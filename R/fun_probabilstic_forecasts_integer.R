@@ -140,7 +140,8 @@ bias <- function(true_values, samples) {
 
 
 dss <- function(true_values, samples) {
-  scoringRules::dss_sample(y, dat)
+  scoringRules::dss_sample(y = true_values,
+                           dat = samples)
 }
 
 

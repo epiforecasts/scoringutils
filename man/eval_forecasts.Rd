@@ -9,7 +9,8 @@ eval_forecasts(
   predictions,
   prediction_type = "probabilistic",
   outcome_type = "integer",
-  metrics = c()
+  metrics = c(),
+  output = "df"
 )
 }
 \arguments{
@@ -18,9 +19,17 @@ eval_forecasts(
 \item{predictions}{a list of nxN matrices of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
+
+\item{prediction_type}{probabilitic or point}
+
+\item{outcome_type}{integer or continuous or binary}
+
+\item{metrics}{what metrics to include. currently not used}
+
+\item{output}{"df" returns a data.frame, everything else returns a list.}
 }
 \value{
-list of data frames with the forecast scores
+either a data.frame or list of data frames with the forecast scores
 }
 \description{
 Applies forecast assessments and scores to the forecasts

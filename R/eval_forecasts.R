@@ -4,8 +4,9 @@
 #' @param predictions a list of nxN matrices of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param prediction_type
-#' @param outcome_type
+#' @param prediction_type probabilitic or point
+#' @param outcome_type integer or continuous or binary
+#' @param metrics what metrics to include. currently not used
 #' @param output "df" returns a data.frame, everything else returns a list.
 
 #' @metrics vector of names of the metrics
