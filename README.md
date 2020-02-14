@@ -2,6 +2,11 @@
 Utilities and Functions for Scoring Forecasts
 
 
+## Todo
+
+  [] make good documentation
+  [] add option for working with datetime values
+
 
 
 <!-- badges: start -->

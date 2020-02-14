@@ -66,8 +66,21 @@ PIT <- function(true_values,
       }
     )
 
+    calibration <- data.frame(mean = mean(p_values),
+                              sd = sd(p_values))
+
     return(list(p_values = p_values,
-                hist_PIT = hist_PIT))
+                hist_PIT = hist_PIT,
+                calibration = calibration))
 }
+
+
+
+
+
+
+
+
+
 
 
