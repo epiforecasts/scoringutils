@@ -2,10 +2,28 @@
 Utilities and Functions for Scoring Forecasts
 
 
-## Todo
+## Components
 
-  [] make good documentation
+### Probabilistic Forecasts
+
+#### integer-valued forecasts
+
+#### continues forecasts
+
+### Point Forecasts
+
+#### integer-valued forecasts
+
+#### continues forecasts
+
+
+
+### Todo
+
+  [] make good documentation. Add formulas to documentation
   [] add option for working with datetime values
+  [] decide on nomenclature of variables
+  [] include error handling for functions
 
 
 
