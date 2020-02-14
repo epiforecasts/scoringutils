@@ -75,16 +75,16 @@ PIT <- function(true_values,
 }
 
 
-##' Determines sharpness of an incidence forecast as the width of the prediction interval
-##'
-##' explanation missing
+#' Determines sharpness of an incidence forecast as the width of the prediction interval
+#'
+#' explanation missing
 #' @param samples nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @importFrom stats mad
-##' @return data frame with sharpness for each interval by date
-##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
-##' export
+#' @return data frame with sharpness for each interval by date
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
 
 sharpness <- function (samples) {
   sharpness <- apply(samples, MARGIN = 1, mad)
@@ -94,15 +94,20 @@ sharpness <- function (samples) {
 }
 
 
-##' Determines bias of an incidence forecast from predictive Monte-Carlo
-##' samples as the proportion of predictive samples greater than the data
+#' Determines bias of an incidence forecast from predictive Monte-Carlo
+#' samples as the proportion of predictive samples greater than the data
 #' @param true_values A vector with the true observed values of size n
 #' @param samples nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-##' @return data frame with bias by date
-##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
-bias <- function(true_values, samples){
+#' @return data frame with bias by date
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#'
+#' @export
+
+
+bias <- function(true_values, samples) {
+
   n_pred <- ncol(samples)
   # empirical cdf
   P_x <- vapply(seq_along(true_values),
@@ -124,16 +129,21 @@ bias <- function(true_values, samples){
 
 
 
-##' Wrapper around the scoringRules::dss_sample() function.
+#' Wrapper around the scoringRules::dss_sample() function.
 #' @param true_values A vector with the true observed values of size n
 #' @param samples nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-##' @return data frame with bias by date
-##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @return data frame with bias by date
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+
+
 dss <- function(true_values, samples) {
   scoringRules::dss_sample(y, dat)
 }
+
+
 
 
 
