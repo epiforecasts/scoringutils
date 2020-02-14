@@ -16,7 +16,7 @@
 #' @param n_replicates the number of tests to perform,
 #' each time re-randomising the PIT
 #' @return list
-#' @importFrom stats runif
+#' @importFrom stats runif sd
 #' @importFrom ggplot2 ggplot aes geom_histogram
 #' @importFrom goftest ad.test
 #' @export
@@ -75,7 +75,23 @@ PIT <- function(true_values,
 }
 
 
+##' Determines sharpness of an incidence forecast as the width of the prediction interval
+##'
+##' explanation missing
+#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples
+#' @importFrom stats mad
+##' @return data frame with sharpness for each interval by date
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' export
 
+sharpness <- function (samples) {
+  sharpness <- apply(samples, MARGIN = 1, mad)
+  return(sharpness)
+  # return(data.frame(date=as.Date(rownames(dat)),
+  #                   sharpness=sharpness))
+}
 
 
 
