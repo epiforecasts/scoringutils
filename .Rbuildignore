@@ -1,2 +1,3 @@
 ^scoringutils\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$
