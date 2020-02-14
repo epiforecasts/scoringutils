@@ -124,6 +124,16 @@ bias <- function(true_values, samples){
 
 
 
+##' Wrapper around the scoringRules::dss_sample() function.
+#' @param true_values A vector with the true observed values of size n
+#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples
+##' @return data frame with bias by date
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+dss <- function(true_values, samples) {
+  scoringRules::dss_sample(y, dat)
+}
 
 
 
