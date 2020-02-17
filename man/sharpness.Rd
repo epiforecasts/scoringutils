@@ -2,7 +2,8 @@
 % Please edit documentation in R/fun_probabilstic_forecasts_integer.R
 \name{sharpness}
 \alias{sharpness}
-\title{Determines sharpness of an incidence forecast as the width of the prediction interval}
+\title{Determines sharpness of a forecast
+Intended for use on Monte Carlo samples of a predictive distribution.}
 \usage{
 sharpness(samples)
 }
@@ -15,7 +16,21 @@ number of Monte Carlo samples}
 data frame with sharpness for each interval by date
 }
 \description{
-explanation missing
+Sharpness is the ability of the model to generate predictions within a
+narrow range. It is a data-independent measure, and is purely a feature
+of the forecasts themselves.
+}
+\details{
+Shaprness of predictive samples corresponding to one single true value is
+measured as the normalised median of the absolute deviation from
+the median of the predictive samples. For details, see \link[stats]{mad}
+}
+\references{
+Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
+Assessing the performance of real-time epidemic forecasts: A case study of
+Ebola in the Western Area region of Sierra Leone, 2014-15.
+PLoS Comput Biol 15(2): e1006785.
+\url{https://doi.org/10.1371/journal.pcbi.1006785}
 }
 \author{
 Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}

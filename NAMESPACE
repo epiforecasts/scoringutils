@@ -3,6 +3,7 @@
 export(Brier_score)
 export(PIT)
 export(bias)
+export(crps)
 export(dss)
 export(eval_forecasts)
 export(eval_forecasts_point_bin)

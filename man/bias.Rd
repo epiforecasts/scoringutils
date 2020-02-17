@@ -2,8 +2,7 @@
 % Please edit documentation in R/fun_probabilstic_forecasts_integer.R
 \name{bias}
 \alias{bias}
-\title{Determines bias of an incidence forecast from predictive Monte-Carlo
-samples as the proportion of predictive samples greater than the data}
+\title{Determines bias of a forecast}
 \usage{
 bias(true_values, samples)
 }
@@ -15,12 +14,24 @@ the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
 \value{
-data frame with bias by date
+data.frame with bias by date
 }
 \description{
-Determines bias of an incidence forecast from predictive Monte-Carlo
-samples as the proportion of predictive samples greater than the data
+Determines bias from predictive Monte-Carlo samples for integer values
+as the proportion of predictive samples greater than the data
+}
+\details{
+Bias is measured as
+
+\deqn{
+B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1))
+}
+
+where \eqn{P_t} is the empirical cumulative distribution function of the
+prediction for the true value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
+just calculated as the fraction of predictive samples for \eqn{x_t}
+that are smaller than \eqn{x_t}.
 }
 \author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+Nikos Bosse \email{nikosbosse@gmail.com}
 }
