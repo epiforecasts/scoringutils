@@ -1,21 +1,131 @@
-#' Applies forecast assessments and scores to the forecasts
+#' @title Evaluate forecasts
+#'
+#' @description The function \code{eval_forecasts} is a wrapper that provides
+#' an interface to lower-level functions. It can be used to assess the goodness
+#' of probabilistic or point forecasts to continues, integer-valued or
+#' binary variables. The lower-level functions accessed are:
+#'
+#' \enumerate{
+#'   \item \code{\link{eval_forecasts_prob_int}}
+#'   \item \code{\link{eval_forecasts_prob_cont}}
+#'   \item \code{\link{eval_forecasts_prob_bin}}
+#'
+#'   \item \code{\link{eval_forecasts_point_int}}
+#'   \item \code{\link{eval_forecasts_point_cont}}
+#'   \item \code{\link{eval_forecasts_point_bin}}
+#' }
 #'
 #' @param true_values A vector with the true observed values of size n
-#' @param predictions a list of nxN matrices of predictive samples, n (number of rows) being
+#' @param predictions a list of appropriate predictions. Every
+#' item in the list corresponds to the predictions made by one model.
+#' Appropriate dimensions and input types are:
+#'
+#' \itemize{
+#'   \item for probabilistic integer and continuous forecasts: a matrix or
+#'   data.frame of size nxN of predictive samples. n (number of rows) being
+#'   the number of observed values to predict and N (number of columns) the
+#'   number of Monte Carlo samples
+#'   \item for probabilistic binary forecasts: a vector of length n that gives
+#'   the probability that the corresponding element in \code{true_values}
+#'   will be equal to one.
+#'   \item for all point estimates: a vector of size n with predictions for the
+#'   corresponding entries of \code{true_values}}
+#' @param prediction_type Type of the prediction made. Can be eitehr
+#' "probabilitic" or "point" for point predictions.
+#' @param outcome_type type of the variable to be predicted. Can be either
+#' "integer" or "continuous" or "binary".
+#' @param metrics what metrics to include. Currently not used, as all metrics
+#' are displayed
+#' @param output specify the format of the output. Can be either "df" (returns
+#' a single data.frame) or anything else (returns a list of data.frames)
+#'
+#' @return  output option "df" returns a single data.frame with the prediction
+#' results.
+#' Rownames of the data.frame correspond to the metric applied for the scoring.
+#' \code{mean} and \code{sd} are the mean and standard deviations of the scores
+#' achieved by the predictions for every single value of \code{true_values}.
+#' Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
+#' the mean and standard deviation of the Replicates of the Randomized PIT.
+#' If everything else than "df" is specified, the above results are returned
+#' as a list of data.frames for the different metrics.
+#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
+#' (2019) Assessing the performance of real-time epidemic forecasts: A
+#' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
+#' PLoS Comput Biol 15(2): e1006785.
+#' \url{https://doi.org/10.1371/journal.pcbi.1006785}
+#' @export
+#'
+
+eval_forecasts <- function(true_values,
+                           predictions,
+                           prediction_type = "probabilistic",
+                           outcome_type = "integer",
+                           metrics = NULL,
+                           output = "df") {
+
+  ## Error handling
+
+
+  if (prediction_type == "probabilistic") {
+
+    if (outcome_type == "integer") {
+      res <- eval_forecasts_prob_int(true_values,
+                                     predictions,
+                                     metrics = metrics,
+                                     output = output)
+      return(res)
+
+    } else if (outcome_type == "binary") {
+      res <- eval_forecasts_prob_bin(true_values,
+                                     predictions,
+                                     metrics = metrics,
+                                     output = output)
+      return(res)
+
+    } else if (outcome_type == "continuous") {
+
+    } else {
+      stop("outcome_type must be either 'integer', 'continuous' or 'binary'")
+    }
+
+
+  } else if (prediction_type == "point") {
+
+    if (outcome_type == "integer") {
+
+    } else if (outcome_type == "binary") {
+
+    } else if (outcome_type == "continuous") {
+
+    } else {
+      stop("outcome_type must be either 'integer', 'continuous' or 'binary'")
+    }
+
+  } else {
+    stop("prediction_type must be either 'probabilistic' or 'point'")
+  }
+}
+
+# ====================================================== #
+# ============= probabilistic + integer ================ #
+# ====================================================== #
+
+#' @title Applies forecast assessments and scores to probabilistic
+#' forecasts of integers
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of nxN matrices of predictive samples,
+#' n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param prediction_type probabilitic or point
-#' @param outcome_type integer or continuous or binary
 #' @param metrics what metrics to include. currently not used
 #' @param output "df" returns a data.frame, everything else returns a list.
-
-#' @metrics vector of names of the metrics
-#'
-#'
 #' @return either a data.frame or list of data frames with the forecast scores
 #' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
-#' 
+#'
+#' @examples
 #' ## Example: Probabilistic predictions for integer values
 #' true_values <- rpois(100, lambda = 1:100)
 #
@@ -23,16 +133,16 @@
 #
 #
 #' predictions <- list(dat1 = replicate(5000, rpois(n = 100, lambda = 1:100)),
-#                    dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
+#'                     dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
 #
 #
 #' eval_forecasts(true_values, predictions)
 
 
-eval_forecasts <- function(true_values,
+
+
+eval_forecasts_prob_int <- function(true_values,
                            predictions,
-                           prediction_type = "probabilistic",
-                           outcome_type = "integer",
                            metrics = c(),
                            output = "df") {
 
@@ -103,3 +213,173 @@ eval_forecasts <- function(true_values,
     return (res)
   }
 }
+
+# ====================================================== #
+# ============ probabilistic + continuous ============== #
+# ====================================================== #
+
+#' @title Applies forecast assessments and scores to probabilistic
+#' forecasts of continuous outcomes
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of nxN matrices of predictive samples,
+#' n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples
+#' @param metrics what metrics to include. currently not used
+#' @param output "df" returns a data.frame, everything else returns a list.
+#'
+#'
+#' @return either a data.frame or list of data frames with the forecast scores
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+
+eval_forecasts_prob_cont <- function(true_values,
+                                     predictions,
+                                     metrics = c(),
+                                     output = "df") {
+
+}
+
+
+# ====================================================== #
+# ============= probabilistic + binary ================= #
+# ====================================================== #
+
+
+#' @title Applies forecast assessments and scores to probabilistic
+#' forecasts of binary outcomes
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of either
+#'
+#' \itemize{
+#' \item vectors of size n containing probabilities that the corresponding
+#' entries of \code{true_values} will be equal to one. Or
+#' \item nxN matrices of predictive samples, n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples. For binary outcomes, this matrices should
+#' only contain zeros and ones. Internally, this matrices will be converted to
+#' probability estimates by averaging over the rows of the matrices.
+#' }
+#'#'
+#' @param metrics what metrics to include. currently not used
+#' @param output "df" returns a data.frame, everything else returns a list.
+#'
+#'
+#' @return either a data.frame or list of data frames with the forecast scores
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+#'
+
+
+
+eval_forecasts_prob_bin <- function(true_values,
+                                    predictions,
+                                    metrics = c(),
+                                    output = "df") {
+
+
+  res <- list()
+
+  # Brier Score
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringutils::Brier_score(true_values = true_values,
+                                            samples = x)
+                },
+                true_values = true_values)
+
+  res$Brier_Score <- data.frame(mean = colMeans(tmp),
+                                sd = apply(tmp, MARGIN=2, FUN=sd))
+
+
+
+  if (output == "df") {
+    return (do.call("rbind", res))
+  } else {
+    return (res)
+  }
+}
+
+
+
+# ====================================================== #
+# ============ point prediction + integer ============== #
+# ====================================================== #
+
+#' @title Applies forecast assessments and scores to point predictinos
+#' of integer outcomes
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of vectors of predicted values of size n that
+#' correspond to the elements in true_values.
+#' @param metrics what metrics to include. currently not used
+#' @param output "df" returns a data.frame, everything else returns a list.
+#'
+#'
+#' @return either a data.frame or list of data frames with the forecast scores
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+
+eval_forecasts_point_int <- function(true_values,
+                                     predictions,
+                                     metrics = c(),
+                                     output = "df") {
+
+}
+
+
+# ====================================================== #
+# ========== point prediction + continuous ============= #
+# ====================================================== #
+
+#' @title Applies forecast assessments and scores to point predictinos of
+#' continuous outcomes
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of vectors of predicted values of size n that
+#' correspond to the elements in true_values.
+#' @param metrics what metrics to include. currently not used
+#' @param output "df" returns a data.frame, everything else returns a list.
+#'
+#'
+#' @return either a data.frame or list of data frames with the forecast scores
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+
+eval_forecasts_point_cont <- function(true_values,
+                                      predictions,
+                                      metrics = c(),
+                                      output = "df") {
+
+}
+
+
+# ====================================================== #
+# ============ point prediction + binary =============== #
+# ====================================================== #
+
+#' @title Applies forecast assessments and scores to point predictinos of
+#' binary outcomes
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions a list of vectors of predicted values of size n that
+#' correspond to the elements in true_values. This should be a vector containing
+#' only zeros and ones. If you want to make predictions using a probability,
+#' use \code{\link{eval_forecasts_prob_bin}}
+#' @param metrics what metrics to include. currently not used
+#' @param output "df" returns a data.frame, everything else returns a list.
+#'
+#'
+#' @return either a data.frame or list of data frames with the forecast scores
+#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @export
+
+eval_forecasts_point_bin <- function(true_values,
+                                     predictions,
+                                     metrics = c(),
+                                     output = "df") {
+
+}
+

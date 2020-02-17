@@ -2,38 +2,81 @@
 % Please edit documentation in R/eval_forecasts.R
 \name{eval_forecasts}
 \alias{eval_forecasts}
-\title{Applies forecast assessments and scores to the forecasts}
+\title{Evaluate forecasts}
 \usage{
 eval_forecasts(
   true_values,
   predictions,
   prediction_type = "probabilistic",
   outcome_type = "integer",
-  metrics = c(),
+  metrics = NULL,
   output = "df"
 )
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{predictions}{a list of nxN matrices of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples}
+\item{predictions}{a list of appropriate predictions. Every
+item in the list corresponds to the predictions made by one model.
+Appropriate dimensions and input types are:
 
-\item{prediction_type}{probabilitic or point}
+\itemize{
+  \item for probabilistic integer and continuous forecasts: a matrix or
+  data.frame of size nxN of predictive samples. n (number of rows) being
+  the number of observed values to predict and N (number of columns) the
+  number of Monte Carlo samples
+  \item for probabilistic binary forecasts: a vector of length n that gives
+  the probability that the corresponding element in \code{true_values}
+  will be equal to one.
+  \item for all point estimates: a vector of size n with predictions for the
+  corresponding entries of \code{true_values}}}
 
-\item{outcome_type}{integer or continuous or binary}
+\item{prediction_type}{Type of the prediction made. Can be eitehr
+"probabilitic" or "point" for point predictions.}
 
-\item{metrics}{what metrics to include. currently not used}
+\item{outcome_type}{type of the variable to be predicted. Can be either
+"integer" or "continuous" or "binary".}
 
-\item{output}{"df" returns a data.frame, everything else returns a list.}
+\item{metrics}{what metrics to include. Currently not used, as all metrics
+are displayed}
+
+\item{output}{specify the format of the output. Can be either "df" (returns
+a single data.frame) or anything else (returns a list of data.frames)}
 }
 \value{
-either a data.frame or list of data frames with the forecast scores
+output option "df" returns a single data.frame with the prediction
+results.
+Rownames of the data.frame correspond to the metric applied for the scoring.
+\code{mean} and \code{sd} are the mean and standard deviations of the scores
+achieved by the predictions for every single value of \code{true_values}.
+Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
+the mean and standard deviation of the Replicates of the Randomized PIT.
+If everything else than "df" is specified, the above results are returned
+as a list of data.frames for the different metrics.
 }
 \description{
-Applies forecast assessments and scores to the forecasts
+The function \code{eval_forecasts} is a wrapper that provides
+an interface to lower-level functions. It can be used to assess the goodness
+of probabilistic or point forecasts to continues, integer-valued or
+binary variables. The lower-level functions accessed are:
+
+\enumerate{
+  \item \code{\link{eval_forecasts_prob_int}}
+  \item \code{\link{eval_forecasts_prob_cont}}
+  \item \code{\link{eval_forecasts_prob_bin}}
+
+  \item \code{\link{eval_forecasts_point_int}}
+  \item \code{\link{eval_forecasts_point_cont}}
+  \item \code{\link{eval_forecasts_point_bin}}
+}
+}
+\references{
+Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
+(2019) Assessing the performance of real-time epidemic forecasts: A
+case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
+PLoS Comput Biol 15(2): e1006785.
+\url{https://doi.org/10.1371/journal.pcbi.1006785}
 }
 \author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+Nikos Bosse \email{nikosbosse@gmail.com}
 }

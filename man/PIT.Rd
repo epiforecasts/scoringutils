@@ -30,3 +30,6 @@ See Eqs. 1 and 2 in Czado, Geniting and Held (2009),
 Predictive Model Assessment for Count Data,
 Biometrics Vol. 65, No. 4 (Dec., 2009), pp. 1254-1261
 }
+\examples{
+NULL
+}

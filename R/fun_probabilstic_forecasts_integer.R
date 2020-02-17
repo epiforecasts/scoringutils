@@ -19,9 +19,10 @@
 #' @importFrom stats runif sd
 #' @importFrom ggplot2 ggplot aes geom_histogram
 #' @importFrom goftest ad.test
-#' @export
 #'
 #' @examples
+#' NULL
+#' @export
 
 PIT <- function(true_values,
                 samples,
