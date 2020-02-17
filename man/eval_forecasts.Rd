@@ -2,7 +2,7 @@
 % Please edit documentation in R/eval_forecasts.R
 \name{eval_forecasts}
 \alias{eval_forecasts}
-\title{Assess forecasts}
+\title{Evaluate forecasts}
 \usage{
 eval_forecasts(
   true_values,
@@ -22,7 +22,7 @@ Appropriate dimensions and input types are:
 
 \itemize{
   \item for probabilistic integer and continuous forecasts: a matrix or
-  data.frame of size nxN of predictive samples. #' n (number of rows) being
+  data.frame of size nxN of predictive samples. n (number of rows) being
   the number of observed values to predict and N (number of columns) the
   number of Monte Carlo samples
   \item for probabilistic binary forecasts: a vector of length n that gives
@@ -40,18 +40,26 @@ Appropriate dimensions and input types are:
 \item{metrics}{what metrics to include. Currently not used, as all metrics
 are displayed}
 
-\item{output}{"df" returns a single data.frame with the prediction results.
+\item{output}{specify the format of the output. Can be either "df" (returns
+a single data.frame) or anything else (returns a list of data.frames)}
+}
+\value{
+output option "df" returns a single data.frame with the prediction
+results.
 Rownames of the data.frame correspond to the metric applied for the scoring.
 \code{mean} and \code{sd} are the mean and standard deviations of the scores
 achieved by the predictions for every single value of \code{true_values}.
 Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
 the mean and standard deviation of the Replicates of the Randomized PIT.
 If everything else than "df" is specified, the above results are returned
-as a list of data.frames for the different metrics.}
+as a list of data.frames for the different metrics.
 }
 \description{
 The function \code{eval_forecasts} is a wrapper that provides
-an interface to the lower-level functions
+an interface to lower-level functions. It can be used to assess the goodness
+of probabilistic or point forecasts to continues, integer-valued or
+binary variables. The lower-level functions accessed are:
+
 \enumerate{
   \item \code{\link{eval_forecasts_prob_int}}
   \item \code{\link{eval_forecasts_prob_cont}}
@@ -61,17 +69,14 @@ an interface to the lower-level functions
   \item \code{\link{eval_forecasts_point_cont}}
   \item \code{\link{eval_forecasts_point_bin}}
 }
-
-To assess the goodness of probabilistic or point forecasts to continues,
-integer-valued or binary variables.
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
 (2019) Assessing the performance of real-time epidemic forecasts: A
 case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
 PLoS Comput Biol 15(2): e1006785.
-https://doi.org/10.1371/journal.pcbi.1006785
+\url{https://doi.org/10.1371/journal.pcbi.1006785}
 }
 \author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+Nikos Bosse \email{nikosbosse@gmail.com}
 }

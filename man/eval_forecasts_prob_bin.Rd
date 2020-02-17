@@ -2,28 +2,26 @@
 % Please edit documentation in R/eval_forecasts.R
 \name{eval_forecasts_prob_bin}
 \alias{eval_forecasts_prob_bin}
-\title{Applies forecast assessments and scores to probabilistic forecasts of
-binary outcomes}
+\title{Applies forecast assessments and scores to probabilistic
+forecasts of binary outcomes}
 \usage{
-eval_forecasts_prob_bin(
-  true_values,
-  predictions,
-  prediction_type = "probabilistic",
-  outcome_type = "integer",
-  metrics = c(),
-  output = "df"
-)
+eval_forecasts_prob_bin(true_values, predictions, metrics = c(), output = "df")
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{predictions}{a list of nxN matrices of predictive samples, n (number of rows) being
+\item{predictions}{a list of either
+
+\itemize{
+\item vectors of size n containing probabilities that the corresponding
+entries of \code{true_values} will be equal to one. Or
+\item nxN matrices of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
-number of Monte Carlo samples}
-
-\item{prediction_type}{probabilitic or point}
-
-\item{outcome_type}{integer or continuous or binary}
+number of Monte Carlo samples. For binary outcomes, this matrices should
+only contain zeros and ones. Internally, this matrices will be converted to
+probability estimates by averaging over the rows of the matrices.
+}
+#'}
 
 \item{metrics}{what metrics to include. currently not used}
 
@@ -33,8 +31,8 @@ number of Monte Carlo samples}
 either a data.frame or list of data frames with the forecast scores
 }
 \description{
-Applies forecast assessments and scores to probabilistic forecasts of
-binary outcomes
+Applies forecast assessments and scores to probabilistic
+forecasts of binary outcomes
 }
 \author{
 Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
