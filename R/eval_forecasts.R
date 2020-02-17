@@ -124,7 +124,22 @@ eval_forecasts <- function(true_values,
 #' @return either a data.frame or list of data frames with the forecast scores
 #' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
+<<<<<<< HEAD
 #'
+=======
+#' 
+#' ## Example: Probabilistic predictions for integer values
+#' true_values <- rpois(100, lambda = 1:100)
+#
+#' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
+#
+#
+#' predictions <- list(dat1 = replicate(5000, rpois(n = 100, lambda = 1:100)),
+#                    dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
+#
+#
+#' eval_forecasts(true_values, predictions)
+>>>>>>> f8e1524afe7f12d5c42adfcea27a46c947969024
 
 
 
