@@ -147,6 +147,54 @@ eval_forecasts_prob_int <- function(true_values,
                            output = "df") {
 
 
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (!is.list(predictions)) {
+    if (is.matrix(predictions)) {
+      predictions <- list(predictions)
+    }
+    else {
+      stop("predictions argument should be a list of matrices")
+    }
+  }
+
+  if (is.data.frame(predictions)) {
+    predictions <- list(as.matrix(predictions))
+  } else {
+    for (i in 1:length(predictions)) {
+      if (is.data.frame(predictions[[i]])) {
+        predictions[[i]] <- as.matrix(predictions[[i]])
+      }
+      if (!is.matrix(predictions[[i]])) {
+        stop("'predictions' should be a list of matrices")
+      }
+      if (nrow(predictions[[i]]) != n) {
+        msg = cat("all matrices in list 'predictions' must have n rows, ",
+                  "where n is the number of true_values to predict. ",
+                  "Dimension mismatch in list element ", as.character(i))
+        stop(msg)
+      }
+      if (!is.integer(predictions[[i]])) {
+        warning("predictions provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+      }
+    }
+  }
+
+  # ============================================
+
   res <- list()
 
   # apply PIT function to true_values and the different predictive_samples
