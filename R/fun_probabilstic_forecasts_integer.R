@@ -105,7 +105,38 @@ PIT <- function(true_values,
                 num_bins = NULL,
                 n_replicates = 20) {
 
-    n <- length(true_values)
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
     n_pred <- ncol(samples)
 
     # calculate emipirical cumulative distribution function as
@@ -183,6 +214,32 @@ PIT <- function(true_values,
 #' @export
 
 sharpness <- function (samples) {
+
+  # ============== Error handling ==============
+
+  if (missing(predictions)) {
+    stop("predictions argument missing")
+  }
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   sharpness <- apply(samples, MARGIN = 1, mad)
   return(sharpness)
   # return(data.frame(date=as.Date(rownames(dat)),
@@ -220,7 +277,39 @@ sharpness <- function (samples) {
 
 bias <- function(true_values, samples) {
 
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   n_pred <- ncol(samples)
+
   # empirical cdf
   P_x <- vapply(seq_along(true_values),
                 function(i) {
@@ -256,13 +345,44 @@ bias <- function(true_values, samples) {
 
 
 dss <- function(true_values, samples) {
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   scoringRules::dss_sample(y = true_values,
                            dat = samples)
 }
 
 
 
-#' @title DRanked Probability Score
+#' @title Ranked Probability Score
 #'
 #' @description
 #' Wrapper around the \code{\link[scoringRules]{crps_sample}} function from the
@@ -277,8 +397,89 @@ dss <- function(true_values, samples) {
 
 
 crps <- function(true_values, samples) {
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   scoringRules::crps_sample(y = true_values,
                            dat = samples)
+}
+
+
+
+
+
+
+#' @title Error Handling Probabilistic Integer Forecasts
+#'
+#' @description
+#' Does internal error handling
+#' @param true_values A vector with the true observed values of size n
+#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples
+#' @return updated predictions
+#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @export
+
+
+error_handling_prob_int <- function(true_values, preditions) {
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  return(predictions)
 }
 
 
