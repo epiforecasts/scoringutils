@@ -45,7 +45,7 @@
 #' \code{mean} and \code{sd} are the mean and standard deviations of the scores
 #' achieved by the predictions for every single value of \code{true_values}.
 #' Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
-#' the mean and standard deviation of the Replicates of the Randomized PIT.
+#' the mean and standard deviation of the Replicates of the Randomised PIT.
 #' If everything else than "df" is specified, the above results are returned
 #' as a list of data.frames for the different metrics.
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
@@ -122,7 +122,6 @@ eval_forecasts <- function(true_values,
 #' @param metrics what metrics to include. currently not used
 #' @param output "df" returns a data.frame, everything else returns a list.
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 #'
 #' @examples
@@ -199,7 +198,7 @@ eval_forecasts_prob_int <- function(true_values,
   res <- list()
 
   # apply PIT function to true_values and the different predictive_samples
-  # provided. Get the p_values for the replications of the randomized PIT
+  # provided. Get the p_values for the replications of the randomised PIT
   # with Anderson-Darling Test and return mean and sd of those p-values
   tmp <- sapply(predictions,
                 function(x, true_values) {
@@ -280,7 +279,6 @@ eval_forecasts_prob_int <- function(true_values,
 #'
 #'
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 
 eval_forecasts_prob_cont <- function(true_values,
@@ -307,17 +305,17 @@ eval_forecasts_prob_cont <- function(true_values,
 #' entries of \code{true_values} will be equal to one. Or
 #' \item nxN matrices of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples. For binary outcomes, this matrices should
-#' only contain zeros and ones. Internally, this matrices will be converted to
-#' probability estimates by averaging over the rows of the matrices.
+#' number of Monte Carlo samples. As these represent binary outcomes, these
+#' matrices should only contain zeros and ones. Internally, this matrices will
+#' be converted to probability estimates by averaging over
+#' the rows of the matrices.
 #' }
-#'#'
+#'
 #' @param metrics what metrics to include. currently not used
 #' @param output "df" returns a data.frame, everything else returns a list.
 #'
 #'
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 #'
 
@@ -368,7 +366,6 @@ eval_forecasts_prob_bin <- function(true_values,
 #'
 #'
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 
 eval_forecasts_point_int <- function(true_values,
@@ -394,7 +391,6 @@ eval_forecasts_point_int <- function(true_values,
 #'
 #'
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 
 eval_forecasts_point_cont <- function(true_values,
@@ -422,7 +418,6 @@ eval_forecasts_point_cont <- function(true_values,
 #'
 #'
 #' @return either a data.frame or list of data frames with the forecast scores
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 #' @export
 
 eval_forecasts_point_bin <- function(true_values,

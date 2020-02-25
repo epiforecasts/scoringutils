@@ -14,11 +14,12 @@ the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
 \value{
-data.frame with bias by date
+vector of length n with the biases of the predictive samples with
+respect to the true values.
 }
 \description{
 Determines bias from predictive Monte-Carlo samples for integer values
-as the proportion of predictive samples greater than the data
+as the proportion of predictive samples greater than the true values
 }
 \details{
 Bias is measured as
@@ -31,6 +32,11 @@ where \eqn{P_t} is the empirical cumulative distribution function of the
 prediction for the true value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
 just calculated as the fraction of predictive samples for \eqn{x_t}
 that are smaller than \eqn{x_t}.
+}
+\examples{
+true_values <- rpois(30, lambda = 1:30)
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+bias(true_values, predictions)
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

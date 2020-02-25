@@ -9,15 +9,30 @@ Brier_score(true_values, predictions)
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{predictions}{A vector with probability for true_value = 1}
+\item{predictions}{A vector with probability forecasts for true_value = 1}
 }
 \value{
-list
+mean squared error of the forecasts (numeric)
 }
 \description{
-Missing
+Computes the Brier Score for probabilistic forecasts of binary outcomes.
+}
+\details{
+The Brier score is a proper score rule that assesses the accuracy of
+probabilistic binary predictions. The outcomes can be either 0 or 1,
+the predictions must be a probability that the true outcome will be 1.
+
+The Brier Score is then computed as the mean squared error between the
+probabilistic prediction and the true outcome.
+
+\deqn{
+Brier_Score = \frac{1}{N} \sum_{i = 1}^{n} (prediction_t - outcome_t)^2
+}
 }
 \examples{
-NULL
+true_values <- sample(c(0,1), size = 30, replace = TRUE)
+predictions <- runif(n = 30, min = 0, max = 1)
+
+Brier_score(true_values, predictions)
 
 }
