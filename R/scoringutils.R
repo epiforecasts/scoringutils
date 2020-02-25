@@ -12,7 +12,7 @@
 #' integer, or binary.
 #'
 #' A collection of different metrics and scoring rules can be accessed through
-#' the function \code{\link{eval_forecasts()}} with the correct prediction type
+#' the function \code{\link{eval_forecasts}} with the correct prediction type
 #' (probabilistic/point prediction, and continuous/integer/binary) specified.
 #'
 #' The following functions can also be accessed directly:
@@ -32,20 +32,20 @@
 #'
 #' @section probabilistic - continuous:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #'
 #' @section point prediction - integer:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #' @section point prediction - binary:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #' @section point prediction - continuous:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #'
 #' @docType package

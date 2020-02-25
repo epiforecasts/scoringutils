@@ -35,12 +35,13 @@ Brier_score <- function (true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
-    if (max(true_values) > 1 | min(true_values < 0)) {
+  if (max(true_values) > 1 | min(true_values < 0)) {
       stop("elements of true_values should be either zero or one")
-    }
-    warning("The true_values provided are not integers. Don't trust the results.
-            Maybe you want to score continuous predictions instead?")
+  }
+
+  if (!all.equal(true_values, as.integer(true_values))){
+    stop("The true_values provided are not integers.
+         Maybe you want to score continuous predictions instead?")
   }
 
   n <- length(true_values)
@@ -49,12 +50,23 @@ Brier_score <- function (true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (is.matrix(predictions)) {
+    if (max(predictions) > 1 | min(predictions < 0)) {
+      stop("elements of predictive samples should be either zero or one")
+    }
+
+    if (!all.equal(as.vector(predictions), as.integer(predictions))){
+      stop("The predictive samples provided are not integers.
+           Maybe you want to score continuous predictions instead?")
+    }
     predictions <- rowMeans(predictions)
   }
 
   if (!is.vector(predictions)) {
     stop("'predictions' should be a vector with probabilites
          or a matrix with predictive samples equal to zero or one")
+  }
+  if (max(predictions) > 1 | min(predictions < 0)) {
+    stop("elements of 'predictions' should be between zero and one")
   }
   if (length(predictions) != n) {
     msg = cat("'predictions' must have n elements (or n rows), ",
@@ -68,7 +80,6 @@ Brier_score <- function (true_values, predictions) {
 
   # ============================================
 
-  n <- length(true_values)
   bs <- (sum((true_values - predictions)^2) ) / n
   return(bs)
 }
