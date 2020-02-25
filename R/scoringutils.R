@@ -32,20 +32,20 @@
 #'
 #' @section probabilistic - continuous:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #'
 #' @section point prediction - integer:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #' @section point prediction - binary:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #' @section point prediction - continuous:
 #' \itemize{
-#' \item \code{\link{.}}
+#' \item .
 #' }
 #'
 #' @docType package
