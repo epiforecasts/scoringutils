@@ -32,7 +32,8 @@ true_values <- rpois(100, lambda = 1:100)
 predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
 predictions <- list(dat1 = replicate(5000, rpois(n = 100, lambda = 1:100)),
                     dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
-eval_forecasts(true_values, predictions)
+eval_forecasts(true_values = true_values, predictions = predictions)
+
 }
 \author{
 Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}

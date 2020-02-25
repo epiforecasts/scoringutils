@@ -70,8 +70,8 @@ eval_forecasts <- function(true_values,
   if (prediction_type == "probabilistic") {
 
     if (outcome_type == "integer") {
-      res <- eval_forecasts_prob_int(true_values,
-                                     predictions,
+      res <- eval_forecasts_prob_int(true_values = true_values,
+                                     predictions = predictions,
                                      metrics = metrics,
                                      output = output)
       return(res)
@@ -136,7 +136,8 @@ eval_forecasts <- function(true_values,
 #'                     dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
 #
 #
-#' eval_forecasts(true_values, predictions)
+#' eval_forecasts(true_values = true_values, predictions = predictions)
+#'
 
 
 
@@ -203,7 +204,7 @@ eval_forecasts_prob_int <- function(true_values,
   tmp <- sapply(predictions,
                 function(x, true_values) {
                   scoringutils::PIT(true_values = true_values,
-                                    samples = x)$p_values
+                                    predictions = x)$p_values
                 },
                 true_values = true_values)
 
@@ -223,7 +224,7 @@ eval_forecasts_prob_int <- function(true_values,
   # bias
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::bias(samples = x,
+                  scoringutils::bias(predictions = x,
                                      true_values = true_values)
                 },
                 true_values = true_values)
@@ -334,7 +335,7 @@ eval_forecasts_prob_bin <- function(true_values,
   tmp <- sapply(predictions,
                 function(x, true_values) {
                   scoringutils::Brier_score(true_values = true_values,
-                                            samples = x)
+                                            predictions = x)
                 },
                 true_values = true_values)
 

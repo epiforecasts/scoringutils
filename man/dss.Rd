@@ -4,12 +4,12 @@
 \alias{dss}
 \title{Dawid-Sebastiani Score}
 \usage{
-dss(true_values, samples)
+dss(true_values, predictions)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{samples}{nxN matrix of predictive samples, n (number of rows) being
+\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
