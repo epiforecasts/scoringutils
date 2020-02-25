@@ -1,4 +1,4 @@
-#' @title randomized Probability Integral Transformation
+#' @title randomised Probability Integral Transformation
 #'
 #' @description Uses a (randomised) Probability Integral Transformation (PIT) to
 #' assess the calibration of predictive Monte Carlo samples. Returns a
@@ -74,7 +74,11 @@
 #' @importFrom goftest ad.test
 #'
 #' @examples
-#' NULL
+#' true_values <- rpois(100, lambda = 1:100)
+#' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
+#' pit <- PIT(true_values, predictions)
+#' plot(pit$hist_PIT)
+#'
 #' @export
 #' @references
 #' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
@@ -200,8 +204,7 @@ PIT <- function(true_values,
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @importFrom stats mad
-#' @return data frame with sharpness for each interval by date
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @return vector with sharpness values
 #'
 #' @references
 #' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
@@ -242,7 +245,7 @@ sharpness <- function (predictions) {
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples for integer values
-#' as the proportion of predictive samples greater than the data
+#' as the proportion of predictive samples greater than the true values
 #'
 #' @details
 #' Bias is measured as
@@ -260,9 +263,13 @@ sharpness <- function (predictions) {
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @return data.frame with bias by date
+#' @return vector of length n with the biases of the predictive samples with
+#' respect to the true values.
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
-#'
+#' @examples
+#' true_values <- rpois(30, lambda = 1:30)
+#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' bias(true_values, predictions)
 #' @export
 
 
@@ -330,8 +337,7 @@ bias <- function(true_values, predictions) {
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @return data frame with DSS by date
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @return vector with scoring values
 #' @export
 
 
@@ -382,8 +388,7 @@ dss <- function(true_values, predictions) {
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @return data frame with CRPS by date
-#' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+#' @return vector with the scoring values
 #' @export
 
 

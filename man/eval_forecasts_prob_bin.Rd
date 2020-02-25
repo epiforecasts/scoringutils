@@ -17,11 +17,11 @@ eval_forecasts_prob_bin(true_values, predictions, metrics = c(), output = "df")
 entries of \code{true_values} will be equal to one. Or
 \item nxN matrices of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
-number of Monte Carlo samples. For binary outcomes, this matrices should
-only contain zeros and ones. Internally, this matrices will be converted to
-probability estimates by averaging over the rows of the matrices.
-}
-#'}
+number of Monte Carlo samples. As these represent binary outcomes, these
+matrices should only contain zeros and ones. Internally, this matrices will
+be converted to probability estimates by averaging over
+the rows of the matrices.
+}}
 
 \item{metrics}{what metrics to include. currently not used}
 
@@ -33,7 +33,4 @@ either a data.frame or list of data frames with the forecast scores
 \description{
 Applies forecast assessments and scores to probabilistic
 forecasts of binary outcomes
-}
-\author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
