@@ -239,8 +239,6 @@ sharpness <- function (predictions) {
 
   sharpness <- apply(predictions, MARGIN = 1, mad)
   return(sharpness)
-  # return(data.frame(date=as.Date(rownames(dat)),
-  #                   sharpness=sharpness))
 }
 
 
