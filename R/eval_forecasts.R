@@ -64,9 +64,6 @@ eval_forecasts <- function(true_values,
                            metrics = NULL,
                            output = "df") {
 
-  ## Error handling
-
-
   if (prediction_type == "probabilistic") {
 
     if (outcome_type == "integer") {
@@ -327,6 +324,49 @@ eval_forecasts_prob_bin <- function(true_values,
                                     output = "df") {
 
 
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (max(true_values > 1) | min(true_values) < 0){
+    stop("elements of 'true_values' should be equal to either zero or one")
+  }
+
+  if (!all.equal(true_values, as.integer(true_values))) {
+    stop("The true_values provided are not integers.
+         Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (!is.list(predictions)) {
+    if (is.matrix(predictions) | is.vector(predictions)) {
+      predictions <- list(predictions)
+    }
+    else {
+      stop("predictions argument should be a list of vectors (or matrices)")
+    }
+  }
+
+  if (is.data.frame(predictions)) {
+    stop("predictions argument should be a list of vectors (or matrices)")
+  }
+  for (i in 1:length(predictions)) {
+    if (is.data.frame(predictions[[i]])) {
+      predictions[[i]] <- as.matrix(predictions[[i]])
+    }
+    if (!(is.matrix(predictions[[i]]) | is.vector(predictions[[i]])) ) {
+      msg = cat("'predictions' should be a list of vectors or matrices. ",
+                "This is not the case for element ", as.character(i))
+      stop(msg)
+    }
+  }
+
+
+  # ============================================
+
   res <- list()
 
   # Brier Score
@@ -337,10 +377,12 @@ eval_forecasts_prob_bin <- function(true_values,
                 },
                 true_values = true_values)
 
-  res$Brier_Score <- data.frame(mean = colMeans(tmp),
-                                sd = apply(tmp, MARGIN=2, FUN=sd))
-
-
+  if (length(tmp) > 1) {
+    res$Brier_Score <- data.frame(mean = colMeans(tmp),
+                                  sd = apply(tmp, MARGIN=2, FUN=sd))
+  } else {
+    res$Brier_Score <- data.frame(Brier_Score = tmp)
+  }
 
   if (output == "df") {
     return (do.call("rbind", res))

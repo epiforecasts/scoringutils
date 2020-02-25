@@ -20,3 +20,8 @@ vector with the scoring values
 Wrapper around the \code{\link[scoringRules]{crps_sample}} function from the
 \code{scoringRules} package.
 }
+\examples{
+true_values <- rpois(30, lambda = 1:30)
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+crps(true_values, predictions)
+}

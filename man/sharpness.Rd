@@ -26,6 +26,10 @@ Shaprness of predictive samples corresponding to one single true value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see \link[stats]{mad}
 }
+\examples{
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+sharpness(predictions)
+}
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
 Assessing the performance of real-time epidemic forecasts: A case study of
