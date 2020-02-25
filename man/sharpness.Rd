@@ -12,7 +12,7 @@ the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
 \value{
-data frame with sharpness for each interval by date
+vector with sharpness values
 }
 \description{
 Determines sharpness of a probabilistic forecast
@@ -32,7 +32,4 @@ Assessing the performance of real-time epidemic forecasts: A case study of
 Ebola in the Western Area region of Sierra Leone, 2014-15.
 PLoS Comput Biol 15(2): e1006785.
 \url{https://doi.org/10.1371/journal.pcbi.1006785}
-}
-\author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }

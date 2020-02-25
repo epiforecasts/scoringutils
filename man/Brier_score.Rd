@@ -26,7 +26,7 @@ The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
 \deqn{
-Brier_Score = \frac{1}{N} \sum_{i = 1}^{n} (prediction_t - outcome_t)^2
+Brier_Score = \frac{1}{N} \sum_{t = 1}^{n} (prediction_t - outcome_t)^2
 }
 }
 \examples{
