@@ -5,6 +5,11 @@
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/epiforecasts/scoringutils.svg?branch=master)](https://travis-ci.org/epiforecasts/scoringutils)
 <!-- badges: end -->
+
+<!-- badges: start -->
+[![codecov](https://codecov.io/github/codecov/example-r/branch/master/graphs/badge.svg)](https://codecov.io/epiforecasts/scoringutils) 
+<!-- badges: end -->
+
  
 
 # scoringutils

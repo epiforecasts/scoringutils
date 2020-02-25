@@ -67,7 +67,7 @@ u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1) )
 
 where \eqn{k_t} is the observed count, \eqn{P_t(x)} is the predictive
 cumulative probability of observing incidence k at time t,
-eqn{P_t (−1) = 0} by definition and v is standard uniform and independent
+eqn{P_t (-1) = 0} by definition and v is standard uniform and independent
 of k. If \eqn{P_t} is the true cumulative
 probability distribution, then \eqn{u_t} is standard uniform.
 
@@ -75,9 +75,9 @@ The resulting values \eqn{u_t} are then tested for uniformity using the
 Anderson-Darling test.
 
 As a rule of thumb, there is no evidence to suggest a forecasting model is
-miscalibrated if the p-value found was greater than a threshold of p ≥ 0.1,
+miscalibrated if the p-value found was greater than a threshold of p >= 0.1,
 some evidence that it was miscalibrated if 0.01 < p < 0.1, and good
-evidence that it was miscalibrated if p ≤ 0.01.
+evidence that it was miscalibrated if p <= 0.01.
 In this context it should be noted, though, that uniformity of the
 (randomised) PIT is a necessary but not sufficient condition of calibration.
 }
