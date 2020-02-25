@@ -36,6 +36,15 @@ Utilities and Functions for Scoring Forecasts
   - [ ] decide on nomenclature of variables
   - [ ] include error handling for functions
   - [ ] add examples to function documentation
+  
+### Things to discuss
+  - [ ] Do we want a vignette, or is the manual enough? 
+  - [ ] What other functionality do we want to include? Also: what is already there?
+  - [ ] Should we / can we wrap functions from other packages? 
+  - [ ] How thorough should formal testing be? 
+  - [ ] Do we want to implement something for probabilistic non-MCMC predictions?
+  - [ ] should we make a formal distinction between absolute and comparative metrics?
+  - [ ] do we want to have an error handling function or error handling within all functions?
 
 
 
