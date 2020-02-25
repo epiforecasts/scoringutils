@@ -31,6 +31,3 @@ either a data.frame or list of data frames with the forecast scores
 Applies forecast assessments and scores to probabilistic
 forecasts of continuous outcomes
 }
-\author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
-}
