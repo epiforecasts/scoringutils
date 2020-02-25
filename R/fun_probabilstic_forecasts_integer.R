@@ -50,7 +50,7 @@
 #'
 #'
 #' @param true_values A vector with the true observed values of size n
-#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @param num_bins the number of bins in the PIT histogram.
@@ -101,18 +101,49 @@
 #'
 
 PIT <- function(true_values,
-                samples,
+                predictions,
                 num_bins = NULL,
                 n_replicates = 20) {
 
-    n <- length(true_values)
-    n_pred <- ncol(samples)
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
+    n_pred <- ncol(predictions)
 
     # calculate emipirical cumulative distribution function as
     # Portion of (y_true <= y_predicted)
     P_x <- vapply(seq_along(true_values),
                   function(i) {
-                    sum(samples[i,] <= true_values[i]) / n_pred
+                    sum(predictions[i,] <= true_values[i]) / n_pred
                   },
                   .0)
 
@@ -120,7 +151,7 @@ PIT <- function(true_values,
     # predictions and true-values.
     P_xm1 <- vapply(seq_along(true_values),
                     function(i) {
-                      sum(samples[i,] <= true_values[i] - 1) / n_pred
+                      sum(predictions[i,] <= true_values[i] - 1) / n_pred
                     },
                     .0)
 
@@ -135,7 +166,7 @@ PIT <- function(true_values,
                                                              fill = 'lightblue',
                                                              bins = num_bins)
 
-    p_values = apply(
+    p_values <- apply(
       u,
       MARGIN = 2,
       FUN = function (x) {
@@ -152,21 +183,20 @@ PIT <- function(true_values,
 }
 
 
-#' @title Determines sharpness of a forecast
-#' Intended for use on Monte Carlo samples of a predictive distribution.
+#' @title Determines sharpness of a probabilistic forecast
 #'
-#' @description
+#'
+#' @details
+#'
 #' Sharpness is the ability of the model to generate predictions within a
 #' narrow range. It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
-#'
-#' @details
 #'
 #' Shaprness of predictive samples corresponding to one single true value is
 #' measured as the normalised median of the absolute deviation from
 #' the median of the predictive samples. For details, see \link[stats]{mad}
 #'
-#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @importFrom stats mad
@@ -182,8 +212,26 @@ PIT <- function(true_values,
 #'
 #' @export
 
-sharpness <- function (samples) {
-  sharpness <- apply(samples, MARGIN = 1, mad)
+sharpness <- function (predictions) {
+
+  # ============== Error handling ==============
+
+  if (missing(predictions)) {
+    stop("predictions argument missing")
+  }
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+
+
+  # ============================================
+
+  sharpness <- apply(predictions, MARGIN = 1, mad)
   return(sharpness)
   # return(data.frame(date=as.Date(rownames(dat)),
   #                   sharpness=sharpness))
@@ -209,7 +257,7 @@ sharpness <- function (samples) {
 #' that are smaller than \eqn{x_t}.
 #'
 #' @param true_values A vector with the true observed values of size n
-#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return data.frame with bias by date
@@ -218,20 +266,52 @@ sharpness <- function (samples) {
 #' @export
 
 
-bias <- function(true_values, samples) {
+bias <- function(true_values, predictions) {
 
-  n_pred <- ncol(samples)
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
+  n_pred <- ncol(predictions)
+
   # empirical cdf
   P_x <- vapply(seq_along(true_values),
                 function(i) {
-                  sum(samples[i,] <= true_values[i]) / n_pred
+                  sum(predictions[i,] <= true_values[i]) / n_pred
                 },
                 .0)
 
   # empirical cdf for (y-1)
   P_xm1 <- vapply(seq_along(true_values),
                   function(i) {
-                    sum(samples[i,] <= true_values[i] - 1) / n_pred
+                    sum(predictions[i,] <= true_values[i] - 1) / n_pred
                   },
                   .0)
 
@@ -247,7 +327,7 @@ bias <- function(true_values, samples) {
 #' Wrapper around the \code{\link[scoringRules]{dss_sample}} function from the
 #' \code{scoringRules} package.
 #' @param true_values A vector with the true observed values of size n
-#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return data frame with DSS by date
@@ -255,20 +335,51 @@ bias <- function(true_values, samples) {
 #' @export
 
 
-dss <- function(true_values, samples) {
+dss <- function(true_values, predictions) {
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   scoringRules::dss_sample(y = true_values,
-                           dat = samples)
+                           dat = predictions)
 }
 
 
 
-#' @title DRanked Probability Score
+#' @title Ranked Probability Score
 #'
 #' @description
 #' Wrapper around the \code{\link[scoringRules]{crps_sample}} function from the
 #' \code{scoringRules} package.
 #' @param true_values A vector with the true observed values of size n
-#' @param samples nxN matrix of predictive samples, n (number of rows) being
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return data frame with CRPS by date
@@ -276,9 +387,90 @@ dss <- function(true_values, samples) {
 #' @export
 
 
-crps <- function(true_values, samples) {
+crps <- function(true_values, predictions) {
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  # ============================================
+
   scoringRules::crps_sample(y = true_values,
-                           dat = samples)
+                           dat = predictions)
+}
+
+
+
+
+
+
+#' @title Error Handling Probabilistic Integer Forecasts
+#'
+#' @description
+#' Does internal error handling
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions nxN matrix of predictive samples, n (number of rows) being
+#' the number of data points and N (number of columns) the
+#' number of Monte Carlo samples
+#' @return updated predictions
+#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @export
+
+
+error_handling_prob_int <- function(true_values, predictions) {
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  if (!is.integer(true_values)) {
+    warning("The true_values provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+  }
+
+  n <- length(true_values)
+
+  if (is.data.frame(predictions)) {
+    predictions <- as.matrix(predictions)
+  }
+  if (!is.matrix(predictions)) {
+    stop("'predictions' should be a matrix")
+  }
+  if (nrow(predictions) != n) {
+    msg = cat("matrix 'predictions' must have n rows, ",
+              "where n is the number of true_values to predict. ")
+    stop(msg)
+  }
+  if (!is.integer(predictions)) {
+    warning("predictions provided are not integers. Don't trust the results.
+        Maybe you want to score continuous predictions instead?")
+  }
+
+  return(predictions)
 }
 
 

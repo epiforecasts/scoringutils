@@ -35,8 +35,7 @@ Utilities and Functions for Scoring Forecasts
   - [ ] add option for working with datetime values
   - [ ] decide on nomenclature of variables
   - [ ] include error handling for functions
-  - [ ] add the binary forecasts and Brier score for EpiCastR
-  - [ ] think about how to incorporate binary forecasts in the above framework
+  - [ ] add examples to function documentation
 
 
 

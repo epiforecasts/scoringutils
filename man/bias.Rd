@@ -4,12 +4,12 @@
 \alias{bias}
 \title{Determines bias of a forecast}
 \usage{
-bias(true_values, samples)
+bias(true_values, predictions)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{samples}{nxN matrix of predictive samples, n (number of rows) being
+\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }

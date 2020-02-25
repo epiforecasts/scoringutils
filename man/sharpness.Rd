@@ -2,13 +2,12 @@
 % Please edit documentation in R/fun_probabilstic_forecasts_integer.R
 \name{sharpness}
 \alias{sharpness}
-\title{Determines sharpness of a forecast
-Intended for use on Monte Carlo samples of a predictive distribution.}
+\title{Determines sharpness of a probabilistic forecast}
 \usage{
-sharpness(samples)
+sharpness(predictions)
 }
 \arguments{
-\item{samples}{nxN matrix of predictive samples, n (number of rows) being
+\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
@@ -16,11 +15,13 @@ number of Monte Carlo samples}
 data frame with sharpness for each interval by date
 }
 \description{
+Determines sharpness of a probabilistic forecast
+}
+\details{
 Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
 of the forecasts themselves.
-}
-\details{
+
 Shaprness of predictive samples corresponding to one single true value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see \link[stats]{mad}
