@@ -29,6 +29,3 @@ either a data.frame or list of data frames with the forecast scores
 Applies forecast assessments and scores to point predictinos
 of integer outcomes
 }
-\author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
-}

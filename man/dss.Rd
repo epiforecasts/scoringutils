@@ -14,12 +14,9 @@ the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 }
 \value{
-data frame with DSS by date
+vector with scoring values
 }
 \description{
 Wrapper around the \code{\link[scoringRules]{dss_sample}} function from the
 \code{scoringRules} package.
-}
-\author{
-Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }

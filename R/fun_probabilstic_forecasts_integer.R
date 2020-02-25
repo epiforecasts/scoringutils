@@ -187,11 +187,11 @@ PIT <- function(true_values,
 }
 
 
+
+
+
 #' @title Determines sharpness of a probabilistic forecast
-#'
-#'
 #' @details
-#'
 #' Sharpness is the ability of the model to generate predictions within a
 #' narrow range. It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
@@ -214,6 +214,9 @@ PIT <- function(true_values,
 #' \url{https://doi.org/10.1371/journal.pcbi.1006785}
 #'
 #' @export
+#' @examples
+#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' sharpness(predictions)
 
 sharpness <- function (predictions) {
 
@@ -338,6 +341,10 @@ bias <- function(true_values, predictions) {
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return vector with scoring values
+#' @examples
+#' true_values <- rpois(30, lambda = 1:30)
+#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' dss(true_values, predictions)
 #' @export
 
 
@@ -389,6 +396,10 @@ dss <- function(true_values, predictions) {
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return vector with the scoring values
+#' @examples
+#' true_values <- rpois(30, lambda = 1:30)
+#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' crps(true_values, predictions)
 #' @export
 
 

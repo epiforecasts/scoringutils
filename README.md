@@ -15,27 +15,36 @@ Utilities and Functions for Scoring Forecasts
 
 ### Probabilistic Forecasts
 
-#### integer-valued forecasts
+  #### binary forecasts
+    - Brier Score
+  
+  #### integer-valued forecasts
+    - PIT / calibration
+    - bias
+    - sharpness
+    - DSS
+    - CRPS
 
-#### continues forecasts
+  #### continuous forecasts
 
 ### Point Forecasts
 
-#### binary forecasts
+  #### binary forecasts
+    - 
 
-#### integer-valued forecasts
+  #### integer-valued forecasts
+    - 
 
-#### continues forecasts
+  #### continuous forecasts
+    - 
 
 
 
 ### Todo
 
-  - [ ] make good documentation. Add formulas to documentation
   - [ ] add option for working with datetime values
   - [ ] decide on nomenclature of variables
   - [ ] include error handling for functions
-  - [ ] add examples to function documentation
   
 ### Things to discuss
   - [ ] Do we want a vignette, or is the manual enough? 

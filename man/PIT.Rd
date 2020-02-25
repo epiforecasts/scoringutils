@@ -2,7 +2,7 @@
 % Please edit documentation in R/fun_probabilstic_forecasts_integer.R
 \name{PIT}
 \alias{PIT}
-\title{randomized Probability Integral Transformation}
+\title{randomised Probability Integral Transformation}
 \usage{
 PIT(true_values, predictions, num_bins = NULL, n_replicates = 20)
 }
@@ -82,7 +82,11 @@ In this context it should be noted, though, that uniformity of the
 (randomised) PIT is a necessary but not sufficient condition of calibration.
 }
 \examples{
-NULL
+true_values <- rpois(100, lambda = 1:100)
+predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
+pit <- PIT(true_values, predictions)
+plot(pit$hist_PIT)
+
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
