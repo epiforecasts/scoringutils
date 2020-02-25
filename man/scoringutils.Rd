@@ -42,28 +42,28 @@ The following functions can also be accessed directly:
 \section{probabilistic - continuous}{
 
 \itemize{
-\item \code{\link{.}}
+\item .
 }
 }
 
 \section{point prediction - integer}{
 
 \itemize{
-\item \code{\link{.}}
+\item .
 }
 }
 
 \section{point prediction - binary}{
 
 \itemize{
-\item \code{\link{.}}
+\item .
 }
 }
 
 \section{point prediction - continuous}{
 
 \itemize{
-\item \code{\link{.}}
+\item .
 }
 }
 
