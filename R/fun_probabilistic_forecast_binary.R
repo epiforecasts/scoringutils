@@ -73,8 +73,8 @@ Brier_score <- function (true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (is.integer(predictions)) {
-    warning("Your predictions are all integers. Maybe you wanted to supply
+  if (all.equal(predictions, as.integer(predictions)) == TRUE) {
+    warning("Your probabilities are all integers. Maybe you wanted to supply
             probabilites or a matrix of predictive samples?")
   }
 

@@ -151,7 +151,7 @@ eval_forecasts_prob_int <- function(true_values,
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (!all.equal(true_values, as.integer(true_values)) == TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -183,7 +183,8 @@ eval_forecasts_prob_int <- function(true_values,
                   "Dimension mismatch in list element ", as.character(i))
         stop(msg)
       }
-      if (!is.integer(predictions[[i]])) {
+      if (!all.equal(as.vector(predictions[[i]]),
+                     as.integer(predictions[[i]])) == TRUE) {
         warning("predictions provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
       }
@@ -378,8 +379,8 @@ eval_forecasts_prob_bin <- function(true_values,
                 true_values = true_values)
 
   if (length(tmp) > 1) {
-    res$Brier_Score <- data.frame(mean = colMeans(tmp),
-                                  sd = apply(tmp, MARGIN=2, FUN=sd))
+    res$Brier_Score <- data.frame(mean = mean(tmp),
+                                  sd = sd(tmp))
   } else {
     res$Brier_Score <- data.frame(Brier_Score = tmp)
   }

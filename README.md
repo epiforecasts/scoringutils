@@ -1,13 +1,5 @@
 <!-- badges: start -->
- [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-<!-- badges: end -->
-
-<!-- badges: start -->
-[![Travis build status](https://travis-ci.org/epiforecasts/scoringutils.svg?branch=master)](https://travis-ci.org/epiforecasts/scoringutils)
-<!-- badges: end -->
-
-<!-- badges: start -->
-[![codecov](https://codecov.io/github/codecov/example-r/branch/master/graphs/badge.svg)](https://codecov.io/epiforecasts/scoringutils) 
+ [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![Travis build status](https://travis-ci.org/epiforecasts/scoringutils.svg?branch=master)](https://travis-ci.org/epiforecasts/scoringutils) [![codecov](https://codecov.io/github/codecov/example-r/branch/master/graphs/badge.svg)](https://codecov.io/epiforecasts/scoringutils) 
 <!-- badges: end -->
 
  

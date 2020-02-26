@@ -116,7 +116,7 @@ PIT <- function(true_values,
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -134,7 +134,7 @@ PIT <- function(true_values,
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (!is.integer(predictions)) {
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     warning("predictions provided are not integers. Don't trust the results.
         Maybe you want to score continuous predictions instead?")
   }
@@ -282,7 +282,7 @@ bias <- function(true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -300,7 +300,7 @@ bias <- function(true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (!is.integer(predictions)) {
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     warning("predictions provided are not integers. Don't trust the results.
         Maybe you want to score continuous predictions instead?")
   }
@@ -353,7 +353,7 @@ dss <- function(true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -371,7 +371,7 @@ dss <- function(true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (!is.integer(predictions)) {
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     warning("predictions provided are not integers. Don't trust the results.
         Maybe you want to score continuous predictions instead?")
   }
@@ -409,7 +409,7 @@ crps <- function(true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -427,7 +427,7 @@ crps <- function(true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (!is.integer(predictions)) {
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     warning("predictions provided are not integers. Don't trust the results.
         Maybe you want to score continuous predictions instead?")
   }
@@ -461,7 +461,7 @@ error_handling_prob_int <- function(true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!is.integer(true_values)) {
+  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
     warning("The true_values provided are not integers. Don't trust the results.
             Maybe you want to score continuous predictions instead?")
   }
@@ -479,7 +479,7 @@ error_handling_prob_int <- function(true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (!is.integer(predictions)) {
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     warning("predictions provided are not integers. Don't trust the results.
         Maybe you want to score continuous predictions instead?")
   }
