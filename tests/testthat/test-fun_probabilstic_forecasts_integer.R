@@ -54,7 +54,7 @@ test_that("function works for correct format of true_values and predictions",
             output <- PIT(true_values = true_values,
                           predictions = predictions)
             expect_equal(length(output),
-                         3)
+                         4)
             expect_equal(class(output),
                          "list")
             expect_equal(class(output[[1]]),
