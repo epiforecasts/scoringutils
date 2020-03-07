@@ -284,6 +284,83 @@ eval_forecasts_prob_cont <- function(true_values,
                                      metrics = c(),
                                      output = "df") {
 
+
+  # ============== Error handling ==============
+
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+
+  n <- length(true_values)
+
+  if (!is.list(predictions)) {
+    if (is.matrix(predictions)) {
+      predictions <- list(predictions)
+    }
+    else {
+      stop("predictions argument should be a list of matrices")
+    }
+  }
+
+  if (is.data.frame(predictions)) {
+    predictions <- list(as.matrix(predictions))
+  } else {
+    for (i in 1:length(predictions)) {
+      if (is.data.frame(predictions[[i]])) {
+        predictions[[i]] <- as.matrix(predictions[[i]])
+      }
+      if (!is.matrix(predictions[[i]])) {
+        stop("'predictions' should be a list of matrices")
+      }
+      if (nrow(predictions[[i]]) != n) {
+        msg = cat("all matrices in list 'predictions' must have n rows, ",
+                  "where n is the number of true_values to predict. ",
+                  "Dimension mismatch in list element ", as.character(i))
+        stop(msg)
+      }
+    }
+  }
+
+  # ============================================
+
+  res <- list()
+
+
+  # CRPS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::crps_sample(dat = x,
+                                            y = true_values)
+                },
+                true_values = true_values)
+
+  res$CRPS <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd))
+
+
+  # CRPS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::logs_sample(dat = x,
+                                            y = true_values)
+                },
+                true_values = true_values)
+
+  res$logs <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd))
+
+
+
+
+
+  if (output == "df") {
+    return (do.call("rbind", res))
+  } else {
+    return (res)
+  }
+
+
 }
 
 

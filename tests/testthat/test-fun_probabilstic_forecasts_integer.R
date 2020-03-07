@@ -1,6 +1,6 @@
 
 # ===================================================================== #
-# PIT
+# pit
 # ===================================================================== #
 
 
@@ -9,7 +9,7 @@ test_that("function throws an error when missing true_values",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
-            expect_error(PIT(predictions = predictions))
+            expect_error(pit(predictions = predictions))
           })
 
 test_that("function throws an error when missing 'predictions'",
@@ -17,7 +17,7 @@ test_that("function throws an error when missing 'predictions'",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
-            expect_error(PIT(true_values = true_values))
+            expect_error(pit(true_values = true_values))
           })
 
 test_that("function throws a warning for wrong format of true_value",
@@ -25,7 +25,7 @@ test_that("function throws a warning for wrong format of true_value",
             true_values <- runif(10, min = 0, max = 1)
             predictions <- replicate(10, rpois(10, lambda = 1:10))
 
-            expect_warning(PIT(true_values = true_values,
+            expect_warning(pit(true_values = true_values,
                                predictions = predictions))
           })
 
@@ -34,15 +34,15 @@ test_that("function throws a warning for wrong format of predictions",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(10, runif(10, min = 0, max = 10))
 
-            expect_warning(PIT(true_values = true_values,
+            expect_warning(pit(true_values = true_values,
                                predictions = predictions))
 
             predictions <- list(replicate(10, rpois(10, lambda = 1:10)))
-            expect_error(PIT(true_values = true_values,
+            expect_error(pit(true_values = true_values,
                                predictions = predictions))
 
             predictions <- replicate(10, runif(13, min = 0, max = 10))
-            expect_error(PIT(true_values = true_values,
+            expect_error(pit(true_values = true_values,
                              predictions = predictions))
           })
 
@@ -51,7 +51,7 @@ test_that("function works for correct format of true_values and predictions",
           {
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(10, rpois(10, lambda = 1:10))
-            output <- PIT(true_values = true_values,
+            output <- pit(true_values = true_values,
                           predictions = predictions)
             expect_equal(length(output),
                          4)

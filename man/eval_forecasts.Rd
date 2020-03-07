@@ -49,7 +49,7 @@ results.
 Rownames of the data.frame correspond to the metric applied for the scoring.
 \code{mean} and \code{sd} are the mean and standard deviations of the scores
 achieved by the predictions for every single value of \code{true_values}.
-Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
+Only in the case of the \code{\link{pit}}, \code{mean} and \code{sd} return
 the mean and standard deviation of the Replicates of the Randomised PIT.
 If everything else than "df" is specified, the above results are returned
 as a list of data.frames for the different metrics.
