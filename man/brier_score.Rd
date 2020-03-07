@@ -33,6 +33,6 @@ Brier_Score = \frac{1}{N} \sum_{t = 1}^{n} (prediction_t - outcome_t)^2
 true_values <- sample(c(0,1), size = 30, replace = TRUE)
 predictions <- runif(n = 30, min = 0, max = 1)
 
-Brier_score(true_values, predictions)
+brier_score(true_values, predictions)
 
 }
