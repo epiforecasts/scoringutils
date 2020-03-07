@@ -76,7 +76,7 @@
 #' @examples
 #' true_values <- rpois(100, lambda = 1:100)
 #' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-#' pit <- PIT(true_values, predictions)
+#' pit <- pit(true_values, predictions)
 #' plot(pit$hist_PIT)
 #'
 #' @export
@@ -104,7 +104,7 @@
 #'
 #'
 
-PIT <- function(true_values,
+pit <- function(true_values,
                 predictions,
                 num_bins = NULL,
                 n_replicates = 20) {
@@ -389,7 +389,8 @@ dss <- function(true_values, predictions) {
 #'
 #' @description
 #' Wrapper around the \code{\link[scoringRules]{crps_sample}} function from the
-#' \code{scoringRules} package.
+#' \code{scoringRules} package. Can be used for continuous as well as integer
+#' valued forecasts
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
@@ -410,11 +411,6 @@ crps <- function(true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (all.equal(true_values, as.integer(true_values)) != TRUE) {
-    warning("The true_values provided are not integers. Don't trust the results.
-            Maybe you want to score continuous predictions instead?")
-  }
-
   n <- length(true_values)
 
   if (is.data.frame(predictions)) {
@@ -428,12 +424,8 @@ crps <- function(true_values, predictions) {
               "where n is the number of true_values to predict. ")
     stop(msg)
   }
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
-    warning("predictions provided are not integers. Don't trust the results.
-        Maybe you want to score continuous predictions instead?")
-  }
 
-  # ============================================
+    # ============================================
 
   scoringRules::crps_sample(y = true_values,
                            dat = predictions)

@@ -19,7 +19,7 @@
 #'
 #' @section probabilistic - integer:
 #' \itemize{
-#' \item \code{\link{PIT}}
+#' \item \code{\link{pit}}
 #' \item \code{\link{bias}}
 #' \item \code{\link{sharpness}}
 #' \item \code{\link{crps}}

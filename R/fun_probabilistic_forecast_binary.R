@@ -27,7 +27,7 @@
 #' Brier_score(true_values, predictions)
 #'
 
-Brier_score <- function (true_values, predictions) {
+brier_score <- function (true_values, predictions) {
 
   # ============== Error handling ==============
 

@@ -44,7 +44,7 @@
 #' Rownames of the data.frame correspond to the metric applied for the scoring.
 #' \code{mean} and \code{sd} are the mean and standard deviations of the scores
 #' achieved by the predictions for every single value of \code{true_values}.
-#' Only in the case of the \code{\link{PIT}}, \code{mean} and \code{sd} return
+#' Only in the case of the \code{\link{pit}}, \code{mean} and \code{sd} return
 #' the mean and standard deviation of the Replicates of the Randomised PIT.
 #' If everything else than "df" is specified, the above results are returned
 #' as a list of data.frames for the different metrics.
@@ -200,7 +200,7 @@ eval_forecasts_prob_int <- function(true_values,
   # with Anderson-Darling Test and return mean and sd of those p-values
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::PIT(true_values = true_values,
+                  scoringutils::pit(true_values = true_values,
                                     predictions = x)$p_values
                 },
                 true_values = true_values)
@@ -373,7 +373,7 @@ eval_forecasts_prob_bin <- function(true_values,
   # Brier Score
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::Brier_score(true_values = true_values,
+                  scoringutils::brier_score(true_values = true_values,
                                             predictions = x)
                 },
                 true_values = true_values)
