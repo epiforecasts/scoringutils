@@ -79,13 +79,12 @@ eval_forecasts <- function(true_values,
                                      metrics = metrics,
                                      output = output)
       return(res)
+    } else if (outcome_type == "continuous") {
       res <- eval_forecasts_prob_cont(true_values,
                                       predictions,
                                       metrics = metrics,
                                       output = output)
-
-    } else if (outcome_type == "continuous") {
-
+      return(res)
     } else {
       stop("outcome_type must be either 'integer', 'continuous' or 'binary'")
     }
