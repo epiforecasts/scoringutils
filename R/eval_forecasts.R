@@ -79,6 +79,7 @@ eval_forecasts <- function(true_values,
                                      metrics = metrics,
                                      output = output)
       return(res)
+
     } else if (outcome_type == "continuous") {
       res <- eval_forecasts_prob_cont(true_values,
                                       predictions,
@@ -105,6 +106,7 @@ eval_forecasts <- function(true_values,
   } else {
     stop("prediction_type must be either 'probabilistic' or 'point'")
   }
+  stop ("end of function reached")
 }
 
 # ====================================================== #
