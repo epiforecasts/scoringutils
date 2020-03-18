@@ -205,8 +205,8 @@ eval_forecasts_prob_int <- function(true_values,
   # with Anderson-Darling Test and return mean and sd of those p-values
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::pit(true_values = true_values,
-                                    predictions = x)$p_values
+                  scoringutils::pit_int(true_values = true_values,
+                                        predictions = x)$p_values
                 },
                 true_values = true_values)
 
@@ -226,8 +226,8 @@ eval_forecasts_prob_int <- function(true_values,
   # bias
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::bias(predictions = x,
-                                     true_values = true_values)
+                  scoringutils::bias_int(predictions = x,
+                                         true_values = true_values)
                 },
                 true_values = true_values)
 

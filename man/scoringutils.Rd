@@ -35,7 +35,7 @@ The following functions can also be accessed directly:
 \section{probabilistic - binary}{
 
 \itemize{
-\item \code{\link{Brier_score}}
+\item \code{\link{brier_score}}
 }
 }
 

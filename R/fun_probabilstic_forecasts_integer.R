@@ -104,10 +104,10 @@
 #'
 #'
 
-pit <- function(true_values,
-                predictions,
-                num_bins = NULL,
-                n_replicates = 20) {
+pit_int <- function(true_values,
+                    predictions,
+                    num_bins = NULL,
+                    n_replicates = 20) {
 
 
   # ============== Error handling ==============
@@ -141,50 +141,43 @@ pit <- function(true_values,
 
   # ============================================
 
-    n_pred <- ncol(predictions)
+  n_pred <- ncol(predictions)
 
-    # calculate emipirical cumulative distribution function as
-    # Portion of (y_true <= y_predicted)
-    P_x <- vapply(seq_along(true_values),
+  # calculate emipirical cumulative distribution function as
+  # Portion of (y_true <= y_predicted)
+  P_x <- vapply(seq_along(true_values),
+                function(i) {
+                  sum(predictions[i,] <= true_values[i]) / n_pred
+                },
+                .0)
+
+  # epirical cdf for (y-1). Only used for for integer-valued
+  # predictions and true-values.
+  P_xm1 <- vapply(seq_along(true_values),
                   function(i) {
-                    sum(predictions[i,] <= true_values[i]) / n_pred
+                    sum(predictions[i,] <= true_values[i] - 1) / n_pred
                   },
                   .0)
 
-    # epirical cdf for (y-1). Only used for for integer-valued
-    # predictions and true-values.
-    P_xm1 <- vapply(seq_along(true_values),
-                    function(i) {
-                      sum(predictions[i,] <= true_values[i] - 1) / n_pred
-                    },
-                    .0)
+  u <- replicate(n_replicates, P_xm1 + runif(n) * (P_x - P_xm1))
 
-    u <- replicate(n_replicates, P_xm1 + runif(n) * (P_x - P_xm1))
+  hist_PIT <- scoringutils::hist_PIT(rowMeans(u))
 
-    if (is.null(num_bins)) {
-      num_bins = round(sqrt(n))
+  p_values <- apply(
+    u,
+    MARGIN = 2,
+    FUN = function (x) {
+      goftest::ad.test(x)$p.value
     }
+  )
 
-    hist_PIT = ggplot(as.data.frame(rowMeans(u)),
-                      aes(x = rowMeans(u))) + geom_histogram(color = 'darkblue',
-                                                             fill = 'lightblue',
-                                                             bins = num_bins)
+  calibration <- data.frame(mean = mean(p_values),
+                            sd = sd(p_values))
 
-    p_values <- apply(
-      u,
-      MARGIN = 2,
-      FUN = function (x) {
-        goftest::ad.test(x)$p.value
-      }
-    )
-
-    calibration <- data.frame(mean = mean(p_values),
-                              sd = sd(p_values))
-
-    return(list(p_values = p_values,
-                hist_PIT = hist_PIT,
-                calibration = calibration,
-                u = u))
+  return(list(p_values = p_values,
+              hist_PIT = hist_PIT,
+              calibration = calibration,
+              u = u))
 }
 
 
@@ -243,7 +236,7 @@ sharpness <- function (predictions) {
 }
 
 
-#' @title Determines bias of a forecast
+#' @title Determines bias of an integer forecast
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples for integer values
@@ -275,7 +268,7 @@ sharpness <- function (predictions) {
 #' @export
 
 
-bias <- function(true_values, predictions) {
+bias_int <- function(true_values, predictions) {
 
   # ============== Error handling ==============
 
