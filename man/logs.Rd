@@ -18,7 +18,12 @@ vector with the scoring values
 }
 \description{
 Wrapper around the \code{\link[scoringRules]{logs_sample}} function from the
-\code{scoringRules} package.
+\code{scoringRules} package. While the Log Score is in theory also applicable
+to integer forecasts, the problem lies in the implementation: The Log Score
+needs a kernel density estimation, which is not well defined with
+integer-valued Monte Carlo Samples. The Log Score can be used for specific
+integer valued probabiliy distributions. See the scoringRules package for
+more details.
 }
 \examples{
 true_values <- rpois(30, lambda = 1:30)
