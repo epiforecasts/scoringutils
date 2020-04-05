@@ -20,7 +20,7 @@
 #' @section probabilistic - integer:
 #' \itemize{
 #' \item \code{\link{pit_int}}
-#' \item \code{\link{bias_int}}
+#' \item \code{\link{bias}}
 #' \item \code{\link{sharpness}}
 #' \item \code{\link{crps}}
 #' \item \code{\link{dss}}
