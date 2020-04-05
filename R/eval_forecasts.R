@@ -226,8 +226,8 @@ eval_forecasts_prob_int <- function(true_values,
   # bias
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::bias_int(predictions = x,
-                                         true_values = true_values)
+                  scoringutils::bias(predictions = x,
+                                     true_values = true_values)
                 },
                 true_values = true_values)
 

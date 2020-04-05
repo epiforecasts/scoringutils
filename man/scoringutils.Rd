@@ -25,7 +25,7 @@ The following functions can also be accessed directly:
 
 \itemize{
 \item \code{\link{pit_int}}
-\item \code{\link{bias_int}}
+\item \code{\link{bias}}
 \item \code{\link{sharpness}}
 \item \code{\link{crps}}
 \item \code{\link{dss}}

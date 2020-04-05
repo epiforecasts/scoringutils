@@ -36,7 +36,6 @@ to assess calibration of the predictions.
 Uses a (randomised) Probability Integral Transformation (PIT) to
 assess the calibration of predictive Monte Carlo samples. Returns a
 randomised PIT histogram and p-values resulting from an Anderson-Darling
-test for uniformity for the randomised PIT.
 }
 \details{
 Calibration or reliability of forecasts is the ability of a model to
