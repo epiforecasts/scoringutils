@@ -32,6 +32,10 @@
 #'                lower = lower,
 #'                upper = upper)
 #' @export
+#' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
+#' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
+#' Statistical Association, Volume 102, 2007 - Issue 477
+
 
 interval_score <- function(interval_range = NULL,
                            lower,
