@@ -50,6 +50,10 @@
 #'
 #'
 #' @export
+#' @references
+#' The integer valued Bias function is discussed in
+#' Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
+#' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, et al. (2019) Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785. https://doi.org/10.1371/journal.pcbi.1006785
 
 
 bias <- function(true_values, predictions) {
