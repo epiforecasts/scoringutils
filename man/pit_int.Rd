@@ -4,7 +4,13 @@
 \alias{pit_int}
 \title{randomised Probability Integral Transformation}
 \usage{
-pit_int(true_values, predictions, num_bins = NULL, n_replicates = 20)
+pit_int(
+  true_values,
+  predictions,
+  n_replicates = 20,
+  plot = TRUE,
+  num_bins = NULL
+)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -13,11 +19,14 @@ pit_int(true_values, predictions, num_bins = NULL, n_replicates = 20)
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 
-\item{num_bins}{the number of bins in the PIT histogram.
-If not given, the square root of n will be used}
-
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
+
+\item{plot}{logical. If TRUE, a histogram of the PIT values will be returned
+as well}
+
+\item{num_bins}{the number of bins in the PIT histogram (provided plot == TRUE)
+If not given, the square root of n will be used}
 }
 \value{
 a list with the following components:
@@ -25,7 +34,8 @@ a list with the following components:
 \item \code{p_values}: p-values from the
 Anderson-Darling test on the \code{n_replicate} replicates of the randomised
 PIT
-\item \code{hist_PIT} a ggplot object with the PIT histogram. Call
+\item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
+if \code{plot == TRUE}. Call
 \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 \item \code{calibration}: mean and standard deviation of the p-values of the
 \code{n_replicates} Anderson-Darling tests. This can be used as a summary

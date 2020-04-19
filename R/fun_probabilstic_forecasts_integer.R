@@ -52,16 +52,19 @@
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param num_bins the number of bins in the PIT histogram.
-#' If not given, the square root of n will be used
 #' @param n_replicates the number of tests to perform,
 #' each time re-randomising the PIT
+#' @param plot logical. If TRUE, a histogram of the PIT values will be returned
+#' as well
+#' @param num_bins the number of bins in the PIT histogram (provided plot == TRUE)
+#' If not given, the square root of n will be used
 #' @return a list with the following components:
 #' \itemize{
 #' \item \code{p_values}: p-values from the
 #' Anderson-Darling test on the \code{n_replicate} replicates of the randomised
 #' PIT
-#' \item \code{hist_PIT} a ggplot object with the PIT histogram. Call
+#' \item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
+#' if \code{plot == TRUE}. Call
 #' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 #' \item \code{calibration}: mean and standard deviation of the p-values of the
 #' \code{n_replicates} Anderson-Darling tests. This can be used as a summary
@@ -105,8 +108,9 @@
 
 pit_int <- function(true_values,
                     predictions,
-                    num_bins = NULL,
-                    n_replicates = 20) {
+                    n_replicates = 20,
+                    plot = TRUE,
+                    num_bins = NULL) {
 
 
   # ============== Error handling ==============
@@ -160,8 +164,6 @@ pit_int <- function(true_values,
 
   u <- replicate(n_replicates, P_xm1 + runif(n) * (P_x - P_xm1))
 
-  hist_PIT <- scoringutils::hist_PIT(rowMeans(u))
-
   p_values <- apply(
     u,
     MARGIN = 2,
@@ -173,10 +175,16 @@ pit_int <- function(true_values,
   calibration <- data.frame(mean = mean(p_values),
                             sd = sd(p_values))
 
-  return(list(p_values = p_values,
-              hist_PIT = hist_PIT,
+  out <- list(p_values = p_values,
               calibration = calibration,
-              u = u))
+              u = u)
+
+  if (plot == TRUE) {
+    hist_PIT <- scoringutils::hist_PIT(rowMeans(u), num_bins = num_bins)
+    out$hist_PIT = hist_PIT
+  }
+
+  return(out)
 }
 
 

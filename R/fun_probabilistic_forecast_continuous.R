@@ -88,9 +88,18 @@ logs <- function(true_values, predictions) {
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param num_bins the number of bins in the PIT histogram.
+#' @param plot logical. If TRUE, a histogram of the PIT values will be returned
+#' as well
+#' @param num_bins the number of bins in the PIT histogram (if plot == TRUE)
 #' If not given, the square root of n will be used
-#' @return vector with the scoring values
+#' @return #' @return a list with the following components:
+#' \itemize{
+#' \item \code{calibration}: p-value of the Anderson-Darling test. on the
+#' PIT values.
+#' \item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
+#' if \code{plot == TRUE}. Call
+#' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
+#' }
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
@@ -101,6 +110,7 @@ logs <- function(true_values, predictions) {
 
 pit <- function(true_values,
                 predictions,
+                plot = TRUE,
                 num_bins = NULL) {
 
 
@@ -145,14 +155,17 @@ pit <- function(true_values,
                 },
                 .0)
 
-  hist_PIT <- scoringutils::hist_PIT(P_x)
-
   calibration <- goftest::ad.test(P_x)$p.value
   names(calibration) <- "p_value"
 
-  return(list(hist_PIT = hist_PIT,
-              calibration = calibration))
+  out <- list(calibration = calibration)
 
+  if (plot == TRUE) {
+    hist_PIT <- scoringutils::hist_PIT(P_x, num_bins = num_bins)
+    out$hist_PIT = hist_PIT
+  }
+
+  return(out)
 }
 
 

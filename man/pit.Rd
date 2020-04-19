@@ -4,7 +4,7 @@
 \alias{pit}
 \title{randomised Probability Integral Transformation}
 \usage{
-pit(true_values, predictions, num_bins = NULL)
+pit(true_values, predictions, plot = TRUE, num_bins = NULL)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -13,11 +13,21 @@ pit(true_values, predictions, num_bins = NULL)
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 
-\item{num_bins}{the number of bins in the PIT histogram.
+\item{plot}{logical. If TRUE, a histogram of the PIT values will be returned
+as well}
+
+\item{num_bins}{the number of bins in the PIT histogram (if plot == TRUE)
 If not given, the square root of n will be used}
 }
 \value{
-vector with the scoring values
+#' @return a list with the following components:
+\itemize{
+\item \code{calibration}: p-value of the Anderson-Darling test. on the
+PIT values.
+\item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
+if \code{plot == TRUE}. Call
+\code{plot(PIT(...)$hist_PIT)} to display the histogram.
+}
 }
 \description{
 Uses a Probability Integral Transformation (PIT) to
