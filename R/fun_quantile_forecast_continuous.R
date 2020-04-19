@@ -2,54 +2,70 @@
 #'
 #' @description
 #' Proper Scoring Rule to score quantile predictions, following Gneiting
-#' and Raftery (2007). Smaller values are better. The user can either specify
-#' a interval range in percentage terms, i.e. interval_range = 90 (percent)
-#' prediction intervals, or
-#' a decimal alpha value, i.e. alpha = 0.1, both corresponding
-#' to the 95% and 5% quantiles. No specific distribution is assumed,
+#' and Raftery (2007). Smaller values are better.
+#'
+#' The score is computed as
+#'
+#' \deqn{
+#' score = (upper - lower) + 2/alpha * (lower - true_value) *
+#' 1(true_values < lower) + 2/alpha * (true_value - upper) *
+#' 1(true_value > upper)
+#' }
+#' where $1()$ is the indicator function and alpha is the decimal value that
+#' indicates how much is outside the prediction interval.
+#' To improve usability, the user is asked to provide an interval range in
+#' percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
+#' prediction interval. Correspondingly, the user would have to provide the
+#' 5% and 95% quantiles (the corresponding alpha would then be 0.1).
+#' No specific distribution is assumed,
 #' but the range has to be symmetric (i.e you can't use the 0.1 quantile
 #' as the lower bound and the 0.7 quantile as the upper).
 #'
-#' @param interval_range the range of the prediction intervals. i.e. if you're
-#' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
-#' Can be either a single number or a vector of size n, if the range changes.
+#' The interval score is a proper scoring rule that scores a quantile forecast
+#'
+#' @param true_values A vector with the true observed values of size n
 #' @param lower vector of size n with the lower quantile of the given range
 #' @param upper vector of size n with the upper quantile of the given range
-#' @param true_values A vector with the true observed values of size n
-#' @param alpha alternative to specifying an interval_range. You can give a
-#' decimal value like 0.1, which means that you have specified the 0.05 and
-#' 0.95 quantiles as lower and upper
+#' @param interval_range the range of the prediction intervals. i.e. if you're
+#' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
+#' Can be either a single number or a vector of size n, if the range changes
+#' for different forecasrs to be scored.
+#' @param verbose if TRUE, gives you feedback if your interval_range seems odd.
 #' @return vector with the scoring values
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = 90
-#' alpha = 0.1
 #' lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
 #' upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
 #'
-#' interval_score(interval_range = interval_range,
-#'                true_values = true_values,
+#' interval_score(true_values = true_values,
 #'                lower = lower,
-#'                upper = upper)
+#'                upper = upper,
+#'                interval_range = interval_range)
 #' @export
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
 #' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
 #' Statistical Association, Volume 102, 2007 - Issue 477
 
 
-interval_score <- function(interval_range = NULL,
+interval_score <- function(true_values,
                            lower,
                            upper,
-                           true_values,
-                           alpha = NULL) {
+                           interval_range = NULL,
+                           verbose = TRUE) {
 
-  if(!is.null(interval_range)) {
-    if (interval_range < 1) {
+  if(is.null(interval_range)) {
+    stop("must provide a range for your prediction interval")
+  }
+
+  if(verbose) {
+    if (interval_range < 1 && interval_range != 0) {
       message(paste(interval_range),
               "% interval was provided. Are you sure that's right?", sep = "")
     }
-    alpha = (100 - interval_range) / 100
   }
+
+  alpha = (100 - interval_range) / 100
 
   score = (upper - lower) +
     2/alpha * (lower - true_values) * (true_values < lower) +
