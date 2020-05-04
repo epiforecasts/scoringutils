@@ -29,7 +29,11 @@
 #' @param interval_range the range of the prediction intervals. i.e. if you're
 #' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 #' Can be either a single number or a vector of size n, if the range changes
-#' for different forecasrs to be scored.
+#' for different forecasts to be scored. This corresponds to (100-alpha)/100
+#' in Gneiting and Raftery (2007).
+#' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
+#' into an interval score that, in the limit, corresponds to CRPS. Default:
+#' FALSE.
 #' @param verbose if TRUE, gives you feedback if your interval_range seems odd.
 #' @return vector with the scoring values
 #' @examples
@@ -53,6 +57,7 @@ interval_score <- function(true_values,
                            lower,
                            upper,
                            interval_range = NULL,
+                           weigh = FALSE,
                            verbose = TRUE) {
 
   if(is.null(interval_range)) {
@@ -71,6 +76,8 @@ interval_score <- function(true_values,
   score = (upper - lower) +
     2/alpha * (lower - true_values) * (true_values < lower) +
     2/alpha * (true_values - upper) * (true_values > upper)
+
+  if (weigh) score <- score * alpha / 4
 
   return(score)
 }
