@@ -59,8 +59,9 @@
 #' as well
 #' @param num_bins the number of bins in the PIT histogram (if plot == TRUE)
 #' If not given, the square root of n will be used
-#' @param n_replicates
-#' @param full_ouput return all individual p_values and computed u_t values
+#' @param n_replicates the number of tests to perform,
+#' each time re-randomising the PIT
+#' @param full_output return all individual p_values and computed u_t values
 #' for the randomised PIT. Usually not needed.
 #' @return a list with the following components:
 #' \itemize{
@@ -71,12 +72,14 @@
 #' \item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
 #' if \code{plot == TRUE}. Call
 #' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
-#' }
-#' \item p_values all p_values generated from the Anderson-Darling tests on the
+#' \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
 #' randomised PIT. Only returned for integer forecasts
 #' and if \code{full_output = TRUE}
-#' \item u the u_t values internally computed. Only returned for integer
+#' \item \code{u}: the u_t values internally computed. Only returned for integer
 #' forecasts and if \code{full_output = TRUE}
+#' }
+#' @importFrom goftest ad.test
+#' @importFrom stats runif sd
 #' @examples
 #'
 #' ## continuous predictions
@@ -163,7 +166,7 @@ pit <- function(true_values,
                     .0)
 
     # do n_replicates times for randomised PIT
-    u <- replicate(n_replicates, P_xm1 + runif(n) * (P_x - P_xm1))
+    u <- replicate(n_replicates, P_xm1 + stats::runif(n) * (P_x - P_xm1))
 
     p_values <- apply(
       u,
@@ -174,7 +177,7 @@ pit <- function(true_values,
     )
 
     calibration <- data.frame(mean = mean(p_values),
-                              sd = sd(p_values))
+                              sd = stats::sd(p_values))
 
     if (full_output) {
       out <- list(p_values = p_values,
@@ -193,3 +196,42 @@ pit <- function(true_values,
 
   return(out)
 }
+
+
+
+
+
+
+#' @title PIT Histogram
+#'
+#' @description
+#' Make a simple histogram of the probability integral transformed values to
+#' visually check whether a uniform distribution seems likely.
+#'
+#' @param PIT_samples A vector with the PIT values of size n
+#' @param num_bins the number of bins in the PIT histogram.
+#' If not given, the square root of n will be used
+#' @return vector with the scoring values
+#' @importFrom ggplot2 aes ggplot
+#' @examples
+#' true_values <- rpois(30, lambda = 1:30)
+#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' logs(true_values, predictions)
+#' @export
+
+
+hist_PIT <- function(PIT_samples, num_bins = NULL) {
+
+  if (is.null(num_bins)) {
+    n <- length(PIT_samples)
+    num_bins = round(sqrt(n))
+  }
+
+  PIT <- PIT_samples
+  hist_PIT <- ggplot2::ggplot(as.data.frame(PIT), ggplot2::aes(x = PIT)) +
+    ggplot2::geom_histogram(color = 'darkblue',
+                            fill = 'lightblue',
+                            bins = num_bins)
+}
+
+

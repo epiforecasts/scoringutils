@@ -43,7 +43,7 @@ brier_score <- function (true_values, predictions) {
 
   n <- length(true_values)
 
-  if (length(predictions != n)) {
+  if (length(predictions) != n) {
     msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
                    n, length(predictions))
     stop(msg)

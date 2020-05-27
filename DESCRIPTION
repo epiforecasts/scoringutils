@@ -7,8 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "nikosbosse@gmail.com",
            comment = c(ORCID = "https://orcid.org/0000-0002-7750-5280"))
-Description: The package bundles a collection of existing metrics and Proper
-Scoring Rules that can be used to conveniently assess the quality of predictions. 
+Description: 
+    The package bundles a collection of existing metrics and Proper 
+    Scoring Rules that can be used to conveniently assess the quality of 
+    predictions. Most of the functions are designed to work on predictive samples. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -14,6 +14,7 @@
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return vector with the scoring values
+#' @importFrom scoringRules logs_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
@@ -63,6 +64,7 @@ logs <- function(true_values, predictions) {
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return vector with scoring values
+#' @importFrom scoringRules dss_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
@@ -114,6 +116,7 @@ dss <- function(true_values, predictions) {
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @return vector with the scoring values
+#' @importFrom scoringRules crps_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))

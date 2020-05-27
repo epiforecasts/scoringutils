@@ -2,7 +2,7 @@
 #'
 #' @description The function \code{eval_forecasts} is a wrapper that provides
 #' an interface to lower-level functions. It can be used to assess the goodness
-#' of probabilistic or point forecasts to continues, integer-valued or
+#' of probabilistic, quantile or point forecasts to continuous, integer-valued or
 #' binary variables. The lower-level functions accessed are:
 #'
 #' \enumerate{
@@ -117,9 +117,10 @@ eval_forecasts <- function(true_values,
 #' forecasts of integers
 #'
 #' @param true_values A vector with the true observed values of size n
-#' @param predictions a list of nxN matrices of predictive samples,
-#' n (number of rows) being
-#' the number of data points and N (number of columns) the
+#' @param predictions a list of nxN matrices of predictive samples. Every list
+#' element is a matrix with the predictive samples generated from one model.
+#' n (number of rows) of those matrices is the number of data points and N
+#' (number of columns) the
 #' number of Monte Carlo samples
 #' @param metrics what metrics to include. currently not used
 #' @param output "df" returns a data.frame, everything else returns a list.
@@ -129,15 +130,14 @@ eval_forecasts <- function(true_values,
 #' @examples
 #' ## Example: Probabilistic predictions for integer values
 #' true_values <- rpois(100, lambda = 1:100)
-#
+#'
 #' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-#
-#
+#'
+#'
 #' predictions <- list(dat1 = replicate(5000, rpois(n = 100, lambda = 1:100)),
 #'                     dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
-#
-#
-#' eval_forecasts(true_values = true_values, predictions = predictions)
+#'
+#' eval_forecasts_prob_int(true_values = true_values, predictions = predictions)
 #'
 
 
@@ -154,11 +154,6 @@ eval_forecasts_prob_int <- function(true_values,
 
   if (missing(true_values) | missing(predictions)) {
     stop("true_values or predictions argument missing")
-  }
-
-  if (!all.equal(true_values, as.integer(true_values)) == TRUE) {
-    warning("The true_values provided are not integers. Don't trust the results.
-            Maybe you want to score continuous predictions instead?")
   }
 
   n <- length(true_values)
@@ -205,7 +200,7 @@ eval_forecasts_prob_int <- function(true_values,
   # with Anderson-Darling Test and return mean and sd of those p-values
   tmp <- sapply(predictions,
                 function(x, true_values) {
-                  scoringutils::pit_int(true_values = true_values,
+                  scoringutils::pit(true_values = true_values,
                                         predictions = x)$p_values
                 },
                 true_values = true_values)
