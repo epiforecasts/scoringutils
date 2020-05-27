@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A collection of proper scoring rules and metrics to assess predictions • scoringutils</title>
+<title>Utilities for Scoring and Assessing Predictions • scoringutils</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A collection of proper scoring rules and metrics to assess predictions">
-<meta property="og:description" content="What the package does (one paragraph).">
+<script src="pkgdown.js"></script><meta property="og:title" content="Utilities for Scoring and Assessing Predictions">
+<meta property="og:description" content="Utilities for scoring and assessing predictions.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -42,9 +42,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="articles/scoringutils.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -69,71 +66,40 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-
-<div id="scoringutils" class="section level1">
+<div id="scoringutils-utilities-for-scoring-and-assessing-predictions" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#scoringutils" class="anchor"></a>scoringutils</h1></div>
-<p>Utilities and Functions for Scoring Forecasts</p>
-<div id="components" class="section level2">
-<h2 class="hasAnchor">
-<a href="#components" class="anchor"></a>Components</h2>
-<div id="probabilistic-forecasts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#probabilistic-forecasts" class="anchor"></a>Probabilistic Forecasts</h3>
-<p>#### binary forecasts - Brier Score</p>
-<p>#### integer-valued forecasts - [x] PIT / calibration - [x] bias - [x] sharpness - [x] DSS - [x] CRPS</p>
-<p>#### continuous forecasts - [x] CRPS - [x] LogS</p>
-</div>
-<div id="point-forecasts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#point-forecasts" class="anchor"></a>Point Forecasts</h3>
-<p>#### binary forecasts -</p>
-<p>#### integer-valued forecasts -</p>
-<p>#### continuous forecasts -</p>
-</div>
-<div id="todo" class="section level3">
-<h3 class="hasAnchor">
-<a href="#todo" class="anchor"></a>Todo</h3>
-<ul>
-<li>
-<input type="checkbox" disabled>
-Vignette</li>
-<li>
-<input type="checkbox" disabled>
-References for CRPS and LogS functions</li>
-</ul>
-</div>
-<div id="things-to-discuss" class="section level3">
-<h3 class="hasAnchor">
-<a href="#things-to-discuss" class="anchor"></a>Things to discuss</h3>
-<ul>
-<li>
-<input type="checkbox" disabled>
-do we need an option for working with datetime values</li>
-<li>
-<input type="checkbox" disabled>
-decide on nomenclature of variables</li>
-<li>
-<input type="checkbox" disabled>
-What other functionality do we want to include? Also: what is already there?</li>
-<li>
-<input type="checkbox" disabled>
-Should we / can we wrap functions from other packages?</li>
-<li>
-<input type="checkbox" disabled>
-Do we want to implement something for probabilistic non-MCMC predictions?</li>
-<li>
-<input type="checkbox" disabled>
-should we make a formal distinction between absolute and comparative metrics?</li>
-<li>
-<input type="checkbox" disabled>
-How do we want to organise error handling? in a separate function? at the lowest level only?</li>
-</ul>
-</div>
-</div>
-</div>
+<a href="#scoringutils-utilities-for-scoring-and-assessing-predictions" class="anchor"></a>scoringutils: Utilities for Scoring and Assessing Predictions</h1></div>
 
+<p>This package is designed to help with assessing the quality of predictions. It provides a collection of proper scoring rules and metrics that can be accessed independently or collectively through wrapper functions. Predicitions can be either probabilistic forecasts (generally predictive samples generated by Markov Chain Monte Carlo procedures) or point forecasts. The type of the predictions and the true values can be either continuous, integer, or binary. A collection of different metrics and scoring rules can be accessed through the function <code>eval_forecasts</code> with the correct prediction type (probabilistic/point prediction, and continuous/integer/binary) specified.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>Install the stabele version of the package using <a href="https://epiforecasts.io/drat/"><code>{drat}</code></a>:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"drat"</span>)
+<span class="kw pkg">drat</span><span class="kw ns">::</span><span class="fu">add</span>(<span class="st">"epiforecasts"</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"scoringutils"</span>)</pre></div>
+<p>Install the development version of the package with:</p>
+<div class="sourceCode" id="cb2"><pre class="r">remotes::install_github("epiforecasts/scoringutils"")</pre></div>
+</div>
+<div id="supported-scores-and-metrics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#supported-scores-and-metrics" class="anchor"></a>Supported scores and metrics</h2>
+<div id="probabilistic" class="section level3">
+<h3 class="hasAnchor">
+<a href="#probabilistic" class="anchor"></a>Probabilistic</h3>
+<ul>
+<li>
+<code>pit_int</code>/ <code>pit</code>
+</li>
+<li><code>bias</code></li>
+<li><code>sharpness</code></li>
+<li><code>crps</code></li>
+<li><code>dss</code></li>
+<li><code>brier_score</code></li>
+</ul>
+</div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -149,23 +115,21 @@ How do we want to organise error handling? in a separate function? at the lowest
 <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Nikos Bosse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/YOUR-ORCID-ID" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Nikos Bosse <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Sebastian Funk <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://travis-ci.org/epiforecasts/scoringutils"><img src="https://travis-ci.org/epiforecasts/scoringutils.svg?branch=master" alt="Travis build status"></a></li>
 <li><a href="https://codecov.io/gh/epiforecasts/scoringutils/"><img src="https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
@@ -174,7 +138,7 @@ How do we want to organise error handling? in a separate function? at the lowest
 
 
       <footer><div class="copyright">
-  <p>Developed by Nikos Bosse.</p>
+  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">
