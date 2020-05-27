@@ -10,7 +10,7 @@ This package is designed to help with assessing the quality of predictions. It p
 
 ## Installation
 
-Install the stabele version of the package using [`{drat}`](https://epiforecasts.io/drat/):
+Install the stable version of the package using [`{drat}`](https://epiforecasts.io/drat/):
 
 ```r
 install.packages("drat")
