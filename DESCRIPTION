@@ -14,12 +14,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ggplot2 (>= 3.2.0),
-    goftest (>= 1.2-2),
-    scoringRules (>= 1.0.0),
-    stats (>= 3.6.0)
+    ggplot2,
+    goftest ,
+    scoringRules,
+    stats
 Suggests: 
-    testthat (>= 2.1.0),
+    testthat,
     knitr,
     rmarkdown
 RoxygenNote: 7.1.0
