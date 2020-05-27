@@ -21,7 +21,7 @@ install.packages("scoringutils")
 Install the development version of the package with: 
 
 ```r
-remotes::install_github("epiforecasts/scoringutils"")
+remotes::install_github("epiforecasts/scoringutils")
 ```
 
 ## Supported scores and metrics
