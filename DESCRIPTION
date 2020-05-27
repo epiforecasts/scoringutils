@@ -1,13 +1,15 @@
 Package: scoringutils
-Title: A collection of proper scoring rules and metrics to assess predictions
-Version: 0.0.0.9000
-Authors@R: 
+Title: Utilities for Scoring and Assessing Predictions
+Version: 0.1.0
+Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
            role = c("aut", "cre"),
-           email = "nikosbosse@gmail.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "nikosbosse@gmail.com"),
+    person("Sebastian", "Funk", 
+            email = "sebastian.funk@lshtm.ac.uk", 
+            role = c("aut")))
+Description: Utilities for scoring and assessing predictions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
