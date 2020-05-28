@@ -75,8 +75,8 @@
 #' \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
 #' randomised PIT. Only returned for integer forecasts
 #' and if \code{full_output = TRUE}
-#' \item \code{u}: the u_t values internally computed. Only returned for integer
-#' forecasts and if \code{full_output = TRUE}
+#' \item \code{u}: the u_t values internally computed. Only returned if
+#' \code{full_output = TRUE}
 #' }
 #' @importFrom goftest ad.test
 #' @importFrom stats runif sd
@@ -155,6 +155,10 @@ pit <- function(true_values,
     if (plot == TRUE) {
       hist_PIT <- scoringutils::hist_PIT(P_x, num_bins = num_bins)
       out$hist_PIT = hist_PIT
+    }
+
+    if(full_output) {
+      out$u <- P_x
     }
 
   } else {
