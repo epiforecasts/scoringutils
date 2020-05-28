@@ -49,7 +49,7 @@ brier_score <- function (true_values, predictions) {
     stop(msg)
   }
 
-  if (max(predictions) > 1 | min(predictions < 0)) {
+  if (max(predictions) > 1 | min(predictions) < 0) {
     stop("elements of 'predictions' should be probabilites between zero and one")
   }
   # ============================================
