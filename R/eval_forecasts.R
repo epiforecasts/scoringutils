@@ -1,3 +1,427 @@
+library(magrittr)
+library(dplyr)
+library(tidyr)
+
+## Brier Score
+true_values <- sample(c(0,1), size = 30, replace = TRUE)
+model1 <- runif(n = 30, min = 0, max = 1)
+model2 <- runif(n = 30, min = 0, max = 0.8)
+id <- 1:30
+
+data <- data.frame(true_values,
+                   model1,
+                   model2,
+                   id) %>%
+  tidyr::pivot_longer(c(model1, model2), names_to = "model",
+                      values_to = "predictions")
+
+## quantile score
+true_values <- rnorm(30, mean = 1:30)
+id <- 1:30
+
+model1 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
+                       mean = 1:30) %>%
+  matrix(ncol = 6) %>%
+  data.frame(id,
+             true_values,
+             model = "model1")
+
+model2 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
+                       mean = 1.1:30.1) %>%
+  matrix(ncol = 6) %>%
+  data.frame(id,
+             true_values,
+             model = "model2")
+
+data <- rbind(model1, model2) %>%
+  dplyr::rename_at(c("X1", "X2", "X3", "X4", "X5", "X6"),
+                   ~ c("lower_90", "lower_50", "lower_0",
+                       "upper_0", "upper_50", "upper_90"))
+
+## integer predictions
+true_values <- rpois(30, lambda = 1:30)
+id <- 1:30
+model1 <- replicate(200, rpois(n = 30, lambda = 1:30)) %>%
+  data.frame(true_values,
+             id,
+             model = "model1") %>%
+  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+                      values_to = "predictions",
+                      names_to = "sample") %>%
+  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+
+model2 <- replicate(200, rpois(n = 30, lambda = 1.1:30.1)) %>%
+  data.frame(true_values,
+             id,
+             model = "model2") %>%
+  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+                      values_to = "predictions",
+                      names_to = "sample") %>%
+  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+
+data <- rbind(model1, model2)
+
+
+## continuous predictions
+true_values <- rnorm(30)
+id <- 1:30
+model1 <- replicate(200, rnorm(30)) %>%
+  data.frame(true_values,
+             id,
+             model = "model1") %>%
+  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+                      values_to = "predictions",
+                      names_to = "sample") %>%
+  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+
+model2 <- replicate(200, rnorm(30, mean = 0.1)) %>%
+  data.frame(true_values,
+             id,
+             model = "model2") %>%
+  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+                      values_to = "predictions",
+                      names_to = "sample") %>%
+  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+
+data <- rbind(model1, model2)
+
+
+
+
+
+eval_forecasts <- function(data,
+                           metrics = c(),
+                           output = "df") {
+
+
+
+  n <- length(true_values)
+
+  ## check if predictions are integer, continuous, etc.
+
+  if (any(grepl("lower", names(data)))) {
+    prediction_type <- "quantile"
+  } else if (all.equal(data$predictions, as.integer(data$predictions)) == TRUE) {
+    prediction_type <- "integer"
+  } else {
+    prediction_type <- "continuous"
+  }
+
+  if (all.equal(data$true_values, as.integer(data$true_values)) == TRUE) {
+    if (all(true_values %in% c(0,1))) {
+      target_type = "binary"
+    } else {
+      target_type = "integer"
+    }
+  } else {
+    target_type = "continuous"
+  }
+
+  # ============================================
+
+  models <- unique(data$model)
+  n <- length(unique(data$id))
+
+  res <- list()
+
+  # Brier Score
+  if (target_type == "binary") {
+    res$brier_score <- data %>%
+      dplyr::group_by(model) %>%
+      dplyr::mutate("score" = brier_score(true_values, predictions),
+                    "metric" = "Brier Score") %>%
+      dplyr::ungroup()
+    return(res)
+  }
+
+  # interval score
+  if (prediction_type == "quantile") {
+
+    # get interval ranges to score
+    res$interval_score <- data %>%
+      tidyr::pivot_longer(cols = c(dplyr::starts_with("lower"),
+                                   dplyr::starts_with("upper")),
+                          values_to = "predictions", names_to = "interval") %>%
+      dplyr::mutate(type = gsub("_.*", "", interval),
+                    interval = as.numeric(gsub("^.*?_","", interval))) %>%
+      tidyr::pivot_wider(names_from = type, values_from = predictions) %>%
+      dplyr::mutate(score = scoringutils::interval_score(true_values, lower,
+                                                         upper, interval)) %>%
+      tidyr::pivot_wider(names_from = interval, names_prefix = "score_",
+                         values_from = score)
+
+    return(res)
+  }
+
+  # calibration
+  tmp <- data %>%
+    pivot_wider(values_from = predictions, names_from = sample,
+                names_prefix = "sample_internal") %>%
+    dplyr::group_by(model) %>%
+    dplyr::group_map(~ scoringutils::pit(true_values = true_values,
+                                         predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))),
+                                         plot = FALSE)) %>%
+    dplyr::bind_rows()
+
+  res$PIT_calibration <- data.frame(tmp,
+                                    model = models,
+                                    metric = "PIT_calibration")
+  # add sd columns in case of continuous forecasts
+  if (!("sd" %in% names(res$PIT_AD_calibration))) {
+    res$PIT_AD_calibration$sd <- NA
+  }
+
+  # sharpness
+  tmp <- sapply(predictions,
+                function(x) {
+                  scoringutils::sharpness(x)
+                })
+
+  res$sharpness <- data.frame(mean = colMeans(tmp),
+                              sd = apply(tmp, MARGIN=2, FUN=sd),
+                              model = models,
+                              metric = "sharpness")
+
+
+  # bias
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringutils::bias(predictions = x,
+                                     true_values = true_values)
+                },
+                true_values = true_values)
+
+  res$bias <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "bias")
+
+  # DSS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::dss_sample(dat = x,
+                                           y = true_values)
+                },
+                true_values = true_values)
+
+  res$DSS <- data.frame(mean = colMeans(tmp),
+                        sd = apply(tmp, MARGIN=2, FUN=sd),
+                        model = models,
+                        metric = "DSS")
+
+
+  # CRPS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::crps_sample(dat = x,
+                                            y = true_values)
+                },
+                true_values = true_values)
+
+  res$CRPS <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "CRPS")
+
+
+  if (output == "df") {
+    return (do.call("rbind", res))
+  } else {
+    return (res)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+eval_forecasts_prob_int <- function(true_values,
+                                    predictions,
+                                    metrics = c(),
+                                    output = "df") {
+
+
+  # ============== Error handling ==============
+  if (missing(true_values) | missing(predictions)) {
+    stop("true_values or predictions argument missing")
+  }
+
+  n <- length(true_values)
+
+  if (!is.list(predictions)) {
+    if (is.matrix(predictions)) {
+      predictions <- list(predictions)
+    }
+    else {
+      stop("predictions argument should be a list of matrices")
+    }
+  }
+
+  if (is.data.frame(predictions)) {
+    predictions <- list(as.matrix(predictions))
+  } else {
+    for (i in 1:length(predictions)) {
+      if (is.data.frame(predictions[[i]])) {
+        predictions[[i]] <- as.matrix(predictions[[i]])
+      }
+      if (!is.matrix(predictions[[i]])) {
+        stop("'predictions' should be a list of matrices")
+      }
+      if (nrow(predictions[[i]]) != n) {
+        msg = cat("all matrices in list 'predictions' must have n rows, ",
+                  "where n is the number of true_values to predict. ",
+                  "Dimension mismatch in list element ", as.character(i))
+        stop(msg)
+      }
+      if (!all.equal(as.vector(predictions[[i]]),
+                     as.integer(predictions[[i]])) == TRUE) {
+        warning("predictions provided are not integers. Don't trust the results.
+            Maybe you want to score continuous predictions instead?")
+      }
+    }
+  }
+
+  # ============================================
+
+
+  # = check if predictions are integer, continuous, etc.
+  ## check whether continuous or integer
+  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+    prediction_type <- "integer"
+  } else {
+    prediction_type <- "integer"
+  }
+
+  if (all.equal(as.vector(true_values), as.integer(true_values)) != TRUE) {
+    if (all(true_values %in% c(0,1))) {
+      target_type = "binary"
+    } else {
+      target_type = "integer"
+    }
+  } else {
+    target_type = "continuous"
+  }
+
+  # ============================================
+
+
+  models <- 1:length(predictions)
+
+  res <- list()
+
+  # Brier Score
+  if (target_type == "binary") {
+    tmp <- lapply(predictions,
+                  function(x, true_values) {
+                    scoringutils::brier_score(true_values = true_values,
+                                              predictions = x)
+                  },
+                  true_values = true_values)
+    res$brier_score <- data.frame(score = do.call(c, tmp),
+                                  model = models,
+                                  metric = "Brier Score")
+
+    return(res)
+  }
+
+
+  # apply PIT function to get p-values of Anderson-Darling Test
+  tmp <- lapply(predictions,
+                function(x, true_values) {
+                  scoringutils::pit(true_values = true_values,
+                                    predictions = x,
+                                    plot = FALSE)$calibration
+                },
+                true_values = true_values)
+
+  res$PIT_AD_calibration <- data.frame(do.call(rbind, tmp),
+                                       model = models,
+                                       metric = "PIT_calibration")
+  # add sd columns in case of continuous forecasts
+  if (!("sd" %in% names(res$PIT_AD_calibration))) {
+    res$PIT_AD_calibration$sd <- NA
+  }
+
+  # sharpness
+  tmp <- sapply(predictions,
+                function(x) {
+                  scoringutils::sharpness(x)
+                })
+
+  res$sharpness <- data.frame(mean = colMeans(tmp),
+                              sd = apply(tmp, MARGIN=2, FUN=sd),
+                              model = models,
+                              metric = "sharpness")
+
+
+  # bias
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringutils::bias(predictions = x,
+                                     true_values = true_values)
+                },
+                true_values = true_values)
+
+  res$bias <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "bias")
+
+  # DSS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::dss_sample(dat = x,
+                                           y = true_values)
+                },
+                true_values = true_values)
+
+  res$DSS <- data.frame(mean = colMeans(tmp),
+                        sd = apply(tmp, MARGIN=2, FUN=sd),
+                        model = models,
+                        metric = "DSS")
+
+
+  # CRPS
+  tmp <- sapply(predictions,
+                function(x, true_values) {
+                  scoringRules::crps_sample(dat = x,
+                                            y = true_values)
+                },
+                true_values = true_values)
+
+  res$CRPS <- data.frame(mean = colMeans(tmp),
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "CRPS")
+
+
+  if (output == "df") {
+    return (do.call("rbind", res))
+  } else {
+    return (res)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' @title Evaluate forecasts
 #'
 #' @description The function \code{eval_forecasts} is a wrapper that provides
@@ -149,7 +573,6 @@ eval_forecasts_prob_int <- function(true_values,
                            output = "df") {
 
 
-
   # ============== Error handling ==============
 
   if (missing(true_values) | missing(predictions)) {
@@ -193,20 +616,27 @@ eval_forecasts_prob_int <- function(true_values,
 
   # ============================================
 
+  models <- 1:length(predictions)
+
   res <- list()
 
   # apply PIT function to true_values and the different predictive_samples
   # provided. Get the p_values for the replications of the randomised PIT
   # with Anderson-Darling Test and return mean and sd of those p-values
-  tmp <- sapply(predictions,
+  tmp <- lapply(predictions,
                 function(x, true_values) {
                   scoringutils::pit(true_values = true_values,
-                                        predictions = x)$p_values
+                                        predictions = x)$calibration
                 },
                 true_values = true_values)
 
-  res$PIT_AD_calibration <- data.frame(mean = colMeans(tmp),
-                                       sd = apply(tmp, MARGIN=2, FUN=sd))
+  res$PIT_AD_calibration <- data.frame(do.call(rbind, tmp),
+                                       model = models,
+                                       metric = "PIT_calibration")
+  # add sd columns in case of continuous forecasts
+  if (!("sd" %in% names(res$PIT_AD_calibration))) {
+    res$PIT_AD_calibration$sd <- NA
+  }
 
   # sharpness
   tmp <- sapply(predictions,
@@ -215,7 +645,9 @@ eval_forecasts_prob_int <- function(true_values,
                 })
 
   res$sharpness <- data.frame(mean = colMeans(tmp),
-                              sd = apply(tmp, MARGIN=2, FUN=sd))
+                              sd = apply(tmp, MARGIN=2, FUN=sd),
+                              model = models,
+                              metric = "sharpness")
 
 
   # bias
@@ -227,7 +659,9 @@ eval_forecasts_prob_int <- function(true_values,
                 true_values = true_values)
 
   res$bias <- data.frame(mean = colMeans(tmp),
-                              sd = apply(tmp, MARGIN=2, FUN=sd))
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "bias")
 
   # DSS
   tmp <- sapply(predictions,
@@ -238,7 +672,9 @@ eval_forecasts_prob_int <- function(true_values,
                 true_values = true_values)
 
   res$DSS <- data.frame(mean = colMeans(tmp),
-                         sd = apply(tmp, MARGIN=2, FUN=sd))
+                        sd = apply(tmp, MARGIN=2, FUN=sd),
+                        model = models,
+                        metric = "DSS")
 
 
   # CRPS
@@ -250,7 +686,9 @@ eval_forecasts_prob_int <- function(true_values,
                 true_values = true_values)
 
   res$CRPS <- data.frame(mean = colMeans(tmp),
-                         sd = apply(tmp, MARGIN=2, FUN=sd))
+                         sd = apply(tmp, MARGIN=2, FUN=sd),
+                         model = models,
+                         metric = "CRPS")
 
 
   if (output == "df") {

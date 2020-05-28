@@ -57,7 +57,7 @@ as a list of data.frames for the different metrics.
 \description{
 The function \code{eval_forecasts} is a wrapper that provides
 an interface to lower-level functions. It can be used to assess the goodness
-of probabilistic or point forecasts to continues, integer-valued or
+of probabilistic, quantile or point forecasts to continuous, integer-valued or
 binary variables. The lower-level functions accessed are:
 
 \enumerate{

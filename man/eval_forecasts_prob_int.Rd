@@ -10,9 +10,10 @@ eval_forecasts_prob_int(true_values, predictions, metrics = c(), output = "df")
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{predictions}{a list of nxN matrices of predictive samples,
-n (number of rows) being
-the number of data points and N (number of columns) the
+\item{predictions}{a list of nxN matrices of predictive samples. Every list
+element is a matrix with the predictive samples generated from one model.
+n (number of rows) of those matrices is the number of data points and N
+(number of columns) the
 number of Monte Carlo samples}
 
 \item{metrics}{what metrics to include. currently not used}
@@ -29,9 +30,13 @@ forecasts of integers
 \examples{
 ## Example: Probabilistic predictions for integer values
 true_values <- rpois(100, lambda = 1:100)
+
 predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
+
+
 predictions <- list(dat1 = replicate(5000, rpois(n = 100, lambda = 1:100)),
                     dat2 = replicate(5000, rpois(n = 100, lambda = 1:100)))
-eval_forecasts(true_values = true_values, predictions = predictions)
+
+eval_forecasts_prob_int(true_values = true_values, predictions = predictions)
 
 }
