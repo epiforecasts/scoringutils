@@ -154,34 +154,36 @@ eval_forecasts <- function(data,
   }
 
   # calibration
-  tmp <- data %>%
+  res$PIT_calibration <- data %>%
     pivot_wider(values_from = predictions, names_from = sample,
                 names_prefix = "sample_internal") %>%
     dplyr::group_by(model) %>%
     dplyr::group_map(~ scoringutils::pit(true_values = true_values,
                                          predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))),
-                                         plot = FALSE)) %>%
-    dplyr::bind_rows()
+                                         plot = FALSE)$calibration) %>%
 
-  res$PIT_calibration <- data.frame(tmp,
-                                    model = models,
-                                    metric = "PIT_calibration")
+    magrittr::set_names(models) %>%
+    dplyr::bind_rows() %>%
+    tidyr::pivot_longer(cols = dplyr::everything(),
+                        names_to = "model", values_to = "score") %>%
+    dplyr::mutate(metric = "PIT calibration")
+
   # add sd columns in case of continuous forecasts
   if (!("sd" %in% names(res$PIT_AD_calibration))) {
     res$PIT_AD_calibration$sd <- NA
   }
 
   # sharpness
-  tmp <- sapply(predictions,
-                function(x) {
-                  scoringutils::sharpness(x)
-                })
-
-  res$sharpness <- data.frame(mean = colMeans(tmp),
-                              sd = apply(tmp, MARGIN=2, FUN=sd),
-                              model = models,
-                              metric = "sharpness")
-
+  res$sharpness <- data %>%
+    pivot_wider(values_from = predictions, names_from = sample,
+                names_prefix = "sample_internal") %>%
+    dplyr::group_by(model) %>%
+    dplyr::group_map(~ scoringutils::sharpness(predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))))) %>%
+    magrittr::set_names(models) %>%
+    dplyr::bind_rows() %>%
+    tidyr::pivot_longer(cols = dplyr::everything(),
+                        names_to = "model", values_to = "score") %>%
+    dplyr::mutate(metric = "sharpness")
 
   # bias
   tmp <- sapply(predictions,
