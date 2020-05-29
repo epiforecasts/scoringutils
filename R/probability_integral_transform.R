@@ -65,10 +65,11 @@
 #' for the randomised PIT. Usually not needed.
 #' @return a list with the following components:
 #' \itemize{
-#' \item \code{calibration}: p-value of the Anderson-Darling test on the
-#' PIT values. In case of integer forecasts, a data.frame with the mean and
-#' sd of the p-values
-#' that come from the replicated Anderson-Darling test is returned
+#' \item \code{p_value}: p-value of the Anderson-Darling test on the
+#' PIT values. In case of integer forecasts, this will be the mean p_value
+#' from the `n_replicates` replicates
+#' \item \code{sd}: standard deviation of the p_value returned. In case of
+#' continuous forecasts, this will be NA as there is only one p_value returned.
 #' \item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
 #' if \code{plot == TRUE}. Call
 #' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
@@ -134,6 +135,10 @@ pit <- function(true_values,
     stop(msg)
   }
 
+  if (length(true_values) == 1) {
+    stop("you need more than one observation to assess uniformity of the PIT")
+  }
+
   # ============================================
 
   n_pred <- ncol(predictions)
@@ -147,10 +152,10 @@ pit <- function(true_values,
                 .0)
 
   if (continuous_predictions) {
-    calibration <- goftest::ad.test(P_x)$p.value
-    names(calibration) <- "p_value"
+    p_value <- goftest::ad.test(P_x)$p.value
 
-    out <- list(calibration = calibration)
+    out <- list(p_value = p_value,
+                sd = NA)
 
     if (plot == TRUE) {
       hist_PIT <- scoringutils::hist_PIT(P_x, num_bins = num_bins)
@@ -180,15 +185,15 @@ pit <- function(true_values,
       }
     )
 
-    calibration <- data.frame(mean = mean(p_values),
-                              sd = stats::sd(p_values))
+    out <- list(p_value = mean(p_values),
+                sd = stats::sd(p_values))
 
     if (full_output) {
+      out$u <- u
+      out$p_values <- p_values
       out <- list(p_values = p_values,
                   calibration = calibration,
                   u = u)
-    } else {
-      out <- list(calibration = calibration)
     }
 
 
