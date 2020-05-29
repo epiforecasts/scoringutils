@@ -1,89 +1,145 @@
 library(magrittr)
 library(dplyr)
 library(tidyr)
+library(data.table)
 
 ## Brier Score
-true_values <- sample(c(0,1), size = 30, replace = TRUE)
+true_values <- sample(c(0,1), size = 31, replace = TRUE)
 model1 <- runif(n = 30, min = 0, max = 1)
 model2 <- runif(n = 30, min = 0, max = 0.8)
 id <- 1:30
 
-data <- data.frame(true_values,
+data <- data.table(true_values,
                    model1,
                    model2,
-                   id) %>%
-  tidyr::pivot_longer(c(model1, model2), names_to = "model",
-                      values_to = "predictions")
+                   id)
+data <- data.table::melt(data, id.vars = c("id", "true_values"),
+                 measure.vars = c("model1", "model2"),
+                 variable.name = "model",
+                 value.name = "predictions")
+#
+# data <- data.frame(true_values,
+#                    model1,
+#                    model2,
+#                    id) %>%
+#   tidyr::pivot_longer(c(model1, model2), names_to = "model",
+#                       values_to = "predictions")
 
 ## quantile score
 true_values <- rnorm(30, mean = 1:30)
 id <- 1:30
 
-model1 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
-                       mean = 1:30) %>%
-  matrix(ncol = 6) %>%
-  data.frame(id,
-             true_values,
-             model = "model1")
+data <- data.table(true_values,
+                   id,
+                   model = rep(c("model1", "model2"), each = 30))
+data[model == "model1",
+     c("lower_90", "lower_50", "lower_0",
+       "upper_0", "upper_50", "upper_90") := as.list(stats::qnorm(p = c(0.05, 0.25, 0.5,
+                                                                0.5, 0.75, 0.95),
+                                                          mean = id)),
+     by = id]
+data[model == "model2",
+     c("lower_90", "lower_50", "lower_0",
+       "upper_0", "upper_50", "upper_90") := as.list(stats::qnorm(p = c(0.05, 0.25, 0.5,
+                                                                        0.5, 0.75, 0.95),
+                                                                  mean = id + 0.1)),
+     by = id]
 
-model2 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
-                       mean = 1.1:30.1) %>%
-  matrix(ncol = 6) %>%
-  data.frame(id,
-             true_values,
-             model = "model2")
 
-data <- rbind(model1, model2) %>%
-  dplyr::rename_at(c("X1", "X2", "X3", "X4", "X5", "X6"),
-                   ~ c("lower_90", "lower_50", "lower_0",
-                       "upper_0", "upper_50", "upper_90"))
+# model1 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
+#                        mean = 1:30) %>%
+#   matrix(ncol = 6) %>%
+#   data.frame(id,
+#              true_values,
+#              model = "model1")
+#
+# model2 <- stats::qnorm(p = rep(c(0.05, 0.25, 0.5, 0.5, 0.75, 0.95), each = 30),
+#                        mean = 1.1:30.1) %>%
+#   matrix(ncol = 6) %>%
+#   data.frame(id,
+#              true_values,
+#              model = "model2")
+#
+# data <- rbind(model1, model2) %>%
+#   dplyr::rename_at(c("X1", "X2", "X3", "X4", "X5", "X6"),
+#                    ~ c("lower_90", "lower_50", "lower_0",
+#                        "upper_0", "upper_50", "upper_90"))
 
 ## integer predictions
 true_values <- rpois(30, lambda = 1:30)
 id <- 1:30
-model1 <- replicate(200, rpois(n = 30, lambda = 1:30)) %>%
-  data.frame(true_values,
-             id,
-             model = "model1") %>%
-  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
-                      values_to = "predictions",
-                      names_to = "sample") %>%
-  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
 
-model2 <- replicate(200, rpois(n = 30, lambda = 1.1:30.1)) %>%
-  data.frame(true_values,
-             id,
-             model = "model2") %>%
-  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
-                      values_to = "predictions",
-                      names_to = "sample") %>%
-  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+data <- data.table(true_values,
+                   id,
+                   model = rep(c("model1", "model2"), each = 30))
 
-data <- rbind(model1, model2)
+data <- rbind(data[model == "model1", .(model = "model1",
+                                        true_values = true_values,
+                                        sample = 1:50,
+                                        predictions = rpois(50, lambda = id)), by = id],
+              data[model == "model2", .(model = "model2",
+                                        true_values = true_values,
+                                        sample = 1:50,
+                                        predictions = rpois(50, lambda = id + 0.5)), by = id])
+
+
+# model1 <- replicate(200, rpois(n = 30, lambda = 1:30)) %>%
+#   data.frame(true_values,
+#              id,
+#              model = "model1") %>%
+#   tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+#                       values_to = "predictions",
+#                       names_to = "sample") %>%
+#   dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+#
+# model2 <- replicate(200, rpois(n = 30, lambda = 1.1:30.1)) %>%
+#   data.frame(true_values,
+#              id,
+#              model = "model2") %>%
+#   tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+#                       values_to = "predictions",
+#                       names_to = "sample") %>%
+#   dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+#
+# data <- rbind(model1, model2)
 
 
 ## continuous predictions
 true_values <- rnorm(30)
 id <- 1:30
-model1 <- replicate(200, rnorm(30)) %>%
-  data.frame(true_values,
-             id,
-             model = "model1") %>%
-  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
-                      values_to = "predictions",
-                      names_to = "sample") %>%
-  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
 
-model2 <- replicate(200, rnorm(30, mean = 0.1)) %>%
-  data.frame(true_values,
-             id,
-             model = "model2") %>%
-  tidyr::pivot_longer(cols = c(-true_values, -id, -model),
-                      values_to = "predictions",
-                      names_to = "sample") %>%
-  dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+data <- data.table(true_values,
+                   id,
+                   model = rep(c("model1", "model2"), each = 30))
 
-data <- rbind(model1, model2)
+data <- rbind(data[model == "model1", .(model = "model1",
+                                        true_values = true_values,
+                                        sample = 1:50,
+                                        predictions = rnorm(50)), by = id],
+              data[model == "model2", .(model = "model2",
+                                        true_values = true_values,
+                                        sample = 1:50,
+                                        predictions = rnorm(50, mean = 0.2)), by = id])
+
+# model1 <- replicate(200, rnorm(30)) %>%
+#   data.frame(true_values,
+#              id,
+#              model = "model1") %>%
+#   tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+#                       values_to = "predictions",
+#                       names_to = "sample") %>%
+#   dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+#
+# model2 <- replicate(200, rnorm(30, mean = 0.1)) %>%
+#   data.frame(true_values,
+#              id,
+#              model = "model2") %>%
+#   tidyr::pivot_longer(cols = c(-true_values, -id, -model),
+#                       values_to = "predictions",
+#                       names_to = "sample") %>%
+#   dplyr::mutate(sample = as.numeric(substring(sample, 2)))
+#
+# data <- rbind(model1, model2)
 
 
 
@@ -91,7 +147,8 @@ data <- rbind(model1, model2)
 
 eval_forecasts <- function(data,
                            metrics = c(),
-                           output = "df") {
+                           output = "df",
+                           summarised = TRUE) {
 
 
 
@@ -126,105 +183,170 @@ eval_forecasts <- function(data,
 
   # Brier Score
   if (target_type == "binary") {
-    res$brier_score <- data %>%
-      dplyr::group_by(model) %>%
-      dplyr::mutate("score" = brier_score(true_values, predictions),
-                    "metric" = "Brier Score") %>%
-      dplyr::ungroup()
+
+    data[, score := scoringutils::brier_score(true_values, predictions),
+         by = .(model, id)]
+    data[, metric := "Brier Score"]
+
+    # res$brier_score <- data %>%
+    #   dplyr::group_by(model) %>%
+    #   dplyr::mutate("score" = brier_score(true_values, predictions),
+    #                 "metric" = "Brier Score") %>%
+    #   dplyr::ungroup()
     return(res)
   }
 
   # interval score
   if (prediction_type == "quantile") {
 
-    # get interval ranges to score
-    res$interval_score <- data %>%
-      tidyr::pivot_longer(cols = c(dplyr::starts_with("lower"),
-                                   dplyr::starts_with("upper")),
-                          values_to = "predictions", names_to = "interval") %>%
-      dplyr::mutate(type = gsub("_.*", "", interval),
-                    interval = as.numeric(gsub("^.*?_","", interval))) %>%
-      tidyr::pivot_wider(names_from = type, values_from = predictions) %>%
-      dplyr::mutate(score = scoringutils::interval_score(true_values, lower,
-                                                         upper, interval)) %>%
-      tidyr::pivot_wider(names_from = interval, names_prefix = "score_",
-                         values_from = score)
+    # get column names
+    colnames <- colnames(data)
+    ranges <- names[grepl("lower", colnames) | grepl("upper", colnames)]
+
+    data <- data.table::melt(data,
+                     id.vars = c("id", "true_values", "model"),
+                     measure.vars = ranges,
+                     variable.name = "range",
+                     value.name = "predictions")
+    data[, type := gsub("_.*", "", range)]
+    data[, range := as.numeric(gsub("^.*?_","", interval))]
+    data <- data.table::dcast(data, id + true_values + range + model ~ type, value.var = "predictions")
+    data[, score := scoringutils::interval_score(true_values, lower, upper, range)]
+
+    # # get interval ranges to score
+    # res$interval_score <- data %>%
+    #   tidyr::pivot_longer(cols = c(dplyr::starts_with("lower"),
+    #                                dplyr::starts_with("upper")),
+    #                       values_to = "predictions", names_to = "interval") %>%
+    #   dplyr::mutate(type = gsub("_.*", "", interval),
+    #                 interval = as.numeric(gsub("^.*?_","", interval))) %>%
+    #   tidyr::pivot_wider(names_from = type, values_from = predictions) %>%
+    #   dplyr::mutate(score = scoringutils::interval_score(true_values, lower,
+    #                                                      upper, interval)) %>%
+    #   tidyr::pivot_wider(names_from = interval, names_prefix = "score_",
+    #                      values_from = score)
 
     return(res)
   }
 
   # calibration
-  res$PIT_calibration <- data %>%
-    pivot_wider(values_from = predictions, names_from = sample,
-                names_prefix = "sample_internal") %>%
-    dplyr::group_by(model) %>%
-    dplyr::group_map(~ scoringutils::pit(true_values = true_values,
-                                         predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))),
-                                         plot = FALSE)$calibration) %>%
+  # todo
 
-    magrittr::set_names(models) %>%
-    dplyr::bind_rows() %>%
-    tidyr::pivot_longer(cols = dplyr::everything(),
-                        names_to = "model", values_to = "score") %>%
-    dplyr::mutate(metric = "PIT calibration")
 
-  # add sd columns in case of continuous forecasts
-  if (!("sd" %in% names(res$PIT_AD_calibration))) {
-    res$PIT_AD_calibration$sd <- NA
-  }
+  data[, score := pit(unique(true_values),
+                                    t(predictions),
+                                    plot = FALSE)$calibration,
+       by = .(model)]
+
+  dat <- data.table::dcast(data, model + id + true_values ~ sample,
+                    value.var = "predictions")[, id := NULL]
+
+  dat[, c("score", "sd") := pit(true_values,
+                   as.matrix(.SD),
+                   plot = FALSE), .SDcols = !c("model", "true_values"), by = model]
+
+
+  res <- dat[, .(score = unique(score),
+          sd = unique(sd),
+          model = unique(model),
+          metric = "PIT calibration"), by = model ]
+
+
+  # res$PIT_calibration <- data %>%
+  #   pivot_wider(values_from = predictions, names_from = sample,
+  #               names_prefix = "sample_internal") %>%
+  #   dplyr::group_by(model) %>%
+  #   dplyr::group_map(~ scoringutils::pit(true_values = true_values,
+  #                                        predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))),
+  #                                        plot = FALSE)$calibration) %>%
+  #
+  #   magrittr::set_names(models) %>%
+  #   dplyr::bind_rows() %>%
+  #   tidyr::pivot_longer(cols = dplyr::everything(),
+  #                       names_to = "model", values_to = "score") %>%
+  #   dplyr::mutate(metric = "PIT calibration")
+  #
+  # # add sd columns in case of continuous forecasts
+  # if (!("sd" %in% names(res$PIT_AD_calibration))) {
+  #   res$PIT_AD_calibration$sd <- NA
+  # }
 
   # sharpness
-  res$sharpness <- data %>%
-    pivot_wider(values_from = predictions, names_from = sample,
-                names_prefix = "sample_internal") %>%
-    dplyr::group_by(model) %>%
-    dplyr::group_map(~ scoringutils::sharpness(predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))))) %>%
-    magrittr::set_names(models) %>%
-    dplyr::bind_rows() %>%
-    tidyr::pivot_longer(cols = dplyr::everything(),
-                        names_to = "model", values_to = "score") %>%
-    dplyr::mutate(metric = "sharpness")
+
+  data[, score := scoringutils::sharpness(t(predictions)), by = .(id, model)]
+  data[, metric := "sharpness"]
+
+  # res$sharpness <- data %>%
+  #   pivot_wider(values_from = predictions, names_from = sample,
+  #               names_prefix = "sample_internal") %>%
+  #   dplyr::group_by(model) %>%
+  #   dplyr::group_map(~ scoringutils::sharpness(predictions = as.matrix(dplyr::select(., dplyr::starts_with("sample_internal"))))) %>%
+  #   magrittr::set_names(models) %>%
+  #   dplyr::bind_rows() %>%
+  #   tidyr::pivot_longer(cols = dplyr::everything(),
+  #                       names_to = "model", values_to = "score") %>%
+  #   dplyr::mutate(metric = "sharpness")
 
   # bias
-  tmp <- sapply(predictions,
-                function(x, true_values) {
-                  scoringutils::bias(predictions = x,
-                                     true_values = true_values)
-                },
-                true_values = true_values)
+  data[, score := scoringutils::bias(unique(true_values),
+                                     t(predictions)), by = .(id, model)]
+  data[, metric := "bias"]
 
-  res$bias <- data.frame(mean = colMeans(tmp),
-                         sd = apply(tmp, MARGIN=2, FUN=sd),
-                         model = models,
-                         metric = "bias")
+
+  # tmp <- sapply(predictions,
+  #               function(x, true_values) {
+  #                 scoringutils::bias(predictions = x,
+  #                                    true_values = true_values)
+  #               },
+  #               true_values = true_values)
+  #
+  # res$bias <- data.frame(mean = colMeans(tmp),
+  #                        sd = apply(tmp, MARGIN=2, FUN=sd),
+  #                        model = models,
+  #                        metric = "bias")
 
   # DSS
-  tmp <- sapply(predictions,
-                function(x, true_values) {
-                  scoringRules::dss_sample(dat = x,
-                                           y = true_values)
-                },
-                true_values = true_values)
+  data[, score := scoringutils::dss(unique(true_values),
+                                    t(predictions)), by = .(id, model)]
+  data[, metric := "DSS"]
 
-  res$DSS <- data.frame(mean = colMeans(tmp),
-                        sd = apply(tmp, MARGIN=2, FUN=sd),
-                        model = models,
-                        metric = "DSS")
+
+  # tmp <- sapply(predictions,
+  #               function(x, true_values) {
+  #                 scoringRules::dss_sample(dat = x,
+  #                                          y = true_values)
+  #               },
+  #               true_values = true_values)
+  #
+  # res$DSS <- data.frame(mean = colMeans(tmp),
+  #                       sd = apply(tmp, MARGIN=2, FUN=sd),
+  #                       model = models,
+  #                       metric = "DSS")
 
 
   # CRPS
-  tmp <- sapply(predictions,
-                function(x, true_values) {
-                  scoringRules::crps_sample(dat = x,
-                                            y = true_values)
-                },
-                true_values = true_values)
+  data[, score := scoringutils::crps(unique(true_values),
+                                    t(predictions)), by = .(id, model)]
+  data[, metric := "CRPS"]
 
-  res$CRPS <- data.frame(mean = colMeans(tmp),
-                         sd = apply(tmp, MARGIN=2, FUN=sd),
-                         model = models,
-                         metric = "CRPS")
 
+  # tmp <- sapply(predictions,
+  #               function(x, true_values) {
+  #                 scoringRules::crps_sample(dat = x,
+  #                                           y = true_values)
+  #               },
+  #               true_values = true_values)
+  #
+  # res$CRPS <- data.frame(mean = colMeans(tmp),
+  #                        sd = apply(tmp, MARGIN=2, FUN=sd),
+  #                        model = models,
+  #                        metric = "CRPS")
+
+
+  # Log Score
+  data[, score := scoringutils::logs(unique(true_values),
+                                     t(predictions)), by = .(id, model)]
+  data[, metric := "Log Score"]
 
   if (output == "df") {
     return (do.call("rbind", res))
