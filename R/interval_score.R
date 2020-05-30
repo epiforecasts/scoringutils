@@ -30,11 +30,11 @@
 #' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 #' Can be either a single number or a vector of size n, if the range changes
 #' for different forecasts to be scored. This corresponds to (100-alpha)/100
-#' in Gneiting and Raftery (2007).
+#' in Gneiting and Raftery (2007). Internally, the range will be transformed
+#' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
-#' @param verbose if TRUE, gives feedback if provided interval_range seems odd.
 #' @return vector with the scoring values
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
@@ -57,18 +57,10 @@ interval_score <- function(true_values,
                            lower,
                            upper,
                            interval_range = NULL,
-                           weigh = FALSE,
-                           verbose = TRUE) {
+                           weigh = FALSE) {
 
   if(is.null(interval_range)) {
     stop("must provide a range for your prediction interval")
-  }
-
-  if(verbose) {
-    if (interval_range < 1 && interval_range != 0) {
-      message(paste(interval_range),
-              "% interval was provided. Are you sure that's right?", sep = "")
-    }
   }
 
   alpha = (100 - interval_range) / 100
