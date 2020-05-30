@@ -4,14 +4,7 @@
 \alias{interval_score}
 \title{Interval Score}
 \usage{
-interval_score(
-  true_values,
-  lower,
-  upper,
-  interval_range = NULL,
-  weigh = FALSE,
-  verbose = TRUE
-)
+interval_score(true_values, lower, upper, interval_range = NULL, weigh = FALSE)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -24,13 +17,12 @@ interval_score(
 forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 Can be either a single number or a vector of size n, if the range changes
 for different forecasts to be scored. This corresponds to (100-alpha)/100
-in Gneiting and Raftery (2007).}
+in Gneiting and Raftery (2007). Internally, the range will be transformed
+to alpha.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 4, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.}
-
-\item{verbose}{if TRUE, gives feedback if provided interval_range seems odd.}
 }
 \value{
 vector with the scoring values

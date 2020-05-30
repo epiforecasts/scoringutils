@@ -70,7 +70,7 @@
 #' from the `n_replicates` replicates
 #' \item \code{sd}: standard deviation of the p_value returned. In case of
 #' continuous forecasts, this will be NA as there is only one p_value returned.
-#' \item \code{hist_PIT} a ggplot object with the PIT histogram. Only returned
+#' \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
 #' if \code{plot == TRUE}. Call
 #' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 #' \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
@@ -158,7 +158,7 @@ pit <- function(true_values,
                 sd = NA)
 
     if (plot == TRUE) {
-      hist_PIT <- scoringutils::hist_PIT(P_x, num_bins = num_bins)
+      hist_PIT <- hist_PIT(P_x, num_bins = num_bins)
       out$hist_PIT = hist_PIT
     }
 
@@ -198,7 +198,7 @@ pit <- function(true_values,
 
 
     if (plot == TRUE) {
-      hist_PIT <- scoringutils::hist_PIT(rowMeans(u), num_bins = num_bins)
+      hist_PIT <- hist_PIT(rowMeans(u), num_bins = num_bins)
       out$hist_PIT = hist_PIT
     }
   }
@@ -221,12 +221,7 @@ pit <- function(true_values,
 #' @param num_bins the number of bins in the PIT histogram.
 #' If not given, the square root of n will be used
 #' @return vector with the scoring values
-#' @importFrom ggplot2 aes ggplot
-#' @examples
-#' true_values <- rpois(30, lambda = 1:30)
-#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' logs(true_values, predictions)
-#' @export
+#' @importFrom graphics hist
 
 
 hist_PIT <- function(PIT_samples, num_bins = NULL) {
@@ -237,10 +232,9 @@ hist_PIT <- function(PIT_samples, num_bins = NULL) {
   }
 
   PIT <- PIT_samples
-  hist_PIT <- ggplot2::ggplot(as.data.frame(PIT), ggplot2::aes(x = PIT)) +
-    ggplot2::geom_histogram(color = 'darkblue',
-                            fill = 'lightblue',
-                            bins = num_bins)
+  hist_PIT <- hist(PIT_samples, breaks = num_bins)
+
+  return(hist_PIT)
 }
 
 
