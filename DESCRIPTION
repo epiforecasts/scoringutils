@@ -1,27 +1,44 @@
 Package: scoringutils
-Title: A collection of proper scoring rules and metrics to assess predictions
-Version: 0.0.0.9000
-Authors@R: 
+Title: Utilities for Scoring and Assessing Predictions
+Version: 0.1.0
+Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
            role = c("aut", "cre"),
            email = "nikosbosse@gmail.com",
-           comment = c(ORCID = "https://orcid.org/0000-0002-7750-5280"))
-Description: 
-    The package bundles a collection of existing metrics and Proper 
-    Scoring Rules that can be used to conveniently assess the quality of 
-    predictions. Most of the functions are designed to work on predictive samples. 
+           comment = c(ORCID = "https://orcid.org/0000-0002-7750-5280")),
+    person(given = "Sam Abbott",
+           role = c("aut"),
+           email = "contact@samabbott.co.uk",
+           comment = c(ORCID = "0000-0001-8057-8037")), 
+    person("Joel", "Hellewell",
+           email = "joel.hellewell@lshtm.ac.uk", 
+           role = c("ctb"),
+           comment = c(ORCID = "0000-0003-2683-0849")),
+    person(given = "Sophie Meakins",
+           role = c("ctb"),
+           email = "sophie.meakins@lshtm.ac.uk"),  
+    person("James", "Munday", 
+           email = "james.munday@lshtm.ac.uk", 
+           role = c("ctb")),
+    person("Katharine", "Sherratt", 
+           email = "katharine.sherratt@lshtm.ac.uk", 
+           role = c("ctb")),
+    person("Sebastian", "Funk", 
+            email = "sebastian.funk@lshtm.ac.uk", 
+            role = c("aut")))
+Description: Utilities for scoring and assessing predictions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ggplot2 (>= 3.2.0),
-    goftest (>= 1.2-2),
-    scoringRules (>= 1.0.0),
-    stats (>= 3.6.0),
-    data.table
+    data.table,
+    goftest,
+    graphics,
+    scoringRules,
+    stats
 Suggests: 
-    testthat (>= 2.1.0),
+    testthat,
     knitr,
     rmarkdown
 RoxygenNote: 7.1.0
