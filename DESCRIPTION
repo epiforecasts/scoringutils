@@ -18,7 +18,8 @@ Imports:
     ggplot2 (>= 3.2.0),
     goftest (>= 1.2-2),
     scoringRules (>= 1.0.0),
-    stats (>= 3.6.0)
+    stats (>= 3.6.0),
+    data.table
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
@@ -27,3 +28,5 @@ RoxygenNote: 7.1.0
 URL: https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
