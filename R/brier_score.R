@@ -18,7 +18,7 @@
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions A vector with a predicted probability
 #' that true_value = 1.
-#' @return A numeric value with the average Brier Score, i.e. the mean squared
+#' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
 #' @export
 #'

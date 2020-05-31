@@ -13,7 +13,7 @@ brier_score(true_values, predictions)
 that true_value = 1.}
 }
 \value{
-A numeric value with the average Brier Score, i.e. the mean squared
+A numeric value with the Brier Score, i.e. the mean squared
 error of the given probability forecasts
 }
 \description{
