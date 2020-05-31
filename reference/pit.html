@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>randomised Probability Integral Transformation — pit • scoringutils</title>
+<title>Probability Integral Transformation — pit • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,12 @@
 
 
 
-<meta property="og:title" content="randomised Probability Integral Transformation — pit" />
-<meta property="og:description" content="Uses a Probability Integral Transformation (PIT) to
+<meta property="og:title" content="Probability Integral Transformation — pit" />
+<meta property="og:description" content="Uses a Probability Integral Transformation (PIT) (or a
+randomised PIT for integer forecasts) to
 assess the calibration of predictive Monte Carlo samples. Returns a
-PIT histogram and p-values resulting from an Anderson-Darling
-test for uniformity for the randomised PIT." />
+p-values resulting from an Anderson-Darling test for uniformity
+of the (randomised) PIT as well as a PIT histogram if specified." />
 
 
 
@@ -88,6 +89,9 @@ test for uniformity for the randomised PIT." />
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -111,19 +115,27 @@ test for uniformity for the randomised PIT." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>randomised Probability Integral Transformation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_probabilistic_forecast_continuous.R'><code>R/fun_probabilistic_forecast_continuous.R</code></a></small>
+    <h1>Probability Integral Transformation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pit.R'><code>R/pit.R</code></a></small>
     <div class="hidden name"><code>pit.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Uses a Probability Integral Transformation (PIT) to
+    <p>Uses a Probability Integral Transformation (PIT) (or a
+randomised PIT for integer forecasts) to
 assess the calibration of predictive Monte Carlo samples. Returns a
-PIT histogram and p-values resulting from an Anderson-Darling
-test for uniformity for the randomised PIT.</p>
+p-values resulting from an Anderson-Darling test for uniformity
+of the (randomised) PIT as well as a PIT histogram if specified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>num_bins</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>pit</span>(
+  <span class='no'>true_values</span>,
+  <span class='no'>predictions</span>,
+  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>full_output</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>n_replicates</span> <span class='kw'>=</span> <span class='fl'>20</span>,
+  <span class='kw'>num_bins</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,6 +156,16 @@ number of Monte Carlo samples</p></td>
 as well</p></td>
     </tr>
     <tr>
+      <th>full_output</th>
+      <td><p>return all individual p_values and computed u_t values
+for the randomised PIT. Usually not needed.</p></td>
+    </tr>
+    <tr>
+      <th>n_replicates</th>
+      <td><p>the number of tests to perform,
+each time re-randomising the PIT</p></td>
+    </tr>
+    <tr>
       <th>num_bins</th>
       <td><p>the number of bins in the PIT histogram (if plot == TRUE)
 If not given, the square root of n will be used</p></td>
@@ -152,12 +174,20 @@ If not given, the square root of n will be used</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>#' @return a list with the following components:</p><ul>
-<li><p><code>calibration</code>: p-value of the Anderson-Darling test. on the
-PIT values.</p></li>
-<li><p><code>hist_PIT</code> a ggplot object with the PIT histogram. Only returned
+    <p>a list with the following components:</p><ul>
+<li><p><code>p_value</code>: p-value of the Anderson-Darling test on the
+PIT values. In case of integer forecasts, this will be the mean p_value
+from the `n_replicates` replicates</p></li>
+<li><p><code>sd</code>: standard deviation of the p_value returned. In case of
+continuous forecasts, this will be NA as there is only one p_value returned.</p></li>
+<li><p><code>hist_PIT</code> a plot object with the PIT histogram. Only returned
 if <code>plot == TRUE</code>. Call
 <code><a href='https://rdrr.io/r/base/plot.html'>plot(PIT(...)$hist_PIT)</a></code> to display the histogram.</p></li>
+<li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests on the
+randomised PIT. Only returned for integer forecasts
+and if <code>full_output = TRUE</code></p></li>
+<li><p><code>u</code>: the u_t values internally computed. Only returned if
+<code>full_output = TRUE</code></p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -177,6 +207,21 @@ cumulative probability distribution at time t. If the true probability
 distribution of outcomes at time t is \(G_t\) then the forecasts eqnF_t are
 said to be ideal if eqnF_t = G_t at all times t. In that case, the
 probabilities ut are distributed uniformly.</p>
+<p>In the case of discrete outcomes such as incidence counts,
+the PIT is no longer uniform even when forecasts are ideal.
+In that case a randomised PIT can be used instead:
+$$
+u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1) )
+$$</p>
+<p>where \(k_t\) is the observed count, \(P_t(x)\) is the predictive
+cumulative probability of observing incidence k at time t,
+eqnP_t (-1) = 0 by definition and v is standard uniform and independent
+of k. If \(P_t\) is the true cumulative
+probability distribution, then \(u_t\) is standard uniform.</p>
+<p>The function checks whether integer or continuous forecasts were provided.
+It then applies the (randomised) probability integral and tests
+the values \(u_t\) for uniformity using the
+Anderson-Darling test.</p>
 <p>As a rule of thumb, there is no evidence to suggest a forecasting model is
 miscalibrated if the p-value found was greater than a threshold of p &gt;= 0.1,
 some evidence that it was miscalibrated if 0.01 &lt; p &lt; 0.1, and good
@@ -185,13 +230,70 @@ In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
+    <pre class="examples"><div class='input'>
+<span class='co'>## continuous predictions</span>
+<span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
 <span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
-<span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='output co'>#&gt; $calibration
-#&gt;   p_value 
-#&gt; 0.5015643 
+<span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='img'><img src='pit-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
+#&gt; [1] 2e-05
 #&gt; 
-#&gt; $hist_PIT</div><div class='img'><img src='pit-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div></pre>
+#&gt; $sd
+#&gt; [1] NA
+#&gt; 
+#&gt; $hist_PIT
+#&gt; $breaks
+#&gt; [1] 0.0 0.2 0.4 0.6 0.8 1.0
+#&gt; 
+#&gt; $counts
+#&gt; [1] 6 6 6 6 6
+#&gt; 
+#&gt; $density
+#&gt; [1] 1 1 1 1 1
+#&gt; 
+#&gt; $mids
+#&gt; [1] 0.1 0.3 0.5 0.7 0.9
+#&gt; 
+#&gt; $xname
+#&gt; [1] "PIT_samples"
+#&gt; 
+#&gt; $equidist
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "histogram"
+#&gt; </div><div class='input'>
+<span class='co'>## integer predictions</span>
+<span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>100</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>)
+<span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>))
+<span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>,  <span class='kw'>n_replicates</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='pit-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
+#&gt; [1] 0.3174882
+#&gt; 
+#&gt; $sd
+#&gt; [1] 0.06153848
+#&gt; 
+#&gt; $hist_PIT
+#&gt; $breaks
+#&gt;  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+#&gt; 
+#&gt; $counts
+#&gt;  [1] 10 12  9 10  7 19 10 10  7  6
+#&gt; 
+#&gt; $density
+#&gt;  [1] 1.0 1.2 0.9 1.0 0.7 1.9 1.0 1.0 0.7 0.6
+#&gt; 
+#&gt; $mids
+#&gt;  [1] 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85 0.95
+#&gt; 
+#&gt; $xname
+#&gt; [1] "PIT_samples"
+#&gt; 
+#&gt; $equidist
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "histogram"
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -203,7 +305,7 @@ PIT is a necessary but not sufficient condition of calibration.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

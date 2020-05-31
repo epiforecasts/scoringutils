@@ -85,6 +85,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -109,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Brier Score</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_probabilistic_forecast_binary.R'><code>R/fun_probabilistic_forecast_binary.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/brier_score.R'><code>R/brier_score.R</code></a></small>
     <div class="hidden name"><code>brier_score.Rd</code></div>
     </div>
 
@@ -128,13 +131,15 @@
     </tr>
     <tr>
       <th>predictions</th>
-      <td><p>A vector with probability forecasts for true_value = 1</p></td>
+      <td><p>A vector with a predicted probability
+that true_value = 1.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>mean squared error of the forecasts (numeric)</p>
+    <p>A numeric value with the Brier Score, i.e. the mean squared
+error of the given probability forecasts</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The Brier score is a proper score rule that assesses the accuracy of
@@ -163,7 +168,7 @@ $$</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

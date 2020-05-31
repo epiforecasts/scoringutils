@@ -53,7 +53,7 @@ indicates how much is outside the prediction interval.
 To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
-5
+5% and 95% quantiles (the corresponding alpha would then be 0.1).
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper).
@@ -102,6 +102,9 @@ The interval score is a proper scoring rule that scores a quantile forecast" />
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -126,7 +129,7 @@ The interval score is a proper scoring rule that scores a quantile forecast" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Interval Score</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_quantile_forecast_continuous.R'><code>R/fun_quantile_forecast_continuous.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/interval_score.R'><code>R/interval_score.R</code></a></small>
     <div class="hidden name"><code>interval_score.Rd</code></div>
     </div>
 
@@ -144,21 +147,14 @@ indicates how much is outside the prediction interval.
 To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
-5<!-- % and 95% quantiles (the corresponding alpha would then be 0.1). -->
+5% and 95% quantiles (the corresponding alpha would then be 0.1).
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper).</p>
 <p>The interval score is a proper scoring rule that scores a quantile forecast</p>
     </div>
 
-    <pre class="usage"><span class='fu'>interval_score</span>(
-  <span class='no'>true_values</span>,
-  <span class='no'>lower</span>,
-  <span class='no'>upper</span>,
-  <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>weigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>interval_score</span>(<span class='no'>true_values</span>, <span class='no'>lower</span>, <span class='no'>upper</span>, <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,17 +177,14 @@ as the lower bound and the 0.7 quantile as the upper).</p>
 forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 Can be either a single number or a vector of size n, if the range changes
 for different forecasts to be scored. This corresponds to (100-alpha)/100
-in Gneiting and Raftery (2007).</p></td>
+in Gneiting and Raftery (2007). Internally, the range will be transformed
+to alpha.</p></td>
     </tr>
     <tr>
       <th>weigh</th>
       <td><p>if TRUE, weigh the score by alpha / 4, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>if TRUE, gives you feedback if your interval_range seems odd.</p></td>
     </tr>
     </table>
 
@@ -214,11 +207,11 @@ Statistical Association, Volume 102, 2007 - Issue 477</p>
 <span class='fu'>interval_score</span>(<span class='kw'>true_values</span> <span class='kw'>=</span> <span class='no'>true_values</span>,
                <span class='kw'>lower</span> <span class='kw'>=</span> <span class='no'>lower</span>,
                <span class='kw'>upper</span> <span class='kw'>=</span> <span class='no'>upper</span>,
-               <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='no'>interval_range</span>)</div><div class='output co'>#&gt;  [1]  1.815791  3.368319  1.331730  3.615904 11.271421  3.423729  3.422569
-#&gt;  [8]  3.538653  1.136997  9.396099  4.028064 24.838614  4.087968  2.794721
-#&gt; [15]  9.091948  2.412507  1.645710 11.299046  4.165597 14.855311  1.124933
-#&gt; [22]  2.742349 20.040320 17.722154 39.296492  3.984032  1.196283  3.103684
-#&gt; [29]  4.509526  5.111067</div></pre>
+               <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='no'>interval_range</span>)</div><div class='output co'>#&gt;  [1]  5.967487  2.713613  4.999808 24.796246  4.619596  4.513879  2.824180
+#&gt;  [8] 13.389657  4.147185  3.651971  2.515199 41.119587 16.663458  3.906339
+#&gt; [15]  1.415991  3.668358  3.499910 15.417140  3.979582  1.168363  3.389144
+#&gt; [22]  4.130209  5.726565  5.431937  2.201964  2.395584  4.534874  2.911822
+#&gt; [29] 13.618276  6.609760</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -230,7 +223,7 @@ Statistical Association, Volume 102, 2007 - Issue 477</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

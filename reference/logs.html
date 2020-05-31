@@ -41,7 +41,8 @@
 
 <meta property="og:title" content="LogS — logs" />
 <meta property="og:description" content="Wrapper around the logs_sample function from the
-scoringRules package. While the Log Score is in theory also applicable
+scoringRules package. Used to score continuous predictions.
+While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples. The Log Score can be used for specific
@@ -91,6 +92,9 @@ more details." />
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -115,13 +119,14 @@ more details." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>LogS</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_probabilistic_forecast_continuous.R'><code>R/fun_probabilistic_forecast_continuous.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/scoringRules_wrappers.R'><code>R/scoringRules_wrappers.R</code></a></small>
     <div class="hidden name"><code>logs.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Wrapper around the <code><a href='https://rdrr.io/pkg/scoringRules/man/scores_sample_univ.html'>logs_sample</a></code> function from the
-<code>scoringRules</code> package. While the Log Score is in theory also applicable
+<code>scoringRules</code> package. Used to score continuous predictions.
+While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples. The Log Score can be used for specific
@@ -149,14 +154,18 @@ number of Monte Carlo samples</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>vector with the scoring values</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
 <span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
-<span class='fu'>logs</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='output co'>#&gt;  [1] 1.515553 3.185156 1.842941 3.269126 2.434908 2.066662 2.083242 1.965935
-#&gt;  [9] 2.687376 3.874522 2.225258 2.195834 2.267778 3.299158 3.151222 2.955654
-#&gt; [17] 4.499432 2.973252 2.474821 2.756225 3.449377 3.541374 2.762083 3.369988
-#&gt; [25] 2.578536 3.082390 2.890874 3.301030 2.827223 2.813937</div></pre>
+<span class='fu'>logs</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='output co'>#&gt;  [1] 4.002954 1.417085 2.479563 1.579875 1.831258 1.955167 2.321013 1.874492
+#&gt;  [9] 2.850795 2.518888 2.234000 2.584186 2.392093 2.553088 3.384956 2.962059
+#&gt; [17] 2.388100 2.518552 2.570098 2.529946 2.509128 2.602792 5.209127 2.575800
+#&gt; [25] 2.668223 2.997706 2.772373 2.665175 5.501107 3.169422</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -168,7 +177,7 @@ number of Monte Carlo samples</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

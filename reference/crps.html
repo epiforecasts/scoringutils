@@ -87,6 +87,9 @@ valued forecasts" />
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -111,7 +114,7 @@ valued forecasts" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Ranked Probability Score</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_probabilstic_forecasts_integer.R'><code>R/fun_probabilstic_forecasts_integer.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/scoringRules_wrappers.R'><code>R/scoringRules_wrappers.R</code></a></small>
     <div class="hidden name"><code>crps.Rd</code></div>
     </div>
 
@@ -141,6 +144,10 @@ number of Monte Carlo samples</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>vector with the scoring values</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
@@ -160,7 +167,7 @@ number of Monte Carlo samples</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

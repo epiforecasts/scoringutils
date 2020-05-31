@@ -89,6 +89,9 @@ $$" />
   </a>
 </li>
 <li>
+  <a href="../articles/scoringutils.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -113,7 +116,7 @@ $$" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Mean Squared Error</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/fun_point_forecast_continuous.R'><code>R/fun_point_forecast_continuous.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/metrics_point_forecasts.R'><code>R/metrics_point_forecasts.R</code></a></small>
     <div class="hidden name"><code>mse.Rd</code></div>
     </div>
 
@@ -147,7 +150,7 @@ $$</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
 <span class='no'>predicted_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
-<span class='fu'>mse</span>(<span class='no'>true_values</span>, <span class='no'>predicted_values</span>)</div><div class='output co'>#&gt; [1] 2.058146</div></pre>
+<span class='fu'>mse</span>(<span class='no'>true_values</span>, <span class='no'>predicted_values</span>)</div><div class='output co'>#&gt; [1] 2.045142</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -159,7 +162,7 @@ $$</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Nikos Bosse, Sebastian Funk.</p>
+  <p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">
