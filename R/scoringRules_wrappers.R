@@ -20,6 +20,9 @@
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' logs(true_values, predictions)
 #' @export
+#' @references
+#' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
 
 
 logs <- function(true_values, predictions) {
@@ -70,7 +73,9 @@ logs <- function(true_values, predictions) {
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' dss(true_values, predictions)
 #' @export
-
+#' @references
+#' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
 
 dss <- function(true_values, predictions) {
 
@@ -122,7 +127,9 @@ dss <- function(true_values, predictions) {
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' crps(true_values, predictions)
 #' @export
-
+#' @references
+#' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
 
 crps <- function(true_values, predictions) {
 

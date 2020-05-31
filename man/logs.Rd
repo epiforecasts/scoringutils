@@ -31,3 +31,7 @@ true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 logs(true_values, predictions)
 }
+\references{
+Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
+Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+}
