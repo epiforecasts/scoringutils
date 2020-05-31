@@ -5,7 +5,25 @@ Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
            role = c("aut", "cre"),
-           email = "nikosbosse@gmail.com"),
+           email = "nikosbosse@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-7750-5280")),
+    person(given = "Sam Abbott",
+           role = c("aut"),
+           email = "contact@samabbott.co.uk",
+           comment = c(ORCID = "0000-0001-8057-8037")), 
+    person("Joel", "Hellewell",
+           email = "joel.hellewell@lshtm.ac.uk", 
+           role = c("ctb"),
+           comment = c(ORCID = "0000-0003-2683-0849")),
+    person(given = "Sophie Meakins",
+           role = c("ctb"),
+           email = "sophie.meakins@lshtm.ac.uk"),  
+    person("James", "Munday", 
+           email = "james.munday@lshtm.ac.uk", 
+           role = c("ctb")),
+    person("Katharine", "Sherratt", 
+           email = "katharine.sherratt@lshtm.ac.uk", 
+           role = c("ctb")),
     person("Sebastian", "Funk", 
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("aut")))
@@ -14,8 +32,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ggplot2,
-    goftest ,
+    data.table,
+    goftest,
+    graphics,
     scoringRules,
     stats
 Suggests: 
@@ -26,3 +45,5 @@ RoxygenNote: 7.1.0
 URL: https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)

@@ -16,7 +16,7 @@
 #' To improve usability, the user is asked to provide an interval range in
 #' percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 #' prediction interval. Correspondingly, the user would have to provide the
-#' 5% and 95% quantiles (the corresponding alpha would then be 0.1).
+#' 5\% and 95\% quantiles (the corresponding alpha would then be 0.1).
 #' No specific distribution is assumed,
 #' but the range has to be symmetric (i.e you can't use the 0.1 quantile
 #' as the lower bound and the 0.7 quantile as the upper).
@@ -30,11 +30,11 @@
 #' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 #' Can be either a single number or a vector of size n, if the range changes
 #' for different forecasts to be scored. This corresponds to (100-alpha)/100
-#' in Gneiting and Raftery (2007).
+#' in Gneiting and Raftery (2007). Internally, the range will be transformed
+#' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
-#' @param verbose if TRUE, gives you feedback if your interval_range seems odd.
 #' @return vector with the scoring values
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
@@ -57,18 +57,10 @@ interval_score <- function(true_values,
                            lower,
                            upper,
                            interval_range = NULL,
-                           weigh = FALSE,
-                           verbose = TRUE) {
+                           weigh = FALSE) {
 
   if(is.null(interval_range)) {
     stop("must provide a range for your prediction interval")
-  }
-
-  if(verbose) {
-    if (interval_range < 1 && interval_range != 0) {
-      message(paste(interval_range),
-              "% interval was provided. Are you sure that's right?", sep = "")
-    }
   }
 
   alpha = (100 - interval_range) / 100

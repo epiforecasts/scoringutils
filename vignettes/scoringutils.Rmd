@@ -1,0 +1,302 @@
+---
+title: "scoringutils"
+author: "Nikos Bosse"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{scoringutils}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+The scoringutils package provides a collection of metrics and proper scoring rules
+that make it simple to score forecasts against the true observed values. You 
+can either automatically score predictions using `eval_forecasts` with an 
+appropriately shaped `data.frame` as input, or you can access the different 
+scoring metrics directly using lower level functions. 
+
+```{r}
+library(scoringutils)
+library(data.table)
+```
+
+# Scoring Forecasts Directly
+A variety of metrics and scoring rules can be accessed through 
+the `scoringutils` package. 
+
+## Bias
+
+The function `bias` determines bias from predictive Monte-Carlo samples, 
+automatically recognising whether forecasts are continuous or
+integer valued. 
+
+For continuous forecasts, Bias is measured as
+$$B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t))$$
+
+where $P_t$ is the empirical cumulative distribution function of the
+prediction for the true value $x_t$. Computationally, $P_t (x_t)$ is
+just calculated as the fraction of predictive samples for $x_t$
+that are smaller than $x_t$.
+
+For integer valued forecasts, Bias is measured as
+
+$$B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1))$$
+
+to adjust for the integer nature of the forecasts. In both cases, Bias can 
+assume values between -1 and 1 and is 0 ideally.
+
+```{r}
+## integer valued forecasts
+true_values <- rpois(30, lambda = 1:30)
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+bias(true_values, predictions)
+
+## continuous forecasts
+true_values <- rnorm(30, mean = 1:30)
+predictions <- replicate(200, rnorm(30, mean = 1:30))
+bias(true_values, predictions)
+```
+
+
+## Sharpness
+Sharpness is the ability of the model to generate predictions within a
+narrow range. It is a data-independent measure, and is purely a feature
+of the forecasts themselves.
+
+Shaprness of predictive samples corresponding to one single true value is
+measured as the normalised median of the absolute deviation from
+the median of the predictive samples. For details, see `?stats::mad`
+
+```{r}
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+sharpness(predictions)
+```
+
+## Calibration
+
+Calibration or reliability of forecasts is the ability of a model to
+correctly identify its own uncertainty in making predictions. In a model
+with perfect calibration, the observed data at each time point look as if
+they came from the predictive probability distribution at that time.
+
+Equivalently, one can inspect the probability integral transform of the
+predictive distribution at time t,
+
+$$u_t = F_t (x_t)$$
+
+where $x_t$ is the observed data point at time $t \text{ in } t_1, …, t_n$,
+n being the number of forecasts, and $F_t$ is the (continuous) predictive
+cumulative probability distribution at time t. If the true probability
+distribution of outcomes at time t is $G_t$ then the forecasts $F_t$ are
+said to be ideal if $F_t = G_t$ at all times $t$. In that case, the
+probabilities ut are distributed uniformly.
+
+In the case of discrete outcomes such as incidence counts,
+the PIT is no longer uniform even when forecasts are ideal.
+In that case a randomised PIT can be used instead:
+
+$$u_t = P_t(k_t) + v \cdot (P_t(k_t) - P_t(k_t - 1) )$$
+
+where $k_t$ is the observed count, $P_t(x)$ is the predictive
+cumulative probability of observing incidence $k$ at time $t$,
+$P_t (-1) = 0$ by definition and $v$ is standard uniform and independent
+of $k$. If $P_t$ is the true cumulative
+probability distribution, then $u_t$ is standard uniform.
+
+The function checks whether integer or continuous forecasts were provided.
+It then applies the (randomised) probability integral and tests
+the values $u_t$ for uniformity using the
+Anderson-Darling test.
+
+As a rule of thumb, there is no evidence to suggest a forecasting model is
+miscalibrated if the p-value found was greater than a threshold of $p >= 0.1$,
+some evidence that it was miscalibrated if $0.01 < p < 0.1$, and good
+evidence that it was miscalibrated if $p <= 0.01$.
+In this context it should be noted, though, that uniformity of the
+PIT is a necessary but not sufficient condition of calibration. It should
+als be noted that the test only works given sufficient samples, otherwise the 
+Null hypothesis will often be rejected outright. 
+
+
+## Continuous Ranked Probability Score (CRPS)
+Wrapper around the `crps_sample` function from the
+`scoringRules` package. For more information look at the manuals from the
+`scoringRules` package. The function can be used for continuous as well as 
+integer valued forecasts. Smaller values are better. 
+
+```{r}
+true_values <- rpois(30, lambda = 1:30)
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+crps(true_values, predictions)
+```
+
+
+
+## Dawid-Sebastiani Score (DSS)
+Wrapper around the `dss_sample` function from the
+`scoringRules` package. For more information look at the manuals from the
+`scoringRules` package. The function can be used for continuous as well as 
+integer valued forecasts. Smaller values are better. 
+
+```{r}
+true_values <- rpois(30, lambda = 1:30)
+predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
+dss(true_values, predictions)
+```
+
+## Log Score
+Wrapper around the `log_sample` function from the
+`scoringRules` package. For more information look at the manuals from the
+`scoringRules` package. The function should not be used for integer valued 
+forecasts. While Log Scores are in principle possible for integer valued 
+foreasts they require a kernel density estimate which is not well defined 
+for discrete values. Smaller values are better. 
+
+```{r}
+true_values <- rnorm(30, mean = 1:30)
+predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
+logs(true_values, predictions)
+```
+
+## Brier Score
+The Brier score is a proper score rule that assesses the accuracy of
+probabilistic binary predictions. The outcomes can be either 0 or 1,
+the predictions must be a probability that the true outcome will be 1.
+
+The Brier Score is then computed as the mean squared error between the
+probabilistic prediction and the true outcome.
+
+$$\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2$$
+
+
+```{r}
+true_values <- sample(c(0,1), size = 30, replace = TRUE)
+predictions <- runif(n = 30, min = 0, max = 1)
+
+brier_score(true_values, predictions)
+```
+
+## Interval Score
+The Interval Score is a Proper Scoring Rule to score quantile predictions,
+following Gneiting and Raftery (2007). Smaller values are better.
+
+The score is computed as
+
+$$ \text{score} = (\text{upper} - \text{lower}) + \\
+\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot 1(\text{true_values} < \text{lower}) + \\
+\frac{2}{\alpha} \cdot (\text{true_value} - \text{upper}) \cdot
+1(\text{true_value} > \text{upper})$$
+
+
+where $1()$ is the indicator function and $\alpha$ is the decimal value that
+indicates how much is outside the prediction interval.
+To improve usability, the user is asked to provide an interval range in
+percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
+prediction interval. Correspondingly, the user would have to provide the
+5\% and 95\% quantiles (the corresponding alpha would then be 0.1).
+No specific distribution is assumed,
+but the range has to be symmetric (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper). 
+Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{4}$ such that 
+the Interval Score converges to the CRPS for increasing number of quantiles. 
+
+
+```{r}
+true_values <- rnorm(30, mean = 1:30)
+interval_range <- 90
+alpha <- (100 - interval_range) / 100
+lower <- qnorm(alpha/2, rnorm(30, mean = 1:30))
+upper <- qnorm((1- alpha/2), rnorm(30, mean = 1:30))
+
+interval_score(true_values = true_values,
+               lower = lower,
+               upper = upper,
+               interval_range = interval_range)
+```
+
+# Automatically Scoring Forecasts
+The function `eval_forecasts` automatically scores forecasts. As input you 
+need a `data.frame` with your predictions. If you want to have one score per
+observation, you can call the function with `summarised = FALSE`. By default, 
+the function returns one aggregate score per model. For more information 
+see `?eval_forecasts`. 
+
+
+## Scoring Probability Binary Forecasts
+```{r}
+library(data.table)
+
+# load example data
+binary_example <- data.table::setDT(scoringutils::binary_example_data)
+print(binary_example, 3, 3)
+```
+
+```{r}
+# score forecasts
+eval <- scoringutils::eval_forecasts(binary_example)
+print(eval)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
+print(eval, 3, 3)
+```
+
+## Scoring Quantile Forecasts
+```{r}
+quantile_example <- data.table::setDT(scoringutils::quantile_example_data)
+print(quantile_example, 3, 3)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(quantile_example)
+print(eval)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
+print(eval, 3, 3)
+```
+
+## Scoring Integer Forecasts
+```{r}
+integer_example <- data.table::setDT(scoringutils::integer_example_data)
+print(integer_example, 3, 3)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(integer_example)
+print(eval)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
+print(eval, 3, 3)
+```
+
+## Scoring Continuous Forecasts
+```{r}
+continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
+print(continuous_example, 3, 3)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(continuous_example)
+print(eval)
+```
+
+```{r}
+eval <- scoringutils::eval_forecasts(continuous_example, summarised = FALSE)
+print(eval, 3, 3)
+
+```
+
+

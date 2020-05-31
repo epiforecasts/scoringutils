@@ -1,4 +1,3 @@
-
 #' @title Determines bias of forecasts
 #'
 #' @description
@@ -70,20 +69,25 @@ bias <- function(true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    stop("'predictions' should be a matrix")
-  }
-  if (nrow(predictions) != n) {
-    msg = cat("matrix 'predictions' must have n rows, ",
-              "where n is the number of true_values to predict. ")
+    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
+                   class(predictions[1]))
     stop(msg)
   }
+  if (nrow(predictions) != n) {
+
+    msg <- sprintf("Mismatch: The true values provided have length `%s`, but 'predictions' has `%s` rows.",
+                   n, nrow(predictions))
+    stop(msg)
+  }
+
+  # ============================================
+
+  ## check whether continuous or integer
   if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE
   }
-
-  # ============================================
 
   n_pred <- ncol(predictions)
 
@@ -98,14 +102,14 @@ bias <- function(true_values, predictions) {
     res <- 1 - 2 * P_x
     return(res)
   } else {
-    # empirical cdf for (y-1)
+    # for integer case also calculate empirical cdf for (y-1)
     P_xm1 <- vapply(seq_along(true_values),
                     function(i) {
                       sum(predictions[i,] <= true_values[i] - 1) / n_pred
                     },
                     .0)
 
-    res = 1 - (P_x + P_xm1)
+    res <- 1 - (P_x + P_xm1)
     return(res)
   }
 }
