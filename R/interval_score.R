@@ -69,7 +69,7 @@ interval_score <- function(true_values,
     2/alpha * (lower - true_values) * (true_values < lower) +
     2/alpha * (true_values - upper) * (true_values > upper)
 
-  if (weigh) score <- score * alpha / 4
+  if (weigh) score <- score * alpha / 2
 
   return(score)
 }
