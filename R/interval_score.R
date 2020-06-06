@@ -51,6 +51,11 @@
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
 #' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
 #' Statistical Association, Volume 102, 2007 - Issue 477
+#'
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+#' <arXiv:2005.12881v1>
+#'
 
 
 interval_score <- function(true_values,
