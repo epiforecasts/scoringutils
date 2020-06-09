@@ -44,7 +44,7 @@ Description:
     to apply these rules separately in a vector / matrix format that can 
     be flexibly used within other packages, or they can choose to do an 
     automatic evaluation of their forecasts. This is implemented with
-    `data.table` and provides a consistent and very efficient framework for 
+    'data.table' and provides a consistent and very efficient framework for 
     evaluating various types of predictions. 
 License: MIT + file LICENSE
 Encoding: UTF-8
