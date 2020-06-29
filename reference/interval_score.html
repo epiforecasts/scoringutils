@@ -154,7 +154,7 @@ as the lower bound and the 0.7 quantile as the upper).</p>
 <p>The interval score is a proper scoring rule that scores a quantile forecast</p>
     </div>
 
-    <pre class="usage"><span class='fu'>interval_score</span>(<span class='no'>true_values</span>, <span class='no'>lower</span>, <span class='no'>upper</span>, <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>interval_score</span>(<span class='kw'>true_values</span>, <span class='kw'>lower</span>, <span class='kw'>upper</span>, interval_range = <span class='kw'>NULL</span>, weigh = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,20 +201,20 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 &lt;arXiv:2005.12881v1&gt;</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
-<span class='no'>interval_range</span> <span class='kw'>=</span> <span class='fl'>90</span>
-<span class='no'>alpha</span> <span class='kw'>=</span> (<span class='fl'>100</span> - <span class='no'>interval_range</span>) / <span class='fl'>100</span>
-<span class='no'>lower</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>(<span class='no'>alpha</span>/<span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
-<span class='no'>upper</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>((<span class='fl'>1</span>- <span class='no'>alpha</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
+    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
+<span class='kw'>interval_range</span> <span class='op'>=</span> <span class='fl'>90</span>
+<span class='kw'>alpha</span> <span class='op'>=</span> (<span class='fl'>100</span> <span class='op'>-</span> <span class='kw'>interval_range</span>) <span class='op'>/</span> <span class='fl'>100</span>
+<span class='kw'>lower</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>(<span class='kw'>alpha</span><span class='op'>/</span><span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
+<span class='kw'>upper</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>((<span class='fl'>1</span><span class='op'>-</span> <span class='kw'>alpha</span><span class='op'>/</span><span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
 
-<span class='fu'>interval_score</span>(<span class='kw'>true_values</span> <span class='kw'>=</span> <span class='no'>true_values</span>,
-               <span class='kw'>lower</span> <span class='kw'>=</span> <span class='no'>lower</span>,
-               <span class='kw'>upper</span> <span class='kw'>=</span> <span class='no'>upper</span>,
-               <span class='kw'>interval_range</span> <span class='kw'>=</span> <span class='no'>interval_range</span>)</div><div class='output co'>#&gt;  [1]  5.967487  2.713613  4.999808 24.796246  4.619596  4.513879  2.824180
-#&gt;  [8] 13.389657  4.147185  3.651971  2.515199 41.119587 16.663458  3.906339
-#&gt; [15]  1.415991  3.668358  3.499910 15.417140  3.979582  1.168363  3.389144
-#&gt; [22]  4.130209  5.726565  5.431937  2.201964  2.395584  4.534874  2.911822
-#&gt; [29] 13.618276  6.609760</div></pre>
+<span class='fu'>interval_score</span>(true_values = <span class='kw'>true_values</span>,
+               lower = <span class='kw'>lower</span>,
+               upper = <span class='kw'>upper</span>,
+               interval_range = <span class='kw'>interval_range</span>)</div><div class='output co'>#&gt;  [1]  5.251901  5.967487  2.713613  4.999808 24.796246  4.619596  4.513879
+#&gt;  [8]  2.824180 13.389657  4.147185  3.651971  2.515199 41.119587 16.663458
+#&gt; [15]  3.906339  1.415991  3.668358  3.499910 15.417140  3.979582  1.168363
+#&gt; [22]  3.389144  4.130209  5.726565  5.431937  2.201964  2.395584  4.534874
+#&gt; [29]  2.911822 13.618276</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

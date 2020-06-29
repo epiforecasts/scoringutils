@@ -124,7 +124,7 @@ valued forecasts" />
 valued forecasts</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crps</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</pre>
+    <pre class="usage"><span class='fu'>crps</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,12 +150,13 @@ number of Monte Carlo samples</p></td>
 Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
-<span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
-<span class='fu'>crps</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='output co'>#&gt;  [1] 0.245050 0.328375 1.126775 1.202625 1.118450 1.145675 0.651800 1.384800
-#&gt;  [9] 0.720125 0.796150 1.371200 1.064750 0.844175 2.396225 1.633125 1.004625
-#&gt; [17] 1.023300 1.836750 1.061600 6.733525 2.479075 3.039775 1.120900 5.636425
-#&gt; [25] 2.262475 6.163250 2.843450 3.619425 5.950325 1.797575</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
+<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
+<span class='fu'>crps</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1]  0.430975  0.474175  0.433875  0.429375  1.122425  1.146100  1.037325
+#&gt;  [8]  1.694000  1.054200  0.976800  0.817525  1.404750  1.054175  0.816225
+#&gt; [15]  2.173125  1.784625  1.023300  1.026750  1.601600  0.963525  6.339075
+#&gt; [22]  2.329775  3.000900  1.156425  6.322475  2.283250  5.683450  2.419425
+#&gt; [29] 11.230325  1.167575</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -129,12 +129,12 @@ of the (randomised) PIT as well as a PIT histogram if specified.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pit</span>(
-  <span class='no'>true_values</span>,
-  <span class='no'>predictions</span>,
-  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>full_output</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>n_replicates</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>num_bins</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>true_values</span>,
+  <span class='kw'>predictions</span>,
+  plot = <span class='fl'>TRUE</span>,
+  full_output = <span class='fl'>FALSE</span>,
+  n_replicates = <span class='fl'>20</span>,
+  num_bins = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -182,7 +182,7 @@ from the `n_replicates` replicates</p></li>
 continuous forecasts, this will be NA as there is only one p_value returned.</p></li>
 <li><p><code>hist_PIT</code> a plot object with the PIT histogram. Only returned
 if <code>plot == TRUE</code>. Call
-<code><a href='https://rdrr.io/r/base/plot.html'>plot(PIT(...)$hist_PIT)</a></code> to display the histogram.</p></li>
+<code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(PIT(...)$hist_PIT)</a></code> to display the histogram.</p></li>
 <li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests on the
 randomised PIT. Only returned for integer forecasts
 and if <code>full_output = TRUE</code></p></li>
@@ -238,9 +238,9 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## continuous predictions</span>
-<span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>)
-<span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>))
-<span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>)</div><div class='img'><img src='pit-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
+<span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
+<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(n = <span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
+<span class='fu'>pit</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='img'><img src='pit-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
 #&gt; [1] 2e-05
 #&gt; 
 #&gt; $sd
@@ -269,9 +269,9 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 #&gt; [1] "histogram"
 #&gt; </div><div class='input'>
 <span class='co'>## integer predictions</span>
-<span class='no'>true_values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>100</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>)
-<span class='no'>predictions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>))
-<span class='fu'>pit</span>(<span class='no'>true_values</span>, <span class='no'>predictions</span>,  <span class='kw'>n_replicates</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='pit-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
+<span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>100</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>)
+<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>100</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>))
+<span class='fu'>pit</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>,  n_replicates = <span class='fl'>5</span>)</div><div class='img'><img src='pit-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; $p_value
 #&gt; [1] 0.3174882
 #&gt; 
 #&gt; $sd
@@ -298,8 +298,7 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "histogram"
-#&gt; </div><div class='input'>
-</div></pre>
+#&gt; </div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

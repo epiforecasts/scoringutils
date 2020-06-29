@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dawid-Sebastiani Score — dss • scoringutils</title>
+<title>Quantile Example Data - Wide Format — quantile_example_data_wide • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Dawid-Sebastiani Score — dss" />
-<meta property="og:description" content="Wrapper around the dss_sample function from the
-scoringRules package." />
+<meta property="og:title" content="Quantile Example Data - Wide Format — quantile_example_data_wide" />
+<meta property="og:description" content="A toy dataset for quantile forecasts of an outcome variable" />
 
 
 
@@ -112,49 +111,41 @@ scoringRules package." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dawid-Sebastiani Score</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/scoringRules_wrappers.R'><code>R/scoringRules_wrappers.R</code></a></small>
-    <div class="hidden name"><code>dss.Rd</code></div>
+    <h1>Quantile Example Data - Wide Format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/data.R'><code>R/data.R</code></a></small>
+    <div class="hidden name"><code>quantile_example_data_wide.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Wrapper around the <code><a href='https://rdrr.io/pkg/scoringRules/man/scores_sample_univ.html'>dss_sample</a></code> function from the
-<code>scoringRules</code> package.</p>
+    <p>A toy dataset for quantile forecasts of an outcome variable</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dss</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</pre>
+    <pre class="usage"><span class='kw'>quantile_example_data_wide</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>true_values</th>
-      <td><p>A vector with the true observed values of size n</p></td>
-    </tr>
-    <tr>
-      <th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>vector with scoring values</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <p>A data frame with 60 rows and 9 variables:</p><dl>
+  <dt>true_values</dt><dd><p>true observed values</p></dd>
+  <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
+  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
+  <dt>lower_90</dt><dd><p>prediction for the lower value of the 90% interval range
+  (corresponding to the 5% quantile)</p></dd>
+  <dt>lower_50</dt><dd><p>prediction for the lower value of the 50% interval range
+  (corresponding to the 25% quantile)</p></dd>
+  <dt>lower_0</dt><dd><p>prediction for the lower value of the 0% interval range
+  (corresponding to the 50% quantile, i.e. the median. For computational
+  reasons there need be a column with <code>lower_0</code> and <code>upper_0</code>)</p></dd>
+  <dt>upper_0</dt><dd><p>prediction for the upper value of the 0<!-- % interval range -->
+  (corresponding to the 50% quantile, i.e. the median)</p></dd>
+  <dt>upper_50</dt><dd><p>prediction for the upper value of the 50% interval range
+  (corresponding to the 75% quantile)</p></dd>
+  <dt>upper_90</dt><dd><p>prediction for the lower value of the 90% interval range
+  (corresponding to the 95% quantile)</p></dd>
 
-    <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
+</dl>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
-<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='fu'>dss</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] -0.06713812  1.03977226  1.38422077  1.39027921  1.83669787  6.17825396
-#&gt;  [7]  7.67675031  2.09569172  2.78581036  3.97777412  5.19384742  2.71992085
-#&gt; [13]  4.85793494  3.34190230  3.15866098  3.73571566  4.44594690  3.37571689
-#&gt; [19]  3.23475952  3.31471786  3.31059377  3.47606465  3.30916963  3.27424120
-#&gt; [25]  3.88810568  8.37237545  3.40040518  3.45090228  5.58619353  5.74833285</div></pre>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
