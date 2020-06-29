@@ -47,7 +47,7 @@
 #' }
 "integer_example_data"
 
-#' Quantile Example Data
+#' Quantile Example Data - Wide Format
 #'
 #' A toy dataset for quantile forecasts of an outcome variable
 #'
@@ -70,6 +70,20 @@
 #'   \item{upper_90}{prediction for the lower value of the 90\% interval range
 #'   (corresponding to the 95\% quantile)}
 #' }
-"quantile_example_data"
+"quantile_example_data_wide"
 
 
+#' Quantile Example Data - Long Format
+#'
+#' A toy dataset for quantile forecasts of an outcome variable
+#'
+#' @format A data frame with 360 rows and 6 variables:
+#' \describe{
+#'   \item{true_values}{true observed values}
+#'   \item{id}{unique identifier for true observed values}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{predictions}{quantile predictions}
+#'   \item{boundary}{lower or upper bound of an interval range}
+#'   \item{range}{interval range for which the quantile forecast was made}
+#' }
+"quantile_example_data_long"

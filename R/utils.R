@@ -1,5 +1,6 @@
 globalVariables(c(".",
                   ".SD",
+                  "boundary",
                   "Brier_score",
                   "CRPS",
                   "DSS",
