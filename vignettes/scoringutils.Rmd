@@ -251,8 +251,12 @@ print(eval, 3, 3)
 ```
 
 ## Scoring Quantile Forecasts
+Forecasts can be provided in either long or wide format
 ```{r}
-quantile_example <- data.table::setDT(scoringutils::quantile_example_data)
+quantile_example <- data.table::setDT(scoringutils::quantile_example_data_long)
+print(quantile_example, 3, 3)
+
+quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 print(quantile_example, 3, 3)
 ```
 
