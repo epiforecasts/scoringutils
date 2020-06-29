@@ -4,6 +4,9 @@
 
 [![R-CMD-check](https://github.com/epiforecasts/EpiNow/workflows/R-CMD-check/badge.svg)](https://github.com/epiforecasts/scoringutils/actions)
 [![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://codecov.io/gh/epiforecasts/scoringutils/) 
+[![develVersion](https://img.shields.io/badge/devel%20version-0.1.1-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
+[![metacran
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
 This package is designed to help with assessing the quality of predictions. 
@@ -38,7 +41,7 @@ drat:::add("epiforecasts")
 install.packages("scoringutils")
 ```
 
-The version of the package under active development can be installed with: 
+The version of the package under active development can also be installed with: 
 
 ```r
 remotes::install_github("epiforecasts/scoringutils")
