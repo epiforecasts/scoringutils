@@ -103,7 +103,7 @@
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
-#' eval <- scoringutils::eval_forecasts(integer_example)
+#' eval <- scoringutils::eval_forecasts(integer_example, n_replicates = 30)
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts

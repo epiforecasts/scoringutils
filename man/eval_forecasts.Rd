@@ -4,7 +4,7 @@
 \alias{eval_forecasts}
 \title{Evaluate forecasts}
 \usage{
-eval_forecasts(data, summarised = TRUE)
+eval_forecasts(data, summarised = TRUE, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the correct columns.
@@ -51,6 +51,10 @@ The long format needs the following columns
   appear twice.}}
 
 \item{summarised}{if \code{TRUE}, only one average score is returned per model}
+
+\item{...}{pass down additional arguments to lower-level functions. One
+use case for this could be passing \code{weigh = TRUE} to
+\code{interval_score} or additional arguments to \code{pit}.}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
@@ -109,7 +113,7 @@ eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long)
 
 ## Integer Forecasts
 integer_example <- data.table::setDT(scoringutils::integer_example_data)
-eval <- scoringutils::eval_forecasts(integer_example)
+eval <- scoringutils::eval_forecasts(integer_example, n_replicates = 30)
 eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 
 ## Continuous Forecasts
