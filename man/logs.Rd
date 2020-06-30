@@ -17,7 +17,7 @@ number of Monte Carlo samples}
 vector with the scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules:score_sample_univ]{logs_sample}}
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample}}
 function from the
 \code{scoringRules} package. Used to score continuous predictions.
 While the Log Score is in theory also applicable

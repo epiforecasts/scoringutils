@@ -1,7 +1,7 @@
 #' @title LogS
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:score_sample_univ]{logs_sample}}
+#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample}}
 #' function from the
 #' \code{scoringRules} package. Used to score continuous predictions.
 #' While the Log Score is in theory also applicable
@@ -61,7 +61,7 @@ logs <- function(true_values, predictions) {
 #' @title Dawid-Sebastiani Score
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:score_sample_univ]{dss_sample}}
+#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample}}
 #' function from the
 #' \code{scoringRules} package.
 #' @param true_values A vector with the true observed values of size n
@@ -115,7 +115,7 @@ dss <- function(true_values, predictions) {
 #' @title Ranked Probability Score
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:score_sample_univ]{crps_sample}}
+#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample}}
 #' function from the
 #' \code{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
