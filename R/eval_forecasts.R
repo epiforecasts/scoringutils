@@ -71,6 +71,9 @@
 #'   need to include a lower and an upper estimate, so the median has to
 #'   appear twice.}
 #' @param summarised if \code{TRUE}, only one average score is returned per model
+#' @param ... pass down additional arguments to lower-level functions. One
+#' use case for this could be passing \code{weigh = TRUE} to
+#' \code{interval_score} or additional arguments to \code{pit}.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -120,7 +123,8 @@
 
 
 eval_forecasts <- function(data,
-                           summarised = TRUE) {
+                           summarised = TRUE,
+                           ...) {
 
   data.table::setDT(data)
 
@@ -189,7 +193,8 @@ eval_forecasts <- function(data,
     res <- data[, "Interval_Score" := scoringutils::interval_score(true_values,
                                                                    lower,
                                                                    upper,
-                                                                   range)]
+                                                                   range,
+                                                                   ...)]
 
     # question: what should be the correct input format for quantile forecasta?
     if (summarised) {
@@ -228,7 +233,8 @@ eval_forecasts <- function(data,
   # compute pit p-values
   dat[, c("pit_p_val", "pit_sd") := pit(true_values,
                                 as.matrix(.SD),
-                                plot = FALSE), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = model]
+                                plot = FALSE,
+                                ...), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = model]
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
 
 
