@@ -17,7 +17,8 @@ number of Monte Carlo samples}
 vector with the scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules]{crps_sample}} function from the
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample}}
+function from the
 \code{scoringRules} package. Can be used for continuous as well as integer
 valued forecasts
 }

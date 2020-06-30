@@ -17,7 +17,8 @@ number of Monte Carlo samples}
 vector with scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules]{dss_sample}} function from the
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample}}
+function from the
 \code{scoringRules} package.
 }
 \examples{
