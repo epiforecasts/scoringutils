@@ -19,7 +19,7 @@ globalVariables(c(".",
 
 
 quantile_to_wide <- function(data) {
-  data.table::dcast(data, id + true_values + model ~ boundary + range,
+  data.table::dcast(data, ... ~ boundary + range,
                     value.var = "predictions")
 }
 
