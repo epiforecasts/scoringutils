@@ -124,6 +124,7 @@
 
 eval_forecasts <- function(data,
                            summarised = TRUE,
+                           by = c("model"),
                            ...) {
 
   data.table::setDT(data)
@@ -159,7 +160,7 @@ eval_forecasts <- function(data,
          by = .(model, id)]
 
     if (summarised) {
-      res <- data[, .(Brier_score = mean(Brier_score)), by  = model]
+      res <- data[, .(Brier_score = mean(Brier_score)), by  = by]
     }
     return(res)
   }
@@ -188,7 +189,7 @@ eval_forecasts <- function(data,
       data[, range := as.numeric(gsub("^.*?_","", range))]
     }
 
-    data <- data.table::dcast(data, id + true_values + range + model ~ boundary,
+    data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "predictions")
     res <- data[, "Interval_Score" := scoringutils::interval_score(true_values,
                                                                    lower,
@@ -196,50 +197,52 @@ eval_forecasts <- function(data,
                                                                    range,
                                                                    ...)]
 
-    # question: what should be the correct input format for quantile forecasta?
     if (summarised) {
-      res <- res[, .("Interval_Score" = mean(Interval_Score)), by = model]
+      res <- res[, .("Interval_Score" = mean(Interval_Score)), by = by]
     }
     return(res)
   }
 
   ## scoring for integer or continuous forecasts
   # sharpness
-  data[, sharpness := scoringutils::sharpness(t(predictions)), by = .(id, model)]
+  data[, sharpness := scoringutils::sharpness(t(predictions)), by = c("id", by)]
 
   # bias
   data[, bias := scoringutils::bias(unique(true_values),
-                                     t(predictions)), by = .(id, model)]
+                                     t(predictions)), by = c("id", by)]
 
   # DSS
   data[, DSS := scoringutils::dss(unique(true_values),
-                                    t(predictions)), by = .(id, model)]
+                                    t(predictions)), by = c("id", by)]
 
   # CRPS
   data[, CRPS := scoringutils::crps(unique(true_values),
-                                    t(predictions)), by = .(id, model)]
+                                    t(predictions)), by = c("id", by)]
 
   # Log Score
   if (prediction_type == "continuous") {
     data[, LogS := scoringutils::logs(unique(true_values),
-                                       t(predictions)), by = .(id, model)]
+                                       t(predictions)), by = c("id", by)]
   }
 
   # calibration
   # reformat data.table to wide format
-  dat <- data.table::dcast(data, model + id + true_values ~ paste("sampl_", sample, sep = ""),
+  dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
                            value.var = "predictions")
 
   # compute pit p-values
   dat[, c("pit_p_val", "pit_sd") := pit(true_values,
                                 as.matrix(.SD),
                                 plot = FALSE,
-                                ...), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = model]
+                                ...), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+  # remove variables not necessary for merging
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
+  dat[, c("sharpness", "bias", "DSS", "CRPS") := NULL]
 
 
   # merge with previous data
-  res <- merge(data, dat, by = c("id", "model", "true_values"))
+  merge_cols = colnames(dat)[!colnames(dat) %in% c("pit_p_val", "pit_sd")]
+  res <- merge(data, dat, by = merge_cols)
 
   if (prediction_type == "continuous") {
     scores <- c("sharpness", "bias", "DSS", "CRPS", "LogS", "pit_p_val")
@@ -250,12 +253,12 @@ eval_forecasts <- function(data,
   # aggregate scores so there is only one score per observed value
   res <- res[, lapply(.SD, mean, na.rm = TRUE),
              .SDcols = scores,
-             by = .(model, id)]
+             by = c("id", by)]
 
   if (summarised) {
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
                .SDcols = scores,
-               by = .(model)]
+               by = by]
   }
   return (res)
 }
