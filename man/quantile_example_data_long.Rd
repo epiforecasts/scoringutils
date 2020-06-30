@@ -5,10 +5,11 @@
 \alias{quantile_example_data_long}
 \title{Quantile Example Data - Long Format}
 \format{
-A data frame with 360 rows and 6 variables:
+A data frame with 720 rows and 7 variables:
 \describe{
   \item{true_values}{true observed values}
   \item{id}{unique identifier for true observed values}
+  \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
   \item{model}{name of the model that generated the forecasts}
   \item{predictions}{quantile predictions}
   \item{boundary}{lower or upper bound of an interval range}

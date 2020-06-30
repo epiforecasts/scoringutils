@@ -72,7 +72,7 @@
 #' @param by character vector of columns to group scoring by. The default
 #' is \code{c("model")}, but you could e.g. group over different locations
 #' or horizons. Note that a column of the corresponding name must be
-#' present in the data.
+#' present in the data. If you don't want any grouping, set \code{by = NULL}
 #' @param summarised if \code{TRUE}, only one average score is returned per
 #' grouped unit
 #' @param ... pass down additional arguments to lower-level functions. One
@@ -99,7 +99,7 @@
 #' ## Quantile Forecasts
 #' # wide format
 #' quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
-#' eval <- scoringutils::eval_forecasts(quantile_example)
+#' eval <- scoringutils::eval_forecasts(quantile_example, by = c("model", horizon"))
 #' eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 #'
 #' #long format
@@ -107,13 +107,17 @@
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
-#' eval <- scoringutils::eval_forecasts(integer_example, n_replicates = 30)
+#' eval <- scoringutils::eval_forecasts(integer_example,
+#'                                      by = c("model", "horizon"),
+#'                                      n_replicates = 30)
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
-#' eval <- scoringutils::eval_forecasts(continuous_example)
-#' eval <- scoringutils::eval_forecasts(continuous_example, summarised = FALSE)
+#' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", horizon"))
+#' eval <- scoringutils::eval_forecasts(continuous_example,
+#'                                      by = c("model", horizon"),
+#'                                      summarised = FALSE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
@@ -185,7 +189,6 @@ eval_forecasts <- function(data,
       ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
 
       data <- data.table::melt(data,
-                               id.vars = c("id", "true_values", "model"),
                                measure.vars = ranges,
                                variable.name = "range",
                                value.name = "predictions")
