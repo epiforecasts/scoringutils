@@ -35,8 +35,7 @@
 #' \itemize{
 #'   \item \code{true_values} the true observed values
 #'   \item \code{id} A unique identifier of the true values. Could be a date
-#'   or just a running index
-#'   \item \code{model} name of the model that generated the predictions}
+#'   or just a running index}
 #' All forecasts except the quantile forecasts need a \code{predictions} column:
 #' \itemize{
 #' \item \code{predictions} predictions or predictive samples for one
@@ -70,7 +69,12 @@
 #'   If you want to score the median (i.e. \code{range = 0}), you still
 #'   need to include a lower and an upper estimate, so the median has to
 #'   appear twice.}
-#' @param summarised if \code{TRUE}, only one average score is returned per model
+#' @param by character vector of columns to group scoring by. The default
+#' is \code{c("model")}, but you could e.g. group over different locations
+#' or horizons. Note that a column of the corresponding name must be
+#' present in the data.
+#' @param summarised if \code{TRUE}, only one average score is returned per
+#' grouped unit
 #' @param ... pass down additional arguments to lower-level functions. One
 #' use case for this could be passing \code{weigh = TRUE} to
 #' \code{interval_score} or additional arguments to \code{pit}.
@@ -123,8 +127,8 @@
 
 
 eval_forecasts <- function(data,
-                           summarised = TRUE,
                            by = c("model"),
+                           summarised = TRUE,
                            ...) {
 
   data.table::setDT(data)

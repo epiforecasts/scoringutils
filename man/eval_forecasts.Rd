@@ -4,7 +4,7 @@
 \alias{eval_forecasts}
 \title{Evaluate forecasts}
 \usage{
-eval_forecasts(data, summarised = TRUE, ...)
+eval_forecasts(data, by = c("model"), summarised = TRUE, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the correct columns.
@@ -14,8 +14,7 @@ Regardless of the forecast type,the following columns need to be present:
 \itemize{
   \item \code{true_values} the true observed values
   \item \code{id} A unique identifier of the true values. Could be a date
-  or just a running index
-  \item \code{model} name of the model that generated the predictions}
+  or just a running index}
 All forecasts except the quantile forecasts need a \code{predictions} column:
 \itemize{
 \item \code{predictions} predictions or predictive samples for one
@@ -50,7 +49,13 @@ The long format needs the following columns
   need to include a lower and an upper estimate, so the median has to
   appear twice.}}
 
-\item{summarised}{if \code{TRUE}, only one average score is returned per model}
+\item{by}{character vector of columns to group scoring by. The default
+is \code{c("model")}, but you could e.g. group over different locations
+or horizons. Note that a column of the corresponding name must be
+present in the data.}
+
+\item{summarised}{if \code{TRUE}, only one average score is returned per
+grouped unit}
 
 \item{...}{pass down additional arguments to lower-level functions. One
 use case for this could be passing \code{weigh = TRUE} to
