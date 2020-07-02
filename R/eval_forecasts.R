@@ -73,8 +73,8 @@
 #' is \code{c("model")}, but you could e.g. group over different locations
 #' or horizons. Note that a column of the corresponding name must be
 #' present in the data. If you don't want any grouping, set \code{by = NULL}
-#' @param summarised if \code{TRUE}, only one average score is returned per
-#' grouped unit
+#' @param summarised if \code{TRUE} (the default), only one average score is
+#' returned per grouped unit.
 #' @param ... pass down additional arguments to lower-level functions. One
 #' use case for this could be passing \code{weigh = TRUE} to
 #' \code{interval_score} or additional arguments to \code{pit}.
