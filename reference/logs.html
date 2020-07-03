@@ -80,7 +80,7 @@ more details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@ more details." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -164,10 +167,10 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
 <span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='fu'>logs</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] 1.089237 1.394300 2.453068 2.308145 5.319346 1.986433 2.299616 2.334938
-#&gt;  [9] 2.251193 2.232418 2.141976 2.517959 2.404688 2.808369 2.475421 2.403112
-#&gt; [17] 3.263313 2.963251 2.481548 2.605776 2.628636 2.599344 2.546795 2.597863
-#&gt; [25] 3.732735 2.659244 2.840202 2.780246 2.659692 4.585741</div></pre>
+<span class='fu'>logs</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] 1.421119 1.331696 2.463456 1.952366 1.972318 2.252716 2.428958 3.253805
+#&gt;  [9] 2.065099 2.197373 2.203754 2.948354 5.315420 2.699703 3.599460 4.276840
+#&gt; [17] 2.390718 2.928528 3.184589 2.851312 2.567575 2.660596 2.735707 2.612942
+#&gt; [25] 2.751654 3.151621 2.722381 3.898188 2.639997 2.994621</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

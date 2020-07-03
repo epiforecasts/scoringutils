@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -89,6 +89,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -125,9 +128,10 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 360 rows and 6 variables:</p><dl>
+    <p>A data frame with 720 rows and 7 variables:</p><dl>
   <dt>true_values</dt><dd><p>true observed values</p></dd>
   <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
+  <dt>horizon</dt><dd><p>forecast horzin (e.g. 1 day ahead forecast)</p></dd>
   <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
   <dt>predictions</dt><dd><p>quantile predictions</p></dd>
   <dt>boundary</dt><dd><p>lower or upper bound of an interval range</p></dd>
