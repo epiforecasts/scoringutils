@@ -35,8 +35,7 @@
 #' \itemize{
 #'   \item \code{true_values} the true observed values
 #'   \item \code{id} A unique identifier of the true values. Could be a date
-#'   or just a running index
-#'   \item \code{model} name of the model that generated the predictions}
+#'   or just a running index}
 #' All forecasts except the quantile forecasts need a \code{predictions} column:
 #' \itemize{
 #' \item \code{predictions} predictions or predictive samples for one
@@ -70,7 +69,16 @@
 #'   If you want to score the median (i.e. \code{range = 0}), you still
 #'   need to include a lower and an upper estimate, so the median has to
 #'   appear twice.}
-#' @param summarised if \code{TRUE}, only one average score is returned per model
+#' @param by character vector of columns to group scoring by. The default
+#' is \code{c("model")}, but you could e.g. group over different locations
+#' or horizons. Note that a column of the corresponding name must be
+#' present in the data. If you don't want any grouping, set \code{by = NULL}
+#' @param summarised if \code{TRUE} (the default), only one average score is
+#' returned per grouped unit.
+#' @param pit_arguments pass down additional arguments to the \code{\link{pit}}
+#' function.
+#' @param interval_score_arguments pass down additional arguments to the
+#' \code{\link{interval_score}} function, e.g. \code{weigh = TRUE}.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -92,7 +100,9 @@
 #' ## Quantile Forecasts
 #' # wide format
 #' quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
-#' eval <- scoringutils::eval_forecasts(quantile_example)
+#' eval <- scoringutils::eval_forecasts(quantile_example,
+#'                                      by = c("model", "horizon"),
+#'                                      interval_score_arguments = list(weigh = TRUE))
 #' eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 #'
 #' #long format
@@ -100,13 +110,17 @@
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
-#' eval <- scoringutils::eval_forecasts(integer_example)
+#' eval <- scoringutils::eval_forecasts(integer_example,
+#'                                      by = c("model", "horizon"),
+#'                                      pit_arguments = list(n_replicates = 30))
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
-#' eval <- scoringutils::eval_forecasts(continuous_example)
-#' eval <- scoringutils::eval_forecasts(continuous_example, summarised = FALSE)
+#' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
+#' eval <- scoringutils::eval_forecasts(continuous_example,
+#'                                      by = c("model", "horizon"),
+#'                                      summarised = FALSE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
@@ -120,7 +134,10 @@
 
 
 eval_forecasts <- function(data,
-                           summarised = TRUE) {
+                           by = c("model"),
+                           summarised = TRUE,
+                           pit_arguments = list(plot = FALSE),
+                           interval_score_arguments = list()) {
 
   data.table::setDT(data)
 
@@ -155,7 +172,7 @@ eval_forecasts <- function(data,
          by = .(model, id)]
 
     if (summarised) {
-      res <- data[, .(Brier_score = mean(Brier_score)), by  = model]
+      res <- data[, .(Brier_score = mean(Brier_score)), by  = by]
     }
     return(res)
   }
@@ -176,7 +193,6 @@ eval_forecasts <- function(data,
       ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
 
       data <- data.table::melt(data,
-                               id.vars = c("id", "true_values", "model"),
                                measure.vars = ranges,
                                variable.name = "range",
                                value.name = "predictions")
@@ -184,56 +200,62 @@ eval_forecasts <- function(data,
       data[, range := as.numeric(gsub("^.*?_","", range))]
     }
 
-    data <- data.table::dcast(data, id + true_values + range + model ~ boundary,
+    data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "predictions")
-    res <- data[, "Interval_Score" := scoringutils::interval_score(true_values,
-                                                                   lower,
-                                                                   upper,
-                                                                   range)]
+    res <- data[, "Interval_Score" := do.call(scoringutils::interval_score,
+                                              c(list(true_values,
+                                                     lower,
+                                                     upper,
+                                                     range),
+                                                interval_score_arguments))]
 
-    # question: what should be the correct input format for quantile forecasta?
     if (summarised) {
-      res <- res[, .("Interval_Score" = mean(Interval_Score)), by = model]
+      res <- res[, .("Interval_Score" = mean(Interval_Score)), by = by]
     }
     return(res)
   }
 
   ## scoring for integer or continuous forecasts
   # sharpness
-  data[, sharpness := scoringutils::sharpness(t(predictions)), by = .(id, model)]
+  data[, sharpness := scoringutils::sharpness(t(predictions)), by = c("id", by)]
 
   # bias
   data[, bias := scoringutils::bias(unique(true_values),
-                                     t(predictions)), by = .(id, model)]
+                                     t(predictions)), by = c("id", by)]
 
   # DSS
   data[, DSS := scoringutils::dss(unique(true_values),
-                                    t(predictions)), by = .(id, model)]
+                                    t(predictions)), by = c("id", by)]
 
   # CRPS
   data[, CRPS := scoringutils::crps(unique(true_values),
-                                    t(predictions)), by = .(id, model)]
+                                    t(predictions)), by = c("id", by)]
 
   # Log Score
   if (prediction_type == "continuous") {
     data[, LogS := scoringutils::logs(unique(true_values),
-                                       t(predictions)), by = .(id, model)]
+                                       t(predictions)), by = c("id", by)]
   }
 
   # calibration
   # reformat data.table to wide format
-  dat <- data.table::dcast(data, model + id + true_values ~ paste("sampl_", sample, sep = ""),
+  dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
                            value.var = "predictions")
 
   # compute pit p-values
-  dat[, c("pit_p_val", "pit_sd") := pit(true_values,
-                                as.matrix(.SD),
-                                plot = FALSE), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = model]
+  dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
+                                                        as.matrix(.SD)),
+                                                   pit_arguments)),
+      .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+
+  # remove variables not necessary for merging
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
+  dat[, c("sharpness", "bias", "DSS", "CRPS") := NULL]
 
 
   # merge with previous data
-  res <- merge(data, dat, by = c("id", "model", "true_values"))
+  merge_cols = colnames(dat)[!colnames(dat) %in% c("pit_p_val", "pit_sd")]
+  res <- merge(data, dat, by = merge_cols)
 
   if (prediction_type == "continuous") {
     scores <- c("sharpness", "bias", "DSS", "CRPS", "LogS", "pit_p_val")
@@ -244,12 +266,12 @@ eval_forecasts <- function(data,
   # aggregate scores so there is only one score per observed value
   res <- res[, lapply(.SD, mean, na.rm = TRUE),
              .SDcols = scores,
-             by = .(model, id)]
+             by = c("id", by)]
 
   if (summarised) {
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
                .SDcols = scores,
-               by = .(model)]
+               by = by]
   }
   return (res)
 }

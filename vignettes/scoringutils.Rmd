@@ -224,10 +224,23 @@ interval_score(true_values = true_values,
 
 # Automatically Scoring Forecasts
 The function `eval_forecasts` automatically scores forecasts. As input you 
-need a `data.frame` with your predictions. If you want to have one score per
-observation, you can call the function with `summarised = FALSE`. By default, 
-the function returns one aggregate score per model. For more information 
+need a `data.frame` with your predictions. You can use the argument `by` to 
+specify variables over which to group. If you e.g. have one to seven-day-ahead
+forecasts in three locations made by two different models, you would 
+specify `by = c("model", "horizon", "location")`. If you want to average over
+horizons, but not locations, you would specify `by = c("model", "horizon")`. 
+If you don't want any groping, you can specify `by = NULL`. The default 
+grouping variable is `"model"`. Note that the variables to group over need to
+be present as columns in the data. 
+
+If you want to have one score per observation, you can call the function 
+with the argument `summarised = FALSE`. The default is `summarised = TRUE` and
+the function returns one aggregate score per grouping unit. For more information 
 see `?eval_forecasts`. 
+
+You can pass down arguments to lower-level functions using `...`. This could 
+be useful if you e.g. want to weigh the interval score with the argument 
+`weigh = TRUE`. 
 
 
 ## Scoring Probability Binary Forecasts
@@ -241,12 +254,13 @@ print(binary_example, 3, 3)
 
 ```{r}
 # score forecasts
-eval <- scoringutils::eval_forecasts(binary_example)
+eval <- scoringutils::eval_forecasts(binary_example, by = c("model", "horizon"))
 print(eval)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
+eval <- scoringutils::eval_forecasts(binary_example, by = c("model", "horizon"), 
+                                     summarised = FALSE)
 print(eval, 3, 3)
 ```
 
@@ -261,7 +275,8 @@ print(quantile_example, 3, 3)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(quantile_example)
+eval <- scoringutils::eval_forecasts(quantile_example, 
+                                     by = c("model", "horizon"))
 print(eval)
 ```
 
@@ -282,7 +297,9 @@ print(eval)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
+eval <- scoringutils::eval_forecasts(integer_example, 
+                                     by = c("model", "horizon"), 
+                                     summarised = FALSE)
 print(eval, 3, 3)
 ```
 
@@ -293,7 +310,8 @@ print(continuous_example, 3, 3)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(continuous_example)
+eval <- scoringutils::eval_forecasts(continuous_example, 
+                                     by = c("model", "horizon"))
 print(eval)
 ```
 

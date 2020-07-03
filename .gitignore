@@ -3,3 +3,4 @@
 .RData
 inst/doc
 .vignett
+R/sandbox.R

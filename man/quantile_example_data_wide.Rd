@@ -5,11 +5,12 @@
 \alias{quantile_example_data_wide}
 \title{Quantile Example Data - Wide Format}
 \format{
-A data frame with 60 rows and 9 variables:
+A data frame with 120 rows and 10 variables:
 \describe{
   \item{true_values}{true observed values}
   \item{id}{unique identifier for true observed values}
   \item{model}{name of the model that generated the forecasts}
+  \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
   \item{lower_90}{prediction for the lower value of the 90\% interval range
   (corresponding to the 5\% quantile)}
   \item{lower_50}{prediction for the lower value of the 50\% interval range
