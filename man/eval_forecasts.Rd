@@ -4,7 +4,13 @@
 \alias{eval_forecasts}
 \title{Evaluate forecasts}
 \usage{
-eval_forecasts(data, by = c("model"), summarised = TRUE, ...)
+eval_forecasts(
+  data,
+  by = c("model"),
+  summarised = TRUE,
+  pit_arguments = list(plot = FALSE),
+  interval_score_arguments = list()
+)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the correct columns.
@@ -54,12 +60,14 @@ is \code{c("model")}, but you could e.g. group over different locations
 or horizons. Note that a column of the corresponding name must be
 present in the data. If you don't want any grouping, set \code{by = NULL}}
 
-\item{summarised}{if \code{TRUE}, only one average score is returned per
-grouped unit}
+\item{summarised}{if \code{TRUE} (the default), only one average score is
+returned per grouped unit.}
 
-\item{...}{pass down additional arguments to lower-level functions. One
-use case for this could be passing \code{weigh = TRUE} to
-\code{interval_score} or additional arguments to \code{pit}.}
+\item{pit_arguments}{pass down additional arguments to the \code{\link{pit}}
+function.}
+
+\item{interval_score_arguments}{pass down additional arguments to the
+\code{\link{interval_score}} function, e.g. \code{weigh = TRUE}.}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
@@ -100,6 +108,38 @@ the following metrics are used where appropriate:
   \item {LogS} Log Score. Smaller is better. Only for continuous forecasts.
   See \code{\link{logs}} for more information.
 }
+}
+\examples{
+## Probability Forecast for Binary Target
+binary_example <- data.table::setDT(scoringutils::binary_example_data)
+eval <- scoringutils::eval_forecasts(binary_example)
+eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
+
+## Quantile Forecasts
+# wide format
+quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
+eval <- scoringutils::eval_forecasts(quantile_example,
+                                     by = c("model", "horizon"),
+                                     interval_score_arguments = list(weigh = TRUE))
+eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
+
+#long format
+eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long)
+
+## Integer Forecasts
+integer_example <- data.table::setDT(scoringutils::integer_example_data)
+eval <- scoringutils::eval_forecasts(integer_example,
+                                     by = c("model", "horizon"),
+                                     pit_arguments = list(n_replicates = 30))
+eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
+
+## Continuous Forecasts
+continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
+eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
+eval <- scoringutils::eval_forecasts(continuous_example,
+                                     by = c("model", "horizon"),
+                                     summarised = FALSE)
+
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ

@@ -75,9 +75,10 @@
 #' present in the data. If you don't want any grouping, set \code{by = NULL}
 #' @param summarised if \code{TRUE} (the default), only one average score is
 #' returned per grouped unit.
-#' @param ... pass down additional arguments to lower-level functions. One
-#' use case for this could be passing \code{weigh = TRUE} to
-#' \code{interval_score} or additional arguments to \code{pit}.
+#' @param pit_arguments pass down additional arguments to the \code{\link{pit}}
+#' function.
+#' @param interval_score_arguments pass down additional arguments to the
+#' \code{\link{interval_score}} function, e.g. \code{weigh = TRUE}.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -99,7 +100,9 @@
 #' ## Quantile Forecasts
 #' # wide format
 #' quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
-#' eval <- scoringutils::eval_forecasts(quantile_example, by = c("model", horizon"))
+#' eval <- scoringutils::eval_forecasts(quantile_example,
+#'                                      by = c("model", "horizon"),
+#'                                      interval_score_arguments = list(weigh = TRUE))
 #' eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 #'
 #' #long format
@@ -109,14 +112,14 @@
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
 #' eval <- scoringutils::eval_forecasts(integer_example,
 #'                                      by = c("model", "horizon"),
-#'                                      n_replicates = 30)
+#'                                      pit_arguments = list(n_replicates = 30))
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
-#' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", horizon"))
+#' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
 #' eval <- scoringutils::eval_forecasts(continuous_example,
-#'                                      by = c("model", horizon"),
+#'                                      by = c("model", "horizon"),
 #'                                      summarised = FALSE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
@@ -133,7 +136,8 @@
 eval_forecasts <- function(data,
                            by = c("model"),
                            summarised = TRUE,
-                           ...) {
+                           pit_arguments = list(plot = FALSE),
+                           interval_score_arguments = list()) {
 
   data.table::setDT(data)
 
@@ -198,11 +202,12 @@ eval_forecasts <- function(data,
 
     data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "predictions")
-    res <- data[, "Interval_Score" := scoringutils::interval_score(true_values,
-                                                                   lower,
-                                                                   upper,
-                                                                   range,
-                                                                   ...)]
+    res <- data[, "Interval_Score" := do.call(scoringutils::interval_score,
+                                              c(list(true_values,
+                                                     lower,
+                                                     upper,
+                                                     range),
+                                                interval_score_arguments))]
 
     if (summarised) {
       res <- res[, .("Interval_Score" = mean(Interval_Score)), by = by]
@@ -238,10 +243,11 @@ eval_forecasts <- function(data,
                            value.var = "predictions")
 
   # compute pit p-values
-  dat[, c("pit_p_val", "pit_sd") := pit(true_values,
-                                as.matrix(.SD),
-                                plot = FALSE,
-                                ...), .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+  dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
+                                                        as.matrix(.SD)),
+                                                   pit_arguments)),
+      .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+
   # remove variables not necessary for merging
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
   dat[, c("sharpness", "bias", "DSS", "CRPS") := NULL]
