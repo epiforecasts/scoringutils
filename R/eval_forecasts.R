@@ -82,7 +82,12 @@
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
-#' score. For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
+#' score, as well as adapted metrics for calibration, sharpness and bias. The
+#' calibration metric is the percentage of true values that fall into a given
+#' range, the sharpness is determined as the average width of the 50\%
+#' interval range and bias is estimated as the percentage of true values that
+#' fall above the median, transformed to [-1, 1].
+#' For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
 #' pit_p_val (as an indicator of calibration) are returned. For integer
 #' forecasts, pit_sd is returned (to account for the randomised PIT),
 #' but no Log Score is returned (the internal estimation relies on a
@@ -209,8 +214,34 @@ eval_forecasts <- function(data,
                                                      range),
                                                 interval_score_arguments))]
 
+    # compute calibration as fraction of values that fall in the range
+    res[, calibration := mean(true_values >= lower & true_values <= upper),
+        by = c("range", by)]
+
+    # compute bias as fraction of true_values above the median and transformed to [-1, 1]
+    # only possible if median forecast exists
+    if (0 %in% unique(res$range)) {
+      bias <- res[range == 0,
+                  .(bias = 1 - 2 * mean(true_values > unique(lower))),
+                  by = by]
+
+      res <-  merge(res, bias, by = by)
+    }
+
+
+    # compute sharpness as average width of the 50% interval
+    if (50 %in% unique(res$range)) {
+      sharpness <- res[range == 50, .(sharpness = mean(upper - lower)),
+                       by = by]
+      res <-  merge(res, sharpness, by = by)
+    }
+
     if (summarised) {
-      res <- res[, .("Interval_Score" = mean(Interval_Score)), by = by]
+
+      res <- res[, .("Interval_Score" = mean(Interval_Score),
+                     "calibration" = ifelse(exists("calibration"), mean(calibration), NA),
+                     "sharpness" = ifelse(exists("sharpness"), mean(sharpness), NA)),
+                 by = c(by, "range")]
     }
     return(res)
   }
