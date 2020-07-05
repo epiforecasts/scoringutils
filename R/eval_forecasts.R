@@ -222,7 +222,7 @@ eval_forecasts <- function(data,
     # only possible if median forecast exists
     if (0 %in% unique(res$range)) {
       bias <- res[range == 0,
-                  .(bias = 1 - 2 * mean(true_values > unique(lower))),
+                  .(bias = 1 - 2 * mean(true_values > lower)),
                   by = by]
 
       res <-  merge(res, bias, by = by)
