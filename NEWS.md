@@ -4,6 +4,8 @@
 in `eval_forecasts`
 - included support for passing down arguments to lower-level functions in 
 `eval_forecasts`
+- included support for three new metrics to score quantiles with 
+`eval_forecasts`: bias, sharpness and calibration
 
 ### Package updates
 - example data now has a horizon column to illustrate the use of grouping
