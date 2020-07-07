@@ -240,7 +240,8 @@ eval_forecasts <- function(data,
 
       res <- res[, .("Interval_Score" = mean(Interval_Score),
                      "calibration" = ifelse(exists("calibration"), mean(calibration), NA),
-                     "sharpness" = ifelse(exists("sharpness"), mean(sharpness), NA)),
+                     "bias" = ifelse(exists("bias"), mean(sharpness), NA),
+                     "sharpness" = ifelse(exists("sharpness"), mean(sharpness), NA)),),
                  by = c(by, "range")]
     }
     return(res)
