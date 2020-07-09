@@ -1,4 +1,9 @@
 ## scoringutils 0.1.2
+
+### (Potentially) Breakting changes
+- all scores in eval_forecasts were consistently renamed to lower case. 
+Interval_score is now interval_score, CRPS is now crps etc. 
+
 ### Feature updates
 - included support for grouping scores according to a vector of column names
 in `eval_forecasts`

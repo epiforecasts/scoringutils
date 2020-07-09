@@ -110,7 +110,7 @@ the following metrics are used where appropriate:
   See \code{\link{dss}} for more information.
   \item {CRPS} Continuous Ranked Probability Score. Smaller is better.
   See \code{\link{crps}} for more information.
-  \item {LogS} Log Score. Smaller is better. Only for continuous forecasts.
+  \item {Log Score} Smaller is better. Only for continuous forecasts.
   See \code{\link{logs}} for more information.
 }
 }

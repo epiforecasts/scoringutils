@@ -24,7 +24,7 @@
 #'   See \code{\link{dss}} for more information.
 #'   \item {CRPS} Continuous Ranked Probability Score. Smaller is better.
 #'   See \code{\link{crps}} for more information.
-#'   \item {LogS} Log Score. Smaller is better. Only for continuous forecasts.
+#'   \item {Log Score} Smaller is better. Only for continuous forecasts.
 #'   See \code{\link{logs}} for more information.
 #' }
 #'
@@ -173,11 +173,11 @@ eval_forecasts <- function(data,
   # Brier Score for binary prediction
   if (target_type == "binary") {
 
-    res <- data[, "Brier_score" := scoringutils::brier_score(true_values, predictions),
+    res <- data[, "brier_score" := scoringutils::brier_score(true_values, predictions),
          by = .(model, id)]
 
     if (summarised) {
-      res <- data[, .(Brier_score = mean(Brier_score)), by  = by]
+      res <- data[, .(brier_score = mean(brier_score)), by  = by]
     }
     return(res)
   }
@@ -207,7 +207,7 @@ eval_forecasts <- function(data,
 
     data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "predictions")
-    res <- data[, "Interval_Score" := do.call(scoringutils::interval_score,
+    res <- data[, "interval_score" := do.call(scoringutils::interval_score,
                                               c(list(true_values,
                                                      lower,
                                                      upper,
@@ -238,7 +238,7 @@ eval_forecasts <- function(data,
 
     if (summarised) {
 
-      res <- res[, .("Interval_Score" = mean(Interval_Score),
+      res <- res[, .("interval_score" = mean(interval_score),
                      "calibration" = ifelse(exists("calibration"), mean(calibration), NA),
                      "bias" = ifelse(exists("bias"), mean(bias), NA),
                      "sharpness" = ifelse(exists("sharpness"), mean(sharpness), NA)),
@@ -256,16 +256,16 @@ eval_forecasts <- function(data,
                                      t(predictions)), by = c("id", by)]
 
   # DSS
-  data[, DSS := scoringutils::dss(unique(true_values),
+  data[, dss := scoringutils::dss(unique(true_values),
                                     t(predictions)), by = c("id", by)]
 
   # CRPS
-  data[, CRPS := scoringutils::crps(unique(true_values),
+  data[, crps := scoringutils::crps(unique(true_values),
                                     t(predictions)), by = c("id", by)]
 
   # Log Score
   if (prediction_type == "continuous") {
-    data[, LogS := scoringutils::logs(unique(true_values),
+    data[, log_score := scoringutils::logs(unique(true_values),
                                        t(predictions)), by = c("id", by)]
   }
 
@@ -282,7 +282,7 @@ eval_forecasts <- function(data,
 
   # remove variables not necessary for merging
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
-  dat[, c("sharpness", "bias", "DSS", "CRPS") := NULL]
+  dat[, c("sharpness", "bias", "dss", "crps") := NULL]
 
 
   # merge with previous data
@@ -290,9 +290,9 @@ eval_forecasts <- function(data,
   res <- merge(data, dat, by = merge_cols)
 
   if (prediction_type == "continuous") {
-    scores <- c("sharpness", "bias", "DSS", "CRPS", "LogS", "pit_p_val")
+    scores <- c("sharpness", "bias", "dss", "crps", "log_score", "pit_p_val")
   } else {
-    scores <- c("sharpness", "bias", "DSS", "CRPS", "pit_p_val", "pit_sd")
+    scores <- c("sharpness", "bias", "dss", "crps", "pit_p_val", "pit_sd")
   }
 
   # aggregate scores so there is only one score per observed value
