@@ -37,7 +37,7 @@
 #'
 #' A toy dataset for a probabilistic forecast of an integer outcome variable
 #'
-#' @format A data frame with 60000 rows and 5 variables:
+#' @format A data frame with 6000 rows and 5 variables:
 #' \describe{
 #'   \item{id}{unique identifier for true observed values}
 #'   \item{model}{name of the model that generated the forecasts}

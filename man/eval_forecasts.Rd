@@ -72,7 +72,12 @@ function.}
 \value{
 A data.table with appropriate scores. For binary predictions,
 the Brier Score will be returned, for quantile predictions the interval
-score. For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
+score, as well as adapted metrics for calibration, sharpness and bias. The
+calibration metric is the percentage of true values that fall into a given
+range, the sharpness is determined as the average width of the 50\%
+interval range and bias is estimated as the percentage of true values that
+fall above the median, transformed to [-1, 1].
+For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
 pit_p_val (as an indicator of calibration) are returned. For integer
 forecasts, pit_sd is returned (to account for the randomised PIT),
 but no Log Score is returned (the internal estimation relies on a
