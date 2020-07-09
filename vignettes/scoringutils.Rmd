@@ -205,7 +205,7 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper). 
-Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{4}$ such that 
+Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{2}$ such that 
 the Interval Score converges to the CRPS for increasing number of quantiles. 
 
 
