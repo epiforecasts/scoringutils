@@ -106,7 +106,8 @@ pit <- function(true_values,
                 plot = TRUE,
                 full_output = FALSE,
                 n_replicates = 20,
-                num_bins = NULL) {
+                num_bins = NULL,
+                verbose = TRUE) {
 
 
 
@@ -127,7 +128,9 @@ pit <- function(true_values,
 
 
   if (n == 1) {
-    message("you need more than one observation to assess uniformity of the PIT")
+    if (verbose) {
+      message("you need more than one observation to assess uniformity of the PIT")
+    }
     out <- list(p_value = NA,
                 sd = NA)
 
