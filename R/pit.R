@@ -116,7 +116,6 @@ pit <- function(true_values,
     stop("true_values or predictions argument missing")
   }
 
-
   ## check whether continuous or integer
   if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     continuous_predictions <- TRUE
@@ -125,6 +124,19 @@ pit <- function(true_values,
   }
 
   n <- length(true_values)
+
+
+  if (n == 1) {
+    message("you need more than one observation to assess uniformity of the PIT")
+    out <- list(p_value = NA,
+                sd = NA)
+
+    if (full_output) {
+      out <- list(p_values = NA,
+                  calibration = NA,
+                  u = NA)
+    }
+  }
 
   if (is.data.frame(predictions)) {
     predictions <- as.matrix(predictions)
@@ -139,10 +151,6 @@ pit <- function(true_values,
     msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
                    n, nrow(predictions))
     stop(msg)
-  }
-
-  if (length(true_values) == 1) {
-    stop("you need more than one observation to assess uniformity of the PIT")
   }
 
   # ============================================
