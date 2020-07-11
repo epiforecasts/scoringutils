@@ -107,7 +107,7 @@ pit <- function(true_values,
                 full_output = FALSE,
                 n_replicates = 20,
                 num_bins = NULL,
-                verbose = TRUE) {
+                verbose = FALSE) {
 
 
 
