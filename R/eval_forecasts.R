@@ -108,6 +108,7 @@
 #' when summarising.
 #'
 #' @importFrom data.table ':=' setDT %like%
+#' @importFrom stats quantile
 #'
 #' @examples
 #' ## Probability Forecast for Binary Target

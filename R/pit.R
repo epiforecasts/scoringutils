@@ -63,6 +63,8 @@
 #' each time re-randomising the PIT
 #' @param full_output return all individual p_values and computed u_t values
 #' for the randomised PIT. Usually not needed.
+#' @param verbose if TRUE (default is FALSE) more error messages are printed.
+#' Usually, this should not be needed, but may help with debugging.
 #' @return a list with the following components:
 #' \itemize{
 #' \item \code{p_value}: p-value of the Anderson-Darling test on the
