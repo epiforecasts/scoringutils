@@ -7,8 +7,11 @@
 eval_forecasts(
   data,
   by = c("model"),
+  summarise_by = NULL,
   summarised = TRUE,
   pit_arguments = list(plot = FALSE),
+  sd = FALSE,
+  quantiles = c(),
   interval_score_arguments = list()
 )
 }
@@ -117,7 +120,7 @@ the following metrics are used where appropriate:
 \examples{
 ## Probability Forecast for Binary Target
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
-eval <- scoringutils::eval_forecasts(binary_example)
+eval <- scoringutils::eval_forecasts(binary_example, quantiles = c(0.7), sd = TRUE)
 eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
 
 ## Quantile Forecasts
@@ -125,6 +128,8 @@ eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
 quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 eval <- scoringutils::eval_forecasts(quantile_example,
                                      by = c("model", "horizon"),
+                                     summarise_by = "model",
+                                     quantiles = c(0.5),
                                      interval_score_arguments = list(weigh = TRUE))
 eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 
@@ -135,7 +140,9 @@ eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long)
 integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      by = c("model", "horizon"),
-                                     pit_arguments = list(n_replicates = 30))
+                                     quantiles = c(0.1, 0.9),
+                                     pit_arguments = list(n_replicates = 30,
+                                                          plot = FALSE))
 eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 
 ## Continuous Forecasts

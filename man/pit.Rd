@@ -10,7 +10,8 @@ pit(
   plot = TRUE,
   full_output = FALSE,
   n_replicates = 20,
-  num_bins = NULL
+  num_bins = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
