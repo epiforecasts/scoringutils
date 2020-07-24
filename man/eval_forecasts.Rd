@@ -170,7 +170,7 @@ eval <- scoringutils::eval_forecasts(continuous_example,
                                      quantiles = c(0.5, 0.9),
                                      sd = TRUE,
                                      by = c("model", "horizon"),
-                                     summarised = FALSE)
+                                     summarised = TRUE)
 
 }
 \references{
