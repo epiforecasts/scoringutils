@@ -7,7 +7,7 @@
 eval_forecasts(
   data,
   by = c("model"),
-  summarise_by = NULL,
+  summarise_by = by,
   summarised = TRUE,
   quantiles = c(),
   sd = FALSE,
@@ -145,7 +145,8 @@ quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 eval <- scoringutils::eval_forecasts(quantile_example,
                                      by = c("model", "horizon"),
                                      summarise_by = "model",
-                                     quantiles = c(0.5),
+                                     quantiles = c(0.05, 0.95),
+                                     sd = TRUE,
                                      interval_score_arguments = list(weigh = TRUE))
 eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 
@@ -157,6 +158,7 @@ integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      by = c("model", "horizon"),
                                      quantiles = c(0.1, 0.9),
+                                     sd = TRUE,
                                      pit_arguments = list(n_replicates = 30,
                                                           plot = FALSE))
 eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
@@ -165,6 +167,8 @@ eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
 eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
 eval <- scoringutils::eval_forecasts(continuous_example,
+                                     quantiles = c(0.5, 0.9),
+                                     sd = TRUE,
                                      by = c("model", "horizon"),
                                      summarised = FALSE)
 
