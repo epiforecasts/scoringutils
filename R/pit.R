@@ -63,6 +63,8 @@
 #' each time re-randomising the PIT
 #' @param full_output return all individual p_values and computed u_t values
 #' for the randomised PIT. Usually not needed.
+#' @param verbose if TRUE (default is FALSE) more error messages are printed.
+#' Usually, this should not be needed, but may help with debugging.
 #' @return a list with the following components:
 #' \itemize{
 #' \item \code{p_value}: p-value of the Anderson-Darling test on the
@@ -106,7 +108,8 @@ pit <- function(true_values,
                 plot = TRUE,
                 full_output = FALSE,
                 n_replicates = 20,
-                num_bins = NULL) {
+                num_bins = NULL,
+                verbose = FALSE) {
 
 
 
@@ -116,7 +119,6 @@ pit <- function(true_values,
     stop("true_values or predictions argument missing")
   }
 
-
   ## check whether continuous or integer
   if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
     continuous_predictions <- TRUE
@@ -125,6 +127,21 @@ pit <- function(true_values,
   }
 
   n <- length(true_values)
+
+
+  if (n == 1) {
+    if (verbose) {
+      message("you need more than one observation to assess uniformity of the PIT")
+    }
+    out <- list(p_value = NA,
+                sd = NA)
+
+    if (full_output) {
+      out <- list(p_values = NA,
+                  calibration = NA,
+                  u = NA)
+    }
+  }
 
   if (is.data.frame(predictions)) {
     predictions <- as.matrix(predictions)
@@ -139,10 +156,6 @@ pit <- function(true_values,
     msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
                    n, nrow(predictions))
     stop(msg)
-  }
-
-  if (length(true_values) == 1) {
-    stop("you need more than one observation to assess uniformity of the PIT")
   }
 
   # ============================================

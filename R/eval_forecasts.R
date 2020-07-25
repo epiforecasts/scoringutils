@@ -73,8 +73,19 @@
 #' is \code{c("model")}, but you could e.g. group over different locations
 #' or horizons. Note that a column of the corresponding name must be
 #' present in the data. If you don't want any grouping, set \code{by = NULL}
+#' @param summarise_by character vector of columns to group the summary by. By
+#' default, this is equal to `by`. But sometimes you may want to to summarise
+#' over categories different from the scoring. If you e.g. want to have the
+#' quantiles for plotting you may want to score by regions, but then summarise
+#' over these regions to display the performance across regions.
 #' @param summarised if \code{TRUE} (the default), only one average score is
-#' returned per grouped unit.
+#' returned per unit specified through `summarise_by`.
+#' @param quantiles numeric vector of quantiles to be returned when summarising.
+#' Instead of just returning a mean, quantiles will be returned for the
+#' groups specified through `summarise_by`. By default, no quantiles are
+#' returned.
+#' @param sd if TRUE (the default is FALSE) the standard deviation of all
+#' metrics will be returned when summarising.
 #' @param pit_arguments pass down additional arguments to the \code{\link{pit}}
 #' function.
 #' @param interval_score_arguments pass down additional arguments to the
@@ -93,13 +104,16 @@
 #' but no Log Score is returned (the internal estimation relies on a
 #' kernel density estimate which is difficult for integer-valued forecasts).
 #' If \code{summarised = TRUE} the average score per model is returned.
+#' If specified, quantiles and standard deviation of scores can also be returned
+#' when summarising.
 #'
-#' @importFrom data.table ':=' setDT
+#' @importFrom data.table ':=' setDT %like%
+#' @importFrom stats quantile
 #'
 #' @examples
 #' ## Probability Forecast for Binary Target
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
-#' eval <- scoringutils::eval_forecasts(binary_example)
+#' eval <- scoringutils::eval_forecasts(binary_example, quantiles = c(0.7), sd = TRUE)
 #' eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
 #'
 #' ## Quantile Forecasts
@@ -107,6 +121,9 @@
 #' quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 #' eval <- scoringutils::eval_forecasts(quantile_example,
 #'                                      by = c("model", "horizon"),
+#'                                      summarise_by = "model",
+#'                                      quantiles = c(0.05, 0.95),
+#'                                      sd = TRUE,
 #'                                      interval_score_arguments = list(weigh = TRUE))
 #' eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 #'
@@ -117,15 +134,20 @@
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
 #' eval <- scoringutils::eval_forecasts(integer_example,
 #'                                      by = c("model", "horizon"),
-#'                                      pit_arguments = list(n_replicates = 30))
+#'                                      quantiles = c(0.1, 0.9),
+#'                                      sd = TRUE,
+#'                                      pit_arguments = list(n_replicates = 30,
+#'                                                           plot = FALSE))
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
 #' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
 #' eval <- scoringutils::eval_forecasts(continuous_example,
+#'                                      quantiles = c(0.5, 0.9),
+#'                                      sd = TRUE,
 #'                                      by = c("model", "horizon"),
-#'                                      summarised = FALSE)
+#'                                      summarised = TRUE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
@@ -137,16 +159,39 @@
 #'
 
 
-
 eval_forecasts <- function(data,
                            by = c("model"),
+                           summarise_by = by,
                            summarised = TRUE,
+                           quantiles = c(),
+                           sd = FALSE,
                            pit_arguments = list(plot = FALSE),
                            interval_score_arguments = list()) {
 
+
+  # preparations ---------------------------------------------------------------
   data.table::setDT(data)
 
-  ## check if predictions are integer, continuous, etc.
+  # helper function to add quantiles to summarised predictions
+  add_quantiles <- function(dt, varnames, quantiles, by) {
+    for (varname in varnames) {
+      dt[, paste0(varname, "_", quantiles) := as.list(quantile(get(varname),
+                                                               probs = quantiles,
+                                                               na.rm = TRUE)),
+         by = c(by)]
+    }
+    return(dt)
+  }
+
+  add_sd <- function(dt, varnames, by) {
+    for (varname in varnames) {
+      dt[, paste0(varname, "_sd") := sd(get(varname), na.rm = TRUE), by = by]
+    }
+    return(dt)
+  }
+
+
+  # check if predictions are integer, continuous, etc. -------------------------
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data)) {
     prediction_type <- "quantile"
   } else if (all.equal(data$predictions, as.integer(data$predictions)) == TRUE) {
@@ -165,24 +210,34 @@ eval_forecasts <- function(data,
     target_type = "continuous"
   }
 
-  # ============================================
 
-  models <- unique(data$model)
-  n <- length(unique(data$id))
-
-  # Brier Score for binary prediction
+  # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
 
     res <- data[, "brier_score" := scoringutils::brier_score(true_values, predictions),
-         by = .(model, id)]
+         by = c("id", by)]
 
     if (summarised) {
-      res <- data[, .(brier_score = mean(brier_score)), by  = by]
+      # add quantiles
+      if (!is.null(quantiles)) {
+        res <- add_quantiles(res, "brier_score", quantiles, by = summarise_by)
+      }
+
+      # add standard deviation
+      if (sd) {
+        res[, "brier_score_sd" := sd(brier_score, na.rm = TRUE), by = c(summarise_by)]
+      }
+
+      # summarise by taking the mean over all relevant columns
+      res <- data[, lapply(.SD, mean, na.rm = TRUE),
+                 .SDcols = colnames(res) %like% "brier",
+                 by = summarise_by]
+
     }
     return(res)
   }
 
-  # interval score for quantile prediction
+  # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
 
     # check if long or wide format
@@ -214,7 +269,7 @@ eval_forecasts <- function(data,
                                                      range),
                                                 interval_score_arguments))]
 
-    # compute calibration as fraction of values that fall in the range
+    # compute calibration
     res[, calibration := mean(true_values >= lower & true_values <= upper),
         by = c("range", by)]
 
@@ -238,16 +293,31 @@ eval_forecasts <- function(data,
 
     if (summarised) {
 
-      res <- res[, .("interval_score" = mean(interval_score),
-                     "calibration" = ifelse(exists("calibration"), mean(calibration), NA),
-                     "bias" = ifelse(exists("bias"), mean(bias), NA),
-                     "sharpness" = ifelse(exists("sharpness"), mean(sharpness), NA)),
-                 by = c(by, "range")]
+      if (!is.null(quantiles)) {
+        # add quantiles for the scores
+        res <- add_quantiles(res,
+                             c("interval_score", "calibration", "bias", "sharpness"),
+                             quantiles,
+                             by = c(summarise_by, "range"))
+      }
+
+      # add standard deviation
+      if (sd) {
+        res <- add_sd(res,
+                      varnames = c("interval_score", "bias", "calibration", "sharpness"),
+                      by = c(summarise_by, "range"))
+      }
+
+      # summarise by taking the mean and omitting unecessary columns
+      res <- res[, lapply(.SD, mean, na.rm = TRUE),
+                 by = c(summarise_by, "range"),
+                 .SDcols = colnames(res) %like% "calibration|bias|sharpness|interval_score"]
     }
     return(res)
   }
 
-  ## scoring for integer or continuous forecasts
+
+  # Score integer or continuous predictions ------------------------------------
   # sharpness
   data[, sharpness := scoringutils::sharpness(t(predictions)), by = c("id", by)]
 
@@ -284,26 +354,44 @@ eval_forecasts <- function(data,
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
   dat[, c("sharpness", "bias", "dss", "crps") := NULL]
 
-
   # merge with previous data
   merge_cols = colnames(dat)[!colnames(dat) %in% c("pit_p_val", "pit_sd")]
   res <- merge(data, dat, by = merge_cols)
 
-  if (prediction_type == "continuous") {
-    scores <- c("sharpness", "bias", "dss", "crps", "log_score", "pit_p_val")
-  } else {
-    scores <- c("sharpness", "bias", "dss", "crps", "pit_p_val", "pit_sd")
-  }
-
-  # aggregate scores so there is only one score per observed value
-  res <- res[, lapply(.SD, mean, na.rm = TRUE),
-             .SDcols = scores,
+  # make scores unique to avoid redundancy.
+  res <- res[, lapply(.SD, unique),
+             .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
              by = c("id", by)]
 
+
   if (summarised) {
+    # add quantiles
+    if (!is.null(quantiles)) {
+
+      if (prediction_type == "continuous") {
+        quantile_vars <- c("crps", "dss", "log_score", "pit_p_val", "bias", "sharpness")
+      } else {
+        quantile_vars <- c("crps", "dss", "pit_p_val", "bias", "sharpness")
+      }
+      res <- add_quantiles(res, quantile_vars, quantiles, by = c(summarise_by))
+    }
+
+    if (sd) {
+      # add standard deviations
+      if (prediction_type == "continuous") {
+        sd_vars <- c("crps", "dss", "log_score", "bias", "sharpness")
+      } else {
+        sd_vars <- c("crps", "dss", "bias", "sharpness")
+      }
+
+      res <- add_sd(res,
+                    varnames = sd_vars,
+                    by = c(summarise_by))
+    }
+
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
-               .SDcols = scores,
-               by = by]
+               .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
+               by = summarise_by]
   }
   return (res)
 }

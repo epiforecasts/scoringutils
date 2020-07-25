@@ -7,7 +7,10 @@
 eval_forecasts(
   data,
   by = c("model"),
+  summarise_by = by,
   summarised = TRUE,
+  quantiles = c(),
+  sd = FALSE,
   pit_arguments = list(plot = FALSE),
   interval_score_arguments = list()
 )
@@ -60,8 +63,22 @@ is \code{c("model")}, but you could e.g. group over different locations
 or horizons. Note that a column of the corresponding name must be
 present in the data. If you don't want any grouping, set \code{by = NULL}}
 
+\item{summarise_by}{character vector of columns to group the summary by. By
+default, this is equal to `by`. But sometimes you may want to to summarise
+over categories different from the scoring. If you e.g. want to have the
+quantiles for plotting you may want to score by regions, but then summarise
+over these regions to display the performance across regions.}
+
 \item{summarised}{if \code{TRUE} (the default), only one average score is
-returned per grouped unit.}
+returned per unit specified through `summarise_by`.}
+
+\item{quantiles}{numeric vector of quantiles to be returned when summarising.
+Instead of just returning a mean, quantiles will be returned for the
+groups specified through `summarise_by`. By default, no quantiles are
+returned.}
+
+\item{sd}{if TRUE (the default is FALSE) the standard deviation of all
+metrics will be returned when summarising.}
 
 \item{pit_arguments}{pass down additional arguments to the \code{\link{pit}}
 function.}
@@ -83,6 +100,8 @@ forecasts, pit_sd is returned (to account for the randomised PIT),
 but no Log Score is returned (the internal estimation relies on a
 kernel density estimate which is difficult for integer-valued forecasts).
 If \code{summarised = TRUE} the average score per model is returned.
+If specified, quantiles and standard deviation of scores can also be returned
+when summarising.
 }
 \description{
 The function \code{eval_forecasts} is an easy to use wrapper
@@ -117,7 +136,7 @@ the following metrics are used where appropriate:
 \examples{
 ## Probability Forecast for Binary Target
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
-eval <- scoringutils::eval_forecasts(binary_example)
+eval <- scoringutils::eval_forecasts(binary_example, quantiles = c(0.7), sd = TRUE)
 eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
 
 ## Quantile Forecasts
@@ -125,6 +144,9 @@ eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
 quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 eval <- scoringutils::eval_forecasts(quantile_example,
                                      by = c("model", "horizon"),
+                                     summarise_by = "model",
+                                     quantiles = c(0.05, 0.95),
+                                     sd = TRUE,
                                      interval_score_arguments = list(weigh = TRUE))
 eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
 
@@ -135,15 +157,20 @@ eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long)
 integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      by = c("model", "horizon"),
-                                     pit_arguments = list(n_replicates = 30))
+                                     quantiles = c(0.1, 0.9),
+                                     sd = TRUE,
+                                     pit_arguments = list(n_replicates = 30,
+                                                          plot = FALSE))
 eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 
 ## Continuous Forecasts
 continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
 eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
 eval <- scoringutils::eval_forecasts(continuous_example,
+                                     quantiles = c(0.5, 0.9),
+                                     sd = TRUE,
                                      by = c("model", "horizon"),
-                                     summarised = FALSE)
+                                     summarised = TRUE)
 
 }
 \references{
