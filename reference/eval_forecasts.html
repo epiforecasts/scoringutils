@@ -132,7 +132,10 @@ continuous, integer-valued or binary variables.</p>
     <pre class="usage"><span class='fu'>eval_forecasts</span>(
   <span class='kw'>data</span>,
   by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>),
+  summarise_by = <span class='kw'>by</span>,
   summarised = <span class='fl'>TRUE</span>,
+  quantiles = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(),
+  sd = <span class='fl'>FALSE</span>,
   pit_arguments = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(plot = <span class='fl'>FALSE</span>),
   interval_score_arguments = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
 )</pre>
@@ -187,19 +190,39 @@ or horizons. Note that a column of the corresponding name must be
 present in the data. If you don't want any grouping, set <code>by = NULL</code></p></td>
     </tr>
     <tr>
+      <th>summarise_by</th>
+      <td><p>character vector of columns to group the summary by. By
+default, this is equal to `by`. But sometimes you may want to to summarise
+over categories different from the scoring. If you e.g. want to have the
+quantiles for plotting you may want to score by regions, but then summarise
+over these regions to display the performance across regions.</p></td>
+    </tr>
+    <tr>
       <th>summarised</th>
       <td><p>if <code>TRUE</code> (the default), only one average score is
-returned per grouped unit.</p></td>
+returned per unit specified through `summarise_by`.</p></td>
+    </tr>
+    <tr>
+      <th>quantiles</th>
+      <td><p>numeric vector of quantiles to be returned when summarising.
+Instead of just returning a mean, quantiles will be returned for the
+groups specified through `summarise_by`. By default, no quantiles are
+returned.</p></td>
+    </tr>
+    <tr>
+      <th>sd</th>
+      <td><p>if TRUE (the default is FALSE) the standard deviation of all
+metrics will be returned when summarising.</p></td>
     </tr>
     <tr>
       <th>pit_arguments</th>
-      <td><p>pass down additional arguments to the <code>pit</code>
+      <td><p>pass down additional arguments to the <code><a href='pit.html'>pit</a></code>
 function.</p></td>
     </tr>
     <tr>
       <th>interval_score_arguments</th>
       <td><p>pass down additional arguments to the
-<code>interval_score</code> function, e.g. <code>weigh = TRUE</code>.</p></td>
+<code><a href='interval_score.html'>interval_score</a></code> function, e.g. <code>weigh = TRUE</code>.</p></td>
     </tr>
     </table>
 
@@ -217,29 +240,31 @@ pit_p_val (as an indicator of calibration) are returned. For integer
 forecasts, pit_sd is returned (to account for the randomised PIT),
 but no Log Score is returned (the internal estimation relies on a
 kernel density estimate which is difficult for integer-valued forecasts).
-If <code>summarised = TRUE</code> the average score per model is returned.</p>
+If <code>summarised = TRUE</code> the average score per model is returned.
+If specified, quantiles and standard deviation of scores can also be returned
+when summarising.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>the following metrics are used where appropriate:</p><ul>
 <li><p>Interval Score for quantile forecasts. Smaller is better. See
-  <code>interval_score</code> for more information.</p></li>
+  <code><a href='interval_score.html'>interval_score</a></code> for more information.</p></li>
 <li><p>Brier Score for a probability forecast of a binary outcome.
-  Smaller is better. See <code>brier_score</code> for more information.</p></li>
+  Smaller is better. See <code><a href='brier_score.html'>brier_score</a></code> for more information.</p></li>
 <li><p>Bias 0 is good, 1 and -1 are bad.
-  See <code>bias</code> for more information.</p></li>
-<li><p>Sharpness Smaller is better. See <code>sharpness</code> for more
+  See <code><a href='bias.html'>bias</a></code> for more information.</p></li>
+<li><p>Sharpness Smaller is better. See <code><a href='sharpness.html'>sharpness</a></code> for more
   information.</p></li>
 <li><p>Calibration represented through the p-value of the
   Anderson-Darling test for the uniformity of the Probability Integral
   Transformation (PIT). For integer valued forecasts, this p-value also
   has a standard deviation. Larger is better.
-  See <code>pit</code> for more information.</p></li>
+  See <code><a href='pit.html'>pit</a></code> for more information.</p></li>
 <li><p>DSS Dawid-Sebastiani-Score. Smaller is better.
-  See <code>dss</code> for more information.</p></li>
+  See <code><a href='dss.html'>dss</a></code> for more information.</p></li>
 <li><p>CRPS Continuous Ranked Probability Score. Smaller is better.
-  See <code>crps</code> for more information.</p></li>
+  See <code><a href='crps.html'>crps</a></code> for more information.</p></li>
 <li><p>Log Score Smaller is better. Only for continuous forecasts.
-  See <code>logs</code> for more information.</p></li>
+  See <code><a href='logs.html'>logs</a></code> for more information.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -255,33 +280,42 @@ PLoS Comput Biol 15(2): e1006785.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Probability Forecast for Binary Target</span>
-<span class='kw'>binary_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='https://rdrr.io/pkg/scoringutils/man/binary_example_data.html'>binary_example_data</a></span>)
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>binary_example</span>)
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>binary_example</span>, summarised = <span class='fl'>FALSE</span>)
+<span class='kw'>binary_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='binary_example_data.html'>binary_example_data</a></span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>binary_example</span>, quantiles = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.7</span>), sd = <span class='fl'>TRUE</span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>binary_example</span>, summarised = <span class='fl'>FALSE</span>)
 
 <span class='co'>## Quantile Forecasts</span>
 <span class='co'># wide format</span>
-<span class='kw'>quantile_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='https://rdrr.io/pkg/scoringutils/man/quantile_example_data_wide.html'>quantile_example_data_wide</a></span>)
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>quantile_example</span>,
+<span class='kw'>quantile_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>quantile_example</span>,
                                      by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>, <span class='st'>"horizon"</span>),
+                                     summarise_by = <span class='st'>"model"</span>,
+                                     quantiles = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.95</span>),
+                                     sd = <span class='fl'>TRUE</span>,
                                      interval_score_arguments = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(weigh = <span class='fl'>TRUE</span>))
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>quantile_example</span>, summarised = <span class='fl'>FALSE</span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>quantile_example</span>, summarised = <span class='fl'>FALSE</span>)
 
 <span class='co'>#long format</span>
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='https://rdrr.io/pkg/scoringutils/man/quantile_example_data_long.html'>quantile_example_data_long</a></span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>)
 
 <span class='co'>## Integer Forecasts</span>
-<span class='kw'>integer_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='https://rdrr.io/pkg/scoringutils/man/integer_example_data.html'>integer_example_data</a></span>)
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>integer_example</span>,
+<span class='kw'>integer_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='integer_example_data.html'>integer_example_data</a></span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>integer_example</span>,
                                      by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>, <span class='st'>"horizon"</span>),
-                                     pit_arguments = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(n_replicates = <span class='fl'>30</span>))</div><div class='img'><img src='eval_forecasts-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='eval_forecasts-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='eval_forecasts-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='eval_forecasts-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>integer_example</span>, summarised = <span class='fl'>FALSE</span>)
+                                     quantiles = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.9</span>),
+                                     sd = <span class='fl'>TRUE</span>,
+                                     pit_arguments = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(n_replicates = <span class='fl'>30</span>,
+                                                          plot = <span class='fl'>FALSE</span>))
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>integer_example</span>, summarised = <span class='fl'>FALSE</span>)
 
 <span class='co'>## Continuous Forecasts</span>
-<span class='kw'>continuous_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='https://rdrr.io/pkg/scoringutils/man/continuous_example_data.html'>continuous_example_data</a></span>)
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>continuous_example</span>, by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>, <span class='st'>"horizon"</span>))
-<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'><a href='https://rdrr.io/pkg/scoringutils/man/eval_forecasts.html'>eval_forecasts</a></span>(<span class='kw'>continuous_example</span>,
+<span class='kw'>continuous_example</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span>(<span class='kw'>scoringutils</span>::<span class='kw'><a href='continuous_example_data.html'>continuous_example_data</a></span>)
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>continuous_example</span>, by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>, <span class='st'>"horizon"</span>))
+<span class='kw'>eval</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>eval_forecasts</span>(<span class='kw'>continuous_example</span>,
+                                     quantiles = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.9</span>),
+                                     sd = <span class='fl'>TRUE</span>,
                                      by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"model"</span>, <span class='st'>"horizon"</span>),
-                                     summarised = <span class='fl'>FALSE</span>)
+                                     summarised = <span class='fl'>TRUE</span>)
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

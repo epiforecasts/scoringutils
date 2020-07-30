@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Determines sharpness of a probabilistic forecast — sharpness • scoringutils</title>
+<title>Pivot Quantile Forecasts From Long to Wide Format — quantile_to_wide • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,12 @@
 
 
 
-<meta property="og:title" content="Determines sharpness of a probabilistic forecast — sharpness" />
-<meta property="og:description" content="Determines sharpness of a probabilistic forecast" />
+<meta property="og:title" content="Pivot Quantile Forecasts From Long to Wide Format — quantile_to_wide" />
+<meta property="og:description" content="Given a data.frame that follows the structure shown in
+quantile_example_data_long, the function outputs the same
+data in a long format as (as shown in
+quantile_example_data_wide). This can be useful e.g. for
+plotting." />
 
 
 
@@ -114,52 +118,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Determines sharpness of a probabilistic forecast</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/sharpness.R'><code>R/sharpness.R</code></a></small>
-    <div class="hidden name"><code>sharpness.Rd</code></div>
+    <h1>Pivot Quantile Forecasts From Long to Wide Format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pivoting_functions.R'><code>R/pivoting_functions.R</code></a></small>
+    <div class="hidden name"><code>quantile_to_wide.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Determines sharpness of a probabilistic forecast</p>
+    <p>Given a data.frame that follows the structure shown in
+<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>, the function outputs the same
+data in a long format as (as shown in
+<code><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></code>). This can be useful e.g. for
+plotting.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sharpness</span>(<span class='kw'>predictions</span>)</pre>
+    <pre class="usage"><span class='fu'>quantile_to_wide</span>(<span class='kw'>data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
+      <th>data</th>
+      <td><p>a data.frame following the specifications from
+<code><a href='eval_forecasts.html'>eval_forecasts</a></code>) for quantile forecasts. For an example, see
+<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector with sharpness values</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Sharpness is the ability of the model to generate predictions within a
-narrow range. It is a data-independent measure, and is purely a feature
-of the forecasts themselves.</p>
-<p>Shaprness of predictive samples corresponding to one single true value is
-measured as the normalised median of the absolute deviation from
-the median of the predictive samples. For details, see <a href='https://rdrr.io/r/stats/mad.html'>mad</a></p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
-Assessing the performance of real-time epidemic forecasts: A case study of
-Ebola in the Western Area region of Sierra Leone, 2014-15.
-PLoS Comput Biol 15(2): e1006785.
-<a href='https://doi.org/10.1371/journal.pcbi.1006785'>https://doi.org/10.1371/journal.pcbi.1006785</a></p>
+    <p>a data.frame in wide format</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='fu'>sharpness</span>(<span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652
-#&gt; [11] 2.9652 2.9652 2.9652 3.7065 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478
-#&gt; [21] 4.4478 4.4478 5.1891 4.4478 4.4478 5.9304 4.4478 5.9304 5.9304 5.1891</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>long</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='kw'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>
+<span class='kw'>wide</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>quantile_to_wide</span>(<span class='kw'>long</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
