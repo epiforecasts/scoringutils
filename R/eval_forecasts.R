@@ -86,6 +86,8 @@
 #' returned.
 #' @param sd if TRUE (the default is FALSE) the standard deviation of all
 #' metrics will be returned when summarising.
+#' @param pit_plots if TRUE (not the default), pit plots will be returned. For
+#' details see \code{\link{pit}}.
 #' @param pit_arguments pass down additional arguments to the \code{\link{pit}}
 #' function.
 #' @param interval_score_arguments pass down additional arguments to the
@@ -136,8 +138,9 @@
 #'                                      by = c("model", "horizon"),
 #'                                      quantiles = c(0.1, 0.9),
 #'                                      sd = TRUE,
+#'                                      pit_plots = TRUE,
 #'                                      pit_arguments = list(n_replicates = 30,
-#'                                                           plot = FALSE))
+#'                                                           plot = TRUE))
 #' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 #'
 #' ## Continuous Forecasts
@@ -165,6 +168,7 @@ eval_forecasts <- function(data,
                            summarised = TRUE,
                            quantiles = c(),
                            sd = FALSE,
+                           pit_plots = FALSE,
                            pit_arguments = list(plot = FALSE),
                            interval_score_arguments = list()) {
 
@@ -344,11 +348,52 @@ eval_forecasts <- function(data,
   dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
                            value.var = "predictions")
 
-  # compute pit p-values
-  dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
-                                                        as.matrix(.SD)),
-                                                   pit_arguments)),
-      .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+  # # code to get better names for the list elements
+  # dt <- unique(dat[, colnames(dat) %in% by, with = FALSE])
+  # do.call(paste, dt)
+
+  # extract pit plots if specified
+  if (pit_plots) {
+    if (is.null(pit_arguments$plot) | !pit_arguments$plot) {
+      pit_arguments$plot <- TRUE
+    }
+    split_dat <- split(dat, by = by)
+
+    pits <- lapply(split_dat,
+                   FUN = function(dat) {
+                     samples <- as.matrix(dat[, grepl("sampl_", colnames(dat)),
+                                              with = FALSE])
+
+                     res <- do.call(pit, c(list(dat$true_values,
+                                         samples),
+                                    pit_arguments))
+
+                     dat[, `:=` (pit_p_val = res$p_value,
+                                 pit_sd = res$sd)]
+                     plot <- res$hist_PIT
+                     return(list(data = dat,
+                                 hist_PIT = plot))
+                   })
+
+    pit_plots <- lapply(pits,
+                        FUN = function(pit) {
+                          return(pit$hist_PIT)
+                        })
+
+    pit_values <- lapply(pits,
+                         FUN = function(pit) {
+                           return(pit$data)
+                         })
+
+    dat <- rbindlist(pit_values, )
+  } else {
+    # compute pit p-values in a quicker way
+    dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
+                                                          as.matrix(.SD)),
+                                                     pit_arguments)),
+        .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+
+  }
 
   # remove variables not necessary for merging
   dat[, names(dat)[grepl("sampl_", names(dat))] := NULL]
@@ -393,6 +438,13 @@ eval_forecasts <- function(data,
                .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
                by = summarise_by]
   }
+
+  # if pit_plots is TRUE, add the plots as an output
+  if (pit_plots) {
+    res <- list(scores = res,
+                pit_plots = pit_plots)
+  }
+
   return (res)
 }
 

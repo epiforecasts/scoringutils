@@ -11,6 +11,7 @@ eval_forecasts(
   summarised = TRUE,
   quantiles = c(),
   sd = FALSE,
+  pit_plots = FALSE,
   pit_arguments = list(plot = FALSE),
   interval_score_arguments = list()
 )
@@ -79,6 +80,9 @@ returned.}
 
 \item{sd}{if TRUE (the default is FALSE) the standard deviation of all
 metrics will be returned when summarising.}
+
+\item{pit_plots}{if TRUE (not the default), pit plots will be returned. For
+details see \code{\link{pit}}.}
 
 \item{pit_arguments}{pass down additional arguments to the \code{\link{pit}}
 function.}
@@ -159,8 +163,9 @@ eval <- scoringutils::eval_forecasts(integer_example,
                                      by = c("model", "horizon"),
                                      quantiles = c(0.1, 0.9),
                                      sd = TRUE,
+                                     pit_plots = TRUE,
                                      pit_arguments = list(n_replicates = 30,
-                                                          plot = FALSE))
+                                                          plot = TRUE))
 eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
 
 ## Continuous Forecasts
