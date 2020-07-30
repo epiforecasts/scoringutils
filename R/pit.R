@@ -251,7 +251,16 @@ hist_PIT <- function(PIT_samples, num_bins = NULL) {
   }
 
   PIT <- PIT_samples
-  hist_PIT <- hist(PIT_samples, breaks = num_bins)
+  # hist_PIT <- hist(PIT_samples, breaks = num_bins)
+
+  hist_PIT <- ggplot2::ggplot(data = data.frame(x = PIT_samples),
+                  ggplot2::aes(x = x)) +
+    ggplot2::geom_histogram(ggplot2::aes(y = stat(count) / sum(count)),
+                            breaks = seq(0, 1, length.out = num_bins + 1),
+                            colour = "grey") +
+    ggplot2::theme(text = ggplot2::element_text(family = "Serif")) +
+    ggplot2::xlab("PIT") +
+    ggplot2::ylab("Frequency")
 
   return(hist_PIT)
 }
