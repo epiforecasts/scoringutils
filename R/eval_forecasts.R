@@ -109,7 +109,7 @@
 #' If specified, quantiles and standard deviation of scores can also be returned
 #' when summarising.
 #'
-#' @importFrom data.table ':=' setDT %like%
+#' @importFrom data.table ':=' setDT %like% rbindlist
 #' @importFrom stats quantile
 #'
 #' @examples
