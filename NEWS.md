@@ -1,3 +1,21 @@
+## scoringutils 0.1.3
+
+### (Potentially) Breaking changes
+- the by argument in `eval_forecasts` now has a slightly changed meaning. It 
+now denotes the lowest possible grouping unit, i.e. the unit of one observation
+and needs to be specified explicitly. The default is now `NULL`. The reason for
+this change is that most metrics need scoring on the observation level and this 
+the most consistent implementation of this principle. The pit function receives
+its grouping now from `summarise_by`. 
+- (potentially planned) rename true_values to true_value and predictions to prediction
+
+### Feature updates
+- updated quantile evaluation metrics in `eval_forecasts`
+- Included option to summarise scores according to a `summarise_by` argument in 
+`eval_forecasts` The summary can return the mean, the standard deviation as well
+as an arbitrary set of quantiles. 
+- `eval_forecasts` can now return pit histograms. 
+
 ## scoringutils 0.1.2
 
 ### (Potentially) Breakting changes

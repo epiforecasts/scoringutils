@@ -168,7 +168,7 @@
 
 
 eval_forecasts <- function(data,
-                           by = c("model"),
+                           by = NULL,
                            summarise_by = by,
                            summarised = TRUE,
                            quantiles = c(),
@@ -278,86 +278,14 @@ eval_forecasts <- function(data,
                                                      range),
                                                 interval_score_arguments))]
 
-    # # compute calibration
-    # res[, calibration := mean(true_values >= lower & true_values <= upper),
-    #     by = c("range", by)]
-
     # compute calibration for every single observation
     res[, calibration := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
 
-    quantile_bias <- function(range, boundary = NULL,
-                              lower = NULL, upper = NULL,
-                              predictions = NULL, true_value) {
-
-      if (is.null(boundary)) {
-        # boundary version
-        lower_ranges <- range
-        upper_ranges <- range
-        lower_predictions <- lower
-        upper_predictions <- upper
-      } else {
-        lower_ranges <- range[boundary == "lower"]
-        lower_predictions <- predictions[boundary == "lower"]
-
-        upper_ranges <- range[boundary == "upper"]
-        upper_predictions <- predictions[boundary == "upper"]
-      }
-
-      # convert range to quantiles
-      lower_quantiles <- abs(100 - lower_ranges) / (2 * 100)
-      upper_quantiles <- abs(100 + upper_ranges) / (2 * 100)
-
-      median_prediction <- upper_predictions[upper_ranges == 0]
-      if (true_value == median_prediction) {
-        bias <- 0
-        return(bias)
-      } else if (true_value < min(lower_predictions)) {
-        lower <- 0
-        bias <- 1 - lower
-        return(bias)
-      } else if (true_value > max(upper_predictions)) {
-        upper <- 1
-        bias <- 1 - upper
-        return(bias)
-      } else if (any(lower_predictions <= true_value)) {
-        max_lower <- max(lower_predictions[lower_predictions <= true_value])
-        lower <- lower_quantiles[lower_predictions == max_lower]
-        bias <- 1 - lower
-        return(bias)
-      } else if (any(upper_predictions >= true_value)){
-        min_upper <- min(upper_predictions[upper_predictions >= true_value])
-        upper <- upper_quantiles[upper_predictions == min_upper]
-        bias <- 1 - upper
-        return(bias)
-      }
-    }
-#
-#     quantile_bias_wrapper <- function(df) {
-#       df_split <- split(df, by = "true_values")
-#
-#       bias <- lapply(df_split,
-#                      FUN = function(x) {
-#                        quantile_bias(range = x$range,
-#                                      lower = x$lower, upper = x$upper,
-#                                      true_value = unique(x$true_values))
-#                      })
-#     }
 
     # compute bias
     res[, bias := quantile_bias(range = range, lower = lower, upper = upper,
                                 true_value = unique(true_values)),
         by = by]
-
-
-    # # compute bias as fraction of true_values above the median and transformed to [-1, 1]
-    # # only possible if median forecast exists
-    # if (0 %in% unique(res$range)) {
-    #   bias <- res[range == 0,
-    #               .(bias = 1 - 2 * mean(true_values > lower)),
-    #               by = by]
-    #
-    #   res <-  merge(res, bias, by = by)
-    # }
 
 
     # compute sharpness as weighted sum of the interval widths
@@ -547,8 +475,6 @@ eval_forecasts <- function(data,
 
   return (res)
 }
-
-
 
 
 

@@ -59,16 +59,21 @@ The long format needs the following columns
   need to include a lower and an upper estimate, so the median has to
   appear twice.}}
 
-\item{by}{character vector of columns to group scoring by. The default
-is \code{c("model")}, but you could e.g. group over different locations
-or horizons. Note that a column of the corresponding name must be
-present in the data. If you don't want any grouping, set \code{by = NULL}}
+\item{by}{character vector of columns to group scoring by. This should be the
+lowest level of grouping possible, i.e. the unit of the individual
+observation. This is important as many functions work on individual
+observations. If you want a different level of aggregation, you should use
+\code{summarise_by} to aggregate the individual scores.
+Also not that the pit will be computed using \code{summarise_by}
+instead of \code{by}}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to `by`. But sometimes you may want to to summarise
 over categories different from the scoring. If you e.g. want to have the
 quantiles for plotting you may want to score by regions, but then summarise
-over these regions to display the performance across regions.}
+over these regions to display the performance across regions.
+\code{summarise_by} is the grouping level used to compute (and possible plot)
+the pit.}
 
 \item{summarised}{if \code{TRUE} (the default), only one average score is
 returned per unit specified through `summarise_by`.}

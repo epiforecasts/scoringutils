@@ -4,7 +4,7 @@
 \alias{hist_PIT}
 \title{PIT Histogram}
 \usage{
-hist_PIT(PIT_samples, num_bins = NULL)
+hist_PIT(PIT_samples, num_bins = NULL, caption = NULL)
 }
 \arguments{
 \item{PIT_samples}{A vector with the PIT values of size n}
