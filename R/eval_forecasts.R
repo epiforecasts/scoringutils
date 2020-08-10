@@ -69,15 +69,20 @@
 #'   If you want to score the median (i.e. \code{range = 0}), you still
 #'   need to include a lower and an upper estimate, so the median has to
 #'   appear twice.}
-#' @param by character vector of columns to group scoring by. The default
-#' is \code{c("model")}, but you could e.g. group over different locations
-#' or horizons. Note that a column of the corresponding name must be
-#' present in the data. If you don't want any grouping, set \code{by = NULL}
+#' @param by character vector of columns to group scoring by. This should be the
+#' lowest level of grouping possible, i.e. the unit of the individual
+#' observation. This is important as many functions work on individual
+#' observations. If you want a different level of aggregation, you should use
+#' \code{summarise_by} to aggregate the individual scores.
+#' Also not that the pit will be computed using \code{summarise_by}
+#' instead of \code{by}
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by`. But sometimes you may want to to summarise
 #' over categories different from the scoring. If you e.g. want to have the
 #' quantiles for plotting you may want to score by regions, but then summarise
 #' over these regions to display the performance across regions.
+#' \code{summarise_by} is the grouping level used to compute (and possible plot)
+#' the pit.
 #' @param summarised if \code{TRUE} (the default), only one average score is
 #' returned per unit specified through `summarise_by`.
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
@@ -219,7 +224,7 @@ eval_forecasts <- function(data,
   if (target_type == "binary") {
 
     res <- data[, "brier_score" := scoringutils::brier_score(true_values, predictions),
-         by = c("id", by)]
+         by = by]
 
     if (summarised) {
       # add quantiles
@@ -273,27 +278,100 @@ eval_forecasts <- function(data,
                                                      range),
                                                 interval_score_arguments))]
 
-    # compute calibration
-    res[, calibration := mean(true_values >= lower & true_values <= upper),
-        by = c("range", by)]
+    # # compute calibration
+    # res[, calibration := mean(true_values >= lower & true_values <= upper),
+    #     by = c("range", by)]
 
-    # compute bias as fraction of true_values above the median and transformed to [-1, 1]
-    # only possible if median forecast exists
-    if (0 %in% unique(res$range)) {
-      bias <- res[range == 0,
-                  .(bias = 1 - 2 * mean(true_values > lower)),
-                  by = by]
+    # compute calibration for every single observation
+    res[, calibration := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
 
-      res <-  merge(res, bias, by = by)
+    quantile_bias <- function(range, boundary = NULL,
+                              lower = NULL, upper = NULL,
+                              predictions = NULL, true_value) {
+
+      if (is.null(boundary)) {
+        # boundary version
+        lower_ranges <- range
+        upper_ranges <- range
+        lower_predictions <- lower
+        upper_predictions <- upper
+      } else {
+        lower_ranges <- range[boundary == "lower"]
+        lower_predictions <- predictions[boundary == "lower"]
+
+        upper_ranges <- range[boundary == "upper"]
+        upper_predictions <- predictions[boundary == "upper"]
+      }
+
+      # convert range to quantiles
+      lower_quantiles <- abs(100 - lower_ranges) / (2 * 100)
+      upper_quantiles <- abs(100 + upper_ranges) / (2 * 100)
+
+      median_prediction <- upper_predictions[upper_ranges == 0]
+      if (true_value == median_prediction) {
+        bias <- 0
+        return(bias)
+      } else if (true_value < min(lower_predictions)) {
+        lower <- 0
+        bias <- 1 - lower
+        return(bias)
+      } else if (true_value > max(upper_predictions)) {
+        upper <- 1
+        bias <- 1 - upper
+        return(bias)
+      } else if (any(lower_predictions <= true_value)) {
+        max_lower <- max(lower_predictions[lower_predictions <= true_value])
+        lower <- lower_quantiles[lower_predictions == max_lower]
+        bias <- 1 - lower
+        return(bias)
+      } else if (any(upper_predictions >= true_value)){
+        min_upper <- min(upper_predictions[upper_predictions >= true_value])
+        upper <- upper_quantiles[upper_predictions == min_upper]
+        bias <- 1 - upper
+        return(bias)
+      }
+    }
+#
+#     quantile_bias_wrapper <- function(df) {
+#       df_split <- split(df, by = "true_values")
+#
+#       bias <- lapply(df_split,
+#                      FUN = function(x) {
+#                        quantile_bias(range = x$range,
+#                                      lower = x$lower, upper = x$upper,
+#                                      true_value = unique(x$true_values))
+#                      })
+#     }
+
+    # compute bias
+    res[, bias := quantile_bias(range = range, lower = lower, upper = upper,
+                                true_value = unique(true_values)),
+        by = by]
+
+
+    # # compute bias as fraction of true_values above the median and transformed to [-1, 1]
+    # # only possible if median forecast exists
+    # if (0 %in% unique(res$range)) {
+    #   bias <- res[range == 0,
+    #               .(bias = 1 - 2 * mean(true_values > lower)),
+    #               by = by]
+    #
+    #   res <-  merge(res, bias, by = by)
+    # }
+
+
+    # compute sharpness as weighted sum of the interval widths
+    quantile_sharpness <- function(lower, upper, range) {
+      alpha <- (100 - range) / (2 * 100)
+
+      sharpness <- sum((upper - lower) * alpha / 2)
+      return(sharpness)
     }
 
+    res[, sharpness := quantile_sharpness(range = range,
+                                          lower = lower, upper = upper),
+        by = by]
 
-    # compute sharpness as average width of the 50% interval
-    if (50 %in% unique(res$range)) {
-      sharpness <- res[range == 50, .(sharpness = mean(upper - lower)),
-                       by = by]
-      res <-  merge(res, sharpness, by = by)
-    }
 
     if (summarised) {
 
@@ -323,24 +401,24 @@ eval_forecasts <- function(data,
 
   # Score integer or continuous predictions ------------------------------------
   # sharpness
-  data[, sharpness := scoringutils::sharpness(t(predictions)), by = c("id", by)]
+  data[, sharpness := scoringutils::sharpness(t(predictions)), by = c(by)]
 
   # bias
   data[, bias := scoringutils::bias(unique(true_values),
-                                     t(predictions)), by = c("id", by)]
+                                     t(predictions)), by = c(by)]
 
   # DSS
   data[, dss := scoringutils::dss(unique(true_values),
-                                    t(predictions)), by = c("id", by)]
+                                    t(predictions)), by = c(by)]
 
   # CRPS
   data[, crps := scoringutils::crps(unique(true_values),
-                                    t(predictions)), by = c("id", by)]
+                                    t(predictions)), by = c(by)]
 
   # Log Score
   if (prediction_type == "continuous") {
     data[, log_score := scoringutils::logs(unique(true_values),
-                                       t(predictions)), by = c("id", by)]
+                                       t(predictions)), by = c(by)]
   }
 
   # calibration
@@ -354,10 +432,9 @@ eval_forecasts <- function(data,
 
   # extract pit plots if specified
   if (pit_plots) {
-    if (is.null(pit_arguments$plot) | !pit_arguments$plot) {
-      pit_arguments$plot <- TRUE
-    }
-    split_dat <- split(dat, by = by)
+    pit_arguments$plot <- TRUE
+
+    split_dat <- split(dat, by = summarise_by)
 
     pits <- lapply(split_dat,
                    FUN = function(dat) {
@@ -372,26 +449,49 @@ eval_forecasts <- function(data,
                                  pit_sd = res$sd)]
                      plot <- res$hist_PIT
                      return(list(data = dat,
-                                 hist_PIT = plot))
+                                 hist_PIT = plot,
+                                 samples = samples,
+                                 true_values = dat$true_values))
                    })
 
-    pit_plots <- lapply(pits,
-                        FUN = function(pit) {
-                          return(pit$hist_PIT)
-                        })
+    pit_histograms <- lapply(pits,
+                             FUN = function(pit) {
+                               return(pit$hist_PIT)
+                             })
 
     pit_values <- lapply(pits,
                          FUN = function(pit) {
                            return(pit$data)
                          })
 
-    dat <- rbindlist(pit_values, )
+    overall_samples <- lapply(pits,
+                              FUN = function(pit) {
+                                return(pit$samples)
+                              })
+
+    overall_samples <- do.call(rbind, overall_samples)
+
+    overall_true_values <- lapply(pits,
+                                  FUN = function(pit) {
+                                    return(pit$true_values)
+                                  })
+
+    overall_true_values <- do.call(c, overall_true_values)
+
+    overall_pit_hist <- res <- do.call(pit, c(list(overall_true_values,
+                                                   overall_samples),
+                                              pit_arguments))
+
+    pit_histograms[["overall_pit"]] <- overall_pit_hist$hist_PIT
+
+
+    dat <- rbindlist(pit_values)
   } else {
     # compute pit p-values in a quicker way
     dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
                                                           as.matrix(.SD)),
                                                      pit_arguments)),
-        .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
+        .SDcols = names(dat)[grepl("sampl_", names(dat))], by = summarise_by]
 
   }
 
@@ -442,12 +542,11 @@ eval_forecasts <- function(data,
   # if pit_plots is TRUE, add the plots as an output
   if (pit_plots) {
     res <- list(scores = res,
-                pit_plots = pit_plots)
+                pit_plots = pit_histograms)
   }
 
   return (res)
 }
-
 
 
 
