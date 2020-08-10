@@ -177,7 +177,7 @@ pit <- function(true_values,
                 sd = NA)
 
     if (plot == TRUE) {
-      hist_PIT <- hist_PIT(P_x, num_bins = num_bins)
+      hist_PIT <- hist_PIT(P_x, num_bins = num_bins, caption = p_value)
       out$hist_PIT = hist_PIT
     }
 
@@ -217,7 +217,8 @@ pit <- function(true_values,
 
 
     if (plot == TRUE) {
-      hist_PIT <- hist_PIT(rowMeans(u), num_bins = num_bins)
+      hist_PIT <- hist_PIT(rowMeans(u), num_bins = num_bins,
+                           caption = mean(p_value))
       out$hist_PIT = hist_PIT
     }
   }
@@ -243,7 +244,9 @@ pit <- function(true_values,
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram
 
 
-hist_PIT <- function(PIT_samples, num_bins = NULL) {
+hist_PIT <- function(PIT_samples,
+                     num_bins = NULL,
+                     caption = NULL) {
 
   if (is.null(num_bins)) {
     n <- length(PIT_samples)
@@ -256,7 +259,8 @@ hist_PIT <- function(PIT_samples, num_bins = NULL) {
                             breaks = seq(0, 1, length.out = num_bins + 1),
                             colour = "grey") +
     ggplot2::xlab("PIT") +
-    ggplot2::ylab("Frequency")
+    ggplot2::ylab("Frequency") +
+    ggplot2::labs(caption = paste0("p-value of Andersen-Darling test for uniformity: ", caption))
 
   return(hist_PIT)
 }
