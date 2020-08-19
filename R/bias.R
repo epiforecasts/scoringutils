@@ -116,7 +116,18 @@ bias <- function(true_values, predictions) {
 
 
 
-
+# lower <- c(6341.000, 6329.500, 6087.014, 5703.500,
+#            5451.000, 5340.500, 4821.996, 4709.000,
+#            4341.500, 4006.250, 1127.000, 705.500)
+# upper <- c(6341.000, 6352.500, 6594.986, 6978.500,
+#            7231.000, 7341.500, 7860.004, 7973.000,
+#            8340.500, 8675.750, 11555.000, 11976.500)
+#
+# range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
+# true_value <- 8062
+#
+# quantile_bias(lower = lower, upper = upper,
+#               range = range, true_value = true_value)
 
 
 quantile_bias <- function(range, boundary = NULL,
@@ -153,15 +164,13 @@ quantile_bias <- function(range, boundary = NULL,
     upper <- 1
     bias <- 1 - upper
     return(bias)
-  } else if (any(lower_predictions <= true_value)) {
-    max_lower <- max(lower_predictions[lower_predictions <= true_value])
-    lower <- lower_quantiles[lower_predictions == max_lower]
-    bias <- 1 - lower
+  } else if (any(lower_predictions >= true_value)) {
+    lower <- max(lower_quantiles[lower_predictions <= true_value])
+    bias <- 1 - 2 * lower
     return(bias)
-  } else if (any(upper_predictions >= true_value)){
-    min_upper <- min(upper_predictions[upper_predictions >= true_value])
-    upper <- upper_quantiles[upper_predictions == min_upper]
-    bias <- 1 - upper
+  } else if (any(upper_predictions <= true_value)){
+    upper <- min(upper_quantiles[upper_predictions >= true_value])
+    bias <- 1 - 2 * upper
     return(bias)
   }
 }

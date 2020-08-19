@@ -260,7 +260,8 @@ hist_PIT <- function(PIT_samples,
                             colour = "grey") +
     ggplot2::xlab("PIT") +
     ggplot2::ylab("Frequency") +
-    ggplot2::labs(caption = paste0("p-value of Andersen-Darling test for uniformity: ", caption))
+    ggplot2::labs(caption = paste0("p-value of Andersen-Darling test for uniformity: ",
+                                   round(caption, 3)))
 
   return(hist_PIT)
 }
