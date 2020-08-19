@@ -80,8 +80,8 @@
 #' default, this is equal to `by`. But sometimes you may want to to summarise
 #' over categories different from the scoring. If you e.g. want to have the
 #' quantiles for plotting you may want to score by regions, but then summarise
-#' over these regions to display the performance across regions.
-#' \code{summarise_by} is the grouping level used to compute (and possible plot)
+#' over these regions.
+#' \code{summarise_by} is the grouping level used to compute (and possibly plot)
 #' the pit.
 #' @param summarised if \code{TRUE} (the default), only one average score is
 #' returned per unit specified through `summarise_by`.
@@ -96,15 +96,11 @@
 #' @param pit_arguments pass down additional arguments to the \code{\link{pit}}
 #' function.
 #' @param interval_score_arguments pass down additional arguments to the
-#' \code{\link{interval_score}} function, e.g. \code{weigh = TRUE}.
+#' \code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
-#' score, as well as adapted metrics for calibration, sharpness and bias. The
-#' calibration metric is the percentage of true values that fall into a given
-#' range, the sharpness is determined as the average width of the 50\%
-#' interval range and bias is estimated as the percentage of true values that
-#' fall above the median, transformed to [-1, 1].
+#' score, as well as adapted metrics for calibration, sharpness and bias.
 #' For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
 #' pit_p_val (as an indicator of calibration) are returned. For integer
 #' forecasts, pit_sd is returned (to account for the randomised PIT),
@@ -120,8 +116,12 @@
 #' @examples
 #' ## Probability Forecast for Binary Target
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
-#' eval <- scoringutils::eval_forecasts(binary_example, quantiles = c(0.7), sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(binary_example, summarised = FALSE)
+#' eval <- scoringutils::eval_forecasts(binary_example,
+#'                                      by = c("id", "model", "horizon"),
+#'                                      summarise_by = c("model"),
+#'                                      quantiles = c(0.5), sd = TRUE)
+#' eval2 <- scoringutils::eval_forecasts(binary_example,
+#'                                      by = c("id", "model", "horizon"))
 #'
 #' ## Quantile Forecasts
 #' # wide format
@@ -170,7 +170,6 @@
 eval_forecasts <- function(data,
                            by,
                            summarise_by = by,
-                           summarised = TRUE,
                            quantiles = c(),
                            sd = FALSE,
                            pit_plots = FALSE,
@@ -217,6 +216,15 @@ eval_forecasts <- function(data,
     }
   } else {
     target_type = "continuous"
+  }
+
+
+  # check if results should be summarised --------------------------------------
+
+  if (any(by != summarise_by)) {
+    summarised <- TRUE
+  } else {
+    summarised <- FALSE
   }
 
 
@@ -280,6 +288,7 @@ eval_forecasts <- function(data,
 
     # compute calibration for every single observation
     res[, calibration := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
+    res[, coverage_deviation := calibration - range/100]
 
 
     # compute bias
@@ -306,21 +315,22 @@ eval_forecasts <- function(data,
       if (!is.null(quantiles)) {
         # add quantiles for the scores
         res <- add_quantiles(res,
-                             c("interval_score", "calibration", "bias", "sharpness"),
+                             c("interval_score", "calibration",
+                               "coverage_deviation", "bias", "sharpness"),
                              quantiles,
-                             by = c(summarise_by, "range"))
+                             by = c(summarise_by))
       }
 
       # add standard deviation
       if (sd) {
         res <- add_sd(res,
                       varnames = c("interval_score", "bias", "calibration", "sharpness"),
-                      by = c(summarise_by, "range"))
+                      by = c(summarise_by))
       }
 
-      # summarise by taking the mean and omitting unecessary columns
+      # summarise by taking the mean and omitting unnecessary columns
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
-                 by = c(summarise_by, "range"),
+                 by = c(summarise_by),
                  .SDcols = colnames(res) %like% "calibration|bias|sharpness|interval_score"]
     }
     return(res)
