@@ -9,7 +9,9 @@ hist_PIT(PIT_samples, num_bins = NULL, caption = NULL)
 \arguments{
 \item{PIT_samples}{A vector with the PIT values of size n}
 
-\item{num_bins}{the number of bins in the PIT histogram.
+\item{num_bins}{the number of bins in the PIT histogram.}
+
+\item{caption}{provide a caption that gets passed to the plot
 If not given, the square root of n will be used}
 }
 \value{

@@ -218,7 +218,7 @@ pit <- function(true_values,
 
     if (plot == TRUE) {
       hist_PIT <- hist_PIT(rowMeans(u), num_bins = num_bins,
-                           caption = mean(p_value))
+                           caption = mean(p_values))
       out$hist_PIT = hist_PIT
     }
   }
@@ -239,9 +239,10 @@ pit <- function(true_values,
 #'
 #' @param PIT_samples A vector with the PIT values of size n
 #' @param num_bins the number of bins in the PIT histogram.
+#' @param caption provide a caption that gets passed to the plot
 #' If not given, the square root of n will be used
 #' @return vector with the scoring values
-#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram
+#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat
 
 
 hist_PIT <- function(PIT_samples,

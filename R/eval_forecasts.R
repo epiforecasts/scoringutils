@@ -96,6 +96,7 @@
 #' function.
 #' @param interval_score_arguments pass down additional arguments to the
 #' \code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.
+#' @param verbose print out additional helpful messages (default is TRUE)
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -155,7 +156,7 @@
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
 #' eval <- scoringutils::eval_forecasts(continuous_example,
-#'                                      by = c("model", "id" "horizon"))
+#'                                      by = c("model", "id", "horizon"))
 #' eval <- scoringutils::eval_forecasts(continuous_example,
 #'                                      quantiles = c(0.5, 0.9),
 #'                                      sd = TRUE,
@@ -179,7 +180,8 @@ eval_forecasts <- function(data,
                            sd = FALSE,
                            pit_plots = FALSE,
                            pit_arguments = list(plot = FALSE),
-                           interval_score_arguments = list(weigh = TRUE)) {
+                           interval_score_arguments = list(weigh = TRUE),
+                           verbose = TRUE) {
 
 
   # preparations ---------------------------------------------------------------
@@ -376,7 +378,7 @@ eval_forecasts <- function(data,
   # do.call(paste, dt)
 
   # extract pit plots if specified
-  if (pit_plots) {
+  if (pit_plots & summarised) {
     pit_arguments$plot <- TRUE
 
     split_dat <- split(dat, by = summarise_by)
@@ -432,12 +434,20 @@ eval_forecasts <- function(data,
 
     dat <- rbindlist(pit_values)
   } else {
-    # compute pit p-values in a quicker way
-    dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
-                                                          as.matrix(.SD)),
-                                                     pit_arguments)),
-        .SDcols = names(dat)[grepl("sampl_", names(dat))], by = summarise_by]
 
+    if (!summarised) {
+      dat[, c("pit_p_val", "pit_sd") := NA]
+      if (verbose) {
+        message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
+      }
+    } else if (summarised) {
+      # compute pit p-values in a quicker way
+      dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
+                                                            as.matrix(.SD)),
+                                                       pit_arguments)),
+          .SDcols = names(dat)[grepl("sampl_", names(dat))], by = summarise_by]
+
+    }
   }
 
   # remove variables not necessary for merging

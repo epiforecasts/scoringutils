@@ -51,6 +51,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
+    ggplot2,
     goftest,
     graphics,
     scoringRules,

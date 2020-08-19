@@ -279,7 +279,7 @@ print(quantile_example, 3, 3)
 ```{r}
 eval <- scoringutils::eval_forecasts(quantile_example, 
                                      by = c("model", "id", "horizon"), 
-                                     summarise_by = "model", "range")
+                                     summarise_by = c("model", "range"))
 print(eval)
 ```
 

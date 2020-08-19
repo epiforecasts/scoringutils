@@ -12,7 +12,8 @@ eval_forecasts(
   sd = FALSE,
   pit_plots = FALSE,
   pit_arguments = list(plot = FALSE),
-  interval_score_arguments = list(weigh = TRUE)
+  interval_score_arguments = list(weigh = TRUE),
+  verbose = TRUE
 )
 }
 \arguments{
@@ -91,6 +92,8 @@ function.}
 
 \item{interval_score_arguments}{pass down additional arguments to the
 \code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.}
+
+\item{verbose}{print out additional helpful messages (default is TRUE)}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
@@ -178,7 +181,7 @@ eval <- scoringutils::eval_forecasts(integer_example,
 ## Continuous Forecasts
 continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
 eval <- scoringutils::eval_forecasts(continuous_example,
-                                     by = c("model", "id" "horizon"))
+                                     by = c("model", "id", "horizon"))
 eval <- scoringutils::eval_forecasts(continuous_example,
                                      quantiles = c(0.5, 0.9),
                                      sd = TRUE,
