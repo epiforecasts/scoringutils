@@ -77,14 +77,13 @@
 #' Also not that the pit will be computed using \code{summarise_by}
 #' instead of \code{by}
 #' @param summarise_by character vector of columns to group the summary by. By
-#' default, this is equal to `by`. But sometimes you may want to to summarise
+#' default, this is equal to `by` and no summary takes place.
+#' But sometimes you may want to to summarise
 #' over categories different from the scoring. If you e.g. want to have the
 #' quantiles for plotting you may want to score by regions, but then summarise
 #' over these regions.
 #' \code{summarise_by} is the grouping level used to compute (and possibly plot)
 #' the pit.
-#' @param summarised if \code{TRUE} (the default), only one average score is
-#' returned per unit specified through `summarise_by`.
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
 #' Instead of just returning a mean, quantiles will be returned for the
 #' groups specified through `summarise_by`. By default, no quantiles are
@@ -106,7 +105,8 @@
 #' forecasts, pit_sd is returned (to account for the randomised PIT),
 #' but no Log Score is returned (the internal estimation relies on a
 #' kernel density estimate which is difficult for integer-valued forecasts).
-#' If \code{summarised = TRUE} the average score per model is returned.
+#' If \code{summarise_by} is specified differently from \code{by},
+#' the average score per summary unit is returned.
 #' If specified, quantiles and standard deviation of scores can also be returned
 #' when summarising.
 #'
@@ -127,35 +127,40 @@
 #' # wide format
 #' quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
 #' eval <- scoringutils::eval_forecasts(quantile_example,
-#'                                      by = c("model", "horizon"),
+#'                                      by = c("model", "horizon", "id"),
 #'                                      summarise_by = "model",
 #'                                      quantiles = c(0.05, 0.95),
-#'                                      sd = TRUE,
-#'                                      interval_score_arguments = list(weigh = TRUE))
-#' eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
+#'                                      sd = TRUE)
+#' eval <- scoringutils::eval_forecasts(quantile_example,
+#'                                      by = c("model", "horizon", "id"))
 #'
 #' #long format
-#' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long)
+#' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
+#'                                      by = c("model", "horizon", "id"),
+#'                                      summarise_by = c("model"))
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
 #' eval <- scoringutils::eval_forecasts(integer_example,
-#'                                      by = c("model", "horizon"),
+#'                                      by = c("model", "id", "horizon"),
+#'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.1, 0.9),
 #'                                      sd = TRUE,
 #'                                      pit_plots = TRUE,
 #'                                      pit_arguments = list(n_replicates = 30,
 #'                                                           plot = TRUE))
-#' eval <- scoringutils::eval_forecasts(integer_example, summarised = FALSE)
+#' eval <- scoringutils::eval_forecasts(integer_example,
+#'                                      by = c("model", "id", "horizon"))
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
-#' eval <- scoringutils::eval_forecasts(continuous_example, by = c("model", "horizon"))
+#' eval <- scoringutils::eval_forecasts(continuous_example,
+#'                                      by = c("model", "id" "horizon"))
 #' eval <- scoringutils::eval_forecasts(continuous_example,
 #'                                      quantiles = c(0.5, 0.9),
 #'                                      sd = TRUE,
-#'                                      by = c("model", "horizon"),
-#'                                      summarised = TRUE)
+#'                                      by = c("model", "id", "horizon"),
+#'                                      summarise_by = c("model"))
 #'
 #' @author Nikos Bosse \email{nikosbosse@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
@@ -324,14 +329,16 @@ eval_forecasts <- function(data,
       # add standard deviation
       if (sd) {
         res <- add_sd(res,
-                      varnames = c("interval_score", "bias", "calibration", "sharpness"),
+                      varnames = c("interval_score", "bias", "calibration",
+                                   "coverage_deviation", "sharpness"),
                       by = c(summarise_by))
       }
 
       # summarise by taking the mean and omitting unnecessary columns
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
                  by = c(summarise_by),
-                 .SDcols = colnames(res) %like% "calibration|bias|sharpness|interval_score"]
+                 .SDcols = colnames(res) %like%
+                   "calibration|bias|sharpness|coverage_deviation|interval_score"]
     }
     return(res)
   }

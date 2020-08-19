@@ -254,13 +254,15 @@ print(binary_example, 3, 3)
 
 ```{r}
 # score forecasts
-eval <- scoringutils::eval_forecasts(binary_example, by = c("model", "horizon"))
+eval <- scoringutils::eval_forecasts(binary_example, 
+                                     by = c("model", "id", "horizon"), 
+                                     summarise_by = c("model"))
 print(eval)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(binary_example, by = c("model", "horizon"), 
-                                     summarised = FALSE)
+eval <- scoringutils::eval_forecasts(binary_example, 
+                                     by = c("model", "id","horizon"))
 print(eval, 3, 3)
 ```
 
@@ -276,12 +278,14 @@ print(quantile_example, 3, 3)
 
 ```{r}
 eval <- scoringutils::eval_forecasts(quantile_example, 
-                                     by = c("model", "horizon"))
+                                     by = c("model", "id", "horizon"), 
+                                     summarise_by = "model", "range")
 print(eval)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(quantile_example, summarised = FALSE)
+eval <- scoringutils::eval_forecasts(quantile_example, 
+                                     by = c("model", "id", "horizon"))
 print(eval, 3, 3)
 ```
 
@@ -292,14 +296,15 @@ print(integer_example, 3, 3)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(integer_example)
+eval <- scoringutils::eval_forecasts(integer_example, 
+                                     by = c("model", "id", "horizon"), 
+                                     summarise_by = c("horizon"))
 print(eval)
 ```
 
 ```{r}
 eval <- scoringutils::eval_forecasts(integer_example, 
-                                     by = c("model", "horizon"), 
-                                     summarised = FALSE)
+                                     by = c("model", "id", "horizon"))
 print(eval, 3, 3)
 ```
 
@@ -311,12 +316,14 @@ print(continuous_example, 3, 3)
 
 ```{r}
 eval <- scoringutils::eval_forecasts(continuous_example, 
-                                     by = c("model", "horizon"))
+                                     by = c("model", "id", "horizon"), 
+                                     summarise_by = "model")
 print(eval)
 ```
 
 ```{r}
-eval <- scoringutils::eval_forecasts(continuous_example, summarised = FALSE)
+eval <- scoringutils::eval_forecasts(continuous_example, 
+                                     by = c("model", "id", "horizon"))
 print(eval, 3, 3)
 
 ```
