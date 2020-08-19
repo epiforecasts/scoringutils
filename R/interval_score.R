@@ -62,7 +62,7 @@ interval_score <- function(true_values,
                            lower,
                            upper,
                            interval_range = NULL,
-                           weigh = FALSE) {
+                           weigh = TRUE) {
 
   if(is.null(interval_range)) {
     stop("must provide a range for your prediction interval")

@@ -4,7 +4,7 @@
 \alias{interval_score}
 \title{Interval Score}
 \usage{
-interval_score(true_values, lower, upper, interval_range = NULL, weigh = FALSE)
+interval_score(true_values, lower, upper, interval_range = NULL, weigh = TRUE)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}

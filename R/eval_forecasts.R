@@ -168,14 +168,14 @@
 
 
 eval_forecasts <- function(data,
-                           by = NULL,
+                           by,
                            summarise_by = by,
                            summarised = TRUE,
                            quantiles = c(),
                            sd = FALSE,
                            pit_plots = FALSE,
                            pit_arguments = list(plot = FALSE),
-                           interval_score_arguments = list()) {
+                           interval_score_arguments = list(weigh = TRUE)) {
 
 
   # preparations ---------------------------------------------------------------
