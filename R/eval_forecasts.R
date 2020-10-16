@@ -96,6 +96,8 @@
 #' function.
 #' @param interval_score_arguments pass down additional arguments to the
 #' \code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.
+#' @param summarised Summarise arguments (i.e. take the mean per group
+#' specified in group_by. Default is TRUE.
 #' @param verbose print out additional helpful messages (default is TRUE)
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
@@ -121,7 +123,7 @@
 #'                                      by = c("id", "model", "horizon"),
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.5), sd = TRUE)
-#' eval2 <- scoringutils::eval_forecasts(binary_example,
+#' eval <- scoringutils::eval_forecasts(binary_example,
 #'                                      by = c("id", "model", "horizon"))
 #'
 #' ## Quantile Forecasts
@@ -181,6 +183,7 @@ eval_forecasts <- function(data,
                            pit_plots = FALSE,
                            pit_arguments = list(plot = FALSE),
                            interval_score_arguments = list(weigh = TRUE),
+                           summarised = TRUE,
                            verbose = TRUE) {
 
 
@@ -226,13 +229,12 @@ eval_forecasts <- function(data,
   }
 
 
-  # check if results should be summarised --------------------------------------
-
-  if (any(by != summarise_by)) {
-    summarised <- TRUE
-  } else {
-    summarised <- FALSE
-  }
+  # # check if results should be summarised --------------------------------------
+  # if (!identical(by, summarise_by)) {
+  #   summarised <- TRUE
+  # } else {
+  #   summarised <- FALSE
+  # }
 
 
   # Score binary predictions ---------------------------------------------------
@@ -293,6 +295,22 @@ eval_forecasts <- function(data,
                                                      range),
                                                 interval_score_arguments))]
 
+    # this is a bit weird --> find a more elegant solution
+    if (!("separate_results" %in% names(interval_score_arguments))) {
+      interval_score_arguments <- c(interval_score_arguments,
+                                    list(separate_results = TRUE))
+    }
+
+    res <- data[, c("sharpness",
+                    "is_underprediction",
+                    "is_overprediction") := do.call(scoringutils::interval_score,
+                                              c(list(true_values,
+                                                     lower,
+                                                     upper,
+                                                     range),
+                                                interval_score_arguments))]
+
+
     # compute calibration for every single observation
     res[, calibration := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
     res[, coverage_deviation := calibration - range/100]
@@ -304,17 +322,16 @@ eval_forecasts <- function(data,
         by = by]
 
 
-    # compute sharpness as weighted sum of the interval widths
-    quantile_sharpness <- function(lower, upper, range) {
-      alpha <- (100 - range) / (2 * 100)
-
-      sharpness <- sum((upper - lower) * alpha / 2)
-      return(sharpness)
-    }
-
-    res[, sharpness := quantile_sharpness(range = range,
-                                          lower = lower, upper = upper),
-        by = by]
+    # # compute sharpness as weighted sum of the interval widths
+    # quantile_sharpness <- function(lower, upper, range) {
+    #   alpha <- (1 - range/100) / 2
+    #
+    #   sharpness <- (upper - lower) * alpha / 2
+    #   return(sharpness)
+    # }
+    #
+    # res[, sharpness := quantile_sharpness(range = range,
+    #                                       lower = lower, upper = upper)]
 
 
     if (summarised) {
@@ -323,6 +340,7 @@ eval_forecasts <- function(data,
         # add quantiles for the scores
         res <- add_quantiles(res,
                              c("interval_score", "calibration",
+                               "is_overprediction", "is_underprediction",
                                "coverage_deviation", "bias", "sharpness"),
                              quantiles,
                              by = c(summarise_by))
@@ -332,6 +350,7 @@ eval_forecasts <- function(data,
       if (sd) {
         res <- add_sd(res,
                       varnames = c("interval_score", "bias", "calibration",
+                                   "is_overprediction", "is_underprediction",
                                    "coverage_deviation", "sharpness"),
                       by = c(summarise_by))
       }
@@ -340,7 +359,7 @@ eval_forecasts <- function(data,
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
                  by = c(summarise_by),
                  .SDcols = colnames(res) %like%
-                   "calibration|bias|sharpness|coverage_deviation|interval_score"]
+                   "calibration|bias|sharpness|coverage_deviation|interval_score|is_"]
     }
     return(res)
   }
@@ -373,9 +392,7 @@ eval_forecasts <- function(data,
   dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
                            value.var = "predictions")
 
-  # # code to get better names for the list elements
-  # dt <- unique(dat[, colnames(dat) %in% by, with = FALSE])
-  # do.call(paste, dt)
+
 
   # extract pit plots if specified
   if (pit_plots & summarised) {
@@ -461,7 +478,7 @@ eval_forecasts <- function(data,
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),
              .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
-             by = c("id", by)]
+             by = c(by)]
 
 
   if (summarised) {

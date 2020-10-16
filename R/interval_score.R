@@ -35,7 +35,11 @@
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
-#' @return vector with the scoring values
+#' @param seprate_result if TRUE (default is FALSE), then the separate parts
+#' of the interval score (sharpness, penalties for over- and under-prediction
+#' get returned as separate elements of a list)
+#' @return vector with the scoring values, or a list with separate entries if
+#' \code{separate_result} is TRUE.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = 90
@@ -62,21 +66,34 @@ interval_score <- function(true_values,
                            lower,
                            upper,
                            interval_range = NULL,
-                           weigh = TRUE) {
+                           weigh = TRUE,
+                           separate_results = FALSE) {
 
   if(is.null(interval_range)) {
     stop("must provide a range for your prediction interval")
   }
 
-  alpha = (100 - interval_range) / 100
+  alpha <- (100 - interval_range) / 100
 
-  score = (upper - lower) +
-    2/alpha * (lower - true_values) * (true_values < lower) +
-    2/alpha * (true_values - upper) * (true_values > upper)
+  sharpness <- (upper - lower)
+  over_prediction <- 2/alpha * (lower - true_values) * (true_values < lower)
+  under_prediction <- 2/alpha * (true_values - upper) * (true_values > upper)
 
-  if (weigh) score <- score * alpha / 2
 
-  return(score)
+
+  if (weigh) {
+    sharpness <- sharpness * alpha / 2
+    under_prediction <- under_prediction * alpha / 2
+    over_prediction <- over_prediction * alpha / 2
+  }
+
+  score <- sharpness + under_prediction + over_prediction
+
+  if (separate_results) {
+    return(list(sharpnes = sharpness,
+                under_prediction = under_prediction,
+                over_prediction = over_prediction))
+  } else {
+    return(score)
+  }
 }
-
-

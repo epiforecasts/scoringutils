@@ -268,3 +268,39 @@ hist_PIT <- function(PIT_samples,
 }
 
 
+
+#' @title PIT Histogram Quantile
+#'
+#' @description
+#' Make a simple histogram of the probability integral transformed values to
+#' visually check whether a uniform distribution seems likely.
+#'
+#' @param PIT_samples A vector with the PIT values of size n
+#' @param num_bins the number of bins in the PIT histogram.
+#' @param caption provide a caption that gets passed to the plot
+#' If not given, the square root of n will be used
+#' @return vector with the scoring values
+#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat
+
+
+hist_PIT_quantile <- function(PIT_samples,
+                     num_bins = NULL,
+                     caption = NULL) {
+
+  if (is.null(num_bins)) {
+    n <- length(PIT_samples)
+    num_bins = round(sqrt(n))
+  }
+
+  hist_PIT <- ggplot2::ggplot(data = data.frame(x = PIT_samples),
+                              ggplot2::aes(x = x)) +
+    ggplot2::geom_histogram(ggplot2::aes(y = stat(count) / sum(count)),
+                            breaks = seq(0, 1, length.out = num_bins + 1),
+                            colour = "grey") +
+    ggplot2::xlab("PIT") +
+    ggplot2::ylab("Frequency") +
+    ggplot2::labs()
+
+  return(hist_PIT)
+}
+

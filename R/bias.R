@@ -158,11 +158,11 @@ quantile_bias <- function(range, boundary = NULL,
     return(bias)
   } else if (true_value < min(lower_predictions)) {
     lower <- 0
-    bias <- 1 - lower
+    bias <- 1 - 2 * lower
     return(bias)
   } else if (true_value > max(upper_predictions)) {
     upper <- 1
-    bias <- 1 - upper
+    bias <- 1 - 2 * upper
     return(bias)
   } else if (any(lower_predictions >= true_value)) {
     lower <- max(lower_quantiles[lower_predictions <= true_value])

@@ -19,6 +19,7 @@ calibration now take all quantiles into account
 `eval_forecasts` The summary can return the mean, the standard deviation as well
 as an arbitrary set of quantiles. 
 - `eval_forecasts` can now return pit histograms. 
+- switched to ggplot2 for plotting
 
 ## scoringutils 0.1.2
 
