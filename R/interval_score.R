@@ -35,11 +35,11 @@
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
-#' @param seprate_result if TRUE (default is FALSE), then the separate parts
+#' @param separate_results if TRUE (default is FALSE), then the separate parts
 #' of the interval score (sharpness, penalties for over- and under-prediction
 #' get returned as separate elements of a list)
 #' @return vector with the scoring values, or a list with separate entries if
-#' \code{separate_result} is TRUE.
+#' \code{separate_results} is TRUE.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = 90

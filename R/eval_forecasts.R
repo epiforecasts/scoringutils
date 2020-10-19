@@ -452,18 +452,20 @@ eval_forecasts <- function(data,
     dat <- rbindlist(pit_values)
   } else {
 
-    if (!summarised) {
-      dat[, c("pit_p_val", "pit_sd") := NA]
-      if (verbose) {
-        message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
-      }
-    } else if (summarised) {
-      # compute pit p-values in a quicker way
-      dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
-                                                            as.matrix(.SD)),
-                                                       pit_arguments)),
-          .SDcols = names(dat)[grepl("sampl_", names(dat))], by = summarise_by]
+    if (summarised) {
 
+      if (identical(by, summarise_by)) {
+        dat[, c("pit_p_val", "pit_sd") := NA]
+        if (verbose) {
+          message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
+        }
+      } else {
+        # compute pit p-values in a quicker way
+        dat[, c("pit_p_val", "pit_sd") := do.call(pit, c(list(true_values,
+                                                              as.matrix(.SD)),
+                                                         pit_arguments)),
+            .SDcols = names(dat)[grepl("sampl_", names(dat))], by = summarise_by]
+      }
     }
   }
 

@@ -13,6 +13,7 @@ eval_forecasts(
   pit_plots = FALSE,
   pit_arguments = list(plot = FALSE),
   interval_score_arguments = list(weigh = TRUE),
+  summarised = TRUE,
   verbose = TRUE
 )
 }
@@ -93,6 +94,9 @@ function.}
 \item{interval_score_arguments}{pass down additional arguments to the
 \code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.}
 
+\item{summarised}{Summarise arguments (i.e. take the mean per group
+specified in group_by. Default is TRUE.}
+
 \item{verbose}{print out additional helpful messages (default is TRUE)}
 }
 \value{
@@ -146,7 +150,7 @@ eval <- scoringutils::eval_forecasts(binary_example,
                                      by = c("id", "model", "horizon"),
                                      summarise_by = c("model"),
                                      quantiles = c(0.5), sd = TRUE)
-eval2 <- scoringutils::eval_forecasts(binary_example,
+eval <- scoringutils::eval_forecasts(binary_example,
                                      by = c("id", "model", "horizon"))
 
 ## Quantile Forecasts
