@@ -60,6 +60,9 @@
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 #' <arXiv:2005.12881v1>
 #'
+#' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
+#' in an interval format. \url{https://arxiv.org/abs/2005.12881}
+#'
 
 
 interval_score <- function(true_values,

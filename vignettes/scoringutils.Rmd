@@ -329,3 +329,61 @@ print(eval, 3, 3)
 ```
 
 
+
+# Plotting Scores
+
+A few default plots are available in the scoringutils package. 
+
+## Create coloured table of scores
+
+```{r}
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
+                                       by = c("model", "id", "horizon"),
+                                       summarise_by = "model")
+scoringutils::score_table(scores)
+```
+
+## Show correlation between metrics
+
+```{r}
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
+                                       by = c("model", "id", "horizon"),
+                                       summarise_by = c("model", "id"))
+scoringutils::correlation_plot(scores)
+```
+
+
+## Show components of the weighted interval score
+
+```{r}
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
+                                       by = c("model", "id", "horizon"),
+                                       summarise_by = c("model", "horizon"))
+scoringutils::wis_components(scores, x = "model", facet_formula = ~ horizon)
+```
+
+## Range plots
+
+```{r}
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
+                                       by = c("model", "id", "horizon"),
+                                       summarise_by = c("model", "horizon", "range"))
+scoringutils::range_plot(scores, x = "model")
+
+```
+
+```{r}
+scoringutils::range_plot(scores, y = "sharpness", x = "model")
+```
+
+
+## Heatmap of scores
+
+```{r}
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
+                                       by = c("model", "id", "horizon"),
+                                       summarise_by = c("model", "horizon"))
+
+scoringutils::score_heatmap(scores, x = "horizon", metric = "bias")
+
+```

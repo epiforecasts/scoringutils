@@ -1,3 +1,15 @@
+## scoringutils 0.1.4
+
+### Feature updates
+- we added basic plotting functionality to visualise scores. You can now
+easily obtain diagnostic plots based on scores as produced by `eval_forecasts`.
+- `correlation_plot` shows correlation between metrics
+- `range_plot` shows contribution of different prediction intervals to some 
+chosen metric
+- `score_heatmap` visualises scores as heatmap
+- `score_table` shows a coloured summary table of scores
+
+
 ## scoringutils 0.1.3
 
 ### (Potentially) Breaking changes
