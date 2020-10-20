@@ -9,7 +9,7 @@ A data frame with 720 rows and 7 variables:
 \describe{
   \item{true_values}{true observed values}
   \item{id}{unique identifier for true observed values}
-  \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
+  \item{horizon}{forecast horizon (e.g. 1 day ahead forecast)}
   \item{model}{name of the model that generated the forecasts}
   \item{predictions}{quantile predictions}
   \item{boundary}{lower or upper bound of an interval range}

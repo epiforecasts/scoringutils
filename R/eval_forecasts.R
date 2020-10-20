@@ -190,7 +190,9 @@ eval_forecasts <- function(data,
 
 
   # preparations ---------------------------------------------------------------
-  data.table::setDT(data)
+  # do a copy to avoid that the input may be altered in any way.
+  # this sometimes unexpectedly happens and I don't fully understand it
+  data <- data.table::as.data.table(data)
 
   # helper function to add quantiles to summarised predictions
   add_quantiles <- function(dt, varnames, quantiles, by) {

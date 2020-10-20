@@ -85,10 +85,27 @@
 #' \describe{
 #'   \item{true_values}{true observed values}
 #'   \item{id}{unique identifier for true observed values}
-#'   \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
+#'   \item{horizon}{forecast horizon (e.g. 1 day ahead forecast)}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{predictions}{quantile predictions}
 #'   \item{boundary}{lower or upper bound of an interval range}
 #'   \item{range}{interval range for which the quantile forecast was made}
 #' }
 "quantile_example_data_long"
+
+
+#' Quantile Example Data - Plain Quantile Format
+#'
+#' A toy dataset for quantile forecasts of an outcome variable in a format
+#' that uses plain quantiles instead of interval ranges
+#'
+#' @format A data frame with 660 rows and 6 variables:
+#' \describe{
+#'   \item{true_values}{true observed values}
+#'   \item{id}{unique identifier for true observed values}
+#'   \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{predictions}{quantile predictions}
+#'   \item{quantile}{quantile of the corresponding prediction}
+#' }
+"quantile_example_data_plain"
