@@ -9,6 +9,12 @@ chosen metric
 - `score_heatmap` visualises scores as heatmap
 - `score_table` shows a coloured summary table of scores
 
+### package updates
+- renamed "calibration" to "coverage"
+- renamed "true_values" to "true_value" in data.frames
+- renamed "predictions" to "prediction" in data.frames
+- renamed "is_overprediction" to "overprediction"
+- renamed "is_underprediction" to "underprediction"
 
 ## scoringutils 0.1.3
 

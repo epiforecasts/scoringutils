@@ -79,23 +79,23 @@ interval_score <- function(true_values,
   alpha <- (100 - interval_range) / 100
 
   sharpness <- (upper - lower)
-  over_prediction <- 2/alpha * (lower - true_values) * (true_values < lower)
-  under_prediction <- 2/alpha * (true_values - upper) * (true_values > upper)
+  overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
+  underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
 
 
 
   if (weigh) {
     sharpness <- sharpness * alpha / 2
-    under_prediction <- under_prediction * alpha / 2
-    over_prediction <- over_prediction * alpha / 2
+    underprediction <- underprediction * alpha / 2
+    overprediction <- overprediction * alpha / 2
   }
 
-  score <- sharpness + under_prediction + over_prediction
+  score <- sharpness + underprediction + overprediction
 
   if (separate_results) {
     return(list(sharpnes = sharpness,
-                under_prediction = under_prediction,
-                over_prediction = over_prediction))
+                underprediction = underprediction,
+                overprediction = overprediction))
   } else {
     return(score)
   }

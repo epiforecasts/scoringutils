@@ -44,7 +44,7 @@ score_table <- function(summarised_scores,
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
   metrics_non_min <- c("bias", "coverage_deviation")
-  metrics_no_color <- c("calibration")
+  metrics_no_color <- c("coverage")
   metrics_min <- setdiff(metrics, c(metrics_non_min, metrics_no_color))
 
   if (!is.null(select_metrics)) {
@@ -247,15 +247,15 @@ wis_components <- function(scores,
                            ylab = "WIS contributions") {
 
     plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = is_underprediction,
+    ggplot2::geom_linerange(ggplot2::aes(ymax = underprediction,
                                          ymin = 0, colour = "Underprediction"),
                             size = 3) +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = is_overprediction + is_underprediction,
-                                         ymin = is_underprediction,
+    ggplot2::geom_linerange(ggplot2::aes(ymax = overprediction + underprediction,
+                                         ymin = underprediction,
                                          colour = "Overprediction"),
                             size = 3)  +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = sharpness + is_overprediction + is_underprediction,
-                                         ymin = is_overprediction + is_underprediction,
+    ggplot2::geom_linerange(ggplot2::aes(ymax = sharpness + overprediction + underprediction,
+                                         ymin = overprediction + underprediction,
                                          colour = "Sharpness"),
                             size = 3) +
     ggplot2::facet_wrap(facet_formula, nrow = nrow,
@@ -494,7 +494,7 @@ score_heatmap <- function(scores,
 #' #
 #' #   if (is.null(by)) {
 #' #     by <- setdiff(colnames(scores),
-#' #                   c("Interval_Score", "calibration", "sharpness", "bias",
+#' #                   c("Interval_Score", "coverage", "sharpness", "bias",
 #' #                     "true_values", "id", "lower", "upper"))
 #' #   }
 #' #
@@ -508,7 +508,7 @@ score_heatmap <- function(scores,
 #' #                  upper75_score = quantile(Interval_Score, 0.75, na.rm = TRUE),
 #' #                  lower05_score = quantile(Interval_Score, 0.05, na.rm = TRUE),
 #' #                  upper95_score = quantile(Interval_Score, 0.95, na.rm = TRUE),
-#' #                  mean_calibration = mean(calibration),
+#' #                  mean_coverage = mean(calibration),
 #' #                  lower25_calibration = quantile(calibration, 0.25, na.rm = TRUE),
 #' #                  upper75_calibration = quantile(calibration, 0.75, na.rm = TRUE),
 #' #                  lower05_calibration = quantile(calibration, 0.05, na.rm = TRUE),

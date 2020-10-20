@@ -304,8 +304,8 @@ eval_forecasts <- function(data,
     }
 
     res <- data[, c("sharpness",
-                    "is_underprediction",
-                    "is_overprediction") := do.call(scoringutils::interval_score,
+                    "underprediction",
+                    "overprediction") := do.call(scoringutils::interval_score,
                                               c(list(true_values,
                                                      lower,
                                                      upper,
@@ -313,9 +313,9 @@ eval_forecasts <- function(data,
                                                 interval_score_arguments))]
 
 
-    # compute calibration for every single observation
-    res[, calibration := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
-    res[, coverage_deviation := calibration - range/100]
+    # compute coverage for every single observation
+    res[, coverage := ifelse(true_values <= upper & true_values >= lower, 1, 0)]
+    res[, coverage_deviation := coverage - range/100]
 
 
     # compute bias
@@ -341,8 +341,8 @@ eval_forecasts <- function(data,
       if (!is.null(quantiles)) {
         # add quantiles for the scores
         res <- add_quantiles(res,
-                             c("interval_score", "calibration",
-                               "is_overprediction", "is_underprediction",
+                             c("interval_score", "coverage",
+                               "overprediction", "underprediction",
                                "coverage_deviation", "bias", "sharpness"),
                              quantiles,
                              by = c(summarise_by))
@@ -351,8 +351,8 @@ eval_forecasts <- function(data,
       # add standard deviation
       if (sd) {
         res <- add_sd(res,
-                      varnames = c("interval_score", "bias", "calibration",
-                                   "is_overprediction", "is_underprediction",
+                      varnames = c("interval_score", "bias", "coverage",
+                                   "overprediction", "underprediction",
                                    "coverage_deviation", "sharpness"),
                       by = c(summarise_by))
       }
@@ -361,7 +361,7 @@ eval_forecasts <- function(data,
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
                  by = c(summarise_by),
                  .SDcols = colnames(res) %like%
-                   "calibration|bias|sharpness|coverage_deviation|interval_score|is_"]
+                   "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction"]
     }
     return(res)
   }
@@ -389,7 +389,7 @@ eval_forecasts <- function(data,
                                        t(predictions)), by = c(by)]
   }
 
-  # calibration
+  # coverage
   # reformat data.table to wide format
   dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
                            value.var = "predictions")
