@@ -374,7 +374,7 @@ range_plot <- function(scores,
 #' @param metric the metric that determines the value and colour shown in the
 #' tiles of the heatmap
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
-#' @param ylab Label for the y-axis. Default is "WIS contributions"
+#' @param ylab Label for the y-axis. Default is the variable name on the y-axis
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
@@ -431,6 +431,137 @@ score_heatmap <- function(scores,
     ggplot2::coord_cartesian(expand = FALSE)
 
 }
+
+
+
+
+#' @title Plot Predictions vs True Values
+#'
+#' @description
+#' Make a plot of observed and predicted values
+#'
+#' @param data a data.frame that follows the same specifications outlined in
+#' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
+#' "true_values", "predictions" and then either a column called sample, or one
+#' called "quantile" or two columns called "range" and "boundary".
+#' @param x character vector of length one that denotes the name of the variable
+#' on the x-axis. Usually, this will be "date", but it can be anything else.
+#' @param range numeric vector indicating the interval ranges to plot. If 0 is
+#' included in range, the median prediction will be shown.
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param scales scales argument that gets passed down to ggplot. Only necessary
+#' if you make use of facetting. Default is "free_y"
+#' @param xlab Label for the x-axis. Default is the variable name on the x-axis
+#' @param ylab Label for the y-axis. Default is "True and predicted values"
+#' @return ggplot object with a plot of true vs predicted values
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' facet_wrap facet_grid
+#' @importFrom data.table dcast
+#' @export
+#'
+#' @examples
+#' example1 <- scoringutils::continuous_example_data
+#' example2 <- scoringutils::quantile_example_data_long
+#'
+#' scoringutils::plot_predictions(example1, x = "id",
+#'                                facet_formula = ~ horizon)
+#' scoringutils::plot_predictions(example2, x = "id",
+#'                                facet_formula = ~ horizon)
+
+
+plot_predictions <- function(data,
+                             x = "date",
+                             range = c(0, 50, 90),
+                             facet_formula = NULL,
+                             facet_wrap_or_grid = "facet_wrap",
+                             scales = "free_y",
+                             xlab = x,
+                             ylab = "True and predicted values") {
+
+
+  # find out what type of predictions we have
+  colnames <- colnames(data)
+
+  if ("sample" %in% colnames) {
+    data <- scoringutils::sample_to_range(data)
+    data[, quantile := NULL]
+  } else if ("quantile" %in% colnames) {
+    data <- scoringutils::quantile_to_range(data)
+  }
+
+  # select appropriate boundaries and pivot wider
+  select <- data$range %in% setdiff(range, 0)
+
+  intervals <- data[select, ]
+  intervals <- data.table::dcast(intervals, ... ~ boundary,
+                    value.var = "predictions")
+  intervals[, range := as.factor(range)]
+
+
+  plot <- ggplot2::ggplot(intervals, ggplot2::aes_string(x = x)) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
+                                      group = range, fill = range),
+                         alpha = 0.4) +
+    ggplot2::geom_point(ggplot2::aes(y = true_values), size = 0.5) +
+    ggplot2::geom_line(ggplot2::aes(y = true_values, colour = "actual"),
+                       lwd = 0.2) +
+    ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
+    ggplot2::scale_fill_manual("range", values = c("steelblue3",
+                                              "lightskyblue3",
+                                              "lightskyblue2",
+                                              "lightskyblue1")) +
+    ggplot2::theme_minimal()
+
+  if (0 %in% range) {
+    select_median <- (data$range %in% 0 & data$boundary == "lower")
+    median <- data[select_median]
+
+    plot <- plot +
+      ggplot2::geom_line(data = median,
+                         mapping = ggplot2::aes(y = predictions, colour = "median"),
+                         lwd = 0.4)
+  }
+
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      plot <- plot +
+        ggplot2::facet_wrap(facet_formula, scales = scales)
+    } else {
+      plot <- plot +
+        ggplot2::facet_grid(facet_formula, scales = scales)
+    }
+  }
+
+  plot <- plot +
+    ggplot2::labs(x = xlab, y = ylab)
+
+  return(plot)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -675,69 +806,3 @@ score_heatmap <- function(scores,
 
 
 
-#' #' @title Plot Predictions vs True Values
-#' #'
-#' #' @description
-#' #' Simple plot of true vs observed values
-#' #'
-#' #' @param scores Unsummarised scores as produced by \code{\link{eval_forecasts}}
-#' #' @param by character vector to do grouping by
-#' #' @param facet_formula formula for facetting in ggplot
-#' #' @return list of plots
-#' #' @importFrom ggplot2 ggplot
-#' #'
-#' #' @examples
-#' #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
-#' #'                                        summarised = FALSE)
-#' #' plot_predictions(d)
-#'
-#'
-#' d <- scoringutils::continuous_example_data
-#' plot_predictions(d)
-#'
-#' d <- scoringutils::quantile_example_data_long
-#'
-#' plot_predictions_quantile <- function(data,
-#'                                       facet_formula = NULL,
-#'                                       facet_or_plot_grid = "facet",
-#'                                       scales = "free_y",
-#'                                       interval_ranges = c(0, 90)) {
-#'
-#'
-#'   # compute quantiles
-#'
-#'   plot <- data %>%
-#'     ggplot2::ggplot(ggplot2::aes(x = id)) +
-#'     ggplot2::geom_point(ggplot2::aes(y = true_values), size = 1) +
-#'     ggplot2::geom_line(ggplot2::aes(y = true_values), lwd = 0.2)
-#'
-#'   for (range in interval_ranges) {
-#'     # lower <- 1 - (interval_ranges / 100) / 2
-#'     # upper <- 1 - lower
-#'
-#'     # check whether we have continuous, binary or quantile forecasts
-#'
-#'     plot <- plot +
-#'       ggplot2::geom_ribbon()
-#'   }
-#'
-#'   if (facet_or_plot_grid == "facet") {
-#'     plot <- plot +
-#'       ggplot2::facet_wrap(facet_formula, scales = scales)
-#'   } else {
-#'     plot <- plot +
-#'       ggplot2::facet_wrap(facet_formula, scales = scales)
-#'   }
-#'
-#'   plot <- plot +
-#'     ggplot2::expand_limits(y = 0) +
-#'     ggplot2::labs(x = "Week", y = "Weekly incident deaths",
-#'                   caption = NULL,
-#'                   col = "Model", fill = "Model") +
-#'     cowplot::theme_cowplot() +
-#'     ggplot2::theme(legend.position = "bottom")
-#'
-#'   return(plot)
-#' }
-#'
-#' plot_predictions_quantile(d)

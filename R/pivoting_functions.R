@@ -102,8 +102,8 @@ range_to_quantile <- function(data,
   data <- data[!(range == 0 & boundary == "upper"), ]
 
   data[, quantile := ifelse(boundary == "lower",
-                            (100 - range) / 200,
-                            1 - (100 - range) / 200)]
+                            round((100 - range) / 200, 10),
+                            round((1 - (100 - range) / 200), 10))]
 
   if (!keep_range_col) {
     data[, c("range", "boundary") := NULL]
@@ -146,8 +146,8 @@ quantile_to_range <- function(data,
 
   data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
   data[, range := ifelse(boundary == "lower",
-                         (1 - 2 * quantile) * 100,
-                         ((2 * quantile - 1)) * 100)]
+                         round((1 - 2 * quantile) * 100, 10),
+                         round((2 * quantile - 1) * 100, 10))]
 
   # add median quantile
   median <- data[quantile == 0.5, ]

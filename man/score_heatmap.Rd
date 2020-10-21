@@ -19,7 +19,7 @@ could be something like "horizon", or "location"}
 \item{metric}{the metric that determines the value and colour shown in the
 tiles of the heatmap}
 
-\item{ylab}{Label for the y-axis. Default is "WIS contributions"}
+\item{ylab}{Label for the y-axis. Default is the variable name on the y-axis}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 }
