@@ -177,8 +177,7 @@ eval <- scoringutils::eval_forecasts(integer_example,
                                      pit_plots = TRUE,
                                      pit_arguments = list(n_replicates = 30,
                                                           plot = TRUE))
-eval <- scoringutils::eval_forecasts(integer_example,
-                                     by = c("model", "id", "horizon"))
+eval <- scoringutils::eval_forecasts(integer_example)
 
 ## Continuous Forecasts
 continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
