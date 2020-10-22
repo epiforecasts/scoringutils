@@ -176,7 +176,7 @@ pit <- function(true_values,
     out <- list(p_value = p_value,
                 sd = NA)
 
-    if (plot == TRUE) {
+    if (plot) {
       hist_PIT <- hist_PIT(P_x, num_bins = num_bins, caption = p_value)
       out$hist_PIT = hist_PIT
     }
@@ -216,7 +216,7 @@ pit <- function(true_values,
     }
 
 
-    if (plot == TRUE) {
+    if (plot) {
       hist_PIT <- hist_PIT(rowMeans(u), num_bins = num_bins,
                            caption = mean(p_values))
       out$hist_PIT = hist_PIT

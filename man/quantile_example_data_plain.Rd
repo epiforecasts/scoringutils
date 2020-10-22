@@ -7,11 +7,11 @@
 \format{
 A data frame with 660 rows and 6 variables:
 \describe{
-  \item{true_values}{true observed values}
+  \item{true_value}{true observed values}
   \item{id}{unique identifier for true observed values}
   \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
   \item{model}{name of the model that generated the forecasts}
-  \item{predictions}{quantile predictions}
+  \item{prediction}{quantile predictions}
   \item{quantile}{quantile of the corresponding prediction}
 }
 }

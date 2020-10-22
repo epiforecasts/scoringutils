@@ -21,10 +21,10 @@ globalVariables(c(".",
                   "metrics_select",
                   "model",
                   "pit_p_val",
-                  "predictions",
+                  "prediction",
                   "quantile",
                   "rn",
-                  "true_values",
+                  "true_value",
                   "type",
                   "upper",
                   "value",
@@ -35,9 +35,9 @@ globalVariables(c(".",
 
 list_of_avail_metrics <- function() {
   available_metrics <- c("log_score", "sharpness", "bias", "dss", "crps",
-                         "calibration", "coverage_deviation",
+                         "coverage", "coverage_deviation",
                          "pit_p_val", "pit_sd","interval_score",
-                         "is_underprediction", "is_overprediction")
+                         "underprediction", "overprediction")
 
   return(available_metrics)
 }

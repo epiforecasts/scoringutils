@@ -20,7 +20,7 @@
 
 quantile_to_wide <- function(data) {
   data.table::dcast(data, ... ~ boundary + range,
-                    value.var = "predictions")
+                    value.var = "prediction")
 }
 
 
@@ -55,7 +55,7 @@ quantile_to_long <- function(data) {
                            id.vars = id_vars,
                            measure.vars = ranges,
                            variable.name = "range",
-                           value.name = "predictions")
+                           value.name = "prediction")
   data[, boundary := gsub("_.*", "", range)]
   data[, range := as.numeric(gsub("^.*?_","", range))]
 
@@ -197,11 +197,11 @@ sample_to_quantile <- function(data,
 
   data <- data.table::as.data.table(data)
 
-  reserved_columns <- c("predictions", "sample")
+  reserved_columns <- c("prediction", "sample")
   by <- setdiff(colnames(data), reserved_columns)
 
   data <- data[, .(quantile = quantiles,
-                   predictions = quantile(predictions, prob = quantiles,
+                   prediction = quantile(prediction, prob = quantiles,
                                           type = type)),
                by = by]
 

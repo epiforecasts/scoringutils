@@ -18,7 +18,7 @@ plot_predictions(
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
 \code{\link{eval_forecasts}}. The data.frame needs to have columns called
-"true_values", "predictions" and then either a column called sample, or one
+"true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary".}
 
 \item{x}{character vector of length one that denotes the name of the variable

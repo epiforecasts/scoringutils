@@ -39,7 +39,7 @@ score_table <- function(summarised_scores,
   # scaling is done in order to colour the different scores
   # for most metrics larger is worse, but others like bias are better if they
   # are close to zero and deviations in both directions is worse
-  data.table::setDT(summarised_scores)
+  summarised_scores <- data.table::as.data.table(summarised_scores)
 
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
@@ -442,7 +442,7 @@ score_heatmap <- function(scores,
 #'
 #' @param data a data.frame that follows the same specifications outlined in
 #' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
-#' "true_values", "predictions" and then either a column called sample, or one
+#' "true_value", "prediction" and then either a column called sample, or one
 #' called "quantile" or two columns called "range" and "boundary".
 #' @param x character vector of length one that denotes the name of the variable
 #' on the x-axis. Usually, this will be "date", but it can be anything else.
@@ -499,7 +499,7 @@ plot_predictions <- function(data,
 
   intervals <- data[select, ]
   intervals <- data.table::dcast(intervals, ... ~ boundary,
-                    value.var = "predictions")
+                    value.var = "prediction")
   intervals[, range := as.factor(range)]
 
 
@@ -507,8 +507,8 @@ plot_predictions <- function(data,
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
                                       group = range, fill = range),
                          alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = true_values), size = 0.5) +
-    ggplot2::geom_line(ggplot2::aes(y = true_values, colour = "actual"),
+    ggplot2::geom_point(ggplot2::aes(y = true_value), size = 0.5) +
+    ggplot2::geom_line(ggplot2::aes(y = true_value, colour = "actual"),
                        lwd = 0.2) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
     ggplot2::scale_fill_manual("range", values = c("steelblue3",
@@ -523,7 +523,7 @@ plot_predictions <- function(data,
 
     plot <- plot +
       ggplot2::geom_line(data = median,
-                         mapping = ggplot2::aes(y = predictions, colour = "median"),
+                         mapping = ggplot2::aes(y = prediction, colour = "median"),
                          lwd = 0.4)
   }
 
@@ -626,7 +626,7 @@ plot_predictions <- function(data,
 #' #   if (is.null(by)) {
 #' #     by <- setdiff(colnames(scores),
 #' #                   c("Interval_Score", "coverage", "sharpness", "bias",
-#' #                     "true_values", "id", "lower", "upper"))
+#' #                     "true_value", "id", "lower", "upper"))
 #' #   }
 #' #
 #' #   if (!("model" %in% by)) {
@@ -750,13 +750,13 @@ plot_predictions <- function(data,
 #' #' data <- scoringutils::quantile_example_data_wide
 #' #' plot_true_vs_pred(data,
 #' #'                   x = "id",
-#' #'                   y = "true_values",
+#' #'                   y = "true_value",
 #' #'                   facet_formula = horizon ~ model)
 #' #'
 #'
 #' plot_true_vs_pred <- function(data,
 #'                               x = "epiweek",
-#'                               y = "true_values",
+#'                               y = "true_value",
 #'                               inner_y_max = "upper_50",
 #'                               inner_y_min = "lower_50",
 #'                               outer_y_max = "upper_90",
@@ -791,10 +791,10 @@ plot_predictions <- function(data,
 #'
 #'
 #' dat <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),
-#'                          value.var = "predictions")
+#'                          value.var = "prediction")
 #'
 #' # compute pit p-values
-#' dat[, c("pit_p_val", "pit_sd", "plot") := do.call(pit, c(list(true_values,
+#' dat[, c("pit_p_val", "pit_sd", "plot") := do.call(pit, c(list(true_value,
 #'                                                               as.matrix(.SD)),
 #'                                                          pit_arguments)),
 #'     .SDcols = names(dat)[grepl("sampl_", names(dat))], by = by]
