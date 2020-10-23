@@ -214,6 +214,10 @@ eval_forecasts <- function(data,
     return(dt)
   }
 
+  # if data is in quantile format, convert it to range format
+  if ("quantile" %in% names(data) & !("range" %in% names(data))) {
+    data <- scoringutils::quantile_to_range(data, keep_quantile_col = FALSE)
+  }
 
   # check if predictions are integer, continuous, etc. -------------------------
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data)) {
