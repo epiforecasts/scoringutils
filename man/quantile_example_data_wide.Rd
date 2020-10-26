@@ -7,7 +7,7 @@
 \format{
 A data frame with 120 rows and 10 variables:
 \describe{
-  \item{true_values}{true observed values}
+  \item{true_value}{true observed values}
   \item{id}{unique identifier for true observed values}
   \item{model}{name of the model that generated the forecasts}
   \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}

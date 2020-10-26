@@ -1,6 +1,6 @@
 Package: scoringutils
 Title: Utilities for Scoring and Assessing Predictions
-Version: 0.1.2
+Version: 0.1.4
 Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
@@ -51,6 +51,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
+    forcats,
+    ggplot2,
     goftest,
     graphics,
     scoringRules,

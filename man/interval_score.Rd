@@ -4,7 +4,14 @@
 \alias{interval_score}
 \title{Interval Score}
 \usage{
-interval_score(true_values, lower, upper, interval_range = NULL, weigh = FALSE)
+interval_score(
+  true_values,
+  lower,
+  upper,
+  interval_range = NULL,
+  weigh = TRUE,
+  separate_results = FALSE
+)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -23,9 +30,14 @@ to alpha.}
 \item{weigh}{if TRUE, weigh the score by alpha / 4, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.}
+
+\item{separate_results}{if TRUE (default is FALSE), then the separate parts
+of the interval score (sharpness, penalties for over- and under-prediction
+get returned as separate elements of a list)}
 }
 \value{
-vector with the scoring values
+vector with the scoring values, or a list with separate entries if
+\code{separate_results} is TRUE.
 }
 \description{
 Proper Scoring Rule to score quantile predictions, following Gneiting
@@ -70,4 +82,7 @@ Statistical Association, Volume 102, 2007 - Issue 477
 Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <arXiv:2005.12881v1>
+
+Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
+in an interval format. \url{https://arxiv.org/abs/2005.12881}
 }

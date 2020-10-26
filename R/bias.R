@@ -113,3 +113,64 @@ bias <- function(true_values, predictions) {
     return(res)
   }
 }
+
+
+
+# lower <- c(6341.000, 6329.500, 6087.014, 5703.500,
+#            5451.000, 5340.500, 4821.996, 4709.000,
+#            4341.500, 4006.250, 1127.000, 705.500)
+# upper <- c(6341.000, 6352.500, 6594.986, 6978.500,
+#            7231.000, 7341.500, 7860.004, 7973.000,
+#            8340.500, 8675.750, 11555.000, 11976.500)
+#
+# range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
+# true_value <- 8062
+#
+# quantile_bias(lower = lower, upper = upper,
+#               range = range, true_value = true_value)
+
+
+quantile_bias <- function(range, boundary = NULL,
+                          lower = NULL, upper = NULL,
+                          predictions = NULL, true_value) {
+
+  if (is.null(boundary)) {
+    # boundary version
+    lower_ranges <- range
+    upper_ranges <- range
+    lower_predictions <- lower
+    upper_predictions <- upper
+  } else {
+    lower_ranges <- range[boundary == "lower"]
+    lower_predictions <- predictions[boundary == "lower"]
+
+    upper_ranges <- range[boundary == "upper"]
+    upper_predictions <- predictions[boundary == "upper"]
+  }
+
+  # convert range to quantiles
+  lower_quantiles <- abs(100 - lower_ranges) / (2 * 100)
+  upper_quantiles <- abs(100 + upper_ranges) / (2 * 100)
+
+  median_prediction <- upper_predictions[upper_ranges == 0]
+  if (true_value == median_prediction) {
+    bias <- 0
+    return(bias)
+  } else if (true_value < min(lower_predictions)) {
+    lower <- 0
+    bias <- 1 - 2 * lower
+    return(bias)
+  } else if (true_value > max(upper_predictions)) {
+    upper <- 1
+    bias <- 1 - 2 * upper
+    return(bias)
+  } else if (any(lower_predictions >= true_value)) {
+    lower <- max(lower_quantiles[lower_predictions <= true_value])
+    bias <- 1 - 2 * lower
+    return(bias)
+  } else if (any(upper_predictions <= true_value)){
+    upper <- min(upper_quantiles[upper_predictions >= true_value])
+    bias <- 1 - 2 * upper
+    return(bias)
+  }
+}

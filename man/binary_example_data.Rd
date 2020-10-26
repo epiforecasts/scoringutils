@@ -8,10 +8,10 @@
 A data.table with 120 rows and 5 variables:
 \describe{
   \item{id}{unique identifier for true observed values}
-  \item{true_values}{true observed values}
+  \item{true_value}{true observed values}
   \item{model}{name of the model that generated the forecasts}
   \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
-  \item{predictions}{predicted probability that the corresponding true
+  \item{prediction}{predicted probability that the corresponding true
   value will be 1}
 }
 }
