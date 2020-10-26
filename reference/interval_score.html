@@ -89,19 +89,13 @@ The interval score is a proper scoring rule that scores a quantile forecast" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/scoringutils.html">Get started</a>
 </li>
 <li>
@@ -157,7 +151,14 @@ as the lower bound and the 0.7 quantile as the upper).</p>
 <p>The interval score is a proper scoring rule that scores a quantile forecast</p>
     </div>
 
-    <pre class="usage"><span class='fu'>interval_score</span>(<span class='kw'>true_values</span>, <span class='kw'>lower</span>, <span class='kw'>upper</span>, interval_range = <span class='kw'>NULL</span>, weigh = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>interval_score</span><span class='op'>(</span>
+  <span class='va'>true_values</span>,
+  <span class='va'>lower</span>,
+  <span class='va'>upper</span>,
+  interval_range <span class='op'>=</span> <span class='cn'>NULL</span>,
+  weigh <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  separate_results <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,11 +190,18 @@ to alpha.</p></td>
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.</p></td>
     </tr>
+    <tr>
+      <th>separate_results</th>
+      <td><p>if TRUE (default is FALSE), then the separate parts
+of the interval score (sharpness, penalties for over- and under-prediction
+get returned as separate elements of a list)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector with the scoring values</p>
+    <p>vector with the scoring values, or a list with separate entries if
+<code>separate_results</code> is TRUE.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Strictly Proper Scoring Rules, Prediction,and Estimation,
@@ -202,22 +210,25 @@ Statistical Association, Volume 102, 2007 - Issue 477</p>
 <p>Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 &lt;arXiv:2005.12881v1&gt;</p>
+<p>Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
+in an interval format. <a href='https://arxiv.org/abs/2005.12881'>https://arxiv.org/abs/2005.12881</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
-<span class='kw'>interval_range</span> <span class='op'>=</span> <span class='fl'>90</span>
-<span class='kw'>alpha</span> <span class='op'>=</span> (<span class='fl'>100</span> <span class='op'>-</span> <span class='kw'>interval_range</span>) <span class='op'>/</span> <span class='fl'>100</span>
-<span class='kw'>lower</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>(<span class='kw'>alpha</span><span class='op'>/</span><span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='kw'>upper</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>((<span class='fl'>1</span><span class='op'>-</span> <span class='kw'>alpha</span><span class='op'>/</span><span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>30</span>, mean = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
+    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>interval_range</span> <span class='op'>=</span> <span class='fl'>90</span>
+<span class='va'>alpha</span> <span class='op'>=</span> <span class='op'>(</span><span class='fl'>100</span> <span class='op'>-</span> <span class='va'>interval_range</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>100</span>
+<span class='va'>lower</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span><span class='va'>alpha</span><span class='op'>/</span><span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>upper</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>-</span> <span class='va'>alpha</span><span class='op'>/</span><span class='fl'>2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>interval_score</span>(true_values = <span class='kw'>true_values</span>,
-               lower = <span class='kw'>lower</span>,
-               upper = <span class='kw'>upper</span>,
-               interval_range = <span class='kw'>interval_range</span>)</div><div class='output co'>#&gt;  [1]  2.1783312  3.3939137 16.2392879  0.5047015  3.3611805  3.5085113
-#&gt;  [7]  5.6526532 14.0278393  3.8858458  0.9322851  3.6800687  3.4209430
-#&gt; [13]  2.5289797  6.6757523  4.0297457  3.4134702  1.3313845  2.6828402
-#&gt; [19]  4.7965756 21.1919150  3.3815902  3.4500677  4.8855058  2.8339920
-#&gt; [25] 12.4595172  3.6446923  2.4102327  5.7904046  4.3890363  4.0436726</div></pre>
+<span class='fu'>interval_score</span><span class='op'>(</span>true_values <span class='op'>=</span> <span class='va'>true_values</span>,
+               lower <span class='op'>=</span> <span class='va'>lower</span>,
+               upper <span class='op'>=</span> <span class='va'>upper</span>,
+               interval_range <span class='op'>=</span> <span class='va'>interval_range</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 0.12033314 0.25083183 0.23112575 0.93102464 0.82013594 1.24634810
+#&gt;  [7] 0.24362764 0.06180225 0.17212365 0.56371030 0.15579140 0.22142106
+#&gt; [13] 0.31354849 0.17224129 0.12982370 1.04395125 0.24414706 0.11897692
+#&gt; [19] 0.24557430 0.18979540 0.19913727 0.14937520 0.22435836 0.14940820
+#&gt; [25] 1.04654764 0.14858524 0.56912853 0.23398915 0.20355043 0.25643876</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -233,7 +244,7 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

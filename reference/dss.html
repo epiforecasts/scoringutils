@@ -74,19 +74,13 @@ scoringRules package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/scoringutils.html">Get started</a>
 </li>
 <li>
@@ -127,7 +121,7 @@ function from the
 <code>scoringRules</code> package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dss</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</pre>
+    <pre class="usage"><span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,9 +147,10 @@ number of Monte Carlo samples</p></td>
 Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
-<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='fu'>dss</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] -0.06713812  1.03977226  1.38422077  1.39027921  1.83669787  6.17825396
+    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] -0.06713812  1.03977226  1.38422077  1.39027921  1.83669787  6.17825396
 #&gt;  [7]  7.67675031  2.09569172  2.78581036  3.97777412  5.19384742  2.71992085
 #&gt; [13]  4.85793494  3.34190230  3.15866098  3.73571566  4.44594690  3.37571689
 #&gt; [19]  3.23475952  3.31471786  3.31059377  3.47606465  3.30916963  3.27424120
@@ -175,7 +170,7 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

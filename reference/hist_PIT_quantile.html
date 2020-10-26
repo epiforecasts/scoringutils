@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quantile Example Data - Wide Format — quantile_example_data_wide • scoringutils</title>
+<title>PIT Histogram Quantile — hist_PIT_quantile • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Quantile Example Data - Wide Format — quantile_example_data_wide" />
-<meta property="og:description" content="A toy dataset for quantile forecasts of an outcome variable" />
+<meta property="og:title" content="PIT Histogram Quantile — hist_PIT_quantile" />
+<meta property="og:description" content="Make a simple histogram of the probability integral transformed values to
+visually check whether a uniform distribution seems likely." />
 
 
 
@@ -108,41 +109,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quantile Example Data - Wide Format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>quantile_example_data_wide.Rd</code></div>
+    <h1>PIT Histogram Quantile</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pit.R'><code>R/pit.R</code></a></small>
+    <div class="hidden name"><code>hist_PIT_quantile.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A toy dataset for quantile forecasts of an outcome variable</p>
+    <p>Make a simple histogram of the probability integral transformed values to
+visually check whether a uniform distribution seems likely.</p>
     </div>
 
-    <pre class="usage"><span class='va'>quantile_example_data_wide</span></pre>
+    <pre class="usage"><span class='fu'>hist_PIT_quantile</span><span class='op'>(</span><span class='va'>PIT_samples</span>, num_bins <span class='op'>=</span> <span class='cn'>NULL</span>, caption <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>PIT_samples</th>
+      <td><p>A vector with the PIT values of size n</p></td>
+    </tr>
+    <tr>
+      <th>num_bins</th>
+      <td><p>the number of bins in the PIT histogram.</p></td>
+    </tr>
+    <tr>
+      <th>caption</th>
+      <td><p>provide a caption that gets passed to the plot
+If not given, the square root of n will be used</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with 120 rows and 10 variables:</p><dl>
-  <dt>true_value</dt><dd><p>true observed values</p></dd>
-  <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
-  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
-  <dt>horizon</dt><dd><p>forecast horzin (e.g. 1 day ahead forecast)</p></dd>
-  <dt>lower_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 5% quantile)</p></dd>
-  <dt>lower_50</dt><dd><p>prediction for the lower value of the 50% interval range
-  (corresponding to the 25% quantile)</p></dd>
-  <dt>lower_0</dt><dd><p>prediction for the lower value of the 0% interval range
-  (corresponding to the 50% quantile, i.e. the median. For computational
-  reasons there need be a column with <code>lower_0</code> and <code>upper_0</code>)</p></dd>
-  <dt>upper_0</dt><dd><p>prediction for the upper value of the 0<!-- % interval range -->
-  (corresponding to the 50% quantile, i.e. the median)</p></dd>
-  <dt>upper_50</dt><dd><p>prediction for the upper value of the 50% interval range
-  (corresponding to the 75% quantile)</p></dd>
-  <dt>upper_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 95% quantile)</p></dd>
-
-</dl>
-
+    <p>vector with the scoring values</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

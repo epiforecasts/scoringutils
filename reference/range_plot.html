@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quantile Example Data - Wide Format — quantile_example_data_wide • scoringutils</title>
+<title>Plot Metrics by Range of the Prediction Interval — range_plot • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Quantile Example Data - Wide Format — quantile_example_data_wide" />
-<meta property="og:description" content="A toy dataset for quantile forecasts of an outcome variable" />
+<meta property="og:title" content="Plot Metrics by Range of the Prediction Interval — range_plot" />
+<meta property="og:description" content="Visualise the metrics by range, e.g. if you are interested how different
+interval ranges contribute to the overal interval score, or how sharpness
+changes by range." />
 
 
 
@@ -108,42 +110,73 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quantile Example Data - Wide Format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>quantile_example_data_wide.Rd</code></div>
+    <h1>Plot Metrics by Range of the Prediction Interval</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
+    <div class="hidden name"><code>range_plot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A toy dataset for quantile forecasts of an outcome variable</p>
+    <p>Visualise the metrics by range, e.g. if you are interested how different
+interval ranges contribute to the overal interval score, or how sharpness
+changes by range.</p>
     </div>
 
-    <pre class="usage"><span class='va'>quantile_example_data_wide</span></pre>
+    <pre class="usage"><span class='fu'>range_plot</span><span class='op'>(</span>
+  <span class='va'>scores</span>,
+  y <span class='op'>=</span> <span class='st'>"interval_score"</span>,
+  x <span class='op'>=</span> <span class='st'>"model"</span>,
+  colour <span class='op'>=</span> <span class='st'>"range"</span>,
+  xlab <span class='op'>=</span> <span class='va'>x</span>,
+  ylab <span class='op'>=</span> <span class='va'>y</span>
+<span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>scores</th>
+      <td><p>A data.frame of scores based on quantile forecasts as
+produced by <code><a href='eval_forecasts.html'>eval_forecasts</a></code>. Note that "range" must be included
+in the <code>summarise_by</code> argument when running <code>eval_forecasts</code></p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>The variable from the scores you want to show on the y-Axis.
+This could be something like "interval_score" (the default) or "sharpness"</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>The variable from the scores you want to show on the x-Axis.
+Usually this will be "model"</p></td>
+    </tr>
+    <tr>
+      <th>colour</th>
+      <td><p>Charachter vector of length one used to determine a variable
+for colouring dots. The Default is "range".</p></td>
+    </tr>
+    <tr>
+      <th>xlab</th>
+      <td><p>Label for the x-axis. Default is the variable name on the x-axis</p></td>
+    </tr>
+    <tr>
+      <th>ylab</th>
+      <td><p>Label for the y-axis. Default is "WIS contributions"</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with 120 rows and 10 variables:</p><dl>
-  <dt>true_value</dt><dd><p>true observed values</p></dd>
-  <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
-  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
-  <dt>horizon</dt><dd><p>forecast horzin (e.g. 1 day ahead forecast)</p></dd>
-  <dt>lower_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 5% quantile)</p></dd>
-  <dt>lower_50</dt><dd><p>prediction for the lower value of the 50% interval range
-  (corresponding to the 25% quantile)</p></dd>
-  <dt>lower_0</dt><dd><p>prediction for the lower value of the 0% interval range
-  (corresponding to the 50% quantile, i.e. the median. For computational
-  reasons there need be a column with <code>lower_0</code> and <code>upper_0</code>)</p></dd>
-  <dt>upper_0</dt><dd><p>prediction for the upper value of the 0<!-- % interval range -->
-  (corresponding to the 50% quantile, i.e. the median)</p></dd>
-  <dt>upper_50</dt><dd><p>prediction for the upper value of the 50% interval range
-  (corresponding to the 75% quantile)</p></dd>
-  <dt>upper_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 95% quantile)</p></dd>
+    <p>A ggplot2 object showing a contributions from the three components of
+the weighted interval score</p>
 
-</dl>
-
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>,
+                                       by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"id"</span>, <span class='st'>"horizon"</span><span class='op'>)</span>,
+                                       summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span><span class='op'>)</span>
+</div><div class='img'><img src='range_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, y <span class='op'>=</span> <span class='st'>"sharpness"</span>, x <span class='op'>=</span> <span class='st'>"model"</span><span class='op'>)</span>
+</div><div class='img'><img src='range_plot-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

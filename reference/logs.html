@@ -80,19 +80,13 @@ more details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/scoringutils.html">Get started</a>
 </li>
 <li>
@@ -139,7 +133,7 @@ integer valued probabiliy distributions. See the scoringRules package for
 more details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>logs</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</pre>
+    <pre class="usage"><span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,12 +159,13 @@ number of Monte Carlo samples</p></td>
 Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>)
-<span class='kw'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(n = <span class='fl'>30</span>, lambda = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>))
-<span class='fu'>logs</span>(<span class='kw'>true_values</span>, <span class='kw'>predictions</span>)</div><div class='output co'>#&gt;  [1] 1.421119 1.331696 2.463456 1.952366 1.972318 2.252716 2.428958 3.253805
-#&gt;  [9] 2.065099 2.197373 2.203754 2.948354 5.315420 2.699703 3.599460 4.276840
-#&gt; [17] 2.390718 2.928528 3.184589 2.851312 2.567575 2.660596 2.735707 2.612942
-#&gt; [25] 2.751654 3.151621 2.722381 3.898188 2.639997 2.994621</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 1.628377 1.378889 1.469686 1.864186 1.813824 2.149154 2.579506 2.432699
+#&gt;  [9] 3.736688 2.397281 3.284036 2.930723 2.597775 2.551600 2.389657 2.556886
+#&gt; [17] 2.626763 4.764840 3.957350 3.124001 3.428102 2.934883 2.695887 3.609694
+#&gt; [25] 3.094816 2.645026 3.995142 2.697517 2.647680 2.728074</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -186,7 +181,7 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ranked Probability Score — crps • scoringutils</title>
+<title>Plot Predictions vs True Values — plot_predictions • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,8 @@
 
 
 
-<meta property="og:title" content="Ranked Probability Score — crps" />
-<meta property="og:description" content="Wrapper around the crps_sample
-function from the
-scoringRules package. Can be used for continuous as well as integer
-valued forecasts" />
+<meta property="og:title" content="Plot Predictions vs True Values — plot_predictions" />
+<meta property="og:description" content="Make a plot of observed and predicted values" />
 
 
 
@@ -111,52 +108,86 @@ valued forecasts" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ranked Probability Score</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/scoringRules_wrappers.R'><code>R/scoringRules_wrappers.R</code></a></small>
-    <div class="hidden name"><code>crps.Rd</code></div>
+    <h1>Plot Predictions vs True Values</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
+    <div class="hidden name"><code>plot_predictions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Wrapper around the <code><a href='https://rdrr.io/pkg/scoringRules/man/scores_sample_univ.html'>crps_sample</a></code>
-function from the
-<code>scoringRules</code> package. Can be used for continuous as well as integer
-valued forecasts</p>
+    <p>Make a plot of observed and predicted values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crps</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_predictions</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  x <span class='op'>=</span> <span class='st'>"date"</span>,
+  range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>90</span><span class='op'>)</span>,
+  facet_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
+  facet_wrap_or_grid <span class='op'>=</span> <span class='st'>"facet_wrap"</span>,
+  scales <span class='op'>=</span> <span class='st'>"free_y"</span>,
+  xlab <span class='op'>=</span> <span class='va'>x</span>,
+  ylab <span class='op'>=</span> <span class='st'>"True and predicted values"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>true_values</th>
-      <td><p>A vector with the true observed values of size n</p></td>
+      <th>data</th>
+      <td><p>a data.frame that follows the same specifications outlined in
+<code><a href='eval_forecasts.html'>eval_forecasts</a></code>. The data.frame needs to have columns called
+"true_value", "prediction" and then either a column called sample, or one
+called "quantile" or two columns called "range" and "boundary".</p></td>
     </tr>
     <tr>
-      <th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
+      <th>x</th>
+      <td><p>character vector of length one that denotes the name of the variable
+on the x-axis. Usually, this will be "date", but it can be anything else.</p></td>
+    </tr>
+    <tr>
+      <th>range</th>
+      <td><p>numeric vector indicating the interval ranges to plot. If 0 is
+included in range, the median prediction will be shown.</p></td>
+    </tr>
+    <tr>
+      <th>facet_formula</th>
+      <td><p>formula for facetting in ggplot. If this is <code>NULL</code>
+(the default), no facetting will take place</p></td>
+    </tr>
+    <tr>
+      <th>facet_wrap_or_grid</th>
+      <td><p>Use ggplot2's <code>facet_wrap</code> or
+<code>facet_grid</code>? Anything other than "facet_wrap" will be interpreted as
+<code>facet_grid</code>. This only takes effect if <code>facet_formula</code> is not
+<code>NULL</code></p></td>
+    </tr>
+    <tr>
+      <th>scales</th>
+      <td><p>scales argument that gets passed down to ggplot. Only necessary
+if you make use of facetting. Default is "free_y"</p></td>
+    </tr>
+    <tr>
+      <th>xlab</th>
+      <td><p>Label for the x-axis. Default is the variable name on the x-axis</p></td>
+    </tr>
+    <tr>
+      <th>ylab</th>
+      <td><p>Label for the y-axis. Default is "True and predicted values"</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector with the scoring values</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
+    <p>ggplot object with a plot of true vs predicted values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
-<span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>crps</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  0.430975  0.474175  0.433875  0.429375  1.122425  1.146100  1.037325
-#&gt;  [8]  1.694000  1.054200  0.976800  0.817525  1.404750  1.054175  0.816225
-#&gt; [15]  2.173125  1.784625  1.023300  1.026750  1.601600  0.963525  6.339075
-#&gt; [22]  2.329775  3.000900  1.156425  6.322475  2.283250  5.683450  2.419425
-#&gt; [29] 11.230325  1.167575</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>example1</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='continuous_example_data.html'>continuous_example_data</a></span>
+<span class='va'>example2</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>
+
+<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example1</span>, x <span class='op'>=</span> <span class='st'>"id"</span>,
+                               facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>horizon</span><span class='op'>)</span>
+</div><div class='img'><img src='plot_predictions-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example2</span>, x <span class='op'>=</span> <span class='st'>"id"</span>,
+                               facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>horizon</span><span class='op'>)</span>
+</div><div class='img'><img src='plot_predictions-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

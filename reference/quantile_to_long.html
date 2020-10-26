@@ -76,19 +76,13 @@ plotting." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/scoringutils.html">Get started</a>
 </li>
 <li>
@@ -131,7 +125,7 @@ data in a long format as (as shown in
 plotting.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quantile_to_long</span>(<span class='kw'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>quantile_to_long</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,8 +143,9 @@ plotting.</p>
     <p>a data.frame in long format</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>wide</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='kw'><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></span>
-<span class='kw'>long</span> <span class='op'>&lt;-</span> <span class='kw'>scoringutils</span>::<span class='fu'>quantile_to_long</span>(<span class='kw'>wide</span>)
+    <pre class="examples"><div class='input'><span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></span>
+<span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>quantile_to_long</span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -167,7 +162,7 @@ plotting.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

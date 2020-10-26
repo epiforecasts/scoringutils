@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quantile Example Data - Wide Format — quantile_example_data_wide • scoringutils</title>
+<title>Quantile Example Data - Plain Quantile Format — quantile_example_data_plain • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Quantile Example Data - Wide Format — quantile_example_data_wide" />
-<meta property="og:description" content="A toy dataset for quantile forecasts of an outcome variable" />
+<meta property="og:title" content="Quantile Example Data - Plain Quantile Format — quantile_example_data_plain" />
+<meta property="og:description" content="A toy dataset for quantile forecasts of an outcome variable in a format
+that uses plain quantiles instead of interval ranges" />
 
 
 
@@ -108,38 +109,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quantile Example Data - Wide Format</h1>
+    <h1>Quantile Example Data - Plain Quantile Format</h1>
     <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>quantile_example_data_wide.Rd</code></div>
+    <div class="hidden name"><code>quantile_example_data_plain.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A toy dataset for quantile forecasts of an outcome variable</p>
+    <p>A toy dataset for quantile forecasts of an outcome variable in a format
+that uses plain quantiles instead of interval ranges</p>
     </div>
 
-    <pre class="usage"><span class='va'>quantile_example_data_wide</span></pre>
+    <pre class="usage"><span class='va'>quantile_example_data_plain</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 120 rows and 10 variables:</p><dl>
+    <p>A data frame with 660 rows and 6 variables:</p><dl>
   <dt>true_value</dt><dd><p>true observed values</p></dd>
   <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
-  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
   <dt>horizon</dt><dd><p>forecast horzin (e.g. 1 day ahead forecast)</p></dd>
-  <dt>lower_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 5% quantile)</p></dd>
-  <dt>lower_50</dt><dd><p>prediction for the lower value of the 50% interval range
-  (corresponding to the 25% quantile)</p></dd>
-  <dt>lower_0</dt><dd><p>prediction for the lower value of the 0% interval range
-  (corresponding to the 50% quantile, i.e. the median. For computational
-  reasons there need be a column with <code>lower_0</code> and <code>upper_0</code>)</p></dd>
-  <dt>upper_0</dt><dd><p>prediction for the upper value of the 0<!-- % interval range -->
-  (corresponding to the 50% quantile, i.e. the median)</p></dd>
-  <dt>upper_50</dt><dd><p>prediction for the upper value of the 50% interval range
-  (corresponding to the 75% quantile)</p></dd>
-  <dt>upper_90</dt><dd><p>prediction for the lower value of the 90% interval range
-  (corresponding to the 95% quantile)</p></dd>
+  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
+  <dt>prediction</dt><dd><p>quantile predictions</p></dd>
+  <dt>quantile</dt><dd><p>quantile of the corresponding prediction</p></dd>
 
 </dl>
 
