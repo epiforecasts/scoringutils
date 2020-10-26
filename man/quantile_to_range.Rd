@@ -28,6 +28,6 @@ data in a long format as (as shown in
 \examples{
 quantile_plain <- scoringutils::quantile_example_data_plain
 
-long <- quantile_to_range(quantile_plain)
+long <- scoringutils::quantile_to_range(quantile_plain)
 
 }

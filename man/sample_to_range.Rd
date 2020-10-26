@@ -4,7 +4,7 @@
 \alias{sample_to_range}
 \title{Change Data from a Sample Based Format to a Interval Range Format}
 \usage{
-sample_to_range(data, range = c(0, 50, 90), type = 7)
+sample_to_range(data, range = c(0, 50, 90), type = 7, keep_quantile_col = TRUE)
 }
 \arguments{
 \item{data}{a data.frame with samples}
@@ -14,6 +14,8 @@ sample_to_range(data, range = c(0, 50, 90), type = 7)
 
 \item{type}{type argument passed down to the quantile function. For more
 information, see \code{\link{quantile}}}
+
+\item{keep_quantile_col}{keep quantile column, default is TRUE}
 }
 \value{
 a data.frame in a long interval range format

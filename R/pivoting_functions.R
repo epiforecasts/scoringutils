@@ -137,7 +137,7 @@ range_to_quantile <- function(data,
 #' @examples
 #' quantile_plain <- scoringutils::quantile_example_data_plain
 #'
-#' long <- quantile_to_range(quantile_plain)
+#' long <- scoringutils::quantile_to_range(quantile_plain)
 #'
 
 quantile_to_range <- function(data,
@@ -223,6 +223,7 @@ sample_to_quantile <- function(data,
 #' (e.g. \code{c(0, 50, 90)})
 #' @param type type argument passed down to the quantile function. For more
 #' information, see \code{\link{quantile}}
+#' @param keep_quantile_col keep quantile column, default is TRUE
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
@@ -238,7 +239,8 @@ sample_to_quantile <- function(data,
 
 sample_to_range <- function(data,
                             range = c(0, 50, 90),
-                            type = 7) {
+                            type = 7,
+                            keep_quantile_col = TRUE) {
 
   data <- data.table::as.data.table(data)
 

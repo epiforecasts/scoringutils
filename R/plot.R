@@ -22,7 +22,7 @@
 #' scoringutils::score_table(scores)
 
 score_table <- function(summarised_scores,
-                           select_metrics = NULL) {
+                        select_metrics = NULL) {
 
 
   # identify metrics -----------------------------------------------------------
@@ -40,6 +40,12 @@ score_table <- function(summarised_scores,
   # for most metrics larger is worse, but others like bias are better if they
   # are close to zero and deviations in both directions is worse
   summarised_scores <- data.table::as.data.table(summarised_scores)
+
+  # # sort columns
+  # summarised_scores[, model := forcats::fct_reorder(model,
+  #                                                   interval_score,
+  #                                                   .fun='mean',
+  #                                                   .desc = TRUE)]
 
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
@@ -237,7 +243,7 @@ correlation_plot <- function(scores,
 
 
 wis_components <- function(scores,
-                           x,
+                           x = "model",
                            group = NULL,
                            relative_contributions = FALSE,
                            facet_formula = NULL,
@@ -246,7 +252,9 @@ wis_components <- function(scores,
                            xlab = x,
                            ylab = "WIS contributions") {
 
-    plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
+  scores <- data.table::as.data.table(scores)
+
+  plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
     ggplot2::geom_linerange(ggplot2::aes(ymax = underprediction,
                                          ymin = 0, colour = "Underprediction"),
                             size = 3) +
@@ -262,9 +270,11 @@ wis_components <- function(scores,
                         scales = scales) +
     ggplot2::labs(x = xlab, y = ylab) +
     ggplot2::theme_minimal() +
-    ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"))
+    ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
+                   axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
+                                                       hjust=1))
 
-    return(plot)
+  return(plot)
 
 }
 
@@ -498,6 +508,11 @@ plot_predictions <- function(data,
   select <- data$range %in% setdiff(range, 0)
 
   intervals <- data[select, ]
+
+  if ("quantile" %in% names(intervals)) {
+    intervals[, quantile := NULL]
+  }
+
   intervals <- data.table::dcast(intervals, ... ~ boundary,
                     value.var = "prediction")
   intervals[, range := as.factor(range)]
@@ -550,10 +565,223 @@ plot_predictions <- function(data,
 
 
 
+#' @title Plot Interval Coverage
+#'
+#' @description
+#' Plot interval coverage
+#'
+#' @param summarised_scores Summarised scores as produced by
+#' \code{\link{eval_forecasts}}. Make sure that "range" is included in
+#' \code{summarise_by} when producing the summarised scores
+#' @param colour According to which variable shall the graphs be coloured?
+#' Default is "model".
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param scales scales argument that gets passed down to ggplot. Only necessary
+#' if you make use of facetting. Default is "free_y"
+#' @return ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' facet_wrap facet_grid
+#' @importFrom data.table dcast
+#' @export
+#'
+#' @examples
+#' example1 <- scoringutils::quantile_example_data_long
+#' scores <- scoringutils::eval_forecasts(example1,
+#'                                        summarise_by = c("model", "range"))
+#' interval_coverage(scores)
+
+interval_coverage <- function(summarised_scores,
+                              colour = "model",
+                              facet_formula = NULL,
+                              facet_wrap_or_grid = "facet_wrap",
+                              scales = "free_y") {
+  ## overall model calibration - empirical interval coverage
+  p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
+                                                    colour = "model")) +
+    ggplot2::geom_polygon(data = data.frame(x = c(0, 0, 100),
+                                            y = c(0, 100, 100),
+                                            g = c("o", "o", "o")),
+                          ggplot2::aes(x = x, y = y, group = g,
+                                       fill = g),
+                          alpha = 0.05,
+                          colour = "white",
+                          fill = "olivedrab3") +
+    ggplot2::geom_line(ggplot2::aes(y = range), colour = "grey",
+                       linetype = "dashed") +
+    ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
+    ggplot2::theme_minimal() +
+    # ggplot2::theme(legend.position = "none") +
+                   # panel.spacing = ggplot2::unit(5, "mm"),
+                   # plot.margin = ggplot2::margin(t = 6, r = 5,
+                   #                               b = 6, l = 4, unit = "mm")) +
+    ggplot2::ylab("% Obs inside interval") +
+    ggplot2::xlab("Interval range") +
+    ggplot2::coord_cartesian(expand = FALSE)
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      p1 <- p1 +
+        ggplot2::facet_wrap(facet_formula, scales = scales)
+    } else {
+      p1 <- p1 +
+        ggplot2::facet_grid(facet_formula, scales = scales)
+    }
+  }
+
+  return(p1)
+}
 
 
 
 
+
+#' @title Plot Quantile Coverage
+#'
+#' @description
+#' Plot quantile coverage
+#'
+#' @param data a data.frame that follows the same specifications outlined in
+#' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
+#' "true_value", "prediction" and then either a column called sample, or one
+#' called "quantile" or two columns called "range" and "boundary".
+#' @param summarise_by grouping used to determine the percentage of true values
+#' below a predictive quantile. Default is \code{c("model", "quantile")}.
+#' "quantile" must always be present in \code{summarise_by}.
+#' @param colour According to which variable shall the graphs be coloured?
+#' Default is "model".
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param scales scales argument that gets passed down to ggplot. Only necessary
+#' if you make use of facetting. Default is "free_y"
+#' @return ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' facet_wrap facet_grid
+#' @importFrom data.table dcast
+#' @export
+#'
+#' @examples
+#' data <- scoringutils::quantile_example_data_long
+#'
+#' quantile_coverage(data)
+
+quantile_coverage <- function(data,
+                              summarise_by = c("model", "quantile"),
+                              colour = "model",
+                              facet_formula = NULL,
+                              facet_wrap_or_grid = "facet_wrap",
+                              scales = "free_y") {
+
+  data <- data.table::as.data.table(data)
+
+  # convert to quantile format if necessary
+  if (!("quantile" %in% names(data))) {
+    if ("sample" %in% names(data)) {
+      data <- scoringutils::sample_to_quantile(data)
+    } else if ("range" %in% names(data)) {
+      data <- scoringutils::range_to_quantile(data)
+    }
+  }
+
+  data[, coverage := mean(true_value <= prediction),
+       by = summarise_by]
+
+  p2 <- ggplot2::ggplot(data = data,
+                        ggplot2::aes_string(x = "quantile", colour = colour)) +
+    ggplot2::geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
+                                                0.5, 0.5, 1),
+                                          y = c(0, 0, 0.5,
+                                                0.5, 1, 1),
+                                          g = c("o", "o", "o")),
+                        ggplot2::aes(x = x, y = y, group = g,
+                                     fill = g),
+                        alpha = 0.05,
+                        colour = "white",
+                        fill = "olivedrab3") +
+    ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
+                       linetype = "dashed") +
+    ggplot2::geom_line(ggplot2::aes(y = coverage)) +
+    ggplot2::theme_minimal() +
+    # ggplot2::theme(legend.position = "none") +
+                   # panel.spacing = unit(5, "mm")
+                   # plot.margin = ggplot2::margin(t = 6, r = 9,
+                   #                               b = 6, l = 0, unit = "mm")) +
+    ggplot2::xlab("Quantile") +
+    ggplot2::ylab("% obs below quantile") +
+    ggplot2::coord_cartesian(expand = FALSE)
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      p2 <- p2 +
+        ggplot2::facet_wrap(facet_formula, scales = scales)
+    } else {
+      p2 <- p2 +
+        ggplot2::facet_grid(facet_formula, scales = scales)
+    }
+  }
+
+  return(p2)
+
+}
+
+
+
+
+
+
+
+#
+#
+#
+#
+#
+#
+#
+# df2 <- combined %>%
+#   dplyr::filter(model %in% m)
+#
+# p2 <- df2  %>%
+#   dplyr::group_by(model, quantile) %>%
+#   dplyr::summarise(coverage = mean(deaths <= value)) %>%
+#   ggplot2::ggplot(ggplot2::aes(x = quantile, colour = model)) +
+#   ggplot2::geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
+#                                                 0.5, 0.5, 1),
+#                                           y = c(0, 0, 0.5,
+#                                                 0.5, 1, 1),
+#                                           g = c("o", "o", "o")),
+#                         ggplot2::aes(x = x, y = y, group = g,
+#                                      fill = g),
+#                         alpha = 0.05,
+#                         colour = "white",
+#                         fill = "olivedrab3") +
+#   ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
+#                      linetype = "dashed") +
+#   ggplot2::geom_line(ggplot2::aes(y = coverage)) +
+#   ggplot2::scale_color_discrete(man_col) +
+#   ggplot2::facet_wrap(~ model, ncol = 3) +
+#   cowplot::theme_cowplot() +
+#   ggplot2::theme(panel.spacing = unit(5, "mm"),
+#                  legend.position = "none",
+#                  plot.margin = ggplot2::margin(t = 6, r = 9,
+#                                                b = 6, l = 0, unit = "mm")) +
+#   ggplot2::xlab("Quantile") +
+#   ggplot2::ylab("% obs below quantile") +
+#   ggplot2::coord_cartesian(expand = FALSE)
+#
+# plot_list[[i]] <- cowplot::plot_grid(p1, p2,
+#                                      ncol = 2)
+# i <- i + 1
+#
+#
+#
 
 
 
