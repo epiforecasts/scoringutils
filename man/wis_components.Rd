@@ -6,7 +6,7 @@
 \usage{
 wis_components(
   scores,
-  x,
+  x = "model",
   group = NULL,
   relative_contributions = FALSE,
   facet_formula = NULL,

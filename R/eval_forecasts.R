@@ -214,6 +214,10 @@ eval_forecasts <- function(data,
     return(dt)
   }
 
+  # if data is in quantile format, convert it to range format
+  if ("quantile" %in% names(data) & !("range" %in% names(data))) {
+    data <- scoringutils::quantile_to_range(data, keep_quantile_col = FALSE)
+  }
 
   # check if predictions are integer, continuous, etc. -------------------------
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data)) {
@@ -294,20 +298,16 @@ eval_forecasts <- function(data,
 
     data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "prediction")
-    res <- data[, "interval_score" := do.call(scoringutils::interval_score,
-                                              c(list(true_value,
-                                                     lower,
-                                                     upper,
-                                                     range),
-                                                interval_score_arguments))]
 
-    # this is a bit weird --> find a more elegant solution
+    # this is a bit weird --> find a more elegant solution. Idea is to add the
+    # separate_results = TRUE argument to the function
     if (!("separate_results" %in% names(interval_score_arguments))) {
       interval_score_arguments <- c(interval_score_arguments,
                                     list(separate_results = TRUE))
     }
 
-    res <- data[, c("sharpness",
+    res <- data[, c("interval_score",
+                    "sharpness",
                     "underprediction",
                     "overprediction") := do.call(scoringutils::interval_score,
                                               c(list(true_value,

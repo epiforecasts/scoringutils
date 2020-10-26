@@ -30,7 +30,9 @@ globalVariables(c(".",
                   "value",
                   "value_scaled",
                   "variable",
-                  "x"))
+                  "x",
+                  "y",
+                  "g"))
 
 
 list_of_avail_metrics <- function() {
