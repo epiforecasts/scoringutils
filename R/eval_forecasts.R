@@ -340,7 +340,7 @@ eval_forecasts <- function(data,
     # compute quantile coverage based on quantile version
     quantile_data[, quantile_coverage := (true_value <= prediction)]
 
-    # delete unnecessary columns befor merging back
+    # delete unnecessary columns before merging back
     keep_cols <- unique(c(by, "quantile", "ae", "quantile_coverage",
                           "boundary", "range"))
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
