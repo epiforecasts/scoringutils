@@ -138,7 +138,7 @@
 #' #long format
 #' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
 #'                                      by = c("model", "horizon", "id"),
-#'                                      summarise_by = c("model"))
+#'                                      summarise_by = c("model", "quantile", "range"))
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
@@ -216,8 +216,10 @@ eval_forecasts <- function(data,
 
   # if data is in quantile format, convert it to range format
   if ("quantile" %in% names(data) & !("range" %in% names(data))) {
+    quantile_data <- data
     data <- scoringutils::quantile_to_range(data, keep_quantile_col = FALSE)
   }
+
 
   # check if predictions are integer, continuous, etc. -------------------------
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data)) {
@@ -296,6 +298,10 @@ eval_forecasts <- function(data,
       data[, range := as.numeric(gsub("^.*?_","", range))]
     }
 
+    # save quantile version of the forecast for later
+    quantile_data <- scoringutils::range_to_quantile(data,
+                                                     keep_range_col = TRUE)
+
     data <- data.table::dcast(data, ... ~ boundary,
                               value.var = "prediction")
 
@@ -328,17 +334,22 @@ eval_forecasts <- function(data,
         by = by]
 
 
-    # # compute sharpness as weighted sum of the interval widths
-    # quantile_sharpness <- function(lower, upper, range) {
-    #   alpha <- (1 - range/100) / 2
-    #
-    #   sharpness <- (upper - lower) * alpha / 2
-    #   return(sharpness)
-    # }
-    #
-    # res[, sharpness := quantile_sharpness(range = range,
-    #                                       lower = lower, upper = upper)]
+    # compute absolute error based on quantile version
+    quantile_data[, ae := abs(true_value - prediction)]
 
+    # compute quantile coverage based on quantile version
+    quantile_data[, quantile_coverage := (true_value <= prediction)]
+
+    # delete unnecessary columns before merging back
+    keep_cols <- unique(c(by, "quantile", "ae", "quantile_coverage",
+                          "boundary", "range"))
+    delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
+    quantile_data[, eval(delete_cols) := NULL]
+
+    # merge back with other metrics
+    merge_cols <- setdiff(keep_cols, c("ae", "quantile_coverage", "quantile",
+                                       "boundary"))
+    res <- merge(res, quantile_data, by = merge_cols)
 
     if (summarised) {
 
@@ -347,7 +358,7 @@ eval_forecasts <- function(data,
         res <- add_quantiles(res,
                              c("interval_score", "coverage",
                                "overprediction", "underprediction",
-                               "coverage_deviation", "bias", "sharpness"),
+                               "coverage_deviation", "bias", "sharpness", "ae"),
                              quantiles,
                              by = c(summarise_by))
       }
@@ -357,7 +368,7 @@ eval_forecasts <- function(data,
         res <- add_sd(res,
                       varnames = c("interval_score", "bias", "coverage",
                                    "overprediction", "underprediction",
-                                   "coverage_deviation", "sharpness"),
+                                   "coverage_deviation", "sharpness", "ae"),
                       by = c(summarise_by))
       }
 
@@ -365,7 +376,7 @@ eval_forecasts <- function(data,
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
                  by = c(summarise_by),
                  .SDcols = colnames(res) %like%
-                   "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction"]
+                   "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|ae"]
     }
     return(res)
   }
