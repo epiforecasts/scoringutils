@@ -99,7 +99,7 @@
 #' A toy dataset for quantile forecasts of an outcome variable in a format
 #' that uses plain quantiles instead of interval ranges
 #'
-#' @format A data frame with 660 rows and 6 variables:
+#' @format A data frame with 600 rows and 6 variables:
 #' \describe{
 #'   \item{true_value}{true observed values}
 #'   \item{id}{unique identifier for true observed values}
