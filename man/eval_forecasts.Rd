@@ -165,7 +165,7 @@ eval <- scoringutils::eval_forecasts(quantile_example,
 #long format
 eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
                                      by = c("model", "horizon", "id"),
-                                     summarise_by = c("model"))
+                                     summarise_by = c("model", "quantile", "range"))
 
 ## Integer Forecasts
 integer_example <- data.table::setDT(scoringutils::integer_example_data)

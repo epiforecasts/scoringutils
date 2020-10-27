@@ -1,5 +1,6 @@
 globalVariables(c(".",
                   ".SD",
+                  "ae",
                   "boundary",
                   "Brier_score",
                   "count",
@@ -10,6 +11,7 @@ globalVariables(c(".",
                   "Interval_Score",
                   "overprediction",
                   "underprediction",
+                  "quantile_coverage",
                   "LogS",
                   "calibration",
                   "coverage",
@@ -36,8 +38,8 @@ globalVariables(c(".",
 
 
 list_of_avail_metrics <- function() {
-  available_metrics <- c("log_score", "sharpness", "bias", "dss", "crps",
-                         "coverage", "coverage_deviation",
+  available_metrics <- c("ae", "log_score", "sharpness", "bias", "dss", "crps",
+                         "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
                          "underprediction", "overprediction")
 

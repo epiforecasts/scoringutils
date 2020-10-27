@@ -5,7 +5,7 @@
 \alias{quantile_example_data_plain}
 \title{Quantile Example Data - Plain Quantile Format}
 \format{
-A data frame with 660 rows and 6 variables:
+A data frame with 600 rows and 6 variables:
 \describe{
   \item{true_value}{true observed values}
   \item{id}{unique identifier for true observed values}
