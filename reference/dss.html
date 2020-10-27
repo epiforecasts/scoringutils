@@ -150,11 +150,11 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
     <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] -0.06713812  1.03977226  1.38422077  1.39027921  1.83669787  6.17825396
-#&gt;  [7]  7.67675031  2.09569172  2.78581036  3.97777412  5.19384742  2.71992085
-#&gt; [13]  4.85793494  3.34190230  3.15866098  3.73571566  4.44594690  3.37571689
-#&gt; [19]  3.23475952  3.31471786  3.31059377  3.47606465  3.30916963  3.27424120
-#&gt; [25]  3.88810568  8.37237545  3.40040518  3.45090228  5.58619353  5.74833285</div></pre>
+</div><div class='output co'>#&gt;  [1] 0.7878634 1.0489087 1.4141128 3.2463748 3.3452251 3.4091752 3.0425715
+#&gt;  [8] 2.6703955 4.6172821 4.0081203 2.7999985 2.6369212 4.0163668 3.8886355
+#&gt; [15] 6.1743796 3.0103860 3.3284950 2.9242367 2.8978852 3.0002890 2.9810318
+#&gt; [22] 4.6472410 5.8957090 3.8646335 5.1186566 3.4299478 3.4552573 3.5087607
+#&gt; [29] 3.4647916 4.1398909</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

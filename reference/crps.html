@@ -152,11 +152,10 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
     <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>crps</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  0.430975  0.474175  0.433875  0.429375  1.122425  1.146100  1.037325
-#&gt;  [8]  1.694000  1.054200  0.976800  0.817525  1.404750  1.054175  0.816225
-#&gt; [15]  2.173125  1.784625  1.023300  1.026750  1.601600  0.963525  6.339075
-#&gt; [22]  2.329775  3.000900  1.156425  6.322475  2.283250  5.683450  2.419425
-#&gt; [29] 11.230325  1.167575</div></pre>
+</div><div class='output co'>#&gt;  [1] 0.233000 0.448725 0.547000 2.001800 0.642150 0.645900 4.764300 4.462425
+#&gt;  [9] 4.394600 0.926200 1.761750 0.851925 5.132225 0.926500 1.735100 3.293900
+#&gt; [17] 5.122425 1.096725 0.960250 3.522925 5.938150 1.126325 1.207800 5.545250
+#&gt; [25] 1.335150 2.443850 1.667625 5.472225 5.303625 1.265400</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

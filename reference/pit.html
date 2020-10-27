@@ -245,7 +245,7 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>pit</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $p_value
-#&gt; [1] 0.6744613
+#&gt; [1] 0.7788347
 #&gt; 
 #&gt; $sd
 #&gt; [1] NA
@@ -256,10 +256,10 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>pit</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span>,  n_replicates <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $p_value
-#&gt; [1] 0.612787
+#&gt; [1] 0.1826231
 #&gt; 
 #&gt; $sd
-#&gt; [1] 0.03436056
+#&gt; [1] 0.01455812
 #&gt; 
 #&gt; $hist_PIT</div><div class='img'><img src='pit-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
 </div></pre>
