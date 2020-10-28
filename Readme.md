@@ -146,7 +146,7 @@ to help get a sense of the data
     scoringutils::plot_predictions(data, x = "id", range = c(0, 90), 
                                    facet_formula = ~ model)
 
-![](Readme_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](man/figures/unnamed-chunk-2-1.png)<!-- -->
 
 (The data is just randomly generated values. We plan to add real example
 data to make these illustrations more useful in the future)
@@ -156,7 +156,7 @@ data to make these illustrations more useful in the future)
 
     scoringutils::score_table(scores)
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](man/figures/unnamed-chunk-3-1.png)<!-- -->
 
 Given this level of aggregation, not all metrics may make sense. In this
 case, for example, averaging over different quantiles to compute
@@ -174,7 +174,7 @@ Let us look at calibration:
     scoringutils::quantile_coverage(data) + 
       ggplot2::ggtitle("Quantile Coverage")
 
-<img src="Readme_files/figure-gfm/unnamed-chunk-4-1.png" width="50%" /><img src="Readme_files/figure-gfm/unnamed-chunk-4-2.png" width="50%" />
+<img src="man/figures/unnamed-chunk-4-1.png" width="50%" /><img src="man/figures/unnamed-chunk-4-2.png" width="50%" />
 
 Let us look at the individual components of the weighted interval score:
 
@@ -183,7 +183,7 @@ Let us look at the individual components of the weighted interval score:
 
     scoringutils::wis_components(scores)
 
-![](Readme_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/unnamed-chunk-5-1.png)<!-- -->
 
 We can also look at contributions to different metrics by range:
 
@@ -192,7 +192,7 @@ We can also look at contributions to different metrics by range:
 
     scoringutils::range_plot(scores, y = "interval_score")
 
-![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](man/figures/unnamed-chunk-6-1.png)<!-- -->
 
 We can also visualise metrics using a heatmap:
 
@@ -203,7 +203,7 @@ We can also visualise metrics using a heatmap:
                                   dplyr::mutate(horizon = as.factor(horizon)), 
                                 x = "horizon", metric = "bias")
 
-![](Readme_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
 
 For an applied example using real data, have look at a [preliminary
 evaluation of models from the German Forecast
