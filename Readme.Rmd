@@ -13,7 +13,8 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://c
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.path = "man/figures/")
 library(magrittr)
 ```
 
