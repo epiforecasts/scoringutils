@@ -165,13 +165,13 @@
 <p>Using an appropriate level of summary, we can easily use the output for visualisation. The <code>scoringutils</code> package offers some built-in functions to help get a sense of the data</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>scoringutils<span class="op">::</span><span class="kw">plot_predictions</span>(data, <span class="dt">x =</span> <span class="st">"id"</span>, <span class="dt">range =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">90</span>), </span>
 <span id="cb3-2"><a href="#cb3-2"></a>                               <span class="dt">facet_formula =</span> <span class="op">~</span><span class="st"> </span>model)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-2-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-2-1.png"><!-- --></p>
 <p>(The data is just randomly generated values. We plan to add real example data to make these illustrations more useful in the future)</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>scores &lt;-<span class="st"> </span>scoringutils<span class="op">::</span><span class="kw">eval_forecasts</span>(data, </span>
 <span id="cb4-2"><a href="#cb4-2"></a>                             <span class="dt">summarise_by =</span> <span class="kw">c</span>(<span class="st">"model"</span>))</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>scoringutils<span class="op">::</span><span class="kw">score_table</span>(scores)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-3-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-3-1.png"><!-- --></p>
 <p>Given this level of aggregation, not all metrics may make sense. In this case, for example, averaging over different quantiles to compute quantile coverage does not make much sense. If you like, you can select specific metrics for the visualisation.</p>
 <p>Let us look at calibration:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>scores &lt;-<span class="st"> </span>scoringutils<span class="op">::</span><span class="kw">eval_forecasts</span>(data, </span>
@@ -182,19 +182,19 @@
 <span id="cb5-6"><a href="#cb5-6"></a></span>
 <span id="cb5-7"><a href="#cb5-7"></a>scoringutils<span class="op">::</span><span class="kw">quantile_coverage</span>(data) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb5-8"><a href="#cb5-8"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"Quantile Coverage"</span>)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-4-1.png" width="50%"><img src="Readme_files/figure-gfm/unnamed-chunk-4-2.png" width="50%"></p>
+<p><img src="reference/figures/unnamed-chunk-4-1.png" width="50%"><img src="reference/figures/unnamed-chunk-4-2.png" width="50%"></p>
 <p>Let us look at the individual components of the weighted interval score:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>scores &lt;-<span class="st"> </span>scoringutils<span class="op">::</span><span class="kw">eval_forecasts</span>(data, </span>
 <span id="cb6-2"><a href="#cb6-2"></a>                             <span class="dt">summarise_by =</span> <span class="kw">c</span>(<span class="st">"model"</span>))</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a>scoringutils<span class="op">::</span><span class="kw">wis_components</span>(scores)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-5-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
 <p>We can also look at contributions to different metrics by range:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>scores &lt;-<span class="st"> </span>scoringutils<span class="op">::</span><span class="kw">eval_forecasts</span>(data, </span>
 <span id="cb7-2"><a href="#cb7-2"></a>                             <span class="dt">summarise_by =</span> <span class="kw">c</span>(<span class="st">"model"</span>, <span class="st">"range"</span>))</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
 <span id="cb7-4"><a href="#cb7-4"></a>scoringutils<span class="op">::</span><span class="kw">range_plot</span>(scores, <span class="dt">y =</span> <span class="st">"interval_score"</span>)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-6-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-6-1.png"><!-- --></p>
 <p>We can also visualise metrics using a heatmap:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>scores &lt;-<span class="st"> </span>scoringutils<span class="op">::</span><span class="kw">eval_forecasts</span>(data, </span>
 <span id="cb8-2"><a href="#cb8-2"></a>                             <span class="dt">summarise_by =</span> <span class="kw">c</span>(<span class="st">"model"</span>, <span class="st">"horizon"</span>))</span>
@@ -202,7 +202,7 @@
 <span id="cb8-4"><a href="#cb8-4"></a>scoringutils<span class="op">::</span><span class="kw">score_heatmap</span>(scores <span class="op">%&gt;%</span></span>
 <span id="cb8-5"><a href="#cb8-5"></a><span class="st">                              </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">horizon =</span> <span class="kw">as.factor</span>(horizon)), </span>
 <span id="cb8-6"><a href="#cb8-6"></a>                            <span class="dt">x =</span> <span class="st">"horizon"</span>, <span class="dt">metric =</span> <span class="st">"bias"</span>)</span></code></pre></div>
-<p><img src="Readme_files/figure-gfm/unnamed-chunk-7-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-7-1.png"><!-- --></p>
 <p>For an applied example using real data, have look at a <a href="https://github.com/nikosbosse/forecast-report">preliminary evaluation of models from the German Forecast Hub</a>.</p>
 <div id="expected-input-formats" class="section level3">
 <h3 class="hasAnchor">
