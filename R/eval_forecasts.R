@@ -182,7 +182,6 @@ eval_forecasts <- function(data,
 
   # preparations ---------------------------------------------------------------
   # do a copy to avoid that the input may be altered in any way.
-  # this sometimes unexpectedly happens and I don't fully understand it
   data <- data.table::as.data.table(data)
 
 
@@ -239,15 +238,6 @@ eval_forecasts <- function(data,
   } else {
     target_type = "continuous"
   }
-
-
-  # # check if results should be summarised --------------------------------------
-  # if (!identical(by, summarise_by)) {
-  #   summarised <- TRUE
-  # } else {
-  #   summarised <- FALSE
-  # }
-
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
