@@ -17,6 +17,12 @@ score_table(
 \item{summarised_scores}{A data.frame of summarised scores as produced by
 \code{\link{eval_forecasts}}}
 
+\item{y}{the variable to be shown on the y-axis. If \code{NULL} (default),
+all columns that are not scoring metrics will be used. Alternatively,
+you can specify a vector with column names, e.g.
+\code{y = c("model", "location")}. These column names will be concatenated
+to create a unique row identifier (e.g. "model1_location1")}
+
 \item{select_metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{summarised_scores} will
 be shown}
@@ -45,4 +51,9 @@ scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
                                        summarise_by = c("model", "horizon"))
 scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon,
                           ncol = 1)
+
+scoringutils::score_table(scores, y = c("model", "horizon"))
+
+# yields the same result in this case
+scoringutils::score_table(scores)
 }
