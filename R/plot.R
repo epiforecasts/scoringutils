@@ -9,6 +9,14 @@
 #' @param select_metrics A character vector with the metrics to show. If set to
 #' \code{NULL} (default), all metrics present in \code{summarised_scores} will
 #' be shown
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param ncol Number of columns for facet wrap. Only relevant if
+#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
 #' @importFrom data.table setDT melt
@@ -18,11 +26,16 @@
 #' @examples
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
 #'                                        by = c("model", "id", "horizon"),
-#'                                        summarise_by = "model")
-#' scoringutils::score_table(scores)
+#'                                        summarise_by = c("model", "horizon"))
+#' scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon,
+#'                           ncol = 1)
 
 score_table <- function(summarised_scores,
-                        select_metrics = NULL) {
+                        y = NULL,
+                        select_metrics = NULL,
+                        facet_formula = NULL,
+                        ncol = NULL,
+                        facet_wrap_or_grid = "facet_wrap") {
 
 
   # identify metrics -----------------------------------------------------------
@@ -80,10 +93,16 @@ score_table <- function(summarised_scores,
   df[metric %in% metrics_no_color, value_scaled := 0,
   by = metric]
 
-  # create an identifier column by concatinating all columns that
-  # are not a metric
-  identifier_columns <- names(df)[!names(df) %in%
-                                    c("metric", "value", "value_scaled")]
+
+  if (is.null(y)) {
+    # create an identifier column by concatinating all columns that
+    # are not a metric
+    identifier_columns <- names(df)[!names(df) %in%
+                                      c("metric", "value", "value_scaled")]
+  } else {
+    identifier_columns <- y
+  }
+
   df[, identif := do.call(paste, c(.SD, sep = "_")),
      .SDcols = identifier_columns]
 
@@ -103,6 +122,16 @@ score_table <- function(summarised_scores,
     ggplot2::coord_cartesian(expand=FALSE)
 
   # colouring for pit_p_val is not ideal
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      plot <- plot +
+        ggplot2::facet_wrap(facet_formula, ncol = ncol)
+    } else {
+      plot <- plot +
+        ggplot2::facet_grid(facet_formula)
+    }
+  }
 
   return(plot)
 

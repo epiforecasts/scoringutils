@@ -4,7 +4,14 @@
 \alias{score_table}
 \title{Plot Coloured Score Table}
 \usage{
-score_table(summarised_scores, select_metrics = NULL)
+score_table(
+  summarised_scores,
+  y = NULL,
+  select_metrics = NULL,
+  facet_formula = NULL,
+  ncol = NULL,
+  facet_wrap_or_grid = "facet_wrap"
+)
 }
 \arguments{
 \item{summarised_scores}{A data.frame of summarised scores as produced by
@@ -13,6 +20,17 @@ score_table(summarised_scores, select_metrics = NULL)
 \item{select_metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{summarised_scores} will
 be shown}
+
+\item{facet_formula}{formula for facetting in ggplot. If this is \code{NULL}
+(the default), no facetting will take place}
+
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
+
+\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
+\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+\code{facet_grid}. This only takes effect if \code{facet_formula} is not
+\code{NULL}}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores
@@ -24,6 +42,6 @@ Plots a coloured table of summarised scores obtained using
 \examples{
 scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
                                        by = c("model", "id", "horizon"),
-                                       summarise_by = "model")
-scoringutils::score_table(scores)
+                                       summarise_by = c("model", "horizon"))
+scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon)
 }
