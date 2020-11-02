@@ -43,5 +43,6 @@ Plots a coloured table of summarised scores obtained using
 scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
                                        by = c("model", "id", "horizon"),
                                        summarise_by = c("model", "horizon"))
-scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon)
+scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon,
+                          ncol = 1)
 }

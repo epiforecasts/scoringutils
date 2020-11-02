@@ -644,6 +644,7 @@ interval_coverage <- function(summarised_scores,
                        linetype = "dashed") +
     ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
     ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
     # ggplot2::theme(legend.position = "none") +
                    # panel.spacing = ggplot2::unit(5, "mm"),
                    # plot.margin = ggplot2::margin(t = 6, r = 5,
@@ -739,6 +740,7 @@ quantile_coverage <- function(data,
                        linetype = "dashed") +
     ggplot2::geom_line(ggplot2::aes(y = coverage)) +
     ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
     # ggplot2::theme(legend.position = "none") +
                    # panel.spacing = unit(5, "mm")
                    # plot.margin = ggplot2::margin(t = 6, r = 9,
