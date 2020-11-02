@@ -709,52 +709,38 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' data <- scoringutils::quantile_example_data_long
-#'
-#' quantile_coverage(data)
+#' example1 <- scoringutils::quantile_example_data_long
+#' scores <- scoringutils::eval_forecasts(example1,
+#'                                        summarise_by = c("model", "quantile"))
+#' quantile_coverage(scores)
 
-quantile_coverage <- function(data,
-                              summarise_by = c("model", "quantile"),
+quantile_coverage <- function(summarised_scores,
                               colour = "model",
                               facet_formula = NULL,
                               facet_wrap_or_grid = "facet_wrap",
                               scales = "free_y") {
 
-  data <- data.table::as.data.table(data)
-
-  # convert to quantile format if necessary
-  if (!("quantile" %in% names(data))) {
-    if ("sample" %in% names(data)) {
-      data <- scoringutils::sample_to_quantile(data)
-    } else if ("range" %in% names(data)) {
-      data <- scoringutils::range_to_quantile(data)
-    }
-  }
-
-  data[, coverage := mean(true_value <= prediction),
-       by = summarise_by]
-
-  p2 <- ggplot2::ggplot(data = data,
+  p2 <- ggplot2::ggplot(data = summarised_scores,
                         ggplot2::aes_string(x = "quantile", colour = colour)) +
     ggplot2::geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
-                                                0.5, 0.5, 1),
-                                          y = c(0, 0, 0.5,
-                                                0.5, 1, 1),
-                                          g = c("o", "o", "o")),
-                        ggplot2::aes(x = x, y = y, group = g,
-                                     fill = g),
-                        alpha = 0.05,
-                        colour = "white",
-                        fill = "olivedrab3") +
+                                                  0.5, 0.5, 1),
+                                            y = c(0, 0, 0.5,
+                                                  0.5, 1, 1),
+                                            g = c("o", "o", "o")),
+                          ggplot2::aes(x = x, y = y, group = g,
+                                       fill = g),
+                          alpha = 0.05,
+                          colour = "white",
+                          fill = "olivedrab3") +
     ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
                        linetype = "dashed") +
-    ggplot2::geom_line(ggplot2::aes(y = coverage)) +
+    ggplot2::geom_line(ggplot2::aes(y = quantile_coverage)) +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position = "bottom") +
     # ggplot2::theme(legend.position = "none") +
-                   # panel.spacing = unit(5, "mm")
-                   # plot.margin = ggplot2::margin(t = 6, r = 9,
-                   #                               b = 6, l = 0, unit = "mm")) +
+    # panel.spacing = unit(5, "mm")
+    # plot.margin = ggplot2::margin(t = 6, r = 9,
+    #                               b = 6, l = 0, unit = "mm")) +
     ggplot2::xlab("Quantile") +
     ggplot2::ylab("% obs below quantile") +
     ggplot2::coord_cartesian(expand = FALSE)
@@ -772,6 +758,7 @@ quantile_coverage <- function(data,
   return(p2)
 
 }
+
 
 
 
