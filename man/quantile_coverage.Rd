@@ -13,6 +13,10 @@ quantile_coverage(
 )
 }
 \arguments{
+\item{summarised_scores}{Summarised scores as produced by
+\code{\link{eval_forecasts}}. Make sure that "quantile" is included in
+\code{summarise_by} when producing the summarised scores}
+
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
 
@@ -26,15 +30,6 @@ Default is "model".}
 
 \item{scales}{scales argument that gets passed down to ggplot. Only necessary
 if you make use of facetting. Default is "free_y"}
-
-\item{data}{a data.frame that follows the same specifications outlined in
-\code{\link{eval_forecasts}}. The data.frame needs to have columns called
-"true_value", "prediction" and then either a column called sample, or one
-called "quantile" or two columns called "range" and "boundary".}
-
-\item{summarise_by}{grouping used to determine the percentage of true values
-below a predictive quantile. Default is \code{c("model", "quantile")}.
-"quantile" must always be present in \code{summarise_by}.}
 }
 \value{
 ggplot object with a plot of interval coverage
