@@ -495,6 +495,10 @@ score_heatmap <- function(scores,
 #' called "quantile" or two columns called "range" and "boundary".
 #' @param x character vector of length one that denotes the name of the variable
 #' on the x-axis. Usually, this will be "date", but it can be anything else.
+#' @param add_truth_data additional truth data, e.g. past values for which
+#' no predictions are available. This should be a data.frame with a column
+#' called "true_value" and another column corresponding to the x variable selected
+#' for the plot
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
 #' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
@@ -525,6 +529,7 @@ score_heatmap <- function(scores,
 
 plot_predictions <- function(data,
                              x = "date",
+                             add_truth_data = NULL,
                              range = c(0, 50, 90),
                              facet_formula = NULL,
                              facet_wrap_or_grid = "facet_wrap",
@@ -595,6 +600,13 @@ plot_predictions <- function(data,
   plot <- plot +
     ggplot2::labs(x = xlab, y = ylab)
 
+  if(!is.null(add_truth_data)) {
+    plot <- plot +
+      ggplot2::geom_line(data = add_truth_data,
+                         ggplot2::aes(y = true_value, colour = "actual"),
+                         lwd = 0.2)
+  }
+
   return(plot)
 }
 
@@ -641,7 +653,7 @@ interval_coverage <- function(summarised_scores,
                               scales = "free_y") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
-                                                    colour = "model")) +
+                                                    colour = colour)) +
     ggplot2::geom_polygon(data = data.frame(x = c(0, 0, 100),
                                             y = c(0, 100, 100),
                                             g = c("o", "o", "o")),

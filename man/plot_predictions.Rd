@@ -7,6 +7,7 @@
 plot_predictions(
   data,
   x = "date",
+  add_truth_data = NULL,
   range = c(0, 50, 90),
   facet_formula = NULL,
   facet_wrap_or_grid = "facet_wrap",
@@ -23,6 +24,11 @@ called "quantile" or two columns called "range" and "boundary".}
 
 \item{x}{character vector of length one that denotes the name of the variable
 on the x-axis. Usually, this will be "date", but it can be anything else.}
+
+\item{add_truth_data}{additional truth data, e.g. past values for which
+no predictions are available. This should be a data.frame with a column
+called "true_value" and another column corresponding to the x variable selected
+for the plot}
 
 \item{range}{numeric vector indicating the interval ranges to plot. If 0 is
 included in range, the median prediction will be shown.}
