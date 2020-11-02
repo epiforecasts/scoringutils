@@ -6,9 +6,22 @@
 #'
 #' @param summarised_scores A data.frame of summarised scores as produced by
 #' \code{\link{eval_forecasts}}
+#' @param y the variable to be shown on the y-axis. If \code{NULL} (default),
+#' all columns that are not scoring metrics will be used. Alternatively,
+#' you can specify a vector with column names, e.g.
+#' \code{y = c("model", "location")}. These column names will be concatenated
+#' to create a unique row identifier (e.g. "model1_location1")
 #' @param select_metrics A character vector with the metrics to show. If set to
 #' \code{NULL} (default), all metrics present in \code{summarised_scores} will
 #' be shown
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param ncol Number of columns for facet wrap. Only relevant if
+#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
 #' @importFrom data.table setDT melt
@@ -18,11 +31,21 @@
 #' @examples
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
 #'                                        by = c("model", "id", "horizon"),
-#'                                        summarise_by = "model")
+#'                                        summarise_by = c("model", "horizon"))
+#' scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon,
+#'                           ncol = 1)
+#'
+#' scoringutils::score_table(scores, y = c("model", "horizon"))
+#'
+#' # yields the same result in this case
 #' scoringutils::score_table(scores)
 
 score_table <- function(summarised_scores,
-                        select_metrics = NULL) {
+                        y = NULL,
+                        select_metrics = NULL,
+                        facet_formula = NULL,
+                        ncol = NULL,
+                        facet_wrap_or_grid = "facet_wrap") {
 
 
   # identify metrics -----------------------------------------------------------
@@ -80,10 +103,16 @@ score_table <- function(summarised_scores,
   df[metric %in% metrics_no_color, value_scaled := 0,
   by = metric]
 
-  # create an identifier column by concatinating all columns that
-  # are not a metric
-  identifier_columns <- names(df)[!names(df) %in%
-                                    c("metric", "value", "value_scaled")]
+
+  if (is.null(y)) {
+    # create an identifier column by concatinating all columns that
+    # are not a metric
+    identifier_columns <- names(df)[!names(df) %in%
+                                      c("metric", "value", "value_scaled")]
+  } else {
+    identifier_columns <- y
+  }
+
   df[, identif := do.call(paste, c(.SD, sep = "_")),
      .SDcols = identifier_columns]
 
@@ -103,6 +132,16 @@ score_table <- function(summarised_scores,
     ggplot2::coord_cartesian(expand=FALSE)
 
   # colouring for pit_p_val is not ideal
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      plot <- plot +
+        ggplot2::facet_wrap(facet_formula, ncol = ncol)
+    } else {
+      plot <- plot +
+        ggplot2::facet_grid(facet_formula)
+    }
+  }
 
   return(plot)
 
@@ -615,6 +654,7 @@ interval_coverage <- function(summarised_scores,
                        linetype = "dashed") +
     ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
     ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
     # ggplot2::theme(legend.position = "none") +
                    # panel.spacing = ggplot2::unit(5, "mm"),
                    # plot.margin = ggplot2::margin(t = 6, r = 5,
@@ -645,13 +685,9 @@ interval_coverage <- function(summarised_scores,
 #' @description
 #' Plot quantile coverage
 #'
-#' @param data a data.frame that follows the same specifications outlined in
-#' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
-#' "true_value", "prediction" and then either a column called sample, or one
-#' called "quantile" or two columns called "range" and "boundary".
-#' @param summarise_by grouping used to determine the percentage of true values
-#' below a predictive quantile. Default is \code{c("model", "quantile")}.
-#' "quantile" must always be present in \code{summarise_by}.
+#' @param summarised_scores Summarised scores as produced by
+#' \code{\link{eval_forecasts}}. Make sure that "quantile" is included in
+#' \code{summarise_by} when producing the summarised scores
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
@@ -669,51 +705,38 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' data <- scoringutils::quantile_example_data_long
-#'
-#' quantile_coverage(data)
+#' example1 <- scoringutils::quantile_example_data_long
+#' scores <- scoringutils::eval_forecasts(example1,
+#'                                        summarise_by = c("model", "quantile"))
+#' quantile_coverage(scores)
 
-quantile_coverage <- function(data,
-                              summarise_by = c("model", "quantile"),
+quantile_coverage <- function(summarised_scores,
                               colour = "model",
                               facet_formula = NULL,
                               facet_wrap_or_grid = "facet_wrap",
                               scales = "free_y") {
 
-  data <- data.table::as.data.table(data)
-
-  # convert to quantile format if necessary
-  if (!("quantile" %in% names(data))) {
-    if ("sample" %in% names(data)) {
-      data <- scoringutils::sample_to_quantile(data)
-    } else if ("range" %in% names(data)) {
-      data <- scoringutils::range_to_quantile(data)
-    }
-  }
-
-  data[, coverage := mean(true_value <= prediction),
-       by = summarise_by]
-
-  p2 <- ggplot2::ggplot(data = data,
+  p2 <- ggplot2::ggplot(data = summarised_scores,
                         ggplot2::aes_string(x = "quantile", colour = colour)) +
     ggplot2::geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
-                                                0.5, 0.5, 1),
-                                          y = c(0, 0, 0.5,
-                                                0.5, 1, 1),
-                                          g = c("o", "o", "o")),
-                        ggplot2::aes(x = x, y = y, group = g,
-                                     fill = g),
-                        alpha = 0.05,
-                        colour = "white",
-                        fill = "olivedrab3") +
+                                                  0.5, 0.5, 1),
+                                            y = c(0, 0, 0.5,
+                                                  0.5, 1, 1),
+                                            g = c("o", "o", "o")),
+                          ggplot2::aes(x = x, y = y, group = g,
+                                       fill = g),
+                          alpha = 0.05,
+                          colour = "white",
+                          fill = "olivedrab3") +
     ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
                        linetype = "dashed") +
-    ggplot2::geom_line(ggplot2::aes(y = coverage)) +
+    ggplot2::geom_line(ggplot2::aes(y = quantile_coverage)) +
     ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
     # ggplot2::theme(legend.position = "none") +
-                   # panel.spacing = unit(5, "mm")
-                   # plot.margin = ggplot2::margin(t = 6, r = 9,
-                   #                               b = 6, l = 0, unit = "mm")) +
+    # panel.spacing = unit(5, "mm")
+    # plot.margin = ggplot2::margin(t = 6, r = 9,
+    #                               b = 6, l = 0, unit = "mm")) +
     ggplot2::xlab("Quantile") +
     ggplot2::ylab("% obs below quantile") +
     ggplot2::coord_cartesian(expand = FALSE)
@@ -731,6 +754,7 @@ quantile_coverage <- function(data,
   return(p2)
 
 }
+
 
 
 
