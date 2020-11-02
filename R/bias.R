@@ -130,6 +130,8 @@ bias <- function(true_values, predictions) {
 #               range = range, true_value = true_value)
 
 
+# this function needs rewriting (to make it clearer) and documentation
+
 quantile_bias <- function(range, boundary = NULL,
                           lower = NULL, upper = NULL,
                           predictions = NULL, true_value) {
@@ -140,6 +142,20 @@ quantile_bias <- function(range, boundary = NULL,
     upper_ranges <- range
     lower_predictions <- lower
     upper_predictions <- upper
+
+    if(any(is.na(upper)) | any(is.na(lower))) {
+
+      range <- range[!is.na(upper) & !is.na(lower)]
+
+      lower_ranges <- range
+      upper_ranges <- range
+
+      # currently, this relies on the condition that either both or none are missing
+      lower_predictions <- lower[!is.na(lower)]
+      upper_predictions <- upper[!is.na(upper)]
+
+    }
+
   } else {
     lower_ranges <- range[boundary == "lower"]
     lower_predictions <- predictions[boundary == "lower"]
