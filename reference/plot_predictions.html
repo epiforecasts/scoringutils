@@ -120,6 +120,7 @@
     <pre class="usage"><span class='fu'>plot_predictions</span><span class='op'>(</span>
   <span class='va'>data</span>,
   x <span class='op'>=</span> <span class='st'>"date"</span>,
+  add_truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
   range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>90</span><span class='op'>)</span>,
   facet_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
   facet_wrap_or_grid <span class='op'>=</span> <span class='st'>"facet_wrap"</span>,
@@ -142,6 +143,13 @@ called "quantile" or two columns called "range" and "boundary".</p></td>
       <th>x</th>
       <td><p>character vector of length one that denotes the name of the variable
 on the x-axis. Usually, this will be "date", but it can be anything else.</p></td>
+    </tr>
+    <tr>
+      <th>add_truth_data</th>
+      <td><p>additional truth data, e.g. past values for which
+no predictions are available. This should be a data.frame with a column
+called "true_value" and another column corresponding to the x variable selected
+for the plot</p></td>
     </tr>
     <tr>
       <th>range</th>
