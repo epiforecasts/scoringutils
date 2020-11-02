@@ -641,7 +641,7 @@ interval_coverage <- function(summarised_scores,
                               scales = "free_y") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
-                                                    colour = "model")) +
+                                                    colour = colour)) +
     ggplot2::geom_polygon(data = data.frame(x = c(0, 0, 100),
                                             y = c(0, 100, 100),
                                             g = c("o", "o", "o")),
