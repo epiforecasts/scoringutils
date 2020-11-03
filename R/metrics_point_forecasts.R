@@ -51,7 +51,7 @@ ae_median <- function(true_values, predictions) {
 
   median_predictions <- apply(as.matrix(predictions),
                               MARGIN = 1,
-                              FUN = mean)
+                              FUN = median)
 
   ae_median <- abs(true_values - median_predictions)
 
