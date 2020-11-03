@@ -166,7 +166,17 @@ quantile_bias <- function(range, boundary = NULL,
   lower_quantiles <- abs(100 - lower_ranges) / (2 * 100)
   upper_quantiles <- abs(100 + upper_ranges) / (2 * 100)
 
-  median_prediction <- upper_predictions[upper_ranges == 0]
+  # handling if median is not available - compute median as mean between two
+  # inner most quantiles
+  if (0 %in% range) {
+    median_prediction <- upper_predictions[upper_ranges == 0]
+  } else {
+    median_prediction <-
+      0.5 * upper_predictions[upper_ranges == min(upper_ranges)] +
+      0.5 * lower_predictions[lower_ranges == min(lower_ranges)]
+  }
+
+
   if (true_value == median_prediction) {
     bias <- 0
     return(bias)
