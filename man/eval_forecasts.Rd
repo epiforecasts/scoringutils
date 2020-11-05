@@ -8,6 +8,7 @@ eval_forecasts(
   data,
   by = NULL,
   summarise_by = by,
+  metrics = NULL,
   quantiles = c(),
   sd = FALSE,
   pit_plots = FALSE,
@@ -74,6 +75,8 @@ quantiles for plotting you may want to score by regions, but then summarise
 over these regions.
 \code{summarise_by} is the grouping level used to compute (and possibly plot)
 the pit.}
+
+\item{metrics}{the metrics you want to have in the output}
 
 \item{quantiles}{numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the
@@ -163,9 +166,10 @@ eval <- scoringutils::eval_forecasts(quantile_example,
                                      by = c("model", "horizon", "id"))
 
 #long format
+
 eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
                                      by = c("model", "horizon", "id"),
-                                     summarise_by = c("model", "quantile", "range"))
+                                     summarise_by = c("model", "range"))
 
 ## Integer Forecasts
 integer_example <- data.table::setDT(scoringutils::integer_example_data)

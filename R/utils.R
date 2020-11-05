@@ -1,6 +1,6 @@
 globalVariables(c(".",
                   ".SD",
-                  "ae",
+                  "aem",
                   "boundary",
                   "Brier_score",
                   "count",
