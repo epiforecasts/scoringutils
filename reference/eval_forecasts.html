@@ -127,6 +127,7 @@ continuous, integer-valued or binary variables.</p>
   <span class='va'>data</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
   summarise_by <span class='op'>=</span> <span class='va'>by</span>,
+  metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
   quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
   sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
   pit_plots <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -196,6 +197,10 @@ quantiles for plotting you may want to score by regions, but then summarise
 over these regions.
 <code>summarise_by</code> is the grouping level used to compute (and possibly plot)
 the pit.</p></td>
+    </tr>
+    <tr>
+      <th>metrics</th>
+      <td><p>the metrics you want to have in the output</p></td>
     </tr>
     <tr>
       <th>quantiles</th>
@@ -306,9 +311,10 @@ PLoS Comput Biol 15(2): e1006785.
                                      by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"id"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>#long format</span>
+
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>,
                                      by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"id"</span><span class='op'>)</span>,
-                                     summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"quantile"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
+                                     summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Integer Forecasts</span>
 <span class='va'>integer_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='integer_example_data.html'>integer_example_data</a></span><span class='op'>)</span>
