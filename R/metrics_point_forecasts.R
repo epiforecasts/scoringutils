@@ -40,6 +40,7 @@ mse <- function(true_values, predictions) {
 #' number of Monte Carlo samples. Alternatively, predictions can just be a vector
 #' of size n
 #' @return vector with the scoring values
+#' @importFrom stats median
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)

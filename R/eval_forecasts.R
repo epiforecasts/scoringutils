@@ -82,6 +82,7 @@
 #' over these regions.
 #' \code{summarise_by} is the grouping level used to compute (and possibly plot)
 #' the pit.
+#' @param metrics the metrics you want to have in the output
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
 #' Instead of just returning a mean, quantiles will be returned for the
 #' groups specified through `summarise_by`. By default, no quantiles are
@@ -136,9 +137,10 @@
 #'                                      by = c("model", "horizon", "id"))
 #'
 #' #long format
+#'
 #' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
 #'                                      by = c("model", "horizon", "id"),
-#'                                      summarise_by = c("model", "quantile", "range"))
+#'                                      summarise_by = c("model", "range"))
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
@@ -172,6 +174,7 @@
 eval_forecasts <- function(data,
                            by = NULL,
                            summarise_by = by,
+                           metrics = NULL,
                            quantiles = c(),
                            sd = FALSE,
                            pit_plots = FALSE,
@@ -238,6 +241,19 @@ eval_forecasts <- function(data,
   } else {
     target_type = "continuous"
   }
+
+  # only compute the metrics desired by the user -------------------------------
+  all_metrics <- list_of_avail_metrics()
+  if (is.null(metrics)) {
+    metrics  <- all_metrics
+  } else {
+    if (!all(metrics %in% all_metrics)) {
+      msg <- paste(setdiff(metrics, all_metrics),
+                   "is not an available metric and will not be computed")
+    }
+  }
+
+
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
@@ -325,19 +341,38 @@ eval_forecasts <- function(data,
 
 
     # compute absolute error based on quantile version
-    quantile_data[, ae := abs(true_value - prediction)]
+    abs_err <- function(true_value, prediction, quantile) {
+      if (0.5 %in% quantile) {
+        ae <- abs(unique(true_value - prediction[quantile == 0.5]))
+      } else {
+        ae <- NA
+      }
+      return(ae)
+    }
+
+    quantile_data[, aem := abs_err(true_value,
+                                   prediction,
+                                   quantile),
+                  by = by]
+    # tmp <- quantile_data[quantile == 0.5, .(ae = abs(true_value - prediction))]
+    # quantile_data <- merge(quantile_data, tmp)
+
 
     # compute quantile coverage based on quantile version
     quantile_data[, quantile_coverage := (true_value <= prediction)]
 
     # delete unnecessary columns before merging back
-    keep_cols <- unique(c(by, "quantile", "ae", "quantile_coverage",
+    keep_cols <- unique(c(by, "quantile", "aem", "quantile_coverage",
                           "boundary", "range"))
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
     quantile_data[, eval(delete_cols) := NULL]
 
+    #duplicate median column before merging
+    median <- quantile_data[quantile == 0.5, ][, boundary := "upper"]
+    quantile_data <- data.table::rbindlist(list(quantile_data, median))
+
     # merge back with other metrics
-    merge_cols <- setdiff(keep_cols, c("ae", "quantile_coverage", "quantile",
+    merge_cols <- setdiff(keep_cols, c("aem", "quantile_coverage", "quantile",
                                        "boundary"))
     res <- merge(res, quantile_data, by = merge_cols)
 
@@ -348,7 +383,7 @@ eval_forecasts <- function(data,
         res <- add_quantiles(res,
                              c("interval_score", "coverage",
                                "overprediction", "underprediction",
-                               "coverage_deviation", "bias", "sharpness", "ae"),
+                               "coverage_deviation", "bias", "sharpness", "aem"),
                              quantiles,
                              by = c(summarise_by))
       }
@@ -358,7 +393,7 @@ eval_forecasts <- function(data,
         res <- add_sd(res,
                       varnames = c("interval_score", "bias", "coverage",
                                    "overprediction", "underprediction",
-                                   "coverage_deviation", "sharpness", "ae"),
+                                   "coverage_deviation", "sharpness", "aem"),
                       by = c(summarise_by))
       }
 
@@ -366,7 +401,7 @@ eval_forecasts <- function(data,
       res <- res[, lapply(.SD, mean, na.rm = TRUE),
                  by = c(summarise_by),
                  .SDcols = colnames(res) %like%
-                   "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|ae"]
+                   "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem"]
     }
     return(res)
   }
@@ -526,7 +561,11 @@ eval_forecasts <- function(data,
                 pit_plots = pit_histograms)
   }
 
-  return (res)
+  # # return only those metrics the user wants to see
+  # filter_cols <- unique(c(by, summarise_by, metrics))
+  #
+  # return (res[, filter_cols])
+  return(res)
 }
 
 
