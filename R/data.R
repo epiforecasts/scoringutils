@@ -11,7 +11,6 @@
 #'   \item{prediction}{predicted probability that the corresponding true
 #'   value will be 1}
 #' }
-
 "binary_example_data"
 
 
