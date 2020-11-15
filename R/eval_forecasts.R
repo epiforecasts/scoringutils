@@ -188,6 +188,14 @@ eval_forecasts <- function(data,
   data <- data.table::as.data.table(data)
 
 
+  # error handling
+  if (any(is.na(true_value))) {
+    if(verbose) {
+      warning("There are NA values in the true values provided")
+    }
+  }
+
+
   if (is.null(by)) {
     protected_columns <- c("prediction", "true_value", "sample", "quantile",
                            "range", "boundary")

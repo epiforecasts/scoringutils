@@ -130,8 +130,9 @@ bias <- function(true_values, predictions) {
 #               range = range, true_value = true_value)
 
 
-quantile_bias <- function(range, boundary = NULL,
+quantile_bias <- function(range,
                           lower = NULL, upper = NULL,
+                          boundary = NULL,
                           predictions = NULL, true_value) {
 
   if (is.null(boundary)) {
