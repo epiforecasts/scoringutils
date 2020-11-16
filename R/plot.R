@@ -64,12 +64,6 @@ score_table <- function(summarised_scores,
   # are close to zero and deviations in both directions is worse
   summarised_scores <- data.table::as.data.table(summarised_scores)
 
-  # # sort columns
-  # summarised_scores[, model := forcats::fct_reorder(model,
-  #                                                   interval_score,
-  #                                                   .fun='mean',
-  #                                                   .desc = TRUE)]
-
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
   metrics_non_min <- c("bias", "coverage_deviation")
@@ -452,21 +446,6 @@ score_heatmap <- function(scores,
 
   scores[, eval(metric) := round(get(metric), 2)]
 
-  # scores <- scores %>%
-  #   dplyr::arrange(state, model, interval_score) %>%
-  #   dplyr::group_by(state) %>%
-  #   dplyr::mutate(cov_scaled = (coverage_deviation) / sd(coverage_deviation)) %>%
-  #   dplyr::ungroup() %>%
-  #   dplyr::mutate(model = forcats::fct_reorder(model,
-  #                                              interval_score,
-  #                                              .fun='mean',
-  #                                              .desc = TRUE),
-  #                 state = forcats::fct_reorder(state,
-  #                                              coverage_deviation,
-  #                                              .fun='mean',
-  #                                              .desc = TRUE))
-
-
   ggplot2::ggplot(scores,
                   ggplot2::aes_string(y = y,
                                       x = x,
@@ -667,10 +646,6 @@ interval_coverage <- function(summarised_scores,
     ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position = "bottom") +
-    # ggplot2::theme(legend.position = "none") +
-                   # panel.spacing = ggplot2::unit(5, "mm"),
-                   # plot.margin = ggplot2::margin(t = 6, r = 5,
-                   #                               b = 6, l = 4, unit = "mm")) +
     ggplot2::ylab("% Obs inside interval") +
     ggplot2::xlab("Interval range") +
     ggplot2::coord_cartesian(expand = FALSE)
@@ -745,10 +720,6 @@ quantile_coverage <- function(summarised_scores,
     ggplot2::geom_line(ggplot2::aes(y = quantile_coverage)) +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position = "bottom") +
-    # ggplot2::theme(legend.position = "none") +
-    # panel.spacing = unit(5, "mm")
-    # plot.margin = ggplot2::margin(t = 6, r = 9,
-    #                               b = 6, l = 0, unit = "mm")) +
     ggplot2::xlab("Quantile") +
     ggplot2::ylab("% obs below quantile") +
     ggplot2::coord_cartesian(expand = FALSE)
@@ -766,13 +737,3 @@ quantile_coverage <- function(summarised_scores,
   return(p2)
 
 }
-
-
-
-
-
-
-
-## make fixed effects regression and plot random effects?
-
-

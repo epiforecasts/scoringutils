@@ -16,16 +16,43 @@
 #' correct form the function will automatically figure out the type of
 #' prediction and true values and return appropriate scoring metrics.
 #'
+#' The package also has a lot of default visualisation based on the output
+#' created by \code{\link{eval_forecasts}}.
+#'
+#' \itemize{
+#' \item \code{\link{score_table}}
+#' \item \code{\link{correlation_plot}}
+#' \item \code{\link{wis_components}}
+#' \item \code{\link{range_plot}}
+#' \item \code{\link{score_heatmap}}
+#' \item \code{\link{plot_predictions}}
+#' \item \code{\link{interval_coverage}}
+#' \item \code{\link{quantile_coverage}}
+#' }
+#'
 #' Alternatively, the following functions can be accessed directly:
 #'
 #' \itemize{
 #' \item \code{\link{brier_score}}
 #' \item \code{\link{pit}}
 #' \item \code{\link{bias}}
+#' \item \code{\link{quantile_bias}}
 #' \item \code{\link{sharpness}}
 #' \item \code{\link{crps}}
 #' \item \code{\link{logs}}
 #' \item \code{\link{dss}}
+#' \item \code{\link{ae_median}}
+#' }
+#'
+#' Predictions can be evaluated in a lot of differnent formats. If you want to
+#' convert from one format to the other, the following helper functions can
+#' do that for you:
+#'
+#' \itemize{
+#' \item \code{\link{sample_to_range}}
+#' \item \code{\link{sample_to_quantile}}
+#' \item \code{\link{quantile_to_range}}
+#' \item \code{\link{range_to_quantile}}
 #' }
 #'
 #' @docType package
