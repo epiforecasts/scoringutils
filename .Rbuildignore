@@ -9,3 +9,5 @@
 ^R/sandbox\.R$
 ^Readme.md
 ^Readme.Rmd
+^doc$
+^Meta$
