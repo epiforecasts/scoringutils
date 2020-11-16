@@ -179,7 +179,6 @@ bias <- function(true_values, predictions) {
 #'               range = range, true_value = true_value)
 #'
 #' @export
-#' @references
 #'
 
 quantile_bias <- function(range, lower, upper,

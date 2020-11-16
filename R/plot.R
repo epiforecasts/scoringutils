@@ -311,26 +311,6 @@ wis_components <- function(scores,
 
 }
 
-# wis_components_rel <- function(scores, x = "model") {
-#
-#   df <- data.table::melt(scores, measure.vars = c("is_underprediction",
-#                                                   "is_overprediction",
-#                                                   "sharpness"))
-#
-#   ggplot2::ggplot(df, ggplot2::aes(x = horizon, y = value, group = group,
-#                                    fill = variable)) +
-#     ggplot2::geom_bar(position = "fill", stat = "identity")
-#
-#
-# }
-
-
-
-
-
-
-
-
 
 
 #' @title Plot Metrics by Range of the Prediction Interval
