@@ -52,15 +52,40 @@ A collection of different metrics and scoring rules can be accessed through
 the function eval_forecasts. Given a data.frame of the
 correct form the function will automatically figure out the type of
 prediction and true values and return appropriate scoring metrics.
+The package also has a lot of default visualisation based on the output
+created by eval_forecasts.
+
+score_table
+correlation_plot
+wis_components
+range_plot
+score_heatmap
+plot_predictions
+interval_coverage
+quantile_coverage
+
+
 Alternatively, the following functions can be accessed directly:
 
 brier_score
 pit
 bias
+quantile_bias
 sharpness
 crps
 logs
 dss
+ae_median
+
+
+Predictions can be evaluated in a lot of differnent formats. If you want to
+convert from one format to the other, the following helper functions can
+do that for you:
+
+sample_to_range
+sample_to_quantile
+quantile_to_range
+range_to_quantile
 
 " />
 
@@ -148,15 +173,40 @@ integer, or binary.</p>
 the function <code><a href='eval_forecasts.html'>eval_forecasts</a></code>. Given a data.frame of the
 correct form the function will automatically figure out the type of
 prediction and true values and return appropriate scoring metrics.</p>
+<p>The package also has a lot of default visualisation based on the output
+created by <code><a href='eval_forecasts.html'>eval_forecasts</a></code>.</p>
+<ul>
+<li><p><code><a href='score_table.html'>score_table</a></code></p></li>
+<li><p><code><a href='correlation_plot.html'>correlation_plot</a></code></p></li>
+<li><p><code><a href='wis_components.html'>wis_components</a></code></p></li>
+<li><p><code><a href='range_plot.html'>range_plot</a></code></p></li>
+<li><p><code><a href='score_heatmap.html'>score_heatmap</a></code></p></li>
+<li><p><code><a href='plot_predictions.html'>plot_predictions</a></code></p></li>
+<li><p><code><a href='interval_coverage.html'>interval_coverage</a></code></p></li>
+<li><p><code><a href='quantile_coverage.html'>quantile_coverage</a></code></p></li>
+</ul>
+
 <p>Alternatively, the following functions can be accessed directly:</p>
 <ul>
 <li><p><code><a href='brier_score.html'>brier_score</a></code></p></li>
 <li><p><code><a href='pit.html'>pit</a></code></p></li>
 <li><p><code><a href='bias.html'>bias</a></code></p></li>
+<li><p><code><a href='quantile_bias.html'>quantile_bias</a></code></p></li>
 <li><p><code><a href='sharpness.html'>sharpness</a></code></p></li>
 <li><p><code><a href='crps.html'>crps</a></code></p></li>
 <li><p><code><a href='logs.html'>logs</a></code></p></li>
 <li><p><code><a href='dss.html'>dss</a></code></p></li>
+<li><p><code><a href='ae_median.html'>ae_median</a></code></p></li>
+</ul>
+
+<p>Predictions can be evaluated in a lot of differnent formats. If you want to
+convert from one format to the other, the following helper functions can
+do that for you:</p>
+<ul>
+<li><p><code><a href='sample_to_range.html'>sample_to_range</a></code></p></li>
+<li><p><code><a href='sample_to_quantile.html'>sample_to_quantile</a></code></p></li>
+<li><p><code><a href='quantile_to_range.html'>quantile_to_range</a></code></p></li>
+<li><p><code><a href='range_to_quantile.html'>range_to_quantile</a></code></p></li>
 </ul>
 
     </div>
