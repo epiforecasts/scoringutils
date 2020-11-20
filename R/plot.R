@@ -525,7 +525,8 @@ plot_predictions <- function(data,
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
                                       group = range, fill = range),
                          alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = true_value), size = 0.5) +
+    ggplot2::geom_point(ggplot2::aes(y = true_value, colour = "actual"),
+                        size = 0.5) +
     ggplot2::geom_line(ggplot2::aes(y = true_value, colour = "actual"),
                        lwd = 0.2) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
@@ -561,6 +562,9 @@ plot_predictions <- function(data,
 
   if(!is.null(add_truth_data)) {
     plot <- plot +
+      ggplot2::geom_point(data = add_truth_data,
+                          ggplot2::aes(y = true_value, colour = "actual"),
+                          size = 0.5) +
       ggplot2::geom_line(data = add_truth_data,
                          ggplot2::aes(y = true_value, colour = "actual"),
                          lwd = 0.2)
