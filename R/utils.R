@@ -38,7 +38,7 @@ globalVariables(c(".",
 
 
 list_of_avail_metrics <- function() {
-  available_metrics <- c("ae", "log_score", "sharpness", "bias", "dss", "crps",
+  available_metrics <- c("aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
                          "underprediction", "overprediction")
