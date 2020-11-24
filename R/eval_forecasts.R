@@ -191,6 +191,9 @@ eval_forecasts <- function(data,
   # do a copy to avoid that the input may be altered in any way.
   data <- data.table::as.data.table(data)
 
+  # remove any rows where the true value is missing
+  data <- data[!is.na(true_value)]
+
 
   # error handling
   if (any(is.na(data$true_value))) {
@@ -238,6 +241,27 @@ eval_forecasts <- function(data,
   # check if predictions are integer, continuous, etc. -------------------------
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data)) {
     prediction_type <- "quantile"
+
+    # check if long or wide format
+    if ("boundary" %in% names(data)) {
+      wide = FALSE
+    } else {
+      wide = TRUE
+    }
+
+    if (wide) {
+      # convert into long format
+      colnames <- colnames(data)
+      ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
+
+      data <- data.table::melt(data,
+                               measure.vars = ranges,
+                               variable.name = "range",
+                               value.name = "prediction")
+      data[, boundary := gsub("_.*", "", range)]
+      data[, range := as.numeric(gsub("^.*?_","", range))]
+    }
+
   } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
     prediction_type <- "integer"
   } else {
@@ -253,6 +277,10 @@ eval_forecasts <- function(data,
   } else {
     target_type = "continuous"
   }
+
+
+  # remove any rows where the prediction is missing
+  data <- data[!is.na(prediction)]
 
   # # only compute the metrics desired by the user -------------------------------
   # all_metrics <- list_of_avail_metrics()
@@ -296,25 +324,7 @@ eval_forecasts <- function(data,
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
 
-    # check if long or wide format
-    if ("boundary" %in% names(data)) {
-      wide = FALSE
-    } else {
-      wide = TRUE
-    }
 
-    if (wide) {
-      # convert into long format
-      colnames <- colnames(data)
-      ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
-
-      data <- data.table::melt(data,
-                               measure.vars = ranges,
-                               variable.name = "range",
-                               value.name = "prediction")
-      data[, boundary := gsub("_.*", "", range)]
-      data[, range := as.numeric(gsub("^.*?_","", range))]
-    }
 
     # save quantile version of the forecast for later
     quantile_data <- scoringutils::range_to_quantile(data,
