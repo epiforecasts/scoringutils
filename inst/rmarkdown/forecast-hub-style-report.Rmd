@@ -11,10 +11,9 @@ params:
 ---
 
 
-  <!-- todo:  -->
-  <!-- - PIT histograms -->
-  <!-- - Sophie's ranking graph -->
-<!-- - temp dir data -->
+<!-- todo:  -->
+<!-- - PIT histograms -->
+<!-- toc -->
 
 ```{r setup, include=FALSE}
 # packages
@@ -180,6 +179,10 @@ for (location in locations) {
 
 # Score Ranking {.tabset}
 
+
+Only those forecasters are named who have submitted a forecast in the most recent evaluated week.
+
+
 ``` {r results = 'asis', eval = TRUE}
 plot_bump_helper <- function(data, target_type = NULL, location = NULL,
                              forecast_date = NULL, horizon = NULL) {
@@ -209,13 +212,14 @@ plot_bump_helper <- function(data, target_type = NULL, location = NULL,
   plot <- ggplot2::ggplot(scores,
                           ggplot2::aes(x = forecast_date,
                                        y = rank, color = model)) +
-    ggbump::geom_bump(smooth = 15, size = 3, alpha = 0.1, na.rm = TRUE) +
-    ggbump::geom_bump(smooth = 15, size = 0.5, alpha = 1, na.rm = TRUE) +
+    ggplot2::geom_point(size = 3, alpha = 1) + 
+    ggbump::geom_bump(smooth = 15, size = 3, alpha = 0.1, na.rm = FALSE) +
+    ggbump::geom_bump(smooth = 15, size = 0.5, alpha = 1, na.rm = FALSE) +
     ggplot2::geom_text(data = scores %>%
                          dplyr::filter(forecast_date == max(forecast_date)),
                        ggplot2::aes(label = model),
                        color = "grey10",
-                       nudge_x = .31,
+                       nudge_x = .61,
                        hjust = 0,
                        size = 2.6) +
     ggplot2::theme_minimal() +
@@ -223,6 +227,9 @@ plot_bump_helper <- function(data, target_type = NULL, location = NULL,
     ggplot2::scale_y_reverse() +
     ggplot2::scale_x_date(expand = ggplot2::expansion(add = c(0, 12))) +
     ggplot2::labs(title = paste("Incident", target_type, "forecasts"))
+  
+
+  
 
   # plot <- scoringutils::score_table(scores) +
   #   ggplot2::ggtitle(paste("Incident", target_type, "forecasts"))
@@ -236,10 +243,12 @@ cat("\n\n## Overall \n")
 pp <- plot_function(data)
 check_print(pp)
 
-cat("\n\n## Overall separate \n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
 }
 
 # by location
@@ -304,10 +313,12 @@ cat("\n\n## Overall \n\n")
 pp <- plot_function(data)
 check_print(pp)
 
-cat("\n\n## Overall separate \n\n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
 }
 
 # by location
@@ -351,22 +362,23 @@ for (horizon in horizons) {
   pp <- plot_function(data, horizon = horizon)
   check_print(pp)
 
-  cat("\n\n### Overall separate \n\n")
-  for (target_type in target_types) {
-    p1 <- plot_function(data, target_type = target_type,
-                        horizon = horizon)
-    check_print(p1)
+  if (length(target_types) > 1) {
+    cat("\n\n### Overall separate \n")
+    for (target_type in target_types) {
+      p1 <- plot_function(data, target_type = target_type)
+      check_print(p1)
+    }
   }
 
   # by location
   for (location in locations) {
 
     cat("\n\n###", location, "\n\n")
-    cat("\n\n ### Overall \n\n")
-    for (target_type in target_types) {
-      p1 <- plot_function(data, target_type = target_type, location = location)
-      check_print(p1)
-    }
+    # cat("\n\n #### Overall \n\n")
+    # for (target_type in target_types) {
+    #   p1 <- plot_function(data, target_type = target_type, location = location)
+    #   check_print(p1)
+    # }
 
     for (target_type in target_types) {
       p1 <- plot_function(data, target_type = target_type,
@@ -418,10 +430,12 @@ cat("\n\n## Overall \n")
 pp <- plot_function(data)
 check_print(pp)
 
-cat("\n\n## Overall separate \n\n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
 }
 
 # by location
@@ -435,7 +449,7 @@ for (location in locations) {
   }
 
   for (forecast_date in forecast_dates) {
-    cat(paste0("### ", forecast_date), "\n")
+    cat(paste0("\n\n### ", forecast_date), "\n\n")
     for (target_type in target_types) {
       p1 <- plot_function(data, target_type = target_type,
                           location = location,
@@ -451,7 +465,7 @@ for (location in locations) {
 
 # Calibration {.tabset}
 
-## Interval Coverage {.tabset .tabset-pill}
+## Interval Coverage {.tabset .tabset-pills}
 
 ``` {r fig.width = 12, results = 'asis', eval = TRUE}
 plot_interval_coverage_helper <- function(data, target_type = NULL, location = NULL,
@@ -478,34 +492,36 @@ plot_function <- plot_interval_coverage_helper
 
 
 # replace by template ##########################################################
-cat("\n\n### Overall \n")
+cat("\n\n### Overall \n\n")
 pp <- plot_function(data)
 check_print(pp)
 
-cat("\n\n### Overall separate \n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
-}
-
-# by location
-for (location in locations) {
-  cat("\n\n###", location, "{.tabset}\n\n")
-  cat("\n\n ### Overall \n\n")
+if (length(target_types) > 1) {
+  cat("\n\n### Overall separate \n\n")
   for (target_type in target_types) {
-    p1 <- plot_function(data, target_type = target_type, location = location)
+    p1 <- plot_function(data, target_type = target_type)
     check_print(p1)
   }
-  for (forecast_date in forecast_dates) {
-    cat(paste0("#### ", forecast_date), "\n")
-    for (target_type in target_types) {
-      p1 <- plot_function(data, target_type = target_type,
-                          location = location,
-                          forecast_date = forecast_date)
-      check_print(p1)
-    }
-  }
 }
+
+# # by location
+# for (location in locations) {
+#   cat("\n\n###", location, "{.tabset}\n\n")
+#   cat("\n\n #### Overall \n\n")
+#   for (target_type in target_types) {
+#     p1 <- plot_function(data, target_type = target_type, location = location)
+#     check_print(p1)
+#   }
+#   for (forecast_date in forecast_dates) {
+#     cat(paste0("\n\n#### ", forecast_date), "\n\n")
+#     for (target_type in target_types) {
+#       p1 <- plot_function(data, target_type = target_type,
+#                           location = location,
+#                           forecast_date = forecast_date)
+#       check_print(p1)
+#     }
+#   }
+# }
 # replace by template ##########################################################
 ```
 
@@ -540,35 +556,37 @@ plot_function <- plot_quantile_coverage_helper
 
 
 # replace by template ##########################################################
-cat("\n\n### Overall \n")
+cat("\n\n### Overall \n\n")
 pp <- plot_function(data)
 print(pp)
 cat("\n\n")
 
-cat("\n\n### Overall separate \n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
+if (length(target_types) > 1) {
+  cat("\n\n### Overall separate \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
 }
 
 # by location
-for (location in locations) {
-  cat("\n\n###", location, "{.tabset}\n\n")
-  cat("\n\n ### Overall \n\n")
-  for (target_type in target_types) {
-    p1 <- plot_function(data, target_type = target_type, location = location)
-    check_print(p1)
-  }
-  for (forecast_date in forecast_dates) {
-    cat(paste0("#### ", forecast_date), "\n")
-    for (target_type in target_types) {
-      p1 <- plot_function(data, target_type = target_type,
-                          location = location,
-                          forecast_date = forecast_date)
-      check_print(p1)
-    }
-  }
-}
+# for (location in locations) {
+#   cat("\n\n###", location, "{.tabset}\n\n")
+#   cat("\n\n #### Overall \n\n")
+#   for (target_type in target_types) {
+#     p1 <- plot_function(data, target_type = target_type, location = location)
+#     check_print(p1)
+#   }
+#   for (forecast_date in forecast_dates) {
+#     cat(paste0("\n\n#### ", forecast_date), "\n\n")
+#     for (target_type in target_types) {
+#       p1 <- plot_function(data, target_type = target_type,
+#                           location = location,
+#                           forecast_date = forecast_date)
+#       check_print(p1)
+#     }
+#   }
+# }
 
 ```
 
@@ -610,16 +628,18 @@ cat("\n\n## Overall \n")
 pp <- plot_function(data)
 check_print(pp)
 
-cat("\n\n## Overall separate \n\n")
-for (target_type in target_types) {
-  p1 <- plot_function(data, target_type = target_type)
-  check_print(p1)
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
 }
 
 
 cat("\n\n## Separate by date {.tabset} \n\n")
 for (forecast_date in forecast_dates) {
-  cat(paste0("### ", forecast_date), "\n")
+  cat(paste0("\n\n### ", forecast_date), "\n")
   for (target_type in target_types) {
     p1 <- plot_function(data, target_type = target_type,,
                         forecast_date = forecast_date)

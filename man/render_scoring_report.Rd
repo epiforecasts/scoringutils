@@ -8,7 +8,8 @@ render_scoring_report(
   format = "html_document",
   truth_data,
   prediction_data,
-  params = list(locations = "all", forecast_dates = "all", horizons = "all"),
+  params = list(locations = "all", forecast_dates = "all", horizons = "all",
+    target_types = "all"),
   interactive = FALSE,
   save_dir = NULL,
   filename = NULL
@@ -17,6 +18,12 @@ render_scoring_report(
 \arguments{
 \item{format}{Character string, defaults to `"html_document"`. The format to render the report to.
 See `?rmarkdown::render` for details.}
+
+\item{truth_data}{data will all observed values}
+
+\item{prediction_data}{dataframe with predictions}
+
+\item{params}{parameters. Currently supported are locations, forecast_dates, target_types, horizons}
 
 \item{interactive}{Logical, defaults to `FALSE`. When the format allows should graphs be interactive.}
 
