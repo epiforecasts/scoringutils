@@ -8,6 +8,7 @@ render_scoring_report(
   format = "html_document",
   truth_data,
   prediction_data,
+  document_title = "Scoring Report",
   params = list(locations = "all", forecast_dates = "all", horizons = "all",
     target_types = "all"),
   interactive = FALSE,

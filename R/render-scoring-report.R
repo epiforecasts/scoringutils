@@ -23,6 +23,7 @@
 render_scoring_report <- function(format = "html_document",
                                   truth_data,
                                   prediction_data,
+                                  document_title = "Scoring Report",
                                   params = list(locations = "all",
                                                 forecast_dates = "all",
                                                 horizons = "all",
@@ -65,23 +66,23 @@ render_scoring_report <- function(format = "html_document",
     message("Rendering report to ", save_dir)
   }
 
-  if ("locations" %in% names(params) & params$locations[1] == "all") {
+  if ("locations" %in% names(params) && params$locations[1] == "all") {
     locations <- prediction_data$location_name %>%
       unique()
   }
 
-  if ("forecast_dates" %in% names(params) & params$forecast_dates[1] == "all") {
+  if ("forecast_dates" %in% names(params) && params$forecast_dates[1] == "all") {
     params$forecast_dates <- prediction_data %>%
       dplyr::pull(forecast_date) %>%
       unique() %>%
       as.character()
   }
-  if ("target_types" %in% names(params) & params$target_types[1] == "all") {
+  if ("target_types" %in% names(params) && params$target_types[1] == "all") {
     params$target_types <- prediction_data %>%
       dplyr::pull(target_type) %>%
       unique()
   }
-  if ("horizons" %in% names(params) & params$horizons[1] == "all") {
+  if ("horizons" %in% names(params) && params$horizons[1] == "all") {
     horizons <- prediction_data %>%
       dplyr::pull(horizon) %>%
       unique()
@@ -105,7 +106,8 @@ render_scoring_report <- function(format = "html_document",
                     output_dir = save_dir,
                     intermediates_dir = save_dir,
                     params = list(
-                      temp_dir = temp_dir
+                      temp_dir = temp_dir,
+                      set_title = document_title
                     ),
                     envir = new.env(),
                     clean = TRUE

@@ -1,9 +1,10 @@
 ---
-title: "Forecast Evaluation for the German Forecast Hub"
 output:
   html_document
 params:
   temp_dir: ""
+  set_title: ""
+title: "`r params$set_title`"
 # toc: true
 # toc_float: true
 # toc_collapsed: true
@@ -120,13 +121,19 @@ check_print <- function(plot) {
 
 ```
 
+```{r introduction-text, results = 'asis'}
+if (!is.null(parameters$intro_text)) {
+  cat(paste0(parameters$intro_text))
+}
+
+# This is a preliminary evaluation of forecasts made for the [German Forecast Hub](https://github.com/KITmetricslab/covid19-forecast-hub-de). These evaluations are preliminary - this means I cannot currently rule out any mistakes and the plots and analyses are subject to change. The evaluations are not authorised by the German Forecast Hub team.
+# 
+# Feel free to reproduce this analysis. To that end, you can clone this repository and the Forecast Hub repository, specify the directory of the submissions files in the R-Markdown script and run the script.
+# 
+# If you have questions or want to give feedback, please create an issue in this repository.
 
 
-This is a preliminary evaluation of forecasts made for the [German Forecast Hub](https://github.com/KITmetricslab/covid19-forecast-hub-de). These evaluations are preliminary - this means I cannot currently rule out any mistakes and the plots and analyses are subject to change. The evaluations are not authorised by the German Forecast Hub team.
-
-Feel free to reproduce this analysis. To that end, you can clone this repository and the Forecast Hub repository, specify the directory of the submissions files in the R-Markdown script and run the script.
-
-If you have questions or want to give feedback, please create an issue in this repository.
+```
 
 # Forecast Visualisation {.tabset}
 
@@ -206,15 +213,15 @@ plot_bump_helper <- function(data, target_type = NULL, location = NULL,
     dplyr::select(-coverage, -quantile_coverage) %>%
     dplyr::group_by(forecast_date) %>%
     dplyr::mutate(rank = rank(interval_score, ties.method = "average",
-                              na.last = "keep")) %>%
+                              na.last = NA)) %>%
     dplyr::ungroup()
 
   plot <- ggplot2::ggplot(scores,
                           ggplot2::aes(x = forecast_date,
                                        y = rank, color = model)) +
     ggplot2::geom_point(size = 3, alpha = 1) + 
-    ggbump::geom_bump(smooth = 15, size = 3, alpha = 0.1, na.rm = FALSE) +
-    ggbump::geom_bump(smooth = 15, size = 0.5, alpha = 1, na.rm = FALSE) +
+    ggbump::geom_bump(smooth = 15, size = 3, alpha = 0.1, na.rm = TRUE) +
+    ggbump::geom_bump(smooth = 15, size = 0.5, alpha = 1, na.rm = TRUE) +
     ggplot2::geom_text(data = scores %>%
                          dplyr::filter(forecast_date == max(forecast_date)),
                        ggplot2::aes(label = model),
@@ -426,7 +433,7 @@ plot_function <- plot_wis_components_helper
 
 
 # replace by template ##########################################################
-cat("\n\n## Overall \n")
+cat("\n\n## Overall \n\n")
 pp <- plot_function(data)
 check_print(pp)
 
@@ -438,16 +445,19 @@ if (length(target_types) > 1) {
   }
 }
 
+
+
+
 # by location
 for (location in locations) {
-  cat("\n\n##", location, "{.tabset}\n\n")
-
-  cat("\n\n ### Overall \n\n")
+  cat("\n\n## ", location, "{.tabset}\n\n")
+  
+  cat("\n\n### Overall \n\n")
   for (target_type in target_types) {
     p1 <- plot_function(data, target_type = target_type, location = location)
     check_print(p1)
   }
-
+  
   for (forecast_date in forecast_dates) {
     cat(paste0("\n\n### ", forecast_date), "\n\n")
     for (target_type in target_types) {
@@ -639,7 +649,7 @@ if (length(target_types) > 1) {
 
 cat("\n\n## Separate by date {.tabset} \n\n")
 for (forecast_date in forecast_dates) {
-  cat(paste0("\n\n### ", forecast_date), "\n")
+  cat(paste0("\n\n### ", forecast_date), "\n\n")
   for (target_type in target_types) {
     p1 <- plot_function(data, target_type = target_type,,
                         forecast_date = forecast_date)
