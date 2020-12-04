@@ -282,6 +282,14 @@ eval_forecasts <- function(data,
   # remove any rows where the prediction is missing
   data <- data[!is.na(prediction)]
 
+  if (nrow(data) == 0) {
+    if (verbose) {
+      message("After removing all NA true values and predictions, there were no observations left")
+    }
+    return(data)
+  }
+
+
   # # only compute the metrics desired by the user -------------------------------
   # all_metrics <- list_of_avail_metrics()
   # if (is.null(metrics)) {
