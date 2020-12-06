@@ -20,10 +20,11 @@ pairwise_comparison(
 to compare. Will probably be changed in the future such that a column
 named "model" must be present.}
 
-\item{metric}{A string with the metric to do the comparison on.}
+\item{metric}{A character vector of length one with the metric to do
+the comparison on.}
 
-\item{permutation_test}{whether or not to do a permutation test alongside
-the comparison. Default is FALSE}
+\item{permutation_test}{logical. If TRUE, a permutation test is done
+alongside the comparison. Default is FALSE}
 
 \item{baseline}{the baseline model against which to compare other models.}
 }
@@ -35,19 +36,19 @@ Make pairwise comparisons between models. The code for the pairwise
 comparisons is inspired by an implementation by Johannes Bracher.
 
 The implementation of the permutation test follows the function
-`permuationTest` from the `surveillance` package by Michael Höhle,
+\link[surveillance]{permutationTest} from the `surveillance` package
+ by Michael Höhle,
 Andrea Riebler and Michaela Paul.
 }
 \examples{
-
-
 df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
                  id = rep(1:10),
                  interval_score = (abs(rnorm(30))),
                  aem = (abs(rnorm(30))))
 
-res <- pairwise_comparison(df, permutation_test = TRUE, baseline = "model1")
-plot_pairwise_comparison(res, type = "ratio")
+res <- scoringutils::pairwise_comparison(df, permutation_test = TRUE,
+                                         baseline = "model1")
+scoringutils::plot_pairwise_comparison(res, type = "ratio")
 
 }
 \author{
