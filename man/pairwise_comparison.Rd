@@ -16,7 +16,8 @@ pairwise_comparison(
 \item{scores}{A data.frame of unsummarised scores as produced by
 \code{\link{eval_forecasts}}}
 
-\item{var}{string that denotes the column name with the models or forecasters
+\item{var}{character vector of length one that denotes the column name
+with the models or forecasters
 to compare. Will probably be changed in the future such that a column
 named "model" must be present.}
 
@@ -26,7 +27,8 @@ the comparison on.}
 \item{permutation_test}{logical. If TRUE, a permutation test is done
 alongside the comparison. Default is FALSE}
 
-\item{baseline}{the baseline model against which to compare other models.}
+\item{baseline}{character vector of length one that deontes
+the baseline model against which to compare other models.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores

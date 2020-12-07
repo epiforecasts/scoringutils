@@ -10,8 +10,9 @@ plot_pairwise_comparison(comparison_result, type = c("ratio", "pval"))
 \item{comparison_result}{A data.frame as produced by
 \code{\link{pairwise_comparison}}}
 
-\item{type}{visualise the ratio or the p-value of the pairwise comparison.
-Default is the ratio}
+\item{type}{character vector of length one that is either "ratio" or "pval".
+This denotes whether to visualise the ratio or the p-value of the
+pairwise comparison. Default is "ratio"}
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison

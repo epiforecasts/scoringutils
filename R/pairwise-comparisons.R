@@ -12,14 +12,16 @@
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
 #' \code{\link{eval_forecasts}}
-#' @param var string that denotes the column name with the models or forecasters
+#' @param var character vector of length one that denotes the column name
+#' with the models or forecasters
 #' to compare. Will probably be changed in the future such that a column
 #' named "model" must be present.
 #' @param metric A character vector of length one with the metric to do
 #' the comparison on.
 #' @param permutation_test logical. If TRUE, a permutation test is done
 #' alongside the comparison. Default is FALSE
-#' @param baseline the baseline model against which to compare other models.
+#' @param baseline character vector of length one that deontes
+#' the baseline model against which to compare other models.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom
@@ -171,8 +173,9 @@ pairwise_comparison <- function(scores,
 #'
 #' @param comparison_result A data.frame as produced by
 #' \code{\link{pairwise_comparison}}
-#' @param type visualise the ratio or the p-value of the pairwise comparison.
-#' Default is the ratio
+#' @param type character vector of length one that is either "ratio" or "pval".
+#' This denotes whether to visualise the ratio or the p-value of the
+#' pairwise comparison. Default is "ratio"
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_minimal element_text
 #' @importFrom data.table as.data.table
