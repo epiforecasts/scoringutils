@@ -1,0 +1,663 @@
+---
+output:
+  html_document
+params:
+  temp_dir: ""
+  set_title: ""
+title: "`r params$set_title`"
+# toc: true
+# toc_float: true
+# toc_collapsed: true
+# toc_depth: 3
+---
+
+
+<!-- todo:  -->
+<!-- - PIT histograms -->
+<!-- toc -->
+
+```{r setup, include=FALSE}
+# packages
+library(scoringutils)
+library(data.table)
+library(dplyr)
+library(tibble)
+library(here)
+library(purrr)
+library(readr)
+library(magrittr)
+library(knitr)
+library(ggbump)
+
+# knitr options
+knitr::opts_chunk$set(echo = FALSE, message = FALSE,
+                      warning = FALSE,
+                      out.width = "100%")
+
+temp_dir <- params$temp_dir
+
+# locations <- params$locations
+# locations <- c("Germany", "Poland")
+# forecast_dates <- params$forecast_dates
+# horizons <- params$horizons
+
+# target_types = c("case", "death")
+
+
+```
+
+```{r include = FALSE}
+
+# define parameters
+parameters <- readRDS(file = paste0(temp_dir, "/scoring_parameters.RDS"))
+locations <- parameters$locations
+forecast_dates <- parameters$forecast_dates
+horizons <- parameters$horizons
+target_types = parameters$target_types
+
+truth_data <- readRDS(file = paste0(temp_dir, "/truth_data.RDS")) %>%
+  dplyr::mutate(target_end_date = as.Date(target_end_date))
+prediction_data <- readRDS(file = paste0(temp_dir, "/prediction_data.RDS")) %>%
+  dplyr::mutate(target_end_date = as.Date(target_end_date),
+                forecast_date = as.character(forecast_date))
+
+data <- dplyr::full_join(truth_data, prediction_data)
+
+  # if (locations[1] == "all") {
+  #   locations <- prediction_data$location_name %>%
+  #     unique()
+  # }
+  #
+  # if (forecast_dates[1] == "all") {
+  #   forecast_dates <- prediction_data %>%
+  #     dplyr::pull(forecast_date) %>%
+  #     unique() %>%
+  #     as.Date() %>%
+  #     as.character() # for some reason numbers appear if I don't do that
+# }
+#
+# if (horizons[1] == "all") {
+#   horizons <- prediction_data %>%
+#     dplyr::pull(horizon) %>%
+#     unique()
+# }
+
+```
+
+
+``` {r helper-functions}
+# filter data
+filter_helper <- function(dataframe, forecast_date = NULL, location = NULL,
+                          horizon = NULL, target_type = NULL) {
+  if (!is.null(forecast_date)) {
+    forecast_date <- forecast_date # why do I need this?
+    dataframe <- dplyr::filter(dataframe,
+                               forecast_date == {{forecast_date}})
+  }
+  if (!is.null(location)) {
+    location <- location # and this?
+    dataframe <- dplyr::filter(dataframe,
+                               location_name == {{location}})
+  }
+  if (!is.null(horizon)) {
+    horizon <- horizon
+    dataframe <- dplyr::filter(dataframe,
+                               horizon == {{horizon}})
+  }
+  if (!is.null(target_type)) {
+    target_type <- target_type
+    dataframe <- dplyr::filter(dataframe,
+                               target_type == {{target_type}})
+  }
+  return(dataframe)
+}
+
+check_print <- function(plot) {
+  if (!is.null(plot)) {
+    print(plot)
+    cat("\n\n")
+  }
+}
+
+```
+
+```{r introduction-text, results = 'asis'}
+if (!is.null(parameters$intro_text)) {
+  cat(paste0(parameters$intro_text))
+}
+
+# This is a preliminary evaluation of forecasts made for the [German Forecast Hub](https://github.com/KITmetricslab/covid19-forecast-hub-de). These evaluations are preliminary - this means I cannot currently rule out any mistakes and the plots and analyses are subject to change. The evaluations are not authorised by the German Forecast Hub team.
+# 
+# Feel free to reproduce this analysis. To that end, you can clone this repository and the Forecast Hub repository, specify the directory of the submissions files in the R-Markdown script and run the script.
+# 
+# If you have questions or want to give feedback, please create an issue in this repository.
+
+
+```
+
+# Forecast Visualisation {.tabset}
+
+``` {r showdata, results = 'asis', warning = FALSE, fig.width = 10, eval = TRUE}
+plot_predictions_helper <- function(data,
+                                    forecast_date = NULL,
+                                    location = NULL,
+                                    target_type = NULL,
+                                    n_weeks = 12) {
+
+  df <- filter_helper(data, forecast_date, location, target_type = target_type)
+  location <- location
+  target_type <- target_type
+  additional_data <- data %>%
+    dplyr::filter(location_name == {{location}},
+                  target_type == {{target_type}},
+                  target_end_date >= (Sys.Date() - n_weeks * 7)) %>%
+    dplyr::select(-model)
+
+  if (nrow(df) == 0) {
+    return (NULL)
+  }
+
+  # maybe switch to using only one data source and filtering NA values
+  plot <- scoringutils::plot_predictions(df,
+                                         x = "target_end_date",
+                                         facet_formula = ~ model,
+                                         add_truth_data = additional_data,
+                                         scales = "free") +
+    ggplot2::ggtitle(paste("Predictions for incident", target_type,  "in", location))
+
+  return(plot)
+}
+
+for (location in locations) {
+  cat("\n\n##", location, "{.tabset}\n\n")
+  for (forecast_date in forecast_dates) {
+    cat(paste0("### ", forecast_date), "\n\n")
+    for (target_type in target_types) {
+      # cat(paste0("#### ", target_type), "\n\n")
+      p1 <- plot_predictions_helper(data = data,
+                                    forecast_date = forecast_date,
+                                    location = location,
+                                    target_type = target_type)
+      check_print(p1)
+    }
+  }
+}
+```
+
+# Score Ranking {.tabset}
+
+
+Only those forecasters are named who have submitted a forecast in the most recent evaluated week.
+
+
+``` {r results = 'asis', eval = TRUE}
+plot_bump_helper <- function(data, target_type = NULL, location = NULL,
+                             forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+
+  if (nrow(df) == 0) {
+    return (NULL)
+  }
+
+  scores <- scoringutils::eval_forecasts(df,
+                                         summarise_by = c("model", "forecast_date") )
+  if (nrow(scores) == 0) {
+    return(NULL)
+  }
+  scores <- scores %>%
+    dplyr::mutate(forecast_date = as.Date(forecast_date)) %>%
+    dplyr::select(-coverage, -quantile_coverage) %>%
+    dplyr::group_by(forecast_date) %>%
+    dplyr::mutate(rank = rank(interval_score, ties.method = "average",
+                              na.last = NA)) %>%
+    dplyr::ungroup()
+
+  plot <- ggplot2::ggplot(scores,
+                          ggplot2::aes(x = forecast_date,
+                                       y = rank, color = model)) +
+    ggplot2::geom_point(size = 3, alpha = 1) + 
+    ggbump::geom_bump(smooth = 15, size = 3, alpha = 0.1, na.rm = TRUE) +
+    ggbump::geom_bump(smooth = 15, size = 0.5, alpha = 1, na.rm = TRUE) +
+    ggplot2::geom_text(data = scores %>%
+                         dplyr::filter(forecast_date == max(forecast_date)),
+                       ggplot2::aes(label = model),
+                       color = "grey10",
+                       nudge_x = .61,
+                       hjust = 0,
+                       size = 2.6) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "none") +
+    ggplot2::scale_y_reverse() +
+    ggplot2::scale_x_date(expand = ggplot2::expansion(add = c(0, 12))) +
+    ggplot2::labs(title = paste("Incident", target_type, "forecasts"))
+  
+
+  
+
+  # plot <- scoringutils::score_table(scores) +
+  #   ggplot2::ggtitle(paste("Incident", target_type, "forecasts"))
+  return(plot)
+}
+
+plot_function <- plot_bump_helper
+
+# replace by template ##########################################################
+cat("\n\n## Overall \n")
+pp <- plot_function(data)
+check_print(pp)
+
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+# by location
+for (location in locations) {
+  cat("\n\n##", location, "\n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type, location = location)
+    check_print(p1)
+  }
+}
+# replace by template ##########################################################
+
+
+
+```
+
+
+
+
+
+# Score Overview {.tabset .tabset-pills}
+
+Overview of all the models and metrics
+
+``` {r}
+plot_score_table_helper <- function(data, target_type = NULL, location = NULL,
+                                    forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+
+  if (nrow(df) == 0) {
+    return (NULL)
+  } else {
+    scores <- scoringutils::eval_forecasts(df,
+                                           summarise_by = "model")
+
+    if (nrow(scores) == 0) {
+      return(NULL)
+    }
+    else {
+      scores <- scores %>%
+        dplyr::select(-coverage, -quantile_coverage)
+    }
+
+    plot <- scoringutils::score_table(scores) +
+      ggplot2::ggtitle(paste("Incident", target_type, "forecasts"))
+    return(plot)
+  }
+}
+```
+
+``` {r scoretable, fig.width = 12, results = 'asis', eval = TRUE}
+# overall summary
+
+plot_function <- plot_score_table_helper
+
+# replace by template ##########################################################
+cat("\n\n## Overall \n\n")
+pp <- plot_function(data)
+check_print(pp)
+
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+# by location
+for (location in locations) {
+  cat("\n\n##", location, "{.tabset}\n\n")
+
+  cat("\n\n### Overall \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type, location = location)
+    check_print(p1)
+  }
+
+
+  for (forecast_date in forecast_dates) {
+    cat(paste0("\n\n### ", forecast_date), "\n\n")
+    for (target_type in target_types) {
+      p1 <- plot_function(data, target_type = target_type,
+                          location = location,
+                          forecast_date = forecast_date)
+      check_print(p1)
+    }
+  }
+}
+# replace by template ##########################################################
+
+```
+
+# Overiew of Scores by Horizon {.tabset .tabset-pill}
+
+Overview of all models and metrics stratified by forecast horizons
+
+``` {r scoretablehorizon, fig.width = 12, results = 'asis', eval = TRUE}
+# replace by template ##########################################################
+
+plot_function <- plot_score_table_helper
+
+for (horizon in horizons) {
+  cat("\n\n## horizon = ", horizon, "{.tabset}\n\n")
+
+  cat("\n\n### Overall\n\n")
+  pp <- plot_function(data, horizon = horizon)
+  check_print(pp)
+
+  if (length(target_types) > 1) {
+    cat("\n\n### Overall separate \n")
+    for (target_type in target_types) {
+      p1 <- plot_function(data, target_type = target_type)
+      check_print(p1)
+    }
+  }
+
+  # by location
+  for (location in locations) {
+
+    cat("\n\n###", location, "\n\n")
+    # cat("\n\n #### Overall \n\n")
+    # for (target_type in target_types) {
+    #   p1 <- plot_function(data, target_type = target_type, location = location)
+    #   check_print(p1)
+    # }
+
+    for (target_type in target_types) {
+      p1 <- plot_function(data, target_type = target_type,
+                          location = location, horizon = horizon)
+      check_print(p1)
+    }
+  }
+}
+
+```
+
+# Interval Score Components  {.tabset .tabset-pill}
+
+Weighted interval score broken down into its components "overprediction penalty",
+"underprediction penalty" and "sharpness"
+
+``` {r wis-components, fig.width = 12, results = 'asis', eval = TRUE, message = FALSE}
+# overall summary
+plot_wis_components_helper <-  function(data, target_type = NULL, location = NULL,
+                                        forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+
+  if (nrow(df) == 0) {
+    return(NULL)
+  }
+  
+  scores <- scoringutils::eval_forecasts(df,
+                                         summarise_by = "model")
+
+  if (nrow(scores) == 0) {
+    return(NULL)
+  }
+  
+  plot <- scoringutils::wis_components(scores) +
+    ggplot2::ggtitle(paste("WIS componentents - Incident", target_type,
+                           "forecast"))
+  return(plot)
+}
+
+plot_function <- plot_wis_components_helper
+
+
+# replace by template ##########################################################
+cat("\n\n## Overall \n\n")
+pp <- plot_function(data)
+check_print(pp)
+
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+
+
+
+# by location
+for (location in locations) {
+  cat("\n\n## ", location, "{.tabset}\n\n")
+  
+  cat("\n\n### Overall \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type, location = location)
+    check_print(p1)
+  }
+  
+  for (forecast_date in forecast_dates) {
+    cat(paste0("\n\n### ", forecast_date), "\n\n")
+    for (target_type in target_types) {
+      p1 <- plot_function(data, target_type = target_type,
+                          location = location,
+                          forecast_date = forecast_date)
+      check_print(p1)
+    }
+  }
+}
+# replace by template ##########################################################
+
+```
+
+
+# Calibration {.tabset}
+
+## Interval Coverage {.tabset .tabset-pills}
+
+``` {r fig.width = 12, results = 'asis', eval = TRUE}
+plot_interval_coverage_helper <- function(data, target_type = NULL, location = NULL,
+                                          forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+  if (nrow(df) == 0) {
+    return(NULL)
+  }
+  scores <- scoringutils::eval_forecasts(df,
+                                         summarise_by = c("model", "range"))
+  if (nrow(scores) == 0) {
+    return(NULL)
+  }
+  plot <- scoringutils::interval_coverage(scores) +
+    ggplot2::ggtitle(paste("Interval coverage - Incident", target_type, "forecasst"))
+  return(plot)
+}
+
+plot_function <- plot_interval_coverage_helper
+
+
+# replace by template ##########################################################
+cat("\n\n### Overall \n\n")
+pp <- plot_function(data)
+check_print(pp)
+
+if (length(target_types) > 1) {
+  cat("\n\n### Overall separate \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+# # by location
+# for (location in locations) {
+#   cat("\n\n###", location, "{.tabset}\n\n")
+#   cat("\n\n #### Overall \n\n")
+#   for (target_type in target_types) {
+#     p1 <- plot_function(data, target_type = target_type, location = location)
+#     check_print(p1)
+#   }
+#   for (forecast_date in forecast_dates) {
+#     cat(paste0("\n\n#### ", forecast_date), "\n\n")
+#     for (target_type in target_types) {
+#       p1 <- plot_function(data, target_type = target_type,
+#                           location = location,
+#                           forecast_date = forecast_date)
+#       check_print(p1)
+#     }
+#   }
+# }
+# replace by template ##########################################################
+```
+
+Plot of the percentage of true values captured by each prediction interval
+
+## Quantile Coverage {.tabset .tabset-pills}
+
+``` {r fig.width = 12, results = 'asis', eval = TRUE}
+plot_quantile_coverage_helper <- function(data, target_type = NULL, location = NULL,
+                                          forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+
+  if (nrow(df) == 0) {
+    return(NULL)
+  }
+  scores <- scoringutils::eval_forecasts(df,
+                                         summarise_by = c("model", "quantile"))
+  if (nrow(scores) == 0) {
+    return(NULL)
+  }
+
+  plot <- scoringutils::quantile_coverage(scores) +
+    ggplot2::ggtitle(paste("Interval coverage - Incident", target_type, "forecast"))
+  return(plot)
+}
+
+plot_function <- plot_quantile_coverage_helper
+
+
+# replace by template ##########################################################
+cat("\n\n### Overall \n\n")
+pp <- plot_function(data)
+print(pp)
+cat("\n\n")
+
+if (length(target_types) > 1) {
+  cat("\n\n### Overall separate \n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+# by location
+# for (location in locations) {
+#   cat("\n\n###", location, "{.tabset}\n\n")
+#   cat("\n\n #### Overall \n\n")
+#   for (target_type in target_types) {
+#     p1 <- plot_function(data, target_type = target_type, location = location)
+#     check_print(p1)
+#   }
+#   for (forecast_date in forecast_dates) {
+#     cat(paste0("\n\n#### ", forecast_date), "\n\n")
+#     for (target_type in target_types) {
+#       p1 <- plot_function(data, target_type = target_type,
+#                           location = location,
+#                           forecast_date = forecast_date)
+#       check_print(p1)
+#     }
+#   }
+# }
+
+```
+
+Plot of the percentage of true values below each predictive quantile level
+
+
+# Bias {.tabset}
+
+``` {r bias, fig.width = 12, results = 'asis', eval = TRUE}
+plot_bias_helper <- function(data, target_type = NULL, location = NULL,
+                             forecast_date = NULL, horizon = NULL) {
+
+  df <- filter_helper(data, location = location,
+                      target_type = target_type,
+                      forecast_date = forecast_date,
+                      horizon = horizon)
+
+  if (nrow(df) == 0) {
+    return(NULL)
+  }
+  scores <- scoringutils::eval_forecasts(df,
+                                         summarise_by = c("model", "location_name"))
+  if (nrow(scores) == 0) {
+    return(NULL)
+  }
+
+  plot <- scoringutils::score_heatmap(scores,
+                                      metric = "bias", x = "location_name") +
+    ggplot2::labs(x = "Location") +
+    ggplot2::ggtitle(paste("Bias - Incident", target_type))
+  return(plot)
+}
+
+plot_function <- plot_bias_helper
+
+
+# replace by template ##########################################################
+cat("\n\n## Overall \n")
+pp <- plot_function(data)
+check_print(pp)
+
+if (length(target_types) > 1) {
+  cat("\n\n## Overall separate \n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type)
+    check_print(p1)
+  }
+}
+
+
+cat("\n\n## Separate by date {.tabset} \n\n")
+for (forecast_date in forecast_dates) {
+  cat(paste0("\n\n### ", forecast_date), "\n\n")
+  for (target_type in target_types) {
+    p1 <- plot_function(data, target_type = target_type,,
+                        forecast_date = forecast_date)
+    check_print(p1)
+  }
+}
+```
+
+
+
+
