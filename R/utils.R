@@ -45,3 +45,8 @@ list_of_avail_metrics <- function() {
 
   return(available_metrics)
 }
+
+geom_mean_helper <- function(x) {
+  geom_mean <- exp(mean(log(x[!is.na(x)])))
+  return(geom_mean)
+}

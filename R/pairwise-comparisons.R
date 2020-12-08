@@ -71,6 +71,10 @@ pairwise_comparison <- function(scores,
 
     overlap <- merge(a, b, by = by)
 
+    if (nrow(overlap) == 0) {
+      return(list(ratio = NA, pval = NA))
+    }
+
     #-------------------------------------------------
     # need to do error handling if there is no overlap.
     #-------------------------------------------------
@@ -79,6 +83,7 @@ pairwise_comparison <- function(scores,
     values_y <- overlap[[paste0(metric, ".y")]]
 
     # ratio should be equivalent to theta_ij in Johannes document
+    # ratio < 1 --> model1 is better.
     ratio <- sum(values_x) / sum(values_y)
 
     if (permutation_test) {
@@ -113,7 +118,7 @@ pairwise_comparison <- function(scores,
 
       pval <- permutation_test(values_x, values_y)
     } else {
-      pval <- NA
+      pval <- wilcox.test(values_x, values_y)
     }
     return(list(ratio = ratio, pval = pval))
   }
@@ -147,9 +152,15 @@ pairwise_comparison <- function(scores,
                                        combinations3),
                                   use.names = TRUE)
 
+  # make result character instead of factor
+  result[, `:=`("model" = as.character(model),
+                "compare_against" = as.character(compare_against))]
+
   # calculate relative wis as geometric mean
   # need a different name for the variable! mean_ratio?
-  result[, theta_i := exp(mean(log(ratio))),
+  # small theta_i is again better
+  result[, `:=` (theta_i = geom_mean_helper(ratio),
+                 theta_j = geom_mean_helper(1/ratio)),
          by = "model"]
 
   if(!is.null(baseline)) {
@@ -198,12 +209,23 @@ plot_pairwise_comparison <- function(comparison_result,
 
   comparison_result <- data.table::as.data.table(comparison_result)
 
+  get_fill_scale <- function(values, breaks, scales) {
+    scale <- cut(values, breaks = breaks,
+                 include.lowest = TRUE,
+                 right = FALSE,
+                 labels = scales)
+    return(as.numeric(as.character(scale)))
+  }
+
   if (type[1] == "ratio") {
     comparison_result[, var_of_interest := round(ratio, 2)]
     comparison_result[, sort_var := round(ratio, 4)]
-
     # implemnt breaks for colour heatmap
-    # breaks <- c(0, 0.5, 0.75, 1, 1.33, 2, 10)
+    breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
+    scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+    comparison_result[, fill_col := get_fill_scale(var_of_interest,
+                                                   breaks, scales)]
+
   } else {
     comparison_result[, var_of_interest := pval]
     # reverse sorting for p-values, as lower means significant
@@ -211,24 +233,29 @@ plot_pairwise_comparison <- function(comparison_result,
     comparison_result[, sort_var := -pval]
 
     # implemnt breaks for colour heatmap
-    # breaks <- c(0, 0.01, 0.05, 0.1, 1)
+    breaks <- c(0, 0.01, 0.05, 0.1, 1)
+    scales <- c(1, 0.5, 0.1, 0)
+    comparison_result[, fill_col := get_fill_scale(var_of_interest,
+                                                   breaks, scales)]
   }
 
   ggplot2::ggplot(comparison_result,
-                  ggplot2::aes(x = reorder(model, -sort_var),
-                               y = reorder(compare_against, sort_var),
-                               fill = var_of_interest)) +
-    ggplot2::geom_tile(color = "white") +
-    ggplot2::geom_text(ggplot2::aes(y = compare_against, label = var_of_interest),
+                  ggplot2::aes(y = reorder(model, 1/ratio, FUN = geom_mean_helper),
+                               x = reorder(compare_against, ratio, FUN = geom_mean_helper),
+                               fill = fill_col)) +
+    ggplot2::geom_tile(color = "black",
+                       width=0.98, height=0.98) +
+    ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
                        na.rm = TRUE) +
     ggplot2::scale_fill_gradient2(low = "steelblue", mid = "white",
                                   high = "salmon",
                                   na.value = "white",
-                                  midpoint = 1,
-                                  name = type) +
-    # ggplot2::theme_minimal() +
+                                  midpoint = 0,
+                                  name = NULL) +
+    ggplot2::theme_minimal() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
-                                                       hjust=1)) +
+                                                       hjust=1),
+                   legend.position = "none") +
     ggplot2::labs(x = "", y = "",
                   title = paste("Pairwise comparisons", type, sep = " - ")) +
     ggplot2::coord_cartesian(expand = FALSE)
