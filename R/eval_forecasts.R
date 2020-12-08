@@ -585,6 +585,12 @@ eval_forecasts <- function(data,
                by = summarise_by]
   }
 
+  # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
+  if (!("range" %in% summarise_by | "quantile" %in% summarise_by)) {
+    res[, c("coverage", "quantile_coverage") := NULL]
+  }
+
+
   # if pit_plots is TRUE, add the plots as an output
   if (pit_plots) {
     res <- list(scores = res,
