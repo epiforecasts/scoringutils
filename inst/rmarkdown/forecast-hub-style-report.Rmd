@@ -135,6 +135,17 @@ if (!is.null(parameters$intro_text)) {
 
 ```
 
+# Available Forecasts {.tabset}
+
+``` {r availability, results = 'asis', warning = FALSE, fig.width = 10, eval = TRUE}
+plot <- scoringutils::show_avail_forecasts(prediction_data, 
+                                           facet_formula = location ~ target_type)
+
+print(plot)
+
+```
+
+
 # Forecast Visualisation {.tabset}
 
 ``` {r showdata, results = 'asis', warning = FALSE, fig.width = 10, eval = TRUE}
@@ -183,6 +194,30 @@ for (location in locations) {
   }
 }
 ```
+
+
+# Ranking by pairwise comparison
+
+``` {r pairwise, results = 'asis', warning = FALSE, fig.width = 10, eval = TRUE}
+
+unsummarised_scores <- scoringutils::eval_forecasts(data)
+
+# print(unsummarised_scores)
+
+pairwise <- scoringutils::pairwise_comparison(unsummarised_scores)
+
+# print(pairwise)
+
+plot1 <- scoringutils::plot_pairwise_comparison(pairwise, type = "ratio")
+
+print(plot1)
+
+plot2 <- scoringutils::plot_pairwise_comparison(pairwise, type = "pval")
+print(plot2)
+
+```
+
+
 
 # Score Ranking {.tabset}
 

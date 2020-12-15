@@ -257,3 +257,53 @@ sample_to_range <- function(data,
   return(data)
 }
 
+
+
+
+
+
+#' @title Merge Forecast Data And Observations
+#'
+#' @description
+#'
+#' The function more or less provides a wrapper around \code{merge} that
+#' aims to handle the merging well if additional columns are present
+#' in one or both data sets. If in doubt, you should probably merge the
+#' data sets manually.
+#'
+#'
+#' @param forecasts data.frame with the forecast data (as can be passed to
+#' \code{\link{eval_forecasts}}).
+#' @param obsrevations data.frame with the observations
+#' @param by character vector that denotes the columns by which to merge. Any
+#' value that is not a column in observations will be removed.
+#' @return a data.frame with forecasts and observations
+#' @export
+
+
+merge_pred_and_obs <- function(forecasts, observations, by = NULL) {
+
+  forecasts <- data.table::as.data.table(forecasts)
+  observations <- data.table::as.data.table(observations)
+
+  if (is.null(by)) {
+    protected_columns <- c("prediction", "true_value", "sample", "quantile",
+                           "range", "boundary")
+    by <- setdiff(colnames(forecasts), protected_columns)
+  }
+
+
+  obs_cols <- colnames(observations)
+  by <- intersect(by, obs_cols)
+
+  combined <- merge(observations, forecasts, by = by)
+
+  # maybe add some error handling here
+
+  return(combined)
+}
+
+
+
+
+

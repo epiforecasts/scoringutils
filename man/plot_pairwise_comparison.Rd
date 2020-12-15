@@ -4,7 +4,11 @@
 \alias{plot_pairwise_comparison}
 \title{Plot Heatmap of Pairwise Comparisons}
 \usage{
-plot_pairwise_comparison(comparison_result, type = c("ratio", "pval"))
+plot_pairwise_comparison(
+  comparison_result,
+  type = c("together", "ratio", "pval"),
+  smaller_is_good = TRUE
+)
 }
 \arguments{
 \item{comparison_result}{A data.frame as produced by
@@ -21,9 +25,10 @@ between models
 \examples{
 df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
                  id = rep(1:10),
-                 interval_score = (abs(rnorm(30))),
+                 interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
                  aem = (abs(rnorm(30))))
 
-res <- pairwise_comparison(df, permutation_test = TRUE, baseline = "model1")
-plot_pairwise_comparison(res, type = "ratio")
+res <- scoringutils::pairwise_comparison(df, permutation_test = TRUE, baseline = "model1")
+plot_pairwise_comparison(res, smaller_is_good = T)
+plot_pairwise_comparison(res, smaller_is_good = T, type = "pval")
 }

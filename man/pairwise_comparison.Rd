@@ -50,7 +50,7 @@ df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
 
 res <- scoringutils::pairwise_comparison(df, permutation_test = TRUE,
                                          baseline = "model1")
-scoringutils::plot_pairwise_comparison(res, type = "ratio")
+scoringutils::plot_pairwise_comparison(res)
 
 }
 \author{

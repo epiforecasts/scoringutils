@@ -719,3 +719,140 @@ quantile_coverage <- function(summarised_scores,
   return(p2)
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+#' @title Visualise Where Forecasts Are Available
+#'
+#' @description
+#' Visualise Where Forecasts Are Available
+#'
+#' @param data data.frame with predictions in the same format required for
+#' \code{\link{eval_forecasts}}
+#' @param y character vector of length one that denotes the name of the column
+#' to appear on the y-axis of the plot
+#' @param x character vector of length one that denotes the name of the column
+#' to appear on the x-axis of the plot
+#' @param make_x_factor logical (default is TRUE). Whether or not to convert
+#' the variable on the x-axis to a factor. This has an effect e.g. if dates
+#' are shown on the x-axis.
+#' @param summarise_by character vector or \code{NULL} (the default) that
+#' denotes the categories over which the number of forecasts should be summed
+#' up. By default (i.e. \code{summarise_by = NULL}) this will be all the
+#' columns that appear in either x, y, or the facetting formula.
+#' @param collapse_to_one logical. If \code{TRUE}) (the default), everything
+#' not included in \code{by} will be counted only once. This is useful, for
+#' example, if you don't want to count every single sample or quantile, but
+#' instead treat one set of samples or quantiles as one forecast.
+#' @param by character vector or \code{NULL} (the default) that denotes the
+#' unit of an individual forecast. This argument behaves similarly to the
+#' \code{by} argument in \code{link{eval_forecasts}}. By default, all columns
+#' are used that are not part of any internally protected columns like "sample"
+#' or "prediction" or similar. The \code{by} argument is only necessary if
+#' \code{collapse_to_one = TRUE} to indicate which rows not to collapse to one.
+#' @param show_numbers logical (default is \code{TRUE}) that indicates whether
+#' or not to show the actual count numbers on the plot
+#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' (the default), no facetting will take place
+#' @param facet_wrap_or_grid character. Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param scales character. The scales argument gets passed down to ggplot.
+#' Only necessary
+#' if you make use of facetting. Default is "fixed"
+#' @param legend_positiong character that indicates where to put the legend.
+#' The argument gets passed to ggplot2. By default ("none"), no legend is shown.
+#' @return ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' facet_wrap facet_grid
+#' @importFrom data.table dcast
+#' @export
+#'
+#' @examples
+#' example1 <- scoringutils::quantile_example_data_long
+#' show_avail_forecasts(example1, x = "id", facet_formula = ~ horizon)
+
+show_avail_forecasts <- function(data,
+                                 y = "model",
+                                 x = "forecast_date",
+                                 make_x_factor = TRUE,
+                                 summarise_by = NULL,
+                                 collapse_to_one = TRUE,
+                                 by = NULL,
+                                 show_numbers = TRUE,
+                                 facet_formula = NULL,
+                                 facet_wrap_or_grid = "facet_wrap",
+                                 scales = "fixed",
+                                 legend_position = "none") {
+
+  data <- data.table::as.data.table(data)
+
+  if (is.null(summarise_by)) {
+    facet_vars <- all.vars(facet_formula)
+    summarise_by <- unique(c(x, y, facet_vars))
+  }
+
+  data <- data[!is.na(prediction),]
+
+  if (collapse_to_one) {
+    # only count one forecast per group in by
+    # this e.g. makes sure that quantiles and samples are not counted
+    # multiple times
+    if (is.null(by)) {
+      protected_columns <- c("prediction", "true_value", "sample", "quantile",
+                             "range", "boundary")
+      by <- setdiff(colnames(data), protected_columns)
+    }
+    data <- data[data[, .I[1], by = by]$V1]
+  }
+
+  # count items per group in summarise_by
+  df <- data[, .(n_obs = .N), by = summarise_by]
+
+  if (make_x_factor) {
+    df[, eval(x) := as.factor(get(x))]
+  }
+
+  plot <- ggplot2::ggplot(df,
+                  ggplot2::aes_string(y = y, x = x)) +
+    ggplot2::geom_tile(ggplot2::aes(fill = n_obs),
+                       width = 0.97, height = 0.97) +
+    ggplot2::scale_fill_gradient(low = "grey95", high = "steelblue",
+                                 na.value = "lightgrey") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
+                   panel.grid.minor.x = ggplot2::element_blank(),
+                   legend.position = legend_position,
+                   axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
+                                                       hjust=1)) +
+    ggplot2::theme(panel.spacing = ggplot2::unit(2, "lines"))
+
+  if (show_numbers) {
+    plot <- plot +
+      ggplot2::geom_text(ggplot2::aes(label = n_obs))
+  }
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      plot <- plot +
+        ggplot2::facet_wrap(facet_formula, scales = scales)
+    } else {
+      plot <- plot +
+        ggplot2::facet_grid(facet_formula, scales = scales)
+    }
+  }
+
+  return(plot)
+}
+
+
