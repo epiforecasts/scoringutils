@@ -407,7 +407,7 @@ for (horizon in horizons) {
   if (length(target_types) > 1) {
     cat("\n\n### Overall separate \n")
     for (target_type in target_types) {
-      p1 <- plot_function(data, target_type = target_type)
+      p1 <- plot_function(data, target_type = target_type, horizon = horizon)
       check_print(p1)
     }
   }
@@ -418,7 +418,8 @@ for (horizon in horizons) {
     cat("\n\n###", location, "\n\n")
     # cat("\n\n #### Overall \n\n")
     # for (target_type in target_types) {
-    #   p1 <- plot_function(data, target_type = target_type, location = location)
+    #   p1 <- plot_function(data, target_type = target_type, 
+                            location = location, horizon = horizon)
     #   check_print(p1)
     # }
 
