@@ -4,6 +4,7 @@ output:
 params:
   temp_dir: ""
   set_title: ""
+  save_plots: ""
 title: "`r params$set_title`"
 # toc: true
 # toc_float: true
@@ -33,6 +34,14 @@ library(ggbump)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE,
                       warning = FALSE,
                       out.width = "100%")
+
+# if(params$save_plots) {
+#   knitr::opts_chunk$set(echo = FALSE, message = FALSE,
+#                       warning = FALSE,
+#                       out.width = "100%", 
+#                       dev = c('png'), 
+#                       fig.path = 'plots/')
+# }
 
 temp_dir <- params$temp_dir
 
@@ -137,9 +146,11 @@ if (!is.null(parameters$intro_text)) {
 
 # Available Forecasts {.tabset}
 
-``` {r availability, results = 'asis', warning = FALSE, fig.width = 10, eval = TRUE}
+``` {r availability, results = 'asis', warning = FALSE, fig.width = 10, fig.height = 8, eval = TRUE}
 plot <- scoringutils::show_avail_forecasts(prediction_data, 
-                                           facet_formula = location ~ target_type)
+                                           facet_formula = location ~ target_type, 
+                                           show_numbers = FALSE, 
+                                           legend_position = "bottom")
 
 print(plot)
 

@@ -28,6 +28,7 @@ render_scoring_report <- function(format = "html_document",
                                                 forecast_dates = "all",
                                                 horizons = "all",
                                                 target_types = "all"),
+                                  # save_plots = FALSE,
                                   interactive = FALSE,
                                   save_dir = NULL,
                                   filename = NULL) {
@@ -67,7 +68,7 @@ render_scoring_report <- function(format = "html_document",
   }
 
   if ("locations" %in% names(params) && params$locations[1] == "all") {
-    locations <- prediction_data$location_name %>%
+    params$locations <- prediction_data$location_name %>%
       unique()
   }
 
@@ -83,7 +84,7 @@ render_scoring_report <- function(format = "html_document",
       unique()
   }
   if ("horizons" %in% names(params) && params$horizons[1] == "all") {
-    horizons <- prediction_data %>%
+    params$horizons <- prediction_data %>%
       dplyr::pull(horizon) %>%
       unique()
   }
@@ -98,8 +99,6 @@ render_scoring_report <- function(format = "html_document",
 
   format = "html_document"
 
-
-
   rmarkdown::render(report,
                     output_format = format,
                     output_file = filename,
@@ -107,6 +106,7 @@ render_scoring_report <- function(format = "html_document",
                     intermediates_dir = save_dir,
                     params = list(
                       temp_dir = temp_dir,
+                      # save_plots = save_plots
                       set_title = document_title
                     ),
                     envir = new.env(),
