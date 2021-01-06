@@ -1,3 +1,10 @@
+## scoringutils 0.1.5
+### Package updates
+- changed the default definition of the weighted interval score. Previously, 
+the median prediction was counted twice, but is no only counted once. If you 
+want to go back to the old behaviour, you can call the interval_score fucntion
+with the agument `count_median_twice = FALSE`. 
+
 ## scoringutils 0.1.4
 
 ### Feature updates
