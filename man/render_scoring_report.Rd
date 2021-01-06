@@ -11,7 +11,6 @@ render_scoring_report(
   document_title = "Scoring Report",
   params = list(locations = "all", forecast_dates = "all", horizons = "all",
     target_types = "all"),
-  save_plots = FALSE,
   interactive = FALSE,
   save_dir = NULL,
   filename = NULL
