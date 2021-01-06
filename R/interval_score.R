@@ -88,7 +88,7 @@ interval_score <- function(true_values,
   if (count_median_twice) {
     # for the median value, alpha is equal to one. In order to only count it
     # once, we can divide it by 2.
-    alpha[alpha == 1] <- 0.5
+    alpha[round(alpha, 5) == 1] <- 0.5
   }
 
   if (weigh) {
