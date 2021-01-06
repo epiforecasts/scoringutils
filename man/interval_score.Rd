@@ -10,7 +10,8 @@ interval_score(
   upper,
   interval_range = NULL,
   weigh = TRUE,
-  separate_results = FALSE
+  separate_results = FALSE,
+  count_median_twice = FALSE
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ FALSE.}
 \item{separate_results}{if TRUE (default is FALSE), then the separate parts
 of the interval score (sharpness, penalties for over- and under-prediction
 get returned as separate elements of a list)}
+
+\item{count_median_twice}{if TRUE (default is FALSE), then the median is
+counted twice in the computation of the score}
 }
 \value{
 vector with the scoring values, or a list with separate entries if

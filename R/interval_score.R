@@ -38,6 +38,8 @@
 #' @param separate_results if TRUE (default is FALSE), then the separate parts
 #' of the interval score (sharpness, penalties for over- and under-prediction
 #' get returned as separate elements of a list)
+#' @param count_median_twice if TRUE (default is FALSE), then the median is
+#' counted twice in the computation of the score
 #' @return vector with the scoring values, or a list with separate entries if
 #' \code{separate_results} is TRUE.
 #' @examples
@@ -70,7 +72,8 @@ interval_score <- function(true_values,
                            upper,
                            interval_range = NULL,
                            weigh = TRUE,
-                           separate_results = FALSE) {
+                           separate_results = FALSE,
+                           count_median_twice = FALSE) {
 
   if(is.null(interval_range)) {
     stop("must provide a range for your prediction interval")
@@ -82,7 +85,11 @@ interval_score <- function(true_values,
   overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
   underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
 
-
+  if (count_median_twice) {
+    # for the median value, alpha is equal to one. In order to only count it
+    # once, we can divide it by 2.
+    alpha[round(alpha, 5) == 1] <- 0.5
+  }
 
   if (weigh) {
     sharpness <- sharpness * alpha / 2
