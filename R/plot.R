@@ -287,18 +287,16 @@ wis_components <- function(scores,
 
   scores <- data.table::as.data.table(scores)
 
+  scores <- data.table::melt(scores,
+                             measure.vars = c("overprediction",
+                                              "underprediction",
+                                              "sharpness"),
+                             variable.name = "wis_component_name",
+                             value.name = "component_value")
+
+
   plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = underprediction,
-                                         ymin = 0, colour = "Underprediction"),
-                            size = 3) +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = overprediction + underprediction,
-                                         ymin = underprediction,
-                                         colour = "Overprediction"),
-                            size = 3)  +
-    ggplot2::geom_linerange(ggplot2::aes(ymax = sharpness + overprediction + underprediction,
-                                         ymin = overprediction + underprediction,
-                                         colour = "Sharpness"),
-                            size = 3) +
+    ggplot2::geom_col(ggplot2::aes(y = component_value, fill = wis_component_name)) +
     ggplot2::facet_wrap(facet_formula, nrow = nrow,
                         scales = scales) +
     ggplot2::labs(x = xlab, y = ylab) +
@@ -525,7 +523,8 @@ plot_predictions <- function(data,
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
                                       group = range, fill = range),
                          alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = true_value), size = 0.5) +
+    ggplot2::geom_point(ggplot2::aes(y = true_value, colour = "actual"),
+                        size = 0.5) +
     ggplot2::geom_line(ggplot2::aes(y = true_value, colour = "actual"),
                        lwd = 0.2) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
@@ -561,6 +560,9 @@ plot_predictions <- function(data,
 
   if(!is.null(add_truth_data)) {
     plot <- plot +
+      ggplot2::geom_point(data = add_truth_data,
+                          ggplot2::aes(y = true_value, colour = "actual"),
+                          size = 0.5) +
       ggplot2::geom_line(data = add_truth_data,
                          ggplot2::aes(y = true_value, colour = "actual"),
                          lwd = 0.2)
