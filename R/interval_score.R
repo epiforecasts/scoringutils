@@ -81,6 +81,11 @@ interval_score <- function(true_values,
 
   alpha <- (100 - interval_range) / 100
 
+  # for point forecasts, interval_range may be NA. For that case, set alpha
+  # to zero
+  alpha[upper == lower] <- 1
+
+
   sharpness <- (upper - lower)
   overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
   underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
