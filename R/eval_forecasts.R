@@ -357,7 +357,7 @@ eval_forecasts <- function(data,
       if (0.5 %in% quantile) {
         ae <- abs(unique(true_value - prediction[quantile == 0.5]))
       } else {
-        ae <- NA_real_
+        ae <- NA
       }
       return(ae)
     }
@@ -366,10 +366,6 @@ eval_forecasts <- function(data,
                                    prediction,
                                    quantile),
                   by = by]
-
-    # set absolute error for point forecasts (quantile column is NA)
-    quantile_data[is.na(quantile), aem := abs(true_value - prediction)]
-
     # tmp <- quantile_data[quantile == 0.5, .(ae = abs(true_value - prediction))]
     # quantile_data <- merge(quantile_data, tmp)
 

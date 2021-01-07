@@ -144,27 +144,22 @@ quantile_to_range <- function(data,
                               keep_quantile_col = TRUE) {
   data <- data.table::as.data.table(data)
 
-  # if any quantile is na, we assume this is a point forecast and assign the
-  # boundary "lower"
-  data[, boundary := ifelse(is.na(quantile),
-                            "lower",
-                            ifelse(quantile <= 0.5,
-                                   "lower",
-                                   "upper"))]
-
+  data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
   data[, range := ifelse(boundary == "lower",
                          round((1 - 2 * quantile) * 100, 10),
                          round((2 * quantile - 1) * 100, 10))]
 
-  # add median quantile and point forecast
-  median_or_point <- data[is.na(quantile) | quantile == 0.5, ]
-  median_or_point[, boundary := "upper"]
+  # add median quantile
+  median <- data[quantile == 0.5, ]
+  median[, boundary := "upper"]
 
-  data <- data.table::rbindlist(list(data, median_or_point))
+  data <- data.table::rbindlist(list(data, median))
 
   if (!keep_quantile_col) {
     data[, "quantile" := NULL]
   }
+
+
   return(data)
 }
 

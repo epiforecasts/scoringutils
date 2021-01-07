@@ -187,12 +187,6 @@ quantile_bias <- function(range, lower, upper,
   lower_predictions <- lower
   upper_predictions <- upper
 
-  # for point forecasts it may be that all range values are NA -> return NA
-  if (all(is.na(range))) {
-    return(NA)
-  }
-
-  # filter out missing forecasts
   if(any(is.na(upper)) | any(is.na(lower))) {
 
     range <- range[!is.na(upper) & !is.na(lower)]
