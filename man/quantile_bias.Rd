@@ -74,9 +74,6 @@ quantile_bias(lower = lower, upper = upper,
               range = range, true_value = true_value)
 
 }
-\references{
-
-}
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
