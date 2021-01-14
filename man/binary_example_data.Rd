@@ -3,22 +3,34 @@
 \docType{data}
 \name{binary_example_data}
 \alias{binary_example_data}
-\title{Binary Example Data}
+\title{Binary Forecast Example Data}
 \format{
-A data.table with 120 rows and 5 variables:
+A data frame with 346 rows and 10 columns:
 \describe{
-  \item{id}{unique identifier for true observed values}
-  \item{true_value}{true observed values}
+  \item{value_date}{the date for which a prediction was made}
+  \item{value_type}{the target to be predicted (short form)}
+  \item{geography}{the region for which a prediction was made}
+  \item{value_desc}{long form description of the prediction target}
   \item{model}{name of the model that generated the forecasts}
-  \item{horizon}{forecast horzin (e.g. 1 day ahead forecast)}
-  \item{prediction}{predicted probability that the corresponding true
-  value will be 1}
+  \item{creation_date}{date on which the forecast was made}
+  \item{horizon}{forecast horizon in days}
+  \item{prediction}{probability prediction that true value would be 1}
+  \item{true_value}{true observed values}
 }
 }
 \usage{
 binary_example_data
 }
 \description{
-A toy dataset for a probability forecast of a binary outcome variable
+A data set with (constructed) binary predictions relevant in the
+2020 UK Covid-19 epidemic.
+}
+\details{
+Predictions in the data set were constructed based on the continuous example
+data by looking at the number of samples below the mean prediction.
+The outcome was constrcuted as whether or not the actually
+observed value was below or above that mean prediction.
+This should not be understood as sound statistical practice, but rather
+as a practical way to create an example data set.
 }
 \keyword{datasets}

@@ -56,7 +56,8 @@ Imports:
     goftest,
     graphics,
     scoringRules,
-    stats
+    stats,
+    methods
 Suggests: 
     testthat,
     knitr,

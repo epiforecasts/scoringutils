@@ -52,7 +52,7 @@ test_that("brier_score works", {
   true_values <- sample(c(0,1), size = 30, replace = TRUE)
   predictions <- runif(n = 30, min = 0, max = 1)
 
-  scoringutils2 <- scoringutils2::brier_score(true_values, predictions)
+  scoringutils2 <- scoringutils::brier_score(true_values, predictions)
   scoringutils <- scoringutils::brier_score(true_values, predictions)
   expect_equal(scoringutils2, scoringutils)
 })

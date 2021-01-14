@@ -4,8 +4,7 @@ test_that("function throws an error when missing true_values",
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
             expect_error(pit(predictions = predictions),
-                         # "true_values` or `predictions` missing in function 'pit()")
-                         "true_values or predictions argument missing")
+                         "true_values` or `predictions` missing in function 'pit()")
           })
 
 test_that("function throws an error when missing 'predictions'",
@@ -14,8 +13,7 @@ test_that("function throws an error when missing 'predictions'",
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
             expect_error(pit(predictions = predictions),
-                         # "true_values` or `predictions` missing in function 'pit()")
-                         "true_values or predictions argument missing")
+                         "true_values` or `predictions` missing in function 'pit()")
           })
 
 
@@ -57,7 +55,7 @@ test_that("function works for continuous true_values and predictions",
             ## continuous predictions
             true_values <- rnorm(30, mean = 1:30)
             predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-            scoringutils2 <- scoringutils2::pit(true_values, predictions)
+            scoringutils2 <- scoringutils::pit(true_values, predictions)
             scoringutils <- scoringutils::pit(true_values, predictions)
 
             expect_equal(scoringutils2$p_value, scoringutils$p_value)

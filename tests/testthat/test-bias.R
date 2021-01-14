@@ -45,13 +45,13 @@ test_that("function works for continuous true_values and predictions",
 test_that("bias works", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-  all(scoringutils2::bias(true_values, predictions) == scoringutils2::bias(true_values, predictions))
+  all(scoringutils::bias(true_values, predictions) == scoringutils::bias(true_values, predictions))
 
   ## continuous forecasts
   true_values <- rnorm(30, mean = 1:30)
   predictions <- replicate(200, rnorm(30, mean = 1:30))
 
-  scoringutils2 <- scoringutils2::bias(true_values, predictions)
+  scoringutils2 <- scoringutils::bias(true_values, predictions)
   scoringutils <- scoringutils::bias(true_values, predictions)
 
   expect_equal(scoringutils, scoringutils2)
@@ -71,7 +71,7 @@ test_that("quantile bias works", {
 
   true_value <- 8062
 
-  scoringutils2 <- scoringutils2::quantile_bias(lower = lower, upper = upper,
+  scoringutils2 <- scoringutils::quantile_bias(lower = lower, upper = upper,
                                                 range = range, true_value = true_value)
   scoringutils <- scoringutils:: quantile_bias(lower = lower, upper = upper,
                                                range = range, true_value = true_value)

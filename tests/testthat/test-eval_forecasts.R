@@ -7,7 +7,7 @@ test_that("function throws an error if data is missing", {
 
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
-  binary_example <- data.table::setDT(scoringutils2::binary_example_data)
+  binary_example <- data.table::setDT(scoringutils::binary_example_data)
   eval <- eval_forecasts(binary_example[!is.na(prediction)],
                          summarise_by = c("model", "value_desc"),
                          quantiles = c(0.5), sd = TRUE,
@@ -19,7 +19,7 @@ test_that("function produces output for a binary case", {
 
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
-  quantile_example <- data.table::setDT(scoringutils2::quantile_example_data)
+  quantile_example <- data.table::setDT(scoringutils::quantile_example_data)
   eval <- eval_forecasts(quantile_example[!is.na(prediction)],
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
@@ -29,7 +29,7 @@ test_that("function produces output for a quantile format case", {
 })
 
 test_that("calculation of aem is correct for a quantile format case", {
-  quantile_example <- data.table::setDT(scoringutils2::quantile_example_data)
+  quantile_example <- data.table::setDT(scoringutils::quantile_example_data)
   eval <- eval_forecasts(quantile_example[!is.na(prediction)],
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
@@ -44,12 +44,12 @@ test_that("calculation of aem is correct for a quantile format case", {
 
 
 test_that("all quantile and range formats yield the same result", {
-  quantile_example1 <- data.table::setDT(scoringutils2::quantile_example_data)
-  quantile_example2 <- data.table::setDT(scoringutils2::range_example_data_long)
-  quantile_example3 <- data.table::setDT(scoringutils2::range_example_data_semi_wide)
+  quantile_example1 <- data.table::setDT(scoringutils::quantile_example_data)
+  quantile_example2 <- data.table::setDT(scoringutils::range_example_data_long)
+  quantile_example3 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
 
-  wide <- data.table::setDT(scoringutils2::range_example_data_wide)
-  quantile_example4 <- scoringutils2::range_wide_to_long(wide)
+  wide <- data.table::setDT(scoringutils::range_example_data_wide)
+  quantile_example4 <- scoringutils::range_wide_to_long(wide)
 
 
   eval1 <- eval_forecasts(quantile_example1[!is.na(prediction)],
@@ -71,7 +71,7 @@ test_that("all quantile and range formats yield the same result", {
 
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
-  example <- data.table::setDT(scoringutils2::continuous_example_data)
+  example <- data.table::setDT(scoringutils::continuous_example_data)
   eval <- eval_forecasts(example[!is.na(prediction)],
                          summarised = TRUE,
                          summarise_by = c("model"),
@@ -105,8 +105,8 @@ test_that("function produces output for a continuous format case", {
 #
 # # tests that function returns the same results for scoringutils2 and scoringutils1
 # test_that("scoringutils and scoringutils2 are the same for a binary case", {
-#   binary_example <- data.table::setDT(scoringutils2::binary_example_data)
-#   eval2 <- scoringutils2::eval_forecasts(binary_example,
+#   binary_example <- data.table::setDT(scoringutils::binary_example_data)
+#   eval2 <- scoringutils::eval_forecasts(binary_example,
 #                                          summarise_by = c("model", "value_desc"),
 #                                          quantiles = c(0.5), sd = TRUE,
 #                                          verbose = FALSE)
@@ -123,8 +123,8 @@ test_that("function produces output for a continuous format case", {
 #
 #
 # test_that("scoringutils and scoringutils2 are the same for a continuous case", {
-#   example <- data.table::setDT(scoringutils2::continuous_example_data)
-#   eval2 <- scoringutils2::eval_forecasts(example,
+#   example <- data.table::setDT(scoringutils::continuous_example_data)
+#   eval2 <- scoringutils::eval_forecasts(example,
 #                                          summarise_by = c("model", "value_desc"),
 #                                          quantiles = c(0.5), sd = TRUE,
 #                                          verbose = FALSE)
@@ -143,8 +143,8 @@ test_that("function produces output for a continuous format case", {
 #
 # test_that("scoringutils and scoringutils2 are the same for an integer case", {
 #   set.seed(1)
-#   example <- data.table::setDT(scoringutils2::integer_example_data)
-#   eval2 <- scoringutils2::eval_forecasts(example,
+#   example <- data.table::setDT(scoringutils::integer_example_data)
+#   eval2 <- scoringutils::eval_forecasts(example,
 #                                          summarise_by = c("model", "value_desc"),
 #                                          quantiles = c(0.5), sd = TRUE,
 #                                          verbose = FALSE)
@@ -167,8 +167,8 @@ test_that("function produces output for a continuous format case", {
 #
 #
 # test_that("scoringutils and scoringutils2 are the same for a quantile case", {
-#   example <- data.table::setDT(scoringutils2::quantile_example_data)
-#   eval2 <- scoringutils2::eval_forecasts(example,
+#   example <- data.table::setDT(scoringutils::quantile_example_data)
+#   eval2 <- scoringutils::eval_forecasts(example,
 #                                          summarise_by = c("model", "value_desc"),
 #                                          interval_score_arguments = list(count_median_twice = FALSE),
 #                                          quantiles = c(0.5), sd = TRUE,
@@ -190,8 +190,8 @@ test_that("function produces output for a continuous format case", {
 #
 #
 # test_that("scoringutils and scoringutils2 are the same for a range format case", {
-#   example <- data.table::setDT(scoringutils2::range_example_data_long)
-#   eval2 <- scoringutils2::eval_forecasts(example,
+#   example <- data.table::setDT(scoringutils::range_example_data_long)
+#   eval2 <- scoringutils::eval_forecasts(example,
 #                                          summarise_by = c("model", "value_desc"),
 #                                          interval_score_arguments = list(count_median_twice = FALSE),
 #                                          quantiles = c(0.5), sd = TRUE,

@@ -45,7 +45,7 @@ Alternatively, the following functions can be accessed directly:
 \item \code{\link{crps}}
 \item \code{\link{logs}}
 \item \code{\link{dss}}
-\item \code{\link{ae_median}}
+\item \code{\link{ae_median_sample}}
 }
 
 Predictions can be evaluated in a lot of differnent formats. If you want to
@@ -53,9 +53,9 @@ convert from one format to the other, the following helper functions can
 do that for you:
 
 \itemize{
-\item \code{\link{sample_to_range}}
+\item \code{\link{sample_to_range_long}}
 \item \code{\link{sample_to_quantile}}
-\item \code{\link{quantile_to_range}}
-\item \code{\link{range_to_quantile}}
+\item \code{\link{quantile_to_range_long}}
+\item \code{\link{range_long_to_quantile}}
 }
 }

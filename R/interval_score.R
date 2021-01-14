@@ -35,16 +35,20 @@
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
+#' @param count_median_twice logical, whether or not to count the median twice.
+#' This would conceptually treat the median as a 0\% prediction interval, where
+#' the median is the lower as well as the upper bound. The alternative is to
+#' treat the median as a single quantile forecast. The interval score would then
+#' be better understood as an average of quantile scores.)
 #' @param separate_results if TRUE (default is FALSE), then the separate parts
 #' of the interval score (sharpness, penalties for over- and under-prediction
-#' get returned as separate elements of a list)
-#' @param count_median_twice if TRUE (default is FALSE), then the median is
-#' counted twice in the computation of the score
+#' get returned as separate elements of a list). If you want a `data.frame`
+#' instead, simply call `as.data.frmae()` on the output.
 #' @return vector with the scoring values, or a list with separate entries if
 #' \code{separate_results} is TRUE.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
-#' interval_range = 90
+#' interval_range = rep(90, 30)
 #' alpha = (100 - interval_range) / 100
 #' lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
 #' upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
@@ -53,6 +57,12 @@
 #'                lower = lower,
 #'                upper = upper,
 #'                interval_range = interval_range)
+#'
+#' interval_score(true_values = c(true_values, NA),
+#'                lower = c(lower, NA),
+#'                upper = c(NA, upper),
+#'                separate_results = TRUE,
+#'                interval_range = 90)
 #' @export
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
 #' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
@@ -70,17 +80,25 @@
 interval_score <- function(true_values,
                            lower,
                            upper,
-                           interval_range = NULL,
+                           interval_range,
                            weigh = TRUE,
-                           separate_results = FALSE,
-                           count_median_twice = FALSE) {
+                           count_median_twice = FALSE,
+                           separate_results = FALSE) {
 
-  if(is.null(interval_range)) {
-    stop("must provide a range for your prediction interval")
+  # error handling - not sure how I can make this better
+  present <- c(methods::hasArg("true_values"), methods::hasArg("lower"),
+               methods::hasArg("upper"), methods::hasArg("interval_range"))
+  if (!all(present)) {
+    stop("need all arguments 'true_values', 'lower', 'upper' and 'interval_range' in function 'interval_score()'")
   }
+  check_not_null(true_values = true_values, lower = lower, upper = upper,
+                 interval_range = interval_range)
+  check_equal_length(true_values, lower, interval_range, upper)
 
+  # calculate alpha from the interval range
   alpha <- (100 - interval_range) / 100
 
+  # calculate three components of WIS
   sharpness <- (upper - lower)
   overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
   underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
@@ -108,3 +126,5 @@ interval_score <- function(true_values,
     return(score)
   }
 }
+
+

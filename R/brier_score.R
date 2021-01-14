@@ -20,6 +20,7 @@
 #' that true_value = 1.
 #' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
+#' @importFrom methods hasArg
 #' @export
 #'
 #' @examples
@@ -33,12 +34,12 @@ brier_score <- function (true_values, predictions) {
 
   # ============== Error handling ==============
 
-  if (missing(true_values) | missing(predictions)) {
+  if (!all(c(methods::hasArg("true_values"), methods::hasArg("predictions")))) {
     stop("true_values or predictions argument missing")
   }
 
   if (!all(true_values %in% c(0,1))) {
-      stop("elements of true_values should be either zero or one")
+    stop("elements of true_values should be either zero or one")
   }
 
   n <- length(true_values)
