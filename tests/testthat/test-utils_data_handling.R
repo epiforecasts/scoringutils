@@ -36,7 +36,7 @@ test_that("range_wide_to_long works", {
 
   data.table::setcolorder(long2, names(long))
 
-  expect_equal(long, long2)
+  expect_equal(long, as.data.frame(long2), ignnore_attr = TRUE)
 })
 
 
@@ -79,7 +79,7 @@ test_that("quantile_to_range_long works", {
 
   data.table::setcolorder(long2, names(long))
 
-  expect_equal(long, long2)
+  expect_equal(long, as.data.frame(long2), ignnore_attr = TRUE)
 })
 
 
@@ -126,7 +126,7 @@ test_that("sample_to_range_long works", {
                                               keep_quantile_col = FALSE)
   long2 <- long2[order(model, boundary, date)]
   data.table::setcolorder(long2, names(long))
-  expect_equal(long, as.data.frame(long2))
+  expect_equal(long, as.data.frame(long2), ignnore_attr = TRUE)
 })
 
 

@@ -5,6 +5,7 @@
 #' variable and the function call where the variable is missing. This function
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
+#' @importFrom base deparse1
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 check_not_null <- function(...) {
