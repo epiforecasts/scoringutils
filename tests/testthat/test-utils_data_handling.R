@@ -35,6 +35,7 @@ test_that("range_wide_to_long works", {
 
   # for some reason this is needed to pass the unit tests on gh actions
   long2$boundary <- as.character(long2$boundary)
+  long$boundary <- as.character(long$boundary)
 
   data.table::setcolorder(long2, names(long))
 
@@ -83,6 +84,7 @@ test_that("quantile_to_range_long works", {
 
   # for some reason this is needed to pass the unit tests on gh actions
   long2$boundary <- as.character(long2$boundary)
+  long$boundary <- as.character(long$boundary)
 
   expect_equal(long, as.data.frame(long2), ignnore_attr = TRUE)
 })
@@ -134,9 +136,9 @@ test_that("sample_to_range_long works", {
 
   # for some reason this is needed to pass the unit tests on gh actions
   long2$boundary <- as.character(long2$boundary)
+  long$boundary <- as.character(long$boundary)
 
   expect_equal(long, as.data.frame(long2), ignnore_attr = TRUE)
 })
-
 
 
