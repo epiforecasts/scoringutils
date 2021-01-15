@@ -138,9 +138,11 @@ eval_forecasts_quantile <- function(data,
   }
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
-  if (!("range" %in% summarise_by | "quantile" %in% summarise_by)) {
-    res[, c("coverage", "quantile_coverage") := NULL]
+  if (!("range" %in% summarise_by)) {
+    res[, c("coverage") := NULL]
   }
-
+  if (!("quantile" %in% summarise_by)) {
+    res[, c("quantile_coverage") := NULL]
+  }
   return(res)
 }
