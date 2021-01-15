@@ -101,6 +101,14 @@
 #' @param summarised Summarise arguments (i.e. take the mean per group
 #' specified in group_by. Default is TRUE.
 #' @param verbose print out additional helpful messages (default is TRUE)
+#' @param forecasts data.frame with forecasts, that should follow the same
+#' general guidelines as the `data` input. Argument can be used to supply
+#' forecasts and truth data independently. Default is `NULL`.
+#' @param truth_data data.frame with a column called `true_value` to be merged
+#' with `forecasts`
+#' @param merge_by character vector with column names that `forecasts` and
+#' `truth_data` should be merged on. Default is `NULL` and merge will be
+#' attempted automatically.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -169,7 +177,7 @@
 #' \url{https://doi.org/10.1371/journal.pcbi.1006785}
 #' @export
 
-eval_forecasts <- function(data,
+eval_forecasts <- function(data = NULL,
                            by = NULL,
                            summarise_by = by,
                            metrics = NULL,
@@ -180,15 +188,26 @@ eval_forecasts <- function(data,
                                                            separate_results = TRUE),
                            pit_plots = FALSE,
                            summarised = TRUE,
-                           verbose = TRUE) {
+                           verbose = TRUE,
+                           forecasts = NULL,
+                           truth_data = NULL,
+                           merge_by = NULL) {
 
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
-  if (!methods::hasArg("data")) {
-    stop("need arguments 'data'in function 'eval_forecasts()'")
+  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
+    stop("need arguments 'data' in function 'eval_forecasts()', or alternatively 'forecasts' and 'truth_data'")
   }
-  check_not_null(data = data)
+  if (is.null(data)) {
+    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by)
+    if (nrow(data) == 0) {
+      if (verbose) {
+        warning("After attempting to merge, only an empty data.table was left")
+      }
+      return(data)
+    }
+  }
 
   # do a copy to avoid that the input may be altered in any way.
   data <- data.table::as.data.table(data)

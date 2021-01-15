@@ -212,3 +212,7 @@ test_that("function produces output for a continuous format case", {
 # })
 
 
+
+## test for separate truth and forecast data
+
+

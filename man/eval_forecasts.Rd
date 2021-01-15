@@ -5,7 +5,7 @@
 \title{Evaluate forecasts}
 \usage{
 eval_forecasts(
-  data,
+  data = NULL,
   by = NULL,
   summarise_by = by,
   metrics = NULL,
@@ -15,7 +15,10 @@ eval_forecasts(
     separate_results = TRUE),
   pit_plots = FALSE,
   summarised = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  forecasts = NULL,
+  truth_data = NULL,
+  merge_by = NULL
 )
 }
 \arguments{
@@ -99,6 +102,17 @@ details see \code{\link{pit}}.}
 specified in group_by. Default is TRUE.}
 
 \item{verbose}{print out additional helpful messages (default is TRUE)}
+
+\item{forecasts}{data.frame with forecasts, that should follow the same
+general guidelines as the `data` input. Argument can be used to supply
+forecasts and truth data independently. Default is `NULL`.}
+
+\item{truth_data}{data.frame with a column called `true_value` to be merged
+with `forecasts`}
+
+\item{merge_by}{character vector with column names that `forecasts` and
+`truth_data` should be merged on. Default is `NULL` and merge will be
+attempted automatically.}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,

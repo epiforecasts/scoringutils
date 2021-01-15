@@ -172,3 +172,44 @@
 #' }
 "binary_example_data"
 
+
+#' Quantile Example Data - Forecasts only
+#'
+#' A data set with predictions for different quantities relevant in the
+#' 2020 UK Covid-19 epidemic, but no true_values
+#'
+#' @format A data frame with 7,581 rows and 9 columns:
+#' \describe{
+#'   \item{value_date}{the date for which a prediction was made}
+#'   \item{value_type}{the target to be predicted (short form)}
+#'   \item{geography}{the region for which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{creation_date}{date on which the forecast was made}
+#'   \item{quantile}{quantile of the corresponding prediction}
+#'   \item{prediction}{quantile predictions}
+#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{horizon}{forecast horizon in days}
+#'
+#' }
+"example_quantile_forecasts_only"
+
+
+#' Truth data only
+#'
+#' A data set with truth data for different quantities relevant in the
+#' 2020 UK Covid-19 epidemic, but no predictions
+#'
+#' @format A data frame with 140 rows and 5 columns:
+#' \describe{
+#'   \item{value_date}{the date for which a prediction was made}
+#'   \item{value_type}{the target to be predicted (short form)}
+#'   \item{geography}{the region for which a prediction was made}
+#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{true_value}{true observed values}
+#'
+#' }
+"example_truth_data_only"
+
+
+
+

@@ -391,7 +391,8 @@ sample_to_range <- function(data,
 #' @export
 
 
-merge_pred_and_obs <- function(forecasts, observations, by = NULL) {
+merge_pred_and_obs <- function(forecasts, observations,
+                               by = NULL) {
 
   forecasts <- data.table::as.data.table(forecasts)
   observations <- data.table::as.data.table(observations)
@@ -406,9 +407,28 @@ merge_pred_and_obs <- function(forecasts, observations, by = NULL) {
   obs_cols <- colnames(observations)
   by <- intersect(by, obs_cols)
 
-  combined <- merge(observations, forecasts, by = by)
+  # do a left_join, where all data in the observations are kept.
+  combined <- merge(observations, forecasts, by = by, all.x = TRUE)
 
-  # maybe add some error handling here
+  # get colnames that are the same for x and y
+  colnames <- colnames(combined)
+  colnames_x <- colnames[endsWith(colnames, ".x")]
+  colnames_y <- colnames[endsWith(colnames, ".y")]
+
+  # extract basenames
+  basenames_x <- sub(".x$", "", colnames_x)
+  basenames_y <- sub(".y$", "", colnames_y)
+
+  # see whether the column name as well as the content is the same
+  overlapping <- (as.list(combined[, ..colnames_x]) %in% as.list(combined[, ..colnames_y])) & basenames_x == basenames_y
+  overlap_names <- colnames_x[overlapping]
+  basenames_overlap <- sub(".x$", "", overlap_names)
+
+  # delete overlapping columns
+  if (length(basenames_overlap > 0)) {
+    combined[, paste0(basenames_overlap, ".x") := NULL]
+    combined[, paste0(basenames_overlap, ".y") := NULL]
+  }
 
   return(combined)
 }
