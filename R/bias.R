@@ -193,6 +193,11 @@ quantile_bias <- function(range, lower, upper,
     lower_predictions <- lower[!is.na(lower) & !is.na(upper)]
     upper_predictions <- upper[!is.na(lower) & !is.na(upper)]
 
+    # deal with the point forecast case where inputs may be NA
+    if (length(range) == 0 | length(lower_predictions) == 0 | length(upper_predictions) == 0) {
+      return(NA_real_)
+    }
+
   }
 
   # convert range to quantiles
@@ -231,3 +236,4 @@ quantile_bias <- function(range, lower, upper,
     return(bias)
   }
 }
+

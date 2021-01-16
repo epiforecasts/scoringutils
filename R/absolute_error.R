@@ -65,8 +65,8 @@ ae_median_sample <- function(true_values, predictions) {
 ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
                                verbose = TRUE) {
   if (!is.null(quantiles)) {
-    if (!any(quantiles == 0.5)) {
-      return(NA)
+    if (!any(quantiles == 0.5) && !any(is.na(quantiles))) {
+      return(NA_real_)
       if (verbose) {
         warning("in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?")
       }

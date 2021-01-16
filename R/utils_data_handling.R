@@ -160,6 +160,8 @@ range_long_to_quantile <- function(data,
   data <- data.table::as.data.table(data)
 
   # filter out duplicated median
+  # note that this also filters out instances where range is NA, i.e.
+  # a point forecast. This should probably be dealt with in the future
   data <- data[!(range == 0 & boundary == "upper"), ]
 
   data[, quantile := ifelse(boundary == "lower",
@@ -238,6 +240,11 @@ quantile_to_range_long <- function(data,
     data[, "quantile" := NULL]
   }
 
+  # if only point forecasts are scored, we only have NA values for range and
+  # boundary. In that instance we need to set the type of the columns
+  # explicitly to avoid future collisions.
+  data[, `:=`(boundary = as.character(boundary),
+              range = as.numeric(range))]
 
   return(data)
 }

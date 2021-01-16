@@ -26,8 +26,18 @@ eval_forecasts_quantile <- function(data,
                                                    keep_range_col = TRUE)
 
 
+  # to deal with point forecasts in a quantile format. This in effect adds
+  # a third column next to lower and upper after pivoting
+  data[is.na(range), boundary := "point"]
+
   data <- data.table::dcast(data, ... ~ boundary,
                             value.var = "prediction")
+
+  # if we only score point forecasts, it may be true that there are no columns
+  # upper and lower in the data.frame. If so, these need to be added
+  if (!all(c("upper", "lower") %in% colnames(data))) {
+    data[, c("upper", "lower") := NA]
+  }
 
   # update interval_score arguments based on what was provided by user
   interval_score_arguments <- update_list(defaults = list(weigh = TRUE,
@@ -72,6 +82,15 @@ eval_forecasts_quantile <- function(data,
         by = by]
   }
 
+  # score absolute error for point forecasts
+  # these are marked by an NA in range, and a numeric value for point
+  if (any(c("ae_point", "aem") %in% metrics)) {
+    if ("point" %in% colnames(res)) {
+      res[is.na(range) & is.numeric(point),
+          ae_point := abs_error(predictions = point, true_value)]
+    }
+  }
+
 
   # calculate scores on quantile format ----------------------------------------
   # compute absolute error of the median
@@ -103,12 +122,13 @@ eval_forecasts_quantile <- function(data,
     # merge back with other metrics
     merge_cols <- setdiff(keep_cols, c("aem", "quantile_coverage", "quantile",
                                        "boundary"))
-    res <- merge(res, quantile_data, by = merge_cols)
+    # specify all.x = TRUE as the point forecasts got deleted when
+    # going from range to quantile above
+    res <- merge(res, quantile_data, by = merge_cols, all.x = TRUE)
   }
 
 
   ############################ pairwise comparisons ############################
-
 
   # summarise scores if desired ------------------------------------------------
   if (summarised) {
@@ -117,7 +137,8 @@ eval_forecasts_quantile <- function(data,
       res <- add_quantiles(res,
                            c("interval_score", "coverage",
                              "overprediction", "underprediction",
-                             "coverage_deviation", "bias", "sharpness", "aem"),
+                             "coverage_deviation", "bias", "sharpness", "aem",
+                             "ae_point"),
                            quantiles,
                            by = c(summarise_by))
     }
@@ -126,7 +147,8 @@ eval_forecasts_quantile <- function(data,
       res <- add_sd(res,
                     varnames = c("interval_score", "bias", "coverage",
                                  "overprediction", "underprediction",
-                                 "coverage_deviation", "sharpness", "aem"),
+                                 "coverage_deviation", "sharpness", "aem",
+                                 "ae_point"),
                     by = c(summarise_by))
     }
 
@@ -134,7 +156,7 @@ eval_forecasts_quantile <- function(data,
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
                by = c(summarise_by),
                .SDcols = colnames(res) %like%
-                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem"]
+                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point"]
   }
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage

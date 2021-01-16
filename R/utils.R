@@ -72,6 +72,7 @@ geom_mean_helper <- function(x) {
 
 globalVariables(c(".",
                   ".SD",
+                  "ae_point",
                   "aem",
                   "boundary",
                   "brier_score",
@@ -100,6 +101,7 @@ globalVariables(c(".",
                   "n_obs",
                   "n_obs wis_component_name",
                   "pit_p_val",
+                  "point",
                   "prediction",
                   "quantile",
                   "rn",
@@ -116,7 +118,7 @@ globalVariables(c(".",
 
 
 list_of_avail_metrics <- function() {
-  available_metrics <- c("aem", "log_score", "sharpness", "bias", "dss", "crps",
+  available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
                          "underprediction", "overprediction")
