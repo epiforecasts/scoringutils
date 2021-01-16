@@ -430,7 +430,7 @@ for (horizon in horizons) {
     # cat("\n\n #### Overall \n\n")
     # for (target_type in target_types) {
     #   p1 <- plot_function(data, target_type = target_type, 
-                            location = location, horizon = horizon)
+                            # location = location, horizon = horizon)
     #   check_print(p1)
     # }
 
