@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Binary Example Data — binary_example_data • scoringutils</title>
+<title>Binary Forecast Example Data — binary_example_data • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Binary Example Data — binary_example_data" />
-<meta property="og:description" content="A toy dataset for a probability forecast of a binary outcome variable" />
+<meta property="og:title" content="Binary Forecast Example Data — binary_example_data" />
+<meta property="og:description" content="A data set with (constructed) binary predictions relevant in the
+2020 UK Covid-19 epidemic." />
 
 
 
@@ -74,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -110,13 +111,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Binary Example Data</h1>
+    <h1>Binary Forecast Example Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>binary_example_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A toy dataset for a probability forecast of a binary outcome variable</p>
+    <p>A data set with (constructed) binary predictions relevant in the
+2020 UK Covid-19 epidemic.</p>
     </div>
 
     <pre class="usage"><span class='va'>binary_example_data</span></pre>
@@ -124,16 +126,27 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data.table with 120 rows and 5 variables:</p><dl>
-  <dt>id</dt><dd><p>unique identifier for true observed values</p></dd>
-  <dt>true_value</dt><dd><p>true observed values</p></dd>
+    <p>A data frame with 346 rows and 10 columns:</p><dl>
+  <dt>value_date</dt><dd><p>the date for which a prediction was made</p></dd>
+  <dt>value_type</dt><dd><p>the target to be predicted (short form)</p></dd>
+  <dt>geography</dt><dd><p>the region for which a prediction was made</p></dd>
+  <dt>value_desc</dt><dd><p>long form description of the prediction target</p></dd>
   <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
-  <dt>horizon</dt><dd><p>forecast horzin (e.g. 1 day ahead forecast)</p></dd>
-  <dt>prediction</dt><dd><p>predicted probability that the corresponding true
-  value will be 1</p></dd>
+  <dt>creation_date</dt><dd><p>date on which the forecast was made</p></dd>
+  <dt>horizon</dt><dd><p>forecast horizon in days</p></dd>
+  <dt>prediction</dt><dd><p>probability prediction that true value would be 1</p></dd>
+  <dt>true_value</dt><dd><p>true observed values</p></dd>
 
 </dl>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Predictions in the data set were constructed based on the continuous example
+data by looking at the number of samples below the mean prediction.
+The outcome was constrcuted as whether or not the actually
+observed value was below or above that mean prediction.
+This should not be understood as sound statistical practice, but rather
+as a practical way to create an example data set.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

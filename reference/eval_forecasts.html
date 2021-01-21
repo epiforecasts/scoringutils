@@ -77,7 +77,7 @@ continuous, integer-valued or binary variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -126,16 +126,20 @@ continuous, integer-valued or binary variables.</p>
     </div>
 
     <pre class="usage"><span class='fu'>eval_forecasts</span><span class='op'>(</span>
-  <span class='va'>data</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
   summarise_by <span class='op'>=</span> <span class='va'>by</span>,
+  metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
   quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
   sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>TRUE</span>, count_median_twice <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    separate_results <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
   pit_plots <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  pit_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>plot <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
-  interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
   summarised <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  forecasts <span class='op'>=</span> <span class='cn'>NULL</span>,
+  truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  merge_by <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,9 +162,9 @@ The following columns need to be present:</p><ul>
   binary predictions.</p></li>
 </ul><p>For quantile forecasts the data can be provided in variety of formats. You
 can either use a range-based format or a quantile-based format. (You can
-convert between formats using <code><a href='quantile_to_range.html'>quantile_to_range</a></code>,
-<code><a href='range_to_quantile.html'>range_to_quantile</a></code>,
-<code><a href='sample_to_range.html'>sample_to_range</a></code>,
+convert between formats using <code><a href='quantile_to_range_long.html'>quantile_to_range_long</a></code>,
+<code><a href='range_long_to_quantile.html'>range_long_to_quantile</a></code>,
+<code><a href='sample_to_range_long.html'>sample_to_range_long</a></code>,
 <code><a href='sample_to_quantile.html'>sample_to_quantile</a></code>)
 For a quantile-format forecast you should provide:</p><ul>
 <li><p>prediction - prediction to the corresponding quantile</p></li>
@@ -203,6 +207,11 @@ over categories different from the scoring.
 (and possibly plot) the probability integral transform(pit).</p></td>
     </tr>
     <tr>
+      <th>metrics</th>
+      <td><p>the metrics you want to have in the output. If `NULL` (the
+default), all available metrics will be computed.</p></td>
+    </tr>
+    <tr>
       <th>quantiles</th>
       <td><p>numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the
@@ -215,19 +224,14 @@ returned.</p></td>
 metrics will be returned when summarising.</p></td>
     </tr>
     <tr>
+      <th>interval_score_arguments</th>
+      <td><p>list with arguments to pass down to
+<code>interval_score</code>.</p></td>
+    </tr>
+    <tr>
       <th>pit_plots</th>
       <td><p>if TRUE (not the default), pit plots will be returned. For
 details see <code><a href='pit.html'>pit</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>pit_arguments</th>
-      <td><p>pass down additional arguments to the <code><a href='pit.html'>pit</a></code>
-function.</p></td>
-    </tr>
-    <tr>
-      <th>interval_score_arguments</th>
-      <td><p>pass down additional arguments to the
-<code><a href='interval_score.html'>interval_score</a></code> function, e.g. <code>weigh = FAlSE</code>.</p></td>
     </tr>
     <tr>
       <th>summarised</th>
@@ -237,6 +241,23 @@ specified in group_by. Default is TRUE.</p></td>
     <tr>
       <th>verbose</th>
       <td><p>print out additional helpful messages (default is TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>forecasts</th>
+      <td><p>data.frame with forecasts, that should follow the same
+general guidelines as the `data` input. Argument can be used to supply
+forecasts and truth data independently. Default is `NULL`.</p></td>
+    </tr>
+    <tr>
+      <th>truth_data</th>
+      <td><p>data.frame with a column called `true_value` to be merged
+with `forecasts`</p></td>
+    </tr>
+    <tr>
+      <th>merge_by</th>
+      <td><p>character vector with column names that `forecasts` and
+`truth_data` should be merged on. Default is `NULL` and merge will be
+attempted automatically.</p></td>
     </tr>
     </table>
 
@@ -295,45 +316,40 @@ PLoS Comput Biol 15(2): e1006785.
     <pre class="examples"><div class='input'><span class='co'>## Probability Forecast for Binary Target</span>
 <span class='va'>binary_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='binary_example_data.html'>binary_example_data</a></span><span class='op'>)</span>
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>binary_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"model"</span>, <span class='st'>"horizon"</span><span class='op'>)</span>,
                                      summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span>,
-                                     quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>binary_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"model"</span>, <span class='st'>"horizon"</span><span class='op'>)</span><span class='op'>)</span>
+                                     quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                                     verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'>## Quantile Forecasts</span>
-<span class='co'># wide format</span>
-<span class='va'>quantile_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></span><span class='op'>)</span>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>quantile_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"id"</span><span class='op'>)</span>,
+<span class='co'># wide format example (this examples shows usage of both wide formats)</span>
+<span class='va'>range_example_wide</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_wide.html'>range_example_data_wide</a></span><span class='op'>)</span>
+<span class='va'>range_example</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='range_wide_to_long.html'>range_wide_to_long</a></span><span class='op'>(</span><span class='va'>range_example_wide</span><span class='op'>)</span>
+<span class='co'># equivalent:</span>
+<span class='va'>wide2</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_semi_wide.html'>range_example_data_semi_wide</a></span><span class='op'>)</span>
+<span class='va'>range_example</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='range_wide_to_long.html'>range_wide_to_long</a></span><span class='op'>(</span><span class='va'>wide2</span><span class='op'>)</span>
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>range_example</span>,
                                      summarise_by <span class='op'>=</span> <span class='st'>"model"</span>,
                                      quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
                                      sd <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>quantile_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"id"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>range_example</span><span class='op'>)</span>
 
 <span class='co'>#long format</span>
 
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"horizon"</span>, <span class='st'>"id"</span><span class='op'>)</span>,
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,
                                      summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Integer Forecasts</span>
 <span class='va'>integer_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='integer_example_data.html'>integer_example_data</a></span><span class='op'>)</span>
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>integer_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"id"</span>, <span class='st'>"horizon"</span><span class='op'>)</span>,
                                      summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span>,
                                      quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.9</span><span class='op'>)</span>,
                                      sd <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                                     pit_plots <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                                     pit_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n_replicates <span class='op'>=</span> <span class='fl'>30</span>,
-                                                          plot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+                                     pit_plots <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>integer_example</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>In order to compute PIT values, 'summarise_by' must be different from 'by'</span></div><div class='input'>
 <span class='co'>## Continuous Forecasts</span>
 <span class='va'>continuous_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='continuous_example_data.html'>continuous_example_data</a></span><span class='op'>)</span>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>continuous_example</span>,
-                                     by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"id"</span>, <span class='st'>"horizon"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>continuous_example</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>In order to compute PIT values, 'summarise_by' must be different from 'by'</span></div><div class='input'><span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>continuous_example</span>,
                                      quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.9</span><span class='op'>)</span>,
                                      sd <span class='op'>=</span> <span class='cn'>TRUE</span>,

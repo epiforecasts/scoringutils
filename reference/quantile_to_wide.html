@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pivot Quantile Forecasts From Long to Wide Format — quantile_to_wide • scoringutils</title>
+<title>Pivot Range Format Forecasts From Long to Wide Format — quantile_to_wide • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,8 @@
 
 
 
-<meta property="og:title" content="Pivot Quantile Forecasts From Long to Wide Format — quantile_to_wide" />
-<meta property="og:description" content="Given a data.frame that follows the structure shown in
-quantile_example_data_long, the function outputs the same
-data in a long format as (as shown in
-quantile_example_data_wide). This can be useful e.g. for
-plotting." />
+<meta property="og:title" content="Pivot Range Format Forecasts From Long to Wide Format — quantile_to_wide" />
+<meta property="og:description" content="Legacy function that will not be supported in future updates." />
 
 
 
@@ -78,7 +74,7 @@ plotting." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -114,17 +110,13 @@ plotting." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Pivot Quantile Forecasts From Long to Wide Format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pivoting_functions.R'><code>R/pivoting_functions.R</code></a></small>
+    <h1>Pivot Range Format Forecasts From Long to Wide Format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/utils_data_handling.R'><code>R/utils_data_handling.R</code></a></small>
     <div class="hidden name"><code>quantile_to_wide.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given a data.frame that follows the structure shown in
-<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>, the function outputs the same
-data in a long format as (as shown in
-<code><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></code>). This can be useful e.g. for
-plotting.</p>
+    <p>Legacy function that will not be supported in future updates.</p>
     </div>
 
     <pre class="usage"><span class='fu'>quantile_to_wide</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
@@ -136,7 +128,7 @@ plotting.</p>
       <th>data</th>
       <td><p>a data.frame following the specifications from
 <code><a href='eval_forecasts.html'>eval_forecasts</a></code>) for quantile forecasts. For an example, see
-<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>)</p></td>
+<code><a href='range_example_data_long.html'>range_example_data_long</a></code>)</p></td>
     </tr>
     </table>
 
@@ -144,11 +136,6 @@ plotting.</p>
 
     <p>a data.frame in wide format</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_long.html'>quantile_example_data_long</a></span>
-<span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>quantile_to_wide</span><span class='op'>(</span><span class='va'>long</span><span class='op'>)</span>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

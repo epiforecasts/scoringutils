@@ -78,7 +78,7 @@ of the (randomised) PIT as well as a PIT histogram if specified." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@ of the (randomised) PIT as well as a PIT histogram if specified.</p>
   <span class='va'>predictions</span>,
   plot <span class='op'>=</span> <span class='cn'>TRUE</span>,
   full_output <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  n_replicates <span class='op'>=</span> <span class='fl'>20</span>,
+  n_replicates <span class='op'>=</span> <span class='fl'>50</span>,
   num_bins <span class='op'>=</span> <span class='cn'>NULL</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -188,9 +188,8 @@ continuous forecasts, this will be NA as there is only one p_value returned.</p>
 <li><p><code>hist_PIT</code> a plot object with the PIT histogram. Only returned
 if <code>plot == TRUE</code>. Call
 <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(PIT(...)$hist_PIT)</a></code> to display the histogram.</p></li>
-<li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests on the
-randomised PIT. Only returned for integer forecasts
-and if <code>full_output = TRUE</code></p></li>
+<li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests
+on the (randomised) PIT. Only returned if <code>full_output = TRUE</code></p></li>
 <li><p><code>u</code>: the u_t values internally computed. Only returned if
 <code>full_output = TRUE</code></p></li>
 </ul>
@@ -230,7 +229,8 @@ Anderson-Darling test.</p>
 <p>As a rule of thumb, there is no evidence to suggest a forecasting model is
 miscalibrated if the p-value found was greater than a threshold of p &gt;= 0.1,
 some evidence that it was miscalibrated if 0.01 &lt; p &lt; 0.1, and good
-evidence that it was miscalibrated if p &lt;= 0.01.
+evidence that it was miscalibrated if p &lt;= 0.01. However, the AD-p-values
+may be overly strict and there actual usefulness may be questionable.
 In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -247,7 +247,7 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>pit</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $p_value
-#&gt; [1] 0.7788347
+#&gt; [1] 0.8504553
 #&gt; 
 #&gt; $sd
 #&gt; [1] NA
@@ -258,10 +258,10 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>pit</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span>,  n_replicates <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $p_value
-#&gt; [1] 0.1826231
+#&gt; [1] 0.1547703
 #&gt; 
 #&gt; $sd
-#&gt; [1] 0.01455812
+#&gt; [1] 0.02700264
 #&gt; 
 #&gt; $hist_PIT</div><div class='img'><img src='pit-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
 </div></pre>

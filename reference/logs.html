@@ -82,7 +82,7 @@ more details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -164,11 +164,11 @@ Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
     <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.9556998 1.9107891 3.0174088 1.7699629 1.9020017 2.6366477 2.1569860
-#&gt;  [8] 2.2913070 3.1816726 2.6138448 3.1841431 2.2164653 2.3475101 2.3173756
-#&gt; [15] 2.1686513 2.5115746 3.6338571 2.3804722 2.3693695 3.5706144 2.5844654
-#&gt; [22] 2.6824709 3.0550545 2.4871786 4.1769711 3.3594553 2.5669029 3.1164003
-#&gt; [29] 2.6395661 2.8266544</div></pre>
+</div><div class='output co'>#&gt;  [1] 0.5651598 1.3011258 1.5499496 1.9644559 2.0967969 1.8718419 2.0442318
+#&gt;  [8] 2.1130667 2.5225856 2.6577304 2.2045652 2.1993289 4.5750503 2.2885058
+#&gt; [15] 3.2055484 2.5250942 3.6164554 2.5661784 2.4654972 2.6036100 3.0155768
+#&gt; [22] 2.5362107 2.6483001 2.7913424 2.7373976 2.9422397 2.5261268 5.2147598
+#&gt; [29] 3.5558491 2.6547767</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

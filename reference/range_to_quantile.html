@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Change Data from a Range Format to a Plain Quantile Format — range_to_quantile • scoringutils</title>
+<title>Pivot Change Data from a Range Format to a Quantile Format — range_to_quantile • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,15 +39,8 @@
 
 
 
-<meta property="og:title" content="Change Data from a Range Format to a Plain Quantile Format — range_to_quantile" />
-<meta property="og:description" content="Transform data from a format that uses interval ranges to denote quantiles
-to a format that uses quantiles only.
-Given a data.frame that follows the structure shown in
-quantile_example_data_long, the function outputs the same
-data in a long format as (as shown in
-quantile_example_data_long). This can be useful e.g. for
-plotting. If you're data.frame is in a different format, consider running
-quantile_to_wide first." />
+<meta property="og:title" content="Pivot Change Data from a Range Format to a Quantile Format — range_to_quantile" />
+<meta property="og:description" content="Legacy function that will not be supported in future updates." />
 
 
 
@@ -81,7 +74,7 @@ quantile_to_wide first." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -117,20 +110,13 @@ quantile_to_wide first." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Change Data from a Range Format to a Plain Quantile Format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pivoting_functions.R'><code>R/pivoting_functions.R</code></a></small>
+    <h1>Pivot Change Data from a Range Format to a Quantile Format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/utils_data_handling.R'><code>R/utils_data_handling.R</code></a></small>
     <div class="hidden name"><code>range_to_quantile.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Transform data from a format that uses interval ranges to denote quantiles
-to a format that uses quantiles only.</p>
-<p>Given a data.frame that follows the structure shown in
-<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>, the function outputs the same
-data in a long format as (as shown in
-<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>). This can be useful e.g. for
-plotting. If you're data.frame is in a different format, consider running
-<code><a href='quantile_to_wide.html'>quantile_to_wide</a></code> first.</p>
+    <p>Legacy function that will not be supported in future updates.</p>
     </div>
 
     <pre class="usage"><span class='fu'>range_to_quantile</span><span class='op'>(</span><span class='va'>data</span>, keep_range_col <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
@@ -142,7 +128,7 @@ plotting. If you're data.frame is in a different format, consider running
       <th>data</th>
       <td><p>a data.frame following the specifications from
 <code><a href='eval_forecasts.html'>eval_forecasts</a></code>) for quantile forecasts. For an example, see
-<code><a href='quantile_example_data_long.html'>quantile_example_data_long</a></code>)</p></td>
+<code><a href='range_example_data_long.html'>range_example_data_long</a></code>)</p></td>
     </tr>
     <tr>
       <th>keep_range_col</th>
@@ -153,15 +139,8 @@ transformation (default is FALSE)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame in a plain quantile format</p>
+    <p>a data.frame in long format</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data_wide.html'>quantile_example_data_wide</a></span>
-<span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='quantile_to_long.html'>quantile_to_long</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span>
-
-<span class='va'>plain_quantile</span> <span class='op'>&lt;-</span> <span class='fu'>range_to_quantile</span><span class='op'>(</span><span class='va'>long</span><span class='op'>)</span>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

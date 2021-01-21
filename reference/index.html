@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -135,9 +135,33 @@
       <tr>
         
         <td>
-          <p><code><a href="ae_median.html">ae_median()</a></code> </p>
+          <p><code><a href="abs_error.html">abs_error()</a></code> </p>
         </td>
-        <td><p>Absolute Error of the Median</p></td>
+        <td><p>Absolute Error</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_quantiles.html">add_quantiles()</a></code> </p>
+        </td>
+        <td><p>Add Quantiles to Predictions When Summarising</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_sd.html">add_sd()</a></code> </p>
+        </td>
+        <td><p>Add Standard Deviation to Predictions When Summarising</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ae_median_quantile.html">ae_median_quantile()</a></code> </p>
+        </td>
+        <td><p>Absolute Error of the Median (Quantile-based Version)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ae_median_sample.html">ae_median_sample()</a></code> </p>
+        </td>
+        <td><p>Absolute Error of the Median (Sample-based Version)</p></td>
       </tr><tr>
         
         <td>
@@ -149,7 +173,7 @@
         <td>
           <p><code><a href="binary_example_data.html">binary_example_data</a></code> </p>
         </td>
-        <td><p>Binary Example Data</p></td>
+        <td><p>Binary Forecast Example Data</p></td>
       </tr><tr>
         
         <td>
@@ -159,9 +183,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="check_equal_length.html">check_equal_length()</a></code> </p>
+        </td>
+        <td><p>Check Length</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_not_null.html">check_not_null()</a></code> </p>
+        </td>
+        <td><p>Check Variable is not NULL</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="continuous_example_data.html">continuous_example_data</a></code> </p>
         </td>
-        <td><p>Continuous Example Data</p></td>
+        <td><p>Continuous Forecast Example Data</p></td>
       </tr><tr>
         
         <td>
@@ -189,6 +225,42 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="eval_forecasts_binary.html">eval_forecasts_binary()</a></code> </p>
+        </td>
+        <td><p>Evaluate forecasts in a Binary Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="eval_forecasts_sample.html">eval_forecasts_sample()</a></code> </p>
+        </td>
+        <td><p>Evaluate forecasts in a Sample-Based Format (Integer or Cotinuous)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="example_quantile_forecasts_only.html">example_quantile_forecasts_only</a></code> </p>
+        </td>
+        <td><p>Quantile Example Data - Forecasts only</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="example_truth_data_only.html">example_truth_data_only</a></code> </p>
+        </td>
+        <td><p>Truth data only</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_from_list.html">extract_from_list()</a></code> </p>
+        </td>
+        <td><p>Extract Elements From a List of Lists</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geom_mean_helper.html">geom_mean_helper()</a></code> </p>
+        </td>
+        <td><p>Calculate Geometric Mean</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="hist_PIT.html">hist_PIT()</a></code> </p>
         </td>
         <td><p>PIT Histogram</p></td>
@@ -203,7 +275,7 @@
         <td>
           <p><code><a href="integer_example_data.html">integer_example_data</a></code> </p>
         </td>
-        <td><p>Integer Example Data</p></td>
+        <td><p>Integer Forecast Example Data</p></td>
       </tr><tr>
         
         <td>
@@ -225,6 +297,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="merge_pred_and_obs.html">merge_pred_and_obs()</a></code> </p>
+        </td>
+        <td><p>Merge Forecast Data And Observations</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mse.html">mse()</a></code> </p>
         </td>
         <td><p>Mean Squared Error</p></td>
@@ -234,6 +312,18 @@
           <p><code><a href="pit.html">pit()</a></code> </p>
         </td>
         <td><p>Probability Integral Transformation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pit_df.html">pit_df()</a></code> </p>
+        </td>
+        <td><p>Probability Integral Transformation (data.frame Format)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pit_df_fast.html">pit_df_fast()</a></code> </p>
+        </td>
+        <td><p>Probability Integral Transformation (data.frame Format, fast version)</p></td>
       </tr><tr>
         
         <td>
@@ -255,39 +345,63 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="quantile_example_data_long.html">quantile_example_data_long</a></code> </p>
+          <p><code><a href="quantile_example_data.html">quantile_example_data</a></code> </p>
         </td>
-        <td><p>Quantile Example Data - Long Format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="quantile_example_data_plain.html">quantile_example_data_plain</a></code> </p>
-        </td>
-        <td><p>Quantile Example Data - Plain Quantile Format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="quantile_example_data_wide.html">quantile_example_data_wide</a></code> </p>
-        </td>
-        <td><p>Quantile Example Data - Wide Format</p></td>
+        <td><p>Quantile Example Data</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="quantile_to_long.html">quantile_to_long()</a></code> </p>
         </td>
-        <td><p>Pivot Quantile Forecasts From Wide to Long Format</p></td>
+        <td><p>Pivot Range Format Forecasts From Wide to Long Format</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="quantile_to_range.html">quantile_to_range()</a></code> </p>
         </td>
-        <td><p>Change Data from a Plain Quantile Format to a Range Format</p></td>
+        <td><p>Change Data from a Plain Quantile Format to a Long Range Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="quantile_to_range_long.html">quantile_to_range_long()</a></code> </p>
+        </td>
+        <td><p>Change Data from a Plain Quantile Format to a Long Range Format</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="quantile_to_wide.html">quantile_to_wide()</a></code> </p>
         </td>
-        <td><p>Pivot Quantile Forecasts From Long to Wide Format</p></td>
+        <td><p>Pivot Range Format Forecasts From Long to Wide Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_example_data_long.html">range_example_data_long</a></code> </p>
+        </td>
+        <td><p>Range Forecast Example Data (Long Format)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_example_data_semi_wide.html">range_example_data_semi_wide</a></code> </p>
+        </td>
+        <td><p>Range Forecast Example Data (Semi-Wide Format)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_example_data_wide.html">range_example_data_wide</a></code> </p>
+        </td>
+        <td><p>Range Forecast Example Data (Wide Format)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_long_to_quantile.html">range_long_to_quantile()</a></code> </p>
+        </td>
+        <td><p>Change Data from a Range Format to a Quantile Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_long_to_wide.html">range_long_to_wide()</a></code> </p>
+        </td>
+        <td><p>Pivot Range Format Forecasts From Long to Wide Format</p></td>
       </tr><tr>
         
         <td>
@@ -299,7 +413,13 @@
         <td>
           <p><code><a href="range_to_quantile.html">range_to_quantile()</a></code> </p>
         </td>
-        <td><p>Change Data from a Range Format to a Plain Quantile Format</p></td>
+        <td><p>Pivot Change Data from a Range Format to a Quantile Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="range_wide_to_long.html">range_wide_to_long()</a></code> </p>
+        </td>
+        <td><p>Pivot Range Format Forecasts From Wide to Long Format</p></td>
       </tr><tr>
         
         <td>
@@ -311,7 +431,13 @@
         <td>
           <p><code><a href="sample_to_range.html">sample_to_range()</a></code> </p>
         </td>
-        <td><p>Change Data from a Sample Based Format to a Interval Range Format</p></td>
+        <td><p>Change Data from a Sample Based Format to a Long Interval Range Format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sample_to_range_long.html">sample_to_range_long()</a></code> </p>
+        </td>
+        <td><p>Change Data from a Sample Based Format to a Long Interval Range Format</p></td>
       </tr><tr>
         
         <td>
@@ -336,6 +462,18 @@
           <p><code><a href="sharpness.html">sharpness()</a></code> </p>
         </td>
         <td><p>Determines sharpness of a probabilistic forecast</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="show_avail_forecasts.html">show_avail_forecasts()</a></code> </p>
+        </td>
+        <td><p>Visualise Where Forecasts Are Available</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="update_list.html">update_list()</a></code> </p>
+        </td>
+        <td><p>Update a List</p></td>
       </tr><tr>
         
         <td>
