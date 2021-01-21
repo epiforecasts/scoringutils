@@ -7,7 +7,10 @@ eval_forecasts_quantile <- function(data,
                                     pit_plots,
                                     interval_score_arguments,
                                     summarised,
-                                    verbose) {
+                                    verbose,
+                                    compute_relative_skill,
+                                    rel_skill_metric,
+                                    baseline) {
 
   # make sure data is in the correct format ------------------------------------
   # check format
@@ -128,7 +131,16 @@ eval_forecasts_quantile <- function(data,
   }
 
 
-  ############################ pairwise comparisons ############################
+  if (compute_relative_skill) {
+
+    relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = res,
+                                                    rel_skill_metric = rel_skill_metric,
+                                                    baseline = baseline,
+                                                    by = by,
+                                                    summarise_by = summarise_by,
+                                                    verbose = verbose)
+    res <- merge(res, relative_res, by = by)
+  }
 
   # summarise scores if desired ------------------------------------------------
   if (summarised) {
@@ -156,7 +168,7 @@ eval_forecasts_quantile <- function(data,
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
                by = c(summarise_by),
                .SDcols = colnames(res) %like%
-                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point"]
+                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|theta"]
   }
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
@@ -166,5 +178,6 @@ eval_forecasts_quantile <- function(data,
   if (!("quantile" %in% summarise_by)) {
     res[, c("quantile_coverage") := NULL]
   }
+
   return(res)
 }

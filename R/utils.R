@@ -104,7 +104,10 @@ globalVariables(c(".",
                   "point",
                   "prediction",
                   "quantile",
+                  "ratio",
+                  "rel_to_baseline",
                   "rn",
+                  "theta",
                   "true_value",
                   "type",
                   "upper",
@@ -166,6 +169,45 @@ update_list <- function(defaults = list(), optional = list()) {
     updated <- defaults
   }
   return(updated)
+}
+
+
+
+
+
+
+
+
+permutation_test <- function(scores1,
+                             scores2,
+                             nPermutation = 999,
+                             oneSided = FALSE,
+                             comparison_mode = c("difference", "ratio")) {
+  nTime = length(scores1)
+  meanscores1 <- mean(scores1)
+  meanscores2 <- mean(scores2)
+  if (comparison_mode == "ratio") {
+    # distinguish between on-sided and two-sided:
+    testStat_observed <- ifelse(oneSided,
+                                meanscores1 / meanscores2,
+                                max(meanscores1 / meanscores2, meanscores2 / meanscores1))
+  } else {
+    testStat_observed <- ifelse(oneSided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
+  }
+  testStat_permuted <- replicate(nPermutation, {
+    sel <- rbinom(nTime, size = 1, prob = 0.5)
+    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1]))/nTime
+    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0]))/nTime
+    if (comparison_mode[1] == "ratio") {
+      ifelse(oneSided, g1 / g2, max(g1 / g2, g2/g1))
+    } else {
+      ifelse(oneSided, g1 - g2, abs(g1 - g2))
+    }
+  })
+  # abs needs to be removed here (messes with one sided vs two-sided)
+  pVal <- (1 + sum(testStat_permuted >= testStat_observed))/(nPermutation + 1)
+  # plus ones to make sure p-val is never 0?
+  return(pVal)
 }
 
 

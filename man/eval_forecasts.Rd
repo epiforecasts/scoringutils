@@ -18,7 +18,10 @@ eval_forecasts(
   verbose = TRUE,
   forecasts = NULL,
   truth_data = NULL,
-  merge_by = NULL
+  merge_by = NULL,
+  compute_relative_skill = TRUE,
+  rel_skill_metric = "auto",
+  baseline = NULL
 )
 }
 \arguments{
@@ -113,6 +116,20 @@ with `forecasts`}
 \item{merge_by}{character vector with column names that `forecasts` and
 `truth_data` should be merged on. Default is `NULL` and merge will be
 attempted automatically.}
+
+\item{compute_relative_skill}{logical, whether or not to compute realitve
+performance between models. If `TRUE` (the default), then a column called
+'model' must be present in the input data. For more information on
+the computation of relative skill, see \code{\link{pairwise_comparison}}}
+
+\item{rel_skill_metric}{chracter string with the name of the metric for which
+a relative skill shall be computed. If equal to 'auto' (the default), then
+one of interval score, crps or brier score will be used where appropriate}
+
+\item{baseline}{character string with the name of a model. If a baseline is
+given, then a scaled relative skill with respect to the baseline will be
+returned. By default (`NULL`), relative skill will not be scaled with
+respect to a baseline model.}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
