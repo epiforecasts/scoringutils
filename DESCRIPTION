@@ -1,6 +1,6 @@
 Package: scoringutils
 Title: Utilities for Scoring and Assessing Predictions
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
@@ -56,7 +56,8 @@ Imports:
     goftest,
     graphics,
     scoringRules,
-    stats
+    stats,
+    methods
 Suggests: 
     testthat,
     knitr,

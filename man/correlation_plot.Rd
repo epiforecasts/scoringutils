@@ -19,12 +19,10 @@ A ggplot2 object showing a coloured matrix of correlations
 between metrics
 }
 \description{
-Plots a coloured table of summarised scores obtained using
+Plots a coloured table of scores obtained using
 \code{\link{eval_forecasts}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
-                                       by = c("model", "id", "horizon"),
-                                       summarise_by = c("model", "id"))
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
 scoringutils::correlation_plot(scores)
 }

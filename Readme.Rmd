@@ -57,7 +57,7 @@ Using the `summarise_by` argument you can now choose categories to aggregate ove
 
 ## Example Evaluation 
 
-Here is an example of an evaluation using toy data:
+Here is an example of an evaluation using the example data included in the package. The data comes from a set of [Covid-19 short-term forecasts in the UK](https://github.com/epiforecasts/covid19.forecasts.uk). 
 
 ```{r}
 library(scoringutils)
@@ -65,17 +65,24 @@ library(data.table)
 ```
 
 ```{r}
-data <- scoringutils::quantile_example_data_plain
+data <- scoringutils::quantile_example_data
 print(data, 3, 3)
-scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model", "quantile", "range"))
+scores <- scoringutils::eval_forecasts(data, 
+                                       summarise_by = c("model", "quantile", "range"))
+print(scores, 3, 3)
 ```
 
 Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data
 
 ```{r}
-scoringutils::plot_predictions(data, x = "id", range = c(0, 90), 
-                               facet_formula = ~ model)
+filtered_data <- data[geography == "England" & 
+                        creation_date <= "2020-06-29" & 
+                        value_desc == "Deaths"]
+
+scoringutils::plot_predictions(filtered_data[creation_date == "2020-06-29"], 
+                               add_truth_data = filtered_data,
+                               x = "value_date", range = c(0, 90), 
+                               facet_formula = value_desc ~ model)
 ```
 
 (The data is just randomly generated values. We plan to add real example data to make these illustrations more useful in the future)
@@ -104,16 +111,17 @@ Let us look at the individual components of the weighted interval score:
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model"))
-scoringutils::wis_components(scores)
+                             summarise_by = c("model", "value_desc"))
+scoringutils::wis_components(scores, facet_formula = ~ value_desc)
 ```
 
 We can also look at contributions to different metrics by range: 
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model", "range"))
-scoringutils::range_plot(scores, y = "interval_score")
+                             summarise_by = c("model", "range", "value_desc"))
+scoringutils::range_plot(scores, y = "interval_score", 
+                         facet_formula = ~ value_desc)
 ```
 
 We can also visualise metrics using a heatmap: 
@@ -134,8 +142,8 @@ The `eval_forecasts` function is designed to work with various different input f
 quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range. 
 
 ``` {r}
-print(scoringutils::quantile_example_data_plain, 3, 3)
-print(scoringutils::quantile_example_data_long, 3, 3)
+print(scoringutils::quantile_example_data, 3, 3)
+print(scoringutils::range_example_data_long, 3, 3)
 ```
 
 sample based format with either continuous or integer values
@@ -143,6 +151,7 @@ sample based format with either continuous or integer values
 ``` {r}
 print(scoringutils::integer_example_data, 3, 3)
 print(scoringutils::continuous_example_data, 3, 3)
+print(scoringutils::range_example_data_wide, 3, 3)
 ```
 
 forecasts in a binary format:
@@ -154,10 +163,10 @@ print(scoringutils::binary_example_data, 3, 3)
 It also offers functionality to convert between these formats. For more information have a look at the documentation of the following functions: 
 ``` {r eval=FALSE}
 scoringutils::sample_to_quantile() # convert from sample based to quantile format
-scoringutils::range_to_quantile() # convert from range format to plain quantile
-scoringutils::quantile_to_range() # convert the other way round
-scoringutils::quantile_to_long() # convert range based format from wide to long
-scoringutils::quantile_to_wide() # convert the other way round
+scoringutils::range_long_to_quantile() # convert from range format to plain quantile
+scoringutils::quantile_to_range_long() # convert the other way round
+scoringutils::range_wide_to_long() # convert range based format from wide to long
+scoringutils::range_long_to_wide() # convert the other way round
 ```
 
 

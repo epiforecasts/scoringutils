@@ -1,10 +1,3 @@
-# ===================================================================== #
-# Test Error Handling
-# ===================================================================== #
-
-# ===================================================================== #
-# Brier_score
-
 test_that("function throws an error when missing true_values or predictions",
           {
             true_values <- sample(c(0,1), size = 10, replace = TRUE)
@@ -53,3 +46,13 @@ test_that("function throws an error for wrong format of predictions",
                                      predictions = predictions),
                          "Mismatch: 'true_values' has length `10`, but 'predictions' has length `15`")
           })
+
+
+test_that("brier_score works", {
+  true_values <- sample(c(0,1), size = 30, replace = TRUE)
+  predictions <- runif(n = 30, min = 0, max = 1)
+
+  scoringutils2 <- scoringutils::brier_score(true_values, predictions)
+  scoringutils <- scoringutils::brier_score(true_values, predictions)
+  expect_equal(scoringutils2, scoringutils)
+})

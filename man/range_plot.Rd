@@ -9,6 +9,10 @@ range_plot(
   y = "interval_score",
   x = "model",
   colour = "range",
+  facet_formula = NULL,
+  scales = "free_y",
+  ncol = NULL,
+  facet_wrap_or_grid = "facet_wrap",
   xlab = x,
   ylab = y
 )
@@ -27,6 +31,20 @@ Usually this will be "model"}
 \item{colour}{Charachter vector of length one used to determine a variable
 for colouring dots. The Default is "range".}
 
+\item{facet_formula}{facetting formula passed down to ggplot. Default is
+\code{NULL}}
+
+\item{scales}{scales argument that gets passed down to ggplot. Only necessary
+if you make use of facetting. Default is "free_y"}
+
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
+
+\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
+\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+\code{facet_grid}. This only takes effect if \code{facet_formula} is not
+\code{NULL}}
+
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
 \item{ylab}{Label for the y-axis. Default is "WIS contributions"}
@@ -41,10 +59,21 @@ interval ranges contribute to the overal interval score, or how sharpness
 changes by range.
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
-                                       by = c("model", "id", "horizon"),
-                                       summarise_by = c("model", "horizon", "range"))
-scoringutils::range_plot(scores, x = "model")
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
+                                        summarise_by = c("model", "value_desc", "range"))
 
-scoringutils::range_plot(scores, y = "sharpness", x = "model")
+scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
+                                        summarise_by = c("model", "value_desc", "range"))
+scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
+
+# visualise sharpness instead of interval score
+scoringutils::range_plot(scores, y = "sharpness", x = "model",
+                          facet_formula =  ~value_desc)
+
+# we saw above that sharpness values crossed. Let's look at the unweighted WIS
+scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
+                                        interval_score_arguments = list(weigh = FALSE),
+                                        summarise_by = c("model", "value_desc", "range"))
+scoringutils::range_plot(scores, y = "sharpness", x = "model",
+                          facet_formula =  ~value_desc)
 }

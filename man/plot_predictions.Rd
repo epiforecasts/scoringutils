@@ -56,10 +56,10 @@ Make a plot of observed and predicted values
 }
 \examples{
 example1 <- scoringutils::continuous_example_data
-example2 <- scoringutils::quantile_example_data_long
+example2 <- scoringutils::range_example_data_long
 
-scoringutils::plot_predictions(example1, x = "id",
-                               facet_formula = ~ horizon)
-scoringutils::plot_predictions(example2, x = "id",
-                               facet_formula = ~ horizon)
+scoringutils::plot_predictions(example1, x = "value_date",
+                               facet_formula = ~ value_desc)
+scoringutils::plot_predictions(example2, x = "value_date",
+                               facet_formula = ~ value_desc)
 }

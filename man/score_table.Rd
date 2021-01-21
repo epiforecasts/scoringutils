@@ -46,14 +46,24 @@ Plots a coloured table of summarised scores obtained using
 \code{\link{eval_forecasts}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
-                                       by = c("model", "id", "horizon"),
-                                       summarise_by = c("model", "horizon"))
-scoringutils::score_table(scores, y = "model", facet_formula = ~ horizon,
-                          ncol = 1)
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
+                                       summarise_by = c("model", "value_desc"))
+scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+                           ncol = 1)
 
-scoringutils::score_table(scores, y = c("model", "horizon"))
+# can also put target description on the y-axis
+scoringutils::score_table(scores, y = c("model", "value_desc"))
 
 # yields the same result in this case
 scoringutils::score_table(scores)
+
+
+scores <- scoringutils::eval_forecasts(scoringutils::integer_example_data,
+                                        summarise_by = c("model", "value_desc"))
+scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+                           ncol = 1)
+
+# only show selected metrics
+scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+                           ncol = 1, select_metrics = c("crps", "bias"))
 }

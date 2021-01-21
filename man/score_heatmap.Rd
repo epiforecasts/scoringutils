@@ -4,7 +4,18 @@
 \alias{score_heatmap}
 \title{Create a Heatmap of a Scoring Metric}
 \usage{
-score_heatmap(scores, y = "model", x, metric, ylab = y, xlab = x)
+score_heatmap(
+  scores,
+  y = "model",
+  x,
+  metric,
+  facet_formula = NULL,
+  scales = "free_y",
+  ncol = NULL,
+  facet_wrap_or_grid = "facet_wrap",
+  ylab = y,
+  xlab = x
+)
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
@@ -19,6 +30,20 @@ could be something like "horizon", or "location"}
 \item{metric}{the metric that determines the value and colour shown in the
 tiles of the heatmap}
 
+\item{facet_formula}{facetting formula passed down to ggplot. Default is
+\code{NULL}}
+
+\item{scales}{scales argument that gets passed down to ggplot. Only necessary
+if you make use of facetting. Default is "free_y"}
+
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
+
+\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
+\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+\code{facet_grid}. This only takes effect if \code{facet_formula} is not
+\code{NULL}}
+
 \item{ylab}{Label for the y-axis. Default is the variable name on the y-axis}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
@@ -32,10 +57,9 @@ groups, e.g. the interval score obtained by several forecasting models in
 different locations.
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
-                                       by = c("model", "id", "horizon"),
-                                       summarise_by = c("model", "horizon"))
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
+                                       summarise_by = c("model", "value_desc", "range"))
 
-scoringutils::score_heatmap(scores, x = "horizon", metric = "bias")
+scoringutils::score_heatmap(scores, x = "value_desc", metric = "bias")
 
 }

@@ -9,7 +9,7 @@ pit(
   predictions,
   plot = TRUE,
   full_output = FALSE,
-  n_replicates = 20,
+  n_replicates = 50,
   num_bins = NULL,
   verbose = FALSE
 )
@@ -47,9 +47,8 @@ continuous forecasts, this will be NA as there is only one p_value returned.
 \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
 if \code{plot == TRUE}. Call
 \code{plot(PIT(...)$hist_PIT)} to display the histogram.
-\item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
-randomised PIT. Only returned for integer forecasts
-and if \code{full_output = TRUE}
+\item \code{p_values}: all p_values generated from the Anderson-Darling tests
+on the (randomised) PIT. Only returned if \code{full_output = TRUE}
 \item \code{u}: the u_t values internally computed. Only returned if
 \code{full_output = TRUE}
 }
@@ -102,7 +101,8 @@ Anderson-Darling test.
 As a rule of thumb, there is no evidence to suggest a forecasting model is
 miscalibrated if the p-value found was greater than a threshold of p >= 0.1,
 some evidence that it was miscalibrated if 0.01 < p < 0.1, and good
-evidence that it was miscalibrated if p <= 0.01.
+evidence that it was miscalibrated if p <= 0.01. However, the AD-p-values
+may be overly strict and there actual usefulness may be questionable.
 In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.
 }

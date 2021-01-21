@@ -5,16 +5,20 @@
 \title{Evaluate forecasts}
 \usage{
 eval_forecasts(
-  data,
+  data = NULL,
   by = NULL,
   summarise_by = by,
+  metrics = NULL,
   quantiles = c(),
   sd = FALSE,
+  interval_score_arguments = list(weigh = TRUE, count_median_twice = TRUE,
+    separate_results = TRUE),
   pit_plots = FALSE,
-  pit_arguments = list(plot = FALSE),
-  interval_score_arguments = list(weigh = TRUE),
   summarised = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  forecasts = NULL,
+  truth_data = NULL,
+  merge_by = NULL
 )
 }
 \arguments{
@@ -35,9 +39,9 @@ For integer and continuous forecasts a \code{sample} column is needed:
   binary predictions.}
 For quantile forecasts the data can be provided in variety of formats. You
 can either use a range-based format or a quantile-based format. (You can
-convert between formats using \code{\link{quantile_to_range}},
-\code{\link{range_to_quantile}},
-\code{\link{sample_to_range}},
+convert between formats using \code{\link{quantile_to_range_long}},
+\code{\link{range_long_to_quantile}},
+\code{\link{sample_to_range_long}},
 \code{\link{sample_to_quantile}})
 For a quantile-format forecast you should provide:
 \itemize{
@@ -77,6 +81,9 @@ over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
 (and possibly plot) the probability integral transform(pit).}
 
+\item{metrics}{the metrics you want to have in the output. If `NULL` (the
+default), all available metrics will be computed.}
+
 \item{quantiles}{numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the
 groups specified through `summarise_by`. By default, no quantiles are
@@ -85,19 +92,27 @@ returned.}
 \item{sd}{if TRUE (the default is FALSE) the standard deviation of all
 metrics will be returned when summarising.}
 
+\item{interval_score_arguments}{list with arguments to pass down to
+\code{interval_score}.}
+
 \item{pit_plots}{if TRUE (not the default), pit plots will be returned. For
 details see \code{\link{pit}}.}
-
-\item{pit_arguments}{pass down additional arguments to the \code{\link{pit}}
-function.}
-
-\item{interval_score_arguments}{pass down additional arguments to the
-\code{\link{interval_score}} function, e.g. \code{weigh = FAlSE}.}
 
 \item{summarised}{Summarise arguments (i.e. take the mean per group
 specified in group_by. Default is TRUE.}
 
 \item{verbose}{print out additional helpful messages (default is TRUE)}
+
+\item{forecasts}{data.frame with forecasts, that should follow the same
+general guidelines as the `data` input. Argument can be used to supply
+forecasts and truth data independently. Default is `NULL`.}
+
+\item{truth_data}{data.frame with a column called `true_value` to be merged
+with `forecasts`}
+
+\item{merge_by}{character vector with column names that `forecasts` and
+`truth_data` should be merged on. Default is `NULL` and merge will be
+attempted automatically.}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
@@ -149,45 +164,40 @@ the following metrics are used where appropriate:
 ## Probability Forecast for Binary Target
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
 eval <- scoringutils::eval_forecasts(binary_example,
-                                     by = c("id", "model", "horizon"),
                                      summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE)
-eval <- scoringutils::eval_forecasts(binary_example,
-                                     by = c("id", "model", "horizon"))
+                                     quantiles = c(0.5), sd = TRUE,
+                                     verbose = FALSE)
 
 ## Quantile Forecasts
-# wide format
-quantile_example <- data.table::setDT(scoringutils::quantile_example_data_wide)
-eval <- scoringutils::eval_forecasts(quantile_example,
-                                     by = c("model", "horizon", "id"),
+# wide format example (this examples shows usage of both wide formats)
+range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
+range_example <- scoringutils::range_wide_to_long(range_example_wide)
+# equivalent:
+wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
+range_example <- scoringutils::range_wide_to_long(wide2)
+eval <- scoringutils::eval_forecasts(range_example,
                                      summarise_by = "model",
                                      quantiles = c(0.05, 0.95),
                                      sd = TRUE)
-eval <- scoringutils::eval_forecasts(quantile_example,
-                                     by = c("model", "horizon", "id"))
+eval <- scoringutils::eval_forecasts(range_example)
 
 #long format
 
-eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_long,
-                                     by = c("model", "horizon", "id"),
+eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
                                      summarise_by = c("model", "range"))
 
 ## Integer Forecasts
 integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
-                                     by = c("model", "id", "horizon"),
                                      summarise_by = c("model"),
                                      quantiles = c(0.1, 0.9),
                                      sd = TRUE,
-                                     pit_plots = TRUE,
-                                     pit_arguments = list(n_replicates = 30,
-                                                          plot = TRUE))
+                                     pit_plots = TRUE)
 eval <- scoringutils::eval_forecasts(integer_example)
 
 ## Continuous Forecasts
 continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
-eval <- scoringutils::eval_forecasts(continuous_example,
-                                     by = c("model", "id", "horizon"))
+eval <- scoringutils::eval_forecasts(continuous_example)
 eval <- scoringutils::eval_forecasts(continuous_example,
                                      quantiles = c(0.5, 0.9),
                                      sd = TRUE,

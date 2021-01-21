@@ -11,7 +11,8 @@ wis_components(
   relative_contributions = FALSE,
   facet_formula = NULL,
   scales = "free_y",
-  nrow = NULL,
+  ncol = NULL,
+  facet_wrap_or_grid = "facet_wrap",
   xlab = x,
   ylab = "WIS contributions"
 )
@@ -35,8 +36,13 @@ contributions. Default is FALSE and this functionality is not available yet.}
 \item{scales}{scales argument that gets passed down to ggplot. Only necessary
 if you make use of facetting. Default is "free_y"}
 
-\item{nrow}{nrow argument that gets passed down to ggplot. Specifies the
-number of rows to use for \code{facet_wrap} in ggplot}
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
+
+\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
+\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+\code{facet_grid}. This only takes effect if \code{facet_formula} is not
+\code{NULL}}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
@@ -51,10 +57,9 @@ Visualise the components of the weighted interval score: penalties for
 over-predicition, under-prediction and for a lack of sharpness
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data_wide,
-                                       by = c("model", "id", "horizon"),
-                                       summarise_by = c("model", "horizon"))
-scoringutils::wis_components(scores, x = "model", facet_formula = ~ horizon)
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
+                                       summarise_by = c("model", "value_desc"))
+scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc)
 
 }
 \references{

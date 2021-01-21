@@ -1,3 +1,17 @@
+## scoringutils 0.1.6
+## Feature updates
+- `eval_forecasts()` can now handle a separate forecast and truth data set as 
+as input
+- `eval_forecasts()` now supports scoring point forecasts along side quantiles
+in a quantile-based format. Currently the only metric used is the absoluter error
+
+### Package updates
+- Many functions, especially `eval_forecasts()` got a major rewrite. While 
+functionality should be unchanged, the code should now be easier to maintain
+- Some of the data-handling functions got renamed, but old names are supported
+as well for now. 
+
+
 ## scoringutils 0.1.5
 ### Package updates
 - changed the default definition of the weighted interval score. Previously, 

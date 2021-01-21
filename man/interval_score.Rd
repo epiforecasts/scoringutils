@@ -8,10 +8,10 @@ interval_score(
   true_values,
   lower,
   upper,
-  interval_range = NULL,
+  interval_range,
   weigh = TRUE,
-  separate_results = FALSE,
-  count_median_twice = FALSE
+  count_median_twice = FALSE,
+  separate_results = FALSE
 )
 }
 \arguments{
@@ -32,12 +32,16 @@ to alpha.}
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.}
 
+\item{count_median_twice}{logical, whether or not to count the median twice.
+This would conceptually treat the median as a 0\% prediction interval, where
+the median is the lower as well as the upper bound. The alternative is to
+treat the median as a single quantile forecast. The interval score would then
+be better understood as an average of quantile scores.)}
+
 \item{separate_results}{if TRUE (default is FALSE), then the separate parts
 of the interval score (sharpness, penalties for over- and under-prediction
-get returned as separate elements of a list)}
-
-\item{count_median_twice}{if TRUE (default is FALSE), then the median is
-counted twice in the computation of the score}
+get returned as separate elements of a list). If you want a `data.frame`
+instead, simply call `as.data.frmae()` on the output.}
 }
 \value{
 vector with the scoring values, or a list with separate entries if
@@ -68,7 +72,7 @@ The interval score is a proper scoring rule that scores a quantile forecast
 }
 \examples{
 true_values <- rnorm(30, mean = 1:30)
-interval_range = 90
+interval_range = rep(90, 30)
 alpha = (100 - interval_range) / 100
 lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
 upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
@@ -77,6 +81,12 @@ interval_score(true_values = true_values,
                lower = lower,
                upper = upper,
                interval_range = interval_range)
+
+interval_score(true_values = c(true_values, NA),
+               lower = c(lower, NA),
+               upper = c(NA, upper),
+               separate_results = TRUE,
+               interval_range = 90)
 }
 \references{
 Strictly Proper Scoring Rules, Prediction,and Estimation,

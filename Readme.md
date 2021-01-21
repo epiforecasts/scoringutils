@@ -13,8 +13,7 @@ The scoringutils package provides a collection of metrics and proper
 scoring rules that make it simple to score forecasts against the true
 observed values.
 
-Installation
-============
+# Installation
 
 The stable version of `scoringutils` is on CRAN, but is outdated now. We
 do not recommend using it. Please install the current development
@@ -24,8 +23,7 @@ version from github using
 remotes::install_github("epiforecasts/scoringutils")
 ```
 
-Introduction and Overview of Functionality
-==========================================
+# Introduction and Overview of Functionality
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules that make it simple to score forecasts against the true
@@ -42,8 +40,7 @@ True values can be integer, continuous or binary.
 In addition to automatic scoring, `scoringutils` offers a variety of
 plots and visualisations.
 
-Scoring Forecasts Automatically
-===============================
+# Scoring Forecasts Automatically
 
 Most of the time, the `eval_forecasts` function will be able to do the
 entire evaluation for you. The idea is simple, yet flexible.
@@ -89,62 +86,64 @@ can also obtain the standard deviation of the scores over which you
 average or any desired quantile (e.g. the median in addition to the
 mean) by specifying `sd = TRUE` and `quantiles = c(0.5)`.
 
-Example Evaluation
-------------------
+## Example Evaluation
 
-Here is an example of an evaluation using toy data:
+Here is an example of an evaluation using the example data included in
+the package. The data comes from a set of [Covid-19 short-term forecasts
+in the UK](https://github.com/epiforecasts/covid19.forecasts.uk).
 
 ``` r
 library(scoringutils)
+#> Note: The definitions of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `interval_score()`
 library(data.table)
 ```
 
 ``` r
-data <- scoringutils::quantile_example_data_plain
+data <- scoringutils::quantile_example_data
 print(data, 3, 3)
-#>      true_value id  model prediction horizon quantile
-#>   1:   2.659261  1 model1 -0.6448536       1     0.05
-#>   2:   2.659261  1 model1  0.3255102       1     0.25
-#>   3:   2.659261  1 model1  1.0000000       1     0.50
-#>  ---                                                 
-#> 598:  30.189608 30 model2 31.2242353       2     0.50
-#> 599:  30.189608 30 model2 31.3873685       2     0.95
-#> 600:  30.189608 30 model2 30.6399809       2     0.75
-scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model", "quantile", "range"))
-#>      model quantile range interval_score sharpness underprediction
-#>  1: model1     0.50     0      0.8269027 0.0000000     0.304369095
-#>  2: model1     0.25    50      0.7760589 0.3044214     0.179681560
-#>  3: model1     0.75    50      0.7760589 0.3044214     0.179681560
-#>  4: model1     0.05    90      0.2658170 0.1523911     0.024935181
-#>  5: model1     0.95    90      0.2658170 0.1523911     0.024935181
-#>  6: model2     0.50     0      0.9779030 0.0000000     0.350926228
-#>  7: model2     0.25    50      0.6787509 0.3566315     0.072721303
-#>  8: model2     0.75    50      0.6787509 0.3566315     0.072721303
-#>  9: model2     0.05    90      0.2721723 0.1606143     0.008071852
-#> 10: model2     0.95    90      0.2721723 0.1606143     0.008071852
-#>     overprediction  coverage coverage_deviation      bias       aem
-#>  1:     0.52253362 0.0000000         0.00000000 0.1566667 0.8269027
-#>  2:     0.29195591 0.4000000        -0.10000000 0.1566667 0.8269027
-#>  3:     0.29195591 0.4000000        -0.10000000 0.1566667 0.8269027
-#>  4:     0.08849074 0.8166667        -0.08333333 0.1566667 0.8269027
-#>  5:     0.08849074 0.8166667        -0.08333333 0.1566667 0.8269027
-#>  6:     0.62697674 0.0000000         0.00000000 0.2233333 0.9779030
-#>  7:     0.24939811 0.5333333         0.03333333 0.2233333 0.9779030
-#>  8:     0.24939811 0.5333333         0.03333333 0.2233333 0.9779030
-#>  9:     0.10348616 0.8500000        -0.05000000 0.2233333 0.9779030
-#> 10:     0.10348616 0.8500000        -0.05000000 0.2233333 0.9779030
+#>       value_date     value_type geography          value_desc true_value
+#>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
+#>    2: 2020-05-04  hospital_prev   England Total beds occupied      10648
+#>    3: 2020-05-11   hospital_inc   England Hospital admissions        743
+#>   ---                                                                   
+#> 5150: 2020-08-03 death_inc_line     Wales              Deaths          1
+#> 5151: 2020-08-03 death_inc_line     Wales              Deaths          1
+#> 5152: 2020-08-03 death_inc_line     Wales              Deaths          1
+#>                    model creation_date quantile prediction horizon
+#>    1:               <NA>          <NA>       NA         NA      NA
+#>    2:               <NA>          <NA>       NA         NA      NA
+#>    3:               <NA>          <NA>       NA         NA      NA
+#>   ---                                                             
+#> 5150:           SIRCOVID    2020-07-13     0.85          4      21
+#> 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21
+#> 5152:           SIRCOVID    2020-07-13     0.90          6      21
+scores <- scoringutils::eval_forecasts(data, 
+                                       summarise_by = c("model", "quantile", "range"))
+print(scores, 3, 3)
+#>                  model quantile range interval_score sharpness underprediction
+#>  1: DetSEIRwithNB MCMC     0.50     0       54.45528  0.000000     54.16260163
+#>  2: DetSEIRwithNB MCMC     0.45    10       53.96138  6.310976     47.42276423
+#>  3: DetSEIRwithNB MCMC     0.55    10       53.96138  6.310976     47.42276423
+#> ---                                                                           
+#> 55:           SIRCOVID     0.90    80       18.18000 17.368889      0.15555556
+#> 56:           SIRCOVID     0.05    90       11.69444 11.661111      0.03333333
+#> 57:           SIRCOVID     0.95    90       11.69444 11.661111      0.03333333
+#>     overprediction  coverage coverage_deviation       bias      aem
+#>  1:      0.2926829 0.3170732         0.31707317 -0.2333333 54.45528
+#>  2:      0.2276423 0.4308943         0.33089431 -0.2333333 54.45528
+#>  3:      0.2276423 0.4308943         0.33089431 -0.2333333 54.45528
+#> ---                                                                
+#> 55:      0.6555556 0.9333333         0.13333333  0.2255556 42.90000
+#> 56:      0.0000000 0.9888889         0.08888889  0.2255556 42.90000
+#> 57:      0.0000000 0.9888889         0.08888889  0.2255556 42.90000
 #>     quantile_coverage
-#>  1:         0.5500000
-#>  2:         0.4000000
-#>  3:         0.7833333
-#>  4:         0.1333333
-#>  5:         0.9500000
-#>  6:         0.6166667
-#>  7:         0.3333333
-#>  8:         0.8666667
-#>  9:         0.1500000
-#> 10:         0.9833333
+#>  1:         0.4959350
+#>  2:         0.4308943
+#>  3:         0.5691057
+#> ---                  
+#> 55:         0.9777778
+#> 56:         0.2666667
+#> 57:         0.9888889
 ```
 
 Using an appropriate level of summary, we can easily use the output for
@@ -152,8 +151,14 @@ visualisation. The `scoringutils` package offers some built-in functions
 to help get a sense of the data
 
 ``` r
-scoringutils::plot_predictions(data, x = "id", range = c(0, 90), 
-                               facet_formula = ~ model)
+filtered_data <- data[geography == "England" & 
+                        creation_date <= "2020-06-29" & 
+                        value_desc == "Deaths"]
+
+scoringutils::plot_predictions(filtered_data[creation_date == "2020-06-29"], 
+                               add_truth_data = filtered_data,
+                               x = "value_date", range = c(0, 90), 
+                               facet_formula = value_desc ~ model)
 ```
 
 ![](man/figures/unnamed-chunk-3-1.png)<!-- -->
@@ -192,8 +197,8 @@ Let us look at the individual components of the weighted interval score:
 
 ``` r
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model"))
-scoringutils::wis_components(scores)
+                             summarise_by = c("model", "value_desc"))
+scoringutils::wis_components(scores, facet_formula = ~ value_desc)
 ```
 
 ![](man/figures/unnamed-chunk-6-1.png)<!-- -->
@@ -202,8 +207,9 @@ We can also look at contributions to different metrics by range:
 
 ``` r
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model", "range"))
-scoringutils::range_plot(scores, y = "interval_score")
+                             summarise_by = c("model", "range", "value_desc"))
+scoringutils::range_plot(scores, y = "interval_score", 
+                         facet_formula = ~ value_desc)
 ```
 
 ![](man/figures/unnamed-chunk-7-1.png)<!-- -->
@@ -218,8 +224,6 @@ scoringutils::score_heatmap(scores,
                             x = "horizon", metric = "bias")
 ```
 
-![](man/figures/unnamed-chunk-8-1.png)<!-- -->
-
 ### Expected Input Formats
 
 The `eval_forecasts` function is designed to work with various different
@@ -229,75 +233,142 @@ quantile forecasts in either a plain quantile format or in a format that
 specifies interval ranges and the boundary of a given interval range.
 
 ``` r
-print(scoringutils::quantile_example_data_plain, 3, 3)
-#>      true_value id  model prediction horizon quantile
-#>   1:   2.659261  1 model1 -0.6448536       1     0.05
-#>   2:   2.659261  1 model1  0.3255102       1     0.25
-#>   3:   2.659261  1 model1  1.0000000       1     0.50
-#>  ---                                                 
-#> 598:  30.189608 30 model2 31.2242353       2     0.50
-#> 599:  30.189608 30 model2 31.3873685       2     0.95
-#> 600:  30.189608 30 model2 30.6399809       2     0.75
-print(scoringutils::quantile_example_data_long, 3, 3)
-#>      true_value id  model prediction boundary range horizon
-#>   1:   2.659261  1 model1 -0.6448536    lower    90       1
-#>   2:   2.659261  1 model1  0.3255102    lower    50       1
-#>   3:   2.659261  1 model1  1.0000000    lower     0       1
-#>  ---                                                       
-#> 718:  30.189608 30 model2 31.3873685    upper    90       2
-#> 719:  30.189608 30 model2 30.6399809    upper    50       2
-#> 720:  30.189608 30 model2 31.2576984    upper     0       2
+print(scoringutils::quantile_example_data, 3, 3)
+#>       value_date     value_type geography          value_desc true_value
+#>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
+#>    2: 2020-05-04  hospital_prev   England Total beds occupied      10648
+#>    3: 2020-05-11   hospital_inc   England Hospital admissions        743
+#>   ---                                                                   
+#> 5150: 2020-08-03 death_inc_line     Wales              Deaths          1
+#> 5151: 2020-08-03 death_inc_line     Wales              Deaths          1
+#> 5152: 2020-08-03 death_inc_line     Wales              Deaths          1
+#>                    model creation_date quantile prediction horizon
+#>    1:               <NA>          <NA>       NA         NA      NA
+#>    2:               <NA>          <NA>       NA         NA      NA
+#>    3:               <NA>          <NA>       NA         NA      NA
+#>   ---                                                             
+#> 5150:           SIRCOVID    2020-07-13     0.85          4      21
+#> 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21
+#> 5152:           SIRCOVID    2020-07-13     0.90          6      21
+print(scoringutils::range_example_data_long, 3, 3)
+#>       value_date     value_type geography          value_desc true_value
+#>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
+#>    2: 2020-05-04  hospital_prev   England Total beds occupied      10648
+#>    3: 2020-05-11   hospital_inc   England Hospital admissions        743
+#>   ---                                                                   
+#> 5417: 2020-07-27 death_inc_line     Wales              Deaths          1
+#> 5418: 2020-08-03 death_inc_line     Wales              Deaths          1
+#> 5419: 2020-08-03 death_inc_line     Wales              Deaths          1
+#>                    model creation_date prediction horizon boundary range
+#>    1:               <NA>          <NA>         NA      NA     <NA>    NA
+#>    2:               <NA>          <NA>         NA      NA     <NA>    NA
+#>    3:               <NA>          <NA>         NA      NA     <NA>    NA
+#>   ---                                                                   
+#> 5417:           SIRCOVID    2020-07-13          1      14    upper     0
+#> 5418: DetSEIRwithNB MCMC    2020-07-13          0      21    upper     0
+#> 5419:           SIRCOVID    2020-07-13          1      21    upper     0
 ```
 
 sample based format with either continuous or integer values
 
 ``` r
 print(scoringutils::integer_example_data, 3, 3)
-#> # A tibble: 6,000 x 6
-#> # Groups:   id [30]
-#>       id model  true_value sample prediction horizon
-#>    <int> <chr>       <dbl>  <int>      <dbl>   <dbl>
-#>  1     1 model1          6      1          5       1
-#>  2     1 model1          6      2          4       1
-#>  3     1 model1          6      3          3       1
-#>  4     1 model1          6      4          3       1
-#>  5     1 model1          6      5          4       1
-#>  6     1 model1          6      6          4       1
-#>  7     1 model1          6      7          5       1
-#>  8     1 model1          6      8          4       1
-#>  9     1 model1          6      9          4       1
-#> 10     1 model1          6     10          6       1
-#> # … with 5,990 more rows
+#>        value_date     value_type geography          value_desc    model
+#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
+#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
+#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
+#>    ---                                                                 
+#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#>        creation_date horizon prediction sample true_value
+#>     1:          <NA>      NA         NA     NA       1043
+#>     2:          <NA>      NA         NA     NA      10648
+#>     3:          <NA>      NA         NA     NA        743
+#>    ---                                                   
+#> 13427:    2020-07-13      21          0     48          1
+#> 13428:    2020-07-13      21          0     49          1
+#> 13429:    2020-07-13      21          0     50          1
 print(scoringutils::continuous_example_data, 3, 3)
-#>       id  model  true_value sample   prediction horizon
-#>    1:  1 model1  0.03007379      1 -0.203426069       1
-#>    2:  1 model1  0.03007379      2  0.007621269       1
-#>    3:  1 model1  0.03007379      3 -2.086657003       1
-#>   ---                                                  
-#> 5998: 30 model2 -2.93749990     48 -0.079900522       2
-#> 5999: 30 model2 -2.93749990     49 -1.178524017       2
-#> 6000: 30 model2 -2.93749990     50  0.638750918       2
+#>        value_date     value_type geography          value_desc    model
+#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
+#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
+#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
+#>    ---                                                                 
+#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#>        creation_date horizon   prediction sample true_value
+#>     1:          <NA>      NA           NA     NA       1043
+#>     2:          <NA>      NA           NA     NA      10648
+#>     3:          <NA>      NA           NA     NA        743
+#>    ---                                                     
+#> 13427:    2020-07-13      21 0.3340917507     48          1
+#> 13428:    2020-07-13      21 0.3540187438     49          1
+#> 13429:    2020-07-13      21 0.0001998965     50          1
+print(scoringutils::range_example_data_wide, 3, 3)
+#>      value_date     value_type        geography          value_desc true_value
+#>   1: 2020-05-04 death_inc_line          England              Deaths        448
+#>   2: 2020-05-04 death_inc_line Northern Ireland              Deaths          9
+#>   3: 2020-05-04 death_inc_line         Scotland              Deaths         40
+#>  ---                                                                          
+#> 344: 2020-08-03  hospital_prev          England Total beds occupied        784
+#> 345: 2020-08-03  hospital_prev         Scotland Total beds occupied        265
+#> 346: 2020-08-03       icu_prev         Scotland   ICU beds occupied          3
+#>                   model creation_date horizon lower_0 lower_10 lower_20
+#>   1:               <NA>          <NA>      NA      NA       NA       NA
+#>   2:               <NA>          <NA>      NA      NA       NA       NA
+#>   3:               <NA>          <NA>      NA      NA       NA       NA
+#>  ---                                                                   
+#> 344:               <NA>          <NA>      NA      NA       NA       NA
+#> 345:               <NA>          <NA>      NA      NA       NA       NA
+#> 346: DetSEIRwithNB MCMC    2020-07-13      21       2        2        2
+#>      lower_30 lower_40 lower_50 lower_60 lower_70 lower_80 lower_90 upper_0
+#>   1:       NA       NA       NA       NA       NA       NA       NA      NA
+#>   2:       NA       NA       NA       NA       NA       NA       NA      NA
+#>   3:       NA       NA       NA       NA       NA       NA       NA      NA
+#>  ---                                                                       
+#> 344:       NA       NA       NA       NA       NA       NA       NA      NA
+#> 345:       NA       NA       NA       NA       NA       NA       NA      NA
+#> 346:        2        2        1        1        1        1        0       2
+#>      upper_10 upper_20 upper_30 upper_40 upper_50 upper_60 upper_70 upper_80
+#>   1:       NA       NA       NA       NA       NA       NA       NA       NA
+#>   2:       NA       NA       NA       NA       NA       NA       NA       NA
+#>   3:       NA       NA       NA       NA       NA       NA       NA       NA
+#>  ---                                                                        
+#> 344:       NA       NA       NA       NA       NA       NA       NA       NA
+#> 345:       NA       NA       NA       NA       NA       NA       NA       NA
+#> 346:        3        3        3        3        4        4        4        5
+#>      upper_90
+#>   1:       NA
+#>   2:       NA
+#>   3:       NA
+#>  ---         
+#> 344:       NA
+#> 345:       NA
+#> 346:        6
 ```
 
 forecasts in a binary format:
 
 ``` r
 print(scoringutils::binary_example_data, 3, 3)
-#> # A tibble: 120 x 5
-#> # Groups:   id, model [60]
-#>       id model  horizon prediction true_value
-#>    <int> <fct>    <dbl>      <dbl>      <dbl>
-#>  1     1 model1       1    0.746            0
-#>  2     1 model1       2    0.522            0
-#>  3     1 model2       1    0.00958          0
-#>  4     1 model2       2    0.00671          0
-#>  5     2 model1       1    0.730            0
-#>  6     2 model1       2    0.511            0
-#>  7     2 model2       1    0.0274           0
-#>  8     2 model2       2    0.0192           0
-#>  9     3 model1       1    0.543            0
-#> 10     3 model1       2    0.380            0
-#> # … with 110 more rows
+#>      value_date     value_type geography          value_desc              model
+#>   1: 2020-05-04   hospital_inc   England Hospital admissions               <NA>
+#>   2: 2020-05-04  hospital_prev   England Total beds occupied               <NA>
+#>   3: 2020-05-11   hospital_inc   England Hospital admissions               <NA>
+#>  ---                                                                           
+#> 344: 2020-07-27 death_inc_line     Wales              Deaths           SIRCOVID
+#> 345: 2020-08-03 death_inc_line     Wales              Deaths DetSEIRwithNB MCMC
+#> 346: 2020-08-03 death_inc_line     Wales              Deaths           SIRCOVID
+#>      creation_date horizon prediction true_value
+#>   1:          <NA>      NA         NA         NA
+#>   2:          <NA>      NA         NA         NA
+#>   3:          <NA>      NA         NA         NA
+#>  ---                                            
+#> 344:    2020-07-13      14       0.34          0
+#> 345:    2020-07-13      21       0.22          1
+#> 346:    2020-07-13      21       0.26          0
 ```
 
 It also offers functionality to convert between these formats. For more
@@ -305,22 +376,20 @@ information have a look at the documentation of the following functions:
 
 ``` r
 scoringutils::sample_to_quantile() # convert from sample based to quantile format
-scoringutils::range_to_quantile() # convert from range format to plain quantile
-scoringutils::quantile_to_range() # convert the other way round
-scoringutils::quantile_to_long() # convert range based format from wide to long
-scoringutils::quantile_to_wide() # convert the other way round
+scoringutils::range_long_to_quantile() # convert from range format to plain quantile
+scoringutils::quantile_to_range_long() # convert the other way round
+scoringutils::range_wide_to_long() # convert range based format from wide to long
+scoringutils::range_long_to_wide() # convert the other way round
 ```
 
-Scoring Forecasts Directly
-==========================
+# Scoring Forecasts Directly
 
 A variety of metrics and scoring rules can also be accessed directly
 through the `scoringutils` package.
 
 The following gives an overview of (most of) the implemented metrics.
 
-Bias
-----
+## Bias
 
 The function `bias` determines bias from predictive Monte-Carlo samples,
 automatically recognising whether forecasts are continuous or integer
@@ -347,21 +416,20 @@ can assume values between -1 and 1 and is 0 ideally.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 bias(true_values, predictions)
-#>  [1] -0.010 -0.800  0.405 -0.380  0.800  0.280  0.425 -0.050 -0.635 -0.675
-#> [11]  0.210  0.355  0.825 -0.815  0.540 -0.170 -0.685  0.765 -0.760  0.640
-#> [21]  0.345  0.725 -0.695 -0.055  0.840 -0.010 -0.865 -1.000  0.385  0.795
+#>  [1] -0.095 -0.610 -0.130 -0.005  0.290  0.000  0.205 -0.900 -0.465  0.390
+#> [11]  0.610 -0.360  0.795  0.875  1.000  0.930  0.010  0.725 -0.935 -0.325
+#> [21] -0.180 -0.705  0.715  0.110  0.025 -0.470 -0.180  0.005  0.625  0.500
 
 ## continuous forecasts
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(30, mean = 1:30))
 bias(true_values, predictions)
-#>  [1] -0.76  0.55  0.27 -0.36  0.79  0.16  0.89  0.93  0.62  0.37 -0.64 -0.32
-#> [13]  0.79 -0.03 -0.96 -0.43 -0.55 -0.98 -0.47 -0.74  0.01  0.78 -0.95  0.55
-#> [25]  0.62 -0.47  0.37 -0.57 -0.83  0.63
+#>  [1]  0.33 -0.12 -0.88 -0.27 -0.45  0.77 -0.91  0.92 -0.31 -0.40  0.47 -0.22
+#> [13]  0.82  0.87  0.02 -0.31  0.83 -0.16  0.03  0.41 -0.77 -0.80  0.84  0.66
+#> [25] -0.18 -0.93  0.76 -0.56 -0.33 -0.99
 ```
 
-Sharpness
----------
+## Sharpness
 
 Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
@@ -374,13 +442,12 @@ median of the predictive samples. For details, see `?stats::mad`
 ``` r
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 sharpness(predictions)
-#>  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652
-#> [11] 2.9652 3.7065 2.9652 2.9652 3.7065 3.7065 3.7065 4.4478 4.4478 4.4478
-#> [21] 4.4478 4.4478 5.1891 4.4478 4.4478 4.4478 5.1891 5.9304 5.9304 5.9304
+#>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 1.4826 2.9652 2.9652 2.9652
+#> [11] 2.9652 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478
+#> [21] 4.4478 4.4478 4.4478 4.4478 5.9304 5.9304 5.9304 5.9304 5.9304 5.1891
 ```
 
-Calibration
------------
+## Calibration
 
 Calibration or reliability of forecasts is the ability of a model to
 correctly identify its own uncertainty in making predictions. In a model
@@ -429,8 +496,7 @@ calibration. It should als be noted that the test only works given
 sufficient samples, otherwise the Null hypothesis will often be rejected
 outright.
 
-Continuous Ranked Probability Score (CRPS)
-------------------------------------------
+## Continuous Ranked Probability Score (CRPS)
 
 Wrapper around the `crps_sample` function from the `scoringRules`
 package. For more information look at the manuals from the
@@ -441,14 +507,14 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 crps(true_values, predictions)
-#>  [1] 0.704075 0.311000 0.432350 2.026400 0.696425 1.286075 0.673100 1.230400
-#>  [9] 1.143925 0.843700 1.150525 0.875475 1.782625 0.900250 1.183550 2.282225
-#> [17] 1.519975 3.286200 1.902250 1.444550 2.609925 4.159200 1.717425 1.222200
-#> [25] 4.761275 3.114750 5.268500 4.391125 2.247625 1.219675
+#>  [1]  0.669925  0.666625  0.396150  1.279300  0.470675  3.410600  0.822175
+#>  [8]  3.098400  0.861725  1.238325  4.209300  1.174450  0.905975  1.178650
+#> [15]  1.122400  0.953425  5.086200 11.136700  1.294500  5.122075  6.680825
+#> [22]  1.412150  8.954825  1.454975  4.931100  5.562650  3.688375  1.616650
+#> [29]  4.629000  1.368350
 ```
 
-Dawid-Sebastiani Score (DSS)
-----------------------------
+## Dawid-Sebastiani Score (DSS)
 
 Wrapper around the `dss_sample` function from the `scoringRules`
 package. For more information look at the manuals from the
@@ -459,15 +525,14 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 dss(true_values, predictions)
-#>  [1] 0.1043611 0.8888282 1.5083081 2.2574257 2.5124626 1.9721862 2.3620773
-#>  [8] 2.9454208 3.2478488 2.4677004 2.5026360 2.3575467 2.4369080 2.8268165
-#> [15] 2.7914715 3.2860262 3.7733067 5.4649830 3.9147155 3.7486418 3.1407649
-#> [22] 4.6635521 3.3183931 3.5593709 3.6031710 3.3189119 3.3872755 4.2149458
-#> [29] 3.7143660 5.5206435
+#>  [1] 0.1177901 0.5822220 1.5066992 3.8373524 1.9597284 1.8531762 3.4175897
+#>  [8] 2.5434091 3.1641709 3.6931812 7.6703941 3.1402025 4.6353701 2.5584192
+#> [15] 4.3530542 4.8442803 3.3773641 4.1063975 3.3360388 4.3296920 3.1801352
+#> [22] 3.3891771 3.1501111 4.6833844 6.1560524 3.6387926 3.1623198 6.0614609
+#> [29] 4.8645734 3.4459012
 ```
 
-Log Score
----------
+## Log Score
 
 Wrapper around the `log_sample` function from the `scoringRules`
 package. For more information look at the manuals from the
@@ -480,15 +545,14 @@ defined for discrete values. Smaller values are better.
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 logs(true_values, predictions)
-#>  [1] 0.8780070 1.2341316 1.1023236 1.1012004 0.9709626 1.0700818 1.0594070
-#>  [8] 1.7880585 1.2927519 0.8751655 1.1405355 1.0779380 1.4176212 0.7565269
-#> [15] 1.2051364 1.1889050 1.1754868 1.3193320 0.9459058 2.6253908 1.6844723
-#> [22] 1.8298744 0.9674385 1.8864392 0.8140657 1.0949883 1.1532910 1.0966391
-#> [29] 1.2514795 1.0004319
+#>  [1] 1.1071445 1.1446195 3.4118736 1.1475530 4.1226770 1.8518763 1.4201647
+#>  [8] 1.1085001 0.9362716 1.0170988 1.1607530 1.0272924 0.9839865 1.1855521
+#> [15] 1.5058463 2.1647430 0.9254600 1.4931984 2.4514677 0.8576165 1.3072919
+#> [22] 1.0286997 1.7659242 0.9539723 2.2266546 1.5902868 2.1572616 3.4122593
+#> [29] 0.9635253 0.9872547
 ```
 
-Brier Score
------------
+## Brier Score
 
 The Brier score is a proper score rule that assesses the accuracy of
 probabilistic binary predictions. The outcomes can be either 0 or 1, the
@@ -504,11 +568,10 @@ true_values <- sample(c(0,1), size = 30, replace = TRUE)
 predictions <- runif(n = 30, min = 0, max = 1)
 
 brier_score(true_values, predictions)
-#> [1] 0.2751849
+#> [1] 0.3962064
 ```
 
-Interval Score
---------------
+## Interval Score
 
 The Interval Score is a Proper Scoring Rule to score quantile
 predictions, following Gneiting and Raftery (2007). Smaller values are
@@ -544,9 +607,9 @@ interval_score(true_values = true_values,
                lower = lower,
                upper = upper,
                interval_range = interval_range)
-#>  [1] 0.23074512 0.32158513 0.13772108 0.30220573 0.17881437 0.69729367
-#>  [7] 0.14821784 1.52278644 0.21188499 0.04990424 0.08890472 0.20200402
-#> [13] 0.25466474 0.20046919 0.11756582 0.89191235 0.14182934 0.23710429
-#> [19] 0.21261377 1.82674018 0.18465405 0.19252317 0.29736976 0.19512091
-#> [25] 0.09765623 0.22994483 0.27190154 0.14759534 0.14447785 0.54087104
+#>  [1] 0.14538566 0.10477555 0.13379352 0.16998247 0.67282876 0.89278362
+#>  [7] 1.02201346 0.07840875 0.10679858 0.17350429 0.80954779 0.03572332
+#> [13] 0.20285522 0.23010213 0.17141142 0.14013901 0.09723121 0.19868605
+#> [19] 0.18237177 0.15799423 0.11898037 0.15083061 1.60384989 0.11411942
+#> [25] 0.11221762 0.66365885 0.22814734 0.52722209 0.19030832 0.53886811
 ```
