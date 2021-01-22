@@ -416,17 +416,17 @@ can assume values between -1 and 1 and is 0 ideally.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 bias(true_values, predictions)
-#>  [1] -0.095 -0.610 -0.130 -0.005  0.290  0.000  0.205 -0.900 -0.465  0.390
-#> [11]  0.610 -0.360  0.795  0.875  1.000  0.930  0.010  0.725 -0.935 -0.325
-#> [21] -0.180 -0.705  0.715  0.110  0.025 -0.470 -0.180  0.005  0.625  0.500
+#>  [1]  0.020  0.830 -0.070  0.850  0.600  0.985 -0.395 -0.540  0.920 -0.705
+#> [11]  0.730 -0.340  0.310  0.955  0.235 -0.235 -0.580 -0.835  0.955 -0.460
+#> [21] -0.225  0.025 -0.980 -0.860 -0.875 -0.235 -0.035  0.580  0.000  0.985
 
 ## continuous forecasts
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(30, mean = 1:30))
 bias(true_values, predictions)
-#>  [1]  0.33 -0.12 -0.88 -0.27 -0.45  0.77 -0.91  0.92 -0.31 -0.40  0.47 -0.22
-#> [13]  0.82  0.87  0.02 -0.31  0.83 -0.16  0.03  0.41 -0.77 -0.80  0.84  0.66
-#> [25] -0.18 -0.93  0.76 -0.56 -0.33 -0.99
+#>  [1]  0.35 -0.37 -0.10 -0.37 -0.32 -0.14 -0.76  0.21 -1.00  0.73  0.31  0.30
+#> [13]  0.40  0.21  0.87  0.83 -0.84 -0.19  0.47 -0.69 -0.18  0.96  0.70  0.27
+#> [25]  0.31 -0.14 -0.05 -0.69 -0.72  0.83
 ```
 
 ## Sharpness
@@ -442,9 +442,9 @@ median of the predictive samples. For details, see `?stats::mad`
 ``` r
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 sharpness(predictions)
-#>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 1.4826 2.9652 2.9652 2.9652
-#> [11] 2.9652 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478
-#> [21] 4.4478 4.4478 4.4478 4.4478 5.9304 5.9304 5.9304 5.9304 5.9304 5.1891
+#>  [1] 1.4826 1.4826 1.4826 2.2239 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652
+#> [11] 2.9652 3.7065 4.4478 4.4478 4.4478 2.9652 4.4478 4.4478 2.9652 4.4478
+#> [21] 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 4.4478 4.4478 5.9304 5.9304
 ```
 
 ## Calibration
@@ -459,12 +459,12 @@ predictive distribution at time t,
 
 *u*<sub>*t*</sub> = *F*<sub>*t*</sub>(*x*<sub>*t*</sub>)
 
-where *x*<sub>*t*</sub> is the observed data point at time
-*t* in *t*<sub>1</sub>, …, *t*<sub>*n*</sub>, n being the number of
-forecasts, and *F*<sub>*t*</sub> is the (continuous) predictive
-cumulative probability distribution at time t. If the true probability
-distribution of outcomes at time t is *G*<sub>*t*</sub> then the
-forecasts *F*<sub>*t*</sub> are said to be ideal if
+where *x*<sub>*t*</sub> is the observed data point at time *t* in
+*t*<sub>1</sub>, …, *t*<sub>*n*</sub>, n being the number of forecasts,
+and *F*<sub>*t*</sub> is the (continuous) predictive cumulative
+probability distribution at time t. If the true probability distribution
+of outcomes at time t is *G*<sub>*t*</sub> then the forecasts
+*F*<sub>*t*</sub> are said to be ideal if
 *F*<sub>*t*</sub> = *G*<sub>*t*</sub> at all times *t*. In that case,
 the probabilities ut are distributed uniformly.
 
@@ -507,11 +507,11 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 crps(true_values, predictions)
-#>  [1]  0.669925  0.666625  0.396150  1.279300  0.470675  3.410600  0.822175
-#>  [8]  3.098400  0.861725  1.238325  4.209300  1.174450  0.905975  1.178650
-#> [15]  1.122400  0.953425  5.086200 11.136700  1.294500  5.122075  6.680825
-#> [22]  1.412150  8.954825  1.454975  4.931100  5.562650  3.688375  1.616650
-#> [29]  4.629000  1.368350
+#>  [1]  0.484725  0.522300  0.754775  1.940750  0.946000  1.540875  0.560800
+#>  [8]  1.287250  0.773250  6.333950  0.977575  1.600275  1.062800  8.922450
+#> [15]  2.441150  0.834700  2.728625  1.004725  1.996200  3.062175  1.136075
+#> [22]  2.975050  3.402475  3.283250  3.156225  3.942225  4.146375 10.740000
+#> [29]  1.646800  1.751275
 ```
 
 ## Dawid-Sebastiani Score (DSS)
@@ -525,11 +525,10 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 dss(true_values, predictions)
-#>  [1] 0.1177901 0.5822220 1.5066992 3.8373524 1.9597284 1.8531762 3.4175897
-#>  [8] 2.5434091 3.1641709 3.6931812 7.6703941 3.1402025 4.6353701 2.5584192
-#> [15] 4.3530542 4.8442803 3.3773641 4.1063975 3.3360388 4.3296920 3.1801352
-#> [22] 3.3891771 3.1501111 4.6833844 6.1560524 3.6387926 3.1623198 6.0614609
-#> [29] 4.8645734 3.4459012
+#>  [1] 3.271605 1.109590 2.296375 1.638642 1.720113 1.891801 1.814442 2.633736
+#>  [9] 2.315999 3.609963 3.199639 3.208637 2.718436 4.955331 5.141449 4.165855
+#> [17] 3.417330 3.390977 3.526383 3.127248 3.334262 3.220303 5.131775 4.164216
+#> [25] 4.444760 6.651042 4.790084 3.784817 3.604751 3.972252
 ```
 
 ## Log Score
@@ -545,11 +544,11 @@ defined for discrete values. Smaller values are better.
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 logs(true_values, predictions)
-#>  [1] 1.1071445 1.1446195 3.4118736 1.1475530 4.1226770 1.8518763 1.4201647
-#>  [8] 1.1085001 0.9362716 1.0170988 1.1607530 1.0272924 0.9839865 1.1855521
-#> [15] 1.5058463 2.1647430 0.9254600 1.4931984 2.4514677 0.8576165 1.3072919
-#> [22] 1.0286997 1.7659242 0.9539723 2.2266546 1.5902868 2.1572616 3.4122593
-#> [29] 0.9635253 0.9872547
+#>  [1] 4.2449388 1.2183110 0.9350496 1.3702498 1.2994017 1.9734176 1.9486463
+#>  [8] 1.0301476 1.0777401 1.1858366 0.8741934 1.2182398 1.0398304 1.1220978
+#> [15] 1.6338811 1.8492573 2.6494550 1.5769399 1.0705151 1.0049739 0.9289143
+#> [22] 1.2958066 1.0433506 1.0013816 1.1328087 1.0145965 4.4580586 1.0059555
+#> [29] 1.0175473 1.3584801
 ```
 
 ## Brier Score
@@ -561,14 +560,14 @@ predictions must be a probability that the true outcome will be 1.
 The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
-$$\\text{Brier\_Score} = \\frac{1}{N} \\sum\_{t = 1}^{n} (\\text{prediction}\_t - \\text{outcome}\_t)^2$$
+<!-- $$\text{BrierScore} = \frac{1}{N}\sum_{t=1}^{n} (\text{prediction}_t-\text{outcome}_t)^2$$ -->
 
 ``` r
 true_values <- sample(c(0,1), size = 30, replace = TRUE)
 predictions <- runif(n = 30, min = 0, max = 1)
 
 brier_score(true_values, predictions)
-#> [1] 0.3962064
+#> [1] 0.3132916
 ```
 
 ## Interval Score
@@ -579,10 +578,13 @@ better.
 
 The score is computed as
 
-$$ \\text{score} = (\\text{upper} - \\text{lower}) + \\\\
-\\frac{2}{\\alpha} \\cdot (\\text{lower} - \\text{true\_value}) \\cdot 1(\\text{true\_values} &lt; \\text{lower}) + \\\\
-\\frac{2}{\\alpha} \\cdot (\\text{true\_value} - \\text{upper}) \\cdot
-1(\\text{true\_value} &gt; \\text{upper})$$
+![interval\_score](man/figures/interval_score.png)
+
+<!-- $$\begin{align*} -->
+<!-- \text{score} = & (\text{upper} - \text{lower}) + \\ -->
+<!-- & \frac{2}{\alpha} \cdot ( \text{lower} - \text{true_value}) \cdot 1( \text{true_values} < \text{lower}) + \\ -->
+<!-- & \frac{2}{\alpha} \cdot ( \text{true_value} - \text{upper}) \cdot 1( \text{true_value} > \text{upper}) -->
+<!-- \end{align*}$$ -->
 
 where 1() is the indicator function and *α* is the decimal value that
 indicates how much is outside the prediction interval. To improve
@@ -592,9 +594,9 @@ interval. Correspondingly, the user would have to provide the 5% and 95%
 quantiles (the corresponding alpha would then be 0.1). No specific
 distribution is assumed, but the range has to be symmetric (i.e you
 can’t use the 0.1 quantile as the lower bound and the 0.7 quantile as
-the upper). Setting `weigh = TRUE` will weigh the score by
-$\\frac{\\alpha}{2}$ such that the Interval Score converges to the CRPS
-for increasing number of quantiles.
+the upper). Setting `weigh = TRUE` will weigh the score by *α*/2 such
+that the Interval Score converges to the CRPS for increasing number of
+quantiles.
 
 ``` r
 true_values <- rnorm(30, mean = 1:30)
@@ -607,9 +609,9 @@ interval_score(true_values = true_values,
                lower = lower,
                upper = upper,
                interval_range = interval_range)
-#>  [1] 0.14538566 0.10477555 0.13379352 0.16998247 0.67282876 0.89278362
-#>  [7] 1.02201346 0.07840875 0.10679858 0.17350429 0.80954779 0.03572332
-#> [13] 0.20285522 0.23010213 0.17141142 0.14013901 0.09723121 0.19868605
-#> [19] 0.18237177 0.15799423 0.11898037 0.15083061 1.60384989 0.11411942
-#> [25] 0.11221762 0.66365885 0.22814734 0.52722209 0.19030832 0.53886811
+#>  [1] 0.1221291 0.1313182 0.1663424 0.2354949 0.2466355 0.2170362 1.5143775
+#>  [8] 0.1810042 0.2064054 1.2614409 0.4002147 1.4409476 0.1685613 0.6510942
+#> [15] 0.1086299 0.2612796 0.2429625 0.1377730 0.1912384 0.7589243 0.1609433
+#> [22] 1.4352004 0.1790574 0.1040817 0.1621819 0.1988057 0.1803143 0.1420993
+#> [29] 0.1225354 0.2043855
 ```

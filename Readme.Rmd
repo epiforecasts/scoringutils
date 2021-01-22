@@ -1,6 +1,7 @@
 ---
 title: 'scoringutils: Utilities for Scoring and Assessing Predictions'
-output: github_document
+output:
+  github_document
 ---
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/workflows/R-CMD-check/badge.svg)](https://github.com/epiforecasts/scoringutils/actions)
@@ -237,7 +238,7 @@ predictive distribution at time t,
 
 $$u_t = F_t (x_t)$$
 
-where $x_t$ is the observed data point at time $t \text{ in } t_1, …, t_n$,
+where $x_t$ is the observed data point at time $t$ in $t_1, \dots, t_n$,
 n being the number of forecasts, and $F_t$ is the (continuous) predictive
 cumulative probability distribution at time t. If the true probability
 distribution of outcomes at time t is $G_t$ then the forecasts $F_t$ are
@@ -319,7 +320,7 @@ the predictions must be a probability that the true outcome will be 1.
 The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
-$$\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2$$
+<!-- $$\text{BrierScore} = \frac{1}{N}\sum_{t=1}^{n} (\text{prediction}_t-\text{outcome}_t)^2$$ -->
 
 
 ```{r}
@@ -335,10 +336,16 @@ following Gneiting and Raftery (2007). Smaller values are better.
 
 The score is computed as
 
-$$ \text{score} = (\text{upper} - \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot 1(\text{true_values} < \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{true_value} - \text{upper}) \cdot
-1(\text{true_value} > \text{upper})$$
+![interval_score](man/figures/interval_score.png)
+
+
+<!-- $$\begin{align*} -->
+<!-- \text{score} = & (\text{upper} - \text{lower}) + \\ -->
+<!-- & \frac{2}{\alpha} \cdot ( \text{lower} - \text{true_value}) \cdot 1( \text{true_values} < \text{lower}) + \\ -->
+<!-- & \frac{2}{\alpha} \cdot ( \text{true_value} - \text{upper}) \cdot 1( \text{true_value} > \text{upper}) -->
+<!-- \end{align*}$$ -->
+
+
 
 
 where $1()$ is the indicator function and $\alpha$ is the decimal value that
@@ -350,7 +357,7 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper). 
-Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{2}$ such that 
+Setting `weigh = TRUE` will weigh the score by $\alpha/2$ such that 
 the Interval Score converges to the CRPS for increasing number of quantiles. 
 
 
