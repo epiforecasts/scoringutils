@@ -5,7 +5,7 @@ test_that("wis works, median only", {
 
   actual <- scoringutils::interval_score(y, lower = lower, upper = upper,
                                           weigh = TRUE,
-                                          interval_range = 0, count_median_twice = TRUE)
+                                          interval_range = 0)
   expected <- abs(y - lower)
 
   expect_identical(actual, expected)
@@ -33,7 +33,7 @@ test_that("wis works, 1 interval only", {
 
   actual <- scoringutils::interval_score(y, lower = lower, upper = upper,
                                           weigh = TRUE,
-                                          interval_range = 50, count_median_twice = TRUE)
+                                          interval_range = 50)
   expected <- (upper - lower)*(alpha/2) + c(0, 1-(-15), 22-3)
 
   expect_identical(actual, expected)
@@ -124,7 +124,7 @@ test_that("wis works, 2 intervals and median", {
 
 
 
-# additional tests from the covidhubutils repo
+# # additional tests from the covidhubutils repo
 #
 # test_that("wis is correct, median only - covidHubUtils check", {
 #   library(covidHubUtils)
@@ -187,9 +187,10 @@ test_that("wis works, 2 intervals and median", {
 #   data_formatted <- merge(forecasts_formated, truth_formatted)
 #
 #   eval <- scoringutils::eval_forecasts(data_formatted,
-#                                         interval_score_arguments = list(count_median_twice = TRUE))
+#                                         interval_score_arguments = list(count_median_twice = FALSE))
 #
-#   actual <- covidHubUtils::score_forecasts(forecasts = test_forecasts, truth = test_truth)
+#   actual <- covidHubUtils::score_forecasts(forecasts = test_forecasts, truth = test_truth,
+#                                            use_median_as_point = TRUE)
 #
 #   expected <- abs(y - forecast_quantiles_matrix[, 1])
 #
@@ -264,9 +265,10 @@ test_that("wis works, 2 intervals and median", {
 #   data_formatted <- merge(forecasts_formated, truth_formatted)
 #
 #   eval <- scoringutils::eval_forecasts(data_formatted,
-#                                         interval_score_arguments = list(count_median_twice = TRUE))
+#                                        interval_score_arguments = list(count_median_twice = FALSE))
 #
-#   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+#   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth,
+#                             use_median_as_point = TRUE)
 #
 #   alpha1 <- 0.2
 #   expected <- (forecast_quantiles_matrix[, 2] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) +
@@ -339,9 +341,10 @@ test_that("wis works, 2 intervals and median", {
 #   data_formatted <- merge(forecasts_formated, truth_formatted)
 #
 #   eval <- scoringutils::eval_forecasts(data_formatted,
-#                                         interval_score_arguments = list(count_median_twice = TRUE))
+#                                         interval_score_arguments = list(count_median_twice = FALSE))
 #
-#   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+#   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth,
+#                             use_median_as_point = TRUE)
 #
 #   alpha1 <- 0.2
 #   alpha2 <- 0.5
@@ -355,33 +358,6 @@ test_that("wis works, 2 intervals and median", {
 #     warning("eval_forecasts() and covidHubUtils don't match")
 #   }
 #
-#   # expect_equal(eval$interval_score, expected)
+#   expect_equal(eval$interval_score, expected)
 # })
-
-
-
-
-# check that results from scoringutils and scoringutils2 conform
-
-test_that("wis is the same for scoringutils2 and scoringutils", {
-  true_values <- rnorm(30, mean = 1:30)
-  interval_range = rep(90, 30)
-  alpha = (100 - interval_range) / 100
-  lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
-  upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
-
-  scoringutils2 <- scoringutils::interval_score(true_values = true_values,
-                                                 lower = lower,
-                                                 upper = upper,
-                                                 count_median_twice = TRUE,
-                                                 interval_range = interval_range)
-
-  scoringutils <- scoringutils::interval_score(true_values = true_values,
-                                               lower = lower,
-                                               upper = upper,
-                                               interval_range = interval_range)
-
-  expect_identical(scoringutils2, scoringutils)
-})
-
 
