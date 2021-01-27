@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -113,6 +113,17 @@
       <small>Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="scoringutils-017" class="section level2">
+<h2 class="hasAnchor">
+<a href="#scoringutils-017" class="anchor"></a>scoringutils 0.1.7</h2>
+<div id="package-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#package-updates" class="anchor"></a>Package updates</h3>
+<ul>
+<li>The WIS definition change introduced in version 0.1.5 was partly corrected such that the difference in weighting is only introduced when summarising over scores from different interval ranges</li>
+</ul>
+</div>
+</div>
     <div id="scoringutils-016" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scoringutils-016" class="anchor"></a>scoringutils 0.1.6</h2>
@@ -120,9 +131,9 @@
     <div id="scoringutils-015" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scoringutils-015" class="anchor"></a>scoringutils 0.1.5</h2>
-<div id="package-updates-1" class="section level3">
+<div id="package-updates-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-1" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-2" class="anchor"></a>Package updates</h3>
 <ul>
 <li>changed the default definition of the weighted interval score. Previously, the median prediction was counted twice, but is no only counted once. If you want to go back to the old behaviour, you can call the interval_score fucntion with the agument <code>count_median_twice = FALSE</code>.</li>
 </ul>
@@ -146,9 +157,9 @@
 <code>score_table</code> shows a coloured summary table of scores</li>
 </ul>
 </div>
-<div id="package-updates-2" class="section level3">
+<div id="package-updates-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-2" class="anchor"></a>package updates</h3>
+<a href="#package-updates-3" class="anchor"></a>package updates</h3>
 <ul>
 <li>renamed “calibration” to “coverage”</li>
 <li>renamed “true_values” to “true_value” in data.frames</li>
@@ -203,9 +214,9 @@
 <li>included support for three new metrics to score quantiles with <code>eval_forecasts</code>: bias, sharpness and calibration</li>
 </ul>
 </div>
-<div id="package-updates-3" class="section level3">
+<div id="package-updates-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-3" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-4" class="anchor"></a>Package updates</h3>
 <ul>
 <li>example data now has a horizon column to illustrate the use of grouping</li>
 <li>documentation updated to explain the above listed changes</li>
@@ -223,9 +234,9 @@
 </li>
 </ul>
 </div>
-<div id="package-updates-4" class="section level3">
+<div id="package-updates-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-4" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-5" class="anchor"></a>Package updates</h3>
 <ul>
 <li>updated documentation for the <code>eval_forecasts</code>
 </li>

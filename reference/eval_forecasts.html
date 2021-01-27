@@ -77,7 +77,7 @@ continuous, integer-valued or binary variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@ continuous, integer-valued or binary variables.</p>
   metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
   quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
   sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>TRUE</span>, count_median_twice <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>TRUE</span>, count_median_twice <span class='op'>=</span> <span class='cn'>FALSE</span>,
     separate_results <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
   pit_plots <span class='op'>=</span> <span class='cn'>FALSE</span>,
   summarised <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -225,8 +225,16 @@ metrics will be returned when summarising.</p></td>
     </tr>
     <tr>
       <th>interval_score_arguments</th>
-      <td><p>list with arguments to pass down to
-<code>interval_score</code>.</p></td>
+      <td><p>list with arguments for the calculation of
+the interval score. These arguments get passed down to
+<code>interval_score</code>, except for the argument `count_median_twice` that
+controls how the interval scores for different intervals are summed up. This
+should be a logical (default is FALSE) that indicates whether or not
+to count the median twice when summarising. This would conceptually treat the
+median as a 0% prediction interval, where the median is the lower as well as
+the upper bound. The alternative is to treat the median as a single quantile
+forecast instead of an interval. The interval score would then
+be better understood as an average of quantile scores.)</p></td>
     </tr>
     <tr>
       <th>pit_plots</th>
