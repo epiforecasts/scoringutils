@@ -1,3 +1,9 @@
+## scoringutils 0.1.7
+### Package updates
+- The WIS definition change introduced in version 0.1.5 was partly corrected
+such that the difference in weighting is only introduced when summarising 
+over scores from different interval ranges
+
 ## scoringutils 0.1.6
 ## Feature updates
 - `eval_forecasts()` can now handle a separate forecast and truth data set as 
