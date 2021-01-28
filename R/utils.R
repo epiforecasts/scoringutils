@@ -186,7 +186,7 @@ permutation_test <- function(scores1,
   nTime = length(scores1)
   meanscores1 <- mean(scores1)
   meanscores2 <- mean(scores2)
-  if (comparison_mode == "ratio") {
+  if (comparison_mode[1] == "ratio") {
     # distinguish between on-sided and two-sided:
     testStat_observed <- ifelse(oneSided,
                                 meanscores1 / meanscores2,

@@ -11,7 +11,7 @@ eval_forecasts(
   metrics = NULL,
   quantiles = c(),
   sd = FALSE,
-  interval_score_arguments = list(weigh = TRUE, count_median_twice = TRUE,
+  interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE,
     separate_results = TRUE),
   pit_plots = FALSE,
   summarised = TRUE,

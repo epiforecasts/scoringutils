@@ -146,7 +146,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
   # delete unnecessary columns from the output
   cols_to_delete <- setdiff(colnames(pairwise),
-                            unique(c(summarise_by, "model", "theta")))
+                            unique(c(summarise_by, "model", "theta", "rel_to_baseline")))
   if (length(cols_to_delete > 1)) {
     pairwise[, eval(cols_to_delete) := NULL]
   }
