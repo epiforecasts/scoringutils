@@ -32,11 +32,11 @@ test_that("pairwise comparisons works", {
                                                      baseline = "m1",
                                                      interval_score_arguments = list(count_median_twice = FALSE))
 
-  # extract the theta values
-  thetas_without <- eval_without_baseline[, .(model = unique(model),
-                                              theta = unique(theta))]
-  thetas_with <- eval_with_baseline[, .(model = unique(model),
-                                        theta = unique(rel_to_baseline))]
+  # extract the relative_skill values
+  relative_skills_without <- eval_without_baseline[, .(model = unique(model),
+                                              relative_skill = unique(relative_skill))]
+  relative_skills_with <- eval_with_baseline[, .(model = unique(model),
+                                        relative_skill = unique(scaled_rel_skill))]
 
   # prepare scores for the code Johannes Bracher wrote
   scores_johannes <- data.table::copy(eval_without_baseline) # doesn't matter which one
@@ -105,7 +105,7 @@ test_that("pairwise comparisons works", {
   # compare results without a baseline specified
   geom_mean_ratios <- exp(rowMeans(log(results_ratio), na.rm = TRUE))
   names(geom_mean_ratios) <- NULL
-  expect_equal(thetas_without$theta, geom_mean_ratios)
+  expect_equal(relative_skills_without$relative_skill, geom_mean_ratios)
 
   # comparison with a baseline
   ind_baseline <- which(rownames(results_ratio) == "m1")
@@ -114,7 +114,7 @@ test_that("pairwise comparisons works", {
   ratios_scaled <- geom_mean_ratios/geom_mean_ratios["m1"]
 
   names(ratios_scaled) <- NULL
-  expect_equal(thetas_with$theta, ratios_scaled)
+  expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 
 
   # scoringutils can also do pairwise comparisons for different subcategories
@@ -148,9 +148,9 @@ test_that("pairwise comparisons works", {
                                                      baseline = "m1",
                                                      compute_relative_skill = TRUE,
                                                      interval_score_arguments = list(count_median_twice = FALSE))
-  thetas_with <- eval_with_baseline[location == "location_3",
+  relative_skills_with <- eval_with_baseline[location == "location_3",
                                     .(model = unique(model),
-                                      theta = unique(rel_to_baseline))]
+                                      relative_skill = unique(scaled_rel_skill))]
 
-  expect_equal(thetas_with$theta, ratios_scaled)
+  expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })

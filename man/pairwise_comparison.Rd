@@ -60,7 +60,7 @@ df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
                  interval_score = (abs(rnorm(30))),
                  aem = (abs(rnorm(30))))
 
-res <- pairwise_comparison(df,
+res <- scoringutils::pairwise_comparison(df,
                            baseline = "model1")
 scoringutils::plot_pairwise_comparison(res)
 

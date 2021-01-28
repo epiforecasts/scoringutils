@@ -6,7 +6,7 @@
 \usage{
 plot_pairwise_comparison(
   comparison_result,
-  type = c("together", "ratio", "pval"),
+  type = c("mean_scores_ratio", "pval", "together"),
   smaller_is_good = TRUE
 )
 }
@@ -14,9 +14,13 @@ plot_pairwise_comparison(
 \item{comparison_result}{A data.frame as produced by
 \code{\link{pairwise_comparison}}}
 
-\item{type}{character vector of length one that is either "ratio" or "pval".
+\item{type}{character vector of length one that is either "mean_scores_ratio" or "pval".
 This denotes whether to visualise the ratio or the p-value of the
-pairwise comparison. Default is "ratio"}
+pairwise comparison. Default is "mean_scores_ratio"}
+
+\item{smaller_is_good}{logical (default is TRUE) that indicates whether
+smaller or larger values are to be interpreted as 'good' (as you could just
+invert the mean scores ratio)}
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
@@ -32,6 +36,6 @@ res <- scoringutils::pairwise_comparison(df, baseline = "model1")
 plot_pairwise_comparison(res, smaller_is_good = TRUE)
 
 res <- pairwise_comparison(df)
-plot_pairwise_comparison(res, smaller_is_good = TRUE)
-plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
+scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE)
+scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
 }

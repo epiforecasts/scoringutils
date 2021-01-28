@@ -44,7 +44,7 @@
 #'                  interval_score = (abs(rnorm(30))),
 #'                  aem = (abs(rnorm(30))))
 #'
-#' res <- pairwise_comparison(df,
+#' res <- scoringutils::pairwise_comparison(df,
 #'                            baseline = "model1")
 #' scoringutils::plot_pairwise_comparison(res)
 #'
@@ -146,7 +146,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
   # delete unnecessary columns from the output
   cols_to_delete <- setdiff(colnames(pairwise),
-                            unique(c(summarise_by, "model", "theta", "rel_to_baseline")))
+                            unique(c(summarise_by, "model", "relative_skill", "scaled_rel_skill")))
   if (length(cols_to_delete > 1)) {
     pairwise[, eval(cols_to_delete) := NULL]
   }
@@ -248,7 +248,8 @@ pairwise_comparison_one_group <- function(scores,
     # remove NAs form merge in the thetas
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
-    result[, `:=` (theta = geom_mean_helper(ratio)),
+    result[, `:=` (theta = geom_mean_helper(ratio),
+                   rel_to_baseline = NA_real_),
            by = "model"]
   }
 
@@ -264,6 +265,10 @@ pairwise_comparison_one_group <- function(scores,
   scores <- unique(scores)
   # allow.cartesian needs to be set as sometimes rows will be duplicated a lot
   out <- merge(scores, result, by = "model", all = TRUE)
+
+  # rename ratio to mean_scores_ratio
+  data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
+                       new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
 
   return(out)
 }
@@ -329,7 +334,8 @@ unique(overlap)
     # alternative: do a paired t-test on ranks?
     pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
   }
-  return(list(ratio = ratio, pval = pval))
+  return(list(mean_scores_ratio = ratio,
+              pval = pval))
 }
 
 
@@ -358,9 +364,12 @@ unique(overlap)
 #'
 #' @param comparison_result A data.frame as produced by
 #' \code{\link{pairwise_comparison}}
-#' @param type character vector of length one that is either "ratio" or "pval".
+#' @param type character vector of length one that is either "mean_scores_ratio" or "pval".
 #' This denotes whether to visualise the ratio or the p-value of the
-#' pairwise comparison. Default is "ratio"
+#' pairwise comparison. Default is "mean_scores_ratio"
+#' @param smaller_is_good logical (default is TRUE) that indicates whether
+#' smaller or larger values are to be interpreted as 'good' (as you could just
+#' invert the mean scores ratio)
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_minimal element_text
 #' @importFrom data.table as.data.table
@@ -377,17 +386,17 @@ unique(overlap)
 #' plot_pairwise_comparison(res, smaller_is_good = TRUE)
 #'
 #' res <- pairwise_comparison(df)
-#' plot_pairwise_comparison(res, smaller_is_good = TRUE)
-#' plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
+#' scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE)
+#' scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
 
 
 plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("together", "ratio", "pval"),
+                                     type = c("mean_scores_ratio", "pval", "together"),
                                      smaller_is_good = TRUE) {
 
   comparison_result <- data.table::as.data.table(comparison_result)
 
-  comparison_result[, model := reorder(model, -theta)]
+  comparison_result[, model := reorder(model, -relative_skill)]
   levels <- levels(comparison_result$model)
 
 
@@ -430,14 +439,14 @@ plot_pairwise_comparison <- function(comparison_result,
     # to plot it as grey later on
     equal <- data.table::data.table(model = levels,
                                     compare_against = levels,
-                                    ratio = 1,
+                                    mean_scores_ratio = 1,
                                     pval = NA,
                                     adj_pval = NA)
     upper_triangle_complete <- data.table::rbindlist(list(upper_triangle,
                                                           equal), fill = TRUE)
 
     # define interest variable
-    upper_triangle_complete[, var_of_interest := round(ratio, 2)]
+    upper_triangle_complete[, var_of_interest := round(mean_scores_ratio, 2)]
 
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
@@ -448,7 +457,7 @@ plot_pairwise_comparison <- function(comparison_result,
     upper_triangle_complete[, fill_col := get_fill_scale(var_of_interest,
                                                          breaks, scales)]
 
-    # create ratios in plot
+    # create mean_scores_ratios in plot
     plot <- ggplot2::ggplot(upper_triangle_complete,
                             ggplot2::aes(x = compare_against,
                                          y = model,
@@ -473,7 +482,7 @@ plot_pairwise_comparison <- function(comparison_result,
                      # axis.line.x = ggplot2::element_line(color = "brown3", size = 4),
                      legend.position = "none") +
       ggplot2::labs(x = "", y = "",
-                    title = "Pairwise comparisons - ratio (upper) and pval (lower)") +
+                    title = "Pairwise comparisons - mean_scores_ratio (upper) and pval (lower)") +
       ggplot2::coord_cartesian(expand = FALSE)
 
     # add pvalues to plot --------------------------------------------------------
@@ -514,8 +523,8 @@ plot_pairwise_comparison <- function(comparison_result,
                          na.rm = TRUE)
 
     return(plot)
-  } else if (type[1] == "ratio") {
-    comparison_result[, var_of_interest := round(ratio, 2)]
+  } else if (type[1] == "mean_scores_ratio") {
+    comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
@@ -540,8 +549,8 @@ plot_pairwise_comparison <- function(comparison_result,
   }
 
   plot <- ggplot2::ggplot(comparison_result,
-                          ggplot2::aes(y = reorder(model, 1/ratio, FUN = geom_mean_helper),
-                                       x = reorder(compare_against, ratio, FUN = geom_mean_helper),
+                          ggplot2::aes(y = reorder(model, 1/mean_scores_ratio, FUN = geom_mean_helper),
+                                       x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
                                        fill = fill_col)) +
     ggplot2::geom_tile(color = "white",
                        width=0.97, height=0.97) +
@@ -554,24 +563,24 @@ plot_pairwise_comparison <- function(comparison_result,
                                   limits = c(-1,1),
                                   name = NULL) +
     ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1),
                    legend.position = "none") +
     ggplot2::labs(x = "", y = "",
-                  title = paste("Pairwise comparisons", type, sep = " - ")) +
+                  title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1") +
     ggplot2::coord_cartesian(expand = FALSE)
 
-  if (type == "ratio") {
+  if (type[1] == "mean_scores_ratio") {
     plot <- plot +
       ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                      panel.grid.minor = ggplot2::element_blank(),
-                     axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
+                     axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                          hjust=1, color = "brown4"),
-                     axis.text.y = ggplot2::element_text(color = "steelblue4"))
+                     axis.text.y = ggplot2::element_text(color = "steelblue4")) +
+      ggplot2::ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
   }
 
   return(plot)
-
 }
 
 
