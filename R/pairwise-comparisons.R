@@ -130,6 +130,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # remove range and quantile from summarise_by if they are present
   summarise_by <- setdiff(summarise_by, c("range", "quantile", "sample"))
 
+  # if summarise_by is equal to by, then pairwise comparisons don't make sense
   if (all(sort(summarise_by) == sort(by))) {
     summarise_by <- "model"
     if (verbose) {

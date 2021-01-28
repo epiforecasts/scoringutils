@@ -112,7 +112,9 @@
 #' @param compute_relative_skill logical, whether or not to compute realitve
 #' performance between models. If `TRUE` (the default), then a column called
 #' 'model' must be present in the input data. For more information on
-#' the computation of relative skill, see \code{\link{pairwise_comparison}}
+#' the computation of relative skill, see \code{\link{pairwise_comparison}}.
+#' Relative skill will be calculated for the aggregation level specified in
+#' `summarise_by`.
 #' @param rel_skill_metric chracter string with the name of the metric for which
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
 #' one of interval score, crps or brier score will be used where appropriate
