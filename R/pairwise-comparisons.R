@@ -473,7 +473,7 @@ plot_pairwise_comparison <- function(comparison_result,
                                     limits = c(-1,1),
                                     name = NULL) +
       ggplot2::theme_minimal() +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1,
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                          hjust=1, color = "brown4"),
                      axis.text.y = ggplot2::element_text(color = "steelblue4"),
                      panel.grid.major = ggplot2::element_blank(),

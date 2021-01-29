@@ -131,7 +131,8 @@ list_of_avail_metrics <- function() {
   available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
-                         "underprediction", "overprediction")
+                         "underprediction", "overprediction", "relative_skill",
+                         "scaled_rel_skill")
 
   return(available_metrics)
 }
