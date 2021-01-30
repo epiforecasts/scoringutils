@@ -7,13 +7,19 @@
 plot_predictions(
   data,
   x = "date",
+  filter_truth = list(),
+  filter_forecasts = list(),
   add_truth_data = NULL,
   range = c(0, 50, 90),
   facet_formula = NULL,
   facet_wrap_or_grid = "facet_wrap",
   scales = "free_y",
+  allow_truth_without_pred = FALSE,
   xlab = x,
-  ylab = "True and predicted values"
+  ylab = "True and predicted values",
+  forecasts = NULL,
+  truth_data = NULL,
+  merge_by = NULL
 )
 }
 \arguments{
@@ -58,8 +64,17 @@ Make a plot of observed and predicted values
 example1 <- scoringutils::continuous_example_data
 example2 <- scoringutils::range_example_data_long
 
+filter_truth =
+filter_forecasts = list("model == 'SIRCOVID'",
+                        'creation_date == "2020-06-22"')
+
 scoringutils::plot_predictions(example1, x = "value_date",
+                               filter_truth = list('value_date <= "2020-06-22"',
+                                                   'value_date > "2020-05-01"'),
+                               filter_forecasts = list("model == 'SIRCOVID'",
+                                                       'creation_date == "2020-06-22"'),
                                facet_formula = ~ value_desc)
+
 scoringutils::plot_predictions(example2, x = "value_date",
                                facet_formula = ~ value_desc)
 }

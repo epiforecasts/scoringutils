@@ -181,7 +181,7 @@ score_table <- function(summarised_scores,
 #' @return A ggplot2 object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
-#' element_text labs coord_cartesian theme theme_minimal
+#' element_text labs coord_cartesian theme theme_light
 #' @importFrom stats cor na.omit
 #' @importFrom data.table setDT melt
 #' @importFrom forcats fct_relevel fct_rev
@@ -242,7 +242,7 @@ correlation_plot <- function(scores,
                                   high = "salmon",
                                   name = "Correlation",
                                   breaks = c(-1, -0.5, 0, 0.5, 1)) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1),
                    panel.grid.major.y = ggplot2::element_blank(),
@@ -290,7 +290,7 @@ correlation_plot <- function(scores,
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes_string aes geom_linerange facet_wrap labs
-#' theme theme_minimal unit
+#' theme theme_light unit
 #' @export
 #'
 #' @examples
@@ -329,7 +329,7 @@ wis_components <- function(scores,
     ggplot2::facet_wrap(facet_formula, ncol = ncol,
                         scales = scales) +
     ggplot2::labs(x = xlab, y = ylab) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
                    axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1))
@@ -450,13 +450,6 @@ range_plot <- function(scores,
 
 
 
-
-
-
-
-
-
-
 #' @title Create a Heatmap of a Scoring Metric
 #'
 #' @description
@@ -515,7 +508,7 @@ score_heatmap <- function(scores,
 
   scores[, eval(metric) := round(get(metric), 2)]
 
-  ggplot2::ggplot(scores,
+  plot <- ggplot2::ggplot(scores,
                   ggplot2::aes_string(y = y,
                                       x = x,
                                       fill = metric)) +
@@ -537,7 +530,7 @@ score_heatmap <- function(scores,
         ggplot2::facet_grid(facet_formula, scales = scales)
     }
   }
-
+  return(plot)
 }
 
 
@@ -581,64 +574,112 @@ score_heatmap <- function(scores,
 #' example2 <- scoringutils::range_example_data_long
 #'
 #' scoringutils::plot_predictions(example1, x = "value_date",
-#'                                facet_formula = ~ value_desc)
+#'                                filter_truth = list('value_date <= "2020-06-22"',
+#'                                                    'value_date > "2020-05-01"'),
+#'                                filter_forecasts = list("model == 'SIRCOVID'",
+#'                                                        'creation_date == "2020-06-22"'),
+#'                                facet_formula = geography ~ value_desc)
+#'
 #' scoringutils::plot_predictions(example2, x = "value_date",
-#'                                facet_formula = ~ value_desc)
+#'                                filter_truth = list('value_date <= "2020-06-22"',
+#'                                                    'value_date > "2020-05-01"'),
+#'                                filter_forecasts = list("model == 'SIRCOVID'",
+#'                                                        'creation_date == "2020-06-22"'),
+#'                                facet_formula = geography ~ value_desc)
 
 
 plot_predictions <- function(data,
                              x = "date",
+                             filter_truth = list(),
+                             filter_forecasts = list(),
                              add_truth_data = NULL,
                              range = c(0, 50, 90),
                              facet_formula = NULL,
                              facet_wrap_or_grid = "facet_wrap",
                              scales = "free_y",
+                             allow_truth_without_pred = FALSE,
                              xlab = x,
-                             ylab = "True and predicted values") {
+                             ylab = "True and predicted values",
+                             forecasts = NULL,
+                             truth_data = NULL,
+                             merge_by = NULL) {
 
+  # preparations ---------------------------------------------------------------
+  # check data argument is provided
+  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
+    stop("need arguments 'data' in function 'eval_forecasts()', or alternatively 'forecasts' and 'truth_data'")
+  }
 
-  # find out what type of predictions we have
-  colnames <- colnames(data)
+  # if data is given as one, separate it
+  if (is.null(truth_data) & is.null(forecasts)) {
+    truth_data <- data.table::copy(data)[!is.na(true_value)]
+    forecasts <- data.table::copy(data)[!is.na(prediction)]
+  }
 
+  # function to filter forecast and truth data
+  filter <- function(data, filter_list) {
+    data <- data.table::copy(data)
+    # filter as specified by the user
+    for (i in 1:length(filter_list)) {
+      data <- data[eval(parse(text = filter_list[[i]])), ]
+    }
+    return(data)
+  }
+
+  truth_data <- filter(truth_data, filter_truth)
+  forecasts <- filter(forecasts, filter_forecasts)
+
+  # if specificed, get all combinations of the facet variables present in the
+  # forecasts and filter the truth_data accordingly
+  if (!allow_truth_without_pred) {
+    facet_vars <- all.vars(facet_formula)
+    index <- colnames(forecasts)[(colnames(forecasts) %in% facet_vars)]
+    combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
+    truth_data <- merge(truth_data, combinations_forecasts)
+  }
+
+  # find out what type of predictions we have. convert sample based to
+  # range data
+  colnames <- colnames(forecasts)
   if ("sample" %in% colnames) {
-    data <- scoringutils::sample_to_range_long(data)
-    data[, quantile := NULL]
+    forecasts <- scoringutils::sample_to_range_long(forecasts,
+                                                    keep_quantile_col = FALSE)
   } else if ("quantile" %in% colnames) {
-    data <- scoringutils::quantile_to_range_long(data)
+    forecasts <- scoringutils::quantile_to_range_long(forecasts,
+                                                      keep_quantile_col = FALSE)
   }
 
   # select appropriate boundaries and pivot wider
-  select <- data$range %in% setdiff(range, 0)
+  select <- forecasts$range %in% setdiff(range, 0)
+  intervals <- forecasts[select, ]
 
-  intervals <- data[select, ]
-
+  # delete quantile column in intervals if present. This is important for
+  # pivoting
   if ("quantile" %in% names(intervals)) {
     intervals[, quantile := NULL]
   }
 
+  # pivot wider and convert range to a factor
   intervals <- data.table::dcast(intervals, ... ~ boundary,
                                  value.var = "prediction")
   intervals[, range := as.factor(range)]
 
-
+  # plot prediciton rnages
   plot <- ggplot2::ggplot(intervals, ggplot2::aes_string(x = x)) +
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
                                       group = range, fill = range),
                          alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = true_value, colour = "actual"),
-                        size = 0.5) +
-    ggplot2::geom_line(ggplot2::aes(y = true_value, colour = "actual"),
-                       lwd = 0.2) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
     ggplot2::scale_fill_manual("range", values = c("steelblue3",
                                                    "lightskyblue3",
                                                    "lightskyblue2",
                                                    "lightskyblue1")) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_light()
 
+  # add median in a different colour
   if (0 %in% range) {
-    select_median <- (data$range %in% 0 & data$boundary == "lower")
-    median <- data[select_median]
+    select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
+    median <- forecasts[select_median]
 
     plot <- plot +
       ggplot2::geom_line(data = median,
@@ -646,7 +687,19 @@ plot_predictions <- function(data,
                          lwd = 0.4)
   }
 
+  # add true_values
+  plot <- plot +
+    ggplot2::labs(x = xlab, y = ylab)
 
+  plot <- plot +
+    ggplot2::geom_point(data = truth_data,
+                        ggplot2::aes(y = true_value, colour = "actual"),
+                        size = 0.5) +
+    ggplot2::geom_line(data = truth_data,
+                       ggplot2::aes(y = true_value, colour = "actual"),
+                       lwd = 0.2)
+
+  # facet if specified by the user
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
       plot <- plot +
@@ -655,19 +708,6 @@ plot_predictions <- function(data,
       plot <- plot +
         ggplot2::facet_grid(facet_formula, scales = scales)
     }
-  }
-
-  plot <- plot +
-    ggplot2::labs(x = xlab, y = ylab)
-
-  if(!is.null(add_truth_data)) {
-    plot <- plot +
-      ggplot2::geom_point(data = add_truth_data,
-                          ggplot2::aes(y = true_value, colour = "actual"),
-                          size = 0.5) +
-      ggplot2::geom_line(data = add_truth_data,
-                         ggplot2::aes(y = true_value, colour = "actual"),
-                         lwd = 0.2)
   }
 
   return(plot)
@@ -728,7 +768,7 @@ interval_coverage <- function(summarised_scores,
     ggplot2::geom_line(ggplot2::aes(y = range), colour = "grey",
                        linetype = "dashed") +
     ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::ylab("% Obs inside interval") +
     ggplot2::xlab("Interval range") +
@@ -802,7 +842,7 @@ quantile_coverage <- function(summarised_scores,
     ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
                        linetype = "dashed") +
     ggplot2::geom_line(ggplot2::aes(y = quantile_coverage)) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::xlab("Quantile") +
     ggplot2::ylab("% obs below quantile") +
@@ -931,7 +971,7 @@ show_avail_forecasts <- function(data,
                        width = 0.97, height = 0.97) +
     ggplot2::scale_fill_gradient(low = "grey95", high = "steelblue",
                                  na.value = "lightgrey") +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
                    panel.grid.minor.x = ggplot2::element_blank(),
                    legend.position = legend_position,
