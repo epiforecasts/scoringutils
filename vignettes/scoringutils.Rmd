@@ -59,18 +59,22 @@ print(scores, 3, 3)
 Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data
 
 ```{r}
+# 
+# filtered_data <- data[geography == "England" & 
+#                         creation_date <= "2020-06-29" & 
+#                         value_desc == "Deaths"]
 
-filtered_data <- data[geography == "England" & 
-                        creation_date <= "2020-06-29" & 
-                        value_desc == "Deaths"]
-
-scoringutils::plot_predictions(filtered_data[creation_date == "2020-06-29"], 
-                               add_truth_data = filtered_data,
-                               x = "value_date", range = c(0, 90), 
-                               facet_formula = value_desc ~ model)
+scoringutils::plot_predictions(data = data, 
+                               filter_both = list("geography == 'England'", 
+                                                  "value_desc == 'Deaths'"),
+                               filter_forecasts = list("creation_date == '2020-06-29'"), 
+                               filter_truth = list("as.Date(value_date) < '2020-06-22'"),
+                               x = "value_date", 
+                               range = c(0, 50, 90), 
+                               scale = "fixed",
+                               facet_formula = ~ model)
 ```
 
-(The data is just randomly generated values. We plan to add real example data to make these illustrations more useful in the future)
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 

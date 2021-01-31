@@ -6,9 +6,12 @@
 \usage{
 plot_predictions(
   data,
+  forecasts = NULL,
+  truth_data = NULL,
   x = "date",
   filter_truth = list(),
   filter_forecasts = list(),
+  filter_both = list(),
   add_truth_data = NULL,
   range = c(0, 50, 90),
   facet_formula = NULL,
@@ -16,25 +19,37 @@ plot_predictions(
   scales = "free_y",
   allow_truth_without_pred = FALSE,
   xlab = x,
-  ylab = "True and predicted values",
-  forecasts = NULL,
-  truth_data = NULL,
-  merge_by = NULL
+  ylab = "True and predicted values"
 )
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
 \code{\link{eval_forecasts}}. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
-called "quantile" or two columns called "range" and "boundary".}
+called "quantile" or two columns called "range" and "boundary". Internally,
+these will be separeted into a truth and forecast data set in order to be
+able to apply different filtering to truth data and forecasts. Alternatively
+you can directly proivde a separate truth and forecasts data frame as input.}
 
-\item{x}{character vector of length one that denotes the name of the variable
+\item{forecasts}{data.frame with forecasts, that should follow the same
+general guidelines as the `data` input. Argument can be used to supply
+forecasts and truth data independently. Default is `NULL`.}
+
+\item{truth_data}{data.frame with a column called `true_value`
 on the x-axis. Usually, this will be "date", but it can be anything else.}
 
-\item{add_truth_data}{additional truth data, e.g. past values for which
-no predictions are available. This should be a data.frame with a column
-called "true_value" and another column corresponding to the x variable selected
-for the plot}
+\item{x}{character vector of length one that denotes the name of the variable}
+
+\item{filter_truth}{a list with character strings that are used to filter
+the truth data. Every element is parsed as an expression and evaluated
+in order to filter the truth data.}
+
+\item{filter_forecasts}{a list with character strings that are used to filter
+the truth data. Every element is parsed as an expression and evaluated
+in order to filter the forecasts data.}
+
+\item{filter_both}{same as `filter_truth` and `filter_forecasts`, but
+applied to both data sets for convenience.}
 
 \item{range}{numeric vector indicating the interval ranges to plot. If 0 is
 included in range, the median prediction will be shown.}
@@ -64,17 +79,18 @@ Make a plot of observed and predicted values
 example1 <- scoringutils::continuous_example_data
 example2 <- scoringutils::range_example_data_long
 
-filter_truth =
-filter_forecasts = list("model == 'SIRCOVID'",
-                        'creation_date == "2020-06-22"')
-
 scoringutils::plot_predictions(example1, x = "value_date",
                                filter_truth = list('value_date <= "2020-06-22"',
                                                    'value_date > "2020-05-01"'),
                                filter_forecasts = list("model == 'SIRCOVID'",
                                                        'creation_date == "2020-06-22"'),
-                               facet_formula = ~ value_desc)
+                               facet_formula = geography ~ value_desc)
 
 scoringutils::plot_predictions(example2, x = "value_date",
-                               facet_formula = ~ value_desc)
+                               filter_truth = list('value_date <= "2020-06-22"',
+                                                   'value_date > "2020-05-01"'),
+                               filter_forecasts = list("model == 'SIRCOVID'",
+                                                       'creation_date == "2020-06-22"'),
+                               allow_truth_without_pred = TRUE,
+                               facet_formula = geography ~ value_desc)
 }
