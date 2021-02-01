@@ -72,6 +72,7 @@ geom_mean_helper <- function(x) {
 
 globalVariables(c(".",
                   ".SD",
+                  "adj_pval",
                   "ae_point",
                   "aem",
                   "boundary",
@@ -79,10 +80,12 @@ globalVariables(c(".",
                   "component_value",
                   "..colnames_x",
                   "..colnames_y",
+                  "compare_against",
                   "count",
                   "coverage_deviation",
                   "CRPS",
                   "DSS",
+                  "fill_col",
                   "identif",
                   "Interval_Score",
                   "overprediction",
@@ -95,6 +98,7 @@ globalVariables(c(".",
                   "id",
                   "log_score",
                   "lower",
+                  "mean_scores_ratio",
                   "metric",
                   "metrics_select",
                   "model",
@@ -103,13 +107,19 @@ globalVariables(c(".",
                   "pit_p_val",
                   "point",
                   "prediction",
+                  "pval",
                   "quantile",
+                  "ratio",
+                  "rel_to_baseline",
+                  "relative_skill",
                   "rn",
+                  "theta",
                   "true_value",
                   "type",
                   "upper",
                   "value",
                   "value_scaled",
+                  "var_of_interest",
                   "variable",
                   "wis_component_name",
                   "x",
@@ -121,7 +131,8 @@ list_of_avail_metrics <- function() {
   available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
-                         "underprediction", "overprediction")
+                         "underprediction", "overprediction", "relative_skill",
+                         "scaled_rel_skill")
 
   return(available_metrics)
 }
@@ -166,6 +177,45 @@ update_list <- function(defaults = list(), optional = list()) {
     updated <- defaults
   }
   return(updated)
+}
+
+
+
+
+
+
+
+
+permutation_test <- function(scores1,
+                             scores2,
+                             nPermutation = 999,
+                             oneSided = FALSE,
+                             comparison_mode = c("difference", "ratio")) {
+  nTime = length(scores1)
+  meanscores1 <- mean(scores1)
+  meanscores2 <- mean(scores2)
+  if (comparison_mode[1] == "ratio") {
+    # distinguish between on-sided and two-sided:
+    testStat_observed <- ifelse(oneSided,
+                                meanscores1 / meanscores2,
+                                max(meanscores1 / meanscores2, meanscores2 / meanscores1))
+  } else {
+    testStat_observed <- ifelse(oneSided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
+  }
+  testStat_permuted <- replicate(nPermutation, {
+    sel <- rbinom(nTime, size = 1, prob = 0.5)
+    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1]))/nTime
+    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0]))/nTime
+    if (comparison_mode[1] == "ratio") {
+      ifelse(oneSided, g1 / g2, max(g1 / g2, g2/g1))
+    } else {
+      ifelse(oneSided, g1 - g2, abs(g1 - g2))
+    }
+  })
+  # abs needs to be removed here (messes with one sided vs two-sided)
+  pVal <- (1 + sum(testStat_permuted >= testStat_observed))/(nPermutation + 1)
+  # plus ones to make sure p-val is never 0?
+  return(pVal)
 }
 
 

@@ -117,6 +117,19 @@
 #' @param merge_by character vector with column names that `forecasts` and
 #' `truth_data` should be merged on. Default is `NULL` and merge will be
 #' attempted automatically.
+#' @param compute_relative_skill logical, whether or not to compute realitve
+#' performance between models. If `TRUE` (the default), then a column called
+#' 'model' must be present in the input data. For more information on
+#' the computation of relative skill, see \code{\link{pairwise_comparison}}.
+#' Relative skill will be calculated for the aggregation level specified in
+#' `summarise_by`.
+#' @param rel_skill_metric chracter string with the name of the metric for which
+#' a relative skill shall be computed. If equal to 'auto' (the default), then
+#' one of interval score, crps or brier score will be used where appropriate
+#' @param baseline character string with the name of a model. If a baseline is
+#' given, then a scaled relative skill with respect to the baseline will be
+#' returned. By default (`NULL`), relative skill will not be scaled with
+#' respect to a baseline model.
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -199,7 +212,10 @@ eval_forecasts <- function(data = NULL,
                            verbose = TRUE,
                            forecasts = NULL,
                            truth_data = NULL,
-                           merge_by = NULL) {
+                           merge_by = NULL,
+                           compute_relative_skill = TRUE,
+                           rel_skill_metric = "auto",
+                           baseline = NULL) {
 
 
   # preparations ---------------------------------------------------------------
@@ -219,6 +235,36 @@ eval_forecasts <- function(data = NULL,
 
   # do a copy to avoid that the input may be altered in any way.
   data <- data.table::as.data.table(data)
+
+  # error handling for relative skill computation
+  # should probably wrap this in a function warn_if_verbose(warning, verbose)
+  if (compute_relative_skill) {
+    if (!("model" %in% colnames(data))) {
+      if (verbose) {
+        warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+      }
+      compute_relative_skill <- FALSE
+    }
+    models <- unique(data$model)
+    if (length(models) < 2 + (!is.null(baseline))) {
+      if (verbose) {
+        warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+      }
+      compute_relative_skill <- FALSE
+    }
+    if (!is.null(baseline) && !(baseline %in% models)) {
+      if (verbose){
+        warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+      }
+      compute_relative_skill <- FALSE
+    }
+    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% list_of_avail_metrics())) {
+      if (verbose) {
+        warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+      }
+      compute_relative_skill <- FALSE
+    }
+  }
 
   # check that everything is unique
   unique_data <- unique(data)
@@ -329,7 +375,10 @@ eval_forecasts <- function(data = NULL,
                                    pit_plots = pit_plots,
                                    interval_score_arguments = interval_score_arguments,
                                    summarised = summarised,
-                                   verbose = verbose)
+                                   verbose = verbose,
+                                   compute_relative_skill = compute_relative_skill,
+                                   rel_skill_metric = rel_skill_metric,
+                                   baseline = baseline)
     return(res)
   }
 
@@ -349,10 +398,7 @@ eval_forecasts <- function(data = NULL,
                                  summarised = summarised,
                                  verbose = verbose)
     return(res)
-
   }
-
-
 }
 
 
