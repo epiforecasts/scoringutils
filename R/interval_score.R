@@ -35,11 +35,6 @@
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' FALSE.
-#' @param count_median_twice logical, whether or not to count the median twice.
-#' This would conceptually treat the median as a 0\% prediction interval, where
-#' the median is the lower as well as the upper bound. The alternative is to
-#' treat the median as a single quantile forecast. The interval score would then
-#' be better understood as an average of quantile scores.)
 #' @param separate_results if TRUE (default is FALSE), then the separate parts
 #' of the interval score (sharpness, penalties for over- and under-prediction
 #' get returned as separate elements of a list). If you want a `data.frame`
@@ -82,7 +77,6 @@ interval_score <- function(true_values,
                            upper,
                            interval_range,
                            weigh = TRUE,
-                           count_median_twice = FALSE,
                            separate_results = FALSE) {
 
   # error handling - not sure how I can make this better
@@ -102,12 +96,6 @@ interval_score <- function(true_values,
   sharpness <- (upper - lower)
   overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
   underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
-
-  if (!count_median_twice) {
-    # for the median value, alpha is equal to one. In order to only count it
-    # once, we can divide it by 2.
-    alpha[round(alpha, 5) == 1] <- 0.5
-  }
 
   if (weigh) {
     sharpness <- sharpness * alpha / 2

@@ -96,8 +96,16 @@
 #' metrics will be returned when summarising.
 #' @param pit_plots if TRUE (not the default), pit plots will be returned. For
 #' details see \code{\link{pit}}.
-#' @param interval_score_arguments list with arguments to pass down to
-#' \code{interval_score}.
+#' @param interval_score_arguments list with arguments for the calculation of
+#' the interval score. These arguments get passed down to
+#' \code{interval_score}, except for the argument `count_median_twice` that
+#' controls how the interval scores for different intervals are summed up. This
+#' should be a logical (default is FALSE) that indicates whether or not
+#' to count the median twice when summarising. This would conceptually treat the
+#' median as a 0\% prediction interval, where the median is the lower as well as
+#' the upper bound. The alternative is to treat the median as a single quantile
+#' forecast instead of an interval. The interval score would then
+#' be better understood as an average of quantile scores.)
 #' @param summarised Summarise arguments (i.e. take the mean per group
 #' specified in group_by. Default is TRUE.
 #' @param verbose print out additional helpful messages (default is TRUE)

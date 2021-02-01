@@ -44,10 +44,13 @@ eval_forecasts_quantile <- function(data,
 
   # update interval_score arguments based on what was provided by user
   interval_score_arguments <- update_list(defaults = list(weigh = TRUE,
-                                                          count_median_twice = TRUE,
+                                                          count_median_twice = FALSE,
                                                           separate_results = TRUE),
                                           optional = interval_score_arguments)
 
+  # store separately, as this doesn't get passed down to interval_score()
+  count_median_twice <- interval_score_arguments$count_median_twice
+  interval_score_arguments$count_median_twice <- NULL
 
   # calculate scores on range format -------------------------------------------
   if ("interval_score" %in% metrics) {
@@ -118,9 +121,13 @@ eval_forecasts_quantile <- function(data,
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
     quantile_data[, eval(delete_cols) := NULL]
 
-    #duplicate median column before merging
-    median <- quantile_data[quantile == 0.5, ][, boundary := "upper"]
-    quantile_data <- data.table::rbindlist(list(quantile_data, median))
+    # duplicate median column before merging if median is too be counted twice
+    # if this is false, then the res will have one entry for every quantile,
+    # which translates to two rows for every interval, but only one for the median
+    if (count_median_twice) {
+      median <- quantile_data[quantile == 0.5, ][, boundary := "upper"]
+      quantile_data <- data.table::rbindlist(list(quantile_data, median))
+    }
 
     # merge back with other metrics
     merge_cols <- setdiff(keep_cols, c("aem", "quantile_coverage", "quantile",

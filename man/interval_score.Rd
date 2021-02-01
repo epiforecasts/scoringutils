@@ -10,7 +10,6 @@ interval_score(
   upper,
   interval_range,
   weigh = TRUE,
-  count_median_twice = FALSE,
   separate_results = FALSE
 )
 }
@@ -31,12 +30,6 @@ to alpha.}
 \item{weigh}{if TRUE, weigh the score by alpha / 4, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
 FALSE.}
-
-\item{count_median_twice}{logical, whether or not to count the median twice.
-This would conceptually treat the median as a 0\% prediction interval, where
-the median is the lower as well as the upper bound. The alternative is to
-treat the median as a single quantile forecast. The interval score would then
-be better understood as an average of quantile scores.)}
 
 \item{separate_results}{if TRUE (default is FALSE), then the separate parts
 of the interval score (sharpness, penalties for over- and under-prediction

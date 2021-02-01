@@ -95,8 +95,16 @@ returned.}
 \item{sd}{if TRUE (the default is FALSE) the standard deviation of all
 metrics will be returned when summarising.}
 
-\item{interval_score_arguments}{list with arguments to pass down to
-\code{interval_score}.}
+\item{interval_score_arguments}{list with arguments for the calculation of
+the interval score. These arguments get passed down to
+\code{interval_score}, except for the argument `count_median_twice` that
+controls how the interval scores for different intervals are summed up. This
+should be a logical (default is FALSE) that indicates whether or not
+to count the median twice when summarising. This would conceptually treat the
+median as a 0\% prediction interval, where the median is the lower as well as
+the upper bound. The alternative is to treat the median as a single quantile
+forecast instead of an interval. The interval score would then
+be better understood as an average of quantile scores.)}
 
 \item{pit_plots}{if TRUE (not the default), pit plots will be returned. For
 details see \code{\link{pit}}.}
