@@ -54,7 +54,9 @@
 #'
 #' eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long)
 #' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
-#'
+#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Johannes Bracher, \email{johannes.bracher@kit.edu}
+
 pairwise_comparison <- function(scores,
                                 metric = "interval_score", # maybe the default can happen automatically,
                                 test_options = list(oneSided = FALSE,
@@ -318,6 +320,8 @@ pairwise_comparison_one_group <- function(scores,
 #' @inheritParams pairwise_comparison
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
+#' @author Johannes Bracher, \email{johannes.bracher@kit.edu}
+#' @author Nikos Bosse \email{nikosbosse@gmail.com}
 
 compare_two_models <- function(scores,
                                name_model1,

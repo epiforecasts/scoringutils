@@ -70,10 +70,13 @@ scoringutils::plot_pairwise_comparison(res)
 
 eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long)
 pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
-
 }
 \author{
 Johannes Bracher, https://jbracher.github.io/
 
 Nikos Bosse
+
+Nikos Bosse \email{nikosbosse@gmail.com}
+
+Johannes Bracher, \email{johannes.bracher@kit.edu}
 }

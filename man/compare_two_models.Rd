@@ -42,3 +42,8 @@ pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 pairwise comparisons for one set of forecasts, but done separately for two
 different forecast targets.
 }
+\author{
+Johannes Bracher, \email{johannes.bracher@kit.edu}
+
+Nikos Bosse \email{nikosbosse@gmail.com}
+}
