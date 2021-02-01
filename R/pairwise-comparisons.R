@@ -1,4 +1,4 @@
-#' @title Do pairwise Comparisons of Scores
+#' @title Do Pairwise Comparisons of Scores
 #'
 #' @description
 #'
@@ -27,7 +27,11 @@
 #' over categories different from the scoring.
 #' \code{summarise_by} is also the grouping level used to compute
 #' (and possibly plot) the probability integral transform(pit).
-#' @param test_options list with options to pass down to `compare_two_models()`
+#' @param test_options list with options to pass down to \code{\link{compare_two_models}}.
+#' To change only one of the default options, just pass a list as input with
+#' the name of the argument you want to change. All elements not included in the
+#' list will be set to the default (so passing an empty list would result in the
+#' default options).
 #' @param baseline character vector of length one that deontes
 #' the baseline model against which to compare other models.
 #' @return A ggplot2 object with a coloured table of summarised scores
@@ -51,10 +55,6 @@
 #' eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long)
 #' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 #'
-
-
-
-
 pairwise_comparison <- function(scores,
                                 metric = "interval_score", # maybe the default can happen automatically,
                                 test_options = list(oneSided = FALSE,
@@ -99,7 +99,18 @@ pairwise_comparison <- function(scores,
 }
 
 
-
+#' @title Add relative skill to eval_forecasts()
+#'
+#' @description
+#'
+#' This function will only be called within \code{\link{eval_forecasts}} and serves to
+#' make pairwise comparisons from within that function. It uses the
+#' `summarise_by` argument as well as the data from \code{\link{eval_forecasts}}.
+#' Essentially, it wraps \code{\link{pairwise_comparison}} and deals with the specifics
+#' necessary to work with \code{\link{eval_forecasts}}.
+#' @inheritParams eval_forecasts
+#' @param unsummarised_scores unsummarised scores to be passed from
+#' \code{\link{eval_forecasts}}
 
 add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             rel_skill_metric,
@@ -108,7 +119,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             summarise_by,
                                             verbose) {
 
-  # infer the correct realtive skill if only "auto" is given
+  # infer the correct relative skill if only "auto" is given
   if (rel_skill_metric == "auto") {
     if ("interval_score" %in% colnames(unsummarised_scores)) {
       rel_skill_metric <- "interval_score"
@@ -117,7 +128,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
     } else if ("brier_score" %in% colnames(unsummarised_scores)) {
       rel_skill_metric <- "brier_score"
     } else {
-      stop("automatically assignign a metric to add relative skill failed. Please provide a metric.")
+      stop("automatically assign a metric to add relative skill failed. Please provide a metric.")
     }
   }
 
@@ -164,7 +175,19 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
 
 
-
+#' @title Do Pairwise Comparison for one Set of Forecasts
+#'
+#' @description
+#'
+#' This function does the pairwise comparison for one set of forecasts, but
+#' multiple models involved. It gets called from \code{\link{pairwise_comparison}}.
+#' \code{\link{pairwise_comparison}} splits the data into arbitrary subgroups specified
+#' by the user (e.g. if pairwise comparison should be done separately for
+#' different forecast targets) and then the actual pairwise comparison for that
+#' subgroup is managed from \code{\link{pairwise_comparison_one_group}}. In order to
+#' actually do the comparison between two models over a subset of common
+#' forecasts it calls \code{\link{compare_two_models}}.
+#' @inheritParams pairwise_comparison
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
@@ -214,7 +237,7 @@ pairwise_comparison_one_group <- function(scores,
   data.table::setnames(combinations_mirrored,
                        old = c("model", "compare_against"),
                        new = c("compare_against", "model"))
-  combinations_mirrored[, ratio := 1/ratio]
+  combinations_mirrored[, ratio := 1 / ratio]
 
   # add a one for those that are the same
   combinations_equal <- data.table::data.table(model = models,
@@ -233,8 +256,7 @@ pairwise_comparison_one_group <- function(scores,
                 "compare_against" = as.character(compare_against))]
 
 
-  # calculate relative wis as geometric mean
-  # need a different name for the variable! mean_ratio?
+  # calculate relative skill as geometric mean
   # small theta is again better. If a baseline is given, exclude it
   # from the computation of the geometric mean
   # maybe there is a more elegant way to do this
@@ -280,11 +302,23 @@ pairwise_comparison_one_group <- function(scores,
 
 
 
+#' @title Compare Two Models Based on Subset of Common Forecasts
+#'
+#' @description
+#'
+#' This function compares two models based on the subset of forecasts for which
+#' both models have made a prediction. It gets called
+#' from \code{\link{pairwise_comparison_one_group}}, which handles the
+#' comparison of multiple models on a single set of forecasts (there are no
+#' subsets of forecasts to be distinguished). \code{\link{pairwise_comparison_one_group}}
+#' in turn gets called from from \code{\link{pairwise_comparison}} which can handle
+#' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
+#' pairwise comparisons for one set of forecasts, but done separately for two
+#' different forecast targets.
+#' @inheritParams pairwise_comparison
+#' @param name_model1 character, name of the first model
+#' @param name_model2 character, name of the model to compare against
 
-
-
-
-# function to compare two models based on their overlap
 compare_two_models <- function(scores,
                                name_model1,
                                name_model2,
@@ -316,7 +350,7 @@ unique(overlap)
   values_y <- overlap[[paste0(metric, ".y")]]
 
   # calculate ratio to of average scores achieved by both models.
-  # thisshould be equivalent to theta_ij in Johannes document.
+  # this should be equivalent to theta_ij in Johannes Bracher's document.
   # ratio < 1 --> model1 is better.
   # note we could also take mean(values_x) / mean(values_y), as it cancels out
   ratio <- sum(values_x) / sum(values_y)
@@ -463,7 +497,7 @@ plot_pairwise_comparison <- function(comparison_result,
                             ggplot2::aes(x = compare_against,
                                          y = model,
                                          fill = fill_col)) +
-      ggplot2::geom_tile(width=0.98, height=0.98) +
+      ggplot2::geom_tile(width = 0.98, height = 0.98) +
       ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
                          na.rm = TRUE) +
       ggplot2::scale_fill_gradient2(low = "skyblue", mid = "grey95",
@@ -500,14 +534,6 @@ plot_pairwise_comparison <- function(comparison_result,
     lower_triangle[, fill_col := get_fill_scale(var_of_interest,
                                                 breaks, scales)]
 
-    # if (smaller_is_good) {
-    #   fill_rule <- ifelse(lower_triangle$fill_col == 0, "white",
-    #                       ifelse(lower_triangle$ratio <= 1, "skyblue3", "brown1"))
-    # } else {
-    #   fill_rule <- ifelse(lower_triangle$fill_col == 0, "white",
-    #                       ifelse(lower_triangle$ratio >= 1, "skyblue3", "brown1"))
-    # }
-
     fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
     lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
@@ -518,7 +544,7 @@ plot_pairwise_comparison <- function(comparison_result,
                          ggplot2::aes(alpha = fill_col),
                          fill = fill_rule,
                          color = "white",
-                         width=0.97, height=0.97) +
+                         width = 0.97, height = 0.97) +
       ggplot2::geom_text(data = lower_triangle,
                          ggplot2::aes(label = var_of_interest),
                          na.rm = TRUE)
@@ -550,11 +576,11 @@ plot_pairwise_comparison <- function(comparison_result,
   }
 
   plot <- ggplot2::ggplot(comparison_result,
-                          ggplot2::aes(y = reorder(model, 1/mean_scores_ratio, FUN = geom_mean_helper),
+                          ggplot2::aes(y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean_helper),
                                        x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
                                        fill = fill_col)) +
     ggplot2::geom_tile(color = "white",
-                       width=0.97, height=0.97) +
+                       width = 0.97, height = 0.97) +
     ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
                        na.rm = TRUE) +
     ggplot2::scale_fill_gradient2(low = "skyblue", mid = "grey95",
