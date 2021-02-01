@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Determines sharpness of a probabilistic forecast — sharpness • scoringutils</title>
+<title>Do Pairwise Comparison for one Set of Forecasts — pairwise_comparison_one_group • scoringutils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,15 @@
 
 
 
-<meta property="og:title" content="Determines sharpness of a probabilistic forecast — sharpness" />
-<meta property="og:description" content="Determines sharpness of a probabilistic forecast" />
+<meta property="og:title" content="Do Pairwise Comparison for one Set of Forecasts — pairwise_comparison_one_group" />
+<meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
+multiple models involved. It gets called from pairwise_comparison.
+pairwise_comparison splits the data into arbitrary subgroups specified
+by the user (e.g. if pairwise comparison should be done separately for
+different forecast targets) and then the actual pairwise comparison for that
+subgroup is managed from pairwise_comparison_one_group. In order to
+actually do the comparison between two models over a subset of common
+forecasts it calls compare_two_models." />
 
 
 
@@ -110,53 +117,79 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Determines sharpness of a probabilistic forecast</h1>
-    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/sharpness.R'><code>R/sharpness.R</code></a></small>
-    <div class="hidden name"><code>sharpness.Rd</code></div>
+    <h1>Do Pairwise Comparison for one Set of Forecasts</h1>
+    <small class="dont-index">Source: <a href='https://github.com/epiforecasts/scoringutils/blob/master/R/pairwise-comparisons.R'><code>R/pairwise-comparisons.R</code></a></small>
+    <div class="hidden name"><code>pairwise_comparison_one_group.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Determines sharpness of a probabilistic forecast</p>
+    <p>This function does the pairwise comparison for one set of forecasts, but
+multiple models involved. It gets called from <code><a href='pairwise_comparison.html'>pairwise_comparison</a></code>.
+<code><a href='pairwise_comparison.html'>pairwise_comparison</a></code> splits the data into arbitrary subgroups specified
+by the user (e.g. if pairwise comparison should be done separately for
+different forecast targets) and then the actual pairwise comparison for that
+subgroup is managed from <code>pairwise_comparison_one_group</code>. In order to
+actually do the comparison between two models over a subset of common
+forecasts it calls <code><a href='compare_two_models.html'>compare_two_models</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sharpness</span><span class='op'>(</span><span class='va'>predictions</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pairwise_comparison_one_group</span><span class='op'>(</span>
+  <span class='va'>scores</span>,
+  <span class='va'>metric</span>,
+  <span class='va'>test_options</span>,
+  <span class='va'>baseline</span>,
+  <span class='va'>by</span>,
+  <span class='va'>summarise_by</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
+      <th>scores</th>
+      <td><p>A data.frame of unsummarised scores as produced by
+<code><a href='eval_forecasts.html'>eval_forecasts</a></code></p></td>
+    </tr>
+    <tr>
+      <th>metric</th>
+      <td><p>A character vector of length one with the metric to do
+the comparison on.</p></td>
+    </tr>
+    <tr>
+      <th>test_options</th>
+      <td><p>list with options to pass down to <code><a href='compare_two_models.html'>compare_two_models</a></code>.
+To change only one of the default options, just pass a list as input with
+the name of the argument you want to change. All elements not included in the
+list will be set to the default (so passing an empty list would result in the
+default options).</p></td>
+    </tr>
+    <tr>
+      <th>baseline</th>
+      <td><p>character vector of length one that deontes
+the baseline model against which to compare other models.</p></td>
+    </tr>
+    <tr>
+      <th>by</th>
+      <td><p>character vector of columns to group scoring by. This should be the
+lowest level of grouping possible, i.e. the unit of the individual
+observation. This is important as many functions work on individual
+observations. If you want a different level of aggregation, you should use
+<code>summarise_by</code> to aggregate the individual scores.
+Also not that the pit will be computed using <code>summarise_by</code>
+instead of <code>by</code></p></td>
+    </tr>
+    <tr>
+      <th>summarise_by</th>
+      <td><p>character vector of columns to group the summary by. By
+default, this is equal to `by` and no summary takes place.
+But sometimes you may want to to summarise
+over categories different from the scoring.
+<code>summarise_by</code> is also the grouping level used to compute
+(and possibly plot) the probability integral transform(pit).</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector with sharpness values</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Sharpness is the ability of the model to generate predictions within a
-narrow range. It is a data-independent measure, and is purely a feature
-of the forecasts themselves.</p>
-<p>Shaprness of predictive samples corresponding to one single true value is
-measured as the normalised median of the absolute deviation from
-the median of the predictive samples. For details, see <a href='https://rdrr.io/r/stats/mad.html'>mad</a></p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
-Assessing the performance of real-time epidemic forecasts: A case study of
-Ebola in the Western Area region of Sierra Leone, 2014-15.
-PLoS Comput Biol 15(2): e1006785.
-<a href='https://doi.org/10.1371/journal.pcbi.1006785'>https://doi.org/10.1371/journal.pcbi.1006785</a></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>sharpness</span><span class='op'>(</span><span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652
-#&gt; [11] 2.9652 2.9652 4.4478 2.9652 4.4478 2.9652 3.7065 4.4478 4.4478 4.4478
-#&gt; [21] 4.4478 5.1891 4.4478 4.4478 4.4478 5.9304 4.4478 4.4478 5.9304 5.9304</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
