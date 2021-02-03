@@ -577,8 +577,12 @@ score_heatmap <- function(scores,
 #' \code{NULL}
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
+#' @param allow_truth_without_pred logical, whether or not
+#' to allow instances where there is truth data, but no forecast. If `FALSE`
+#' (the default), these get filtered out.
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "True and predicted values"
+#' @param verbose print out additional helpful messages (default is TRUE)
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' facet_wrap facet_grid
@@ -604,8 +608,7 @@ score_heatmap <- function(scores,
 #'                                allow_truth_without_pred = TRUE,
 #'                                facet_formula = geography ~ value_desc)
 
-
-plot_predictions <- function(data,
+plot_predictions <- function(data = NULL,
                              forecasts = NULL,
                              truth_data = NULL,
                              merge_by = NULL,
@@ -613,14 +616,14 @@ plot_predictions <- function(data,
                              filter_truth = list(),
                              filter_forecasts = list(),
                              filter_both = list(),
-                             add_truth_data = NULL,
                              range = c(0, 50, 90),
                              facet_formula = NULL,
                              facet_wrap_or_grid = "facet_wrap",
                              scales = "free_y",
                              allow_truth_without_pred = FALSE,
                              xlab = x,
-                             ylab = "True and predicted values") {
+                             ylab = "True and predicted values",
+                             verbose = TRUE) {
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
@@ -638,6 +641,7 @@ plot_predictions <- function(data,
     }
   }
 
+  # split truth data and forecasts in order to apply different filtering
   truth_data <- data.table::copy(data)[!is.na(true_value)]
   forecasts <- data.table::copy(data)[!is.na(prediction)]
 

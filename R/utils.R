@@ -70,7 +70,8 @@ geom_mean_helper <- function(x) {
 }
 
 
-globalVariables(c(".",
+globalVariables(c("..index",
+                  ".",
                   ".SD",
                   "ae_point",
                   "aem",

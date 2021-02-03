@@ -5,21 +5,22 @@
 \title{Plot Predictions vs True Values}
 \usage{
 plot_predictions(
-  data,
+  data = NULL,
   forecasts = NULL,
   truth_data = NULL,
+  merge_by = NULL,
   x = "date",
   filter_truth = list(),
   filter_forecasts = list(),
   filter_both = list(),
-  add_truth_data = NULL,
   range = c(0, 50, 90),
   facet_formula = NULL,
   facet_wrap_or_grid = "facet_wrap",
   scales = "free_y",
   allow_truth_without_pred = FALSE,
   xlab = x,
-  ylab = "True and predicted values"
+  ylab = "True and predicted values",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -29,7 +30,9 @@ plot_predictions(
 called "quantile" or two columns called "range" and "boundary". Internally,
 these will be separeted into a truth and forecast data set in order to be
 able to apply different filtering to truth data and forecasts. Alternatively
-you can directly proivde a separate truth and forecasts data frame as input.}
+you can directly proivde a separate truth and forecasts data frame as input.
+These data sets, however, need to be mergeable, in order to connect forecasts
+and truth data for plotting}
 
 \item{forecasts}{data.frame with forecasts, that should follow the same
 general guidelines as the `data` input. Argument can be used to supply
@@ -37,6 +40,10 @@ forecasts and truth data independently. Default is `NULL`.}
 
 \item{truth_data}{data.frame with a column called `true_value`
 on the x-axis. Usually, this will be "date", but it can be anything else.}
+
+\item{merge_by}{character vector with column names that `forecasts` and
+`truth_data` should be merged on. Default is `NULL` and merge will be
+attempted automatically.}
 
 \item{x}{character vector of length one that denotes the name of the variable}
 
@@ -65,9 +72,15 @@ included in range, the median prediction will be shown.}
 \item{scales}{scales argument that gets passed down to ggplot. Only necessary
 if you make use of facetting. Default is "free_y"}
 
+\item{allow_truth_without_pred}{logical, whether or not
+to allow instances where there is truth data, but no forecast. If `FALSE`
+(the default), these get filtered out.}
+
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
 \item{ylab}{Label for the y-axis. Default is "True and predicted values"}
+
+\item{verbose}{print out additional helpful messages (default is TRUE)}
 }
 \value{
 ggplot object with a plot of true vs predicted values

@@ -64,15 +64,14 @@ Using an appropriate level of summary, we can easily use the output for visualis
 #                         creation_date <= "2020-06-29" & 
 #                         value_desc == "Deaths"]
 
-scoringutils::plot_predictions(data = data, 
-                               filter_both = list("geography == 'England'", 
-                                                  "value_desc == 'Deaths'"),
-                               filter_forecasts = list("creation_date == '2020-06-29'"), 
-                               filter_truth = list("as.Date(value_date) < '2020-06-22'"),
+scoringutils::plot_predictions(data = data,
+                               filter_both = list("geography == 'England'"),
+                               filter_forecasts = list("creation_date == '2020-07-06'"), 
+                               filter_truth = list("as.Date(value_date) <= '2020-07-06'"),
                                x = "value_date", 
                                range = c(0, 50, 90), 
-                               scale = "fixed",
-                               facet_formula = ~ model)
+                               scale = "free",
+                               facet_formula = value_desc ~ model)
 ```
 
 
