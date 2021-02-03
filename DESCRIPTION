@@ -1,6 +1,7 @@
 Package: scoringutils
 Title: Utilities for Scoring and Assessing Predictions
 Version: 0.1.7
+Language: en-GB
 Authors@R: c(
     person(given = "Nikos",
            family = "Bosse",
@@ -11,6 +12,10 @@ Authors@R: c(
            role = c("aut"),
            email = "contact@samabbott.co.uk",
            comment = c(ORCID = "0000-0001-8057-8037")), 
+    person(given = "Johannes Bracher",
+           role = c("ctb"),
+           email = "johannes.bracher@kit.edu",
+           comment = c(ORCID = "0000-0002-3777-1410")), 
     person("Joel", "Hellewell",
            email = "joel.hellewell@lshtm.ac.uk", 
            role = c("ctb"),

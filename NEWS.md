@@ -1,4 +1,10 @@
 ## scoringutils 0.1.7
+## Feature updates
+- added a function, `pairwise_comparison()` that runs pairwise comparisons 
+between models on the output of `eval_forecasts()`
+- added functionality to compute relative skill within `eval_forecasts()`
+- added a function to visualise pairwise comparisons
+
 ### Package updates
 - The WIS definition change introduced in version 0.1.5 was partly corrected
 such that the difference in weighting is only introduced when summarising 
