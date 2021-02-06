@@ -296,8 +296,10 @@ correlation_plot <- function(scores,
 #' @examples
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                        summarise_by = c("model", "value_desc"))
-#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc)
-#'
+#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+#'                              relative_contributions = TRUE)
+#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+#'                              relative_contributions = FALSE)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. \url{https://arxiv.org/abs/2005.12881}
@@ -323,9 +325,12 @@ wis_components <- function(scores,
                              variable.name = "wis_component_name",
                              value.name = "component_value")
 
+  # stack or fill the geom_col position
+  col_position <- ifelse(relative_contributions, "fill", "stack")
 
   plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
-    ggplot2::geom_col(ggplot2::aes(y = component_value, fill = wis_component_name)) +
+    ggplot2::geom_col(position = col_position,
+                      ggplot2::aes(y = component_value, fill = wis_component_name)) +
     ggplot2::facet_wrap(facet_formula, ncol = ncol,
                         scales = scales) +
     ggplot2::labs(x = xlab, y = ylab) +
@@ -333,7 +338,6 @@ wis_components <- function(scores,
     ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
                    axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1))
-
 
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
