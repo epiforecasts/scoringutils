@@ -416,6 +416,16 @@ unique(overlap)
 #' @param smaller_is_good logical (default is TRUE) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
 #' invert the mean scores ratio)
+#' @param facet_formula facetting formula passed down to ggplot. Default is
+#' \code{NULL}
+#' @param scales scales argument that gets passed down to ggplot. Only necessary
+#' if you make use of facetting. Default is "free_y"
+#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
+#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
+#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
+#' \code{NULL}
+#' @param ncol Number of columns for facet wrap. Only relevant if
+#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table
@@ -428,17 +438,22 @@ unique(overlap)
 #'                  interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
 #'                  aem = (abs(rnorm(30))))
 #'
-#' res <- scoringutils::pairwise_comparison(df, baseline = "model1")
-#' plot_pairwise_comparison(res, smaller_is_good = TRUE)
-#'
-#' res <- pairwise_comparison(df)
-#' scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE)
-#' scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
+#' data <- scoringutils::quantile_example_data
+#' scores <- scoringutils::eval_forecasts(data)
+#' pairwise <- pairwise_comparison(scores,
+#'                                 summarise_by = "value_desc")
+#' scoringutils::plot_pairwise_comparison(pairwise,
+#'                                        facet_formula = ~ value_desc,
+#'                                        scales = "fixed")
 
 
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
-                                     smaller_is_good = TRUE) {
+                                     smaller_is_good = TRUE,
+                                     facet_formula = NULL,
+                                     scales = "free_y",
+                                     ncol = NULL,
+                                     facet_wrap_or_grid = "facet_wrap") {
 
   comparison_result <- data.table::as.data.table(comparison_result)
 
@@ -446,12 +461,12 @@ plot_pairwise_comparison <- function(comparison_result,
   levels <- levels(comparison_result$model)
 
 
-  get_fill_scale <- function(values, breaks, scales) {
+  get_fill_scale <- function(values, breaks, plot_scales) {
     values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
     scale <- cut(values, breaks = breaks,
                  include.lowest = TRUE,
                  right = FALSE,
-                 labels = scales)
+                 labels = plot_scales)
     # scale[is.na(scale)] <- 0
     return(as.numeric(as.character(scale)))
   }
@@ -496,12 +511,12 @@ plot_pairwise_comparison <- function(comparison_result,
 
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
-    scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+    plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
     if (!smaller_is_good) {
-      scales <- rev(scales)
+      plot_scales <- rev(plot_scales)
     }
     upper_triangle_complete[, fill_col := get_fill_scale(var_of_interest,
-                                                         breaks, scales)]
+                                                         breaks, plot_scales)]
 
     # create mean_scores_ratios in plot
     plot <- ggplot2::ggplot(upper_triangle_complete,
@@ -541,9 +556,9 @@ plot_pairwise_comparison <- function(comparison_result,
     lower_triangle[, var_of_interest := round(adj_pval, 3)]
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.01, 0.05, 0.1, 1)
-    scales <- c(0.8, 0.5, 0.1, 0.000001)
+    plot_scales <- c(0.8, 0.5, 0.1, 0.000001)
     lower_triangle[, fill_col := get_fill_scale(var_of_interest,
-                                                breaks, scales)]
+                                                breaks, plot_scales)]
 
     fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
@@ -560,15 +575,14 @@ plot_pairwise_comparison <- function(comparison_result,
                          ggplot2::aes(label = var_of_interest),
                          na.rm = TRUE)
 
-    return(plot)
   } else if (type[1] == "mean_scores_ratio") {
     comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
-    scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+    plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
     comparison_result[, fill_col := get_fill_scale(var_of_interest,
-                                                   breaks, scales)]
+                                                   breaks, plot_scales)]
 
     high_col = "brown1"
 
@@ -576,9 +590,9 @@ plot_pairwise_comparison <- function(comparison_result,
     comparison_result[, var_of_interest := round(pval, 3)]
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.01, 0.05, 0.1, 1)
-    scales <- c(1, 0.5, 0.1, 0)
+    plot_scales <- c(1, 0.5, 0.1, 0)
     comparison_result[, fill_col := get_fill_scale(var_of_interest,
-                                                   breaks, scales)]
+                                                   breaks, plot_scales)]
 
     high_col = "palegreen3"
     comparison_result[, var_of_interest := as.character(var_of_interest)]
@@ -616,6 +630,17 @@ plot_pairwise_comparison <- function(comparison_result,
                                                          hjust=1, color = "brown4"),
                      axis.text.y = ggplot2::element_text(color = "steelblue4")) +
       ggplot2::ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
+  }
+
+  if (!is.null(facet_formula)) {
+    if (facet_wrap_or_grid == "facet_wrap") {
+      plot <- plot +
+        ggplot2::facet_wrap(facet_formula, ncol = ncol,
+                            scales = scales)
+    } else {
+      plot <- plot +
+        ggplot2::facet_grid(facet_formula, scales = scales)
+    }
   }
 
   return(plot)

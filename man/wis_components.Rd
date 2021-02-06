@@ -61,7 +61,8 @@ scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
                                        summarise_by = c("model", "value_desc"))
 scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
                              relative_contributions = TRUE)
-
+scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+                             relative_contributions = FALSE)
 }
 \references{
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
