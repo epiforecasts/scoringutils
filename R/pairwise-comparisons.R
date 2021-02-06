@@ -144,7 +144,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   summarise_by <- setdiff(summarise_by, c("range", "quantile", "sample"))
 
   # if summarise_by is equal to by, then pairwise comparisons don't make sense
-  if (all(sort(summarise_by) == sort(by))) {
+  if (identical(sort(summarise_by), sort(by))) {
     summarise_by <- "model"
     if (verbose) {
       message("relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'")
@@ -198,12 +198,19 @@ pairwise_comparison_one_group <- function(scores,
                                           by,
                                           summarise_by) {
 
+
+
   if (!("model" %in% names(scores))) {
     stop("pairwise compairons require a column called 'model'")
   }
 
-# get list of models
+  # get list of models
   models <- unique(scores$model)
+
+  # if there aren't enough models to do any comparison, return NULL
+  if (length(models) < 2) {
+    return(NULL)
+  }
 
   # the overlap is obtained by merging the available data for one model with
   # the avaialble data from the other model.
@@ -347,7 +354,7 @@ compare_two_models <- function(scores,
 unique(overlap)
 
   if (nrow(overlap) == 0) {
-    return(list(ratio = NA, pval = NA))
+    return(list(ratio = NA_real_, pval = NA_real_))
   }
 
   values_x <- overlap[[paste0(metric, ".x")]]
@@ -410,7 +417,7 @@ unique(overlap)
 #' smaller or larger values are to be interpreted as 'good' (as you could just
 #' invert the mean scores ratio)
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
-#' scale_fill_gradient2 theme_minimal element_text
+#' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table
 #' @importFrom stats reorder
 #' @export
@@ -510,7 +517,7 @@ plot_pairwise_comparison <- function(comparison_result,
                                     midpoint = 0,
                                     limits = c(-1,1),
                                     name = NULL) +
-      ggplot2::theme_minimal() +
+      ggplot2::theme_light() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                          hjust=1, color = "brown4"),
                      axis.text.y = ggplot2::element_text(color = "steelblue4"),
@@ -593,7 +600,7 @@ plot_pairwise_comparison <- function(comparison_result,
                                   midpoint = 0,
                                   limits = c(-1,1),
                                   name = NULL) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_light() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1),
                    legend.position = "none") +
