@@ -18,6 +18,7 @@ plot_predictions(
   facet_wrap_or_grid = "facet_wrap",
   scales = "free_y",
   allow_truth_without_pred = FALSE,
+  remove_from_truth = c("model", "forecaster"),
   xlab = x,
   ylab = "True and predicted values",
   verbose = TRUE
@@ -32,7 +33,7 @@ these will be separeted into a truth and forecast data set in order to be
 able to apply different filtering to truth data and forecasts. Alternatively
 you can directly proivde a separate truth and forecasts data frame as input.
 These data sets, however, need to be mergeable, in order to connect forecasts
-and truth data for plotting}
+and truth data for plotting.}
 
 \item{forecasts}{data.frame with forecasts, that should follow the same
 general guidelines as the `data` input. Argument can be used to supply
@@ -75,6 +76,13 @@ if you make use of facetting. Default is "free_y"}
 \item{allow_truth_without_pred}{logical, whether or not
 to allow instances where there is truth data, but no forecast. If `FALSE`
 (the default), these get filtered out.}
+
+\item{remove_from_truth}{character vector of columns to remove from the
+truth data. The reason these columns are removed is that sometimes different
+models or forecasters don't cover the same periods. Removing these columns
+from the truth data makes sure that nevertheless all available truth data
+is plotted (instead of having different true values depending on the
+period covered by a certain model).}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 

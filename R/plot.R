@@ -553,7 +553,7 @@ score_heatmap <- function(scores,
 #' able to apply different filtering to truth data and forecasts. Alternatively
 #' you can directly proivde a separate truth and forecasts data frame as input.
 #' These data sets, however, need to be mergeable, in order to connect forecasts
-#' and truth data for plotting
+#' and truth data for plotting.
 #' @param x character vector of length one that denotes the name of the variable
 #' @param forecasts data.frame with forecasts, that should follow the same
 #' general guidelines as the `data` input. Argument can be used to supply
@@ -571,6 +571,12 @@ score_heatmap <- function(scores,
 #' in order to filter the forecasts data.
 #' @param filter_both same as `filter_truth` and `filter_forecasts`, but
 #' applied to both data sets for convenience.
+#' @param remove_from_truth character vector of columns to remove from the
+#' truth data. The reason these columns are removed is that sometimes different
+#' models or forecasters don't cover the same periods. Removing these columns
+#' from the truth data makes sure that nevertheless all available truth data
+#' is plotted (instead of having different true values depending on the
+#' period covered by a certain model).
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
 #' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
@@ -625,6 +631,7 @@ plot_predictions <- function(data = NULL,
                              facet_wrap_or_grid = "facet_wrap",
                              scales = "free_y",
                              allow_truth_without_pred = FALSE,
+                             remove_from_truth = c("model", "forecaster"),
                              xlab = x,
                              ylab = "True and predicted values",
                              verbose = TRUE) {
@@ -651,7 +658,7 @@ plot_predictions <- function(data = NULL,
 
 
   # function to filter forecast and truth data
-  filter <- function(data, filter_list) {
+  filter_df <- function(data, filter_list) {
     data <- data.table::copy(data)
     # filter as specified by the user
     for (expr in filter_list) {
@@ -660,8 +667,8 @@ plot_predictions <- function(data = NULL,
     return(data)
   }
 
-  truth_data <- filter(truth_data, c(filter_both, filter_truth))
-  forecasts <- filter(forecasts, c(filter_both, filter_forecasts))
+  truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
+  forecasts <- filter_df(forecasts, c(filter_both, filter_forecasts))
 
   # if specificed, get all combinations of the facet variables present in the
   # forecasts and filter the truth_data accordingly
@@ -669,7 +676,15 @@ plot_predictions <- function(data = NULL,
     facet_vars <- all.vars(facet_formula)
     index <- colnames(forecasts)[(colnames(forecasts) %in% facet_vars)]
     combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
+    data.table::setkey(combinations_forecasts)
+    data.table::setkey(truth_data)
     truth_data <- merge(truth_data, combinations_forecasts)
+  }
+
+  # delete certain columns that denominate the forecaster from the truth data
+  delete_columns <- names(truth_data)[names(truth_data) %in% remove_from_truth]
+  if (length(delete_columns) > 0) {
+    truth_data <- unique(truth_data[, eval(delete_columns) := NULL])
   }
 
   # find out what type of predictions we have. convert sample based to
