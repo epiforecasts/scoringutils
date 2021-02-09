@@ -392,6 +392,10 @@ sample_to_range <- function(data,
 #' @param forecasts data.frame with the forecast data (as can be passed to
 #' \code{\link{eval_forecasts}}).
 #' @param observations data.frame with the observations
+#' @param join character, one of `c("left", "full", "right")`. Determines the
+#' type of the join. Usually, a left join is appropriate, but sometimes you
+#' may want to do a full join to keep dates for which there is a forecast, but
+#' no ground truth data.
 #' @param by character vector that denotes the columns by which to merge. Any
 #' value that is not a column in observations will be removed.
 #' @return a data.frame with forecasts and observations
@@ -399,6 +403,7 @@ sample_to_range <- function(data,
 
 
 merge_pred_and_obs <- function(forecasts, observations,
+                               join = c("left", "full", "right"),
                                by = NULL) {
 
   forecasts <- data.table::as.data.table(forecasts)
@@ -414,8 +419,16 @@ merge_pred_and_obs <- function(forecasts, observations,
   obs_cols <- colnames(observations)
   by <- intersect(by, obs_cols)
 
-  # do a left_join, where all data in the observations are kept.
-  combined <- merge(observations, forecasts, by = by, all.x = TRUE)
+  if (join == "left") {
+    # do a left_join, where all data in the observations are kept.
+    combined <- merge(observations, forecasts, by = by, all.x = TRUE)
+  } else if (join == "full") {
+    # do a full, where all data is kept.
+    combined <- merge(observations, forecasts, by = by, all = TRUE)
+  } else {
+    combined <- merge(observations, forecasts, by = by, all.y = TRUE)
+  }
+
 
   # get colnames that are the same for x and y
   colnames <- colnames(combined)

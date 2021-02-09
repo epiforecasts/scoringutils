@@ -4,13 +4,23 @@
 \alias{merge_pred_and_obs}
 \title{Merge Forecast Data And Observations}
 \usage{
-merge_pred_and_obs(forecasts, observations, by = NULL)
+merge_pred_and_obs(
+  forecasts,
+  observations,
+  join = c("left", "full", "right"),
+  by = NULL
+)
 }
 \arguments{
 \item{forecasts}{data.frame with the forecast data (as can be passed to
 \code{\link{eval_forecasts}}).}
 
 \item{observations}{data.frame with the observations}
+
+\item{join}{character, one of `c("left", "full", "right")`. Determines the
+type of the join. Usually, a left join is appropriate, but sometimes you
+may want to do a full join to keep dates for which there is a forecast, but
+no ground truth data.}
 
 \item{by}{character vector that denotes the columns by which to merge. Any
 value that is not a column in observations will be removed.}
