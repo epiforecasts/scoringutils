@@ -57,8 +57,4 @@ pairwise <- pairwise_comparison(scores,
 scoringutils::plot_pairwise_comparison(pairwise,
                                        facet_formula = ~ value_desc,
                                        scales = "fixed")
-
-res <- pairwise_comparison(df)
-scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE)
-scoringutils::plot_pairwise_comparison(res, smaller_is_good = TRUE, type = "pval")
 }

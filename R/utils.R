@@ -222,7 +222,8 @@ permutation_test <- function(scores1,
 
 #' Delete Columns From a Data.table
 #'
-#' @description
+#' @description take a vector of column names and delete the columns if they
+#' are present in the data.table
 #' @param df A data.table or data.frame from which columns shall be deleted
 #' @param col_to_delete character vector with names of columns to be deleted
 #' @return A data.table

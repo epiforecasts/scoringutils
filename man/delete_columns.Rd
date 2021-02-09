@@ -15,5 +15,6 @@ delete_columns(df, cols_to_delete)
 A data.table
 }
 \description{
-Delete Columns From a Data.table
+take a vector of column names and delete the columns if they
+are present in the data.table
 }
