@@ -125,7 +125,12 @@ in one or both data sets. If in doubt, you should probably merge the
 data sets manually.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>merge_pred_and_obs</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>observations</span>, by <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>merge_pred_and_obs</span><span class='op'>(</span>
+  <span class='va'>forecasts</span>,
+  <span class='va'>observations</span>,
+  join <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"left"</span>, <span class='st'>"full"</span>, <span class='st'>"right"</span><span class='op'>)</span>,
+  by <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,6 +143,13 @@ data sets manually.</p>
     <tr>
       <th>observations</th>
       <td><p>data.frame with the observations</p></td>
+    </tr>
+    <tr>
+      <th>join</th>
+      <td><p>character, one of `c("left", "full", "right")`. Determines the
+type of the join. Usually, a left join is appropriate, but sometimes you
+may want to do a full join to keep dates for which there is a forecast, but
+no ground truth data.</p></td>
     </tr>
     <tr>
       <th>by</th>
