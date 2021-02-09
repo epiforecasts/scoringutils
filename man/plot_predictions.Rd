@@ -16,6 +16,7 @@ plot_predictions(
   range = c(0, 50, 90),
   facet_formula = NULL,
   facet_wrap_or_grid = "facet_wrap",
+  ncol = NULL,
   scales = "free_y",
   allow_truth_without_pred = FALSE,
   remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
@@ -71,6 +72,9 @@ included in range, the median prediction will be shown.}
 \code{facet_grid}. This only takes effect if \code{facet_formula} is not
 \code{NULL}}
 
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
+
 \item{scales}{scales argument that gets passed down to ggplot. Only necessary
 if you make use of facetting. Default is "free_y"}
 
@@ -90,9 +94,6 @@ period covered by a certain model).}
 \item{ylab}{Label for the y-axis. Default is "True and predicted values"}
 
 \item{verbose}{print out additional helpful messages (default is TRUE)}
-
-\item{ncol}{Number of columns for facet wrap. Only relevant if
-\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
 }
 \value{
 ggplot object with a plot of true vs predicted values
