@@ -18,7 +18,8 @@ plot_predictions(
   facet_wrap_or_grid = "facet_wrap",
   scales = "free_y",
   allow_truth_without_pred = FALSE,
-  remove_from_truth = c("model", "forecaster"),
+  remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
+    "interval"),
   xlab = x,
   ylab = "True and predicted values",
   verbose = TRUE
@@ -89,6 +90,9 @@ period covered by a certain model).}
 \item{ylab}{Label for the y-axis. Default is "True and predicted values"}
 
 \item{verbose}{print out additional helpful messages (default is TRUE)}
+
+\item{ncol}{Number of columns for facet wrap. Only relevant if
+\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
 }
 \value{
 ggplot object with a plot of true vs predicted values

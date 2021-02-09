@@ -220,4 +220,18 @@ permutation_test <- function(scores1,
 }
 
 
+#' Delete Columns From a Data.table
+#'
+#' @description
+#' @param df A data.table or data.frame from which columns shall be deleted
+#' @param col_to_delete character vector with names of columns to be deleted
+#' @return A data.table
+delete_columns <- function(df, cols_to_delete) {
+  df <- data.table::as.data.table(df)
+  delete_columns <- names(df)[names(df) %in% cols_to_delete]
+  if (length(delete_columns) > 0) {
+    df <- unique(df[, eval(delete_columns) := NULL])
+  }
+  return(df)
+}
 

@@ -585,6 +585,8 @@ score_heatmap <- function(scores,
 #' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
 #' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
 #' \code{NULL}
+#' @param ncol Number of columns for facet wrap. Only relevant if
+#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
 #' @param allow_truth_without_pred logical, whether or not
@@ -631,7 +633,7 @@ plot_predictions <- function(data = NULL,
                              facet_wrap_or_grid = "facet_wrap",
                              scales = "free_y",
                              allow_truth_without_pred = FALSE,
-                             remove_from_truth = c("model", "forecaster"),
+                             remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval"),
                              xlab = x,
                              ylab = "True and predicted values",
                              verbose = TRUE) {
@@ -678,14 +680,17 @@ plot_predictions <- function(data = NULL,
     combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
     data.table::setkey(combinations_forecasts)
     data.table::setkey(truth_data)
+
+    # keep part where predictions are na so they don't get removed by merging
+    truth_without_pred <- truth_data[is.na(prediction)]
     truth_data <- merge(truth_data, combinations_forecasts)
+    # add back together
+    truth_data <- data.table::rbindlist(list(truth_without_pred, truth_data),
+                                        use.names = TRUE)
   }
 
   # delete certain columns that denominate the forecaster from the truth data
-  delete_columns <- names(truth_data)[names(truth_data) %in% remove_from_truth]
-  if (length(delete_columns) > 0) {
-    truth_data <- unique(truth_data[, eval(delete_columns) := NULL])
-  }
+  truth_data <- delete_columns(truth_data, remove_from_truth)
 
   # find out what type of predictions we have. convert sample based to
   # range data
@@ -741,7 +746,7 @@ plot_predictions <- function(data = NULL,
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
       plot <- plot +
-        ggplot2::facet_wrap(facet_formula, scales = scales)
+        ggplot2::facet_wrap(facet_formula, scales = scales, ncol = ncol)
     } else {
       plot <- plot +
         ggplot2::facet_grid(facet_formula, scales = scales)
