@@ -9,7 +9,7 @@ delete_columns(df, cols_to_delete)
 \arguments{
 \item{df}{A data.table or data.frame from which columns shall be deleted}
 
-\item{col_to_delete}{character vector with names of columns to be deleted}
+\item{cols_to_delete}{character vector with names of columns to be deleted}
 }
 \value{
 A data.table
