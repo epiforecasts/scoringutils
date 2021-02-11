@@ -656,8 +656,8 @@ plot_predictions <- function(data = NULL,
   }
 
   # split truth data and forecasts in order to apply different filtering
-  truth_data <- data.table::copy(data)[!is.na(true_value)]
-  forecasts <- data.table::copy(data)[!is.na(prediction)]
+  truth_data <- data.table::as.data.table(data)[!is.na(true_value)]
+  forecasts <- data.table::as.data.table(data)[!is.na(prediction)]
 
 
   # function to filter forecast and truth data
@@ -675,7 +675,7 @@ plot_predictions <- function(data = NULL,
 
   # if specificed, get all combinations of the facet variables present in the
   # forecasts and filter the truth_data accordingly
-  if (!allow_truth_without_pred) {
+  if (!allow_truth_without_pred && !is.null(facet_formula)) {
     facet_vars <- all.vars(facet_formula)
     index <- colnames(forecasts)[(colnames(forecasts) %in% facet_vars)]
     combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
@@ -720,7 +720,7 @@ plot_predictions <- function(data = NULL,
   intervals[, range := as.factor(range)]
 
   # plot prediciton rnages
-  plot <- ggplot2::ggplot(intervals, ggplot2::aes_string(x = x)) +
+  plot <- ggplot2::ggplot(intervals, ggplot2::aes(x = !!ggplot2::sym(x))) +
     ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
                                       group = range, fill = range),
                          alpha = 0.4) +

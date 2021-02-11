@@ -428,8 +428,10 @@ unique(overlap)
 #' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
-#' @importFrom data.table as.data.table
+#' @importFrom data.table as.data.table setnames rbindlist
 #' @importFrom stats reorder
+#' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
+#' element_text element_blank
 #' @export
 #'
 #' @examples
