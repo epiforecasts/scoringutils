@@ -646,7 +646,7 @@ plot_predictions <- function(data = NULL,
   }
 
   if (is.null(data)) {
-    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by)
+    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by, join = "full")
     if (nrow(data) == 0) {
       if (verbose) {
         warning("After attempting to merge, only an empty data.table was left")
