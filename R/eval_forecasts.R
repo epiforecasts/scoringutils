@@ -118,7 +118,7 @@
 #' `truth_data` should be merged on. Default is `NULL` and merge will be
 #' attempted automatically.
 #' @param compute_relative_skill logical, whether or not to compute realitve
-#' performance between models. If `TRUE` (the default), then a column called
+#' performance between models. If `TRUE` (default is FALSE), then a column called
 #' 'model' must be present in the input data. For more information on
 #' the computation of relative skill, see \code{\link{pairwise_comparison}}.
 #' Relative skill will be calculated for the aggregation level specified in
@@ -213,7 +213,7 @@ eval_forecasts <- function(data = NULL,
                            forecasts = NULL,
                            truth_data = NULL,
                            merge_by = NULL,
-                           compute_relative_skill = TRUE,
+                           compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
                            baseline = NULL) {
 
