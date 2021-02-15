@@ -61,9 +61,15 @@ continuous, integer-valued or binary variables." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -140,7 +146,7 @@ continuous, integer-valued or binary variables.</p>
   forecasts <span class='op'>=</span> <span class='cn'>NULL</span>,
   truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
   merge_by <span class='op'>=</span> <span class='cn'>NULL</span>,
-  compute_relative_skill <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  compute_relative_skill <span class='op'>=</span> <span class='cn'>FALSE</span>,
   rel_skill_metric <span class='op'>=</span> <span class='st'>"auto"</span>,
   baseline <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -273,7 +279,7 @@ attempted automatically.</p></td>
     <tr>
       <th>compute_relative_skill</th>
       <td><p>logical, whether or not to compute realitve
-performance between models. If `TRUE` (the default), then a column called
+performance between models. If `TRUE` (default is FALSE), then a column called
 'model' must be present in the input data. For more information on
 the computation of relative skill, see <code><a href='pairwise_comparison.html'>pairwise_comparison</a></code>.
 Relative skill will be calculated for the aggregation level specified in
@@ -365,7 +371,7 @@ PLoS Comput Biol 15(2): e1006785.
                                      quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
                                      sd <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='va'>range_example</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'</span></div><div class='input'>
+
 <span class='co'>#long format</span>
 
 <span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>eval_forecasts</span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,
@@ -412,6 +418,8 @@ PLoS Comput Biol 15(2): e1006785.
 
   
 
+
+  
 
   </body>
 </html>

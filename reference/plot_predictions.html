@@ -58,9 +58,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -120,15 +126,25 @@
     </div>
 
     <pre class="usage"><span class='fu'>plot_predictions</span><span class='op'>(</span>
-  <span class='va'>data</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  forecasts <span class='op'>=</span> <span class='cn'>NULL</span>,
+  truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  merge_by <span class='op'>=</span> <span class='cn'>NULL</span>,
   x <span class='op'>=</span> <span class='st'>"date"</span>,
-  add_truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  filter_both <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>90</span><span class='op'>)</span>,
   facet_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
   facet_wrap_or_grid <span class='op'>=</span> <span class='st'>"facet_wrap"</span>,
+  ncol <span class='op'>=</span> <span class='cn'>NULL</span>,
   scales <span class='op'>=</span> <span class='st'>"free_y"</span>,
+  allow_truth_without_pred <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  remove_from_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"forecaster"</span>, <span class='st'>"quantile"</span>, <span class='st'>"prediction"</span>, <span class='st'>"sample"</span>,
+    <span class='st'>"interval"</span><span class='op'>)</span>,
   xlab <span class='op'>=</span> <span class='va'>x</span>,
-  ylab <span class='op'>=</span> <span class='st'>"True and predicted values"</span>
+  ylab <span class='op'>=</span> <span class='st'>"True and predicted values"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -139,19 +155,50 @@
       <td><p>a data.frame that follows the same specifications outlined in
 <code><a href='eval_forecasts.html'>eval_forecasts</a></code>. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
-called "quantile" or two columns called "range" and "boundary".</p></td>
+called "quantile" or two columns called "range" and "boundary". Internally,
+these will be separeted into a truth and forecast data set in order to be
+able to apply different filtering to truth data and forecasts. Alternatively
+you can directly proivde a separate truth and forecasts data frame as input.
+These data sets, however, need to be mergeable, in order to connect forecasts
+and truth data for plotting.</p></td>
     </tr>
     <tr>
-      <th>x</th>
-      <td><p>character vector of length one that denotes the name of the variable
+      <th>forecasts</th>
+      <td><p>data.frame with forecasts, that should follow the same
+general guidelines as the `data` input. Argument can be used to supply
+forecasts and truth data independently. Default is `NULL`.</p></td>
+    </tr>
+    <tr>
+      <th>truth_data</th>
+      <td><p>data.frame with a column called `true_value`
 on the x-axis. Usually, this will be "date", but it can be anything else.</p></td>
     </tr>
     <tr>
-      <th>add_truth_data</th>
-      <td><p>additional truth data, e.g. past values for which
-no predictions are available. This should be a data.frame with a column
-called "true_value" and another column corresponding to the x variable selected
-for the plot</p></td>
+      <th>merge_by</th>
+      <td><p>character vector with column names that `forecasts` and
+`truth_data` should be merged on. Default is `NULL` and merge will be
+attempted automatically.</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>character vector of length one that denotes the name of the variable</p></td>
+    </tr>
+    <tr>
+      <th>filter_truth</th>
+      <td><p>a list with character strings that are used to filter
+the truth data. Every element is parsed as an expression and evaluated
+in order to filter the truth data.</p></td>
+    </tr>
+    <tr>
+      <th>filter_forecasts</th>
+      <td><p>a list with character strings that are used to filter
+the truth data. Every element is parsed as an expression and evaluated
+in order to filter the forecasts data.</p></td>
+    </tr>
+    <tr>
+      <th>filter_both</th>
+      <td><p>same as `filter_truth` and `filter_forecasts`, but
+applied to both data sets for convenience.</p></td>
     </tr>
     <tr>
       <th>range</th>
@@ -171,9 +218,29 @@ included in range, the median prediction will be shown.</p></td>
 <code>NULL</code></p></td>
     </tr>
     <tr>
+      <th>ncol</th>
+      <td><p>Number of columns for facet wrap. Only relevant if
+<code>facet_formula</code> is given and <code>facet_wrap_or_grid == "facet_wrap"</code></p></td>
+    </tr>
+    <tr>
       <th>scales</th>
       <td><p>scales argument that gets passed down to ggplot. Only necessary
 if you make use of facetting. Default is "free_y"</p></td>
+    </tr>
+    <tr>
+      <th>allow_truth_without_pred</th>
+      <td><p>logical, whether or not
+to allow instances where there is truth data, but no forecast. If `FALSE`
+(the default), these get filtered out.</p></td>
+    </tr>
+    <tr>
+      <th>remove_from_truth</th>
+      <td><p>character vector of columns to remove from the
+truth data. The reason these columns are removed is that sometimes different
+models or forecasters don't cover the same periods. Removing these columns
+from the truth data makes sure that nevertheless all available truth data
+is plotted (instead of having different true values depending on the
+period covered by a certain model).</p></td>
     </tr>
     <tr>
       <th>xlab</th>
@@ -182,6 +249,10 @@ if you make use of facetting. Default is "free_y"</p></td>
     <tr>
       <th>ylab</th>
       <td><p>Label for the y-axis. Default is "True and predicted values"</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>print out additional helpful messages (default is TRUE)</p></td>
     </tr>
     </table>
 
@@ -194,9 +265,19 @@ if you make use of facetting. Default is "free_y"</p></td>
 <span class='va'>example2</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>
 
 <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example1</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,
-                               facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 12 row(s) containing missing values (geom_path).</span></div><div class='img'><img src='plot_predictions-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example2</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,
-                               facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
+                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,
+                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,
+                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,
+                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,
+                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
+</div><div class='img'><img src='plot_predictions-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example2</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,
+                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,
+                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,
+                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,
+                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,
+                               allow_truth_without_pred <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
 </div><div class='img'><img src='plot_predictions-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -221,6 +302,8 @@ if you make use of facetting. Default is "free_y"</p></td>
 
   
 
+
+  
 
   </body>
 </html>
