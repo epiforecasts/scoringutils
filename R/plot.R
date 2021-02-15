@@ -714,6 +714,11 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
+  # if there isn't any data to plot, return NULL
+  if (nrow(intervals) == 0) {
+    return(NULL)
+  }
+
   # pivot wider and convert range to a factor
   intervals <- data.table::dcast(intervals, ... ~ boundary,
                                  value.var = "prediction")
