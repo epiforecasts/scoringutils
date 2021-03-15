@@ -332,7 +332,7 @@ eval_forecasts <- function(data = NULL,
   }
 
   if (all.equal(data$true_value, as.integer(data$true_value)) == TRUE) {
-    if (all(data$true_value %in% c(0,1))) {
+    if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
       target_type = "binary"
     } else {
       target_type = "integer"
