@@ -7,7 +7,7 @@ citEntry(entry = "Manual",
                             as.person("EpiForecasts"),
                             as.person("Sebastian Funk")),
   year         = "2020",
-  doi          = "10.5281/zenodo.3957489",
+  doi          = "10.5281/zenodo.4618017",
   textVersion  =
   paste("Nikos I. Bosse, Sam Abbott, EpiForecasts, and Sebastian Funk (2020).",
         "scoringutils: Utilities for Scoring and Assessing Predictions, ",
