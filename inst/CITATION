@@ -1,6 +1,6 @@
 citHeader("To cite scoringutils in publications use:")
 
-citEntry(entry = "scoringutils",
+citEntry(entry = "Manual",
   title        = "scoringutils: Utilities for Scoring and Assessing Predictions",
   author       = personList(as.person("Nikos I. Bosse"),
                             as.person("Sam Abbott"),
