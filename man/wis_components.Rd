@@ -13,6 +13,7 @@ wis_components(
   scales = "free_y",
   ncol = NULL,
   facet_wrap_or_grid = "facet_wrap",
+  x_text_angle = 90,
   xlab = x,
   ylab = "WIS contributions"
 )
@@ -43,6 +44,8 @@ if you make use of facetting. Default is "free_y"}
 \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
 \code{facet_grid}. This only takes effect if \code{facet_formula} is not
 \code{NULL}}
+
+\item{x_text_angle}{Angle for the text on the x-axis. Default is 90}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 

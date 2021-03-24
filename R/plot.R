@@ -285,6 +285,7 @@ correlation_plot <- function(scores,
 #' \code{NULL}
 #' @param ncol Number of columns for facet wrap. Only relevant if
 #' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' @param x_text_angle Angle for the text on the x-axis. Default is 90
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "WIS contributions"
 #' @return A ggplot2 object showing a contributions from the three components of
@@ -313,6 +314,7 @@ wis_components <- function(scores,
                            scales = "free_y",
                            ncol = NULL,
                            facet_wrap_or_grid = "facet_wrap",
+                           x_text_angle = 90,
                            xlab = x,
                            ylab = "WIS contributions") {
 
@@ -336,7 +338,8 @@ wis_components <- function(scores,
     ggplot2::labs(x = xlab, y = ylab) +
     ggplot2::theme_light() +
     ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
-                   axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
+                   axis.text.x = ggplot2::element_text(angle = x_text_angle,
+                                                       vjust = 1,
                                                        hjust=1))
 
   if (!is.null(facet_formula)) {
