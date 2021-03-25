@@ -557,7 +557,6 @@ score_heatmap <- function(scores,
 #' you can directly provide a separate truth and forecasts data frame as input.
 #' These data sets, however, need to be mergeable, in order to connect forecasts
 #' and truth data for plotting.
-#' @param x character vector of length one that denotes the name of the variable
 #' @param forecasts data.frame with forecasts, that should follow the same
 #' general guidelines as the `data` input. Argument can be used to supply
 #' forecasts and truth data independently. Default is `NULL`.
@@ -566,6 +565,7 @@ score_heatmap <- function(scores,
 #' @param merge_by character vector with column names that `forecasts` and
 #' `truth_data` should be merged on. Default is `NULL` and merge will be
 #' attempted automatically.
+#' @param x character vector of length one that denotes the name of the variable
 #' @param filter_truth a list with character strings that are used to filter
 #' the truth data. Every element is parsed as an expression and evaluated
 #' in order to filter the truth data.
@@ -574,12 +574,6 @@ score_heatmap <- function(scores,
 #' in order to filter the forecasts data.
 #' @param filter_both same as `filter_truth` and `filter_forecasts`, but
 #' applied to both data sets for convenience.
-#' @param remove_from_truth character vector of columns to remove from the
-#' truth data. The reason these columns are removed is that sometimes different
-#' models or forecasters don't cover the same periods. Removing these columns
-#' from the truth data makes sure that nevertheless all available truth data
-#' is plotted (instead of having different true values depending on the
-#' period covered by a certain model).
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
 #' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
@@ -595,8 +589,19 @@ score_heatmap <- function(scores,
 #' @param allow_truth_without_pred logical, whether or not
 #' to allow instances where there is truth data, but no forecast. If `FALSE`
 #' (the default), these get filtered out.
+#' @param remove_from_truth character vector of columns to remove from the
+#' truth data. The reason these columns are removed is that sometimes different
+#' models or forecasters don't cover the same periods. Removing these columns
+#' from the truth data makes sure that nevertheless all available truth data
+#' is plotted (instead of having different true values depending on the
+#' period covered by a certain model).
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "True and predicted values"
+#' @param zoom_multiple_data Named vector with names \code{ymin} and/or
+#' \code{ymax}. If fiven, forecasts will be limited to minimally/maximally
+#' the given multiple of the data, repsectively. For example, \code{ymax = 3}
+#' will cut forecasts that go beyond 2 times the highest data point from view.
+#' @param expand_limits Named list to pass to \code{expand_limits}, if given
 #' @param verbose print out additional helpful messages (default is TRUE)
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
@@ -640,6 +645,8 @@ plot_predictions <- function(data = NULL,
                              remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval"),
                              xlab = x,
                              ylab = "True and predicted values",
+                             zoom_multiple_data = NULL,
+                             expand_limits = NULL,
                              verbose = TRUE) {
 
   # preparations ---------------------------------------------------------------
@@ -761,6 +768,60 @@ plot_predictions <- function(data = NULL,
       plot <- plot +
         ggplot2::facet_grid(facet_formula, scales = scales)
     }
+  }
+
+  if (!is.null(zoom_multiple_data)) {
+    ymin_multiple_data <- zoom_multiple_data["ymin"]
+    ymax_multiple_data <- zoom_multiple_data["ymax"]
+    ## identify maximal true value by location
+    facet_by <- sub("~", "", setdiff(as.character(facet_formula), c("~", "+")))
+    ## get scaled and unscaled min/max truth values
+    truth_limits <-
+      truth_data[, list(min_truth = min(true_value),
+                        max_truth = max(true_value)),
+                 by = facet_by]
+    truth_limits <-
+      truth_limits[, min_truth_scaled := min_truth * ymin_multiple_data]
+    truth_limits <-
+      truth_limits[, max_truth_scaled := max_truth * ymax_multiple_data]
+    ## get min/max predictions
+    fc_limits <-
+      forecasts[, list(min_fc = min(prediction),
+                       max_fc = max(prediction)),
+                by = facet_by]
+    ## merge min/max
+    limits <- merge(fc_limits, truth_limits, by = facet_by)
+    ## determins min/max to plot
+    ## max_fc > scaled max -> max is scaled_max
+    ## max_fc < scaled max -> max is max(max_truth, max_fc)
+    ## and vice verse for min
+    limits <-
+      limits[,
+             list(min_plot =
+                    ifelse(min_fc < min_truth_scaled,
+                           min_truth_scaled,
+                           max(min_truth_scaled, min(min_truth, min_fc))),
+                  max_plot =
+                    ifelse(max_fc > max_truth_scaled,
+                           max_truth_scaled,
+                           min(max_truth_scaled, max(max_truth, max_fc)))),
+             by = facet_by]
+    if (!is.null(expand_limits) && !is.null(expand_limits[["y"]])) {
+      limits[, min_plot := pmin(min_plot, expand_limits[['y']])]
+      limits[, max_plot := pmax(max_plot, expand_limits[['y']])]
+    }
+
+    limits[, ymin := min_plot - (max_plot - min_plot) * 0.05]
+    limits[, ymax := max_plot + (max_plot - min_plot) * 0.05]
+
+    limits <- limits[, c(facet_by, "ymin", "ymax"), with = FALSE]
+
+    ## add plot limits
+    plot <- plot + coord_cartesian_panels(limits)
+  }
+
+  if (!is.null(expand_limits) && !is.null(expand_limits[["x"]])) {
+    plot <- plot + expand_limits(x = expand_limits[["x"]])
   }
 
   # add true_values
