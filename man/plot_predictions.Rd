@@ -23,6 +23,8 @@ plot_predictions(
     "interval"),
   xlab = x,
   ylab = "True and predicted values",
+  zoom_multiple_data = NULL,
+  expand_limits = NULL,
   verbose = TRUE
 )
 }
@@ -92,6 +94,13 @@ period covered by a certain model).}
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
 \item{ylab}{Label for the y-axis. Default is "True and predicted values"}
+
+\item{zoom_multiple_data}{Named vector with names \code{ymin} and/or
+\code{ymax}. If fiven, forecasts will be limited to minimally/maximally
+the given multiple of the data, repsectively. For example, \code{ymax = 3}
+will cut forecasts that go beyond 2 times the highest data point from view.}
+
+\item{expand_limits}{Named list to pass to \code{expand_limits}, if given}
 
 \item{verbose}{print out additional helpful messages (default is TRUE)}
 }
