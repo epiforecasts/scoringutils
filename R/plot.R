@@ -774,8 +774,8 @@ plot_predictions <- function(data = NULL,
       ggplot2::geom_line(data = truth_data,
                          ggplot2::aes(y = true_value, colour = "actual"),
                          lwd = 0.2)
-    return(plot)
   }
+  return(plot)
 }
 
 
