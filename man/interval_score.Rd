@@ -34,7 +34,7 @@ FALSE.}
 \item{separate_results}{if TRUE (default is FALSE), then the separate parts
 of the interval score (sharpness, penalties for over- and under-prediction
 get returned as separate elements of a list). If you want a `data.frame`
-instead, simply call `as.data.frame()` on the output.}
+instead, simply call `as.data.frmae()` on the output.}
 }
 \value{
 vector with the scoring values, or a list with separate entries if

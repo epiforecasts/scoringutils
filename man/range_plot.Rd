@@ -28,7 +28,7 @@ This could be something like "interval_score" (the default) or "sharpness"}
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model"}
 
-\item{colour}{Charachter vector of length one used to determine a variable
+\item{colour}{Character vector of length one used to determine a variable
 for colouring dots. The Default is "range".}
 
 \item{facet_formula}{facetting formula passed down to ggplot. Default is
@@ -55,7 +55,7 @@ the weighted interval score
 }
 \description{
 Visualise the metrics by range, e.g. if you are interested how different
-interval ranges contribute to the overal interval score, or how sharpness
+interval ranges contribute to the overall interval score, or how sharpness
 changes by range.
 }
 \examples{

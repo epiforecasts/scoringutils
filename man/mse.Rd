@@ -16,7 +16,7 @@ vector with the scoring values
 }
 \description{
 Mean Squared Error MSE of point forecasts.
-Calculuated as
+Calculated as
 
 \deqn{
   mean((true_values - predicted_values)^2)

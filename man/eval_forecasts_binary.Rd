@@ -40,7 +40,7 @@ convert between formats using \code{\link{quantile_to_range_long}},
 For a quantile-format forecast you should provide:
 \itemize{
   \item {prediction} - prediction to the corresponding quantile
-  \item {qunaitle} - quantile to which the prediction corresponds}
+  \item {quantile} - quantile to which the prediction corresponds}
 For a range format (long) forecast you need
 \itemize{
   \item \code{prediction} the quantile forecasts
@@ -58,7 +58,7 @@ This format needs
 \itemize{
   \item pairs of columns called something like 'upper_90' and 'lower_90',
   or 'upper_50' and 'lower_50', where the number denotes the interval range.
-  For the median, you need to proivde columns called 'upper_0' and 'lower_0'}}
+  For the median, you need to provide columns called 'upper_0' and 'lower_0'}}
 
 \item{by}{character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual

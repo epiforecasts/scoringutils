@@ -17,7 +17,7 @@ add_rel_skill_to_eval_forecasts(
 \item{unsummarised_scores}{unsummarised scores to be passed from
 \code{\link{eval_forecasts}}}
 
-\item{rel_skill_metric}{chracter string with the name of the metric for which
+\item{rel_skill_metric}{character string with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 one of interval score, crps or brier score will be used where appropriate}
 

@@ -57,7 +57,7 @@ the weighted interval score
 }
 \description{
 Visualise the components of the weighted interval score: penalties for
-over-predicition, under-prediction and for a lack of sharpness
+over-prediction, under-prediction and for a lack of sharpness
 }
 \examples{
 scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
