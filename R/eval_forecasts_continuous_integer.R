@@ -1,4 +1,4 @@
-#' @title Evaluate forecasts in a Sample-Based Format (Integer or Cotinuous)
+#' @title Evaluate forecasts in a Sample-Based Format (Integer or Continuous)
 #'
 #'
 #' @inheritParams eval_forecasts

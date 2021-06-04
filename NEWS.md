@@ -28,8 +28,8 @@ as well for now.
 ### Package updates
 - changed the default definition of the weighted interval score. Previously, 
 the median prediction was counted twice, but is no only counted once. If you 
-want to go back to the old behaviour, you can call the interval_score fucntion
-with the agument `count_median_twice = FALSE`. 
+want to go back to the old behaviour, you can call the interval_score function
+with the argument `count_median_twice = FALSE`. 
 
 ## scoringutils 0.1.4
 
@@ -74,7 +74,7 @@ as an arbitrary set of quantiles.
 
 ## scoringutils 0.1.2
 
-### (Potentially) Breakting changes
+### (Potentially) Breaking changes
 - all scores in eval_forecasts were consistently renamed to lower case. 
 Interval_score is now interval_score, CRPS is now crps etc. 
 

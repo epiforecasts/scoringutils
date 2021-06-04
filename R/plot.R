@@ -265,7 +265,7 @@ correlation_plot <- function(scores,
 #'
 #' @description
 #' Visualise the components of the weighted interval score: penalties for
-#' over-predicition, under-prediction and for a lack of sharpness
+#' over-prediction, under-prediction and for a lack of sharpness
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by \code{\link{eval_forecasts}}
@@ -363,7 +363,7 @@ wis_components <- function(scores,
 #'
 #' @description
 #' Visualise the metrics by range, e.g. if you are interested how different
-#' interval ranges contribute to the overal interval score, or how sharpness
+#' interval ranges contribute to the overall interval score, or how sharpness
 #' changes by range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
@@ -373,7 +373,7 @@ wis_components <- function(scores,
 #' This could be something like "interval_score" (the default) or "sharpness"
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
-#' @param colour Charachter vector of length one used to determine a variable
+#' @param colour Character vector of length one used to determine a variable
 #' for colouring dots. The Default is "range".
 #' @param facet_formula facetting formula passed down to ggplot. Default is
 #' \code{NULL}
@@ -552,9 +552,9 @@ score_heatmap <- function(scores,
 #' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
 #' "true_value", "prediction" and then either a column called sample, or one
 #' called "quantile" or two columns called "range" and "boundary". Internally,
-#' these will be separeted into a truth and forecast data set in order to be
+#' these will be separated into a truth and forecast data set in order to be
 #' able to apply different filtering to truth data and forecasts. Alternatively
-#' you can directly proivde a separate truth and forecasts data frame as input.
+#' you can directly provide a separate truth and forecasts data frame as input.
 #' These data sets, however, need to be mergeable, in order to connect forecasts
 #' and truth data for plotting.
 #' @param x character vector of length one that denotes the name of the variable
