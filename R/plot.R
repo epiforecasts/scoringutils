@@ -763,16 +763,18 @@ plot_predictions <- function(data = NULL,
   }
 
   # add true_values
-  plot <- plot +
-    ggplot2::labs(x = xlab, y = ylab)
+  if (nrow(truth_data) > 0) {
+    plot <- plot +
+      ggplot2::labs(x = xlab, y = ylab)
 
-  plot <- plot +
-    ggplot2::geom_point(data = truth_data,
-                        ggplot2::aes(y = true_value, colour = "actual"),
-                        size = 0.5) +
-    ggplot2::geom_line(data = truth_data,
-                       ggplot2::aes(y = true_value, colour = "actual"),
-                       lwd = 0.2)
+    plot <- plot +
+      ggplot2::geom_point(data = truth_data,
+                          ggplot2::aes(y = true_value, colour = "actual"),
+                          size = 0.5) +
+      ggplot2::geom_line(data = truth_data,
+                         ggplot2::aes(y = true_value, colour = "actual"),
+                         lwd = 0.2)
+  }
   return(plot)
 }
 
