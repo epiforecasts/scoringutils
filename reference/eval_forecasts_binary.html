@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -128,7 +125,7 @@
     <p>Evaluate forecasts in a Binary Format</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eval_forecasts_binary</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>eval_forecasts_binary</span><span class='op'>(</span>
   <span class='va'>data</span>,
   <span class='va'>by</span>,
   <span class='va'>summarise_by</span>,
@@ -137,7 +134,7 @@
   <span class='va'>sd</span>,
   <span class='va'>summarised</span>,
   <span class='va'>verbose</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,7 +162,7 @@ convert between formats using <code><a href='quantile_to_range_long.html'>quanti
 <code><a href='sample_to_quantile.html'>sample_to_quantile</a></code>)
 For a quantile-format forecast you should provide:</p><ul>
 <li><p>prediction - prediction to the corresponding quantile</p></li>
-<li><p>qunaitle - quantile to which the prediction corresponds</p></li>
+<li><p>quantile - quantile to which the prediction corresponds</p></li>
 </ul><p>For a range format (long) forecast you need</p><ul>
 <li><p><code>prediction</code> the quantile forecasts</p></li>
 <li><p><code>boundary</code> values should be either "lower" or "upper", depending
@@ -181,7 +178,7 @@ For a quantile-format forecast you should provide:</p><ul>
 This format needs</p><ul>
 <li><p>pairs of columns called something like 'upper_90' and 'lower_90',
   or 'upper_50' and 'lower_50', where the number denotes the interval range.
-  For the median, you need to proivde columns called 'upper_0' and 'lower_0'</p></li>
+  For the median, you need to provide columns called 'upper_0' and 'lower_0'</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -240,14 +237,14 @@ specified in group_by. Default is TRUE.</p></td>
     <p>Nikos Bosse <a href='mailto:nikosbosse@gmail.com'>nikosbosse@gmail.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Probability Forecast for Binary Target</span>
-<span class='va'>binary_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='binary_example_data.html'>binary_example_data</a></span><span class='op'>)</span>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>binary_example</span>,
-                                     summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span>,
-                                     quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                                     verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># Probability Forecast for Binary Target</span></span>
+<span class='r-in'><span class='va'>binary_example</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setDT.html'>setDT</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='binary_example_data.html'>binary_example_data</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>binary_example</span>,</span>
+<span class='r-in'>                                     summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                     quantiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>                                     verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

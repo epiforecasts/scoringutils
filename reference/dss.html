@@ -60,9 +60,6 @@ scoringRules package." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -132,7 +129,7 @@ function from the
 <code>scoringRules</code> package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,14 +155,15 @@ number of Monte Carlo samples</p></td>
 Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
-<span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] -0.06179111  2.83921090  1.44543223  1.79360855  1.80256397  2.39984267
-#&gt;  [7]  1.92865409  3.40550989  2.51190439  7.51978137  2.41339004 16.93022240
-#&gt; [13]  3.17401574  2.96386128  3.17958266  2.78624505  3.23080345  3.16354290
-#&gt; [19]  5.24895084  3.09268199  3.46687784  4.16291132  3.45338517  3.46506057
-#&gt; [25] 10.96380613  3.58671320  3.46559726 23.71425327  3.52343091  3.50771695</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>dss</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] -0.06179111  2.83921090  1.44543223  1.79360855  1.80256397  2.39984267</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7]  1.92865409  3.40550989  2.51190439  7.51978137  2.41339004 16.93022240</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13]  3.17401574  2.96386128  3.17958266  2.78624505  3.23080345  3.16354290</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [19]  5.24895084  3.09268199  3.46687784  4.16291132  3.45338517  3.46506057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [25] 10.96380613  3.58671320  3.46559726 23.71425327  3.52343091  3.50771695</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -63,9 +63,6 @@ Andrea Riebler and Michaela Paul." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -138,7 +135,7 @@ permutationTest from the `surveillance` package
 Andrea Riebler and Michaela Paul.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pairwise_comparison</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>pairwise_comparison</span><span class='op'>(</span>
   <span class='va'>scores</span>,
   metric <span class='op'>=</span> <span class='st'>"interval_score"</span>,
   test_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>oneSided <span class='op'>=</span> <span class='cn'>FALSE</span>, test_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"non_parametric"</span>, <span class='st'>"permuation"</span><span class='op'>)</span>,
@@ -146,7 +143,7 @@ Andrea Riebler and Michaela Paul.</p>
   baseline <span class='op'>=</span> <span class='cn'>NULL</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
   summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +168,7 @@ default options).</p></td>
     </tr>
     <tr>
       <th>baseline</th>
-      <td><p>character vector of length one that deontes
+      <td><p>character vector of length one that denotes
 the baseline model against which to compare other models.</p></td>
     </tr>
     <tr>
@@ -206,19 +203,20 @@ over categories different from the scoring.
 <p>Johannes Bracher, <a href='mailto:johannes.bracher@kit.edu'>johannes.bracher@kit.edu</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model1"</span>, <span class='st'>"model2"</span>, <span class='st'>"model3"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
-                 date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, each <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-                 location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
-                 interval_score <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-                 aem <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>pairwise_comparison</span><span class='op'>(</span><span class='va'>df</span>,
-                           baseline <span class='op'>=</span> <span class='st'>"model1"</span><span class='op'>)</span>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='plot_pairwise_comparison.html'>plot_pairwise_comparison</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-</div><div class='img'><img src='pairwise_comparison-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span><span class='op'>)</span>
-<span class='va'>pairwise</span> <span class='op'>&lt;-</span> <span class='fu'>pairwise_comparison</span><span class='op'>(</span><span class='va'>eval</span>, summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span><span class='op'>)</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model1"</span>, <span class='st'>"model2"</span>, <span class='st'>"model3"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, each <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 interval_score <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 aem <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>pairwise_comparison</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>                           baseline <span class='op'>=</span> <span class='st'>"model1"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='plot_pairwise_comparison.html'>plot_pairwise_comparison</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='pairwise_comparison-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pairwise</span> <span class='op'>&lt;-</span> <span class='fu'>pairwise_comparison</span><span class='op'>(</span><span class='va'>eval</span>, summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span><span class='op'>)</span><span class='op'>)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

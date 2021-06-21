@@ -47,7 +47,7 @@ While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples. The Log Score can be used for specific
-integer valued probabiliy distributions. See the scoringRules package for
+integer valued probability distributions. See the scoringRules package for
 more details." />
 
 
@@ -64,9 +64,6 @@ more details." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-
-<!-- dependencies from examples -->
 
 
   
@@ -140,11 +137,11 @@ While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples. The Log Score can be used for specific
-integer valued probabiliy distributions. See the scoringRules package for
+integer valued probability distributions. See the scoringRules package for
 more details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,14 +167,15 @@ number of Monte Carlo samples</p></td>
 Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>
-<span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.5651598 1.3011258 1.5499496 1.9644559 2.0967969 1.8718419 2.0442318
-#&gt;  [8] 2.1130667 2.5225856 2.6577304 2.2045652 2.1993289 4.5750503 2.2885058
-#&gt; [15] 3.2055484 2.5250942 3.6164554 2.5661784 2.4654972 2.6036100 3.0155768
-#&gt; [22] 2.5362107 2.6483001 2.7913424 2.7373976 2.9422397 2.5261268 5.2147598
-#&gt; [29] 3.5558491 2.6547767</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>true_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, lambda <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>logs</span><span class='op'>(</span><span class='va'>true_values</span>, <span class='va'>predictions</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.5651598 1.3011258 1.5499496 1.9644559 2.0967969 1.8718419 2.0442318</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 2.1130667 2.5225856 2.6577304 2.2045652 2.1993289 4.5750503 2.2885058</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] 3.2055484 2.5250942 3.6164554 2.5661784 2.4654972 2.6036100 3.0155768</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [22] 2.5362107 2.6483001 2.7913424 2.7373976 2.9422397 2.5261268 5.2147598</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [29] 3.5558491 2.6547767</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

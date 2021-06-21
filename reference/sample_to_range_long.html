@@ -59,9 +59,6 @@ based on interval ranges" />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -130,12 +127,12 @@ based on interval ranges" />
 based on interval ranges</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sample_to_range_long</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>sample_to_range_long</span><span class='op'>(</span>
   <span class='va'>data</span>,
   range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>90</span><span class='op'>)</span>,
   type <span class='op'>=</span> <span class='fl'>7</span>,
   keep_quantile_col <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +144,7 @@ based on interval ranges</p>
     <tr>
       <th>range</th>
       <td><p>a numeric vector of interval ranges to extract
-(e.g. <code><a href='https://rdrr.io/r/base/c.html'>c(0, 50, 90)</a></code>)</p></td>
+(e.g. <code>c(0, 50, 90)</code>)</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -165,11 +162,11 @@ information, see <code><a href='https://rdrr.io/r/stats/quantile.html'>quantile<
     <p>a data.frame in a long interval range format</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>example_data</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='integer_example_data.html'>integer_example_data</a></span>
-
-<span class='va'>quantile_data</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>sample_to_range_long</span><span class='op'>(</span><span class='va'>example_data</span><span class='op'>)</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>example_data</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='integer_example_data.html'>integer_example_data</a></span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>quantile_data</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>sample_to_range_long</span><span class='op'>(</span><span class='va'>example_data</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

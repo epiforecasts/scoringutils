@@ -62,7 +62,6 @@ necessary to work with eval_forecasts." />
 
 
 
-
   
 
   
@@ -134,14 +133,14 @@ Essentially, it wraps <code><a href='pairwise_comparison.html'>pairwise_comparis
 necessary to work with <code><a href='eval_forecasts.html'>eval_forecasts</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_rel_skill_to_eval_forecasts</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>add_rel_skill_to_eval_forecasts</span><span class='op'>(</span>
   <span class='va'>unsummarised_scores</span>,
   <span class='va'>rel_skill_metric</span>,
   <span class='va'>baseline</span>,
   <span class='va'>by</span>,
   <span class='va'>summarise_by</span>,
   <span class='va'>verbose</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,7 +152,7 @@ necessary to work with <code><a href='eval_forecasts.html'>eval_forecasts</a></c
     </tr>
     <tr>
       <th>rel_skill_metric</th>
-      <td><p>chracter string with the name of the metric for which
+      <td><p>character string with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 one of interval score, crps or brier score will be used where appropriate</p></td>
     </tr>

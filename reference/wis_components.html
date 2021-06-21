@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Plot Contributions to the Weighted Interval Score — wis_components" />
 <meta property="og:description" content="Visualise the components of the weighted interval score: penalties for
-over-predicition, under-prediction and for a lack of sharpness" />
+over-prediction, under-prediction and for a lack of sharpness" />
 
 
 
@@ -57,9 +57,6 @@ over-predicition, under-prediction and for a lack of sharpness" />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-
-<!-- dependencies from examples -->
 
 
   
@@ -127,10 +124,10 @@ over-predicition, under-prediction and for a lack of sharpness" />
 
     <div class="ref-description">
     <p>Visualise the components of the weighted interval score: penalties for
-over-predicition, under-prediction and for a lack of sharpness</p>
+over-prediction, under-prediction and for a lack of sharpness</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wis_components</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>wis_components</span><span class='op'>(</span>
   <span class='va'>scores</span>,
   x <span class='op'>=</span> <span class='st'>"model"</span>,
   group <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -142,7 +139,7 @@ over-predicition, under-prediction and for a lack of sharpness</p>
   x_text_angle <span class='op'>=</span> <span class='fl'>90</span>,
   xlab <span class='op'>=</span> <span class='va'>x</span>,
   ylab <span class='op'>=</span> <span class='st'>"WIS contributions"</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -213,13 +210,15 @@ the weighted interval score</p>
 in an interval format. <a href='https://arxiv.org/abs/2005.12881'>https://arxiv.org/abs/2005.12881</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data.html'>quantile_example_data</a></span>,
-                                       summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>wis_components</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span>,
-                             relative_contributions <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='wis_components-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>wis_components</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span>,
-                             relative_contributions <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='wis_components-2.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data.html'>quantile_example_data</a></span>,</span>
+<span class='r-in'>                                       summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>wis_components</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span>,</span>
+<span class='r-in'>                             relative_contributions <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='wis_components-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>wis_components</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span>,</span>
+<span class='r-in'>                             relative_contributions <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='wis_components-2.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

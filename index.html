@@ -89,34 +89,34 @@
 
 <div id="scoringutils-utilities-for-scoring-and-assessing-predictions" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#scoringutils-utilities-for-scoring-and-assessing-predictions" class="anchor"></a>scoringutils: Utilities for Scoring and Assessing Predictions</h1></div>
+<a href="#scoringutils-utilities-for-scoring-and-assessing-predictions" class="anchor" aria-hidden="true"></a>scoringutils: Utilities for Scoring and Assessing Predictions</h1></div>
 
 <p>The scoringutils package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h1>
 <p>The stable version of <code>scoringutils</code> is on CRAN, but is outdated now. We do not recommend using it. Please install the current development version from github using</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="introduction-and-overview-of-functionality" class="section level1">
 <h1 class="hasAnchor">
-<a href="#introduction-and-overview-of-functionality" class="anchor"></a>Introduction and Overview of Functionality</h1>
+<a href="#introduction-and-overview-of-functionality" class="anchor" aria-hidden="true"></a>Introduction and Overview of Functionality</h1>
 <p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Predictions can either be automatically scored from a <code>data.frame</code> using the function <code>eval_forecasts</code>. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework.</p>
 <p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary.</p>
 <p>In addition to automatic scoring, <code>scoringutils</code> offers a variety of plots and visualisations.</p>
 </div>
 <div id="scoring-forecasts-automatically" class="section level1">
 <h1 class="hasAnchor">
-<a href="#scoring-forecasts-automatically" class="anchor"></a>Scoring Forecasts Automatically</h1>
+<a href="#scoring-forecasts-automatically" class="anchor" aria-hidden="true"></a>Scoring Forecasts Automatically</h1>
 <p>Most of the time, the <code>eval_forecasts</code> function will be able to do the entire evaluation for you. The idea is simple, yet flexible.</p>
 <p>All you need to do is to pass in a <code>data.frame</code> that has a column called <code>prediction</code> and one called <code>true_value</code>. Depending on the exact input format, additional columns like <code>sample</code>, <code>quantile</code> or <code>range</code> and <code>boundary</code> are needed. Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. In this case, we would have additional columns called for example <code>model</code>, <code>date</code>, <code>forecast_date</code>, <code>forecast_horizon</code> and <code>location</code>.</p>
 <p>Using the <code>by</code> argument you need to specify the <em>unit of a single forecast</em>. In this example here we would set <code>by = c("model", "date", "forecast_date", "forecast_horizon", "location")</code> (note: if we want to be pedantic, there is a small duplication as the information of “date” is already included in the combination of “forecast_date” and “forecast_horizon”. But as long as there isn’t some weird shift, this doesn’t matter for the purpose of grouping our observations). If you don’t specify <code>by</code> (i.e. <code>by = NULL</code>), <code>scoringutils</code> will automatically use all appropriate present columns. Note that you don’t need to include columns such as <code>quantile</code> or <code>sample</code> in the <code>by</code> argument, as several quantiles / samples make up one forecast.</p>
 <p>Using the <code>summarise_by</code> argument you can now choose categories to aggregate over. If you were only interested in scores for the different models, you would specify <code>summarise_by = c("model")</code>. If you wanted to have scores for every model in every location, you would need to specify <code>summarise_by = c("model", "location")</code>. If you wanted to have one score per quantile or one per prediction interval range, you could specify something like <code>summarise_by = c("model", "quantile")</code> or <code>summarise_by = c("model", "quantile", "range")</code> (note again that some information is duplicated in quantile and range, but this doesn’t really matter for grouping purposes). When aggregating, <code>eval_forecasts</code> takes the mean according to the group defined in <code>summarise_by</code> (i.e. in this example, if <code>summarise_by = c("model", "location")</code>, scores will be averaged over all forecast dates, forecast horizons and quantiles to yield one score per model and location). In addition to the mean, you can also obtain the standard deviation of the scores over which you average or any desired quantile (e.g. the median in addition to the mean) by specifying <code>sd = TRUE</code> and <code>quantiles = c(0.5)</code>.</p>
 <div id="example-evaluation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example-evaluation" class="anchor"></a>Example Evaluation</h2>
+<a href="#example-evaluation" class="anchor" aria-hidden="true"></a>Example Evaluation</h2>
 <p>Here is an example of an evaluation using the example data included in the package. The data comes from a set of <a href="https://github.com/epiforecasts/covid19.forecasts.uk" class="external-link">Covid-19 short-term forecasts in the UK</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/epiforecasts/scoringutils" class="external-link">scoringutils</a></span><span class="op">)</span>
@@ -218,7 +218,7 @@
                             x <span class="op">=</span> <span class="st">"horizon"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span></code></pre></div>
 <div id="expected-input-formats" class="section level3">
 <h3 class="hasAnchor">
-<a href="#expected-input-formats" class="anchor"></a>Expected Input Formats</h3>
+<a href="#expected-input-formats" class="anchor" aria-hidden="true"></a>Expected Input Formats</h3>
 <p>The <code>eval_forecasts</code> function is designed to work with various different input formats. The following formats are currently supported:</p>
 <p>quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -364,12 +364,12 @@
 </div>
 <div id="scoring-forecasts-directly" class="section level1">
 <h1 class="hasAnchor">
-<a href="#scoring-forecasts-directly" class="anchor"></a>Scoring Forecasts Directly</h1>
+<a href="#scoring-forecasts-directly" class="anchor" aria-hidden="true"></a>Scoring Forecasts Directly</h1>
 <p>A variety of metrics and scoring rules can also be accessed directly through the <code>scoringutils</code> package.</p>
 <p>The following gives an overview of (most of) the implemented metrics.</p>
 <div id="bias" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bias" class="anchor"></a>Bias</h2>
+<a href="#bias" class="anchor" aria-hidden="true"></a>Bias</h2>
 <p>The function <code>bias</code> determines bias from predictive Monte-Carlo samples, automatically recognising whether forecasts are continuous or integer valued.</p>
 <p>For continuous forecasts, Bias is measured as <em>B</em><sub><em>t</em></sub>(<em>P</em><sub><em>t</em></sub>, <em>x</em><sub><em>t</em></sub>) = 1 − 2 ⋅ (<em>P</em><sub><em>t</em></sub>(<em>x</em><sub><em>t</em></sub>))</p>
 <p>where <em>P</em><sub><em>t</em></sub> is the empirical cumulative distribution function of the prediction for the true value <em>x</em><sub><em>t</em></sub>. Computationally, <em>P</em><sub><em>t</em></sub>(<em>x</em><sub><em>t</em></sub>) is just calculated as the fraction of predictive samples for <em>x</em><sub><em>t</em></sub> that are smaller than <em>x</em><sub><em>t</em></sub>.</p>
@@ -395,7 +395,7 @@
 </div>
 <div id="sharpness" class="section level2">
 <h2 class="hasAnchor">
-<a href="#sharpness" class="anchor"></a>Sharpness</h2>
+<a href="#sharpness" class="anchor" aria-hidden="true"></a>Sharpness</h2>
 <p>Sharpness is the ability of the model to generate predictions within a narrow range. It is a data-independent measure, and is purely a feature of the forecasts themselves.</p>
 <p>Shaprness of predictive samples corresponding to one single true value is measured as the normalised median of the absolute deviation from the median of the predictive samples. For details, see <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">?stats::mad</a></code></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -407,7 +407,7 @@
 </div>
 <div id="calibration" class="section level2">
 <h2 class="hasAnchor">
-<a href="#calibration" class="anchor"></a>Calibration</h2>
+<a href="#calibration" class="anchor" aria-hidden="true"></a>Calibration</h2>
 <p>Calibration or reliability of forecasts is the ability of a model to correctly identify its own uncertainty in making predictions. In a model with perfect calibration, the observed data at each time point look as if they came from the predictive probability distribution at that time.</p>
 <p>Equivalently, one can inspect the probability integral transform of the predictive distribution at time t,</p>
 <p><em>u</em><sub><em>t</em></sub> = <em>F</em><sub><em>t</em></sub>(<em>x</em><sub><em>t</em></sub>)</p>
@@ -420,7 +420,7 @@
 </div>
 <div id="continuous-ranked-probability-score-crps" class="section level2">
 <h2 class="hasAnchor">
-<a href="#continuous-ranked-probability-score-crps" class="anchor"></a>Continuous Ranked Probability Score (CRPS)</h2>
+<a href="#continuous-ranked-probability-score-crps" class="anchor" aria-hidden="true"></a>Continuous Ranked Probability Score (CRPS)</h2>
 <p>Wrapper around the <code>crps_sample</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
@@ -434,7 +434,7 @@
 </div>
 <div id="dawid-sebastiani-score-dss" class="section level2">
 <h2 class="hasAnchor">
-<a href="#dawid-sebastiani-score-dss" class="anchor"></a>Dawid-Sebastiani Score (DSS)</h2>
+<a href="#dawid-sebastiani-score-dss" class="anchor" aria-hidden="true"></a>Dawid-Sebastiani Score (DSS)</h2>
 <p>Wrapper around the <code>dss_sample</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
@@ -447,7 +447,7 @@
 </div>
 <div id="log-score" class="section level2">
 <h2 class="hasAnchor">
-<a href="#log-score" class="anchor"></a>Log Score</h2>
+<a href="#log-score" class="anchor" aria-hidden="true"></a>Log Score</h2>
 <p>Wrapper around the <code>log_sample</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function should not be used for integer valued forecasts. While Log Scores are in principle possible for integer valued foreasts they require a kernel density estimate which is not well defined for discrete values. Smaller values are better.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
@@ -461,7 +461,7 @@
 </div>
 <div id="brier-score" class="section level2">
 <h2 class="hasAnchor">
-<a href="#brier-score" class="anchor"></a>Brier Score</h2>
+<a href="#brier-score" class="anchor" aria-hidden="true"></a>Brier Score</h2>
 <p>The Brier score is a proper score rule that assesses the accuracy of probabilistic binary predictions. The outcomes can be either 0 or 1, the predictions must be a probability that the true outcome will be 1.</p>
 <p>The Brier Score is then computed as the mean squared error between the probabilistic prediction and the true outcome.</p>
 <!-- $$\text{BrierScore} = \frac{1}{N}\sum_{t=1}^{n} (\text{prediction}_t-\text{outcome}_t)^2$$ -->
@@ -474,7 +474,7 @@
 </div>
 <div id="interval-score" class="section level2">
 <h2 class="hasAnchor">
-<a href="#interval-score" class="anchor"></a>Interval Score</h2>
+<a href="#interval-score" class="anchor" aria-hidden="true"></a>Interval Score</h2>
 <p>The Interval Score is a Proper Scoring Rule to score quantile predictions, following Gneiting and Raftery (2007). Smaller values are better.</p>
 <p>The score is computed as</p>
 <div class="figure">

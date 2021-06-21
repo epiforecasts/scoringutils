@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -128,13 +125,13 @@
     <p>Plot quantile coverage</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quantile_coverage</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>quantile_coverage</span><span class='op'>(</span>
   <span class='va'>summarised_scores</span>,
   colour <span class='op'>=</span> <span class='st'>"model"</span>,
   facet_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
   facet_wrap_or_grid <span class='op'>=</span> <span class='st'>"facet_wrap"</span>,
   scales <span class='op'>=</span> <span class='st'>"free_y"</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,11 +171,12 @@ if you make use of facetting. Default is "free_y"</p></td>
     <p>ggplot object with a plot of interval coverage</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>example1</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>
-<span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='va'>example1</span>,
-                                       summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"quantile"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>quantile_coverage</span><span class='op'>(</span><span class='va'>scores</span><span class='op'>)</span>
-</div><div class='img'><img src='quantile_coverage-1.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>example1</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span></span>
+<span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='va'>example1</span>,</span>
+<span class='r-in'>                                       summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"quantile"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>quantile_coverage</span><span class='op'>(</span><span class='va'>scores</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='quantile_coverage-1.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

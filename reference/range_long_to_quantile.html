@@ -65,9 +65,6 @@ range_long_to_wide first." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -142,7 +139,7 @@ plotting. If you're data.frame is in a different format, consider running
 <code><a href='range_long_to_wide.html'>range_long_to_wide</a></code> first.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>range_long_to_quantile</span><span class='op'>(</span><span class='va'>data</span>, keep_range_col <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>range_long_to_quantile</span><span class='op'>(</span><span class='va'>data</span>, keep_range_col <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,12 +162,12 @@ transformation (default is FALSE)</p></td>
     <p>a data.frame in a plain quantile format</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_wide.html'>range_example_data_wide</a></span>
-<span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='range_wide_to_long.html'>range_wide_to_long</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span>
-
-<span class='va'>plain_quantile</span> <span class='op'>&lt;-</span> <span class='fu'>range_long_to_quantile</span><span class='op'>(</span><span class='va'>long</span><span class='op'>)</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_wide.html'>range_example_data_wide</a></span></span>
+<span class='r-in'><span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='range_wide_to_long.html'>range_wide_to_long</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>plain_quantile</span> <span class='op'>&lt;-</span> <span class='fu'>range_long_to_quantile</span><span class='op'>(</span><span class='va'>long</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

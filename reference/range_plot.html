@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Plot Metrics by Range of the Prediction Interval — range_plot" />
 <meta property="og:description" content="Visualise the metrics by range, e.g. if you are interested how different
-interval ranges contribute to the overal interval score, or how sharpness
+interval ranges contribute to the overall interval score, or how sharpness
 changes by range." />
 
 
@@ -58,9 +58,6 @@ changes by range." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-
-<!-- dependencies from examples -->
 
 
   
@@ -128,11 +125,11 @@ changes by range." />
 
     <div class="ref-description">
     <p>Visualise the metrics by range, e.g. if you are interested how different
-interval ranges contribute to the overal interval score, or how sharpness
+interval ranges contribute to the overall interval score, or how sharpness
 changes by range.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>range_plot</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>range_plot</span><span class='op'>(</span>
   <span class='va'>scores</span>,
   y <span class='op'>=</span> <span class='st'>"interval_score"</span>,
   x <span class='op'>=</span> <span class='st'>"model"</span>,
@@ -143,7 +140,7 @@ changes by range.</p>
   facet_wrap_or_grid <span class='op'>=</span> <span class='st'>"facet_wrap"</span>,
   xlab <span class='op'>=</span> <span class='va'>x</span>,
   ylab <span class='op'>=</span> <span class='va'>y</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,7 +163,7 @@ Usually this will be "model"</p></td>
     </tr>
     <tr>
       <th>colour</th>
-      <td><p>Charachter vector of length one used to determine a variable
+      <td><p>Character vector of length one used to determine a variable
 for colouring dots. The Default is "range".</p></td>
     </tr>
     <tr>
@@ -207,24 +204,27 @@ if you make use of facetting. Default is "free_y"</p></td>
 the weighted interval score</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data.html'>quantile_example_data</a></span>,
-                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,
-                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='img'><img src='range_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># visualise sharpness instead of interval score</span>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, y <span class='op'>=</span> <span class='st'>"sharpness"</span>, x <span class='op'>=</span> <span class='st'>"model"</span>,
-                          facet_formula <span class='op'>=</span>  <span class='op'>~</span><span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='img'><img src='range_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># we saw above that sharpness values crossed. Let's look at the unweighted WIS</span>
-<span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,
-                                        interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
-                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, y <span class='op'>=</span> <span class='st'>"sharpness"</span>, x <span class='op'>=</span> <span class='st'>"model"</span>,
-                          facet_formula <span class='op'>=</span>  <span class='op'>~</span><span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='img'><img src='range_plot-3.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='quantile_example_data.html'>quantile_example_data</a></span>,</span>
+<span class='r-in'>                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,</span>
+<span class='r-in'>                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, x <span class='op'>=</span> <span class='st'>"model"</span>, facet_formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='range_plot-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># visualise sharpness instead of interval score</span></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, y <span class='op'>=</span> <span class='st'>"sharpness"</span>, x <span class='op'>=</span> <span class='st'>"model"</span>,</span>
+<span class='r-in'>                          facet_formula <span class='op'>=</span>  <span class='op'>~</span><span class='va'>value_desc</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='range_plot-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># we saw above that sharpness values crossed. Let's look at the unweighted WIS</span></span>
+<span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'><a href='eval_forecasts.html'>eval_forecasts</a></span><span class='op'>(</span><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>,</span>
+<span class='r-in'>                                        interval_score_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>weigh <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                        summarise_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"model"</span>, <span class='st'>"value_desc"</span>, <span class='st'>"range"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>range_plot</span><span class='op'>(</span><span class='va'>scores</span>, y <span class='op'>=</span> <span class='st'>"sharpness"</span>, x <span class='op'>=</span> <span class='st'>"model"</span>,</span>
+<span class='r-in'>                          facet_formula <span class='op'>=</span>  <span class='op'>~</span><span class='va'>value_desc</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='range_plot-3.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

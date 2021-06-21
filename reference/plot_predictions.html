@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -128,7 +125,7 @@
     <p>Make a plot of observed and predicted values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_predictions</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>plot_predictions</span><span class='op'>(</span>
   data <span class='op'>=</span> <span class='cn'>NULL</span>,
   forecasts <span class='op'>=</span> <span class='cn'>NULL</span>,
   truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -148,7 +145,7 @@
   xlab <span class='op'>=</span> <span class='va'>x</span>,
   ylab <span class='op'>=</span> <span class='st'>"True and predicted values"</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,9 +156,9 @@
 <code><a href='eval_forecasts.html'>eval_forecasts</a></code>. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
-these will be separeted into a truth and forecast data set in order to be
+these will be separated into a truth and forecast data set in order to be
 able to apply different filtering to truth data and forecasts. Alternatively
-you can directly proivde a separate truth and forecasts data frame as input.
+you can directly provide a separate truth and forecasts data frame as input.
 These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.</p></td>
     </tr>
@@ -264,24 +261,26 @@ period covered by a certain model).</p></td>
     <p>ggplot object with a plot of true vs predicted values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>example1</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='continuous_example_data.html'>continuous_example_data</a></span>
-<span class='va'>example2</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span>
-
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example1</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,
-                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,
-                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,
-                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,
-                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,
-                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='img'><img src='plot_predictions-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example2</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,
-                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,
-                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,
-                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,
-                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,
-                               allow_truth_without_pred <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span>
-</div><div class='img'><img src='plot_predictions-2.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>example1</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='continuous_example_data.html'>continuous_example_data</a></span></span>
+<span class='r-in'><span class='va'>example2</span> <span class='op'>&lt;-</span> <span class='fu'>scoringutils</span><span class='fu'>::</span><span class='va'><a href='range_example_data_long.html'>range_example_data_long</a></span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example1</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,</span>
+<span class='r-in'>                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,</span>
+<span class='r-in'>                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,</span>
+<span class='r-in'>                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,</span>
+<span class='r-in'>                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,</span>
+<span class='r-in'>                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='plot_predictions-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>scoringutils</span><span class='fu'>::</span><span class='fu'>plot_predictions</span><span class='op'>(</span><span class='va'>example2</span>, x <span class='op'>=</span> <span class='st'>"value_date"</span>,</span>
+<span class='r-in'>                               filter_truth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'value_date &lt;= "2020-06-22"'</span>,</span>
+<span class='r-in'>                                                   <span class='st'>'value_date &gt; "2020-05-01"'</span><span class='op'>)</span>,</span>
+<span class='r-in'>                               filter_forecasts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"model == 'SIRCOVID'"</span>,</span>
+<span class='r-in'>                                                       <span class='st'>'creation_date == "2020-06-22"'</span><span class='op'>)</span>,</span>
+<span class='r-in'>                               allow_truth_without_pred <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>                               facet_formula <span class='op'>=</span> <span class='va'>geography</span> <span class='op'>~</span> <span class='va'>value_desc</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='plot_predictions-2.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
