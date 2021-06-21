@@ -32,7 +32,7 @@
 #' the name of the argument you want to change. All elements not included in the
 #' list will be set to the default (so passing an empty list would result in the
 #' default options).
-#' @param baseline character vector of length one that deontes
+#' @param baseline character vector of length one that denotes
 #' the baseline model against which to compare other models.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy

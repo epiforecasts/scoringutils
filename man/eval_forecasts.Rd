@@ -49,7 +49,7 @@ convert between formats using \code{\link{quantile_to_range_long}},
 For a quantile-format forecast you should provide:
 \itemize{
   \item {prediction} - prediction to the corresponding quantile
-  \item {qunaitle} - quantile to which the prediction corresponds}
+  \item {quantile} - quantile to which the prediction corresponds}
 For a range format (long) forecast you need
 \itemize{
   \item \code{prediction} the quantile forecasts
@@ -67,7 +67,7 @@ This format needs
 \itemize{
   \item pairs of columns called something like 'upper_90' and 'lower_90',
   or 'upper_50' and 'lower_50', where the number denotes the interval range.
-  For the median, you need to proivde columns called 'upper_0' and 'lower_0'}}
+  For the median, you need to provide columns called 'upper_0' and 'lower_0'}}
 
 \item{by}{character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
@@ -125,14 +125,14 @@ with `forecasts`}
 `truth_data` should be merged on. Default is `NULL` and merge will be
 attempted automatically.}
 
-\item{compute_relative_skill}{logical, whether or not to compute realitve
+\item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If `TRUE` (default is FALSE), then a column called
 'model' must be present in the input data. For more information on
 the computation of relative skill, see \code{\link{pairwise_comparison}}.
 Relative skill will be calculated for the aggregation level specified in
 `summarise_by`.}
 
-\item{rel_skill_metric}{chracter string with the name of the metric for which
+\item{rel_skill_metric}{character string with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 one of interval score, crps or brier score will be used where appropriate}
 

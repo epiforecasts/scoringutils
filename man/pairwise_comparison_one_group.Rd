@@ -26,7 +26,7 @@ the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
 default options).}
 
-\item{baseline}{character vector of length one that deontes
+\item{baseline}{character vector of length one that denotes
 the baseline model against which to compare other models.}
 
 \item{by}{character vector of columns to group scoring by. This should be the

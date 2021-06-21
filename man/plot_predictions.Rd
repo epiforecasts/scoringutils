@@ -31,9 +31,9 @@ plot_predictions(
 \code{\link{eval_forecasts}}. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
-these will be separeted into a truth and forecast data set in order to be
+these will be separated into a truth and forecast data set in order to be
 able to apply different filtering to truth data and forecasts. Alternatively
-you can directly proivde a separate truth and forecasts data frame as input.
+you can directly provide a separate truth and forecasts data frame as input.
 These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.}
 

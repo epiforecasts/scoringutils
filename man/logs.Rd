@@ -24,7 +24,7 @@ While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples. The Log Score can be used for specific
-integer valued probabiliy distributions. See the scoringRules package for
+integer valued probability distributions. See the scoringRules package for
 more details.
 }
 \examples{

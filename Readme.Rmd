@@ -303,7 +303,7 @@ Wrapper around the `log_sample` function from the
 `scoringRules` package. For more information look at the manuals from the
 `scoringRules` package. The function should not be used for integer valued 
 forecasts. While Log Scores are in principle possible for integer valued 
-foreasts they require a kernel density estimate which is not well defined 
+forecasts they require a kernel density estimate which is not well defined 
 for discrete values. Smaller values are better. 
 
 ```{r}

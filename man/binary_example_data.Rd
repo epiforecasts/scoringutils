@@ -28,7 +28,7 @@ A data set with (constructed) binary predictions relevant in the
 \details{
 Predictions in the data set were constructed based on the continuous example
 data by looking at the number of samples below the mean prediction.
-The outcome was constrcuted as whether or not the actually
+The outcome was constructed as whether or not the actually
 observed value was below or above that mean prediction.
 This should not be understood as sound statistical practice, but rather
 as a practical way to create an example data set.
