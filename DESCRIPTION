@@ -59,7 +59,6 @@ Imports:
     forcats,
     ggplot2,
     goftest,
-    graphics,
     scoringRules,
     stats,
     methods

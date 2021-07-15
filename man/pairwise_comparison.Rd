@@ -53,8 +53,7 @@ Make pairwise comparisons between models. The code for the pairwise
 comparisons is inspired by an implementation by Johannes Bracher.
 
 The implementation of the permutation test follows the function
-\link[surveillance]{permutationTest} from the `surveillance` package
- by Michael Höhle,
+permutationTest from the `surveillance` package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
 }
 \examples{
