@@ -52,27 +52,31 @@ eval_forecasts_quantile <- function(data,
   count_median_twice <- interval_score_arguments$count_median_twice
   interval_score_arguments$count_median_twice <- NULL
 
+  # set up results data.table that will then be modified throughout ------------
+  res <- data.table::copy(data)
+
   # calculate scores on range format -------------------------------------------
   if ("interval_score" %in% metrics) {
     # compute separate results if desired
     if (interval_score_arguments$separate_results) {
-      res <- data[, c("interval_score",
-                      "sharpness",
-                      "underprediction",
-                      "overprediction") := do.call(scoringutils::interval_score,
-                                                   c(list(true_value,
-                                                          lower,
-                                                          upper,
-                                                          range),
-                                                     interval_score_arguments))]
+      res <- res[, c("interval_score",
+                     "sharpness",
+                     "underprediction",
+                     "overprediction") := do.call(scoringutils::interval_score,
+                                                  c(list(true_value,
+                                                         lower,
+                                                         upper,
+                                                         range),
+                                                    interval_score_arguments))]
     } else {
-      res <- data[, c("interval_score") := do.call(scoringutils::interval_score,
-                                                   c(list(true_value,
-                                                          lower,
-                                                          upper,
-                                                          range),
-                                                     interval_score_arguments))]
+      res <- res[, c("interval_score") := do.call(scoringutils::interval_score,
+                                                  c(list(true_value,
+                                                         lower,
+                                                         upper,
+                                                         range),
+                                                    interval_score_arguments))]
     }
+    # res[, .(unlist(interval_score)), by = setdiff(colnames(res), "interval_score")]
   }
 
   # compute coverage for every single observation
@@ -182,7 +186,7 @@ eval_forecasts_quantile <- function(data,
   if (!("range" %in% summarise_by)) {
     res[, c("coverage") := NULL]
   }
-  if (!("quantile" %in% summarise_by)) {
+  if (!("quantile" %in% summarise_by) & "quantile_coverage" %in% names(res)) {
     res[, c("quantile_coverage") := NULL]
   }
 
