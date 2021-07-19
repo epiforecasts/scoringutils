@@ -114,7 +114,8 @@ test_that("wis works, 2 intervals and median", {
       (quantiles[, 4] - quantiles[, 2])*(alpha2/2) + c(0, 1-(-15), 22-3)
   )
 
-  expect_identical(eval$interval_score, expected)
+  expect_equal(as.numeric(eval$interval_score),
+               as.numeric(expected))
 })
 
 
