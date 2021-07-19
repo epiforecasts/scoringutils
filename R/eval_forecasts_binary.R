@@ -40,9 +40,9 @@ eval_forecasts_binary <- function(data,
     }
 
     # summarise by taking the mean over all relevant columns
-    res <- data[, lapply(.SD, mean, na.rm = TRUE),
-                .SDcols = colnames(res) %like% "brier",
-                by = summarise_by]
+    res <- res[, lapply(.SD, mean, na.rm = TRUE),
+               .SDcols = colnames(res) %like% "brier",
+               by = summarise_by]
 
   }
 }
