@@ -68,6 +68,22 @@ test_that("all quantile and range formats yield the same result", {
   expect_equal(sort(eval1$aem), sort(ae))
 })
 
+test_that("function produces output even if only some metrics are chosen", {
+  range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
+  range_example <- scoringutils::range_wide_to_long(range_example_wide)
+
+  eval <- scoringutils::eval_forecasts(range_example,
+                                       summarise_by = c("model", "range"),
+                                       metrics = "coverage",
+                                       sd = TRUE)
+
+  expect_equal(nrow(eval) > 1,
+               TRUE)
+})
+
+
+
+
 
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {

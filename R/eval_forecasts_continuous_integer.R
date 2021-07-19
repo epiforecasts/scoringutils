@@ -135,7 +135,7 @@ eval_forecasts_sample <- function(data,
     }
   }
 
-  res <- data
+  res <- data.table::copy(data)
 
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),

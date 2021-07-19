@@ -1,3 +1,8 @@
+## scoringutils 0.1.7.2
+### Package updates
+- minor bug fixes (previously, 'interval_score' needed to be among the 
+selected metrics)
+
 ## scoringutils 0.1.7
 ## Feature updates
 - added a function, `pairwise_comparison()` that runs pairwise comparisons 
