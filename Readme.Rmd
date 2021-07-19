@@ -7,7 +7,7 @@ output:
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/workflows/R-CMD-check/badge.svg)](https://github.com/epiforecasts/scoringutils/actions)
 [![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://codecov.io/gh/epiforecasts/scoringutils/) 
 [![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
-[![develVersion](https://img.shields.io/badge/devel%20version-0.1.4-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
+[![develVersion](https://img.shields.io/badge/devel%20version-0.1.7-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
 [![metacran
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
@@ -20,19 +20,6 @@ knitr::opts_chunk$set(echo = TRUE,
                       comment = "#>",
                       fig.path = "man/figures/")
 library(magrittr)
-```
-
-
-The scoringutils package provides a collection of metrics and proper scoring rules
-that make it simple to score forecasts against the true observed values. 
-
-# Installation
-
-The stable version of `scoringutils` is on CRAN, but is outdated now. We do not recommend using it. 
-Please install the current development version from github using
-
-```r
-remotes::install_github("epiforecasts/scoringutils")
 ```
 
 # Introduction and Overview of Functionality
@@ -68,25 +55,33 @@ library(data.table)
 ```{r}
 data <- scoringutils::quantile_example_data
 print(data, 3, 3)
+
 scores <- scoringutils::eval_forecasts(data, 
                                        summarise_by = c("model", "quantile", "range"))
 print(scores, 3, 3)
 ```
 
-Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data
+<!-- Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data -->
 
-```{r}
-filtered_data <- data[geography == "England" & 
-                        creation_date <= "2020-06-29" & 
-                        value_desc == "Deaths"]
+```{r eval = FALSE, echo = FALSE}
+# 
+# filtered_data <- data[geography == "England" & 
+#                         creation_date <= "2020-06-29" & 
+#                         value_desc == "Deaths"]
 
-scoringutils::plot_predictions(filtered_data[creation_date == "2020-06-29"], 
-                               add_truth_data = filtered_data,
-                               x = "value_date", range = c(0, 90), 
+scoringutils::plot_predictions(data = data,
+                               filter_both = list("geography == 'England'"),
+                               filter_forecasts = list("creation_date == '2020-06-29'", 
+                                                       "value_desc == 'Deaths'",
+                                                       "model %in% c('SIRCOVID', 'EpiSoon')"), 
+                               filter_truth = list("as.Date(value_date) <= '2020-07-06'"),
+                               x = "value_date", 
+                               range = c(0, 50, 90), 
+                               scale = "free",
                                facet_formula = value_desc ~ model)
+
 ```
 
-(The data is just randomly generated values. We plan to add real example data to make these illustrations more useful in the future)
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
@@ -130,7 +125,7 @@ We can also visualise metrics using a heatmap:
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
                              summarise_by = c("model", "horizon"))
-scores[, horizon := as.factor(horizon)]
+scores <- scores[, horizon := as.factor(horizon)]
 scoringutils::score_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
@@ -145,6 +140,7 @@ quantile forecasts in either a plain quantile format or in a format that specifi
 ``` {r}
 print(scoringutils::quantile_example_data, 3, 3)
 print(scoringutils::range_example_data_long, 3, 3)
+print(scoringutils::range_example_data_wide, 3, 3)
 ```
 
 sample based format with either continuous or integer values
@@ -152,7 +148,6 @@ sample based format with either continuous or integer values
 ``` {r}
 print(scoringutils::integer_example_data, 3, 3)
 print(scoringutils::continuous_example_data, 3, 3)
-print(scoringutils::range_example_data_wide, 3, 3)
 ```
 
 forecasts in a binary format:
@@ -238,7 +233,7 @@ predictive distribution at time t,
 
 $$u_t = F_t (x_t)$$
 
-where $x_t$ is the observed data point at time $t$ in $t_1, \dots, t_n$,
+where $x_t$ is the observed data point at time $t \text{ in } t_1, …, t_n$,
 n being the number of forecasts, and $F_t$ is the (continuous) predictive
 cumulative probability distribution at time t. If the true probability
 distribution of outcomes at time t is $G_t$ then the forecasts $F_t$ are
@@ -320,8 +315,6 @@ the predictions must be a probability that the true outcome will be 1.
 The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
-<!-- $$\text{BrierScore} = \frac{1}{N}\sum_{t=1}^{n} (\text{prediction}_t-\text{outcome}_t)^2$$ -->
-
 
 ```{r}
 true_values <- sample(c(0,1), size = 30, replace = TRUE)
@@ -338,16 +331,6 @@ The score is computed as
 
 ![interval_score](man/figures/interval_score.png)
 
-
-<!-- $$\begin{align*} -->
-<!-- \text{score} = & (\text{upper} - \text{lower}) + \\ -->
-<!-- & \frac{2}{\alpha} \cdot ( \text{lower} - \text{true_value}) \cdot 1( \text{true_values} < \text{lower}) + \\ -->
-<!-- & \frac{2}{\alpha} \cdot ( \text{true_value} - \text{upper}) \cdot 1( \text{true_value} > \text{upper}) -->
-<!-- \end{align*}$$ -->
-
-
-
-
 where $1()$ is the indicator function and $\alpha$ is the decimal value that
 indicates how much is outside the prediction interval.
 To improve usability, the user is asked to provide an interval range in
@@ -357,7 +340,7 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper). 
-Setting `weigh = TRUE` will weigh the score by $\alpha/2$ such that 
+Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{2}$ such that 
 the Interval Score converges to the CRPS for increasing number of quantiles. 
 
 

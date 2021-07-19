@@ -3,25 +3,11 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/workflows/R-CMD-check/badge.svg)](https://github.com/epiforecasts/scoringutils/actions)
 [![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://codecov.io/gh/epiforecasts/scoringutils/)
-[![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
-[![develVersion](https://img.shields.io/badge/devel%20version-0.1.4-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
+[![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
+[![develVersion](https://img.shields.io/badge/devel%20version-0.1.7-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
 [![metacran
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
-
-The scoringutils package provides a collection of metrics and proper
-scoring rules that make it simple to score forecasts against the true
-observed values.
-
-# Installation
-
-The stable version of `scoringutils` is on CRAN, but is outdated now. We
-do not recommend using it. Please install the current development
-version from github using
-
-``` r
-remotes::install_github("epiforecasts/scoringutils")
-```
 
 # Introduction and Overview of Functionality
 
@@ -60,8 +46,8 @@ forecast*. In this example here we would set
 `by = c("model", "date", "forecast_date", "forecast_horizon", "location")`
 (note: if we want to be pedantic, there is a small duplication as the
 information of “date” is already included in the combination of
-“forecast\_date” and “forecast\_horizon”. But as long as there isn’t
-some weird shift, this doesn’t matter for the purpose of grouping our
+“forecast_date” and “forecast_horizon”. But as long as there isn’t some
+weird shift, this doesn’t matter for the purpose of grouping our
 observations). If you don’t specify `by` (i.e. `by = NULL`),
 `scoringutils` will automatically use all appropriate present columns.
 Note that you don’t need to include columns such as `quantile` or
@@ -94,7 +80,7 @@ in the UK](https://github.com/epiforecasts/covid19.forecasts.uk).
 
 ``` r
 library(scoringutils)
-#> Note: The definitions of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `interval_score()`
+#> Note: The definition of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `eval_forecasts()`
 library(data.table)
 ```
 
@@ -117,6 +103,7 @@ print(data, 3, 3)
 #> 5150:           SIRCOVID    2020-07-13     0.85          4      21
 #> 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21
 #> 5152:           SIRCOVID    2020-07-13     0.90          6      21
+
 scores <- scoringutils::eval_forecasts(data, 
                                        summarise_by = c("model", "quantile", "range"))
 print(scores, 3, 3)
@@ -146,25 +133,7 @@ print(scores, 3, 3)
 #> 57:         0.9888889
 ```
 
-Using an appropriate level of summary, we can easily use the output for
-visualisation. The `scoringutils` package offers some built-in functions
-to help get a sense of the data
-
-``` r
-filtered_data <- data[geography == "England" & 
-                        creation_date <= "2020-06-29" & 
-                        value_desc == "Deaths"]
-
-scoringutils::plot_predictions(filtered_data[creation_date == "2020-06-29"], 
-                               add_truth_data = filtered_data,
-                               x = "value_date", range = c(0, 90), 
-                               facet_formula = value_desc ~ model)
-```
-
-![](man/figures/unnamed-chunk-3-1.png)<!-- -->
-
-(The data is just randomly generated values. We plan to add real example
-data to make these illustrations more useful in the future)
+<!-- Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data -->
 
 ``` r
 scores <- scoringutils::eval_forecasts(data, 
@@ -219,10 +188,12 @@ We can also visualise metrics using a heatmap:
 ``` r
 scores <- scoringutils::eval_forecasts(data, 
                              summarise_by = c("model", "horizon"))
-scores[, horizon := as.factor(horizon)]
+scores <- scores[, horizon := as.factor(horizon)]
 scoringutils::score_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
+
+![](man/figures/unnamed-chunk-8-1.png)<!-- -->
 
 ### Expected Input Formats
 
@@ -267,45 +238,6 @@ print(scoringutils::range_example_data_long, 3, 3)
 #> 5417:           SIRCOVID    2020-07-13          1      14    upper     0
 #> 5418: DetSEIRwithNB MCMC    2020-07-13          0      21    upper     0
 #> 5419:           SIRCOVID    2020-07-13          1      21    upper     0
-```
-
-sample based format with either continuous or integer values
-
-``` r
-print(scoringutils::integer_example_data, 3, 3)
-#>        value_date     value_type geography          value_desc    model
-#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
-#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
-#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
-#>    ---                                                                 
-#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#>        creation_date horizon prediction sample true_value
-#>     1:          <NA>      NA         NA     NA       1043
-#>     2:          <NA>      NA         NA     NA      10648
-#>     3:          <NA>      NA         NA     NA        743
-#>    ---                                                   
-#> 13427:    2020-07-13      21          0     48          1
-#> 13428:    2020-07-13      21          0     49          1
-#> 13429:    2020-07-13      21          0     50          1
-print(scoringutils::continuous_example_data, 3, 3)
-#>        value_date     value_type geography          value_desc    model
-#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
-#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
-#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
-#>    ---                                                                 
-#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
-#>        creation_date horizon   prediction sample true_value
-#>     1:          <NA>      NA           NA     NA       1043
-#>     2:          <NA>      NA           NA     NA      10648
-#>     3:          <NA>      NA           NA     NA        743
-#>    ---                                                     
-#> 13427:    2020-07-13      21 0.3340917507     48          1
-#> 13428:    2020-07-13      21 0.3540187438     49          1
-#> 13429:    2020-07-13      21 0.0001998965     50          1
 print(scoringutils::range_example_data_wide, 3, 3)
 #>      value_date     value_type        geography          value_desc true_value
 #>   1: 2020-05-04 death_inc_line          England              Deaths        448
@@ -347,6 +279,45 @@ print(scoringutils::range_example_data_wide, 3, 3)
 #> 344:       NA
 #> 345:       NA
 #> 346:        6
+```
+
+sample based format with either continuous or integer values
+
+``` r
+print(scoringutils::integer_example_data, 3, 3)
+#>        value_date     value_type geography          value_desc    model
+#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
+#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
+#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
+#>    ---                                                                 
+#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#>        creation_date horizon prediction sample true_value
+#>     1:          <NA>      NA         NA     NA       1043
+#>     2:          <NA>      NA         NA     NA      10648
+#>     3:          <NA>      NA         NA     NA        743
+#>    ---                                                   
+#> 13427:    2020-07-13      21          0     48          1
+#> 13428:    2020-07-13      21          0     49          1
+#> 13429:    2020-07-13      21          0     50          1
+print(scoringutils::continuous_example_data, 3, 3)
+#>        value_date     value_type geography          value_desc    model
+#>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
+#>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
+#>     3: 2020-05-11   hospital_inc   England Hospital admissions     <NA>
+#>    ---                                                                 
+#> 13427: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13428: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#> 13429: 2020-08-03 death_inc_line     Wales              Deaths SIRCOVID
+#>        creation_date horizon   prediction sample true_value
+#>     1:          <NA>      NA           NA     NA       1043
+#>     2:          <NA>      NA           NA     NA      10648
+#>     3:          <NA>      NA           NA     NA        743
+#>    ---                                                     
+#> 13427:    2020-07-13      21 0.3340917507     48          1
+#> 13428:    2020-07-13      21 0.3540187438     49          1
+#> 13429:    2020-07-13      21 0.0001998965     50          1
 ```
 
 forecasts in a binary format:
@@ -396,7 +367,7 @@ automatically recognising whether forecasts are continuous or integer
 valued.
 
 For continuous forecasts, Bias is measured as
-*B*<sub>*t*</sub>(*P*<sub>*t*</sub>, *x*<sub>*t*</sub>) = 1 − 2 ⋅ (*P*<sub>*t*</sub>(*x*<sub>*t*</sub>))
+*B*<sub>*t*</sub>(*P*<sub>*t*</sub>,*x*<sub>*t*</sub>) = 1 − 2 ⋅ (*P*<sub>*t*</sub>(*x*<sub>*t*</sub>))
 
 where *P*<sub>*t*</sub> is the empirical cumulative distribution
 function of the prediction for the true value *x*<sub>*t*</sub>.
@@ -406,7 +377,7 @@ smaller than *x*<sub>*t*</sub>.
 
 For integer valued forecasts, Bias is measured as
 
-*B*<sub>*t*</sub>(*P*<sub>*t*</sub>, *x*<sub>*t*</sub>) = 1 − (*P*<sub>*t*</sub>(*x*<sub>*t*</sub>) + *P*<sub>*t*</sub>(*x*<sub>*t*</sub> + 1))
+*B*<sub>*t*</sub>(*P*<sub>*t*</sub>,*x*<sub>*t*</sub>) = 1 − (*P*<sub>*t*</sub>(*x*<sub>*t*</sub>)+*P*<sub>*t*</sub>(*x*<sub>*t*</sub>+1))
 
 to adjust for the integer nature of the forecasts. In both cases, Bias
 can assume values between -1 and 1 and is 0 ideally.
@@ -416,17 +387,17 @@ can assume values between -1 and 1 and is 0 ideally.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 bias(true_values, predictions)
-#>  [1]  0.020  0.830 -0.070  0.850  0.600  0.985 -0.395 -0.540  0.920 -0.705
-#> [11]  0.730 -0.340  0.310  0.955  0.235 -0.235 -0.580 -0.835  0.955 -0.460
-#> [21] -0.225  0.025 -0.980 -0.860 -0.875 -0.235 -0.035  0.580  0.000  0.985
+#>  [1] -0.700 -0.520 -0.460 -0.665  0.305  0.780  0.750 -0.600 -0.935  0.975
+#> [11] -0.410 -0.380 -0.135  0.080  0.580 -0.310 -0.380 -0.195  0.375  0.700
+#> [21]  0.545 -0.010  0.080 -0.440  0.885  0.310  0.530 -0.945 -0.045 -0.635
 
 ## continuous forecasts
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(30, mean = 1:30))
 bias(true_values, predictions)
-#>  [1]  0.35 -0.37 -0.10 -0.37 -0.32 -0.14 -0.76  0.21 -1.00  0.73  0.31  0.30
-#> [13]  0.40  0.21  0.87  0.83 -0.84 -0.19  0.47 -0.69 -0.18  0.96  0.70  0.27
-#> [25]  0.31 -0.14 -0.05 -0.69 -0.72  0.83
+#>  [1] -0.17  0.42  0.53 -0.70  0.71 -0.49 -0.71  0.28 -0.51  0.53  0.92  0.52
+#> [13]  0.31 -0.92  0.03  0.75 -0.66  0.59  0.48 -0.83 -0.99 -0.66 -0.57  0.54
+#> [25]  0.43 -0.33 -0.27 -0.39  0.58 -0.17
 ```
 
 ## Sharpness
@@ -442,9 +413,9 @@ median of the predictive samples. For details, see `?stats::mad`
 ``` r
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 sharpness(predictions)
-#>  [1] 1.4826 1.4826 1.4826 2.2239 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652
-#> [11] 2.9652 3.7065 4.4478 4.4478 4.4478 2.9652 4.4478 4.4478 2.9652 4.4478
-#> [21] 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 4.4478 4.4478 5.9304 5.9304
+#>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652
+#> [11] 4.4478 2.9652 2.9652 2.9652 4.4478 4.4478 3.7065 4.4478 4.4478 4.4478
+#> [21] 5.9304 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 5.9304
 ```
 
 ## Calibration
@@ -459,12 +430,12 @@ predictive distribution at time t,
 
 *u*<sub>*t*</sub> = *F*<sub>*t*</sub>(*x*<sub>*t*</sub>)
 
-where *x*<sub>*t*</sub> is the observed data point at time *t* in
-*t*<sub>1</sub>, …, *t*<sub>*n*</sub>, n being the number of forecasts,
-and *F*<sub>*t*</sub> is the (continuous) predictive cumulative
-probability distribution at time t. If the true probability distribution
-of outcomes at time t is *G*<sub>*t*</sub> then the forecasts
-*F*<sub>*t*</sub> are said to be ideal if
+where *x*<sub>*t*</sub> is the observed data point at time
+*t* in *t*<sub>1</sub>, …, *t*<sub>*n*</sub>, n being the number of
+forecasts, and *F*<sub>*t*</sub> is the (continuous) predictive
+cumulative probability distribution at time t. If the true probability
+distribution of outcomes at time t is *G*<sub>*t*</sub> then the
+forecasts *F*<sub>*t*</sub> are said to be ideal if
 *F*<sub>*t*</sub> = *G*<sub>*t*</sub> at all times *t*. In that case,
 the probabilities ut are distributed uniformly.
 
@@ -472,14 +443,13 @@ In the case of discrete outcomes such as incidence counts, the PIT is no
 longer uniform even when forecasts are ideal. In that case a randomised
 PIT can be used instead:
 
-*u*<sub>*t*</sub> = *P*<sub>*t*</sub>(*k*<sub>*t*</sub>) + *v* ⋅ (*P*<sub>*t*</sub>(*k*<sub>*t*</sub>) − *P*<sub>*t*</sub>(*k*<sub>*t*</sub> − 1))
+*u*<sub>*t*</sub> = *P*<sub>*t*</sub>(*k*<sub>*t*</sub>) + *v* ⋅ (*P*<sub>*t*</sub>(*k*<sub>*t*</sub>)−*P*<sub>*t*</sub>(*k*<sub>*t*</sub>−1))
 
 where *k*<sub>*t*</sub> is the observed count, *P*<sub>*t*</sub>(*x*) is
 the predictive cumulative probability of observing incidence *k* at time
-*t*, *P*<sub>*t*</sub>( − 1) = 0 by definition and *v* is standard
-uniform and independent of *k*. If *P*<sub>*t*</sub> is the true
-cumulative probability distribution, then *u*<sub>*t*</sub> is standard
-uniform.
+*t*, *P*<sub>*t*</sub>(−1) = 0 by definition and *v* is standard uniform
+and independent of *k*. If *P*<sub>*t*</sub> is the true cumulative
+probability distribution, then *u*<sub>*t*</sub> is standard uniform.
 
 The function checks whether integer or continuous forecasts were
 provided. It then applies the (randomised) probability integral and
@@ -488,9 +458,9 @@ Anderson-Darling test.
 
 As a rule of thumb, there is no evidence to suggest a forecasting model
 is miscalibrated if the p-value found was greater than a threshold of
-*p* &gt;  = 0.1, some evidence that it was miscalibrated if
-0.01 &lt; *p* &lt; 0.1, and good evidence that it was miscalibrated if
-*p* &lt;  = 0.01. In this context it should be noted, though, that
+*p* \>  = 0.1, some evidence that it was miscalibrated if
+0.01 \< *p* \< 0.1, and good evidence that it was miscalibrated if
+*p* \<  = 0.01. In this context it should be noted, though, that
 uniformity of the PIT is a necessary but not sufficient condition of
 calibration. It should als be noted that the test only works given
 sufficient samples, otherwise the Null hypothesis will often be rejected
@@ -507,11 +477,10 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 crps(true_values, predictions)
-#>  [1]  0.484725  0.522300  0.754775  1.940750  0.946000  1.540875  0.560800
-#>  [8]  1.287250  0.773250  6.333950  0.977575  1.600275  1.062800  8.922450
-#> [15]  2.441150  0.834700  2.728625  1.004725  1.996200  3.062175  1.136075
-#> [22]  2.975050  3.402475  3.283250  3.156225  3.942225  4.146375 10.740000
-#> [29]  1.646800  1.751275
+#>  [1] 0.633225 0.522550 0.396400 2.935500 0.646975 1.092100 1.673725 1.208975
+#>  [9] 2.349250 1.457050 1.492775 3.949725 1.190300 3.185700 5.178925 0.968050
+#> [17] 0.979150 1.072325 2.183100 4.927400 1.109600 1.740250 1.685275 1.841800
+#> [25] 1.937725 1.789300 2.097750 1.441450 7.593550 8.196575
 ```
 
 ## Dawid-Sebastiani Score (DSS)
@@ -525,10 +494,11 @@ as integer valued forecasts. Smaller values are better.
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 dss(true_values, predictions)
-#>  [1] 3.271605 1.109590 2.296375 1.638642 1.720113 1.891801 1.814442 2.633736
-#>  [9] 2.315999 3.609963 3.199639 3.208637 2.718436 4.955331 5.141449 4.165855
-#> [17] 3.417330 3.390977 3.526383 3.127248 3.334262 3.220303 5.131775 4.164216
-#> [25] 4.444760 6.651042 4.790084 3.784817 3.604751 3.972252
+#>  [1] -0.1800783  1.0913706  1.0079771  3.4442881  1.3031143  1.8876494
+#>  [7]  2.3585774  2.2110750  2.3802473  2.6640302  3.0230465  7.3333000
+#> [13]  2.7466030  2.8338357  2.8143720  2.8633432  2.8711060  3.3624147
+#> [19]  3.0109214  3.0643456  3.1705285  3.9281835  3.3284476 16.2662208
+#> [25]  3.2660274  3.5280882  3.9380496  4.4371102  3.4380811  3.6981317
 ```
 
 ## Log Score
@@ -537,18 +507,18 @@ Wrapper around the `log_sample` function from the `scoringRules`
 package. For more information look at the manuals from the
 `scoringRules` package. The function should not be used for integer
 valued forecasts. While Log Scores are in principle possible for integer
-valued foreasts they require a kernel density estimate which is not well
-defined for discrete values. Smaller values are better.
+valued forecasts they require a kernel density estimate which is not
+well defined for discrete values. Smaller values are better.
 
 ``` r
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 logs(true_values, predictions)
-#>  [1] 4.2449388 1.2183110 0.9350496 1.3702498 1.2994017 1.9734176 1.9486463
-#>  [8] 1.0301476 1.0777401 1.1858366 0.8741934 1.2182398 1.0398304 1.1220978
-#> [15] 1.6338811 1.8492573 2.6494550 1.5769399 1.0705151 1.0049739 0.9289143
-#> [22] 1.2958066 1.0433506 1.0013816 1.1328087 1.0145965 4.4580586 1.0059555
-#> [29] 1.0175473 1.3584801
+#>  [1] 1.2611949 2.0085114 0.9560384 1.0689759 1.0129317 1.4904568 2.9205285
+#>  [8] 0.8460895 1.4281170 0.9316350 0.9953321 1.0236646 0.9766526 1.8764237
+#> [15] 1.6515511 1.0918181 2.1622704 1.5427550 0.8694894 1.5452538 0.9868115
+#> [22] 0.9044315 1.3446104 1.9701726 1.1217898 1.2175854 1.4064990 1.0417268
+#> [29] 1.1115333 0.8998055
 ```
 
 ## Brier Score
@@ -560,14 +530,12 @@ predictions must be a probability that the true outcome will be 1.
 The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
-<!-- $$\text{BrierScore} = \frac{1}{N}\sum_{t=1}^{n} (\text{prediction}_t-\text{outcome}_t)^2$$ -->
-
 ``` r
 true_values <- sample(c(0,1), size = 30, replace = TRUE)
 predictions <- runif(n = 30, min = 0, max = 1)
 
 brier_score(true_values, predictions)
-#> [1] 0.3132916
+#> [1] 0.3554911
 ```
 
 ## Interval Score
@@ -578,25 +546,19 @@ better.
 
 The score is computed as
 
-![interval\_score](man/figures/interval_score.png)
-
-<!-- $$\begin{align*} -->
-<!-- \text{score} = & (\text{upper} - \text{lower}) + \\ -->
-<!-- & \frac{2}{\alpha} \cdot ( \text{lower} - \text{true_value}) \cdot 1( \text{true_values} < \text{lower}) + \\ -->
-<!-- & \frac{2}{\alpha} \cdot ( \text{true_value} - \text{upper}) \cdot 1( \text{true_value} > \text{upper}) -->
-<!-- \end{align*}$$ -->
+![interval_score](man/figures/interval_score.png)
 
 where 1() is the indicator function and *α* is the decimal value that
 indicates how much is outside the prediction interval. To improve
 usability, the user is asked to provide an interval range in percentage
-terms, i.e. interval\_range = 90 (percent) for a 90 percent prediction
+terms, i.e. interval_range = 90 (percent) for a 90 percent prediction
 interval. Correspondingly, the user would have to provide the 5% and 95%
 quantiles (the corresponding alpha would then be 0.1). No specific
 distribution is assumed, but the range has to be symmetric (i.e you
 can’t use the 0.1 quantile as the lower bound and the 0.7 quantile as
-the upper). Setting `weigh = TRUE` will weigh the score by *α*/2 such
-that the Interval Score converges to the CRPS for increasing number of
-quantiles.
+the upper). Setting `weigh = TRUE` will weigh the score by
+$\\frac{\\alpha}{2}$ such that the Interval Score converges to the CRPS
+for increasing number of quantiles.
 
 ``` r
 true_values <- rnorm(30, mean = 1:30)
@@ -609,9 +571,9 @@ interval_score(true_values = true_values,
                lower = lower,
                upper = upper,
                interval_range = interval_range)
-#>  [1] 0.1221291 0.1313182 0.1663424 0.2354949 0.2466355 0.2170362 1.5143775
-#>  [8] 0.1810042 0.2064054 1.2614409 0.4002147 1.4409476 0.1685613 0.6510942
-#> [15] 0.1086299 0.2612796 0.2429625 0.1377730 0.1912384 0.7589243 0.1609433
-#> [22] 1.4352004 0.1790574 0.1040817 0.1621819 0.1988057 0.1803143 0.1420993
-#> [29] 0.1225354 0.2043855
+#>  [1] 0.1435602 0.1363273 0.1214869 0.3309745 0.1909975 0.1015329 0.1686463
+#>  [8] 0.1605127 0.2402594 0.1066244 0.7533624 0.5321044 0.1682648 0.2013887
+#> [15] 0.3317460 0.2161267 0.3294493 0.1764297 0.9422938 0.2414125 2.0005948
+#> [22] 0.1053030 0.1262531 0.2189997 0.1860936 0.1452726 0.1516566 0.2706347
+#> [29] 0.1062714 0.2404143
 ```
