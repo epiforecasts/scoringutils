@@ -15,7 +15,7 @@ over scores from different interval ranges
 - `eval_forecasts()` can now handle a separate forecast and truth data set as 
 as input
 - `eval_forecasts()` now supports scoring point forecasts along side quantiles
-in a quantile-based format. Currently the only metric used is the absoluter error
+in a quantile-based format. Currently the only metric used is the absolute error
 
 ### Package updates
 - Many functions, especially `eval_forecasts()` got a major rewrite. While 
