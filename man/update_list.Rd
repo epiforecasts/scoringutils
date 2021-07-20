@@ -19,3 +19,4 @@ A list
 Used to handle updating settings in a list. For example when making
 changes to `interval_score_arguments` in `eval_forecasts()`
 }
+\keyword{internal}

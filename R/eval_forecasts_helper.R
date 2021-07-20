@@ -9,6 +9,8 @@
 #' @param by grouping variable in `eval_forecasts()
 #'
 #' @return `data.table` with quantiles added
+#'
+#' @keywords internal
 add_quantiles <- function(dt, varnames, quantiles, by) {
   # make sure that the desired varnames are actually present
   varnames <- intersect(varnames, colnames(dt))
@@ -31,6 +33,8 @@ add_quantiles <- function(dt, varnames, quantiles, by) {
 #' @param by grouping variable in `eval_forecasts()
 #' @importFrom data.table `%like%`
 #' @return `data.table` with sd added
+#'
+#' @keywords internal
 add_sd <- function(dt, varnames, by) {
   # make sure that the desired varnames are actually present
   varnames <- intersect(varnames, colnames(dt))

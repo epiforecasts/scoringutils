@@ -18,3 +18,4 @@ A data.table
 take a vector of column names and delete the columns if they
 are present in the data.table
 }
+\keyword{internal}

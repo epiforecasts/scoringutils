@@ -15,3 +15,4 @@ the geometric mean of the values in `x`
 \description{
 Calculate Geometric Mean
 }
+\keyword{internal}

@@ -21,3 +21,4 @@ add_quantiles(dt, varnames, quantiles, by)
 \description{
 Helper function used within eval_forecasts
 }
+\keyword{internal}

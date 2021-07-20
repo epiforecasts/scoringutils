@@ -19,3 +19,4 @@ add_sd(dt, varnames, by)
 \description{
 Helper function used within eval_forecasts
 }
+\keyword{internal}
