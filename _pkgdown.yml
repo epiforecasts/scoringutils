@@ -1,0 +1,55 @@
+reference:
+        - title: Package documentation
+          contents:
+                - scoringutils
+        - title: Evaluation functions
+          contents:
+                - compare_two_models
+                - eval_forecasts
+                - eval_forecasts_binary
+                - eval_forecasts_sample
+                - pairwise_comparison
+                - pairwise_comparison_one_group
+        - title: Scoring functions
+          contents:
+                - abs_error
+                - ae_median_quantile
+                - ae_median_sample
+                - bias
+                - brier_score
+                - crps
+                - dss
+                - interval_score
+                - logs
+                - mse
+                - pit
+                - pit_df
+                - pit_df_fast
+                - quantile_bias
+                - sharpness
+        - title: Data wrangling helpers
+          contents:
+                - ends_with("to_long")
+                - ends_with("to_wide")
+                - ends_with("to_quantile")
+                - ends_with("to_range")
+                - ends_with("to_range_long")
+                - merge_pred_and_obs
+        - title: Plotting helpers
+          contents:
+                - starts_with("plot_")
+                - ends_with("_plot")
+                - hist_PIT
+                - hist_PIT_quantile
+                - interval_coverage
+                - quantile_coverage
+                - score_table
+                - score_heatmap
+                - show_avail_forecasts
+                - wis_components
+        - title: Internal functions
+          contents:
+                - has_keyword("internal")
+        - title: Example data
+          contents:
+                - has_keyword("datasets")

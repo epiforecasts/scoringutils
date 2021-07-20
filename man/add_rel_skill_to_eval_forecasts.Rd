@@ -50,3 +50,4 @@ make pairwise comparisons from within that function. It uses the
 Essentially, it wraps \code{\link{pairwise_comparison}} and deals with the specifics
 necessary to work with \code{\link{eval_forecasts}}.
 }
+\keyword{internal}

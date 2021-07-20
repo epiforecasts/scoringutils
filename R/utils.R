@@ -7,6 +7,8 @@
 #' @param ... The variables to check
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
+#'
+#' @keywords internal
 check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
@@ -36,6 +38,8 @@ check_not_null <- function(...) {
 #'
 #' @return The function returns `NULL`, but throws an error if variable lengths
 #' differ
+#'
+#' @keywords internal
 check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
@@ -64,6 +68,8 @@ check_equal_length <- function(...,
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
 #' @return the geometric mean of the values in `x`
+#'
+#' @keywords internal
 geom_mean_helper <- function(x) {
   geom_mean <- exp(mean(log(x[!is.na(x)])))
   return(geom_mean)
@@ -149,6 +155,8 @@ list_of_avail_metrics <- function() {
 #' individual list element of `list`
 #' @return A list with the extracted element from every sublist
 #' missing.
+#'
+#' @keywords internal
 extract_from_list <- function(list, what) {
   out <- lapply(list,
                 FUN = function(list_element) {
@@ -170,6 +178,8 @@ extract_from_list <- function(list, what) {
 #' @param optional A list of optional settings to override defaults
 #' @return A list
 #' @export
+#'
+#' @keywords internal
 update_list <- function(defaults = list(), optional = list()) {
   if (length(optional) != 0) {
     defaults <- defaults[setdiff(names(defaults), names(optional))]
@@ -228,6 +238,8 @@ permutation_test <- function(scores1,
 #' @param cols_to_delete character vector with names of columns to be deleted
 #' @importFrom data.table as.data.table
 #' @return A data.table
+#'
+#' @keywords internal
 delete_columns <- function(df, cols_to_delete) {
   df <- data.table::as.data.table(df)
   delete_columns <- names(df)[names(df) %in% cols_to_delete]

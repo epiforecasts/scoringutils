@@ -18,3 +18,4 @@ differ
 \description{
 Check whether variables all have the same length
 }
+\keyword{internal}

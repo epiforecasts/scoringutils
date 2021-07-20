@@ -112,6 +112,8 @@ pairwise_comparison <- function(scores,
 #' @inheritParams eval_forecasts
 #' @param unsummarised_scores unsummarised scores to be passed from
 #' \code{\link{eval_forecasts}}
+#'
+#' @keywords internal
 
 add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             rel_skill_metric,
