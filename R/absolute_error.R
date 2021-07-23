@@ -6,7 +6,7 @@
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
-#'   abs(true\_value - median\_prediction)
+#'   abs(true_value - median_prediction)
 #' }
 #'
 #' @param true_values A vector with the true observed values of size n
@@ -44,7 +44,7 @@ ae_median_sample <- function(true_values, predictions) {
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
-#'   abs(true\_value - median\_prediction)
+#'   abs(true_value - median_prediction)
 #' }
 #'
 #' @param true_values A vector with the true observed values of size n
@@ -86,7 +86,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
 #' Caclulate absolute error as
 #'
 #' \deqn{
-#'   abs(true\_value - prediction)
+#'   abs(true_value - prediction)
 #' }
 #'
 #' @param true_values A vector with the true observed values of size n
