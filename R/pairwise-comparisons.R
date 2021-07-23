@@ -6,13 +6,9 @@
 #' comparisons is inspired by an implementation by Johannes Bracher.
 #'
 #' The implementation of the permutation test follows the function
-<<<<<<< HEAD
 #' permutationTest from the `surveillance` package by Michael Höhle,
-=======
-#' [permutationTest][surveillance::permutationTest] from the `surveillance` package
-#'  by Michael Höhle,
->>>>>>> dd97a5b (Run roxygen2md::roxygen2md())
-#' Andrea Riebler and Michaela Paul.
+#' [permutationTest()][surveillance::permutationTest()] from the `surveillance`
+#' package by Michael Höhle, Andrea Riebler and Michaela Paul.
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
 #' [eval_forecasts()]
@@ -23,21 +19,19 @@
 #' observation. This is important as many functions work on individual
 #' observations. If you want a different level of aggregation, you should use
 #' `summarise_by` to aggregate the individual scores.
-#' Also not that the pit will be computed using `summarise_by`
-#' instead of `by`
+#' Also not that the pit will be computed using `summarise_by` instead of `by`
 #' @param summarise_by character vector of columns to group the summary by. By
-#' default, this is equal to `by` and no summary takes place.
-#' But sometimes you may want to to summarise
-#' over categories different from the scoring.
-#' `summarise_by` is also the grouping level used to compute
-#' (and possibly plot) the probability integral transform(pit).
+#' default, this is equal to `by` and no summary takes place. But sometimes you
+#' may want to to summarise over categories different from the scoring.
+#' `summarise_by` is also the grouping level used to compute (and possibly plot)
+#' the probability integral transform(pit).
 #' @param test_options list with options to pass down to [compare_two_models()].
 #' To change only one of the default options, just pass a list as input with
 #' the name of the argument you want to change. All elements not included in the
 #' list will be set to the default (so passing an empty list would result in the
 #' default options).
-#' @param baseline character vector of length one that denotes
-#' the baseline model against which to compare other models.
+#' @param baseline character vector of length one that denotes the baseline
+#' model against which to compare other models.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
@@ -419,7 +413,7 @@ unique(overlap)
 #' @param type character vector of length one that is either "mean_scores_ratio" or "pval".
 #' This denotes whether to visualise the ratio or the p-value of the
 #' pairwise comparison. Default is "mean_scores_ratio"
-#' @param smaller_is_good logical (default is TRUE) that indicates whether
+#' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
 #' invert the mean scores ratio)
 #' @param facet_formula facetting formula passed down to ggplot. Default is

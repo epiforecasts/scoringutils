@@ -34,13 +34,13 @@
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
-#' FALSE.
-#' @param separate_results if TRUE (default is FALSE), then the separate parts
-#' of the interval score (sharpness, penalties for over- and under-prediction
-#' get returned as separate elements of a list). If you want a `data.frame`
-#' instead, simply call `as.data.frmae()` on the output.
+#' `FALSE.`
+#' @param separate_results if `TRUE` (default is `FALSE`), then the separate
+#' parts of the interval score (sharpness, penalties for over- and
+#' under-prediction get returned as separate elements of a list). If you want a
+#' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
-#' `separate_results` is TRUE.
+#' `separate_results` is `TRUE`.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = rep(90, 30)

@@ -53,7 +53,7 @@ ae_median_sample <- function(true_values, predictions) {
 #' @param quantiles numeric vector that denotes the quantile for the values
 #' in `predictions`. Only those predictions where `quantiles == 0.5` will
 #' be kept. If `quantiles` is `NULL`, then all `predictions` and
-#' `true_values` will be used (this is then the same as `absolute_error()`)
+#' `true_values` will be used (this is then the same as [absolute_error()])
 #' @param verbose logical, return a warning is something unexpected happens
 #' @return vector with the scoring values
 #' @importFrom stats median

@@ -1,7 +1,7 @@
 #' @title Evaluate forecasts
 #'
 #' @description The function `eval_forecasts` is an easy to use wrapper
-#' of the lower level functions in the `scoringutils` package.
+#' of the lower level functions in the \pkg{scoringutils} package.
 #' It can be used to score probabilistic or quantile forecasts of
 #' continuous, integer-valued or binary variables.
 #'
@@ -89,23 +89,23 @@
 #' Instead of just returning a mean, quantiles will be returned for the
 #' groups specified through `summarise_by`. By default, no quantiles are
 #' returned.
-#' @param sd if TRUE (the default is FALSE) the standard deviation of all
+#' @param sd if `TRUE` (the default is `FALSE`) the standard deviation of all
 #' metrics will be returned when summarising.
-#' @param pit_plots if TRUE (not the default), pit plots will be returned. For
+#' @param pit_plots if `TRUE` (not the default), pit plots will be returned. For
 #' details see [pit()].
 #' @param interval_score_arguments list with arguments for the calculation of
 #' the interval score. These arguments get passed down to
 #' `interval_score`, except for the argument `count_median_twice` that
 #' controls how the interval scores for different intervals are summed up. This
-#' should be a logical (default is FALSE) that indicates whether or not
+#' should be a logical (default is `FALSE`) that indicates whether or not
 #' to count the median twice when summarising. This would conceptually treat the
 #' median as a 0\% prediction interval, where the median is the lower as well as
 #' the upper bound. The alternative is to treat the median as a single quantile
 #' forecast instead of an interval. The interval score would then
 #' be better understood as an average of quantile scores.)
 #' @param summarised Summarise arguments (i.e. take the mean per group
-#' specified in group_by. Default is TRUE.
-#' @param verbose print out additional helpful messages (default is TRUE)
+#' specified in group_by. Default is `TRUE.`
+#' @param verbose print out additional helpful messages (default is `TRUE`)
 #' @param forecasts data.frame with forecasts, that should follow the same
 #' general guidelines as the `data` input. Argument can be used to supply
 #' forecasts and truth data independently. Default is `NULL`.
@@ -115,7 +115,7 @@
 #' `truth_data` should be merged on. Default is `NULL` and merge will be
 #' attempted automatically.
 #' @param compute_relative_skill logical, whether or not to compute relative
-#' performance between models. If `TRUE` (default is FALSE), then a column called
+#' performance between models. If `TRUE` (default is `FALSE`), then a column called
 #' 'model' must be present in the input data. For more information on
 #' the computation of relative skill, see [pairwise_comparison()].
 #' Relative skill will be calculated for the aggregation level specified in
