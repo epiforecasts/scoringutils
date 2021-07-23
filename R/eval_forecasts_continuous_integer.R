@@ -35,6 +35,7 @@
 #' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
 #' PLoS Comput Biol 15(2): e1006785. <doi:10.1371/journal.pcbi.1006785>
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @inherit eval_forecasts references
 
 
 eval_forecasts_sample <- function(data,
