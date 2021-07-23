@@ -3,7 +3,7 @@
 #' @description
 #' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' `scoringRules` package. Used to score continuous predictions.
+#' \pkg{scoringRules} package. Used to score continuous predictions.
 #' While the Log Score is in theory also applicable
 #' to integer forecasts, the problem lies in the implementation: The Log Score
 #' needs a kernel density estimation, which is not well defined with
@@ -63,7 +63,7 @@ logs <- function(true_values, predictions) {
 #' @description
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' `scoringRules` package.
+#' \pkg{scoringRules} package.
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
@@ -117,7 +117,7 @@ dss <- function(true_values, predictions) {
 #' @description
 #' Wrapper around the [`crps_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' `scoringRules` package. Can be used for continuous as well as integer
+#' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
