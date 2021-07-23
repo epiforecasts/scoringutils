@@ -34,7 +34,7 @@
 #' number of Monte Carlo samples
 #' @return vector of length n with the biases of the predictive samples with
 #' respect to the true values.
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' ## integer valued forecasts
@@ -160,7 +160,7 @@ bias <- function(true_values, predictions) {
 #' of the central prediction interval
 #' @param true_value a single true value
 #' @return scalar with the quantile bias for a single quantile prediction
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' lower <- c(6341.000, 6329.500, 6087.014, 5703.500,

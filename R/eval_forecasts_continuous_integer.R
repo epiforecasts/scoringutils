@@ -30,11 +30,11 @@
 #'                                      sd = TRUE,
 #'                                      summarise_by = c("model"))
 #'
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
 #' (2019) Assessing the performance of real-time epidemic forecasts: A
 #' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
 #' PLoS Comput Biol 15(2): e1006785. <doi:10.1371/journal.pcbi.1006785>
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 
 eval_forecasts_sample <- function(data,

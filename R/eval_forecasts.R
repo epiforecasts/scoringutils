@@ -52,27 +52,24 @@
 #' [sample_to_range_long()],
 #' [sample_to_quantile()])
 #' For a quantile-format forecast you should provide:
-#' \itemize{
-#'   \item {prediction} - prediction to the corresponding quantile
-#'   \item {quantile} - quantile to which the prediction corresponds}
+#'   - `prediction`: prediction to the corresponding quantile
+#'   - `quantile`: quantile to which the prediction corresponds
 #' For a range format (long) forecast you need
-#' \itemize{
-#'   \item `prediction` the quantile forecasts
-#'   \item `boundary` values should be either "lower" or "upper", depending
+#'   - `prediction`: the quantile forecasts
+#'   - `boundary`: values should be either "lower" or "upper", depending
 #'   on whether the prediction is for the lower or upper bound of a given range
-#'   \item {range} the range for which a forecast was made. For a 50\% interval
-#'   the range should be 50. The forecast for the 25\% quantile should have
+#'   - `range` the range for which a forecast was made. For a 50%% interval
+#'   the range should be 50. The forecast for the 25%% quantile should have
 #'   the value in the `prediction` column, the value of `range`
 #'   should be 50 and the value of `boundary` should be "lower".
 #'   If you want to score the median (i.e. `range = 0`), you still
 #'   need to include a lower and an upper estimate, so the median has to
-#'   appear twice.}
+#'   appear twice.
 #' Alternatively you can also provide the format in a wide range format.
-#' This format needs
-#' \itemize{
-#'   \item pairs of columns called something like 'upper_90' and 'lower_90',
+#' This format needs:
+#'   - pairs of columns called something like 'upper_90' and 'lower_90',
 #'   or 'upper_50' and 'lower_50', where the number denotes the interval range.
-#'   For the median, you need to provide columns called 'upper_0' and 'lower_0'}
+#'   For the median, you need to provide columns called 'upper_0' and 'lower_0'
 #' @param by character vector of columns to group scoring by. This should be the
 #' lowest level of grouping possible, i.e. the unit of the individual
 #' observation. This is important as many functions work on individual
@@ -190,7 +187,7 @@
 #'                                      sd = TRUE,
 #'                                      summarise_by = c("model"))
 #'
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
 #' (2019) Assessing the performance of real-time epidemic forecasts: A
 #' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.

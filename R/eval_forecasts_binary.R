@@ -14,7 +14,7 @@
 #'                                      quantiles = c(0.5), sd = TRUE,
 #'                                      verbose = FALSE)
 #'
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 eval_forecasts_binary <- function(data,
                                   by,

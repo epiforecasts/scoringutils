@@ -5,7 +5,7 @@
 #' Calculated as
 #'
 #' \deqn{
-#'   mean((true_values - predicted_values)^2)
+#'   mean((true\_values - predicted\_values)^2)
 #' }
 #'
 #' @param true_values A vector with the true observed values of size n
