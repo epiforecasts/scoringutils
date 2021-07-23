@@ -5,7 +5,7 @@
 #' @param prediction_type character, should be either "continuous" or "integer"
 #'
 #' @return A data.table with appropriate scores. For more information see
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @importFrom data.table ':=' as.data.table rbindlist %like%
 #'

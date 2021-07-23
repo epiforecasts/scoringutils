@@ -2,7 +2,7 @@
 #'
 #' @inheritParams eval_forecasts
 #' @return A data.table with appropriate scores. For more information see
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @importFrom data.table ':='
 #'

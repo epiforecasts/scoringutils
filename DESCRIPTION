@@ -72,3 +72,4 @@ BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
+Roxygen: list(markdown = TRUE)

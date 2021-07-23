@@ -40,7 +40,7 @@
 #' get returned as separate elements of a list). If you want a `data.frame`
 #' instead, simply call `as.data.frmae()` on the output.
 #' @return vector with the scoring values, or a list with separate entries if
-#' \code{separate_results} is TRUE.
+#' `separate_results` is TRUE.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = rep(90, 30)
@@ -68,7 +68,7 @@
 #' <arXiv:2005.12881v1>
 #'
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
-#' in an interval format. \url{https://arxiv.org/abs/2005.12881}
+#' in an interval format. <https://arxiv.org/abs/2005.12881>
 #'
 
 
