@@ -10,12 +10,12 @@ ae_median_quantile(true_values, predictions, quantiles = NULL, verbose = TRUE)
 \item{true_values}{A vector with the true observed values of size n}
 
 \item{predictions}{numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.}
+quantiles in a second vector, \code{quantiles}.}
 
 \item{quantiles}{numeric vector that denotes the quantile for the values
-in `predictions`. Only those predictions where `quantiles == 0.5` will
-be kept. If `quantiles` is `NULL`, then all `predictions` and
-`true_values` will be used (this is then the same as `absolute_error()`)}
+in \code{predictions}. Only those predictions where \code{quantiles == 0.5} will
+be kept. If \code{quantiles} is \code{NULL}, then all \code{predictions} and
+\code{true_values} will be used (this is then the same as \code{\link[=absolute_error]{absolute_error()}})}
 
 \item{verbose}{logical, return a warning is something unexpected happens}
 }

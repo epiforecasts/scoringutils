@@ -10,7 +10,7 @@ extract_from_list(list, what)
 \item{list}{the list of lists}
 
 \item{what}{character with the name of the element to extract from every
-individual list element of `list`}
+individual list element of \code{list}}
 }
 \value{
 A list with the extracted element from every sublist

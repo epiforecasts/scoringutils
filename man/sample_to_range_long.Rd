@@ -18,7 +18,7 @@ sample_to_range_long(
 (e.g. \code{c(0, 50, 90)})}
 
 \item{type}{type argument passed down to the quantile function. For more
-information, see \code{\link{quantile}}}
+information, see \code{\link[=quantile]{quantile()}}}
 
 \item{keep_quantile_col}{keep quantile column, default is TRUE}
 }

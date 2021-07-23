@@ -8,7 +8,7 @@ compare_two_models(scores, name_model1, name_model2, metric, test_options, by)
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link{eval_forecasts}}}
+\code{\link[=eval_forecasts]{eval_forecasts()}}}
 
 \item{name_model1}{character, name of the first model}
 
@@ -17,7 +17,7 @@ compare_two_models(scores, name_model1, name_model2, metric, test_options, by)
 \item{metric}{A character vector of length one with the metric to do
 the comparison on.}
 
-\item{test_options}{list with options to pass down to \code{\link{compare_two_models}}.
+\item{test_options}{list with options to pass down to \code{\link[=compare_two_models]{compare_two_models()}}.
 To change only one of the default options, just pass a list as input with
 the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
@@ -28,16 +28,15 @@ lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 \code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by}
-instead of \code{by}}
+Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
 }
 \description{
 This function compares two models based on the subset of forecasts for which
 both models have made a prediction. It gets called
-from \code{\link{pairwise_comparison_one_group}}, which handles the
+from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}, which handles the
 comparison of multiple models on a single set of forecasts (there are no
-subsets of forecasts to be distinguished). \code{\link{pairwise_comparison_one_group}}
-in turn gets called from from \code{\link{pairwise_comparison}} which can handle
+subsets of forecasts to be distinguished). \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}
+in turn gets called from from \code{\link[=pairwise_comparison]{pairwise_comparison()}} which can handle
 pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 pairwise comparisons for one set of forecasts, but done separately for two
 different forecast targets.

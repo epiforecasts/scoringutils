@@ -10,11 +10,11 @@ check_not_null(...)
 \item{...}{The variables to check}
 }
 \value{
-The function returns `NULL`, but throws an error if the variable is
+The function returns \code{NULL}, but throws an error if the variable is
 missing.
 }
 \description{
-Check whether a certain variable is not `NULL` and return the name of that
+Check whether a certain variable is not \code{NULL} and return the name of that
 variable and the function call where the variable is missing. This function
 is a helper function that should only be called within other functions
 }

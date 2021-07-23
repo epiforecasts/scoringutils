@@ -13,7 +13,7 @@ sample_to_range(data, range = c(0, 50, 90), type = 7, keep_quantile_col = TRUE)
 (e.g. \code{c(0, 50, 90)})}
 
 \item{type}{type argument passed down to the quantile function. For more
-information, see \code{\link{quantile}}}
+information, see \code{\link[=quantile]{quantile()}}}
 
 \item{keep_quantile_col}{keep quantile column, default is TRUE}
 }

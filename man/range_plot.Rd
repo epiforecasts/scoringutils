@@ -19,7 +19,7 @@ range_plot(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link{eval_forecasts}}. Note that "range" must be included
+produced by \code{\link[=eval_forecasts]{eval_forecasts()}}. Note that "range" must be included
 in the \code{summarise_by} argument when running \code{eval_forecasts}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.

@@ -10,7 +10,7 @@ abs_error(true_values, predictions)
 \item{true_values}{A vector with the true observed values of size n}
 
 \item{predictions}{numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.}
+quantiles in a second vector, \code{quantiles}.}
 }
 \value{
 vector with the absolute error

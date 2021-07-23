@@ -17,9 +17,9 @@ number of Monte Carlo samples}
 vector with the scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample}}
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample()}}
 function from the
-\code{scoringRules} package. Can be used for continuous as well as integer
+\pkg{scoringRules} package. Can be used for continuous as well as integer
 valued forecasts
 }
 \examples{
@@ -29,5 +29,5 @@ crps(true_values, predictions)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+Forecasts with scoringRules, \url{https://arxiv.org/pdf/1709.04743.pdf}
 }

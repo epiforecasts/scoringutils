@@ -28,7 +28,7 @@ plot_predictions(
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
-\code{\link{eval_forecasts}}. The data.frame needs to have columns called
+\code{\link[=eval_forecasts]{eval_forecasts()}}. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
 these will be separated into a truth and forecast data set in order to be
@@ -38,14 +38,14 @@ These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.}
 
 \item{forecasts}{data.frame with forecasts, that should follow the same
-general guidelines as the `data` input. Argument can be used to supply
-forecasts and truth data independently. Default is `NULL`.}
+general guidelines as the \code{data} input. Argument can be used to supply
+forecasts and truth data independently. Default is \code{NULL}.}
 
-\item{truth_data}{data.frame with a column called `true_value`
+\item{truth_data}{data.frame with a column called \code{true_value}
 on the x-axis. Usually, this will be "date", but it can be anything else.}
 
-\item{merge_by}{character vector with column names that `forecasts` and
-`truth_data` should be merged on. Default is `NULL` and merge will be
+\item{merge_by}{character vector with column names that \code{forecasts} and
+\code{truth_data} should be merged on. Default is \code{NULL} and merge will be
 attempted automatically.}
 
 \item{x}{character vector of length one that denotes the name of the variable}
@@ -58,7 +58,7 @@ in order to filter the truth data.}
 the truth data. Every element is parsed as an expression and evaluated
 in order to filter the forecasts data.}
 
-\item{filter_both}{same as `filter_truth` and `filter_forecasts`, but
+\item{filter_both}{same as \code{filter_truth} and \code{filter_forecasts}, but
 applied to both data sets for convenience.}
 
 \item{range}{numeric vector indicating the interval ranges to plot. If 0 is
@@ -79,7 +79,7 @@ included in range, the median prediction will be shown.}
 if you make use of facetting. Default is "free_y"}
 
 \item{allow_truth_without_pred}{logical, whether or not
-to allow instances where there is truth data, but no forecast. If `FALSE`
+to allow instances where there is truth data, but no forecast. If \code{FALSE}
 (the default), these get filtered out.}
 
 \item{remove_from_truth}{character vector of columns to remove from the

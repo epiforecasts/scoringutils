@@ -16,13 +16,13 @@ plot_pairwise_comparison(
 }
 \arguments{
 \item{comparison_result}{A data.frame as produced by
-\code{\link{pairwise_comparison}}}
+\code{\link[=pairwise_comparison]{pairwise_comparison()}}}
 
 \item{type}{character vector of length one that is either "mean_scores_ratio" or "pval".
 This denotes whether to visualise the ratio or the p-value of the
 pairwise comparison. Default is "mean_scores_ratio"}
 
-\item{smaller_is_good}{logical (default is TRUE) that indicates whether
+\item{smaller_is_good}{logical (default is \code{TRUE}) that indicates whether
 smaller or larger values are to be interpreted as 'good' (as you could just
 invert the mean scores ratio)}
 
