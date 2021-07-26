@@ -92,22 +92,14 @@ bias <- function(true_values, predictions) {
   n_pred <- ncol(predictions)
 
   # empirical cdf
-  P_x <- vapply(seq_along(true_values),
-                function(i) {
-                  sum(predictions[i,] <= true_values[i]) / n_pred
-                },
-                .0)
+  P_x <- rowSums(predictions <= true_values) / n_pred
 
   if (continuous_predictions) {
     res <- 1 - 2 * P_x
     return(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
-    P_xm1 <- vapply(seq_along(true_values),
-                    function(i) {
-                      sum(predictions[i,] <= true_values[i] - 1) / n_pred
-                    },
-                    .0)
+    P_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
 
     res <- 1 - (P_x + P_xm1)
     return(res)
