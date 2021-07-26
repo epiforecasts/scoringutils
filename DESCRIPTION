@@ -67,7 +67,7 @@ Suggests:
     knitr,
     rmarkdown
 RoxygenNote: 7.1.1
-URL: https://github.com/epiforecasts/scoringutils
+URL: https://github.com/epiforecasts/scoringutils, https://epiforecasts.io/scoringutils/
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
