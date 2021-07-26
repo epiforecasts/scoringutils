@@ -44,7 +44,6 @@ Here is an example of an evaluation using the example data included in the packa
 
 ```{r}
 library(scoringutils)
-library(data.table)
 ```
 
 ```{r}
@@ -117,7 +116,7 @@ We can also visualise metrics using a heatmap:
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
                              summarise_by = c("model", "horizon"))
-scores <- scores[, horizon := as.factor(horizon)]
+scores$horizon <- as.factor(scores$horizon)
 scoringutils::score_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
