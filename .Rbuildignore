@@ -11,3 +11,4 @@
 ^Readme.Rmd
 ^doc$
 ^Meta$
+^_pkgdown\.yml$
