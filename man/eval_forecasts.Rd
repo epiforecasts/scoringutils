@@ -54,8 +54,8 @@ For a range format (long) forecast you need
 \item \code{prediction}: the quantile forecasts
 \item \code{boundary}: values should be either "lower" or "upper", depending
 on whether the prediction is for the lower or upper bound of a given range
-\item \code{range} the range for which a forecast was made. For a 50\%\% interval
-the range should be 50. The forecast for the 25\%\% quantile should have
+\item \code{range} the range for which a forecast was made. For a 50\% interval
+the range should be 50. The forecast for the 25\% quantile should have
 the value in the \code{prediction} column, the value of \code{range}
 should be 50 and the value of \code{boundary} should be "lower".
 If you want to score the median (i.e. \code{range = 0}), you still
@@ -100,7 +100,7 @@ the interval score. These arguments get passed down to
 controls how the interval scores for different intervals are summed up. This
 should be a logical (default is \code{FALSE}) that indicates whether or not
 to count the median twice when summarising. This would conceptually treat the
-median as a 0\\% prediction interval, where the median is the lower as well as
+median as a 0\% prediction interval, where the median is the lower as well as
 the upper bound. The alternative is to treat the median as a single quantile
 forecast instead of an interval. The interval score would then
 be better understood as an average of quantile scores.)}

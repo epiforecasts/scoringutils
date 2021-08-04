@@ -47,8 +47,8 @@ For a range format (long) forecast you need
 \item \code{prediction}: the quantile forecasts
 \item \code{boundary}: values should be either "lower" or "upper", depending
 on whether the prediction is for the lower or upper bound of a given range
-\item \code{range} the range for which a forecast was made. For a 50\%\% interval
-the range should be 50. The forecast for the 25\%\% quantile should have
+\item \code{range} the range for which a forecast was made. For a 50\% interval
+the range should be 50. The forecast for the 25\% quantile should have
 the value in the \code{prediction} column, the value of \code{range}
 should be 50 and the value of \code{boundary} should be "lower".
 If you want to score the median (i.e. \code{range = 0}), you still

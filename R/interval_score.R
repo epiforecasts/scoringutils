@@ -16,7 +16,7 @@
 #' To improve usability, the user is asked to provide an interval range in
 #' percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 #' prediction interval. Correspondingly, the user would have to provide the
-#' 5%% and 95%% quantiles (the corresponding alpha would then be 0.1).
+#' 5% and 95% quantiles (the corresponding alpha would then be 0.1).
 #' No specific distribution is assumed,
 #' but the range has to be symmetric (i.e you can't use the 0.1 quantile
 #' as the lower bound and the 0.7 quantile as the upper).

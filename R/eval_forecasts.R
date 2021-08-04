@@ -58,8 +58,8 @@
 #'   - `prediction`: the quantile forecasts
 #'   - `boundary`: values should be either "lower" or "upper", depending
 #'   on whether the prediction is for the lower or upper bound of a given range
-#'   - `range` the range for which a forecast was made. For a 50%% interval
-#'   the range should be 50. The forecast for the 25%% quantile should have
+#'   - `range` the range for which a forecast was made. For a 50% interval
+#'   the range should be 50. The forecast for the 25% quantile should have
 #'   the value in the `prediction` column, the value of `range`
 #'   should be 50 and the value of `boundary` should be "lower".
 #'   If you want to score the median (i.e. `range = 0`), you still
@@ -99,7 +99,7 @@
 #' controls how the interval scores for different intervals are summed up. This
 #' should be a logical (default is `FALSE`) that indicates whether or not
 #' to count the median twice when summarising. This would conceptually treat the
-#' median as a 0\% prediction interval, where the median is the lower as well as
+#' median as a 0% prediction interval, where the median is the lower as well as
 #' the upper bound. The alternative is to treat the median as a single quantile
 #' forecast instead of an interval. The interval score would then
 #' be better understood as an average of quantile scores.)
