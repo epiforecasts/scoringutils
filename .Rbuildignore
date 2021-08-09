@@ -5,10 +5,9 @@
 ^LICENSE\.md$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
-^NEWS.md
 ^R/sandbox\.R$
-^Readme.md
-^Readme.Rmd
+^README.Rmd
+^_pkgdown.yml$
 ^doc$
 ^Meta$
 ^_pkgdown\.yml$
