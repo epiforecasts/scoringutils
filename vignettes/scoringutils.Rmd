@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules
 that make it simple to score forecasts against the true observed values.
-Predictions can either be automatically scored from a `data.frame` using the function `eval_forecasts`. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework. 
+Predictions can either be automatically scored from a `data.frame` using the function `eval_forecasts()`. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework. 
 
 Predictions can be handled in various formats: `scoringutils` can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary. 
 
@@ -29,7 +29,7 @@ In addition to automatic scoring, `scoringutils` offers a variety of plots and v
 
 # Scoring Forecasts Automatically
 
-Most of the time, the `eval_forecasts` function will be able to do the entire evaluation for you. The idea is simple, yet flexible. 
+Most of the time, the `eval_forecasts()` function will be able to do the entire evaluation for you. The idea is simple, yet flexible. 
 
 All you need to do is to pass in a `data.frame` that has a column called `prediction` and one called `true_value`. Depending on the exact input format, additional columns like `sample`, `quantile` or `range` and `boundary` are needed. Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. In this case, we would have additional columns called for example `model`, `date`, `forecast_date`, `forecast_horizon` and `location`. 
 
@@ -44,7 +44,6 @@ Here is an example of an evaluation using the example data included in the packa
 
 ```{r}
 library(scoringutils)
-library(data.table)
 ```
 
 ```{r}
@@ -117,7 +116,7 @@ We can also visualise metrics using a heatmap:
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
                              summarise_by = c("model", "horizon"))
-scores <- scores[, horizon := as.factor(horizon)]
+scores$horizon <- as.factor(scores$horizon)
 scoringutils::score_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
@@ -125,7 +124,7 @@ scoringutils::score_heatmap(scores,
 
 ### Expected Input Formats
 
-The `eval_forecasts` function is designed to work with various different input formats. The following formats are currently supported: 
+The `eval_forecasts()` function is designed to work with various different input formats. The following formats are currently supported: 
 
 quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range. 
 
@@ -260,7 +259,7 @@ Null hypothesis will often be rejected outright.
 
 
 ## Continuous Ranked Probability Score (CRPS)
-Wrapper around the `crps_sample` function from the
+Wrapper around the `crps_sample()` function from the
 `scoringRules` package. For more information look at the manuals from the
 `scoringRules` package. The function can be used for continuous as well as 
 integer valued forecasts. Smaller values are better. 
@@ -274,7 +273,7 @@ crps(true_values, predictions)
 
 
 ## Dawid-Sebastiani Score (DSS)
-Wrapper around the `dss_sample` function from the
+Wrapper around the `dss_sample()` function from the
 `scoringRules` package. For more information look at the manuals from the
 `scoringRules` package. The function can be used for continuous as well as 
 integer valued forecasts. Smaller values are better. 
@@ -286,7 +285,7 @@ dss(true_values, predictions)
 ```
 
 ## Log Score
-Wrapper around the `log_sample` function from the
+Wrapper around the `log_sample()` function from the
 `scoringRules` package. For more information look at the manuals from the
 `scoringRules` package. The function should not be used for integer valued 
 forecasts. While Log Scores are in principle possible for integer valued 
