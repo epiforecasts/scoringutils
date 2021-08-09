@@ -131,10 +131,38 @@
     <div id="scoringutils-017" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scoringutils-017" class="anchor" aria-hidden="true"></a>scoringutils 0.1.7</h2>
+<div id="feature-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#feature-updates" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+<ul><li>added a function, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> that runs pairwise comparisons between models on the output of <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code>
+</li>
+<li>added functionality to compute relative skill within <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code>
+</li>
+<li>added a function to visualise pairwise comparisons</li>
+</ul></div>
+<div id="package-updates-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#package-updates-1" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<ul><li>The WIS definition change introduced in version 0.1.5 was partly corrected such that the difference in weighting is only introduced when summarising over scores from different interval ranges</li>
+</ul></div>
 </div>
-    <div id="scoringutils-016" class="section level2">
+    <div id="scoringutils-01" class="section level2">
 <h2 class="hasAnchor">
-<a href="#scoringutils-016" class="anchor" aria-hidden="true"></a>scoringutils 0.1.6</h2>
+<a href="#scoringutils-01" class="anchor" aria-hidden="true"></a>scoringutils 0.1.</h2>
+<div id="feature-updates-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#feature-updates-1" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+<ul><li>
+<code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> can now handle a separate forecast and truth data set as as input</li>
+<li>
+<code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> now supports scoring point forecasts along side quantiles in a quantile-based format. Currently the only metric used is the absolute error</li>
+</ul></div>
+<div id="package-updates-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#package-updates-2" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<ul><li>Many functions, especially <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> got a major rewrite. While functionality should be unchanged, the code should now be easier to maintain</li>
+<li>Some of the data-handling functions got renamed, but old names are supported as well for now.</li>
+</ul></div>
 </div>
     <div id="scoringutils-015" class="section level2">
 <h2 class="hasAnchor">
