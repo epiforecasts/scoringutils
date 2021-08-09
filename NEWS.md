@@ -1,10 +1,12 @@
 ## scoringutils 0.1.7.2
+
 ### Package updates
 - minor bug fixes (previously, 'interval_score' needed to be among the 
 selected metrics)
 
 ## scoringutils 0.1.7
-## Feature updates
+
+### Feature updates
 - added a function, `pairwise_comparison()` that runs pairwise comparisons 
 between models on the output of `eval_forecasts()`
 - added functionality to compute relative skill within `eval_forecasts()`
@@ -15,8 +17,9 @@ between models on the output of `eval_forecasts()`
 such that the difference in weighting is only introduced when summarising 
 over scores from different interval ranges
 
-## scoringutils 0.1.6
-## Feature updates
+## scoringutils 0.1.
+
+### Feature updates
 - `eval_forecasts()` can now handle a separate forecast and truth data set as 
 as input
 - `eval_forecasts()` now supports scoring point forecasts along side quantiles
@@ -30,6 +33,7 @@ as well for now.
 
 
 ## scoringutils 0.1.5
+
 ### Package updates
 - changed the default definition of the weighted interval score. Previously, 
 the median prediction was counted twice, but is no only counted once. If you 
