@@ -117,8 +117,12 @@ eval_forecasts_quantile <- function(data,
     quantile_data[, quantile_coverage := (true_value <= prediction)]
   }
 
-  # merge only if something was computed
-  if (any(c("aem", "quantile_coverage") %in% metrics)) {
+  # merge metrics computed on quantile data (i.e. aem, quantile_coverage) back
+  # into metrics computed on range data. One important side effect of this is
+  # that it controls whether we count the median twice for the interval score
+  # (row is then duplicated) or only once. However, merge only needs to happen
+  # if we computed either the interval score or the aem or quantile coverage
+  if (any(c("aem", "interval_score", "quantile_coverage") %in% metrics)) {
     # delete unnecessary columns before merging back
     keep_cols <- unique(c(by, "quantile", "aem", "quantile_coverage",
                           "boundary", "range"))
@@ -183,7 +187,7 @@ eval_forecasts_quantile <- function(data,
   }
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
-  if (!("range" %in% summarise_by)) {
+  if (!("range" %in% summarise_by) & ("coverage" %in% colnames(res))) {
     res[, c("coverage") := NULL]
   }
   if (!("quantile" %in% summarise_by) & "quantile_coverage" %in% names(res)) {
