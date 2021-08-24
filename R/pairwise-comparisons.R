@@ -341,7 +341,7 @@ compare_two_models <- function(scores,
   scores <- data.table::as.data.table(scores)
 
   if (!("model" %in% names(scores))) {
-    stop("pairwise compairons require a column called 'model'")
+    stop("pairwise comparisons require a column called 'model'")
   }
 
   # select only columns in c(by, var)
