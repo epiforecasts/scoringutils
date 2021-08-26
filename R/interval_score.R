@@ -106,12 +106,12 @@ interval_score <- function(true_values,
   score <- sharpness + underprediction + overprediction
 
   if (separate_results) {
-    return(list(interval_score = score,
-                sharpness = sharpness,
-                underprediction = underprediction,
-                overprediction = overprediction))
+    return_(list(interval_score = score,
+                 sharpness = sharpness,
+                 underprediction = underprediction,
+                 overprediction = overprediction))
   } else {
-    return(score)
+    return_(score)
   }
 }
 

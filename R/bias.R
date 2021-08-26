@@ -100,7 +100,7 @@ bias <- function(true_values, predictions) {
 
   if (continuous_predictions) {
     res <- 1 - 2 * P_x
-    return(res)
+    return_(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
     P_xm1 <- vapply(seq_along(true_values),
@@ -110,7 +110,7 @@ bias <- function(true_values, predictions) {
                     .0)
 
     res <- 1 - (P_x + P_xm1)
-    return(res)
+    return_(res)
   }
 }
 
@@ -195,7 +195,7 @@ quantile_bias <- function(range, lower, upper,
 
     # deal with the point forecast case where inputs may be NA
     if (length(range) == 0 | length(lower_predictions) == 0 | length(upper_predictions) == 0) {
-      return(NA_real_)
+      return_(NA_real_)
     }
 
   }
@@ -217,23 +217,20 @@ quantile_bias <- function(range, lower, upper,
 
   if (true_value == median_prediction) {
     bias <- 0
-    return(bias)
   } else if (true_value < min(lower_predictions)) {
     lower <- 0
     bias <- 1 - 2 * lower
-    return(bias)
   } else if (true_value > max(upper_predictions)) {
     upper <- 1
     bias <- 1 - 2 * upper
-    return(bias)
   } else if (any(lower_predictions >= true_value)) {
     lower <- max(lower_quantiles[lower_predictions <= true_value])
     bias <- 1 - 2 * lower
-    return(bias)
   } else if (any(upper_predictions <= true_value)){
     upper <- min(upper_quantiles[upper_predictions >= true_value])
     bias <- 1 - 2 * upper
-    return(bias)
   }
+
+  return_(bias)
 }
 

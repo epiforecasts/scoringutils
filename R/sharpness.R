@@ -44,5 +44,5 @@ sharpness <- function (predictions) {
   # ============================================
 
   sharpness <- apply(predictions, MARGIN = 1, mad)
-  return(sharpness)
+  return_(sharpness)
 }

@@ -96,7 +96,7 @@ pairwise_comparison <- function(scores,
                                                            summarise_by = summarise_by)
                     })
 
-  out <- data.table::rbindlist(results)
+  return_(data.table::rbindlist(results))
 }
 
 
@@ -172,7 +172,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # also delete skill metric from output
   out[, eval(rel_skill_metric) := NULL]
 
-  return(out)
+  return_(out)
 }
 
 
@@ -210,7 +210,7 @@ pairwise_comparison_one_group <- function(scores,
 
   # if there aren't enough models to do any comparison, return NULL
   if (length(models) < 2) {
-    return(NULL)
+    return_(NULL)
   }
 
   # the overlap is obtained by merging the available data for one model with
@@ -303,7 +303,7 @@ pairwise_comparison_one_group <- function(scores,
   data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
                        new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
 
-  return(out)
+  return_(out)
 }
 
 
@@ -355,7 +355,7 @@ compare_two_models <- function(scores,
 unique(overlap)
 
   if (nrow(overlap) == 0) {
-    return(list(ratio = NA_real_, pval = NA_real_))
+    return_(list(ratio = NA_real_, pval = NA_real_))
   }
 
   values_x <- overlap[[paste0(metric, ".x")]]
@@ -381,8 +381,8 @@ unique(overlap)
     # alternative: do a paired t-test on ranks?
     pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
   }
-  return(list(mean_scores_ratio = ratio,
-              pval = pval))
+  return_(list(mean_scores_ratio = ratio,
+               pval = pval))
 }
 
 
@@ -471,7 +471,7 @@ plot_pairwise_comparison <- function(comparison_result,
                  right = FALSE,
                  labels = plot_scales)
     # scale[is.na(scale)] <- 0
-    return(as.numeric(as.character(scale)))
+    return_(as.numeric(as.character(scale)))
   }
 
   if (type[1] == "together") {
@@ -646,7 +646,7 @@ plot_pairwise_comparison <- function(comparison_result,
     }
   }
 
-  return(plot)
+  return_(plot)
 }
 
 

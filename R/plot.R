@@ -91,18 +91,18 @@ score_table <- function(summarised_scores,
   # write scale functions that can be used in data.table
   scale <- function(x) {
     scaled <- x / sd(x, na.rm = TRUE)
-    return(scaled)
+    return_(scaled)
   }
   scale_min_good <- function(x) {
     scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
-    return(scaled)
+    return_(scaled)
   }
   scale_p_val <- function(x) {
     out <- rep(0, length(x))
     out[x < 0.1] <- 0.2
     out[x < 0.05] <- 0.5
     out[x < 0.01] <- 1
-    return(out)
+    return_(out)
   }
 
   # pivot longer and add scaled values
@@ -160,7 +160,7 @@ score_table <- function(summarised_scores,
     }
   }
 
-  return(plot)
+  return_(plot)
 
 }
 
@@ -219,7 +219,7 @@ correlation_plot <- function(scores,
   # define function to obtain upper triangle of matrix
   get_lower_tri <- function(cormat){
     cormat[lower.tri(cormat)] <- NA
-    return(cormat)
+    return_(cormat)
   }
 
   # get plot data.frame
@@ -253,7 +253,7 @@ correlation_plot <- function(scores,
     ggplot2::coord_cartesian(expand = FALSE) +
     ggplot2::labs(title = "Correlation between metrics")
 
-  return(plot)
+  return_(plot)
 }
 
 
@@ -353,7 +353,7 @@ wis_components <- function(scores,
     }
   }
 
-  return(plot)
+  return_(plot)
 
 }
 
@@ -452,7 +452,7 @@ range_plot <- function(scores,
     }
   }
 
-  return(plot)
+  return_(plot)
 }
 
 
@@ -537,7 +537,7 @@ score_heatmap <- function(scores,
         ggplot2::facet_grid(facet_formula, scales = scales)
     }
   }
-  return(plot)
+  return_(plot)
 }
 
 
@@ -654,7 +654,7 @@ plot_predictions <- function(data = NULL,
       if (verbose) {
         warning("After attempting to merge, only an empty data.table was left")
       }
-      return(data)
+      return_(data)
     }
   }
 
@@ -670,7 +670,7 @@ plot_predictions <- function(data = NULL,
     for (expr in filter_list) {
       data <- data[eval(parse(text = expr)), ]
     }
-    return(data)
+    return_(data)
   }
 
   truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
@@ -719,7 +719,7 @@ plot_predictions <- function(data = NULL,
 
   # if there isn't any data to plot, return NULL
   if (nrow(intervals) == 0) {
-    return(NULL)
+    return_(NULL)
   }
 
   # pivot wider and convert range to a factor
@@ -775,7 +775,7 @@ plot_predictions <- function(data = NULL,
                          ggplot2::aes(y = true_value, colour = "actual"),
                          lwd = 0.2)
   }
-  return(plot)
+  return_(plot)
 }
 
 
@@ -849,7 +849,7 @@ interval_coverage <- function(summarised_scores,
     }
   }
 
-  return(p1)
+  return_(p1)
 }
 
 
@@ -923,7 +923,7 @@ quantile_coverage <- function(summarised_scores,
     }
   }
 
-  return(p2)
+  return_(p2)
 
 }
 
@@ -1059,7 +1059,7 @@ show_avail_forecasts <- function(data,
     }
   }
 
-  return(plot)
+  return_(plot)
 }
 
 

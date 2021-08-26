@@ -190,5 +190,5 @@ eval_forecasts_quantile <- function(data,
     res[, c("quantile_coverage") := NULL]
   }
 
-  return(res)
+  return_(res)
 }

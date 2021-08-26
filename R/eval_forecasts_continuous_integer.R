@@ -169,5 +169,5 @@ eval_forecasts_sample <- function(data,
                 pit_plots = pit_histograms)
   }
 
-  return(res)
+  return_(res)
 }

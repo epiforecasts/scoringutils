@@ -52,8 +52,10 @@ logs <- function(true_values, predictions) {
 
   # ============================================
 
-  scoringRules::logs_sample(y = true_values,
-                            dat = predictions)
+  return_(
+    scoringRules::logs_sample(y = true_values,
+                              dat = predictions)
+  )
 }
 
 
@@ -103,8 +105,10 @@ dss <- function(true_values, predictions) {
   }
   # ============================================
 
-  scoringRules::dss_sample(y = true_values,
-                           dat = predictions)
+  return_(
+    scoringRules::dss_sample(y = true_values,
+                             dat = predictions)
+  )
 }
 
 
@@ -158,6 +162,8 @@ crps <- function(true_values, predictions) {
   }
   # ============================================
 
-  scoringRules::crps_sample(y = true_values,
-                            dat = predictions)
+  return_(
+    scoringRules::crps_sample(y = true_values,
+                              dat = predictions)
+  )
 }

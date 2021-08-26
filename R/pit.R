@@ -220,7 +220,7 @@ pit <- function(true_values,
     }
   }
 
-  return(out)
+  return_(out)
 }
 
 
@@ -308,7 +308,7 @@ pit_df <- function(data,
     out$u <- res$u
   }
 
-  return(out)
+  return_(out)
 }
 
 
@@ -377,7 +377,7 @@ pit_df_fast <- function(data,
                    value.name = "prediction")
 
 
-  return(data)
+  return_(data)
 }
 
 
@@ -421,7 +421,7 @@ hist_PIT <- function(PIT_samples,
     ggplot2::labs(caption = paste0("p-value of Andersen-Darling test for uniformity: ",
                                    round(caption, 3)))
 
-  return(hist_PIT)
+  return_(hist_PIT)
 }
 
 
@@ -458,6 +458,6 @@ hist_PIT_quantile <- function(PIT_samples,
     ggplot2::ylab("Frequency") +
     ggplot2::labs()
 
-  return(hist_PIT)
+  return_(hist_PIT)
 }
 

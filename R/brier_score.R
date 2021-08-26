@@ -56,7 +56,7 @@ brier_score <- function (true_values, predictions) {
   # ============================================
 
   brierscore <- (sum((true_values - predictions)^2) ) / n
-  return(brierscore)
+  return_(brierscore)
 }
 
 

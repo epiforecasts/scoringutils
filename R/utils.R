@@ -22,7 +22,7 @@ check_not_null <- function(...) {
                   calling_function, "'"))
     }
   }
-  return(invisible(NULL))
+  return_(invisible(NULL))
 }
 
 
@@ -61,7 +61,7 @@ check_equal_length <- function(...,
                 "' should have the same length (or length one). Arguments have the following lengths: ",
                 paste0(lengths, collapse = ", ")))
   }
-  return(invisible(NULL))
+  return_(invisible(NULL))
 }
 
 #' @title Calculate Geometric Mean
@@ -72,7 +72,7 @@ check_equal_length <- function(...,
 #' @keywords internal
 geom_mean_helper <- function(x) {
   geom_mean <- exp(mean(log(x[!is.na(x)])))
-  return(geom_mean)
+  return_(geom_mean)
 }
 
 
@@ -141,7 +141,7 @@ list_of_avail_metrics <- function() {
                          "underprediction", "overprediction", "relative_skill",
                          "scaled_rel_skill")
 
-  return(available_metrics)
+  return_(available_metrics)
 }
 
 
@@ -160,9 +160,9 @@ list_of_avail_metrics <- function() {
 extract_from_list <- function(list, what) {
   out <- lapply(list,
                 FUN = function(list_element) {
-                  return(list_element[[what]])
+                  return_(list_element[[what]])
                 })
-  return(out)
+  return_(out)
 }
 
 
@@ -187,7 +187,7 @@ update_list <- function(defaults = list(), optional = list()) {
   } else {
     updated <- defaults
   }
-  return(updated)
+  return_(updated)
 }
 
 
@@ -226,7 +226,7 @@ permutation_test <- function(scores1,
   # abs needs to be removed here (messes with one sided vs two-sided)
   pVal <- (1 + sum(testStat_permuted >= testStat_observed))/(nPermutation + 1)
   # plus ones to make sure p-val is never 0?
-  return(pVal)
+  return_(pVal)
 }
 
 
@@ -246,6 +246,6 @@ delete_columns <- function(df, cols_to_delete) {
   if (length(delete_columns) > 0) {
     df <- unique(df[, eval(delete_columns) := NULL])
   }
-  return(df)
+  return_(df)
 }
 

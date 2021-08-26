@@ -45,6 +45,7 @@ eval_forecasts_binary <- function(data,
                by = summarise_by]
 
   }
+  return_(res)
 }
 
 

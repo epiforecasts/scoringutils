@@ -228,7 +228,7 @@ eval_forecasts <- function(data = NULL,
       if (verbose) {
         warning("After attempting to merge, only an empty data.table was left")
       }
-      return(data)
+      return_(data)
     }
   }
 
@@ -346,7 +346,7 @@ eval_forecasts <- function(data = NULL,
     if (verbose) {
       message("After removing all NA true values and predictions, there were no observations left")
     }
-    return(data)
+    return_(data)
   }
 
 
@@ -360,7 +360,7 @@ eval_forecasts <- function(data = NULL,
                                  sd = sd,
                                  summarised = summarised,
                                  verbose = verbose)
-    return(res)
+    return_(res)
   }
 
   # Score quantile predictions -------------------------------------------------
@@ -378,7 +378,7 @@ eval_forecasts <- function(data = NULL,
                                    compute_relative_skill = compute_relative_skill,
                                    rel_skill_metric = rel_skill_metric,
                                    baseline = baseline)
-    return(res)
+    return_(res)
   }
 
 
@@ -396,7 +396,7 @@ eval_forecasts <- function(data = NULL,
                                  pit_plots = pit_plots,
                                  summarised = summarised,
                                  verbose = verbose)
-    return(res)
+    return_(res)
   }
 }
 

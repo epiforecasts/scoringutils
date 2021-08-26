@@ -31,7 +31,7 @@ ae_median_sample <- function(true_values, predictions) {
 
   ae_median <- abs(true_values - median_predictions)
 
-  return(ae_median)
+  return_(ae_median)
 }
 
 
@@ -66,7 +66,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
                                verbose = TRUE) {
   if (!is.null(quantiles)) {
     if (!any(quantiles == 0.5) && !any(is.na(quantiles))) {
-      return(NA_real_)
+      return_(NA_real_)
       if (verbose) {
         warning("in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?")
       }
@@ -75,7 +75,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
     predictions <- predictions[quantiles == 0.5]
   }
   abs_error_median <- abs(true_values - predictions)
-  return(abs_error_median)
+  return_(abs_error_median)
 }
 
 
@@ -101,5 +101,5 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
 
 
 abs_error <- function(true_values, predictions) {
-  return(abs(true_values - predictions))
+  return_(abs(true_values - predictions))
 }
