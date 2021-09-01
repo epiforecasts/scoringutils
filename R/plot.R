@@ -779,7 +779,7 @@ plot_predictions <- function(data = NULL,
     truth_limits <-
       truth_data[, list(min_truth = min(true_value),
                         max_truth = max(true_value)),
-                 by = facet_by]
+                 by = intersect(facet_by, colnames(truth_data))]
     truth_limits <-
       truth_limits[, min_truth_scaled := min_truth * ymin_multiple_data]
     truth_limits <-
@@ -790,7 +790,12 @@ plot_predictions <- function(data = NULL,
                        max_fc = max(prediction)),
                 by = facet_by]
     ## merge min/max
-    limits <- merge(fc_limits, truth_limits, by = facet_by)
+    if (length(intersect(facet_by, colnames(truth_data))) > 0) {
+      limits <- merge(fc_limits, truth_limits,
+                      by = intersect(facet_by, colnames(truth_data)))
+    } else {
+      limits <- cbind(fc_limits, truth_limits)
+    }
     ## determins min/max to plot
     ## max_fc > scaled max -> max is scaled_max
     ## max_fc < scaled max -> max is max(max_truth, max_fc)
