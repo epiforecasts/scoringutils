@@ -279,7 +279,7 @@ pairwise_comparison_one_group <- function(scores,
     # merge back to retain the ratios even for comparisons with the baseline
     result <- merge(result, result_without_baseline, all.x = TRUE)
     # avoid mixture of NA and NaN which can cause problems downstream
-    result[is.na(theta), theta := NaN]
+    result[is.na(theta), theta := NA_real_]
     # remove NAs form merge in the thetas
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
