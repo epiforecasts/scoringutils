@@ -29,7 +29,7 @@ to alpha.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 4, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
-\code{FALSE.}}
+\code{FALSE}.}
 
 \item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
 parts of the interval score (sharpness, penalties for over- and

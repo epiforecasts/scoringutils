@@ -19,41 +19,35 @@
 #' The package also has a lot of default visualisation based on the output
 #' created by [eval_forecasts()].
 #'
-#' \itemize{
-#' \item [score_table()]
-#' \item [correlation_plot()]
-#' \item [wis_components()]
-#' \item [range_plot()]
-#' \item [score_heatmap()]
-#' \item [plot_predictions()]
-#' \item [interval_coverage()]
-#' \item [quantile_coverage()]
-#' }
+#' - [score_table()]
+#' - [correlation_plot()]
+#' - [wis_components()]
+#' - [range_plot()]
+#' - [score_heatmap()]
+#' - [plot_predictions()]
+#' - [interval_coverage()]
+#' - [quantile_coverage()]
 #'
 #' Alternatively, the following functions can be accessed directly:
 #'
-#' \itemize{
-#' \item [brier_score()]
-#' \item [pit()]
-#' \item [bias()]
-#' \item [quantile_bias()]
-#' \item [sharpness()]
-#' \item [crps()]
-#' \item [logs()]
-#' \item [dss()]
-#' \item [ae_median_sample()]
-#' }
+#' - [brier_score()]
+#' - [pit()]
+#' - [bias()]
+#' - [quantile_bias()]
+#' - [sharpness()]
+#' - [crps()]
+#' - [logs()]
+#' - [dss()]
+#' - [ae_median_sample()]
 #'
 #' Predictions can be evaluated in a lot of different formats. If you want to
 #' convert from one format to the other, the following helper functions can
 #' do that for you:
 #'
-#' \itemize{
-#' \item [sample_to_range_long()]
-#' \item [sample_to_quantile()]
-#' \item [quantile_to_range_long()]
-#' \item [range_long_to_quantile()]
-#' }
+#' - [sample_to_range_long()]
+#' - [sample_to_quantile()]
+#' - [quantile_to_range_long()]
+#' - [range_long_to_quantile()]
 #'
 #' @docType package
 #' @name scoringutils
