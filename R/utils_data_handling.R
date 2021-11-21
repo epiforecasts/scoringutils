@@ -106,7 +106,7 @@ range_wide_to_long <- function(data) {
     data[, range := as.numeric(gsub("^.*?_","", range))]
   }
 
-  return(data)
+  return(data[])
 }
 
 
