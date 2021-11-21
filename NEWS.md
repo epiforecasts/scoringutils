@@ -1,8 +1,12 @@
+# News
+
 ## scoringutils 0.1.7.2
 
 ### Package updates
 - minor bug fixes (previously, 'interval_score' needed to be among the 
 selected metrics)
+- all data.tables are now returned as `table[]` rather than as `table`, 
+such that they don't have to be called twice to display the contents. 
 
 ## scoringutils 0.1.7
 
