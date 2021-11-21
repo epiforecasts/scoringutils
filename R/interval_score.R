@@ -34,7 +34,7 @@
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
-#' `FALSE.`
+#' `FALSE`.
 #' @param separate_results if `TRUE` (default is `FALSE`), then the separate
 #' parts of the interval score (sharpness, penalties for over- and
 #' under-prediction get returned as separate elements of a list). If you want a
