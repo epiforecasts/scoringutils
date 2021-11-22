@@ -6,9 +6,8 @@
 #' comparisons is inspired by an implementation by Johannes Bracher.
 #'
 #' The implementation of the permutation test follows the function
-#' permutationTest from the `surveillance` package by Michael Höhle,
-#' [permutationTest()][surveillance::permutationTest()] from the `surveillance`
-#' package by Michael Höhle, Andrea Riebler and Michaela Paul.
+#' `permutationTest` from the `surveillance` package by Michael Höhle,
+#' Andrea Riebler and Michaela Paul.
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
 #' [eval_forecasts()]

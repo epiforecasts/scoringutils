@@ -51,9 +51,8 @@ Make pairwise comparisons between models. The code for the pairwise
 comparisons is inspired by an implementation by Johannes Bracher.
 
 The implementation of the permutation test follows the function
-permutationTest from the \code{surveillance} package by Michael Höhle,
-\link[surveillance:permutationTest]{permutationTest()} from the \code{surveillance}
-package by Michael Höhle, Andrea Riebler and Michaela Paul.
+\code{permutationTest} from the \code{surveillance} package by Michael Höhle,
+Andrea Riebler and Michaela Paul.
 }
 \examples{
 df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
