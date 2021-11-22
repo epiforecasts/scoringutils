@@ -15,7 +15,7 @@ quantiles in a second vector, \code{quantiles}.}
 \item{quantiles}{numeric vector that denotes the quantile for the values
 in \code{predictions}. Only those predictions where \code{quantiles == 0.5} will
 be kept. If \code{quantiles} is \code{NULL}, then all \code{predictions} and
-\code{true_values} will be used (this is then the same as \code{\link[=absolute_error]{absolute_error()}})}
+\code{true_values} will be used (this is then the same as \code{\link[=abs_error]{abs_error()}})}
 
 \item{verbose}{logical, return a warning is something unexpected happens}
 }
