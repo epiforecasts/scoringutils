@@ -321,13 +321,13 @@ eval_forecasts <- function(data = NULL,
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data) |
       "quantile" %in% names(data) | "range" %in% names(data)) {
     prediction_type <- "quantile"
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+  } else if (all.equal(data$prediction, as.integer(data$prediction))) {
     prediction_type <- "integer"
   } else {
     prediction_type <- "continuous"
   }
 
-  if (all.equal(data$true_value, as.integer(data$true_value)) == TRUE) {
+  if (all.equal(data$true_value, as.integer(data$true_value))) {
     if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
       target_type = "binary"
     } else {

@@ -26,7 +26,7 @@ for the randomised PIT. Usually not needed.}
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
 
-\item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
+\item{num_bins}{the number of bins in the PIT histogram (if \code{plot = TRUE})
 If not given, the square root of n will be used}
 
 \item{verbose}{if \code{TRUE} (default is \code{FALSE}) more error messages are printed.
@@ -38,7 +38,7 @@ a list with the following components:
 \item \code{data}: the input data.frame (not including rows where prediction is \code{NA}),
 with added columns \code{pit_p_val} and \code{pit_sd}
 \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-if \code{plot == TRUE}. Call
+if \code{plot = TRUE}. Call
 \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
 (randomised) PIT. Only returned if \code{full_output = TRUE}
