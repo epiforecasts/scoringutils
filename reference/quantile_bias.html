@@ -34,7 +34,7 @@ for integer and continuous forecasts."><!-- mathjax --><script src="https://cdnj
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -49,7 +49,7 @@ for integer and continuous forecasts."><!-- mathjax --><script src="https://cdnj
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Determines Bias of Quantile Forecasts</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/bias.R"><code>R/bias.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/bias.R" class="external-link"><code>R/bias.R</code></a></small>
     <div class="hidden name"><code>quantile_bias.Rd</code></div>
     </div>
 
@@ -61,25 +61,29 @@ for integer and continuous forecasts.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">quantile_bias</span><span class="op">(</span><span class="va">range</span>, <span class="va">lower</span>, <span class="va">upper</span>, <span class="va">true_value</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>range</th>
-      <td><p>vector of corresponding size with information about the width
-of the central prediction interval</p></td>
-    </tr><tr><th>lower</th>
-      <td><p>vector of length corresponding to the number of central
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>range</dt>
+<dd><p>vector of corresponding size with information about the width
+of the central prediction interval</p></dd>
+<dt>lower</dt>
+<dd><p>vector of length corresponding to the number of central
 prediction intervals that holds predictions for the lower bounds of a
-prediction interval</p></td>
-    </tr><tr><th>upper</th>
-      <td><p>vector of length corresponding to the number of central
+prediction interval</p></dd>
+<dt>upper</dt>
+<dd><p>vector of length corresponding to the number of central
 prediction intervals that holds predictions for the upper bounds of a
-prediction interval</p></td>
-    </tr><tr><th>true_value</th>
-      <td><p>a single true value</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+prediction interval</p></dd>
+<dt>true_value</dt>
+<dd><p>a single true value</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>scalar with the quantile bias for a single quantile prediction</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>For quantile forecasts, bias is measured as</p>
 <p>$$
 B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) 1( x_t \leq q_{t, 0.5}) \\
@@ -103,21 +107,25 @@ observed true value, and this metric coincides with the one for
 continuous forecasts.</p>
 <p>Bias can assume values between
 -1 and 1 and is 0 ideally.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
+    </div>
+    <div id="author">
+    <h2>Author</h2>
     <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6341.000</span>, <span class="fl">6329.500</span>, <span class="fl">6087.014</span>, <span class="fl">5703.500</span>,</span>
+<span class="r-in"><span class="va">lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6341.000</span>, <span class="fl">6329.500</span>, <span class="fl">6087.014</span>, <span class="fl">5703.500</span>,</span>
 <span class="r-in">           <span class="fl">5451.000</span>, <span class="fl">5340.500</span>, <span class="fl">4821.996</span>, <span class="fl">4709.000</span>,</span>
 <span class="r-in">           <span class="fl">4341.500</span>, <span class="fl">4006.250</span>, <span class="fl">1127.000</span>, <span class="fl">705.500</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6341.000</span>, <span class="fl">6352.500</span>, <span class="fl">6594.986</span>, <span class="fl">6978.500</span>,</span>
+<span class="r-in"><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6341.000</span>, <span class="fl">6352.500</span>, <span class="fl">6594.986</span>, <span class="fl">6978.500</span>,</span>
 <span class="r-in">           <span class="fl">7231.000</span>, <span class="fl">7341.500</span>, <span class="fl">7860.004</span>, <span class="fl">7973.000</span>,</span>
 <span class="r-in">           <span class="fl">8340.500</span>, <span class="fl">8675.750</span>, <span class="fl">11555.000</span>, <span class="fl">11976.500</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span>, <span class="fl">90</span>, <span class="fl">95</span>, <span class="fl">98</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span>, <span class="fl">90</span>, <span class="fl">95</span>, <span class="fl">98</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">true_value</span> <span class="op">&lt;-</span> <span class="fl">8062</span></span>
 <span class="r-in"></span>
@@ -126,6 +134,7 @@ continuous forecasts.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.8</span>
 <span class="r-in"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

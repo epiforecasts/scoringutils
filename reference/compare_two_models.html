@@ -40,7 +40,7 @@ different forecast targets."><!-- mathjax --><script src="https://cdnjs.cloudfla
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -55,7 +55,7 @@ different forecast targets."><!-- mathjax --><script src="https://cdnjs.cloudfla
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compare Two Models Based on Subset of Common Forecasts</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/pairwise-comparisons.R"><code>R/pairwise-comparisons.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
     <div class="hidden name"><code>compare_two_models.Rd</code></div>
     </div>
 
@@ -73,35 +73,40 @@ different forecast targets.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">compare_two_models</span><span class="op">(</span><span class="va">scores</span>, <span class="va">name_model1</span>, <span class="va">name_model2</span>, <span class="va">metric</span>, <span class="va">test_options</span>, <span class="va">by</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>scores</th>
-      <td><p>A data.frame of unsummarised scores as produced by
-<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></td>
-    </tr><tr><th>name_model1</th>
-      <td><p>character, name of the first model</p></td>
-    </tr><tr><th>name_model2</th>
-      <td><p>character, name of the model to compare against</p></td>
-    </tr><tr><th>metric</th>
-      <td><p>A character vector of length one with the metric to do
-the comparison on.</p></td>
-    </tr><tr><th>test_options</th>
-      <td><p>list with options to pass down to <code>compare_two_models</code>.
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>scores</dt>
+<dd><p>A data.frame of unsummarised scores as produced by
+<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></dd>
+<dt>name_model1</dt>
+<dd><p>character, name of the first model</p></dd>
+<dt>name_model2</dt>
+<dd><p>character, name of the model to compare against</p></dd>
+<dt>metric</dt>
+<dd><p>A character vector of length one with the metric to do
+the comparison on.</p></dd>
+<dt>test_options</dt>
+<dd><p>list with options to pass down to <code>compare_two_models</code>.
 To change only one of the default options, just pass a list as input with
 the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
-default options).</p></td>
-    </tr><tr><th>by</th>
-      <td><p>character vector of columns to group scoring by. This should be the
+default options).</p></dd>
+<dt>by</dt>
+<dd><p>character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 <code>summarise_by</code> to aggregate the individual scores.
 Also not that the pit will be computed using <code>summarise_by</code>
-instead of <code>by</code></p></td>
-    </tr></table><h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
+instead of <code>by</code></p></dd>
+</dl></div>
+    <div id="author">
+    <h2>Author</h2>
     <p>Johannes Bracher, <a href="mailto:johannes.bracher@kit.edu">johannes.bracher@kit.edu</a></p>
 <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
+    </div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

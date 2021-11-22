@@ -1,7 +1,7 @@
 pandoc: 2.7.3
 pkgdown: 1.9000.9000.9000
-pkgdown_sha: 429aac8401b58b0275b76b045b569c28ad1287ba
+pkgdown_sha: e72fc30f333dc4f50f3f9d1f274fc29d67e34974
 articles:
   scoringutils: scoringutils.html
-last_built: 2021-10-12T11:28Z
+last_built: 2021-11-22T08:18Z
 

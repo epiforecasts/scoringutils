@@ -36,7 +36,7 @@ necessary to work with eval_forecasts."><!-- mathjax --><script src="https://cdn
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -51,7 +51,7 @@ necessary to work with eval_forecasts."><!-- mathjax --><script src="https://cdn
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add relative skill to eval_forecasts()</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/pairwise-comparisons.R"><code>R/pairwise-comparisons.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
     <div class="hidden name"><code>add_rel_skill_to_eval_forecasts.Rd</code></div>
     </div>
 
@@ -72,37 +72,42 @@ necessary to work with <code><a href="eval_forecasts.html">eval_forecasts</a></c
   <span class="va">verbose</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>unsummarised_scores</th>
-      <td><p>unsummarised scores to be passed from
-<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></td>
-    </tr><tr><th>rel_skill_metric</th>
-      <td><p>character string with the name of the metric for which
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>unsummarised_scores</dt>
+<dd><p>unsummarised scores to be passed from
+<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></dd>
+<dt>rel_skill_metric</dt>
+<dd><p>character string with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
-one of interval score, crps or brier score will be used where appropriate</p></td>
-    </tr><tr><th>baseline</th>
-      <td><p>character string with the name of a model. If a baseline is
+one of interval score, crps or brier score will be used where appropriate</p></dd>
+<dt>baseline</dt>
+<dd><p>character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (`NULL`), relative skill will not be scaled with
-respect to a baseline model.</p></td>
-    </tr><tr><th>by</th>
-      <td><p>character vector of columns to group scoring by. This should be the
+respect to a baseline model.</p></dd>
+<dt>by</dt>
+<dd><p>character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 <code>summarise_by</code> to aggregate the individual scores.
 Also not that the pit will be computed using <code>summarise_by</code>
-instead of <code>by</code></p></td>
-    </tr><tr><th>summarise_by</th>
-      <td><p>character vector of columns to group the summary by. By
+instead of <code>by</code></p></dd>
+<dt>summarise_by</dt>
+<dd><p>character vector of columns to group the summary by. By
 default, this is equal to `by` and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 <code>summarise_by</code> is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>print out additional helpful messages (default is TRUE)</p></td>
-    </tr></table></div>
+(and possibly plot) the probability integral transform(pit).</p></dd>
+<dt>verbose</dt>
+<dd><p>print out additional helpful messages (default is TRUE)</p></dd>
+</dl></div>
+    </div>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>

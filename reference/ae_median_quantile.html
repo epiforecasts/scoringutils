@@ -35,7 +35,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -50,7 +50,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Absolute Error of the Median (Quantile-based Version)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/absolute_error.R"><code>R/absolute_error.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/absolute_error.R" class="external-link"><code>R/absolute_error.R</code></a></small>
     <div class="hidden name"><code>ae_median_quantile.Rd</code></div>
     </div>
 
@@ -63,33 +63,40 @@ $$</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>, quantiles <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>true_values</th>
-      <td><p>A vector with the true observed values of size n</p></td>
-    </tr><tr><th>predictions</th>
-      <td><p>numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.</p></td>
-    </tr><tr><th>quantiles</th>
-      <td><p>numeric vector that denotes the quantile for the values
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>true_values</dt>
+<dd><p>A vector with the true observed values of size n</p></dd>
+<dt>predictions</dt>
+<dd><p>numeric vector with predictions, corresponding to the
+quantiles in a second vector, `quantiles`.</p></dd>
+<dt>quantiles</dt>
+<dd><p>numeric vector that denotes the quantile for the values
 in `predictions`. Only those predictions where `quantiles == 0.5` will
 be kept. If `quantiles` is `NULL`, then all `predictions` and
-`true_values` will be used (this is then the same as `absolute_error()`)</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>logical, return a warning is something unexpected happens</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+`true_values` will be used (this is then the same as `absolute_error()`)</p></dd>
+<dt>verbose</dt>
+<dd><p>logical, return a warning is something unexpected happens</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>vector with the scoring values</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.066452797 0.240208955 1.630145378 0.102555397 0.916055119 0.211673553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.860839088 1.503815158 0.047830874 2.075389239 0.152590268 0.352323455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.840906222 0.472142712 0.176563842 0.098207641 1.721851671 2.394926637</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.395497466 1.574105208 0.378798497 0.625981241 0.237725880 0.826770827</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.275181639 0.047625990 0.408546236 0.979480213 0.001981924 1.033269005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.5379126 1.5297234 0.4390133 1.5556039 1.9540704 1.0685284 0.6369278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.1637534 0.9832028 1.3355071 3.0925863 0.7426133 0.2445745 0.1887087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.9721019 0.1828532 1.6682219 1.3091410 1.3222280 0.3425393 1.0884663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 1.9684694 0.2165003 1.8271872 0.7466067 1.2779676 1.3612846 3.3166872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.5707882 0.5227342</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

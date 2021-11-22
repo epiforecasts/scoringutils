@@ -34,7 +34,7 @@ in a data.frame as specified in the `by` argument."><!-- mathjax --><script src=
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -49,7 +49,7 @@ in a data.frame as specified in the `by` argument."><!-- mathjax --><script src=
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Probability Integral Transformation (data.frame Format, fast version)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/pit.R"><code>R/pit.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pit.R" class="external-link"><code>R/pit.R</code></a></small>
     <div class="hidden name"><code>pit_df_fast.Rd</code></div>
     </div>
 
@@ -61,34 +61,43 @@ in a data.frame as specified in the `by` argument.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">pit_df_fast</span><span class="op">(</span><span class="va">data</span>, n_replicates <span class="op">=</span> <span class="fl">100</span>, by <span class="op">=</span> <span class="va">by</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>a data.frame with the following columns: `true_value`,
-`prediction`, `sample`</p></td>
-    </tr><tr><th>n_replicates</th>
-      <td><p>the number of tests to perform,
-each time re-randomising the PIT</p></td>
-    </tr><tr><th>by</th>
-      <td><p>character vector with categories to iterate over</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>a data.frame with the following columns: `true_value`,
+`prediction`, `sample`</p></dd>
+<dt>n_replicates</dt>
+<dd><p>the number of tests to perform,
+each time re-randomising the PIT</p></dd>
+<dt>by</dt>
+<dd><p>character vector with categories to iterate over</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>the input data.frame (not including rows where prediction is `NA`),
 with added columns `pit_p_val` and `pit_sd`</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>see <code><a href="pit.html">pit</a></code></p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
 region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">example</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="continuous_example_data.html">continuous_example_data</a></span></span>
 <span class="r-in"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="pit_df.html">pit_df</a></span><span class="op">(</span><span class="va">example</span>, full_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

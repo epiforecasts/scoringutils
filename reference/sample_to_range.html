@@ -32,7 +32,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Change Data from a Sample Based Format to a Long Interval Range Format</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/utils_data_handling.R"><code>R/utils_data_handling.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/utils_data_handling.R" class="external-link"><code>R/utils_data_handling.R</code></a></small>
     <div class="hidden name"><code>sample_to_range.Rd</code></div>
     </div>
 
@@ -55,22 +55,27 @@
     <p>Legacy function that will not be supported in future updates.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sample_to_range</span><span class="op">(</span><span class="va">data</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span>, keep_quantile_col <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sample_to_range</span><span class="op">(</span><span class="va">data</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span>, keep_quantile_col <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>a data.frame with samples</p></td>
-    </tr><tr><th>range</th>
-      <td><p>a numeric vector of interval ranges to extract
-(e.g. <code>c(0, 50, 90)</code>)</p></td>
-    </tr><tr><th>type</th>
-      <td><p>type argument passed down to the quantile function. For more
-information, see <code><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></code></p></td>
-    </tr><tr><th>keep_quantile_col</th>
-      <td><p>keep quantile column, default is TRUE</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>a data.frame with samples</p></dd>
+<dt>range</dt>
+<dd><p>a numeric vector of interval ranges to extract
+(e.g. <code>c(0, 50, 90)</code>)</p></dd>
+<dt>type</dt>
+<dd><p>type argument passed down to the quantile function. For more
+information, see <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code></p></dd>
+<dt>keep_quantile_col</dt>
+<dd><p>keep quantile column, default is TRUE</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>a data.frame in long format</p>
+    </div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

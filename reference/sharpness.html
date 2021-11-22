@@ -32,7 +32,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Determines sharpness of a probabilistic forecast</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/sharpness.R"><code>R/sharpness.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/sharpness.R" class="external-link"><code>R/sharpness.R</code></a></small>
     <div class="hidden name"><code>sharpness.Rd</code></div>
     </div>
 
@@ -57,36 +57,45 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sharpness</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>predictions</dt>
+<dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+number of Monte Carlo samples</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>vector with sharpness values</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
 of the forecasts themselves.</p>
 <p>Shaprness of predictive samples corresponding to one single true value is
 measured as the normalised median of the absolute deviation from
-the median of the predictive samples. For details, see <a href="https://rdrr.io/r/stats/mad.html">mad</a></p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+the median of the predictive samples. For details, see <a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad</a></p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
 Assessing the performance of real-time epidemic forecasts: A case study of
 Ebola in the Western Area region of Sierra Leone, 2014-15.
 PLoS Comput Biol 15(2): e1006785. &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">sharpness</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 4.4478 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 4.4478 5.1891 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 5.9304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 3.7065 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 5.9304 4.4478 5.9304 4.4478 5.9304 4.4478 4.4478 4.4478 5.1891</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

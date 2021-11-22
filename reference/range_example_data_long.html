@@ -33,7 +33,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -48,7 +48,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Range Forecast Example Data (Long Format)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/data.R"><code>R/data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>range_example_data_long.Rd</code></div>
     </div>
 
@@ -59,22 +59,47 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="va">range_example_data_long</span></code></pre></div>
 
+    <div id="ref-sections">
+    <div id="format">
+    <h2>Format</h2>
+    <p>A data frame with 5,419 rows and 12 columns:</p><dl><dt>value_date</dt>
+<dd><p>the date for which a prediction was made</p></dd>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+  <dt>value_type</dt>
+<dd><p>the target to be predicted (short form)</p></dd>
 
-    <p>A data frame with 5,419 rows and 12 columns:</p><dl><dt>value_date</dt><dd><p>the date for which a prediction was made</p></dd>
-  <dt>value_type</dt><dd><p>the target to be predicted (short form)</p></dd>
-  <dt>geography</dt><dd><p>the region for which a prediction was made</p></dd>
-  <dt>value_desc</dt><dd><p>long form description of the prediction target</p></dd>
-  <dt>true_value</dt><dd><p>true observed values</p></dd>
-  <dt>model</dt><dd><p>name of the model that generated the forecasts</p></dd>
-  <dt>creation_date</dt><dd><p>date on which the forecast was made</p></dd>
-  <dt>prediction</dt><dd><p>value for the lower or upper bound of the given prediction interval</p></dd>
-  <dt>horizon</dt><dd><p>forecast horizon in days</p></dd>
-  <dt>boundary</dt><dd><p>indicate lower or upper bound of prediction interval</p></dd>
-  <dt>range</dt><dd><p>range of the corresponding prediction interval</p></dd>
+  <dt>geography</dt>
+<dd><p>the region for which a prediction was made</p></dd>
+
+  <dt>value_desc</dt>
+<dd><p>long form description of the prediction target</p></dd>
+
+  <dt>true_value</dt>
+<dd><p>true observed values</p></dd>
+
+  <dt>model</dt>
+<dd><p>name of the model that generated the forecasts</p></dd>
+
+  <dt>creation_date</dt>
+<dd><p>date on which the forecast was made</p></dd>
+
+  <dt>prediction</dt>
+<dd><p>value for the lower or upper bound of the given prediction interval</p></dd>
+
+  <dt>horizon</dt>
+<dd><p>forecast horizon in days</p></dd>
+
+  <dt>boundary</dt>
+<dd><p>indicate lower or upper bound of prediction interval</p></dd>
+
+  <dt>range</dt>
+<dd><p>range of the corresponding prediction interval</p></dd>
+
 
 </dl></div>
+    </div>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>

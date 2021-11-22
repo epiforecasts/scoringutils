@@ -32,7 +32,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Evaluate forecasts in a Binary Format</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/eval_forecasts_binary.R"><code>R/eval_forecasts_binary.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/eval_forecasts_binary.R" class="external-link"><code>R/eval_forecasts_binary.R</code></a></small>
     <div class="hidden name"><code>eval_forecasts_binary.Rd</code></div>
     </div>
 
@@ -66,9 +66,11 @@
   <span class="va">verbose</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>A data.frame or data.table with the predictions and observations.
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>A data.frame or data.table with the predictions and observations.
 Note: it is easiest to have a look at the example files provided in the
 package and in the examples below.
 The following columns need to be present:</p><ul><li><p><code>true_value</code> - the true observed values</p></li>
@@ -101,55 +103,61 @@ For a quantile-format forecast you should provide:</p><ul><li><p>prediction - pr
 This format needs</p><ul><li><p>pairs of columns called something like 'upper_90' and 'lower_90',
   or 'upper_50' and 'lower_50', where the number denotes the interval range.
   For the median, you need to provide columns called 'upper_0' and 'lower_0'</p></li>
-</ul></td>
-    </tr><tr><th>by</th>
-      <td><p>character vector of columns to group scoring by. This should be the
+</ul></dd>
+<dt>by</dt>
+<dd><p>character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 <code>summarise_by</code> to aggregate the individual scores.
 Also not that the pit will be computed using <code>summarise_by</code>
-instead of <code>by</code></p></td>
-    </tr><tr><th>summarise_by</th>
-      <td><p>character vector of columns to group the summary by. By
+instead of <code>by</code></p></dd>
+<dt>summarise_by</dt>
+<dd><p>character vector of columns to group the summary by. By
 default, this is equal to `by` and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 <code>summarise_by</code> is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).</p></td>
-    </tr><tr><th>metrics</th>
-      <td><p>the metrics you want to have in the output. If `NULL` (the
-default), all available metrics will be computed.</p></td>
-    </tr><tr><th>quantiles</th>
-      <td><p>numeric vector of quantiles to be returned when summarising.
+(and possibly plot) the probability integral transform(pit).</p></dd>
+<dt>metrics</dt>
+<dd><p>the metrics you want to have in the output. If `NULL` (the
+default), all available metrics will be computed.</p></dd>
+<dt>quantiles</dt>
+<dd><p>numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the
 groups specified through `summarise_by`. By default, no quantiles are
-returned.</p></td>
-    </tr><tr><th>sd</th>
-      <td><p>if TRUE (the default is FALSE) the standard deviation of all
-metrics will be returned when summarising.</p></td>
-    </tr><tr><th>summarised</th>
-      <td><p>Summarise arguments (i.e. take the mean per group
-specified in group_by. Default is TRUE.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>print out additional helpful messages (default is TRUE)</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+returned.</p></dd>
+<dt>sd</dt>
+<dd><p>if TRUE (the default is FALSE) the standard deviation of all
+metrics will be returned when summarising.</p></dd>
+<dt>summarised</dt>
+<dd><p>Summarise arguments (i.e. take the mean per group
+specified in group_by. Default is TRUE.</p></dd>
+<dt>verbose</dt>
+<dd><p>print out additional helpful messages (default is TRUE)</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A data.table with appropriate scores. For more information see
 <code><a href="eval_forecasts.html">eval_forecasts</a></code></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
+    </div>
+    <div id="author">
+    <h2>Author</h2>
     <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Probability Forecast for Binary Target</span></span>
-<span class="r-in"><span class="va">binary_example</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="binary_example_data.html">binary_example_data</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="va">binary_example</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="binary_example_data.html">binary_example_data</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="eval_forecasts.html">eval_forecasts</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">binary_example</span>,</span>
-<span class="r-in">                                     summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span>,</span>
-<span class="r-in">                                     quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, sd <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">                                     summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span>,</span>
+<span class="r-in">                                     quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, sd <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span class="r-in">                                     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

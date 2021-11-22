@@ -72,32 +72,32 @@
       <h1 data-toc-skip>scoringutils</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2021-10-12</h4>
+            <h4 data-toc-skip class="date">2021-11-22</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="hidden name"><code>scoringutils.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction-and-overview-of-functionality" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction-and-overview-of-functionality" class="anchor" aria-hidden="true"></a>Introduction and Overview of Functionality</h1>
+<div class="section level1">
+<h1 id="introduction-and-overview-of-functionality">Introduction and Overview of Functionality<a class="anchor" aria-label="anchor" href="#introduction-and-overview-of-functionality"></a>
+</h1>
 <p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Predictions can either be automatically scored from a <code>data.frame</code> using the function <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code>. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework.</p>
 <p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary.</p>
 <p>In addition to automatic scoring, <code>scoringutils</code> offers a variety of plots and visualisations.</p>
 </div>
-<div id="scoring-forecasts-automatically" class="section level1">
-<h1 class="hasAnchor">
-<a href="#scoring-forecasts-automatically" class="anchor" aria-hidden="true"></a>Scoring Forecasts Automatically</h1>
+<div class="section level1">
+<h1 id="scoring-forecasts-automatically">Scoring Forecasts Automatically<a class="anchor" aria-label="anchor" href="#scoring-forecasts-automatically"></a>
+</h1>
 <p>Most of the time, the <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> function will be able to do the entire evaluation for you. The idea is simple, yet flexible.</p>
 <p>All you need to do is to pass in a <code>data.frame</code> that has a column called <code>prediction</code> and one called <code>true_value</code>. Depending on the exact input format, additional columns like <code>sample</code>, <code>quantile</code> or <code>range</code> and <code>boundary</code> are needed. Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. In this case, we would have additional columns called for example <code>model</code>, <code>date</code>, <code>forecast_date</code>, <code>forecast_horizon</code> and <code>location</code>.</p>
 <p>Using the <code>by</code> argument you need to specify the <em>unit of a single forecast</em>. In this example here we would set <code>by = c("model", "date", "forecast_date", "forecast_horizon", "location")</code> (note: if we want to be pedantic, there is a small duplication as the information of “date” is already included in the combination of “forecast_date” and “forecast_horizon”. But as long as there isn’t some weird shift, this doesn’t matter for the purpose of grouping our observations). If you don’t specify <code>by</code> (i.e. <code>by = NULL</code>), <code>scoringutils</code> will automatically use all appropriate present columns. Note that you don’t need to include columns such as <code>quantile</code> or <code>sample</code> in the <code>by</code> argument, as several quantiles / samples make up one forecast.</p>
 <p>Using the <code>summarise_by</code> argument you can now choose categories to aggregate over. If you were only interested in scores for the different models, you would specify <code>summarise_by = c("model")</code>. If you wanted to have scores for every model in every location, you would need to specify <code>summarise_by = c("model", "location")</code>. If you wanted to have one score per quantile or one per prediction interval range, you could specify something like <code>summarise_by = c("model", "quantile")</code> or <code>summarise_by = c("model", "quantile", "range")</code> (note again that some information is duplicated in quantile and range, but this doesn’t really matter for grouping purposes). When aggregating, <code>eval_forecasts</code> takes the mean according to the group defined in <code>summarise_by</code> (i.e. in this example, if <code>summarise_by = c("model", "location")</code>, scores will be averaged over all forecast dates, forecast horizons and quantiles to yield one score per model and location). In addition to the mean, you can also obtain the standard deviation of the scores over which you average or any desired quantile (e.g. the median in addition to the mean) by specifying <code>sd = TRUE</code> and <code>quantiles = c(0.5)</code>.</p>
-<div id="example-evaluation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-evaluation" class="anchor" aria-hidden="true"></a>Example Evaluation</h2>
+<div class="section level2">
+<h2 id="example-evaluation">Example Evaluation<a class="anchor" aria-label="anchor" href="#example-evaluation"></a>
+</h2>
 <p>Here is an example of an evaluation using the example data included in the package. The data comes from a set of <a href="https://github.com/epiforecasts/covid19.forecasts.uk" class="external-link">Covid-19 short-term forecasts in the UK</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/epiforecasts/scoringutils" class="external-link">scoringutils</a></span><span class="op">)</span>
@@ -202,9 +202,9 @@
 <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="../reference/score_heatmap.html">score_heatmap</a></span><span class="op">(</span><span class="va">scores</span>, 
                             x <span class="op">=</span> <span class="st">"horizon"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
-<div id="expected-input-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#expected-input-formats" class="anchor" aria-hidden="true"></a>Expected Input Formats</h3>
+<div class="section level3">
+<h3 id="expected-input-formats">Expected Input Formats<a class="anchor" aria-label="anchor" href="#expected-input-formats"></a>
+</h3>
 <p>The <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> function is designed to work with various different input formats. The following formats are currently supported:</p>
 <p>quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -348,14 +348,14 @@
 </div>
 </div>
 </div>
-<div id="scoring-forecasts-directly" class="section level1">
-<h1 class="hasAnchor">
-<a href="#scoring-forecasts-directly" class="anchor" aria-hidden="true"></a>Scoring Forecasts Directly</h1>
+<div class="section level1">
+<h1 id="scoring-forecasts-directly">Scoring Forecasts Directly<a class="anchor" aria-label="anchor" href="#scoring-forecasts-directly"></a>
+</h1>
 <p>A variety of metrics and scoring rules can also be accessed directly through the <code>scoringutils</code> package.</p>
 <p>The following gives an overview of (most of) the implemented metrics.</p>
-<div id="bias" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bias" class="anchor" aria-hidden="true"></a>Bias</h2>
+<div class="section level2">
+<h2 id="bias">Bias<a class="anchor" aria-label="anchor" href="#bias"></a>
+</h2>
 <p>The function <code>bias</code> determines bias from predictive Monte-Carlo samples, automatically recognising whether forecasts are continuous or integer valued.</p>
 <p>For continuous forecasts, Bias is measured as <span class="math display">\[B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t))\]</span></p>
 <p>where <span class="math inline">\(P_t\)</span> is the empirical cumulative distribution function of the prediction for the true value <span class="math inline">\(x_t\)</span>. Computationally, <span class="math inline">\(P_t (x_t)\)</span> is just calculated as the fraction of predictive samples for <span class="math inline">\(x_t\)</span> that are smaller than <span class="math inline">\(x_t\)</span>.</p>
@@ -367,33 +367,33 @@
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias.html">bias</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.075 -0.130 -0.085 -0.400  0.480 -0.350 -0.850  0.310 -0.485 -0.830</span>
-<span class="co">#&gt; [11]  0.880  0.885  0.265  0.990 -0.260 -0.965  0.215 -0.560  0.420  0.670</span>
-<span class="co">#&gt; [21] -0.215 -0.880  0.445  0.025  0.000 -0.730 -0.225 -0.140 -0.555 -0.680</span>
+<span class="co">#&gt;  [1]  0.640 -0.470 -0.865  0.415  0.150  0.555  0.005  0.490  0.695  0.350</span>
+<span class="co">#&gt; [11] -0.695 -0.795 -0.850 -0.250  0.220 -0.880  0.340  0.480  0.870 -0.745</span>
+<span class="co">#&gt; [21]  0.465  0.595  0.805  0.030  0.775 -0.295  0.710  0.785  0.075  0.630</span>
 
 <span class="co">## continuous forecasts</span>
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias.html">bias</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.22  0.67 -0.58 -0.60  0.68  0.12 -0.67 -0.15  0.25 -0.73  0.58  0.20</span>
-<span class="co">#&gt; [13] -0.68 -0.51  0.57 -0.36  0.65  0.03 -0.25  0.21  0.66 -0.04 -0.97  0.05</span>
-<span class="co">#&gt; [25] -0.72 -0.11  0.73  0.57  0.91  0.39</span></code></pre></div>
+<span class="co">#&gt;  [1] -0.08  0.08  0.40 -0.38  0.80 -0.75  0.32 -0.86  0.67 -0.45 -0.91 -0.25</span>
+<span class="co">#&gt; [13]  0.53 -0.95 -0.77  0.13 -0.90  0.41 -0.20  0.05  0.65  0.70  0.52 -0.75</span>
+<span class="co">#&gt; [25] -0.81  0.60 -0.46 -0.09 -0.71  0.34</span></code></pre></div>
 </div>
-<div id="sharpness" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sharpness" class="anchor" aria-hidden="true"></a>Sharpness</h2>
+<div class="section level2">
+<h2 id="sharpness">Sharpness<a class="anchor" aria-label="anchor" href="#sharpness"></a>
+</h2>
 <p>Sharpness is the ability of the model to generate predictions within a narrow range. It is a data-independent measure, and is purely a feature of the forecasts themselves.</p>
 <p>Shaprness of predictive samples corresponding to one single true value is measured as the normalised median of the absolute deviation from the median of the predictive samples. For details, see <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">?stats::mad</a></code></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/sharpness.html">sharpness</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span>
 <span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652</span>
-<span class="co">#&gt; [11] 2.9652 2.9652 4.4478 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478</span>
-<span class="co">#&gt; [21] 4.4478 4.4478 5.9304 4.4478 4.4478 5.9304 4.4478 5.9304 5.9304 5.9304</span></code></pre></div>
+<span class="co">#&gt; [11] 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span>
+<span class="co">#&gt; [21] 4.4478 4.4478 4.4478 5.1891 4.4478 5.9304 5.9304 5.9304 5.9304 5.9304</span></code></pre></div>
 </div>
-<div id="calibration" class="section level2">
-<h2 class="hasAnchor">
-<a href="#calibration" class="anchor" aria-hidden="true"></a>Calibration</h2>
+<div class="section level2">
+<h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
+</h2>
 <p>Calibration or reliability of forecasts is the ability of a model to correctly identify its own uncertainty in making predictions. In a model with perfect calibration, the observed data at each time point look as if they came from the predictive probability distribution at that time.</p>
 <p>Equivalently, one can inspect the probability integral transform of the predictive distribution at time t,</p>
 <p><span class="math display">\[u_t = F_t (x_t)\]</span></p>
@@ -404,49 +404,50 @@
 <p>The function checks whether integer or continuous forecasts were provided. It then applies the (randomised) probability integral and tests the values <span class="math inline">\(u_t\)</span> for uniformity using the Anderson-Darling test.</p>
 <p>As a rule of thumb, there is no evidence to suggest a forecasting model is miscalibrated if the p-value found was greater than a threshold of <span class="math inline">\(p &gt;= 0.1\)</span>, some evidence that it was miscalibrated if <span class="math inline">\(0.01 &lt; p &lt; 0.1\)</span>, and good evidence that it was miscalibrated if <span class="math inline">\(p &lt;= 0.01\)</span>. In this context it should be noted, though, that uniformity of the PIT is a necessary but not sufficient condition of calibration. It should als be noted that the test only works given sufficient samples, otherwise the Null hypothesis will often be rejected outright.</p>
 </div>
-<div id="continuous-ranked-probability-score-crps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#continuous-ranked-probability-score-crps" class="anchor" aria-hidden="true"></a>Continuous Ranked Probability Score (CRPS)</h2>
+<div class="section level2">
+<h2 id="continuous-ranked-probability-score-crps">Continuous Ranked Probability Score (CRPS)<a class="anchor" aria-label="anchor" href="#continuous-ranked-probability-score-crps"></a>
+</h2>
 <p>Wrapper around the <code>crps_sample()</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/crps.html">crps</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.225925 0.296775 5.179950 0.512025 0.459125 0.598125 1.889675 0.620200</span>
-<span class="co">#&gt;  [9] 1.373475 0.795600 1.169250 1.349925 1.373825 1.017700 5.614150 0.863475</span>
-<span class="co">#&gt; [17] 1.342350 2.485150 1.980775 1.377125 1.014300 2.185175 2.228225 1.866600</span>
-<span class="co">#&gt; [25] 1.980200 2.160475 1.796875 7.308825 6.443950 1.582175</span></code></pre></div>
+<span class="co">#&gt;  [1] 0.225650 1.232650 0.360275 1.425950 0.491875 1.000125 1.420175 0.703800</span>
+<span class="co">#&gt;  [9] 1.378175 3.545925 2.638400 0.989925 0.792250 0.848500 1.746575 0.955150</span>
+<span class="co">#&gt; [17] 4.206050 0.926625 1.626000 1.512175 1.809300 7.648300 1.105250 6.019450</span>
+<span class="co">#&gt; [25] 2.634450 1.263925 1.243575 1.994225 1.438225 6.280150</span></code></pre></div>
 </div>
-<div id="dawid-sebastiani-score-dss" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dawid-sebastiani-score-dss" class="anchor" aria-hidden="true"></a>Dawid-Sebastiani Score (DSS)</h2>
+<div class="section level2">
+<h2 id="dawid-sebastiani-score-dss">Dawid-Sebastiani Score (DSS)<a class="anchor" aria-label="anchor" href="#dawid-sebastiani-score-dss"></a>
+</h2>
 <p>Wrapper around the <code>dss_sample()</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/dss.html">dss</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 3.470581 1.078866 4.045994 4.324897 2.033184 2.747201 3.170322 1.935176</span>
-<span class="co">#&gt;  [9] 2.350423 4.977292 3.501551 2.583827 3.297801 2.788377 2.931551 3.306317</span>
-<span class="co">#&gt; [17] 2.849210 4.431450 3.139711 3.515849 3.596370 3.093847 3.358771 3.809758</span>
-<span class="co">#&gt; [25] 7.019296 7.888034 3.437963 3.327426 5.743253 7.992844</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.2121719 2.5542648 0.9651674 6.0512422 4.8815631 1.8099271 2.5739051</span>
+<span class="co">#&gt;  [8] 3.0201602 4.3233818 2.5576385 2.3600993 2.6716245 2.5404598 2.7991441</span>
+<span class="co">#&gt; [15] 4.5625968 3.5509166 2.9477221 3.0650821 4.4973508 3.1041234 3.4198114</span>
+<span class="co">#&gt; [22] 5.3106639 3.3994623 3.3293010 3.3283688 5.5666160 3.2507937 4.0640490</span>
+<span class="co">#&gt; [29] 3.9907606 3.6951952</span></code></pre></div>
 </div>
-<div id="log-score" class="section level2">
-<h2 class="hasAnchor">
-<a href="#log-score" class="anchor" aria-hidden="true"></a>Log Score</h2>
+<div class="section level2">
+<h2 id="log-score">Log Score<a class="anchor" aria-label="anchor" href="#log-score"></a>
+</h2>
 <p>Wrapper around the <code>log_sample()</code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function should not be used for integer valued forecasts. While Log Scores are in principle possible for integer valued forecasts they require a kernel density estimate which is not well defined for discrete values. Smaller values are better.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/logs.html">logs</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.8846707 1.1769287 1.0890961 2.2004518 1.4249496 1.3400200 1.0599773</span>
-<span class="co">#&gt;  [8] 0.9739714 1.0158670 1.4132931 3.0988537 1.5673044 0.8878697 2.2193475</span>
-<span class="co">#&gt; [15] 2.0518006 1.0135170 1.5199267 1.1009390 1.7452249 1.5039332 1.0192210</span>
-<span class="co">#&gt; [22] 1.2312478 1.0310920 2.3264804 1.7063411 3.2954019 1.3285673 1.3860062</span>
-<span class="co">#&gt; [29] 1.1988428 1.4426368</span></code></pre></div>
+<span class="co">#&gt;  [1] 2.4880574 1.7091231 1.8160151 2.3266495 1.0784692 1.0332555 1.1040208</span>
+<span class="co">#&gt;  [8] 1.0171116 1.0869329 1.1502414 1.2501296 1.2327317 0.8700143 1.5057474</span>
+<span class="co">#&gt; [15] 1.1466205 2.2856098 1.6525295 1.2142415 2.5531926 1.6605134 0.9900921</span>
+<span class="co">#&gt; [22] 1.1139023 8.0401745 0.8553202 0.9841360 1.5983710 1.0432322 1.0835928</span>
+<span class="co">#&gt; [29] 0.9066280 0.8876688</span></code></pre></div>
 </div>
-<div id="brier-score" class="section level2">
-<h2 class="hasAnchor">
-<a href="#brier-score" class="anchor" aria-hidden="true"></a>Brier Score</h2>
+<div class="section level2">
+<h2 id="brier-score">Brier Score<a class="anchor" aria-label="anchor" href="#brier-score"></a>
+</h2>
 <p>The Brier score is a proper score rule that assesses the accuracy of probabilistic binary predictions. The outcomes can be either 0 or 1, the predictions must be a probability that the true outcome will be 1.</p>
 <p>The Brier Score is then computed as the mean squared error between the probabilistic prediction and the true outcome.</p>
 <p><span class="math display">\[\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2\]</span></p>
@@ -455,11 +456,11 @@
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/brier_score.html">brier_score</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.2688802</span></code></pre></div>
+<span class="co">#&gt; [1] 0.2378408</span></code></pre></div>
 </div>
-<div id="interval-score" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interval-score" class="anchor" aria-hidden="true"></a>Interval Score</h2>
+<div class="section level2">
+<h2 id="interval-score">Interval Score<a class="anchor" aria-label="anchor" href="#interval-score"></a>
+</h2>
 <p>The Interval Score is a Proper Scoring Rule to score quantile predictions, following Gneiting and Raftery (2007). Smaller values are better.</p>
 <p>The score is computed as</p>
 <p><span class="math display">\[ \text{score} = (\text{upper} - \text{lower}) + \\
@@ -478,11 +479,11 @@
                lower <span class="op">=</span> <span class="va">lower</span>,
                upper <span class="op">=</span> <span class="va">upper</span>,
                interval_range <span class="op">=</span> <span class="va">interval_range</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.28730875 0.13563272 0.12544909 0.10166385 0.20498752 1.23012208</span>
-<span class="co">#&gt;  [7] 0.14545526 0.19725961 0.88131049 0.28740160 0.22036986 0.21320319</span>
-<span class="co">#&gt; [13] 0.08612959 0.63095413 0.18827823 0.09845555 0.16118143 1.05685815</span>
-<span class="co">#&gt; [19] 0.21890055 0.14973370 0.23223041 0.11902775 0.08515415 0.16363139</span>
-<span class="co">#&gt; [25] 1.27884792 0.14119923 0.29818027 0.16103873 0.16628796 0.25232155</span></code></pre></div>
+<span class="co">#&gt;  [1] 0.18284092 0.62663153 0.26601393 0.21881289 0.18332259 0.93079109</span>
+<span class="co">#&gt;  [7] 0.13332263 0.21873303 0.57606165 0.35812726 0.17494018 0.13782440</span>
+<span class="co">#&gt; [13] 0.17016450 0.15890467 0.17230038 0.22433096 0.22273602 0.64065197</span>
+<span class="co">#&gt; [19] 0.21324910 0.18864888 0.23349970 1.45980368 0.62040150 0.20657379</span>
+<span class="co">#&gt; [25] 0.13779050 0.18735673 0.09865765 0.11059788 0.31010240 0.16397700</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -504,7 +505,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.9000.9000.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>

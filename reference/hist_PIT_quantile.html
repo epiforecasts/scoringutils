@@ -33,7 +33,7 @@ visually check whether a uniform distribution seems likely."><!-- mathjax --><sc
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -48,7 +48,7 @@ visually check whether a uniform distribution seems likely."><!-- mathjax --><sc
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>PIT Histogram Quantile</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/pit.R"><code>R/pit.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pit.R" class="external-link"><code>R/pit.R</code></a></small>
     <div class="hidden name"><code>hist_PIT_quantile.Rd</code></div>
     </div>
 
@@ -59,17 +59,22 @@ visually check whether a uniform distribution seems likely.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">hist_PIT_quantile</span><span class="op">(</span><span class="va">PIT_samples</span>, num_bins <span class="op">=</span> <span class="cn">NULL</span>, caption <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>PIT_samples</th>
-      <td><p>A vector with the PIT values of size n</p></td>
-    </tr><tr><th>num_bins</th>
-      <td><p>the number of bins in the PIT histogram.</p></td>
-    </tr><tr><th>caption</th>
-      <td><p>provide a caption that gets passed to the plot
-If not given, the square root of n will be used</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>PIT_samples</dt>
+<dd><p>A vector with the PIT values of size n</p></dd>
+<dt>num_bins</dt>
+<dd><p>the number of bins in the PIT histogram.</p></dd>
+<dt>caption</dt>
+<dd><p>provide a caption that gets passed to the plot
+If not given, the square root of n will be used</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>vector with the scoring values</p>
+    </div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

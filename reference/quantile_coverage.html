@@ -32,7 +32,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot Quantile Coverage</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/plot.R"><code>R/plot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/plot.R" class="external-link"><code>R/plot.R</code></a></small>
     <div class="hidden name"><code>quantile_coverage.Rd</code></div>
     </div>
 
@@ -63,36 +63,43 @@
   scales <span class="op">=</span> <span class="st">"free_y"</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>summarised_scores</th>
-      <td><p>Summarised scores as produced by
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>summarised_scores</dt>
+<dd><p>Summarised scores as produced by
 <code><a href="eval_forecasts.html">eval_forecasts</a></code>. Make sure that "quantile" is included in
-<code>summarise_by</code> when producing the summarised scores</p></td>
-    </tr><tr><th>colour</th>
-      <td><p>According to which variable shall the graphs be coloured?
-Default is "model".</p></td>
-    </tr><tr><th>facet_formula</th>
-      <td><p>formula for facetting in ggplot. If this is <code>NULL</code>
-(the default), no facetting will take place</p></td>
-    </tr><tr><th>facet_wrap_or_grid</th>
-      <td><p>Use ggplot2's <code>facet_wrap</code> or
+<code>summarise_by</code> when producing the summarised scores</p></dd>
+<dt>colour</dt>
+<dd><p>According to which variable shall the graphs be coloured?
+Default is "model".</p></dd>
+<dt>facet_formula</dt>
+<dd><p>formula for facetting in ggplot. If this is <code>NULL</code>
+(the default), no facetting will take place</p></dd>
+<dt>facet_wrap_or_grid</dt>
+<dd><p>Use ggplot2's <code>facet_wrap</code> or
 <code>facet_grid</code>? Anything other than "facet_wrap" will be interpreted as
 <code>facet_grid</code>. This only takes effect if <code>facet_formula</code> is not
-<code>NULL</code></p></td>
-    </tr><tr><th>scales</th>
-      <td><p>scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+<code>NULL</code></p></dd>
+<dt>scales</dt>
+<dd><p>scales argument that gets passed down to ggplot. Only necessary
+if you make use of facetting. Default is "free_y"</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>ggplot object with a plot of interval coverage</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">example1</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_long.html">range_example_data_long</a></span></span>
 <span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="eval_forecasts.html">eval_forecasts</a></span><span class="op">(</span><span class="va">example1</span>,</span>
-<span class="r-in">                                       summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"quantile"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">                                       summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"quantile"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">quantile_coverage</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
-<span class="r-plt"><img src="quantile_coverage-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="quantile_coverage-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

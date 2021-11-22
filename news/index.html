@@ -32,7 +32,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,69 +47,58 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/NEWS.md"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="scoringutils-0172" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-0172" class="anchor" aria-hidden="true"></a>scoringutils 0.1.7.2</h2>
-<div id="package-updates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates" class="anchor" aria-hidden="true"></a>Package updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.7.2" id="scoringutils-0172">scoringutils 0.1.7.2<small>2021-07-21</small><a class="anchor" aria-label="anchor" href="#scoringutils-0172"></a></h2>
+<div class="section level3">
+<h3 id="package-updates-0-1-7-2">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-7-2"></a></h3>
 <ul><li>minor bug fixes (previously, ‘interval_score’ needed to be among the selected metrics)</li>
+<li>all data.tables are now returned as <code>table[]</code> rather than as <code>table</code>, such that they don’t have to be called twice to display the contents.</li>
 </ul></div>
 </div>
-    <div id="scoringutils-017" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-017" class="anchor" aria-hidden="true"></a>scoringutils 0.1.7</h2>
-<div id="feature-updates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.7" id="scoringutils-017">scoringutils 0.1.7<small>2021-07-14</small><a class="anchor" aria-label="anchor" href="#scoringutils-017"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-0-1-7">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-7"></a></h3>
 <ul><li>added a function, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> that runs pairwise comparisons between models on the output of <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code>
 </li>
 <li>added functionality to compute relative skill within <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code>
 </li>
 <li>added a function to visualise pairwise comparisons</li>
 </ul></div>
-<div id="package-updates-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-1" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<div class="section level3">
+<h3 id="package-updates-0-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-7"></a></h3>
 <ul><li>The WIS definition change introduced in version 0.1.5 was partly corrected such that the difference in weighting is only introduced when summarising over scores from different interval ranges</li>
 </ul></div>
 </div>
-    <div id="scoringutils-01" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-01" class="anchor" aria-hidden="true"></a>scoringutils 0.1.</h2>
-<div id="feature-updates-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates-1" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1" id="scoringutils-01">scoringutils 0.1.<a class="anchor" aria-label="anchor" href="#scoringutils-01"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-0-1">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1"></a></h3>
 <ul><li>
 <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> can now handle a separate forecast and truth data set as as input</li>
 <li>
 <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> now supports scoring point forecasts along side quantiles in a quantile-based format. Currently the only metric used is the absolute error</li>
 </ul></div>
-<div id="package-updates-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-2" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<div class="section level3">
+<h3 id="package-updates-0-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1"></a></h3>
 <ul><li>Many functions, especially <code><a href="../reference/eval_forecasts.html">eval_forecasts()</a></code> got a major rewrite. While functionality should be unchanged, the code should now be easier to maintain</li>
 <li>Some of the data-handling functions got renamed, but old names are supported as well for now.</li>
 </ul></div>
 </div>
-    <div id="scoringutils-015" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-015" class="anchor" aria-hidden="true"></a>scoringutils 0.1.5</h2>
-<div id="package-updates-3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-3" class="anchor" aria-hidden="true"></a>Package updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.5" id="scoringutils-015">scoringutils 0.1.5<a class="anchor" aria-label="anchor" href="#scoringutils-015"></a></h2>
+<div class="section level3">
+<h3 id="package-updates-0-1-5">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-5"></a></h3>
 <ul><li>changed the default definition of the weighted interval score. Previously, the median prediction was counted twice, but is no only counted once. If you want to go back to the old behaviour, you can call the interval_score function with the argument <code>count_median_twice = FALSE</code>.</li>
 </ul></div>
 </div>
-    <div id="scoringutils-014" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-014" class="anchor" aria-hidden="true"></a>scoringutils 0.1.4</h2>
-<div id="feature-updates-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates-2" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.4" id="scoringutils-014">scoringutils 0.1.4<small>2020-11-17</small><a class="anchor" aria-label="anchor" href="#scoringutils-014"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-0-1-4">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-4"></a></h3>
 <ul><li>we added basic plotting functionality to visualise scores. You can now easily obtain diagnostic plots based on scores as produced by <code>eval_forecasts</code>.</li>
 <li>
 <code>correlation_plot</code> shows correlation between metrics</li>
@@ -120,9 +109,8 @@
 <li>
 <code>score_table</code> shows a coloured summary table of scores</li>
 </ul></div>
-<div id="package-updates-4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-4" class="anchor" aria-hidden="true"></a>package updates</h3>
+<div class="section level3">
+<h3 id="package-updates-0-1-4">package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-4"></a></h3>
 <ul><li>renamed “calibration” to “coverage”</li>
 <li>renamed “true_values” to “true_value” in data.frames</li>
 <li>renamed “predictions” to “prediction” in data.frames</li>
@@ -130,19 +118,16 @@
 <li>renamed “is_underprediction” to “underprediction”</li>
 </ul></div>
 </div>
-    <div id="scoringutils-013" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-013" class="anchor" aria-hidden="true"></a>scoringutils 0.1.3</h2>
-<div id="potentially-breaking-changes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#potentially-breaking-changes" class="anchor" aria-hidden="true"></a>(Potentially) Breaking changes</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.3" id="scoringutils-013">scoringutils 0.1.3<a class="anchor" aria-label="anchor" href="#scoringutils-013"></a></h2>
+<div class="section level3">
+<h3 id="potentially-breaking-changes-0-1-3">(Potentially) Breaking changes<a class="anchor" aria-label="anchor" href="#potentially-breaking-changes-0-1-3"></a></h3>
 <ul><li>the by argument in <code>eval_forecasts</code> now has a slightly changed meaning. It now denotes the lowest possible grouping unit, i.e. the unit of one observation and needs to be specified explicitly. The default is now <code>NULL</code>. The reason for this change is that most metrics need scoring on the observation level and this the most consistent implementation of this principle. The pit function receives its grouping now from <code>summarise_by</code>. In a similar spirit, <code>summarise_by</code> has to be specificed explicitly and e.g. doesn’t assume anymore that you want ‘range’ to be included.</li>
 <li>for the interval score, <code>weigh = TRUE</code> is now the default option.</li>
 <li>(potentially planned) rename true_values to true_value and predictions to prediction.</li>
 </ul></div>
-<div id="feature-updates-3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates-3" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+<div class="section level3">
+<h3 id="feature-updates-0-1-3">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-3"></a></h3>
 <ul><li>updated quantile evaluation metrics in <code>eval_forecasts</code>. Bias as well as calibration now take all quantiles into account</li>
 <li>Included option to summarise scores according to a <code>summarise_by</code> argument in <code>eval_forecasts</code> The summary can return the mean, the standard deviation as well as an arbitrary set of quantiles.</li>
 <li>
@@ -150,42 +135,35 @@
 <li>switched to ggplot2 for plotting</li>
 </ul></div>
 </div>
-    <div id="scoringutils-012" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-012" class="anchor" aria-hidden="true"></a>scoringutils 0.1.2</h2>
-<div id="potentially-breaking-changes-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#potentially-breaking-changes-1" class="anchor" aria-hidden="true"></a>(Potentially) Breaking changes</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.2" id="scoringutils-012">scoringutils 0.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-012"></a></h2>
+<div class="section level3">
+<h3 id="potentially-breaking-changes-0-1-2">(Potentially) Breaking changes<a class="anchor" aria-label="anchor" href="#potentially-breaking-changes-0-1-2"></a></h3>
 <ul><li>all scores in eval_forecasts were consistently renamed to lower case. Interval_score is now interval_score, CRPS is now crps etc.</li>
 </ul></div>
-<div id="feature-updates-4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates-4" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+<div class="section level3">
+<h3 id="feature-updates-0-1-2">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-2"></a></h3>
 <ul><li>included support for grouping scores according to a vector of column names in <code>eval_forecasts</code>
 </li>
 <li>included support for passing down arguments to lower-level functions in <code>eval_forecasts</code>
 </li>
 <li>included support for three new metrics to score quantiles with <code>eval_forecasts</code>: bias, sharpness and calibration</li>
 </ul></div>
-<div id="package-updates-5" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-5" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<div class="section level3">
+<h3 id="package-updates-0-1-2">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-2"></a></h3>
 <ul><li>example data now has a horizon column to illustrate the use of grouping</li>
 <li>documentation updated to explain the above listed changes</li>
 </ul></div>
 </div>
-    <div id="scoringutils-011" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scoringutils-011" class="anchor" aria-hidden="true"></a>scoringutils 0.1.1</h2>
-<div id="feature-updates-5" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-updates-5" class="anchor" aria-hidden="true"></a>Feature updates</h3>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.1" id="scoringutils-011">scoringutils 0.1.1<a class="anchor" aria-label="anchor" href="#scoringutils-011"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-0-1-1">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-1"></a></h3>
 <ul><li>included support for a long as well as wide input formats for quantile forecasts that are scored with <code>eval_forecasts</code>
 </li>
 </ul></div>
-<div id="package-updates-6" class="section level3">
-<h3 class="hasAnchor">
-<a href="#package-updates-6" class="anchor" aria-hidden="true"></a>Package updates</h3>
+<div class="section level3">
+<h3 id="package-updates-0-1-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-1"></a></h3>
 <ul><li>updated documentation for the <code>eval_forecasts</code>
 </li>
 <li>added badges to the Readme</li>

@@ -33,7 +33,7 @@ based on plain quantiles."><!-- mathjax --><script src="https://cdnjs.cloudflare
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -48,7 +48,7 @@ based on plain quantiles."><!-- mathjax --><script src="https://cdnjs.cloudflare
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Change Data from a Sample Based Format to a Quantile Format</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/utils_data_handling.R"><code>R/utils_data_handling.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/utils_data_handling.R" class="external-link"><code>R/utils_data_handling.R</code></a></small>
     <div class="hidden name"><code>sample_to_quantile.Rd</code></div>
     </div>
 
@@ -57,26 +57,33 @@ based on plain quantiles."><!-- mathjax --><script src="https://cdnjs.cloudflare
 based on plain quantiles.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sample_to_quantile</span><span class="op">(</span><span class="va">data</span>, quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sample_to_quantile</span><span class="op">(</span><span class="va">data</span>, quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>a data.frame with samples</p></td>
-    </tr><tr><th>quantiles</th>
-      <td><p>a numeric vector of quantiles to extract</p></td>
-    </tr><tr><th>type</th>
-      <td><p>type argument passed down to the quantile function. For more
-information, see <code><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></code></p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>a data.frame with samples</p></dd>
+<dt>quantiles</dt>
+<dd><p>a numeric vector of quantiles to extract</p></dd>
+<dt>type</dt>
+<dd><p>type argument passed down to the quantile function. For more
+information, see <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code></p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>a data.frame in a long interval range format</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="integer_example_data.html">integer_example_data</a></span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">quantile_data</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">sample_to_quantile</span><span class="op">(</span><span class="va">example_data</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -36,7 +36,7 @@ Andrea Riebler and Michaela Paul."><!-- mathjax --><script src="https://cdnjs.cl
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -51,7 +51,7 @@ Andrea Riebler and Michaela Paul."><!-- mathjax --><script src="https://cdnjs.cl
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Do Pairwise Comparisons of Scores</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/pairwise-comparisons.R"><code>R/pairwise-comparisons.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
     <div class="hidden name"><code>pairwise_comparison.Rd</code></div>
     </div>
 
@@ -66,69 +66,77 @@ Andrea Riebler and Michaela Paul.</p>
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">pairwise_comparison</span><span class="op">(</span>
   <span class="va">scores</span>,
   metric <span class="op">=</span> <span class="st">"interval_score"</span>,
-  test_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>oneSided <span class="op">=</span> <span class="cn">FALSE</span>, test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permuation"</span><span class="op">)</span>,
+  test_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>oneSided <span class="op">=</span> <span class="cn">FALSE</span>, test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permuation"</span><span class="op">)</span>,
     n_permutations <span class="op">=</span> <span class="fl">999</span><span class="op">)</span>,
   baseline <span class="op">=</span> <span class="cn">NULL</span>,
   by <span class="op">=</span> <span class="cn">NULL</span>,
-  summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span>
+  summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>scores</th>
-      <td><p>A data.frame of unsummarised scores as produced by
-<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></td>
-    </tr><tr><th>metric</th>
-      <td><p>A character vector of length one with the metric to do
-the comparison on.</p></td>
-    </tr><tr><th>test_options</th>
-      <td><p>list with options to pass down to <code><a href="compare_two_models.html">compare_two_models</a></code>.
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>scores</dt>
+<dd><p>A data.frame of unsummarised scores as produced by
+<code><a href="eval_forecasts.html">eval_forecasts</a></code></p></dd>
+<dt>metric</dt>
+<dd><p>A character vector of length one with the metric to do
+the comparison on.</p></dd>
+<dt>test_options</dt>
+<dd><p>list with options to pass down to <code><a href="compare_two_models.html">compare_two_models</a></code>.
 To change only one of the default options, just pass a list as input with
 the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
-default options).</p></td>
-    </tr><tr><th>baseline</th>
-      <td><p>character vector of length one that denotes
-the baseline model against which to compare other models.</p></td>
-    </tr><tr><th>by</th>
-      <td><p>character vector of columns to group scoring by. This should be the
+default options).</p></dd>
+<dt>baseline</dt>
+<dd><p>character vector of length one that denotes
+the baseline model against which to compare other models.</p></dd>
+<dt>by</dt>
+<dd><p>character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 <code>summarise_by</code> to aggregate the individual scores.
 Also not that the pit will be computed using <code>summarise_by</code>
-instead of <code>by</code></p></td>
-    </tr><tr><th>summarise_by</th>
-      <td><p>character vector of columns to group the summary by. By
+instead of <code>by</code></p></dd>
+<dt>summarise_by</dt>
+<dd><p>character vector of columns to group the summary by. By
 default, this is equal to `by` and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 <code>summarise_by</code> is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+(and possibly plot) the probability integral transform(pit).</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A ggplot2 object with a coloured table of summarised scores</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
+    </div>
+    <div id="author">
+    <h2>Author</h2>
     <p>Johannes Bracher, https://jbracher.github.io/</p>
 <p>Nikos Bosse</p>
 <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
 <p>Johannes Bracher, <a href="mailto:johannes.bracher@kit.edu">johannes.bracher@kit.edu</a></p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"model1"</span>, <span class="st">"model2"</span>, <span class="st">"model3"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">                 date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">                 location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">                 interval_score <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 aem <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model1"</span>, <span class="st">"model2"</span>, <span class="st">"model3"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span class="r-in">                 date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">                 location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">                 interval_score <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">                 aem <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">pairwise_comparison</span><span class="op">(</span><span class="va">df</span>,</span>
 <span class="r-in">                           baseline <span class="op">=</span> <span class="st">"model1"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="plot_pairwise_comparison.html">plot_pairwise_comparison</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-plt"><img src="pairwise_comparison-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="pairwise_comparison-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="eval_forecasts.html">eval_forecasts</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_long.html">range_example_data_long</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="fu">pairwise_comparison</span><span class="op">(</span><span class="va">eval</span>, summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="fu">pairwise_comparison</span><span class="op">(</span><span class="va">eval</span>, summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

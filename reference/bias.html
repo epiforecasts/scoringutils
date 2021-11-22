@@ -34,7 +34,7 @@ integer valued and adapts the Bias function accordingly."><!-- mathjax --><scrip
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -49,7 +49,7 @@ integer valued and adapts the Bias function accordingly."><!-- mathjax --><scrip
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Determines bias of forecasts</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/bias.R"><code>R/bias.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/bias.R" class="external-link"><code>R/bias.R</code></a></small>
     <div class="hidden name"><code>bias.Rd</code></div>
     </div>
 
@@ -61,19 +61,23 @@ integer valued and adapts the Bias function accordingly.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>true_values</th>
-      <td><p>A vector with the true observed values of size n</p></td>
-    </tr><tr><th>predictions</th>
-      <td><p>nxN matrix of predictive samples, n (number of rows) being
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>true_values</dt>
+<dd><p>A vector with the true observed values of size n</p></dd>
+<dt>predictions</dt>
+<dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the
-number of Monte Carlo samples</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+number of Monte Carlo samples</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>vector of length n with the biases of the predictive samples with
 respect to the true values.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>For continuous forecasts, Bias is measured as</p>
 <p>$$
 B_t (P_t, x_t) = 1 - 2 * (P_t (x_t))
@@ -89,35 +93,41 @@ $$</p>
 <p>to adjust for the integer nature of the forecasts.</p>
 <p>In both cases, Bias can assume values between
 -1 and 1 and is 0 ideally.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>The integer valued Bias function is discussed in
 Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, et al. (2019) Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785. https://doi.org/10.1371/journal.pcbi.1006785</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
+    </div>
+    <div id="author">
+    <h2>Author</h2>
     <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="co">## integer valued forecasts</span></span>
-<span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.660 -0.930 -0.720  0.995  0.930  0.575  0.225  0.655 -0.460  0.725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.910 -0.555  0.575  0.540 -0.510 -0.355  0.815 -0.220 -0.370  0.710</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.235  0.405  0.990 -0.440 -0.040 -0.710 -0.545 -0.735  0.330 -0.410</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.635  0.845  0.725  0.710 -0.785 -0.060 -0.410 -0.090  0.180  0.070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] -0.845  0.220 -0.250  0.195 -0.715 -0.470 -0.225 -0.245 -0.530 -0.745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] -0.815  0.355  0.970  0.980  0.540 -0.520  0.425 -0.680  0.515  0.500</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## continuous forecasts</span></span>
-<span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.00 -0.20  0.68  0.26 -0.51  0.94 -0.26 -0.91  0.17  0.71  0.84 -0.86</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.04 -0.47 -0.85  0.24 -0.15 -0.92 -0.36 -0.25  0.11 -0.36 -0.55 -0.79</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.88  0.50  0.31 -0.64 -0.08  0.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.84 -0.03  0.33 -0.38  0.59 -0.40 -0.60  0.96 -0.61 -0.04 -0.79 -0.77</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.67 -0.30  0.10  0.39  0.92  0.72 -0.90  0.98  0.73  0.01  0.39 -0.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.20  0.07 -0.63  0.58 -0.32  0.31</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -35,7 +35,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/epiforecasts/scoringutils/">
+  <a href="https://github.com/epiforecasts/scoringutils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -50,7 +50,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Absolute Error</h1>
-    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/master/R/absolute_error.R"><code>R/absolute_error.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/absolute_error.R" class="external-link"><code>R/absolute_error.R</code></a></small>
     <div class="hidden name"><code>abs_error.Rd</code></div>
     </div>
 
@@ -63,26 +63,33 @@ $$</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>true_values</th>
-      <td><p>A vector with the true observed values of size n</p></td>
-    </tr><tr><th>predictions</th>
-      <td><p>numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>true_values</dt>
+<dd><p>A vector with the true observed values of size n</p></dd>
+<dt>predictions</dt>
+<dd><p>numeric vector with predictions, corresponding to the
+quantiles in a second vector, `quantiles`.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>vector with the absolute error</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.6809590 0.4017592 1.6469410 1.0900786 1.8053187 3.3677040 1.1363570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.3620182 0.5680368 1.5153716 1.2059543 0.7068152 3.2098463 1.6091767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.5260865 0.4396998 0.3005593 1.5295469 0.7700395 1.8265955 0.6284132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.3188186 0.8958920 2.6927935 0.2135313 0.7642933 0.8576537 2.0873130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6085144 1.0149766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.8555026 1.3268963 0.6748908 0.7040925 2.3661406 1.7911928 0.5588885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.1544398 1.9595176 2.2750984 1.9219094 1.8790255 0.9555198 0.1945388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.2166835 1.5659685 0.4635030 1.9241308 0.5762475 2.5085228 0.1007230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.2906782 1.2753798 0.4701211 0.6820734 0.9880621 0.8947506 1.0185020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.1093292 1.9356847</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
