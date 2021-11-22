@@ -90,11 +90,11 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.69309046 0.42281055 0.57972248 0.28405235 0.43196382 0.45076168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.48280779 0.68498407 0.26950188 2.70206776 0.13016562 0.03385114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.14132010 0.76795573 1.80427904 1.12431952 1.46643023 0.20494392</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.77867091 0.66237892 0.05965236 1.07457849 0.07066143 2.67958324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.51688508 0.09236933 2.70263010 1.23577563 0.80357864 1.63994654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8446925 0.7340834 0.8884854 2.2489158 1.3136518 2.0617970 0.3742299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.1132009 0.2968702 0.7527425 0.1210738 1.1809630 0.1874906 0.9421527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 1.4121486 2.4344980 0.9068653 1.3814745 0.2165076 1.2259613 1.1169862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.1073489 2.3125178 0.9350985 2.2168459 1.5871110 1.2620640 0.7075042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.1766267 2.0582156</span>
 </code></pre></div>
     </div>
   </div>
@@ -105,7 +105,7 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
+  <p></p><p>Developed by Nikos Bosse, Sam Abbott, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

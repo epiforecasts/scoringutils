@@ -87,11 +87,11 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dss</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10.1199800  0.7537913  1.5519933  2.2404262  6.6500445  2.5230043</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.8633056  2.2734121  3.8746466  4.7604394  3.6750306  3.4404724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  2.2705977  6.8212074  3.3235047  2.7418615  4.3834686  5.0348154</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  3.4503200  5.1761667  3.6860882  3.2056738  3.9251019  3.3719542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  5.8397063  3.3685180  3.0999926  3.5579353  3.3405624  3.3816816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9813061 1.1738538 1.6299993 4.9693897 1.6524992 2.5504153 2.1586661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 3.2517682 2.3326295 3.8852888 2.3613865 2.8813335 4.0450921 5.9794906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.6133381 2.8228734 2.9308509 4.2688926 3.5423893 3.2958186 3.6588264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 3.2025049 3.1910849 3.4003162 3.4349507 3.9964575 3.4254181 3.4586378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 3.6615700 3.2868309</span>
 </code></pre></div>
     </div>
   </div>
@@ -102,7 +102,7 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Nikos Bosse, Sam Abbott, Sebastian Funk.</p>
+  <p></p><p>Developed by Nikos Bosse, Sam Abbott, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">
