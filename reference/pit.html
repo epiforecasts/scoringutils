@@ -83,8 +83,8 @@ of the (randomised) PIT as well as a PIT histogram if specified.</p>
 the number of data points and N (number of columns) the
 number of Monte Carlo samples</p></dd>
 <dt>plot</dt>
-<dd><p>logical. If TRUE, a histogram of the PIT values will be returned
-as well</p></dd>
+<dd><p>logical. If <code>TRUE</code>, a histogram of the PIT values will be
+returned as well</p></dd>
 <dt>full_output</dt>
 <dd><p>return all individual p_values and computed u_t values
 for the randomised PIT. Usually not needed.</p></dd>
@@ -92,22 +92,21 @@ for the randomised PIT. Usually not needed.</p></dd>
 <dd><p>the number of tests to perform,
 each time re-randomising the PIT</p></dd>
 <dt>num_bins</dt>
-<dd><p>the number of bins in the PIT histogram (if plot == TRUE)
+<dd><p>the number of bins in the PIT histogram (if <code>plot == TRUE</code>)
 If not given, the square root of n will be used</p></dd>
 <dt>verbose</dt>
-<dd><p>if TRUE (default is FALSE) more error messages are printed.
+<dd><p>if <code>TRUE</code> (default is <code>FALSE</code>) more error messages are printed.
 Usually, this should not be needed, but may help with debugging.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>a list with the following components:</p><ul><li><p><code>p_value</code>: p-value of the Anderson-Darling test on the
 PIT values. In case of integer forecasts, this will be the mean p_value
-from the `n_replicates` replicates</p></li>
+from the <code>n_replicates</code> replicates</p></li>
 <li><p><code>sd</code>: standard deviation of the p_value returned. In case of
 continuous forecasts, this will be NA as there is only one p_value returned.</p></li>
 <li><p><code>hist_PIT</code> a plot object with the PIT histogram. Only returned
-if <code>plot == TRUE</code>. Call
-<code>plot(PIT(...)$hist_PIT)</code> to display the histogram.</p></li>
+if <code>plot = TRUE</code>. Call <code>plot(PIT(...)$hist_PIT)</code> to display the histogram.</p></li>
 <li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests
 on the (randomised) PIT. Only returned if <code>full_output = TRUE</code></p></li>
 <li><p><code>u</code>: the u_t values internally computed. Only returned if
@@ -158,7 +157,7 @@ PIT is a necessary but not sufficient condition of calibration.</p>
     <p>Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
-region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
+region of Sierra Leone, 2014-15, <a href="doi:10.1371/journal.pcbi.1006785">doi:10.1371/journal.pcbi.1006785</a></p>
     </div>
     </div>
 
@@ -170,7 +169,7 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">pit</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8536289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9749297</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
@@ -184,10 +183,10 @@ region of Sierra Leone, 2014-15, &lt;doi:10.1371/journal.pcbi.1006785&gt;</p>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5000</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">pit</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>,  n_replicates <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2933174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8329696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04346061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.06012578</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $hist_PIT</span>
 <span class="r-plt img"><img src="pit-2.png" alt="" width="700" height="433"></span>

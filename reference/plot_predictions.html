@@ -82,7 +82,7 @@
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>a data.frame that follows the same specifications outlined in
-<code><a href="eval_forecasts.html">eval_forecasts</a></code>. The data.frame needs to have columns called
+<code><a href="eval_forecasts.html">eval_forecasts()</a></code>. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
 these will be separated into a truth and forecast data set in order to be
@@ -92,14 +92,14 @@ These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.</p></dd>
 <dt>forecasts</dt>
 <dd><p>data.frame with forecasts, that should follow the same
-general guidelines as the `data` input. Argument can be used to supply
-forecasts and truth data independently. Default is `NULL`.</p></dd>
+general guidelines as the <code>data</code> input. Argument can be used to supply
+forecasts and truth data independently. Default is <code>NULL</code>.</p></dd>
 <dt>truth_data</dt>
-<dd><p>data.frame with a column called `true_value`
+<dd><p>data.frame with a column called <code>true_value</code>
 on the x-axis. Usually, this will be "date", but it can be anything else.</p></dd>
 <dt>merge_by</dt>
-<dd><p>character vector with column names that `forecasts` and
-`truth_data` should be merged on. Default is `NULL` and merge will be
+<dd><p>character vector with column names that <code>forecasts</code> and
+<code>truth_data</code> should be merged on. Default is <code>NULL</code> and merge will be
 attempted automatically.</p></dd>
 <dt>x</dt>
 <dd><p>character vector of length one that denotes the name of the variable</p></dd>
@@ -112,7 +112,7 @@ in order to filter the truth data.</p></dd>
 the truth data. Every element is parsed as an expression and evaluated
 in order to filter the forecasts data.</p></dd>
 <dt>filter_both</dt>
-<dd><p>same as `filter_truth` and `filter_forecasts`, but
+<dd><p>same as <code>filter_truth</code> and <code>filter_forecasts</code>, but
 applied to both data sets for convenience.</p></dd>
 <dt>range</dt>
 <dd><p>numeric vector indicating the interval ranges to plot. If 0 is
@@ -133,7 +133,7 @@ included in range, the median prediction will be shown.</p></dd>
 if you make use of facetting. Default is "free_y"</p></dd>
 <dt>allow_truth_without_pred</dt>
 <dd><p>logical, whether or not
-to allow instances where there is truth data, but no forecast. If `FALSE`
+to allow instances where there is truth data, but no forecast. If <code>FALSE</code>
 (the default), these get filtered out.</p></dd>
 <dt>remove_from_truth</dt>
 <dd><p>character vector of columns to remove from the

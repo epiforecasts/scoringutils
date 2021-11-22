@@ -70,12 +70,12 @@ $$</p>
 <dd><p>A vector with the true observed values of size n</p></dd>
 <dt>predictions</dt>
 <dd><p>numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.</p></dd>
+quantiles in a second vector, <code>quantiles</code>.</p></dd>
 <dt>quantiles</dt>
 <dd><p>numeric vector that denotes the quantile for the values
-in `predictions`. Only those predictions where `quantiles == 0.5` will
-be kept. If `quantiles` is `NULL`, then all `predictions` and
-`true_values` will be used (this is then the same as `absolute_error()`)</p></dd>
+in <code>predictions</code>. Only those predictions where <code>quantiles == 0.5</code> will
+be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predictions</code> and
+<code>true_values</code> will be used (this is then the same as <code><a href="abs_error.html">abs_error()</a></code>)</p></dd>
 <dt>verbose</dt>
 <dd><p>logical, return a warning is something unexpected happens</p></dd>
 </dl></div>
@@ -90,11 +90,11 @@ be kept. If `quantiles` is `NULL`, then all `predictions` and
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.00921003 0.76720984 1.07806324 0.36555112 3.00801072 0.92068572</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.19504216 1.19617835 2.80205934 1.13135099 0.02122691 0.07576984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.01091410 0.43217011 1.41763124 1.87125403 2.69747475 0.25670977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.54248327 0.30072065 0.49023490 0.02344457 0.62109967 1.34393545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.31687088 0.73090970 0.15001948 2.48324814 0.44691333 1.48182604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.69309046 0.42281055 0.57972248 0.28405235 0.43196382 0.45076168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.48280779 0.68498407 0.26950188 2.70206776 0.13016562 0.03385114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.14132010 0.76795573 1.80427904 1.12431952 1.46643023 0.20494392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.77867091 0.66237892 0.05965236 1.07457849 0.07066143 2.67958324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.51688508 0.09236933 2.70263010 1.23577563 0.80357864 1.63994654</span>
 </code></pre></div>
     </div>
   </div>

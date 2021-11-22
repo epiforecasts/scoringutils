@@ -70,7 +70,7 @@ $$</p>
 <dd><p>A vector with the true observed values of size n</p></dd>
 <dt>predictions</dt>
 <dd><p>numeric vector with predictions, corresponding to the
-quantiles in a second vector, `quantiles`.</p></dd>
+quantiles in a second vector, <code>quantiles</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -83,11 +83,11 @@ quantiles in a second vector, `quantiles`.</p></dd>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.47621274 1.60504315 0.98128492 2.49109241 0.20235240 1.73801178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.55896587 0.35971721 0.16826313 2.53130031 1.14003914 1.19419365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.04829739 1.60133288 0.60161304 0.16548076 1.74715174 3.50516810</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.91542945 0.05781317 2.35194110 0.59277983 0.28494431 0.42583564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.55069229 0.12387879 0.16761383 3.30959237 1.35931485 2.84417224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.86619117 0.12064966 0.15204096 0.27077893 0.21998955 0.66239231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.27458773 0.20424766 2.01400740 2.91506309 0.04558426 2.26683993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.16572352 0.65110027 1.07655041 1.45502075 3.20267917 1.27892448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.97139023 0.25650445 1.50867456 0.22847270 3.41531197 1.30394886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.42734471 0.18205037 0.85883510 1.17337951 0.44890040 0.56994325</span>
 </code></pre></div>
     </div>
   </div>
