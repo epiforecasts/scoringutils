@@ -60,7 +60,7 @@ eval_forecasts_quantile <- function(data,
     # compute separate results if desired
     if (interval_score_arguments$separate_results) {
       res <- res[, c("interval_score",
-                     "sharpness",
+                     "dispersion",
                      "underprediction",
                      "overprediction") := do.call(scoringutils::interval_score,
                                                   c(list(true_value,
@@ -164,7 +164,7 @@ eval_forecasts_quantile <- function(data,
       res <- add_quantiles(res,
                            c("interval_score", "coverage",
                              "overprediction", "underprediction",
-                             "coverage_deviation", "bias", "sharpness", "aem",
+                             "coverage_deviation", "bias", "dispersion", "aem",
                              "ae_point"),
                            quantiles,
                            by = c(summarise_by))
@@ -174,7 +174,7 @@ eval_forecasts_quantile <- function(data,
       res <- add_sd(res,
                     varnames = c("interval_score", "bias", "coverage",
                                  "overprediction", "underprediction",
-                                 "coverage_deviation", "sharpness", "aem",
+                                 "coverage_deviation", "dispersion", "aem",
                                  "ae_point"),
                     by = c(summarise_by))
     }
@@ -183,7 +183,7 @@ eval_forecasts_quantile <- function(data,
     res <- res[, lapply(.SD, mean, na.rm = TRUE),
                by = c(summarise_by),
                .SDcols = colnames(res) %like%
-                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
+                 "coverage|bias|dispersion|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
   }
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage

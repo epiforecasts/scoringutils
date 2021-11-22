@@ -36,7 +36,7 @@
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' `FALSE`.
 #' @param separate_results if `TRUE` (default is `FALSE`), then the separate
-#' parts of the interval score (sharpness, penalties for over- and
+#' parts of the interval score (dispersion penalty, penalties for over- and
 #' under-prediction get returned as separate elements of a list). If you want a
 #' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
@@ -91,21 +91,21 @@ interval_score <- function(true_values,
   alpha <- (100 - interval_range) / 100
 
   # calculate three components of WIS
-  sharpness <- (upper - lower)
+  dispersion <- (upper - lower)
   overprediction <- 2/alpha * (lower - true_values) * (true_values < lower)
   underprediction <- 2/alpha * (true_values - upper) * (true_values > upper)
 
   if (weigh) {
-    sharpness <- sharpness * alpha / 2
+    dispersion <- dispersion * alpha / 2
     underprediction <- underprediction * alpha / 2
     overprediction <- overprediction * alpha / 2
   }
 
-  score <- sharpness + underprediction + overprediction
+  score <- dispersion + underprediction + overprediction
 
   if (separate_results) {
     return(list(interval_score = score,
-                sharpness = sharpness,
+                dispersion = dispersion,
                 underprediction = underprediction,
                 overprediction = overprediction))
   } else {

@@ -23,7 +23,7 @@ produced by \code{\link[=eval_forecasts]{eval_forecasts()}}. Note that "range" m
 in the \code{summarise_by} argument when running \code{eval_forecasts}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.
-This could be something like "interval_score" (the default) or "sharpness"}
+This could be something like "interval_score" (the default) or "dispersion"}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model"}
@@ -55,8 +55,8 @@ the weighted interval score
 }
 \description{
 Visualise the metrics by range, e.g. if you are interested how different
-interval ranges contribute to the overall interval score, or how sharpness
-changes by range.
+interval ranges contribute to the overall interval score, or how
+sharpness / dispersion changes by range.
 }
 \examples{
 scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
@@ -66,14 +66,14 @@ scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
                                         summarise_by = c("model", "value_desc", "range"))
 scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
 
-# visualise sharpness instead of interval score
-scoringutils::range_plot(scores, y = "sharpness", x = "model",
+# visualise dispersion instead of interval score
+scoringutils::range_plot(scores, y = "dispersion", x = "model",
                           facet_formula =  ~value_desc)
 
-# we saw above that sharpness values crossed. Let's look at the unweighted WIS
+# we saw above that dispersion values crossed. Let's look at the unweighted WIS
 scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
                                         interval_score_arguments = list(weigh = FALSE),
                                         summarise_by = c("model", "value_desc", "range"))
-scoringutils::range_plot(scores, y = "sharpness", x = "model",
+scoringutils::range_plot(scores, y = "dispersion", x = "model",
                           facet_formula =  ~value_desc)
 }
