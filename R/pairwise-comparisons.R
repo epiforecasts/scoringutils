@@ -172,7 +172,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # also delete skill metric from output
   out[, eval(rel_skill_metric) := NULL]
 
-  return(out)
+  return(out[])
 }
 
 
@@ -305,7 +305,7 @@ pairwise_comparison_one_group <- function(scores,
   data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
                        new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
 
-  return(out)
+  return(out[])
 }
 
 

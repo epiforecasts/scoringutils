@@ -29,7 +29,7 @@ range_long_to_wide <- function(data) {
   out <- data.table::dcast(data, ... ~ boundary + range,
                            value.var = "prediction")
 
-  return(out)
+  return(out[])
 }
 
 
@@ -45,7 +45,7 @@ range_long_to_wide <- function(data) {
 quantile_to_wide <- function(data) {
   warning("This function will be deprecated. Please use `range_long_to_wide()` in the future")
   out <- scoringutils::range_long_to_wide(data)
-  return(out)
+  return(out[])
 }
 
 
@@ -120,7 +120,7 @@ range_wide_to_long <- function(data) {
 quantile_to_long <- function(data) {
   warning("This function will be deprecated. Please use `range_wide_to_long()` in the future")
   out <- scoringutils::range_wide_to_long(data)
-  return(out)
+  return(out[])
 }
 
 
@@ -173,7 +173,7 @@ range_long_to_quantile <- function(data,
   }
 
 
-  return(unique(data))
+  return(unique(data)[])
 }
 
 
@@ -188,7 +188,7 @@ range_to_quantile <- function(data,
                               keep_range_col = FALSE) {
   warning("This function will be deprecated. Please use `range_long_to_quantile()` in the future")
   out <- scoringutils::range_long_to_quantile(data, keep_range_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -246,7 +246,7 @@ quantile_to_range_long <- function(data,
   data[, `:=`(boundary = as.character(boundary),
               range = as.numeric(range))]
 
-  return(data)
+  return(data[])
 }
 
 
@@ -261,7 +261,7 @@ quantile_to_range <- function(data,
                               keep_quantile_col = FALSE) {
   warning("This function will be deprecated. Please use `quantile_to_range_long()` in the future")
   out <- scoringutils::quantile_to_range_long(data, keep_quantile_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -306,7 +306,7 @@ sample_to_quantile <- function(data,
                                          type = type, na.rm = TRUE)),
                by = by]
 
-  return(data)
+  return(data[])
 }
 
 
@@ -354,7 +354,7 @@ sample_to_range_long <- function(data,
   data <- scoringutils::quantile_to_range_long(data,
                                                keep_quantile_col = keep_quantile_col)
 
-  return(data)
+  return(data[])
 }
 
 
@@ -372,7 +372,7 @@ sample_to_range <- function(data,
                             keep_quantile_col = TRUE) {
   warning("This function will be deprecated. Please use `sample_to_range-long()` in the future")
   out <- scoringutils::sample_to_range_long(data, range, type, keep_quantile_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -450,7 +450,7 @@ merge_pred_and_obs <- function(forecasts, observations,
     combined[, paste0(basenames_overlap, ".y") := NULL]
   }
 
-  return(combined)
+  return(combined[])
 }
 
 
