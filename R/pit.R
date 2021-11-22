@@ -153,7 +153,7 @@ pit <- function(true_values,
 
   # check data type ------------------------------------------------------------
   # check whether continuous or integer
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE

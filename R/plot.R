@@ -61,7 +61,7 @@ score_table <- function(summarised_scores,
   # identify metrics -----------------------------------------------------------
   # identify metrics by looking at which of the available column names
   # are metrics. All other variables are treated as identifier variables
-  all_metrics <- list_of_avail_metrics()
+  all_metrics <- available_metrics()
 
   metrics <- names(summarised_scores)[names(summarised_scores) %in% all_metrics]
   id_vars <- names(summarised_scores)[!(names(summarised_scores) %in% all_metrics)]
@@ -196,7 +196,7 @@ correlation_plot <- function(scores,
                              select_metrics = NULL) {
 
   # define possible metrics
-  all_metrics <- list_of_avail_metrics()
+  all_metrics <- available_metrics()
 
   # find metrics present
   metrics <- names(scores)[names(scores) %in% all_metrics]

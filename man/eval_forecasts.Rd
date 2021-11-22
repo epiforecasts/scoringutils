@@ -84,7 +84,8 @@ over categories different from the scoring.
 (and possibly plot) the probability integral transform(pit).}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed.}
+default), all available metrics will be computed. For a list of available
+metrics see \code{\link[=available_metrics]{available_metrics()}}}
 
 \item{quantiles}{numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the

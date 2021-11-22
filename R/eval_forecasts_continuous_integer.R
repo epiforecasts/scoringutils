@@ -46,7 +46,7 @@ eval_forecasts_sample <- function(data,
                                   verbose) {
 
   if (missing(prediction_type)) {
-    if (all.equal(data$prediction, as.integer(data$prediction))) {
+    if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
       prediction_type <- "integer"
     } else {
       prediction_type <- "continuous"
