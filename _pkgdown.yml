@@ -5,6 +5,7 @@ reference:
         - title: Evaluation functions
           contents:
                 - compare_two_models
+                - starts_with("eval_")
                 - eval_forecasts
                 - eval_forecasts_binary
                 - eval_forecasts_sample

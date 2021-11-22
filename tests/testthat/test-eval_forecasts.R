@@ -81,6 +81,21 @@ test_that("function produces output even if only some metrics are chosen", {
                TRUE)
 })
 
+test_that("WIS is the same with other metrics omitted or included", {
+  range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
+  range_example <- scoringutils::range_wide_to_long(range_example_wide)
+
+  eval <- scoringutils::eval_forecasts(range_example,
+                                       summarise_by = c("model", "range"),
+                                       metrics = "interval_score")
+
+  eval2 <- scoringutils::eval_forecasts(range_example,
+                                        summarise_by = c("model", "range"))
+
+  expect_equal(sum(eval$interval_score),
+               sum(eval2$interval_score))
+})
+
 
 
 

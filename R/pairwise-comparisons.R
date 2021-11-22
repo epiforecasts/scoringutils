@@ -171,7 +171,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # also delete skill metric from output
   out[, eval(rel_skill_metric) := NULL]
 
-  return(out)
+  return(out[])
 }
 
 
@@ -277,6 +277,8 @@ pairwise_comparison_one_group <- function(scores,
                             by = "model"]
     # merge back to retain the ratios even for comparisons with the baseline
     result <- merge(result, result_without_baseline, all.x = TRUE)
+    # avoid mixture of NA and NaN which can cause problems downstream
+    result[is.na(theta), theta := NA_real_]
     # remove NAs form merge in the thetas
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
@@ -302,7 +304,7 @@ pairwise_comparison_one_group <- function(scores,
   data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
                        new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
 
-  return(out)
+  return(out[])
 }
 
 
@@ -340,7 +342,7 @@ compare_two_models <- function(scores,
   scores <- data.table::as.data.table(scores)
 
   if (!("model" %in% names(scores))) {
-    stop("pairwise compairons require a column called 'model'")
+    stop("pairwise comparisons require a column called 'model'")
   }
 
   # select only columns in c(by, var)

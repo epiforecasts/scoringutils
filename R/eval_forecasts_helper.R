@@ -20,7 +20,7 @@ add_quantiles <- function(dt, varnames, quantiles, by) {
                                                              na.rm = TRUE)),
        by = c(by)]
   }
-  return(dt)
+  return(dt[])
 }
 
 
@@ -41,5 +41,5 @@ add_sd <- function(dt, varnames, by) {
   for (varname in varnames) {
     dt[, paste0(varname, "_sd") := sd(get(varname), na.rm = TRUE), by = by]
   }
-  return(dt)
+  return(dt[])
 }

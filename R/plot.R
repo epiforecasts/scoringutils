@@ -744,12 +744,13 @@ plot_predictions <- function(data = NULL,
     select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]
 
-    plot <- plot +
-      ggplot2::geom_line(data = median,
-                         mapping = ggplot2::aes(y = prediction, colour = "median"),
-                         lwd = 0.4)
+    if (nrow(median) > 0) {
+      plot <- plot +
+        ggplot2::geom_line(data = median,
+                           mapping = ggplot2::aes(y = prediction, colour = "median"),
+                           lwd = 0.4)
+      }
   }
-
 
   # facet if specified by the user
   if (!is.null(facet_formula)) {

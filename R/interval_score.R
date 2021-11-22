@@ -53,6 +53,7 @@
 #'                upper = upper,
 #'                interval_range = interval_range)
 #'
+#' # example with missing values and separate results
 #' interval_score(true_values = c(true_values, NA),
 #'                lower = c(lower, NA),
 #'                upper = c(NA, upper),

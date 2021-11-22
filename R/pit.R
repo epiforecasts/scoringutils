@@ -165,11 +165,7 @@ pit <- function(true_values,
 
   # calculate emipirical cumulative distribution function as
   # Portion of (y_true <= y_predicted)
-  P_x <- vapply(seq_along(true_values),
-                function(i) {
-                  sum(predictions[i, ] <= true_values[i]) / n_pred
-                },
-                .0)
+  P_x <- rowSums(predictions <= true_values) / n_pred
 
   # calculate PIT for continuous predictions case
   if (continuous_predictions) {
@@ -189,11 +185,7 @@ pit <- function(true_values,
   # calculate PIT for integer predictions case
   if (!continuous_predictions) {
     # empirical cdf for (y-1) for integer-valued predictions
-    P_xm1 <- vapply(seq_along(true_values),
-                    function(i) {
-                      sum(predictions[i,] <= true_values[i] - 1) / n_pred
-                    },
-                    .0)
+    P_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
     # do n_replicates times for randomised PIT
     u <- replicate(n_replicates, P_xm1 + stats::runif(n) * (P_x - P_xm1))
     # apply Anderson Darling test on u values
