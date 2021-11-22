@@ -177,7 +177,6 @@ extract_from_list <- function(list, what) {
 #' @param defaults A list of default settings
 #' @param optional A list of optional settings to override defaults
 #' @return A list
-#' @export
 #'
 #' @keywords internal
 update_list <- function(defaults = list(), optional = list()) {
