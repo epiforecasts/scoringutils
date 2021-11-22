@@ -7,16 +7,16 @@
 \format{
 A data frame with 13,429 rows and 10 columns:
 \describe{
-  \item{value_date}{the date for which a prediction was made}
-  \item{value_type}{the target to be predicted (short form)}
-  \item{geography}{the region for which a prediction was made}
-  \item{value_desc}{long form description of the prediction target}
-  \item{model}{name of the model that generated the forecasts}
-  \item{creation_date}{date on which the forecast was made}
-  \item{horizon}{forecast horizon in days}
-  \item{prediction}{prediction value for the corresponding sample}
-  \item{sample}{id for the corresponding sample}
-  \item{true_value}{true observed values}
+\item{value_date}{the date for which a prediction was made}
+\item{value_type}{the target to be predicted (short form)}
+\item{geography}{the region for which a prediction was made}
+\item{value_desc}{long form description of the prediction target}
+\item{model}{name of the model that generated the forecasts}
+\item{creation_date}{date on which the forecast was made}
+\item{horizon}{forecast horizon in days}
+\item{prediction}{prediction value for the corresponding sample}
+\item{sample}{id for the corresponding sample}
+\item{true_value}{true observed values}
 }
 }
 \usage{

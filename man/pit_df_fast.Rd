@@ -7,8 +7,8 @@
 pit_df_fast(data, n_replicates = 100, by = by)
 }
 \arguments{
-\item{data}{a data.frame with the following columns: `true_value`,
-`prediction`, `sample`}
+\item{data}{a data.frame with the following columns: \code{true_value},
+\code{prediction}, \code{sample}}
 
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
@@ -16,16 +16,16 @@ each time re-randomising the PIT}
 \item{by}{character vector with categories to iterate over}
 }
 \value{
-the input data.frame (not including rows where prediction is `NA`),
-with added columns `pit_p_val` and `pit_sd`
+the input data.frame (not including rows where prediction is \code{NA}),
+with added columns \code{pit_p_val} and \code{pit_sd}
 }
 \description{
-Wrapper around `pit()` for fast use in data.frames. This version
+Wrapper around \code{pit()} for fast use in data.frames. This version
 of the pit does not do allow any plotting, but can iterate over categories
-in a data.frame as specified in the `by` argument.
+in a data.frame as specified in the \code{by} argument.
 }
 \details{
-see \code{\link{pit}}
+see \code{\link[=pit]{pit()}}
 }
 \examples{
 example <- scoringutils::continuous_example_data
@@ -36,5 +36,5 @@ result <- pit_df(example, full_output = TRUE)
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
-region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
+region of Sierra Leone, 2014-15, \url{doi:10.1371/journal.pcbi.1006785}
 }

@@ -16,7 +16,7 @@
 #' To improve usability, the user is asked to provide an interval range in
 #' percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 #' prediction interval. Correspondingly, the user would have to provide the
-#' 5\% and 95\% quantiles (the corresponding alpha would then be 0.1).
+#' 5% and 95% quantiles (the corresponding alpha would then be 0.1).
 #' No specific distribution is assumed,
 #' but the range has to be symmetric (i.e you can't use the 0.1 quantile
 #' as the lower bound and the 0.7 quantile as the upper).
@@ -34,13 +34,13 @@
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
-#' FALSE.
-#' @param separate_results if TRUE (default is FALSE), then the separate parts
-#' of the interval score (sharpness, penalties for over- and under-prediction
-#' get returned as separate elements of a list). If you want a `data.frame`
-#' instead, simply call `as.data.frmae()` on the output.
+#' `FALSE`.
+#' @param separate_results if `TRUE` (default is `FALSE`), then the separate
+#' parts of the interval score (sharpness, penalties for over- and
+#' under-prediction get returned as separate elements of a list). If you want a
+#' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
-#' \code{separate_results} is TRUE.
+#' `separate_results` is `TRUE`.
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range = rep(90, 30)
@@ -66,10 +66,7 @@
 #'
 #' Evaluating epidemic forecasts in an interval format,
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <arXiv:2005.12881v1>
-#'
-#' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
-#' in an interval format. \url{https://arxiv.org/abs/2005.12881}
+#' <https://arxiv.org/abs/2005.12881>
 #'
 
 

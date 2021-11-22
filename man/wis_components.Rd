@@ -20,7 +20,7 @@ wis_components(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link{eval_forecasts}}}
+produced by \code{\link[=eval_forecasts]{eval_forecasts()}}}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model"}

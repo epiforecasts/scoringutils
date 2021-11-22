@@ -7,11 +7,11 @@
 \format{
 A data frame with 140 rows and 5 columns:
 \describe{
-  \item{value_date}{the date for which a prediction was made}
-  \item{value_type}{the target to be predicted (short form)}
-  \item{geography}{the region for which a prediction was made}
-  \item{value_desc}{long form description of the prediction target}
-  \item{true_value}{true observed values}
+\item{value_date}{the date for which a prediction was made}
+\item{value_type}{the target to be predicted (short form)}
+\item{geography}{the region for which a prediction was made}
+\item{value_desc}{long form description of the prediction target}
+\item{true_value}{true observed values}
 
 }
 }

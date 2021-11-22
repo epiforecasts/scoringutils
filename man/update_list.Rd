@@ -15,8 +15,8 @@ update_list(defaults = list(), optional = list())
 A list
 }
 \description{
-`r lifecycle::badge("stable")`
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Used to handle updating settings in a list. For example when making
-changes to `interval_score_arguments` in `eval_forecasts()`
+changes to \code{interval_score_arguments} in \code{eval_forecasts()}
 }
 \keyword{internal}

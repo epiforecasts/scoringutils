@@ -14,11 +14,11 @@ pit_df(
 )
 }
 \arguments{
-\item{data}{a data.frame with the following columns: `true_value`,
-`prediction`, `sample`}
+\item{data}{a data.frame with the following columns: \code{true_value},
+\code{prediction}, \code{sample}}
 
-\item{plot}{logical. If TRUE, a histogram of the PIT values will be returned
-as well}
+\item{plot}{logical. If \code{TRUE}, a histogram of the PIT values will be
+returned as well}
 
 \item{full_output}{return all individual p_values and computed u_t values
 for the randomised PIT. Usually not needed.}
@@ -26,17 +26,17 @@ for the randomised PIT. Usually not needed.}
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
 
-\item{num_bins}{the number of bins in the PIT histogram (if plot == TRUE)
+\item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
 If not given, the square root of n will be used}
 
-\item{verbose}{if TRUE (default is FALSE) more error messages are printed.
+\item{verbose}{if \code{TRUE} (default is \code{FALSE}) more error messages are printed.
 Usually, this should not be needed, but may help with debugging.}
 }
 \value{
 a list with the following components:
 \itemize{
-\item \code{data}: the input data.frame (not including rows where prediction is `NA`),
-with added columns `pit_p_val` and `pit_sd`
+\item \code{data}: the input data.frame (not including rows where prediction is \code{NA}),
+with added columns \code{pit_p_val} and \code{pit_sd}
 \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
 if \code{plot == TRUE}. Call
 \code{plot(PIT(...)$hist_PIT)} to display the histogram.
@@ -47,10 +47,10 @@ if \code{plot == TRUE}. Call
 }
 }
 \description{
-Wrapper around `pit()` for use in data.frames
+Wrapper around \code{pit()} for use in data.frames
 }
 \details{
-see \code{\link{pit}}
+see \code{\link[=pit]{pit()}}
 }
 \examples{
 example <- scoringutils::continuous_example_data
@@ -61,5 +61,5 @@ result <- pit_df(example, full_output = TRUE)
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
-region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
+region of Sierra Leone, 2014-15, \url{doi:10.1371/journal.pcbi.1006785}
 }

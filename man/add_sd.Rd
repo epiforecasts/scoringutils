@@ -11,10 +11,10 @@ add_sd(dt, varnames, by)
 
 \item{varnames}{names of the variables for which to calculate the sd}
 
-\item{by}{grouping variable in `eval_forecasts()}
+\item{by}{grouping variable in \code{\link[=eval_forecasts]{eval_forecasts()}}}
 }
 \value{
-`data.table` with sd added
+\code{data.table} with sd added
 }
 \description{
 Helper function used within eval_forecasts

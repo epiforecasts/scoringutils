@@ -6,7 +6,7 @@
 #' @param dt the data.table operated on
 #' @param varnames names of the variables for which to calculate quantiles
 #' @param quantiles the desired quantiles
-#' @param by grouping variable in `eval_forecasts()
+#' @param by grouping variable in [eval_forecasts()]
 #'
 #' @return `data.table` with quantiles added
 #'
@@ -30,7 +30,7 @@ add_quantiles <- function(dt, varnames, quantiles, by) {
 #' Helper function used within eval_forecasts
 #' @param dt the data.table operated on
 #' @param varnames names of the variables for which to calculate the sd
-#' @param by grouping variable in `eval_forecasts()
+#' @param by grouping variable in [eval_forecasts()]
 #' @importFrom data.table `%like%`
 #' @return `data.table` with sd added
 #'

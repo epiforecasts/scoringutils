@@ -21,7 +21,7 @@ show_avail_forecasts(
 }
 \arguments{
 \item{data}{data.frame with predictions in the same format required for
-\code{\link{eval_forecasts}}}
+\code{\link[=eval_forecasts]{eval_forecasts()}}}
 
 \item{y}{character vector of length one that denotes the name of the column
 to appear on the y-axis of the plot}

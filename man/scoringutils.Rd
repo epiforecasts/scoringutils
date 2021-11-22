@@ -16,46 +16,43 @@ forecasts or point forecasts. The true values can be either continuous,
 integer, or binary.
 
 A collection of different metrics and scoring rules can be accessed through
-the function \code{\link{eval_forecasts}}. Given a data.frame of the
+the function \code{\link[=eval_forecasts]{eval_forecasts()}}. Given a data.frame of the
 correct form the function will automatically figure out the type of
 prediction and true values and return appropriate scoring metrics.
 
 The package also has a lot of default visualisation based on the output
-created by \code{\link{eval_forecasts}}.
-
+created by \code{\link[=eval_forecasts]{eval_forecasts()}}.
 \itemize{
-\item \code{\link{score_table}}
-\item \code{\link{correlation_plot}}
-\item \code{\link{wis_components}}
-\item \code{\link{range_plot}}
-\item \code{\link{score_heatmap}}
-\item \code{\link{plot_predictions}}
-\item \code{\link{interval_coverage}}
-\item \code{\link{quantile_coverage}}
+\item \code{\link[=score_table]{score_table()}}
+\item \code{\link[=correlation_plot]{correlation_plot()}}
+\item \code{\link[=wis_components]{wis_components()}}
+\item \code{\link[=range_plot]{range_plot()}}
+\item \code{\link[=score_heatmap]{score_heatmap()}}
+\item \code{\link[=plot_predictions]{plot_predictions()}}
+\item \code{\link[=interval_coverage]{interval_coverage()}}
+\item \code{\link[=quantile_coverage]{quantile_coverage()}}
 }
 
 Alternatively, the following functions can be accessed directly:
-
 \itemize{
-\item \code{\link{brier_score}}
-\item \code{\link{pit}}
-\item \code{\link{bias}}
-\item \code{\link{quantile_bias}}
-\item \code{\link{sharpness}}
-\item \code{\link{crps}}
-\item \code{\link{logs}}
-\item \code{\link{dss}}
-\item \code{\link{ae_median_sample}}
+\item \code{\link[=brier_score]{brier_score()}}
+\item \code{\link[=pit]{pit()}}
+\item \code{\link[=bias]{bias()}}
+\item \code{\link[=quantile_bias]{quantile_bias()}}
+\item \code{\link[=sharpness]{sharpness()}}
+\item \code{\link[=crps]{crps()}}
+\item \code{\link[=logs]{logs()}}
+\item \code{\link[=dss]{dss()}}
+\item \code{\link[=ae_median_sample]{ae_median_sample()}}
 }
 
 Predictions can be evaluated in a lot of different formats. If you want to
 convert from one format to the other, the following helper functions can
 do that for you:
-
 \itemize{
-\item \code{\link{sample_to_range_long}}
-\item \code{\link{sample_to_quantile}}
-\item \code{\link{quantile_to_range_long}}
-\item \code{\link{range_long_to_quantile}}
+\item \code{\link[=sample_to_range_long]{sample_to_range_long()}}
+\item \code{\link[=sample_to_quantile]{sample_to_quantile()}}
+\item \code{\link[=quantile_to_range_long]{quantile_to_range_long()}}
+\item \code{\link[=range_long_to_quantile]{range_long_to_quantile()}}
 }
 }

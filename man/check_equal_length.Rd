@@ -12,7 +12,7 @@ check_equal_length(..., one_allowed = TRUE)
 \item{one_allowed}{logical, allow arguments of length one that can be recycled}
 }
 \value{
-The function returns `NULL`, but throws an error if variable lengths
+The function returns \code{NULL}, but throws an error if variable lengths
 differ
 }
 \description{
