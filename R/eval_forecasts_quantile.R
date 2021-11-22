@@ -12,15 +12,7 @@ eval_forecasts_quantile <- function(data,
                                     rel_skill_metric,
                                     baseline) {
 
-  # make sure data is in the correct format ------------------------------------
-  # check format
-  if ("boundary" %in% names(data)) {
-    format <- "range_long_format"
-  } else if ("quantile" %in% names(data) & !("range" %in% names(data))) {
-    format <- "quantile_format"
-  }
-
-  # make sure to have both quantile as well as range format
+  # make sure to have both quantile as well as range format --------------------
   if ("quantile" %in% names(data) & !("range" %in% names(data))) {
     data <- scoringutils::quantile_to_range_long(data,
                                                   keep_quantile_col = FALSE)
