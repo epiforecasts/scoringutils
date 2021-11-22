@@ -4,8 +4,7 @@
 #'
 #' @details missing
 #'
-#' @param missing
-#' @param missing2
+#' @param data A data.frame or similiar as would be used as input to [eval_forecasts()]
 #'
 #' @return some output that tells you what scoringutils thinks you want to do.
 #'
@@ -13,10 +12,7 @@
 #' @importFrom methods hasArg
 #'
 #' @examples
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
-#' @export
-
-
+#'
 #' ## Probability Forecast for Binary Target
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
 #' eval <- scoringutils::eval_forecasts(binary_example,
@@ -24,18 +20,8 @@
 #'                                      quantiles = c(0.5), sd = TRUE,
 #'                                      verbose = FALSE)
 #'
-#' ## Quantile Forecasts
-#' # wide format example (this examples shows usage of both wide formats)
-#' range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
-#' range_example <- scoringutils::range_wide_to_long(range_example_wide)
-#' # equivalent:
-#' wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
-#' range_example <- scoringutils::range_wide_to_long(wide2)
-#' eval <- scoringutils::eval_forecasts(range_example,
-#'                                      summarise_by = "model",
-#'                                      quantiles = c(0.05, 0.95),
-#'                                      sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(range_example)
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @export
 
 # questions:
 # should this function also change the data, or should that part be duplicated in eval_forecasts?
@@ -208,7 +194,7 @@ check_forecasts <- function(data) {
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
 #'
-#' @return some output that tells you what scoringutils thinks you want to do.
+#' @return cleaned data.table
 #'
 #' @importFrom data.table as.data.table
 
