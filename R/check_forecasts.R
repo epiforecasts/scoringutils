@@ -1,67 +1,81 @@
 #' @title Check forecasts
 #'
-#' @description missing
+#' @description Function to check the input data before running
+#' [eval_forecasts()].
 #'
-#' @details missing
+#' The data should come in one of three different formats:
+#' - A format for binary predictions (see [binary_example_data])
+#' - A sample-based format for discrete or continuous predictions
+#' (see [continuous_example_data] and [integer_example_data])
+#' - A quantile-based format (see [quantile_example_data])
 #'
-#' @param missing
-#' @param missing2
+#' @seealso Functions to move between different formats:
+#' [range_long_to_quantile()], [range_wide_to_long()]
 #'
-#' @return some output that tells you what scoringutils thinks you want to do.
+#' @param data A data.frame or similar that could be used in [eval_forecasts()]
+#'
+#' @return A list with elements that give information about what `scoringutils`
+#' thinks you are trying to do and potential issues.
+#'
+#' - `target_type` the type of the prediction target as inferred from the
+#' input: 'binary', if all values in `true_value` are either 0 or 1 and values in
+#' `prediction` are between 0 and 1, 'discrete' if all true values are integers
+#' and 'continuous' if not.
+#' - `prediction_type` inferred type of the prediction. 'quantile', if there is
+#' a column called 'quantile', else 'discrete' if all values in `prediction`
+#' are integer, else 'continuous.
+#' - `forecast_unit` unit of a single forecast, i.e. the grouping that uniquely
+#' defines a single forecast. This is assumed to be all
+#' present columns apart from the following protected columns:
+#' `c("prediction", "true_value", "sample", "quantile","range", "boundary")`.
+#' It is important that you remove all unnecessary columns before scoring.
+#' - `rows_per_forecast` a data.frame that shows how many rows (usually
+#' quantiles or samples there are available per forecast. If a forecast model
+#' has several entries, then there a forecasts with differing numbers of
+#' quantiles / samples.
+#' - `unique_values` A data.frame that shows how many unique values there are
+#' present per model and column in the data. This doesn't directly show missing
+#' values, but rather the maximum number of unique values across the whole data.
+#' - `warnings` A vector with warnings. These can be ignored if you know what
+#' you are doing.
+#' - `errors` A vector with issues that will cause an error when running
+#' [eval_forecasts()].
+#' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' as.data.table
-#' @importFrom methods hasArg
 #'
 #' @examples
+#' library(scoringutils)
+#' check <- check_forecasts(quantile_example_data)
+#' print(check)
+#' check_forecasts(binary_example_data)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
-
-
-#' ## Probability Forecast for Binary Target
-#' binary_example <- data.table::setDT(scoringutils::binary_example_data)
-#' eval <- scoringutils::eval_forecasts(binary_example,
-#'                                      summarise_by = c("model"),
-#'                                      quantiles = c(0.5), sd = TRUE,
-#'                                      verbose = FALSE)
-#'
-#' ## Quantile Forecasts
-#' # wide format example (this examples shows usage of both wide formats)
-#' range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
-#' range_example <- scoringutils::range_wide_to_long(range_example_wide)
-#' # equivalent:
-#' wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
-#' range_example <- scoringutils::range_wide_to_long(wide2)
-#' eval <- scoringutils::eval_forecasts(range_example,
-#'                                      summarise_by = "model",
-#'                                      quantiles = c(0.05, 0.95),
-#'                                      sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(range_example)
-
-# questions:
-# should this function also change the data, or should that part be duplicated in eval_forecasts?
-# should this function also take in the other eval_forecasts arguments, e.g summarise_by etc.
-# should this also do the checks for the pairwise_comparisons?
-# should this also check available metrics?
 
 check_forecasts <- function(data) {
 
   check <- list()
+  msg <- list()
+  warnings <- list()
+  errors <- list()
 
   # check data looks ok and remove columns with no prediction or no true value
-  data <- check_clean_data(data)
-  if (nrow(data) == 0) {
-    "After cleaning, no observations to score are left"
-  }
-
-  # obtain unit of a single forecast
-  protected_columns <- c("prediction", "true_value", "sample", "quantile",
-                         "range", "boundary")
-  obs_unit <- setdiff(colnames(data), protected_columns)
-  check[["forecast unit"]] <- obs_unit
+  data <- tryCatch(check_clean_data(data),
+                   warning = function(w) {
+                     warnings <<- c(warnings, w$message)
+                     # not ideal to repeat, but not sure whether this could be solved differently
+                     return(suppressWarnings(check_clean_data(data)))
+                   },
+                   error = function(e) {
+                     errors <<- c(errors, e$message)
+                     return(data)
+                   }
+  )
 
   # obtain truth type
-  if (all.equal(data$true_value, as.integer(data$true_value)) == TRUE) {
-    if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
+  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
+    if (all(data$true_value %in% c(0,1)) &&
+        all(data$prediction >= 0) && all(data$prediction <= 1)) {
       check[["target_type"]] = "binary"
     } else {
       check[["target_type"]] = "integer"
@@ -71,8 +85,10 @@ check_forecasts <- function(data) {
   }
 
   # obtain prediction type
-  if (any(grepl("lower", names(data))) | "boundary" %in% names(data) |
-      "quantile" %in% names(data) | "range" %in% names(data)) {
+  # if (any(grepl("lower_", names(data))) | "boundary" %in% names(data) |
+  #     "quantile" %in% names(data) | "range" %in% names(data)) {
+
+  if ("quantile" %in% names(data)) {
     check[["prediction_type"]] <- "quantile"
   } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
     check[["prediction_type"]] <- "integer"
@@ -80,12 +96,29 @@ check_forecasts <- function(data) {
     check[["prediction_type"]] <- "continuous"
   }
 
+  msg <- c(msg,
+           paste0("Forecasts are for a `", check[["target_type"]], "` target ",
+                  "using a `", check[["prediction_type"]], "` prediction format."))
+
+  # obtain unit of a single forecast
+  protected_columns <- c("prediction", "true_value", "sample", "quantile",
+                         "range", "boundary")
+  obs_unit <- setdiff(colnames(data), protected_columns)
+  check[["forecast_unit"]] <- obs_unit
+  msg <- c(msg,
+           paste0("The unit of a single forecast is defined by `",
+                  paste(check[["forecast_unit"]], collapse = "`, `"), "`. ",
+                  "If this is not as intended, please DELETE UNNECESSARY columns or add new ones."))
+
   # check what format is has right now and tell user to convert it.
   if (!any(c("quantile", "sample") %in% colnames(data))) {
-    if ("range" %in% colnames(data) | grepl("lower_" %in% colnames(data))) {
-      warning("It seems like you have a format based on forecast intervals (see `example_data_long`, `example_data_semi_wide`, `example_data_wide`). You need to convert this to a quantile-based format first using `range_wide_to_long()` and `range_long_to_quantile()`")
+    if ("range" %in% colnames(data) | any(grepl("lower_", colnames(data)))) {
+      errors <- c(errors,
+                  "It seems like you have a format based on forecast intervals (see `example_data_long`, `example_data_semi_wide`, `example_data_wide`). You need to convert this to a quantile-based format first using `range_wide_to_long()` and `range_long_to_quantile()`")
+
     } else if (!check[["target_type"]] == "binary") {
-      warning("Missing a column called quantile or sample")
+      errors <- c(errors,
+                  "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample")
     }
   }
 
@@ -95,106 +128,79 @@ check_forecasts <- function(data) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
   data[, InternalDuplicateCheck := .N, by = c(obs_unit, type)]
 
-  # print something if there are duplicates
   if (any(data$duplicatecheck) > 1) {
-    warning("There are instances with more than one forecast. This can't be right and needs to be resolved. Maybe you need to run `unique(data)` or check the unit of a single forecast and add missing columns?")
-    data <- data[InternalDuplicateCheck > 1]
-    return(data[])
+    errors <- c(errors,
+                paste("There are instances with more than one forecast for the same target.",
+                      "This can't be right and needs to be resolved. Maybe you need to check",
+                      "the unit of a single forecast and add missing columns?"))
+    check[["duplicate_forecasts"]] <- data[InternalDuplicateCheck > 1]
   }
-
-
-  # some checks whether there are the same number of quantiles, samples
-
-  # check whether all models have the same number of locations etc?
-
-  # check whether all models have a point forecast?
+  data[, InternalDuplicateCheck := NULL]
 
   # check whether there is a model column present. And if not, state what that means
+  if (!("model" %in% colnames(data))) {
+    msg <- c(msg,
+             paste("There is no column called `model` in the data.",
+                   "scoringutils therefore thinks that all forecasts come from the same model"))
+    data[, model := "Unspecified model"]
 
+  }
 
+  # some checks whether there are the same number of quantiles, samples
+  data[, InternalNumCheck := length(prediction), by = obs_unit]
+  n <- unique(data$InternalNumCheck)
+  if (length(n) > 1) {
+    warnings <- c(warnings,
+                  paste0("Some forecasts have different numbers of rows (e.g. quantiles or samples). ",
+                         "scoringutils found: ", paste(n, collapse = ", "),
+                         ". This is not necessarily a problem, but make sure this is intended."))
+  }
+  check[["rows_per_forecast"]] <-
+    data[, .(rows_per_forecast = unique(InternalNumCheck)), by = model]
+  data[, InternalNumCheck := NULL]
 
-  # print results to user ------------------------------------------------------
-  paste("Based on your input, scoringutils thinks: ")
+  # get available unique values per model for the different columns
+  cols <- obs_unit[!(obs_unit == "model")]
+  check[["unique_values"]] <-
+    data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
 
-  # unit of a single forecast
-  paste0("- there is one unique forecast per `",
-        paste(check[["forecast unit"]], collapse = "`, `"), "`. ",
-              "If this is not the case, please DELETE UNNECESSARY columns or add new ones.")
+  check[["messages"]] <- unlist(msg)
+  check[["warnings"]] <- unlist(warnings)
+  check[["errors"]] <- unlist(errors)
 
-  # prediction and target types
-  paste0("- you want to score a `", check[["target_type"]], "` target ",
-        "using a `", check[["prediction_type"]], "` prediction format.")
+  attr(check, "class") <- "scoringutils_check"
 
-
-
+  return(check)
 }
 
 
 
+print.scoringutils_check <- function(check) {
+
+  print_elements <- names(check)[!(names(check) %in% c("messages"))]
+  print.default(check[print_elements])
+
+  cat(paste0("\nBased on your input, scoringutils thinks:\n",
+             paste(check$messages, collapse = "\n")))
+  cat("\n$rows_per_forecast shows how many rows (usually quantiles or samples are available per forecast.")
+  cat("\n$unique_values shows how many unique values there are per column per model",
+      "(across the entire data).")
+
+  if (length(check$warnings) > 0) {
+    cat(paste0("\n\n",
+               "You should be aware of the following warnings:\n",
+               paste(check$warnings, collapse = "\n")))
+  }
+
+  if (length(check$errors) > 0) {
+    cat(paste0("\n\n",
+               "The following things will likely result in an error:",
+               paste(check$errors, collapse = "\n")))
+  }
+}
 
 
 
-#   # error handling for relative skill computation
-#   # should probably wrap this in a function warn_if_verbose(warning, verbose)
-#   if (compute_relative_skill) {
-#     if (!("model" %in% colnames(data))) {
-#       if (verbose) {
-#         warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-#       }
-#       compute_relative_skill <- FALSE
-#     }
-#     models <- unique(data$model)
-#     if (length(models) < 2 + (!is.null(baseline))) {
-#       if (verbose) {
-#         warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
-#       }
-#       compute_relative_skill <- FALSE
-#     }
-#     if (!is.null(baseline) && !(baseline %in% models)) {
-#       if (verbose){
-#         warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
-#       }
-#       compute_relative_skill <- FALSE
-#     }
-#     if (rel_skill_metric != "auto" && !(rel_skill_metric %in% list_of_avail_metrics())) {
-#       if (verbose) {
-#         warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-#       }
-#       compute_relative_skill <- FALSE
-#     }
-#   }
-#
-#
-#
-#   # check that the arguments in by and summarise_by are actually present
-#   if (!all(c(by, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
-#     not_present <- setdiff(unique(c(by, summarise_by)),
-#                            c(colnames(data), "range", "quantile"))
-#     msg <- paste0("The following items in `by` or `summarise_by` are not",
-#                   "valid column names of the data: '",
-#                   paste(not_present, collapse = ", "),
-#                   "'. Check and run `eval_forecasts()` again")
-#     stop(msg)
-#   }
-#
-#
-#
-#   # check metrics to be computed
-#   available_metrics <- list_of_avail_metrics()
-#   if (is.null(metrics)) {
-#     metrics <- available_metrics
-#   } else {
-#     if (!all(metrics %in% available_metrics)) {
-#       if (verbose) {
-#         msg <- paste("The following metrics are not currently implemented and",
-#                      "will not be computed:",
-#                      paste(setdiff(metrics, available_metrics), collapse = ", "))
-#       }
-#       warning(msg)
-#     }
-#   }
-#   }
-# }
 
 
 
@@ -211,10 +217,13 @@ check_forecasts <- function(data) {
 #' @return some output that tells you what scoringutils thinks you want to do.
 #'
 #' @importFrom data.table as.data.table
+#'
+#'@keywords internal
 
 check_clean_data <- function(data) {
-  if (!("data.frame" %in% class(data))) {
-    stop("you should provide a data.frame or similar")
+
+  if(!is.data.frame(data)) {
+    stop("Input should be a data.frame or similar")
   }
   data <- as.data.table(data)
 
@@ -224,19 +233,18 @@ check_clean_data <- function(data) {
   }
 
   # remove rows where prediction or true value are NA
-  if (any(is.na(data$true_value))) {
-    warning("There are NA values in the true values provided. These will be removed")
+  if (anyNA(data$true_value)) {
+    warning("Some values for `true_value` are NA in the data provided")
   }
   data <- data[!is.na(true_value)]
-  if (any(is.na(data$prediction))) {
-    warning("There are NA values in the prediction values provided. These will be removed")
+
+  if (anyNA(data$prediction)) {
+    warning("Some values for `prediction` are NA in the data provided")
   }
   data <- data[!is.na(prediction)]
   if (nrow(data) == 0) {
-    warning("After removing all NA true values and predictions, there were no observations left")
-    # maybe this should be an error, but I left it like this in case someone wants to use eval_forecasts
-    # in other code
+    stop("After removing all NA true values and predictions, there were no observations left")
   }
-
   return(data)
 }
+
