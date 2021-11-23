@@ -11,8 +11,7 @@
 #'
 #' @seealso Functions to move between different formats:
 #' [range_long_to_quantile()], [range_wide_to_long()]
-#'
-#' @param data A data.frame or similar that could be used in [eval_forecasts()]
+#' @param data A data.frame or similiar as would be used as input to [eval_forecasts()]
 #'
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.
@@ -51,7 +50,7 @@
 #' check_forecasts(binary_example_data)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
-
+  
 check_forecasts <- function(data) {
 
   check <- list()
@@ -232,7 +231,7 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
 #'
-#' @return some output that tells you what scoringutils thinks you want to do.
+#' @return cleaned data.table
 #'
 #' @importFrom data.table as.data.table
 #'

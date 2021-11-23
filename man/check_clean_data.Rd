@@ -11,6 +11,7 @@ check_clean_data(data)
 }
 \value{
 some output that tells you what scoringutils thinks you want to do.
+cleaned data.table
 }
 \description{
 Helper function to check that the input is in fact a data.frame
