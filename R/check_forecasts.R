@@ -11,8 +11,7 @@
 #'
 #' @seealso Functions to move between different formats:
 #' [range_long_to_quantile()], [range_wide_to_long()]
-#'
-#' @param data A data.frame or similar that could be used in [eval_forecasts()]
+#' @param data A data.frame or similiar as would be used as input to [eval_forecasts()]
 #'
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.

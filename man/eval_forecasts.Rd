@@ -198,19 +198,15 @@ eval <- scoringutils::eval_forecasts(binary_example,
 # wide format example (this examples shows usage of both wide formats)
 range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
 range_example <- scoringutils::range_wide_to_long(range_example_wide)
-# equivalent:
 wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
 range_example <- scoringutils::range_wide_to_long(wide2)
-eval <- scoringutils::eval_forecasts(range_example,
+example <- scoringutils::range_long_to_quantile(range_example)
+eval <- scoringutils::eval_forecasts(example,
                                      summarise_by = "model",
                                      quantiles = c(0.05, 0.95),
                                      sd = TRUE)
-eval <- scoringutils::eval_forecasts(range_example)
+eval <- scoringutils::eval_forecasts(example)
 
-#long format
-
-eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
-                                     summarise_by = c("model", "range"))
 
 ## Integer Forecasts
 integer_example <- data.table::setDT(scoringutils::integer_example_data)

@@ -397,8 +397,6 @@ wis_components <- function(scores,
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                         summarise_by = c("model", "value_desc", "range"))
 #'
-#' scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
-#'                                         summarise_by = c("model", "value_desc", "range"))
 #' scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
 #'
 #' # visualise sharpness instead of interval score
@@ -406,7 +404,7 @@ wis_components <- function(scores,
 #'                           facet_formula =  ~value_desc)
 #'
 #' # we saw above that sharpness values crossed. Let's look at the unweighted WIS
-#' scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
+#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                         interval_score_arguments = list(weigh = FALSE),
 #'                                         summarise_by = c("model", "value_desc", "range"))
 #' scoringutils::range_plot(scores, y = "sharpness", x = "model",
@@ -811,6 +809,7 @@ plot_predictions <- function(data = NULL,
 #'
 #' @examples
 #' example1 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::range_long_to_quantile(example1)
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "range"))
 #' interval_coverage(scores)
@@ -882,7 +881,7 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::quantile_example_data
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "quantile"))
 #' quantile_coverage(scores)
