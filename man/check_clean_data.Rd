@@ -10,7 +10,7 @@ check_clean_data(data)
 \item{data}{A data.frame or similar as it gets passed to \code{\link[=eval_forecasts]{eval_forecasts()}}.}
 }
 \value{
-some output that tells you what scoringutils thinks you want to do.
+A data.table with NA values in \code{true_value} or \code{prediction} removed.
 }
 \description{
 Helper function to check that the input is in fact a data.frame

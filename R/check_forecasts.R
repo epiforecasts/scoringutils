@@ -232,7 +232,7 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
 #'
-#' @return some output that tells you what scoringutils thinks you want to do.
+#' @return A data.table with NA values in `true_value` or `prediction` removed.
 #'
 #' @importFrom data.table as.data.table
 #'
