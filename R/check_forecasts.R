@@ -182,8 +182,8 @@ check_forecasts <- function(data) {
 #' @param data A list of class 'scoringutils_check'.
 #'
 #' @return NULL
-#'
-#'@keywords internal
+#' @method print scoringutils_check
+#' @export
 
 print.scoringutils_check <- function(check) {
 
