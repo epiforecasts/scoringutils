@@ -717,12 +717,11 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
+  pal <- grDevices::colorRampPalette(c("steelblue3", "lightskyblue1"))
+
   plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
-    ggplot2::scale_fill_manual("range", values = c("steelblue3",
-                                                   "lightskyblue3",
-                                                   "lightskyblue2",
-                                                   "lightskyblue1")) +
+    ggplot2::scale_fill_manual(name = "range", values = pal(length(range))) +
     ggplot2::theme_light()
 
   if (nrow(intervals) != 0) {
