@@ -7,7 +7,7 @@
 check_forecasts(data)
 }
 \arguments{
-\item{data}{A data.frame or similar that could be used in \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{data}{A data.frame or similiar as would be used as input to \code{\link[=eval_forecasts]{eval_forecasts()}}}
 }
 \value{
 A list with elements that give information about what \code{scoringutils}

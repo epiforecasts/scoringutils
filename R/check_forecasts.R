@@ -50,7 +50,7 @@
 #' check_forecasts(binary_example_data)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
-  
+
 check_forecasts <- function(data) {
 
   check <- list()
@@ -231,7 +231,7 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
 #'
-#' @return cleaned data.table
+#' @return A data.table with NA values in `true_value` or `prediction` removed.
 #'
 #' @importFrom data.table as.data.table
 #'
