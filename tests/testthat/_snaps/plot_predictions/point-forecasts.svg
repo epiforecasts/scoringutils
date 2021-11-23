@@ -935,6 +935,6 @@
 <line x1='659.14' y1='316.90' x2='672.97' y2='316.90' style='stroke-width: 0.43; stroke: #36648B; stroke-linecap: butt;' />
 <text x='680.18' y='302.65' style='font-size: 8.80px; font-family: sans;' textLength='23.49px' lengthAdjust='spacingAndGlyphs'>actual</text>
 <text x='680.18' y='319.93' style='font-size: 8.80px; font-family: sans;' textLength='28.87px' lengthAdjust='spacingAndGlyphs'>median</text>
-<text x='47.48' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='189.34px' lengthAdjust='spacingAndGlyphs'>plot_predictions_point_forecasts</text>
+<text x='47.48' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='89.54px' lengthAdjust='spacingAndGlyphs'>point_forecasts</text>
 </g>
 </svg>

@@ -701,6 +701,7 @@ plot_predictions <- function(data = NULL,
   colnames <- colnames(forecasts)
   if ("sample" %in% colnames) {
     forecasts <- scoringutils::sample_to_range_long(forecasts,
+                                                    range = range,
                                                     keep_quantile_col = FALSE)
   } else if ("quantile" %in% colnames) {
     forecasts <- scoringutils::quantile_to_range_long(forecasts,
