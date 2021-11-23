@@ -10,9 +10,11 @@ check_clean_data(data)
 \item{data}{A data.frame or similar as it gets passed to \code{\link[=eval_forecasts]{eval_forecasts()}}.}
 }
 \value{
+some output that tells you what scoringutils thinks you want to do.
 cleaned data.table
 }
 \description{
 Helper function to check that the input is in fact a data.frame
 or similar and remove rows with no value for \code{prediction} or \code{true_value}
 }
+\keyword{internal}
