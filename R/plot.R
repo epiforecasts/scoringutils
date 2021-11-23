@@ -717,27 +717,27 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  # if there isn't any data to plot, return NULL
-  if (nrow(intervals) == 0) {
-    return(NULL)
-  }
-
-  # pivot wider and convert range to a factor
-  intervals <- data.table::dcast(intervals, ... ~ boundary,
-                                 value.var = "prediction")
-  intervals[, range := as.factor(range)]
-
-  # plot prediciton rnages
-  plot <- ggplot2::ggplot(intervals, ggplot2::aes(x = !!ggplot2::sym(x))) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
-                                      group = range, fill = range),
-                         alpha = 0.4) +
+  plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
     ggplot2::scale_fill_manual("range", values = c("steelblue3",
                                                    "lightskyblue3",
                                                    "lightskyblue2",
                                                    "lightskyblue1")) +
     ggplot2::theme_light()
+
+  if (nrow(intervals) != 0) {
+    # pivot wider and convert range to a factor
+    intervals <- data.table::dcast(intervals, ... ~ boundary,
+                                   value.var = "prediction")
+    intervals[, range := as.factor(range)]
+
+    # plot prediction ranges
+    plot <- plot +
+      ggplot2::geom_ribbon(data = intervals,
+                           ggplot2::aes(ymin = lower, ymax = upper,
+                                        group = range, fill = range),
+                           alpha = 0.4)
+  }
 
   # add median in a different colour
   if (0 %in% range) {
@@ -752,6 +752,20 @@ plot_predictions <- function(data = NULL,
       }
   }
 
+  # add true_values
+  if (nrow(truth_data) > 0) {
+    plot <- plot +
+      ggplot2::geom_point(data = truth_data,
+                          ggplot2::aes(y = true_value, colour = "actual"),
+                          size = 0.5) +
+      ggplot2::geom_line(data = truth_data,
+                         ggplot2::aes(y = true_value, colour = "actual"),
+                         lwd = 0.2)
+  }
+
+  plot <- plot +
+    ggplot2::labs(x = xlab, y = ylab)
+
   # facet if specified by the user
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
@@ -763,19 +777,6 @@ plot_predictions <- function(data = NULL,
     }
   }
 
-  # add true_values
-  if (nrow(truth_data) > 0) {
-    plot <- plot +
-      ggplot2::labs(x = xlab, y = ylab)
-
-    plot <- plot +
-      ggplot2::geom_point(data = truth_data,
-                          ggplot2::aes(y = true_value, colour = "actual"),
-                          size = 0.5) +
-      ggplot2::geom_line(data = truth_data,
-                         ggplot2::aes(y = true_value, colour = "actual"),
-                         lwd = 0.2)
-  }
   return(plot)
 }
 
