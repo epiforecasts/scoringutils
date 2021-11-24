@@ -82,7 +82,9 @@
 #' But sometimes you may want to to summarise
 #' over categories different from the scoring.
 #' `summarise_by` is also the grouping level used to compute
-#' (and possibly plot) the probability integral transform(pit).
+#' (and possibly plot) the probability integral transform(pit). Sometimes you
+#' may want to include 'range', 'quantile' or 'sample', to summarise by
+#' range, quantile or sample.
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed.
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
