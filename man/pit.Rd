@@ -30,7 +30,7 @@ for the randomised PIT. Usually not needed.}
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
 
-\item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
+\item{num_bins}{the number of bins in the PIT histogram (if \code{plot = TRUE})
 If not given, the square root of n will be used}
 
 \item{verbose}{if \code{TRUE} (default is \code{FALSE}) more error messages are printed.

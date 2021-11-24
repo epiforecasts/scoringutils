@@ -3,6 +3,7 @@
 export(abs_error)
 export(ae_median_quantile)
 export(ae_median_sample)
+export(available_metrics)
 export(bias)
 export(brier_score)
 export(correlation_plot)

@@ -58,7 +58,7 @@
 #' number of Monte Carlo samples
 #' @param plot logical. If `TRUE`, a histogram of the PIT values will be
 #' returned as well
-#' @param num_bins the number of bins in the PIT histogram (if `plot == TRUE`)
+#' @param num_bins the number of bins in the PIT histogram (if `plot = TRUE`)
 #' If not given, the square root of n will be used
 #' @param n_replicates the number of tests to perform,
 #' each time re-randomising the PIT
@@ -153,7 +153,7 @@ pit <- function(true_values,
 
   # check data type ------------------------------------------------------------
   # check whether continuous or integer
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE
@@ -235,7 +235,7 @@ pit <- function(true_values,
 #' \item `data`: the input data.frame (not including rows where prediction is `NA`),
 #' with added columns `pit_p_val` and `pit_sd`
 #' \item `hist_PIT` a plot object with the PIT histogram. Only returned
-#' if `plot == TRUE`. Call
+#' if `plot = TRUE`. Call
 #' `plot(PIT(...)$hist_PIT)` to display the histogram.
 #' \item `p_values`: all p_values generated from the Anderson-Darling tests on the
 #' (randomised) PIT. Only returned if `full_output = TRUE`
