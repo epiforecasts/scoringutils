@@ -220,8 +220,8 @@ eval_forecasts <- function(data = NULL,
     }
   }
 
-  # do a copy to avoid that the input may be altered in any way.
-  data <- data.table::as.data.table(data)
+  # check relevant columns and remove NA values in true_values and prediction
+  data <- check_clean_data(data)
 
   # error handling for relative skill computation
   if (compute_relative_skill) {
@@ -243,19 +243,6 @@ eval_forecasts <- function(data = NULL,
       compute_relative_skill <- FALSE
     }
   }
-
-  # check that everything is unique
-  unique_data <- unique(data)
-  if (nrow(unique_data) != nrow(data)) {
-    data <- unique_data
-    warning("There are duplicate rows in data. These were removed")
-  }
-
-  # check and remove any rows where the true value is missing
-  if (any(is.na(data$true_value))) {
-    warning("There are NA values in the true values provided. These will be removed")
-  }
-  data <- data[!is.na(true_value)]
 
   # obtain a value for by if nothing was provided by the user
   if (is.null(by)) {
@@ -312,14 +299,6 @@ eval_forecasts <- function(data = NULL,
   } else {
     target_type = "continuous"
   }
-
-  # remove any rows where the prediction is missing ----------------------------
-  data <- data[!is.na(prediction)]
-  if (nrow(data) == 0) {
-    message("After removing all NA true values and predictions, there were no observations left")
-    return(data)
-  }
-
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
