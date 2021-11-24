@@ -72,8 +72,8 @@ check_forecasts <- function(data) {
   )
 
   if (length(errors) > 0 | !is.data.table(data)) {
-    stop(paste0("Can't check input. The following error has been produced:\n",
-               paste(errors, collapse = "\n")))
+    stop("Can't check input. The following error has been produced:\n",
+         paste(errors, collapse = "\n"))
   }
 
   # obtain truth type
