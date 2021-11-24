@@ -254,9 +254,7 @@ eval_forecasts <- function(data = NULL,
       compute_relative_skill <- FALSE
     }
     if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
-      if (verbose) {
-        warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-      }
+      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
   }
