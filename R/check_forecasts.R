@@ -132,7 +132,7 @@ check_forecasts <- function(data) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
   data[, InternalDuplicateCheck := .N, by = c(obs_unit, type)]
 
-  if (any(data$duplicatecheck) > 1) {
+if (any(data$InternalDuplicateCheck > 1)) {
     errors <- c(errors,
                 paste("There are instances with more than one forecast for the same target.",
                       "This can't be right and needs to be resolved. Maybe you need to check",
@@ -164,15 +164,15 @@ check_forecasts <- function(data) {
   data[, InternalNumCheck := NULL]
 
   # get available unique values per model for the different columns
-  cols <- obs_unit[!(obs_unit == "model")]
+  cols <- obs_unit[obs_unit != "model"]
   check[["unique_values"]] <-
-    data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
+    data[, vapply(.SD, FUN = function(x) length(unique(x)), integer(1)), by = "model"]
 
   check[["messages"]] <- unlist(msg)
   check[["warnings"]] <- unlist(warnings)
   check[["errors"]] <- unlist(errors)
 
-  attr(check, "class") <- "scoringutils_check"
+class(check) <- c("scoringutils_check", "list")
 
   return(check)
 }
@@ -188,7 +188,6 @@ check_forecasts <- function(data) {
 #' @param ... additional arguments (not used here)
 #'
 #' @return NULL
-#' @method print scoringutils_check
 #' @export
 
 print.scoringutils_check <- function(x, ...) {
@@ -213,7 +212,7 @@ print.scoringutils_check <- function(x, ...) {
                "The following things will likely result in an error:",
                paste(x$errors, collapse = "\n")))
   }
-  return(NULL)
+  return(invisible(x))
 }
 
 
