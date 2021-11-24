@@ -38,7 +38,9 @@ default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).}
+(and possibly plot) the probability integral transform(pit). Sometimes you
+may want to include 'range', 'quantile' or 'sample', to summarise by
+range, quantile or sample.}
 }
 \description{
 This function will only be called within \code{\link[=eval_forecasts]{eval_forecasts()}} and serves to

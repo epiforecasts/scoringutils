@@ -4,15 +4,7 @@
 \alias{eval_forecasts_binary}
 \title{Evaluate forecasts in a Binary Format}
 \usage{
-eval_forecasts_binary(
-  data,
-  by,
-  summarise_by,
-  metrics,
-  quantiles,
-  sd,
-  summarised
-)
+eval_forecasts_binary(data, by, summarise_by, metrics, quantiles, sd)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -71,7 +63,9 @@ default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).}
+(and possibly plot) the probability integral transform(pit). Sometimes you
+may want to include 'range', 'quantile' or 'sample', to summarise by
+range, quantile or sample.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed.}
@@ -83,9 +77,6 @@ returned.}
 
 \item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
 metrics will be returned when summarising.}
-
-\item{summarised}{Summarise arguments (i.e. take the mean per group
-specified in group_by. Default is \code{TRUE.}}
 }
 \value{
 A data.table with appropriate scores. For more information see

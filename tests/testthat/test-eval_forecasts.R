@@ -110,19 +110,17 @@ test_that("WIS is the same with other metrics omitted or included", {
 test_that("function produces output for a continuous format case", {
   example <- data.table::setDT(scoringutils::continuous_example_data)
   eval <- eval_forecasts(example[!is.na(prediction)],
-                         summarised = TRUE,
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
 
-  # eval2 <- scoringutils::eval_forecasts(example,
-  #                                       summarised = TRUE,
-  #                        summarise_by = c("model"),
-  #                        quantiles = c(0.5), sd = TRUE)
-  #
-  # setcolorder(eval2, colnames(eval))
-  # eval <- eval[order(model)]
-  # eval2 <- eval2[order(model)]
-  # all(eval == eval2, na.rm = TRUE)
+  eval2 <- scoringutils::eval_forecasts(example,
+                         summarise_by = c("model"),
+                         quantiles = c(0.5), sd = TRUE)
+
+  data.table::setcolorder(eval2, colnames(eval))
+  eval <- eval[order(model)]
+  eval2 <- eval2[order(model)]
+  all(eval == eval2, na.rm = TRUE)
 
   expect_equal(nrow(eval) > 1,
                TRUE)

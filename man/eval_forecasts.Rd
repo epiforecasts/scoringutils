@@ -12,7 +12,6 @@ eval_forecasts(
   quantiles = c(),
   sd = FALSE,
   pit_plots = FALSE,
-  summarised = TRUE,
   compute_relative_skill = FALSE,
   rel_skill_metric = "auto",
   baseline = NULL,
@@ -76,7 +75,9 @@ default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).}
+(and possibly plot) the probability integral transform(pit). Sometimes you
+may want to include 'range', 'quantile' or 'sample', to summarise by
+range, quantile or sample.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed.}
@@ -91,9 +92,6 @@ metrics will be returned when summarising.}
 
 \item{pit_plots}{if \code{TRUE} (not the default), pit plots will be returned. For
 details see \code{\link[=pit]{pit()}}.}
-
-\item{summarised}{Summarise arguments (i.e. take the mean per group
-specified in group_by. Default is \code{TRUE.}}
 
 \item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called

@@ -1,6 +1,5 @@
 #' @title Evaluate forecasts in a Sample-Based Format (Integer or Continuous)
 #'
-#'
 #' @inheritParams eval_forecasts
 #' @param prediction_type character, should be either "continuous" or "integer"
 #'
@@ -41,8 +40,7 @@ eval_forecasts_sample <- function(data,
                                   prediction_type,
                                   quantiles,
                                   sd,
-                                  pit_plots,
-                                  summarised) {
+                                  pit_plots) {
 
   if (missing(prediction_type)) {
     if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
@@ -137,24 +135,22 @@ eval_forecasts_sample <- function(data,
              by = c(by)]
 
   # summarise output if desired ------------------------------------------------
-  if (summarised) {
-    # add quantiles
-    if (!is.null(quantiles)) {
-      quantile_vars <- c("crps", "dss", "log_score", "pit_p_val", "bias", "sharpness")
-      res <- add_quantiles(res, quantile_vars, quantiles, by = c(summarise_by))
-    }
-
-    if (sd) {
-      # add standard deviations
-      sd_vars <- c("crps", "dss", "log_score", "bias", "sharpness")
-      res <- add_sd(res, sd_vars, by = c(summarise_by))
-    }
-
-    # take mean
-    res <- res[, lapply(.SD, mean, na.rm = TRUE),
-               .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
-               by = summarise_by]
+  # add quantiles
+  if (!is.null(quantiles)) {
+    quantile_vars <- c("crps", "dss", "log_score", "pit_p_val", "bias", "sharpness")
+    res <- add_quantiles(res, quantile_vars, quantiles, by = c(summarise_by))
   }
+
+  if (sd) {
+    # add standard deviations
+    sd_vars <- c("crps", "dss", "log_score", "bias", "sharpness")
+    res <- add_sd(res, sd_vars, by = c(summarise_by))
+  }
+
+  # take mean
+  res <- res[, lapply(.SD, mean, na.rm = TRUE),
+             .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
+             by = summarise_by]
 
 
   # if pit_plots is TRUE, add the plots as an output ---------------------------

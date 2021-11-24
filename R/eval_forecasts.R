@@ -95,8 +95,6 @@
 #' metrics will be returned when summarising.
 #' @param pit_plots if `TRUE` (not the default), pit plots will be returned. For
 #' details see [pit()].
-#' @param summarised Summarise arguments (i.e. take the mean per group
-#' specified in group_by. Default is `TRUE.`
 #' @param compute_relative_skill logical, whether or not to compute relative
 #' performance between models. If `TRUE` (default is `FALSE`), then a column called
 #' 'model' must be present in the input data. For more information on
@@ -190,7 +188,6 @@ eval_forecasts <- function(data = NULL,
                            quantiles = c(),
                            sd = FALSE,
                            pit_plots = FALSE,
-                           summarised = TRUE,
                            compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
                            baseline = NULL,
@@ -285,8 +282,7 @@ eval_forecasts <- function(data = NULL,
                                  summarise_by = summarise_by,
                                  metrics = metrics,
                                  quantiles = quantiles,
-                                 sd = sd,
-                                 summarised = summarised)
+                                 sd = sd)
     return(res)
   }
 
@@ -299,7 +295,6 @@ eval_forecasts <- function(data = NULL,
                                    quantiles = quantiles,
                                    sd = sd,
                                    pit_plots = pit_plots,
-                                   summarised = summarised,
                                    compute_relative_skill = compute_relative_skill,
                                    rel_skill_metric = rel_skill_metric,
                                    baseline = baseline,
@@ -319,8 +314,7 @@ eval_forecasts <- function(data = NULL,
                                  prediction_type = prediction_type,
                                  quantiles = quantiles,
                                  sd = sd,
-                                 pit_plots = pit_plots,
-                                 summarised = summarised)
+                                 pit_plots = pit_plots)
     return(res)
   }
 }

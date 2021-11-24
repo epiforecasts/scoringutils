@@ -128,34 +128,32 @@ eval_forecasts_quantile <- function(data,
     res <- merge(res, relative_res, by = by)
   }
 
-  # summarise scores if desired ------------------------------------------------
-  if (summarised) {
-    # add quantiles for the scores
-    if (!is.null(quantiles)) {
-      res <- add_quantiles(res,
-                           c("interval_score", "coverage",
-                             "overprediction", "underprediction",
-                             "coverage_deviation", "bias", "sharpness", "aem",
-                             "ae_point"),
-                           quantiles,
-                           by = c(summarise_by))
-    }
-    # add standard deviation
-    if (sd) {
-      res <- add_sd(res,
-                    varnames = c("interval_score", "bias", "coverage",
-                                 "overprediction", "underprediction",
-                                 "coverage_deviation", "sharpness", "aem",
-                                 "ae_point"),
-                    by = c(summarise_by))
-    }
-
-    # summarise by taking the mean and omitting unnecessary columns
-    res <- res[, lapply(.SD, mean, na.rm = TRUE),
-               by = c(summarise_by),
-               .SDcols = colnames(res) %like%
-                 "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
+  # summarise scores -----------------------------------------------------------
+  # add quantiles for the scores
+  if (!is.null(quantiles)) {
+    res <- add_quantiles(res,
+                         c("interval_score", "coverage",
+                           "overprediction", "underprediction",
+                           "coverage_deviation", "bias", "sharpness", "aem",
+                           "ae_point"),
+                         quantiles,
+                         by = c(summarise_by))
   }
+  # add standard deviation
+  if (sd) {
+    res <- add_sd(res,
+                  varnames = c("interval_score", "bias", "coverage",
+                               "overprediction", "underprediction",
+                               "coverage_deviation", "sharpness", "aem",
+                               "ae_point"),
+                  by = c(summarise_by))
+  }
+
+  # summarise by taking the mean and omitting unnecessary columns
+  res <- res[, lapply(.SD, mean, na.rm = TRUE),
+             by = c(summarise_by),
+             .SDcols = colnames(res) %like%
+               "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
   if (!("range" %in% summarise_by) & ("coverage" %in% colnames(res))) {
