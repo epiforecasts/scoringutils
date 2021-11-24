@@ -42,8 +42,7 @@ eval_forecasts_sample <- function(data,
                                   quantiles,
                                   sd,
                                   pit_plots,
-                                  summarised,
-                                  verbose) {
+                                  summarised) {
 
   if (missing(prediction_type)) {
     if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
@@ -92,9 +91,7 @@ eval_forecasts_sample <- function(data,
     # check if by == summarise_by - in that case no pit values can be computed
     if (identical(by, summarise_by)) {
       data[, c("pit_p_val", "pit_sd") := NA]
-      if (verbose) {
-        message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
-      }
+      message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
     }
 
     # if they are not identical, pit p-values can be computed

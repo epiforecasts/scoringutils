@@ -13,8 +13,7 @@ eval_forecasts_sample(
   quantiles,
   sd,
   pit_plots,
-  summarised,
-  verbose
+  summarised
 )
 }
 \arguments{
@@ -94,8 +93,6 @@ details see \code{\link[=pit]{pit()}}.}
 
 \item{summarised}{Summarise arguments (i.e. take the mean per group
 specified in group_by. Default is \code{TRUE.}}
-
-\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
 }
 \value{
 A data.table with appropriate scores. For more information see

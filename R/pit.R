@@ -64,8 +64,6 @@
 #' each time re-randomising the PIT
 #' @param full_output return all individual p_values and computed u_t values
 #' for the randomised PIT. Usually not needed.
-#' @param verbose if `TRUE` (default is `FALSE`) more error messages are printed.
-#' Usually, this should not be needed, but may help with debugging.
 #' @return a list with the following components:
 #' \itemize{
 #' \item `p_value`: p-value of the Anderson-Darling test on the
@@ -107,8 +105,7 @@ pit <- function(true_values,
                 plot = TRUE,
                 full_output = FALSE,
                 n_replicates = 50,
-                num_bins = NULL,
-                verbose = FALSE) {
+                num_bins = NULL) {
 
 
 
@@ -122,9 +119,7 @@ pit <- function(true_values,
   # check if there is more than one observation
   n <- length(true_values)
   if (n == 1) {
-    if (verbose) {
-      message("you need more than one observation to assess uniformity of the PIT")
-    }
+    message("you need more than one observation to assess uniformity of the PIT")
     out <- list(p_value = NA,
                 sd = NA)
     if (full_output) {
@@ -259,8 +254,7 @@ pit_df <- function(data,
                    plot = TRUE,
                    full_output = FALSE,
                    n_replicates = 100,
-                   num_bins = NULL,
-                   verbose = FALSE) {
+                   num_bins = NULL) {
 
   data <- data.table::as.data.table(data)
 
@@ -281,8 +275,7 @@ pit_df <- function(data,
                        plot = plot,
                        full_output = full_output,
                        n_replicates = n_replicates,
-                       num_bins = num_bins,
-                       verbose = verbose)
+                       num_bins = num_bins)
 
   # call pit with samples and true values
   res <- do.call(pit, pit_arguments)
@@ -347,8 +340,7 @@ pit_df_fast <- function(data,
   pit_arguments = list(plot = FALSE,
                        full_output = FALSE,
                        n_replicates = n_replicates,
-                       num_bins = 1,
-                       verbose = FALSE)
+                       num_bins = 1)
 
   # reformat data.table to wide format for PIT
   data_wide <- data.table::dcast(data, ... ~ paste("sampl_", sample, sep = ""),

@@ -11,8 +11,7 @@
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
 #' eval <- scoringutils::eval_forecasts(data = binary_example,
 #'                                      summarise_by = c("model"),
-#'                                      quantiles = c(0.5), sd = TRUE,
-#'                                      verbose = FALSE)
+#'                                      quantiles = c(0.5), sd = TRUE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
@@ -22,8 +21,7 @@ eval_forecasts_binary <- function(data,
                                   metrics,
                                   quantiles,
                                   sd,
-                                  summarised,
-                                  verbose){
+                                  summarised){
 
   res <- data[, "brier_score" := scoringutils::brier_score(true_value, prediction),
               by = by]

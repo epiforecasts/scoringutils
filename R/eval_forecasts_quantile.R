@@ -7,7 +7,6 @@ eval_forecasts_quantile <- function(data,
                                     pit_plots,
                                     interval_score_arguments,
                                     summarised,
-                                    verbose,
                                     compute_relative_skill,
                                     rel_skill_metric,
                                     baseline) {
@@ -98,8 +97,7 @@ eval_forecasts_quantile <- function(data,
   if ("aem" %in% metrics) {
     quantile_data[, aem := ae_median_quantile(true_value,
                                               prediction,
-                                              quantile,
-                                              verbose = verbose),
+                                              quantile),
                   by = by]
   }
 
@@ -143,8 +141,7 @@ eval_forecasts_quantile <- function(data,
                                                     rel_skill_metric = rel_skill_metric,
                                                     baseline = baseline,
                                                     by = by,
-                                                    summarise_by = summarise_by,
-                                                    verbose = verbose)
+                                                    summarise_by = summarise_by)
     res <- merge(res, relative_res, by = by)
   }
 

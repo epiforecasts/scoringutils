@@ -11,8 +11,7 @@ eval_forecasts_binary(
   metrics,
   quantiles,
   sd,
-  summarised,
-  verbose
+  summarised
 )
 }
 \arguments{
@@ -87,8 +86,6 @@ metrics will be returned when summarising.}
 
 \item{summarised}{Summarise arguments (i.e. take the mean per group
 specified in group_by. Default is \code{TRUE.}}
-
-\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
 }
 \value{
 A data.table with appropriate scores. For more information see
@@ -102,8 +99,7 @@ Evaluate forecasts in a Binary Format
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
 eval <- scoringutils::eval_forecasts(data = binary_example,
                                      summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE,
-                                     verbose = FALSE)
+                                     quantiles = c(0.5), sd = TRUE)
 
 }
 \author{

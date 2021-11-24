@@ -117,8 +117,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             rel_skill_metric,
                                             baseline,
                                             by,
-                                            summarise_by,
-                                            verbose) {
+                                            summarise_by) {
 
   # infer the correct relative skill if only "auto" is given
   if (rel_skill_metric == "auto") {
@@ -145,9 +144,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # if summarise_by is equal to by, then pairwise comparisons don't make sense
   if (identical(sort(summarise_by), sort(by))) {
     summarise_by <- "model"
-    if (verbose) {
-      message("relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'")
-    }
+    message("relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'")
   }
 
   # do pairwise comparison

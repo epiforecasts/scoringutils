@@ -15,7 +15,6 @@ eval_forecasts(
     separate_results = TRUE),
   pit_plots = FALSE,
   summarised = TRUE,
-  verbose = TRUE,
   forecasts = NULL,
   truth_data = NULL,
   merge_by = NULL,
@@ -111,8 +110,6 @@ details see \code{\link[=pit]{pit()}}.}
 \item{summarised}{Summarise arguments (i.e. take the mean per group
 specified in group_by. Default is \code{TRUE.}}
 
-\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
-
 \item{forecasts}{data.frame with forecasts, that should follow the same
 general guidelines as the \code{data} input. Argument can be used to supply
 forecasts and truth data independently. Default is \code{NULL}.}
@@ -191,8 +188,7 @@ See \code{\link[=logs]{logs()}} for more information.
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
 eval <- scoringutils::eval_forecasts(binary_example,
                                      summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE,
-                                     verbose = FALSE)
+                                     quantiles = c(0.5), sd = TRUE)
 
 ## Quantile Forecasts
 # wide format example (this examples shows usage of both wide formats)

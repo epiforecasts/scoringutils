@@ -10,8 +10,7 @@ pit(
   plot = TRUE,
   full_output = FALSE,
   n_replicates = 50,
-  num_bins = NULL,
-  verbose = FALSE
+  num_bins = NULL
 )
 }
 \arguments{
@@ -32,9 +31,6 @@ each time re-randomising the PIT}
 
 \item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
 If not given, the square root of n will be used}
-
-\item{verbose}{if \code{TRUE} (default is \code{FALSE}) more error messages are printed.
-Usually, this should not be needed, but may help with debugging.}
 }
 \value{
 a list with the following components:

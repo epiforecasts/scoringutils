@@ -9,8 +9,7 @@ add_rel_skill_to_eval_forecasts(
   rel_skill_metric,
   baseline,
   by,
-  summarise_by,
-  verbose
+  summarise_by
 )
 }
 \arguments{
@@ -40,8 +39,6 @@ But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
 (and possibly plot) the probability integral transform(pit).}
-
-\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
 }
 \description{
 This function will only be called within \code{\link[=eval_forecasts]{eval_forecasts()}} and serves to

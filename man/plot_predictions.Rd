@@ -22,8 +22,7 @@ plot_predictions(
   remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
     "interval"),
   xlab = x,
-  ylab = "True and predicted values",
-  verbose = TRUE
+  ylab = "True and predicted values"
 )
 }
 \arguments{
@@ -92,8 +91,6 @@ period covered by a certain model).}
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
 \item{ylab}{Label for the y-axis. Default is "True and predicted values"}
-
-\item{verbose}{print out additional helpful messages (default is TRUE)}
 }
 \value{
 ggplot object with a plot of true vs predicted values

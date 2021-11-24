@@ -24,10 +24,10 @@ test_that("pairwise comparisons works", {
                                                      truth_formatted)
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval_without_baseline <- scoringutils::eval_forecasts(data_formatted,
-                                                        by = c("location", "target_end_date", "model"),
-                                                        compute_relative_skill = TRUE,
-                                                        interval_score_arguments = list(count_median_twice = FALSE))
+  eval_without_baseline <- eval_forecasts(data_formatted,
+                                          by = c("location", "target_end_date", "model"),
+                                          compute_relative_skill = TRUE,
+                                          interval_score_arguments = list(count_median_twice = FALSE))
   eval_with_baseline <- scoringutils::eval_forecasts(data_formatted,
                                                      by = c("location", "target_end_date", "model"),
                                                      baseline = "m1",

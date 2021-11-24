@@ -4,7 +4,7 @@
 \alias{ae_median_quantile}
 \title{Absolute Error of the Median (Quantile-based Version)}
 \usage{
-ae_median_quantile(true_values, predictions, quantiles = NULL, verbose = TRUE)
+ae_median_quantile(true_values, predictions, quantiles = NULL)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -16,8 +16,6 @@ quantiles in a second vector, \code{quantiles}.}
 in \code{predictions}. Only those predictions where \code{quantiles == 0.5} will
 be kept. If \code{quantiles} is \code{NULL}, then all \code{predictions} and
 \code{true_values} will be used (this is then the same as \code{\link[=abs_error]{abs_error()}})}
-
-\item{verbose}{logical, return a warning is something unexpected happens}
 }
 \value{
 vector with the scoring values
