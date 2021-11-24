@@ -213,7 +213,7 @@ eval_forecasts <- function(data = NULL,
       warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
-    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% list_of_avail_metrics())) {
+    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
       warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
