@@ -43,7 +43,7 @@ eval_forecasts_sample <- function(data,
                                   pit_plots) {
 
   if (missing(prediction_type)) {
-    if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+    if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
       prediction_type <- "integer"
     } else {
       prediction_type <- "continuous"

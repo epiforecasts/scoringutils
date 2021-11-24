@@ -75,7 +75,7 @@ pairwise_comparison <- function(scores,
   # usually, by = NULL should be fine and only needs to be specified if there
   # are additional columns that are not metrics and not related to the unit of observation
   if (is.null(by)) {
-    all_metrics <- list_of_avail_metrics()
+    all_metrics <- available_metrics()
     by <- setdiff(names(scores), c(all_metrics, "model"))
   }
 
