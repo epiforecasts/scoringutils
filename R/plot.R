@@ -718,7 +718,7 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  pal <- grDevices::colorRampPalette(c("steelblue3", "lightskyblue1"))
+  pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
 
   plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
@@ -729,14 +729,15 @@ plot_predictions <- function(data = NULL,
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
                                    value.var = "prediction")
-    intervals[, range := as.factor(range)]
+    intervals[, range := factor(range,
+                                levels = sort(unique(range), decreasing = TRUE),
+                                ordered = TRUE)]
 
     # plot prediction ranges
     plot <- plot +
       ggplot2::geom_ribbon(data = intervals,
                            ggplot2::aes(ymin = lower, ymax = upper,
-                                        group = range, fill = range),
-                           alpha = 0.4)
+                                        group = range, fill = range))
   }
 
   # add median in a different colour
