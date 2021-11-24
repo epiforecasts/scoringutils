@@ -13,6 +13,9 @@ test_that("plot_predictions() works with point forecasts", {
     facet_formula = geography ~ value_desc
   )
 
+  expect_s3_class(p, "ggplot")
+
+  skip_on_cran()
   vdiffr::expect_doppelganger('point_forecasts', p)
 
 })
@@ -31,7 +34,9 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     facet_formula = geography ~ value_desc,
     range = c(0, 10, 20, 30, 40, 50, 60)
   )
+  expect_s3_class(p, "ggplot")
 
+  skip_on_cran()
   vdiffr::expect_doppelganger('many_quantiles', p)
 
   example1 <- scoringutils::continuous_example_data
@@ -45,8 +50,10 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     facet_formula = geography ~ value_desc,
     range = c(0, 50, 90, 95)
   )
+  expect_s3_class(p2, "ggplot")
 
-  vdiffr::expect_doppelganger('many_quantiles_from_sample', p)
+  skip_on_cran()
+  vdiffr::expect_doppelganger('many_quantiles_from_sample', p2)
 })
 
 
