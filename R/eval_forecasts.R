@@ -105,14 +105,6 @@
 #' be better understood as an average of quantile scores.)
 #' @param summarised Summarise arguments (i.e. take the mean per group
 #' specified in group_by. Default is `TRUE.`
-#' @param forecasts data.frame with forecasts, that should follow the same
-#' general guidelines as the `data` input. Argument can be used to supply
-#' forecasts and truth data independently. Default is `NULL`.
-#' @param truth_data data.frame with a column called `true_value` to be merged
-#' with `forecasts`
-#' @param merge_by character vector with column names that `forecasts` and
-#' `truth_data` should be merged on. Default is `NULL` and merge will be
-#' attempted automatically.
 #' @param compute_relative_skill logical, whether or not to compute relative
 #' performance between models. If `TRUE` (default is `FALSE`), then a column called
 #' 'model' must be present in the input data. For more information on
@@ -199,29 +191,14 @@ eval_forecasts <- function(data = NULL,
                                                            separate_results = TRUE),
                            pit_plots = FALSE,
                            summarised = TRUE,
-                           forecasts = NULL,
-                           truth_data = NULL,
-                           merge_by = NULL,
                            compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
                            baseline = NULL) {
 
 
   # preparations ---------------------------------------------------------------
-  # check data argument is provided
-  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
-    stop("need arguments 'data' in function 'eval_forecasts()', or alternatively 'forecasts' and 'truth_data'")
-  }
-  if (is.null(data)) {
-    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by)
-    if (nrow(data) == 0) {
-      warning("After attempting to merge, only an empty data.table was left")
-      return(data)
-    }
-  }
-
   # check relevant columns and remove NA values in true_values and prediction
-  data <- check_clean_data(data)
+  data <- check_clean_data(data, verbose = FALSE)
 
   # error handling for relative skill computation
   if (compute_relative_skill) {

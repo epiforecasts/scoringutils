@@ -230,6 +230,7 @@ print.scoringutils_check <- function(x, ...) {
 #' or similar and remove rows with no value for `prediction` or `true_value`
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
+#' @param verbose Boolean, whether or not to print warnings
 #'
 #' @return A data.table with NA values in `true_value` or `prediction` removed.
 #'
@@ -237,7 +238,7 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #'@keywords internal
 
-check_clean_data <- function(data) {
+check_clean_data <- function(data, verbose = TRUE) {
 
   if(!is.data.frame(data)) {
     stop("Input should be a data.frame or similar")
@@ -251,12 +252,16 @@ check_clean_data <- function(data) {
 
   # remove rows where prediction or true value are NA
   if (anyNA(data$true_value)) {
-    warning("Some values for `true_value` are NA in the data provided")
+    if (verbose) {
+      warning("Some values for `true_value` are NA in the data provided")
+    }
   }
   data <- data[!is.na(true_value)]
 
   if (anyNA(data$prediction)) {
-    warning("Some values for `prediction` are NA in the data provided")
+    if (verbose) {
+      warning("Some values for `prediction` are NA in the data provided")
+    }
   }
   data <- data[!is.na(prediction)]
   if (nrow(data) == 0) {

@@ -4,10 +4,12 @@
 \alias{check_clean_data}
 \title{Clean forecast data}
 \usage{
-check_clean_data(data)
+check_clean_data(data, verbose = TRUE)
 }
 \arguments{
 \item{data}{A data.frame or similar as it gets passed to \code{\link[=eval_forecasts]{eval_forecasts()}}.}
+
+\item{verbose}{Boolean, whether or not to print warnings}
 }
 \value{
 A data.table with NA values in \code{true_value} or \code{prediction} removed.

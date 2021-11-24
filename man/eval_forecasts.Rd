@@ -15,9 +15,6 @@ eval_forecasts(
     separate_results = TRUE),
   pit_plots = FALSE,
   summarised = TRUE,
-  forecasts = NULL,
-  truth_data = NULL,
-  merge_by = NULL,
   compute_relative_skill = FALSE,
   rel_skill_metric = "auto",
   baseline = NULL
@@ -109,17 +106,6 @@ details see \code{\link[=pit]{pit()}}.}
 
 \item{summarised}{Summarise arguments (i.e. take the mean per group
 specified in group_by. Default is \code{TRUE.}}
-
-\item{forecasts}{data.frame with forecasts, that should follow the same
-general guidelines as the \code{data} input. Argument can be used to supply
-forecasts and truth data independently. Default is \code{NULL}.}
-
-\item{truth_data}{data.frame with a column called \code{true_value} to be merged
-with \code{forecasts}}
-
-\item{merge_by}{character vector with column names that \code{forecasts} and
-\code{truth_data} should be merged on. Default is \code{NULL} and merge will be
-attempted automatically.}
 
 \item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called

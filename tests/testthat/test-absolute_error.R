@@ -61,8 +61,10 @@ test_that("abs error is correct within eval_forecasts, point forecast only", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils)
+  data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
+                                          observations = truth_scoringutils)
+
+  eval <- scoringutils::eval_forecasts(data_scoringutils)
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 
@@ -131,10 +133,10 @@ test_that("abs error is correct, point and median forecasts different", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils)
+  data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
+                                          observations = truth_scoringutils)
 
-  # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  eval <- scoringutils::eval_forecasts(data_scoringutils)
 
   expected <- abs(y - point_forecast)
   # expect_equal(actual$abs_error, expected)
@@ -200,9 +202,12 @@ test_that("abs error is correct, point and median forecasts same", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils,
-                                       summarise_by = c("location", "target_end_date", "target_variable", "horizon"))
+  data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
+                                          observations = truth_scoringutils)
+
+  eval <- scoringutils::eval_forecasts(data = data_scoringutils,
+                                       summarise_by = c("location", "target_end_date",
+                                                        "target_variable", "horizon"))
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 
