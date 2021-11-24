@@ -4,43 +4,26 @@
 \alias{pit_df}
 \title{Probability Integral Transformation (data.frame Format)}
 \usage{
-pit_df(
-  data,
-  plot = TRUE,
-  full_output = FALSE,
-  n_replicates = 100,
-  num_bins = NULL
-)
+pit_df(data, summarise_by, n_replicates = 100, include_full = FALSE)
 }
 \arguments{
 \item{data}{a data.frame with the following columns: \code{true_value},
-\code{prediction}, \code{sample}}
+\code{prediction}, \code{sample}.}
 
-\item{plot}{logical. If \code{TRUE}, a histogram of the PIT values will be
-returned as well}
+\item{summarise_by}{Character vector with the columns according to which the
+PIT values shall be grouped. If you e.g. have the columns 'model' and
+'location' in the data and want to have a PIT histogram for
+every model and location, specify \code{summarise_by = c("model", "location")}.}
 
-\item{full_output}{return all individual p_values and computed u_t values
-for the randomised PIT. Usually not needed.}
+\item{n_replicates}{the number of draws for the ranomised PIT for
+integer predictions.}
 
-\item{n_replicates}{the number of tests to perform,
-each time re-randomising the PIT}
-
-\item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
-If not given, the square root of n will be used}
+\item{include_full}{Boolean (default is \code{FALSE}). Whether or not to also
+return PIT values for the full data set without any grouping.}
 }
 \value{
-a list with the following components:
-\itemize{
-\item \code{data}: the input data.frame (not including rows where prediction is \code{NA}),
-with added columns \code{pit_p_val} and \code{pit_sd}
-\item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-if \code{plot == TRUE}. Call
-\code{plot(PIT(...)$hist_PIT)} to display the histogram.
-\item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
-(randomised) PIT. Only returned if \code{full_output = TRUE}
-\item \code{u}: the u_t values internally computed. Only returned if
-\code{full_output = TRUE}
-}
+a named list with PIT values according to the grouping specified in
+\code{summarised_by}
 }
 \description{
 Wrapper around \code{pit()} for use in data.frames
@@ -50,7 +33,8 @@ see \code{\link[=pit]{pit()}}
 }
 \examples{
 example <- scoringutils::continuous_example_data
-result <- pit_df(example, full_output = TRUE)
+result <- pit_df(example, summarise_by = "model")
+hist_PIT(result)
 
 }
 \references{

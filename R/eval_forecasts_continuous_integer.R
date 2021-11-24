@@ -82,51 +82,6 @@ eval_forecasts_sample <- function(data,
   if ("coverage" %in% metrics) {
   }
 
-
-  # Compute PIT if specified ---------------------------------------------------
-  if (any(grepl("pit", metrics)) || pit_plots) {
-
-    # check if by == summarise_by - in that case no pit values can be computed
-    if (identical(by, summarise_by)) {
-      data[, c("pit_p_val", "pit_sd") := NA]
-      message("In order to compute PIT values, 'summarise_by' must be different from 'by'")
-    }
-
-    # if they are not identical, pit p-values can be computed
-    if (!identical(by, summarise_by)) {
-      # if plots are not desired, a quick way to do computation can be chosen
-      if (!pit_plots) {
-        data <- pit_df_fast(data, by = summarise_by)
-      } else {
-        # split data into chunks as determined by summarise_by, since we need to
-        # get one PIT per element of summarise_by
-        split_data <- split(data, by = summarise_by)
-
-        # calculate pit for every element of the split data.frame
-        pits <- lapply(split_data,
-                       FUN = pit_df, plot = pit_plots)
-
-        # extract data frames with added p-values. Bind data together again
-        data_with_pit_values <- extract_from_list(pits, "data")
-        data <- data.table::rbindlist(data_with_pit_values)
-
-        if (pit_plots) {
-          # extract pit histograms if plots are desired
-          pit_histograms <- extract_from_list(pits, "hist_PIT")
-
-          # add another histogram for the entire data set
-          pit_histograms[["overall_pit"]] <- scoringutils::pit_df(data)$hist_PIT
-        }
-
-      }
-    }
-
-    # remove sd if not asked for
-    if (!sd) {
-      data[, "pit_sd" := NULL]
-    }
-  }
-
   res <- data.table::copy(data)
 
   # make scores unique to avoid redundancy.
@@ -151,13 +106,6 @@ eval_forecasts_sample <- function(data,
   res <- res[, lapply(.SD, mean, na.rm = TRUE),
              .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
              by = summarise_by]
-
-
-  # if pit_plots is TRUE, add the plots as an output ---------------------------
-  if (pit_plots) {
-    res <- list(scores = res,
-                pit_plots = pit_histograms)
-  }
 
   return(res[])
 }

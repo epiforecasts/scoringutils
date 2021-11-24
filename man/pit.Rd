@@ -4,14 +4,7 @@
 \alias{pit}
 \title{Probability Integral Transformation}
 \usage{
-pit(
-  true_values,
-  predictions,
-  plot = TRUE,
-  full_output = FALSE,
-  n_replicates = 50,
-  num_bins = NULL
-)
+pit(true_values, predictions, n_replicates = 100)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
@@ -20,33 +13,14 @@ pit(
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 
-\item{plot}{logical. If \code{TRUE}, a histogram of the PIT values will be
-returned as well}
-
-\item{full_output}{return all individual p_values and computed u_t values
-for the randomised PIT. Usually not needed.}
-
-\item{n_replicates}{the number of tests to perform,
-each time re-randomising the PIT}
-
-\item{num_bins}{the number of bins in the PIT histogram (if \code{plot == TRUE})
-If not given, the square root of n will be used}
+\item{n_replicates}{the number of draws for the ranomised PIT for
+integer predictions.}
 }
 \value{
-a list with the following components:
-\itemize{
-\item \code{p_value}: p-value of the Anderson-Darling test on the
-PIT values. In case of integer forecasts, this will be the mean p_value
-from the \code{n_replicates} replicates
-\item \code{sd}: standard deviation of the p_value returned. In case of
-continuous forecasts, this will be NA as there is only one p_value returned.
-\item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-if \code{plot = TRUE}. Call \code{plot(PIT(...)$hist_PIT)} to display the histogram.
-\item \code{p_values}: all p_values generated from the Anderson-Darling tests
-on the (randomised) PIT. Only returned if \code{full_output = TRUE}
-\item \code{u}: the u_t values internally computed. Only returned if
-\code{full_output = TRUE}
-}
+A vector with PIT-values. For continuous forecasts, the vector will
+correspond to the length of \code{true_values}. For integer forecasts, a
+randomised PIT will be returned of length
+\code{length(true_values) * n_replicates}
 }
 \description{
 Uses a Probability Integral Transformation (PIT) (or a
@@ -102,16 +76,18 @@ In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.
 }
 \examples{
-
+library(scoringutils)
 ## continuous predictions
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-pit(true_values, predictions)
+pit <- pit(true_values, predictions)
+hist_PIT(pit)
 
 ## integer predictions
 true_values <- rpois(100, lambda = 1:100)
 predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-pit(true_values, predictions,  n_replicates = 5)
+pit <- pit(true_values, predictions,  n_replicates = 50)
+hist_PIT(pit)
 
 }
 \references{

@@ -4,15 +4,12 @@
 \alias{hist_PIT}
 \title{PIT Histogram}
 \usage{
-hist_PIT(PIT_samples, num_bins = NULL, caption = NULL)
+hist_PIT(PIT_samples, num_bins = NULL)
 }
 \arguments{
 \item{PIT_samples}{A vector with the PIT values of size n}
 
 \item{num_bins}{the number of bins in the PIT histogram.}
-
-\item{caption}{provide a caption that gets passed to the plot
-If not given, the square root of n will be used}
 }
 \value{
 vector with the scoring values
@@ -20,4 +17,12 @@ vector with the scoring values
 \description{
 Make a simple histogram of the probability integral transformed values to
 visually check whether a uniform distribution seems likely.
+}
+\examples{
+library(scoringutils)
+true_values <- rnorm(30, mean = 1:30)
+predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
+pit <- pit(true_values, predictions)
+hist_PIT(pit)
+
 }
