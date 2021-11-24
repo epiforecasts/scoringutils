@@ -136,7 +136,12 @@ globalVariables(c("..index",
                   "g"))
 
 
-list_of_avail_metrics <- function() {
+#' @title Available metrics in scoringutils
+#'
+#' @return A vector with the name of all available metrics
+#' @export
+
+available_metrics <- function() {
   available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",

@@ -86,7 +86,8 @@
 #' may want to include 'range', 'quantile' or 'sample', to summarise by
 #' range, quantile or sample.
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
-#' default), all available metrics will be computed.
+#' default), all available metrics will be computed. For a list of available
+#' metrics see [available_metrics()]
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
 #' Instead of just returning a mean, quantiles will be returned for the
 #' groups specified through `summarise_by`. By default, no quantiles are
@@ -242,7 +243,7 @@ eval_forecasts <- function(data = NULL,
   }
 
   # check metrics to be computed
-  available_metrics <- list_of_avail_metrics()
+  available_metrics <- available_metrics()
   if (is.null(metrics)) {
     metrics <- available_metrics
   } else {
@@ -259,13 +260,13 @@ eval_forecasts <- function(data = NULL,
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data) |
       "quantile" %in% names(data) | "range" %in% names(data)) {
     prediction_type <- "quantile"
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+  } else if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
     prediction_type <- "integer"
   } else {
     prediction_type <- "continuous"
   }
 
-  if (all.equal(data$true_value, as.integer(data$true_value)) == TRUE) {
+  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
     if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
       target_type = "binary"
     } else {

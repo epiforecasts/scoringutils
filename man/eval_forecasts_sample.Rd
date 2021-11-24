@@ -77,7 +77,8 @@ may want to include 'range', 'quantile' or 'sample', to summarise by
 range, quantile or sample.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed.}
+default), all available metrics will be computed. For a list of available
+metrics see \code{\link[=available_metrics]{available_metrics()}}}
 
 \item{prediction_type}{character, should be either "continuous" or "integer"}
 
