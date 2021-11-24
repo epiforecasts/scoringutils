@@ -5,7 +5,9 @@ eval_forecasts_quantile <- function(data,
                                     quantiles,
                                     sd,
                                     pit_plots,
-                                    interval_score_arguments,
+                                    weigh = TRUE,
+                                    count_median_twice = FALSE,
+                                    separate_results = TRUE,
                                     summarised,
                                     compute_relative_skill,
                                     rel_skill_metric,
@@ -32,39 +34,25 @@ eval_forecasts_quantile <- function(data,
     range_data[, c("upper", "lower") := NA]
   }
 
-  # update interval_score arguments based on what was provided by user
-  interval_score_arguments <- update_list(defaults = list(weigh = TRUE,
-                                                          count_median_twice = FALSE,
-                                                          separate_results = TRUE),
-                                          optional = interval_score_arguments)
-
-  # store separately, as this doesn't get passed down to interval_score()
-  count_median_twice <- interval_score_arguments$count_median_twice
-  interval_score_arguments$count_median_twice <- NULL
-
   # set up results data.table that will then be modified throughout ------------
   res <- data.table::copy(range_data)
 
   # calculate scores on range format -------------------------------------------
   if ("interval_score" %in% metrics) {
     # compute separate results if desired
-    if (interval_score_arguments$separate_results) {
+    if (separate_results) {
       res <- res[, c("interval_score",
                      "sharpness",
                      "underprediction",
                      "overprediction") := do.call(scoringutils::interval_score,
-                                                  c(list(true_value,
-                                                         lower,
-                                                         upper,
-                                                         range),
-                                                    interval_score_arguments))]
+                                                  list(true_value, lower,
+                                                       upper,range,
+                                                       weigh, separate_results))]
     } else {
       res <- res[, c("interval_score") := do.call(scoringutils::interval_score,
-                                                  c(list(true_value,
-                                                         lower,
-                                                         upper,
-                                                         range),
-                                                    interval_score_arguments))]
+                                                  list(true_value, lower,
+                                                       upper,range,
+                                                       weigh, separate_results))]
     }
     # res[, .(unlist(interval_score)), by = setdiff(colnames(res), "interval_score")]
   }

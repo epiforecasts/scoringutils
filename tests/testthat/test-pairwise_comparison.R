@@ -27,12 +27,12 @@ test_that("pairwise comparisons works", {
   eval_without_baseline <- eval_forecasts(data_formatted,
                                           by = c("location", "target_end_date", "model"),
                                           compute_relative_skill = TRUE,
-                                          interval_score_arguments = list(count_median_twice = FALSE))
+                                          count_median_twice = FALSE)
   eval_with_baseline <- scoringutils::eval_forecasts(data_formatted,
                                                      by = c("location", "target_end_date", "model"),
                                                      baseline = "m1",
                                                      compute_relative_skill = TRUE,
-                                                     interval_score_arguments = list(count_median_twice = FALSE))
+                                                     count_median_twice = FALSE)
 
   # extract the relative_skill values
   relative_skills_without <- eval_without_baseline[, .(model = unique(model),
@@ -149,7 +149,7 @@ test_that("pairwise comparisons works", {
                                                      summarise_by = c("model", "location"),
                                                      baseline = "m1",
                                                      compute_relative_skill = TRUE,
-                                                     interval_score_arguments = list(count_median_twice = FALSE))
+                                                     count_median_twice = FALSE)
   relative_skills_with <- eval_with_baseline[location == "location_3",
                                     .(model = unique(model),
                                       relative_skill = unique(scaled_rel_skill))]

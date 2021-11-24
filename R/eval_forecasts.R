@@ -93,16 +93,6 @@
 #' metrics will be returned when summarising.
 #' @param pit_plots if `TRUE` (not the default), pit plots will be returned. For
 #' details see [pit()].
-#' @param interval_score_arguments list with arguments for the calculation of
-#' the interval score. These arguments get passed down to
-#' `interval_score`, except for the argument `count_median_twice` that
-#' controls how the interval scores for different intervals are summed up. This
-#' should be a logical (default is `FALSE`) that indicates whether or not
-#' to count the median twice when summarising. This would conceptually treat the
-#' median as a 0% prediction interval, where the median is the lower as well as
-#' the upper bound. The alternative is to treat the median as a single quantile
-#' forecast instead of an interval. The interval score would then
-#' be better understood as an average of quantile scores.)
 #' @param summarised Summarise arguments (i.e. take the mean per group
 #' specified in group_by. Default is `TRUE.`
 #' @param compute_relative_skill logical, whether or not to compute relative
@@ -118,6 +108,17 @@
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
+#' @param ... additional parameters passed down to lower-level functions.
+#' For example, the following arguments can change how weighted interval
+#' scores are computed:
+#' - `count_median_twice` that controls how the interval scores for different
+#' intervals are summed up. This should be a logical (default is `FALSE`) that
+#' indicates whether or not to count the median twice when summarising.
+#' This would conceptually treat the
+#' median as a 0% prediction interval, where the median is the lower as well as
+#' the upper bound. The alternative is to treat the median as a single quantile
+#' forecast instead of an interval. The interval score would then
+#' be better understood as an average of quantile scores.)
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -186,14 +187,12 @@ eval_forecasts <- function(data = NULL,
                            metrics = NULL,
                            quantiles = c(),
                            sd = FALSE,
-                           interval_score_arguments = list(weigh = TRUE,
-                                                           count_median_twice = FALSE,
-                                                           separate_results = TRUE),
                            pit_plots = FALSE,
                            summarised = TRUE,
                            compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
-                           baseline = NULL) {
+                           baseline = NULL,
+                           ...) {
 
 
   # preparations ---------------------------------------------------------------
@@ -298,11 +297,11 @@ eval_forecasts <- function(data = NULL,
                                    quantiles = quantiles,
                                    sd = sd,
                                    pit_plots = pit_plots,
-                                   interval_score_arguments = interval_score_arguments,
                                    summarised = summarised,
                                    compute_relative_skill = compute_relative_skill,
                                    rel_skill_metric = rel_skill_metric,
-                                   baseline = baseline)
+                                   baseline = baseline,
+                                   ...)
     return(res)
   }
 
