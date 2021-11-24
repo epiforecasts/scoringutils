@@ -237,9 +237,7 @@ eval_forecasts <- function(data = NULL,
   # should probably wrap this in a function warn_if_verbose(warning, verbose)
   if (compute_relative_skill) {
     if (!("model" %in% colnames(data))) {
-      if (verbose) {
-        warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-      }
+      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
     models <- unique(data$model)
