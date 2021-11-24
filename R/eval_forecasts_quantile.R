@@ -41,20 +41,15 @@ eval_forecasts_quantile <- function(data,
   if ("interval_score" %in% metrics) {
     # compute separate results if desired
     if (separate_results) {
-      res <- res[, c("interval_score",
-                     "sharpness",
-                     "underprediction",
-                     "overprediction") := do.call(scoringutils::interval_score,
-                                                  list(true_value, lower,
-                                                       upper,range,
-                                                       weigh, separate_results))]
+      outcols <- c("interval_score", "sharpness",
+                "underprediction", "overprediction")
     } else {
-      res <- res[, c("interval_score") := do.call(scoringutils::interval_score,
-                                                  list(true_value, lower,
-                                                       upper,range,
-                                                       weigh, separate_results))]
+      outcols <- "interval_score"
     }
-    # res[, .(unlist(interval_score)), by = setdiff(colnames(res), "interval_score")]
+    res <- res[,  eval(outcols) := do.call(scoringutils::interval_score,
+                                       list(true_value, lower,
+                                            upper,range,
+                                            weigh, separate_results = TRUE))]
   }
 
   # compute coverage for every single observation
