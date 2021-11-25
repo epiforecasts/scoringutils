@@ -58,48 +58,31 @@ check_forecasts <- function(data) {
   errors <- list()
 
   # check data looks ok and remove columns with no prediction or no true value
-  data <- tryCatch(check_clean_data(data),
+
+  data <- withCallingHandlers(
+    tryCatch(
+      check_clean_data(data),
+      error = function(e) {
+        errors <<- c(errors, e$message)
+      }
+    ),
     warning = function(w) {
       warnings <<- c(warnings, w$message)
-      # not ideal to repeat, but not sure whether this could be solved differently
-      return(suppressWarnings(check_clean_data(data)))
-    },
-    error = function(e) {
-      errors <<- c(errors, e$message)
-      return(data)
+      tryInvokeRestart("muffleWarning")
     }
   )
 
   if (length(errors) > 0 | !is.data.table(data)) {
-    stop(paste0(
+    stop(
       "Can't check input. The following error has been produced:\n",
       paste(errors, collapse = "\n")
-    ))
+    )
   }
 
   # obtain truth type
-  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
-    if (all(data$true_value %in% c(0, 1)) &&
-      all(data$prediction >= 0) && all(data$prediction <= 1)) {
-      check[["target_type"]] <- "binary"
-    } else {
-      check[["target_type"]] <- "integer"
-    }
-  } else {
-    check[["target_type"]] <- "continuous"
-  }
 
-  # obtain prediction type
-  # if (any(grepl("lower_", names(data))) | "boundary" %in% names(data) |
-  #     "quantile" %in% names(data) | "range" %in% names(data)) {
-
-  if ("quantile" %in% names(data)) {
-    check[["prediction_type"]] <- "quantile"
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
-    check[["prediction_type"]] <- "integer"
-  } else {
-    check[["prediction_type"]] <- "continuous"
-  }
+  check[["target_type"]] <- get_target_type(data)
+  check[["prediction_type"]] <- get_prediction_type(data)
 
   msg <- c(
     msg,
@@ -146,7 +129,7 @@ check_forecasts <- function(data) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
   data[, InternalDuplicateCheck := .N, by = c(obs_unit, type)]
 
-  if (any(data$duplicatecheck) > 1) {
+  if (any(data$InternalDuplicateCheck > 1)) {
     errors <- c(
       errors,
       paste(
@@ -189,15 +172,15 @@ check_forecasts <- function(data) {
   data[, InternalNumCheck := NULL]
 
   # get available unique values per model for the different columns
-  cols <- obs_unit[!(obs_unit == "model")]
+  cols <- obs_unit[obs_unit != "model"]
   check[["unique_values"]] <-
-    data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
+    data[, vapply(.SD, FUN = function(x) length(unique(x)), integer(1)), by = "model"]
 
   check[["messages"]] <- unlist(msg)
   check[["warnings"]] <- unlist(warnings)
   check[["errors"]] <- unlist(errors)
 
-  attr(check, "class") <- "scoringutils_check"
+  class(check) <- c("scoringutils_check", "list")
 
   return(check)
 }
@@ -213,7 +196,6 @@ check_forecasts <- function(data) {
 #' @param ... additional arguments (not used here)
 #'
 #' @return NULL
-#' @method print scoringutils_check
 #' @export
 
 print.scoringutils_check <- function(x, ...) {
@@ -245,15 +227,60 @@ print.scoringutils_check <- function(x, ...) {
       paste(x$errors, collapse = "\n")
     ))
   }
-  return(NULL)
+  return(invisible(x))
 }
 
 
 
+#' @title Get prediction type of a forecast
+#'
+#' @description Internal helper function to get the prediction type of a
+#' forecast. That is inferred based on the properties of the values in the
+#' `prediction` column.
+#'
+#' @inheritParams check_forecasts
+#'
+#' @return Character vector of length one with either "quantile", "integer", or
+#' "continuous".
+#'
+#' @keywords internal
+
+get_prediction_type <- function(data) {
+  if ("quantile" %in% names(data)) {
+    return("quantile")
+  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+    return("integer")
+  } else {
+    return("continuous")
+  }
+}
 
 
+#' @title Get type of the target true values of a forecast
+#'
+#' @description Internal helper function to get the type of the target
+#' true values of a forecast. That is inferred based on the which columns
+#' are present in the data.
+#'
+#' @inheritParams check_forecasts
+#'
+#' @return Character vector of length one with either "binary", "integer", or
+#' "continous"
+#'
+#' @keywords internal
 
-
+get_target_type <- function(data) {
+  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
+    if (all(data$true_value %in% c(0, 1)) &&
+        all(data$prediction >= 0) && all(data$prediction <= 1)) {
+      return("binary")
+    } else {
+      return("integer")
+    }
+  } else {
+    return("continuous")
+  }
+}
 
 
 #' @title Clean forecast data
@@ -262,7 +289,7 @@ print.scoringutils_check <- function(x, ...) {
 #' or similar and remove rows with no value for `prediction` or `true_value`
 #'
 #' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
-#' @param verbose Boolean, whether or not to print warnings
+#' @param verbose Boolean (default is `TRUE`), whether or not to print warnings
 #'
 #' @return A data.table with NA values in `true_value` or `prediction` removed.
 #'
@@ -293,6 +320,7 @@ check_clean_data <- function(data, verbose = TRUE) {
     if (verbose) {
       warning("Some values for `prediction` are NA in the data provided")
     }
+    warning("Some values for `prediction` are NA in the data provided")
   }
   data <- data[!is.na(prediction)]
   if (nrow(data) == 0) {
