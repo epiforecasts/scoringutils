@@ -5,13 +5,12 @@
 \title{Evaluate forecasts}
 \usage{
 eval_forecasts(
-  data = NULL,
+  data,
   by = NULL,
   summarise_by = by,
   metrics = NULL,
   quantiles = c(),
   sd = FALSE,
-  pit_plots = FALSE,
   compute_relative_skill = FALSE,
   rel_skill_metric = "auto",
   baseline = NULL,
@@ -90,9 +89,6 @@ returned.}
 
 \item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
 metrics will be returned when summarising.}
-
-\item{pit_plots}{if \code{TRUE} (not the default), pit plots will be returned. For
-details see \code{\link[=pit]{pit()}}.}
 
 \item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called
@@ -196,8 +192,7 @@ integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      summarise_by = c("model"),
                                      quantiles = c(0.1, 0.9),
-                                     sd = TRUE,
-                                     pit_plots = TRUE)
+                                     sd = TRUE)
 eval <- scoringutils::eval_forecasts(integer_example)
 
 ## Continuous Forecasts

@@ -73,7 +73,6 @@ eval_forecasts_quantile <- function(data,
     }
   }
 
-
   # calculate scores on quantile format ----------------------------------------
   # compute absolute error of the median
   if ("aem" %in% metrics) {

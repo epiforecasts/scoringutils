@@ -11,8 +11,7 @@ eval_forecasts_sample(
   metrics,
   prediction_type,
   quantiles,
-  sd,
-  pit_plots
+  sd
 )
 }
 \arguments{
@@ -89,9 +88,6 @@ returned.}
 
 \item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
 metrics will be returned when summarising.}
-
-\item{pit_plots}{if \code{TRUE} (not the default), pit plots will be returned. For
-details see \code{\link[=pit]{pit()}}.}
 }
 \value{
 A data.table with appropriate scores. For more information see
@@ -107,8 +103,7 @@ integer_example <- data.table::setDT(scoringutils::integer_example_data)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      summarise_by = c("model"),
                                      quantiles = c(0.1, 0.9),
-                                     sd = TRUE,
-                                     pit_plots = TRUE)
+                                     sd = TRUE)
 eval <- scoringutils::eval_forecasts(integer_example)
 
 ## Continuous Forecasts

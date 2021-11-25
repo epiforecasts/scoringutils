@@ -179,7 +179,7 @@
 #' PLoS Comput Biol 15(2): e1006785. <doi:10.1371/journal.pcbi.1006785>
 #' @export
 
-eval_forecasts <- function(data = NULL,
+eval_forecasts <- function(data,
                            by = NULL,
                            summarise_by = by,
                            metrics = NULL,
