@@ -265,7 +265,7 @@ correlation_plot <- function(scores,
 #'
 #' @description
 #' Visualise the components of the weighted interval score: penalties for
-#' over-prediction, under-prediction and for a lack of sharpness
+#' over-prediction, under-prediction and for high dispersion (lack of sharpness)
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [eval_forecasts()]
@@ -323,7 +323,7 @@ wis_components <- function(scores,
   scores <- data.table::melt(scores,
                              measure.vars = c("overprediction",
                                               "underprediction",
-                                              "sharpness"),
+                                              "dispersion"),
                              variable.name = "wis_component_name",
                              value.name = "component_value")
 
@@ -363,14 +363,14 @@ wis_components <- function(scores,
 #'
 #' @description
 #' Visualise the metrics by range, e.g. if you are interested how different
-#' interval ranges contribute to the overall interval score, or how sharpness
-#' changes by range.
+#' interval ranges contribute to the overall interval score, or how
+#' sharpness / dispersion changes by range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [eval_forecasts()]. Note that "range" must be included
 #' in the `summarise_by` argument when running `eval_forecasts`
 #' @param y The variable from the scores you want to show on the y-Axis.
-#' This could be something like "interval_score" (the default) or "sharpness"
+#' This could be something like "interval_score" (the default) or "dispersion"
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
 #' @param colour Character vector of length one used to determine a variable
@@ -399,15 +399,15 @@ wis_components <- function(scores,
 #'
 #' scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
 #'
-#' # visualise sharpness instead of interval score
-#' scoringutils::range_plot(scores, y = "sharpness", x = "model",
+#' # visualise dispersion instead of interval score
+#' scoringutils::range_plot(scores, y = "dispersion", x = "model",
 #'                           facet_formula =  ~value_desc)
 #'
-#' # we saw above that sharpness values crossed. Let's look at the unweighted WIS
+#' # we saw above that dispersion values crossed. Let's look at the unweighted WIS
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                         interval_score_arguments = list(weigh = FALSE),
 #'                                         summarise_by = c("model", "value_desc", "range"))
-#' scoringutils::range_plot(scores, y = "sharpness", x = "model",
+#' scoringutils::range_plot(scores, y = "dispersion", x = "model",
 #'                           facet_formula =  ~value_desc)
 
 
