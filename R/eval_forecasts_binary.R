@@ -1,6 +1,10 @@
 #' @title Evaluate forecasts in a Binary Format
 #'
 #' @inheritParams eval_forecasts
+#' @param forecast_unit A character vector with the column names that define
+#' the unit of a single forecast, i.e. a forecast was made for a combination
+#' of the values in `forecast_unit`
+#'
 #' @return A data.table with appropriate scores. For more information see
 #' [eval_forecasts()]
 #'
@@ -16,14 +20,14 @@
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 eval_forecasts_binary <- function(data,
-                                  by,
+                                  forecast_unit,
                                   summarise_by,
                                   metrics,
                                   quantiles,
                                   sd){
 
   res <- data[, "brier_score" := scoringutils::brier_score(true_value, prediction),
-              by = by]
+              by = forecast_unit]
 
   # add quantiles
   if (!is.null(quantiles)) {

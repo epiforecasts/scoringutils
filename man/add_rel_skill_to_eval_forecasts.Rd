@@ -25,14 +25,6 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by}
-instead of \code{by}}
-
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise

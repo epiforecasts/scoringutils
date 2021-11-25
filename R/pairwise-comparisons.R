@@ -13,12 +13,6 @@
 #' [eval_forecasts()]
 #' @param metric A character vector of length one with the metric to do
 #' the comparison on.
-#' @param by character vector of columns to group scoring by. This should be the
-#' lowest level of grouping possible, i.e. the unit of the individual
-#' observation. This is important as many functions work on individual
-#' observations. If you want a different level of aggregation, you should use
-#' `summarise_by` to aggregate the individual scores.
-#' Also not that the pit will be computed using `summarise_by` instead of `by`
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place. But sometimes you
 #' may want to to summarise over categories different from the scoring.
@@ -60,7 +54,6 @@ pairwise_comparison <- function(scores,
                                                     test_type = c("non_parametric", "permuation"),
                                                     n_permutations = 999),
                                 baseline = NULL,
-                                by = NULL,
                                 summarise_by = c("model")) {
 
   scores <- data.table::as.data.table(scores)

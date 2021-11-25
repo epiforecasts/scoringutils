@@ -1,5 +1,5 @@
 eval_forecasts_quantile <- function(data,
-                                    by,
+                                    forecast_unit,
                                     summarise_by,
                                     metrics,
                                     quantiles,
@@ -61,7 +61,7 @@ eval_forecasts_quantile <- function(data,
   if ("bias" %in% metrics) {
     res[, bias := quantile_bias(range = range, lower = lower, upper = upper,
                                 true_value = unique(true_value)),
-        by = by]
+        by = forecast_unit]
   }
 
   # score absolute error for point forecasts
@@ -79,7 +79,7 @@ eval_forecasts_quantile <- function(data,
     quantile_data[, aem := ae_median_quantile(true_value,
                                               prediction,
                                               quantile),
-                  by = by]
+                  by = forecast_unit]
   }
 
   # compute quantile coverage based on quantile version
@@ -94,7 +94,7 @@ eval_forecasts_quantile <- function(data,
   # if we computed either the interval score or the aem or quantile coverage
   if (any(c("aem", "interval_score", "quantile_coverage") %in% metrics)) {
     # delete unnecessary columns before merging back
-    keep_cols <- unique(c(by, "quantile", "aem", "quantile_coverage",
+    keep_cols <- unique(c(forecast_unit, "quantile", "aem", "quantile_coverage",
                           "boundary", "range"))
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
     quantile_data[, eval(delete_cols) := NULL]
@@ -121,9 +121,9 @@ eval_forecasts_quantile <- function(data,
     relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = res,
                                                     rel_skill_metric = rel_skill_metric,
                                                     baseline = baseline,
-                                                    by = by,
+                                                    by = forecast_unit,
                                                     summarise_by = summarise_by)
-    res <- merge(res, relative_res, by = by)
+    res <- merge(res, relative_res, by = forecast_unit)
   }
 
   # summarise scores -----------------------------------------------------------

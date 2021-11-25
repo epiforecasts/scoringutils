@@ -4,7 +4,14 @@
 \alias{eval_forecasts_binary}
 \title{Evaluate forecasts in a Binary Format}
 \usage{
-eval_forecasts_binary(data, by, summarise_by, metrics, quantiles, sd)
+eval_forecasts_binary(
+  data,
+  forecast_unit,
+  summarise_by,
+  metrics,
+  quantiles,
+  sd
+)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -50,13 +57,9 @@ or 'upper_50' and 'lower_50', where the number denotes the interval range.
 For the median, you need to provide columns called 'upper_0' and 'lower_0'
 }}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by}
-instead of \code{by}}
+\item{forecast_unit}{A character vector with the column names that define
+the unit of a single forecast, i.e. a forecast was made for a combination
+of the values in \code{forecast_unit}}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place.

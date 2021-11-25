@@ -70,13 +70,6 @@
 #'   - pairs of columns called something like 'upper_90' and 'lower_90',
 #'   or 'upper_50' and 'lower_50', where the number denotes the interval range.
 #'   For the median, you need to provide columns called 'upper_0' and 'lower_0'
-#' @param by character vector of columns to group scoring by. This should be the
-#' lowest level of grouping possible, i.e. the unit of the individual
-#' observation. This is important as many functions work on individual
-#' observations. If you want a different level of aggregation, you should use
-#' `summarise_by` to aggregate the individual scores.
-#' Also not that the pit will be computed using `summarise_by`
-#' instead of `by`
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place.
 #' But sometimes you may want to to summarise
@@ -180,8 +173,7 @@
 #' @export
 
 eval_forecasts <- function(data,
-                           by = NULL,
-                           summarise_by = by,
+                           summarise_by = NULL,
                            metrics = NULL,
                            quantiles = c(),
                            sd = FALSE,
@@ -216,22 +208,18 @@ eval_forecasts <- function(data,
     }
   }
 
-  # obtain a value for by if nothing was provided by the user
-  if (is.null(by)) {
-    protected_columns <- c("prediction", "true_value", "sample", "quantile",
-                           "range", "boundary")
-    by <- setdiff(colnames(data), protected_columns)
+  # obtain a value for the unit of a single observation
+  forecast_unit <- get_unit_of_forecast(data)
 
-    if (is.null(summarise_by)) {
-      summarise_by <- by
-    }
+  if (is.null(summarise_by)) {
+    summarise_by <- forecast_unit
   }
 
   # check that the arguments in by and summarise_by are actually present
-  if (!all(c(by, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
-    not_present <- setdiff(unique(c(by, summarise_by)),
+  if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
+    not_present <- setdiff(unique(c(forecast_unit, summarise_by)),
                            c(colnames(data), "range", "quantile"))
-    msg <- paste0("The following items in `by` or `summarise_by` are not",
+    msg <- paste0("The following items in `summarise_by` are not",
                  "valid column names of the data: '",
                  paste(not_present, collapse = ", "),
                  "'. Check and run `eval_forecasts()` again")
@@ -275,7 +263,7 @@ eval_forecasts <- function(data,
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
     res <- eval_forecasts_binary(data = data,
-                                 by = by,
+                                 forecast_unit = forecast_unit,
                                  summarise_by = summarise_by,
                                  metrics = metrics,
                                  quantiles = quantiles,
@@ -286,7 +274,7 @@ eval_forecasts <- function(data,
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
     res <- eval_forecasts_quantile(data = data,
-                                   by = by,
+                                   forecast_unit = forecast_unit,
                                    summarise_by = summarise_by,
                                    metrics = metrics,
                                    quantiles = quantiles,
@@ -304,7 +292,7 @@ eval_forecasts <- function(data,
 
     # compute scores -----------------------------------------------------------
     res <- eval_forecasts_sample(data = data,
-                                 by = by,
+                                 forecast_unit = forecast_unit,
                                  summarise_by = summarise_by,
                                  metrics = metrics,
                                  prediction_type = prediction_type,

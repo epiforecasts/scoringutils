@@ -2,6 +2,9 @@
 #'
 #' @inheritParams eval_forecasts
 #' @param prediction_type character, should be either "continuous" or "integer"
+#' @param forecast_unit A character vector with the column names that define
+#' the unit of a single forecast, i.e. a forecast was made for a combination
+#' of the values in `forecast_unit`
 #'
 #' @return A data.table with appropriate scores. For more information see
 #' [eval_forecasts()]
@@ -31,9 +34,8 @@
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @inherit eval_forecasts references
 
-
 eval_forecasts_sample <- function(data,
-                                  by,
+                                  forecast_unit,
                                   summarise_by,
                                   metrics,
                                   prediction_type,
@@ -51,29 +53,29 @@ eval_forecasts_sample <- function(data,
   # calculate scores -----------------------------------------------------------
   # sharpness
   if ("sharpness" %in% metrics) {
-    data[, sharpness := scoringutils::sharpness(t(prediction)), by = c(by)]
+    data[, sharpness := scoringutils::sharpness(t(prediction)), by = forecast_unit]
   }
   # bias
   if ("bias" %in% metrics) {
     data[, bias := scoringutils::bias(unique(true_value),
-                                      t(prediction)), by = c(by)]
+                                      t(prediction)), by = forecast_unit]
   }
   # DSS
   if ("dss" %in% metrics) {
     data[, dss := scoringutils::dss(unique(true_value),
-                                    t(prediction)), by = c(by)]
+                                    t(prediction)), by = forecast_unit]
   }
   # CRPS
   if ("crps" %in% metrics) {
     data[, crps := scoringutils::crps(unique(true_value),
-                                      t(prediction)), by = c(by)]
+                                      t(prediction)), by = forecast_unit]
   }
   # Log Score
   if ("log_score" %in% metrics) {
     # only compute if prediction type is continuous
     if (prediction_type == "continuous") {
       data[, log_score := scoringutils::logs(unique(true_value),
-                                             t(prediction)), by = c(by)]
+                                             t(prediction)), by = forecast_unit]
     }
   }
   # coverage
@@ -85,7 +87,7 @@ eval_forecasts_sample <- function(data,
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),
              .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit",
-             by = c(by)]
+             by = forecast_unit]
 
   # summarise output if desired ------------------------------------------------
   # add quantiles
