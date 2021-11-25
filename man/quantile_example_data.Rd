@@ -5,7 +5,7 @@
 \alias{quantile_example_data}
 \title{Quantile Example Data}
 \format{
-A data frame with 5,152 rows and 10 columns:
+A data frame with
 \describe{
 \item{value_date}{the date for which a prediction was made}
 \item{value_type}{the target to be predicted (short form)}
