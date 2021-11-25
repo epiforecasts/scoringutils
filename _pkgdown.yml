@@ -2,6 +2,9 @@ reference:
         - title: Package documentation
           contents:
                 - scoringutils
+        - title: Check input functions
+          contents:
+                - check_forecasts
         - title: Evaluation functions
           contents:
                 - compare_two_models
