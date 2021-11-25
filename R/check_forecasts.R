@@ -320,7 +320,6 @@ check_clean_data <- function(data, verbose = TRUE) {
     if (verbose) {
       warning("Some values for `prediction` are NA in the data provided")
     }
-    warning("Some values for `prediction` are NA in the data provided")
   }
   data <- data[!is.na(prediction)]
   if (nrow(data) == 0) {

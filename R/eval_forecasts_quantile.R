@@ -152,7 +152,7 @@ eval_forecasts_quantile <- function(data,
   res <- res[, lapply(.SD, mean, na.rm = TRUE),
              by = c(summarise_by),
              .SDcols = colnames(res) %like%
-               "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
+               "coverage|bias|dispersion|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
   if (!("range" %in% summarise_by) & ("coverage" %in% colnames(res))) {
