@@ -4,9 +4,9 @@
 #' narrow range. It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
 #'
-#' Shaprness of predictive samples corresponding to one single true value is
+#' Sharpness of predictive samples corresponding to one single true value is
 #' measured as the normalised median of the absolute deviation from
-#' the median of the predictive samples. For details, see \link[stats]{mad}
+#' the median of the predictive samples. For details, see [mad()][stats::mad()]
 #'
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the

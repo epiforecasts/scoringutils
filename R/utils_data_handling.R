@@ -2,14 +2,14 @@
 #'
 #' @description
 #' Given a data.frame that follows the structure shown in
-#' \code{\link{range_example_data_long}}, the function outputs the same
+#' [range_example_data_long()], the function outputs the same
 #' data in a long format as (as shown in
-#' \code{\link{range_example_data_wide}}). This can be useful e.g. for
+#' [range_example_data_wide()]). This can be useful e.g. for
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
-#' \code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-#' \code{\link{range_example_data_long}})
+#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [range_example_data_long()])
 #' @return a data.frame in wide format
 #' @importFrom data.table dcast
 #' @export
@@ -29,7 +29,7 @@ range_long_to_wide <- function(data) {
   out <- data.table::dcast(data, ... ~ boundary + range,
                            value.var = "prediction")
 
-  return(out)
+  return(out[])
 }
 
 
@@ -45,7 +45,7 @@ range_long_to_wide <- function(data) {
 quantile_to_wide <- function(data) {
   warning("This function will be deprecated. Please use `range_long_to_wide()` in the future")
   out <- scoringutils::range_long_to_wide(data)
-  return(out)
+  return(out[])
 }
 
 
@@ -55,14 +55,14 @@ quantile_to_wide <- function(data) {
 #'
 #' @description
 #' Given a data.frame that follows the structure shown in
-#' \code{\link{range_example_data_wide}}, the function outputs the same
+#' [range_example_data_wide()], the function outputs the same
 #' data in a long format as (as shown in
-#' \code{\link{range_example_data_long}}). This can be useful e.g. for
+#' [range_example_data_long()]). This can be useful e.g. for
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
-#' \code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-#' \code{\link{range_example_data_wide}})
+#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [range_example_data_wide()])
 #' @return a data.frame in long format
 #' @importFrom data.table melt
 #' @export
@@ -106,7 +106,7 @@ range_wide_to_long <- function(data) {
     data[, range := as.numeric(gsub("^.*?_","", range))]
   }
 
-  return(data)
+  return(data[])
 }
 
 
@@ -120,7 +120,7 @@ range_wide_to_long <- function(data) {
 quantile_to_long <- function(data) {
   warning("This function will be deprecated. Please use `range_wide_to_long()` in the future")
   out <- scoringutils::range_wide_to_long(data)
-  return(out)
+  return(out[])
 }
 
 
@@ -133,25 +133,28 @@ quantile_to_long <- function(data) {
 #' to a format that uses quantiles only.
 #'
 #' Given a data.frame that follows the structure shown in
-#' \code{\link{range_example_data_long}}, the function outputs the same
+#' [range_example_data_long()], the function outputs the same
 #' data in a long format as (as shown in
-#' \code{\link{range_example_data_long}}). This can be useful e.g. for
+#' [range_example_data_long()]). This can be useful e.g. for
 #' plotting. If you're data.frame is in a different format, consider running
-#' \code{\link{range_long_to_wide}} first.
+#' [range_long_to_wide()] first.
 #'
 #' @param data a data.frame following the specifications from
-#' \code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-#' \code{\link{range_example_data_long}})
+#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [range_example_data_long()])
 #' @param keep_range_col keep the range and boundary columns after
 #' transformation (default is FALSE)
 #' @return a data.frame in a plain quantile format
 #' @importFrom data.table copy
 #' @export
 #' @examples
-#' wide <- scoringutils::range_example_data_wide
-#' long <- scoringutils::range_wide_to_long(wide)
+#' wide <- range_example_data_wide
+#' semiwide <- range_example_data_semi_wide
 #'
-#' plain_quantile <- range_long_to_quantile(long)
+#' long <- range_wide_to_long(wide)
+#' long2 <- range_wide_to_long(semiwide)
+#'
+#' plain_quantile <- range_long_to_quantile(long2)
 #'
 
 
@@ -173,7 +176,7 @@ range_long_to_quantile <- function(data,
   }
 
 
-  return(unique(data))
+  return(unique(data)[])
 }
 
 
@@ -188,7 +191,7 @@ range_to_quantile <- function(data,
                               keep_range_col = FALSE) {
   warning("This function will be deprecated. Please use `range_long_to_quantile()` in the future")
   out <- scoringutils::range_long_to_quantile(data, keep_range_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -203,12 +206,12 @@ range_to_quantile <- function(data,
 #' interval ranges to denote quantiles.
 #'
 #' Given a data.frame that follows the structure shown in
-#' \code{\link{quantile_example_data}}, the function outputs the same
+#' [quantile_example_data()], the function outputs the same
 #' data in a long format as (as shown in
-#' \code{\link{range_example_data_long}}).
+#' [range_example_data_long()]).
 #'
 #' @param data a data.frame following the specifications shown in the example
-#' \code{\link{range_example_data_long}})
+#' [range_example_data_long()])
 #' @param keep_quantile_col keep the quantile column in the final
 #' output after transformation (default is FALSE)
 #' @return a data.frame in a long interval range format
@@ -246,7 +249,7 @@ quantile_to_range_long <- function(data,
   data[, `:=`(boundary = as.character(boundary),
               range = as.numeric(range))]
 
-  return(data)
+  return(data[])
 }
 
 
@@ -261,7 +264,7 @@ quantile_to_range <- function(data,
                               keep_quantile_col = FALSE) {
   warning("This function will be deprecated. Please use `quantile_to_range_long()` in the future")
   out <- scoringutils::quantile_to_range_long(data, keep_quantile_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -278,7 +281,7 @@ quantile_to_range <- function(data,
 #' @param data a data.frame with samples
 #' @param quantiles a numeric vector of quantiles to extract
 #' @param type type argument passed down to the quantile function. For more
-#' information, see \code{\link{quantile}}
+#' information, see [quantile()]
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
@@ -306,7 +309,7 @@ sample_to_quantile <- function(data,
                                          type = type, na.rm = TRUE)),
                by = by]
 
-  return(data)
+  return(data[])
 }
 
 
@@ -321,9 +324,9 @@ sample_to_quantile <- function(data,
 #'
 #' @param data a data.frame with samples
 #' @param range a numeric vector of interval ranges to extract
-#' (e.g. \code{c(0, 50, 90)})
+#' (e.g. `c(0, 50, 90)`)
 #' @param type type argument passed down to the quantile function. For more
-#' information, see \code{\link{quantile}}
+#' information, see [quantile()]
 #' @param keep_quantile_col keep quantile column, default is TRUE
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
@@ -354,7 +357,7 @@ sample_to_range_long <- function(data,
   data <- scoringutils::quantile_to_range_long(data,
                                                keep_quantile_col = keep_quantile_col)
 
-  return(data)
+  return(data[])
 }
 
 
@@ -372,7 +375,7 @@ sample_to_range <- function(data,
                             keep_quantile_col = TRUE) {
   warning("This function will be deprecated. Please use `sample_to_range-long()` in the future")
   out <- scoringutils::sample_to_range_long(data, range, type, keep_quantile_col)
-  return(out)
+  return(out[])
 }
 
 
@@ -383,14 +386,14 @@ sample_to_range <- function(data,
 #'
 #' @description
 #'
-#' The function more or less provides a wrapper around \code{merge} that
+#' The function more or less provides a wrapper around `merge` that
 #' aims to handle the merging well if additional columns are present
 #' in one or both data sets. If in doubt, you should probably merge the
 #' data sets manually.
 #'
 #'
 #' @param forecasts data.frame with the forecast data (as can be passed to
-#' \code{\link{eval_forecasts}}).
+#' [eval_forecasts()]).
 #' @param observations data.frame with the observations
 #' @param join character, one of `c("left", "full", "right")`. Determines the
 #' type of the join. Usually, a left join is appropriate, but sometimes you
@@ -450,7 +453,7 @@ merge_pred_and_obs <- function(forecasts, observations,
     combined[, paste0(basenames_overlap, ".y") := NULL]
   }
 
-  return(combined)
+  return(combined[])
 }
 
 

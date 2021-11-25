@@ -17,9 +17,9 @@ number of Monte Carlo samples}
 vector with scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample}}
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample()}}
 function from the
-\code{scoringRules} package.
+\pkg{scoringRules} package.
 }
 \examples{
 true_values <- rpois(30, lambda = 1:30)
@@ -28,5 +28,5 @@ dss(true_values, predictions)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+Forecasts with scoringRules, \url{https://arxiv.org/pdf/1709.04743.pdf}
 }

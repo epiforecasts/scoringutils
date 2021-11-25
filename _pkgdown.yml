@@ -2,8 +2,12 @@ reference:
         - title: Package documentation
           contents:
                 - scoringutils
+        - title: Check input functions
+          contents:
+                - check_forecasts
         - title: Evaluation functions
           contents:
+                - available_metrics
                 - compare_two_models
                 - starts_with("eval_")
                 - eval_forecasts

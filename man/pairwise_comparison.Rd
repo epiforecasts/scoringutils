@@ -16,34 +16,32 @@ pairwise_comparison(
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link{eval_forecasts}}}
+\code{\link[=eval_forecasts]{eval_forecasts()}}}
 
 \item{metric}{A character vector of length one with the metric to do
 the comparison on.}
 
-\item{test_options}{list with options to pass down to \code{\link{compare_two_models}}.
+\item{test_options}{list with options to pass down to \code{\link[=compare_two_models]{compare_two_models()}}.
 To change only one of the default options, just pass a list as input with
 the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
 default options).}
 
-\item{baseline}{character vector of length one that denotes
-the baseline model against which to compare other models.}
+\item{baseline}{character vector of length one that denotes the baseline
+model against which to compare other models.}
 
 \item{by}{character vector of columns to group scoring by. This should be the
 lowest level of grouping possible, i.e. the unit of the individual
 observation. This is important as many functions work on individual
 observations. If you want a different level of aggregation, you should use
 \code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by}
-instead of \code{by}}
+Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to `by` and no summary takes place.
-But sometimes you may want to to summarise
-over categories different from the scoring.
-\code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).}
+default, this is equal to \code{by} and no summary takes place. But sometimes you
+may want to to summarise over categories different from the scoring.
+\code{summarise_by} is also the grouping level used to compute (and possibly plot)
+the probability integral transform(pit).}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores
@@ -53,7 +51,7 @@ Make pairwise comparisons between models. The code for the pairwise
 comparisons is inspired by an implementation by Johannes Bracher.
 
 The implementation of the permutation test follows the function
-permutationTest from the `surveillance` package by Michael Höhle,
+\code{permutationTest} from the \code{surveillance} package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
 }
 \examples{
@@ -67,7 +65,7 @@ res <- scoringutils::pairwise_comparison(df,
                            baseline = "model1")
 scoringutils::plot_pairwise_comparison(res)
 
-eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long)
+eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
 pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 }
 \author{

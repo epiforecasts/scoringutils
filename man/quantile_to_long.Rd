@@ -8,8 +8,8 @@ quantile_to_long(data)
 }
 \arguments{
 \item{data}{a data.frame following the specifications from
-\code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-\code{\link{range_example_data_long}})}
+\code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
+\code{\link[=range_example_data_long]{range_example_data_long()}})}
 }
 \value{
 a data.frame in long format

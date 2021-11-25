@@ -2,7 +2,7 @@
 #'
 #' @inheritParams eval_forecasts
 #' @return A data.table with appropriate scores. For more information see
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @importFrom data.table ':='
 #'
@@ -14,7 +14,7 @@
 #'                                      quantiles = c(0.5), sd = TRUE,
 #'                                      verbose = FALSE)
 #'
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 eval_forecasts_binary <- function(data,
                                   by,
@@ -45,6 +45,8 @@ eval_forecasts_binary <- function(data,
                by = summarise_by]
 
   }
+
+  return(res[])
 }
 
 

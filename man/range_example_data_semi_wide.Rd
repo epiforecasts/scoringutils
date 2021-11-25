@@ -7,17 +7,17 @@
 \format{
 A data frame with 5,419 rows and 12 columns:
 \describe{
-  \item{value_date}{the date for which a prediction was made}
-  \item{value_type}{the target to be predicted (short form)}
-  \item{geography}{the region for which a prediction was made}
-  \item{value_desc}{long form description of the prediction target}
-  \item{true_value}{true observed values}
-  \item{model}{name of the model that generated the forecasts}
-  \item{creation_date}{date on which the forecast was made}
-  \item{horizon}{forecast horizon in days}
-  \item{range}{range of the corresponding prediction interval}
-  \item{lower}{prediction for the lower bound of the corresponding interval}
-  \item{upper}{prediction for the upper bound of the corresponding interval}
+\item{value_date}{the date for which a prediction was made}
+\item{value_type}{the target to be predicted (short form)}
+\item{geography}{the region for which a prediction was made}
+\item{value_desc}{long form description of the prediction target}
+\item{true_value}{true observed values}
+\item{model}{name of the model that generated the forecasts}
+\item{creation_date}{date on which the forecast was made}
+\item{horizon}{forecast horizon in days}
+\item{range}{range of the corresponding prediction interval}
+\item{lower}{prediction for the lower bound of the corresponding interval}
+\item{upper}{prediction for the upper bound of the corresponding interval}
 }
 }
 \usage{

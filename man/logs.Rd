@@ -17,9 +17,9 @@ number of Monte Carlo samples}
 vector with the scoring values
 }
 \description{
-Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample}}
+Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample()}}
 function from the
-\code{scoringRules} package. Used to score continuous predictions.
+\pkg{scoringRules} package. Used to score continuous predictions.
 While the Log Score is in theory also applicable
 to integer forecasts, the problem lies in the implementation: The Log Score
 needs a kernel density estimation, which is not well defined with
@@ -34,5 +34,5 @@ logs(true_values, predictions)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+Forecasts with scoringRules, \url{https://arxiv.org/pdf/1709.04743.pdf}
 }

@@ -15,7 +15,7 @@ add_rel_skill_to_eval_forecasts(
 }
 \arguments{
 \item{unsummarised_scores}{unsummarised scores to be passed from
-\code{\link{eval_forecasts}}}
+\code{\link[=eval_forecasts]{eval_forecasts()}}}
 
 \item{rel_skill_metric}{character string with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
@@ -23,7 +23,7 @@ one of interval score, crps or brier score will be used where appropriate}
 
 \item{baseline}{character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
-returned. By default (`NULL`), relative skill will not be scaled with
+returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
 \item{by}{character vector of columns to group scoring by. This should be the
@@ -35,19 +35,19 @@ Also not that the pit will be computed using \code{summarise_by}
 instead of \code{by}}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to `by` and no summary takes place.
+default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
 (and possibly plot) the probability integral transform(pit).}
 
-\item{verbose}{print out additional helpful messages (default is TRUE)}
+\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
 }
 \description{
-This function will only be called within \code{\link{eval_forecasts}} and serves to
+This function will only be called within \code{\link[=eval_forecasts]{eval_forecasts()}} and serves to
 make pairwise comparisons from within that function. It uses the
-`summarise_by` argument as well as the data from \code{\link{eval_forecasts}}.
-Essentially, it wraps \code{\link{pairwise_comparison}} and deals with the specifics
-necessary to work with \code{\link{eval_forecasts}}.
+\code{summarise_by} argument as well as the data from \code{\link[=eval_forecasts]{eval_forecasts()}}.
+Essentially, it wraps \code{\link[=pairwise_comparison]{pairwise_comparison()}} and deals with the specifics
+necessary to work with \code{\link[=eval_forecasts]{eval_forecasts()}}.
 }
 \keyword{internal}

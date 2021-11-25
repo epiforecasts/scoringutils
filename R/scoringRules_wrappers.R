@@ -1,9 +1,9 @@
 #' @title LogS
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample}}
+#' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' \code{scoringRules} package. Used to score continuous predictions.
+#' \pkg{scoringRules} package. Used to score continuous predictions.
 #' While the Log Score is in theory also applicable
 #' to integer forecasts, the problem lies in the implementation: The Log Score
 #' needs a kernel density estimation, which is not well defined with
@@ -23,7 +23,7 @@
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 
 
 logs <- function(true_values, predictions) {
@@ -61,9 +61,9 @@ logs <- function(true_values, predictions) {
 #' @title Dawid-Sebastiani Score
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample}}
+#' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' \code{scoringRules} package.
+#' \pkg{scoringRules} package.
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
@@ -77,7 +77,7 @@ logs <- function(true_values, predictions) {
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 
 dss <- function(true_values, predictions) {
 
@@ -115,9 +115,9 @@ dss <- function(true_values, predictions) {
 #' @title Ranked Probability Score
 #'
 #' @description
-#' Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample}}
+#' Wrapper around the [`crps_sample()`][scoringRules::scores_sample_univ]
 #' function from the
-#' \code{scoringRules} package. Can be used for continuous as well as integer
+#' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
@@ -132,7 +132,7 @@ dss <- function(true_values, predictions) {
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts withscoringRules, https://arxiv.org/pdf/1709.04743.pdf
+#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 
 crps <- function(true_values, predictions) {
 

@@ -5,18 +5,18 @@
 \alias{quantile_example_data}
 \title{Quantile Example Data}
 \format{
-A data frame with 5,152 rows and 10 columns:
+A data frame with
 \describe{
-  \item{value_date}{the date for which a prediction was made}
-  \item{value_type}{the target to be predicted (short form)}
-  \item{geography}{the region for which a prediction was made}
-  \item{value_desc}{long form description of the prediction target}
-  \item{true_value}{true observed values}
-  \item{model}{name of the model that generated the forecasts}
-  \item{creation_date}{date on which the forecast was made}
-  \item{quantile}{quantile of the corresponding prediction}
-  \item{prediction}{quantile predictions}
-  \item{horizon}{forecast horizon in days}
+\item{value_date}{the date for which a prediction was made}
+\item{value_type}{the target to be predicted (short form)}
+\item{geography}{the region for which a prediction was made}
+\item{value_desc}{long form description of the prediction target}
+\item{true_value}{true observed values}
+\item{model}{name of the model that generated the forecasts}
+\item{creation_date}{date on which the forecast was made}
+\item{quantile}{quantile of the corresponding prediction}
+\item{prediction}{quantile predictions}
+\item{horizon}{forecast horizon in days}
 
 }
 }

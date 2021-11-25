@@ -5,7 +5,7 @@
 #' @param prediction_type character, should be either "continuous" or "integer"
 #'
 #' @return A data.table with appropriate scores. For more information see
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @importFrom data.table ':=' as.data.table rbindlist %like%
 #'
@@ -30,11 +30,8 @@
 #'                                      sd = TRUE,
 #'                                      summarise_by = c("model"))
 #'
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
-#' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
-#' (2019) Assessing the performance of real-time epidemic forecasts: A
-#' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
-#' PLoS Comput Biol 15(2): e1006785. <doi:10.1371/journal.pcbi.1006785>
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @inherit eval_forecasts references
 
 
 eval_forecasts_sample <- function(data,
@@ -49,7 +46,7 @@ eval_forecasts_sample <- function(data,
                                   verbose) {
 
   if (missing(prediction_type)) {
-    if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+    if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
       prediction_type <- "integer"
     } else {
       prediction_type <- "continuous"
@@ -169,5 +166,5 @@ eval_forecasts_sample <- function(data,
                 pit_plots = pit_histograms)
   }
 
-  return(res)
+  return(res[])
 }

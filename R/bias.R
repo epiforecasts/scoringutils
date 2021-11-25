@@ -34,7 +34,7 @@
 #' number of Monte Carlo samples
 #' @return vector of length n with the biases of the predictive samples with
 #' respect to the true values.
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' ## integer valued forecasts
@@ -51,8 +51,12 @@
 #' @export
 #' @references
 #' The integer valued Bias function is discussed in
-#' Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
-#' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, et al. (2019) Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785. https://doi.org/10.1371/journal.pcbi.1006785
+#' Assessing the performance of real-time epidemic forecasts: A case study of
+#' Ebola in the Western Area region of Sierra Leone, 2014-15 Funk S, Camacho A,
+#' Kucharski AJ, Lowe R, Eggo RM, et al. (2019) Assessing the performance of
+#' real-time epidemic forecasts: A case study of Ebola in the Western Area
+#' region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
+#' <doi:10.1371/journal.pcbi.1006785>
 
 
 bias <- function(true_values, predictions) {
@@ -83,7 +87,7 @@ bias <- function(true_values, predictions) {
   # ============================================
 
   ## check whether continuous or integer
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE
@@ -152,7 +156,7 @@ bias <- function(true_values, predictions) {
 #' of the central prediction interval
 #' @param true_value a single true value
 #' @return scalar with the quantile bias for a single quantile prediction
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' lower <- c(6341.000, 6329.500, 6087.014, 5703.500,

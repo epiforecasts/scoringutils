@@ -12,34 +12,25 @@ eval_forecasts_quantile <- function(data,
                                     rel_skill_metric,
                                     baseline) {
 
-  # make sure data is in the correct format ------------------------------------
-  # check format
-  if ("boundary" %in% names(data)) {
-    format <- "range_long_format"
-  } else if ("quantile" %in% names(data) & !("range" %in% names(data))) {
-    format <- "quantile_format"
-  }
-
-  # make sure to have both quantile as well as range format
-  if ("quantile" %in% names(data) & !("range" %in% names(data))) {
-    data <- scoringutils::quantile_to_range_long(data,
-                                                  keep_quantile_col = FALSE)
-  }
-  quantile_data <- scoringutils::range_long_to_quantile(data,
-                                                   keep_range_col = TRUE)
+  # make sure to have both quantile as well as range format --------------------
+  range_data <- scoringutils::quantile_to_range_long(data,
+                                                     keep_quantile_col = FALSE)
+  # adds the range column to the quantile data set
+  quantile_data <- scoringutils::range_long_to_quantile(range_data,
+                                                        keep_range_col = TRUE)
 
 
   # to deal with point forecasts in a quantile format. This in effect adds
   # a third column next to lower and upper after pivoting
-  data[is.na(range), boundary := "point"]
+  range_data[is.na(range), boundary := "point"]
 
-  data <- data.table::dcast(data, ... ~ boundary,
-                            value.var = "prediction")
+  range_data <- data.table::dcast(range_data, ... ~ boundary,
+                                  value.var = "prediction")
 
   # if we only score point forecasts, it may be true that there are no columns
   # upper and lower in the data.frame. If so, these need to be added
-  if (!all(c("upper", "lower") %in% colnames(data))) {
-    data[, c("upper", "lower") := NA]
+  if (!all(c("upper", "lower") %in% colnames(range_data))) {
+    range_data[, c("upper", "lower") := NA]
   }
 
   # update interval_score arguments based on what was provided by user
@@ -53,7 +44,7 @@ eval_forecasts_quantile <- function(data,
   interval_score_arguments$count_median_twice <- NULL
 
   # set up results data.table that will then be modified throughout ------------
-  res <- data.table::copy(data)
+  res <- data.table::copy(range_data)
 
   # calculate scores on range format -------------------------------------------
   if ("interval_score" %in% metrics) {
@@ -194,5 +185,5 @@ eval_forecasts_quantile <- function(data,
     res[, c("quantile_coverage") := NULL]
   }
 
-  return(res)
+  return(res[])
 }

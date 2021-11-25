@@ -14,7 +14,7 @@ interval_coverage(
 }
 \arguments{
 \item{summarised_scores}{Summarised scores as produced by
-\code{\link{eval_forecasts}}. Make sure that "range" is included in
+\code{\link[=eval_forecasts]{eval_forecasts()}}. Make sure that "range" is included in
 \code{summarise_by} when producing the summarised scores}
 
 \item{colour}{According to which variable shall the graphs be coloured?
@@ -39,6 +39,7 @@ Plot interval coverage
 }
 \examples{
 example1 <- scoringutils::range_example_data_long
+example1 <- scoringutils::range_long_to_quantile(example1)
 scores <- scoringutils::eval_forecasts(example1,
                                        summarise_by = c("model", "range"))
 interval_coverage(scores)

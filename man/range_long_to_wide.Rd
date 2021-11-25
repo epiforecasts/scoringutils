@@ -8,17 +8,17 @@ range_long_to_wide(data)
 }
 \arguments{
 \item{data}{a data.frame following the specifications from
-\code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-\code{\link{range_example_data_long}})}
+\code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
+\code{\link[=range_example_data_long]{range_example_data_long()}})}
 }
 \value{
 a data.frame in wide format
 }
 \description{
 Given a data.frame that follows the structure shown in
-\code{\link{range_example_data_long}}, the function outputs the same
+\code{\link[=range_example_data_long]{range_example_data_long()}}, the function outputs the same
 data in a long format as (as shown in
-\code{\link{range_example_data_wide}}). This can be useful e.g. for
+\code{\link[=range_example_data_wide]{range_example_data_wide()}}). This can be useful e.g. for
 plotting.
 }
 \examples{

@@ -2,26 +2,26 @@
 #'
 #' @description
 #' Plots a coloured table of summarised scores obtained using
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @param summarised_scores A data.frame of summarised scores as produced by
-#' \code{\link{eval_forecasts}}
-#' @param y the variable to be shown on the y-axis. If \code{NULL} (default),
+#' [eval_forecasts()]
+#' @param y the variable to be shown on the y-axis. If `NULL` (default),
 #' all columns that are not scoring metrics will be used. Alternatively,
 #' you can specify a vector with column names, e.g.
-#' \code{y = c("model", "location")}. These column names will be concatenated
+#' `y = c("model", "location")`. These column names will be concatenated
 #' to create a unique row identifier (e.g. "model1_location1")
 #' @param select_metrics A character vector with the metrics to show. If set to
-#' \code{NULL} (default), all metrics present in \code{summarised_scores} will
+#' `NULL` (default), all metrics present in `summarised_scores` will
 #' be shown
-#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
 #' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
 #' @importFrom data.table setDT melt
@@ -61,7 +61,7 @@ score_table <- function(summarised_scores,
   # identify metrics -----------------------------------------------------------
   # identify metrics by looking at which of the available column names
   # are metrics. All other variables are treated as identifier variables
-  all_metrics <- list_of_avail_metrics()
+  all_metrics <- available_metrics()
 
   metrics <- names(summarised_scores)[names(summarised_scores) %in% all_metrics]
   id_vars <- names(summarised_scores)[!(names(summarised_scores) %in% all_metrics)]
@@ -171,12 +171,12 @@ score_table <- function(summarised_scores,
 #'
 #' @description
 #' Plots a coloured table of scores obtained using
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @param scores A data.frame of scores as produced by
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #' @param select_metrics A character vector with the metrics to show. If set to
-#' \code{NULL} (default), all metrics present in \code{summarised_scores} will
+#' `NULL` (default), all metrics present in `summarised_scores` will
 #' be shown
 #' @return A ggplot2 object showing a coloured matrix of correlations
 #' between metrics
@@ -196,7 +196,7 @@ correlation_plot <- function(scores,
                              select_metrics = NULL) {
 
   # define possible metrics
-  all_metrics <- list_of_avail_metrics()
+  all_metrics <- available_metrics()
 
   # find metrics present
   metrics <- names(scores)[names(scores) %in% all_metrics]
@@ -268,23 +268,23 @@ correlation_plot <- function(scores,
 #' over-prediction, under-prediction and for a lack of sharpness
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by \code{\link{eval_forecasts}}
+#' produced by [eval_forecasts()]
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
 #' @param group Choose a grouping variable for the plot that gets directly
-#' passed down to ggplot. Default is \code{NULL}
+#' passed down to ggplot. Default is `NULL`
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
 #' @param facet_formula facetting formula passed down to ggplot. Default is
-#' \code{NULL}
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @param x_text_angle Angle for the text on the x-axis. Default is 90
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "WIS contributions"
@@ -303,7 +303,7 @@ correlation_plot <- function(scores,
 #'                              relative_contributions = FALSE)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
-#' in an interval format. \url{https://arxiv.org/abs/2005.12881}
+#' in an interval format. <https://arxiv.org/abs/2005.12881>
 
 
 wis_components <- function(scores,
@@ -367,8 +367,8 @@ wis_components <- function(scores,
 #' changes by range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by \code{\link{eval_forecasts}}. Note that "range" must be included
-#' in the \code{summarise_by} argument when running \code{eval_forecasts}
+#' produced by [eval_forecasts()]. Note that "range" must be included
+#' in the `summarise_by` argument when running `eval_forecasts`
 #' @param y The variable from the scores you want to show on the y-Axis.
 #' This could be something like "interval_score" (the default) or "sharpness"
 #' @param x The variable from the scores you want to show on the x-Axis.
@@ -376,15 +376,15 @@ wis_components <- function(scores,
 #' @param colour Character vector of length one used to determine a variable
 #' for colouring dots. The Default is "range".
 #' @param facet_formula facetting formula passed down to ggplot. Default is
-#' \code{NULL}
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "WIS contributions"
 #' @return A ggplot2 object showing a contributions from the three components of
@@ -397,8 +397,6 @@ wis_components <- function(scores,
 #' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                         summarise_by = c("model", "value_desc", "range"))
 #'
-#' scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
-#'                                         summarise_by = c("model", "value_desc", "range"))
 #' scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
 #'
 #' # visualise sharpness instead of interval score
@@ -406,7 +404,7 @@ wis_components <- function(scores,
 #'                           facet_formula =  ~value_desc)
 #'
 #' # we saw above that sharpness values crossed. Let's look at the unweighted WIS
-#' scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
+#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
 #'                                         interval_score_arguments = list(weigh = FALSE),
 #'                                         summarise_by = c("model", "value_desc", "range"))
 #' scoringutils::range_plot(scores, y = "sharpness", x = "model",
@@ -465,7 +463,7 @@ range_plot <- function(scores,
 #' different locations.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by \code{\link{eval_forecasts}}.
+#' produced by [eval_forecasts()].
 #' @param y The variable from the scores you want to show on the y-Axis. The
 #' default for this is "model"
 #' @param x The variable from the scores you want to show on the x-Axis. This
@@ -475,15 +473,15 @@ range_plot <- function(scores,
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is the variable name on the y-axis
 #' @param facet_formula facetting formula passed down to ggplot. Default is
-#' \code{NULL}
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
@@ -549,7 +547,7 @@ score_heatmap <- function(scores,
 #' Make a plot of observed and predicted values
 #'
 #' @param data a data.frame that follows the same specifications outlined in
-#' \code{\link{eval_forecasts}}. The data.frame needs to have columns called
+#' [eval_forecasts()]. The data.frame needs to have columns called
 #' "true_value", "prediction" and then either a column called sample, or one
 #' called "quantile" or two columns called "range" and "boundary". Internally,
 #' these will be separated into a truth and forecast data set in order to be
@@ -576,14 +574,14 @@ score_heatmap <- function(scores,
 #' applied to both data sets for convenience.
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
-#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
 #' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
 #' @param allow_truth_without_pred logical, whether or not
@@ -708,6 +706,7 @@ plot_predictions <- function(data = NULL,
   colnames <- colnames(forecasts)
   if ("sample" %in% colnames) {
     forecasts <- scoringutils::sample_to_range_long(forecasts,
+                                                    range = range,
                                                     keep_quantile_col = FALSE)
   } else if ("quantile" %in% colnames) {
     forecasts <- scoringutils::quantile_to_range_long(forecasts,
@@ -724,27 +723,27 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  # if there isn't any data to plot, return NULL
-  if (nrow(intervals) == 0) {
-    return(NULL)
-  }
+  pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
 
-  # pivot wider and convert range to a factor
-  intervals <- data.table::dcast(intervals, ... ~ boundary,
-                                 value.var = "prediction")
-  intervals[, range := as.factor(range)]
-
-  # plot prediciton rnages
-  plot <- ggplot2::ggplot(intervals, ggplot2::aes(x = !!ggplot2::sym(x))) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper,
-                                      group = range, fill = range),
-                         alpha = 0.4) +
+  plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
     ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
-    ggplot2::scale_fill_manual("range", values = c("steelblue3",
-                                                   "lightskyblue3",
-                                                   "lightskyblue2",
-                                                   "lightskyblue1")) +
+    ggplot2::scale_fill_manual(name = "range", values = pal(length(range))) +
     ggplot2::theme_light()
+
+  if (nrow(intervals) != 0) {
+    # pivot wider and convert range to a factor
+    intervals <- data.table::dcast(intervals, ... ~ boundary,
+                                   value.var = "prediction")
+    intervals[, range := factor(range,
+                                levels = sort(unique(range), decreasing = TRUE),
+                                ordered = TRUE)]
+
+    # plot prediction ranges
+    plot <- plot +
+      ggplot2::geom_ribbon(data = intervals,
+                           ggplot2::aes(ymin = lower, ymax = upper,
+                                        group = range, fill = range))
+  }
 
   # add median in a different colour
   if (0 %in% range) {
@@ -758,6 +757,20 @@ plot_predictions <- function(data = NULL,
                            lwd = 0.4)
       }
   }
+
+  # add true_values
+  if (nrow(truth_data) > 0) {
+    plot <- plot +
+      ggplot2::geom_point(data = truth_data,
+                          ggplot2::aes(y = true_value, colour = "actual"),
+                          size = 0.5) +
+      ggplot2::geom_line(data = truth_data,
+                         ggplot2::aes(y = true_value, colour = "actual"),
+                         lwd = 0.2)
+  }
+
+  plot <- plot +
+    ggplot2::labs(x = xlab, y = ylab)
 
   # facet if specified by the user
   if (!is.null(facet_formula)) {
@@ -857,16 +870,16 @@ plot_predictions <- function(data = NULL,
 #' Plot interval coverage
 #'
 #' @param summarised_scores Summarised scores as produced by
-#' \code{\link{eval_forecasts}}. Make sure that "range" is included in
-#' \code{summarise_by} when producing the summarised scores
+#' [eval_forecasts()]. Make sure that "range" is included in
+#' `summarise_by` when producing the summarised scores
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
-#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
 #' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
 #' @return ggplot object with a plot of interval coverage
@@ -877,6 +890,7 @@ plot_predictions <- function(data = NULL,
 #'
 #' @examples
 #' example1 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::range_long_to_quantile(example1)
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "range"))
 #' interval_coverage(scores)
@@ -929,16 +943,16 @@ interval_coverage <- function(summarised_scores,
 #' Plot quantile coverage
 #'
 #' @param summarised_scores Summarised scores as produced by
-#' \code{\link{eval_forecasts}}. Make sure that "quantile" is included in
-#' \code{summarise_by} when producing the summarised scores
+#' [eval_forecasts()]. Make sure that "quantile" is included in
+#' `summarise_by` when producing the summarised scores
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
-#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
 #' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
 #' @return ggplot object with a plot of interval coverage
@@ -948,7 +962,7 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::quantile_example_data
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "quantile"))
 #' quantile_coverage(scores)
@@ -1011,7 +1025,7 @@ quantile_coverage <- function(summarised_scores,
 #' Visualise Where Forecasts Are Available
 #'
 #' @param data data.frame with predictions in the same format required for
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #' @param y character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot
 #' @param x character vector of length one that denotes the name of the column
@@ -1019,28 +1033,28 @@ quantile_coverage <- function(summarised_scores,
 #' @param make_x_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
-#' @param summarise_by character vector or \code{NULL} (the default) that
+#' @param summarise_by character vector or `NULL` (the default) that
 #' denotes the categories over which the number of forecasts should be summed
-#' up. By default (i.e. \code{summarise_by = NULL}) this will be all the
+#' up. By default (i.e. `summarise_by = NULL`) this will be all the
 #' columns that appear in either x, y, or the facetting formula.
-#' @param collapse_to_one logical. If \code{TRUE}) (the default), everything
-#' not included in \code{by} will be counted only once. This is useful, for
+#' @param collapse_to_one logical. If `TRUE`) (the default), everything
+#' not included in `by` will be counted only once. This is useful, for
 #' example, if you don't want to count every single sample or quantile, but
 #' instead treat one set of samples or quantiles as one forecast.
-#' @param by character vector or \code{NULL} (the default) that denotes the
+#' @param by character vector or `NULL` (the default) that denotes the
 #' unit of an individual forecast. This argument behaves similarly to the
-#' \code{by} argument in \code{link{eval_forecasts}}. By default, all columns
+#' `by` argument in \code{link{eval_forecasts}}. By default, all columns
 #' are used that are not part of any internally protected columns like "sample"
-#' or "prediction" or similar. The \code{by} argument is only necessary if
-#' \code{collapse_to_one = TRUE} to indicate which rows not to collapse to one.
-#' @param show_numbers logical (default is \code{TRUE}) that indicates whether
+#' or "prediction" or similar. The `by` argument is only necessary if
+#' `collapse_to_one = TRUE` to indicate which rows not to collapse to one.
+#' @param show_numbers logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
-#' @param facet_formula formula for facetting in ggplot. If this is \code{NULL}
+#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
 #' (the default), no facetting will take place
-#' @param facet_wrap_or_grid character. Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid character. Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param scales character. The scales argument gets passed down to ggplot.
 #' Only necessary
 #' if you make use of facetting. Default is "fixed"

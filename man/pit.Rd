@@ -21,8 +21,8 @@ pit(
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 
-\item{plot}{logical. If TRUE, a histogram of the PIT values will be returned
-as well}
+\item{plot}{logical. If \code{TRUE}, a histogram of the PIT values will be
+returned as well}
 
 \item{full_output}{return all individual p_values and computed u_t values
 for the randomised PIT. Usually not needed.}
@@ -30,10 +30,10 @@ for the randomised PIT. Usually not needed.}
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
 
-\item{num_bins}{the number of bins in the PIT histogram (if plot == TRUE)
+\item{num_bins}{the number of bins in the PIT histogram (if \code{plot = TRUE})
 If not given, the square root of n will be used}
 
-\item{verbose}{if TRUE (default is FALSE) more error messages are printed.
+\item{verbose}{if \code{TRUE} (default is \code{FALSE}) more error messages are printed.
 Usually, this should not be needed, but may help with debugging.}
 }
 \value{
@@ -41,12 +41,11 @@ a list with the following components:
 \itemize{
 \item \code{p_value}: p-value of the Anderson-Darling test on the
 PIT values. In case of integer forecasts, this will be the mean p_value
-from the `n_replicates` replicates
+from the \code{n_replicates} replicates
 \item \code{sd}: standard deviation of the p_value returned. In case of
 continuous forecasts, this will be NA as there is only one p_value returned.
 \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-if \code{plot == TRUE}. Call
-\code{plot(PIT(...)$hist_PIT)} to display the histogram.
+if \code{plot = TRUE}. Call \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 \item \code{p_values}: all p_values generated from the Anderson-Darling tests
 on the (randomised) PIT. Only returned if \code{full_output = TRUE}
 \item \code{u}: the u_t values internally computed. Only returned if
@@ -123,5 +122,5 @@ pit(true_values, predictions,  n_replicates = 5)
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
-region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
+region of Sierra Leone, 2014-15, \url{doi:10.1371/journal.pcbi.1006785}
 }

@@ -8,8 +8,8 @@ range_to_quantile(data, keep_range_col = FALSE)
 }
 \arguments{
 \item{data}{a data.frame following the specifications from
-\code{\link{eval_forecasts}}) for quantile forecasts. For an example, see
-\code{\link{range_example_data_long}})}
+\code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
+\code{\link[=range_example_data_long]{range_example_data_long()}})}
 
 \item{keep_range_col}{keep the range and boundary columns after
 transformation (default is FALSE)}

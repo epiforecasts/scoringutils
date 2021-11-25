@@ -56,30 +56,29 @@
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param plot logical. If TRUE, a histogram of the PIT values will be returned
-#' as well
-#' @param num_bins the number of bins in the PIT histogram (if plot == TRUE)
+#' @param plot logical. If `TRUE`, a histogram of the PIT values will be
+#' returned as well
+#' @param num_bins the number of bins in the PIT histogram (if `plot = TRUE`)
 #' If not given, the square root of n will be used
 #' @param n_replicates the number of tests to perform,
 #' each time re-randomising the PIT
 #' @param full_output return all individual p_values and computed u_t values
 #' for the randomised PIT. Usually not needed.
-#' @param verbose if TRUE (default is FALSE) more error messages are printed.
+#' @param verbose if `TRUE` (default is `FALSE`) more error messages are printed.
 #' Usually, this should not be needed, but may help with debugging.
 #' @return a list with the following components:
 #' \itemize{
-#' \item \code{p_value}: p-value of the Anderson-Darling test on the
+#' \item `p_value`: p-value of the Anderson-Darling test on the
 #' PIT values. In case of integer forecasts, this will be the mean p_value
 #' from the `n_replicates` replicates
-#' \item \code{sd}: standard deviation of the p_value returned. In case of
+#' \item `sd`: standard deviation of the p_value returned. In case of
 #' continuous forecasts, this will be NA as there is only one p_value returned.
-#' \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-#' if \code{plot == TRUE}. Call
-#' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
-#' \item \code{p_values}: all p_values generated from the Anderson-Darling tests
-#' on the (randomised) PIT. Only returned if \code{full_output = TRUE}
-#' \item \code{u}: the u_t values internally computed. Only returned if
-#' \code{full_output = TRUE}
+#' \item `hist_PIT` a plot object with the PIT histogram. Only returned
+#' if `plot = TRUE`. Call `plot(PIT(...)$hist_PIT)` to display the histogram.
+#' \item `p_values`: all p_values generated from the Anderson-Darling tests
+#' on the (randomised) PIT. Only returned if `full_output = TRUE`
+#' \item `u`: the u_t values internally computed. Only returned if
+#' `full_output = TRUE`
 #' }
 #' @importFrom goftest ad.test
 #' @importFrom stats runif sd
@@ -154,7 +153,7 @@ pit <- function(true_values,
 
   # check data type ------------------------------------------------------------
   # check whether continuous or integer
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE
@@ -226,22 +225,22 @@ pit <- function(true_values,
 #' @description Wrapper around `pit()` for use in data.frames
 #'
 #' @details
-#' see \code{\link{pit}}
+#' see [pit()]
 #'
 #' @param data a data.frame with the following columns: `true_value`,
 #' `prediction`, `sample`
 #' @inheritParams pit
 #' @return a list with the following components:
 #' \itemize{
-#' \item \code{data}: the input data.frame (not including rows where prediction is `NA`),
+#' \item `data`: the input data.frame (not including rows where prediction is `NA`),
 #' with added columns `pit_p_val` and `pit_sd`
-#' \item \code{hist_PIT} a plot object with the PIT histogram. Only returned
-#' if \code{plot == TRUE}. Call
-#' \code{plot(PIT(...)$hist_PIT)} to display the histogram.
-#' \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
-#' (randomised) PIT. Only returned if \code{full_output = TRUE}
-#' \item \code{u}: the u_t values internally computed. Only returned if
-#' \code{full_output = TRUE}
+#' \item `hist_PIT` a plot object with the PIT histogram. Only returned
+#' if `plot = TRUE`. Call
+#' `plot(PIT(...)$hist_PIT)` to display the histogram.
+#' \item `p_values`: all p_values generated from the Anderson-Darling tests on the
+#' (randomised) PIT. Only returned if `full_output = TRUE`
+#' \item `u`: the u_t values internally computed. Only returned if
+#' `full_output = TRUE`
 #' }
 #' @importFrom goftest ad.test
 #' @importFrom stats runif sd
@@ -314,7 +313,7 @@ pit_df <- function(data,
 #' in a data.frame as specified in the `by` argument.
 #'
 #' @details
-#' see \code{\link{pit}}
+#' see [pit()]
 #'
 #' @param data a data.frame with the following columns: `true_value`,
 #' `prediction`, `sample`

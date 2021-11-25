@@ -6,33 +6,31 @@
 #' comparisons is inspired by an implementation by Johannes Bracher.
 #'
 #' The implementation of the permutation test follows the function
-#' permutationTest from the `surveillance` package by Michael Höhle,
+#' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #' @param metric A character vector of length one with the metric to do
 #' the comparison on.
 #' @param by character vector of columns to group scoring by. This should be the
 #' lowest level of grouping possible, i.e. the unit of the individual
 #' observation. This is important as many functions work on individual
 #' observations. If you want a different level of aggregation, you should use
-#' \code{summarise_by} to aggregate the individual scores.
-#' Also not that the pit will be computed using \code{summarise_by}
-#' instead of \code{by}
+#' `summarise_by` to aggregate the individual scores.
+#' Also not that the pit will be computed using `summarise_by` instead of `by`
 #' @param summarise_by character vector of columns to group the summary by. By
-#' default, this is equal to `by` and no summary takes place.
-#' But sometimes you may want to to summarise
-#' over categories different from the scoring.
-#' \code{summarise_by} is also the grouping level used to compute
-#' (and possibly plot) the probability integral transform(pit).
-#' @param test_options list with options to pass down to \code{\link{compare_two_models}}.
+#' default, this is equal to `by` and no summary takes place. But sometimes you
+#' may want to to summarise over categories different from the scoring.
+#' `summarise_by` is also the grouping level used to compute (and possibly plot)
+#' the probability integral transform(pit).
+#' @param test_options list with options to pass down to [compare_two_models()].
 #' To change only one of the default options, just pass a list as input with
 #' the name of the argument you want to change. All elements not included in the
 #' list will be set to the default (so passing an empty list would result in the
 #' default options).
-#' @param baseline character vector of length one that denotes
-#' the baseline model against which to compare other models.
+#' @param baseline character vector of length one that denotes the baseline
+#' model against which to compare other models.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
@@ -51,10 +49,10 @@
 #'                            baseline = "model1")
 #' scoringutils::plot_pairwise_comparison(res)
 #'
-#' eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long)
+#' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
 #' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
-#' @author Johannes Bracher, \email{johannes.bracher@kit.edu}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 
 pairwise_comparison <- function(scores,
                                 metric = "interval_score", # maybe the default can happen automatically,
@@ -77,7 +75,7 @@ pairwise_comparison <- function(scores,
   # usually, by = NULL should be fine and only needs to be specified if there
   # are additional columns that are not metrics and not related to the unit of observation
   if (is.null(by)) {
-    all_metrics <- list_of_avail_metrics()
+    all_metrics <- available_metrics()
     by <- setdiff(names(scores), c(all_metrics, "model"))
   }
 
@@ -104,14 +102,14 @@ pairwise_comparison <- function(scores,
 #'
 #' @description
 #'
-#' This function will only be called within \code{\link{eval_forecasts}} and serves to
+#' This function will only be called within [eval_forecasts()] and serves to
 #' make pairwise comparisons from within that function. It uses the
-#' `summarise_by` argument as well as the data from \code{\link{eval_forecasts}}.
-#' Essentially, it wraps \code{\link{pairwise_comparison}} and deals with the specifics
-#' necessary to work with \code{\link{eval_forecasts}}.
+#' `summarise_by` argument as well as the data from [eval_forecasts()].
+#' Essentially, it wraps [pairwise_comparison()] and deals with the specifics
+#' necessary to work with [eval_forecasts()].
 #' @inheritParams eval_forecasts
 #' @param unsummarised_scores unsummarised scores to be passed from
-#' \code{\link{eval_forecasts}}
+#' [eval_forecasts()]
 #'
 #' @keywords internal
 
@@ -172,7 +170,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # also delete skill metric from output
   out[, eval(rel_skill_metric) := NULL]
 
-  return(out)
+  return(out[])
 }
 
 
@@ -183,13 +181,13 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 #' @description
 #'
 #' This function does the pairwise comparison for one set of forecasts, but
-#' multiple models involved. It gets called from \code{\link{pairwise_comparison}}.
-#' \code{\link{pairwise_comparison}} splits the data into arbitrary subgroups specified
+#' multiple models involved. It gets called from [pairwise_comparison()].
+#' [pairwise_comparison()] splits the data into arbitrary subgroups specified
 #' by the user (e.g. if pairwise comparison should be done separately for
 #' different forecast targets) and then the actual pairwise comparison for that
-#' subgroup is managed from \code{\link{pairwise_comparison_one_group}}. In order to
+#' subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
-#' forecasts it calls \code{\link{compare_two_models}}.
+#' forecasts it calls [compare_two_models()].
 #' @inheritParams pairwise_comparison
 
 pairwise_comparison_one_group <- function(scores,
@@ -279,7 +277,7 @@ pairwise_comparison_one_group <- function(scores,
     # merge back to retain the ratios even for comparisons with the baseline
     result <- merge(result, result_without_baseline, all.x = TRUE)
     # avoid mixture of NA and NaN which can cause problems downstream
-    result[is.na(theta), theta := NaN]
+    result[is.na(theta), theta := NA_real_]
     # remove NAs form merge in the thetas
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
@@ -305,7 +303,7 @@ pairwise_comparison_one_group <- function(scores,
   data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
                        new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
 
-  return(out)
+  return(out[])
 }
 
 
@@ -320,18 +318,18 @@ pairwise_comparison_one_group <- function(scores,
 #'
 #' This function compares two models based on the subset of forecasts for which
 #' both models have made a prediction. It gets called
-#' from \code{\link{pairwise_comparison_one_group}}, which handles the
+#' from [pairwise_comparison_one_group()], which handles the
 #' comparison of multiple models on a single set of forecasts (there are no
-#' subsets of forecasts to be distinguished). \code{\link{pairwise_comparison_one_group}}
-#' in turn gets called from from \code{\link{pairwise_comparison}} which can handle
+#' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
+#' in turn gets called from from [pairwise_comparison()] which can handle
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
 #' @inheritParams pairwise_comparison
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
-#' @author Johannes Bracher, \email{johannes.bracher@kit.edu}
-#' @author Nikos Bosse \email{nikosbosse@gmail.com}
+#' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 compare_two_models <- function(scores,
                                name_model1,
@@ -412,23 +410,23 @@ unique(overlap)
 #' between models
 #'
 #' @param comparison_result A data.frame as produced by
-#' \code{\link{pairwise_comparison}}
+#' [pairwise_comparison()]
 #' @param type character vector of length one that is either "mean_scores_ratio" or "pval".
 #' This denotes whether to visualise the ratio or the p-value of the
 #' pairwise comparison. Default is "mean_scores_ratio"
-#' @param smaller_is_good logical (default is TRUE) that indicates whether
+#' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
 #' invert the mean scores ratio)
 #' @param facet_formula facetting formula passed down to ggplot. Default is
-#' \code{NULL}
+#' `NULL`
 #' @param scales scales argument that gets passed down to ggplot. Only necessary
 #' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's \code{facet_wrap} or
-#' \code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-#' \code{facet_grid}. This only takes effect if \code{facet_formula} is not
-#' \code{NULL}
+#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
+#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
+#' `facet_grid`. This only takes effect if `facet_formula` is not
+#' `NULL`
 #' @param ncol Number of columns for facet wrap. Only relevant if
-#' \code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}
+#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist

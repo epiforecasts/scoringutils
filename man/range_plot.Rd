@@ -19,7 +19,7 @@ range_plot(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link{eval_forecasts}}. Note that "range" must be included
+produced by \code{\link[=eval_forecasts]{eval_forecasts()}}. Note that "range" must be included
 in the \code{summarise_by} argument when running \code{eval_forecasts}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.
@@ -62,8 +62,6 @@ changes by range.
 scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
                                         summarise_by = c("model", "value_desc", "range"))
 
-scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
-                                        summarise_by = c("model", "value_desc", "range"))
 scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
 
 # visualise sharpness instead of interval score
@@ -71,7 +69,7 @@ scoringutils::range_plot(scores, y = "sharpness", x = "model",
                           facet_formula =  ~value_desc)
 
 # we saw above that sharpness values crossed. Let's look at the unweighted WIS
-scores <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
+scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
                                         interval_score_arguments = list(weigh = FALSE),
                                         summarise_by = c("model", "value_desc", "range"))
 scoringutils::range_plot(scores, y = "sharpness", x = "model",

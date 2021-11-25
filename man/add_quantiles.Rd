@@ -13,10 +13,10 @@ add_quantiles(dt, varnames, quantiles, by)
 
 \item{quantiles}{the desired quantiles}
 
-\item{by}{grouping variable in `eval_forecasts()}
+\item{by}{grouping variable in \code{\link[=eval_forecasts]{eval_forecasts()}}}
 }
 \value{
-`data.table` with quantiles added
+\code{data.table} with quantiles added
 }
 \description{
 Helper function used within eval_forecasts

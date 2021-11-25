@@ -3,7 +3,7 @@
 #' A data set with predictions for different quantities relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 5,152 rows and 10 columns:
+#' @format A data frame with
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
@@ -25,7 +25,7 @@
 #' A data set with predictions with different interval ranges relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 5,419 rows and 12 columns:
+#' @format A data frame with:
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
@@ -48,7 +48,7 @@
 #' A data set with predictions with different interval ranges relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 346 rows and 28 columns:
+#' @format A data frame with:
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
@@ -58,26 +58,26 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{creation_date}{date on which the forecast was made}
 #'   \item{horizon}{forecast horizon in days}
-#'   \item{lower_0}{prediction for the lower bound of the 0\% interval range (median)}
-#'   \item{lower_10}{prediction for the lower bound of the 10\% interval range}
-#'   \item{lower_20}{prediction for the lower bound of the 20\% interval range}
-#'   \item{lower_30}{prediction for the lower bound of the 30\% interval range}
-#'   \item{lower_40}{prediction for the lower bound of the 40\% interval range}
-#'   \item{lower_50}{prediction for the lower bound of the 50\% interval range}
-#'   \item{lower_60}{prediction for the lower bound of the 60\% interval range}
-#'   \item{lower_70}{prediction for the lower bound of the 70\% interval range}
-#'   \item{lower_80}{prediction for the lower bound of the 80\% interval range}
-#'   \item{lower_90}{prediction for the lower bound of the 90\% interval range}
-#'   \item{upper_0}{prediction for the upper bound of the 0\% interval range}
-#'   \item{upper_10}{prediction for the upper bound of the 1\% interval range}
-#'   \item{upper_20}{prediction for the upper bound of the 20\% interval range}
-#'   \item{upper_30}{prediction for the upper bound of the 30\% interval range}
-#'   \item{upper_40}{prediction for the upper bound of the 40\% interval range}
-#'   \item{upper_50}{prediction for the upper bound of the 50\% interval range}
-#'   \item{upper_60}{prediction for the upper bound of the 60\% interval range}
-#'   \item{upper_70}{prediction for the upper bound of the 70\% interval range}
-#'   \item{upper_80}{prediction for the upper bound of the 80\% interval range}
-#'   \item{upper_90}{prediction for the upper bound of the 90\% interval range}
+#'   \item{lower_0}{prediction for the lower bound of the 0% interval range (median)}
+#'   \item{lower_10}{prediction for the lower bound of the 10% interval range}
+#'   \item{lower_20}{prediction for the lower bound of the 20% interval range}
+#'   \item{lower_30}{prediction for the lower bound of the 30% interval range}
+#'   \item{lower_40}{prediction for the lower bound of the 40% interval range}
+#'   \item{lower_50}{prediction for the lower bound of the 50% interval range}
+#'   \item{lower_60}{prediction for the lower bound of the 60% interval range}
+#'   \item{lower_70}{prediction for the lower bound of the 70% interval range}
+#'   \item{lower_80}{prediction for the lower bound of the 80% interval range}
+#'   \item{lower_90}{prediction for the lower bound of the 90% interval range}
+#'   \item{upper_0}{prediction for the upper bound of the 0% interval range}
+#'   \item{upper_10}{prediction for the upper bound of the 1% interval range}
+#'   \item{upper_20}{prediction for the upper bound of the 20% interval range}
+#'   \item{upper_30}{prediction for the upper bound of the 30% interval range}
+#'   \item{upper_40}{prediction for the upper bound of the 40% interval range}
+#'   \item{upper_50}{prediction for the upper bound of the 50% interval range}
+#'   \item{upper_60}{prediction for the upper bound of the 60% interval range}
+#'   \item{upper_70}{prediction for the upper bound of the 70% interval range}
+#'   \item{upper_80}{prediction for the upper bound of the 80% interval range}
+#'   \item{upper_90}{prediction for the upper bound of the 90% interval range}
 #' }
 "range_example_data_wide"
 

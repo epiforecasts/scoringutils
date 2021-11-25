@@ -103,6 +103,8 @@ globalVariables(c("..index",
                   "coverage",
                   "hist",
                   "id",
+                  "InternalDuplicateCheck",
+                  "InternalNumCheck",
                   "log_score",
                   "lower",
                   "mean_scores_ratio",
@@ -134,7 +136,12 @@ globalVariables(c("..index",
                   "g"))
 
 
-list_of_avail_metrics <- function() {
+#' @title Available metrics in scoringutils
+#'
+#' @return A vector with the name of all available metrics
+#' @export
+
+available_metrics <- function() {
   available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
@@ -177,7 +184,6 @@ extract_from_list <- function(list, what) {
 #' @param defaults A list of default settings
 #' @param optional A list of optional settings to override defaults
 #' @return A list
-#' @export
 #'
 #' @keywords internal
 update_list <- function(defaults = list(), optional = list()) {

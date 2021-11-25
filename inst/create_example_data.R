@@ -30,7 +30,8 @@ obs <- covid19.forecasts.uk::covid_uk_data %>%
                                             "2020-05-18", "2020-05-11", "2020-05-04")),
                                   dates),
                 geography %in% c("England", "Scotland", "Wales", "Northern Ireland")) %>%
-  dplyr::rename(true_value = value)
+  dplyr::rename(true_value = value) %>%
+  dplyr::select(-truncation)
 
 # save example data with forecasts only
 example_quantile_forecasts_only <- data
