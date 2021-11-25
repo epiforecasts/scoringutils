@@ -410,7 +410,6 @@ wis_components <- function(scores,
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
 #'                          facet_formula =  ~value_desc)
 
-
 range_plot <- function(scores,
                        y = "interval_score",
                        x = "model",

@@ -5,7 +5,7 @@
 \alias{range_example_data_wide}
 \title{Range Forecast Example Data (Wide Format)}
 \format{
-A data frame with 346 rows and 28 columns:
+A data frame with:
 \describe{
 \item{value_date}{the date for which a prediction was made}
 \item{value_type}{the target to be predicted (short form)}

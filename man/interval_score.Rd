@@ -32,7 +32,7 @@ into an interval score that, in the limit, corresponds to CRPS. Default:
 \code{FALSE}.}
 
 \item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
-parts of the interval score (sharpness, penalties for over- and
+parts of the interval score (dispersion penalty, penalties for over- and
 under-prediction get returned as separate elements of a list). If you want a
 \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
 }

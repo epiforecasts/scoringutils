@@ -15,7 +15,7 @@
 #'   \item {aem} Absolute error of the median prediction
 #'   \item {Bias} 0 is good, 1 and -1 are bad.
 #'   See [bias()] for more information.
-#'   \item {Sharpness} Smaller is better. See [sharpness()] for more
+#'   \item {Sharpness/dispersion} Smaller is better. See [sharpness()] for more
 #'   information.
 #'   \item {Calibration} represented through the p-value of the
 #'   Anderson-Darling test for the uniformity of the Probability Integral
@@ -123,8 +123,8 @@
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
-#' score, as well as adapted metrics for calibration, sharpness and bias.
-#' For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
+#' score, as well as adapted metrics for calibration, sharpness/dispersion and
+#' bias. For integer forecasts, Sharpness, Bias, DSS, CRPS, LogS, and
 #' pit_p_val (as an indicator of calibration) are returned. For integer
 #' forecasts, pit_sd is returned (to account for the randomised PIT),
 #' but no Log Score is returned (the internal estimation relies on a
