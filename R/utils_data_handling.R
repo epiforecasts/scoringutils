@@ -33,24 +33,6 @@ range_long_to_wide <- function(data) {
 }
 
 
-
-#' @title Pivot Range Format Forecasts From Long to Wide Format
-#'
-#' @description
-#' Legacy function that will not be supported in future updates.
-#' @inheritParams range_long_to_wide
-#' @return a data.frame in wide format
-#' @importFrom data.table dcast
-#' @export
-quantile_to_wide <- function(data) {
-  warning("This function will be deprecated. Please use `range_long_to_wide()` in the future")
-  out <- scoringutils::range_long_to_wide(data)
-  return(out[])
-}
-
-
-
-
 #' @title Pivot Range Format Forecasts From Wide to Long Format
 #'
 #' @description
@@ -108,21 +90,6 @@ range_wide_to_long <- function(data) {
 
   return(data[])
 }
-
-
-#' @title Pivot Range Format Forecasts From Wide to Long Format
-#'
-#' @description
-#' Legacy function that will not be supported in future updates.
-#' @inheritParams range_long_to_wide
-#' @return a data.frame in long format
-#' @export
-quantile_to_long <- function(data) {
-  warning("This function will be deprecated. Please use `range_wide_to_long()` in the future")
-  out <- scoringutils::range_wide_to_long(data)
-  return(out[])
-}
-
 
 
 #' @title Change Data from a Range Format to a Quantile Format
@@ -253,23 +220,6 @@ quantile_to_range_long <- function(data,
 }
 
 
-#' @title Change Data from a Plain Quantile Format to a Long Range Format
-#'
-#' @description
-#' Legacy function that will not be supported in future updates.
-#' @inheritParams quantile_to_range_long
-#' @return a data.frame in long format
-#' @export
-quantile_to_range <- function(data,
-                              keep_quantile_col = FALSE) {
-  warning("This function will be deprecated. Please use `quantile_to_range_long()` in the future")
-  out <- scoringutils::quantile_to_range_long(data, keep_quantile_col)
-  return(out[])
-}
-
-
-
-
 #' @title Change Data from a Sample Based Format to a Quantile Format
 #'
 #' @description
@@ -292,9 +242,6 @@ quantile_to_range <- function(data,
 #'
 #' quantile_data <- scoringutils::sample_to_quantile(example_data)
 #'
-
-
-
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
@@ -338,7 +285,6 @@ sample_to_quantile <- function(data,
 #'
 #' quantile_data <- scoringutils::sample_to_range_long(example_data)
 #'
-
 sample_to_range_long <- function(data,
                                  range = c(0, 50, 90),
                                  type = 7,
@@ -359,28 +305,6 @@ sample_to_range_long <- function(data,
 
   return(data[])
 }
-
-
-
-#' @title Change Data from a Sample Based Format to a Long Interval Range Format
-#'
-#' @description
-#' Legacy function that will not be supported in future updates.
-#' @inheritParams sample_to_range_long
-#' @return a data.frame in long format
-#' @export
-sample_to_range <- function(data,
-                            range = c(0, 50, 90),
-                            type = 7,
-                            keep_quantile_col = TRUE) {
-  warning("This function will be deprecated. Please use `sample_to_range-long()` in the future")
-  out <- scoringutils::sample_to_range_long(data, range, type, keep_quantile_col)
-  return(out[])
-}
-
-
-
-
 
 #' @title Merge Forecast Data And Observations
 #'
@@ -403,7 +327,6 @@ sample_to_range <- function(data,
 #' value that is not a column in observations will be removed.
 #' @return a data.frame with forecasts and observations
 #' @export
-
 
 merge_pred_and_obs <- function(forecasts, observations,
                                join = c("left", "full", "right"),
@@ -455,8 +378,3 @@ merge_pred_and_obs <- function(forecasts, observations,
 
   return(combined[])
 }
-
-
-
-
-
