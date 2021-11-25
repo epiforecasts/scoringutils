@@ -15,7 +15,7 @@ test_that("check_forecasts() function returns a warning with NA in the data", {
 })
 
 test_that("check_forecasts() function returns warnings with NA in the data", {
-  example <- quantile_example_data
+  example <- data.table::copy(quantile_example_data)
   example[horizon == 7, true_value := NA]
   check <- check_forecasts(example)
 
