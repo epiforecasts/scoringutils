@@ -21,7 +21,8 @@ Anderson-Darling test for uniformity of the PIT values. The AD test is
 sometimes not reliable in practice and we do not recommend its use in most cases. 
 The function also does not return plots anymore. Instead, plots can be generated
 by running [hist_PIT()]. 
-
+- Old legacy functions for transforming data between different formats were
+removed
   
 # scoringutils 0.1.8
 
