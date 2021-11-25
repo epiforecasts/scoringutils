@@ -5,6 +5,7 @@ reference:
         - title: Check input functions
           contents:
                 - check_forecasts
+                - print.scoringutils_check
         - title: Evaluation functions
           contents:
                 - available_metrics
