@@ -5,6 +5,7 @@ reference:
         - title: Check input functions
           contents:
                 - check_forecasts
+                - print.scoringutils_check
         - title: Evaluation functions
           contents:
                 - compare_two_models
@@ -51,9 +52,6 @@ reference:
                 - score_heatmap
                 - show_avail_forecasts
                 - wis_components
-        - title: S3-methods for printing output
-          contents:
-                - print.scoringutils_check
         - title: Internal functions
           contents:
                 - has_keyword("internal")
