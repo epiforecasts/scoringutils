@@ -58,7 +58,6 @@ check_forecasts <- function(data) {
   errors <- list()
 
   # check data looks ok and remove columns with no prediction or no true value
-
   data <- withCallingHandlers(
     tryCatch(
       check_clean_data(data),
@@ -71,15 +70,12 @@ check_forecasts <- function(data) {
       tryInvokeRestart("muffleWarning")
     }
   )
-
   if (length(errors) > 0 | !is.data.table(data)) {
     stop(
       "Can't check input. The following error has been produced:\n",
       paste(errors, collapse = "\n")
     )
   }
-
-  # obtain truth type
 
   check[["target_type"]] <- get_target_type(data)
   check[["prediction_type"]] <- get_prediction_type(data)
@@ -93,12 +89,9 @@ check_forecasts <- function(data) {
   )
 
   # obtain unit of a single forecast
-  protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile",
-    "range", "boundary"
-  )
-  obs_unit <- setdiff(colnames(data), protected_columns)
+  obs_unit <- get_unit_of_forecast(data)
   check[["forecast_unit"]] <- obs_unit
+
   msg <- c(
     msg,
     paste0(
@@ -327,3 +320,26 @@ check_clean_data <- function(data, verbose = TRUE) {
   }
   return(data)
 }
+
+
+#' @title Get unit of a single forecast
+#'
+#' @description Helper function to get the unit of a single forecast, i.e.
+#' the column names that define where a single forecast was made for
+#'
+#' @inheritParams check_forecast
+#'
+#' @return A character vector with the column names that define the unit of
+#' a single forecast
+#'
+#' @keywords internal
+
+get_unit_of_forecast <- function(data) {
+  protected_columns <- c(
+    "prediction", "true_value", "sample", "quantile",
+    "range", "boundary"
+  )
+  obs_unit <- setdiff(colnames(data), protected_columns)
+  return(obs_unit)
+}
+
