@@ -29,12 +29,7 @@ default options).}
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
+\item{by}{character vector that denotes the unit of a single forecast.}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place. But sometimes you

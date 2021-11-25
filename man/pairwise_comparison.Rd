@@ -10,8 +10,8 @@ pairwise_comparison(
   test_options = list(oneSided = FALSE, test_type = c("non_parametric", "permuation"),
     n_permutations = 999),
   baseline = NULL,
-  by = NULL,
-  summarise_by = c("model")
+  summarise_by = c("model"),
+  by = NULL
 )
 }
 \arguments{
@@ -30,18 +30,13 @@ default options).}
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
-
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place. But sometimes you
 may want to to summarise over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute (and possibly plot)
 the probability integral transform(pit).}
+
+\item{by}{character vector that denotes the unit of a single forecast.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores

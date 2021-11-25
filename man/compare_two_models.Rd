@@ -23,12 +23,7 @@ the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
 default options).}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
+\item{by}{character vector that denotes the unit of a single forecast.}
 }
 \description{
 This function compares two models based on the subset of forecasts for which

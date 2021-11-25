@@ -13,6 +13,7 @@
 #' [eval_forecasts()]
 #' @param metric A character vector of length one with the metric to do
 #' the comparison on.
+#' @param by character vector that denotes the unit of a single forecast.
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place. But sometimes you
 #' may want to to summarise over categories different from the scoring.
@@ -54,7 +55,8 @@ pairwise_comparison <- function(scores,
                                                     test_type = c("non_parametric", "permuation"),
                                                     n_permutations = 999),
                                 baseline = NULL,
-                                summarise_by = c("model")) {
+                                summarise_by = c("model"),
+                                by = NULL) {
 
   scores <- data.table::as.data.table(scores)
 
@@ -75,7 +77,6 @@ pairwise_comparison <- function(scores,
   split_by <- setdiff(summarise_by, "model")
 
   split_scores <- split(scores, by = split_by)
-
 
   results <- lapply(split_scores,
                     FUN = function(scores) {
