@@ -11,17 +11,11 @@ eval_forecasts(
   metrics = NULL,
   quantiles = c(),
   sd = FALSE,
-  interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE,
-    separate_results = TRUE),
   pit_plots = FALSE,
-  summarised = TRUE,
-  verbose = TRUE,
-  forecasts = NULL,
-  truth_data = NULL,
-  merge_by = NULL,
   compute_relative_skill = FALSE,
   rel_skill_metric = "auto",
-  baseline = NULL
+  baseline = NULL,
+  ...
 )
 }
 \arguments{
@@ -81,7 +75,9 @@ default, this is equal to \code{by} and no summary takes place.
 But sometimes you may want to to summarise
 over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit).}
+(and possibly plot) the probability integral transform(pit). Sometimes you
+may want to include 'range', 'quantile' or 'sample', to summarise by
+range, quantile or sample.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
@@ -95,35 +91,8 @@ returned.}
 \item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
 metrics will be returned when summarising.}
 
-\item{interval_score_arguments}{list with arguments for the calculation of
-the interval score. These arguments get passed down to
-\code{interval_score}, except for the argument \code{count_median_twice} that
-controls how the interval scores for different intervals are summed up. This
-should be a logical (default is \code{FALSE}) that indicates whether or not
-to count the median twice when summarising. This would conceptually treat the
-median as a 0\% prediction interval, where the median is the lower as well as
-the upper bound. The alternative is to treat the median as a single quantile
-forecast instead of an interval. The interval score would then
-be better understood as an average of quantile scores.)}
-
 \item{pit_plots}{if \code{TRUE} (not the default), pit plots will be returned. For
 details see \code{\link[=pit]{pit()}}.}
-
-\item{summarised}{Summarise arguments (i.e. take the mean per group
-specified in group_by. Default is \code{TRUE.}}
-
-\item{verbose}{print out additional helpful messages (default is \code{TRUE})}
-
-\item{forecasts}{data.frame with forecasts, that should follow the same
-general guidelines as the \code{data} input. Argument can be used to supply
-forecasts and truth data independently. Default is \code{NULL}.}
-
-\item{truth_data}{data.frame with a column called \code{true_value} to be merged
-with \code{forecasts}}
-
-\item{merge_by}{character vector with column names that \code{forecasts} and
-\code{truth_data} should be merged on. Default is \code{NULL} and merge will be
-attempted automatically.}
 
 \item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called
@@ -140,6 +109,20 @@ one of interval score, crps or brier score will be used where appropriate}
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
+
+\item{...}{additional parameters passed down to lower-level functions.
+For example, the following arguments can change how weighted interval
+scores are computed:
+\itemize{
+\item \code{count_median_twice} that controls how the interval scores for different
+intervals are summed up. This should be a logical (default is \code{FALSE}) that
+indicates whether or not to count the median twice when summarising.
+This would conceptually treat the
+median as a 0\% prediction interval, where the median is the lower as well as
+the upper bound. The alternative is to treat the median as a single quantile
+forecast instead of an interval. The interval score would then
+be better understood as an average of quantile scores.)
+}}
 }
 \value{
 A data.table with appropriate scores. For binary predictions,
@@ -192,8 +175,7 @@ See \code{\link[=logs]{logs()}} for more information.
 binary_example <- data.table::setDT(scoringutils::binary_example_data)
 eval <- scoringutils::eval_forecasts(binary_example,
                                      summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE,
-                                     verbose = FALSE)
+                                     quantiles = c(0.5), sd = TRUE)
 
 ## Quantile Forecasts
 # wide format example (this examples shows usage of both wide formats)

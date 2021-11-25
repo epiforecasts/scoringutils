@@ -54,7 +54,6 @@ ae_median_sample <- function(true_values, predictions) {
 #' in `predictions`. Only those predictions where `quantiles == 0.5` will
 #' be kept. If `quantiles` is `NULL`, then all `predictions` and
 #' `true_values` will be used (this is then the same as [abs_error()])
-#' @param verbose logical, return a warning is something unexpected happens
 #' @return vector with the scoring values
 #' @importFrom stats median
 #' @examples
@@ -62,14 +61,11 @@ ae_median_sample <- function(true_values, predictions) {
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
 #' @export
-ae_median_quantile <- function(true_values, predictions, quantiles = NULL,
-                               verbose = TRUE) {
+ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
   if (!is.null(quantiles)) {
     if (!any(quantiles == 0.5) && !any(is.na(quantiles))) {
       return(NA_real_)
-      if (verbose) {
-        warning("in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?")
-      }
+      warning("in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?")
     }
     true_values <- true_values[quantiles == 0.5]
     predictions <- predictions[quantiles == 0.5]

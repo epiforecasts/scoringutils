@@ -4,10 +4,10 @@ eval_forecasts_quantile <- function(data,
                                     metrics,
                                     quantiles,
                                     sd,
-                                    pit_plots,
-                                    interval_score_arguments,
+                                    weigh = TRUE,
+                                    count_median_twice = FALSE,
+                                    separate_results = TRUE,
                                     summarised,
-                                    verbose,
                                     compute_relative_skill,
                                     rel_skill_metric,
                                     baseline) {
@@ -33,41 +33,22 @@ eval_forecasts_quantile <- function(data,
     range_data[, c("upper", "lower") := NA]
   }
 
-  # update interval_score arguments based on what was provided by user
-  interval_score_arguments <- update_list(defaults = list(weigh = TRUE,
-                                                          count_median_twice = FALSE,
-                                                          separate_results = TRUE),
-                                          optional = interval_score_arguments)
-
-  # store separately, as this doesn't get passed down to interval_score()
-  count_median_twice <- interval_score_arguments$count_median_twice
-  interval_score_arguments$count_median_twice <- NULL
-
   # set up results data.table that will then be modified throughout ------------
   res <- data.table::copy(range_data)
 
   # calculate scores on range format -------------------------------------------
   if ("interval_score" %in% metrics) {
     # compute separate results if desired
-    if (interval_score_arguments$separate_results) {
-      res <- res[, c("interval_score",
-                     "dispersion",
-                     "underprediction",
-                     "overprediction") := do.call(scoringutils::interval_score,
-                                                  c(list(true_value,
-                                                         lower,
-                                                         upper,
-                                                         range),
-                                                    interval_score_arguments))]
+    if (separate_results) {
+      outcols <- c("interval_score", "dispersion",
+                   "underprediction", "overprediction")
     } else {
-      res <- res[, c("interval_score") := do.call(scoringutils::interval_score,
-                                                  c(list(true_value,
-                                                         lower,
-                                                         upper,
-                                                         range),
-                                                    interval_score_arguments))]
+      outcols <- "interval_score"
     }
-    # res[, .(unlist(interval_score)), by = setdiff(colnames(res), "interval_score")]
+    res <- res[,  eval(outcols) := do.call(scoringutils::interval_score,
+                                           list(true_value, lower,
+                                                upper,range,
+                                                weigh, separate_results = TRUE))]
   }
 
   # compute coverage for every single observation
@@ -98,8 +79,7 @@ eval_forecasts_quantile <- function(data,
   if ("aem" %in% metrics) {
     quantile_data[, aem := ae_median_quantile(true_value,
                                               prediction,
-                                              quantile,
-                                              verbose = verbose),
+                                              quantile),
                   by = by]
   }
 
@@ -143,39 +123,36 @@ eval_forecasts_quantile <- function(data,
                                                     rel_skill_metric = rel_skill_metric,
                                                     baseline = baseline,
                                                     by = by,
-                                                    summarise_by = summarise_by,
-                                                    verbose = verbose)
+                                                    summarise_by = summarise_by)
     res <- merge(res, relative_res, by = by)
   }
 
-  # summarise scores if desired ------------------------------------------------
-  if (summarised) {
-    # add quantiles for the scores
-    if (!is.null(quantiles)) {
-      res <- add_quantiles(res,
-                           c("interval_score", "coverage",
-                             "overprediction", "underprediction",
-                             "coverage_deviation", "bias", "dispersion", "aem",
-                             "ae_point"),
-                           quantiles,
-                           by = c(summarise_by))
-    }
-    # add standard deviation
-    if (sd) {
-      res <- add_sd(res,
-                    varnames = c("interval_score", "bias", "coverage",
-                                 "overprediction", "underprediction",
-                                 "coverage_deviation", "dispersion", "aem",
-                                 "ae_point"),
-                    by = c(summarise_by))
-    }
-
-    # summarise by taking the mean and omitting unnecessary columns
-    res <- res[, lapply(.SD, mean, na.rm = TRUE),
-               by = c(summarise_by),
-               .SDcols = colnames(res) %like%
-                 "coverage|bias|dispersion|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
+  # summarise scores -----------------------------------------------------------
+  # add quantiles for the scores
+  if (!is.null(quantiles)) {
+    res <- add_quantiles(res,
+                         c("interval_score", "coverage",
+                           "overprediction", "underprediction",
+                           "coverage_deviation", "bias", "dispersion", "aem",
+                           "ae_point"),
+                         quantiles,
+                         by = c(summarise_by))
   }
+  # add standard deviation
+  if (sd) {
+    res <- add_sd(res,
+                  varnames = c("interval_score", "bias", "coverage",
+                               "overprediction", "underprediction",
+                               "coverage_deviation", "dispersion", "aem",
+                               "ae_point"),
+                  by = c(summarise_by))
+  }
+
+  # summarise by taking the mean and omitting unnecessary columns
+  res <- res[, lapply(.SD, mean, na.rm = TRUE),
+             by = c(summarise_by),
+             .SDcols = colnames(res) %like%
+               "coverage|bias|sharpness|coverage_deviation|interval_score|overprediction|underprediction|aem|ae_point|relative_skill|scaled_rel_skill"]
 
   # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
   if (!("range" %in% summarise_by) & ("coverage" %in% colnames(res))) {

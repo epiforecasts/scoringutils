@@ -1,4 +1,4 @@
-test_that("merge pred and obs works within eval_forecasts", {
+test_that("merge pred and obs works", {
 
   data <- scoringutils::quantile_example_data
   forecasts <- scoringutils::example_quantile_forecasts_only
@@ -6,8 +6,10 @@ test_that("merge pred and obs works within eval_forecasts", {
 
   eval1 <- scoringutils::eval_forecasts(data = data)
 
-  eval2 <- scoringutils::eval_forecasts(forecasts = forecasts,
-                                        truth_data = truth_data)
+  data2 <- merge_pred_and_obs(forecasts = forecasts,
+                              observations = truth_data)
+
+  eval2 <- scoringutils::eval_forecasts(data = data2)
 
 
   data.table::setcolorder(eval1, colnames(eval2))

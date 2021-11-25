@@ -3,7 +3,6 @@ test_that("check_forecasts() function works", {
   expect_s3_class(check, "scoringutils_check")
 })
 
-
 test_that("check_forecasts() function has an error for empty data.frame", {
   expect_error(check_forecasts(data.frame()))
 })
@@ -21,4 +20,3 @@ test_that("check_forecasts() function returns warnings with NA in the data", {
 
   expect_equal(length(check$warnings), 2)
 })
-

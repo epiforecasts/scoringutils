@@ -82,7 +82,9 @@
 #' But sometimes you may want to to summarise
 #' over categories different from the scoring.
 #' `summarise_by` is also the grouping level used to compute
-#' (and possibly plot) the probability integral transform(pit).
+#' (and possibly plot) the probability integral transform(pit). Sometimes you
+#' may want to include 'range', 'quantile' or 'sample', to summarise by
+#' range, quantile or sample.
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
 #' metrics see [available_metrics()]
@@ -94,27 +96,6 @@
 #' metrics will be returned when summarising.
 #' @param pit_plots if `TRUE` (not the default), pit plots will be returned. For
 #' details see [pit()].
-#' @param interval_score_arguments list with arguments for the calculation of
-#' the interval score. These arguments get passed down to
-#' `interval_score`, except for the argument `count_median_twice` that
-#' controls how the interval scores for different intervals are summed up. This
-#' should be a logical (default is `FALSE`) that indicates whether or not
-#' to count the median twice when summarising. This would conceptually treat the
-#' median as a 0% prediction interval, where the median is the lower as well as
-#' the upper bound. The alternative is to treat the median as a single quantile
-#' forecast instead of an interval. The interval score would then
-#' be better understood as an average of quantile scores.)
-#' @param summarised Summarise arguments (i.e. take the mean per group
-#' specified in group_by. Default is `TRUE.`
-#' @param verbose print out additional helpful messages (default is `TRUE`)
-#' @param forecasts data.frame with forecasts, that should follow the same
-#' general guidelines as the `data` input. Argument can be used to supply
-#' forecasts and truth data independently. Default is `NULL`.
-#' @param truth_data data.frame with a column called `true_value` to be merged
-#' with `forecasts`
-#' @param merge_by character vector with column names that `forecasts` and
-#' `truth_data` should be merged on. Default is `NULL` and merge will be
-#' attempted automatically.
 #' @param compute_relative_skill logical, whether or not to compute relative
 #' performance between models. If `TRUE` (default is `FALSE`), then a column called
 #' 'model' must be present in the input data. For more information on
@@ -128,6 +109,17 @@
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
+#' @param ... additional parameters passed down to lower-level functions.
+#' For example, the following arguments can change how weighted interval
+#' scores are computed:
+#' - `count_median_twice` that controls how the interval scores for different
+#' intervals are summed up. This should be a logical (default is `FALSE`) that
+#' indicates whether or not to count the median twice when summarising.
+#' This would conceptually treat the
+#' median as a 0% prediction interval, where the median is the lower as well as
+#' the upper bound. The alternative is to treat the median as a single quantile
+#' forecast instead of an interval. The interval score would then
+#' be better understood as an average of quantile scores.)
 #'
 #' @return A data.table with appropriate scores. For binary predictions,
 #' the Brier Score will be returned, for quantile predictions the interval
@@ -150,8 +142,7 @@
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
 #' eval <- scoringutils::eval_forecasts(binary_example,
 #'                                      summarise_by = c("model"),
-#'                                      quantiles = c(0.5), sd = TRUE,
-#'                                      verbose = FALSE)
+#'                                      quantiles = c(0.5), sd = TRUE)
 #'
 #' ## Quantile Forecasts
 #' # wide format example (this examples shows usage of both wide formats)
@@ -197,40 +188,18 @@ eval_forecasts <- function(data = NULL,
                            metrics = NULL,
                            quantiles = c(),
                            sd = FALSE,
-                           interval_score_arguments = list(weigh = TRUE,
-                                                           count_median_twice = FALSE,
-                                                           separate_results = TRUE),
                            pit_plots = FALSE,
-                           summarised = TRUE,
-                           verbose = TRUE,
-                           forecasts = NULL,
-                           truth_data = NULL,
-                           merge_by = NULL,
                            compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
-                           baseline = NULL) {
+                           baseline = NULL,
+                           ...) {
 
 
   # preparations ---------------------------------------------------------------
-  # check data argument is provided
-  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
-    stop("need arguments 'data' in function 'eval_forecasts()', or alternatively 'forecasts' and 'truth_data'")
-  }
-  if (is.null(data)) {
-    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by)
-    if (nrow(data) == 0) {
-      if (verbose) {
-        warning("After attempting to merge, only an empty data.table was left")
-      }
-      return(data)
-    }
-  }
-
-  # do a copy to avoid that the input may be altered in any way.
-  data <- data.table::as.data.table(data)
+  # check relevant columns and remove NA values in true_values and prediction
+  data <- check_clean_data(data, verbose = FALSE)
 
   # error handling for relative skill computation
-  # should probably wrap this in a function warn_if_verbose(warning, verbose)
   if (compute_relative_skill) {
     if (!("model" %in% colnames(data))) {
       warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
@@ -238,15 +207,11 @@ eval_forecasts <- function(data = NULL,
     }
     models <- unique(data$model)
     if (length(models) < 2 + (!is.null(baseline))) {
-      if (verbose) {
-        warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
-      }
+      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
     if (!is.null(baseline) && !(baseline %in% models)) {
-      if (verbose){
-        warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
-      }
+      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
     if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
@@ -254,23 +219,6 @@ eval_forecasts <- function(data = NULL,
       compute_relative_skill <- FALSE
     }
   }
-
-  # check that everything is unique
-  unique_data <- unique(data)
-  if (nrow(unique_data) != nrow(data)) {
-    data <- unique_data
-    if(verbose) {
-      warning("There are duplicate rows in data. These were removed")
-    }
-  }
-
-  # check and remove any rows where the true value is missing
-  if (any(is.na(data$true_value))) {
-    if(verbose) {
-      warning("There are NA values in the true values provided. These will be removed")
-    }
-  }
-  data <- data[!is.na(true_value)]
 
   # obtain a value for by if nothing was provided by the user
   if (is.null(by)) {
@@ -300,11 +248,9 @@ eval_forecasts <- function(data = NULL,
     metrics <- available_metrics
   } else {
     if (!all(metrics %in% available_metrics)) {
-      if (verbose) {
-        msg <- paste("The following metrics are not currently implemented and",
+      msg <- paste("The following metrics are not currently implemented and",
                      "will not be computed:",
                      paste(setdiff(metrics, available_metrics), collapse = ", "))
-      }
       warning(msg)
     }
   }
@@ -330,16 +276,6 @@ eval_forecasts <- function(data = NULL,
     target_type = "continuous"
   }
 
-  # remove any rows where the prediction is missing ----------------------------
-  data <- data[!is.na(prediction)]
-  if (nrow(data) == 0) {
-    if (verbose) {
-      message("After removing all NA true values and predictions, there were no observations left")
-    }
-    return(data)
-  }
-
-
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
     res <- eval_forecasts_binary(data = data,
@@ -347,9 +283,7 @@ eval_forecasts <- function(data = NULL,
                                  summarise_by = summarise_by,
                                  metrics = metrics,
                                  quantiles = quantiles,
-                                 sd = sd,
-                                 summarised = summarised,
-                                 verbose = verbose)
+                                 sd = sd)
     return(res)
   }
 
@@ -361,13 +295,10 @@ eval_forecasts <- function(data = NULL,
                                    metrics = metrics,
                                    quantiles = quantiles,
                                    sd = sd,
-                                   pit_plots = pit_plots,
-                                   interval_score_arguments = interval_score_arguments,
-                                   summarised = summarised,
-                                   verbose = verbose,
                                    compute_relative_skill = compute_relative_skill,
                                    rel_skill_metric = rel_skill_metric,
-                                   baseline = baseline)
+                                   baseline = baseline,
+                                   ...)
     return(res)
   }
 
@@ -383,9 +314,7 @@ eval_forecasts <- function(data = NULL,
                                  prediction_type = prediction_type,
                                  quantiles = quantiles,
                                  sd = sd,
-                                 pit_plots = pit_plots,
-                                 summarised = summarised,
-                                 verbose = verbose)
+                                 pit_plots = pit_plots)
     return(res)
   }
 }

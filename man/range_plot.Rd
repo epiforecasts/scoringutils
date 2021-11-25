@@ -73,5 +73,5 @@ scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
                                         interval_score_arguments = list(weigh = FALSE),
                                         summarise_by = c("model", "value_desc", "range"))
 scoringutils::range_plot(scores, y = "dispersion", x = "model",
-                          facet_formula =  ~value_desc)
+                         facet_formula =  ~value_desc)
 }

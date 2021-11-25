@@ -11,8 +11,7 @@
 #' binary_example <- data.table::setDT(scoringutils::binary_example_data)
 #' eval <- scoringutils::eval_forecasts(data = binary_example,
 #'                                      summarise_by = c("model"),
-#'                                      quantiles = c(0.5), sd = TRUE,
-#'                                      verbose = FALSE)
+#'                                      quantiles = c(0.5), sd = TRUE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
@@ -21,30 +20,26 @@ eval_forecasts_binary <- function(data,
                                   summarise_by,
                                   metrics,
                                   quantiles,
-                                  sd,
-                                  summarised,
-                                  verbose){
+                                  sd){
 
   res <- data[, "brier_score" := scoringutils::brier_score(true_value, prediction),
               by = by]
 
-  if (summarised) {
-    # add quantiles
-    if (!is.null(quantiles)) {
-      res <- add_quantiles(res, "brier_score", quantiles, by = summarise_by)
-    }
-
-    # add standard deviation
-    if (sd) {
-      res <- add_sd(res, "brier_score", by = c(summarise_by))
-    }
-
-    # summarise by taking the mean over all relevant columns
-    res <- res[, lapply(.SD, mean, na.rm = TRUE),
-               .SDcols = colnames(res) %like% "brier",
-               by = summarise_by]
-
+  # add quantiles
+  if (!is.null(quantiles)) {
+    res <- add_quantiles(res, "brier_score", quantiles, by = summarise_by)
   }
+
+  # add standard deviation
+  if (sd) {
+    res <- add_sd(res, "brier_score", by = c(summarise_by))
+  }
+
+  # summarise by taking the mean over all relevant columns
+  res <- res[, lapply(.SD, mean, na.rm = TRUE),
+             .SDcols = colnames(res) %like% "brier",
+             by = summarise_by]
+
 
   return(res[])
 }

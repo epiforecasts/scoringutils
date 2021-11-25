@@ -22,13 +22,10 @@ test_that("function works for integer true_values and predictions",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(10, rpois(10, lambda = 1:10))
             output <- pit(true_values = true_values,
-                          predictions = predictions)
+                          predictions = predictions,
+                          n_replicates = 56)
             expect_equal(length(output),
-                         3)
-            expect_equal(class(output),
-                         "list")
-            expect_equal(class(output[[1]]),
-                         "numeric")
+                         560)
           })
 
 test_that("function works for continuous true_values and predictions",
@@ -36,31 +33,11 @@ test_that("function works for continuous true_values and predictions",
             true_values <- rnorm(10)
             predictions <- replicate(10, rnorm(10))
             output <- pit(true_values = true_values,
-                          predictions = predictions)
+                          predictions = predictions,
+                          n_replicates = 56)
             expect_equal(length(output),
-                         3)
-            expect_equal(class(output),
-                         "list")
-            expect_equal(class(output[[1]]),
-                         "numeric")
+                         10)
           })
-
-
-
-
-# compare results scoringutils2 with scoringutils
-
-test_that("function works for continuous true_values and predictions",
-          {
-            ## continuous predictions
-            true_values <- rnorm(30, mean = 1:30)
-            predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-            scoringutils2 <- scoringutils::pit(true_values, predictions)
-            scoringutils <- scoringutils::pit(true_values, predictions)
-
-            expect_equal(scoringutils2$p_value, scoringutils$p_value)
-          })
-
 
 
 

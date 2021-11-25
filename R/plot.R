@@ -408,8 +408,7 @@ wis_components <- function(scores,
 #'                                         interval_score_arguments = list(weigh = FALSE),
 #'                                         summarise_by = c("model", "value_desc", "range"))
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
-#'                           facet_formula =  ~value_desc)
-
+#'                          facet_formula =  ~value_desc)
 
 range_plot <- function(scores,
                        y = "interval_score",
@@ -423,9 +422,9 @@ range_plot <- function(scores,
                        ylab = y) {
 
   plot <- ggplot2::ggplot(scores,
-                  ggplot2::aes_string(x = x,
-                                      y = y,
-                                      colour = colour)) +
+                          ggplot2::aes_string(x = x,
+                                              y = y,
+                                              colour = colour)) +
     ggplot2::geom_point(size = 2) +
     ggplot2::geom_line(ggplot2::aes(group = range),
                        colour = "black",
@@ -514,9 +513,9 @@ score_heatmap <- function(scores,
   scores[, eval(metric) := round(get(metric), 2)]
 
   plot <- ggplot2::ggplot(scores,
-                  ggplot2::aes_string(y = y,
-                                      x = x,
-                                      fill = metric)) +
+                          ggplot2::aes_string(y = y,
+                                              x = x,
+                                              fill = metric)) +
     ggplot2::geom_tile() +
     ggplot2::geom_text(ggplot2::aes_string(label = metric)) +
     ggplot2::scale_fill_gradient2(low = "skyblue", high = "red") +
@@ -595,7 +594,6 @@ score_heatmap <- function(scores,
 #' (the default), these get filtered out.
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "True and predicted values"
-#' @param verbose print out additional helpful messages (default is TRUE)
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' facet_wrap facet_grid
@@ -637,8 +635,7 @@ plot_predictions <- function(data = NULL,
                              allow_truth_without_pred = FALSE,
                              remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval"),
                              xlab = x,
-                             ylab = "True and predicted values",
-                             verbose = TRUE) {
+                             ylab = "True and predicted values") {
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
@@ -649,9 +646,7 @@ plot_predictions <- function(data = NULL,
   if (is.null(data)) {
     data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by, join = "full")
     if (nrow(data) == 0) {
-      if (verbose) {
-        warning("After attempting to merge, only an empty data.table was left")
-      }
+      warning("After attempting to merge, only an empty data.table was left")
       return(data)
     }
   }
@@ -748,7 +743,7 @@ plot_predictions <- function(data = NULL,
         ggplot2::geom_line(data = median,
                            mapping = ggplot2::aes(y = prediction, colour = "median"),
                            lwd = 0.4)
-      }
+    }
   }
 
   # add true_values
@@ -1063,5 +1058,3 @@ show_avail_forecasts <- function(data,
 
   return(plot)
 }
-
-
