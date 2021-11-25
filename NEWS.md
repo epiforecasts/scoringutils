@@ -1,3 +1,10 @@
+# scoringutils 0.2.0
+
+## Breaking changes
+- The 'sharpness' component of the weighted interval score was renamed to 
+dispersion. This was done to make it more clear what the component represents 
+and to maintain consistency with what is used in other places. 
+
 # scoringutils 0.1.8
 
 ## Feature updates
