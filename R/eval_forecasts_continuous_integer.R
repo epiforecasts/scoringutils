@@ -16,8 +16,7 @@
 #' eval <- scoringutils::eval_forecasts(integer_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.1, 0.9),
-#'                                      sd = TRUE,
-#'                                      pit_plots = TRUE)
+#'                                      sd = TRUE)
 #' eval <- scoringutils::eval_forecasts(integer_example)
 #'
 #' ## Continuous Forecasts
@@ -39,8 +38,7 @@ eval_forecasts_sample <- function(data,
                                   metrics,
                                   prediction_type,
                                   quantiles,
-                                  sd,
-                                  pit_plots) {
+                                  sd) {
 
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {

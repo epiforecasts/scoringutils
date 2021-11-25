@@ -94,8 +94,6 @@
 #' returned.
 #' @param sd if `TRUE` (the default is `FALSE`) the standard deviation of all
 #' metrics will be returned when summarising.
-#' @param pit_plots if `TRUE` (not the default), pit plots will be returned. For
-#' details see [pit()].
 #' @param compute_relative_skill logical, whether or not to compute relative
 #' performance between models. If `TRUE` (default is `FALSE`), then a column called
 #' 'model' must be present in the input data. For more information on
@@ -163,8 +161,7 @@
 #' eval <- scoringutils::eval_forecasts(integer_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.1, 0.9),
-#'                                      sd = TRUE,
-#'                                      pit_plots = TRUE)
+#'                                      sd = TRUE)
 #' eval <- scoringutils::eval_forecasts(integer_example)
 #'
 #' ## Continuous Forecasts
@@ -188,7 +185,6 @@ eval_forecasts <- function(data = NULL,
                            metrics = NULL,
                            quantiles = c(),
                            sd = FALSE,
-                           pit_plots = FALSE,
                            compute_relative_skill = FALSE,
                            rel_skill_metric = "auto",
                            baseline = NULL,
@@ -313,8 +309,7 @@ eval_forecasts <- function(data = NULL,
                                  metrics = metrics,
                                  prediction_type = prediction_type,
                                  quantiles = quantiles,
-                                 sd = sd,
-                                 pit_plots = pit_plots)
+                                 sd = sd)
     return(res)
   }
 }
