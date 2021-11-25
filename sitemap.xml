@@ -43,6 +43,9 @@
     <loc>/reference/ae_median_sample.html</loc>
   </url>
   <url>
+    <loc>/reference/available_metrics.html</loc>
+  </url>
+  <url>
     <loc>/reference/bias.html</loc>
   </url>
   <url>
@@ -52,7 +55,13 @@
     <loc>/reference/brier_score.html</loc>
   </url>
   <url>
+    <loc>/reference/check_clean_data.html</loc>
+  </url>
+  <url>
     <loc>/reference/check_equal_length.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_forecasts.html</loc>
   </url>
   <url>
     <loc>/reference/check_not_null.html</loc>
@@ -95,6 +104,12 @@
   </url>
   <url>
     <loc>/reference/geom_mean_helper.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_prediction_type.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_target_type.html</loc>
   </url>
   <url>
     <loc>/reference/hist_PIT.html</loc>
@@ -143,6 +158,9 @@
   </url>
   <url>
     <loc>/reference/plot_predictions.html</loc>
+  </url>
+  <url>
+    <loc>/reference/print.scoringutils_check.html</loc>
   </url>
   <url>
     <loc>/reference/quantile_bias.html</loc>

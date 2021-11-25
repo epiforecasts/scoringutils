@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
       <h1 data-toc-skip>scoringutils</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2021-11-24</h4>
+            <h4 data-toc-skip class="date">2021-11-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="hidden name"><code>scoringutils.Rmd</code></div>
@@ -105,50 +105,50 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="../reference/quantile_example_data.html">quantile_example_data</a></span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt;       value_date     value_type geography          value_desc true_value</span>
-<span class="co">#&gt;    1: 2020-05-04   hospital_inc   England Hospital admissions       1043</span>
-<span class="co">#&gt;    2: 2020-05-04  hospital_prev   England Total beds occupied      10648</span>
-<span class="co">#&gt;    3: 2020-05-11   hospital_inc   England Hospital admissions        743</span>
-<span class="co">#&gt;   ---                                                                   </span>
-<span class="co">#&gt; 5150: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt; 5151: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt; 5152: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt;                    model creation_date quantile prediction horizon</span>
-<span class="co">#&gt;    1:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;    2:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;    3:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;   ---                                                             </span>
-<span class="co">#&gt; 5150:           SIRCOVID    2020-07-13     0.85          4      21</span>
-<span class="co">#&gt; 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21</span>
-<span class="co">#&gt; 5152:           SIRCOVID    2020-07-13     0.90          6      21</span>
+<span class="co">#&gt;              geography     value_type          value_desc value_date true_value</span>
+<span class="co">#&gt;    1:          England death_inc_line              Deaths 2020-05-04        411</span>
+<span class="co">#&gt;    2:          England death_inc_line              Deaths 2020-05-11        260</span>
+<span class="co">#&gt;    3:          England death_inc_line              Deaths 2020-05-18        253</span>
+<span class="co">#&gt;   ---                                                                          </span>
+<span class="co">#&gt; 4856: Northern Ireland  hospital_prev Total beds occupied 2020-07-20         19</span>
+<span class="co">#&gt; 4857: Northern Ireland  hospital_prev Total beds occupied 2020-07-27         17</span>
+<span class="co">#&gt; 4858: Northern Ireland  hospital_prev Total beds occupied 2020-08-03         16</span>
+<span class="co">#&gt;          model creation_date quantile prediction horizon</span>
+<span class="co">#&gt;    1:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;    2:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;    3:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;   ---                                                   </span>
+<span class="co">#&gt; 4856: SIRCOVID    2020-07-06      0.9          6      14</span>
+<span class="co">#&gt; 4857:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt; 4858:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
 
 <span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="../reference/eval_forecasts.html">eval_forecasts</a></span><span class="op">(</span><span class="va">data</span>, 
                                        summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"quantile"</span>, <span class="st">"range"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">scores</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt;                  model quantile range interval_score sharpness underprediction</span>
-<span class="co">#&gt;  1: DetSEIRwithNB MCMC     0.50     0       54.45528  0.000000     54.16260163</span>
-<span class="co">#&gt;  2: DetSEIRwithNB MCMC     0.45    10       53.96138  6.310976     47.42276423</span>
-<span class="co">#&gt;  3: DetSEIRwithNB MCMC     0.55    10       53.96138  6.310976     47.42276423</span>
+<span class="co">#&gt;  1: DetSEIRwithNB MCMC     0.50     0       53.55263  0.000000      51.3684211</span>
+<span class="co">#&gt;  2: DetSEIRwithNB MCMC     0.45    10       53.01140  6.844737      44.3508772</span>
+<span class="co">#&gt;  3: DetSEIRwithNB MCMC     0.55    10       53.01140  6.844737      44.3508772</span>
 <span class="co">#&gt; ---                                                                           </span>
-<span class="co">#&gt; 55:           SIRCOVID     0.90    80       18.18000 17.368889      0.15555556</span>
-<span class="co">#&gt; 56:           SIRCOVID     0.05    90       11.69444 11.661111      0.03333333</span>
-<span class="co">#&gt; 57:           SIRCOVID     0.95    90       11.69444 11.661111      0.03333333</span>
-<span class="co">#&gt;     overprediction  coverage coverage_deviation       bias      aem</span>
-<span class="co">#&gt;  1:      0.2926829 0.3170732         0.31707317 -0.2333333 54.45528</span>
-<span class="co">#&gt;  2:      0.2276423 0.4308943         0.33089431 -0.2333333 54.45528</span>
-<span class="co">#&gt;  3:      0.2276423 0.4308943         0.33089431 -0.2333333 54.45528</span>
-<span class="co">#&gt; ---                                                                </span>
-<span class="co">#&gt; 55:      0.6555556 0.9333333         0.13333333  0.2255556 42.90000</span>
-<span class="co">#&gt; 56:      0.0000000 0.9888889         0.08888889  0.2255556 42.90000</span>
-<span class="co">#&gt; 57:      0.0000000 0.9888889         0.08888889  0.2255556 42.90000</span>
+<span class="co">#&gt; 55:           SIRCOVID     0.90    80       23.94023 18.170115       0.2873563</span>
+<span class="co">#&gt; 56:           SIRCOVID     0.05    90       16.35172 12.202299       0.2183908</span>
+<span class="co">#&gt; 57:           SIRCOVID     0.95    90       16.35172 12.202299       0.2183908</span>
+<span class="co">#&gt;     overprediction  coverage coverage_deviation        bias      aem</span>
+<span class="co">#&gt;  1:       2.184211 0.2894737         0.28947368 -0.05526316 53.55263</span>
+<span class="co">#&gt;  2:       1.815789 0.4210526         0.32105263 -0.05526316 53.55263</span>
+<span class="co">#&gt;  3:       1.815789 0.4210526         0.32105263 -0.05526316 53.55263</span>
+<span class="co">#&gt; ---                                                                 </span>
+<span class="co">#&gt; 55:       5.482759 0.7586207        -0.04137931  0.28965517 49.66667</span>
+<span class="co">#&gt; 56:       3.931034 0.8275862        -0.07241379  0.28965517 49.66667</span>
+<span class="co">#&gt; 57:       3.931034 0.8275862        -0.07241379  0.28965517 49.66667</span>
 <span class="co">#&gt;     quantile_coverage</span>
-<span class="co">#&gt;  1:         0.4959350</span>
-<span class="co">#&gt;  2:         0.4308943</span>
-<span class="co">#&gt;  3:         0.5691057</span>
+<span class="co">#&gt;  1:         0.5964912</span>
+<span class="co">#&gt;  2:         0.5263158</span>
+<span class="co">#&gt;  3:         0.6754386</span>
 <span class="co">#&gt; ---                  </span>
-<span class="co">#&gt; 55:         0.9777778</span>
-<span class="co">#&gt; 56:         0.2666667</span>
-<span class="co">#&gt; 57:         0.9888889</span></code></pre></div>
+<span class="co">#&gt; 55:         0.9540230</span>
+<span class="co">#&gt; 56:         0.4252874</span>
+<span class="co">#&gt; 57:         0.9770115</span></code></pre></div>
 <p>Using an appropriate level of summary, we can easily use the output for visualisation. The <code>scoringutils</code> package offers some built-in functions to help get a sense of the data</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># </span>
@@ -209,22 +209,22 @@
 <p>quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="../reference/quantile_example_data.html">quantile_example_data</a></span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt;       value_date     value_type geography          value_desc true_value</span>
-<span class="co">#&gt;    1: 2020-05-04   hospital_inc   England Hospital admissions       1043</span>
-<span class="co">#&gt;    2: 2020-05-04  hospital_prev   England Total beds occupied      10648</span>
-<span class="co">#&gt;    3: 2020-05-11   hospital_inc   England Hospital admissions        743</span>
-<span class="co">#&gt;   ---                                                                   </span>
-<span class="co">#&gt; 5150: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt; 5151: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt; 5152: 2020-08-03 death_inc_line     Wales              Deaths          1</span>
-<span class="co">#&gt;                    model creation_date quantile prediction horizon</span>
-<span class="co">#&gt;    1:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;    2:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;    3:               &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
-<span class="co">#&gt;   ---                                                             </span>
-<span class="co">#&gt; 5150:           SIRCOVID    2020-07-13     0.85          4      21</span>
-<span class="co">#&gt; 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21</span>
-<span class="co">#&gt; 5152:           SIRCOVID    2020-07-13     0.90          6      21</span>
+<span class="co">#&gt;              geography     value_type          value_desc value_date true_value</span>
+<span class="co">#&gt;    1:          England death_inc_line              Deaths 2020-05-04        411</span>
+<span class="co">#&gt;    2:          England death_inc_line              Deaths 2020-05-11        260</span>
+<span class="co">#&gt;    3:          England death_inc_line              Deaths 2020-05-18        253</span>
+<span class="co">#&gt;   ---                                                                          </span>
+<span class="co">#&gt; 4856: Northern Ireland  hospital_prev Total beds occupied 2020-07-20         19</span>
+<span class="co">#&gt; 4857: Northern Ireland  hospital_prev Total beds occupied 2020-07-27         17</span>
+<span class="co">#&gt; 4858: Northern Ireland  hospital_prev Total beds occupied 2020-08-03         16</span>
+<span class="co">#&gt;          model creation_date quantile prediction horizon</span>
+<span class="co">#&gt;    1:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;    2:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;    3:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt;   ---                                                   </span>
+<span class="co">#&gt; 4856: SIRCOVID    2020-07-06      0.9          6      14</span>
+<span class="co">#&gt; 4857:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
+<span class="co">#&gt; 4858:     &lt;NA&gt;          &lt;NA&gt;       NA         NA      NA</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="../reference/range_example_data_long.html">range_example_data_long</a></span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt;       value_date     value_type geography          value_desc true_value</span>
 <span class="co">#&gt;    1: 2020-05-04   hospital_inc   England Hospital admissions       1043</span>
@@ -367,17 +367,17 @@
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias.html">bias</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.895 -0.925  0.365  0.725 -0.530  0.520  0.545 -0.570 -0.355 -0.440</span>
-<span class="co">#&gt; [11] -0.960 -0.605  0.590  0.765 -0.390 -0.365 -0.980  0.960 -0.680 -0.355</span>
-<span class="co">#&gt; [21]  0.195  0.450  0.785  0.825  0.690 -0.670 -0.415  0.865  0.630 -0.365</span>
+<span class="co">#&gt;  [1] -0.055 -0.875 -0.525  0.270 -0.015  0.565 -0.300  0.310 -0.130  0.695</span>
+<span class="co">#&gt; [11]  0.720  0.610  0.915 -1.000 -0.735  0.845 -0.245 -0.335  0.705 -0.200</span>
+<span class="co">#&gt; [21] -0.515 -0.420 -0.940  0.640  0.150 -0.050 -0.360 -0.390 -0.040  0.750</span>
 
 <span class="co">## continuous forecasts</span>
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias.html">bias</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.34  0.26 -0.05  0.31  0.47 -0.23  0.71  0.53 -0.19 -0.14 -0.27 -0.83</span>
-<span class="co">#&gt; [13] -0.64 -0.06  0.26  0.02  0.92 -0.54  0.36 -0.74 -0.24 -0.67 -0.44 -0.19</span>
-<span class="co">#&gt; [25] -0.78  0.23  0.40 -0.82  0.36  0.10</span></code></pre></div>
+<span class="co">#&gt;  [1] -0.63  0.15 -0.72 -0.17 -0.72 -0.96  0.29 -0.01  0.35  0.63 -0.34 -0.68</span>
+<span class="co">#&gt; [13] -0.27  0.16 -0.12  0.87  0.87  0.37 -0.91  0.53 -0.81 -0.24 -0.21  0.52</span>
+<span class="co">#&gt; [25] -0.63  0.25 -0.55  0.30 -0.79  0.68</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sharpness">Sharpness<a class="anchor" aria-label="anchor" href="#sharpness"></a>
@@ -387,9 +387,9 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/sharpness.html">sharpness</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 1.4826 2.9652 2.9652 2.9652 2.9652</span>
+<span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652</span>
 <span class="co">#&gt; [11] 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span>
-<span class="co">#&gt; [21] 4.4478 2.9652 4.4478 4.4478 4.4478 5.1891 4.4478 5.9304 5.1891 5.9304</span></code></pre></div>
+<span class="co">#&gt; [21] 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 4.4478 4.4478</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
@@ -412,10 +412,10 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/crps.html">crps</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.690500 0.324475 0.661775 1.024550 0.680875 1.221750 0.830000 2.680000</span>
-<span class="co">#&gt;  [9] 1.333000 1.501025 2.393700 1.407925 1.305900 1.461575 0.808950 2.225450</span>
-<span class="co">#&gt; [17] 1.738875 1.434250 2.256975 1.102425 1.252250 1.089450 2.472025 1.614750</span>
-<span class="co">#&gt; [25] 1.647350 1.248550 4.667850 3.162700 1.508975 2.172350</span></code></pre></div>
+<span class="co">#&gt;  [1] 0.828475 1.434975 2.167925 0.424700 3.845925 1.853875 8.348775 1.832225</span>
+<span class="co">#&gt;  [9] 1.722675 2.421550 2.149400 2.108675 1.465225 2.358275 3.438425 4.143750</span>
+<span class="co">#&gt; [17] 1.012800 1.177700 7.226075 2.509625 1.174000 2.485300 7.498025 1.059000</span>
+<span class="co">#&gt; [25] 1.946800 1.247275 2.197900 1.353350 3.849375 4.192625</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="dawid-sebastiani-score-dss">Dawid-Sebastiani Score (DSS)<a class="anchor" aria-label="anchor" href="#dawid-sebastiani-score-dss"></a>
@@ -425,11 +425,10 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/dss.html">dss</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 4.2017860 0.7907277 2.5951241 2.6745507 2.5996692 4.4543665 6.5320869</span>
-<span class="co">#&gt;  [8] 2.1783438 2.0717492 2.3956619 2.8545119 3.5709593 3.8415947 3.1436571</span>
-<span class="co">#&gt; [15] 2.8533067 3.1136598 2.7679729 4.0245952 4.1392105 4.8995793 6.7636378</span>
-<span class="co">#&gt; [22] 2.8693212 3.0812863 5.0435104 3.6835369 7.0312126 3.2722270 3.5293422</span>
-<span class="co">#&gt; [29] 3.6300964 4.0175298</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.059335 2.777730 3.640487 2.508768 1.532557 1.976582 2.047278 5.240467</span>
+<span class="co">#&gt;  [9] 2.277718 3.781768 4.768094 3.569112 5.083308 2.892745 5.116448 4.127193</span>
+<span class="co">#&gt; [17] 3.123635 2.868783 3.240735 5.184288 7.085115 3.151118 3.296224 5.588369</span>
+<span class="co">#&gt; [25] 3.338135 7.599858 3.696836 3.326555 4.909066 3.383373</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="log-score">Log Score<a class="anchor" aria-label="anchor" href="#log-score"></a>
@@ -439,11 +438,11 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/logs.html">logs</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 1.0506584 1.4259060 2.1317604 1.1194708 1.2217812 1.0096917 0.9722459</span>
-<span class="co">#&gt;  [8] 1.2289671 1.3004162 1.2292751 0.8416544 1.3234540 1.1853136 0.9402058</span>
-<span class="co">#&gt; [15] 1.6962341 1.2012924 1.2684389 1.7055006 1.2520509 1.0195378 2.5044860</span>
-<span class="co">#&gt; [22] 1.1470426 2.8406929 3.1329007 1.0826234 1.7911311 1.1140694 1.3108674</span>
-<span class="co">#&gt; [29] 1.0314021 1.4307296</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.3797034 1.5184522 1.3225521 0.9559325 0.9557606 0.9660252 2.4739799</span>
+<span class="co">#&gt;  [8] 0.9394494 1.4760754 1.1899007 1.0521485 1.1119431 0.9656349 1.0443445</span>
+<span class="co">#&gt; [15] 1.5935539 1.0638282 0.9953830 1.0904843 1.0658280 1.7037508 1.6836044</span>
+<span class="co">#&gt; [22] 1.1455689 0.9897463 1.0704677 1.4235672 1.3873093 1.8700339 1.2251487</span>
+<span class="co">#&gt; [29] 0.8090423 1.4152674</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="brier-score">Brier Score<a class="anchor" aria-label="anchor" href="#brier-score"></a>
@@ -456,7 +455,7 @@
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/brier_score.html">brier_score</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.3878357</span></code></pre></div>
+<span class="co">#&gt; [1] 0.4049923</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="interval-score">Interval Score<a class="anchor" aria-label="anchor" href="#interval-score"></a>
@@ -479,11 +478,11 @@
                lower <span class="op">=</span> <span class="va">lower</span>,
                upper <span class="op">=</span> <span class="va">upper</span>,
                interval_range <span class="op">=</span> <span class="va">interval_range</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.04298356 0.18415192 0.29390450 0.79903661 0.67934435 0.27851401</span>
-<span class="co">#&gt;  [7] 0.18717879 0.34516173 1.28593565 0.26234267 0.20195854 0.22723547</span>
-<span class="co">#&gt; [13] 0.17047408 0.19646010 0.16187219 0.30652844 0.15064756 0.13803492</span>
-<span class="co">#&gt; [19] 0.15301131 0.15919156 0.20969103 0.06871000 0.27176866 0.21252264</span>
-<span class="co">#&gt; [25] 0.53594749 0.29512810 0.26928634 0.13689264 0.21644868 0.14843723</span></code></pre></div>
+<span class="co">#&gt;  [1] 0.15774290 0.18140203 0.12402344 0.12080638 0.24483156 0.17486618</span>
+<span class="co">#&gt;  [7] 0.10844866 0.14608748 0.25625691 0.17613031 0.78887381 0.28281827</span>
+<span class="co">#&gt; [13] 0.19409020 0.35501770 0.25536439 0.17745011 0.12782662 0.15552790</span>
+<span class="co">#&gt; [19] 0.13443234 0.19227982 0.08719339 0.24306255 0.10221052 1.35189600</span>
+<span class="co">#&gt; [25] 0.09190606 0.17050209 0.22532606 0.65577433 0.02616202 0.28794906</span></code></pre></div>
 </div>
 </div>
   </div>

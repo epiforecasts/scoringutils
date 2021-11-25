@@ -24,7 +24,7 @@ range_long_to_wide() first."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -90,10 +90,13 @@ transformation (default is FALSE)</p></dd>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">wide</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_wide.html">range_example_data_wide</a></span></span>
-<span class="r-in"><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="range_wide_to_long.html">range_wide_to_long</a></span><span class="op">(</span><span class="va">wide</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">wide</span> <span class="op">&lt;-</span> <span class="va">range_example_data_wide</span></span>
+<span class="r-in"><span class="va">semiwide</span> <span class="op">&lt;-</span> <span class="va">range_example_data_semi_wide</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">plain_quantile</span> <span class="op">&lt;-</span> <span class="fu">range_long_to_quantile</span><span class="op">(</span><span class="va">long</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu"><a href="range_wide_to_long.html">range_wide_to_long</a></span><span class="op">(</span><span class="va">wide</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">long2</span> <span class="op">&lt;-</span> <span class="fu"><a href="range_wide_to_long.html">range_wide_to_long</a></span><span class="op">(</span><span class="va">semiwide</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">plain_quantile</span> <span class="op">&lt;-</span> <span class="fu">range_long_to_quantile</span><span class="op">(</span><span class="va">long2</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

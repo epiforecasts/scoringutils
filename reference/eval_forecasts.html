@@ -20,7 +20,7 @@ continuous, integer-valued or binary variables."><!-- mathjax --><script src="ht
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -138,7 +138,8 @@ over categories different from the scoring.
 (and possibly plot) the probability integral transform(pit).</p></dd>
 <dt>metrics</dt>
 <dd><p>the metrics you want to have in the output. If <code>NULL</code> (the
-default), all available metrics will be computed.</p></dd>
+default), all available metrics will be computed. For a list of available
+metrics see <code><a href="available_metrics.html">available_metrics()</a></code></p></dd>
 <dt>quantiles</dt>
 <dd><p>numeric vector of quantiles to be returned when summarising.
 Instead of just returning a mean, quantiles will be returned for the
@@ -259,19 +260,15 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-in"><span class="co"># wide format example (this examples shows usage of both wide formats)</span></span>
 <span class="r-in"><span class="va">range_example_wide</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_wide.html">range_example_data_wide</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="range_wide_to_long.html">range_wide_to_long</a></span><span class="op">(</span><span class="va">range_example_wide</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># equivalent:</span></span>
 <span class="r-in"><span class="va">wide2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_semi_wide.html">range_example_data_semi_wide</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="range_wide_to_long.html">range_wide_to_long</a></span><span class="op">(</span><span class="va">wide2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="va">range_example</span>,</span>
+<span class="r-in"><span class="va">example</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu"><a href="range_long_to_quantile.html">range_long_to_quantile</a></span><span class="op">(</span><span class="va">range_example</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="va">example</span>,</span>
 <span class="r-in">                                     summarise_by <span class="op">=</span> <span class="st">"model"</span>,</span>
 <span class="r-in">                                     quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span><span class="op">)</span>,</span>
 <span class="r-in">                                     sd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="va">range_example</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="va">example</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co">#long format</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="range_example_data_long.html">range_example_data_long</a></span>,</span>
-<span class="r-in">                                     summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"range"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## Integer Forecasts</span></span>
 <span class="r-in"><span class="va">integer_example</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="integer_example_data.html">integer_example_data</a></span><span class="op">)</span></span>

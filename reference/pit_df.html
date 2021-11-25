@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scoringutils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@ for the randomised PIT. Usually not needed.</p></dd>
 <dd><p>the number of tests to perform,
 each time re-randomising the PIT</p></dd>
 <dt>num_bins</dt>
-<dd><p>the number of bins in the PIT histogram (if <code>plot == TRUE</code>)
+<dd><p>the number of bins in the PIT histogram (if <code>plot = TRUE</code>)
 If not given, the square root of n will be used</p></dd>
 <dt>verbose</dt>
 <dd><p>if <code>TRUE</code> (default is <code>FALSE</code>) more error messages are printed.
@@ -91,7 +91,7 @@ Usually, this should not be needed, but may help with debugging.</p></dd>
     <p>a list with the following components:</p><ul><li><p><code>data</code>: the input data.frame (not including rows where prediction is <code>NA</code>),
 with added columns <code>pit_p_val</code> and <code>pit_sd</code></p></li>
 <li><p><code>hist_PIT</code> a plot object with the PIT histogram. Only returned
-if <code>plot == TRUE</code>. Call
+if <code>plot = TRUE</code>. Call
 <code>plot(PIT(...)$hist_PIT)</code> to display the histogram.</p></li>
 <li><p><code>p_values</code>: all p_values generated from the Anderson-Darling tests on the
 (randomised) PIT. Only returned if <code>full_output = TRUE</code></p></li>
