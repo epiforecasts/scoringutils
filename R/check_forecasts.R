@@ -327,7 +327,7 @@ check_clean_data <- function(data, verbose = TRUE) {
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for
 #'
-#' @inheritParams check_forecast
+#' @inheritParams check_forecasts
 #'
 #' @return A character vector with the column names that define the unit of
 #' a single forecast

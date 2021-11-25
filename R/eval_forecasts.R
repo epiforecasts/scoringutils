@@ -187,78 +187,31 @@ eval_forecasts <- function(data,
   # check relevant columns and remove NA values in true_values and prediction
   data <- check_clean_data(data, verbose = FALSE)
 
-  # error handling for relative skill computation
-  if (compute_relative_skill) {
-    if (!("model" %in% colnames(data))) {
-      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    models <- unique(data$model)
-    if (length(models) < 2 + (!is.null(baseline))) {
-      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (!is.null(baseline) && !(baseline %in% models)) {
-      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
-      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
+  # use all available metrics if none are given
+  if (is.null(metrics)) {
+    metrics <- available_metrics()
   }
 
   # obtain a value for the unit of a single observation
   forecast_unit <- get_unit_of_forecast(data)
-
   if (is.null(summarise_by)) {
     summarise_by <- forecast_unit
   }
 
-  # check that the arguments in by and summarise_by are actually present
-  if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
-    not_present <- setdiff(unique(c(forecast_unit, summarise_by)),
-                           c(colnames(data), "range", "quantile"))
-    msg <- paste0("The following items in `summarise_by` are not",
-                 "valid column names of the data: '",
-                 paste(not_present, collapse = ", "),
-                 "'. Check and run `eval_forecasts()` again")
-    stop(msg)
-  }
-
-  # check metrics to be computed
-  available_metrics <- available_metrics()
-  if (is.null(metrics)) {
-    metrics <- available_metrics
-  } else {
-    if (!all(metrics %in% available_metrics)) {
-      msg <- paste("The following metrics are not currently implemented and",
-                     "will not be computed:",
-                     paste(setdiff(metrics, available_metrics), collapse = ", "))
-      warning(msg)
-    }
-  }
-
+  # check input parameters and whether computation of relative skill is possible
+  compute_rel_skill <- check_eval_forecasts_params(
+    data,
+    forecast_unit,
+    metrics,
+    summarise_by,
+    compute_relative_skill,
+    baseline,
+    rel_skill_metric
+  )
 
   # check prediction and target type -------------------------------------------
-  if (any(grepl("lower", names(data))) | "boundary" %in% names(data) |
-      "quantile" %in% names(data) | "range" %in% names(data)) {
-    prediction_type <- "quantile"
-  } else if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
-    prediction_type <- "integer"
-  } else {
-    prediction_type <- "continuous"
-  }
-
-  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
-    if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
-      target_type = "binary"
-    } else {
-      target_type = "integer"
-    }
-  } else {
-    target_type = "continuous"
-  }
+  prediction_type <- get_prediction_type(data)
+  target_type <- get_target_type(data)
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
@@ -286,11 +239,9 @@ eval_forecasts <- function(data,
     return(res)
   }
 
-
   # Score integer or continuous predictions ------------------------------------
   if (prediction_type %in% c("integer", "continuous")) {
 
-    # compute scores -----------------------------------------------------------
     res <- eval_forecasts_sample(data = data,
                                  forecast_unit = forecast_unit,
                                  summarise_by = summarise_by,
@@ -305,9 +256,64 @@ eval_forecasts <- function(data,
 
 
 
+#' @title Check input parameters for [eval_forecasts()]
+#'
+#' @description A helper function to check the input parameters for
+#' [eval_forecasts()].
+#'
+#' @inheritParams eval_forecasts
+#'
+#' @keywords internal
+check_eval_forecasts_params <- function(data,
+                                        forecast_unit,
+                                        metrics,
+                                        summarise_by,
+                                        compute_relative_skill,
+                                        baseline,
+                                        rel_skill_metric) {
 
+  # check that the arguments in by and summarise_by are actually present
+  if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
+    not_present <- setdiff(unique(c(forecast_unit, summarise_by)),
+                           c(colnames(data), "range", "quantile"))
+    msg <- paste0("The following items in `summarise_by` are not",
+                  "valid column names of the data: '",
+                  paste(not_present, collapse = ", "),
+                  "'. Check and run `eval_forecasts()` again")
+    stop(msg)
+  }
 
+  # check metrics to be computed
+  available_metrics <- available_metrics()
+  if (!all(metrics %in% available_metrics)) {
+    msg <- paste("The following metrics are not currently implemented and",
+                 "will not be computed:",
+                 paste(setdiff(metrics, available_metrics), collapse = ", "))
+    warning(msg)
+  }
 
+  # error handling for relative skill computation
+  if (compute_relative_skill) {
+    if (!("model" %in% colnames(data))) {
+      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+      compute_relative_skill <- FALSE
+    }
+    models <- unique(data$model)
+    if (length(models) < 2 + (!is.null(baseline))) {
+      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+      compute_relative_skill <- FALSE
+    }
+    if (!is.null(baseline) && !(baseline %in% models)) {
+      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+      compute_relative_skill <- FALSE
+    }
+    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
+      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+      compute_relative_skill <- FALSE
+    }
+  }
+  return(compute_relative_skill)
+}
 
 
 
