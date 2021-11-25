@@ -3,7 +3,7 @@
 #' A data set with predictions for different quantities relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 5,152 rows and 10 columns:
+#' @format A data frame with
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
@@ -25,7 +25,7 @@
 #' A data set with predictions with different interval ranges relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 5,419 rows and 12 columns:
+#' @format A data frame with:
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
@@ -48,7 +48,7 @@
 #' A data set with predictions with different interval ranges relevant in the
 #' 2020 UK Covid-19 epidemic.
 #'
-#' @format A data frame with 346 rows and 28 columns:
+#' @format A data frame with:
 #' \describe{
 #'   \item{value_date}{the date for which a prediction was made}
 #'   \item{value_type}{the target to be predicted (short form)}
