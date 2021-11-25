@@ -84,7 +84,8 @@
 #' `summarise_by` is also the grouping level used to compute
 #' (and possibly plot) the probability integral transform(pit).
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
-#' default), all available metrics will be computed.
+#' default), all available metrics will be computed. For a list of available
+#' metrics see [available_metrics()]
 #' @param quantiles numeric vector of quantiles to be returned when summarising.
 #' Instead of just returning a mean, quantiles will be returned for the
 #' groups specified through `summarise_by`. By default, no quantiles are
@@ -156,19 +157,15 @@
 #' # wide format example (this examples shows usage of both wide formats)
 #' range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
 #' range_example <- scoringutils::range_wide_to_long(range_example_wide)
-#' # equivalent:
 #' wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
 #' range_example <- scoringutils::range_wide_to_long(wide2)
-#' eval <- scoringutils::eval_forecasts(range_example,
+#' example <- scoringutils::range_long_to_quantile(range_example)
+#' eval <- scoringutils::eval_forecasts(example,
 #'                                      summarise_by = "model",
 #'                                      quantiles = c(0.05, 0.95),
 #'                                      sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(range_example)
+#' eval <- scoringutils::eval_forecasts(example)
 #'
-#' #long format
-#'
-#' eval <- scoringutils::eval_forecasts(scoringutils::range_example_data_long,
-#'                                      summarise_by = c("model", "range"))
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::integer_example_data)
@@ -236,9 +233,7 @@ eval_forecasts <- function(data = NULL,
   # should probably wrap this in a function warn_if_verbose(warning, verbose)
   if (compute_relative_skill) {
     if (!("model" %in% colnames(data))) {
-      if (verbose) {
-        warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-      }
+      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
     models <- unique(data$model)
@@ -254,10 +249,8 @@ eval_forecasts <- function(data = NULL,
       }
       compute_relative_skill <- FALSE
     }
-    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% list_of_avail_metrics())) {
-      if (verbose) {
-        warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-      }
+    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
+      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
       compute_relative_skill <- FALSE
     }
   }
@@ -302,7 +295,7 @@ eval_forecasts <- function(data = NULL,
   }
 
   # check metrics to be computed
-  available_metrics <- list_of_avail_metrics()
+  available_metrics <- available_metrics()
   if (is.null(metrics)) {
     metrics <- available_metrics
   } else {
@@ -321,13 +314,13 @@ eval_forecasts <- function(data = NULL,
   if (any(grepl("lower", names(data))) | "boundary" %in% names(data) |
       "quantile" %in% names(data) | "range" %in% names(data)) {
     prediction_type <- "quantile"
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
+  } else if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
     prediction_type <- "integer"
   } else {
     prediction_type <- "continuous"
   }
 
-  if (all.equal(data$true_value, as.integer(data$true_value)) == TRUE) {
+  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
     if (all(data$true_value %in% c(0,1)) && all(data$prediction >= 0) && all(data$prediction <= 1)) {
       target_type = "binary"
     } else {

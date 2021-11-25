@@ -87,7 +87,7 @@ bias <- function(true_values, predictions) {
   # ============================================
 
   ## check whether continuous or integer
-  if (all.equal(as.vector(predictions), as.integer(predictions)) != TRUE) {
+  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE

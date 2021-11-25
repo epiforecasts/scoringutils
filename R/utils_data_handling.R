@@ -148,10 +148,13 @@ quantile_to_long <- function(data) {
 #' @importFrom data.table copy
 #' @export
 #' @examples
-#' wide <- scoringutils::range_example_data_wide
-#' long <- scoringutils::range_wide_to_long(wide)
+#' wide <- range_example_data_wide
+#' semiwide <- range_example_data_semi_wide
 #'
-#' plain_quantile <- range_long_to_quantile(long)
+#' long <- range_wide_to_long(wide)
+#' long2 <- range_wide_to_long(semiwide)
+#'
+#' plain_quantile <- range_long_to_quantile(long2)
 #'
 
 

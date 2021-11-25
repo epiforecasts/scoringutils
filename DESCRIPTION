@@ -1,6 +1,6 @@
 Package: scoringutils
 Title: Utilities for Scoring and Assessing Predictions
-Version: 0.1.7.2
+Version: 0.1.8
 Language: en-GB
 Authors@R: c(
     person(given = "Nikos",
@@ -12,6 +12,11 @@ Authors@R: c(
            role = c("aut"),
            email = "contact@samabbott.co.uk",
            comment = c(ORCID = "0000-0001-8057-8037")), 
+    person(given = "Hugo",
+           family = "Gruson",
+           role = c("aut"),
+           email = "hugo.gruson@lshtm.ac.uk",
+           comment = c(ORCID = "https://orcid.org/0000-0002-4094-1476")),
     person(given = "Johannes Bracher",
            role = c("ctb"),
            email = "johannes.bracher@kit.edu",
@@ -65,11 +70,12 @@ Imports:
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    vdiffr
 RoxygenNote: 7.1.1
 URL: https://github.com/epiforecasts/scoringutils, https://epiforecasts.io/scoringutils/
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.1)
 Roxygen: list(markdown = TRUE)
