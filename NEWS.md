@@ -1,3 +1,9 @@
+# scoringutils 0.1.8
+
+## Feature updates
+- now added a function `check_forecasts()` that runs some basic checks on the
+input data and provides feedback
+
 # scoringutils 0.1.7.2
 
 ## Package updates
