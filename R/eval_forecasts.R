@@ -182,7 +182,6 @@ eval_forecasts <- function(data,
                            baseline = NULL,
                            ...) {
 
-
   # preparations ---------------------------------------------------------------
   # check relevant columns and remove NA values in true_values and prediction
   data <- check_clean_data(data, verbose = FALSE)
@@ -215,108 +214,86 @@ eval_forecasts <- function(data,
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
-    res <- eval_forecasts_binary(data = data,
-                                 forecast_unit = forecast_unit,
-                                 summarise_by = summarise_by,
-                                 metrics = metrics,
-                                 quantiles = quantiles,
-                                 sd = sd)
-    return(res)
+    scores <- eval_forecasts_binary(data = data,
+                                    forecast_unit = forecast_unit,
+                                    metrics = metrics)
   }
 
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
-    res <- eval_forecasts_quantile(data = data,
-                                   forecast_unit = forecast_unit,
-                                   summarise_by = summarise_by,
-                                   metrics = metrics,
-                                   quantiles = quantiles,
-                                   sd = sd,
-                                   compute_relative_skill = compute_relative_skill,
-                                   rel_skill_metric = rel_skill_metric,
-                                   baseline = baseline,
-                                   ...)
-    return(res)
+    scores <- eval_forecasts_quantile(data = data,
+                                      forecast_unit = forecast_unit,
+                                      metrics = metrics,
+                                      summarise_by = summarise_by,
+                                      compute_relative_skill = compute_relative_skill,
+                                      rel_skill_metric = rel_skill_metric,
+                                      baseline = baseline,
+                                      ...)
   }
 
   # Score integer or continuous predictions ------------------------------------
-  if (prediction_type %in% c("integer", "continuous")) {
+  if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
 
-    res <- eval_forecasts_sample(data = data,
-                                 forecast_unit = forecast_unit,
-                                 summarise_by = summarise_by,
-                                 metrics = metrics,
-                                 prediction_type = prediction_type,
-                                 quantiles = quantiles,
-                                 sd = sd)
-    return(res)
+    scores <- eval_forecasts_sample(data = data,
+                                    forecast_unit = forecast_unit,
+                                    metrics = metrics,
+                                    prediction_type = prediction_type)
   }
+
+  scores <- summarise_scores(scores,
+                             summarise_by,
+                             quantiles = quantiles,
+                             sd = sd)
+
+
 }
 
 
-
-
-#' @title Check input parameters for [eval_forecasts()]
+#' @title Summarise scores as produced by [eval_forecasts()]
 #'
-#' @description A helper function to check the input parameters for
-#' [eval_forecasts()].
+#' @description Summarise scores as produced by [eval_forecasts()]-
 #'
+#' @param scores a data.table of unsummarised scores as produced by
+#' [eval_forecasts()], when running it with the option `summarise_by = NULL`
 #' @inheritParams eval_forecasts
 #'
-#' @keywords internal
-check_eval_forecasts_params <- function(data,
-                                        forecast_unit,
-                                        metrics,
-                                        summarise_by,
-                                        compute_relative_skill,
-                                        baseline,
-                                        rel_skill_metric) {
+#' @examples
+#' library(scoringutils)
+#' data <- quantile_example_data
+#' scores <- eval_forecasts(data)
+#' summarise_scores(scores,
+#'                  summarise_by = c("model"))
+#'
+#' @export
 
-  # check that the arguments in by and summarise_by are actually present
-  if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
-    not_present <- setdiff(unique(c(forecast_unit, summarise_by)),
-                           c(colnames(data), "range", "quantile"))
-    msg <- paste0("The following items in `summarise_by` are not",
-                  "valid column names of the data: '",
-                  paste(not_present, collapse = ", "),
-                  "'. Check and run `eval_forecasts()` again")
-    stop(msg)
+summarise_scores <- function(scores,
+                             summarise_by,
+                             quantiles = c(),
+                             sd = FALSE) {
+
+  forecast_unit <- get_unit_of_forecast(scores)
+
+  if (!is.null(quantiles) && length(quantiles) > 1) {
+    scores <- add_quantiles(scores, quantiles, summarise_by)
+  }
+  # add standard deviation
+  if (sd) {
+    scores <- add_sd(scores, summarise_by)
   }
 
-  # check metrics to be computed
-  available_metrics <- available_metrics()
-  if (!all(metrics %in% available_metrics)) {
-    msg <- paste("The following metrics are not currently implemented and",
-                 "will not be computed:",
-                 paste(setdiff(metrics, available_metrics), collapse = ", "))
-    warning(msg)
+  # summarise by taking the mean and omitting unnecessary columns
+  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
+  scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
+             by = c(summarise_by),
+             .SDcols = colnames(scores) %like% cols_to_summarise]
+
+  # if neither quantile nor range are in summarise_by, remove coverage and quantile_coverage
+  if (!("range" %in% summarise_by) & ("coverage" %in% colnames(scores))) {
+    scores[, c("coverage") := NULL]
+  }
+  if (!("quantile" %in% summarise_by) & "quantile_coverage" %in% names(scores)) {
+    scores[, c("quantile_coverage") := NULL]
   }
 
-  # error handling for relative skill computation
-  if (compute_relative_skill) {
-    if (!("model" %in% colnames(data))) {
-      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    models <- unique(data$model)
-    if (length(models) < 2 + (!is.null(baseline))) {
-      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (!is.null(baseline) && !(baseline %in% models)) {
-      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
-      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-  }
-  return(compute_relative_skill)
+  return(scores[])
 }
-
-
-
-
-
-

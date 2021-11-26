@@ -4,14 +4,7 @@
 \alias{eval_forecasts_binary}
 \title{Evaluate forecasts in a Binary Format}
 \usage{
-eval_forecasts_binary(
-  data,
-  forecast_unit,
-  summarise_by,
-  metrics,
-  quantiles,
-  sd
-)
+eval_forecasts_binary(data, forecast_unit, metrics)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -61,26 +54,9 @@ For the median, you need to provide columns called 'upper_0' and 'lower_0'
 the unit of a single forecast, i.e. a forecast was made for a combination
 of the values in \code{forecast_unit}}
 
-\item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to \code{by} and no summary takes place.
-But sometimes you may want to to summarise
-over categories different from the scoring.
-\code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit). Sometimes you
-may want to include 'range', 'quantile' or 'sample', to summarise by
-range, quantile or sample.}
-
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}}
-
-\item{quantiles}{numeric vector of quantiles to be returned when summarising.
-Instead of just returning a mean, quantiles will be returned for the
-groups specified through \code{summarise_by}. By default, no quantiles are
-returned.}
-
-\item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
-metrics will be returned when summarising.}
 }
 \value{
 A data.table with appropriate scores. For more information see

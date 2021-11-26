@@ -4,7 +4,7 @@
 \alias{add_sd}
 \title{Add Standard Deviation to Predictions When Summarising}
 \usage{
-add_sd(dt, varnames, by)
+add_sd(dt, summarise_by)
 }
 \arguments{
 \item{dt}{the data.table operated on}

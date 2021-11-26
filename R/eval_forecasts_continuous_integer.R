@@ -36,11 +36,8 @@
 
 eval_forecasts_sample <- function(data,
                                   forecast_unit,
-                                  summarise_by,
                                   metrics,
-                                  prediction_type,
-                                  quantiles,
-                                  sd) {
+                                  prediction_type) {
 
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
@@ -88,24 +85,6 @@ eval_forecasts_sample <- function(data,
   res <- res[, lapply(.SD, unique),
              .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit",
              by = forecast_unit]
-
-  # summarise output if desired ------------------------------------------------
-  # add quantiles
-  if (!is.null(quantiles)) {
-    quantile_vars <- c("crps", "dss", "log_score", "pit_p_val", "bias", "sharpness")
-    res <- add_quantiles(res, quantile_vars, quantiles, by = c(summarise_by))
-  }
-
-  if (sd) {
-    # add standard deviations
-    sd_vars <- c("crps", "dss", "log_score", "bias", "sharpness")
-    res <- add_sd(res, sd_vars, by = c(summarise_by))
-  }
-
-  # take mean
-  res <- res[, lapply(.SD, mean, na.rm = TRUE),
-             .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score",
-             by = summarise_by]
 
   return(res[])
 }

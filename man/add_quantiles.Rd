@@ -4,14 +4,14 @@
 \alias{add_quantiles}
 \title{Add Quantiles to Predictions When Summarising}
 \usage{
-add_quantiles(dt, varnames, quantiles, by)
+add_quantiles(dt, quantiles, summarise_by)
 }
 \arguments{
 \item{dt}{the data.table operated on}
 
-\item{varnames}{names of the variables for which to calculate quantiles}
-
 \item{quantiles}{the desired quantiles}
+
+\item{varnames}{names of the variables for which to calculate quantiles}
 
 \item{by}{grouping variable in \code{\link[=eval_forecasts]{eval_forecasts()}}}
 }
