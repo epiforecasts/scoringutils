@@ -143,11 +143,101 @@ globalVariables(c("..index",
 #' @export
 
 available_metrics <- function() {
-  available_metrics <- c("ae_point", "aem", "log_score", "sharpness", "bias", "dss", "crps",
+  available_metrics <- c("ae_point", "aem", "log_score", "sharpness",
+                         "dispersion", "bias", "dss", "crps", "brier_score",
                          "coverage", "coverage_deviation", "quantile_coverage",
                          "pit_p_val", "pit_sd","interval_score",
                          "underprediction", "overprediction", "relative_skill",
                          "scaled_rel_skill")
+
+  metrics <- list()
+  ae_point <- list(
+    id = "ae_point",
+    name = "Absolute error of the point forecast",
+    description = ""
+  )
+  aem <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  log_score <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+
+  sharpness <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  bias <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  dss <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  crps <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+
+  brier_score <-  list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  coverage <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  coverage_deviation <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  quantile_coverage <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  pit_values <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  interval_score <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  underprediction <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  overprediction <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  relative_skill <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
+  scaled_rel_skill <- list(
+    id = "",
+    name = "",
+    description = ""
+  )
 
   return(available_metrics)
 }
