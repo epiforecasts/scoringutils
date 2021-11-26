@@ -301,6 +301,12 @@ check_clean_data <- function(data, verbose = TRUE) {
     stop("Data needs to have columns called `true_value` and `prediction`")
   }
 
+  if (any(colnames(data) %in% available_metrics())) {
+    warning("At least one column in the data corresponds to the name of a ",
+            "metric that will be computed by scoringutils. This may be a ",
+            "problem. Please check `available_metrics()`")
+  }
+
   # remove rows where prediction or true value are NA
   if (anyNA(data$true_value)) {
     if (verbose) {
@@ -337,7 +343,7 @@ check_clean_data <- function(data, verbose = TRUE) {
 get_unit_of_forecast <- function(data) {
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile",
-    "range", "boundary"
+    "range", "boundary", available_metrics()
   )
   obs_unit <- setdiff(colnames(data), protected_columns)
   return(obs_unit)
