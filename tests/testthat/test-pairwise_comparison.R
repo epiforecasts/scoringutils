@@ -47,7 +47,7 @@ test_that("pairwise comparisons works", {
 
   # -----------------------------------------------------------------------------#
   ## rerun code from Johannes Bracher to see whether results agree
-  pairwise_comparison <- function(scores, mx, my, subset = rep(TRUE, nrow(scores)),
+  pairwise_comparison_jb <- function(scores, mx, my, subset = rep(TRUE, nrow(scores)),
                                   permutation_test = FALSE){
     # apply subset:
     scores <- scores[subset, ]
@@ -90,8 +90,8 @@ test_that("pairwise comparisons works", {
   set.seed(123) # set seed for permutation tests
   for(mx in seq_along(models)){
     for(my in 1:mx){
-      pwc <- pairwise_comparison(scores = scores_johannes, mx = models[mx], my = models[my],
-                                 permutation_test = TRUE)
+      pwc <- pairwise_comparison_jb(scores = scores_johannes, mx = models[mx], my = models[my],
+                                    permutation_test = TRUE)
       results_ratio[mx, my] <- pwc$ratio
       results_ratio[my, mx] <- 1/pwc$ratio
       results_pval[mx, my] <-
@@ -127,8 +127,8 @@ test_that("pairwise comparisons works", {
   set.seed(123) # set seed for permutation tests
   for(mx in seq_along(models)){
     for(my in 1:mx){
-      pwc <- pairwise_comparison(scores = scores_johannes_subset, mx = models[mx], my = models[my],
-                                 permutation_test = TRUE)
+      pwc <- pairwise_comparison_jb(scores = scores_johannes_subset, mx = models[mx], my = models[my],
+                                    permutation_test = TRUE)
       results_ratio[mx, my] <- pwc$ratio
       results_ratio[my, mx] <- 1/pwc$ratio
       results_pval[mx, my] <-
