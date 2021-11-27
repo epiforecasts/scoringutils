@@ -112,20 +112,5 @@ eval_forecasts_quantile <- function(data,
     res <- merge(res, quantile_data, by = merge_cols, all.x = TRUE)
   }
 
-
-  if (compute_relative_skill) {
-
-    if (is.null(summarise_by)) {
-      summarise_by <- forecast_unit
-    }
-
-    relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = res,
-                                                    rel_skill_metric = rel_skill_metric,
-                                                    baseline = baseline,
-                                                    by = forecast_unit,
-                                                    summarise_by = summarise_by)
-    res <- merge(res, relative_res, by = forecast_unit)
-  }
-
   return(res[])
 }

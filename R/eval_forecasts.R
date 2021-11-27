@@ -240,6 +240,19 @@ eval_forecasts <- function(data,
                                     prediction_type = prediction_type)
   }
 
+  if (compute_relative_skill) {
+    if (is.null(summarise_by)) {
+      summarise_by <- forecast_unit
+    }
+
+    relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = scores,
+                                                    rel_skill_metric = rel_skill_metric,
+                                                    baseline = baseline,
+                                                    by = forecast_unit,
+                                                    summarise_by = summarise_by)
+    scores <- merge(scores, relative_res, by = forecast_unit)
+  }
+
   scores <- summarise_scores(scores,
                              summarise_by,
                              quantiles = quantiles,
