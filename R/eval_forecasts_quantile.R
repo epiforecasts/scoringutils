@@ -96,7 +96,7 @@ eval_forecasts_quantile <- function(data,
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
     quantile_data[, eval(delete_cols) := NULL]
 
-    # duplicate median column before merging if median is too be counted twice
+    # duplicate median column before merging if median is to be counted twice
     # if this is false, then the res will have one entry for every quantile,
     # which translates to two rows for every interval, but only one for the median
     if (count_median_twice) {

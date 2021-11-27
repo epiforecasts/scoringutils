@@ -3,6 +3,17 @@ test_that("function throws an error if data is missing", {
   expect_error(eval_forecasts(data = NULL))
 })
 
+test_that("eval_forecasts() warns if column name equals a metric name", {
+  data <- data.frame(true_value = rep(1:10, each = 2),
+                     prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+                     model = "Model 1",
+                     date = as.Date("2020-01-01") + rep(1:10, each = 2),
+                     quantile = rep(c(0.1, 0.9), times = 10),
+                     bias = 3)
+
+  expect_warning(eval_forecasts(data = data))
+})
+
 
 
 # test binary case -------------------------------------------------------------
@@ -16,6 +27,17 @@ test_that("function produces output for a binary case", {
 })
 
 
+test_that("function produces score for a binary case", {
+  binary_example <- data.table::setDT(scoringutils::binary_example_data)
+  eval <- eval_forecasts(binary_example[!is.na(prediction)],
+                         summarise_by = c("model", "value_desc"),
+                         quantiles = c(0.5), sd = TRUE)
+  expect_true("brier_score" %in% names(eval))
+})
+
+
+
+
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::quantile_example_data)
@@ -26,6 +48,21 @@ test_that("function produces output for a quantile format case", {
   expect_equal(nrow(eval) > 1,
                TRUE)
 })
+
+test_that("eval_forecasts() quantile produces desired metrics", {
+  data <- data.frame(true_value = rep(1:10, each = 2),
+                     prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+                     model = "Model 1",
+                     date = as.Date("2020-01-01") + rep(1:10, each = 2),
+                     quantile = rep(c(0.1, 0.9), times = 10))
+
+  out <- eval_forecasts(data = data)
+  metric_names <- c("dispersion", "underprediction", "overprediction",
+                    "bias", "aem", "coverage_deviation")
+
+  expect_true(all(metric_names %in% colnames(out)))
+})
+
 
 test_that("calculation of aem is correct for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::quantile_example_data)

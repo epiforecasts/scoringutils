@@ -245,7 +245,7 @@ eval_forecasts <- function(data,
                              quantiles = quantiles,
                              sd = sd)
 
-
+  return(scores[])
 }
 
 

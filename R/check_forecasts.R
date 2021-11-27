@@ -216,7 +216,7 @@ print.scoringutils_check <- function(x, ...) {
   if (length(x$errors) > 0) {
     cat(paste0(
       "\n\n",
-      "The following things will likely result in an error:",
+      "The following things will likely result in an error: ",
       paste(x$errors, collapse = "\n")
     ))
   }
