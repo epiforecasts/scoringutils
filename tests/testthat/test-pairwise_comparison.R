@@ -154,3 +154,24 @@ test_that("pairwise comparisons works", {
 
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })
+
+test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
+  eval <- eval_forecasts(data = integer_example_data,
+                         summarise_by = "model",
+                         compute_relative_skill = TRUE)
+
+  expect_true("relative_skill" %in% colnames(eval))
+})
+
+
+test_that("Pairwise comparisons work in eval_forecasts() with binary data", {
+  eval <- suppressWarnings(
+    eval_forecasts(data = binary_example_data,
+                   summarise_by = "model",
+                   compute_relative_skill = TRUE)
+  )
+
+  expect_true("relative_skill" %in% colnames(eval))
+})
+
+
