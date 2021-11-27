@@ -89,6 +89,8 @@ pairwise_comparison <- function(scores,
                     })
 
   out <- data.table::rbindlist(results)
+
+  return(out)
 }
 
 
