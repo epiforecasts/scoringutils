@@ -115,15 +115,7 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
   # infer the correct relative skill if only "auto" is given
   if (rel_skill_metric == "auto") {
-    if ("interval_score" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "interval_score"
-    } else if ("crps" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "crps"
-    } else if ("brier_score" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "brier_score"
-    } else {
-      stop("automatically assign a metric to add relative skill failed. Please provide a metric.")
-    }
+    rel_skill_metric <- infer_rel_skill_metric(unsummarised_scores)
   }
 
   # summarise scores over all quantiles, ranges or samples in order to not
@@ -641,6 +633,32 @@ plot_pairwise_comparison <- function(comparison_result,
 }
 
 
+
+
+#' @title Infer metric for pairwise comparisons
+#'
+#' @description
+#' Helper function to infer the metric for which pairwise comparisons shall
+#' be made. The function simply checks the names of the available columns and
+#' chooses the most widely used metric.
+#' @param scores A data.table of scores as produced by [eval_forecasts()]
+#' @keywords internal
+
+infer_rel_skill_metric <- function(scores) {
+
+  if ("interval_score" %in% colnames(scores)) {
+    rel_skill_metric <- "interval_score"
+  } else if ("crps" %in% colnames(scores)) {
+    rel_skill_metric <- "crps"
+  } else if ("brier_score" %in% colnames(scores)) {
+    rel_skill_metric <- "brier_score"
+  } else {
+    stop("automatically assigning a metric to compute relative skills on failed. ",
+         "Please provide a metric.")
+  }
+
+  return(rel_skill_metric)
+}
 
 
 
