@@ -69,9 +69,18 @@ pairwise_comparison <- function(scores,
   # identify unit of single observation.
   forecast_unit <- get_unit_of_forecast(scores)
 
-  # get rid of all unnecessary columns and keep only metric and forecast unit
-  scores <- scores[, .SD, .SDcols = c(forecast_unit, metric)]
-  scores <- unique(scores)
+  # if summarise_by is equal to forecast_unit, then pairwise comparisons don't make sense
+  if (identical(sort(summarise_by), sort(forecast_unit))) {
+    summarise_by <- "model"
+    message("relative skill can only be computed if `summarise_by` is different from the unit of a single forecast. `summarise_by` was set to 'model'")
+  }
+
+  # summarise scores over everything (e.g. quantiles, ranges or samples) in
+  # order to not to include those in the calculation of relative scores. Also
+  # gets rid of all unnecessary columns and keep only metric and forecast unit
+  scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
+                   by = forecast_unit,
+                   .SDcols = metric]
 
   # split data set into groups determined by summarise_by
   split_by <- setdiff(summarise_by, "model")
