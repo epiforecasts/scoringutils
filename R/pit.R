@@ -152,8 +152,14 @@ pit <- function(true_values,
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param PIT_samples A vector with the PIT values of size n
-#' @param num_bins the number of bins in the PIT histogram.
+#' @param PIT_samples A named or unnamed vector with the PIT values of size n.
+#' Alternatively a list of such vectors.
+#' @param num_bins the number of bins in the PIT histogram. [hist_PIT()] will
+#' always attempt to use the names of the vector (these should be interpretable
+#' as numeric quantiles between 0 and 1) in order to construct the bins.
+#' If this is not desired please provide unnamed vectors. If no names are
+#' provided, and `num_bins` is `NULL`, then
+#' the number of bins will be determined heuristically.
 #' @return vector with the scoring values
 #' @examples
 #' library(scoringutils)
@@ -171,15 +177,19 @@ hist_PIT <- function(PIT_samples,
 
   single_PIT_hist <- function(PIT_samples,
                               num_bins) {
-    if (is.null(num_bins)) {
+
+    if (!is.null(names(PIT_samples))) {
+      breaks <- as.numeric(names(PIT_samples))
+    } else if (is.null(num_bins)) {
       n <- length(PIT_samples)
       num_bins = round(sqrt(n))
+      breaks <- seq(0, 1, length.out = num_bins + 1)
     }
 
     hist_PIT <- ggplot2::ggplot(data = data.frame(x = PIT_samples),
                                 ggplot2::aes(x = x)) +
       ggplot2::geom_histogram(ggplot2::aes(y = stat(count) / sum(count)),
-                              breaks = seq(0, 1, length.out = num_bins + 1),
+                              breaks = breaks,
                               colour = "grey") +
       ggplot2::xlab("PIT") +
       ggplot2::ylab("Frequency") +
@@ -212,8 +222,6 @@ hist_PIT <- function(PIT_samples,
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `summarise_by = c("model", "location")`.
 #' @inheritParams pit
-#' @param include_full Boolean (default is `FALSE`). Whether or not to also
-#' return PIT values for the full data set without any grouping.
 #' @return a named list with PIT values according to the grouping specified in
 #' `summarised_by`
 #' @examples
@@ -221,6 +229,9 @@ hist_PIT <- function(PIT_samples,
 #' result <- pit_df(example, summarise_by = "model")
 #' hist_PIT(result)
 #'
+#' # example with quantile data
+#' result <- pit_df(quantile_example_data, summarise_by = "model")
+#' hist_PIT(result)
 #' @export
 #' @references
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
@@ -230,39 +241,40 @@ hist_PIT <- function(PIT_samples,
 
 pit_df <- function(data,
                    summarise_by,
-                   n_replicates = 100,
-                   include_full = FALSE) {
+                   n_replicates = 100) {
 
+  # clean data by removing NA values
   data <- check_clean_data(data, verbose = FALSE)
 
-  # reformat data.table to wide format for PIT
+  # get prediction type
+  prediction_type <- get_prediction_type(data)
+
+  # if prediction type is quantile, simply extract coverage values from
+  # eval_forecasts and returned a list with named vectors
+  if (prediction_type == "quantile") {
+    coverage <-
+      eval_forecasts(data,
+                     summarise_by = unique(c("quantile", summarise_by)),
+                     metrics = "quantile_coverage")
+
+    split_data <- split(coverage, by = summarise_by)
+
+    pit_values <- lapply(split_data,
+           FUN = function(data) {
+             data <- data[order(quantile)]
+             pit_values <- data$quantile_coverage
+             names(pit_values) <- data$quantile
+             return(pit_values)
+           })
+    return(pit_values)
+  }
+
+  # if prediction type is not quantile, calculate PIT values based on samples
   data_wide <- data.table::dcast(data,
                                  ... ~ paste("InternalSampl_", sample, sep = ""),
                                  value.var = "prediction")
 
-  # implementation idea for a data.table version. Probably only makes sense
-  # in a non-randomised version of the integer PIT
-  # could have a return = c("Data.table", "list") argument to distinguish
-  # data_wide[, "pit_values" := list(pit(true_value, as.matrix(.SD),
-  #                                      n_replicates = n_replicates)),
-  #           .SDcols = names(data_wide)[grepl("InternalSampl_", names(data_wide))],
-  #           by = summarise_by]
-  # sample_names <- names(data_wide)[grepl("InternalSampl_", names(data_wide))]
-  # data <- data.table::melt(data_wide,
-  #                          measure.vars = sample_names,
-  #                          variable.name = "sample",
-  #                          value.name = "prediction")
-  # data[, sample := as.integer(gsub(pattern = "InternalSampl_", replacement = "",
-  #                                  x = sample))]
-
-  # include the full data set once in addition to the subsets.
-  if (include_full) {
-    split_data <- list(data_wide)
-  } else {
-    split_data <- list()
-  }
-
-  split_data <- c(split_data, split(data_wide, by = summarise_by))
+  split_data <- split(data_wide, by = summarise_by)
 
   pit_values <- lapply(split_data,
                        FUN = function(data) {
@@ -273,4 +285,3 @@ pit_df <- function(data,
                        })
   return(pit_values)
 }
-

@@ -4,7 +4,7 @@
 \alias{pit_df}
 \title{Probability Integral Transformation (data.frame Format)}
 \usage{
-pit_df(data, summarise_by, n_replicates = 100, include_full = FALSE)
+pit_df(data, summarise_by, n_replicates = 100)
 }
 \arguments{
 \item{data}{a data.frame with the following columns: \code{true_value},
@@ -17,9 +17,6 @@ every model and location, specify \code{summarise_by = c("model", "location")}.}
 
 \item{n_replicates}{the number of draws for the ranomised PIT for
 integer predictions.}
-
-\item{include_full}{Boolean (default is \code{FALSE}). Whether or not to also
-return PIT values for the full data set without any grouping.}
 }
 \value{
 a named list with PIT values according to the grouping specified in
@@ -36,6 +33,9 @@ example <- scoringutils::continuous_example_data
 result <- pit_df(example, summarise_by = "model")
 hist_PIT(result)
 
+# example with quantile data
+result <- pit_df(quantile_example_data, summarise_by = "model")
+hist_PIT(result)
 }
 \references{
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
