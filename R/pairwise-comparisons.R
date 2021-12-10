@@ -11,8 +11,10 @@
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
 #' [eval_forecasts()]
-#' @param metric A character vector of length one with the metric to do
-#' the comparison on.
+#' @param metric A character vector of length one with the metric to do the
+#' comparison on. The default is "auto", meaning that either "interval_score",
+#' "crps", or "brier_score" will be selected where available.
+#' See [available_metrics()] for available metrics.
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place. But sometimes you
 #' may want to to summarise over categories different from the scoring.
@@ -52,12 +54,25 @@
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 
 pairwise_comparison <- function(scores,
-                                metric = "interval_score", # maybe the default can happen automatically,
+                                metric = "auto",
                                 baseline = NULL,
                                 summarise_by = c("model"),
                                 ...) {
 
   scores <- data.table::as.data.table(scores)
+
+  # determine metric automatically
+  if (metric == "auto") {
+    if ("interval_score" %in% names(scores)) {
+      metric <- "interval_score"
+    } else if ("crps" %in% names(scores)) {
+      metric <- "crps"
+    } else if ("brier_score" %in% names(scores)) {
+      metric <- "brier_score"
+    } else (
+      stop("determining a metric automatically failed. Please set the argument `metric` to an appropriate metric.")
+    )
+  }
 
   # identify unit of single observation.
   forecast_unit <- get_unit_of_forecast(scores)

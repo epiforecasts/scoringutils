@@ -22,8 +22,10 @@ compare_two_models(
 
 \item{name_model2}{character, name of the model to compare against}
 
-\item{metric}{A character vector of length one with the metric to do
-the comparison on.}
+\item{metric}{A character vector of length one with the metric to do the
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
 
 \item{oneSided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
 instead of a two-sided test to determine significance in a pairwise comparison}

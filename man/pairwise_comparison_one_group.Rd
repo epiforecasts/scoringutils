@@ -10,8 +10,10 @@ pairwise_comparison_one_group(scores, metric, baseline, summarise_by, ...)
 \item{scores}{A data.frame of unsummarised scores as produced by
 \code{\link[=eval_forecasts]{eval_forecasts()}}}
 
-\item{metric}{A character vector of length one with the metric to do
-the comparison on.}
+\item{metric}{A character vector of length one with the metric to do the
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
 
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
