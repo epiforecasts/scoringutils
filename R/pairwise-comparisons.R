@@ -62,16 +62,8 @@ pairwise_comparison <- function(scores,
   scores <- data.table::as.data.table(scores)
 
   # determine metric automatically
-  if (metric == "auto") {
-    if ("interval_score" %in% names(scores)) {
-      metric <- "interval_score"
-    } else if ("crps" %in% names(scores)) {
-      metric <- "crps"
-    } else if ("brier_score" %in% names(scores)) {
-      metric <- "brier_score"
-    } else (
-      stop("determining a metric automatically failed. Please set the argument `metric` to an appropriate metric.")
-    )
+  if (rel_skill_metric == "auto") {
+    metric <- infer_rel_skill_metric(unsummarised_scores)
   }
 
   # identify unit of single observation.
@@ -120,11 +112,6 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             baseline,
                                             by,
                                             summarise_by) {
-
-  # infer the correct relative skill if only "auto" is given
-  if (rel_skill_metric == "auto") {
-    rel_skill_metric <- infer_rel_skill_metric(unsummarised_scores)
-  }
 
   # summarise scores over all quantiles, ranges or samples in order to not
   # include them in the calculation of relative scores
