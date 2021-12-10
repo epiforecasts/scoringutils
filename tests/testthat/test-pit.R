@@ -39,6 +39,13 @@ test_that("function works for continuous true_values and predictions",
                          10)
           })
 
+test_that("pit_df function works for continuous and quantile data",
+          {
+            pit_df(quantile_example_data, summarise_by = "model")
+            pit_df(continuous_example_data, summarise_by = "model")
+          })
+
+
 
 
 

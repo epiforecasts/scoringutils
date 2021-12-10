@@ -7,9 +7,15 @@
 hist_PIT(PIT_samples, num_bins = NULL)
 }
 \arguments{
-\item{PIT_samples}{A vector with the PIT values of size n}
+\item{PIT_samples}{A named or unnamed vector with the PIT values of size n.
+Alternatively a list of such vectors.}
 
-\item{num_bins}{the number of bins in the PIT histogram.}
+\item{num_bins}{the number of bins in the PIT histogram. \code{\link[=hist_PIT]{hist_PIT()}} will
+always attempt to use the names of the vector (these should be interpretable
+as numeric quantiles between 0 and 1) in order to construct the bins.
+If this is not desired please provide unnamed vectors. If no names are
+provided, and \code{num_bins} is \code{NULL}, then
+the number of bins will be determined heuristically.}
 }
 \value{
 vector with the scoring values
