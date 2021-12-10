@@ -240,6 +240,23 @@ eval_forecasts <- function(data,
                                     prediction_type = prediction_type)
   }
 
+  if (compute_relative_skill) {
+    pairwise <- pairwise_comparison(scores = scores,
+                                    metric = rel_skill_metric,
+                                    baseline = baseline,
+                                    summarise_by = summarise_by)
+
+    # delete unnecessary columns
+    pairwise[, c("compare_against", "mean_scores_ratio",
+                 "pval", "adj_pval") := NULL]
+    pairwise <- unique(pairwise)
+
+    # merge back
+    scores <- merge(scores, pairwise, all.x = TRUE,
+                    by = get_unit_of_forecast(pairwise))
+
+  }
+
   scores <- summarise_scores(scores,
                              summarise_by,
                              quantiles = quantiles,

@@ -11,21 +11,25 @@
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
 #' [eval_forecasts()]
-#' @param metric A character vector of length one with the metric to do
-#' the comparison on.
-#' @param by character vector that denotes the unit of a single forecast.
+#' @param metric A character vector of length one with the metric to do the
+#' comparison on. The default is "auto", meaning that either "interval_score",
+#' "crps", or "brier_score" will be selected where available.
+#' See [available_metrics()] for available metrics.
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place. But sometimes you
 #' may want to to summarise over categories different from the scoring.
 #' `summarise_by` is also the grouping level used to compute (and possibly plot)
 #' the probability integral transform(pit).
-#' @param test_options list with options to pass down to [compare_two_models()].
-#' To change only one of the default options, just pass a list as input with
-#' the name of the argument you want to change. All elements not included in the
-#' list will be set to the default (so passing an empty list would result in the
-#' default options).
 #' @param baseline character vector of length one that denotes the baseline
 #' model against which to compare other models.
+#' @param ... additional arguments, such as test options that can get passed
+#' down to lower level functions. The following options are available:
+#' `oneSided` (Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test), `test_type` (character, either "non_parametric"
+#' or "permutation" determining which kind of test shall be conducted to
+#' determine p-values. Default is "non-parametric), `n_permutations` (number of
+#' permutations for a permutation test. Default is 999). See
+#' [compare_two_models()] for more information.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
@@ -50,121 +54,51 @@
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 
 pairwise_comparison <- function(scores,
-                                metric = "interval_score", # maybe the default can happen automatically,
-                                test_options = list(oneSided = FALSE,
-                                                    test_type = c("non_parametric", "permuation"),
-                                                    n_permutations = 999),
+                                metric = "auto",
                                 baseline = NULL,
                                 summarise_by = c("model"),
-                                by = NULL) {
+                                ...) {
 
   scores <- data.table::as.data.table(scores)
 
-  # update test options
-  test_options <- update_list(defaults = list(oneSided = FALSE,
-                                              test_type = c("non_parametric", "permuation"),
-                                              n_permutations = 999),
-                              optional = test_options)
-
-  # identify unit of single observation if it is not given.
-  # usually, by = NULL should be fine and only needs to be specified if there
-  # are additional columns that are not metrics and not related to the unit of observation
-  if (is.null(by)) {
-    all_metrics <- available_metrics()
-    by <- setdiff(names(scores), c(all_metrics, "model"))
+  # determine metric automatically
+  if (metric == "auto") {
+    metric <- infer_rel_skill_metric(scores)
   }
 
-  split_by <- setdiff(summarise_by, "model")
+  # identify unit of single observation.
+  forecast_unit <- get_unit_of_forecast(scores)
 
+  # if summarise_by is equal to forecast_unit, then pairwise comparisons don't make sense
+  if (identical(sort(summarise_by), sort(forecast_unit))) {
+    summarise_by <- "model"
+    message("relative skill can only be computed if `summarise_by` is different from the unit of a single forecast. `summarise_by` was set to 'model'")
+  }
+
+  # summarise scores over everything (e.g. quantiles, ranges or samples) in
+  # order to not to include those in the calculation of relative scores. Also
+  # gets rid of all unnecessary columns and keep only metric and forecast unit
+  scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
+                   by = forecast_unit,
+                   .SDcols = metric]
+
+  # split data set into groups determined by summarise_by
+  split_by <- setdiff(summarise_by, "model")
   split_scores <- split(scores, by = split_by)
 
   results <- lapply(split_scores,
                     FUN = function(scores) {
                       out <- pairwise_comparison_one_group(scores = scores,
                                                            metric = metric,
-                                                           test_options = test_options,
                                                            baseline = baseline,
-                                                           by = by,
-                                                           summarise_by = summarise_by)
+                                                           summarise_by = summarise_by,
+                                                           ...)
                     })
 
   out <- data.table::rbindlist(results)
+
+  return(out)
 }
-
-
-#' @title Add relative skill to eval_forecasts()
-#'
-#' @description
-#'
-#' This function will only be called within [eval_forecasts()] and serves to
-#' make pairwise comparisons from within that function. It uses the
-#' `summarise_by` argument as well as the data from [eval_forecasts()].
-#' Essentially, it wraps [pairwise_comparison()] and deals with the specifics
-#' necessary to work with [eval_forecasts()].
-#' @inheritParams eval_forecasts
-#' @param unsummarised_scores unsummarised scores to be passed from
-#' [eval_forecasts()]
-#'
-#' @keywords internal
-
-add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
-                                            rel_skill_metric,
-                                            baseline,
-                                            by,
-                                            summarise_by) {
-
-  # infer the correct relative skill if only "auto" is given
-  if (rel_skill_metric == "auto") {
-    if ("interval_score" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "interval_score"
-    } else if ("crps" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "crps"
-    } else if ("brier_score" %in% colnames(unsummarised_scores)) {
-      rel_skill_metric <- "brier_score"
-    } else {
-      stop("automatically assign a metric to add relative skill failed. Please provide a metric.")
-    }
-  }
-
-  # summarise scores over all quantiles, ranges or samples in order to not
-  # include them in the calculation of relative scores
-  scores <- unsummarised_scores[, lapply(.SD, mean, na.rm = TRUE),
-                by = c(by),
-                .SDcols = colnames(unsummarised_scores) %in% c(rel_skill_metric)]
-
-  # remove range and quantile from summarise_by if they are present
-  summarise_by <- setdiff(summarise_by, c("range", "quantile", "sample"))
-
-  # if summarise_by is equal to by, then pairwise comparisons don't make sense
-  if (identical(sort(summarise_by), sort(by))) {
-    summarise_by <- "model"
-    message("relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'")
-  }
-
-  # do pairwise comparison
-  pairwise <- pairwise_comparison(scores = scores,
-                                  metric = rel_skill_metric,
-                                  baseline = baseline,
-                                  by = by,
-                                  summarise_by = summarise_by)
-
-  # delete unnecessary columns from the output
-  cols_to_delete <- setdiff(colnames(pairwise),
-                            unique(c(summarise_by, "model", "relative_skill", "scaled_rel_skill")))
-  if (length(cols_to_delete > 1)) {
-    pairwise[, eval(cols_to_delete) := NULL]
-  }
-  pairwise <- unique(pairwise)
-  out <- merge(scores, pairwise, all.x = TRUE,
-               by = unique(c("model", summarise_by)))
-
-  # also delete skill metric from output
-  out[, eval(rel_skill_metric) := NULL]
-
-  return(out[])
-}
-
-
 
 
 #' @title Do Pairwise Comparison for one Set of Forecasts
@@ -183,12 +117,9 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
-                                          test_options,
                                           baseline,
-                                          by,
-                                          summarise_by) {
-
-
+                                          summarise_by,
+                                          ...) {
 
   if (!("model" %in% names(scores))) {
     stop("pairwise compairons require a column called 'model'")
@@ -202,18 +133,9 @@ pairwise_comparison_one_group <- function(scores,
     return(NULL)
   }
 
-  # the overlap is obtained by merging the available data for one model with
-  # the avaialble data from the other model.
-  # for efficiency when merging, remove everything that is not in c(by, var)
-  cols_to_remove <- setdiff(names(scores), c(by, "model", metric))
-  if (length(cols_to_remove > 0)) {
-    scores[, eval(cols_to_remove) := NULL]
-    scores <- unique(scores)
-  }
-
   # create a data.frame with results
   # we only need to do the calculation once, because for the ratio that
-  # should just be the inverse and for the permuation the result should
+  # should just be the inverse and for the permutation the result should
   # be the same
 
   # set up initial data.frame with all possible pairwise comparisons
@@ -224,8 +146,7 @@ pairwise_comparison_one_group <- function(scores,
                                                           name_model1 = model,
                                                           name_model2 = compare_against,
                                                           metric = metric,
-                                                          test_options = test_options,
-                                                          by = by),
+                                                          ...),
                by = seq_len(NROW(combinations))]
 
   combinations <- combinations[order(ratio)]
@@ -319,6 +240,13 @@ pairwise_comparison_one_group <- function(scores,
 #' @inheritParams pairwise_comparison
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
+#' @param oneSided Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test to determine significance in a pairwise comparison
+#' @param test_type character, either "non_parametric" (the default) or
+#' "permutation". This determines which kind of test shall be conducted to
+#' determine p-values.
+#' @param n_permutations numeric, the number of permutations for a
+#' permutation test. Default is 999.
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
@@ -326,10 +254,13 @@ compare_two_models <- function(scores,
                                name_model1,
                                name_model2,
                                metric,
-                               test_options,
-                               by) {
+                               oneSided = FALSE,
+                               test_type = c("non_parametric", "permutation"),
+                               n_permutations = 999) {
 
   scores <- data.table::as.data.table(scores)
+
+  forecast_unit <- get_unit_of_forecast(scores)
 
   if (!("model" %in% names(scores))) {
     stop("pairwise comparisons require a column called 'model'")
@@ -340,9 +271,9 @@ compare_two_models <- function(scores,
   b <- scores[model == name_model2, ]
 
   # remove "model" from 'by' before merging
-  by <- setdiff(by, "model")
+  merge_by <- setdiff(forecast_unit, "model")
 
-  overlap <- merge(a, b, by = by, allow.cartesian = TRUE)
+  overlap <- merge(a, b, by = merge_by, allow.cartesian = TRUE)
 unique(overlap)
 
   if (nrow(overlap) == 0) {
@@ -361,11 +292,11 @@ unique(overlap)
   # test whether the ratio is significantly different from one
   # equivalently, one can test whether the difference between the two values
   # is significantly different from zero.
-  if (test_options$test_type[1] == "permutation") {
+  if (test_type[1] == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
-                             nPermutation = test_options$n_permutations,
-                             oneSided = test_options$oneSided,
+                             nPermutation = n_permutations,
+                             oneSided = oneSided,
                              comparison_mode = "difference")
   } else {
     # this probably needs some more thought
@@ -641,6 +572,32 @@ plot_pairwise_comparison <- function(comparison_result,
 }
 
 
+
+
+#' @title Infer metric for pairwise comparisons
+#'
+#' @description
+#' Helper function to infer the metric for which pairwise comparisons shall
+#' be made. The function simply checks the names of the available columns and
+#' chooses the most widely used metric.
+#' @param scores A data.table of scores as produced by [eval_forecasts()]
+#' @keywords internal
+
+infer_rel_skill_metric <- function(scores) {
+
+  if ("interval_score" %in% colnames(scores)) {
+    rel_skill_metric <- "interval_score"
+  } else if ("crps" %in% colnames(scores)) {
+    rel_skill_metric <- "crps"
+  } else if ("brier_score" %in% colnames(scores)) {
+    rel_skill_metric <- "brier_score"
+  } else {
+    stop("automatically assigning a metric to compute relative skills on failed. ",
+         "Please provide a metric.")
+  }
+
+  return(rel_skill_metric)
+}
 
 
 

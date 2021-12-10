@@ -154,3 +154,56 @@ test_that("pairwise comparisons works", {
 
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })
+
+test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
+  eval <- eval_forecasts(data = integer_example_data,
+                         summarise_by = "model",
+                         compute_relative_skill = TRUE)
+
+  expect_true("relative_skill" %in% colnames(eval))
+})
+
+
+test_that("Pairwise comparisons work in eval_forecasts() with binary data", {
+  eval <- suppressWarnings(
+    eval_forecasts(data = binary_example_data,
+                   summarise_by = "model",
+                   compute_relative_skill = TRUE)
+  )
+
+  expect_true("relative_skill" %in% colnames(eval))
+})
+
+
+# tests for pairwise comparison function ---------------------------------------
+
+test_that("pairwise_comparison() works", {
+  df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
+                   date = as.Date("2020-01-01") + rep(1:5, each = 2),
+                   location = c(1, 2),
+                   interval_score = (abs(rnorm(30))),
+                   aem = (abs(rnorm(30))))
+
+  res <- pairwise_comparison(df,
+                             baseline = "model1")
+
+  colnames <- c("model", "compare_against", "mean_scores_ratio",
+                "pval", "adj_pval", "relative_skill", "scaled_rel_skill")
+
+  expect_true(all(colnames %in% colnames(res)))
+})
+
+
+test_that("pairwise_comparison() works inside and outside of eval_forecasts()", {
+  eval <- eval_forecasts(data = continuous_example_data)
+
+  pairwise <- pairwise_comparison(eval, summarise_by = "model",
+                                  metric = "crps")
+
+  eval2 <-  eval_forecasts(data = continuous_example_data,
+                           summarise_by = "model",
+                           compute_relative_skill = TRUE)
+
+  expect_equal(sort(unique(pairwise$relative_skill)),
+               sort(eval2$relative_skill))
+})

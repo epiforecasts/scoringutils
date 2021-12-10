@@ -6,26 +6,20 @@
 \usage{
 pairwise_comparison(
   scores,
-  metric = "interval_score",
-  test_options = list(oneSided = FALSE, test_type = c("non_parametric", "permuation"),
-    n_permutations = 999),
+  metric = "auto",
   baseline = NULL,
   summarise_by = c("model"),
-  by = NULL
+  ...
 )
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
 \code{\link[=eval_forecasts]{eval_forecasts()}}}
 
-\item{metric}{A character vector of length one with the metric to do
-the comparison on.}
-
-\item{test_options}{list with options to pass down to \code{\link[=compare_two_models]{compare_two_models()}}.
-To change only one of the default options, just pass a list as input with
-the name of the argument you want to change. All elements not included in the
-list will be set to the default (so passing an empty list would result in the
-default options).}
+\item{metric}{A character vector of length one with the metric to do the
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
 
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
@@ -36,7 +30,14 @@ may want to to summarise over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute (and possibly plot)
 the probability integral transform(pit).}
 
-\item{by}{character vector that denotes the unit of a single forecast.}
+\item{...}{additional arguments, such as test options that can get passed
+down to lower level functions. The following options are available:
+\code{oneSided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test), \code{test_type} (character, either "non_parametric"
+or "permutation" determining which kind of test shall be conducted to
+determine p-values. Default is "non-parametric), \code{n_permutations} (number of
+permutations for a permutation test. Default is 999). See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores
