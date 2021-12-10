@@ -8,7 +8,6 @@ add_rel_skill_to_eval_forecasts(
   unsummarised_scores,
   rel_skill_metric,
   baseline,
-  by,
   summarise_by
 )
 }

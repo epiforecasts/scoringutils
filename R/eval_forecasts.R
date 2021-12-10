@@ -248,7 +248,6 @@ eval_forecasts <- function(data,
     relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = scores,
                                                     rel_skill_metric = rel_skill_metric,
                                                     baseline = baseline,
-                                                    by = forecast_unit,
                                                     summarise_by = summarise_by)
     scores <- merge(scores, relative_res, by = forecast_unit)
   }

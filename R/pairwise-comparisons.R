@@ -110,7 +110,6 @@ pairwise_comparison <- function(scores,
 add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             rel_skill_metric,
                                             baseline,
-                                            by,
                                             summarise_by) {
 
   # determine metric automatically
@@ -129,10 +128,10 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   # remove range and quantile from summarise_by if they are present
   summarise_by <- setdiff(summarise_by, c("range", "quantile", "sample"))
 
-  # if summarise_by is equal to by, then pairwise comparisons don't make sense
-  if (identical(sort(summarise_by), sort(by))) {
+  # if summarise_by is equal to forecast_unit, then pairwise comparisons don't make sense
+  if (identical(sort(summarise_by), sort(forecast_unit))) {
     summarise_by <- "model"
-    message("relative skill can only be computed if `summarise_by` is different from `by`. `summarise_by` was set to 'model'")
+    message("relative skill can only be computed if `summarise_by` is different from the unit of a single forecast. `summarise_by` was set to 'model'")
   }
 
   # do pairwise comparison
