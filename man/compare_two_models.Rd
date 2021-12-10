@@ -11,8 +11,7 @@ compare_two_models(
   metric,
   oneSided = FALSE,
   test_type = c("non_parametric", "permutation"),
-  n_permutations = 999,
-  by
+  n_permutations = 999
 )
 }
 \arguments{
@@ -25,6 +24,16 @@ compare_two_models(
 
 \item{metric}{A character vector of length one with the metric to do
 the comparison on.}
+
+\item{oneSided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test to determine significance in a pairwise comparison}
+
+\item{test_type}{character, either "non_parametric" (the default) or
+"permutation". This determines which kind of test shall be conducted to
+determine p-values.}
+
+\item{n_permutations}{numeric, the number of permutations for a
+permutation test. Default is 999.}
 }
 \description{
 This function compares two models based on the subset of forecasts for which

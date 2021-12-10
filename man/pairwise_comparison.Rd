@@ -34,7 +34,8 @@ down to lower level functions. The following options are available:
 instead of a two-sided test), \code{test_type} (character, either "non_parametric"
 or "permutation" determining which kind of test shall be conducted to
 determine p-values. Default is "non-parametric), \code{n_permutations} (number of
-permutations for a permutation test. Default is 999)}
+permutations for a permutation test. Default is 999). See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores

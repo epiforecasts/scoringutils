@@ -26,7 +26,8 @@
 #' instead of a two-sided test), `test_type` (character, either "non_parametric"
 #' or "permutation" determining which kind of test shall be conducted to
 #' determine p-values. Default is "non-parametric), `n_permutations` (number of
-#' permutations for a permutation test. Default is 999)
+#' permutations for a permutation test. Default is 999). See
+#' [compare_two_models()] for more information.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
@@ -59,7 +60,11 @@ pairwise_comparison <- function(scores,
   scores <- data.table::as.data.table(scores)
 
   # identify unit of single observation.
-  forecast_unit <- scoringutils:::get_unit_of_forecast(scores)
+  forecast_unit <- get_unit_of_forecast(scores)
+
+  # get rid of all unnecessary columns and keep only metric and forecast unit
+  scores <- scores[, .SD, .SDcols = c(forecast_unit, metric)]
+  scores <- unique(scores)
 
   # split data set into groups determined by summarise_by
   split_by <- setdiff(summarise_by, "model")
@@ -70,7 +75,6 @@ pairwise_comparison <- function(scores,
                       out <- pairwise_comparison_one_group(scores = scores,
                                                            metric = metric,
                                                            baseline = baseline,
-                                                           by = forecast_unit,
                                                            summarise_by = summarise_by,
                                                            ...)
                     })
@@ -164,11 +168,8 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 pairwise_comparison_one_group <- function(scores,
                                           metric,
                                           baseline,
-                                          by,
                                           summarise_by,
                                           ...) {
-
-
 
   if (!("model" %in% names(scores))) {
     stop("pairwise compairons require a column called 'model'")
@@ -180,15 +181,6 @@ pairwise_comparison_one_group <- function(scores,
   # if there aren't enough models to do any comparison, return NULL
   if (length(models) < 2) {
     return(NULL)
-  }
-
-  # the overlap is obtained by merging the available data for one model with
-  # the avaialble data from the other model.
-  # for efficiency when merging, remove everything that is not in c(by, var)
-  cols_to_remove <- setdiff(names(scores), c(by, "model", metric))
-  if (length(cols_to_remove > 0)) {
-    scores[, eval(cols_to_remove) := NULL]
-    scores <- unique(scores)
   }
 
   # create a data.frame with results
@@ -204,7 +196,6 @@ pairwise_comparison_one_group <- function(scores,
                                                           name_model1 = model,
                                                           name_model2 = compare_against,
                                                           metric = metric,
-                                                          by = by,
                                                           ...),
                by = seq_len(NROW(combinations))]
 
@@ -299,6 +290,13 @@ pairwise_comparison_one_group <- function(scores,
 #' @inheritParams pairwise_comparison
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
+#' @param oneSided Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test to determine significance in a pairwise comparison
+#' @param test_type character, either "non_parametric" (the default) or
+#' "permutation". This determines which kind of test shall be conducted to
+#' determine p-values.
+#' @param n_permutations numeric, the number of permutations for a
+#' permutation test. Default is 999.
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
@@ -308,10 +306,11 @@ compare_two_models <- function(scores,
                                metric,
                                oneSided = FALSE,
                                test_type = c("non_parametric", "permutation"),
-                               n_permutations = 999,
-                               by) {
+                               n_permutations = 999) {
 
   scores <- data.table::as.data.table(scores)
+
+  forecast_unit <- get_unit_of_forecast(scores)
 
   if (!("model" %in% names(scores))) {
     stop("pairwise comparisons require a column called 'model'")
@@ -322,9 +321,9 @@ compare_two_models <- function(scores,
   b <- scores[model == name_model2, ]
 
   # remove "model" from 'by' before merging
-  by <- setdiff(by, "model")
+  merge_by <- setdiff(forecast_unit, "model")
 
-  overlap <- merge(a, b, by = by, allow.cartesian = TRUE)
+  overlap <- merge(a, b, by = merge_by, allow.cartesian = TRUE)
 unique(overlap)
 
   if (nrow(overlap) == 0) {

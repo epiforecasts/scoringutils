@@ -4,7 +4,7 @@
 \alias{pairwise_comparison_one_group}
 \title{Do Pairwise Comparison for one Set of Forecasts}
 \usage{
-pairwise_comparison_one_group(scores, metric, baseline, by, summarise_by, ...)
+pairwise_comparison_one_group(scores, metric, baseline, summarise_by, ...)
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
@@ -28,7 +28,8 @@ down to lower level functions. The following options are available:
 instead of a two-sided test), \code{test_type} (character, either "non_parametric"
 or "permutation" determining which kind of test shall be conducted to
 determine p-values. Default is "non-parametric), \code{n_permutations} (number of
-permutations for a permutation test. Default is 999)}
+permutations for a permutation test. Default is 999). See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but
