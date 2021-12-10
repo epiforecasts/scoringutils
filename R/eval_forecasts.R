@@ -241,22 +241,17 @@ eval_forecasts <- function(data,
   }
 
   if (compute_relative_skill) {
-
-    # relative_res <- add_rel_skill_to_eval_forecasts(unsummarised_scores = scores,
-    #                                                 rel_skill_metric = rel_skill_metric,
-    #                                                 baseline = baseline,
-    #                                                 summarise_by = summarise_by)
-    # scores <- merge(scores, relative_res, by = forecast_unit)
-
     pairwise <- pairwise_comparison(scores = scores,
                                     metric = rel_skill_metric,
                                     baseline = baseline,
                                     summarise_by = summarise_by)
 
+    # delete unnecessary columns
     pairwise[, c("compare_against", "mean_scores_ratio",
                  "pval", "adj_pval") := NULL]
     pairwise <- unique(pairwise)
 
+    # merge back
     scores <- merge(scores, pairwise, all.x = TRUE,
                     by = get_unit_of_forecast(pairwise))
 
