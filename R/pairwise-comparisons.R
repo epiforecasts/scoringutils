@@ -113,18 +113,17 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
                                             by,
                                             summarise_by) {
 
-  # summarise scores over all quantiles, ranges or samples in order to not
-  # include them in the calculation of relative scores
-
-
   # determine metric automatically
   if (rel_skill_metric == "auto") {
     rel_skill_metric <- infer_rel_skill_metric(unsummarised_scores)
   }
 
+  forecast_unit <- get_unit_of_forecast(unsummarised_scores)
 
+  # summarise scores over all quantiles, ranges or samples in order to not
+  # include them in the calculation of relative scores
   scores <- unsummarised_scores[, lapply(.SD, mean, na.rm = TRUE),
-                by = c(by),
+                by = by,
                 .SDcols = colnames(unsummarised_scores) %in% c(rel_skill_metric)]
 
   # remove range and quantile from summarise_by if they are present
