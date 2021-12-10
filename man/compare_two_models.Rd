@@ -4,7 +4,16 @@
 \alias{compare_two_models}
 \title{Compare Two Models Based on Subset of Common Forecasts}
 \usage{
-compare_two_models(scores, name_model1, name_model2, metric, test_options, by)
+compare_two_models(
+  scores,
+  name_model1,
+  name_model2,
+  metric,
+  oneSided = FALSE,
+  test_type = c("non_parametric", "permutation"),
+  n_permutations = 999,
+  by
+)
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
@@ -16,12 +25,6 @@ compare_two_models(scores, name_model1, name_model2, metric, test_options, by)
 
 \item{metric}{A character vector of length one with the metric to do
 the comparison on.}
-
-\item{test_options}{list with options to pass down to \code{\link[=compare_two_models]{compare_two_models()}}.
-To change only one of the default options, just pass a list as input with
-the name of the argument you want to change. All elements not included in the
-list will be set to the default (so passing an empty list would result in the
-default options).}
 }
 \description{
 This function compares two models based on the subset of forecasts for which

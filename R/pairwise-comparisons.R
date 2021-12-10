@@ -18,13 +18,15 @@
 #' may want to to summarise over categories different from the scoring.
 #' `summarise_by` is also the grouping level used to compute (and possibly plot)
 #' the probability integral transform(pit).
-#' @param test_options list with options to pass down to [compare_two_models()].
-#' To change only one of the default options, just pass a list as input with
-#' the name of the argument you want to change. All elements not included in the
-#' list will be set to the default (so passing an empty list would result in the
-#' default options).
 #' @param baseline character vector of length one that denotes the baseline
 #' model against which to compare other models.
+#' @param ... additional arguments, such as test options that can get passed
+#' down to lower level functions. The following options are available:
+#' `oneSided` (Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test), `test_type` (character, either "non_parametric"
+#' or "permutation" determining which kind of test shall be conducted to
+#' determine p-values. Default is "non-parametric), `n_permutations` (number of
+#' permutations for a permutation test. Default is 999)
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
@@ -50,36 +52,27 @@
 
 pairwise_comparison <- function(scores,
                                 metric = "interval_score", # maybe the default can happen automatically,
-                                test_options = list(oneSided = FALSE,
-                                                    test_type = c("non_parametric", "permuation"),
-                                                    n_permutations = 999),
                                 baseline = NULL,
-                                summarise_by = c("model")) {
+                                summarise_by = c("model"),
+                                ...) {
 
   scores <- data.table::as.data.table(scores)
 
-  # update test options
-  test_options <- update_list(defaults = list(oneSided = FALSE,
-                                              test_type = c("non_parametric", "permuation"),
-                                              n_permutations = 999),
-                              optional = test_options)
-
   # identify unit of single observation.
-  all_metrics <- available_metrics()
-  by <- setdiff(names(scores), c(all_metrics, "model"))
+  forecast_unit <- scoringutils:::get_unit_of_forecast(scores)
 
+  # split data set into groups determined by summarise_by
   split_by <- setdiff(summarise_by, "model")
-
   split_scores <- split(scores, by = split_by)
 
   results <- lapply(split_scores,
                     FUN = function(scores) {
                       out <- pairwise_comparison_one_group(scores = scores,
                                                            metric = metric,
-                                                           test_options = test_options,
                                                            baseline = baseline,
-                                                           by = by,
-                                                           summarise_by = summarise_by)
+                                                           by = forecast_unit,
+                                                           summarise_by = summarise_by,
+                                                           ...)
                     })
 
   out <- data.table::rbindlist(results)
@@ -170,10 +163,10 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
-                                          test_options,
                                           baseline,
                                           by,
-                                          summarise_by) {
+                                          summarise_by,
+                                          ...) {
 
 
 
@@ -200,7 +193,7 @@ pairwise_comparison_one_group <- function(scores,
 
   # create a data.frame with results
   # we only need to do the calculation once, because for the ratio that
-  # should just be the inverse and for the permuation the result should
+  # should just be the inverse and for the permutation the result should
   # be the same
 
   # set up initial data.frame with all possible pairwise comparisons
@@ -211,8 +204,8 @@ pairwise_comparison_one_group <- function(scores,
                                                           name_model1 = model,
                                                           name_model2 = compare_against,
                                                           metric = metric,
-                                                          test_options = test_options,
-                                                          by = by),
+                                                          by = by,
+                                                          ...),
                by = seq_len(NROW(combinations))]
 
   combinations <- combinations[order(ratio)]
@@ -313,7 +306,9 @@ compare_two_models <- function(scores,
                                name_model1,
                                name_model2,
                                metric,
-                               test_options,
+                               oneSided = FALSE,
+                               test_type = c("non_parametric", "permutation"),
+                               n_permutations = 999,
                                by) {
 
   scores <- data.table::as.data.table(scores)
@@ -348,11 +343,11 @@ unique(overlap)
   # test whether the ratio is significantly different from one
   # equivalently, one can test whether the difference between the two values
   # is significantly different from zero.
-  if (test_options$test_type[1] == "permutation") {
+  if (test_type[1] == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
-                             nPermutation = test_options$n_permutations,
-                             oneSided = test_options$oneSided,
+                             nPermutation = n_permutations,
+                             oneSided = oneSided,
                              comparison_mode = "difference")
   } else {
     # this probably needs some more thought
