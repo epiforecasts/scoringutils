@@ -10,8 +10,7 @@ pairwise_comparison(
   test_options = list(oneSided = FALSE, test_type = c("non_parametric", "permuation"),
     n_permutations = 999),
   baseline = NULL,
-  summarise_by = c("model"),
-  by = NULL
+  summarise_by = c("model")
 )
 }
 \arguments{
@@ -35,8 +34,6 @@ default, this is equal to \code{by} and no summary takes place. But sometimes yo
 may want to to summarise over categories different from the scoring.
 \code{summarise_by} is also the grouping level used to compute (and possibly plot)
 the probability integral transform(pit).}
-
-\item{by}{character vector that denotes the unit of a single forecast.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores

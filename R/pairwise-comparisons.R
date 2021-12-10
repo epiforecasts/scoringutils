@@ -13,7 +13,6 @@
 #' [eval_forecasts()]
 #' @param metric A character vector of length one with the metric to do
 #' the comparison on.
-#' @param by character vector that denotes the unit of a single forecast.
 #' @param summarise_by character vector of columns to group the summary by. By
 #' default, this is equal to `by` and no summary takes place. But sometimes you
 #' may want to to summarise over categories different from the scoring.
@@ -55,8 +54,7 @@ pairwise_comparison <- function(scores,
                                                     test_type = c("non_parametric", "permuation"),
                                                     n_permutations = 999),
                                 baseline = NULL,
-                                summarise_by = c("model"),
-                                by = NULL) {
+                                summarise_by = c("model")) {
 
   scores <- data.table::as.data.table(scores)
 
@@ -66,13 +64,9 @@ pairwise_comparison <- function(scores,
                                               n_permutations = 999),
                               optional = test_options)
 
-  # identify unit of single observation if it is not given.
-  # usually, by = NULL should be fine and only needs to be specified if there
-  # are additional columns that are not metrics and not related to the unit of observation
-  if (is.null(by)) {
-    all_metrics <- available_metrics()
-    by <- setdiff(names(scores), c(all_metrics, "model"))
-  }
+  # identify unit of single observation.
+  all_metrics <- available_metrics()
+  by <- setdiff(names(scores), c(all_metrics, "model"))
 
   split_by <- setdiff(summarise_by, "model")
 
@@ -139,7 +133,6 @@ add_rel_skill_to_eval_forecasts <- function(unsummarised_scores,
   pairwise <- pairwise_comparison(scores = scores,
                                   metric = rel_skill_metric,
                                   baseline = baseline,
-                                  by = by,
                                   summarise_by = summarise_by)
 
   # delete unnecessary columns from the output

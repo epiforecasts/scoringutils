@@ -22,8 +22,6 @@ To change only one of the default options, just pass a list as input with
 the name of the argument you want to change. All elements not included in the
 list will be set to the default (so passing an empty list would result in the
 default options).}
-
-\item{by}{character vector that denotes the unit of a single forecast.}
 }
 \description{
 This function compares two models based on the subset of forecasts for which

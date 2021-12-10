@@ -29,8 +29,6 @@ default options).}
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
 
-\item{by}{character vector that denotes the unit of a single forecast.}
-
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place. But sometimes you
 may want to to summarise over categories different from the scoring.
