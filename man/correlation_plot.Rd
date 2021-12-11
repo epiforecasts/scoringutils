@@ -23,6 +23,6 @@ Plots a coloured table of scores obtained using
 \code{\link[=eval_forecasts]{eval_forecasts()}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
+scores <- scoringutils::eval_forecasts(scoringutils::example_quantile)
 scoringutils::correlation_plot(scores)
 }

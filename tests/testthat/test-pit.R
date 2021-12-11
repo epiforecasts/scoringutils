@@ -41,8 +41,11 @@ test_that("function works for continuous true_values and predictions",
 
 test_that("pit_df function works for continuous and quantile data",
           {
-            pit_df(quantile_example_data, summarise_by = "model")
-            pit_df(continuous_example_data, summarise_by = "model")
+            pit1 <- pit_df(example_quantile, summarise_by = "model")
+            pit2 <- pit_df(example_continuous, summarise_by = "model")
+
+            expect_equal(length(pit1), 4)
+            expect_equal(length(pit2), 4)
           })
 
 

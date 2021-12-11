@@ -9,7 +9,7 @@ quantile_to_wide(data)
 \arguments{
 \item{data}{a data.frame following the specifications from
 \code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
-\code{\link[=range_example_data_long]{range_example_data_long()}})}
+\code{\link[=example_range_long]{example_range_long()}})}
 }
 \value{
 a data.frame in wide format

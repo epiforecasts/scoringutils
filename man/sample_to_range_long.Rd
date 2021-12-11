@@ -30,7 +30,7 @@ Transform data from a format that is based on predictive samples to a format
 based on interval ranges
 }
 \examples{
-example_data <- scoringutils::integer_example_data
+example_data <- scoringutils::example_integer
 
 quantile_data <- scoringutils::sample_to_range_long(example_data)
 

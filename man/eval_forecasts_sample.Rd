@@ -70,7 +70,7 @@ Evaluate forecasts in a Sample-Based Format (Integer or Continuous)
 \examples{
 
 ## Integer Forecasts
-integer_example <- data.table::setDT(scoringutils::integer_example_data)
+integer_example <- data.table::setDT(scoringutils::example_integer)
 eval <- scoringutils::eval_forecasts(integer_example,
                                      summarise_by = c("model"),
                                      quantiles = c(0.1, 0.9),
@@ -78,7 +78,7 @@ eval <- scoringutils::eval_forecasts(integer_example,
 eval <- scoringutils::eval_forecasts(integer_example)
 
 ## Continuous Forecasts
-continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
+continuous_example <- data.table::setDT(scoringutils::example_continuous)
 eval <- scoringutils::eval_forecasts(continuous_example)#'
 
 eval <- scoringutils::eval_forecasts(continuous_example,

@@ -75,6 +75,6 @@ ggplot object with a plot of interval coverage
 Visualise Where Forecasts Are Available
 }
 \examples{
-example1 <- scoringutils::range_example_data_long
-show_avail_forecasts(example1, x = "value_date", facet_formula = ~ value_desc)
+example1 <- scoringutils::example_range_long
+show_avail_forecasts(example1, x = "target_end_date", facet_formula = ~ target_type)
 }

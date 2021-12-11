@@ -59,18 +59,18 @@ interval ranges contribute to the overall interval score, or how
 sharpness / dispersion changes by range.
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-                                        summarise_by = c("model", "value_desc", "range"))
+scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+                                        summarise_by = c("model", "target_type", "range"))
 
-scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
+scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
 
 # visualise dispersion instead of interval score
 scoringutils::range_plot(scores, y = "dispersion", x = "model",
-                          facet_formula =  ~value_desc)
+                          facet_formula =  ~target_type)
 
 # we saw above that dispersion values crossed. Let's look at the unweighted WIS
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-                                        summarise_by = c("model", "value_desc", "range"))
+scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+                                        summarise_by = c("model", "target_type", "range"))
 scoringutils::range_plot(scores, y = "dispersion", x = "model",
-                         facet_formula =  ~value_desc)
+                         facet_formula =  ~target_type)
 }

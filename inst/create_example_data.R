@@ -6,6 +6,7 @@ library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils")
 library(purrr)
 library(data.table)
 library(stringr)
+library(scoringutils)
 
 
 # download data from the European Forecast Hub Github Repository using
@@ -15,7 +16,6 @@ system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe
 system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe/trunk/data-processed/EuroCOVIDhub-baseline")
 system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe/trunk/data-processed/UMass-MechBayes")
 system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe/trunk/data-processed/epiforecasts-EpiNow2")
-system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe/trunk/data-processed/UVA-Ensemble")
 
 # load truth data using the covidHubutils package ------------------------------
 truth <- covidHubUtils::load_truth(hub = "ECDC") |>
@@ -27,7 +27,7 @@ truth <- covidHubUtils::load_truth(hub = "ECDC") |>
   select(-model)
 
 # get the correct file paths to all forecasts ----------------------------------
-folders <- here(c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline", "UMASS-MechBayes", "UVA-Ensemble"))
+folders <- here(c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline", "UMass-MechBayes", "epiforecasts-EpiNow2"))
 
 file_paths <- purrr::map(folders,
                          .f = function(folder) {
@@ -67,27 +67,23 @@ prediction_data <- map_dfr(file_paths,
   select(location, forecast_date, quantile, prediction,
          model, target_end_date, target, target_type, horizon)
 
-# merge forecast data and truth data and save
-hub_data <- merge_pred_and_obs(prediction_data, truth,
-                               by = c("location", "target_end_date",
-                                      "target_type")) |>
-  filter(target_end_date >= "2021-01-01") |>
-  select(-location_name, -population, -target)
-
 # harmonise forecast dates to be the date a submission was made
-hub_data <- mutate(hub_data,
+hub_data <- mutate(prediction_data,
                    forecast_date = calc_submission_due_date(forecast_date))
 
 hub_data <- hub_data |>
   filter(horizon <= 3,
          forecast_date > "2021-05-01",
          forecast_date < "2021-07-15",
-         location %in% c("DE", "GB", "FR", "IT"))
+         # quantile %in% c(seq(0.05, 0.45, 0.1), 0.5, seq(0.55, 0.95, 0.1)),
+         location %in% c("DE", "GB", "FR", "IT")) |>
+  select(-target)
 
 truth <- truth |>
   filter(target_end_date > "2021-01-01",
          target_end_date < max(hub_data$target_end_date),
-         location %in% c("DE", "GB", "FR", "IT"))
+         location %in% c("DE", "GB", "FR", "IT")) |>
+  select(-population)
 
 # save example data with forecasts only
 example_quantile_forecasts_only <- hub_data
@@ -96,10 +92,8 @@ usethis::use_data(example_quantile_forecasts_only, overwrite = TRUE)
 example_truth_only <- truth
 usethis::use_data(example_truth_only, overwrite = TRUE)
 
-
-# join
-example_quantile <- dplyr::left_join(truth, hub_data) %>%
-  dplyr::mutate(model = as.character(model))
+# merge forecast data and truth data and save
+example_quantile <- merge_pred_and_obs(hub_data, truth)
 data.table::setDT(example_quantile)
 # make model a character instead of a factor
 usethis::use_data(example_quantile, overwrite = TRUE)
@@ -175,17 +169,18 @@ example_continuous <- example_quantile[, .(prediction = get_samples(prediction,
                                                                     n_samples = n_samples),
                                            sample = 1:n_samples,
                                            true_value = unique(true_value)),
-                                       by = c("location", "target_end_date", "target_type",
+                                       by = c("location", "location_name",
+                                              "target_end_date", "target_type",
                                               "forecast_date", "model", "horizon")]
 # remove unnecessary rows where no predictions are available
 example_continuous[is.na(prediction), sample := NA]
-example_continuous <- unique(continuous_example_data)
+example_continuous <- unique(example_continuous)
 usethis::use_data(example_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
 example_integer <- data.table::copy(example_continuous)
-example_integer <- integer_example_data[, prediction := round(prediction)]
+example_integer <- example_integer[, prediction := round(prediction)]
 usethis::use_data(example_integer, overwrite = TRUE)
 
 
@@ -218,6 +213,6 @@ example_binary[, true_value := true_value > mean_val]
 # delete unnecessary columns and take unique values
 example_binary[, `:=`(sample = NULL, mean_val = NULL,
                       true_value = as.numeric(true_value))]
-example_binary <- unique(binary_example_data)
+example_binary <- unique(example_binary)
 usethis::use_data(example_binary, overwrite = TRUE)
 

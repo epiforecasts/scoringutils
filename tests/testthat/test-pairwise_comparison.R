@@ -156,7 +156,7 @@ test_that("pairwise comparisons works", {
 })
 
 test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
-  eval <- eval_forecasts(data = integer_example_data,
+  eval <- eval_forecasts(data = example_integer,
                          summarise_by = "model",
                          compute_relative_skill = TRUE)
 
@@ -166,7 +166,7 @@ test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
 
 test_that("Pairwise comparisons work in eval_forecasts() with binary data", {
   eval <- suppressWarnings(
-    eval_forecasts(data = binary_example_data,
+    eval_forecasts(data = example_binary,
                    summarise_by = "model",
                    compute_relative_skill = TRUE)
   )
@@ -195,12 +195,12 @@ test_that("pairwise_comparison() works", {
 
 
 test_that("pairwise_comparison() works inside and outside of eval_forecasts()", {
-  eval <- eval_forecasts(data = continuous_example_data)
+  eval <- eval_forecasts(data = example_continuous)
 
   pairwise <- pairwise_comparison(eval, summarise_by = "model",
                                   metric = "crps")
 
-  eval2 <-  eval_forecasts(data = continuous_example_data,
+  eval2 <-  eval_forecasts(data = example_continuous,
                            summarise_by = "model",
                            compute_relative_skill = TRUE)
 

@@ -46,24 +46,24 @@ Plots a coloured table of summarised scores obtained using
 \code{\link[=eval_forecasts]{eval_forecasts()}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-                                       summarise_by = c("model", "value_desc"))
-scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+                                       summarise_by = c("model", "target_type"))
+scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)
 
 # can also put target description on the y-axis
-scoringutils::score_table(scores, y = c("model", "value_desc"))
+scoringutils::score_table(scores, y = c("model", "target_type"))
 
 # yields the same result in this case
 scoringutils::score_table(scores)
 
 
-scores <- scoringutils::eval_forecasts(scoringutils::integer_example_data,
-                                        summarise_by = c("model", "value_desc"))
-scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+scores <- scoringutils::eval_forecasts(scoringutils::example_integer,
+                                        summarise_by = c("model", "target_type"))
+scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)
 
 # only show selected metrics
-scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1, select_metrics = c("crps", "bias"))
 }
