@@ -9,7 +9,7 @@ range_long_to_quantile(data, keep_range_col = FALSE)
 \arguments{
 \item{data}{a data.frame following the specifications from
 \code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
-\code{\link[=range_example_data_long]{range_example_data_long()}})}
+\code{\link[=example_range_long]{example_range_long()}})}
 
 \item{keep_range_col}{keep the range and boundary columns after
 transformation (default is FALSE)}
@@ -22,15 +22,15 @@ Transform data from a format that uses interval ranges to denote quantiles
 to a format that uses quantiles only.
 
 Given a data.frame that follows the structure shown in
-\code{\link[=range_example_data_long]{range_example_data_long()}}, the function outputs the same
+\code{\link[=example_range_long]{example_range_long()}}, the function outputs the same
 data in a long format as (as shown in
-\code{\link[=range_example_data_long]{range_example_data_long()}}). This can be useful e.g. for
+\code{\link[=example_range_long]{example_range_long()}}). This can be useful e.g. for
 plotting. If you're data.frame is in a different format, consider running
 \code{\link[=range_long_to_wide]{range_long_to_wide()}} first.
 }
 \examples{
-wide <- range_example_data_wide
-semiwide <- range_example_data_semi_wide
+wide <- example_range_wide
+semiwide <- example_range_semi_wide
 
 long <- range_wide_to_long(wide)
 long2 <- range_wide_to_long(semiwide)

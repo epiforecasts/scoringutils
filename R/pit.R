@@ -225,12 +225,12 @@ hist_PIT <- function(PIT_samples,
 #' @return a named list with PIT values according to the grouping specified in
 #' `summarised_by`
 #' @examples
-#' example <- scoringutils::continuous_example_data
+#' example <- scoringutils::example_continuous
 #' result <- pit_df(example, summarise_by = "model")
 #' hist_PIT(result)
 #'
 #' # example with quantile data
-#' result <- pit_df(quantile_example_data, summarise_by = "model")
+#' result <- pit_df(example_quantile, summarise_by = "model")
 #' hist_PIT(result)
 #' @export
 #' @references

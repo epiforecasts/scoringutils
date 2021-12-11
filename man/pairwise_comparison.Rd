@@ -61,7 +61,7 @@ res <- scoringutils::pairwise_comparison(df,
                            baseline = "model1")
 scoringutils::plot_pairwise_comparison(res)
 
-eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
+eval <- scoringutils::eval_forecasts(scoringutils::example_quantile)
 pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 }
 \author{

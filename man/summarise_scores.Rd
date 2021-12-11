@@ -32,7 +32,7 @@ Summarise scores as produced by \code{\link[=eval_forecasts]{eval_forecasts()}}-
 }
 \examples{
 library(scoringutils)
-data <- quantile_example_data
+data <- example_quantile
 scores <- eval_forecasts(data)
 summarise_scores(scores,
                  summarise_by = c("model"))

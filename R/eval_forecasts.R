@@ -130,16 +130,16 @@
 #'
 #' @examples
 #' ## Probability Forecast for Binary Target
-#' binary_example <- data.table::setDT(scoringutils::binary_example_data)
+#' binary_example <- data.table::setDT(scoringutils::example_binary)
 #' eval <- scoringutils::eval_forecasts(binary_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.5), sd = TRUE)
 #'
 #' ## Quantile Forecasts
 #' # wide format example (this examples shows usage of both wide formats)
-#' range_example_wide <- data.table::setDT(scoringutils::range_example_data_wide)
+#' range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
 #' range_example <- scoringutils::range_wide_to_long(range_example_wide)
-#' wide2 <- data.table::setDT(scoringutils::range_example_data_semi_wide)
+#' wide2 <- data.table::setDT(scoringutils::example_range_semi_wide)
 #' range_example <- scoringutils::range_wide_to_long(wide2)
 #' example <- scoringutils::range_long_to_quantile(range_example)
 #' eval <- scoringutils::eval_forecasts(example,
@@ -150,7 +150,7 @@
 #'
 #'
 #' ## Integer Forecasts
-#' integer_example <- data.table::setDT(scoringutils::integer_example_data)
+#' integer_example <- data.table::setDT(scoringutils::example_integer)
 #' eval <- scoringutils::eval_forecasts(integer_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.1, 0.9),
@@ -158,7 +158,7 @@
 #' eval <- scoringutils::eval_forecasts(integer_example)
 #'
 #' ## Continuous Forecasts
-#' continuous_example <- data.table::setDT(scoringutils::continuous_example_data)
+#' continuous_example <- data.table::setDT(scoringutils::example_continuous)
 #' eval <- scoringutils::eval_forecasts(continuous_example)
 #' eval <- scoringutils::eval_forecasts(continuous_example,
 #'                                      quantiles = c(0.5, 0.9),
@@ -276,7 +276,7 @@ eval_forecasts <- function(data,
 #'
 #' @examples
 #' library(scoringutils)
-#' data <- quantile_example_data
+#' data <- example_quantile
 #' scores <- eval_forecasts(data)
 #' summarise_scores(scores,
 #'                  summarise_by = c("model"))
@@ -290,7 +290,7 @@ summarise_scores <- function(scores,
 
   forecast_unit <- get_unit_of_forecast(scores)
 
-  if (!is.null(quantiles) && length(quantiles) > 1) {
+  if (!is.null(quantiles) && length(quantiles) >= 1) {
     scores <- add_quantiles(scores, quantiles, summarise_by)
   }
   # add standard deviation

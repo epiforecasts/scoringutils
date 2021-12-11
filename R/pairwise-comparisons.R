@@ -48,7 +48,7 @@
 #'                            baseline = "model1")
 #' scoringutils::plot_pairwise_comparison(res)
 #'
-#' eval <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
+#' eval <- scoringutils::eval_forecasts(scoringutils::example_quantile)
 #' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -363,12 +363,12 @@ unique(overlap)
 #'                  interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
 #'                  aem = (abs(rnorm(30))))
 #'
-#' data <- scoringutils::quantile_example_data
+#' data <- scoringutils::example_quantile
 #' scores <- scoringutils::eval_forecasts(data)
 #' pairwise <- pairwise_comparison(scores,
-#'                                 summarise_by = "value_desc")
+#'                                 summarise_by = "target_type")
 #' scoringutils::plot_pairwise_comparison(pairwise,
-#'                                        facet_formula = ~ value_desc,
+#'                                        facet_formula = ~ target_type,
 #'                                        scales = "fixed")
 
 

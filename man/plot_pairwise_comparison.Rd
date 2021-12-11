@@ -50,11 +50,11 @@ df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
                  interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
                  aem = (abs(rnorm(30))))
 
-data <- scoringutils::quantile_example_data
+data <- scoringutils::example_quantile
 scores <- scoringutils::eval_forecasts(data)
 pairwise <- pairwise_comparison(scores,
-                                summarise_by = "value_desc")
+                                summarise_by = "target_type")
 scoringutils::plot_pairwise_comparison(pairwise,
-                                       facet_formula = ~ value_desc,
+                                       facet_formula = ~ target_type,
                                        scales = "fixed")
 }

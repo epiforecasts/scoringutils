@@ -29,25 +29,25 @@
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-#'                                        summarise_by = c("model", "value_desc"))
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#'                                        summarise_by = c("model", "target_type"))
+#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
 #'
 #' # can also put target description on the y-axis
-#' scoringutils::score_table(scores, y = c("model", "value_desc"))
+#' scoringutils::score_table(scores, y = c("model", "target_type"))
 #'
 #' # yields the same result in this case
 #' scoringutils::score_table(scores)
 #'
 #'
-#' scores <- scoringutils::eval_forecasts(scoringutils::integer_example_data,
-#'                                         summarise_by = c("model", "value_desc"))
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_integer,
+#'                                         summarise_by = c("model", "target_type"))
+#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
 #'
 #' # only show selected metrics
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ value_desc,
+#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1, select_metrics = c("crps", "bias"))
 
 score_table <- function(summarised_scores,
@@ -188,7 +188,7 @@ score_table <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data)
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile)
 #' scoringutils::correlation_plot(scores)
 
 
@@ -295,11 +295,11 @@ correlation_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-#'                                        summarise_by = c("model", "value_desc"))
-#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#'                                        summarise_by = c("model", "target_type"))
+#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
 #'                              relative_contributions = TRUE)
-#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
 #'                              relative_contributions = FALSE)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
@@ -394,20 +394,20 @@ wis_components <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-#'                                         summarise_by = c("model", "value_desc", "range"))
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#'                                         summarise_by = c("model", "target_type", "range"))
 #'
-#' scoringutils::range_plot(scores, x = "model", facet_formula = ~ value_desc)
+#' scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
 #'
 #' # visualise dispersion instead of interval score
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
-#'                           facet_formula =  ~value_desc)
+#'                           facet_formula =  ~target_type)
 #'
 #' # we saw above that dispersion values crossed. Let's look at the unweighted WIS
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-#'                                         summarise_by = c("model", "value_desc", "range"))
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#'                                         summarise_by = c("model", "target_type", "range"))
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
-#'                          facet_formula =  ~value_desc)
+#'                          facet_formula =  ~target_type)
 
 range_plot <- function(scores,
                        y = "interval_score",
@@ -487,10 +487,10 @@ range_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-#'                                        summarise_by = c("model", "value_desc", "range"))
+#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#'                                        summarise_by = c("model", "target_type", "range"))
 #'
-#' scoringutils::score_heatmap(scores, x = "value_desc", metric = "bias")
+#' scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
 #'
 
 
@@ -600,23 +600,19 @@ score_heatmap <- function(scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::continuous_example_data
-#' example2 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::example_continuous
 #'
-#' scoringutils::plot_predictions(example1, x = "value_date",
-#'                                filter_truth = list('value_date <= "2020-06-22"',
-#'                                                    'value_date > "2020-05-01"'),
-#'                                filter_forecasts = list("model == 'SIRCOVID'",
-#'                                                        'creation_date == "2020-06-22"'),
-#'                                facet_formula = geography ~ value_desc)
+#' plot_predictions(
+#'   example1,
+#'   x = "target_end_date",
+#'   filter_truth = list('target_end_date <= "2021-07-22"',
+#'                       'target_end_date > "2021-05-01"'),
+#'   filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
+#'                           'forecast_date == "2021-06-07"'),
+#'   facet_formula = location ~ target_type,
+#'   range = c(0, 50, 90, 95)
+#' )
 #'
-#' scoringutils::plot_predictions(example2, x = "value_date",
-#'                                filter_truth = list('value_date <= "2020-06-22"',
-#'                                                    'value_date > "2020-05-01"'),
-#'                                filter_forecasts = list("model == 'SIRCOVID'",
-#'                                                        'creation_date == "2020-06-22"'),
-#'                                allow_truth_without_pred = TRUE,
-#'                                facet_formula = geography ~ value_desc)
 
 plot_predictions <- function(data = NULL,
                              forecasts = NULL,
@@ -804,7 +800,7 @@ plot_predictions <- function(data = NULL,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::range_example_data_long
+#' example1 <- scoringutils::example_range_long
 #' example1 <- scoringutils::range_long_to_quantile(example1)
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "range"))
@@ -877,7 +873,7 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::quantile_example_data
+#' example1 <- scoringutils::example_quantile
 #' scores <- scoringutils::eval_forecasts(example1,
 #'                                        summarise_by = c("model", "quantile"))
 #' quantile_coverage(scores)
@@ -982,8 +978,8 @@ quantile_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::range_example_data_long
-#' show_avail_forecasts(example1, x = "value_date", facet_formula = ~ value_desc)
+#' example1 <- scoringutils::example_range_long
+#' show_avail_forecasts(example1, x = "target_end_date", facet_formula = ~ target_type)
 
 show_avail_forecasts <- function(data,
                                  y = "model",

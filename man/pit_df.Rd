@@ -29,12 +29,12 @@ Wrapper around \code{pit()} for use in data.frames
 see \code{\link[=pit]{pit()}}
 }
 \examples{
-example <- scoringutils::continuous_example_data
+example <- scoringutils::example_continuous
 result <- pit_df(example, summarise_by = "model")
 hist_PIT(result)
 
 # example with quantile data
-result <- pit_df(quantile_example_data, summarise_by = "model")
+result <- pit_df(example_quantile, summarise_by = "model")
 hist_PIT(result)
 }
 \references{

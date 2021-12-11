@@ -1,63 +1,60 @@
 #' Quantile Example Data
 #'
-#' A data set with predictions for different quantities relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
 #'
 #' @format A data frame with
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{prediction}{quantile predictions}
-#'   \item{horizon}{forecast horizon in days}
-#'
+#'   \item{prediction}{predicted value}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
 #' }
-"quantile_example_data"
+#' @source \url{https://github.com/epiforecasts/covid19-forecast-hub-europe/}
+"example_quantile"
 
 
 #' Range Forecast Example Data (Long Format)
 #'
-#' A data set with predictions with different interval ranges relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
 #'
 #' @format A data frame with:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{prediction}{predicted value}
 #'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{prediction}{value for the lower or upper bound of the given prediction interval}
-#'   \item{horizon}{forecast horizon in days}
+#'   \item{horizon}{forecast horizon in weeks}
 #'   \item{boundary}{indicate lower or upper bound of prediction interval}
 #'   \item{range}{range of the corresponding prediction interval}
 #' }
-"range_example_data_long"
+"example_range_long"
 
 
 
 #' Range Forecast Example Data (Wide Format)
 #'
-#' A data set with predictions with different interval ranges relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
 #'
 #' @format A data frame with:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{horizon}{forecast horizon in days}
+#'   \item{horizon}{forecast horizon in weeks}
 #'   \item{lower_0}{prediction for the lower bound of the 0% interval range (median)}
 #'   \item{lower_10}{prediction for the lower bound of the 10% interval range}
 #'   \item{lower_20}{prediction for the lower bound of the 20% interval range}
@@ -68,6 +65,8 @@
 #'   \item{lower_70}{prediction for the lower bound of the 70% interval range}
 #'   \item{lower_80}{prediction for the lower bound of the 80% interval range}
 #'   \item{lower_90}{prediction for the lower bound of the 90% interval range}
+#'   \item{lower_95}{prediction for the lower bound of the 95% interval range}
+#'   \item{lower_98}{prediction for the lower bound of the 98% interval range}
 #'   \item{upper_0}{prediction for the upper bound of the 0% interval range}
 #'   \item{upper_10}{prediction for the upper bound of the 1% interval range}
 #'   \item{upper_20}{prediction for the upper bound of the 20% interval range}
@@ -78,78 +77,79 @@
 #'   \item{upper_70}{prediction for the upper bound of the 70% interval range}
 #'   \item{upper_80}{prediction for the upper bound of the 80% interval range}
 #'   \item{upper_90}{prediction for the upper bound of the 90% interval range}
+#'   \item{upper_95}{prediction for the upper bound of the 95% interval range}
+#'   \item{upper_98}{prediction for the upper bound of the 98% interval range}
 #' }
-"range_example_data_wide"
+"example_range_wide"
 
 
 #' Range Forecast Example Data (Semi-Wide Format)
 #'
-#' A data set with predictions with different interval ranges relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 5,419 rows and 12 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{horizon}{forecast horizon in days}
+#'   \item{horizon}{forecast horizon in weeks}
 #'   \item{range}{range of the corresponding prediction interval}
 #'   \item{lower}{prediction for the lower bound of the corresponding interval}
 #'   \item{upper}{prediction for the upper bound of the corresponding interval}
 #' }
-"range_example_data_semi_wide"
+"example_range_semi_wide"
 
 
 #' Continuous Forecast Example Data
 #'
-#' A data set with continuous predictions in a sample-based format relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with continuous predictions for COVID-19 cases and deaths constructed from data
+#' submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{horizon}{forecast horizon in days}
-#'   \item{prediction}{prediction value for the corresponding sample}
-#'   \item{sample}{id for the corresponding sample}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{prediction}{predicted value}
+#'   \item{sample}{id for the corresponding sample}
 #' }
-"continuous_example_data"
+"example_continuous"
 
 
 #' Integer Forecast Example Data
 #'
-#' A data set with integer predictions in a sample-based format relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with integer predictions for COVID-19 cases and deaths constructed from data
+#' submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{horizon}{forecast horizon in days}
-#'   \item{prediction}{prediction value for the corresponding sample}
-#'   \item{sample}{id for the corresponding sample}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{prediction}{predicted value}
+#'   \item{sample}{id for the corresponding sample}
 #' }
-"integer_example_data"
+"example_integer"
 
 
 #' Binary Forecast Example Data
 #'
-#' A data set with (constructed) binary predictions relevant in the
-#' 2020 UK Covid-19 epidemic.
+#' A data set with binary predictions for COVID-19 cases and deaths constructed from data
+#' submitted to the European Forecast Hub.
 #'
 #' Predictions in the data set were constructed based on the continuous example
 #' data by looking at the number of samples below the mean prediction.
@@ -160,56 +160,49 @@
 #'
 #' @format A data frame with 346 rows and 10 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
-#'   \item{horizon}{forecast horizon in days}
-#'   \item{prediction}{probability prediction that true value would be 1}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{prediction}{predicted value}
 #' }
-"binary_example_data"
+"example_binary"
 
 
 #' Quantile Example Data - Forecasts only
 #'
-#' A data set with predictions for different quantities relevant in the
-#' 2020 UK Covid-19 epidemic, but no true_values
+#' A data set with quantile predictions for COVID-19 cases and deaths
+#' submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 7,581 rows and 9 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{creation_date}{date on which the forecast was made}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
+#'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{prediction}{quantile predictions}
-#'   \item{value_desc}{long form description of the prediction target}
-#'   \item{horizon}{forecast horizon in days}
-#'
+#'   \item{prediction}{predicted value}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
 #' }
 "example_quantile_forecasts_only"
 
 
 #' Truth data only
 #'
-#' A data set with truth data for different quantities relevant in the
-#' 2020 UK Covid-19 epidemic, but no predictions
+#' A data set with truth values for COVID-19 cases and deaths
+#' submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 140 rows and 5 columns:
 #' \describe{
-#'   \item{value_date}{the date for which a prediction was made}
-#'   \item{value_type}{the target to be predicted (short form)}
-#'   \item{geography}{the region for which a prediction was made}
-#'   \item{value_desc}{long form description of the prediction target}
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{true_value}{true observed values}
-#'
+#'   \item{location_name}{name of the country for which a prediction was made}
 #' }
-"example_truth_data_only"
-
-
-
-
+"example_truth_only"

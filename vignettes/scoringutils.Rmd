@@ -47,7 +47,7 @@ library(scoringutils)
 ```
 
 ```{r}
-data <- scoringutils::quantile_example_data
+data <- scoringutils::example_quantile
 print(data, 3, 3)
 
 scores <- scoringutils::eval_forecasts(data, 
@@ -58,26 +58,26 @@ print(scores, 3, 3)
 Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data
 
 ```{r}
-# 
-# filtered_data <- data[geography == "England" & 
-#                         creation_date <= "2020-06-29" & 
-#                         value_desc == "Deaths"]
-
-scoringutils::plot_predictions(data = data,
-                               filter_both = list("geography == 'England'"),
-                               filter_forecasts = list("creation_date == '2020-07-06'"), 
-                               filter_truth = list("as.Date(value_date) <= '2020-07-06'"),
-                               x = "value_date", 
-                               range = c(0, 50, 90), 
-                               scale = "free",
-                               facet_formula = value_desc ~ model)
+scoringutils::plot_predictions(
+  data = data,,
+  x = "target_end_date",
+  filter_truth = list('target_end_date <= "2021-07-22"',
+                      'target_end_date > "2021-05-01"'),
+  filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
+                          'forecast_date == "2021-06-28"'),
+  facet_formula = location ~ target_type,
+  range = c(0, 50, 90, 95),
+  scale = "free"
+) 
 ```
 
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model"))
-scoringutils::score_table(scores)
+                             summarise_by = c("model", "target_type"))
+scoringutils::score_table(scores, 
+                          y = "model",
+                          facet_formula = ~ target_type)
 ```
 
 Given this level of aggregation, not all metrics may make sense. In this case, for example, averaging over different quantiles to compute quantile coverage does not make much sense. If you like, you can select specific metrics for the visualisation. 
@@ -98,17 +98,17 @@ Let us look at the individual components of the weighted interval score:
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
-                                       summarise_by = c("model", "value_desc"))
-scoringutils::wis_components(scores, facet_formula = ~ value_desc)
+                                       summarise_by = c("model", "target_type"))
+scoringutils::wis_components(scores, facet_formula = ~ target_type)
 ```
 
 We can also look at contributions to different metrics by range: 
 
 ```{r}
 scores <- scoringutils::eval_forecasts(data, 
-                             summarise_by = c("model", "range", "value_desc"))
+                             summarise_by = c("model", "range", "target_type"))
 scoringutils::range_plot(scores, y = "interval_score", 
-                         facet_formula = ~ value_desc)
+                         facet_formula = ~ target_type)
 ```
 
 We can also visualise metrics using a heatmap: 
@@ -129,22 +129,22 @@ The `eval_forecasts()` function is designed to work with various different input
 quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range. 
 
 ``` {r}
-print(scoringutils::quantile_example_data, 3, 3)
-print(scoringutils::range_example_data_long, 3, 3)
-print(scoringutils::range_example_data_wide, 3, 3)
+print(scoringutils::example_quantile, 3, 3)
+print(scoringutils::example_range_long, 3, 3)
+print(scoringutils::example_range_wide, 3, 3)
 ```
 
 sample based format with either continuous or integer values
 
 ``` {r}
-print(scoringutils::integer_example_data, 3, 3)
-print(scoringutils::continuous_example_data, 3, 3)
+print(scoringutils::example_integer, 3, 3)
+print(scoringutils::example_continuous, 3, 3)
 ```
 
 forecasts in a binary format:
 
 ``` {r}
-print(scoringutils::binary_example_data, 3, 3)
+print(scoringutils::example_binary, 3, 3)
 ```
 
 It also offers functionality to convert between these formats. For more information have a look at the documentation of the following functions: 

@@ -8,7 +8,7 @@ quantile_to_range_long(data, keep_quantile_col = TRUE)
 }
 \arguments{
 \item{data}{a data.frame following the specifications shown in the example
-\code{\link[=range_example_data_long]{range_example_data_long()}})}
+\code{\link[=example_range_long]{example_range_long()}})}
 
 \item{keep_quantile_col}{keep the quantile column in the final
 output after transformation (default is FALSE)}
@@ -21,12 +21,12 @@ Transform data from a format that uses quantiles only to one that uses
 interval ranges to denote quantiles.
 
 Given a data.frame that follows the structure shown in
-\code{\link[=quantile_example_data]{quantile_example_data()}}, the function outputs the same
+\code{\link[=example_quantile]{example_quantile()}}, the function outputs the same
 data in a long format as (as shown in
-\code{\link[=range_example_data_long]{range_example_data_long()}}).
+\code{\link[=example_range_long]{example_range_long()}}).
 }
 \examples{
-quantile <- scoringutils::quantile_example_data
+quantile <- scoringutils::example_quantile
 
 long <- scoringutils::quantile_to_range_long(quantile)
 

@@ -60,11 +60,11 @@ Visualise the components of the weighted interval score: penalties for
 over-prediction, under-prediction and for high dispersion (lack of sharpness)
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::quantile_example_data,
-                                       summarise_by = c("model", "value_desc"))
-scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+                                       summarise_by = c("model", "target_type"))
+scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
                              relative_contributions = TRUE)
-scoringutils::wis_components(scores, x = "model", facet_formula = ~ value_desc,
+scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
                              relative_contributions = FALSE)
 }
 \references{

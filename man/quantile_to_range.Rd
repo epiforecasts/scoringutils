@@ -8,7 +8,7 @@ quantile_to_range(data, keep_quantile_col = FALSE)
 }
 \arguments{
 \item{data}{a data.frame following the specifications shown in the example
-\code{\link[=range_example_data_long]{range_example_data_long()}})}
+\code{\link[=example_range_long]{example_range_long()}})}
 
 \item{keep_quantile_col}{keep the quantile column in the final
 output after transformation (default is FALSE)}

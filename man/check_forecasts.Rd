@@ -45,17 +45,17 @@ Function to check the input data before running
 
 The data should come in one of three different formats:
 \itemize{
-\item A format for binary predictions (see \link{binary_example_data})
+\item A format for binary predictions (see \link{example_binary})
 \item A sample-based format for discrete or continuous predictions
-(see \link{continuous_example_data} and \link{integer_example_data})
-\item A quantile-based format (see \link{quantile_example_data})
+(see \link{example_continuous} and \link{example_integer})
+\item A quantile-based format (see \link{example_quantile})
 }
 }
 \examples{
 library(scoringutils)
-check <- check_forecasts(quantile_example_data)
+check <- check_forecasts(example_quantile)
 print(check)
-check_forecasts(binary_example_data)
+check_forecasts(example_binary)
 }
 \seealso{
 Functions to move between different formats:

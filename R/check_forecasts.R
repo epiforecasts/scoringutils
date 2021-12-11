@@ -4,10 +4,10 @@
 #' [eval_forecasts()].
 #'
 #' The data should come in one of three different formats:
-#' - A format for binary predictions (see [binary_example_data])
+#' - A format for binary predictions (see [example_binary])
 #' - A sample-based format for discrete or continuous predictions
-#' (see [continuous_example_data] and [integer_example_data])
-#' - A quantile-based format (see [quantile_example_data])
+#' (see [example_continuous] and [example_integer])
+#' - A quantile-based format (see [example_quantile])
 #'
 #' @seealso Functions to move between different formats:
 #' [range_long_to_quantile()], [range_wide_to_long()]
@@ -45,9 +45,9 @@
 #'
 #' @examples
 #' library(scoringutils)
-#' check <- check_forecasts(quantile_example_data)
+#' check <- check_forecasts(example_quantile)
 #' print(check)
-#' check_forecasts(binary_example_data)
+#' check_forecasts(example_binary)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
 

@@ -2,19 +2,19 @@
 #'
 #' @description
 #' Given a data.frame that follows the structure shown in
-#' [range_example_data_long()], the function outputs the same
+#' [example_range_long()], the function outputs the same
 #' data in a long format as (as shown in
-#' [range_example_data_wide()]). This can be useful e.g. for
+#' [example_range_wide()]). This can be useful e.g. for
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
 #' [eval_forecasts()]) for quantile forecasts. For an example, see
-#' [range_example_data_long()])
+#' [example_range_long()])
 #' @return a data.frame in wide format
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' long <- scoringutils::range_example_data_long
+#' long <- scoringutils::example_range_long
 #' wide <- scoringutils::range_long_to_wide(long)
 #'
 
@@ -55,19 +55,19 @@ quantile_to_wide <- function(data) {
 #'
 #' @description
 #' Given a data.frame that follows the structure shown in
-#' [range_example_data_wide()], the function outputs the same
+#' [example_range_wide()], the function outputs the same
 #' data in a long format as (as shown in
-#' [range_example_data_long()]). This can be useful e.g. for
+#' [example_range_long()]). This can be useful e.g. for
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
 #' [eval_forecasts()]) for quantile forecasts. For an example, see
-#' [range_example_data_wide()])
+#' [example_range_wide()])
 #' @return a data.frame in long format
 #' @importFrom data.table melt
 #' @export
 #' @examples
-#' wide <- scoringutils::range_example_data_wide
+#' wide <- scoringutils::example_range_wide
 #' long <- scoringutils::range_wide_to_long(wide)
 #'
 
@@ -133,23 +133,23 @@ quantile_to_long <- function(data) {
 #' to a format that uses quantiles only.
 #'
 #' Given a data.frame that follows the structure shown in
-#' [range_example_data_long()], the function outputs the same
+#' [example_range_long()], the function outputs the same
 #' data in a long format as (as shown in
-#' [range_example_data_long()]). This can be useful e.g. for
+#' [example_range_long()]). This can be useful e.g. for
 #' plotting. If you're data.frame is in a different format, consider running
 #' [range_long_to_wide()] first.
 #'
 #' @param data a data.frame following the specifications from
 #' [eval_forecasts()]) for quantile forecasts. For an example, see
-#' [range_example_data_long()])
+#' [example_range_long()])
 #' @param keep_range_col keep the range and boundary columns after
 #' transformation (default is FALSE)
 #' @return a data.frame in a plain quantile format
 #' @importFrom data.table copy
 #' @export
 #' @examples
-#' wide <- range_example_data_wide
-#' semiwide <- range_example_data_semi_wide
+#' wide <- example_range_wide
+#' semiwide <- example_range_semi_wide
 #'
 #' long <- range_wide_to_long(wide)
 #' long2 <- range_wide_to_long(semiwide)
@@ -206,12 +206,12 @@ range_to_quantile <- function(data,
 #' interval ranges to denote quantiles.
 #'
 #' Given a data.frame that follows the structure shown in
-#' [quantile_example_data()], the function outputs the same
+#' [example_quantile()], the function outputs the same
 #' data in a long format as (as shown in
-#' [range_example_data_long()]).
+#' [example_range_long()]).
 #'
 #' @param data a data.frame following the specifications shown in the example
-#' [range_example_data_long()])
+#' [example_range_long()])
 #' @param keep_quantile_col keep the quantile column in the final
 #' output after transformation (default is FALSE)
 #' @return a data.frame in a long interval range format
@@ -219,7 +219,7 @@ range_to_quantile <- function(data,
 #' @export
 #'
 #' @examples
-#' quantile <- scoringutils::quantile_example_data
+#' quantile <- scoringutils::example_quantile
 #'
 #' long <- scoringutils::quantile_to_range_long(quantile)
 #'
@@ -288,7 +288,7 @@ quantile_to_range <- function(data,
 #' @export
 #'
 #' @examples
-#' example_data <- scoringutils::integer_example_data
+#' example_data <- scoringutils::example_integer
 #'
 #' quantile_data <- scoringutils::sample_to_quantile(example_data)
 #'
@@ -334,7 +334,7 @@ sample_to_quantile <- function(data,
 #' @export
 #'
 #' @examples
-#' example_data <- scoringutils::integer_example_data
+#' example_data <- scoringutils::example_integer
 #'
 #' quantile_data <- scoringutils::sample_to_range_long(example_data)
 #'

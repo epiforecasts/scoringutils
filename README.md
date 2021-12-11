@@ -85,7 +85,7 @@ library(data.table)
 ```
 
 ``` r
-data <- scoringutils::quantile_example_data
+data <- scoringutils::example_quantile
 print(data, 3, 3)
 #>       value_date     value_type geography          value_desc true_value
 #>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
@@ -204,7 +204,7 @@ quantile forecasts in either a plain quantile format or in a format that
 specifies interval ranges and the boundary of a given interval range.
 
 ``` r
-print(scoringutils::quantile_example_data, 3, 3)
+print(scoringutils::example_quantile, 3, 3)
 #>       value_date     value_type geography          value_desc true_value
 #>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
 #>    2: 2020-05-04  hospital_prev   England Total beds occupied      10648
@@ -221,7 +221,7 @@ print(scoringutils::quantile_example_data, 3, 3)
 #> 5150:           SIRCOVID    2020-07-13     0.85          4      21
 #> 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21
 #> 5152:           SIRCOVID    2020-07-13     0.90          6      21
-print(scoringutils::range_example_data_long, 3, 3)
+print(scoringutils::example_range_long, 3, 3)
 #>       value_date     value_type geography          value_desc true_value
 #>    1: 2020-05-04   hospital_inc   England Hospital admissions       1043
 #>    2: 2020-05-04  hospital_prev   England Total beds occupied      10648
@@ -238,7 +238,7 @@ print(scoringutils::range_example_data_long, 3, 3)
 #> 5417:           SIRCOVID    2020-07-13          1      14    upper     0
 #> 5418: DetSEIRwithNB MCMC    2020-07-13          0      21    upper     0
 #> 5419:           SIRCOVID    2020-07-13          1      21    upper     0
-print(scoringutils::range_example_data_wide, 3, 3)
+print(scoringutils::example_range_wide, 3, 3)
 #>      value_date     value_type        geography          value_desc true_value
 #>   1: 2020-05-04 death_inc_line          England              Deaths        448
 #>   2: 2020-05-04 death_inc_line Northern Ireland              Deaths          9
@@ -284,7 +284,7 @@ print(scoringutils::range_example_data_wide, 3, 3)
 sample based format with either continuous or integer values
 
 ``` r
-print(scoringutils::integer_example_data, 3, 3)
+print(scoringutils::example_integer, 3, 3)
 #>        value_date     value_type geography          value_desc    model
 #>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
 #>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
@@ -301,7 +301,7 @@ print(scoringutils::integer_example_data, 3, 3)
 #> 13427:    2020-07-13      21          0     48          1
 #> 13428:    2020-07-13      21          0     49          1
 #> 13429:    2020-07-13      21          0     50          1
-print(scoringutils::continuous_example_data, 3, 3)
+print(scoringutils::example_continuous, 3, 3)
 #>        value_date     value_type geography          value_desc    model
 #>     1: 2020-05-04   hospital_inc   England Hospital admissions     <NA>
 #>     2: 2020-05-04  hospital_prev   England Total beds occupied     <NA>
@@ -323,7 +323,7 @@ print(scoringutils::continuous_example_data, 3, 3)
 forecasts in a binary format:
 
 ``` r
-print(scoringutils::binary_example_data, 3, 3)
+print(scoringutils::example_binary, 3, 3)
 #>      value_date     value_type geography          value_desc              model
 #>   1: 2020-05-04   hospital_inc   England Hospital admissions               <NA>
 #>   2: 2020-05-04  hospital_prev   England Total beds occupied               <NA>
