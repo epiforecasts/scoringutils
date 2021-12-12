@@ -89,8 +89,8 @@ check_forecasts <- function(data) {
   )
 
   # obtain unit of a single forecast
-  obs_unit <- get_unit_of_forecast(data)
-  check[["forecast_unit"]] <- obs_unit
+  forecast_unit <- get_unit_of_forecast(data)
+  check[["forecast_unit"]] <- forecast_unit
 
   msg <- c(
     msg,
@@ -120,7 +120,7 @@ check_forecasts <- function(data) {
   # the length of prediction is greater 1 for a sample / quantile for
   # a single forecast
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
-  data[, InternalDuplicateCheck := .N, by = c(obs_unit, type)]
+  data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
 
   if (any(data$InternalDuplicateCheck > 1)) {
     errors <- c(
@@ -148,7 +148,7 @@ check_forecasts <- function(data) {
   }
 
   # some checks whether there are the same number of quantiles, samples
-  data[, InternalNumCheck := length(prediction), by = obs_unit]
+  data[, InternalNumCheck := length(prediction), by = forecast_unit]
   n <- unique(data$InternalNumCheck)
   if (length(n) > 1) {
     warnings <- c(
@@ -160,14 +160,12 @@ check_forecasts <- function(data) {
       )
     )
   }
-  check[["rows_per_forecast"]] <-
-    data[, .(rows_per_forecast = unique(InternalNumCheck)), by = model]
   data[, InternalNumCheck := NULL]
 
   # get available unique values per model for the different columns
-  cols <- obs_unit[obs_unit != "model"]
+  cols <- forecast_unit[forecast_unit != "model"]
   check[["unique_values"]] <-
-    data[, vapply(.SD, FUN = function(x) length(unique(x)), integer(1)), by = "model"]
+    data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
 
   check[["messages"]] <- unlist(msg)
   check[["warnings"]] <- unlist(warnings)
@@ -199,7 +197,6 @@ print.scoringutils_check <- function(x, ...) {
     "\nBased on your input, scoringutils thinks:\n",
     paste(x$messages, collapse = "\n")
   ))
-  cat("\n$rows_per_forecast shows how many rows (usually quantiles or samples are available per forecast.")
   cat(
     "\n$unique_values shows how many unique values there are per column per model",
     "(across the entire data)."
@@ -345,7 +342,7 @@ get_unit_of_forecast <- function(data) {
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "range", "boundary", available_metrics()
   )
-  obs_unit <- setdiff(colnames(data), protected_columns)
-  return(obs_unit)
+  forecast_unit <- setdiff(colnames(data), protected_columns)
+  return(forecast_unit)
 }
 
