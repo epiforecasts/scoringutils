@@ -63,12 +63,13 @@ Imports:
     data.table,
     forcats,
     ggplot2,
-    goftest,
     scoringRules,
     stats,
     methods
 Suggests: 
     testthat,
+    kableExtra,
+    magrittr,
     knitr,
     rmarkdown,
     vdiffr
