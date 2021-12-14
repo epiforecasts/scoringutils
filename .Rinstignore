@@ -1,11 +1,3 @@
-.Rproj.user
-.Rhistory
-.RData
-inst/doc
-.vignett
-R/sandbox.R
-doc
-Meta
 inst/manuscript/Scoring-forecasts-using-scoringutils-in-R_cache/
 inst/manuscript/Scoring-forecasts-using-scoringutils-in-R.log
 inst/manuscript/Scoring-forecasts-using-scoringutils-in-R.pdf
