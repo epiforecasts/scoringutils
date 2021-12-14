@@ -6,8 +6,8 @@ inst/doc
 R/sandbox.R
 doc
 Meta
-inst/manuscript/Scoring-forecasts-using-scoringutils-in-R_cache/
-inst/manuscript/Scoring-forecasts-using-scoringutils-in-R.log
-inst/manuscript/Scoring-forecasts-using-scoringutils-in-R.pdf
-inst/manuscript/Scoring-forecasts-using-scoringutils-in-R.tex
-inst/manuscript/Scoring-forecasts-using-scoringutils-in-R_files/
+inst/manuscript/manuscript_cache/
+inst/manuscript/manuscript.log
+inst/manuscript/manuscript.pdf
+inst/manuscript/manuscript.tex
+inst/manuscript/manuscript_files/

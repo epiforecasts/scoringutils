@@ -249,6 +249,7 @@ For forecasts in a quantile-based format it is necessary to have columns called 
 Table \ref{tab:column-requirements} shows the columns expected for different input formats. 
 
 ```{r, column-requirements}
+library(data.table)
 requirements <- 
   data.table(
     "Format" = c("quantile-based", "sample-based", "binary", "pairwise-comparisons"), 
