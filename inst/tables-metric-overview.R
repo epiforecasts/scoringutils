@@ -1,4 +1,30 @@
 #------------------------------------------------------------------------------#
+#------------------ Overview of the different forecast types ------------------#
+#------------------------------------------------------------------------------#
+
+point_forecast <- list(
+  `Forecast type` = c("Point forecast"),
+  `Target type` = c("continuous \n discrete \n binary"),
+  `Representation of the predictive distribution` = c("one single number for the predicted outcome")
+)
+
+
+probabilistic_forecast <- list(
+  `Forecast type` = c("Probabilistic forecast", "Probabilistic forecast"),
+  `Target type` = c("continuous \n discrete",
+                    "binary"),
+  `Representation of the predictive distribution` = c(
+    "predictive samples \n  quantiles \n  closed analytical form",
+    "binary probabilities"
+  )
+)
+
+data <- rbind(as.data.table(point_forecast),
+              as.data.table(probabilistic_forecast))
+
+saveRDS(data, "inst/metrics-overview/forecast-types.Rda")
+
+#------------------------------------------------------------------------------#
 #----------------- Overview with applicability of the metrics -----------------#
 #------------------------------------------------------------------------------#
 
