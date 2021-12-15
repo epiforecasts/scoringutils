@@ -152,58 +152,123 @@ pit <- function(true_values,
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param PIT_samples A named or unnamed vector with the PIT values of size n.
-#' Alternatively a list of such vectors.
-#' @param num_bins the number of bins in the PIT histogram. [hist_PIT()] will
-#' always attempt to use the names of the vector (these should be interpretable
-#' as numeric quantiles between 0 and 1) in order to construct the bins.
-#' If this is not desired please provide unnamed vectors. If no names are
-#' provided, and `num_bins` is `NULL`, then
-#' the number of bins will be determined heuristically.
+#' @param pit either a vector with the PIT values of size n, or a data.frame as
+#' produced by [pit_df()]
+#' @param num_bins the number of bins in the PIT histogram, default is "auto".
+#' When `num_bins == "auto"`, [hist_PIT()] will either display 10 bins, or it
+#' will display a bin for each available quantile in case you passed in data in
+#' a quantile-based format.
+#' You can control the number of bins by supplying a number. This is fine for
+#' sample-based pit histograms, but may fail for quantile-based formats. In this
+#' case it is preferred to supply explicit breaks points using the `breaks`
+#' argument.
+#' @param breaks numeric vector with the break points for the bins in the
+#' PIT histogram. This is preferred when creating a PIT histogram based on
+#' quantile-based data. Default is `NULL` and breaks will be determined by
+#' `num_bins`.
+#' @importFrom stats as.formula
+#' @importFrom ggplot2 geom_col
 #' @return vector with the scoring values
 #' @examples
 #' library(scoringutils)
+#'
+#' # PIT histogram in vector based format
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 #' pit <- pit(true_values, predictions)
+#' hist_PIT(pit)
+#'
+#' # quantile-based pit
+#' pit <- pit_df(example_quantile, summarise_by = c("model"))
+#' hist_PIT(pit, breaks = seq(0.1, 1, 0.1))
+#'
+#' # sample-based pit
+#' pit <- pit_df(example_integer, summarise_by = c("model"))
 #' hist_PIT(pit)
 #'
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
 #' @export
 
 
-hist_PIT <- function(PIT_samples,
-                     num_bins = NULL) {
+hist_PIT <- function(pit,
+                     num_bins = "auto",
+                     breaks = NULL) {
 
-  single_PIT_hist <- function(PIT_samples,
-                              num_bins) {
+  if ("quantile" %in% names(pit)) {
+    type <- "quantile-based"
+  } else {
+    type <- "sample-based"
+  }
 
-    if (!is.null(names(PIT_samples))) {
-      breaks <- as.numeric(names(PIT_samples))
-    } else if (is.null(num_bins)) {
-      n <- length(PIT_samples)
-      num_bins = round(sqrt(n))
-      breaks <- seq(0, 1, length.out = num_bins + 1)
+  # use breaks if explicitly given, otherwise assign based on number of bins
+  if (!is.null(breaks)) {
+    plot_quantiles <- breaks
+  } else if (is.null(num_bins) | num_bins == "auto") {
+    # automatically set number of bins
+    if (type == "sample-based") {
+      num_bins <- 10
+      width <- 1/num_bins
+      plot_quantiles <- seq(width, 1, width)
+    }
+    if (type == "quantile-based") {
+      plot_quantiles <- unique(pit$quantile)
+    }
+  } else {
+    # if num_bins is explicitly given
+    width <- 1/num_bins
+    plot_quantiles <- seq(width, 1, width)
+  }
+
+  # function for data.frames
+  if(is.data.frame(pit)) {
+
+    facet_cols <- get_unit_of_forecast(pit)
+    formula <- as.formula(paste("~", paste(facet_cols, collapse = "+")))
+
+    # quantile version
+    if (type == "quantile-based") {
+
+      if (num_bins == "auto") {
+      } else {
+        width <- 1/num_bins
+        plot_quantiles <- seq(width, 1, width)
+      }
+
+      if (!is.null(breaks)) {
+        plot_quantiles <- breaks
+      }
+
+      hist <- ggplot(data = pit[quantile %in% plot_quantiles],
+                     aes(x = quantile, y = pit_value)) +
+        geom_col(position = "dodge") +
+        facet_wrap(formula)
+
     }
 
-    hist_PIT <- ggplot2::ggplot(data = data.frame(x = PIT_samples),
-                                ggplot2::aes(x = x)) +
-      ggplot2::geom_histogram(ggplot2::aes(y = stat(count) / sum(count)),
-                              breaks = breaks,
-                              colour = "grey") +
-      ggplot2::xlab("PIT") +
-      ggplot2::ylab("Frequency") +
-      ggplot2::theme_light()
+    if (type == "sample-based") {
+      hist <- ggplot2::ggplot(data = pit,
+                      aes(x = pit_value)) +
+        ggplot2::geom_histogram(aes(y = stat(count) / sum(count)),
+                                breaks = plot_quantiles,
+                                colour = "grey") +
+        facet_wrap(formula)
+    }
 
-    return(hist_PIT)
-  }
-
-  if (is.list(PIT_samples) && !is.data.frame(PIT_samples)) {
-    out <- lapply(PIT_samples, single_PIT_hist, num_bins = num_bins)
   } else {
-    out <- single_PIT_hist(PIT_samples, num_bins)
+    # non data.frame version
+    hist <- ggplot(data = data.frame(x = pit),
+                   aes(x = x)) +
+      geom_histogram(aes(y = stat(count) / sum(count)),
+                     breaks = plot_quantiles,
+                     colour = "grey")
   }
-  return(out)
+
+  hist <- hist +
+    xlab("PIT") +
+    ylab("Frequency") +
+    theme_light()
+
+  return(hist)
 }
 
 
@@ -222,8 +287,8 @@ hist_PIT <- function(PIT_samples,
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `summarise_by = c("model", "location")`.
 #' @inheritParams pit
-#' @return a named list with PIT values according to the grouping specified in
-#' `summarised_by`
+#' @return a data.table with PIT values according to the grouping specified in
+#' `summarise_by`
 #' @examples
 #' example <- scoringutils::example_continuous
 #' result <- pit_df(example, summarise_by = "model")
@@ -254,19 +319,15 @@ pit_df <- function(data,
   if (prediction_type == "quantile") {
     coverage <-
       eval_forecasts(data,
-                     summarise_by = unique(c("quantile", summarise_by)),
+                     summarise_by = unique(c(summarise_by, "quantile")),
                      metrics = "quantile_coverage")
 
-    split_data <- split(coverage, by = summarise_by)
+    coverage <- coverage[order(quantile),
+                         .(quantile = c(quantile, 1),
+                           pit_value = diff(c(0, quantile_coverage, 1))),
+                         by = c(get_unit_of_forecast(coverage))]
 
-    pit_values <- lapply(split_data,
-           FUN = function(data) {
-             data <- data[order(quantile)]
-             pit_values <- data$quantile_coverage
-             names(pit_values) <- data$quantile
-             return(pit_values)
-           })
-    return(pit_values)
+    return(coverage)
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
@@ -274,14 +335,11 @@ pit_df <- function(data,
                                  ... ~ paste("InternalSampl_", sample, sep = ""),
                                  value.var = "prediction")
 
-  split_data <- split(data_wide, by = summarise_by)
+  pit <- data_wide[, .("pit_value" = pit(true_values = true_value,
+                                         predictions = as.matrix(.SD))),
+                   by = summarise_by,
+                   .SDcols = grepl("InternalSampl_", names(data_wide))]
 
-  pit_values <- lapply(split_data,
-                       FUN = function(data) {
-                         true_values <- data$true_value
-                         samplecols <- names(data)[grepl("InternalSampl_", names(data))]
-                         predictions <- as.matrix(data[, ..samplecols])
-                         return(pit(true_values, predictions, n_replicates))
-                       })
-  return(pit_values)
+  return(pit)
 }
+
