@@ -340,6 +340,7 @@ check_clean_data <- function(data, verbose = TRUE) {
 get_unit_of_forecast <- function(data) {
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
+    "pit_value",
     "range", "boundary", available_metrics()
   )
   forecast_unit <- setdiff(colnames(data), protected_columns)

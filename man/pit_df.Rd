@@ -19,8 +19,8 @@ every model and location, specify \code{summarise_by = c("model", "location")}.}
 integer predictions.}
 }
 \value{
-a named list with PIT values according to the grouping specified in
-\code{summarised_by}
+a data.table with PIT values according to the grouping specified in
+\code{summarise_by}
 }
 \description{
 Wrapper around \code{pit()} for use in data.frames

@@ -4,18 +4,25 @@
 \alias{hist_PIT}
 \title{PIT Histogram}
 \usage{
-hist_PIT(PIT_samples, num_bins = NULL)
+hist_PIT(pit, num_bins = "auto", breaks = NULL)
 }
 \arguments{
-\item{PIT_samples}{A named or unnamed vector with the PIT values of size n.
-Alternatively a list of such vectors.}
+\item{pit}{either a vector with the PIT values of size n, or a data.frame as
+produced by \code{\link[=pit_df]{pit_df()}}}
 
-\item{num_bins}{the number of bins in the PIT histogram. \code{\link[=hist_PIT]{hist_PIT()}} will
-always attempt to use the names of the vector (these should be interpretable
-as numeric quantiles between 0 and 1) in order to construct the bins.
-If this is not desired please provide unnamed vectors. If no names are
-provided, and \code{num_bins} is \code{NULL}, then
-the number of bins will be determined heuristically.}
+\item{num_bins}{the number of bins in the PIT histogram, default is "auto".
+When \code{num_bins == "auto"}, \code{\link[=hist_PIT]{hist_PIT()}} will either display 10 bins, or it
+will display a bin for each available quantile in case you passed in data in
+a quantile-based format.
+You can control the number of bins by supplying a number. This is fine for
+sample-based pit histograms, but may fail for quantile-based formats. In this
+case it is preferred to supply explicit breaks points using the \code{breaks}
+argument.}
+
+\item{breaks}{numeric vector with the break points for the bins in the
+PIT histogram. This is preferred when creating a PIT histogram based on
+quantile-based data. Default is \code{NULL} and breaks will be determined by
+\code{num_bins}.}
 }
 \value{
 vector with the scoring values
@@ -26,9 +33,19 @@ visually check whether a uniform distribution seems likely.
 }
 \examples{
 library(scoringutils)
+
+# PIT histogram in vector based format
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 pit <- pit(true_values, predictions)
+hist_PIT(pit)
+
+# quantile-based pit
+pit <- pit_df(example_quantile, summarise_by = c("model"))
+hist_PIT(pit, breaks = seq(0.1, 1, 0.1))
+
+# sample-based pit
+pit <- pit_df(example_integer, summarise_by = c("model"))
 hist_PIT(pit)
 
 }
