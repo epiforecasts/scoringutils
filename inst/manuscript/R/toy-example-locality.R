@@ -15,6 +15,14 @@ df[, crps := sum((cumsum(prob) - (outcome >= true_value))^2),
    by = c("forecaster")]
 df[, logS := -log(prob[outcome == true_value]),
    by = c("forecaster")]
+df[, mean_pred := sum(prob * outcome) / sum(prob),
+   by = c("forecaster")]
+df[, sd_pred := sqrt(sum((prob * outcome - mean_pred)^2)),
+   by = c("forecaster")]
+df[, logS := -log(prob[outcome == true_value]),
+   by = c("forecaster")]
+df[, dss := ((true_value - mean_pred)^2) / sd_pred + 2 * log(sd_pred),
+   by = c("forecaster")]
 
 # sense-check: compute crps using samples
 sample_a <- sample(x=1:10, size = 1e5, replace = TRUE, prob = forecast_a)
@@ -27,6 +35,7 @@ ggplot(df, aes(x = factor(outcome), y = prob)) +
   geom_col() +
   geom_text(x = 8, y = 0.3, aes(label = paste("CRPS: ", round(crps, 3)))) +
   geom_text(x = 8, y = 0.27, aes(label = paste("LogS: ", round(logS, 3)))) +
+  geom_text(x = 8, y = 0.24, aes(label = paste("DSS: ", round(dss, 3)))) +
   facet_wrap(~ forecaster) +
   geom_vline(aes(xintercept = 2), linetype = "dashed") +
   theme_light() +

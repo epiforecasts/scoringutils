@@ -125,7 +125,7 @@ include_graphics("plots/forecast-paradigm.png")
 
 # Scoring metrics implemented in \pkg{scoringutils} {short-title="Scoring metrics implemented in scoringutils" #metrics}
 
-The \pkg{scoringutils} package implements a variety of metrics which focus on sharpness or calibration alone, as well as several so-called proper scoring rules, which combine both aspects into a single number. The former can be helpful to learn about specific model aspects and improve them. The latter are especially useful to assess and rank predictive performance of a forecaster. Table \ref{tab:table-summary-scores} shows an overview of the metrics currently implemented in \pkg{scoringutils} and when they are applicable. Table \ref{tab:score-table} in the Appendix gives a mathematical definition and more thorough explanation of all the metrics. 
+The \pkg{scoringutils} package implements a variety of metrics which focus on sharpness or calibration alone, as well as several so-called proper scoring rules \citep{gneitingStrictlyProperScoring2007}, which combine both aspects into a single number. Looking at calibration and sharpness independently can be helpful to learn about specific model aspects and improve them. Proper scoring rules are especially useful to assess and rank predictive performance of a forecaster. A scoring rule is proper if a perfect forecaster (the predictive distribution equals the data-generating distribution) receives the lowest score on average. This makes sure that a forecaster evaluated by a proper scoring rule is always incentivised to state their best estimate. Table \ref{tab:table-summary-scores} gives an overview of the metrics implemented in \pkg{scoringutils} and when they are applicable,  while table \ref{tab:score-table} in the Appendix provides mathematical definitions, as well as a more thorough explanation of all the metrics. 
 
 <!-- Figure \ref{fig:calibration-plots} gives an applied example of different scoring metrics and visualisations for simple toy data.  -->
 
@@ -186,58 +186,69 @@ include_graphics("plots/calibration-diagnostic-examples.png")
 ## Metrics to assess sharpness
 
 Sharpness is the ability to produce narrow forecasts. It does not depend on the actual observations and is a quality of the forecast only \ref{gneitingProbabilisticForecastsCalibration2007}. Sharpness is therefore only useful subject to calibration, as exemplified above in Figure \ref{fig:calibration-example}. We may be willing to trade off a little calibration for a lot more sharpness, but usually not much. 
-
 For sample-based forecasts, \pkg{scoringutils} calculates dispersion (as the inverse of sharpness) as the normalised median absolute deviation about the median (MADN), following \cite{funkAssessingPerformanceRealtime2019} (for details see Table \ref{tab:score-overview}). For quantile forecasts, we instead report the dispersion component of the weighted interval score (see section XXX) which corresponds to a weighted average of the individual interval widths. 
 
 
-## Proper scoring rules
+## Proper scoring rules for sample-based forecasts (CRPS, logS and DSS)
 
-Proper scoring rules \citep{gneitingStrictlyProperScoring2007} jointly assess sharpness and calibration and assign a single numeric value to a forecast. A scoring rule is proper if a perfect forecaster (the predictive distribution equals the data-generating distribution) receives the lowest score on average. This makes sure that a forecaster evaluated by a proper scoring rule is always incentivised to state their best estimate. As summarised in Table \ref{tab:table-summary-scores}, not all proper scoring rules are suitable for all forecast formats. 
+For sample-based forecasts, the \pkg{scoringutils} provides the following proper scoring rules: the (continuous) ranked probability score (CRPS) [CITATION], the log score (logS) [CITATION], and the Dawid-Sebastiani-score (DSS) [CITATION] (formal definitions are given in Table \ref{tab:score-table}). The corresponding functions are imported from the \pkg{scoringRules} package and exposed to the user through a slightly adapted interface. Other, non-sample-based variants of the CRPS, logS and DSS are available in the \pkg{scoringRules} package. 
 
-### Proper scoring rules for sample-based forecasts (CRPS, logS and DSS)
-For sample-based forecasts, the \pkg{scoringutils} provides the following proper scoring rules: the (continuous) ranked probability score (CRPS) [CITATION], the log score (logS) [CITATION], and the Dawid-Sebastiani-score (DSS) [CITATION] (formal definitions are given in Table \ref{tab:score-table}). The corresponding functions are imported from the \pkg{scoringRules} package and exposed to the user through a slightly adapted interface. Other, non-sample-based variants of the CRPS, logS and DSS are available directly in the \pkg{scoringRules} package, but not in \pkg{scoringutils}. All three scores are in principle applicable to continuous as well as discrete forecasts. The \pkg{scoringRules} implementation of the log score used within \pkg{scoringutils}, however, requires a kernel density estimation that may be inappropriate for discrete values (see also Table \ref{tab:table-summary-scores}). The logS is therefore not computed for discrete predictions in \pkg{scoringutils}. 
+The DSS is much less commonly used than the logS and the CRPS. 
 
-When scoring forecasts in a sample-based format, the choice is usually between the logS and the CRPS. The DSS is much less commonly used. It is easier to compute, but apart from that does not have immediate advantages over the former two. CRPS and logS differ in three important aspects: sensitivity to distance \cite{winklerScoringRulesEvaluation1996}, sensitivity to outlier predictions, and sensitivity to the order of magnitude of the forecast quantity. 
+When scoring forecasts in a sample-based format, the choice is usually between the logS and the CRPS. The DSS is much less commonly used. It is easier to compute, but apart from that does not have immediate advantages over the former two. 
 
-#### Sensitivity to distance: local and global scores
+CRPS and logS differ in three important aspects: sensitivity to distance \cite{winklerScoringRulesEvaluation1996}, sensitivity to outlier predictions, and sensitivity to the order of magnitude of the forecast quantity. 
+
+### Estimation details and speed of convergence
+
+All three scores are in principle applicable to continuous as well as discrete forecasts. However, the fact that \pkg{scoringutils} uses sample-based approximations makes estimation more complicated, especially for the log score. For the CRPS and the DSS, approximate scores can be computed based on the empirical distribution function, i.e. using samples directly. For the log score (which equals the negative log density of the predictive distribution evaluated at the observed value), a density estimation is required first. The \pkg{scoringRules} implementation of the log score used within \pkg{scoringutils} performs a kernel density estimation that may in particular be inappropriate for discrete values (see also Table \ref{tab:table-summary-scores}). The logS is therefore not computed for discrete predictions in \pkg{scoringutils}. The sample-based version of the log score also tends to converge more slowly than the CRPS or the DSS to the exact score, as illustrated in Figure \ref{fig:score-convergence}. 
+
+```{r score-convergence, echo = FALSE, fig.cap="Convergence of different scores.", fig.width=10}
+include_graphics("plots/sample-convergence.png")
+```
+
+### Sensitivity to distance - local vs\. global scores
+
 The CRPS is a so-called global scoring rule, which means that the score is sensitive to the distance of the entire predictive distribution from the observed value. The log score, on the other hand is local and not sensitive to the distance between the observed value and the predictive distribution. The resulting score does not depend on the overall distance between the observed value and the distribution, but only on the probability density assigned to the actual outcome. Figure \ref{fig:score-locality} illustrates the case of two hypothetical forecasters predicting the number of goals in a football match. Both assign the same probability to the outcome that was later observed, but forecaster B gives significant probability to outcomes far away from the observed outcome. The crps as a global scoring rule takes the entire predictive distribution into account and will assign a worse score to forecaster B. The log score is only determined by the probability assigned to the observed outcome and therefore both forecasters receive the same score. Sensitivity to distance (taking the entire predictive distribution into account) may be an advantage in most settings that involve decision making. Forecaster A's prediction that assigns high probability to results far away from the observed value is arguably less useful than B's forecast that assigns higher probability to values closer to it (the probability assigned to the actual outcome being equal for both forecasts). The log score is only implicitly sensitive to distance if we assume that values close to the observed value are actually more likely to occur. The logS may, however, be more appropriate for inferential purposes (see \cite{winklerScoringRulesEvaluation1996}) and is commonly used in Bayesian statistics [CITATION]. 
 
-
-```{r score-locality, fig.cap="Probabilities assigned by to hypothetical forecasters, A and B, to the possible number of goals in a football match. The true number later observed, 2, is marked with a dashed line. Both forecasters assign a probability of 0.35 to the observed outcome, 2. Forecaster A's prediction is centred around the observed value, while Forecaster B assigns significant probability to outcomes far away from the observed value. Judged by a local score like the Log Score, both forecasters receive the same score. A global score like the CRPS punishes forecaster B more severly."}
+```{r score-locality, echo = FALSE, fig.cap="Probabilities assigned by to hypothetical forecasters, A and B, to the possible number of goals in a football match. The true number later observed, 2, is marked with a dashed line. Both forecasters assign a probability of 0.35 to the observed outcome, 2. Forecaster A's prediction is centred around the observed value, while Forecaster B assigns significant probability to outcomes far away from the observed value. Judged by a local score like the Log Score, both forecasters receive the same score. A global score like the CRPS punishes forecaster B more severly."}
 
 include_graphics("plots/score-locality.png")
 ```
 
-#### Robustness to outlier predictions
+### Robustness to outlier predictions
 A second important difference is how forecasts are treated that deviate strongly from the observed outcome. The CRPS can be thought of as a generalisation of the absolute error to a predictive distribution. It therefore scales linearly with the distance between forecast distribution and true value. The log score, however, is the log of the predictive density evaluated at the observed value. It can quickly go to negative infinity if the probability assigned to the observed outcome is close to zero. The CRPS is therefore considered more stable than the log score. The behaviour of the DSS is in between the two. Whether or not harsh punishment of bad predictions is desirable or not depends of course on the setting. \cite{bracherEvaluatingEpidemicForecasts2021} exemplify that in practice there may indeed be substantial differences between how the CRPS and log score judge the same forecast. 
 
-#### Sensitivity to the order of magnitude of the forecast quantity
+### Sensitivity to the order of magnitude of the forecast quantity
 As the CRPS is a generalisation of the absolute value, overall scores depend on the order of magnitude of the quantity we try to forecast. This makes it harder to compare forecasts for very different targets, or assess average performance if the quantity of interest varies substantially over time. Average scores are dominated by forecasts for targets with high absolute numbers. This may be desirable,if we care most about forecasts in situations where numbers are high, but usually it is not. LogS and DSS are more robust against this effect. Another way to address this issue by using pairwise comparisons will be introduced later. 
 
-### Proper scoring rules for quantile-based forecasts (WIS and BS)
-For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. 
-% properties of the WIS + decomposition
-The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness) for the width of a prediction interval and penalties for over- and underprediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing model problems. It may even be useful to convert samples into quantiles and use the WIS instead of the CRPS to make use of this decomposition for the purpose of model diagnostics. 
+## Proper scoring rule for quantile-based forecasts (WIS)
+For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness penalty) for the width of a prediction interval and penalties for over- and under-prediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing model problems. It may even be useful to convert samples into quantiles and use the WIS instead of the CRPS to make use of this decomposition for the purpose of model diagnostics. 
+<!-- Think about this again -->
 
-### Proper scoring rules for binary outcomes (BS and logS)
+## Proper scoring rules for binary outcomes (BS and logS)
 
 Binary forecasts can be scored using the Brier score (BS) [CITATION], which corresponds to the squared difference between the given probability and the outcome (either 0 or 1). 
+
+ADD EXPLANATION OF LOG SCORE FOR BINARY OUTCOMES AND WHEN TO USE WHICH
 
 ## Pairwise comparisons
 
 If what we care about is to determine which model performs best, pairwise comparisons between models are a suitable approach [CITATION CRAMER et al.]. In turn, each pair of models is evaluated based on the targets that both models have predicted. The mean score by one model is divided by the mean score of the other model to obtain the mean score ratio (see Table \ref{tab:score-overview}, a measure of relative performance. To obtain an overall relative skill score for a model, we take the geomatric mean of all mean score ratios that involve that model  (omitting comparisons where there is no overlapping set of forecasts). This gives us an indicator of performance relative to all other models. The orientation depends on the score used. For the proper scoring rules described above, smaller is better and a relative skill score smaller than 1 indicates that a model is performing better than the average model. We can obtain a scaled relative skill score by dividing a model's relative skill by the relative skill of a baseline model. A scaled relative skill smaller than one then means that the model in question performed better than the baseline. 
 
-It is in principle possible to obtain p-values that help determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test or a permutation test. In practice, this is slightly complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g. if a forecaster has a bad day, they will likely perform badly across different targets for a given forecast date). P-values may therefore be too quick to suggest significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation. A test that is performed on aggregate scores will likely be more conservative. 
+It is in principle possible to obtain p-values that help determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test or a permutation test. In practice, this is slightly complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g. if a forecaster has a bad day, they will likely perform badly across different targets for a given forecast date). P-values may therefore be too quick to suggest significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (fore example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
-# Evaluating forecasts using scoringutils - an case study {#evalutation-example}
+# Evaluating forecasts using scoringutils {#evalutation-example}
 
-Generally there are two ways in which scores can be used: as lower level functions or as part of a data.frame-based workflow. 
+\pkg{scoringutils} offers two principal ways of scoring forecasts. We suggest a convenient evaluation workflow that is centred around function which accept data.frames as input. However, \pkg{scoringutils} also exports lower-level functions which work with vectors and matrices, allowing more experienced users to use the functioniality in their own evaluation pipelines. For these lower-level functions we refer to the 
 
-The following section shows an example evaluation of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub [CITATION]. The full oficial hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The following example evaluation is based on a subset of forecasts from the European Forecast Hub which includes one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different models. 
+<!-- Maybe have an overview of which functions are available in the package -->
 
-This example data follows a quantile-based format, but the evaluation process would work analogously for forecasts in a different format. We will point out differences to scoring different forecast formats where appropriate. The example data set (as well as versions of it in different formats) is also included in the \pkg{scoringutils} package. 
+The following section shows an example evaluation of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The following example evaluation is based on a subset of forecasts from the European Forecast Hub which includes one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different models. The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. 
 
-The evaluation process looks as follows: First we load, prepare and visualise (some of) the data. Then we obtain forecast scores and a model ranking based on pairwise-comparisons, followed by a more detailed analysis of calibration and sharpness. 
+The example data used here follows a quantile-based format, but the evaluation process works analogously for forecasts in a different format. We will point out differences to scoring different forecast formats where appropriate. The example data set (as well as versions of it in different formats) is also included in the \pkg{scoringutils} package. 
+
+<!-- The evaluation process looks as follows: First we load, prepare and visualise (some of) the data. Then we obtain forecast scores and a model ranking based on pairwise-comparisons, followed by a more detailed analysis of calibration and sharpness.  -->
 
 ## Data, data checks and input formats
 
@@ -264,7 +275,7 @@ example_quantile |>
 For forecasts in a quantile-based format it is necessary to have columns called \code{true_value}, \code{prediction} and \code{quantile}. It is recommended (although not necessary except in order to do pairwise comparisons) to have a column called "model" with an identifier for the forecaster.
 Table \ref{tab:column-requirements} shows the columns expected for different input formats. 
 
-```{r, column-requirements}
+```{r, column-requirements, echo=FALSE}
 library(data.table)
 requirements <- 
   data.table(
@@ -282,7 +293,7 @@ requirements |>
 
 We can check whether the data conforms to the requirements by running \fct{check\_forecasts}. 
 
-```{r,tidy=TRUE, tidy.opts=list(width.cutoff=I(70))}
+```{r,tidy=TRUE, tidy.opts=list(width.cutoff=I(70)), echo=FALSE}
 check_forecasts(example_quantile)
 ```
 
