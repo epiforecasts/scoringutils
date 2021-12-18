@@ -7,6 +7,7 @@
 #' [score()]
 #' @inheritParams score
 #' @param by character vector with column names to summarise scores by.
+#' @param FUN a function used for summarising scores. Default is `mean`.
 #'
 #' @examples
 #' library(scoringutils)
@@ -43,7 +44,7 @@ summarise_scores <- function(scores,
   # takes the mean over ranges and quantiles first, if neither range nor
   # quantile are in `by`. Reason to do this is that summaries may be
   # inaccurate if we treat individual quantiles as independent forecasts
-  forecast_unit <- scoringutils:::get_unit_of_forecast(scores)
+  forecast_unit <- get_unit_of_forecast(scores)
   scores <- scores[, lapply(.SD, mean, ...),
                    by = c(unique(c(forecast_unit, by))),
                    .SDcols = colnames(scores) %like% cols_to_summarise]

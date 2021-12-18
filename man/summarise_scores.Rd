@@ -12,6 +12,8 @@ summarise_scores(scores, by, FUN = mean, ...)
 
 \item{by}{character vector with column names to summarise scores by.}
 
+\item{FUN}{a function used for summarising scores. Default is \code{mean}.}
+
 \item{...}{additional parameters passed down to lower-level functions.
 For example, the following arguments can change how weighted interval
 scores are computed:
