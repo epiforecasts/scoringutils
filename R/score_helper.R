@@ -56,12 +56,12 @@ add_sd <- function(dt, summarise_by) {
 #'
 #' @keywords internal
 check_score_params <- function(data,
-                                        forecast_unit,
-                                        metrics,
-                                        summarise_by,
-                                        compute_relative_skill,
-                                        baseline,
-                                        rel_skill_metric) {
+                               forecast_unit,
+                               metrics,
+                               summarise_by,
+                               compute_relative_skill,
+                               baseline,
+                               rel_skill_metric) {
 
   # check that the arguments in by and summarise_by are actually present
   if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
