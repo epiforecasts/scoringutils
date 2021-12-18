@@ -205,9 +205,12 @@ test_that("abs error is correct, point and median forecasts same", {
   data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
                                           observations = truth_scoringutils)
 
-  eval <- scoringutils::score(data = data_scoringutils,
-                                       summarise_by = c("location", "target_end_date",
-                                                        "target_variable", "horizon"))
+  eval <- score(data = data_scoringutils)
+  eval <- summarise_scores(eval,
+                           by = c("location", "target_end_date",
+                                  "target_variable", "horizon"),
+                           na.rm = TRUE)
+
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 

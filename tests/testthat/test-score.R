@@ -20,21 +20,19 @@ test_that("score() warns if column name equals a metric name", {
 test_that("function produces output for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
   eval <- score(binary_example[!is.na(prediction)],
-                         summarise_by = c("model", "target_type"),
-                         quantiles = c(0.5), sd = TRUE)
+                         summarise_by = c("model", "target_type"))
   expect_equal(nrow(eval) > 1,
                TRUE)
   expect_equal(colnames(eval),
                c("model", "target_type",
-                 "brier_score", "brier_score_0.5", "brier_score_sd"))
+                 "brier_score"))
 })
 
 
 test_that("function produces score for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
   eval <- score(binary_example[!is.na(prediction)],
-                         summarise_by = c("model", "target_type"),
-                         quantiles = c(0.5), sd = TRUE)
+                         summarise_by = c("model", "target_type"))
   expect_true("brier_score" %in% names(eval))
 })
 

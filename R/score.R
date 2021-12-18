@@ -258,7 +258,7 @@ score <- function(data,
   }
 
   scores <- summarise_scores(scores,
-                             summarise_by,
+                             by = summarise_by,
                              quantiles = quantiles,
                              sd = sd)
 
