@@ -16,12 +16,12 @@ forecasts or point forecasts. The true values can be either continuous,
 integer, or binary.
 
 A collection of different metrics and scoring rules can be accessed through
-the function \code{\link[=eval_forecasts]{eval_forecasts()}}. Given a data.frame of the
+the function \code{\link[=score]{score()}}. Given a data.frame of the
 correct form the function will automatically figure out the type of
 prediction and true values and return appropriate scoring metrics.
 
 The package also has a lot of default visualisation based on the output
-created by \code{\link[=eval_forecasts]{eval_forecasts()}}.
+created by \code{\link[=score]{score()}}.
 \itemize{
 \item \code{\link[=score_table]{score_table()}}
 \item \code{\link[=correlation_plot]{correlation_plot()}}

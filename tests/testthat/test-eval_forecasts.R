@@ -1,9 +1,9 @@
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
-  expect_error(eval_forecasts(data = NULL))
+  expect_error(score(data = NULL))
 })
 
-test_that("eval_forecasts() warns if column name equals a metric name", {
+test_that("score() warns if column name equals a metric name", {
   data <- data.frame(true_value = rep(1:10, each = 2),
                      prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
                      model = "Model 1",
@@ -11,7 +11,7 @@ test_that("eval_forecasts() warns if column name equals a metric name", {
                      quantile = rep(c(0.1, 0.9), times = 10),
                      bias = 3)
 
-  expect_warning(eval_forecasts(data = data))
+  expect_warning(score(data = data))
 })
 
 
@@ -19,7 +19,7 @@ test_that("eval_forecasts() warns if column name equals a metric name", {
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- eval_forecasts(binary_example[!is.na(prediction)],
+  eval <- score(binary_example[!is.na(prediction)],
                          summarise_by = c("model", "target_type"),
                          quantiles = c(0.5), sd = TRUE)
   expect_equal(nrow(eval) > 1,
@@ -32,7 +32,7 @@ test_that("function produces output for a binary case", {
 
 test_that("function produces score for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- eval_forecasts(binary_example[!is.na(prediction)],
+  eval <- score(binary_example[!is.na(prediction)],
                          summarise_by = c("model", "target_type"),
                          quantiles = c(0.5), sd = TRUE)
   expect_true("brier_score" %in% names(eval))
@@ -44,7 +44,7 @@ test_that("function produces score for a binary case", {
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- eval_forecasts(quantile_example[!is.na(prediction)],
+  eval <- score(quantile_example[!is.na(prediction)],
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
 
@@ -52,14 +52,14 @@ test_that("function produces output for a quantile format case", {
                TRUE)
 })
 
-test_that("eval_forecasts() quantile produces desired metrics", {
+test_that("score() quantile produces desired metrics", {
   data <- data.frame(true_value = rep(1:10, each = 2),
                      prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
                      model = "Model 1",
                      date = as.Date("2020-01-01") + rep(1:10, each = 2),
                      quantile = rep(c(0.1, 0.9), times = 10))
 
-  out <- eval_forecasts(data = data)
+  out <- score(data = data)
   metric_names <- c("dispersion", "underprediction", "overprediction",
                     "bias", "aem", "coverage_deviation")
 
@@ -69,7 +69,7 @@ test_that("eval_forecasts() quantile produces desired metrics", {
 
 test_that("calculation of aem is correct for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- eval_forecasts(quantile_example[!is.na(prediction)],
+  eval <- score(quantile_example[!is.na(prediction)],
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
 
@@ -96,11 +96,11 @@ test_that("all quantile and range formats yield the same result", {
   quantile_example4 <- scoringutils::range_wide_to_long(wide)
 
 
-  eval1 <- eval_forecasts(quantile_example1[!is.na(prediction)],
+  eval1 <- score(quantile_example1[!is.na(prediction)],
                           summarise_by = c("model"),
                           quantiles = c(0.5), sd = TRUE)
 
-  eval2 <- eval_forecasts(quantile_example2[!is.na(prediction)],
+  eval2 <- score(quantile_example2[!is.na(prediction)],
                           summarise_by = c("model"),
                           quantiles = c(0.5), sd = TRUE)
 
@@ -117,7 +117,7 @@ test_that("function produces output even if only some metrics are chosen", {
   range_example <- scoringutils::range_wide_to_long(range_example_wide)
   example <- range_long_to_quantile(range_example)
 
-  eval <- scoringutils::eval_forecasts(example,
+  eval <- scoringutils::score(example,
                                        summarise_by = c("model", "range"),
                                        metrics = "coverage",
                                        sd = TRUE)
@@ -131,11 +131,11 @@ test_that("WIS is the same with other metrics omitted or included", {
   range_example <- scoringutils::range_wide_to_long(range_example_wide)
   example <- scoringutils::range_long_to_quantile(range_example)
 
-  eval <- scoringutils::eval_forecasts(example,
+  eval <- scoringutils::score(example,
                                        summarise_by = c("model", "range"),
                                        metrics = "interval_score")
 
-  eval2 <- scoringutils::eval_forecasts(example,
+  eval2 <- scoringutils::score(example,
                                         summarise_by = c("model", "range"))
 
   expect_equal(sum(eval$interval_score),
@@ -149,11 +149,11 @@ test_that("WIS is the same with other metrics omitted or included", {
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
   example <- data.table::setDT(scoringutils::example_continuous)
-  eval <- eval_forecasts(example[!is.na(prediction)],
+  eval <- score(example[!is.na(prediction)],
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
 
-  eval2 <- scoringutils::eval_forecasts(example,
+  eval2 <- scoringutils::score(example,
                          summarise_by = c("model"),
                          quantiles = c(0.5), sd = TRUE)
 

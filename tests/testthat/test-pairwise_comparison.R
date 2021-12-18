@@ -24,10 +24,10 @@ test_that("pairwise comparisons works", {
                                                      truth_formatted)
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval_without_baseline <- eval_forecasts(data_formatted,
+  eval_without_baseline <- score(data_formatted,
                                           compute_relative_skill = TRUE,
                                           count_median_twice = FALSE)
-  eval_with_baseline <- scoringutils::eval_forecasts(data_formatted,
+  eval_with_baseline <- scoringutils::score(data_formatted,
                                                      baseline = "m1",
                                                      compute_relative_skill = TRUE,
                                                      count_median_twice = FALSE)
@@ -143,7 +143,7 @@ test_that("pairwise comparisons works", {
   ratios_scaled <- geom_mean_ratios/geom_mean_ratios["m1"]
   names(ratios_scaled) <- NULL
 
-  eval_with_baseline <- scoringutils::eval_forecasts(data_formatted,
+  eval_with_baseline <- scoringutils::score(data_formatted,
                                                      summarise_by = c("model", "location"),
                                                      baseline = "m1",
                                                      compute_relative_skill = TRUE,
@@ -155,8 +155,8 @@ test_that("pairwise comparisons works", {
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })
 
-test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
-  eval <- eval_forecasts(data = example_integer,
+test_that("Pairwise comparisons work in score() with integer data", {
+  eval <- score(data = example_integer,
                          summarise_by = "model",
                          compute_relative_skill = TRUE)
 
@@ -164,9 +164,9 @@ test_that("Pairwise comparisons work in eval_forecasts() with integer data", {
 })
 
 
-test_that("Pairwise comparisons work in eval_forecasts() with binary data", {
+test_that("Pairwise comparisons work in score() with binary data", {
   eval <- suppressWarnings(
-    eval_forecasts(data = example_binary,
+    score(data = example_binary,
                    summarise_by = "model",
                    compute_relative_skill = TRUE)
   )
@@ -194,13 +194,13 @@ test_that("pairwise_comparison() works", {
 })
 
 
-test_that("pairwise_comparison() works inside and outside of eval_forecasts()", {
-  eval <- eval_forecasts(data = example_continuous)
+test_that("pairwise_comparison() works inside and outside of score()", {
+  eval <- score(data = example_continuous)
 
   pairwise <- pairwise_comparison(eval, summarise_by = "model",
                                   metric = "crps")
 
-  eval2 <-  eval_forecasts(data = example_continuous,
+  eval2 <-  score(data = example_continuous,
                            summarise_by = "model",
                            compute_relative_skill = TRUE)
 

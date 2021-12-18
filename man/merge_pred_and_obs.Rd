@@ -13,7 +13,7 @@ merge_pred_and_obs(
 }
 \arguments{
 \item{forecasts}{data.frame with the forecast data (as can be passed to
-\code{\link[=eval_forecasts]{eval_forecasts()}}).}
+\code{\link[=score]{score()}}).}
 
 \item{observations}{data.frame with the observations}
 

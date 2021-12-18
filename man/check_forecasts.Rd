@@ -7,7 +7,7 @@
 check_forecasts(data)
 }
 \arguments{
-\item{data}{A data.frame or similar as would be used for \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{data}{A data.frame or similar as would be used for \code{\link[=score]{score()}}}
 }
 \value{
 A list with elements that give information about what \code{scoringutils}
@@ -35,13 +35,13 @@ values, but rather the maximum number of unique values across the whole data.
 \item \code{warnings} A vector with warnings. These can be ignored if you know what
 you are doing.
 \item \code{errors} A vector with issues that will cause an error when running
-\code{\link[=eval_forecasts]{eval_forecasts()}}.
+\code{\link[=score]{score()}}.
 \item \code{messages} A verbal explanation of the information provided above.
 }
 }
 \description{
 Function to check the input data before running
-\code{\link[=eval_forecasts]{eval_forecasts()}}.
+\code{\link[=score]{score()}}.
 
 The data should come in one of three different formats:
 \itemize{

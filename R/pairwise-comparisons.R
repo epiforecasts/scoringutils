@@ -10,7 +10,7 @@
 #' Andrea Riebler and Michaela Paul.
 #'
 #' @param scores A data.frame of unsummarised scores as produced by
-#' [eval_forecasts()]
+#' [score()]
 #' @param metric A character vector of length one with the metric to do the
 #' comparison on. The default is "auto", meaning that either "interval_score",
 #' "crps", or "brier_score" will be selected where available.
@@ -48,7 +48,7 @@
 #'                            baseline = "model1")
 #' scoringutils::plot_pairwise_comparison(res)
 #'
-#' eval <- scoringutils::eval_forecasts(scoringutils::example_quantile)
+#' eval <- scoringutils::score(scoringutils::example_quantile)
 #' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -364,7 +364,7 @@ unique(overlap)
 #'                  aem = (abs(rnorm(30))))
 #'
 #' data <- scoringutils::example_quantile
-#' scores <- scoringutils::eval_forecasts(data)
+#' scores <- scoringutils::score(data)
 #' pairwise <- pairwise_comparison(scores,
 #'                                 summarise_by = "target_type")
 #' scoringutils::plot_pairwise_comparison(pairwise,
@@ -580,7 +580,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' Helper function to infer the metric for which pairwise comparisons shall
 #' be made. The function simply checks the names of the available columns and
 #' chooses the most widely used metric.
-#' @param scores A data.table of scores as produced by [eval_forecasts()]
+#' @param scores A data.table of scores as produced by [score()]
 #' @keywords internal
 
 infer_rel_skill_metric <- function(scores) {

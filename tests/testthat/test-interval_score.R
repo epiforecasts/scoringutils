@@ -11,13 +11,13 @@ test_that("wis works, median only", {
   expect_identical(actual, expected)
 })
 
-test_that("WIS works within eval_forecasts for median forecast", {
+test_that("WIS works within score for median forecast", {
   test_data <- data.frame(true_value =   c(1, -15, 22),
                           prediction = 1:3,
                           quantile = rep(c(0.5), each = 3),
                           model = "model1",
                           date = 1:3)
-  eval <- scoringutils::eval_forecasts(test_data,
+  eval <- scoringutils::score(test_data,
                                        count_median_twice = TRUE)
   expect_equal(eval$aem, eval$interval_score)
 })
@@ -39,14 +39,14 @@ test_that("wis works, 1 interval only", {
   expect_identical(actual, expected)
 })
 
-test_that("WIS works within eval_forecasts for one interval", {
+test_that("WIS works within score for one interval", {
   test_data <- data.frame(true_value =   rep(c(1, -15, 22), times = 2),
                           quantile = rep(c(0.25, 0.75), each = 3),
                           prediction = c(c(0, 1, 0), c(2, 2, 3)),
                           model = c("model1"),
                           date = rep(1:3, times = 2))
 
-  eval <- scoringutils::eval_forecasts(test_data,
+  eval <- scoringutils::score(test_data,
                                        count_median_twice = TRUE)
 
   lower = c(0, 1, 0)
@@ -70,7 +70,7 @@ test_that("wis works, 1 interval and median", {
                           model = c("model1"),
                           date = rep(1:3, times = 3))
 
-  eval <- scoringutils::eval_forecasts(test_data,
+  eval <- scoringutils::score(test_data,
                                        count_median_twice = TRUE)
 
 
@@ -98,7 +98,7 @@ test_that("wis works, 2 intervals and median", {
                           model = c("model1"),
                           date = rep(1:3, times = 5))
 
-  eval <- scoringutils::eval_forecasts(test_data,
+  eval <- scoringutils::score(test_data,
                                        count_median_twice = TRUE)
 
   y <- c(1, -15, 22)
@@ -186,7 +186,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::eval_forecasts(data_formatted,
+  eval <- scoringutils::score(data_formatted,
                                        count_median_twice = FALSE)
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
@@ -256,7 +256,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::eval_forecasts(data_formatted,
+  eval <- scoringutils::score(data_formatted,
                                        count_median_twice = FALSE)
 
   alpha1 <- 0.2
@@ -324,7 +324,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::eval_forecasts(data_formatted,
+  eval <- scoringutils::score(data_formatted,
                                         count_median_twice = FALSE)
 
   alpha1 <- 0.2

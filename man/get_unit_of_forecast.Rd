@@ -7,7 +7,7 @@
 get_unit_of_forecast(data)
 }
 \arguments{
-\item{data}{A data.frame or similar as would be used for \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{data}{A data.frame or similar as would be used for \code{\link[=score]{score()}}}
 }
 \value{
 A character vector with the column names that define the unit of

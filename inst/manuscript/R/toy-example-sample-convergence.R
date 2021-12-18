@@ -28,7 +28,7 @@ for (i in sample_sizes) {
                   variable.name = "repetition",
                   value.name = "prediction")
   samples[, true_value := true_value]
-  results[[paste(i)]] <- eval_forecasts(
+  results[[paste(i)]] <- score(
     samples, metrics = c("crps", "log_score", "dss")
   )[, n_samples := i]
 }

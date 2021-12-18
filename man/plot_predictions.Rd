@@ -27,7 +27,7 @@ plot_predictions(
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
-\code{\link[=eval_forecasts]{eval_forecasts()}}. The data.frame needs to have columns called
+\code{\link[=score]{score()}}. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
 these will be separated into a truth and forecast data set in order to be

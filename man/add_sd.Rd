@@ -11,12 +11,12 @@ add_sd(dt, summarise_by)
 
 \item{varnames}{names of the variables for which to calculate the sd}
 
-\item{by}{grouping variable in \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{by}{grouping variable in \code{\link[=score]{score()}}}
 }
 \value{
 \code{data.table} with sd added
 }
 \description{
-Helper function used within eval_forecasts
+Helper function used within score
 }
 \keyword{internal}

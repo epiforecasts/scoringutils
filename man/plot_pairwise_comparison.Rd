@@ -51,7 +51,7 @@ df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
                  aem = (abs(rnorm(30))))
 
 data <- scoringutils::example_quantile
-scores <- scoringutils::eval_forecasts(data)
+scores <- scoringutils::score(data)
 pairwise <- pairwise_comparison(scores,
                                 summarise_by = "target_type")
 scoringutils::plot_pairwise_comparison(pairwise,

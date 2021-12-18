@@ -8,7 +8,7 @@
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
-#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [score()]) for quantile forecasts. For an example, see
 #' [example_range_long()])
 #' @return a data.frame in wide format
 #' @importFrom data.table dcast
@@ -61,7 +61,7 @@ quantile_to_wide <- function(data) {
 #' plotting.
 #'
 #' @param data a data.frame following the specifications from
-#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [score()]) for quantile forecasts. For an example, see
 #' [example_range_wide()])
 #' @return a data.frame in long format
 #' @importFrom data.table melt
@@ -140,7 +140,7 @@ quantile_to_long <- function(data) {
 #' [range_long_to_wide()] first.
 #'
 #' @param data a data.frame following the specifications from
-#' [eval_forecasts()]) for quantile forecasts. For an example, see
+#' [score()]) for quantile forecasts. For an example, see
 #' [example_range_long()])
 #' @param keep_range_col keep the range and boundary columns after
 #' transformation (default is FALSE)
@@ -393,7 +393,7 @@ sample_to_range <- function(data,
 #'
 #'
 #' @param forecasts data.frame with the forecast data (as can be passed to
-#' [eval_forecasts()]).
+#' [score()]).
 #' @param observations data.frame with the observations
 #' @param join character, one of `c("left", "full", "right")`. Determines the
 #' type of the join. Usually, a left join is appropriate, but sometimes you

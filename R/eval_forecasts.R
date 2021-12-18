@@ -1,6 +1,6 @@
 #' @title Evaluate forecasts
 #'
-#' @description The function `eval_forecasts` is an easy to use wrapper
+#' @description The function `score` is an easy to use wrapper
 #' of the lower level functions in the \pkg{scoringutils} package.
 #' It can be used to score probabilistic or quantile forecasts of
 #' continuous, integer-valued or binary variables.
@@ -131,7 +131,7 @@
 #' @examples
 #' ## Probability Forecast for Binary Target
 #' binary_example <- data.table::setDT(scoringutils::example_binary)
-#' eval <- scoringutils::eval_forecasts(binary_example,
+#' eval <- scoringutils::score(binary_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.5), sd = TRUE)
 #'
@@ -142,25 +142,25 @@
 #' wide2 <- data.table::setDT(scoringutils::example_range_semi_wide)
 #' range_example <- scoringutils::range_wide_to_long(wide2)
 #' example <- scoringutils::range_long_to_quantile(range_example)
-#' eval <- scoringutils::eval_forecasts(example,
+#' eval <- scoringutils::score(example,
 #'                                      summarise_by = "model",
 #'                                      quantiles = c(0.05, 0.95),
 #'                                      sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(example)
+#' eval <- scoringutils::score(example)
 #'
 #'
 #' ## Integer Forecasts
 #' integer_example <- data.table::setDT(scoringutils::example_integer)
-#' eval <- scoringutils::eval_forecasts(integer_example,
+#' eval <- scoringutils::score(integer_example,
 #'                                      summarise_by = c("model"),
 #'                                      quantiles = c(0.1, 0.9),
 #'                                      sd = TRUE)
-#' eval <- scoringutils::eval_forecasts(integer_example)
+#' eval <- scoringutils::score(integer_example)
 #'
 #' ## Continuous Forecasts
 #' continuous_example <- data.table::setDT(scoringutils::example_continuous)
-#' eval <- scoringutils::eval_forecasts(continuous_example)
-#' eval <- scoringutils::eval_forecasts(continuous_example,
+#' eval <- scoringutils::score(continuous_example)
+#' eval <- scoringutils::score(continuous_example,
 #'                                      quantiles = c(0.5, 0.9),
 #'                                      sd = TRUE,
 #'                                      summarise_by = c("model"))
@@ -172,7 +172,7 @@
 #' PLoS Comput Biol 15(2): e1006785. <doi:10.1371/journal.pcbi.1006785>
 #' @export
 
-eval_forecasts <- function(data,
+score <- function(data,
                            summarise_by = NULL,
                            metrics = NULL,
                            quantiles = c(),
@@ -198,7 +198,7 @@ eval_forecasts <- function(data,
   }
 
   # check input parameters and whether computation of relative skill is possible
-  compute_rel_skill <- check_eval_forecasts_params(
+  compute_rel_skill <- check_score_params(
     data,
     forecast_unit,
     metrics,
@@ -214,14 +214,14 @@ eval_forecasts <- function(data,
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
-    scores <- eval_forecasts_binary(data = data,
+    scores <- score_binary(data = data,
                                     forecast_unit = forecast_unit,
                                     metrics = metrics)
   }
 
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
-    scores <- eval_forecasts_quantile(data = data,
+    scores <- score_quantile(data = data,
                                       forecast_unit = forecast_unit,
                                       metrics = metrics,
                                       summarise_by = summarise_by,
@@ -234,7 +234,7 @@ eval_forecasts <- function(data,
   # Score integer or continuous predictions ------------------------------------
   if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
 
-    scores <- eval_forecasts_sample(data = data,
+    scores <- score_sample(data = data,
                                     forecast_unit = forecast_unit,
                                     metrics = metrics,
                                     prediction_type = prediction_type)
@@ -266,18 +266,18 @@ eval_forecasts <- function(data,
 }
 
 
-#' @title Summarise scores as produced by [eval_forecasts()]
+#' @title Summarise scores as produced by [score()]
 #'
-#' @description Summarise scores as produced by [eval_forecasts()]-
+#' @description Summarise scores as produced by [score()]-
 #'
 #' @param scores a data.table of unsummarised scores as produced by
-#' [eval_forecasts()], when running it with the option `summarise_by = NULL`
-#' @inheritParams eval_forecasts
+#' [score()], when running it with the option `summarise_by = NULL`
+#' @inheritParams score
 #'
 #' @examples
 #' library(scoringutils)
 #' data <- example_quantile
-#' scores <- eval_forecasts(data)
+#' scores <- score(data)
 #' summarise_scores(scores,
 #'                  summarise_by = c("model"))
 #'

@@ -2,10 +2,10 @@
 #'
 #' @description
 #' Plots a coloured table of summarised scores obtained using
-#' [eval_forecasts()]
+#' [score()]
 #'
 #' @param summarised_scores A data.frame of summarised scores as produced by
-#' [eval_forecasts()]
+#' [score()]
 #' @param y the variable to be shown on the y-axis. If `NULL` (default),
 #' all columns that are not scoring metrics will be used. Alternatively,
 #' you can specify a vector with column names, e.g.
@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#' scores <- scoringutils::score(scoringutils::example_quantile,
 #'                                        summarise_by = c("model", "target_type"))
 #' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
@@ -41,7 +41,7 @@
 #' scoringutils::score_table(scores)
 #'
 #'
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_integer,
+#' scores <- scoringutils::score(scoringutils::example_integer,
 #'                                         summarise_by = c("model", "target_type"))
 #' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
@@ -171,10 +171,10 @@ score_table <- function(summarised_scores,
 #'
 #' @description
 #' Plots a coloured table of scores obtained using
-#' [eval_forecasts()]
+#' [score()]
 #'
 #' @param scores A data.frame of scores as produced by
-#' [eval_forecasts()]
+#' [score()]
 #' @param select_metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `summarised_scores` will
 #' be shown
@@ -188,7 +188,7 @@ score_table <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile)
+#' scores <- scoringutils::score(scoringutils::example_quantile)
 #' scoringutils::correlation_plot(scores)
 
 
@@ -268,7 +268,7 @@ correlation_plot <- function(scores,
 #' over-prediction, under-prediction and for high dispersion (lack of sharpness)
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [eval_forecasts()]
+#' produced by [score()]
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
 #' @param group Choose a grouping variable for the plot that gets directly
@@ -295,7 +295,7 @@ correlation_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#' scores <- scoringutils::score(scoringutils::example_quantile,
 #'                                        summarise_by = c("model", "target_type"))
 #' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
 #'                              relative_contributions = TRUE)
@@ -367,8 +367,8 @@ wis_components <- function(scores,
 #' sharpness / dispersion changes by range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [eval_forecasts()]. Note that "range" must be included
-#' in the `summarise_by` argument when running `eval_forecasts`
+#' produced by [score()]. Note that "range" must be included
+#' in the `summarise_by` argument when running `score`
 #' @param y The variable from the scores you want to show on the y-Axis.
 #' This could be something like "interval_score" (the default) or "dispersion"
 #' @param x The variable from the scores you want to show on the x-Axis.
@@ -394,7 +394,7 @@ wis_components <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#' scores <- scoringutils::score(scoringutils::example_quantile,
 #'                                         summarise_by = c("model", "target_type", "range"))
 #'
 #' scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
@@ -404,7 +404,7 @@ wis_components <- function(scores,
 #'                           facet_formula =  ~target_type)
 #'
 #' # we saw above that dispersion values crossed. Let's look at the unweighted WIS
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#' scores <- scoringutils::score(scoringutils::example_quantile,
 #'                                         summarise_by = c("model", "target_type", "range"))
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
 #'                          facet_formula =  ~target_type)
@@ -461,7 +461,7 @@ range_plot <- function(scores,
 #' different locations.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [eval_forecasts()].
+#' produced by [score()].
 #' @param y The variable from the scores you want to show on the y-Axis. The
 #' default for this is "model"
 #' @param x The variable from the scores you want to show on the x-Axis. This
@@ -487,7 +487,7 @@ range_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+#' scores <- scoringutils::score(scoringutils::example_quantile,
 #'                                        summarise_by = c("model", "target_type", "range"))
 #'
 #' scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
@@ -545,7 +545,7 @@ score_heatmap <- function(scores,
 #' Make a plot of observed and predicted values
 #'
 #' @param data a data.frame that follows the same specifications outlined in
-#' [eval_forecasts()]. The data.frame needs to have columns called
+#' [score()]. The data.frame needs to have columns called
 #' "true_value", "prediction" and then either a column called sample, or one
 #' called "quantile" or two columns called "range" and "boundary". Internally,
 #' these will be separated into a truth and forecast data set in order to be
@@ -635,7 +635,7 @@ plot_predictions <- function(data = NULL,
   # preparations ---------------------------------------------------------------
   # check data argument is provided
   if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
-    stop("need arguments 'data' in function 'eval_forecasts()', or alternatively 'forecasts' and 'truth_data'")
+    stop("need arguments 'data' in function 'score()', or alternatively 'forecasts' and 'truth_data'")
   }
 
   if (is.null(data)) {
@@ -781,7 +781,7 @@ plot_predictions <- function(data = NULL,
 #' Plot interval coverage
 #'
 #' @param summarised_scores Summarised scores as produced by
-#' [eval_forecasts()]. Make sure that "range" is included in
+#' [score()]. Make sure that "range" is included in
 #' `summarise_by` when producing the summarised scores
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
@@ -802,7 +802,7 @@ plot_predictions <- function(data = NULL,
 #' @examples
 #' example1 <- scoringutils::example_range_long
 #' example1 <- scoringutils::range_long_to_quantile(example1)
-#' scores <- scoringutils::eval_forecasts(example1,
+#' scores <- scoringutils::score(example1,
 #'                                        summarise_by = c("model", "range"))
 #' interval_coverage(scores)
 
@@ -854,7 +854,7 @@ interval_coverage <- function(summarised_scores,
 #' Plot quantile coverage
 #'
 #' @param summarised_scores Summarised scores as produced by
-#' [eval_forecasts()]. Make sure that "quantile" is included in
+#' [score()]. Make sure that "quantile" is included in
 #' `summarise_by` when producing the summarised scores
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
@@ -874,7 +874,7 @@ interval_coverage <- function(summarised_scores,
 #'
 #' @examples
 #' example1 <- scoringutils::example_quantile
-#' scores <- scoringutils::eval_forecasts(example1,
+#' scores <- scoringutils::score(example1,
 #'                                        summarise_by = c("model", "quantile"))
 #' quantile_coverage(scores)
 
@@ -936,7 +936,7 @@ quantile_coverage <- function(summarised_scores,
 #' Visualise Where Forecasts Are Available
 #'
 #' @param data data.frame with predictions in the same format required for
-#' [eval_forecasts()]
+#' [score()]
 #' @param y character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot
 #' @param x character vector of length one that denotes the name of the column
@@ -954,7 +954,7 @@ quantile_coverage <- function(summarised_scores,
 #' instead treat one set of samples or quantiles as one forecast.
 #' @param by character vector or `NULL` (the default) that denotes the
 #' unit of an individual forecast. This argument behaves similarly to the
-#' `by` argument in \code{link{eval_forecasts}}. By default, all columns
+#' `by` argument in \code{link{score}}. By default, all columns
 #' are used that are not part of any internally protected columns like "sample"
 #' or "prediction" or similar. The `by` argument is only necessary if
 #' `collapse_to_one = TRUE` to indicate which rows not to collapse to one.

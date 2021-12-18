@@ -14,7 +14,7 @@ pairwise_comparison(
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{metric}{A character vector of length one with the metric to do the
 comparison on. The default is "auto", meaning that either "interval_score",
@@ -61,7 +61,7 @@ res <- scoringutils::pairwise_comparison(df,
                            baseline = "model1")
 scoringutils::plot_pairwise_comparison(res)
 
-eval <- scoringutils::eval_forecasts(scoringutils::example_quantile)
+eval <- scoringutils::score(scoringutils::example_quantile)
 pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
 }
 \author{

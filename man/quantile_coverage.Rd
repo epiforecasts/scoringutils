@@ -14,7 +14,7 @@ quantile_coverage(
 }
 \arguments{
 \item{summarised_scores}{Summarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}. Make sure that "quantile" is included in
+\code{\link[=score]{score()}}. Make sure that "quantile" is included in
 \code{summarise_by} when producing the summarised scores}
 
 \item{colour}{According to which variable shall the graphs be coloured?
@@ -39,7 +39,7 @@ Plot quantile coverage
 }
 \examples{
 example1 <- scoringutils::example_quantile
-scores <- scoringutils::eval_forecasts(example1,
+scores <- scoringutils::score(example1,
                                        summarise_by = c("model", "quantile"))
 quantile_coverage(scores)
 }

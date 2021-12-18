@@ -11,9 +11,9 @@ reference:
                 - available_metrics
                 - compare_two_models
                 - starts_with("eval_")
-                - eval_forecasts
-                - eval_forecasts_binary
-                - eval_forecasts_sample
+                - score
+                - score_binary
+                - score_sample
                 - pairwise_comparison
                 - pairwise_comparison_one_group
         - title: Scoring functions

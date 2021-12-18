@@ -13,12 +13,12 @@ add_quantiles(dt, quantiles, summarise_by)
 
 \item{varnames}{names of the variables for which to calculate quantiles}
 
-\item{by}{grouping variable in \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{by}{grouping variable in \code{\link[=score]{score()}}}
 }
 \value{
 \code{data.table} with quantiles added
 }
 \description{
-Helper function used within eval_forecasts
+Helper function used within score
 }
 \keyword{internal}

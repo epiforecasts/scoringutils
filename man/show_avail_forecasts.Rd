@@ -21,7 +21,7 @@ show_avail_forecasts(
 }
 \arguments{
 \item{data}{data.frame with predictions in the same format required for
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{y}{character vector of length one that denotes the name of the column
 to appear on the y-axis of the plot}
@@ -45,7 +45,7 @@ instead treat one set of samples or quantiles as one forecast.}
 
 \item{by}{character vector or \code{NULL} (the default) that denotes the
 unit of an individual forecast. This argument behaves similarly to the
-\code{by} argument in \code{link{eval_forecasts}}. By default, all columns
+\code{by} argument in \code{link{score}}. By default, all columns
 are used that are not part of any internally protected columns like "sample"
 or "prediction" or similar. The \code{by} argument is only necessary if
 \code{collapse_to_one = TRUE} to indicate which rows not to collapse to one.}

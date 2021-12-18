@@ -15,7 +15,7 @@ score_table(
 }
 \arguments{
 \item{summarised_scores}{A data.frame of summarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{y}{the variable to be shown on the y-axis. If \code{NULL} (default),
 all columns that are not scoring metrics will be used. Alternatively,
@@ -43,10 +43,10 @@ A ggplot2 object with a coloured table of summarised scores
 }
 \description{
 Plots a coloured table of summarised scores obtained using
-\code{\link[=eval_forecasts]{eval_forecasts()}}
+\code{\link[=score]{score()}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+scores <- scoringutils::score(scoringutils::example_quantile,
                                        summarise_by = c("model", "target_type"))
 scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)
@@ -58,7 +58,7 @@ scoringutils::score_table(scores, y = c("model", "target_type"))
 scoringutils::score_table(scores)
 
 
-scores <- scoringutils::eval_forecasts(scoringutils::example_integer,
+scores <- scoringutils::score(scoringutils::example_integer,
                                         summarise_by = c("model", "target_type"))
 scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)

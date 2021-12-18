@@ -19,7 +19,7 @@ score_heatmap(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=eval_forecasts]{eval_forecasts()}}.}
+produced by \code{\link[=score]{score()}}.}
 
 \item{y}{The variable from the scores you want to show on the y-Axis. The
 default for this is "model"}
@@ -57,7 +57,7 @@ groups, e.g. the interval score obtained by several forecasting models in
 different locations.
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+scores <- scoringutils::score(scoringutils::example_quantile,
                                        summarise_by = c("model", "target_type", "range"))
 
 scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")

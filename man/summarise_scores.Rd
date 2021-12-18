@@ -2,13 +2,13 @@
 % Please edit documentation in R/eval_forecasts.R
 \name{summarise_scores}
 \alias{summarise_scores}
-\title{Summarise scores as produced by \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
 summarise_scores(scores, summarise_by, quantiles = c(), sd = FALSE)
 }
 \arguments{
 \item{scores}{a data.table of unsummarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}, when running it with the option \code{summarise_by = NULL}}
+\code{\link[=score]{score()}}, when running it with the option \code{summarise_by = NULL}}
 
 \item{summarise_by}{character vector of columns to group the summary by. By
 default, this is equal to \code{by} and no summary takes place.
@@ -28,12 +28,12 @@ returned.}
 metrics will be returned when summarising.}
 }
 \description{
-Summarise scores as produced by \code{\link[=eval_forecasts]{eval_forecasts()}}-
+Summarise scores as produced by \code{\link[=score]{score()}}-
 }
 \examples{
 library(scoringutils)
 data <- example_quantile
-scores <- eval_forecasts(data)
+scores <- score(data)
 summarise_scores(scores,
                  summarise_by = c("model"))
 

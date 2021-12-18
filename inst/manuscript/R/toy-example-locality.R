@@ -49,4 +49,4 @@ ggsave("inst/manuscript/plots/score-locality.png")
 # dt <- copy(df)
 # dt[, quantile := cumsum(prob_b)]
 # dt[, prediction := outcome]
-# eval_forecasts(dt[, .(true_value, prediction, quantile)])
+# score(dt[, .(true_value, prediction, quantile)])

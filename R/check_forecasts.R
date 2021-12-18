@@ -1,7 +1,7 @@
 #' @title Check forecasts
 #'
 #' @description Function to check the input data before running
-#' [eval_forecasts()].
+#' [score()].
 #'
 #' The data should come in one of three different formats:
 #' - A format for binary predictions (see [example_binary])
@@ -11,7 +11,7 @@
 #'
 #' @seealso Functions to move between different formats:
 #' [range_long_to_quantile()], [range_wide_to_long()]
-#' @param data A data.frame or similar as would be used for [eval_forecasts()]
+#' @param data A data.frame or similar as would be used for [score()]
 #'
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.
@@ -38,7 +38,7 @@
 #' - `warnings` A vector with warnings. These can be ignored if you know what
 #' you are doing.
 #' - `errors` A vector with issues that will cause an error when running
-#' [eval_forecasts()].
+#' [score()].
 #' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' is.data.table
@@ -278,7 +278,7 @@ get_target_type <- function(data) {
 #' @description Helper function to check that the input is in fact a data.frame
 #' or similar and remove rows with no value for `prediction` or `true_value`
 #'
-#' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
+#' @param data A data.frame or similar as it gets passed to [score()].
 #' @param verbose Boolean (default is `TRUE`), whether or not to print warnings
 #'
 #' @return A data.table with NA values in `true_value` or `prediction` removed.

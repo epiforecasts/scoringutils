@@ -1,4 +1,4 @@
-eval_forecasts_quantile <- function(data,
+score_quantile <- function(data,
                                     forecast_unit,
                                     metrics,
                                     weigh = TRUE,

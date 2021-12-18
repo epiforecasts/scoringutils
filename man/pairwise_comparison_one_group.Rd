@@ -8,7 +8,7 @@ pairwise_comparison_one_group(scores, metric, baseline, summarise_by, ...)
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{metric}{A character vector of length one with the metric to do the
 comparison on. The default is "auto", meaning that either "interval_score",

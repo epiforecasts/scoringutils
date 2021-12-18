@@ -8,7 +8,7 @@ correlation_plot(scores, select_metrics = NULL)
 }
 \arguments{
 \item{scores}{A data.frame of scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{select_metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{summarised_scores} will
@@ -20,9 +20,9 @@ between metrics
 }
 \description{
 Plots a coloured table of scores obtained using
-\code{\link[=eval_forecasts]{eval_forecasts()}}
+\code{\link[=score]{score()}}
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile)
+scores <- scoringutils::score(scoringutils::example_quantile)
 scoringutils::correlation_plot(scores)
 }

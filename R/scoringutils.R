@@ -12,12 +12,12 @@
 #' integer, or binary.
 #'
 #' A collection of different metrics and scoring rules can be accessed through
-#' the function [eval_forecasts()]. Given a data.frame of the
+#' the function [score()]. Given a data.frame of the
 #' correct form the function will automatically figure out the type of
 #' prediction and true values and return appropriate scoring metrics.
 #'
 #' The package also has a lot of default visualisation based on the output
-#' created by [eval_forecasts()].
+#' created by [score()].
 #'
 #' - [score_table()]
 #' - [correlation_plot()]

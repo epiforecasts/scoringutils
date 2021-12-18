@@ -11,7 +11,7 @@ test_that("absolute error (sample based) works", {
 
 # covidHubUtils-tests
 
-test_that("abs error is correct within eval_forecasts, point forecast only", {
+test_that("abs error is correct within score, point forecast only", {
   # test is adapted from the package covidHubUtils, https://github.com/reichlab/covidHubUtils/
   y <- c(1, -15, 22)
 
@@ -64,7 +64,7 @@ test_that("abs error is correct within eval_forecasts, point forecast only", {
   data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
                                           observations = truth_scoringutils)
 
-  eval <- scoringutils::eval_forecasts(data_scoringutils)
+  eval <- scoringutils::score(data_scoringutils)
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 
@@ -136,7 +136,7 @@ test_that("abs error is correct, point and median forecasts different", {
   data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
                                           observations = truth_scoringutils)
 
-  eval <- scoringutils::eval_forecasts(data_scoringutils)
+  eval <- scoringutils::score(data_scoringutils)
 
   expected <- abs(y - point_forecast)
   # expect_equal(actual$abs_error, expected)
@@ -205,7 +205,7 @@ test_that("abs error is correct, point and median forecasts same", {
   data_scoringutils <- merge_pred_and_obs(forecasts = fc_scoringutils,
                                           observations = truth_scoringutils)
 
-  eval <- scoringutils::eval_forecasts(data = data_scoringutils,
+  eval <- scoringutils::score(data = data_scoringutils,
                                        summarise_by = c("location", "target_end_date",
                                                         "target_variable", "horizon"))
 

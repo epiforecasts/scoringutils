@@ -7,7 +7,7 @@
 get_target_type(data)
 }
 \arguments{
-\item{data}{A data.frame or similar as would be used for \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{data}{A data.frame or similar as would be used for \code{\link[=score]{score()}}}
 }
 \value{
 Character vector of length one with either "binary", "integer", or

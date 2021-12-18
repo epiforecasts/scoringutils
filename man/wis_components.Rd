@@ -20,7 +20,7 @@ wis_components(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=eval_forecasts]{eval_forecasts()}}}
+produced by \code{\link[=score]{score()}}}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model"}
@@ -60,7 +60,7 @@ Visualise the components of the weighted interval score: penalties for
 over-prediction, under-prediction and for high dispersion (lack of sharpness)
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+scores <- scoringutils::score(scoringutils::example_quantile,
                                        summarise_by = c("model", "target_type"))
 scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
                              relative_contributions = TRUE)

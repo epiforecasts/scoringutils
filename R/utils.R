@@ -272,7 +272,7 @@ extract_from_list <- function(list, what) {
 #'
 #' @description `r lifecycle::badge("stable")`
 #' Used to handle updating settings in a list. For example when making
-#' changes to `interval_score_arguments` in `eval_forecasts()`
+#' changes to `interval_score_arguments` in `score()`
 #' @param defaults A list of default settings
 #' @param optional A list of optional settings to override defaults
 #' @return A list

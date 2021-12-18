@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules
 that make it simple to score forecasts against the true observed values.
-Predictions can either be automatically scored from a `data.frame` using the function `eval_forecasts()`. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework. 
+Predictions can either be automatically scored from a `data.frame` using the function `score()`. Alternatively, evaluation metrics can be accessed directly using lower level functions within a vector/matrix framework. 
 
 Predictions can be handled in various formats: `scoringutils` can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary. 
 
@@ -29,13 +29,13 @@ In addition to automatic scoring, `scoringutils` offers a variety of plots and v
 
 # Scoring Forecasts Automatically
 
-Most of the time, the `eval_forecasts()` function will be able to do the entire evaluation for you. The idea is simple, yet flexible. 
+Most of the time, the `score()` function will be able to do the entire evaluation for you. The idea is simple, yet flexible. 
 
 All you need to do is to pass in a `data.frame` that has a column called `prediction` and one called `true_value`. Depending on the exact input format, additional columns like `sample`, `quantile` or `range` and `boundary` are needed. Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. In this case, we would have additional columns called for example `model`, `date`, `forecast_date`, `forecast_horizon` and `location`. 
 
 Using the `by` argument you need to specify the *unit of a single forecast*. In this example here we would set `by = c("model", "date", "forecast_date", "forecast_horizon", "location")` (note: if we want to be pedantic, there is a small duplication as the information of "date" is already included in the combination of "forecast_date" and "forecast_horizon". But as long as there isn't some weird shift, this doesn't matter for the purpose of grouping our observations). If you don't specify `by` (i.e. `by = NULL`), `scoringutils` will automatically use all appropriate present columns. Note that you don't need to include columns such as `quantile` or `sample` in the `by` argument, as several quantiles / samples make up one forecast. 
 
-Using the `summarise_by` argument you can now choose categories to aggregate over. If you were only interested in scores for the different models, you would specify `summarise_by = c("model")`. If you wanted to have scores for every model in every location, you would need to specify `summarise_by = c("model", "location")`. If you wanted to have one score per quantile or one per prediction interval range, you could specify something like `summarise_by = c("model", "quantile")` or `summarise_by = c("model", "quantile", "range")` (note again that some information is duplicated in quantile and range, but this doesn't really matter for grouping purposes). When aggregating, `eval_forecasts` takes the mean according to the group defined in `summarise_by` (i.e. in this example, if `summarise_by = c("model", "location")`, scores will be averaged over all forecast dates, forecast horizons and quantiles to yield one score per model and location). In addition to the mean, you can also obtain the standard deviation of the scores over which you average or any desired quantile (e.g. the median in addition to the mean) by specifying `sd = TRUE` and `quantiles = c(0.5)`. 
+Using the `summarise_by` argument you can now choose categories to aggregate over. If you were only interested in scores for the different models, you would specify `summarise_by = c("model")`. If you wanted to have scores for every model in every location, you would need to specify `summarise_by = c("model", "location")`. If you wanted to have one score per quantile or one per prediction interval range, you could specify something like `summarise_by = c("model", "quantile")` or `summarise_by = c("model", "quantile", "range")` (note again that some information is duplicated in quantile and range, but this doesn't really matter for grouping purposes). When aggregating, `score` takes the mean according to the group defined in `summarise_by` (i.e. in this example, if `summarise_by = c("model", "location")`, scores will be averaged over all forecast dates, forecast horizons and quantiles to yield one score per model and location). In addition to the mean, you can also obtain the standard deviation of the scores over which you average or any desired quantile (e.g. the median in addition to the mean) by specifying `sd = TRUE` and `quantiles = c(0.5)`. 
 
 
 ## Example Evaluation 
@@ -50,7 +50,7 @@ library(scoringutils)
 data <- scoringutils::example_quantile
 print(data, 3, 3)
 
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                                        summarise_by = c("model", "quantile", "range"))
 print(scores, 3, 3)
 ```
@@ -73,7 +73,7 @@ scoringutils::plot_predictions(
 
 
 ```{r}
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "target_type"))
 scoringutils::score_table(scores, 
                           y = "model",
@@ -85,7 +85,7 @@ Given this level of aggregation, not all metrics may make sense. In this case, f
 Let us look at calibration: 
 
 ```{r out.width="50%", fig.show="hold"}
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "quantile"))
 scoringutils::interval_coverage(scores) + 
   ggplot2::ggtitle("Interval Coverage")
@@ -97,7 +97,7 @@ scoringutils::quantile_coverage(scores) +
 Let us look at the individual components of the weighted interval score: 
 
 ```{r}
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                                        summarise_by = c("model", "target_type"))
 scoringutils::wis_components(scores, facet_formula = ~ target_type)
 ```
@@ -105,7 +105,7 @@ scoringutils::wis_components(scores, facet_formula = ~ target_type)
 We can also look at contributions to different metrics by range: 
 
 ```{r}
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "target_type"))
 scoringutils::range_plot(scores, y = "interval_score", 
                          facet_formula = ~ target_type)
@@ -114,7 +114,7 @@ scoringutils::range_plot(scores, y = "interval_score",
 We can also visualise metrics using a heatmap: 
 
 ```{r}
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "horizon"))
 scores$horizon <- as.factor(scores$horizon)
 scoringutils::score_heatmap(scores, 
@@ -124,7 +124,7 @@ scoringutils::score_heatmap(scores,
 
 ### Expected Input Formats
 
-The `eval_forecasts()` function is designed to work with various different input formats. The following formats are currently supported: 
+The `score()` function is designed to work with various different input formats. The following formats are currently supported: 
 
 quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range. 
 

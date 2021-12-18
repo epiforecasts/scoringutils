@@ -14,7 +14,7 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://c
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules that make it simple to score forecasts against the true
 observed values. Predictions can either be automatically scored from a
-`data.frame` using the function `eval_forecasts`. Alternatively,
+`data.frame` using the function `score`. Alternatively,
 evaluation metrics can be accessed directly using lower level functions
 within a vector/matrix framework.
 
@@ -28,7 +28,7 @@ plots and visualisations.
 
 # Scoring Forecasts Automatically
 
-Most of the time, the `eval_forecasts` function will be able to do the
+Most of the time, the `score` function will be able to do the
 entire evaluation for you. The idea is simple, yet flexible.
 
 All you need to do is to pass in a `data.frame` that has a column called
@@ -63,7 +63,7 @@ per quantile or one per prediction interval range, you could specify
 something like `summarise_by = c("model", "quantile")` or
 `summarise_by = c("model", "quantile", "range")` (note again that some
 information is duplicated in quantile and range, but this doesn’t really
-matter for grouping purposes). When aggregating, `eval_forecasts` takes
+matter for grouping purposes). When aggregating, `score` takes
 the mean according to the group defined in `summarise_by` (i.e. in this
 example, if `summarise_by = c("model", "location")`, scores will be
 averaged over all forecast dates, forecast horizons and quantiles to
@@ -80,7 +80,7 @@ in the UK](https://github.com/epiforecasts/covid19.forecasts.uk).
 
 ``` r
 library(scoringutils)
-#> Note: The definition of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `eval_forecasts()`
+#> Note: The definition of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `score()`
 library(data.table)
 ```
 
@@ -104,7 +104,7 @@ print(data, 3, 3)
 #> 5151: DetSEIRwithNB MCMC    2020-07-13     0.90          2      21
 #> 5152:           SIRCOVID    2020-07-13     0.90          6      21
 
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                                        summarise_by = c("model", "quantile", "range"))
 print(scores, 3, 3)
 #>                  model quantile range interval_score sharpness underprediction
@@ -136,7 +136,7 @@ print(scores, 3, 3)
 <!-- Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data -->
 
 ``` r
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model"))
 scoringutils::score_table(scores)
 ```
@@ -151,7 +151,7 @@ specific metrics for the visualisation.
 Let us look at calibration:
 
 ``` r
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "quantile"))
 scoringutils::interval_coverage(scores) + 
   ggplot2::ggtitle("Interval Coverage")
@@ -165,7 +165,7 @@ scoringutils::quantile_coverage(scores) +
 Let us look at the individual components of the weighted interval score:
 
 ``` r
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "value_desc"))
 scoringutils::wis_components(scores, facet_formula = ~ value_desc)
 ```
@@ -175,7 +175,7 @@ scoringutils::wis_components(scores, facet_formula = ~ value_desc)
 We can also look at contributions to different metrics by range:
 
 ``` r
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "value_desc"))
 scoringutils::range_plot(scores, y = "interval_score", 
                          facet_formula = ~ value_desc)
@@ -186,7 +186,7 @@ scoringutils::range_plot(scores, y = "interval_score",
 We can also visualise metrics using a heatmap:
 
 ``` r
-scores <- scoringutils::eval_forecasts(data, 
+scores <- scoringutils::score(data, 
                              summarise_by = c("model", "horizon"))
 scores <- scores[, horizon := as.factor(horizon)]
 scoringutils::score_heatmap(scores, 
@@ -197,7 +197,7 @@ scoringutils::score_heatmap(scores,
 
 ### Expected Input Formats
 
-The `eval_forecasts` function is designed to work with various different
+The `score` function is designed to work with various different
 input formats. The following formats are currently supported:
 
 quantile forecasts in either a plain quantile format or in a format that

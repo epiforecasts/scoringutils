@@ -2,11 +2,11 @@
 #' @title Add Quantiles to Predictions When Summarising
 #'
 #' @description
-#' Helper function used within eval_forecasts
+#' Helper function used within score
 #' @param dt the data.table operated on
 #' @param varnames names of the variables for which to calculate quantiles
 #' @param quantiles the desired quantiles
-#' @param by grouping variable in [eval_forecasts()]
+#' @param by grouping variable in [score()]
 #'
 #' @return `data.table` with quantiles added
 #'
@@ -27,10 +27,10 @@ add_quantiles <- function(dt, quantiles, summarise_by) {
 #' @title Add Standard Deviation to Predictions When Summarising
 #'
 #' @description
-#' Helper function used within eval_forecasts
+#' Helper function used within score
 #' @param dt the data.table operated on
 #' @param varnames names of the variables for which to calculate the sd
-#' @param by grouping variable in [eval_forecasts()]
+#' @param by grouping variable in [score()]
 #' @importFrom data.table `%like%`
 #' @return `data.table` with sd added
 #'
@@ -47,15 +47,15 @@ add_sd <- function(dt, summarise_by) {
 
 
 
-#' @title Check input parameters for [eval_forecasts()]
+#' @title Check input parameters for [score()]
 #'
 #' @description A helper function to check the input parameters for
-#' [eval_forecasts()].
+#' [score()].
 #'
-#' @inheritParams eval_forecasts
+#' @inheritParams score
 #'
 #' @keywords internal
-check_eval_forecasts_params <- function(data,
+check_score_params <- function(data,
                                         forecast_unit,
                                         metrics,
                                         summarise_by,
@@ -70,7 +70,7 @@ check_eval_forecasts_params <- function(data,
     msg <- paste0("The following items in `summarise_by` are not",
                   "valid column names of the data: '",
                   paste(not_present, collapse = ", "),
-                  "'. Check and run `eval_forecasts()` again")
+                  "'. Check and run `score()` again")
     stop(msg)
   }
 

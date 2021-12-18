@@ -19,8 +19,8 @@ range_plot(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=eval_forecasts]{eval_forecasts()}}. Note that "range" must be included
-in the \code{summarise_by} argument when running \code{eval_forecasts}}
+produced by \code{\link[=score]{score()}}. Note that "range" must be included
+in the \code{summarise_by} argument when running \code{score}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.
 This could be something like "interval_score" (the default) or "dispersion"}
@@ -59,7 +59,7 @@ interval ranges contribute to the overall interval score, or how
 sharpness / dispersion changes by range.
 }
 \examples{
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+scores <- scoringutils::score(scoringutils::example_quantile,
                                         summarise_by = c("model", "target_type", "range"))
 
 scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
@@ -69,7 +69,7 @@ scoringutils::range_plot(scores, y = "dispersion", x = "model",
                           facet_formula =  ~target_type)
 
 # we saw above that dispersion values crossed. Let's look at the unweighted WIS
-scores <- scoringutils::eval_forecasts(scoringutils::example_quantile,
+scores <- scoringutils::score(scoringutils::example_quantile,
                                         summarise_by = c("model", "target_type", "range"))
 scoringutils::range_plot(scores, y = "dispersion", x = "model",
                          facet_formula =  ~target_type)

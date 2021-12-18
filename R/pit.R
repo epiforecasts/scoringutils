@@ -315,10 +315,10 @@ pit_df <- function(data,
   prediction_type <- get_prediction_type(data)
 
   # if prediction type is quantile, simply extract coverage values from
-  # eval_forecasts and returned a list with named vectors
+  # score and returned a list with named vectors
   if (prediction_type == "quantile") {
     coverage <-
-      eval_forecasts(data,
+      score(data,
                      summarise_by = unique(c(summarise_by, "quantile")),
                      metrics = "quantile_coverage")
 

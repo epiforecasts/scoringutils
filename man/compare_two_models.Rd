@@ -16,7 +16,7 @@ compare_two_models(
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\code{\link[=score]{score()}}}
 
 \item{name_model1}{character, name of the first model}
 

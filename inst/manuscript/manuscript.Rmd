@@ -327,12 +327,12 @@ plot_predictions(data = example_quantile,
 
 The output is shown in Figure \ref{fig:forecast-visualisation}.
 
-## Scoring forecasts with \fct{eval\_forecasts} {short-title="Scoring forecasts with eval_forecasts()"}
+## Scoring forecasts with \fct{eval\_forecasts} {short-title="Scoring forecasts with score()"}
 
 The actual scoring of forecasts based on observed values can be performed using the function \fct{eval\_forecasts}. The function automatically detects the forecast type and format (as shown in the output of \fct{check\_forecasts}), applies the appropriate scoring metrics and can in addition also aggregate results as well as perform pairwise comparisons between models. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. 
 
 ```{r}
-scores <- eval_forecasts(example_quantile)
+scores <- score(example_quantile)
 glimpse(scores)
 ```
 
@@ -351,7 +351,7 @@ or we score and summarise in one function call:
 
 ```{r}
 summarised_scores <- 
-  eval_forecasts(example_quantile, 
+  score(example_quantile, 
                  summarise_by = c("model", "target_type"))
 ```
 
@@ -431,7 +431,7 @@ hist_PIT(pit)
 
 
 ```{r coverage, fig.width = 10, fig.show='hold', fig.cap = "Interval coverage"}
-cov_scores <- eval_forecasts(example_quantile, 
+cov_scores <- score(example_quantile, 
                              summarise_by = c("model", "target_type",
                                               "range", "quantile"))
 
@@ -446,7 +446,7 @@ DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTAT
 
 ```{r calibration-pit, fig.cap = "PIT histograms"}
 # pit-plots, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
-# out <- eval_forecasts(example_quantile, 
+# out <- score(example_quantile, 
 #                      summarise_by = c("model"), 
 #                      pit_plots = TRUE)
 
@@ -455,7 +455,7 @@ DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTAT
 Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 ```{r heatmap-location, fig.width = 10, fig.cap="Heatmap of interval scores by location"}
-scores <- eval_forecasts(example_quantile, 
+scores <- score(example_quantile, 
                          summarise_by = c("model",
                                           "target_type", 
                                           "location_name"), 

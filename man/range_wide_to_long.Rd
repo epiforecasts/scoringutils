@@ -8,7 +8,7 @@ range_wide_to_long(data)
 }
 \arguments{
 \item{data}{a data.frame following the specifications from
-\code{\link[=eval_forecasts]{eval_forecasts()}}) for quantile forecasts. For an example, see
+\code{\link[=score]{score()}}) for quantile forecasts. For an example, see
 \code{\link[=example_range_wide]{example_range_wide()}})}
 }
 \value{

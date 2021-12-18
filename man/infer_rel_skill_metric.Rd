@@ -7,7 +7,7 @@
 infer_rel_skill_metric(scores)
 }
 \arguments{
-\item{scores}{A data.table of scores as produced by \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}}
 }
 \description{
 Helper function to infer the metric for which pairwise comparisons shall
