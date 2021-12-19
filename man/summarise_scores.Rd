@@ -34,7 +34,9 @@ Summarise scores as produced by \code{\link[=score]{score()}}-
 \examples{
 library(scoringutils)
 data <- example_quantile
-scores <- score(data)
+scores <- score(data,
+                summarise_by = c("model", "target_type", "location",
+                                 "horizon", "range", "quantile"))
 
 # get scores by model
 summarise_scores(scores, by = c("model"))

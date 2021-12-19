@@ -2,6 +2,7 @@
 
 S3method(print,scoringutils_check)
 export(abs_error)
+export(add_coverage)
 export(ae_median_quantile)
 export(ae_median_sample)
 export(available_metrics)
