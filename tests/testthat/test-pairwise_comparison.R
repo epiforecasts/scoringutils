@@ -25,12 +25,19 @@ test_that("pairwise comparisons works", {
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
   eval_without_baseline <- score(data_formatted,
-                                          compute_relative_skill = TRUE,
-                                          count_median_twice = FALSE)
+                                 compute_relative_skill = TRUE,
+                                 count_median_twice = FALSE)
+  eval_without_baseline <- summarise_scores(eval_without_baseline,
+                                            by = c("model", "location", "target_end_date",
+                                                   "target_variable"))
   eval_with_baseline <- scoringutils::score(data_formatted,
-                                                     baseline = "m1",
-                                                     compute_relative_skill = TRUE,
-                                                     count_median_twice = FALSE)
+                                            baseline = "m1",
+                                            compute_relative_skill = TRUE,
+                                            count_median_twice = FALSE)
+  eval_with_baseline <- summarise_scores(eval_with_baseline,
+                                         by = c("model", "location", "target_end_date",
+                                                "target_variable"))
+
 
   # extract the relative_skill values
   relative_skills_without <- eval_without_baseline[, .(model = unique(model),
@@ -201,8 +208,9 @@ test_that("pairwise_comparison() works inside and outside of score()", {
                                   metric = "crps")
 
   eval2 <-  score(data = example_continuous,
-                           summarise_by = "model",
-                           compute_relative_skill = TRUE)
+                  summarise_by = "model",
+                  compute_relative_skill = TRUE)
+  eval2 <- summarise_scores(eval2, by = "model")
 
   expect_equal(sort(unique(pairwise$relative_skill)),
                sort(eval2$relative_skill))

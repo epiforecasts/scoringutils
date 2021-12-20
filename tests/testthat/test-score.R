@@ -19,8 +19,9 @@ test_that("score() warns if column name equals a metric name", {
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- score(binary_example[!is.na(prediction)],
-                         summarise_by = c("model", "target_type"))
+  eval <- score(binary_example[!is.na(prediction)])
+  eval <- summarise_scores(eval, by = c("model", "target_type"))
+
   expect_equal(nrow(eval) > 1,
                TRUE)
   expect_equal(colnames(eval),
@@ -31,8 +32,8 @@ test_that("function produces output for a binary case", {
 
 test_that("function produces score for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- score(binary_example[!is.na(prediction)],
-                         summarise_by = c("model", "target_type"))
+  eval <- score(binary_example[!is.na(prediction)])
+  eval <- summarise_scores(eval, by = c("model", "target_type"))
   expect_true("brier_score" %in% names(eval))
 })
 
@@ -42,9 +43,7 @@ test_that("function produces score for a binary case", {
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- score(quantile_example[!is.na(prediction)],
-                         summarise_by = c("model"),
-                         quantiles = c(0.5), sd = TRUE)
+  eval <- score(quantile_example[!is.na(prediction)])
 
   expect_equal(nrow(eval) > 1,
                TRUE)
@@ -66,12 +65,12 @@ test_that("score() quantile produces desired metrics", {
 
 
 test_that("calculation of aem is correct for a quantile format case", {
-  quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- score(quantile_example[!is.na(prediction)],
-                         summarise_by = c("model"),
-                         quantiles = c(0.5), sd = TRUE)
+  eval <- score(scoringutils::example_quantile[!is.na(prediction)])
 
-  ae <- quantile_example[quantile == 0.5, ae := abs(true_value - prediction)
+  eval <- summarise_scores(eval, by = c("model"))
+
+  example <- scoringutils::example_quantile
+  ae <- example[quantile == 0.5, ae := abs(true_value - prediction)
   ][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
@@ -83,24 +82,19 @@ test_that("calculation of aem is correct for a quantile format case", {
 test_that("all quantile and range formats yield the same result", {
   quantile_example1 <- data.table::setDT(scoringutils::example_quantile)
 
-  quantile_example2 <- data.table::setDT(scoringutils::example_range_long)
-  quantile_example2 <- range_long_to_quantile(quantile_example2)
+  # quantile_example2 <- data.table::setDT(scoringutils::example_range_long)
+  # quantile_example2 <- range_long_to_quantile(quantile_example2)
+  #
+  # quantile_example3 <- data.table::setDT(scoringutils::example_range_semi_wide)
+  # quantile_example3 <- range_wide_to_long(quantile_example3)
+  # quantile_example3 <- range_long_to_quantile(quantile_example3)
+  #
+  # wide <- data.table::setDT(scoringutils::example_range_wide)
+  # quantile_example4 <- scoringutils::range_wide_to_long(wide)
 
-  quantile_example3 <- data.table::setDT(scoringutils::example_range_semi_wide)
-  quantile_example3 <- range_wide_to_long(quantile_example3)
-  quantile_example3 <- range_long_to_quantile(quantile_example3)
 
-  wide <- data.table::setDT(scoringutils::example_range_wide)
-  quantile_example4 <- scoringutils::range_wide_to_long(wide)
-
-
-  eval1 <- score(quantile_example1[!is.na(prediction)],
-                          summarise_by = c("model"),
-                          quantiles = c(0.5), sd = TRUE)
-
-  eval2 <- score(quantile_example2[!is.na(prediction)],
-                          summarise_by = c("model"),
-                          quantiles = c(0.5), sd = TRUE)
+  eval1 <- score(quantile_example1[!is.na(prediction)])
+  eval1 <- summarise_scores(eval1, by = "model")
 
   ae <- quantile_example1[quantile == 0.5, ae := abs(true_value - prediction)
   ][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
@@ -111,14 +105,13 @@ test_that("all quantile and range formats yield the same result", {
 })
 
 test_that("function produces output even if only some metrics are chosen", {
-  range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
-  range_example <- scoringutils::range_wide_to_long(range_example_wide)
-  example <- range_long_to_quantile(range_example)
+  # range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
+  # range_example <- scoringutils::range_wide_to_long(range_example_wide)
+  # example <- range_long_to_quantile(range_example)
 
-  eval <- scoringutils::score(example,
-                                       summarise_by = c("model", "range"),
-                                       metrics = "coverage",
-                                       sd = TRUE)
+  example <- scoringutils::example_quantile
+
+  eval <- scoringutils::score(example,metrics = "coverage")
 
   expect_equal(nrow(eval) > 1,
                TRUE)
@@ -130,11 +123,9 @@ test_that("WIS is the same with other metrics omitted or included", {
   example <- scoringutils::range_long_to_quantile(range_example)
 
   eval <- scoringutils::score(example,
-                                       summarise_by = c("model", "range"),
-                                       metrics = "interval_score")
+                              metrics = "interval_score")
 
-  eval2 <- scoringutils::score(example,
-                                        summarise_by = c("model", "range"))
+  eval2 <- scoringutils::score(example)
 
   expect_equal(sum(eval$interval_score),
                sum(eval2$interval_score))
@@ -147,13 +138,9 @@ test_that("WIS is the same with other metrics omitted or included", {
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
   example <- data.table::setDT(scoringutils::example_continuous)
-  eval <- score(example[!is.na(prediction)],
-                         summarise_by = c("model"),
-                         quantiles = c(0.5), sd = TRUE)
+  eval <- score(example[!is.na(prediction)])
 
-  eval2 <- scoringutils::score(example,
-                         summarise_by = c("model"),
-                         quantiles = c(0.5), sd = TRUE)
+  eval2 <- scoringutils::score(example)
 
   data.table::setcolorder(eval2, colnames(eval))
   eval <- eval[order(model)]

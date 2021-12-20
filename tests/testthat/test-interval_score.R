@@ -47,7 +47,9 @@ test_that("WIS works within score for one interval", {
                           date = rep(1:3, times = 2))
 
   eval <- scoringutils::score(test_data,
-                                       count_median_twice = TRUE)
+                              count_median_twice = TRUE)
+
+  eval <- summarise_scores(eval, by = c("model", "date"))
 
   lower = c(0, 1, 0)
   upper = c(2, 2, 3)
@@ -71,8 +73,9 @@ test_that("wis works, 1 interval and median", {
                           date = rep(1:3, times = 3))
 
   eval <- scoringutils::score(test_data,
-                                       count_median_twice = TRUE)
+                              count_median_twice = TRUE)
 
+  eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
   quantiles <- rbind(c(0, 1, 2), c(1, 2, 2), c(0, 3, 3))
@@ -99,7 +102,9 @@ test_that("wis works, 2 intervals and median", {
                           date = rep(1:3, times = 5))
 
   eval <- scoringutils::score(test_data,
-                                       count_median_twice = TRUE)
+                              count_median_twice = TRUE)
+
+  eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
   quantiles <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
@@ -257,7 +262,11 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- scoringutils::score(data_formatted,
-                                       count_median_twice = FALSE)
+                              count_median_twice = FALSE)
+
+  eval <- summarise_scores(eval,
+                           by = c("model", "location", "target_variable",
+                           "target_end_date", "forecast_date", "horizon"))
 
   alpha1 <- 0.2
   expected <- (forecast_quantiles_matrix[, 2] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) +
@@ -325,7 +334,11 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- scoringutils::score(data_formatted,
-                                        count_median_twice = FALSE)
+                              count_median_twice = FALSE)
+
+  eval <- summarise_scores(eval,
+                           by = c("model", "location", "target_variable",
+                                  "target_end_date", "forecast_date", "horizon"))
 
   alpha1 <- 0.2
   alpha2 <- 0.5
