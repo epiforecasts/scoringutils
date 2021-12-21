@@ -597,12 +597,12 @@ plot_predictions <- function(data = NULL,
   # range data
   colnames <- colnames(forecasts)
   if ("sample" %in% colnames) {
-    forecasts <- scoringutils::sample_to_range_long(forecasts,
-                                                    range = range,
-                                                    keep_quantile_col = FALSE)
+    forecasts <- sample_to_range_long(forecasts,
+                                      range = range,
+                                      keep_quantile_col = FALSE)
   } else if ("quantile" %in% colnames) {
-    forecasts <- scoringutils::quantile_to_range_long(forecasts,
-                                                      keep_quantile_col = FALSE)
+    forecasts <- quantile_to_range_long(forecasts,
+                                        keep_quantile_col = FALSE)
   }
 
   # select appropriate boundaries and pivot wider
@@ -832,8 +832,7 @@ quantile_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::example_range_long
-#' show_avail_forecasts(example1, x = "target_end_date")
+#' show_avail_forecasts(example_quantile, x = "target_end_date")
 
 show_avail_forecasts <- function(data,
                                  y = "model",

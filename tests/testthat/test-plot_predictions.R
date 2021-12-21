@@ -1,7 +1,7 @@
 test_that("plot_predictions() works with point forecasts", {
 
-  d <- example_range_long
-  d <- d[d$range == 0 | is.na(d$range), ]
+  d <- scoringutils::example_quantile
+  d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
   p <- scoringutils::plot_predictions(
     d,
     x = "target_end_date",
@@ -22,7 +22,7 @@ test_that("plot_predictions() works with point forecasts", {
 
 test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
-  example2 <- scoringutils::example_range_long
+  example2 <- scoringutils::example_quantile
 
   p <- scoringutils::plot_predictions(
     example2,

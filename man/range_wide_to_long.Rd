@@ -8,21 +8,11 @@ range_wide_to_long(data)
 }
 \arguments{
 \item{data}{a data.frame following the specifications from
-\code{\link[=score]{score()}}) for quantile forecasts. For an example, see
-\code{\link[=example_range_wide]{example_range_wide()}})}
+\code{\link[=score]{score()}}) for quantile forecasts.}
 }
 \value{
 a data.frame in long format
 }
 \description{
-Given a data.frame that follows the structure shown in
-\code{\link[=example_range_wide]{example_range_wide()}}, the function outputs the same
-data in a long format as (as shown in
-\code{\link[=example_range_long]{example_range_long()}}). This can be useful e.g. for
-plotting.
-}
-\examples{
-wide <- scoringutils::example_range_wide
-long <- scoringutils::range_wide_to_long(wide)
-
+Pivot wide range format to long range format.
 }

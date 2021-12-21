@@ -6,11 +6,11 @@ score_quantile <- function(data,
                            separate_results = TRUE) {
 
   # make sure to have both quantile as well as range format --------------------
-  range_data <- scoringutils::quantile_to_range_long(data,
-                                                     keep_quantile_col = FALSE)
+  range_data <- quantile_to_range_long(data,
+                                       keep_quantile_col = FALSE)
   # adds the range column to the quantile data set
-  quantile_data <- scoringutils::range_long_to_quantile(range_data,
-                                                        keep_range_col = TRUE)
+  quantile_data <- range_long_to_quantile(range_data,
+                                          keep_range_col = TRUE)
 
 
   # to deal with point forecasts in a quantile format. This in effect adds

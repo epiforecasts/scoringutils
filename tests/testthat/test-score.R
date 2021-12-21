@@ -82,17 +82,6 @@ test_that("calculation of aem is correct for a quantile format case", {
 test_that("all quantile and range formats yield the same result", {
   quantile_example1 <- data.table::setDT(scoringutils::example_quantile)
 
-  # quantile_example2 <- data.table::setDT(scoringutils::example_range_long)
-  # quantile_example2 <- range_long_to_quantile(quantile_example2)
-  #
-  # quantile_example3 <- data.table::setDT(scoringutils::example_range_semi_wide)
-  # quantile_example3 <- range_wide_to_long(quantile_example3)
-  # quantile_example3 <- range_long_to_quantile(quantile_example3)
-  #
-  # wide <- data.table::setDT(scoringutils::example_range_wide)
-  # quantile_example4 <- scoringutils::range_wide_to_long(wide)
-
-
   eval1 <- score(quantile_example1[!is.na(prediction)])
   eval1 <- summarise_scores(eval1, by = "model")
 
@@ -105,10 +94,6 @@ test_that("all quantile and range formats yield the same result", {
 })
 
 test_that("function produces output even if only some metrics are chosen", {
-  # range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
-  # range_example <- scoringutils::range_wide_to_long(range_example_wide)
-  # example <- range_long_to_quantile(range_example)
-
   example <- scoringutils::example_quantile
 
   eval <- scoringutils::score(example,metrics = "coverage")
@@ -118,14 +103,10 @@ test_that("function produces output even if only some metrics are chosen", {
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
-  range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
-  range_example <- scoringutils::range_wide_to_long(range_example_wide)
-  example <- scoringutils::range_long_to_quantile(range_example)
-
-  eval <- scoringutils::score(example,
+  eval <- scoringutils::score(example_quantile,
                               metrics = "interval_score")
 
-  eval2 <- scoringutils::score(example)
+  eval2 <- scoringutils::score(example_quantile)
 
   expect_equal(sum(eval$interval_score),
                sum(eval2$interval_score))

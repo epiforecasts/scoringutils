@@ -58,8 +58,8 @@ print(check)
 check_forecasts(example_binary)
 }
 \seealso{
-Functions to move between different formats:
-\code{\link[=range_long_to_quantile]{range_long_to_quantile()}}, \code{\link[=range_wide_to_long]{range_wide_to_long()}}
+Function to move from sample-based to quantile format:
+\code{\link[=sample_to_quantile]{sample_to_quantile()}}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

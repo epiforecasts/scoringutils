@@ -98,32 +98,6 @@ data.table::setDT(example_quantile)
 # make model a character instead of a factor
 usethis::use_data(example_quantile, overwrite = TRUE)
 
-
-
-
-# create long range example ----------------------------------------------------
-example_range_long <- quantile_to_range_long(example_quantile,
-                                             keep_quantile_col = FALSE)
-usethis::use_data(example_range_long, overwrite = TRUE)
-
-
-
-# create wide range example ----------------------------------------------------
-example_range_wide <- range_long_to_wide(example_range_long)
-example_range_wide[, NA_NA := NULL]
-usethis::use_data(example_range_wide, overwrite = TRUE)
-
-
-#create semi-wide range example ------------------------------------------------
-example_range_semi_wide <- data.table::copy(example_range_long)
-example_range_semi_wide <- data.table::dcast(example_range_semi_wide,
-                                                  ... ~ boundary,
-                                                  value.var = "prediction")
-example_range_semi_wide[, "NA" := NULL]
-usethis::use_data(example_range_semi_wide, overwrite = TRUE)
-
-
-
 # get continuous sample data ---------------------------------------------------
 # define gamma function
 fn_gamma <- function(par, x) {

@@ -139,8 +139,6 @@ quantile forecasts in either a plain quantile format or in a format that specifi
 
 ``` {r}
 print(scoringutils::example_quantile, 3, 3)
-print(scoringutils::example_range_long, 3, 3)
-print(scoringutils::example_range_wide, 3, 3)
 ```
 
 sample based format with either continuous or integer values
@@ -159,10 +157,6 @@ print(scoringutils::example_binary, 3, 3)
 It also offers functionality to convert between these formats. For more information have a look at the documentation of the following functions: 
 ``` {r eval=FALSE}
 scoringutils::sample_to_quantile() # convert from sample based to quantile format
-scoringutils::range_long_to_quantile() # convert from range format to plain quantile
-scoringutils::quantile_to_range_long() # convert the other way round
-scoringutils::range_wide_to_long() # convert range based format from wide to long
-scoringutils::range_long_to_wide() # convert the other way round
 ```
 
 

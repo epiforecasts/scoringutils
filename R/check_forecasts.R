@@ -9,8 +9,8 @@
 #' (see [example_continuous] and [example_integer])
 #' - A quantile-based format (see [example_quantile])
 #'
-#' @seealso Functions to move between different formats:
-#' [range_long_to_quantile()], [range_wide_to_long()]
+#' @seealso Function to move from sample-based to quantile format:
+#' [sample_to_quantile()]
 #' @param data A data.frame or similar as would be used for [score()]
 #'
 #' @return A list with elements that give information about what `scoringutils`
@@ -103,12 +103,7 @@ check_forecasts <- function(data) {
 
   # check what format is has right now and tell user to convert it.
   if (!any(c("quantile", "sample") %in% colnames(data))) {
-    if ("range" %in% colnames(data) | any(grepl("lower_", colnames(data)))) {
-      errors <- c(
-        errors,
-        "It seems like you have a format based on forecast intervals (see `example_data_long`, `example_data_semi_wide`, `example_data_wide`). You need to convert this to a quantile-based format first using `range_wide_to_long()` and `range_long_to_quantile()`"
-      )
-    } else if (!check[["target_type"]] == "binary") {
+    if (!check[["target_type"]] == "binary") {
       errors <- c(
         errors,
         "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample"
