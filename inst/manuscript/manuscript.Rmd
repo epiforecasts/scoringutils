@@ -304,10 +304,10 @@ It is helpful to start the evaluation process by visualising data availability, 
 
 ```{r avail-forecasts, echo=TRUE, fig.width = 10, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
 show_avail_forecasts(data = example_quantile, 
+                     facet_formula = ~ target_type,
                      x = "target_end_date", 
                      show_numbers = FALSE,
-                     legend_position = "bottom",
-                     facet_formula = ~ target_type)
+                     legend_position = "bottom") 
 ```
 
 The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021 as well as 5 weeks of prior data, we can call: % 
@@ -319,9 +319,8 @@ plot_predictions(data = example_quantile,
                  filter_truth = list('target_end_date <= "2021-07-15"',
                                      'target_end_date > "2021-05-22"'),
                  filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                                         'forecast_date == "2021-06-28"'),
-                 facet_formula =  target_type ~ location, 
-                 ncol = 4) + 
+                                         'forecast_date == "2021-06-28"')) + 
+  facet_wrap(target_type ~ location, ncol = 4) + 
   theme(legend.position = "bottom")
 ```
 
@@ -344,15 +343,15 @@ We can either run a separate function to summarise the scores,
 ```{r}
 summarised_scores <- 
   summarise_scores(scores = scores, 
-                   summarise_by = c("model", "target_type"))
+                   by = c("model", "target_type"))
 ```
 
 or we score and summarise in one function call: 
 
 ```{r}
 summarised_scores <- 
-  score(example_quantile, 
-                 summarise_by = c("model", "target_type"))
+  score(example_quantile) %>%
+  summarise_scores(by = c("model", "target_type"))
 ```
 
 ```{r}
@@ -366,7 +365,8 @@ If we wanted to have one score per quantile or one per prediction interval range
 The user must, however, exercise some caution when aggregating scores. As explained above, many of the metrics are absolute and scale with the magnitude of the quantity to forecast. This makes it sometimes ill-advised to average over them. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while errors on death forecasts would have little influence. Similarly, aggregating over different forecast horizons is often not a good idea as the mean will be dominated by further ahead forecast horizons. 
 
 ```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores."}
-score_table(summarised_scores, y = "model", facet_formula = ~ target_type)
+score_table(summarised_scores, y = "model") + 
+  facet_wrap( ~ target_type)
 ```
 
 In order to obtain a model ranking, we recommend to look at the relative skill in terms of an appropriate proper scoring rule instead of the raw score. Relative skill scores can be aggregated more easily across different forecast targets as they are less influenced by the order of magnitude of the quantity to forecast than e.g. the WIS or the CRPS. 
@@ -380,7 +380,7 @@ pairwise <- pairwise_comparison(scores,
                                 baseline = "EuroCOVIDhub-baseline")
 
 pairwise2 <- pairwise_comparison(scores, 
-                                summarise_by = c("model", "target_type"), 
+                                by = c("model", "target_type"), 
                                 baseline = "EuroCOVIDhub-baseline")
 ```
 
@@ -410,12 +410,12 @@ For forecasts in an interval format, looking at the components of the weighted i
 
 ```{r wis-components, fig.width = 10, fig.cap = "CAPTION"}
 wis_components(summarised_scores, 
-               facet_formula = ~ target_type, 
-               scales = "free_x", 
                relative_contributions = TRUE, 
                x_text_angle = 0) + 
-  ggplot2::coord_flip() + 
-  ggplot2::theme(legend.position = "bottom")
+  facet_wrap(~ target_type, 
+             scales = "free_x") + 
+  coord_flip() + 
+  theme(legend.position = "bottom")
 ```
 
 We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration \ref{gneitingProbabilisticForecastsCalibration2007}. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. We can see, for example, that the Exponential growth/decline model was consistently biased downwards. Figure \ref{fig:coverage}
@@ -423,7 +423,7 @@ We can have a closer look at calibration using the functions \fct{interval\_cove
 
 ```{r pit-plots, out.width="49%", fig.show='hold'}
 pit <- pit_df(example_quantile, 
-              summarise_by = "model", "target")
+              by = "model", "target")
 
 hist_PIT(pit)
 ```
@@ -431,15 +431,16 @@ hist_PIT(pit)
 
 
 ```{r coverage, fig.width = 10, fig.show='hold', fig.cap = "Interval coverage"}
-cov_scores <- score(example_quantile, 
-                             summarise_by = c("model", "target_type",
-                                              "range", "quantile"))
+cov_scores <- score(example_quantile) %>%
+  summarise_scores(by = c("model", "target_type", "range", "quantile"))
 
-scoringutils::interval_coverage(cov_scores, facet_formula = ~ target_type)
+interval_coverage(cov_scores) + 
+  facet_wrap(~ target_type)
 ```
 
 ```{r quantile-coverage, fig.width = 10, fig.show='hold', fig.cap = "Quantile coverage"}
-scoringutils::quantile_coverage(cov_scores, facet_formula = ~ target_type)
+quantile_coverage(cov_scores) + 
+  facet_wrap(~ target_type)
 ```
 
 DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTATION FOR QUANTILE FORECASTS
@@ -455,14 +456,12 @@ DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTAT
 Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 ```{r heatmap-location, fig.width = 10, fig.cap="Heatmap of interval scores by location"}
-scores <- score(example_quantile, 
-                         summarise_by = c("model",
-                                          "target_type", 
-                                          "location_name"), 
-                         compute_relative_skill = FALSE)
-scoringutils::score_heatmap(scores, metric = "interval_score", 
-                            x = "location_name", facet_formula = ~ target_type, 
-                            scale = "free_x")
+scores <- score(example_quantile) %>%
+  summarise_scores(by = c("model", "target_type", "location_name"))
+
+score_heatmap(scores, 
+              metric = "interval_score", x = "location_name") + 
+  facet_wrap(~ target_type, scale = "free_x")
 ```
 
 
