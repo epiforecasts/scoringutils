@@ -4,15 +4,7 @@
 \alias{check_score_params}
 \title{Check input parameters for \code{\link[=score]{score()}}}
 \usage{
-check_score_params(
-  data,
-  forecast_unit,
-  metrics,
-  summarise_by,
-  compute_relative_skill,
-  baseline,
-  rel_skill_metric
-)
+check_score_params(data, forecast_unit, metrics, summarise_by)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -70,22 +62,6 @@ over categories different from the scoring.
 (and possibly plot) the probability integral transform(pit). Sometimes you
 may want to include 'range', 'quantile' or 'sample', to summarise by
 range, quantile or sample.}
-
-\item{compute_relative_skill}{logical, whether or not to compute relative
-performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called
-'model' must be present in the input data. For more information on
-the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
-Relative skill will be calculated for the aggregation level specified in
-\code{summarise_by}.}
-
-\item{baseline}{character string with the name of a model. If a baseline is
-given, then a scaled relative skill with respect to the baseline will be
-returned. By default (\code{NULL}), relative skill will not be scaled with
-respect to a baseline model.}
-
-\item{rel_skill_metric}{character string with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-one of interval score, crps or brier score will be used where appropriate}
 }
 \description{
 A helper function to check the input parameters for

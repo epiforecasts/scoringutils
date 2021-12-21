@@ -2,12 +2,8 @@ score_quantile <- function(data,
                            forecast_unit,
                            metrics,
                            weigh = TRUE,
-                           summarise_by,
                            count_median_twice = FALSE,
-                           separate_results = TRUE,
-                           compute_relative_skill,
-                           rel_skill_metric,
-                           baseline) {
+                           separate_results = TRUE) {
 
   # make sure to have both quantile as well as range format --------------------
   range_data <- scoringutils::quantile_to_range_long(data,

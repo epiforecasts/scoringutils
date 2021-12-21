@@ -58,10 +58,11 @@ add_sd <- function(dt, summarise_by) {
 check_score_params <- function(data,
                                forecast_unit,
                                metrics,
-                               summarise_by,
-                               compute_relative_skill,
-                               baseline,
-                               rel_skill_metric) {
+                               summarise_by
+                               # compute_relative_skill,
+                               # baseline,
+                               # rel_skill_metric
+                               ) {
 
   # check that the arguments in by and summarise_by are actually present
   if (!all(c(forecast_unit, summarise_by) %in% c(colnames(data), "range", "quantile"))) {
@@ -83,25 +84,25 @@ check_score_params <- function(data,
     warning(msg)
   }
 
-  # error handling for relative skill computation
-  if (compute_relative_skill) {
-    if (!("model" %in% colnames(data))) {
-      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    models <- unique(data$model)
-    if (length(models) < 2 + (!is.null(baseline))) {
-      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (!is.null(baseline) && !(baseline %in% models)) {
-      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-    if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
-      warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
-      compute_relative_skill <- FALSE
-    }
-  }
-  return(compute_relative_skill)
+  # # error handling for relative skill computation
+  # if (compute_relative_skill) {
+  #   if (!("model" %in% colnames(data))) {
+  #     warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+  #     compute_relative_skill <- FALSE
+  #   }
+  #   models <- unique(data$model)
+  #   if (length(models) < 2 + (!is.null(baseline))) {
+  #     warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+  #     compute_relative_skill <- FALSE
+  #   }
+  #   if (!is.null(baseline) && !(baseline %in% models)) {
+  #     warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+  #     compute_relative_skill <- FALSE
+  #   }
+  #   if (rel_skill_metric != "auto" && !(rel_skill_metric %in% available_metrics())) {
+  #     warning("argument 'rel_skill_metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+  #     compute_relative_skill <- FALSE
+  #   }
+  # }
+  # return(compute_relative_skill)
 }

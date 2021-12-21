@@ -4,7 +4,15 @@
 \alias{summarise_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by, FUN = mean, ...)
+summarise_scores(
+  scores,
+  by,
+  FUN = mean,
+  relative_skill = FALSE,
+  metric = "auto",
+  baseline = NULL,
+  ...
+)
 }
 \arguments{
 \item{scores}{a data.table of unsummarised scores as produced by
@@ -13,6 +21,24 @@ summarise_scores(scores, by, FUN = mean, ...)
 \item{by}{character vector with column names to summarise scores by.}
 
 \item{FUN}{a function used for summarising scores. Default is \code{mean}.}
+
+\item{relative_skill}{logical, whether or not to compute relative
+performance between models based on pairwise comparisons.
+If \code{TRUE} (default is \code{FALSE}), then a column called
+'model' must be present in the input data. For more information on
+the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
+Relative skill will be calculated for the aggregation level specified in
+\code{by}.}
+
+\item{metric}{character with the name of the metric for which
+a relative skill shall be computed. If equal to 'auto' (the default), then
+this will be either interval score, crps or brier score (depending on which
+of these is available in the input data)}
+
+\item{baseline}{character string with the name of a model. If a baseline is
+given, then a scaled relative skill with respect to the baseline will be
+returned. By default (\code{NULL}), relative skill will not be scaled with
+respect to a baseline model.}
 
 \item{...}{additional parameters passed down to lower-level functions.
 For example, the following arguments can change how weighted interval
@@ -33,10 +59,9 @@ Summarise scores as produced by \code{\link[=score]{score()}}-
 }
 \examples{
 library(scoringutils)
-data <- example_quantile
-scores <- score(data,
-                summarise_by = c("model", "target_type", "location",
-                                 "horizon", "range", "quantile"))
+scores <- score(example_quantile)
+scores <- summarise_scores(scores, by = c("model", "target_type", "location",
+                                          "horizon", "range", "quantile"))
 
 # get scores by model
 summarise_scores(scores, by = c("model"))

@@ -4,15 +4,7 @@
 \alias{score}
 \title{Evaluate forecasts}
 \usage{
-score(
-  data,
-  summarise_by = NULL,
-  metrics = NULL,
-  compute_relative_skill = FALSE,
-  rel_skill_metric = "auto",
-  baseline = NULL,
-  ...
-)
+score(data, summarise_by = NULL, metrics = NULL, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -70,22 +62,6 @@ range, quantile or sample.}
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}}
-
-\item{compute_relative_skill}{logical, whether or not to compute relative
-performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called
-'model' must be present in the input data. For more information on
-the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
-Relative skill will be calculated for the aggregation level specified in
-\code{summarise_by}.}
-
-\item{rel_skill_metric}{character string with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-one of interval score, crps or brier score will be used where appropriate}
-
-\item{baseline}{character string with the name of a model. If a baseline is
-given, then a scaled relative skill with respect to the baseline will be
-returned. By default (\code{NULL}), relative skill will not be scaled with
-respect to a baseline model.}
 
 \item{...}{additional parameters passed down to lower-level functions.
 For example, the following arguments can change how weighted interval

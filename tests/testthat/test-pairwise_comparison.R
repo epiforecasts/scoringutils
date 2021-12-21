@@ -24,17 +24,17 @@ test_that("pairwise comparisons works", {
                                                      truth_formatted)
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval_without_baseline <- score(data_formatted,
-                                 compute_relative_skill = TRUE,
-                                 count_median_twice = FALSE)
+  eval_without_baseline <- score(data_formatted)
+
   eval_without_baseline <- summarise_scores(eval_without_baseline,
+                                            relative_skill = TRUE,
                                             by = c("model", "location", "target_end_date",
                                                    "target_variable"))
   eval_with_baseline <- scoringutils::score(data_formatted,
-                                            baseline = "m1",
-                                            compute_relative_skill = TRUE,
                                             count_median_twice = FALSE)
   eval_with_baseline <- summarise_scores(eval_with_baseline,
+                                         baseline = "m1",
+                                         relative_skill = TRUE,
                                          by = c("model", "location", "target_end_date",
                                                 "target_variable"))
 
@@ -151,10 +151,12 @@ test_that("pairwise comparisons works", {
   names(ratios_scaled) <- NULL
 
   eval_with_baseline <- scoringutils::score(data_formatted,
-                                                     summarise_by = c("model", "location"),
-                                                     baseline = "m1",
-                                                     compute_relative_skill = TRUE,
-                                                     count_median_twice = FALSE)
+                                            count_median_twice = FALSE)
+  eval_with_baseline <- summarise_scores(eval_with_baseline,
+                                         baseline = "m1",
+                                         relative_skill = TRUE,
+                                         by = c("model", "location"))
+
   relative_skills_with <- eval_with_baseline[location == "location_3",
                                     .(model = unique(model),
                                       relative_skill = unique(scaled_rel_skill))]
@@ -163,20 +165,17 @@ test_that("pairwise comparisons works", {
 })
 
 test_that("Pairwise comparisons work in score() with integer data", {
-  eval <- score(data = example_integer,
-                         summarise_by = "model",
-                         compute_relative_skill = TRUE)
+  eval <- score(data = example_integer)
+  eval <- summarise_scores(eval, by = "model", relative_skill = TRUE)
 
   expect_true("relative_skill" %in% colnames(eval))
 })
 
 
 test_that("Pairwise comparisons work in score() with binary data", {
-  eval <- suppressWarnings(
-    score(data = example_binary,
-                   summarise_by = "model",
-                   compute_relative_skill = TRUE)
-  )
+
+  eval <- score(data = example_binary)
+  eval <- summarise_scores(eval, by = "model", relative_skill = TRUE)
 
   expect_true("relative_skill" %in% colnames(eval))
 })
@@ -207,10 +206,8 @@ test_that("pairwise_comparison() works inside and outside of score()", {
   pairwise <- pairwise_comparison(eval, summarise_by = "model",
                                   metric = "crps")
 
-  eval2 <-  score(data = example_continuous,
-                  summarise_by = "model",
-                  compute_relative_skill = TRUE)
-  eval2 <- summarise_scores(eval2, by = "model")
+  eval2 <-  score(data = example_continuous)
+  eval2 <- summarise_scores(eval2, by = "model", relative_skill = TRUE)
 
   expect_equal(sort(unique(pairwise$relative_skill)),
                sort(eval2$relative_skill))

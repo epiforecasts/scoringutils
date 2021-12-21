@@ -81,19 +81,6 @@
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
 #' metrics see [available_metrics()]
-#' @param compute_relative_skill logical, whether or not to compute relative
-#' performance between models. If `TRUE` (default is `FALSE`), then a column called
-#' 'model' must be present in the input data. For more information on
-#' the computation of relative skill, see [pairwise_comparison()].
-#' Relative skill will be calculated for the aggregation level specified in
-#' `summarise_by`.
-#' @param rel_skill_metric character string with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' one of interval score, crps or brier score will be used where appropriate
-#' @param baseline character string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
 #' @param ... additional parameters passed down to lower-level functions.
 #' For example, the following arguments can change how weighted interval
 #' scores are computed:
@@ -146,9 +133,9 @@
 score <- function(data,
                   summarise_by = NULL,
                   metrics = NULL,
-                  compute_relative_skill = FALSE,
-                  rel_skill_metric = "auto",
-                  baseline = NULL,
+                  # compute_relative_skill = FALSE,
+                  # rel_skill_metric = "auto",
+                  # baseline = NULL,
                   ...) {
 
   # preparations ---------------------------------------------------------------
@@ -167,16 +154,16 @@ score <- function(data,
   }
 
 
-  # check input parameters and whether computation of relative skill is possible
-  compute_rel_skill <- check_score_params(
-    data,
-    forecast_unit,
-    metrics,
-    summarise_by,
-    compute_relative_skill,
-    baseline,
-    rel_skill_metric
-  )
+  # # check input parameters and whether computation of relative skill is possible
+  # compute_rel_skill <- check_score_params(
+  #   data,
+  #   forecast_unit,
+  #   metrics,
+  #   summarise_by,
+  #   compute_relative_skill,
+  #   baseline,
+  #   rel_skill_metric
+  # )
 
   # check prediction and target type -------------------------------------------
   prediction_type <- get_prediction_type(data)
@@ -194,10 +181,6 @@ score <- function(data,
     scores <- score_quantile(data = data,
                                       forecast_unit = forecast_unit,
                                       metrics = metrics,
-                                      summarise_by = summarise_by,
-                                      compute_relative_skill = compute_relative_skill,
-                                      rel_skill_metric = rel_skill_metric,
-                                      baseline = baseline,
                                       ...)
   }
 
@@ -211,24 +194,6 @@ score <- function(data,
 
     scores <- summarise_scores(scores,
                                by = forecast_unit)
-  }
-
-  if (compute_relative_skill) {
-
-    pairwise <- pairwise_comparison(scores = scores,
-                                    metric = rel_skill_metric,
-                                    baseline = baseline,
-                                    by = summarise_by)
-
-    # delete unnecessary columns
-    pairwise[, c("compare_against", "mean_scores_ratio",
-                 "pval", "adj_pval") := NULL]
-    pairwise <- unique(pairwise)
-
-    # merge back
-    scores <- merge(scores, pairwise, all.x = TRUE,
-                    by = get_unit_of_forecast(pairwise))
-
   }
 
   return(scores[])
