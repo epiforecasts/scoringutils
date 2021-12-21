@@ -9,10 +9,6 @@ wis_components(
   x = "model",
   group = NULL,
   relative_contributions = FALSE,
-  facet_formula = NULL,
-  scales = "free_y",
-  ncol = NULL,
-  facet_wrap_or_grid = "facet_wrap",
   x_text_angle = 90,
   xlab = x,
   ylab = "WIS contributions"
@@ -31,20 +27,6 @@ passed down to ggplot. Default is \code{NULL}}
 \item{relative_contributions}{show relative contributions instead of absolute
 contributions. Default is FALSE and this functionality is not available yet.}
 
-\item{facet_formula}{facetting formula passed down to ggplot. Default is
-\code{NULL}}
-
-\item{scales}{scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"}
-
-\item{ncol}{Number of columns for facet wrap. Only relevant if
-\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
-
-\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
-\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-\code{facet_grid}. This only takes effect if \code{facet_formula} is not
-\code{NULL}}
-
 \item{x_text_angle}{Angle for the text on the x-axis. Default is 90}
 
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
@@ -61,13 +43,16 @@ over-prediction, under-prediction and for high dispersion (lack of sharpness)
 }
 \examples{
 library("scoringutils")
-
+library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
-scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
-                             relative_contributions = TRUE)
-scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
-                             relative_contributions = FALSE)
+
+wis_components(scores, x = "model",
+              relative_contributions = TRUE) +
+  facet_wrap(~ target_type)
+wis_components(scores, x = "model",
+              relative_contributions = FALSE) +
+  facet_wrap(~ target_type)
 }
 \references{
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts

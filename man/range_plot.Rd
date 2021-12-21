@@ -9,10 +9,6 @@ range_plot(
   y = "interval_score",
   x = "model",
   colour = "range",
-  facet_formula = NULL,
-  scales = "free_y",
-  ncol = NULL,
-  facet_wrap_or_grid = "facet_wrap",
   xlab = x,
   ylab = y
 )
@@ -31,20 +27,6 @@ Usually this will be "model"}
 \item{colour}{Character vector of length one used to determine a variable
 for colouring dots. The Default is "range".}
 
-\item{facet_formula}{facetting formula passed down to ggplot. Default is
-\code{NULL}}
-
-\item{scales}{scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"}
-
-\item{ncol}{Number of columns for facet wrap. Only relevant if
-\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
-
-\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
-\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-\code{facet_grid}. This only takes effect if \code{facet_formula} is not
-\code{NULL}}
-
 \item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 
 \item{ylab}{Label for the y-axis. Default is "WIS contributions"}
@@ -60,13 +42,15 @@ sharpness / dispersion changes by range.
 }
 \examples{
 library("scoringutils")
+library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
-scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
+scoringutils::range_plot(scores, x = "model") +
+  facet_wrap(~ target_type)
 
 # visualise dispersion instead of interval score
-scoringutils::range_plot(scores, y = "dispersion", x = "model",
-                          facet_formula =  ~target_type)
+scoringutils::range_plot(scores, y = "dispersion", x = "model") +
+  facet_wrap(~ target_type)
 
 }

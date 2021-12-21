@@ -14,14 +14,6 @@
 #' @param select_metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `summarised_scores` will
 #' be shown
-#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
-#' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
 #' @importFrom data.table setDT melt
@@ -30,34 +22,31 @@
 #'
 #' @examples
 #' library("scoringutils")
+#' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
-#'                            ncol = 1)
+#' score_table(scores, y = "model") +
+#'   facet_wrap(~ target_type, ncol = 1)
 #'
 #' # can also put target description on the y-axis
-#' scoringutils::score_table(scores, y = c("model", "target_type"))
+#' score_table(scores, y = c("model", "target_type"))
 #'
 #' # yields the same result in this case
-#' scoringutils::score_table(scores)
+#' score_table(scores)
 #'
 #' scores <- score(example_integer)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
-#'                            ncol = 1)
-#'
 #' # only show selected metrics
-#' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
-#'                            ncol = 1, select_metrics = c("crps", "bias"))
+#' score_table(scores, y = "model",
+#'             select_metrics = c("crps", "bias")) +
+#'   facet_wrap(~ target_type, ncol = 1)
+#'
 
 score_table <- function(summarised_scores,
                         y = NULL,
-                        select_metrics = NULL,
-                        facet_formula = NULL,
-                        ncol = NULL,
-                        facet_wrap_or_grid = "facet_wrap") {
+                        select_metrics = NULL) {
 
 
   # identify metrics -----------------------------------------------------------
@@ -151,16 +140,6 @@ score_table <- function(summarised_scores,
                                                        hjust=1)) +
     ggplot2::labs(x = "", y = "") +
     ggplot2::coord_cartesian(expand=FALSE)
-
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        ggplot2::facet_wrap(facet_formula, ncol = ncol)
-    } else {
-      plot <- plot +
-        ggplot2::facet_grid(facet_formula)
-    }
-  }
 
   return(plot)
 
@@ -277,16 +256,6 @@ correlation_plot <- function(scores,
 #' passed down to ggplot. Default is `NULL`
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
-#' @param facet_formula facetting formula passed down to ggplot. Default is
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @param x_text_angle Angle for the text on the x-axis. Default is 90
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "WIS contributions"
@@ -298,13 +267,16 @@ correlation_plot <- function(scores,
 #'
 #' @examples
 #' library("scoringutils")
-#'
+#' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
-#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
-#'                              relative_contributions = TRUE)
-#' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
-#'                              relative_contributions = FALSE)
+#'
+#' wis_components(scores, x = "model",
+#'               relative_contributions = TRUE) +
+#'   facet_wrap(~ target_type)
+#' wis_components(scores, x = "model",
+#'               relative_contributions = FALSE) +
+#'   facet_wrap(~ target_type)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. <https://arxiv.org/abs/2005.12881>
@@ -314,10 +286,6 @@ wis_components <- function(scores,
                            x = "model",
                            group = NULL,
                            relative_contributions = FALSE,
-                           facet_formula = NULL,
-                           scales = "free_y",
-                           ncol = NULL,
-                           facet_wrap_or_grid = "facet_wrap",
                            x_text_angle = 90,
                            xlab = x,
                            ylab = "WIS contributions") {
@@ -337,25 +305,12 @@ wis_components <- function(scores,
   plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
     ggplot2::geom_col(position = col_position,
                       ggplot2::aes(y = component_value, fill = wis_component_name)) +
-    ggplot2::facet_wrap(facet_formula, ncol = ncol,
-                        scales = scales) +
     ggplot2::labs(x = xlab, y = ylab) +
     ggplot2::theme_light() +
     ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
                    axis.text.x = ggplot2::element_text(angle = x_text_angle,
                                                        vjust = 1,
                                                        hjust=1))
-
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        ggplot2::facet_wrap(facet_formula, ncol = ncol,
-                            scales = scales)
-    } else {
-      plot <- plot +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
-  }
 
   return(plot)
 
@@ -379,16 +334,6 @@ wis_components <- function(scores,
 #' Usually this will be "model"
 #' @param colour Character vector of length one used to determine a variable
 #' for colouring dots. The Default is "range".
-#' @param facet_formula facetting formula passed down to ggplot. Default is
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is "WIS contributions"
 #' @return A ggplot2 object showing a contributions from the three components of
@@ -399,24 +344,22 @@ wis_components <- function(scores,
 #'
 #' @examples
 #' library("scoringutils")
+#' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
-#' scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
+#' scoringutils::range_plot(scores, x = "model") +
+#'   facet_wrap(~ target_type)
 #'
 #' # visualise dispersion instead of interval score
-#' scoringutils::range_plot(scores, y = "dispersion", x = "model",
-#'                           facet_formula =  ~target_type)
+#' scoringutils::range_plot(scores, y = "dispersion", x = "model") +
+#'   facet_wrap(~ target_type)
 #'
 
 range_plot <- function(scores,
                        y = "interval_score",
                        x = "model",
                        colour = "range",
-                       facet_formula = NULL,
-                       scales = "free_y",
-                       ncol = NULL,
-                       facet_wrap_or_grid = "facet_wrap",
                        xlab = x,
                        ylab = y) {
 
@@ -436,17 +379,6 @@ range_plot <- function(scores,
                                                        hjust=1)) +
     ggplot2::labs(y = ylab,
                   x = xlab)
-
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        ggplot2::facet_wrap(facet_formula, ncol = ncol,
-                            scales = scales)
-    } else {
-      plot <- plot +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
-  }
 
   return(plot)
 }
@@ -470,16 +402,6 @@ range_plot <- function(scores,
 #' tiles of the heatmap
 #' @param xlab Label for the x-axis. Default is the variable name on the x-axis
 #' @param ylab Label for the y-axis. Default is the variable name on the y-axis
-#' @param facet_formula facetting formula passed down to ggplot. Default is
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
@@ -500,10 +422,6 @@ score_heatmap <- function(scores,
                           y = "model",
                           x,
                           metric,
-                          facet_formula = NULL,
-                          scales = "free_y",
-                          ncol = NULL,
-                          facet_wrap_or_grid = "facet_wrap",
                           ylab = y,
                           xlab = x) {
 
@@ -524,16 +442,6 @@ score_heatmap <- function(scores,
                                                        hjust=1)) +
     ggplot2::coord_cartesian(expand = FALSE)
 
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        ggplot2::facet_wrap(facet_formula, ncol = ncol,
-                            scales = scales)
-    } else {
-      plot <- plot +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
-  }
   return(plot)
 }
 
@@ -786,14 +694,6 @@ plot_predictions <- function(data = NULL,
 #' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
-#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
-#' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' facet_wrap facet_grid
@@ -807,10 +707,7 @@ plot_predictions <- function(data = NULL,
 #' interval_coverage(scores)
 
 interval_coverage <- function(summarised_scores,
-                              colour = "model",
-                              facet_formula = NULL,
-                              facet_wrap_or_grid = "facet_wrap",
-                              scales = "free_y") {
+                              colour = "model") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
                                                                colour = colour)) +
@@ -831,16 +728,6 @@ interval_coverage <- function(summarised_scores,
     ggplot2::xlab("Interval range") +
     ggplot2::coord_cartesian(expand = FALSE)
 
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      p1 <- p1 +
-        ggplot2::facet_wrap(facet_formula, scales = scales)
-    } else {
-      p1 <- p1 +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
-  }
-
   return(p1)
 }
 
@@ -858,17 +745,8 @@ interval_coverage <- function(summarised_scores,
 #' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
-#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
-#' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid
 #' @importFrom data.table dcast
 #' @export
 #'
@@ -879,10 +757,7 @@ interval_coverage <- function(summarised_scores,
 #' quantile_coverage(scores)
 
 quantile_coverage <- function(summarised_scores,
-                              colour = "model",
-                              facet_formula = NULL,
-                              facet_wrap_or_grid = "facet_wrap",
-                              scales = "free_y") {
+                              colour = "model") {
 
   p2 <- ggplot2::ggplot(data = summarised_scores,
                         ggplot2::aes_string(x = "quantile", colour = colour)) +
@@ -905,30 +780,9 @@ quantile_coverage <- function(summarised_scores,
     ggplot2::ylab("% obs below quantile") +
     ggplot2::coord_cartesian(expand = FALSE)
 
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      p2 <- p2 +
-        ggplot2::facet_wrap(facet_formula, scales = scales)
-    } else {
-      p2 <- p2 +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
-  }
-
   return(p2)
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 #' @title Visualise Where Forecasts Are Available
 #'
@@ -979,7 +833,7 @@ quantile_coverage <- function(summarised_scores,
 #'
 #' @examples
 #' example1 <- scoringutils::example_range_long
-#' show_avail_forecasts(example1, x = "target_end_date", facet_formula = ~ target_type)
+#' show_avail_forecasts(example1, x = "target_end_date")
 
 show_avail_forecasts <- function(data,
                                  y = "model",

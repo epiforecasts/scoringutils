@@ -44,10 +44,11 @@ Here is an example of an evaluation using the example data included in the packa
 
 ```{r}
 library(scoringutils)
+library(ggplot2)
 ```
 
 ```{r}
-data <- scoringutils::example_quantile
+data <- example_quantile
 print(data, 3, 3)
 
 scores <- scoringutils::score(data)
@@ -76,9 +77,9 @@ scoringutils::plot_predictions(
 scores <- scoringutils::score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
-scoringutils::score_table(scores, 
-                          y = "model",
-                          facet_formula = ~ target_type)
+score_table(scores, 
+            y = "model") + 
+  facet_wrap(~ target_type)
 ```
 
 Given this level of aggregation, not all metrics may make sense. In this case, for example, averaging over different quantiles to compute quantile coverage does not make much sense. If you like, you can select specific metrics for the visualisation. 
@@ -101,7 +102,8 @@ Let us look at the individual components of the weighted interval score:
 ```{r}
 scores <- scoringutils::score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
-scoringutils::wis_components(scores, facet_formula = ~ target_type)
+wis_components(scores) + 
+  facet_wrap(~ target_type)
 ```
 
 We can also look at contributions to different metrics by range: 
@@ -109,8 +111,8 @@ We can also look at contributions to different metrics by range:
 ```{r}
 scores <- scoringutils::score(data)
 scores <- summarise_scores(scores, by = c("model", "range", "target_type"))
-scoringutils::range_plot(scores, y = "interval_score", 
-                         facet_formula = ~ target_type)
+scoringutils::range_plot(scores, y = "interval_score") + 
+  facet_wrap(~ target_type)
 ```
 
 We can also visualise metrics using a heatmap: 

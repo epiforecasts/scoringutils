@@ -76,5 +76,5 @@ Visualise Where Forecasts Are Available
 }
 \examples{
 example1 <- scoringutils::example_range_long
-show_avail_forecasts(example1, x = "target_end_date", facet_formula = ~ target_type)
+show_avail_forecasts(example1, x = "target_end_date")
 }

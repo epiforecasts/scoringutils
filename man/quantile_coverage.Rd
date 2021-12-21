@@ -4,13 +4,7 @@
 \alias{quantile_coverage}
 \title{Plot Quantile Coverage}
 \usage{
-quantile_coverage(
-  summarised_scores,
-  colour = "model",
-  facet_formula = NULL,
-  facet_wrap_or_grid = "facet_wrap",
-  scales = "free_y"
-)
+quantile_coverage(summarised_scores, colour = "model")
 }
 \arguments{
 \item{summarised_scores}{A data.frame of scores based on quantile forecasts as
@@ -19,17 +13,6 @@ in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
-
-\item{facet_formula}{formula for facetting in ggplot. If this is \code{NULL}
-(the default), no facetting will take place}
-
-\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
-\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-\code{facet_grid}. This only takes effect if \code{facet_formula} is not
-\code{NULL}}
-
-\item{scales}{scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"}
 }
 \value{
 ggplot object with a plot of interval coverage
