@@ -67,26 +67,6 @@ A data.table with appropriate scores. For more information see
 \description{
 Evaluate forecasts in a Sample-Based Format (Integer or Continuous)
 }
-\examples{
-
-## Integer Forecasts
-integer_example <- data.table::setDT(scoringutils::example_integer)
-eval <- scoringutils::score(integer_example,
-                                     summarise_by = c("model"),
-                                     quantiles = c(0.1, 0.9),
-                                     sd = TRUE)
-eval <- scoringutils::score(integer_example)
-
-## Continuous Forecasts
-continuous_example <- data.table::setDT(scoringutils::example_continuous)
-eval <- scoringutils::score(continuous_example)#'
-
-eval <- scoringutils::score(continuous_example,
-                                     quantiles = c(0.5, 0.9),
-                                     sd = TRUE,
-                                     summarise_by = c("model"))
-
-}
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
 (2019) Assessing the performance of real-time epidemic forecasts: A

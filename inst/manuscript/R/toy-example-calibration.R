@@ -24,8 +24,8 @@ df <- data.table::data.table(true_value = rep(true_values, each = n_samples),
                                          each = n_truth * n_samples))
 
 # get scores
-res <- score(df,
-                      summarise_by = c("model"))
+res <- score(df)
+res <- summarise_scores(res, by = summarise_by = c("model"))
 
 # create pit plots
 pit <- scoringutils::pit_df(df, summarise_by = "model")
@@ -36,8 +36,9 @@ quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 df_quantile <- scoringutils::sample_to_quantile(df,
                                                 quantiles = quantiles)
 
-res_quantile <- score(df_quantile,
-                               summarise_by = c("model", "range", "quantile"))
+res_quantile <- score(df_quantile)
+res_quantile <- summarise_scores(res_quantile,
+                                 by = c("model", "range", "quantile"))
 
 res_quantile[, model := factor(model, levels = c("Normal(0, 1)", "Normal(0.5, 1)", "Normal(0, 1.4)", "Normal(0, 0.7)"))]
 

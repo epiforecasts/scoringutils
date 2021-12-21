@@ -127,9 +127,7 @@ summarise_scores <- function(scores,
 #' library(scoringutils)
 #' data <- example_quantile
 #' score(data)
-#' scores <- score(data,
-#'                 summarise_by = c("model", "target_type", "location",
-#'                                  "horizon", "range", "quantile"))
+#' scores <- score(data)
 #'
 #' # add coverage
 #' scores <- add_coverage(scores, by = c("model", "target_type"))

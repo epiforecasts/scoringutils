@@ -11,26 +11,6 @@
 #'
 #' @importFrom data.table ':=' as.data.table rbindlist %like%
 #'
-#'
-#' @examples
-#'
-#' ## Integer Forecasts
-#' integer_example <- data.table::setDT(scoringutils::example_integer)
-#' eval <- scoringutils::score(integer_example,
-#'                                      summarise_by = c("model"),
-#'                                      quantiles = c(0.1, 0.9),
-#'                                      sd = TRUE)
-#' eval <- scoringutils::score(integer_example)
-#'
-#' ## Continuous Forecasts
-#' continuous_example <- data.table::setDT(scoringutils::example_continuous)
-#' eval <- scoringutils::score(continuous_example)#'
-#'
-#' eval <- scoringutils::score(continuous_example,
-#'                                      quantiles = c(0.5, 0.9),
-#'                                      sd = TRUE,
-#'                                      summarise_by = c("model"))
-#'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @inherit score references
 

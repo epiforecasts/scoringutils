@@ -65,14 +65,6 @@ A data.table with appropriate scores. For more information see
 \description{
 Evaluate forecasts in a Binary Format
 }
-\examples{
-# Probability Forecast for Binary Target
-binary_example <- data.table::setDT(scoringutils::example_binary)
-eval <- scoringutils::score(data = binary_example,
-                                     summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE)
-
-}
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
