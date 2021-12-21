@@ -8,8 +8,6 @@ score(
   data,
   summarise_by = NULL,
   metrics = NULL,
-  quantiles = c(),
-  sd = FALSE,
   compute_relative_skill = FALSE,
   rel_skill_metric = "auto",
   baseline = NULL,
@@ -72,14 +70,6 @@ range, quantile or sample.}
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}}
-
-\item{quantiles}{numeric vector of quantiles to be returned when summarising.
-Instead of just returning a mean, quantiles will be returned for the
-groups specified through \code{summarise_by}. By default, no quantiles are
-returned.}
-
-\item{sd}{if \code{TRUE} (the default is \code{FALSE}) the standard deviation of all
-metrics will be returned when summarising.}
 
 \item{compute_relative_skill}{logical, whether or not to compute relative
 performance between models. If \code{TRUE} (default is \code{FALSE}), then a column called
@@ -158,41 +148,18 @@ See \code{\link[=logs]{logs()}} for more information.
 }
 }
 \examples{
+library("scoringutils")
 ## Probability Forecast for Binary Target
-binary_example <- data.table::setDT(scoringutils::example_binary)
-eval <- scoringutils::score(binary_example,
-                                     summarise_by = c("model"),
-                                     quantiles = c(0.5), sd = TRUE)
+eval <- score(example_binary)
 
 ## Quantile Forecasts
-# wide format example (this examples shows usage of both wide formats)
-range_example_wide <- data.table::setDT(scoringutils::example_range_wide)
-range_example <- scoringutils::range_wide_to_long(range_example_wide)
-wide2 <- data.table::setDT(scoringutils::example_range_semi_wide)
-range_example <- scoringutils::range_wide_to_long(wide2)
-example <- scoringutils::range_long_to_quantile(range_example)
-eval <- scoringutils::score(example,
-                                     summarise_by = "model",
-                                     quantiles = c(0.05, 0.95),
-                                     sd = TRUE)
-eval <- scoringutils::score(example)
-
+eval <- score(example_quantile)
 
 ## Integer Forecasts
-integer_example <- data.table::setDT(scoringutils::example_integer)
-eval <- scoringutils::score(integer_example,
-                                     summarise_by = c("model"),
-                                     quantiles = c(0.1, 0.9),
-                                     sd = TRUE)
-eval <- scoringutils::score(integer_example)
+eval <- score(example_integer)
 
 ## Continuous Forecasts
-continuous_example <- data.table::setDT(scoringutils::example_continuous)
-eval <- scoringutils::score(continuous_example)
-eval <- scoringutils::score(continuous_example,
-                                     quantiles = c(0.5, 0.9),
-                                     sd = TRUE,
-                                     summarise_by = c("model"))
+eval <- score(example_continuous)
 
 }
 \references{

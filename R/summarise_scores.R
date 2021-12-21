@@ -81,7 +81,6 @@ summarise_scores <- function(scores,
 #'
 #' @param scores a data.table of unsummarised scores as produced by
 #' [score()]
-#' @inheritParams score
 #' @param by character vector with column names to add the coverage for.
 #' @param ranges numeric vector of the ranges of the central prediction intervals
 #' for which coverage values shall be added.

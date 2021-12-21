@@ -46,8 +46,10 @@ Plots a coloured table of summarised scores obtained using
 \code{\link[=score]{score()}}
 }
 \examples{
-scores <- scoringutils::score(scoringutils::example_quantile,
-                                       summarise_by = c("model", "target_type"))
+library("scoringutils")
+scores <- score(example_quantile)
+scores <- summarise_scores(scores, by = c("model", "target_type"))
+
 scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)
 
@@ -57,9 +59,9 @@ scoringutils::score_table(scores, y = c("model", "target_type"))
 # yields the same result in this case
 scoringutils::score_table(scores)
 
+scores <- score(example_integer)
+scores <- summarise_scores(scores, by = c("model", "target_type"))
 
-scores <- scoringutils::score(scoringutils::example_integer,
-                                        summarise_by = c("model", "target_type"))
 scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
                            ncol = 1)
 

@@ -29,8 +29,10 @@
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::score(scoringutils::example_quantile,
-#'                                        summarise_by = c("model", "target_type"))
+#' library("scoringutils")
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "target_type"))
+#'
 #' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
 #'
@@ -40,9 +42,9 @@
 #' # yields the same result in this case
 #' scoringutils::score_table(scores)
 #'
+#' scores <- score(example_integer)
+#' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' scores <- scoringutils::score(scoringutils::example_integer,
-#'                                         summarise_by = c("model", "target_type"))
 #' scoringutils::score_table(scores, y = "model", facet_formula = ~ target_type,
 #'                            ncol = 1)
 #'
@@ -295,8 +297,10 @@ correlation_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::score(scoringutils::example_quantile,
-#'                                        summarise_by = c("model", "target_type"))
+#' library("scoringutils")
+#'
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
 #'                              relative_contributions = TRUE)
 #' scoringutils::wis_components(scores, x = "model", facet_formula = ~ target_type,
@@ -394,8 +398,9 @@ wis_components <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::score(scoringutils::example_quantile,
-#'                                         summarise_by = c("model", "target_type", "range"))
+#' library("scoringutils")
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' scoringutils::range_plot(scores, x = "model", facet_formula = ~ target_type)
 #'
@@ -403,11 +408,6 @@ wis_components <- function(scores,
 #' scoringutils::range_plot(scores, y = "dispersion", x = "model",
 #'                           facet_formula =  ~target_type)
 #'
-#' # we saw above that dispersion values crossed. Let's look at the unweighted WIS
-#' scores <- scoringutils::score(scoringutils::example_quantile,
-#'                                         summarise_by = c("model", "target_type", "range"))
-#' scoringutils::range_plot(scores, y = "dispersion", x = "model",
-#'                          facet_formula =  ~target_type)
 
 range_plot <- function(scores,
                        y = "interval_score",
@@ -487,8 +487,9 @@ range_plot <- function(scores,
 #' @export
 #'
 #' @examples
-#' scores <- scoringutils::score(scoringutils::example_quantile,
-#'                                        summarise_by = c("model", "target_type", "range"))
+#' library("scoringutils")
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
 #'
@@ -800,10 +801,9 @@ plot_predictions <- function(data = NULL,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::example_range_long
-#' example1 <- scoringutils::range_long_to_quantile(example1)
-#' scores <- scoringutils::score(example1,
-#'                                        summarise_by = c("model", "range"))
+#' library("scoringutils")
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "range"))
 #' interval_coverage(scores)
 
 interval_coverage <- function(summarised_scores,
@@ -873,9 +873,9 @@ interval_coverage <- function(summarised_scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::example_quantile
-#' scores <- scoringutils::score(example1,
-#'                                        summarise_by = c("model", "quantile"))
+#' library("scoringutils")
+#' scores <- score(example_quantile)
+#' scores <- summarise_scores(scores, by = c("model", "quantile"))
 #' quantile_coverage(scores)
 
 quantile_coverage <- function(summarised_scores,

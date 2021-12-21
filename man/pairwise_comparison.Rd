@@ -8,7 +8,7 @@ pairwise_comparison(
   scores,
   metric = "auto",
   baseline = NULL,
-  summarise_by = c("model"),
+  by = c("model"),
   ...
 )
 }
@@ -24,11 +24,14 @@ See \code{\link[=available_metrics]{available_metrics()}} for available metrics.
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
 
-\item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to \code{by} and no summary takes place. But sometimes you
-may want to to summarise over categories different from the scoring.
-\code{summarise_by} is also the grouping level used to compute (and possibly plot)
-the probability integral transform(pit).}
+\item{by}{character vector with names of columns present in the input
+data.frame. \code{by} determines how pairwise comparisons will be computed.
+You will get a relative skill score for every grouping level determined in
+\code{by}. If, for example, \code{by = c("model", "location")}. Then you will get a
+separate relative skill score for every model in every location. Internally,
+the data.frame will be split according \code{by} (but removing "model" before
+splitting) and the pairwise comparisons will be computed separately for the
+split data.frames.}
 
 \item{...}{additional arguments, such as test options that can get passed
 down to lower level functions. The following options are available:
@@ -62,7 +65,7 @@ res <- scoringutils::pairwise_comparison(df,
 scoringutils::plot_pairwise_comparison(res)
 
 eval <- scoringutils::score(scoringutils::example_quantile)
-pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
+pairwise <- pairwise_comparison(eval, by = c("model"))
 }
 \author{
 Johannes Bracher, https://jbracher.github.io/

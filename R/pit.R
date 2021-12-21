@@ -318,9 +318,10 @@ pit_df <- function(data,
   # score and returned a list with named vectors
   if (prediction_type == "quantile") {
     coverage <-
-      score(data,
-                     summarise_by = unique(c(summarise_by, "quantile")),
-                     metrics = "quantile_coverage")
+      score(data, metrics = "quantile_coverage")
+
+    coverage <- summarise_scores(coverage,
+                                 by = unique(c(summarise_by, "quantile")))
 
     coverage <- coverage[order(quantile),
                          .(quantile = c(quantile, 1),

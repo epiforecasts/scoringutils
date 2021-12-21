@@ -57,8 +57,9 @@ groups, e.g. the interval score obtained by several forecasting models in
 different locations.
 }
 \examples{
-scores <- scoringutils::score(scoringutils::example_quantile,
-                                       summarise_by = c("model", "target_type", "range"))
+library("scoringutils")
+scores <- score(example_quantile)
+scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
 scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
 

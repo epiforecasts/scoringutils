@@ -38,8 +38,8 @@ ggplot object with a plot of interval coverage
 Plot quantile coverage
 }
 \examples{
-example1 <- scoringutils::example_quantile
-scores <- scoringutils::score(example1,
-                                       summarise_by = c("model", "quantile"))
+library("scoringutils")
+scores <- score(example_quantile)
+scores <- summarise_scores(scores, by = c("model", "quantile"))
 quantile_coverage(scores)
 }

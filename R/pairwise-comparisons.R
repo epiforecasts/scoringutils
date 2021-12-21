@@ -15,11 +15,14 @@
 #' comparison on. The default is "auto", meaning that either "interval_score",
 #' "crps", or "brier_score" will be selected where available.
 #' See [available_metrics()] for available metrics.
-#' @param summarise_by character vector of columns to group the summary by. By
-#' default, this is equal to `by` and no summary takes place. But sometimes you
-#' may want to to summarise over categories different from the scoring.
-#' `summarise_by` is also the grouping level used to compute (and possibly plot)
-#' the probability integral transform(pit).
+#' @param by character vector with names of columns present in the input
+#' data.frame. `by` determines how pairwise comparisons will be computed.
+#' You will get a relative skill score for every grouping level determined in
+#' `by`. If, for example, `by = c("model", "location")`. Then you will get a
+#' separate relative skill score for every model in every location. Internally,
+#' the data.frame will be split according `by` (but removing "model" before
+#' splitting) and the pairwise comparisons will be computed separately for the
+#' split data.frames.
 #' @param baseline character vector of length one that denotes the baseline
 #' model against which to compare other models.
 #' @param ... additional arguments, such as test options that can get passed
@@ -49,14 +52,14 @@
 #' scoringutils::plot_pairwise_comparison(res)
 #'
 #' eval <- scoringutils::score(scoringutils::example_quantile)
-#' pairwise <- pairwise_comparison(eval, summarise_by = c("model"))
+#' pairwise <- pairwise_comparison(eval, by = c("model"))
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 
 pairwise_comparison <- function(scores,
                                 metric = "auto",
                                 baseline = NULL,
-                                summarise_by = c("model"),
+                                by = c("model"),
                                 ...) {
 
   scores <- data.table::as.data.table(scores)
@@ -69,10 +72,10 @@ pairwise_comparison <- function(scores,
   # identify unit of single observation.
   forecast_unit <- get_unit_of_forecast(scores)
 
-  # if summarise_by is equal to forecast_unit, then pairwise comparisons don't make sense
-  if (identical(sort(summarise_by), sort(forecast_unit))) {
-    summarise_by <- "model"
-    message("relative skill can only be computed if `summarise_by` is different from the unit of a single forecast. `summarise_by` was set to 'model'")
+  # if by is equal to forecast_unit, then pairwise comparisons don't make sense
+  if (identical(sort(by), sort(forecast_unit))) {
+    by <- "model"
+    message("relative skill can only be computed if `by` is different from the unit of a single forecast. `by` was set to 'model'")
   }
 
   # summarise scores over everything (e.g. quantiles, ranges or samples) in
@@ -82,8 +85,8 @@ pairwise_comparison <- function(scores,
                    by = forecast_unit,
                    .SDcols = metric]
 
-  # split data set into groups determined by summarise_by
-  split_by <- setdiff(summarise_by, "model")
+  # split data set into groups determined by by
+  split_by <- setdiff(by, "model")
   split_scores <- split(scores, by = split_by)
 
   results <- lapply(split_scores,
@@ -91,7 +94,7 @@ pairwise_comparison <- function(scores,
                       out <- pairwise_comparison_one_group(scores = scores,
                                                            metric = metric,
                                                            baseline = baseline,
-                                                           summarise_by = summarise_by,
+                                                           by = by,
                                                            ...)
                     })
 
@@ -118,7 +121,7 @@ pairwise_comparison <- function(scores,
 pairwise_comparison_one_group <- function(scores,
                                           metric,
                                           baseline,
-                                          summarise_by,
+                                          by,
                                           ...) {
 
   if (!("model" %in% names(scores))) {
@@ -203,8 +206,8 @@ pairwise_comparison_one_group <- function(scores,
     result[, rel_to_baseline := theta / baseline_theta]
   }
 
-  # remove all the rows that are not present in summarise_by before merging
-  cols_to_keep <- unique(c(summarise_by, "model"))
+  # remove all the rows that are not present in by before merging
+  cols_to_keep <- unique(c(by, "model"))
   cols_to_remove <- colnames(scores)[!(colnames(scores) %in% cols_to_keep)]
   scores[, eval(cols_to_remove) := NULL]
   scores <- unique(scores)
@@ -256,7 +259,8 @@ compare_two_models <- function(scores,
                                metric,
                                oneSided = FALSE,
                                test_type = c("non_parametric", "permutation"),
-                               n_permutations = 999) {
+                               n_permutations = 999, # remove dot argument later on
+                               ...) {
 
   scores <- data.table::as.data.table(scores)
 
@@ -365,8 +369,7 @@ unique(overlap)
 #'
 #' data <- scoringutils::example_quantile
 #' scores <- scoringutils::score(data)
-#' pairwise <- pairwise_comparison(scores,
-#'                                 summarise_by = "target_type")
+#' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' scoringutils::plot_pairwise_comparison(pairwise,
 #'                                        facet_formula = ~ target_type,
 #'                                        scales = "fixed")
