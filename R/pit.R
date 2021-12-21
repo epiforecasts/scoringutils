@@ -179,11 +179,11 @@ pit <- function(true_values,
 #' hist_PIT(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit_df(example_quantile, summarise_by = c("model"))
+#' pit <- pit_df(example_quantile, by = c("model"))
 #' hist_PIT(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit_df(example_integer, summarise_by = c("model"))
+#' pit <- pit_df(example_integer, by = c("model"))
 #' hist_PIT(pit)
 #'
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
@@ -282,20 +282,20 @@ hist_PIT <- function(pit,
 #'
 #' @param data a data.frame with the following columns: `true_value`,
 #' `prediction`, `sample`.
-#' @param summarise_by Character vector with the columns according to which the
+#' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
-#' every model and location, specify `summarise_by = c("model", "location")`.
+#' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit
 #' @return a data.table with PIT values according to the grouping specified in
-#' `summarise_by`
+#' `by`
 #' @examples
 #' example <- scoringutils::example_continuous
-#' result <- pit_df(example, summarise_by = "model")
+#' result <- pit_df(example, by = "model")
 #' hist_PIT(result)
 #'
 #' # example with quantile data
-#' result <- pit_df(example_quantile, summarise_by = "model")
+#' result <- pit_df(example_quantile, by = "model")
 #' hist_PIT(result)
 #' @export
 #' @references
@@ -305,7 +305,7 @@ hist_PIT <- function(pit,
 #' region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
 
 pit_df <- function(data,
-                   summarise_by,
+                   by,
                    n_replicates = 100) {
 
   # clean data by removing NA values
@@ -321,7 +321,7 @@ pit_df <- function(data,
       score(data, metrics = "quantile_coverage")
 
     coverage <- summarise_scores(coverage,
-                                 by = unique(c(summarise_by, "quantile")))
+                                 by = unique(c(by, "quantile")))
 
     coverage <- coverage[order(quantile),
                          .(quantile = c(quantile, 1),
@@ -338,7 +338,7 @@ pit_df <- function(data,
 
   pit <- data_wide[, .("pit_value" = pit(true_values = true_value,
                                          predictions = as.matrix(.SD))),
-                   by = summarise_by,
+                   by = by,
                    .SDcols = grepl("InternalSampl_", names(data_wide))]
 
   return(pit)

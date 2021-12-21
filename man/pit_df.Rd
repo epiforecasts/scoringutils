@@ -4,23 +4,23 @@
 \alias{pit_df}
 \title{Probability Integral Transformation (data.frame Format)}
 \usage{
-pit_df(data, summarise_by, n_replicates = 100)
+pit_df(data, by, n_replicates = 100)
 }
 \arguments{
 \item{data}{a data.frame with the following columns: \code{true_value},
 \code{prediction}, \code{sample}.}
 
-\item{summarise_by}{Character vector with the columns according to which the
+\item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
 'location' in the data and want to have a PIT histogram for
-every model and location, specify \code{summarise_by = c("model", "location")}.}
+every model and location, specify \code{by = c("model", "location")}.}
 
 \item{n_replicates}{the number of draws for the ranomised PIT for
 integer predictions.}
 }
 \value{
 a data.table with PIT values according to the grouping specified in
-\code{summarise_by}
+\code{by}
 }
 \description{
 Wrapper around \code{pit()} for use in data.frames
@@ -30,11 +30,11 @@ see \code{\link[=pit]{pit()}}
 }
 \examples{
 example <- scoringutils::example_continuous
-result <- pit_df(example, summarise_by = "model")
+result <- pit_df(example, by = "model")
 hist_PIT(result)
 
 # example with quantile data
-result <- pit_df(example_quantile, summarise_by = "model")
+result <- pit_df(example_quantile, by = "model")
 hist_PIT(result)
 }
 \references{

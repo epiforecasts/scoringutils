@@ -41,11 +41,11 @@ pit <- pit(true_values, predictions)
 hist_PIT(pit)
 
 # quantile-based pit
-pit <- pit_df(example_quantile, summarise_by = c("model"))
+pit <- pit_df(example_quantile, by = c("model"))
 hist_PIT(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- pit_df(example_integer, summarise_by = c("model"))
+pit <- pit_df(example_integer, by = c("model"))
 hist_PIT(pit)
 
 }

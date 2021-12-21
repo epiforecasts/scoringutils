@@ -41,11 +41,11 @@ test_that("pit() function works for continuous true_values and predictions",
 
 test_that("pit_df function works for continuous integer and quantile data",
           {
-            pit1 <- pit_df(example_quantile, summarise_by = "model")
+            pit1 <- pit_df(example_quantile, by = "model")
             pit2 <- pit_df(example_continuous,
-                           summarise_by = c("model", "target_type"))
+                           by = c("model", "target_type"))
             pit3 <- pit_df(example_integer,
-                           summarise_by = c("model", "location"))
+                           by = c("model", "location"))
 
             expect_equal(names(pit1), c("model", "quantile", "pit_value"))
             expect_equal(names(pit2), c("model", "target_type", "pit_value"))
