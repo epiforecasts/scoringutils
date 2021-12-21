@@ -371,8 +371,8 @@ wis_components <- function(scores,
 #' sharpness / dispersion changes by range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()]. Note that "range" must be included
-#' in the `summarise_by` argument when running `score`
+#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
+#' in the `by` argument when running [summarise_scores()]
 #' @param y The variable from the scores you want to show on the y-Axis.
 #' This could be something like "interval_score" (the default) or "dispersion"
 #' @param x The variable from the scores you want to show on the x-Axis.
@@ -781,9 +781,9 @@ plot_predictions <- function(data = NULL,
 #' @description
 #' Plot interval coverage
 #'
-#' @param summarised_scores Summarised scores as produced by
-#' [score()]. Make sure that "range" is included in
-#' `summarise_by` when producing the summarised scores
+#' @param summarised_scores A data.frame of scores based on quantile forecasts as
+#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
+#' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @param facet_formula formula for facetting in ggplot. If this is `NULL`
@@ -853,9 +853,9 @@ interval_coverage <- function(summarised_scores,
 #' @description
 #' Plot quantile coverage
 #'
-#' @param summarised_scores Summarised scores as produced by
-#' [score()]. Make sure that "quantile" is included in
-#' `summarise_by` when producing the summarised scores
+#' @param summarised_scores A data.frame of scores based on quantile forecasts as
+#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
+#' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @param facet_formula formula for facetting in ggplot. If this is `NULL`

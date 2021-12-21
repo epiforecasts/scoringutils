@@ -13,9 +13,9 @@ quantile_coverage(
 )
 }
 \arguments{
-\item{summarised_scores}{Summarised scores as produced by
-\code{\link[=score]{score()}}. Make sure that "quantile" is included in
-\code{summarise_by} when producing the summarised scores}
+\item{summarised_scores}{A data.frame of scores based on quantile forecasts as
+produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
+in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}

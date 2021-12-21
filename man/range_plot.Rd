@@ -19,8 +19,8 @@ range_plot(
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=score]{score()}}. Note that "range" must be included
-in the \code{summarise_by} argument when running \code{score}}
+produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
+in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.
 This could be something like "interval_score" (the default) or "dispersion"}
