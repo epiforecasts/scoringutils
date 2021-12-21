@@ -19,9 +19,4 @@ a data.frame in a long interval range format
 Transform data from a format that uses quantiles only to one that uses
 interval ranges to denote quantiles.
 }
-\examples{
-quantile <- scoringutils::example_quantile
-
-long <- scoringutils::quantile_to_range_long(quantile)
-
-}
+\keyword{internal}

@@ -7,7 +7,7 @@
 #' [score()]) for quantile forecasts.
 #' @return a data.frame in wide format
 #' @importFrom data.table dcast
-#'
+#' @keywords internal
 
 range_long_to_wide <- function(data) {
   data <- data.table::as.data.table(data)
@@ -35,7 +35,7 @@ range_long_to_wide <- function(data) {
 #' [score()]) for quantile forecasts.
 #' @return a data.frame in long format
 #' @importFrom data.table melt
-#' @export
+#' @keywords internal
 #'
 
 range_wide_to_long <- function(data) {
@@ -91,7 +91,7 @@ range_wide_to_long <- function(data) {
 #' transformation (default is FALSE)
 #' @return a data.frame in a plain quantile format
 #' @importFrom data.table copy
-#'
+#' @keywords internal
 
 
 range_long_to_quantile <- function(data,
@@ -129,13 +129,7 @@ range_long_to_quantile <- function(data,
 #' output after transformation (default is FALSE)
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table copy
-#' @export
-#'
-#' @examples
-#' quantile <- scoringutils::example_quantile
-#'
-#' long <- scoringutils::quantile_to_range_long(quantile)
-#'
+#' @keywords internal
 
 quantile_to_range_long <- function(data,
                                    keep_quantile_col = TRUE) {
@@ -229,13 +223,7 @@ sample_to_quantile <- function(data,
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
-#' @export
-#'
-#' @examples
-#' example_data <- scoringutils::example_integer
-#'
-#' quantile_data <- scoringutils::sample_to_range_long(example_data)
-#'
+#' @keywords internal
 
 sample_to_range_long <- function(data,
                                  range = c(0, 50, 90),
@@ -248,12 +236,12 @@ sample_to_range_long <- function(data,
   upper_quantiles <- 1 - lower_quantiles
   quantiles <- sort(unique(c(lower_quantiles, upper_quantiles)))
 
-  data <- scoringutils::sample_to_quantile(data,
-                                           quantiles = quantiles,
-                                           type = type)
+  data <- sample_to_quantile(data,
+                             quantiles = quantiles,
+                             type = type)
 
-  data <- scoringutils::quantile_to_range_long(data,
-                                               keep_quantile_col = keep_quantile_col)
+  data <- quantile_to_range_long(data,
+                                 keep_quantile_col = keep_quantile_col)
 
   return(data[])
 }

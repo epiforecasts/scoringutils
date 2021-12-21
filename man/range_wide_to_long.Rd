@@ -16,3 +16,4 @@ a data.frame in long format
 \description{
 Pivot wide range format to long range format.
 }
+\keyword{internal}
