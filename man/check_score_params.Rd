@@ -31,15 +31,6 @@ For a quantile-format forecast you should provide:
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}}
-
-\item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to \code{by} and no summary takes place.
-But sometimes you may want to to summarise
-over categories different from the scoring.
-\code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit). Sometimes you
-may want to include 'range', 'quantile' or 'sample', to summarise by
-range, quantile or sample.}
 }
 \description{
 A helper function to check the input parameters for

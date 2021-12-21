@@ -4,7 +4,7 @@
 \alias{score}
 \title{Evaluate forecasts}
 \usage{
-score(data, summarise_by = NULL, metrics = NULL, ...)
+score(data, metrics = NULL, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -27,15 +27,6 @@ For a quantile-format forecast you should provide:
 \item \code{prediction}: prediction to the corresponding quantile
 \item \code{quantile}: quantile to which the prediction corresponds
 }}
-
-\item{summarise_by}{character vector of columns to group the summary by. By
-default, this is equal to \code{by} and no summary takes place.
-But sometimes you may want to to summarise
-over categories different from the scoring.
-\code{summarise_by} is also the grouping level used to compute
-(and possibly plot) the probability integral transform(pit). Sometimes you
-may want to include 'range', 'quantile' or 'sample', to summarise by
-range, quantile or sample.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
@@ -64,7 +55,7 @@ pit_p_val (as an indicator of calibration) are returned. For integer
 forecasts, pit_sd is returned (to account for the randomised PIT),
 but no Log Score is returned (the internal estimation relies on a
 kernel density estimate which is difficult for integer-valued forecasts).
-If \code{summarise_by} is specified differently from \code{by},
+If \code{by} is specified differently from \code{by},
 the average score per summary unit is returned.
 If specified, quantiles and standard deviation of scores can also be returned
 when summarising.

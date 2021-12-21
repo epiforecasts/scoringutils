@@ -48,14 +48,6 @@
 #' For a quantile-format forecast you should provide:
 #'   - `prediction`: prediction to the corresponding quantile
 #'   - `quantile`: quantile to which the prediction corresponds
-#' @param summarise_by character vector of columns to group the summary by. By
-#' default, this is equal to `by` and no summary takes place.
-#' But sometimes you may want to to summarise
-#' over categories different from the scoring.
-#' `summarise_by` is also the grouping level used to compute
-#' (and possibly plot) the probability integral transform(pit). Sometimes you
-#' may want to include 'range', 'quantile' or 'sample', to summarise by
-#' range, quantile or sample.
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
 #' metrics see [available_metrics()]
@@ -79,7 +71,7 @@
 #' forecasts, pit_sd is returned (to account for the randomised PIT),
 #' but no Log Score is returned (the internal estimation relies on a
 #' kernel density estimate which is difficult for integer-valued forecasts).
-#' If `summarise_by` is specified differently from `by`,
+#' If `by` is specified differently from `by`,
 #' the average score per summary unit is returned.
 #' If specified, quantiles and standard deviation of scores can also be returned
 #' when summarising.
@@ -109,7 +101,6 @@
 #' @export
 
 score <- function(data,
-                  summarise_by = NULL,
                   metrics = NULL,
                   # compute_relative_skill = FALSE,
                   # rel_skill_metric = "auto",
@@ -127,10 +118,6 @@ score <- function(data,
 
   # obtain a value for the unit of a single observation
   forecast_unit <- get_unit_of_forecast(data)
-  if (is.null(summarise_by)) {
-    summarise_by <- forecast_unit
-  }
-
 
   # # check input parameters and whether computation of relative skill is possible
   # compute_rel_skill <- check_score_params(
@@ -150,25 +137,25 @@ score <- function(data,
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
     scores <- score_binary(data = data,
-                                    forecast_unit = forecast_unit,
-                                    metrics = metrics)
+                           forecast_unit = forecast_unit,
+                           metrics = metrics)
   }
 
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
     scores <- score_quantile(data = data,
-                                      forecast_unit = forecast_unit,
-                                      metrics = metrics,
-                                      ...)
+                             forecast_unit = forecast_unit,
+                             metrics = metrics,
+                             ...)
   }
 
   # Score integer or continuous predictions ------------------------------------
   if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
 
     scores <- score_sample(data = data,
-                                    forecast_unit = forecast_unit,
-                                    metrics = metrics,
-                                    prediction_type = prediction_type)
+                           forecast_unit = forecast_unit,
+                           metrics = metrics,
+                           prediction_type = prediction_type)
 
     scores <- summarise_scores(scores,
                                by = forecast_unit)
