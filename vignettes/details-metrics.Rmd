@@ -43,18 +43,6 @@ data[, 1:6] %>%
   add_header_above(c(" " = 1, "Sample-based" = 2, "  " = 3)) %>%
   row_spec(seq(1, nrow(data), 2), background = "Gainsboro") %>%
   kable_styling()
-
-
-setDT(data)
-
-data[, lapply(.SD, FUN = function(x) {
-  x <- gsub("$\\checkmark$", '+', x, fixed = TRUE)
-  x <- gsub("$-$", '-', x, fixed = TRUE)
-  x <- gsub("$\\sim$", '~', x, fixed = TRUE)
-  return(x)
-  })]
-  
-
 ```
 
 

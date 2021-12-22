@@ -121,3 +121,9 @@
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
 "example_truth_only"
+
+#' Summary information for selected metrics
+#'
+#' A data set with summary information on selected metrics implemented in
+#' \pkg{scoringutils}
+"metrics_summary"

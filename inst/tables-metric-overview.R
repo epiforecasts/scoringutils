@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------#
 #------------------ Overview of the different forecast types ------------------#
 #------------------------------------------------------------------------------#
-
+library(data.table)
 point_forecast <- list(
   `Forecast type` = c("Point forecast"),
   `Target type` = c("continuous \n discrete \n binary"),
@@ -161,9 +161,19 @@ data <- rbind(as.data.table(crps),
               as.data.table(mean_score_ratio),
               as.data.table(relative_skill))
 
+# save for manuscript
 saveRDS(data, file = "inst/metrics-overview/metrics-summary.Rda")
 
+data[, references := NULL]
 
+metrics_summary <- data[, lapply(.SD, FUN = function(x) {
+  x <- gsub("$\\checkmark$", '+', x, fixed = TRUE)
+  x <- gsub("$-$", '-', x, fixed = TRUE)
+  x <- gsub("$\\sim$", '~', x, fixed = TRUE)
+  return(x)
+})]
+
+usethis::use_data(metrics_summary, overwrite = TRUE)
 
 #------------------------------------------------------------------------------#
 #------------------ Detailed explanation of all the metrics -------------------#
