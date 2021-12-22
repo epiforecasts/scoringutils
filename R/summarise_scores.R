@@ -60,17 +60,6 @@ summarise_scores <- function(scores,
                              ...) {
 
   # preparations ---------------------------------------------------------------
-  # get all available metrics to determine names of columns to summarise over
-  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
-
-  # takes the mean over ranges and quantiles first, if neither range nor
-  # quantile are in `by`. Reason to do this is that summaries may be
-  # inaccurate if we treat individual quantiles as independent forecasts
-  forecast_unit <- get_unit_of_forecast(scores)
-  scores <- scores[, lapply(.SD, mean, ...),
-                   by = c(unique(c(forecast_unit, by))),
-                   .SDcols = colnames(scores) %like% cols_to_summarise]
-
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
     by <- forecast_unit
@@ -83,8 +72,18 @@ summarise_scores <- function(scores,
     relative_skill = relative_skill,
     baseline = baseline,
     metric = metric
-
   )
+
+  # get all available metrics to determine names of columns to summarise over
+  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
+
+  # takes the mean over ranges and quantiles first, if neither range nor
+  # quantile are in `by`. Reason to do this is that summaries may be
+  # inaccurate if we treat individual quantiles as independent forecasts
+  forecast_unit <- get_unit_of_forecast(scores)
+  scores <- scores[, lapply(.SD, mean, ...),
+                   by = c(unique(c(forecast_unit, by))),
+                   .SDcols = colnames(scores) %like% cols_to_summarise]
 
   # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
