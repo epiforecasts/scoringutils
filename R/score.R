@@ -57,8 +57,9 @@
 #'
 #' # usual workflow:
 #' check_forecasts(example_quantile)
-#' score_forecasts(example_quantile) %>%
-#'   summarise_scores()
+#' score(example_quantile) %>%
+#'   add_coverage(by = c("model", "target_type")) %>%
+#'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # Other forecast formats with different metrics
 #' score(example_binary)
@@ -84,24 +85,23 @@ score <- function(data,
   # check relevant columns and remove NA values in true_values and prediction
   data <- check_clean_data(data, verbose = FALSE)
 
+  # handle metrics argument ----------------------------------------------------
   # use all available metrics if none are given
   if (is.null(metrics)) {
     metrics <- available_metrics()
   }
 
-  # obtain a value for the unit of a single observation
-  forecast_unit <- get_unit_of_forecast(data)
+  # check desired metrics are actually available in scoringutils
+  available_metrics <- available_metrics()
+  if (!all(metrics %in% available_metrics)) {
+    msg <- paste("The following metrics are not currently implemented and",
+                 "will not be computed:",
+                 paste(setdiff(metrics, available_metrics), collapse = ", "))
+    warning(msg)
+  }
 
-  # # check input parameters and whether computation of relative skill is possible
-  # compute_rel_skill <- check_score_params(
-  #   data,
-  #   forecast_unit,
-  #   metrics,
-  #   summarise_by,
-  #   compute_relative_skill,
-  #   baseline,
-  #   rel_skill_metric
-  # )
+  # obtain a value for the unit of a single observation ------------------------
+  forecast_unit <- get_unit_of_forecast(data)
 
   # check prediction and target type -------------------------------------------
   prediction_type <- get_prediction_type(data)
@@ -129,9 +129,6 @@ score <- function(data,
                            forecast_unit = forecast_unit,
                            metrics = metrics,
                            prediction_type = prediction_type)
-
-    scores <- summarise_scores(scores,
-                               by = forecast_unit)
   }
 
   return(scores[])

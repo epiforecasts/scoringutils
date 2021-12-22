@@ -69,8 +69,9 @@ library(magrittr) # pipe operator
 
 # usual workflow:
 check_forecasts(example_quantile)
-score_forecasts(example_quantile) \%>\%
-  summarise_scores()
+score(example_quantile) \%>\%
+  add_coverage(by = c("model", "target_type")) \%>\%
+  summarise_scores(by = c("model", "target_type"))
 
 # Other forecast formats with different metrics
 score(example_binary)

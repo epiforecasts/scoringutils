@@ -34,13 +34,11 @@ the unit of a single forecast.
 }
 \examples{
 library(scoringutils)
-data <- example_quantile
-score(data)
-scores <- score(data)
+library(magrittr) # pipe operator
 
-# add coverage
-scores <- add_coverage(scores, by = c("model", "target_type"))
-summarise_scores(scores, by = c("model", "target_type"))
+score(example_quantile) \%>\%
+  add_coverage(by = c("model", "target_type")) \%>\%
+  summarise_scores(by = c("model", "target_type"))
 
 
 }

@@ -59,7 +59,8 @@ summarise_scores <- function(scores,
                              baseline = NULL,
                              ...) {
 
-  # get names of columns to summarise over
+  # preparations ---------------------------------------------------------------
+  # get all available metrics to determine names of columns to summarise over
   cols_to_summarise <- paste0(available_metrics(), collapse = "|")
 
   # takes the mean over ranges and quantiles first, if neither range nor
@@ -75,7 +76,17 @@ summarise_scores <- function(scores,
     by <- forecast_unit
   }
 
-  # do pairwise comparisons
+  # check input arguments and check whether relative skill can be computed
+  relative_skill <- check_summary_params(
+    scores = scores,
+    by = by,
+    relative_skill = relative_skill,
+    baseline = baseline,
+    metric = metric
+
+  )
+
+  # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
 
     pairwise <- pairwise_comparison(scores = scores,
@@ -94,11 +105,14 @@ summarise_scores <- function(scores,
 
   }
 
+  # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, FUN, ...),
                    by = c(by),
                    .SDcols = colnames(scores) %like% cols_to_summarise]
 
-  # if neither quantile nor range are in by, remove coverage and quantile_coverage
+  # remove unnecessary columns -------------------------------------------------
+  # if neither quantile nor range are in by, remove coverage and
+  # quantile_coverage because averaging does not make sense
   if (!("range" %in% by) & ("coverage" %in% colnames(scores))) {
     scores[, c("coverage") := NULL]
   }
@@ -108,6 +122,57 @@ summarise_scores <- function(scores,
 
   return(scores[])
 }
+
+
+
+#' @title Check input parameters for [summarise_scores()]
+#'
+#' @description A helper function to check the input parameters for
+#' [score()].
+#'
+#' @inheritParams summarise_scores
+#'
+#' @keywords internal
+check_summary_params <- function(scores,
+                                 by,
+                                 relative_skill,
+                                 baseline,
+                                 metric
+) {
+
+  # check that columns in 'by' are actually present ----------------------------
+  if (!all(by %in% c(colnames(scores), "range", "quantile"))) {
+    not_present <- setdiff(by, c(colnames(scores), "range", "quantile"))
+    msg <- paste0("The following items in `by` are not",
+                  "valid column names of the data: '",
+                  paste(not_present, collapse = ", "),
+                  "'. Check and run `summarise_scores()` again")
+    stop(msg)
+  }
+
+  # error handling for relative skill computation ------------------------------
+  if (relative_skill) {
+    if (!("model" %in% colnames(scores))) {
+      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+      relative_skill <- FALSE
+    }
+    models <- unique(scores$model)
+    if (length(models) < 2 + (!is.null(baseline))) {
+      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+      relative_skill <- FALSE
+    }
+    if (!is.null(baseline) && !(baseline %in% models)) {
+      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+      relative_skill <- FALSE
+    }
+    if (metric != "auto" && !(metric %in% available_metrics())) {
+      warning("argument 'metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+      relative_skill <- FALSE
+    }
+  }
+  return(relative_skill)
+}
+
 
 
 #' @title Add coverage of central prediction intervals
@@ -133,13 +198,11 @@ summarise_scores <- function(scores,
 #' summary is present according to the value specified in `by`.
 #' @examples
 #' library(scoringutils)
-#' data <- example_quantile
-#' score(data)
-#' scores <- score(data)
+#' library(magrittr) # pipe operator
 #'
-#' # add coverage
-#' scores <- add_coverage(scores, by = c("model", "target_type"))
-#' summarise_scores(scores, by = c("model", "target_type"))
+#' score(example_quantile) %>%
+#'   add_coverage(by = c("model", "target_type")) %>%
+#'   summarise_scores(by = c("model", "target_type"))
 #'
 #'
 #' @export
