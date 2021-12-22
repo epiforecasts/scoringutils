@@ -6,7 +6,7 @@
 \usage{
 summarise_scores(
   scores,
-  by,
+  by = NULL,
   FUN = mean,
   relative_skill = FALSE,
   metric = "auto",
@@ -18,7 +18,11 @@ summarise_scores(
 \item{scores}{a data.table of unsummarised scores as produced by
 \code{\link[=score]{score()}}}
 
-\item{by}{character vector with column names to summarise scores by.}
+\item{by}{character vector with column names to summarise scores by. Default
+is \code{NULL}, meaning that the only summary that takes is place is summarising
+over quantiles or samples, such that there is one score per forecast as
+defined by the unit of a single forecast
+(rather than one score for every quantile / sample).}
 
 \item{FUN}{a function used for summarising scores. Default is \code{mean}.}
 

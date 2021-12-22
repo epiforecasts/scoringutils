@@ -5,7 +5,11 @@
 #' @param scores a data.table of unsummarised scores as produced by
 #' [score()]
 #' @inheritParams score
-#' @param by character vector with column names to summarise scores by.
+#' @param by character vector with column names to summarise scores by. Default
+#' is `NULL`, meaning that the only summary that takes is place is summarising
+#' over quantiles or samples, such that there is one score per forecast as
+#' defined by the unit of a single forecast
+#' (rather than one score for every quantile / sample).
 #' @param FUN a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
@@ -48,7 +52,7 @@
 #' @export
 
 summarise_scores <- function(scores,
-                             by,
+                             by = NULL,
                              FUN = mean,
                              relative_skill = FALSE,
                              metric = "auto",
@@ -65,6 +69,11 @@ summarise_scores <- function(scores,
   scores <- scores[, lapply(.SD, mean, ...),
                    by = c(unique(c(forecast_unit, by))),
                    .SDcols = colnames(scores) %like% cols_to_summarise]
+
+  # if by is not provided, set to the unit of a single forecast
+  if (is.null(by)) {
+    by <- forecast_unit
+  }
 
   # do pairwise comparisons
   if (relative_skill) {
@@ -84,7 +93,6 @@ summarise_scores <- function(scores,
                     by = get_unit_of_forecast(pairwise))
 
   }
-
 
   scores <- scores[, lapply(.SD, FUN, ...),
                    by = c(by),
