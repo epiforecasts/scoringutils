@@ -243,57 +243,6 @@ available_metrics <- function() {
 }
 
 
-
-#' @title Extract Elements From a List of Lists
-#'
-#' @description
-#' Extract corresponding elements from a list of lists.
-#' @param list the list of lists
-#' @param what character with the name of the element to extract from every
-#' individual list element of `list`
-#' @return A list with the extracted element from every sublist
-#' missing.
-#'
-#' @keywords internal
-extract_from_list <- function(list, what) {
-  out <- lapply(list,
-                FUN = function(list_element) {
-                  return(list_element[[what]])
-                })
-  return(out)
-}
-
-
-
-
-
-#' Update a List
-#'
-#' @description `r lifecycle::badge("stable")`
-#' Used to handle updating settings in a list. For example when making
-#' changes to `interval_score_arguments` in `score()`
-#' @param defaults A list of default settings
-#' @param optional A list of optional settings to override defaults
-#' @return A list
-#'
-#' @keywords internal
-update_list <- function(defaults = list(), optional = list()) {
-  if (length(optional) != 0) {
-    defaults <- defaults[setdiff(names(defaults), names(optional))]
-    updated <- c(defaults, optional)
-  } else {
-    updated <- defaults
-  }
-  return(updated)
-}
-
-
-
-
-
-
-
-
 permutation_test <- function(scores1,
                              scores2,
                              nPermutation = 999,

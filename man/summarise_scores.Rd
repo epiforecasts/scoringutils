@@ -63,9 +63,11 @@ Summarise scores as produced by \code{\link[=score]{score()}}-
 }
 \examples{
 library(scoringutils)
+library(magrittr) # pipe operator
+
+# summarise over samples or quantiles to get one score per forecast
 scores <- score(example_quantile)
-scores <- summarise_scores(scores, by = c("model", "target_type", "location",
-                                          "horizon", "range", "quantile"))
+summarise_scores(scores)
 
 # get scores by model
 summarise_scores(scores, by = c("model"))
