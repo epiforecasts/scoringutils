@@ -24,7 +24,7 @@ The package also has a lot of default visualisation based on the output
 created by \code{\link[=score]{score()}}.
 \itemize{
 \item \code{\link[=score_table]{score_table()}}
-\item \code{\link[=correlation_plot]{correlation_plot()}}
+\item \code{\link[=plot_correlation]{plot_correlation()}}
 \item \code{\link[=wis_components]{wis_components()}}
 \item \code{\link[=range_plot]{range_plot()}}
 \item \code{\link[=score_heatmap]{score_heatmap()}}

@@ -85,20 +85,8 @@ score <- function(data,
   # check relevant columns and remove NA values in true_values and prediction
   data <- check_clean_data(data, verbose = FALSE)
 
-  # handle metrics argument ----------------------------------------------------
-  # use all available metrics if none are given
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-
-  # check desired metrics are actually available in scoringutils
-  available_metrics <- available_metrics()
-  if (!all(metrics %in% available_metrics)) {
-    msg <- paste("The following metrics are not currently implemented and",
-                 "will not be computed:",
-                 paste(setdiff(metrics, available_metrics), collapse = ", "))
-    warning(msg)
-  }
+  # check metrics are available or set to all metrics --------------------------
+  metrics <- check_metrics(metrics)
 
   # obtain a value for the unit of a single observation ------------------------
   forecast_unit <- get_unit_of_forecast(data)

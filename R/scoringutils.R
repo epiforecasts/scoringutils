@@ -20,7 +20,7 @@
 #' created by [score()].
 #'
 #' - [score_table()]
-#' - [correlation_plot()]
+#' - [plot_correlation()]
 #' - [wis_components()]
 #' - [range_plot()]
 #' - [score_heatmap()]

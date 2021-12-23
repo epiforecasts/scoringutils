@@ -61,7 +61,6 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
-    forcats,
     ggplot2,
     scoringRules,
     stats,
