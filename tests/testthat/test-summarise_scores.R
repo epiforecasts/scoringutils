@@ -14,6 +14,8 @@ test_that("summarise_scores() works without any arguments", {
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
+  scores <- score(example_quantile)
+
   expect_error(summarise_scores(scores, by = "not_present"),
                "The following items in `by` are notvalid column names of the data: 'not_present'. Check and run `summarise_scores()` again",
                fixed = TRUE)
