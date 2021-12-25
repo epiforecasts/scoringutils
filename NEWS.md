@@ -79,7 +79,7 @@ with the argument `count_median_twice = FALSE`.
 - we added basic plotting functionality to visualise scores. You can now
 easily obtain diagnostic plots based on scores as produced by `score`.
 - `correlation_plot` shows correlation between metrics
-- `range_plot` shows contribution of different prediction intervals to some 
+- `plot_ranges` shows contribution of different prediction intervals to some 
 chosen metric
 - `plot_heatmap` visualises scores as heatmap
 - `score_table` shows a coloured summary table of scores

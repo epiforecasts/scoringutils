@@ -116,7 +116,7 @@ We can also look at contributions to different metrics by range:
 ```{r}
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "value_desc"))
-scoringutils::range_plot(scores, y = "interval_score", 
+scoringutils::plot_ranges(scores, y = "interval_score", 
                          facet_formula = ~ value_desc)
 ```
 

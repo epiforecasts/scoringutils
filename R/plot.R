@@ -242,15 +242,15 @@ plot_wis_components <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
-#' range_plot(scores, x = "model") +
+#' plot_ranges(scores, x = "model") +
 #'   facet_wrap(~ target_type, scales = "free")
 #'
 #' # visualise dispersion instead of interval score
-#' range_plot(scores, y = "dispersion", x = "model") +
+#' plot_ranges(scores, y = "dispersion", x = "model") +
 #'   facet_wrap(~ target_type)
 #'
 
-range_plot <- function(scores,
+plot_ranges <- function(scores,
                        y = "interval_score",
                        x = "model",
                        colour = "range") {
