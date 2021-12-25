@@ -154,20 +154,15 @@ score_table <- function(summarised_scores,
 #' over-prediction, under-prediction and for high dispersion (lack of sharpness)
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()]
+#' produced by [score()] and summarised using [summarise_scores()]
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
-#' @param group Choose a grouping variable for the plot that gets directly
-#' passed down to ggplot. Default is `NULL`
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
-#' @param x_text_angle Angle for the text on the x-axis. Default is 90
-#' @param xlab Label for the x-axis. Default is the variable name on the x-axis
-#' @param ylab Label for the y-axis. Default is "WIS contributions"
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes_string aes geom_linerange facet_wrap labs
-#' theme theme_light unit
+#' theme theme_light unit guides guide_legend
 #' @export
 #'
 #' @examples
@@ -176,24 +171,20 @@ score_table <- function(summarised_scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' wis_components(scores, x = "model",
-#'               relative_contributions = TRUE) +
+#' plot_wis_components(scores, x = "model",
+#'                     relative_contributions = TRUE) +
 #'   facet_wrap(~ target_type)
-#' wis_components(scores, x = "model",
-#'               relative_contributions = FALSE) +
+#' plot_wis_components(scores, x = "model",
+#'                     relative_contributions = FALSE) +
 #'   facet_wrap(~ target_type)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. <https://arxiv.org/abs/2005.12881>
 
 
-wis_components <- function(scores,
-                           x = "model",
-                           group = NULL,
-                           relative_contributions = FALSE,
-                           x_text_angle = 90,
-                           xlab = x,
-                           ylab = "WIS contributions") {
+plot_wis_components <- function(scores,
+                                x = "model",
+                                relative_contributions = FALSE) {
 
   scores <- data.table::as.data.table(scores)
 
@@ -207,18 +198,18 @@ wis_components <- function(scores,
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
-  plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x, group = group)) +
+  plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x)) +
     ggplot2::geom_col(position = col_position,
                       ggplot2::aes(y = component_value, fill = wis_component_name)) +
-    ggplot2::labs(x = xlab, y = ylab) +
     ggplot2::theme_light() +
     ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
-                   axis.text.x = ggplot2::element_text(angle = x_text_angle,
+                   axis.text.x = ggplot2::element_text(angle = 90,
                                                        vjust = 1,
-                                                       hjust=1))
+                                                       hjust=1)) +
+    guides(fill = guide_legend(title="WIS component")) +
+    ylab("WIS contributions")
 
   return(plot)
-
 }
 
 

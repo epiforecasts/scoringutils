@@ -21,7 +21,7 @@
 #'
 #' - [score_table()]
 #' - [plot_correlation()]
-#' - [wis_components()]
+#' - [plot_wis_components()]
 #' - [range_plot()]
 #' - [score_heatmap()]
 #' - [plot_predictions()]
