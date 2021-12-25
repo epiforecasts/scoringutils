@@ -50,7 +50,7 @@ reference:
                 - interval_coverage
                 - quantile_coverage
                 - score_table
-                - score_heatmap
+                - plot_heatmap
                 - show_avail_forecasts
                 - wis_components
         - title: Internal functions

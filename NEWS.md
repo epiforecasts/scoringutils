@@ -81,7 +81,7 @@ easily obtain diagnostic plots based on scores as produced by `score`.
 - `correlation_plot` shows correlation between metrics
 - `range_plot` shows contribution of different prediction intervals to some 
 chosen metric
-- `score_heatmap` visualises scores as heatmap
+- `plot_heatmap` visualises scores as heatmap
 - `score_table` shows a coloured summary table of scores
 
 ## package updates

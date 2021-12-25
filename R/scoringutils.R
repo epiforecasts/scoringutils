@@ -23,7 +23,7 @@
 #' - [plot_correlation()]
 #' - [plot_wis_components()]
 #' - [range_plot()]
-#' - [score_heatmap()]
+#' - [plot_heatmap()]
 #' - [plot_predictions()]
 #' - [interval_coverage()]
 #' - [quantile_coverage()]

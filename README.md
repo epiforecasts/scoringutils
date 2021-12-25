@@ -189,7 +189,7 @@ We can also visualise metrics using a heatmap:
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "horizon"))
 scores <- scores[, horizon := as.factor(horizon)]
-scoringutils::score_heatmap(scores, 
+scoringutils::plot_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
 

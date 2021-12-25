@@ -459,7 +459,7 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 scores <- score(example_quantile) %>%
   summarise_scores(by = c("model", "target_type", "location_name"))
 
-score_heatmap(scores, 
+plot_heatmap(scores, 
               metric = "interval_score", x = "location_name") + 
   facet_wrap(~ target_type, scale = "free_x")
 ```
