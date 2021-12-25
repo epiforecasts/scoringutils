@@ -4,7 +4,7 @@
 \alias{score_heatmap}
 \title{Create a Heatmap of a Scoring Metric}
 \usage{
-score_heatmap(scores, y = "model", x, metric, ylab = y, xlab = x)
+score_heatmap(scores, y = "model", x, metric)
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
@@ -18,10 +18,6 @@ could be something like "horizon", or "location"}
 
 \item{metric}{the metric that determines the value and colour shown in the
 tiles of the heatmap}
-
-\item{ylab}{Label for the y-axis. Default is the variable name on the y-axis}
-
-\item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
 }
 \value{
 A ggplot2 object showing a heatmap of the desired metric
@@ -36,6 +32,6 @@ library("scoringutils")
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
-scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
+score_heatmap(scores, x = "target_type", metric = "bias")
 
 }

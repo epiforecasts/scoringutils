@@ -230,8 +230,6 @@ plot_wis_components <- function(scores,
 #' Usually this will be "model"
 #' @param colour Character vector of length one used to determine a variable
 #' for colouring dots. The Default is "range".
-#' @param xlab Label for the x-axis. Default is the variable name on the x-axis
-#' @param ylab Label for the y-axis. Default is "WIS contributions"
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes_string aes geom_point geom_line
@@ -244,20 +242,18 @@ plot_wis_components <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
-#' scoringutils::range_plot(scores, x = "model") +
-#'   facet_wrap(~ target_type)
+#' range_plot(scores, x = "model") +
+#'   facet_wrap(~ target_type, scales = "free")
 #'
 #' # visualise dispersion instead of interval score
-#' scoringutils::range_plot(scores, y = "dispersion", x = "model") +
+#' range_plot(scores, y = "dispersion", x = "model") +
 #'   facet_wrap(~ target_type)
 #'
 
 range_plot <- function(scores,
                        y = "interval_score",
                        x = "model",
-                       colour = "range",
-                       xlab = x,
-                       ylab = y) {
+                       colour = "range") {
 
   plot <- ggplot2::ggplot(scores,
                           ggplot2::aes_string(x = x,
@@ -272,9 +268,7 @@ range_plot <- function(scores,
     ggplot2::scale_color_continuous(low = "steelblue", high = "salmon") +
     ggplot2::theme(legend.position = "right",
                    axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
-                                                       hjust=1)) +
-    ggplot2::labs(y = ylab,
-                  x = xlab)
+                                                       hjust=1))
 
   return(plot)
 }
@@ -296,8 +290,6 @@ range_plot <- function(scores,
 #' could be something like "horizon", or "location"
 #' @param metric the metric that determines the value and colour shown in the
 #' tiles of the heatmap
-#' @param xlab Label for the x-axis. Default is the variable name on the x-axis
-#' @param ylab Label for the y-axis. Default is the variable name on the y-axis
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
@@ -309,7 +301,7 @@ range_plot <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
-#' scoringutils::score_heatmap(scores, x = "target_type", metric = "bias")
+#' score_heatmap(scores, x = "target_type", metric = "bias")
 #'
 
 
@@ -317,9 +309,7 @@ range_plot <- function(scores,
 score_heatmap <- function(scores,
                           y = "model",
                           x,
-                          metric,
-                          ylab = y,
-                          xlab = x) {
+                          metric) {
 
 
   data.table::setDT(scores)
@@ -333,7 +323,6 @@ score_heatmap <- function(scores,
     ggplot2::geom_tile() +
     ggplot2::geom_text(ggplot2::aes_string(label = metric)) +
     ggplot2::scale_fill_gradient2(low = "skyblue", high = "red") +
-    ggplot2::labs(y = ylab, x = xlab) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
                                                        hjust=1)) +
     ggplot2::coord_cartesian(expand = FALSE)
@@ -396,8 +385,6 @@ score_heatmap <- function(scores,
 #' @param allow_truth_without_pred logical, whether or not
 #' to allow instances where there is truth data, but no forecast. If `FALSE`
 #' (the default), these get filtered out.
-#' @param xlab Label for the x-axis. Default is the variable name on the x-axis
-#' @param ylab Label for the y-axis. Default is "True and predicted values"
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' facet_wrap facet_grid
@@ -433,9 +420,7 @@ plot_predictions <- function(data = NULL,
                              ncol = NULL,
                              scales = "free_y",
                              allow_truth_without_pred = FALSE,
-                             remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval"),
-                             xlab = x,
-                             ylab = "True and predicted values") {
+                             remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval")) {
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
@@ -558,7 +543,7 @@ plot_predictions <- function(data = NULL,
   }
 
   plot <- plot +
-    ggplot2::labs(x = xlab, y = ylab)
+    ylab("True and predicted values")
 
   # facet if specified by the user
   if (!is.null(facet_formula)) {

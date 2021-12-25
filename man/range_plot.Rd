@@ -4,14 +4,7 @@
 \alias{range_plot}
 \title{Plot Metrics by Range of the Prediction Interval}
 \usage{
-range_plot(
-  scores,
-  y = "interval_score",
-  x = "model",
-  colour = "range",
-  xlab = x,
-  ylab = y
-)
+range_plot(scores, y = "interval_score", x = "model", colour = "range")
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
@@ -26,10 +19,6 @@ Usually this will be "model"}
 
 \item{colour}{Character vector of length one used to determine a variable
 for colouring dots. The Default is "range".}
-
-\item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
-
-\item{ylab}{Label for the y-axis. Default is "WIS contributions"}
 }
 \value{
 A ggplot2 object showing a contributions from the three components of
@@ -46,11 +35,11 @@ library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
-scoringutils::range_plot(scores, x = "model") +
-  facet_wrap(~ target_type)
+range_plot(scores, x = "model") +
+  facet_wrap(~ target_type, scales = "free")
 
 # visualise dispersion instead of interval score
-scoringutils::range_plot(scores, y = "dispersion", x = "model") +
+range_plot(scores, y = "dispersion", x = "model") +
   facet_wrap(~ target_type)
 
 }

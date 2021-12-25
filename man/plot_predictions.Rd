@@ -20,9 +20,7 @@ plot_predictions(
   scales = "free_y",
   allow_truth_without_pred = FALSE,
   remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
-    "interval"),
-  xlab = x,
-  ylab = "True and predicted values"
+    "interval")
 )
 }
 \arguments{
@@ -87,10 +85,6 @@ models or forecasters don't cover the same periods. Removing these columns
 from the truth data makes sure that nevertheless all available truth data
 is plotted (instead of having different true values depending on the
 period covered by a certain model).}
-
-\item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
-
-\item{ylab}{Label for the y-axis. Default is "True and predicted values"}
 }
 \value{
 ggplot object with a plot of true vs predicted values
