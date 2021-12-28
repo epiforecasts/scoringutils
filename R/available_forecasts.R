@@ -3,15 +3,16 @@
 #' @description
 #'
 #' Given a data set with forecasts, count the number of available forecasts
-#' for arbitrary groupring (e.g. the number of forecasts per model, or the
+#' for arbitrary grouping (e.g. the number of forecasts per model, or the
 #' number of forecasts per model and location).
+#' This is useful to determine whether there are any missing forecasts.
 #'
 #' @param data data.frame with predictions in the same format required for
 #' [score()]
 #' @param by character vector or `NULL` (the default) that
 #' denotes the categories over which the number of forecasts should be counted.
 #' By default (`by = NULL`) this will be the unit of a single forecast (i.e.
-#' all available columns (apart from a few protected columsn such as
+#' all available columns (apart from a few "protected" columns such as
 #' 'prediction' and 'true value') plus "quantile" or "sample" where present).
 #' @param collapse character vector (default is `c("quantile", "sample"`) with
 #' names of categories for which the number of rows should be collapsed to one
@@ -25,13 +26,12 @@
 #'
 #' @examples
 #' avail_forecasts(example_quantile,
-#'                 collapse = c("quantile"),
-#'                 by = c("model", "target_type"))
-
+#'   collapse = c("quantile"),
+#'   by = c("model", "target_type")
+#' )
 avail_forecasts <- function(data,
                             by = NULL,
                             collapse = c("quantile", "sample")) {
-
   data <- check_clean_data(data, verbose = FALSE)
 
   forecast_unit <- get_unit_of_forecast(data)
@@ -42,8 +42,10 @@ avail_forecasts <- function(data,
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
-  collapse_by <- setdiff(c(forecast_unit, "quantile", "sample"),
-                         collapse)
+  collapse_by <- setdiff(
+    c(forecast_unit, "quantile", "sample"),
+    collapse
+  )
   # filter out "quantile" or "sample" if present in collapse_by, but not data
   collapse_by <- intersect(collapse_by, names(data))
 
@@ -74,7 +76,7 @@ avail_forecasts <- function(data,
 #' or not to show the actual count numbers on the plot
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid
+#' geom_tile scale_fill_gradient aes_string
 #' @importFrom data.table dcast .I .N
 #' @export
 #'
@@ -82,41 +84,52 @@ avail_forecasts <- function(data,
 #' library(scoringutils)
 #' library(ggplot2)
 #' avail_forecasts <- avail_forecasts(example_quantile,
-#'                                    by = c("model", "target_type",
-#'                                           "target_end_date"))
+#'   by = c(
+#'     "model", "target_type",
+#'     "target_end_date"
+#'   )
+#' )
 #' plot_avail_forecasts(avail_forecasts,
-#'                      x = "target_end_date",
-#'                      show_numbers = FALSE) +
+#'   x = "target_end_date",
+#'   show_numbers = FALSE
+#' ) +
 #'   facet_wrap("target_type")
-
 plot_avail_forecasts <- function(avail_forecasts,
                                  y = "model",
                                  x = "forecast_date",
                                  make_x_factor = TRUE,
                                  show_numbers = TRUE) {
-
   avail_forecasts <- as.data.table(avail_forecasts)
 
-   if (make_x_factor) {
-     avail_forecasts[, eval(x) := as.factor(get(x))]
+  if (make_x_factor) {
+    avail_forecasts[, eval(x) := as.factor(get(x))]
   }
 
-  plot <- ggplot2::ggplot(avail_forecasts,
-                          ggplot2::aes_string(y = y, x = x)) +
-    ggplot2::geom_tile(ggplot2::aes(fill = `Number forecasts`),
-                       width = 0.97, height = 0.97) +
-    ggplot2::scale_fill_gradient(low = "grey95", high = "steelblue",
-                                 na.value = "lightgrey") +
-    ggplot2::theme_light() +
-    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
-                   panel.grid.minor.x = ggplot2::element_blank(),
-                   axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
-                                                       hjust=1)) +
-    ggplot2::theme(panel.spacing = ggplot2::unit(2, "lines"))
+  plot <- ggplot(
+    avail_forecasts,
+    aes_string(y = y, x = x)
+  ) +
+    geom_tile(aes(fill = `Number forecasts`),
+      width = 0.97, height = 0.97
+    ) +
+    scale_fill_gradient(
+      low = "grey95", high = "steelblue",
+      na.value = "lightgrey"
+    ) +
+    theme_light() +
+    theme(
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    theme(panel.spacing = unit(2, "lines"))
 
   if (show_numbers) {
     plot <- plot +
-      ggplot2::geom_text(ggplot2::aes(label = `Number forecasts`))
+      geom_text(aes(label = `Number forecasts`))
   }
 
   return(plot)
