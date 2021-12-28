@@ -4,10 +4,10 @@
 \alias{plot_interval_coverage}
 \title{Plot Interval Coverage}
 \usage{
-plot_interval_coverage(summarised_scores, colour = "model")
+plot_interval_coverage(scores, colour = "model")
 }
 \arguments{
-\item{summarised_scores}{A data.frame of scores based on quantile forecasts as
+\item{scores}{A data.frame of scores based on quantile forecasts as
 produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
 in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
 

@@ -4,10 +4,10 @@
 \alias{score_table}
 \title{Plot Coloured Score Table}
 \usage{
-score_table(summarised_scores, y = NULL, select_metrics = NULL)
+score_table(scores, y = NULL, select_metrics = NULL)
 }
 \arguments{
-\item{summarised_scores}{A data.frame of summarised scores as produced by
+\item{scores}{A data.frame of summarised scores as produced by
 \code{\link[=score]{score()}}}
 
 \item{y}{the variable to be shown on the y-axis. If \code{NULL} (default),
@@ -17,7 +17,7 @@ you can specify a vector with column names, e.g.
 to create a unique row identifier (e.g. "model1_location1")}
 
 \item{select_metrics}{A character vector with the metrics to show. If set to
-\code{NULL} (default), all metrics present in \code{summarised_scores} will
+\code{NULL} (default), all metrics present in \code{scores} will
 be shown}
 }
 \value{

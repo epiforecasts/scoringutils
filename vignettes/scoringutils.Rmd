@@ -51,7 +51,7 @@ library(ggplot2)
 data <- example_quantile
 print(data, 3, 3)
 
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "quantile", "range"))
 print(scores, 3, 3)
 ```
@@ -59,7 +59,7 @@ print(scores, 3, 3)
 Using an appropriate level of summary, we can easily use the output for visualisation. The `scoringutils` package offers some built-in functions to help get a sense of the data
 
 ```{r}
-scoringutils::plot_predictions(
+plot_predictions(
   data = data,,
   x = "target_end_date",
   filter_truth = list('target_end_date <= "2021-07-22"',
@@ -74,7 +74,7 @@ scoringutils::plot_predictions(
 
 
 ```{r}
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 score_table(scores, 
@@ -100,7 +100,7 @@ plot_quantile_coverage(scores) +
 Let us look at the individual components of the weighted interval score: 
 
 ```{r}
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 plot_wis_components(scores) + 
   facet_wrap(~ target_type)
@@ -109,19 +109,19 @@ plot_wis_components(scores) +
 We can also look at contributions to different metrics by range: 
 
 ```{r}
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "range", "target_type"))
-scoringutils::plot_ranges(scores, y = "interval_score") + 
+plot_ranges(scores, y = "interval_score") + 
   facet_wrap(~ target_type)
 ```
 
 We can also visualise metrics using a heatmap: 
 
 ```{r}
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "horizon"))
 scores$horizon <- as.factor(scores$horizon)
-scoringutils::plot_heatmap(scores, 
+plot_heatmap(scores, 
                             x = "horizon", metric = "bias")
 ```
 
@@ -133,25 +133,25 @@ The `score()` function is designed to work with various different input formats.
 quantile forecasts in either a plain quantile format or in a format that specifies interval ranges and the boundary of a given interval range. 
 
 ``` {r}
-print(scoringutils::example_quantile, 3, 3)
+print(example_quantile, 3, 3)
 ```
 
 sample based format with either continuous or integer values
 
 ``` {r}
-print(scoringutils::example_integer, 3, 3)
-print(scoringutils::example_continuous, 3, 3)
+print(example_integer, 3, 3)
+print(example_continuous, 3, 3)
 ```
 
 forecasts in a binary format:
 
 ``` {r}
-print(scoringutils::example_binary, 3, 3)
+print(example_binary, 3, 3)
 ```
 
 It also offers functionality to convert between these formats. For more information have a look at the documentation of the following functions: 
 ``` {r eval=FALSE}
-scoringutils::sample_to_quantile() # convert from sample based to quantile format
+sample_to_quantile() # convert from sample based to quantile format
 ```
 
 

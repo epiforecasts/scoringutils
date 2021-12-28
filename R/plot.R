@@ -4,7 +4,7 @@
 #' Plots a coloured table of summarised scores obtained using
 #' [score()]
 #'
-#' @param summarised_scores A data.frame of summarised scores as produced by
+#' @param scores A data.frame of summarised scores as produced by
 #' [score()]
 #' @param y the variable to be shown on the y-axis. If `NULL` (default),
 #' all columns that are not scoring metrics will be used. Alternatively,
@@ -12,7 +12,7 @@
 #' `y = c("model", "location")`. These column names will be concatenated
 #' to create a unique row identifier (e.g. "model1_location1")
 #' @param select_metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `summarised_scores` will
+#' `NULL` (default), all metrics present in `scores` will
 #' be shown
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
@@ -44,7 +44,7 @@
 #'   facet_wrap(~ target_type, ncol = 1)
 #'
 
-score_table <- function(summarised_scores,
+score_table <- function(scores,
                         y = NULL,
                         select_metrics = NULL) {
 
@@ -54,16 +54,16 @@ score_table <- function(summarised_scores,
   # are metrics. All other variables are treated as identifier variables
   all_metrics <- available_metrics()
 
-  metrics <- names(summarised_scores)[names(summarised_scores) %in% all_metrics]
-  id_vars <- names(summarised_scores)[!(names(summarised_scores) %in% all_metrics)]
+  metrics <- names(scores)[names(scores) %in% all_metrics]
+  id_vars <- names(scores)[!(names(scores) %in% all_metrics)]
 
 
   # metrics to delete
-  summarised_scores <- data.table::as.data.table(summarised_scores)
+  scores <- data.table::as.data.table(scores)
 
   if (!is.null(select_metrics)) {
     to_delete <- setdiff(metrics, select_metrics)
-    summarised_scores[, (to_delete) := NULL]
+    scores[, (to_delete) := NULL]
   }
 
   # compute scaled values ------------------------------------------------------
@@ -97,7 +97,7 @@ score_table <- function(summarised_scores,
   }
 
   # pivot longer and add scaled values
-  df <- data.table::melt(summarised_scores, value.vars = metrics,
+  df <- data.table::melt(scores, value.vars = metrics,
                          id.vars = id_vars,
                          variable.name = "metric")
 
@@ -127,19 +127,19 @@ score_table <- function(summarised_scores,
 
   # plot -----------------------------------------------------------------------
   # make plot with all metrics that are not NA
-  plot <- ggplot2::ggplot(df[!is.na(value), ],
-                          ggplot2::aes(y = identif, x = metric)) +
-    #ggplot2::geom_tile(fill = "blue") +
-    ggplot2::geom_tile(ggplot2::aes(fill = value_scaled), colour = "white") +
-    ggplot2::geom_text(ggplot2::aes(y = identif, label = round(value, 2))) +
-    ggplot2::scale_fill_gradient2(low = "steelblue", high = "salmon") +
-    ggplot2::theme_light() +
-    ggplot2::theme(legend.title = ggplot2::element_blank(),
+  plot <- ggplot(df[!is.na(value), ],
+                          aes(y = identif, x = metric)) +
+    #geom_tile(fill = "blue") +
+    geom_tile(aes(fill = value_scaled), colour = "white") +
+    geom_text(aes(y = identif, label = round(value, 2))) +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
+    theme_light() +
+    theme(legend.title = element_blank(),
                    legend.position = "none",
-                   axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
+                   axis.text.x = element_text(angle = 90, vjust = 1,
                                                        hjust=1)) +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::coord_cartesian(expand=FALSE)
+    labs(x = "", y = "") +
+    coord_cartesian(expand=FALSE)
 
   return(plot)
 
@@ -198,12 +198,12 @@ plot_wis_components <- function(scores,
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
-  plot <- ggplot2::ggplot(scores, ggplot2::aes_string(x = x)) +
-    ggplot2::geom_col(position = col_position,
-                      ggplot2::aes(y = component_value, fill = wis_component_name)) +
-    ggplot2::theme_light() +
-    ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
-                   axis.text.x = ggplot2::element_text(angle = 90,
+  plot <- ggplot(scores, aes_string(x = x)) +
+    geom_col(position = col_position,
+                      aes(y = component_value, fill = wis_component_name)) +
+    theme_light() +
+    theme(panel.spacing = unit(4, "mm"),
+                   axis.text.x = element_text(angle = 90,
                                                        vjust = 1,
                                                        hjust=1)) +
     guides(fill = guide_legend(title="WIS component")) +
@@ -255,19 +255,19 @@ plot_ranges <- function(scores,
                        x = "model",
                        colour = "range") {
 
-  plot <- ggplot2::ggplot(scores,
-                          ggplot2::aes_string(x = x,
+  plot <- ggplot(scores,
+                          aes_string(x = x,
                                               y = y,
                                               colour = colour)) +
-    ggplot2::geom_point(size = 2) +
-    ggplot2::geom_line(ggplot2::aes(group = range),
+    geom_point(size = 2) +
+    geom_line(aes(group = range),
                        colour = "black",
                        size = 0.01) +
-    ggplot2::theme_light() +
-    ggplot2::expand_limits(y = 0) +
-    ggplot2::scale_color_continuous(low = "steelblue", high = "salmon") +
-    ggplot2::theme(legend.position = "right",
-                   axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
+    theme_light() +
+    expand_limits(y = 0) +
+    scale_color_continuous(low = "steelblue", high = "salmon") +
+    theme(legend.position = "right",
+                   axis.text.x = element_text(angle = 90, vjust = 1,
                                                        hjust=1))
 
   return(plot)
@@ -316,16 +316,16 @@ plot_heatmap <- function(scores,
 
   scores[, eval(metric) := round(get(metric), 2)]
 
-  plot <- ggplot2::ggplot(scores,
-                          ggplot2::aes_string(y = y,
+  plot <- ggplot(scores,
+                          aes_string(y = y,
                                               x = x,
                                               fill = metric)) +
-    ggplot2::geom_tile() +
-    ggplot2::geom_text(ggplot2::aes_string(label = metric)) +
-    ggplot2::scale_fill_gradient2(low = "skyblue", high = "red") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
+    geom_tile() +
+    geom_text(aes_string(label = metric)) +
+    scale_fill_gradient2(low = "skyblue", high = "red") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 1,
                                                        hjust=1)) +
-    ggplot2::coord_cartesian(expand = FALSE)
+    coord_cartesian(expand = FALSE)
 
   return(plot)
 }
@@ -387,7 +387,7 @@ plot_heatmap <- function(scores,
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid
+#' facet_wrap facet_grid sym geom_ribbon
 #' @importFrom data.table dcast
 #' @export
 #'
@@ -498,10 +498,10 @@ plot_predictions <- function(data = NULL,
 
   pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
 
-  plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
-    ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
-    ggplot2::scale_fill_manual(name = "range", values = pal(length(range))) +
-    ggplot2::theme_light()
+  plot <- ggplot(data = data, aes(x = !!sym(x))) +
+    scale_colour_manual("",values = c("black", "steelblue4")) +
+    scale_fill_manual(name = "range", values = pal(length(range))) +
+    theme_light()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
@@ -513,8 +513,8 @@ plot_predictions <- function(data = NULL,
 
     # plot prediction ranges
     plot <- plot +
-      ggplot2::geom_ribbon(data = intervals,
-                           ggplot2::aes(ymin = lower, ymax = upper,
+      geom_ribbon(data = intervals,
+                           aes(ymin = lower, ymax = upper,
                                         group = range, fill = range))
   }
 
@@ -525,8 +525,8 @@ plot_predictions <- function(data = NULL,
 
     if (nrow(median) > 0) {
       plot <- plot +
-        ggplot2::geom_line(data = median,
-                           mapping = ggplot2::aes(y = prediction, colour = "median"),
+        geom_line(data = median,
+                           mapping = aes(y = prediction, colour = "median"),
                            lwd = 0.4)
     }
   }
@@ -534,11 +534,11 @@ plot_predictions <- function(data = NULL,
   # add true_values
   if (nrow(truth_data) > 0) {
     plot <- plot +
-      ggplot2::geom_point(data = truth_data,
-                          ggplot2::aes(y = true_value, colour = "actual"),
+      geom_point(data = truth_data,
+                          aes(y = true_value, colour = "actual"),
                           size = 0.5) +
-      ggplot2::geom_line(data = truth_data,
-                         ggplot2::aes(y = true_value, colour = "actual"),
+      geom_line(data = truth_data,
+                         aes(y = true_value, colour = "actual"),
                          lwd = 0.2)
   }
 
@@ -549,10 +549,10 @@ plot_predictions <- function(data = NULL,
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
       plot <- plot +
-        ggplot2::facet_wrap(facet_formula, scales = scales, ncol = ncol)
+        facet_wrap(facet_formula, scales = scales, ncol = ncol)
     } else {
       plot <- plot +
-        ggplot2::facet_grid(facet_formula, scales = scales)
+        facet_grid(facet_formula, scales = scales)
     }
   }
 
@@ -570,7 +570,7 @@ plot_predictions <- function(data = NULL,
 #' @description
 #' Plot interval coverage
 #'
-#' @param summarised_scores A data.frame of scores based on quantile forecasts as
+#' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()] or [summarise_scores()]. Note that "range" must be included
 #' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
@@ -587,27 +587,27 @@ plot_predictions <- function(data = NULL,
 #' scores <- summarise_scores(scores, by = c("model", "range"))
 #' plot_interval_coverage(scores)
 
-plot_interval_coverage <- function(summarised_scores,
+plot_interval_coverage <- function(scores,
                               colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
+  p1 <- ggplot(scores, aes_string(x = "range",
                                                                colour = colour)) +
-    ggplot2::geom_polygon(data = data.frame(x = c(0, 0, 100),
+    geom_polygon(data = data.frame(x = c(0, 0, 100),
                                             y = c(0, 100, 100),
                                             g = c("o", "o", "o")),
-                          ggplot2::aes(x = x, y = y, group = g,
+                          aes(x = x, y = y, group = g,
                                        fill = g),
                           alpha = 0.05,
                           colour = "white",
                           fill = "olivedrab3") +
-    ggplot2::geom_line(ggplot2::aes(y = range), colour = "grey",
+    geom_line(aes(y = range), colour = "grey",
                        linetype = "dashed") +
-    ggplot2::geom_line(ggplot2::aes(y = coverage * 100)) +
-    ggplot2::theme_light() +
-    ggplot2::theme(legend.position = "bottom") +
-    ggplot2::ylab("% Obs inside interval") +
-    ggplot2::xlab("Interval range") +
-    ggplot2::coord_cartesian(expand = FALSE)
+    geom_line(aes(y = coverage * 100)) +
+    theme_light() +
+    theme(legend.position = "bottom") +
+    ylab("% Obs inside interval") +
+    xlab("Interval range") +
+    coord_cartesian(expand = FALSE)
 
   return(p1)
 }
@@ -621,7 +621,7 @@ plot_interval_coverage <- function(summarised_scores,
 #' @description
 #' Plot quantile coverage
 #'
-#' @param summarised_scores A data.frame of scores based on quantile forecasts as
+#' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()] or [summarise_scores()]. Note that "range" must be included
 #' in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
@@ -637,29 +637,29 @@ plot_interval_coverage <- function(summarised_scores,
 #' scores <- summarise_scores(scores, by = c("model", "quantile"))
 #' plot_quantile_coverage(scores)
 
-plot_quantile_coverage <- function(summarised_scores,
-                              colour = "model") {
+plot_quantile_coverage <- function(scores,
+                                   colour = "model") {
 
-  p2 <- ggplot2::ggplot(data = summarised_scores,
-                        ggplot2::aes_string(x = "quantile", colour = colour)) +
-    ggplot2::geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
+  p2 <- ggplot(data = scores,
+                        aes_string(x = "quantile", colour = colour)) +
+    geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
                                                   0.5, 0.5, 1),
                                             y = c(0, 0, 0.5,
                                                   0.5, 1, 1),
                                             g = c("o", "o", "o")),
-                          ggplot2::aes(x = x, y = y, group = g,
+                          aes(x = x, y = y, group = g,
                                        fill = g),
                           alpha = 0.05,
                           colour = "white",
                           fill = "olivedrab3") +
-    ggplot2::geom_line(ggplot2::aes(y = quantile), colour = "grey",
+    geom_line(aes(y = quantile), colour = "grey",
                        linetype = "dashed") +
-    ggplot2::geom_line(ggplot2::aes(y = quantile_coverage)) +
-    ggplot2::theme_light() +
-    ggplot2::theme(legend.position = "bottom") +
-    ggplot2::xlab("Quantile") +
-    ggplot2::ylab("% obs below quantile") +
-    ggplot2::coord_cartesian(expand = FALSE)
+    geom_line(aes(y = quantile_coverage)) +
+    theme_light() +
+    theme(legend.position = "bottom") +
+    xlab("Quantile") +
+    ylab("% obs below quantile") +
+    coord_cartesian(expand = FALSE)
 
   return(p2)
 
