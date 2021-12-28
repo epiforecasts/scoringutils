@@ -577,7 +577,7 @@ plot_predictions <- function(data = NULL,
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid
+#' facet_wrap facet_grid geom_polygon
 #' @importFrom data.table dcast
 #' @export
 #'
@@ -585,9 +585,9 @@ plot_predictions <- function(data = NULL,
 #' library("scoringutils")
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "range"))
-#' interval_coverage(scores)
+#' plot_interval_coverage(scores)
 
-interval_coverage <- function(summarised_scores,
+plot_interval_coverage <- function(summarised_scores,
                               colour = "model") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot2::ggplot(summarised_scores, ggplot2::aes_string(x = "range",
@@ -635,9 +635,9 @@ interval_coverage <- function(summarised_scores,
 #' library("scoringutils")
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "quantile"))
-#' quantile_coverage(scores)
+#' plot_quantile_coverage(scores)
 
-quantile_coverage <- function(summarised_scores,
+plot_quantile_coverage <- function(summarised_scores,
                               colour = "model") {
 
   p2 <- ggplot2::ggplot(data = summarised_scores,

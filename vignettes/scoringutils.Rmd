@@ -87,13 +87,13 @@ Given this level of aggregation, not all metrics may make sense. In this case, f
 Let us look at calibration: 
 
 ```{r out.width="50%", fig.show="hold"}
-scores <- scoringutils::score(data)
+scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "range", "quantile"))
 
-scoringutils::interval_coverage(scores) + 
+plot_interval_coverage(scores) + 
   ggplot2::ggtitle("Interval Coverage")
 
-scoringutils::quantile_coverage(scores) + 
+plot_quantile_coverage(scores) + 
   ggplot2::ggtitle("Quantile Coverage")
 ```
 

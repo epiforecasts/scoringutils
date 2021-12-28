@@ -29,8 +29,8 @@ created by \code{\link[=score]{score()}}.
 \item \code{\link[=plot_ranges]{plot_ranges()}}
 \item \code{\link[=plot_heatmap]{plot_heatmap()}}
 \item \code{\link[=plot_predictions]{plot_predictions()}}
-\item \code{\link[=interval_coverage]{interval_coverage()}}
-\item \code{\link[=quantile_coverage]{quantile_coverage()}}
+\item \code{\link[=plot_interval_coverage]{plot_interval_coverage()}}
+\item \code{\link[=plot_quantile_coverage]{plot_quantile_coverage()}}
 }
 
 Alternatively, the following functions can be accessed directly:

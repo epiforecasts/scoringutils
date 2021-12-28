@@ -96,10 +96,10 @@ Let us look at calibration:
 ```{r out.width="50%", fig.show="hold"}
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "quantile"))
-scoringutils::interval_coverage(scores) + 
+scoringutils::plot_interval_coverage(scores) + 
   ggplot2::ggtitle("Interval Coverage")
 
-scoringutils::quantile_coverage(scores) + 
+scoringutils::plot_quantile_coverage(scores) + 
   ggplot2::ggtitle("Quantile Coverage")
 ```
 
@@ -108,7 +108,7 @@ Let us look at the individual components of the weighted interval score:
 ```{r}
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "value_desc"))
-scoringutils::wis_components(scores, facet_formula = ~ value_desc)
+scoringutils::plot_wis_components(scores, facet_formula = ~ value_desc)
 ```
 
 We can also look at contributions to different metrics by range: 
@@ -116,8 +116,8 @@ We can also look at contributions to different metrics by range:
 ```{r}
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "range", "value_desc"))
-scoringutils::plot_ranges(scores, y = "interval_score", 
-                         facet_formula = ~ value_desc)
+scoringutils::plot_ranges(scores, y = "interval_score") + 
+  facet_wrap( ~ value_desc)
 ```
 
 We can also visualise metrics using a heatmap: 

@@ -25,8 +25,8 @@
 #' - [plot_ranges()]
 #' - [plot_heatmap()]
 #' - [plot_predictions()]
-#' - [interval_coverage()]
-#' - [quantile_coverage()]
+#' - [plot_interval_coverage()]
+#' - [plot_quantile_coverage()]
 #'
 #' Alternatively, the following functions can be accessed directly:
 #'
