@@ -26,9 +26,15 @@ Absolute error of the median calculated as
 \deqn{
   abs(true_value - median_prediction)
 }
+
+The function was created for internal use within \code{\link[=score]{score()}}, but can also
+used as a standalone function.
 }
 \examples{
 true_values <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
 ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
+}
+\seealso{
+\code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=abs_error]{abs_error()}}
 }
