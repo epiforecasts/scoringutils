@@ -15,9 +15,17 @@
 score_binary <- function(data,
                          forecast_unit,
                          metrics) {
-  res <- data[, "brier_score" := scoringutils::brier_score(true_value, prediction),
-    by = forecast_unit
-  ]
+  if ("brier_score" %in% metrics) {
+    data[, "brier_score" := brier_score(true_value, prediction),
+      by = forecast_unit
+    ]
+  }
 
-  return(res[])
+  if ("log_score" %in% metrics) {
+    data[, "log_score" := logs_binary(true_value, prediction),
+      by = forecast_unit
+    ]
+  }
+
+  return(data[])
 }

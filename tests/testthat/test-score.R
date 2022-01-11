@@ -32,7 +32,8 @@ test_that("function produces output for a binary case", {
     colnames(eval),
     c(
       "model", "target_type",
-      "brier_score"
+      "brier_score",
+      "log_score"
     )
   )
 })
