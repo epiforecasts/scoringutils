@@ -9,8 +9,10 @@ test_that("check_forecasts() function has an error for empty data.frame", {
 
 test_that("check_forecasts() function returns a warning with NA in the data", {
   check <- check_forecasts(example_quantile)
-  expect_equal(unlist(check$warnings),
-               "Some values for `prediction` are NA in the data provided")
+  expect_equal(
+    unlist(check$warnings),
+    "Some values for `prediction` are NA in the data provided"
+  )
 })
 
 test_that("check_forecasts() function returns warnings with NA in the data", {

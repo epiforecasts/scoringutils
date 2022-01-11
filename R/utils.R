@@ -14,12 +14,14 @@ check_not_null <- function(...) {
   varnames <- names(vars)
 
   for (i in 1:length(vars)) {
-    varname = varnames[i]
+    varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      calling_function <- deparse1(sys.calls()[[sys.nframe()-1]])
-      stop(paste0("variable '", varname,
-                  "' is `NULL` in the following function call: '",
-                  calling_function, "'"))
+      calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+      stop(paste0(
+        "variable '", varname,
+        "' is `NULL` in the following function call: '",
+        calling_function, "'"
+      ))
     }
   }
   return(invisible(NULL))
@@ -44,9 +46,10 @@ check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
   lengths <- sapply(vars,
-         FUN = function(x) {
-           length(x)
-         })
+    FUN = function(x) {
+      length(x)
+    }
+  )
 
   lengths <- unique(lengths)
 
@@ -55,11 +58,13 @@ check_equal_length <- function(...,
   }
 
   if (length(unique(lengths)) != 1) {
-    calling_function <- deparse1(sys.calls()[[sys.nframe()-1]])
-    stop(paste0("Arguments passed to the following function call: '",
-                calling_function,
-                "' should have the same length (or length one). Arguments have the following lengths: ",
-                paste0(lengths, collapse = ", ")))
+    calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+    stop(paste0(
+      "Arguments passed to the following function call: '",
+      calling_function,
+      "' should have the same length (or length one). Arguments have the following lengths: ",
+      paste0(lengths, collapse = ", ")
+    ))
   }
   return(invisible(NULL))
 }
@@ -76,67 +81,69 @@ geom_mean_helper <- function(x) {
 }
 
 
-globalVariables(c("..index",
-                  ".",
-                  ".SD",
-                  "adj_pval",
-                  "ae_point",
-                  "aem",
-                  "boundary",
-                  "bias",
-                  "brier_score",
-                  "component_value",
-                  "..colnames_x",
-                  "..colnames_y",
-                  "..samplecols",
-                  "compare_against",
-                  "count",
-                  "coverage_deviation",
-                  "CRPS",
-                  "DSS",
-                  "fill_col",
-                  "identif",
-                  "Interval_Score",
-                  "overprediction",
-                  "underprediction",
-                  "quantile_coverage",
-                  "LogS",
-                  "calibration",
-                  "coverage",
-                  "hist",
-                  "InternalDuplicateCheck",
-                  "InternalNumCheck",
-                  "log_score",
-                  "lower",
-                  "mean_scores_ratio",
-                  "metric",
-                  "metrics_select",
-                  "model",
-                  "n_obs",
-                  "n_obs wis_component_name",
-                  "Number forecasts",
-                  "pit_p_val",
-                  "pit_value",
-                  "point",
-                  "prediction",
-                  "pval",
-                  "quantile",
-                  "ratio",
-                  "rel_to_baseline",
-                  "relative_skill",
-                  "rn",
-                  "theta",
-                  "true_value",
-                  "type",
-                  "upper",
-                  "value",
-                  "value_scaled",
-                  "var_of_interest",
-                  "variable",
-                  "wis_component_name",
-                  "x",
-                  "y",
-                  "g"))
+globalVariables(c(
+  "..index",
+  ".",
+  ".SD",
+  "adj_pval",
+  "ae_point",
+  "aem",
+  "boundary",
+  "bias",
+  "brier_score",
+  "component_value",
+  "..colnames_x",
+  "..colnames_y",
+  "..samplecols",
+  "compare_against",
+  "count",
+  "coverage_deviation",
+  "CRPS",
+  "DSS",
+  "fill_col",
+  "identif",
+  "Interval_Score",
+  "overprediction",
+  "underprediction",
+  "quantile_coverage",
+  "LogS",
+  "calibration",
+  "coverage",
+  "hist",
+  "InternalDuplicateCheck",
+  "InternalNumCheck",
+  "log_score",
+  "lower",
+  "mean_scores_ratio",
+  "metric",
+  "metrics_select",
+  "model",
+  "n_obs",
+  "n_obs wis_component_name",
+  "Number forecasts",
+  "pit_p_val",
+  "pit_value",
+  "point",
+  "prediction",
+  "pval",
+  "quantile",
+  "ratio",
+  "rel_to_baseline",
+  "relative_skill",
+  "rn",
+  "theta",
+  "true_value",
+  "type",
+  "upper",
+  "value",
+  "value_scaled",
+  "var_of_interest",
+  "variable",
+  "wis_component_name",
+  "x",
+  "y",
+  "g"
+))
 
 
 #' @title Available metrics in scoringutils
@@ -145,12 +152,14 @@ globalVariables(c("..index",
 #' @export
 
 available_metrics <- function() {
-  available_metrics <- c("ae_point", "aem", "log_score", "sharpness",
-                         "dispersion", "bias", "dss", "crps", "brier_score",
-                         "coverage", "coverage_deviation", "quantile_coverage",
-                         "pit_p_val", "pit_sd","interval_score",
-                         "underprediction", "overprediction", "relative_skill",
-                         "scaled_rel_skill")
+  available_metrics <- c(
+    "ae_point", "aem", "log_score", "sharpness",
+    "dispersion", "bias", "dss", "crps", "brier_score",
+    "coverage", "coverage_deviation", "quantile_coverage",
+    "pit_p_val", "pit_sd", "interval_score",
+    "underprediction", "overprediction", "relative_skill",
+    "scaled_rel_skill"
+  )
 
   metrics <- list()
   ae_point <- list(
@@ -190,7 +199,7 @@ available_metrics <- function() {
     description = ""
   )
 
-  brier_score <-  list(
+  brier_score <- list(
     id = "",
     name = "",
     description = ""
@@ -250,29 +259,30 @@ permutation_test <- function(scores1,
                              nPermutation = 999,
                              oneSided = FALSE,
                              comparison_mode = c("difference", "ratio")) {
-  nTime = length(scores1)
+  nTime <- length(scores1)
   meanscores1 <- mean(scores1)
   meanscores2 <- mean(scores2)
   if (comparison_mode[1] == "ratio") {
     # distinguish between on-sided and two-sided:
     testStat_observed <- ifelse(oneSided,
-                                meanscores1 / meanscores2,
-                                max(meanscores1 / meanscores2, meanscores2 / meanscores1))
+      meanscores1 / meanscores2,
+      max(meanscores1 / meanscores2, meanscores2 / meanscores1)
+    )
   } else {
     testStat_observed <- ifelse(oneSided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
   }
   testStat_permuted <- replicate(nPermutation, {
     sel <- rbinom(nTime, size = 1, prob = 0.5)
-    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1]))/nTime
-    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0]))/nTime
+    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1])) / nTime
+    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0])) / nTime
     if (comparison_mode[1] == "ratio") {
-      ifelse(oneSided, g1 / g2, max(g1 / g2, g2/g1))
+      ifelse(oneSided, g1 / g2, max(g1 / g2, g2 / g1))
     } else {
       ifelse(oneSided, g1 - g2, abs(g1 - g2))
     }
   })
   # abs needs to be removed here (messes with one sided vs two-sided)
-  pVal <- (1 + sum(testStat_permuted >= testStat_observed))/(nPermutation + 1)
+  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (nPermutation + 1)
   # plus ones to make sure p-val is never 0?
   return(pVal)
 }
@@ -339,7 +349,7 @@ get_prediction_type <- function(data) {
 get_target_type <- function(data) {
   if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
     if (all(data$true_value %in% c(0, 1)) &&
-        all(data$prediction >= 0) && all(data$prediction <= 1)) {
+      all(data$prediction >= 0) && all(data$prediction <= 1)) {
       return("binary")
     } else {
       return("integer")
@@ -376,9 +386,11 @@ check_clean_data <- function(data, verbose = TRUE) {
   }
 
   if (any(colnames(data) %in% available_metrics())) {
-    warning("At least one column in the data corresponds to the name of a ",
-            "metric that will be computed by scoringutils. This may be a ",
-            "problem. Please check `available_metrics()`")
+    warning(
+      "At least one column in the data corresponds to the name of a ",
+      "metric that will be computed by scoringutils. This may be a ",
+      "problem. Please check `available_metrics()`"
+    )
   }
 
   # remove rows where prediction or true value are NA
@@ -445,10 +457,11 @@ check_metrics <- function(metrics) {
   # check desired metrics are actually available in scoringutils
   available_metrics <- available_metrics()
   if (!all(metrics %in% available_metrics)) {
-    msg <- paste("The following metrics are not available:",
-                 paste(setdiff(metrics, available_metrics), collapse = ", "))
+    msg <- paste(
+      "The following metrics are not available:",
+      paste(setdiff(metrics, available_metrics), collapse = ", ")
+    )
     warning(msg)
   }
   return(metrics)
 }
-

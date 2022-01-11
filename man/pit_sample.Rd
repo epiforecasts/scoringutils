@@ -86,9 +86,8 @@ plot_pit(pit)
 ## integer predictions
 true_values <- rpois(100, lambda = 1:100)
 predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-pit <- pit_sample(true_values, predictions,  n_replicates = 50)
+pit <- pit_sample(true_values, predictions, n_replicates = 50)
 plot_pit(pit)
-
 }
 \references{
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,

@@ -65,22 +65,26 @@ The interval score is a proper scoring rule that scores a quantile forecast
 }
 \examples{
 true_values <- rnorm(30, mean = 1:30)
-interval_range = rep(90, 30)
-alpha = (100 - interval_range) / 100
-lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
-upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
+interval_range <- rep(90, 30)
+alpha <- (100 - interval_range) / 100
+lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
+upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 
-interval_score(true_values = true_values,
-               lower = lower,
-               upper = upper,
-               interval_range = interval_range)
+interval_score(
+  true_values = true_values,
+  lower = lower,
+  upper = upper,
+  interval_range = interval_range
+)
 
 # example with missing values and separate results
-interval_score(true_values = c(true_values, NA),
-               lower = c(lower, NA),
-               upper = c(NA, upper),
-               separate_results = TRUE,
-               interval_range = 90)
+interval_score(
+  true_values = c(true_values, NA),
+  lower = c(lower, NA),
+  upper = c(NA, upper),
+  separate_results = TRUE,
+  interval_range = 90
+)
 }
 \references{
 Strictly Proper Scoring Rules, Prediction,and Estimation,

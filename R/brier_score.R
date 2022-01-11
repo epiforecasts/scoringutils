@@ -24,13 +24,11 @@
 #' @export
 #'
 #' @examples
-#' true_values <- sample(c(0,1), size = 30, replace = TRUE)
+#' true_values <- sample(c(0, 1), size = 30, replace = TRUE)
 #' predictions <- runif(n = 30, min = 0, max = 1)
 #'
 #' brier_score(true_values, predictions)
-#'
-
-brier_score <- function (true_values, predictions) {
+brier_score <- function(true_values, predictions) {
 
   # ============== Error handling ==============
 
@@ -38,15 +36,17 @@ brier_score <- function (true_values, predictions) {
     stop("true_values or predictions argument missing")
   }
 
-  if (!all(true_values %in% c(0,1))) {
+  if (!all(true_values %in% c(0, 1))) {
     stop("elements of true_values should be either zero or one")
   }
 
   n <- length(true_values)
 
   if (length(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
-                   n, length(predictions))
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
+      n, length(predictions)
+    )
     stop(msg)
   }
 
@@ -55,8 +55,6 @@ brier_score <- function (true_values, predictions) {
   }
   # ============================================
 
-  brierscore <- (sum((true_values - predictions)^2) ) / n
+  brierscore <- (sum((true_values - predictions)^2)) / n
   return(brierscore)
 }
-
-

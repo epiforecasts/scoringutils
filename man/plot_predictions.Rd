@@ -98,12 +98,15 @@ example1 <- scoringutils::example_continuous
 plot_predictions(
   example1,
   x = "target_end_date",
-  filter_truth = list('target_end_date <= "2021-07-22"',
-                      'target_end_date > "2021-05-01"'),
-  filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                          'forecast_date == "2021-06-07"'),
+  filter_truth = list(
+    'target_end_date <= "2021-07-22"',
+    'target_end_date > "2021-05-01"'
+  ),
+  filter_forecasts = list(
+    "model == 'EuroCOVIDhub-ensemble'",
+    'forecast_date == "2021-06-07"'
+  ),
   facet_formula = location ~ target_type,
   range = c(0, 50, 90, 95)
 )
-
 }

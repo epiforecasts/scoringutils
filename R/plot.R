@@ -27,7 +27,7 @@
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' score_table(scores, y = "model") +
-#'   facet_wrap(~ target_type, ncol = 1)
+#'   facet_wrap(~target_type, ncol = 1)
 #'
 #' # can also put target description on the y-axis
 #' score_table(scores, y = c("model", "target_type"))
@@ -39,11 +39,11 @@
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' # only show selected metrics
-#' score_table(scores, y = "model",
-#'             select_metrics = c("crps", "bias")) +
-#'   facet_wrap(~ target_type, ncol = 1)
-#'
-
+#' score_table(scores,
+#'   y = "model",
+#'   select_metrics = c("crps", "bias")
+#' ) +
+#'   facet_wrap(~target_type, ncol = 1)
 score_table <- function(scores,
                         y = NULL,
                         select_metrics = NULL) {
@@ -76,8 +76,10 @@ score_table <- function(scores,
   metrics_zero_good <- c("bias", "coverage_deviation")
   metrics_no_color <- c("coverage")
   metrics_p_val <- c("pit_p_val")
-  metrics_min_good <- setdiff(metrics, c(metrics_zero_good, metrics_p_val,
-                                         metrics_no_color))
+  metrics_min_good <- setdiff(metrics, c(
+    metrics_zero_good, metrics_p_val,
+    metrics_no_color
+  ))
 
   # write scale functions that can be used in data.table
   scale <- function(x) {
@@ -97,18 +99,24 @@ score_table <- function(scores,
   }
 
   # pivot longer and add scaled values
-  df <- data.table::melt(scores, value.vars = metrics,
-                         id.vars = id_vars,
-                         variable.name = "metric")
+  df <- data.table::melt(scores,
+    value.vars = metrics,
+    id.vars = id_vars,
+    variable.name = "metric"
+  )
 
   df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-     by = metric]
+    by = metric
+  ]
   df[metric %in% metrics_zero_good, value_scaled := scale(value),
-     by = metric]
+    by = metric
+  ]
   df[metric %in% metrics_no_color, value_scaled := 0,
-     by = metric]
+    by = metric
+  ]
   df[metric %in% metrics_p_val, value_scaled := scale_p_val(value),
-     by = metric]
+    by = metric
+  ]
 
 
   # create identifier column for plot if not given -----------------------------
@@ -116,33 +124,39 @@ score_table <- function(scores,
     # create an identifier column by concatinating all columns that
     # are not a metric
     identifier_columns <- names(df)[!names(df) %in%
-                                      c("metric", "value", "value_scaled")]
+      c("metric", "value", "value_scaled")]
   } else {
     identifier_columns <- y
   }
 
   df[, identif := do.call(paste, c(.SD, sep = "_")),
-     .SDcols = identifier_columns]
+    .SDcols = identifier_columns
+  ]
 
 
   # plot -----------------------------------------------------------------------
   # make plot with all metrics that are not NA
-  plot <- ggplot(df[!is.na(value), ],
-                          aes(y = identif, x = metric)) +
-    #geom_tile(fill = "blue") +
+  plot <- ggplot(
+    df[!is.na(value), ],
+    aes(y = identif, x = metric)
+  ) +
+    # geom_tile(fill = "blue") +
     geom_tile(aes(fill = value_scaled), colour = "white") +
     geom_text(aes(y = identif, label = round(value, 2))) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_light() +
-    theme(legend.title = element_blank(),
-                   legend.position = "none",
-                   axis.text.x = element_text(angle = 90, vjust = 1,
-                                                       hjust=1)) +
+    theme(
+      legend.title = element_blank(),
+      legend.position = "none",
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
     labs(x = "", y = "") +
-    coord_cartesian(expand=FALSE)
+    coord_cartesian(expand = FALSE)
 
   return(plot)
-
 }
 
 
@@ -171,12 +185,16 @@ score_table <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' plot_wis(scores, x = "model",
-#'                     relative_contributions = TRUE) +
-#'   facet_wrap(~ target_type)
-#' plot_wis(scores, x = "model",
-#'                     relative_contributions = FALSE) +
-#'   facet_wrap(~ target_type)
+#' plot_wis(scores,
+#'   x = "model",
+#'   relative_contributions = TRUE
+#' ) +
+#'   facet_wrap(~target_type)
+#' plot_wis(scores,
+#'   x = "model",
+#'   relative_contributions = FALSE
+#' ) +
+#'   facet_wrap(~target_type)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
@@ -184,28 +202,36 @@ score_table <- function(scores,
 plot_wis <- function(scores,
                      x = "model",
                      relative_contributions = FALSE) {
-
   scores <- data.table::as.data.table(scores)
 
   scores <- data.table::melt(scores,
-                             measure.vars = c("overprediction",
-                                              "underprediction",
-                                              "dispersion"),
-                             variable.name = "wis_component_name",
-                             value.name = "component_value")
+    measure.vars = c(
+      "overprediction",
+      "underprediction",
+      "dispersion"
+    ),
+    variable.name = "wis_component_name",
+    value.name = "component_value"
+  )
 
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
   plot <- ggplot(scores, aes_string(x = x)) +
-    geom_col(position = col_position,
-                      aes(y = component_value, fill = wis_component_name)) +
+    geom_col(
+      position = col_position,
+      aes(y = component_value, fill = wis_component_name)
+    ) +
     theme_light() +
-    theme(panel.spacing = unit(4, "mm"),
-                   axis.text.x = element_text(angle = 90,
-                                                       vjust = 1,
-                                                       hjust=1)) +
-    guides(fill = guide_legend(title="WIS component")) +
+    theme(
+      panel.spacing = unit(4, "mm"),
+      axis.text.x = element_text(
+        angle = 90,
+        vjust = 1,
+        hjust = 1
+      )
+    ) +
+    guides(fill = guide_legend(title = "WIS component")) +
     ylab("WIS contributions")
 
   return(plot)
@@ -242,32 +268,38 @@ plot_wis <- function(scores,
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' plot_ranges(scores, x = "model") +
-#'   facet_wrap(~ target_type, scales = "free")
+#'   facet_wrap(~target_type, scales = "free")
 #'
 #' # visualise dispersion instead of interval score
 #' plot_ranges(scores, y = "dispersion", x = "model") +
-#'   facet_wrap(~ target_type)
-#'
-
+#'   facet_wrap(~target_type)
 plot_ranges <- function(scores,
-                       y = "interval_score",
-                       x = "model",
-                       colour = "range") {
-
-  plot <- ggplot(scores,
-                          aes_string(x = x,
-                                              y = y,
-                                              colour = colour)) +
+                        y = "interval_score",
+                        x = "model",
+                        colour = "range") {
+  plot <- ggplot(
+    scores,
+    aes_string(
+      x = x,
+      y = y,
+      colour = colour
+    )
+  ) +
     geom_point(size = 2) +
     geom_line(aes(group = range),
-                       colour = "black",
-                       size = 0.01) +
+      colour = "black",
+      size = 0.01
+    ) +
     theme_light() +
     expand_limits(y = 0) +
     scale_color_continuous(low = "steelblue", high = "salmon") +
-    theme(legend.position = "right",
-                   axis.text.x = element_text(angle = 90, vjust = 1,
-                                                       hjust=1))
+    theme(
+      legend.position = "right",
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    )
 
   return(plot)
 }
@@ -301,27 +333,29 @@ plot_ranges <- function(scores,
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
-#'
-
 plot_heatmap <- function(scores,
-                          y = "model",
-                          x,
-                          metric) {
-
-
+                         y = "model",
+                         x,
+                         metric) {
   data.table::setDT(scores)
 
   scores[, eval(metric) := round(get(metric), 2)]
 
-  plot <- ggplot(scores,
-                          aes_string(y = y,
-                                              x = x,
-                                              fill = metric)) +
+  plot <- ggplot(
+    scores,
+    aes_string(
+      y = y,
+      x = x,
+      fill = metric
+    )
+  ) +
     geom_tile() +
     geom_text(aes_string(label = metric)) +
     scale_fill_gradient2(low = "skyblue", high = "red") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 1,
-                                                       hjust=1)) +
+    theme(axis.text.x = element_text(
+      angle = 90, vjust = 1,
+      hjust = 1
+    )) +
     coord_cartesian(expand = FALSE)
 
   return(plot)
@@ -394,15 +428,17 @@ plot_heatmap <- function(scores,
 #' plot_predictions(
 #'   example1,
 #'   x = "target_end_date",
-#'   filter_truth = list('target_end_date <= "2021-07-22"',
-#'                       'target_end_date > "2021-05-01"'),
-#'   filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-#'                           'forecast_date == "2021-06-07"'),
+#'   filter_truth = list(
+#'     'target_end_date <= "2021-07-22"',
+#'     'target_end_date > "2021-05-01"'
+#'   ),
+#'   filter_forecasts = list(
+#'     "model == 'EuroCOVIDhub-ensemble'",
+#'     'forecast_date == "2021-06-07"'
+#'   ),
 #'   facet_formula = location ~ target_type,
 #'   range = c(0, 50, 90, 95)
 #' )
-#'
-
 plot_predictions <- function(data = NULL,
                              forecasts = NULL,
                              truth_data = NULL,
@@ -465,7 +501,8 @@ plot_predictions <- function(data = NULL,
     truth_data <- merge(truth_data, combinations_forecasts)
     # add back together
     truth_data <- data.table::rbindlist(list(truth_without_pred, truth_data),
-                                        use.names = TRUE)
+      use.names = TRUE
+    )
   }
 
   # delete certain columns that denominate the forecaster from the truth data
@@ -476,11 +513,13 @@ plot_predictions <- function(data = NULL,
   colnames <- colnames(forecasts)
   if ("sample" %in% colnames) {
     forecasts <- sample_to_range_long(forecasts,
-                                      range = range,
-                                      keep_quantile_col = FALSE)
+      range = range,
+      keep_quantile_col = FALSE
+    )
   } else if ("quantile" %in% colnames) {
     forecasts <- quantile_to_range_long(forecasts,
-                                        keep_quantile_col = FALSE)
+      keep_quantile_col = FALSE
+    )
   }
 
   # select appropriate boundaries and pivot wider
@@ -496,23 +535,29 @@ plot_predictions <- function(data = NULL,
   pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
 
   plot <- ggplot(data = data, aes(x = !!sym(x))) +
-    scale_colour_manual("",values = c("black", "steelblue4")) +
+    scale_colour_manual("", values = c("black", "steelblue4")) +
     scale_fill_manual(name = "range", values = pal(length(range))) +
     theme_light()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
-                                   value.var = "prediction")
+      value.var = "prediction"
+    )
     intervals[, range := factor(range,
-                                levels = sort(unique(range), decreasing = TRUE),
-                                ordered = TRUE)]
+      levels = sort(unique(range), decreasing = TRUE),
+      ordered = TRUE
+    )]
 
     # plot prediction ranges
     plot <- plot +
-      geom_ribbon(data = intervals,
-                           aes(ymin = lower, ymax = upper,
-                                        group = range, fill = range))
+      geom_ribbon(
+        data = intervals,
+        aes(
+          ymin = lower, ymax = upper,
+          group = range, fill = range
+        )
+      )
   }
 
   # add median in a different colour
@@ -522,21 +567,27 @@ plot_predictions <- function(data = NULL,
 
     if (nrow(median) > 0) {
       plot <- plot +
-        geom_line(data = median,
-                           mapping = aes(y = prediction, colour = "median"),
-                           lwd = 0.4)
+        geom_line(
+          data = median,
+          mapping = aes(y = prediction, colour = "median"),
+          lwd = 0.4
+        )
     }
   }
 
   # add true_values
   if (nrow(truth_data) > 0) {
     plot <- plot +
-      geom_point(data = truth_data,
-                          aes(y = true_value, colour = "actual"),
-                          size = 0.5) +
-      geom_line(data = truth_data,
-                         aes(y = true_value, colour = "actual"),
-                         lwd = 0.2)
+      geom_point(
+        data = truth_data,
+        aes(y = true_value, colour = "actual"),
+        size = 0.5
+      ) +
+      geom_line(
+        data = truth_data,
+        aes(y = true_value, colour = "actual"),
+        lwd = 0.2
+      )
   }
 
   plot <- plot +
@@ -583,22 +634,31 @@ plot_predictions <- function(data = NULL,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "range"))
 #' plot_interval_coverage(scores)
-
 plot_interval_coverage <- function(scores,
-                              colour = "model") {
+                                   colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(scores, aes_string(x = "range",
-                                  colour = colour)) +
-    geom_polygon(data = data.frame(x = c(0, 0, 100),
-                                            y = c(0, 100, 100),
-                                            g = c("o", "o", "o")),
-                          aes(x = x, y = y, group = g,
-                                       fill = g),
-                          alpha = 0.05,
-                          colour = "white",
-                          fill = "olivedrab3") +
-    geom_line(aes(y = range), colour = "grey",
-                       linetype = "dashed") +
+  p1 <- ggplot(scores, aes_string(
+    x = "range",
+    colour = colour
+  )) +
+    geom_polygon(
+      data = data.frame(
+        x = c(0, 0, 100),
+        y = c(0, 100, 100),
+        g = c("o", "o", "o")
+      ),
+      aes(
+        x = x, y = y, group = g,
+        fill = g
+      ),
+      alpha = 0.05,
+      colour = "white",
+      fill = "olivedrab3"
+    ) +
+    geom_line(aes(y = range),
+      colour = "grey",
+      linetype = "dashed"
+    ) +
     geom_line(aes(y = coverage * 100)) +
     theme_light() +
     theme(legend.position = "bottom") +
@@ -633,24 +693,36 @@ plot_interval_coverage <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "quantile"))
 #' plot_quantile_coverage(scores)
-
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
-
-  p2 <- ggplot(data = scores,
-                        aes_string(x = "quantile", colour = colour)) +
-    geom_polygon(data = data.frame(x = c(0, 0.5, 0.5,
-                                                  0.5, 0.5, 1),
-                                            y = c(0, 0, 0.5,
-                                                  0.5, 1, 1),
-                                            g = c("o", "o", "o")),
-                          aes(x = x, y = y, group = g,
-                                       fill = g),
-                          alpha = 0.05,
-                          colour = "white",
-                          fill = "olivedrab3") +
-    geom_line(aes(y = quantile), colour = "grey",
-                       linetype = "dashed") +
+  p2 <- ggplot(
+    data = scores,
+    aes_string(x = "quantile", colour = colour)
+  ) +
+    geom_polygon(
+      data = data.frame(
+        x = c(
+          0, 0.5, 0.5,
+          0.5, 0.5, 1
+        ),
+        y = c(
+          0, 0, 0.5,
+          0.5, 1, 1
+        ),
+        g = c("o", "o", "o")
+      ),
+      aes(
+        x = x, y = y, group = g,
+        fill = g
+      ),
+      alpha = 0.05,
+      colour = "white",
+      fill = "olivedrab3"
+    ) +
+    geom_line(aes(y = quantile),
+      colour = "grey",
+      linetype = "dashed"
+    ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_light() +
     theme(legend.position = "bottom") +
@@ -659,5 +731,4 @@ plot_quantile_coverage <- function(scores,
     coord_cartesian(expand = FALSE)
 
   return(p2)
-
 }

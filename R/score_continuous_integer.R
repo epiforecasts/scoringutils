@@ -15,10 +15,9 @@
 #' @inherit score references
 
 score_sample <- function(data,
-                                  forecast_unit,
-                                  metrics,
-                                  prediction_type) {
-
+                         forecast_unit,
+                         metrics,
+                         prediction_type) {
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
       prediction_type <- "integer"
@@ -34,25 +33,33 @@ score_sample <- function(data,
   }
   # bias
   if ("bias" %in% metrics) {
-    data[, bias := bias_sample(unique(true_value),
-                               t(prediction)), by = forecast_unit]
+    data[, bias := bias_sample(
+      unique(true_value),
+      t(prediction)
+    ), by = forecast_unit]
   }
   # DSS
   if ("dss" %in% metrics) {
-    data[, dss := scoringutils::dss(unique(true_value),
-                                    t(prediction)), by = forecast_unit]
+    data[, dss := scoringutils::dss(
+      unique(true_value),
+      t(prediction)
+    ), by = forecast_unit]
   }
   # CRPS
   if ("crps" %in% metrics) {
-    data[, crps := scoringutils::crps(unique(true_value),
-                                      t(prediction)), by = forecast_unit]
+    data[, crps := scoringutils::crps(
+      unique(true_value),
+      t(prediction)
+    ), by = forecast_unit]
   }
   # Log Score
   if ("log_score" %in% metrics) {
     # only compute if prediction type is continuous
     if (prediction_type == "continuous") {
-      data[, log_score := scoringutils::logs(unique(true_value),
-                                             t(prediction)), by = forecast_unit]
+      data[, log_score := scoringutils::logs(
+        unique(true_value),
+        t(prediction)
+      ), by = forecast_unit]
     }
   }
   # coverage
@@ -63,8 +70,9 @@ score_sample <- function(data,
 
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),
-             .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit",
-             by = forecast_unit]
+    .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit",
+    by = forecast_unit
+  ]
 
   return(res[])
 }

@@ -46,8 +46,6 @@
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(30, mean = 1:30))
 #' bias_sample(true_values, predictions)
-#'
-#'
 #' @export
 #' @references
 #' The integer valued Bias function is discussed in
@@ -73,14 +71,17 @@ bias_sample <- function(true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
+    msg <- sprintf(
+      "'predictions' should be a matrix. Instead `%s` was found",
+      class(predictions[1])
+    )
     stop(msg)
   }
   if (nrow(predictions) != n) {
-
-    msg <- sprintf("Mismatch: The true values provided have length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
+    msg <- sprintf(
+      "Mismatch: The true values provided have length `%s`, but 'predictions' has `%s` rows.",
+      n, nrow(predictions)
+    )
     stop(msg)
   }
 
@@ -159,32 +160,35 @@ bias_sample <- function(true_values, predictions) {
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
-#' lower <- c(6341.000, 6329.500, 6087.014, 5703.500,
-#'            5451.000, 5340.500, 4821.996, 4709.000,
-#'            4341.500, 4006.250, 1127.000, 705.500)
+#' lower <- c(
+#'   6341.000, 6329.500, 6087.014, 5703.500,
+#'   5451.000, 5340.500, 4821.996, 4709.000,
+#'   4341.500, 4006.250, 1127.000, 705.500
+#' )
 #'
-#' upper <- c(6341.000, 6352.500, 6594.986, 6978.500,
-#'            7231.000, 7341.500, 7860.004, 7973.000,
-#'            8340.500, 8675.750, 11555.000, 11976.500)
+#' upper <- c(
+#'   6341.000, 6352.500, 6594.986, 6978.500,
+#'   7231.000, 7341.500, 7860.004, 7973.000,
+#'   8340.500, 8675.750, 11555.000, 11976.500
+#' )
 #'
 #' range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
 #'
 #' true_value <- 8062
 #'
-#' bias_range(lower = lower, upper = upper,
-#'            range = range, true_value = true_value)
-#'
+#' bias_range(
+#'   lower = lower, upper = upper,
+#'   range = range, true_value = true_value
+#' )
 #' @export
 #'
 
 bias_range <- function(range, lower, upper,
-                        true_value) {
-
+                       true_value) {
   lower_predictions <- lower
   upper_predictions <- upper
 
-  if(any(is.na(upper)) | any(is.na(lower))) {
-
+  if (any(is.na(upper)) | any(is.na(lower))) {
     range <- range[!is.na(upper) & !is.na(lower)]
     lower_predictions <- lower[!is.na(lower) & !is.na(upper)]
     upper_predictions <- upper[!is.na(lower) & !is.na(upper)]
@@ -193,7 +197,6 @@ bias_range <- function(range, lower, upper,
     if (length(range) == 0 | length(lower_predictions) == 0 | length(upper_predictions) == 0) {
       return(NA_real_)
     }
-
   }
 
   # convert range to quantiles
@@ -226,7 +229,7 @@ bias_range <- function(range, lower, upper,
     lower <- max(lower_quantiles[lower_predictions <= true_value])
     bias <- 1 - 2 * lower
     return(bias)
-  } else if (any(upper_predictions <= true_value)){
+  } else if (any(upper_predictions <= true_value)) {
     upper <- min(upper_quantiles[upper_predictions >= true_value])
     bias <- 1 - 2 * upper
     return(bias)
@@ -278,17 +281,18 @@ bias_range <- function(range, lower, upper,
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
-#' predictions <- c(705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
-#'                  5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
-#'                  6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
-#'                  7973.000, 8340.500, 8675.750, 11555.000, 11976.500)
+#' predictions <- c(
+#'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
+#'   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
+#'   6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
+#'   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
+#' )
 #'
 #' quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 #'
 #' true_value <- 8062
 #'
 #' bias_quantile(predictions, quantiles, true_value = true_value)
-#'
 #' @export
 #'
 

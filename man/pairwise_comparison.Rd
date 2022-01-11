@@ -54,14 +54,17 @@ The implementation of the permutation test follows the function
 Andrea Riebler and Michaela Paul.
 }
 \examples{
-df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
-                 date = as.Date("2020-01-01") + rep(1:5, each = 2),
-                 location = c(1, 2),
-                 interval_score = (abs(rnorm(30))),
-                 aem = (abs(rnorm(30))))
+df <- data.frame(
+  model = rep(c("model1", "model2", "model3"), each = 10),
+  date = as.Date("2020-01-01") + rep(1:5, each = 2),
+  location = c(1, 2),
+  interval_score = (abs(rnorm(30))),
+  aem = (abs(rnorm(30)))
+)
 
 res <- scoringutils::pairwise_comparison(df,
-                           baseline = "model1")
+  baseline = "model1"
+)
 scoringutils::plot_pairwise_comparison(res)
 
 eval <- scoringutils::score(scoringutils::example_quantile)

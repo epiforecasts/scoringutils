@@ -78,7 +78,6 @@ score(example_binary)
 score(example_quantile)
 score(example_integer)
 score(example_continuous)
-
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ

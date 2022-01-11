@@ -1,14 +1,17 @@
 test_that("plot_predictions() works with point forecasts", {
-
   d <- scoringutils::example_quantile
   d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
   p <- scoringutils::plot_predictions(
     d,
     x = "target_end_date",
-    filter_truth = list('target_end_date <= "2021-07-22"',
-                       'target_end_date > "2021-05-01"'),
-    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                           'forecast_date == "2021-06-07"'),
+    filter_truth = list(
+      'target_end_date <= "2021-07-22"',
+      'target_end_date > "2021-05-01"'
+    ),
+    filter_forecasts = list(
+      "model == 'EuroCOVIDhub-ensemble'",
+      'forecast_date == "2021-06-07"'
+    ),
     allow_truth_without_pred = TRUE,
     facet_formula = location ~ target_type
   )
@@ -16,21 +19,23 @@ test_that("plot_predictions() works with point forecasts", {
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()
-  vdiffr::expect_doppelganger('point_forecasts', p)
-
+  vdiffr::expect_doppelganger("point_forecasts", p)
 })
 
 test_that("plot_predictions() can handle an arbitrary number of quantiles", {
-
   example2 <- scoringutils::example_quantile
 
   p <- scoringutils::plot_predictions(
     example2,
     x = "target_end_date",
-    filter_truth = list('target_end_date <= "2021-07-22"',
-                        'target_end_date > "2021-05-01"'),
-    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                            'forecast_date == "2021-06-07"'),
+    filter_truth = list(
+      'target_end_date <= "2021-07-22"',
+      'target_end_date > "2021-05-01"'
+    ),
+    filter_forecasts = list(
+      "model == 'EuroCOVIDhub-ensemble'",
+      'forecast_date == "2021-06-07"'
+    ),
     allow_truth_without_pred = TRUE,
     facet_formula = location ~ target_type,
     range = c(0, 10, 20, 30, 40, 50, 60)
@@ -38,24 +43,26 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()
-  vdiffr::expect_doppelganger('many_quantiles', p)
+  vdiffr::expect_doppelganger("many_quantiles", p)
 
   example1 <- scoringutils::example_continuous
 
   p2 <- scoringutils::plot_predictions(
     example1,
     x = "target_end_date",
-    filter_truth = list('target_end_date <= "2021-07-22"',
-                        'target_end_date > "2021-05-01"'),
-    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                            'forecast_date == "2021-06-07"'),
+    filter_truth = list(
+      'target_end_date <= "2021-07-22"',
+      'target_end_date > "2021-05-01"'
+    ),
+    filter_forecasts = list(
+      "model == 'EuroCOVIDhub-ensemble'",
+      'forecast_date == "2021-06-07"'
+    ),
     facet_formula = location ~ target_type,
     range = c(0, 50, 90, 95)
   )
   expect_s3_class(p2, "ggplot")
 
   skip_on_cran()
-  vdiffr::expect_doppelganger('many_quantiles_from_sample', p2)
+  vdiffr::expect_doppelganger("many_quantiles_from_sample", p2)
 })
-
-

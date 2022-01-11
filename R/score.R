@@ -66,7 +66,6 @@
 #' score(example_quantile)
 #' score(example_integer)
 #' score(example_continuous)
-#'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
 #' (2019) Assessing the performance of real-time epidemic forecasts: A
@@ -97,26 +96,31 @@ score <- function(data,
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
-    scores <- score_binary(data = data,
-                           forecast_unit = forecast_unit,
-                           metrics = metrics)
+    scores <- score_binary(
+      data = data,
+      forecast_unit = forecast_unit,
+      metrics = metrics
+    )
   }
 
   # Score quantile predictions -------------------------------------------------
   if (prediction_type == "quantile") {
-    scores <- score_quantile(data = data,
-                             forecast_unit = forecast_unit,
-                             metrics = metrics,
-                             ...)
+    scores <- score_quantile(
+      data = data,
+      forecast_unit = forecast_unit,
+      metrics = metrics,
+      ...
+    )
   }
 
   # Score integer or continuous predictions ------------------------------------
   if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
-
-    scores <- score_sample(data = data,
-                           forecast_unit = forecast_unit,
-                           metrics = metrics,
-                           prediction_type = prediction_type)
+    scores <- score_sample(
+      data = data,
+      forecast_unit = forecast_unit,
+      metrics = metrics,
+      prediction_type = prediction_type
+    )
   }
 
   return(scores[])

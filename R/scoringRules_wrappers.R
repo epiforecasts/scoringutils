@@ -40,20 +40,26 @@ logs <- function(true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
+    msg <- sprintf(
+      "'predictions' should be a matrix. Instead `%s` was found",
+      class(predictions[1])
+    )
     stop(msg)
   }
   if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
+      n, nrow(predictions)
+    )
     stop(msg)
   }
 
   # ============================================
 
-  scoringRules::logs_sample(y = true_values,
-                            dat = predictions)
+  scoringRules::logs_sample(
+    y = true_values,
+    dat = predictions
+  )
 }
 
 
@@ -92,19 +98,25 @@ dss <- function(true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
+    msg <- sprintf(
+      "'predictions' should be a matrix. Instead `%s` was found",
+      class(predictions[1])
+    )
     stop(msg)
   }
   if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
+      n, nrow(predictions)
+    )
     stop(msg)
   }
   # ============================================
 
-  scoringRules::dss_sample(y = true_values,
-                           dat = predictions)
+  scoringRules::dss_sample(
+    y = true_values,
+    dat = predictions
+  )
 }
 
 
@@ -147,17 +159,23 @@ crps <- function(true_values, predictions) {
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
+    msg <- sprintf(
+      "'predictions' should be a matrix. Instead `%s` was found",
+      class(predictions[1])
+    )
     stop(msg)
   }
   if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
+      n, nrow(predictions)
+    )
     stop(msg)
   }
   # ============================================
 
-  scoringRules::crps_sample(y = true_values,
-                            dat = predictions)
+  scoringRules::crps_sample(
+    y = true_values,
+    dat = predictions
+  )
 }

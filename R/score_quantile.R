@@ -7,10 +7,12 @@ score_quantile <- function(data,
 
   # make sure to have both quantile as well as range format --------------------
   range_data <- quantile_to_range_long(data,
-                                       keep_quantile_col = FALSE)
+    keep_quantile_col = FALSE
+  )
   # adds the range column to the quantile data set
   quantile_data <- range_long_to_quantile(range_data,
-                                          keep_range_col = TRUE)
+    keep_range_col = TRUE
+  )
 
 
   # to deal with point forecasts in a quantile format. This in effect adds
@@ -18,7 +20,8 @@ score_quantile <- function(data,
   range_data[is.na(range), boundary := "point"]
 
   range_data <- data.table::dcast(range_data, ... ~ boundary,
-                                  value.var = "prediction")
+    value.var = "prediction"
+  )
 
   # if we only score point forecasts, it may be true that there are no columns
   # upper and lower in the data.frame. If so, these need to be added
@@ -33,46 +36,60 @@ score_quantile <- function(data,
   if ("interval_score" %in% metrics) {
     # compute separate results if desired
     if (separate_results) {
-      outcols <- c("interval_score", "dispersion",
-                   "underprediction", "overprediction")
+      outcols <- c(
+        "interval_score", "dispersion",
+        "underprediction", "overprediction"
+      )
     } else {
       outcols <- "interval_score"
     }
-    res <- res[,  eval(outcols) := do.call(scoringutils::interval_score,
-                                           list(true_value, lower,
-                                                upper,range,
-                                                weigh, separate_results = TRUE))]
+    res <- res[, eval(outcols) := do.call(
+      scoringutils::interval_score,
+      list(true_value, lower,
+        upper, range,
+        weigh,
+        separate_results = TRUE
+      )
+    )]
   }
 
   # compute coverage for every single observation
   if ("coverage" %in% metrics) {
     res[, coverage := ifelse(true_value <= upper & true_value >= lower, 1, 0)]
-    res[, coverage_deviation := coverage - range/100]
+    res[, coverage_deviation := coverage - range / 100]
   }
 
   # compute bias
   if ("bias" %in% metrics) {
-    res[, bias := bias_range(range = range, lower = lower, upper = upper,
-                                true_value = unique(true_value)),
-        by = forecast_unit]
+    res[, bias := bias_range(
+      range = range, lower = lower, upper = upper,
+      true_value = unique(true_value)
+    ),
+    by = forecast_unit
+    ]
   }
 
   # score absolute error for point forecasts
   # these are marked by an NA in range, and a numeric value for point
   if (any(c("ae_point", "aem") %in% metrics)) {
     if ("point" %in% colnames(res)) {
-      res[is.na(range) & is.numeric(point),
-          ae_point := abs_error(predictions = point, true_value)]
+      res[
+        is.na(range) & is.numeric(point),
+        ae_point := abs_error(predictions = point, true_value)
+      ]
     }
   }
 
   # calculate scores on quantile format ----------------------------------------
   # compute absolute error of the median
   if ("aem" %in% metrics) {
-    quantile_data[, aem := ae_median_quantile(true_value,
-                                              prediction,
-                                              quantile),
-                  by = forecast_unit]
+    quantile_data[, aem := ae_median_quantile(
+      true_value,
+      prediction,
+      quantile
+    ),
+    by = forecast_unit
+    ]
   }
 
   # compute quantile coverage based on quantile version
@@ -87,8 +104,10 @@ score_quantile <- function(data,
   # if we computed either the interval score or the aem or quantile coverage
   if (any(c("aem", "interval_score", "quantile_coverage") %in% metrics)) {
     # delete unnecessary columns before merging back
-    keep_cols <- unique(c(forecast_unit, "quantile", "aem", "quantile_coverage",
-                          "boundary", "range"))
+    keep_cols <- unique(c(
+      forecast_unit, "quantile", "aem", "quantile_coverage",
+      "boundary", "range"
+    ))
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
     quantile_data[, eval(delete_cols) := NULL]
 
@@ -101,8 +120,10 @@ score_quantile <- function(data,
     }
 
     # merge back with other metrics
-    merge_cols <- setdiff(keep_cols, c("aem", "quantile_coverage", "quantile",
-                                       "boundary"))
+    merge_cols <- setdiff(keep_cols, c(
+      "aem", "quantile_coverage", "quantile",
+      "boundary"
+    ))
     # specify all.x = TRUE as the point forecasts got deleted when
     # going from range to quantile above
     res <- merge(res, quantile_data, by = merge_cols, all.x = TRUE)

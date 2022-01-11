@@ -75,9 +75,8 @@
 #' ## integer predictions
 #' true_values <- rpois(100, lambda = 1:100)
 #' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-#' pit <- pit_sample(true_values, predictions,  n_replicates = 50)
+#' pit <- pit_sample(true_values, predictions, n_replicates = 50)
 #' plot_pit(pit)
-#'
 #' @export
 #' @references
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
@@ -108,14 +107,17 @@ pit_sample <- function(true_values,
     predictions <- as.matrix(predictions)
   }
   if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
+    msg <- sprintf(
+      "'predictions' should be a matrix. Instead `%s` was found",
+      class(predictions[1])
+    )
     stop(msg)
   }
   if (nrow(predictions) != n) {
-
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
+      n, nrow(predictions)
+    )
     stop(msg)
   }
 
@@ -186,7 +188,6 @@ pit_sample <- function(true_values,
 #' # sample-based pit
 #' pit <- pit(example_integer, by = c("model"))
 #' plot_pit(pit)
-#'
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
 #' @export
 
@@ -194,7 +195,6 @@ pit_sample <- function(true_values,
 plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
-
   if ("quantile" %in% names(pit)) {
     type <- "quantile-based"
   } else {
@@ -208,7 +208,7 @@ plot_pit <- function(pit,
     # automatically set number of bins
     if (type == "sample-based") {
       num_bins <- 10
-      width <- 1/num_bins
+      width <- 1 / num_bins
       plot_quantiles <- seq(width, 1, width)
     }
     if (type == "quantile-based") {
@@ -216,22 +216,20 @@ plot_pit <- function(pit,
     }
   } else {
     # if num_bins is explicitly given
-    width <- 1/num_bins
+    width <- 1 / num_bins
     plot_quantiles <- seq(width, 1, width)
   }
 
   # function for data.frames
-  if(is.data.frame(pit)) {
-
+  if (is.data.frame(pit)) {
     facet_cols <- get_unit_of_forecast(pit)
     formula <- as.formula(paste("~", paste(facet_cols, collapse = "+")))
 
     # quantile version
     if (type == "quantile-based") {
-
       if (num_bins == "auto") {
       } else {
-        width <- 1/num_bins
+        width <- 1 / num_bins
         plot_quantiles <- seq(width, 1, width)
       }
 
@@ -239,29 +237,35 @@ plot_pit <- function(pit,
         plot_quantiles <- breaks
       }
 
-      hist <- ggplot(data = pit[quantile %in% plot_quantiles],
-                     aes(x = quantile, y = pit_value)) +
+      hist <- ggplot(
+        data = pit[quantile %in% plot_quantiles],
+        aes(x = quantile, y = pit_value)
+      ) +
         geom_col(position = "dodge") +
         facet_wrap(formula)
-
     }
 
     if (type == "sample-based") {
-      hist <- ggplot2::ggplot(data = pit,
-                      aes(x = pit_value)) +
+      hist <- ggplot2::ggplot(
+        data = pit,
+        aes(x = pit_value)
+      ) +
         ggplot2::geom_histogram(aes(y = stat(count) / sum(count)),
-                                breaks = plot_quantiles,
-                                colour = "grey") +
+          breaks = plot_quantiles,
+          colour = "grey"
+        ) +
         facet_wrap(formula)
     }
-
   } else {
     # non data.frame version
-    hist <- ggplot(data = data.frame(x = pit),
-                   aes(x = x)) +
+    hist <- ggplot(
+      data = data.frame(x = pit),
+      aes(x = x)
+    ) +
       geom_histogram(aes(y = stat(count) / sum(count)),
-                     breaks = plot_quantiles,
-                     colour = "grey")
+        breaks = plot_quantiles,
+        colour = "grey"
+      )
   }
 
   hist <- hist +
@@ -322,26 +326,33 @@ pit <- function(data,
       score(data, metrics = "quantile_coverage")
 
     coverage <- summarise_scores(coverage,
-                                 by = unique(c(by, "quantile")))
+      by = unique(c(by, "quantile"))
+    )
 
     coverage <- coverage[order(quantile),
-                         .(quantile = c(quantile, 1),
-                           pit_value = diff(c(0, quantile_coverage, 1))),
-                         by = c(get_unit_of_forecast(coverage))]
+      .(
+        quantile = c(quantile, 1),
+        pit_value = diff(c(0, quantile_coverage, 1))
+      ),
+      by = c(get_unit_of_forecast(coverage))
+    ]
 
     return(coverage)
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
   data_wide <- data.table::dcast(data,
-                                 ... ~ paste("InternalSampl_", sample, sep = ""),
-                                 value.var = "prediction")
+    ... ~ paste("InternalSampl_", sample, sep = ""),
+    value.var = "prediction"
+  )
 
-  pit <- data_wide[, .("pit_value" = pit_sample(true_values = true_value,
-                                                predictions = as.matrix(.SD))),
-                   by = by,
-                   .SDcols = grepl("InternalSampl_", names(data_wide))]
+  pit <- data_wide[, .("pit_value" = pit_sample(
+    true_values = true_value,
+    predictions = as.matrix(.SD)
+  )),
+  by = by,
+  .SDcols = grepl("InternalSampl_", names(data_wide))
+  ]
 
   return(pit)
 }
-

@@ -30,12 +30,16 @@ library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
-plot_wis(scores, x = "model",
-                    relative_contributions = TRUE) +
-  facet_wrap(~ target_type)
-plot_wis(scores, x = "model",
-                    relative_contributions = FALSE) +
-  facet_wrap(~ target_type)
+plot_wis(scores,
+  x = "model",
+  relative_contributions = TRUE
+) +
+  facet_wrap(~target_type)
+plot_wis(scores,
+  x = "model",
+  relative_contributions = FALSE
+) +
+  facet_wrap(~target_type)
 }
 \references{
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts

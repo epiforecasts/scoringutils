@@ -18,7 +18,8 @@ range_long_to_wide <- function(data) {
   }
 
   out <- data.table::dcast(data, ... ~ boundary + range,
-                           value.var = "prediction")
+    value.var = "prediction"
+  )
 
   return(out[])
 }
@@ -39,13 +40,11 @@ range_long_to_wide <- function(data) {
 #'
 
 range_wide_to_long <- function(data) {
-
   data <- data.table::as.data.table(data)
   colnames <- colnames(data)
 
   # semi-wide format where only lower and upper are given independently
   if (all(c("lower", "upper") %in% colnames)) {
-
     id_vars <- colnames[!(colnames %in% c("lower", "upper"))]
 
     # need to remove quantile column if present
@@ -54,10 +53,11 @@ range_wide_to_long <- function(data) {
     }
 
     data <- data.table::melt(data,
-                             id.vars = id_vars,
-                             measure.vars = c("lower", "upper"),
-                             variable.name = "boundary",
-                             value.name = "prediction")
+      id.vars = id_vars,
+      measure.vars = c("lower", "upper"),
+      variable.name = "boundary",
+      value.name = "prediction"
+    )
   } else {
     # alternative is super-wide format where every range has its own column
     ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
@@ -65,12 +65,13 @@ range_wide_to_long <- function(data) {
     id_vars <- colnames[!(colnames %in% ranges)]
 
     data <- data.table::melt(data,
-                             id.vars = id_vars,
-                             measure.vars = ranges,
-                             variable.name = "range",
-                             value.name = "prediction")
+      id.vars = id_vars,
+      measure.vars = ranges,
+      variable.name = "range",
+      value.name = "prediction"
+    )
     data[, boundary := gsub("_.*", "", range)]
-    data[, range := as.numeric(gsub("^.*?_","", range))]
+    data[, range := as.numeric(gsub("^.*?_", "", range))]
   }
 
   return(data[])
@@ -95,7 +96,7 @@ range_wide_to_long <- function(data) {
 
 
 range_long_to_quantile <- function(data,
-                              keep_range_col = FALSE) {
+                                   keep_range_col = FALSE) {
   data <- data.table::as.data.table(data)
 
   # filter out duplicated median
@@ -104,8 +105,9 @@ range_long_to_quantile <- function(data,
   data <- data[!(range == 0 & boundary == "upper"), ]
 
   data[, quantile := ifelse(boundary == "lower",
-                            round((100 - range) / 200, 10),
-                            round((1 - (100 - range) / 200), 10))]
+    round((100 - range) / 200, 10),
+    round((1 - (100 - range) / 200), 10)
+  )]
 
   if (!keep_range_col) {
     data[, c("range", "boundary") := NULL]
@@ -137,8 +139,9 @@ quantile_to_range_long <- function(data,
 
   data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
   data[, range := ifelse(boundary == "lower",
-                         round((1 - 2 * quantile) * 100, 10),
-                         round((2 * quantile - 1) * 100, 10))]
+    round((1 - 2 * quantile) * 100, 10),
+    round((2 * quantile - 1) * 100, 10)
+  )]
 
   # add median quantile
   median <- data[quantile == 0.5, ]
@@ -153,8 +156,10 @@ quantile_to_range_long <- function(data,
   # if only point forecasts are scored, we only have NA values for range and
   # boundary. In that instance we need to set the type of the columns
   # explicitly to avoid future collisions.
-  data[, `:=`(boundary = as.character(boundary),
-              range = as.numeric(range))]
+  data[, `:=`(
+    boundary = as.character(boundary),
+    range = as.numeric(range)
+  )]
 
   return(data[])
 }
@@ -183,23 +188,23 @@ quantile_to_range_long <- function(data,
 #' example_data <- scoringutils::example_integer
 #'
 #' quantile_data <- scoringutils::sample_to_quantile(example_data)
-#'
-
-
-
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-
   data <- data.table::as.data.table(data)
 
   reserved_columns <- c("prediction", "sample")
   by <- setdiff(colnames(data), reserved_columns)
 
-  data <- data[, .(quantile = quantiles,
-                   prediction = quantile(prediction, prob = quantiles,
-                                         type = type, na.rm = TRUE)),
-               by = by]
+  data <- data[, .(
+    quantile = quantiles,
+    prediction = quantile(prediction,
+      prob = quantiles,
+      type = type, na.rm = TRUE
+    )
+  ),
+  by = by
+  ]
 
   return(data[])
 }
@@ -229,7 +234,6 @@ sample_to_range_long <- function(data,
                                  range = c(0, 50, 90),
                                  type = 7,
                                  keep_quantile_col = TRUE) {
-
   data <- data.table::as.data.table(data)
 
   lower_quantiles <- (100 - range) / 200
@@ -237,11 +241,13 @@ sample_to_range_long <- function(data,
   quantiles <- sort(unique(c(lower_quantiles, upper_quantiles)))
 
   data <- sample_to_quantile(data,
-                             quantiles = quantiles,
-                             type = type)
+    quantiles = quantiles,
+    type = type
+  )
 
   data <- quantile_to_range_long(data,
-                                 keep_quantile_col = keep_quantile_col)
+    keep_quantile_col = keep_quantile_col
+  )
 
   return(data[])
 }
@@ -276,13 +282,14 @@ sample_to_range_long <- function(data,
 merge_pred_and_obs <- function(forecasts, observations,
                                join = c("left", "full", "right"),
                                by = NULL) {
-
   forecasts <- data.table::as.data.table(forecasts)
   observations <- data.table::as.data.table(observations)
 
   if (is.null(by)) {
-    protected_columns <- c("prediction", "true_value", "sample", "quantile",
-                           "range", "boundary")
+    protected_columns <- c(
+      "prediction", "true_value", "sample", "quantile",
+      "range", "boundary"
+    )
     by <- setdiff(colnames(forecasts), protected_columns)
   }
 
@@ -323,8 +330,3 @@ merge_pred_and_obs <- function(forecasts, observations,
 
   return(combined[])
 }
-
-
-
-
-

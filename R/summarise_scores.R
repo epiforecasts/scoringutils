@@ -45,12 +45,13 @@
 #'
 #' # get quantiles of scores
 #' # make sure to aggregate over ranges first
-#' summarise_scores(scores, by = "model", FUN = quantile,
-#'                  probs = c(0.25, 0.5, 0.75))
+#' summarise_scores(scores,
+#'   by = "model", FUN = quantile,
+#'   probs = c(0.25, 0.5, 0.75)
+#' )
 #'
 #' # get ranges
 #' # summarise_scores(scores, by = "range")
-#'
 #' @export
 
 summarise_scores <- function(scores,
@@ -86,32 +87,38 @@ summarise_scores <- function(scores,
   # quantile are in `by`. Reason to do this is that summaries may be
   # inaccurate if we treat individual quantiles as independent forecasts
   scores <- scores[, lapply(.SD, mean, ...),
-                   by = c(unique(c(forecast_unit, by))),
-                   .SDcols = colnames(scores) %like% cols_to_summarise]
+    by = c(unique(c(forecast_unit, by))),
+    .SDcols = colnames(scores) %like% cols_to_summarise
+  ]
 
   # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
-
-    pairwise <- pairwise_comparison(scores = scores,
-                                    metric = metric,
-                                    baseline = baseline,
-                                    by = by)
+    pairwise <- pairwise_comparison(
+      scores = scores,
+      metric = metric,
+      baseline = baseline,
+      by = by
+    )
 
     # delete unnecessary columns
-    pairwise[, c("compare_against", "mean_scores_ratio",
-                 "pval", "adj_pval") := NULL]
+    pairwise[, c(
+      "compare_against", "mean_scores_ratio",
+      "pval", "adj_pval"
+    ) := NULL]
     pairwise <- unique(pairwise)
 
     # merge back
-    scores <- merge(scores, pairwise, all.x = TRUE,
-                    by = get_unit_of_forecast(pairwise))
-
+    scores <- merge(scores, pairwise,
+      all.x = TRUE,
+      by = get_unit_of_forecast(pairwise)
+    )
   }
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, FUN, ...),
-                   by = c(by),
-                   .SDcols = colnames(scores) %like% cols_to_summarise]
+    by = c(by),
+    .SDcols = colnames(scores) %like% cols_to_summarise
+  ]
 
   # remove unnecessary columns -------------------------------------------------
   # if neither quantile nor range are in by, remove coverage and
@@ -140,16 +147,17 @@ check_summary_params <- function(scores,
                                  by,
                                  relative_skill,
                                  baseline,
-                                 metric
-) {
+                                 metric) {
 
   # check that columns in 'by' are actually present ----------------------------
   if (!all(by %in% c(colnames(scores), "range", "quantile"))) {
     not_present <- setdiff(by, c(colnames(scores), "range", "quantile"))
-    msg <- paste0("The following items in `by` are not",
-                  "valid column names of the data: '",
-                  paste(not_present, collapse = ", "),
-                  "'. Check and run `summarise_scores()` again")
+    msg <- paste0(
+      "The following items in `by` are not",
+      "valid column names of the data: '",
+      paste(not_present, collapse = ", "),
+      "'. Check and run `summarise_scores()` again"
+    )
     stop(msg)
   }
 
@@ -206,15 +214,12 @@ check_summary_params <- function(scores,
 #' score(example_quantile) %>%
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"))
-#'
-#'
 #' @export
 
 
 add_coverage <- function(scores,
                          by,
                          ranges = c(50, 90)) {
-
   summarised_scores <- summarise_scores(
     scores,
     by = c(by, "range")
@@ -238,4 +243,3 @@ add_coverage <- function(scores,
   scores_with_coverage <- merge(scores, coverages, by = by)
   return(scores_with_coverage)
 }
-

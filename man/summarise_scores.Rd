@@ -80,10 +80,11 @@ summarise_scores(scores, by = "model", FUN = sd)
 
 # get quantiles of scores
 # make sure to aggregate over ranges first
-summarise_scores(scores, by = "model", FUN = quantile,
-                 probs = c(0.25, 0.5, 0.75))
+summarise_scores(scores,
+  by = "model", FUN = quantile,
+  probs = c(0.25, 0.5, 0.75)
+)
 
 # get ranges
 # summarise_scores(scores, by = "range")
-
 }

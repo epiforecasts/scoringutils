@@ -36,10 +36,9 @@ scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
 plot_ranges(scores, x = "model") +
-  facet_wrap(~ target_type, scales = "free")
+  facet_wrap(~target_type, scales = "free")
 
 # visualise dispersion instead of interval score
 plot_ranges(scores, y = "dispersion", x = "model") +
-  facet_wrap(~ target_type)
-
+  facet_wrap(~target_type)
 }

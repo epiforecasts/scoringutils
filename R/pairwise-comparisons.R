@@ -41,14 +41,17 @@
 #' @author Johannes Bracher, https://jbracher.github.io/
 #' @author Nikos Bosse
 #' @examples
-#' df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
-#'                  date = as.Date("2020-01-01") + rep(1:5, each = 2),
-#'                  location = c(1, 2),
-#'                  interval_score = (abs(rnorm(30))),
-#'                  aem = (abs(rnorm(30))))
+#' df <- data.frame(
+#'   model = rep(c("model1", "model2", "model3"), each = 10),
+#'   date = as.Date("2020-01-01") + rep(1:5, each = 2),
+#'   location = c(1, 2),
+#'   interval_score = (abs(rnorm(30))),
+#'   aem = (abs(rnorm(30)))
+#' )
 #'
 #' res <- scoringutils::pairwise_comparison(df,
-#'                            baseline = "model1")
+#'   baseline = "model1"
+#' )
 #' scoringutils::plot_pairwise_comparison(res)
 #'
 #' eval <- scoringutils::score(scoringutils::example_quantile)
@@ -61,7 +64,6 @@ pairwise_comparison <- function(scores,
                                 baseline = NULL,
                                 by = c("model"),
                                 ...) {
-
   scores <- data.table::as.data.table(scores)
 
   # determine metric automatically
@@ -82,21 +84,25 @@ pairwise_comparison <- function(scores,
   # order to not to include those in the calculation of relative scores. Also
   # gets rid of all unnecessary columns and keep only metric and forecast unit
   scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
-                   by = forecast_unit,
-                   .SDcols = metric]
+    by = forecast_unit,
+    .SDcols = metric
+  ]
 
   # split data set into groups determined by by
   split_by <- setdiff(by, "model")
   split_scores <- split(scores, by = split_by)
 
   results <- lapply(split_scores,
-                    FUN = function(scores) {
-                      out <- pairwise_comparison_one_group(scores = scores,
-                                                           metric = metric,
-                                                           baseline = baseline,
-                                                           by = by,
-                                                           ...)
-                    })
+    FUN = function(scores) {
+      out <- pairwise_comparison_one_group(
+        scores = scores,
+        metric = metric,
+        baseline = baseline,
+        by = by,
+        ...
+      )
+    }
+  )
 
   out <- data.table::rbindlist(results)
 
@@ -123,7 +129,6 @@ pairwise_comparison_one_group <- function(scores,
                                           baseline,
                                           by,
                                           ...) {
-
   if (!("model" %in% names(scores))) {
     stop("pairwise compairons require a column called 'model'")
   }
@@ -145,12 +150,15 @@ pairwise_comparison_one_group <- function(scores,
   combinations <- data.table::as.data.table(t(combn(models, m = 2)))
   colnames(combinations) <- c("model", "compare_against")
 
-  combinations[, c("ratio", "pval") := compare_two_models(scores = scores,
-                                                          name_model1 = model,
-                                                          name_model2 = compare_against,
-                                                          metric = metric,
-                                                          ...),
-               by = seq_len(NROW(combinations))]
+  combinations[, c("ratio", "pval") := compare_two_models(
+    scores = scores,
+    name_model1 = model,
+    name_model2 = compare_against,
+    metric = metric,
+    ...
+  ),
+  by = seq_len(NROW(combinations))
+  ]
 
   combinations <- combinations[order(ratio)]
   combinations[, adj_pval := p.adjust(pval)]
@@ -158,25 +166,33 @@ pairwise_comparison_one_group <- function(scores,
   # mirror computations
   combinations_mirrored <- data.table::copy(combinations)
   data.table::setnames(combinations_mirrored,
-                       old = c("model", "compare_against"),
-                       new = c("compare_against", "model"))
+    old = c("model", "compare_against"),
+    new = c("compare_against", "model")
+  )
   combinations_mirrored[, ratio := 1 / ratio]
 
   # add a one for those that are the same
-  combinations_equal <- data.table::data.table(model = models,
-                                               compare_against = models,
-                                               ratio = 1,
-                                               pval = 1,
-                                               adj_pval = 1)
+  combinations_equal <- data.table::data.table(
+    model = models,
+    compare_against = models,
+    ratio = 1,
+    pval = 1,
+    adj_pval = 1
+  )
 
-  result <- data.table::rbindlist(list(combinations,
-                                       combinations_mirrored,
-                                       combinations_equal),
-                                  use.names = TRUE)
+  result <- data.table::rbindlist(list(
+    combinations,
+    combinations_mirrored,
+    combinations_equal
+  ),
+  use.names = TRUE
+  )
 
   # make result character instead of factor
-  result[, `:=`("model" = as.character(model),
-                "compare_against" = as.character(compare_against))]
+  result[, `:=`(
+    "model" = as.character(model),
+    "compare_against" = as.character(compare_against)
+  )]
 
 
   # calculate relative skill as geometric mean
@@ -187,8 +203,9 @@ pairwise_comparison_one_group <- function(scores,
     result_without_baseline <- data.table::copy(result)
     # filter out all ratios where compare_against is the baseline
     result_without_baseline <- result_without_baseline[compare_against != baseline, ]
-    result_without_baseline[, `:=` (theta = geom_mean_helper(ratio)),
-                            by = "model"]
+    result_without_baseline[, `:=`(theta = geom_mean_helper(ratio)),
+      by = "model"
+    ]
     # merge back to retain the ratios even for comparisons with the baseline
     result <- merge(result, result_without_baseline, all.x = TRUE)
     # avoid mixture of NA and NaN which can cause problems downstream
@@ -196,12 +213,15 @@ pairwise_comparison_one_group <- function(scores,
     # remove NAs form merge in the thetas
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
-    result[, `:=` (theta = geom_mean_helper(ratio),
-                   rel_to_baseline = NA_real_),
-           by = "model"]
+    result[, `:=`(
+      theta = geom_mean_helper(ratio),
+      rel_to_baseline = NA_real_
+    ),
+    by = "model"
+    ]
   }
 
-  if(!is.null(baseline)) {
+  if (!is.null(baseline)) {
     baseline_theta <- unique(result[model == baseline, ]$theta)
     result[, rel_to_baseline := theta / baseline_theta]
   }
@@ -215,8 +235,10 @@ pairwise_comparison_one_group <- function(scores,
   out <- merge(scores, result, by = "model", all = TRUE)
 
   # rename ratio to mean_scores_ratio
-  data.table::setnames(out, old = c("ratio", "theta", "rel_to_baseline"),
-                       new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill"))
+  data.table::setnames(out,
+    old = c("ratio", "theta", "rel_to_baseline"),
+    new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill")
+  )
 
   return(out[])
 }
@@ -261,7 +283,6 @@ compare_two_models <- function(scores,
                                test_type = c("non_parametric", "permutation"),
                                n_permutations = 999, # remove dot argument later on
                                ...) {
-
   scores <- data.table::as.data.table(scores)
 
   forecast_unit <- get_unit_of_forecast(scores)
@@ -278,7 +299,7 @@ compare_two_models <- function(scores,
   merge_by <- setdiff(forecast_unit, "model")
 
   overlap <- merge(a, b, by = merge_by, allow.cartesian = TRUE)
-unique(overlap)
+  unique(overlap)
 
   if (nrow(overlap) == 0) {
     return(list(ratio = NA_real_, pval = NA_real_))
@@ -299,16 +320,19 @@ unique(overlap)
   if (test_type[1] == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
-                             nPermutation = n_permutations,
-                             oneSided = oneSided,
-                             comparison_mode = "difference")
+      nPermutation = n_permutations,
+      oneSided = oneSided,
+      comparison_mode = "difference"
+    )
   } else {
     # this probably needs some more thought
     # alternative: do a paired t-test on ranks?
     pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
   }
-  return(list(mean_scores_ratio = ratio,
-              pval = pval))
+  return(list(
+    mean_scores_ratio = ratio,
+    pval = pval
+  ))
 }
 
 
@@ -362,19 +386,20 @@ unique(overlap)
 #' @export
 #'
 #' @examples
-#' df <- data.frame(model = rep(c("model1", "model2", "model3"), each = 10),
-#'                  id = rep(1:10),
-#'                  interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
-#'                  aem = (abs(rnorm(30))))
+#' df <- data.frame(
+#'   model = rep(c("model1", "model2", "model3"), each = 10),
+#'   id = rep(1:10),
+#'   interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
+#'   aem = (abs(rnorm(30)))
+#' )
 #'
 #' data <- scoringutils::example_quantile
 #' scores <- scoringutils::score(data)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' scoringutils::plot_pairwise_comparison(pairwise,
-#'                                        facet_formula = ~ target_type,
-#'                                        scales = "fixed")
-
-
+#'   facet_formula = ~target_type,
+#'   scales = "fixed"
+#' )
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
                                      smaller_is_good = TRUE,
@@ -382,7 +407,6 @@ plot_pairwise_comparison <- function(comparison_result,
                                      scales = "free_y",
                                      ncol = NULL,
                                      facet_wrap_or_grid = "facet_wrap") {
-
   comparison_result <- data.table::as.data.table(comparison_result)
 
   comparison_result[, model := reorder(model, -relative_skill)]
@@ -391,10 +415,12 @@ plot_pairwise_comparison <- function(comparison_result,
 
   get_fill_scale <- function(values, breaks, plot_scales) {
     values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
-    scale <- cut(values, breaks = breaks,
-                 include.lowest = TRUE,
-                 right = FALSE,
-                 labels = plot_scales)
+    scale <- cut(values,
+      breaks = breaks,
+      include.lowest = TRUE,
+      right = FALSE,
+      labels = plot_scales
+    )
     # scale[is.na(scale)] <- 0
     return(as.numeric(as.character(scale)))
   }
@@ -413,26 +439,34 @@ plot_pairwise_comparison <- function(comparison_result,
     upper_triangle <- merge(comparison_result, unique_comb)
 
     # change levels for plotting order
-    upper_triangle[, `:=` (model = factor(model, levels),
-                           compare_against = factor(compare_against, levels))]
+    upper_triangle[, `:=`(
+      model = factor(model, levels),
+      compare_against = factor(compare_against, levels)
+    )]
 
     # reverse y and x if larger is better
     if (!smaller_is_good) {
-      data.table::setnames(upper_triangle,
-                           c("model", "compare_against"),
-                           c("compare_against", "model"))
+      data.table::setnames(
+        upper_triangle,
+        c("model", "compare_against"),
+        c("compare_against", "model")
+      )
     }
 
     # modify upper triangle ------------------------------------------------------
     # add columns where a model is compared with itself. make adj_pval NA
     # to plot it as grey later on
-    equal <- data.table::data.table(model = levels,
-                                    compare_against = levels,
-                                    mean_scores_ratio = 1,
-                                    pval = NA,
-                                    adj_pval = NA)
-    upper_triangle_complete <- data.table::rbindlist(list(upper_triangle,
-                                                          equal), fill = TRUE)
+    equal <- data.table::data.table(
+      model = levels,
+      compare_against = levels,
+      mean_scores_ratio = 1,
+      pval = NA,
+      adj_pval = NA
+    )
+    upper_triangle_complete <- data.table::rbindlist(list(
+      upper_triangle,
+      equal
+    ), fill = TRUE)
 
     # define interest variable
     upper_triangle_complete[, var_of_interest := round(mean_scores_ratio, 2)]
@@ -443,128 +477,176 @@ plot_pairwise_comparison <- function(comparison_result,
     if (!smaller_is_good) {
       plot_scales <- rev(plot_scales)
     }
-    upper_triangle_complete[, fill_col := get_fill_scale(var_of_interest,
-                                                         breaks, plot_scales)]
+    upper_triangle_complete[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
 
     # create mean_scores_ratios in plot
-    plot <- ggplot2::ggplot(upper_triangle_complete,
-                            ggplot2::aes(x = compare_against,
-                                         y = model,
-                                         fill = fill_col)) +
+    plot <- ggplot2::ggplot(
+      upper_triangle_complete,
+      ggplot2::aes(
+        x = compare_against,
+        y = model,
+        fill = fill_col
+      )
+    ) +
       ggplot2::geom_tile(width = 0.98, height = 0.98) +
       ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
-                         na.rm = TRUE) +
-      ggplot2::scale_fill_gradient2(low = "skyblue", mid = "grey95",
-                                    high = "brown1",
-                                    na.value = "lightgrey",
-                                    midpoint = 0,
-                                    limits = c(-1,1),
-                                    name = NULL) +
+        na.rm = TRUE
+      ) +
+      ggplot2::scale_fill_gradient2(
+        low = "skyblue", mid = "grey95",
+        high = "brown1",
+        na.value = "lightgrey",
+        midpoint = 0,
+        limits = c(-1, 1),
+        name = NULL
+      ) +
       ggplot2::theme_light() +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
-                                                         hjust=1, color = "brown4"),
-                     axis.text.y = ggplot2::element_text(color = "steelblue4"),
-                     panel.grid.major = ggplot2::element_blank(),
-                     panel.grid.minor = ggplot2::element_blank(),
-                     # panel.background = ggplot2::element_rect(fill = "grey90"),
-                     # axis.line.y = ggplot2::element_line(color = "steelblue4", size = 4),
-                     # axis.line.x = ggplot2::element_line(color = "brown3", size = 4),
-                     legend.position = "none") +
-      ggplot2::labs(x = "", y = "",
-                    title = "Pairwise comparisons - mean_scores_ratio (upper) and pval (lower)") +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(
+          angle = 90, vjust = 1,
+          hjust = 1, color = "brown4"
+        ),
+        axis.text.y = ggplot2::element_text(color = "steelblue4"),
+        panel.grid.major = ggplot2::element_blank(),
+        panel.grid.minor = ggplot2::element_blank(),
+        # panel.background = ggplot2::element_rect(fill = "grey90"),
+        # axis.line.y = ggplot2::element_line(color = "steelblue4", size = 4),
+        # axis.line.x = ggplot2::element_line(color = "brown3", size = 4),
+        legend.position = "none"
+      ) +
+      ggplot2::labs(
+        x = "", y = "",
+        title = "Pairwise comparisons - mean_scores_ratio (upper) and pval (lower)"
+      ) +
       ggplot2::coord_cartesian(expand = FALSE)
 
     # add pvalues to plot --------------------------------------------------------
     # obtain lower triangle for the pvalues
     lower_triangle <- data.table::copy(upper_triangle)
-    data.table::setnames(lower_triangle,
-                         c("model", "compare_against"),
-                         c("compare_against", "model"))
+    data.table::setnames(
+      lower_triangle,
+      c("model", "compare_against"),
+      c("compare_against", "model")
+    )
 
     lower_triangle[, var_of_interest := round(adj_pval, 3)]
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.01, 0.05, 0.1, 1)
     plot_scales <- c(0.8, 0.5, 0.1, 0.000001)
-    lower_triangle[, fill_col := get_fill_scale(var_of_interest,
-                                                breaks, plot_scales)]
+    lower_triangle[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
 
     fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
     lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
-                                               "< 0.001", var_of_interest)]
+      "< 0.001", var_of_interest
+    )]
 
     plot <- plot +
-      ggplot2::geom_tile(data = lower_triangle,
-                         ggplot2::aes(alpha = fill_col),
-                         fill = fill_rule,
-                         color = "white",
-                         width = 0.97, height = 0.97) +
-      ggplot2::geom_text(data = lower_triangle,
-                         ggplot2::aes(label = var_of_interest),
-                         na.rm = TRUE)
-
+      ggplot2::geom_tile(
+        data = lower_triangle,
+        ggplot2::aes(alpha = fill_col),
+        fill = fill_rule,
+        color = "white",
+        width = 0.97, height = 0.97
+      ) +
+      ggplot2::geom_text(
+        data = lower_triangle,
+        ggplot2::aes(label = var_of_interest),
+        na.rm = TRUE
+      )
   } else if (type[1] == "mean_scores_ratio") {
     comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
     plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
-    comparison_result[, fill_col := get_fill_scale(var_of_interest,
-                                                   breaks, plot_scales)]
+    comparison_result[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
 
-    high_col = "brown1"
-
+    high_col <- "brown1"
   } else {
     comparison_result[, var_of_interest := round(pval, 3)]
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.01, 0.05, 0.1, 1)
     plot_scales <- c(1, 0.5, 0.1, 0)
-    comparison_result[, fill_col := get_fill_scale(var_of_interest,
-                                                   breaks, plot_scales)]
+    comparison_result[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
 
-    high_col = "palegreen3"
+    high_col <- "palegreen3"
     comparison_result[, var_of_interest := as.character(var_of_interest)]
     comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-                                                  "< 0.001", var_of_interest)]
+      "< 0.001", var_of_interest
+    )]
   }
 
-  plot <- ggplot2::ggplot(comparison_result,
-                          ggplot2::aes(y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean_helper),
-                                       x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
-                                       fill = fill_col)) +
-    ggplot2::geom_tile(color = "white",
-                       width = 0.97, height = 0.97) +
+  plot <- ggplot2::ggplot(
+    comparison_result,
+    ggplot2::aes(
+      y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean_helper),
+      x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
+      fill = fill_col
+    )
+  ) +
+    ggplot2::geom_tile(
+      color = "white",
+      width = 0.97, height = 0.97
+    ) +
     ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
-                       na.rm = TRUE) +
-    ggplot2::scale_fill_gradient2(low = "skyblue", mid = "grey95",
-                                  high = high_col,
-                                  na.value = "lightgrey",
-                                  midpoint = 0,
-                                  limits = c(-1,1),
-                                  name = NULL) +
+      na.rm = TRUE
+    ) +
+    ggplot2::scale_fill_gradient2(
+      low = "skyblue", mid = "grey95",
+      high = high_col,
+      na.value = "lightgrey",
+      midpoint = 0,
+      limits = c(-1, 1),
+      name = NULL
+    ) +
     ggplot2::theme_light() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
-                                                       hjust=1),
-                   legend.position = "none") +
-    ggplot2::labs(x = "", y = "",
-                  title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1") +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      ),
+      legend.position = "none"
+    ) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1"
+    ) +
     ggplot2::coord_cartesian(expand = FALSE)
 
   if (type[1] == "mean_scores_ratio") {
     plot <- plot +
-      ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                     panel.grid.minor = ggplot2::element_blank(),
-                     axis.text.x = ggplot2::element_text(angle = 90, vjust = 1,
-                                                         hjust=1, color = "brown4"),
-                     axis.text.y = ggplot2::element_text(color = "steelblue4")) +
+      ggplot2::theme(
+        panel.grid.major = ggplot2::element_blank(),
+        panel.grid.minor = ggplot2::element_blank(),
+        axis.text.x = ggplot2::element_text(
+          angle = 90, vjust = 1,
+          hjust = 1, color = "brown4"
+        ),
+        axis.text.y = ggplot2::element_text(color = "steelblue4")
+      ) +
       ggplot2::ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
   }
 
   if (!is.null(facet_formula)) {
     if (facet_wrap_or_grid == "facet_wrap") {
       plot <- plot +
-        ggplot2::facet_wrap(facet_formula, ncol = ncol,
-                            scales = scales)
+        ggplot2::facet_wrap(facet_formula,
+          ncol = ncol,
+          scales = scales
+        )
     } else {
       plot <- plot +
         ggplot2::facet_grid(facet_formula, scales = scales)
@@ -587,7 +669,6 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @keywords internal
 
 infer_rel_skill_metric <- function(scores) {
-
   if ("interval_score" %in% colnames(scores)) {
     rel_skill_metric <- "interval_score"
   } else if ("crps" %in% colnames(scores)) {
@@ -595,16 +676,11 @@ infer_rel_skill_metric <- function(scores) {
   } else if ("brier_score" %in% colnames(scores)) {
     rel_skill_metric <- "brier_score"
   } else {
-    stop("automatically assigning a metric to compute relative skills on failed. ",
-         "Please provide a metric.")
+    stop(
+      "automatically assigning a metric to compute relative skills on failed. ",
+      "Please provide a metric."
+    )
   }
 
   return(rel_skill_metric)
 }
-
-
-
-
-
-
-

@@ -24,8 +24,7 @@
 #' @examples
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' sharpness(predictions)
-
-sharpness <- function (predictions) {
+sharpness <- function(predictions) {
 
   # ============== Error handling ==============
 

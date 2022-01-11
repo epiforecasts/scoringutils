@@ -56,8 +56,6 @@ bias_sample(true_values, predictions)
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(30, mean = 1:30))
 bias_sample(true_values, predictions)
-
-
 }
 \references{
 The integer valued Bias function is discussed in

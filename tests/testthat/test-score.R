@@ -4,12 +4,14 @@ test_that("function throws an error if data is missing", {
 })
 
 test_that("score() warns if column name equals a metric name", {
-  data <- data.frame(true_value = rep(1:10, each = 2),
-                     prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
-                     model = "Model 1",
-                     date = as.Date("2020-01-01") + rep(1:10, each = 2),
-                     quantile = rep(c(0.1, 0.9), times = 10),
-                     bias = 3)
+  data <- data.frame(
+    true_value = rep(1:10, each = 2),
+    prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+    model = "Model 1",
+    date = as.Date("2020-01-01") + rep(1:10, each = 2),
+    quantile = rep(c(0.1, 0.9), times = 10),
+    bias = 3
+  )
 
   expect_warning(score(data = data))
 })
@@ -22,11 +24,17 @@ test_that("function produces output for a binary case", {
   eval <- score(binary_example[!is.na(prediction)])
   eval <- summarise_scores(eval, by = c("model", "target_type"))
 
-  expect_equal(nrow(eval) > 1,
-               TRUE)
-  expect_equal(colnames(eval),
-               c("model", "target_type",
-                 "brier_score"))
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
+  expect_equal(
+    colnames(eval),
+    c(
+      "model", "target_type",
+      "brier_score"
+    )
+  )
 })
 
 
@@ -45,20 +53,26 @@ test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
   eval <- score(quantile_example[!is.na(prediction)])
 
-  expect_equal(nrow(eval) > 1,
-               TRUE)
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
 })
 
 test_that("score() quantile produces desired metrics", {
-  data <- data.frame(true_value = rep(1:10, each = 2),
-                     prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
-                     model = "Model 1",
-                     date = as.Date("2020-01-01") + rep(1:10, each = 2),
-                     quantile = rep(c(0.1, 0.9), times = 10))
+  data <- data.frame(
+    true_value = rep(1:10, each = 2),
+    prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+    model = "Model 1",
+    date = as.Date("2020-01-01") + rep(1:10, each = 2),
+    quantile = rep(c(0.1, 0.9), times = 10)
+  )
 
   out <- score(data = data)
-  metric_names <- c("dispersion", "underprediction", "overprediction",
-                    "bias", "aem", "coverage_deviation")
+  metric_names <- c(
+    "dispersion", "underprediction", "overprediction",
+    "bias", "aem", "coverage_deviation"
+  )
 
   expect_true(all(metric_names %in% colnames(out)))
 })
@@ -70,8 +84,7 @@ test_that("calculation of aem is correct for a quantile format case", {
   eval <- summarise_scores(eval, by = c("model"))
 
   example <- scoringutils::example_quantile
-  ae <- example[quantile == 0.5, ae := abs(true_value - prediction)
-  ][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- example[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -85,8 +98,7 @@ test_that("all quantile and range formats yield the same result", {
   eval1 <- score(quantile_example1[!is.na(prediction)])
   eval1 <- summarise_scores(eval1, by = "model")
 
-  ae <- quantile_example1[quantile == 0.5, ae := abs(true_value - prediction)
-  ][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- quantile_example1[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -96,20 +108,25 @@ test_that("all quantile and range formats yield the same result", {
 test_that("function produces output even if only some metrics are chosen", {
   example <- scoringutils::example_quantile
 
-  eval <- scoringutils::score(example,metrics = "coverage")
+  eval <- scoringutils::score(example, metrics = "coverage")
 
-  expect_equal(nrow(eval) > 1,
-               TRUE)
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
   eval <- scoringutils::score(example_quantile,
-                              metrics = "interval_score")
+    metrics = "interval_score"
+  )
 
   eval2 <- scoringutils::score(example_quantile)
 
-  expect_equal(sum(eval$interval_score),
-               sum(eval2$interval_score))
+  expect_equal(
+    sum(eval$interval_score),
+    sum(eval2$interval_score)
+  )
 })
 
 
@@ -128,7 +145,8 @@ test_that("function produces output for a continuous format case", {
   eval2 <- eval2[order(model)]
   all(eval == eval2, na.rm = TRUE)
 
-  expect_equal(nrow(eval) > 1,
-               TRUE)
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
 })
-

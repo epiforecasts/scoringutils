@@ -47,5 +47,4 @@ plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 # sample-based pit
 pit <- pit(example_integer, by = c("model"))
 plot_pit(pit)
-
 }

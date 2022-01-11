@@ -34,7 +34,7 @@ scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 score_table(scores, y = "model") +
-  facet_wrap(~ target_type, ncol = 1)
+  facet_wrap(~target_type, ncol = 1)
 
 # can also put target description on the y-axis
 score_table(scores, y = c("model", "target_type"))
@@ -46,8 +46,9 @@ scores <- score(example_integer)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 # only show selected metrics
-score_table(scores, y = "model",
-            select_metrics = c("crps", "bias")) +
-  facet_wrap(~ target_type, ncol = 1)
-
+score_table(scores,
+  y = "model",
+  select_metrics = c("crps", "bias")
+) +
+  facet_wrap(~target_type, ncol = 1)
 }

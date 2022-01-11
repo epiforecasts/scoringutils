@@ -13,13 +13,11 @@
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 
 score_binary <- function(data,
-                                  forecast_unit,
-                                  metrics){
-
+                         forecast_unit,
+                         metrics) {
   res <- data[, "brier_score" := scoringutils::brier_score(true_value, prediction),
-              by = forecast_unit]
+    by = forecast_unit
+  ]
 
   return(res[])
 }
-
-

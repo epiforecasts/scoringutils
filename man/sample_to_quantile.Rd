@@ -25,5 +25,4 @@ based on plain quantiles.
 example_data <- scoringutils::example_integer
 
 quantile_data <- scoringutils::sample_to_quantile(example_data)
-
 }
