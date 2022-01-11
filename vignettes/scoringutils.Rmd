@@ -187,12 +187,12 @@ assume values between -1 and 1 and is 0 ideally.
 ## integer valued forecasts
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-bias(true_values, predictions)
+bias_sample(true_values, predictions)
 
 ## continuous forecasts
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(30, mean = 1:30))
-bias(true_values, predictions)
+bias_sample(true_values, predictions)
 ```
 
 

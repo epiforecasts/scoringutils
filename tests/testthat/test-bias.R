@@ -3,7 +3,7 @@ test_that("function throws an error when missing true_values",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
-            expect_error(bias(predictions = predictions),
+            expect_error(bias_sample(predictions = predictions),
                          "true_values or predictions argument missing")
           })
 
@@ -12,7 +12,7 @@ test_that("function throws an error when missing 'predictions'",
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
-            expect_error(bias(true_values = true_values),
+            expect_error(bias_sample(true_values = true_values),
                          "true_values or predictions argument missing")
           })
 
@@ -20,7 +20,7 @@ test_that("function works for integer true_values and predictions",
           {
             true_values <- rpois(10, lambda = 1:10)
             predictions <- replicate(10, rpois(10, lambda = 1:10))
-            output <- bias(true_values = true_values,
+            output <- bias_sample(true_values = true_values,
                            predictions = predictions)
             expect_equal(length(output),
                          length(true_values))
@@ -32,8 +32,8 @@ test_that("function works for continuous true_values and predictions",
           {
             true_values <- rnorm(10)
             predictions <- replicate(10, rnorm(10))
-            output <- bias(true_values = true_values,
-                           predictions = predictions)
+            output <- bias_sample(true_values = true_values,
+                                  predictions = predictions)
             expect_equal(length(output),
                          length(true_values))
             expect_equal(class(output),
@@ -45,14 +45,14 @@ test_that("function works for continuous true_values and predictions",
 test_that("bias works", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-  all(scoringutils::bias(true_values, predictions) == scoringutils::bias(true_values, predictions))
+  all(bias_sample(true_values, predictions) == bias_sample(true_values, predictions))
 
   ## continuous forecasts
   true_values <- rnorm(30, mean = 1:30)
   predictions <- replicate(200, rnorm(30, mean = 1:30))
 
-  scoringutils2 <- scoringutils::bias(true_values, predictions)
-  scoringutils <- scoringutils::bias(true_values, predictions)
+  scoringutils2 <- bias_sample(true_values, predictions)
+  scoringutils <- bias_sample(true_values, predictions)
 
   expect_equal(scoringutils, scoringutils2)
 })
@@ -71,9 +71,9 @@ test_that("range bias works", {
 
   true_value <- 8062
 
-  scoringutils2 <- scoringutils::bias_range(lower = lower, upper = upper,
+  scoringutils2 <- bias_range(lower = lower, upper = upper,
                                                 range = range, true_value = true_value)
-  scoringutils <- scoringutils::bias_range(lower = lower, upper = upper,
+  scoringutils <- bias_range(lower = lower, upper = upper,
                                            range = range, true_value = true_value)
 
   expect_equal(scoringutils, scoringutils2)

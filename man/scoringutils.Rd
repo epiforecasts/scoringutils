@@ -37,7 +37,8 @@ Alternatively, the following functions can be accessed directly:
 \itemize{
 \item \code{\link[=brier_score]{brier_score()}}
 \item \code{\link[=pit]{pit()}}
-\item \code{\link[=bias]{bias()}}
+\item \code{\link[=bias_sample]{bias_sample()}}
+\item \code{\link[=bias_quantile]{bias_quantile()}}
 \item \code{\link[=bias_range]{bias_range()}}
 \item \code{\link[=sharpness]{sharpness()}}
 \item \code{\link[=crps]{crps()}}

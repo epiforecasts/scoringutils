@@ -34,8 +34,8 @@ score_sample <- function(data,
   }
   # bias
   if ("bias" %in% metrics) {
-    data[, bias := scoringutils::bias(unique(true_value),
-                                      t(prediction)), by = forecast_unit]
+    data[, bias := bias_sample(unique(true_value),
+                               t(prediction)), by = forecast_unit]
   }
   # DSS
   if ("dss" %in% metrics) {

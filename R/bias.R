@@ -40,12 +40,12 @@
 #' ## integer valued forecasts
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' bias(true_values, predictions)
+#' bias_sample(true_values, predictions)
 #'
 #' ## continuous forecasts
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(30, mean = 1:30))
-#' bias(true_values, predictions)
+#' bias_sample(true_values, predictions)
 #'
 #'
 #' @export
@@ -59,7 +59,7 @@
 #' <doi:10.1371/journal.pcbi.1006785>
 
 
-bias <- function(true_values, predictions) {
+bias_sample <- function(true_values, predictions) {
 
   # ============== Error handling ==============
 
