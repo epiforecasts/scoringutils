@@ -39,10 +39,14 @@ Visualise Where Forecasts Are Available
 library(scoringutils)
 library(ggplot2)
 avail_forecasts <- avail_forecasts(example_quantile,
-                                   by = c("model", "target_type",
-                                          "target_end_date"))
+  by = c(
+    "model", "target_type",
+    "target_end_date"
+  )
+)
 plot_avail_forecasts(avail_forecasts,
-                     x = "target_end_date",
-                     show_numbers = FALSE) +
+  x = "target_end_date",
+  show_numbers = FALSE
+) +
   facet_wrap("target_type")
 }

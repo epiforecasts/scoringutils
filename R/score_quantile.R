@@ -52,7 +52,7 @@ score_quantile <- function(data,
 
   # compute bias
   if ("bias" %in% metrics) {
-    res[, bias := quantile_bias(range = range, lower = lower, upper = upper,
+    res[, bias := bias_range(range = range, lower = lower, upper = upper,
                                 true_value = unique(true_value)),
         by = forecast_unit]
   }

@@ -71,9 +71,9 @@ test_that("quantile bias works", {
 
   true_value <- 8062
 
-  scoringutils2 <- scoringutils::quantile_bias(lower = lower, upper = upper,
+  scoringutils2 <- scoringutils::bias_range(lower = lower, upper = upper,
                                                 range = range, true_value = true_value)
-  scoringutils <- scoringutils:: quantile_bias(lower = lower, upper = upper,
+  scoringutils <- scoringutils:: bias_range(lower = lower, upper = upper,
                                                range = range, true_value = true_value)
 
   expect_equal(scoringutils, scoringutils2)

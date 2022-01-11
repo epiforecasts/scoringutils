@@ -13,7 +13,7 @@ avail_forecasts(data, by = NULL, collapse = c("quantile", "sample"))
 \item{by}{character vector or \code{NULL} (the default) that
 denotes the categories over which the number of forecasts should be counted.
 By default (\code{by = NULL}) this will be the unit of a single forecast (i.e.
-all available columns (apart from a few protected columsn such as
+all available columns (apart from a few "protected" columns such as
 'prediction' and 'true value') plus "quantile" or "sample" where present).}
 
 \item{collapse}{character vector (default is \verb{c("quantile", "sample"}) with
@@ -28,11 +28,13 @@ column with the number of forecasts.
 }
 \description{
 Given a data set with forecasts, count the number of available forecasts
-for arbitrary groupring (e.g. the number of forecasts per model, or the
+for arbitrary grouping (e.g. the number of forecasts per model, or the
 number of forecasts per model and location).
+This is useful to determine whether there are any missing forecasts.
 }
 \examples{
 avail_forecasts(example_quantile,
-                collapse = c("quantile"),
-                by = c("model", "target_type"))
+  collapse = c("quantile"),
+  by = c("model", "target_type")
+)
 }

@@ -38,7 +38,7 @@ Alternatively, the following functions can be accessed directly:
 \item \code{\link[=brier_score]{brier_score()}}
 \item \code{\link[=pit]{pit()}}
 \item \code{\link[=bias]{bias()}}
-\item \code{\link[=quantile_bias]{quantile_bias()}}
+\item \code{\link[=bias_range]{bias_range()}}
 \item \code{\link[=sharpness]{sharpness()}}
 \item \code{\link[=crps]{crps()}}
 \item \code{\link[=logs]{logs()}}

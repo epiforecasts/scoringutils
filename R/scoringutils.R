@@ -33,7 +33,7 @@
 #' - [brier_score()]
 #' - [pit()]
 #' - [bias()]
-#' - [quantile_bias()]
+#' - [bias_range()]
 #' - [sharpness()]
 #' - [crps()]
 #' - [logs()]

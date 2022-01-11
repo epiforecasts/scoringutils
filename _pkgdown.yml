@@ -31,7 +31,7 @@ reference:
                 - pit
                 - pit_df
                 - pit_df_fast
-                - quantile_bias
+                - bias_range
                 - sharpness
         - title: Data wrangling helpers
           contents:
