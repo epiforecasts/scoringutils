@@ -89,5 +89,5 @@ Statistical Association, Volume 102, 2007 - Issue 477
 
 Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-\url{https://arxiv.org/abs/2005.12881}
+\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
 }

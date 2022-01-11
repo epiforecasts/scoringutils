@@ -39,5 +39,5 @@ plot_wis_components(scores, x = "model",
 }
 \references{
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
-in an interval format. \url{https://arxiv.org/abs/2005.12881}
+in an interval format. \url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
 }

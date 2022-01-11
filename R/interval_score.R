@@ -66,7 +66,7 @@
 #'
 #' Evaluating epidemic forecasts in an interval format,
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <https://arxiv.org/abs/2005.12881>
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 #'
 
 
@@ -113,4 +113,26 @@ interval_score <- function(true_values,
   }
 }
 
+
+true_values <- rnorm(30, mean = 1:30)
+
+
+
+
+interval_range = rep(90, 30)
+alpha = (100 - interval_range) / 100
+lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
+upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
+
+interval_score(true_values = true_values,
+               lower = lower,
+               upper = upper,
+               interval_range = interval_range)
+
+# example with missing values and separate results
+interval_score(true_values = c(true_values, NA),
+               lower = c(lower, NA),
+               upper = c(NA, upper),
+               separate_results = TRUE,
+               interval_range = 90)
 

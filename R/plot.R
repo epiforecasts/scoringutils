@@ -179,7 +179,7 @@ score_table <- function(scores,
 #'   facet_wrap(~ target_type)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
-#' in an interval format. <https://arxiv.org/abs/2005.12881>
+#' in an interval format. <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 
 
 plot_wis_components <- function(scores,
