@@ -29,8 +29,8 @@ reference:
                 - logs
                 - mse
                 - pit
-                - pit_df
-                - pit_df_fast
+                - pit
+                - pit_fast
                 - bias_range
                 - sharpness
         - title: Data wrangling helpers
@@ -45,8 +45,8 @@ reference:
           contents:
                 - starts_with("plot_")
                 - ends_with("_plot")
-                - hist_PIT
-                - hist_PIT_quantile
+                - plot_pit
+                - plot_pit_quantile
                 - interval_coverage
                 - quantile_coverage
                 - score_table

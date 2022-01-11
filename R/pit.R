@@ -1,4 +1,4 @@
-#' @title Probability Integral Transformation
+#' @title Probability Integral Transformation (sample-based version)
 #'
 #' @description Uses a Probability Integral Transformation (PIT) (or a
 #' randomised PIT for integer forecasts) to
@@ -62,20 +62,21 @@
 #' correspond to the length of `true_values`. For integer forecasts, a
 #' randomised PIT will be returned of length
 #' `length(true_values) * n_replicates`
+#' @seealso [pit()]
 #' @importFrom stats runif
 #' @examples
 #' library(scoringutils)
 #' ## continuous predictions
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-#' pit <- pit(true_values, predictions)
-#' hist_PIT(pit)
+#' pit <- pit_sample(true_values, predictions)
+#' plot_pit(pit)
 #'
 #' ## integer predictions
 #' true_values <- rpois(100, lambda = 1:100)
 #' predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-#' pit <- pit(true_values, predictions,  n_replicates = 50)
-#' hist_PIT(pit)
+#' pit <- pit_sample(true_values, predictions,  n_replicates = 50)
+#' plot_pit(pit)
 #'
 #' @export
 #' @references
@@ -84,14 +85,14 @@
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
 
-pit <- function(true_values,
-                predictions,
-                n_replicates = 100) {
+pit_sample <- function(true_values,
+                       predictions,
+                       n_replicates = 100) {
 
   # error handling--------------------------------------------------------------
   # check al arguments are provided
   if (!all(c(methods::hasArg("true_values"), methods::hasArg("predictions")))) {
-    stop("`true_values` or `predictions` missing in function 'pit()'")
+    stop("`true_values` or `predictions` missing in function 'pit_sample()'")
   }
   check_not_null(true_values = true_values, predictions = predictions)
 
@@ -153,9 +154,9 @@ pit <- function(true_values,
 #' visually check whether a uniform distribution seems likely.
 #'
 #' @param pit either a vector with the PIT values of size n, or a data.frame as
-#' produced by [pit_df()]
+#' produced by [pit()]
 #' @param num_bins the number of bins in the PIT histogram, default is "auto".
-#' When `num_bins == "auto"`, [hist_PIT()] will either display 10 bins, or it
+#' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
 #' will display a bin for each available quantile in case you passed in data in
 #' a quantile-based format.
 #' You can control the number of bins by supplying a number. This is fine for
@@ -175,22 +176,22 @@ pit <- function(true_values,
 #' # PIT histogram in vector based format
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-#' pit <- pit(true_values, predictions)
-#' hist_PIT(pit)
+#' pit <- pit_sample(true_values, predictions)
+#' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit_df(example_quantile, by = c("model"))
-#' hist_PIT(pit, breaks = seq(0.1, 1, 0.1))
+#' pit <- pit(example_quantile, by = c("model"))
+#' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit_df(example_integer, by = c("model"))
-#' hist_PIT(pit)
+#' pit <- pit(example_integer, by = c("model"))
+#' plot_pit(pit)
 #'
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
 #' @export
 
 
-hist_PIT <- function(pit,
+plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
 
@@ -286,17 +287,17 @@ hist_PIT <- function(pit,
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
-#' @inheritParams pit
+#' @inheritParams pit_sample
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
 #' example <- scoringutils::example_continuous
-#' result <- pit_df(example, by = "model")
-#' hist_PIT(result)
+#' result <- pit(example, by = "model")
+#' plot_pit(result)
 #'
 #' # example with quantile data
-#' result <- pit_df(example_quantile, by = "model")
-#' hist_PIT(result)
+#' result <- pit(example_quantile, by = "model")
+#' plot_pit(result)
 #' @export
 #' @references
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
@@ -304,9 +305,9 @@ hist_PIT <- function(pit,
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
 
-pit_df <- function(data,
-                   by,
-                   n_replicates = 100) {
+pit <- function(data,
+                by,
+                n_replicates = 100) {
 
   # clean data by removing NA values
   data <- check_clean_data(data, verbose = FALSE)
@@ -336,8 +337,8 @@ pit_df <- function(data,
                                  ... ~ paste("InternalSampl_", sample, sep = ""),
                                  value.var = "prediction")
 
-  pit <- data_wide[, .("pit_value" = pit(true_values = true_value,
-                                         predictions = as.matrix(.SD))),
+  pit <- data_wide[, .("pit_value" = pit_sample(true_values = true_value,
+                                                predictions = as.matrix(.SD))),
                    by = by,
                    .SDcols = grepl("InternalSampl_", names(data_wide))]
 

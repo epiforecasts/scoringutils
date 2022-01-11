@@ -422,10 +422,10 @@ We can have a closer look at calibration using the functions \fct{interval\_cove
 
 
 ```{r pit-plots, out.width="49%", fig.show='hold'}
-pit <- pit_df(example_quantile, 
+pit <- pit(example_quantile, 
               by = "model", "target")
 
-hist_PIT(pit)
+plot_pit(pit)
 ```
 
 

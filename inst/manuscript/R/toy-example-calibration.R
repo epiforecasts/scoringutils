@@ -28,8 +28,8 @@ res <- score(df)
 res <- summarise_scores(res, by = summarise_by = c("model"))
 
 # create pit plots
-pit <- scoringutils::pit_df(df, summarise_by = "model")
-pit_plots <- scoringutils::hist_PIT(pit)
+pit <- scoringutils::pit(df, summarise_by = "model")
+pit_plots <- scoringutils::plot_pit(pit)
 
 # create coverage plots by transforming to quantile format first
 quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)

@@ -10,8 +10,8 @@ and to maintain consistency with what is used in other places.
   functions now expect you to remove any additional columns beforehand to 
   avoid confusion. 
   - PIT plots have been removed from [score()]. Instead the function
-  [pit_df()] can now be used on a `data.frame` and its output can then be 
-  passed to [hist_PIT()]
+  [pit()] can now be used on a `data.frame` and its output can then be 
+  passed to [plot_pit()]
   - the `interval_score_arguments` were now replaced by `...` in [score()]
   - the argument `summarised = TRUE` was dropped. If you want no summarising 
   at all, please let `summarise_by` be equal to all avaialable column names 
@@ -20,7 +20,7 @@ and to maintain consistency with what is used in other places.
 Anderson-Darling test for uniformity of the PIT values. The AD test is 
 sometimes not reliable in practice and we do not recommend its use in most cases. 
 The function also does not return plots anymore. Instead, plots can be generated
-by running [hist_PIT()]. 
+by running [plot_pit()]. 
 
   
 # scoringutils 0.1.8
