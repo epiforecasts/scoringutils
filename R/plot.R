@@ -487,7 +487,7 @@ plot_predictions <- function(data = NULL,
   truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
   forecasts <- filter_df(forecasts, c(filter_both, filter_forecasts))
 
-  # if specificed, get all combinations of the facet variables present in the
+  # if specified, get all combinations of the facet variables present in the
   # forecasts and filter the truth_data accordingly
   if (!allow_truth_without_pred && !is.null(facet_formula)) {
     facet_vars <- all.vars(facet_formula)

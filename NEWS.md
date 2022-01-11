@@ -100,7 +100,7 @@ and needs to be specified explicitly. The default is now `NULL`. The reason for
 this change is that most metrics need scoring on the observation level and this 
 the most consistent implementation of this principle. The pit function receives
 its grouping now from `summarise_by`. In a similar spirit, `summarise_by` has to
-be specificed explicitly and e.g. doesn't assume anymore that you want 'range'
+be specified explicitly and e.g. doesn't assume anymore that you want 'range'
 to be included. 
 - for the interval score, `weigh = TRUE` is now the default option.
 - (potentially planned) rename true_values to true_value and predictions to prediction. 

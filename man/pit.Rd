@@ -15,7 +15,7 @@ PIT values shall be grouped. If you e.g. have the columns 'model' and
 'location' in the data and want to have a PIT histogram for
 every model and location, specify \code{by = c("model", "location")}.}
 
-\item{n_replicates}{the number of draws for the ranomised PIT for
+\item{n_replicates}{the number of draws for the randomised PIT for
 integer predictions.}
 }
 \value{

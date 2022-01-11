@@ -78,7 +78,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #' @title Absolute Error
 #'
 #' @description
-#' Caclulate absolute error as
+#' Calculate absolute error as
 #'
 #' \deqn{
 #'   abs(true_value - prediction)

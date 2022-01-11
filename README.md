@@ -406,7 +406,7 @@ Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
 of the forecasts themselves.
 
-Shaprness of predictive samples corresponding to one single true value
+Sharpness of predictive samples corresponding to one single true value
 is measured as the normalised median of the absolute deviation from the
 median of the predictive samples. For details, see `?stats::mad`
 

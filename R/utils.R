@@ -342,7 +342,7 @@ get_prediction_type <- function(data) {
 #' @inheritParams check_forecasts
 #'
 #' @return Character vector of length one with either "binary", "integer", or
-#' "continous"
+#' "continuous"
 #'
 #' @keywords internal
 

@@ -16,7 +16,7 @@ quantiles in a second vector, \code{quantiles}.}
 vector with the absolute error
 }
 \description{
-Caclulate absolute error as
+Calculate absolute error as
 
 \deqn{
   abs(true_value - prediction)

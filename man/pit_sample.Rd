@@ -13,7 +13,7 @@ pit_sample(true_values, predictions, n_replicates = 100)
 the number of data points and N (number of columns) the
 number of Monte Carlo samples}
 
-\item{n_replicates}{the number of draws for the ranomised PIT for
+\item{n_replicates}{the number of draws for the randomised PIT for
 integer predictions.}
 }
 \value{

@@ -56,7 +56,7 @@
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
-#' @param n_replicates the number of draws for the ranomised PIT for
+#' @param n_replicates the number of draws for the randomised PIT for
 #' integer predictions.
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
 #' correspond to the length of `true_values`. For integer forecasts, a

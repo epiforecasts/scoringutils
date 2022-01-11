@@ -11,7 +11,7 @@ get_target_type(data)
 }
 \value{
 Character vector of length one with either "binary", "integer", or
-"continous"
+"continuous"
 }
 \description{
 Internal helper function to get the type of the target
