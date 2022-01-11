@@ -108,7 +108,7 @@ Let us look at the individual components of the weighted interval score:
 ```{r}
 scores <- scoringutils::score(data, 
                              summarise_by = c("model", "value_desc"))
-scoringutils::plot_wis_components(scores, facet_formula = ~ value_desc)
+scoringutils::plot_wis(scores, facet_formula = ~ value_desc)
 ```
 
 We can also look at contributions to different metrics by range: 

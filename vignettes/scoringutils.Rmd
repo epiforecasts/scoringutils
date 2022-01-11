@@ -102,7 +102,7 @@ Let us look at the individual components of the weighted interval score:
 ```{r}
 scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
-plot_wis_components(scores) + 
+plot_wis(scores) + 
   facet_wrap(~ target_type)
 ```
 

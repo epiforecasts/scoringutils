@@ -171,20 +171,19 @@ score_table <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' plot_wis_components(scores, x = "model",
+#' plot_wis(scores, x = "model",
 #'                     relative_contributions = TRUE) +
 #'   facet_wrap(~ target_type)
-#' plot_wis_components(scores, x = "model",
+#' plot_wis(scores, x = "model",
 #'                     relative_contributions = FALSE) +
 #'   facet_wrap(~ target_type)
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 
-
-plot_wis_components <- function(scores,
-                                x = "model",
-                                relative_contributions = FALSE) {
+plot_wis <- function(scores,
+                     x = "model",
+                     relative_contributions = FALSE) {
 
   scores <- data.table::as.data.table(scores)
 
@@ -303,8 +302,6 @@ plot_ranges <- function(scores,
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
 #'
-
-
 
 plot_heatmap <- function(scores,
                           y = "model",
@@ -591,7 +588,7 @@ plot_interval_coverage <- function(scores,
                               colour = "model") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot(scores, aes_string(x = "range",
-                                                               colour = colour)) +
+                                  colour = colour)) +
     geom_polygon(data = data.frame(x = c(0, 0, 100),
                                             y = c(0, 100, 100),
                                             g = c("o", "o", "o")),

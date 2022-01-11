@@ -25,7 +25,7 @@ created by \code{\link[=score]{score()}}.
 \itemize{
 \item \code{\link[=score_table]{score_table()}}
 \item \code{\link[=plot_correlation]{plot_correlation()}}
-\item \code{\link[=plot_wis_components]{plot_wis_components()}}
+\item \code{\link[=plot_wis]{plot_wis()}}
 \item \code{\link[=plot_ranges]{plot_ranges()}}
 \item \code{\link[=plot_heatmap]{plot_heatmap()}}
 \item \code{\link[=plot_predictions]{plot_predictions()}}
