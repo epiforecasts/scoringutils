@@ -281,8 +281,7 @@ compare_two_models <- function(scores,
                                metric,
                                oneSided = FALSE,
                                test_type = c("non_parametric", "permutation"),
-                               n_permutations = 999, # remove dot argument later on
-                               ...) {
+                               n_permutations = 999) {
   scores <- data.table::as.data.table(scores)
 
   forecast_unit <- get_unit_of_forecast(scores)

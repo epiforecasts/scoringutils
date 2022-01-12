@@ -246,7 +246,7 @@ test_that("pairwise_comparison() works inside and outside of score()", {
   eval <- score(data = example_continuous)
 
   pairwise <- pairwise_comparison(eval,
-    summarise_by = "model",
+    by = "model",
     metric = "crps"
   )
 
