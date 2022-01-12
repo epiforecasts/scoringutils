@@ -32,7 +32,7 @@
 #' for different forecasts to be scored. This corresponds to (100-alpha)/100
 #' in Gneiting and Raftery (2007). Internally, the range will be transformed
 #' to alpha.
-#' @param weigh if TRUE, weigh the score by alpha / 4, so it can be averaged
+#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
 #' `FALSE`.
 #' @param separate_results if `TRUE` (default is `FALSE`), then the separate
