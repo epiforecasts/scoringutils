@@ -77,7 +77,7 @@ plot_predictions(
 scores <- score(data)
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
-score_table(scores, 
+plot_score_table(scores, 
             y = "model") + 
   facet_wrap(~ target_type)
 ```

@@ -49,7 +49,7 @@ reference:
                 - plot_pit_quantile
                 - interval_coverage
                 - quantile_coverage
-                - score_table
+                - plot_score_table
                 - plot_heatmap
                 - show_avail_forecasts
                 - wis_components

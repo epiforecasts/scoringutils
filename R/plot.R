@@ -26,25 +26,25 @@
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' score_table(scores, y = "model") +
+#' plot_score_table(scores, y = "model") +
 #'   facet_wrap(~target_type, ncol = 1)
 #'
 #' # can also put target description on the y-axis
-#' score_table(scores, y = c("model", "target_type"))
+#' plot_score_table(scores, y = c("model", "target_type"))
 #'
 #' # yields the same result in this case
-#' score_table(scores)
+#' plot_score_table(scores)
 #'
 #' scores <- score(example_integer)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' # only show selected metrics
-#' score_table(scores,
+#' plot_score_table(scores,
 #'   y = "model",
 #'   select_metrics = c("crps", "bias")
 #' ) +
 #'   facet_wrap(~target_type, ncol = 1)
-score_table <- function(scores,
+plot_score_table <- function(scores,
                         y = NULL,
                         select_metrics = NULL) {
 
@@ -752,16 +752,6 @@ plot_quantile_coverage <- function(scores,
 #' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
 #' invert the mean scores ratio)
-#' @param facet_formula facetting formula passed down to ggplot. Default is
-#' `NULL`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -771,6 +761,8 @@ plot_quantile_coverage <- function(scores,
 #' @export
 #'
 #' @examples
+#' library(ggplot2)
+#' library(scoringutils)
 #' df <- data.frame(
 #'   model = rep(c("model1", "model2", "model3"), each = 10),
 #'   id = rep(1:10),
@@ -778,20 +770,14 @@ plot_quantile_coverage <- function(scores,
 #'   aem = (abs(rnorm(30)))
 #' )
 #'
-#' data <- scoringutils::example_quantile
-#' scores <- scoringutils::score(data)
+#' scores <- score(example_quantile)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' scoringutils::plot_pairwise_comparison(pairwise,
-#'   facet_formula = ~target_type,
-#'   scales = "fixed"
-#' )
+#' plot_pairwise_comparison(pairwise) +
+#'   facet_wrap(~ target_type)
+
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
-                                     smaller_is_good = TRUE,
-                                     facet_formula = NULL,
-                                     scales = "free_y",
-                                     ncol = NULL,
-                                     facet_wrap_or_grid = "facet_wrap") {
+                                     smaller_is_good = TRUE) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
   comparison_result[, model := reorder(model, -relative_skill)]
@@ -1023,19 +1009,6 @@ plot_pairwise_comparison <- function(comparison_result,
         axis.text.y = ggplot2::element_text(color = "steelblue4")
       ) +
       ggplot2::ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
-  }
-
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        ggplot2::facet_wrap(facet_formula,
-                            ncol = ncol,
-                            scales = scales
-        )
-    } else {
-      plot <- plot +
-        ggplot2::facet_grid(facet_formula, scales = scales)
-    }
   }
 
   return(plot)

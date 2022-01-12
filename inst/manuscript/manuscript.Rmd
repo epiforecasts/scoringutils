@@ -365,7 +365,7 @@ If we wanted to have one score per quantile or one per prediction interval range
 The user must, however, exercise some caution when aggregating scores. As explained above, many of the metrics are absolute and scale with the magnitude of the quantity to forecast. This makes it sometimes ill-advised to average over them. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while errors on death forecasts would have little influence. Similarly, aggregating over different forecast horizons is often not a good idea as the mean will be dominated by further ahead forecast horizons. 
 
 ```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores."}
-score_table(summarised_scores, y = "model") + 
+plot_score_table(summarised_scores, y = "model") + 
   facet_wrap( ~ target_type)
 ```
 

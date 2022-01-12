@@ -19,7 +19,7 @@
 #' The package also has a lot of default visualisation based on the output
 #' created by [score()].
 #'
-#' - [score_table()]
+#' - [plot_score_table()]
 #' - [plot_correlation()]
 #' - [plot_wis()]
 #' - [plot_ranges()]

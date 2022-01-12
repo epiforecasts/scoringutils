@@ -7,11 +7,7 @@
 plot_pairwise_comparison(
   comparison_result,
   type = c("mean_scores_ratio", "pval", "together"),
-  smaller_is_good = TRUE,
-  facet_formula = NULL,
-  scales = "free_y",
-  ncol = NULL,
-  facet_wrap_or_grid = "facet_wrap"
+  smaller_is_good = TRUE
 )
 }
 \arguments{
@@ -25,26 +21,14 @@ pairwise comparison. Default is "mean_scores_ratio"}
 \item{smaller_is_good}{logical (default is \code{TRUE}) that indicates whether
 smaller or larger values are to be interpreted as 'good' (as you could just
 invert the mean scores ratio)}
-
-\item{facet_formula}{facetting formula passed down to ggplot. Default is
-\code{NULL}}
-
-\item{scales}{scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"}
-
-\item{ncol}{Number of columns for facet wrap. Only relevant if
-\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
-
-\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
-\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-\code{facet_grid}. This only takes effect if \code{facet_formula} is not
-\code{NULL}}
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
 between models
 }
 \examples{
+library(ggplot2)
+library(scoringutils)
 df <- data.frame(
   model = rep(c("model1", "model2", "model3"), each = 10),
   id = rep(1:10),
@@ -52,11 +36,8 @@ df <- data.frame(
   aem = (abs(rnorm(30)))
 )
 
-data <- scoringutils::example_quantile
-scores <- scoringutils::score(data)
+scores <- score(example_quantile)
 pairwise <- pairwise_comparison(scores, by = "target_type")
-scoringutils::plot_pairwise_comparison(pairwise,
-  facet_formula = ~target_type,
-  scales = "fixed"
-)
+plot_pairwise_comparison(pairwise) +
+  facet_wrap(~ target_type)
 }

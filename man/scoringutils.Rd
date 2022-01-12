@@ -23,7 +23,7 @@ prediction and true values and return appropriate scoring metrics.
 The package also has a lot of default visualisation based on the output
 created by \code{\link[=score]{score()}}.
 \itemize{
-\item \code{\link[=score_table]{score_table()}}
+\item \code{\link[=plot_score_table]{plot_score_table()}}
 \item \code{\link[=plot_correlation]{plot_correlation()}}
 \item \code{\link[=plot_wis]{plot_wis()}}
 \item \code{\link[=plot_ranges]{plot_ranges()}}

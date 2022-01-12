@@ -82,7 +82,7 @@ easily obtain diagnostic plots based on scores as produced by `score`.
 - `plot_ranges` shows contribution of different prediction intervals to some 
 chosen metric
 - `plot_heatmap` visualises scores as heatmap
-- `score_table` shows a coloured summary table of scores
+- `plot_score_table` shows a coloured summary table of scores
 
 ## package updates
 - renamed "calibration" to "coverage"
