@@ -276,8 +276,12 @@ sample_to_range_long <- function(data,
 #' @param by character vector that denotes the columns by which to merge. Any
 #' value that is not a column in observations will be removed.
 #' @return a data.frame with forecasts and observations
+#' @examples
+#' library(scoringutils)
+#' forecasts <- example_quantile_forecasts_only
+#' observations <- example_truth_only
+#' merge_pred_and_obs(forecasts, observations)
 #' @export
-
 
 merge_pred_and_obs <- function(forecasts, observations,
                                join = c("left", "full", "right"),

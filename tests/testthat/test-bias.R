@@ -57,7 +57,7 @@ test_that("function works for continuous true_values and predictions", {
 test_that("bias works", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-  all(bias_sample(true_values, predictions) == bias_sample(true_values, predictions))
+  expect_true(all(bias_sample(true_values, predictions) == bias_sample(true_values, predictions)))
 
   ## continuous forecasts
   true_values <- rnorm(30, mean = 1:30)
