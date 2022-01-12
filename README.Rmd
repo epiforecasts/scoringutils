@@ -75,7 +75,7 @@ We see that 'epiforecasts-EpiNow2' has some missing forecasts and that UMass-Mec
 
 This information can also be visualised: 
 
-```{r}
+```{r, fig.width=11, fig.height=6}
 avail_forecasts(example_quantile, 
                 by = c("model", "forecast_date", "target_type")) %>%
   plot_avail_forecasts() + 
@@ -85,7 +85,7 @@ avail_forecasts(example_quantile,
 
 You can visualise forecasts directly using the `plot_predictions` function: 
 
-```{r}
+```{r, fig.width=9, fig.height=6}
 plot_predictions(data = example_quantile,
                  x = "target_end_date",
                  filter_truth = list('target_end_date <= "2021-07-15"',
@@ -154,7 +154,7 @@ score(example_integer) %>%
 
 We can also summarise one particular metric across different categories using a simple heatmap: 
 
-```{r}
+```{r, fig.width=11, fig.height=6}
 score(example_continuous) %>%
   summarise_scores(by = c("model", "location", "target_type")) %>%
   plot_heatmap(x = "location", metric = "bias") + 
@@ -241,7 +241,7 @@ example_quantile %>%
 
 If using the `pairwise_comparison()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 
 
-```{r}
+```{r, fig.width=9, fig.height=7}
 example_quantile %>%
   score() %>%
   pairwise_comparison(by = c("model", "target_type")) %>%
