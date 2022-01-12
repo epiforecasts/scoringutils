@@ -25,6 +25,11 @@ correlation <- function(scores,
   # check metrics are present
   metrics <- names(scores)[names(scores) %in% metrics]
 
+  # if quantile column is present, throw a warning
+  if ("quantile" %in% names(scores)) {
+    warning("There is a column called 'quantile' in the scores. Usually, you should call 'summarise_scores()' to summarise over quantiles and obtain one score per forecast before calculating correlations. You can ignore this warning if you know what you're doing.")
+  }
+
   # remove all non metrics and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(
     scores,
@@ -41,7 +46,7 @@ correlation <- function(scores,
     keep.rownames = TRUE
   )[, metric := rn][, rn := NULL]
 
-  return(correlations)
+  return(correlations[])
 }
 
 
