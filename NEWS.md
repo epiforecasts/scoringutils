@@ -1,28 +1,42 @@
-# scoringutils 0.2.0
+# scoringutils 1.0.0
 
-## Breaking changes
+Major update to the package and most package functions with lots of breaking changes. 
+
+## Feature updates
+- new and updated Readme and vignette
+- the proposed scoring workflow was reworked. Functions were changed so they 
+can easily be piped and have simplified arguments and outputs. 
+
+### new functions and function changes
+- the function `eval_forecasts` was replaced by a function [score()] with a 
+much reduced set of function arguments. 
+- Functionality to summarise scores and to add relative skill scores was moved
+to a function [summarise_scores()]
+- new function [check_forecasts()] to analyse input data before scoring
+- new function [correlation()] to compute correlations between different metrics
+- new function [add_coverage()] to add coverage for specific central prediction
+intervals
+- new function [avail_forecasts()] allows to visualise the number of available
+forecasts
+- all plotting functions were renamed to begin with `plot_`
+- the function [pit()] now works based on data.frames. The old `pit` function 
+was renamed to [pit_sample()]. PIT p-values were removed entirely. 
+- the function [plot_pit()] now works directly with input as produced by [pit()]
+- many data-handling functions were removed and input types for [score()] were
+restricted to sample-based, quantile-based or binary forecasts. 
+
+### package data updated
+- package data is now based on forecasts submitted to the European Forecast Hub
+(https://covid19forecasthub.eu/). 
+- all example data files were renamed to begin with `example_`
+- a new data set, `summary_metrics` was included that contains a summary of the 
+metrics implemented in `scoringutils`
+
+## Other breaking changes
 - The 'sharpness' component of the weighted interval score was renamed to 
 dispersion. This was done to make it more clear what the component represents 
 and to maintain consistency with what is used in other places. 
-- Several changes have been introduced to [score()] and other functions: 
-  - the verbose argument has to be removed from almost all functions
-  - the `by` argument has been removed from [score()]. Instead, all 
-  functions now expect you to remove any additional columns beforehand to 
-  avoid confusion. 
-  - PIT plots have been removed from [score()]. Instead the function
-  [pit()] can now be used on a `data.frame` and its output can then be 
-  passed to [plot_pit()]
-  - the `interval_score_arguments` were now replaced by `...` in [score()]
-  - the argument `summarised = TRUE` was dropped. If you want no summarising 
-  at all, please let `summarise_by` be equal to all avaialable column names 
-  plus 'sample' or 'quantile' and 'range'
-- the function [pit()] now returns PIT values rather than p-values from an 
-Anderson-Darling test for uniformity of the PIT values. The AD test is 
-sometimes not reliable in practice and we do not recommend its use in most cases. 
-The function also does not return plots anymore. Instead, plots can be generated
-by running [plot_pit()]. 
 
-  
 # scoringutils 0.1.8
 
 ## Feature updates
