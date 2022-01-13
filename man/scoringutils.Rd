@@ -40,7 +40,7 @@ Alternatively, the following functions can be accessed directly:
 \item \code{\link[=bias_sample]{bias_sample()}}
 \item \code{\link[=bias_quantile]{bias_quantile()}}
 \item \code{\link[=bias_range]{bias_range()}}
-\item \code{\link[=sharpness]{sharpness()}}
+\item \code{\link[=sharpness_sample]{sharpness_sample()}}
 \item \code{\link[=crps]{crps()}}
 \item \code{\link[=logs]{logs()}}
 \item \code{\link[=dss]{dss()}}
