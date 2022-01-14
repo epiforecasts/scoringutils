@@ -152,6 +152,7 @@ globalVariables(c(
 #'
 #' @return A vector with the name of all available metrics
 #' @export
+#' @keywords info
 
 available_metrics <- function() {
   available_metrics <- c(

@@ -1,3 +1,27 @@
+#' @title Evaluate forecasts in a Quantile-Based Format
+#'
+#' @inheritParams score
+#' @inheritParams interval_score
+#' @param count_median_twice logical that controls whether or not to count the
+#' median twice when summarising (default is \code{FALSE}). Counting the
+#' median twice would conceptually treat it as a 0\% prediction interval, where
+#' the median is the lower as well as the upper bound. The alternative is to
+#' treat the median as a single quantile forecast instead of an interval. The
+#' interval score would then be better understood as an average of quantile
+#' scores.
+#' @param forecast_unit A character vector with the column names that define
+#' the unit of a single forecast, i.e. a forecast was made for a combination
+#' of the values in `forecast_unit`
+#'
+#' @return A data.table with appropriate scores. For more information see
+#' [score()]
+#'
+#' @importFrom data.table ':=' as.data.table rbindlist %like%
+#'
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @inherit score references
+#' @keywords internal
+
 score_quantile <- function(data,
                            forecast_unit,
                            metrics,
@@ -13,7 +37,6 @@ score_quantile <- function(data,
   quantile_data <- range_long_to_quantile(range_data,
     keep_range_col = TRUE
   )
-
 
   # to deal with point forecasts in a quantile format. This in effect adds
   # a third column next to lower and upper after pivoting

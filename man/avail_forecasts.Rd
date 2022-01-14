@@ -38,3 +38,4 @@ avail_forecasts(example_quantile,
   by = c("model", "target_type")
 )
 }
+\keyword{check-forecasts}

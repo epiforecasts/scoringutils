@@ -19,6 +19,7 @@
 #' error of the given probability forecasts
 #' @importFrom methods hasArg
 #' @export
+#' @keywords metric
 #'
 #' @examples
 #' true_values <- sample(c(0, 1), size = 30, replace = TRUE)

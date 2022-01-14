@@ -75,9 +75,6 @@
 
 score <- function(data,
                   metrics = NULL,
-                  # compute_relative_skill = FALSE,
-                  # rel_skill_metric = "auto",
-                  # baseline = NULL,
                   ...) {
 
   # preparations ---------------------------------------------------------------

@@ -36,3 +36,4 @@ logs(true_values, predictions)
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, \url{https://arxiv.org/pdf/1709.04743.pdf}
 }
+\keyword{metric}

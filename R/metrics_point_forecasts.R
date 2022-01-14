@@ -16,6 +16,7 @@
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' mse(true_values, predicted_values)
 #' @export
+#' @keywords metric
 
 mse <- function(true_values, predictions) {
   mse <- mean((true_values - predictions)^2)

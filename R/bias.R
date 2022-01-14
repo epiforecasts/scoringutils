@@ -55,7 +55,7 @@
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
 #' <doi:10.1371/journal.pcbi.1006785>
-
+#' @keywords metric
 
 bias_sample <- function(true_values, predictions) {
 
@@ -181,7 +181,7 @@ bias_sample <- function(true_values, predictions) {
 #'   range = range, true_value = true_value
 #' )
 #' @export
-#'
+#' @keywords metric
 
 bias_range <- function(range, lower, upper,
                        true_value) {
@@ -294,7 +294,7 @@ bias_range <- function(range, lower, upper,
 #'
 #' bias_quantile(predictions, quantiles, true_value = true_value)
 #' @export
-#'
+#' @keywords metric
 
 bias_quantile <- function(predictions, quantiles, true_value) {
   # check that predictions and quantiles have the same length

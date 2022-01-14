@@ -11,6 +11,7 @@
 #' @importFrom data.table ':='
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @keywords internal
 
 score_binary <- function(data,
                          forecast_unit,

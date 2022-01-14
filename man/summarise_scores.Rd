@@ -88,3 +88,4 @@ summarise_scores(scores,
 # get ranges
 # summarise_scores(scores, by = "range")
 }
+\keyword{scoring}

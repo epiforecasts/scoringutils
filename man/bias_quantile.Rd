@@ -69,3 +69,4 @@ bias_quantile(predictions, quantiles, true_value = true_value)
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
+\keyword{metric}

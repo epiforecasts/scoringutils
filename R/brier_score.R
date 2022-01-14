@@ -28,6 +28,8 @@
 #' predictions <- runif(n = 30, min = 0, max = 1)
 #'
 #' brier_score(true_values, predictions)
+#' @keywords metric
+
 brier_score <- function(true_values, predictions) {
 
   # ============== Error handling ==============

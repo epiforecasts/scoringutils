@@ -95,3 +95,4 @@ Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 \url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
 }
+\keyword{metric}

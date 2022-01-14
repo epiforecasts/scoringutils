@@ -51,9 +51,6 @@ Predictions can be evaluated in a lot of different formats. If you want to
 convert from one format to the other, the following helper functions can
 do that for you:
 \itemize{
-\item \code{\link[=sample_to_range_long]{sample_to_range_long()}}
 \item \code{\link[=sample_to_quantile]{sample_to_quantile()}}
-\item \code{\link[=quantile_to_range_long]{quantile_to_range_long()}}
-\item \code{\link[=range_long_to_quantile]{range_long_to_quantile()}}
 }
 }

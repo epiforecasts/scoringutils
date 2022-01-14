@@ -58,6 +58,7 @@
 #' pairwise <- pairwise_comparison(eval, by = c("model"))
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
+#' @keywords scoring
 
 pairwise_comparison <- function(scores,
                                 metric = "auto",
@@ -123,6 +124,7 @@ pairwise_comparison <- function(scores,
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
 #' @inheritParams pairwise_comparison
+#' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
@@ -274,6 +276,7 @@ pairwise_comparison_one_group <- function(scores,
 #' permutation test. Default is 999.
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @keywords internal
 
 compare_two_models <- function(scores,
                                name_model1,

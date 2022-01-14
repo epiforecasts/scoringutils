@@ -27,3 +27,4 @@ true_values <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
 mse(true_values, predicted_values)
 }
+\keyword{metric}

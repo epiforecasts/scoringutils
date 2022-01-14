@@ -46,3 +46,4 @@ subgroup is managed from \code{\link[=pairwise_comparison_one_group]{pairwise_co
 actually do the comparison between two models over a subset of common
 forecasts it calls \code{\link[=compare_two_models]{compare_two_models()}}.
 }
+\keyword{internal}

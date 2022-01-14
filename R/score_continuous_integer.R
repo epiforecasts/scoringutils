@@ -13,6 +13,7 @@
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @inherit score references
+#' @keywords internal
 
 score_sample <- function(data,
                          forecast_unit,

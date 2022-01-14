@@ -50,6 +50,7 @@
 #' check_forecasts(example_binary)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
+#' @keywords check-forecasts
 
 check_forecasts <- function(data) {
   check <- list()
@@ -183,6 +184,7 @@ check_forecasts <- function(data) {
 #'
 #' @return NULL
 #' @export
+#' @keywords check-forecasts
 
 print.scoringutils_check <- function(x, ...) {
   print_elements <- names(x)[!(names(x) %in% c("messages"))]

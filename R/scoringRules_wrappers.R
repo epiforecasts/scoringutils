@@ -24,6 +24,7 @@
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
 
 logs <- function(true_values, predictions) {
@@ -84,6 +85,7 @@ logs <- function(true_values, predictions) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
 dss <- function(true_values, predictions) {
 
@@ -120,10 +122,6 @@ dss <- function(true_values, predictions) {
 }
 
 
-
-
-
-
 #' @title Ranked Probability Score
 #'
 #' @description
@@ -145,6 +143,7 @@ dss <- function(true_values, predictions) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
 crps <- function(true_values, predictions) {
 

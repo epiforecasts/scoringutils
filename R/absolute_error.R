@@ -20,6 +20,7 @@
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' ae_median_sample(true_values, predicted_values)
 #' @export
+#' @keywords metric
 
 ae_median_sample <- function(true_values, predictions) {
   median_predictions <- apply(as.matrix(predictions),
@@ -60,6 +61,7 @@ ae_median_sample <- function(true_values, predictions) {
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
 #' @export
+#' @keywords metric
 
 ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
   if (!is.null(quantiles)) {
@@ -94,6 +96,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' abs_error(true_values, predicted_values)
 #' @export
+#' @keywords metric
 
 abs_error <- function(true_values, predictions) {
   return(abs(true_values - predictions))

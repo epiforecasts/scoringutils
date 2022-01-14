@@ -30,3 +30,4 @@ abs_error(true_values, predicted_values)
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
+\keyword{metric}

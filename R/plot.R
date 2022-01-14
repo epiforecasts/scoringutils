@@ -1144,3 +1144,81 @@ plot_pit <- function(pit,
   return(hist)
 }
 
+
+#' @title Visualise Where Forecasts Are Available
+#'
+#' @description
+#' Visualise Where Forecasts Are Available
+#'
+#' @param avail_forecasts data.frame with a column called `Number forecasts` as
+#' produced by [avail_forecasts()]
+#' @param y character vector of length one that denotes the name of the column
+#' to appear on the y-axis of the plot. Default is "model".
+#' @param x character vector of length one that denotes the name of the column
+#' to appear on the x-axis of the plot. Default is "forecast_date".
+#' @param make_x_factor logical (default is TRUE). Whether or not to convert
+#' the variable on the x-axis to a factor. This has an effect e.g. if dates
+#' are shown on the x-axis.
+#' @param show_numbers logical (default is `TRUE`) that indicates whether
+#' or not to show the actual count numbers on the plot
+#' @return ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' geom_tile scale_fill_gradient aes_string
+#' @importFrom data.table dcast .I .N
+#' @export
+#'
+#' @examples
+#' library(scoringutils)
+#' library(ggplot2)
+#' avail_forecasts <- avail_forecasts(example_quantile,
+#'   by = c(
+#'     "model", "target_type",
+#'     "target_end_date"
+#'   )
+#' )
+#' plot_avail_forecasts(avail_forecasts,
+#'   x = "target_end_date",
+#'   show_numbers = FALSE
+#' ) +
+#'   facet_wrap("target_type")
+plot_avail_forecasts <- function(avail_forecasts,
+                                 y = "model",
+                                 x = "forecast_date",
+                                 make_x_factor = TRUE,
+                                 show_numbers = TRUE) {
+  avail_forecasts <- as.data.table(avail_forecasts)
+
+  if (make_x_factor) {
+    avail_forecasts[, eval(x) := as.factor(get(x))]
+  }
+
+  plot <- ggplot(
+    avail_forecasts,
+    aes_string(y = y, x = x)
+  ) +
+    geom_tile(aes(fill = `Number forecasts`),
+              width = 0.97, height = 0.97
+    ) +
+    scale_fill_gradient(
+      low = "grey95", high = "steelblue",
+      na.value = "lightgrey"
+    ) +
+    theme_light() +
+    theme(
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    theme(panel.spacing = unit(2, "lines"))
+
+  if (show_numbers) {
+    plot <- plot +
+      geom_text(aes(label = `Number forecasts`))
+  }
+
+  return(plot)
+}
+

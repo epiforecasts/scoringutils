@@ -26,3 +26,4 @@ library(scoringutils)
 scores <- score(example_quantile)
 correlation(scores)
 }
+\keyword{scoring}

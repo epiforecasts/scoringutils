@@ -13,7 +13,7 @@
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @export
-#'
+#' @keywords scoring
 #' @examples
 #' library(scoringutils)
 #' scores <- score(example_quantile)

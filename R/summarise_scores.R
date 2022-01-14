@@ -53,6 +53,7 @@
 #' # get ranges
 #' # summarise_scores(scores, by = "range")
 #' @export
+#' @keywords scoring
 
 summarise_scores <- function(scores,
                              by = NULL,
@@ -215,7 +216,7 @@ check_summary_params <- function(scores,
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #' @export
-
+#' @keywords scoring
 
 add_coverage <- function(scores,
                          by,

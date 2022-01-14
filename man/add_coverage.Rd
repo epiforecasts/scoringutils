@@ -40,3 +40,4 @@ score(example_quantile) \%>\%
   add_coverage(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type"))
 }
+\keyword{scoring}

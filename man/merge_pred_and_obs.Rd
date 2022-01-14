@@ -40,3 +40,4 @@ forecasts <- example_quantile_forecasts_only
 observations <- example_truth_only
 merge_pred_and_obs(forecasts, observations)
 }
+\keyword{data-handling}

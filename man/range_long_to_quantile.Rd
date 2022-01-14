@@ -20,4 +20,4 @@ a data.frame in a plain quantile format
 Transform data from a format that uses interval ranges to denote quantiles
 to a format that uses quantiles only.
 }
-\keyword{internal}
+\keyword{deprecated}

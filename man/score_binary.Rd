@@ -43,3 +43,4 @@ Evaluate forecasts in a Binary Format
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
+\keyword{internal}

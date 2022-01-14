@@ -64,3 +64,4 @@ Function to move from sample-based to quantile format:
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
+\keyword{check-forecasts}

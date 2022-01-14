@@ -24,6 +24,7 @@
 #' @examples
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' sharpness_sample(predictions)
+#' @keywords metric
 
 sharpness_sample <- function(predictions) {
 

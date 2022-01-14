@@ -38,3 +38,4 @@ ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=abs_error]{abs_error()}}
 }
+\keyword{metric}

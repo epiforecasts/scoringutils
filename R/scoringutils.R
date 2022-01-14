@@ -45,10 +45,7 @@
 #' convert from one format to the other, the following helper functions can
 #' do that for you:
 #'
-#' - [sample_to_range_long()]
 #' - [sample_to_quantile()]
-#' - [quantile_to_range_long()]
-#' - [range_long_to_quantile()]
 #'
 #' @docType package
 #' @name scoringutils
