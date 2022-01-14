@@ -14,4 +14,4 @@ metrics_summary
 A data set with summary information on selected metrics implemented in
 \pkg{scoringutils}
 }
-\keyword{datasets}
+\keyword{info}
