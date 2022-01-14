@@ -316,7 +316,8 @@ compare_two_models <- function(scores,
   # test whether the ratio is significantly different from one
   # equivalently, one can test whether the difference between the two values
   # is significantly different from zero.
-  if (test_type[1] == "permutation") {
+  test_type <- match.arg(test_type)
+  if (test_type == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
       nPermutation = n_permutations,

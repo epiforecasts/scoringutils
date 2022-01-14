@@ -301,10 +301,12 @@ merge_pred_and_obs <- function(forecasts, observations,
   obs_cols <- colnames(observations)
   by <- intersect(by, obs_cols)
 
-  if (join[1] == "left") {
+  join <- match.arg(join)
+
+  if (join == "left") {
     # do a left_join, where all data in the observations are kept.
     combined <- merge(observations, forecasts, by = by, all.x = TRUE)
-  } else if (join[1] == "full") {
+  } else if (join == "full") {
     # do a full, where all data is kept.
     combined <- merge(observations, forecasts, by = by, all = TRUE)
   } else {

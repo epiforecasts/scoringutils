@@ -796,7 +796,9 @@ plot_pairwise_comparison <- function(comparison_result,
     return(as.numeric(as.character(scale)))
   }
 
-  if (type[1] == "together") {
+  type = match.arg(type)
+
+  if (type == "together") {
     # obtain only the upper triangle of the comparison
     # that is used for showing ratios
     # need to change the order if larger is good
@@ -931,7 +933,7 @@ plot_pairwise_comparison <- function(comparison_result,
         ggplot2::aes(label = var_of_interest),
         na.rm = TRUE
       )
-  } else if (type[1] == "mean_scores_ratio") {
+  } else if (type == "mean_scores_ratio") {
     comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
     # implemnt breaks for colour heatmap
@@ -997,7 +999,7 @@ plot_pairwise_comparison <- function(comparison_result,
     ) +
     ggplot2::coord_cartesian(expand = FALSE)
 
-  if (type[1] == "mean_scores_ratio") {
+  if (type == "mean_scores_ratio") {
     plot <- plot +
       ggplot2::theme(
         panel.grid.major = ggplot2::element_blank(),
