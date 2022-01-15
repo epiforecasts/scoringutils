@@ -20,12 +20,13 @@
 #' No specific distribution is assumed,
 #' but the range has to be symmetric (i.e you can't use the 0.1 quantile
 #' as the lower bound and the 0.7 quantile as the upper).
-#'
-#' The interval score is a proper scoring rule that scores a quantile forecast
+#' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
 #' @param true_values A vector with the true observed values of size n
-#' @param lower vector of size n with the lower quantile of the given range
-#' @param upper vector of size n with the upper quantile of the given range
+#' @param lower vector of size n with the prediction for the lower quantile
+#' of the given range
+#' @param upper vector of size n with the prediction for the upper quantile
+#' of the given range
 #' @param interval_range the range of the prediction intervals. i.e. if you're
 #' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
 #' Can be either a single number or a vector of size n, if the range changes
@@ -34,7 +35,7 @@
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Default:
-#' `FALSE`.
+#' `TRUE`.
 #' @param separate_results if `TRUE` (default is `FALSE`), then the separate
 #' parts of the interval score (dispersion penalty, penalties for over- and
 #' under-prediction get returned as separate elements of a list). If you want a
@@ -73,7 +74,6 @@
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 #'
-
 
 interval_score <- function(true_values,
                            lower,
@@ -123,3 +123,76 @@ interval_score <- function(true_values,
     return(score)
   }
 }
+
+
+
+#' @title Quantile Score
+#'
+#' @description
+#' Proper Scoring Rule to score quantile predictions. Smaller values are better.
+#' The quantile score is
+#' closely related to the Interval score (see [interval_score()]) and is
+#' the quantile equivalent that works with single quantiles instead of
+#' central prediction intervals.
+#'
+#' @param true_values A vector with the true observed values of size n
+#' @param predictions vector of size n with the lower quantile of the given range
+#' @param quantiles vector of size n with the quantile values of the
+#' corresponding predictions.
+#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
+#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+#' value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
+#' and will be computed from the quantile. Alpha is the decimal value that
+#' represents how much is outside a central prediction interval (E.g. for a
+#' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
+#' @return vector with the scoring values
+#' @examples
+#' library(scoringutils)
+#' true_values <- rnorm(10, mean = 1:10)
+#' alpha <- 0.5
+#'
+#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
+#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+#'
+#' qs_lower <- quantile_score(true_values,
+#'                            predictions = lower,
+#'                            quantiles = alpha/2)
+#' qs_upper <- quantile_score(true_values,
+#'                            predictions = upper,
+#'                            quantiles = 1 - alpha/2)
+#' interval_score <- (qs_lower + qs_upper) / 2
+#' @export
+#' @keywords metric
+#' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
+#' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
+#' Statistical Association, Volume 102, 2007 - Issue 477
+#'
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
+#
+
+quantile_score <- function(true_values,
+                           predictions,
+                           quantiles,
+                           weigh = TRUE) {
+
+  # get central prediction interval which corresponds to given quantiles
+  central_interval <- abs(0.5 - quantiles) * 2
+  alpha <- 1 - central_interval
+
+  # compute score - this is the version explained in the SI of Bracher et. al.
+  error <- abs(predictions - true_values)
+  score <- 2 * ifelse(true_values <= predictions, 1 - quantiles, quantiles) * error
+
+  # adapt score such that mean of unweighted quantile scores corresponds to
+  # unweighted interval score of the corresponding prediction interval
+  score <- 2 * score / alpha
+
+  if (weigh) {
+    score <- score * alpha / 2
+  }
+
+  return(score)
+}
+

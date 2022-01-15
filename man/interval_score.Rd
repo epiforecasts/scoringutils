@@ -16,9 +16,11 @@ interval_score(
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{lower}{vector of size n with the lower quantile of the given range}
+\item{lower}{vector of size n with the prediction for the lower quantile
+of the given range}
 
-\item{upper}{vector of size n with the upper quantile of the given range}
+\item{upper}{vector of size n with the prediction for the upper quantile
+of the given range}
 
 \item{interval_range}{the range of the prediction intervals. i.e. if you're
 forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
@@ -29,7 +31,7 @@ to alpha.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
-\code{FALSE}.}
+\code{TRUE}.}
 
 \item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
 parts of the interval score (dispersion penalty, penalties for over- and
@@ -60,8 +62,7 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper).
-
-The interval score is a proper scoring rule that scores a quantile forecast
+Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 }
 \examples{
 true_values <- rnorm(30, mean = 1:30)

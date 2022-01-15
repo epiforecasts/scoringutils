@@ -42,7 +42,7 @@ metrics see \code{\link[=available_metrics]{available_metrics()}}}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Default:
-\code{FALSE}.}
+\code{TRUE}.}
 
 \item{count_median_twice}{logical that controls whether or not to count the
 median twice when summarising (default is \code{FALSE}). Counting the
