@@ -326,12 +326,21 @@ delete_columns <- function(df, cols_to_delete) {
 #' @keywords internal
 
 get_prediction_type <- function(data) {
-  if ("quantile" %in% names(data)) {
-    return("quantile")
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
-    return("integer")
+
+  if (is.data.frame(data)) {
+    if ("quantile" %in% names(data)) {
+      return("quantile")
+    } else if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
+      return("integer")
+    } else {
+      return("continuous")
+    }
   } else {
-    return("continuous")
+    if (isTRUE(all.equal(data, as.integer(data)))) {
+      return("integer")
+    } else {
+      return("continuous")
+    }
   }
 }
 

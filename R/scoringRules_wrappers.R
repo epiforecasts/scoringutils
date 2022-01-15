@@ -29,7 +29,9 @@
 
 logs <- function(true_values, predictions) {
 
-  scoringRules_checks(predictions, true_values)
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+                    class = "matrix")
 
   scoringRules::logs_sample(
     y = true_values,
@@ -63,7 +65,9 @@ logs <- function(true_values, predictions) {
 
 dss <- function(true_values, predictions) {
 
-  scoringRules_checks(predictions, true_values)
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+                    class = "matrix")
 
   scoringRules::dss_sample(
     y = true_values,
@@ -98,7 +102,9 @@ dss <- function(true_values, predictions) {
 crps <- function(true_values, predictions) {
 
   # check inputs
-  scoringRules_checks(predictions, true_values)
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+                    class = "matrix")
 
   scoringRules::crps_sample(
     y = true_values,
@@ -106,44 +112,4 @@ crps <- function(true_values, predictions) {
   )
 }
 
-
-
-#' @title Check Inputs For scoringRules Wrapper Functions
-#'
-#' @description
-#' Helper fucntion to check inputs for `scoringRules` functions
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
-#' @return NULL
-#' @keywords internal
-
-scoringRules_checks <- function(predictions, true_values) {
-  # ============== Error handling ==============
-  if (missing(true_values) | missing(predictions)) {
-    stop("true_values or predictions argument missing")
-  }
-
-  n <- length(true_values)
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-  if (!is.matrix(predictions)) {
-    msg <- sprintf(
-      "'predictions' should be a matrix. Instead `%s` was found",
-      class(predictions[1])
-    )
-    stop(msg)
-  }
-  if (nrow(predictions) != n) {
-    msg <- sprintf(
-      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-      n, nrow(predictions)
-    )
-    stop(msg)
-  }
-  return(NULL)
-}
 

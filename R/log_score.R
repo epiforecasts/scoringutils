@@ -12,9 +12,7 @@
 #' assigned to the true outcome. Reporting the negative logarithm means that
 #' smaller values are better.
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions A vector with a predicted probability
-#' that true_value = 1.
+#' @inheritParams brier_score
 #' @return A numeric value with the Log Score, i.e. the mean squared
 #' error of the given probability forecasts
 #' @importFrom methods hasArg
@@ -28,31 +26,9 @@
 #' logs_binary(true_values, predictions)
 logs_binary <- function(true_values, predictions) {
 
-  # ============== Error handling ==============
+  check_true_values(true_values, type = "binary")
+  check_predictions(predictions, true_values, type = "binary")
 
-  if (!all(c(methods::hasArg("true_values"), methods::hasArg("predictions")))) {
-    stop("true_values or predictions argument missing")
-  }
-
-  if (!all(true_values %in% c(0, 1))) {
-    stop("elements of true_values should be either zero or one")
-  }
-
-  n <- length(true_values)
-
-  if (length(predictions) != n) {
-    msg <- sprintf(
-      "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
-      n, length(predictions)
-    )
-    stop(msg)
-  }
-
-  if (max(predictions) > 1 | min(predictions) < 0) {
-    stop("elements of 'predictions' should be probabilites between zero and one")
-  }
-  # ============================================
-
-  logs <- -(sum(log(ifelse(true_values == 1, predictions, 1 - predictions)))) / n
+  logs <- -(log(ifelse(true_values == 1, predictions, 1 - predictions)))
   return(logs)
 }

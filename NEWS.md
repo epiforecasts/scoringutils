@@ -24,6 +24,8 @@ was renamed to [pit_sample()]. PIT p-values were removed entirely.
 - the function [plot_pit()] now works directly with input as produced by [pit()]
 - many data-handling functions were removed and input types for [score()] were
 restricted to sample-based, quantile-based or binary forecasts. 
+- the function [brier_score()] now returns all brier scores, rather than taking
+the mean before returning an output. 
 
 ### package data updated
 - package data is now based on forecasts submitted to the European Forecast Hub

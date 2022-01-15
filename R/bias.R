@@ -59,47 +59,16 @@
 
 bias_sample <- function(true_values, predictions) {
 
-  # ============== Error handling ==============
-
-  if (missing(true_values) | missing(predictions)) {
-    stop("true_values or predictions argument missing")
-  }
-
-  n <- length(true_values)
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-  if (!is.matrix(predictions)) {
-    msg <- sprintf(
-      "'predictions' should be a matrix. Instead `%s` was found",
-      class(predictions[1])
-    )
-    stop(msg)
-  }
-  if (nrow(predictions) != n) {
-    msg <- sprintf(
-      "Mismatch: The true values provided have length `%s`, but 'predictions' has `%s` rows.",
-      n, nrow(predictions)
-    )
-    stop(msg)
-  }
-
-  # ============================================
-
-  ## check whether continuous or integer
-  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
-    continuous_predictions <- TRUE
-  } else {
-    continuous_predictions <- FALSE
-  }
-
-  n_pred <- ncol(predictions)
+  # check inputs
+  check_true_values(true_values)
+  check_predictions(predictions, true_values, class = "matrix")
+  prediction_type <- get_prediction_type(predictions)
 
   # empirical cdf
+  n_pred <- ncol(predictions)
   P_x <- rowSums(predictions <= true_values) / n_pred
 
-  if (continuous_predictions) {
+  if (prediction_type == "continuous") {
     res <- 1 - 2 * P_x
     return(res)
   } else {

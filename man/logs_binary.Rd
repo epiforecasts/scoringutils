@@ -7,7 +7,8 @@
 logs_binary(true_values, predictions)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{true_values}{A vector with the true observed values of size n with
+all values equal to either 0 or 1}
 
 \item{predictions}{A vector with a predicted probability
 that true_value = 1.}
