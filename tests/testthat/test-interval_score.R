@@ -395,7 +395,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
     upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 
-    w = FALSE
+    w <- FALSE
     is <- interval_score(
       true_values = true_values,
       lower = lower,
@@ -412,8 +412,6 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
                                predictions = upper,
                                quantiles = 1 - alpha/2,
                                weigh = w)
-    (qs_lower + qs_upper) / 2
-    is
     expect_equal((qs_lower + qs_upper) / 2, is)
   }
 })
@@ -428,7 +426,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
     upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 
-    w = TRUE
+    w <- TRUE
     is <- interval_score(
       true_values = true_values,
       lower = lower,
@@ -445,8 +443,6 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
                                predictions = upper,
                                quantiles = 1 - alpha/2,
                                weigh = w)
-    (qs_lower + qs_upper) / 2
-    is
     expect_equal((qs_lower + qs_upper) / 2, is)
   }
 })
