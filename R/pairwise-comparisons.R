@@ -61,9 +61,9 @@
 #' @keywords scoring
 
 pairwise_comparison <- function(scores,
+                                by = c("model"),
                                 metric = "auto",
                                 baseline = NULL,
-                                by = c("model"),
                                 ...) {
   scores <- data.table::as.data.table(scores)
 

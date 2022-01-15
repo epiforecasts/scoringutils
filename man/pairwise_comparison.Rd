@@ -6,23 +6,15 @@
 \usage{
 pairwise_comparison(
   scores,
+  by = c("model"),
   metric = "auto",
   baseline = NULL,
-  by = c("model"),
   ...
 )
 }
 \arguments{
 \item{scores}{A data.frame of unsummarised scores as produced by
 \code{\link[=score]{score()}}}
-
-\item{metric}{A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "interval_score",
-"crps", or "brier_score" will be selected where available.
-See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
-
-\item{baseline}{character vector of length one that denotes the baseline
-model against which to compare other models.}
 
 \item{by}{character vector with names of columns present in the input
 data.frame. \code{by} determines how pairwise comparisons will be computed.
@@ -32,6 +24,14 @@ separate relative skill score for every model in every location. Internally,
 the data.frame will be split according \code{by} (but removing "model" before
 splitting) and the pairwise comparisons will be computed separately for the
 split data.frames.}
+
+\item{metric}{A character vector of length one with the metric to do the
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
+
+\item{baseline}{character vector of length one that denotes the baseline
+model against which to compare other models.}
 
 \item{...}{additional arguments, such as test options that can get passed
 down to lower level functions. The following options are available:
