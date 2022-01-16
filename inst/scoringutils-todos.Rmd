@@ -71,3 +71,9 @@ Do we want to have an additional `aggregate_by` or `aggregate_over` argument in 
 # Name of 'range' argument
 
 Some functions accept a 'range' argument. Should we rename "range" to "interval_range" to make it more clear? it is currently called `interval_range` in function `interval_score`, but 'range' somwhere else
+
+---
+
+# Available metrics function and data set
+
+The function available_metrics() maybe could be a data set. In any case it is not yet done and also the data set would need some updating. 
