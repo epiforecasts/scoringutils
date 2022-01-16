@@ -1,0 +1,73 @@
+---
+title: "scoringutils - to dos and open questions"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Documentation for `score()` function
+
+- there is currently no documentation for the metrics returned (maybe a list of possible metrics could also be included in `check_forecasts()`). Generally, that information could sit in the documentation for the main function, the subfunctions, or in a data.frame that is provided as package data (maybe not ideal?). 
+- there is a documentation for the `score_binary()`, `score_quantile()` and `score_sample()`, but that inherits the data description for all which is maybe slightly confusing. 
+
+---
+
+# Unit tests needed
+
+- for example checking how unnecessary arguments are handled with regards to the `...` arguments
+- handling of point forecasts in data.frames, i.e. forecasts where quantile is `NA` (also that option is poorly documented)
+- input checks
+
+---
+
+# Input checks
+
+check functions need to be applied consistently everywhere. Also maybe check functions could be improved
+
+---
+
+# Argument names and order
+
+Check that all function arguments are named and ordered consistently
+
+---
+
+# scoringutils.R help file
+
+I find the scoringutils.R file useful, so you can get some overview by calling `?scoringutils`. However, populating that file manually is quite annoying. Is there a way to auto-populate it? Or maybe just link to the website with the pkgdown yaml overview? 
+
+---
+
+# Check overall documentaion is ok
+
+---
+
+# Names of scoringRules wrapper functions
+
+Currently functions are called `dss`, `crps`, `logs`. Maybe it would be more consistent to call them `dss_sample`. `crps_sample`, `logss_sample`, as all other lower-level scoring functions also have that naming convention to show where they are applicable. Also there is a `logs_binary` function. 
+
+---
+
+# Check function naming is consistent
+
+---
+
+# Relative skill with and without baseline
+
+The relative skill is different when there is a baseline (not only the scaled relative skill), because the baseline is not taken into account when taking the geometric mean. Is this what we want? Maybe discuss again with Johannes? 
+
+---
+
+# Behaviour of `score()` and `summarise_scores()`
+
+Are we happy with what is sumamrised and what is not sumamrised? E.g. partial summarising over samples for sample-based, but nothing for quantiles? Are we also happy with the default `by = NULL` in `summarise_scores()`, where `NULL` means to summarise over quantiles for quantile-based predictions? 
+
+Do we want to have an additional `aggregate_by` or `aggregate_over` argument in `summarise_scores()` to save typing?
+
+---
+
+# Name of 'range' argument
+
+Some functions accept a 'range' argument. Should we rename "range" to "interval_range" to make it more clear? it is currently called `interval_range` in function `interval_score`, but 'range' somwhere else
