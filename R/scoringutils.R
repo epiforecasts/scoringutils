@@ -35,7 +35,7 @@
 #' - [bias_sample()]
 #' - [bias_quantile()]
 #' - [bias_range()]
-#' - [sharpness_sample()]
+#' - [mad_sample()]
 #' - [crps()]
 #' - [logs()]
 #' - [dss()]

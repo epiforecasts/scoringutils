@@ -14,7 +14,7 @@ test_that("function throws an error when missing 'predictions'", {
 
   expect_error(
     bias_sample(true_values = true_values),
-    "true_values or predictions argument missing"
+    "argument 'predictions' missing"
   )
 })
 

@@ -1,18 +1,20 @@
-#' @title Determines sharpness of a probabilistic forecast
+#' @title Determine dispersion of a probabilistic forecast
 #' @details
 #' Sharpness is the ability of the model to generate predictions within a
-#' narrow range. It is a data-independent measure, and is purely a feature
+#' narrow range and dispersion is the lack thereof.
+#' It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
 #'
-#' Sharpness of predictive samples corresponding to one single true value is
+#' Dispersion of predictive samples corresponding to one single true value is
 #' measured as the normalised median of the absolute deviation from
 #' the median of the predictive samples. For details, see [mad()][stats::mad()]
+#' and the explanations given in Funk et al. (2019)
 #'
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the
 #' number of Monte Carlo samples
 #' @importFrom stats mad
-#' @return vector with sharpness values
+#' @return vector with dispersion values
 #'
 #' @references
 #' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
@@ -23,27 +25,14 @@
 #' @export
 #' @examples
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' sharpness_sample(predictions)
+#' mad_sample(predictions)
 #' @keywords metric
 
-sharpness_sample <- function(predictions) {
+mad_sample <- function(predictions) {
 
-  # ============== Error handling ==============
-
-  if (missing(predictions)) {
-    stop("predictions argument missing")
-  }
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-
-  if (!is.matrix(predictions)) {
-    stop("'predictions' should be a matrix")
-  }
-
-  # ============================================
+  check_predictions(predictions, class = "matrix")
 
   sharpness <- apply(predictions, MARGIN = 1, mad)
   return(sharpness)
 }
+

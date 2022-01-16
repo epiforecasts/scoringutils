@@ -65,6 +65,8 @@ between models on the output of `score()`
 - The WIS definition change introduced in version 0.1.5 was partly corrected
 such that the difference in weighting is only introduced when summarising 
 over scores from different interval ranges
+- "sharpness" was renamed to 'mad' in the output of [score()] for sample-based
+forecasts. 
 
 # scoringutils 0.1.
 

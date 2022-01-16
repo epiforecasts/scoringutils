@@ -29,8 +29,8 @@ score_sample <- function(data,
 
   # calculate scores -----------------------------------------------------------
   # sharpness
-  if ("sharpness" %in% metrics) {
-    data[, sharpness := scoringutils::sharpness_sample(t(prediction)), by = forecast_unit]
+  if (any(c("sharpness", "mad") %in% metrics)) {
+    data[, mad := mad_sample(t(prediction)), by = forecast_unit]
   }
   # bias
   if ("bias" %in% metrics) {

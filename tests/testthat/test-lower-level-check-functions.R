@@ -54,7 +54,7 @@ test_that("function throws an error when missing true_values or predictions", {
 
   expect_error(
     brier_score(true_values = true_values),
-    "true_values or predictions argument missing"
+    "argument 'predictions' missing"
   )
 })
 
