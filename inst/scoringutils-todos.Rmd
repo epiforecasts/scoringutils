@@ -77,3 +77,9 @@ Some functions accept a 'range' argument. Should we rename "range" to "interval_
 # Available metrics function and data set
 
 The function available_metrics() maybe could be a data set. In any case it is not yet done and also the data set would need some updating. 
+
+--- 
+
+# Support for logging forecasts and data
+
+The `score()` function could have an argument for whether everything shall be scored on a log scale. Would have to think about the exact transformation (e.g. log(y + 1)?) and also what to do with negative forecasts. And binary questions. Maybe complicated. 
