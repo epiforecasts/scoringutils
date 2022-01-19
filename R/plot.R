@@ -505,7 +505,7 @@ plot_predictions <- function(data = NULL,
   }
 
   # delete certain columns that denominate the forecaster from the truth data
-  truth_data <- delete_columns(truth_data, remove_from_truth)
+  truth_data <- delete_columns(truth_data, remove_from_truth, make_unique = TRUE)
 
   # find out what type of predictions we have. convert sample based to
   # range data

@@ -152,5 +152,8 @@ score_quantile <- function(data,
     res <- merge(res, quantile_data, by = merge_cols, all.x = TRUE)
   }
 
+  # delete internal columns before returning result
+  res <- delete_columns(res, c("upper", "lower", "boundary"))
+
   return(res[])
 }

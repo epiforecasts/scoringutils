@@ -12,9 +12,10 @@ check_summary_params(scores, by, relative_skill, baseline, metric)
 
 \item{by}{character vector with column names to summarise scores by. Default
 is \code{NULL}, meaning that the only summary that takes is place is summarising
-over quantiles or samples, such that there is one score per forecast as
+over quantiles (in case of quantile-based forecasts),
+such that there is one score per forecast as
 defined by the unit of a single forecast
-(rather than one score for every quantile / sample).}
+(rather than one score for every quantile).}
 
 \item{relative_skill}{logical, whether or not to compute relative
 performance between models based on pairwise comparisons.

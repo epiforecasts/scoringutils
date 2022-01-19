@@ -4,12 +4,14 @@
 \alias{delete_columns}
 \title{Delete Columns From a Data.table}
 \usage{
-delete_columns(df, cols_to_delete)
+delete_columns(df, cols_to_delete, make_unique = FALSE)
 }
 \arguments{
 \item{df}{A data.table or data.frame from which columns shall be deleted}
 
 \item{cols_to_delete}{character vector with names of columns to be deleted}
+
+\item{make_unique}{whether to make the data set unique after removing columns}
 }
 \value{
 A data.table
