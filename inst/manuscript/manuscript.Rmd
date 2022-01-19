@@ -92,20 +92,20 @@ The predictive distribution of a probabilistic forecast can be represented in di
 data <- readRDS(system.file("metrics-overview/forecast-types.Rda",
                             package = "scoringutils"))
 
-data %>%
-  dplyr::mutate_all(linebreak) %>%
+data |>
+  dplyr::mutate_all(linebreak) |>
   kableExtra::kbl(format = "latex",
                   valign = "middle",
                   caption = "Forecasts can be distinguished by whether they are probabilistic in nature, or a point forecast only. Depending on the type of the target (discrete, continuous or binary) different representation of the predictive distribution are possible.",
                   booktabs = TRUE,
                   escape = FALSE,
-                  linesep = c('\\addlinespace')) %>%
-  # kableExtra::column_spec(1, width = "3.5cm") %>%
-  # kableExtra::column_spec(2, width = "2.5cm") %>%
-  # kableExtra::column_spec(3, width = "4.5cm") %>%
-  kableExtra::row_spec(0, bold = TRUE) %>%
-  # kableExtra::row_spec(1, hline = TRUE) %>%
-  kableExtra::kable_styling()  %>%
+                  linesep = c('\\addlinespace')) |>
+  # kableExtra::column_spec(1, width = "3.5cm") |>
+  # kableExtra::column_spec(2, width = "2.5cm") |>
+  # kableExtra::column_spec(3, width = "4.5cm") |>
+  kableExtra::row_spec(0, bold = TRUE) |>
+  # kableExtra::row_spec(1, hline = TRUE) |>
+  kableExtra::kable_styling()  |>
   kableExtra::collapse_rows()
 ```
 
@@ -133,21 +133,21 @@ The \pkg{scoringutils} package implements a variety of metrics which focus on sh
 
 data <- readRDS(system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils"))
 
-data[, 1:6] %>%
+data[, 1:6] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE, 
                   escape = FALSE,
                   longtable = TRUE,
                   caption = "Summary table of scores available in \\pkg{scoringutils} and when they are applicable. ",
                   align = c("lccccl"),
-                  linesep = c('\\addlinespace')) %>%
-  kableExtra::column_spec(1, width = "3.3cm") %>%
-  # kableExtra::column_spec(2, width = "1.2cm") %>%
-  # kableExtra::column_spec(3, width = "1.2cm") %>%
-  # kableExtra::column_spec(4, width = "1.0cm") %>%
-  # kableExtra::column_spec(5, width = "1.0cm") %>%
-  kableExtra::column_spec(6, width = "4.8cm") %>%
-  # kableExtra::column_spec(7, width = "1.1cm") %>%
-  # kableExtra::column_spec(8, width = "3.4cm") %>%
+                  linesep = c('\\addlinespace')) |>
+  kableExtra::column_spec(1, width = "3.3cm") |>
+  # kableExtra::column_spec(2, width = "1.2cm") |>
+  # kableExtra::column_spec(3, width = "1.2cm") |>
+  # kableExtra::column_spec(4, width = "1.0cm") |>
+  # kableExtra::column_spec(5, width = "1.0cm") |>
+  kableExtra::column_spec(6, width = "4.8cm") |>
+  # kableExtra::column_spec(7, width = "1.1cm") |>
+  # kableExtra::column_spec(8, width = "3.4cm") |>
   kableExtra::kable_styling(latex_options = c("striped", 
                                               "repeat_header, scale_down"), 
                             # full_width = TRUE, 
@@ -238,42 +238,24 @@ If what we care about is to determine which model performs best, pairwise compar
 
 It is in principle possible to obtain p-values that help determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test or a permutation test. In practice, this is slightly complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g. if a forecaster has a bad day, they will likely perform badly across different targets for a given forecast date). P-values may therefore be too quick to suggest significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (fore example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
+
+
 # Evaluating forecasts using scoringutils {#evalutation-example}
 
-\pkg{scoringutils} offers two principal ways of scoring forecasts. We suggest a convenient evaluation workflow that is centred around function which accept data.frames as input. However, \pkg{scoringutils} also exports lower-level functions which work with vectors and matrices, allowing more experienced users to use the functioniality in their own evaluation pipelines. For these lower-level functions we refer to the 
+## Package functionality and example data
 
-<!-- Maybe have an overview of which functions are available in the package -->
+The \pkg{scoringutils} package offers comprehensive functionality to check inputs, score forecasts and visualise results. Most functions operate on a `data.frame`-based format, but the package also provides a set of reliable lower-level scoring metrics operating on vectors/matrices, which experienced users can use in their own evaluation pipelines. Some helper functions for data-handling, as well as example data sets and tables with additional information about available scoring metrics are also included in the package. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. 
 
-The following section shows an example evaluation of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The following example evaluation is based on a subset of forecasts from the European Forecast Hub which includes one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different models. The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. 
+The example data included in the package consists of one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different forecasting models. It represents a small subset of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. 
 
-The example data used here follows a quantile-based format, but the evaluation process works analogously for forecasts in a different format. We will point out differences to scoring different forecast formats where appropriate. The example data set (as well as versions of it in different formats) is also included in the \pkg{scoringutils} package. 
+
+<!-- The example data used here follows a quantile-based format, but the evaluation process works analogously for forecasts in a different format. We will point out differences to scoring different forecast formats where appropriate. The example data set (as well as versions of it in different formats) is also included in the \pkg{scoringutils} package.  -->
 
 <!-- The evaluation process looks as follows: First we load, prepare and visualise (some of) the data. Then we obtain forecast scores and a model ranking based on pairwise-comparisons, followed by a more detailed analysis of calibration and sharpness.  -->
 
-## Data, data checks and input formats
+## Expected input formats and data checking
 
-```{r}
-# load packages
-library(scoringutils)
-library(dplyr)
-library(ggplot2)
-
-# load forecasts
-data(example_quantile)
-```
-
-All higher level functions that allow for convenient evaluation of forecasts expect a \code{data.frame} or similar. Lower-level functions (discussed in a later section) accept inputs as vectors and matrices. 
-
-We omit \code{NA} values as the data set also contains entries for which we have an observed value, but no forecast. 
-
-```{r}
-example_quantile |>
-  na.omit() |>
-  glimpse()
-```
-
-For forecasts in a quantile-based format it is necessary to have columns called \code{true_value}, \code{prediction} and \code{quantile}. It is recommended (although not necessary except in order to do pairwise comparisons) to have a column called "model" with an identifier for the forecaster.
-Table \ref{tab:column-requirements} shows the columns expected for different input formats. 
+Depending on the format of the forecast, a `data.frame` (or similar) with the following columns is required: 
 
 ```{r, column-requirements, echo=FALSE}
 library(data.table)
@@ -283,35 +265,63 @@ requirements <-
     `Required columns` = c("'true_value', 'prediction', 'quantile'", 
                            "'true_value', 'prediction', 'sample'", 
                            "'true_value', 'prediction'", 
-                           "additionally a column 'model'")
+                           "additionally a column 'model'"), 
+    "Example data" = c("example_quantile", "example_integer, \n  example_continous", "example_binary", "~")
   )
 
 requirements |>
   kbl(format = "latex", 
-      caption = "Overview of the columns required for different input formats.")
+      caption = "Overview of the columns required for different input formats.")  
 ```
 
-We can check whether the data conforms to the requirements by running \fct{check\_forecasts}. 
+Additional columns may be present to indicate a grouping of forecasts. A combination of different columns should uniquely define the unit of a single forecast, meaning that a single forecast is defined by the combination of values in the other columns. For example, a single forecast could be uniquely defined by a model name, a location, a forecast date and a forecast horizon. 
+
+The data sets included in the package give an example of the expected input. 
+
+```{r}
+library(scoringutils)
+library(tibble) # use the glimpse() function to show data overview
+
+example_quantile |>
+  na.omit() |>
+  glimpse()
+```
+
+The function \fct{check\_forecasts} allows to check whether the input conforms to the requirements and returns a list with entries that provide information on what \pkg{scoringutils} infers from the data. 
 
 ```{r,tidy=TRUE, tidy.opts=list(width.cutoff=I(70)), echo=FALSE}
 check_forecasts(example_quantile)
 ```
 
-This returns a list with different entries giving information about what \pkg{scoringutils} infers from the data. \code{target_type} \code{prediction_type} refer to the forecast format. \code{forecast_unit} contains a vector of the columns which \pkg{scoringutils} thinks denote the unit of a single forecast. This means that in this instance a single forecast (with a set of 23 quantiles) can uniquely be identified by the values in the columns "location", "target\_end\_date", "target\_type", "location\_name", "forecast\_date", "model", "horizon". In this example, having "location" as well as "location\_name" included does not make a difference, as they contain duplicated information. In general, however, it is strongly advised to remove all unnecessary columns that do not help identify a single forecast. \code{unique_values} gives an overview of the number of unique values per column across the entire data set, providing a first hint as to whether the forecast set is complete. \code{warnings} shows potential warnings about the data. In this example, \pkg{scoringutils} warns that there are observed values present for which there is no corresponding forecast. These warnings can often be ignored, but may provide important information. If there are errors that cannot be ignored, a list entry \code{errors} will appear. 
+The values stored in \code{target_type} and \code{prediction_type} refer to type of the forecast and the target variable. \code{forecast_unit} contains a vector of the columns which \pkg{scoringutils} thinks denote the unit of a single forecast. This means that in this instance a single forecast (with a set of 23 quantiles) can uniquely be identified by the values in the columns "location", "target\_end\_date", "target\_type", "location\_name", "forecast\_date", "model", "horizon". In this example, having "location" as well as "location\_name" included does not make a difference, as they contain duplicated information. In general, however, it is strongly advised to remove all unnecessary columns that do not help identify a single forecast. \code{unique_values} gives an overview of the number of unique values per column across the entire data set, providing a first hint as to whether the forecast set is complete. \code{warnings} shows potential warnings about the data. In this example, \pkg{scoringutils} warns that there are observed values present for which there is no corresponding forecast. These warnings can often be ignored, but may provide important information. If there are errors that cannot be ignored, a list entry \code{errors} will appear. 
 
-It is helpful to start the evaluation process by visualising data availability, as missing forecasts can impact the evaluation if missingness is not random, but instead correlates with performance. The function \fct{show\_avail\_forecasts} returns a heatmap with the number of available forecasts. By default, the function treats a set of different quantiles or samples as one forecast. However, the user can specify manually which elements to treat as one forecast and which categories to sum over to count the number of available forecasts. 
 
+## Visualising forecast data
+
+It is helpful to start the evaluation process by examining forecast availability, as missing forecasts can impact the evaluation if missingness correlates with performance. The function \fct{avail_forecasts} returns information about the number of available forecasts, given a level of summary that can be specified through the \code{by} argument. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r avail-forecasts, echo=TRUE, fig.width = 10, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
-show_avail_forecasts(data = example_quantile, 
-                     facet_formula = ~ target_type,
-                     x = "target_end_date", 
-                     show_numbers = FALSE,
-                     legend_position = "bottom") 
+avail_forecasts(data = example_integer, 
+                by = c("model", "target_type"))
 ```
 
-The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021 as well as 5 weeks of prior data, we can call: % 
+and visualise results using the function \fct{plot\_avail\_forecasts}, for example running
 
+```{r avail-forecasts-plot, echo=TRUE, fig.width = 10, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
+library(ggplot2)
+
+avail_forecasts(data = example_integer, 
+                by = c("model", "target_type", "forecast_date")) |>
+  plot_avail_forecasts(x = "forecast_date", 
+                       show_numbers = FALSE) + 
+  facet_wrap(~ target_type) + 
+  labs(y = "Model", x = "Forecast date") + 
+  theme(legend.position = "bottom")
+```
+
+<!-- THIS NEEDS TO BE REWORKED DEPENDING ON WHAT WE DO WITH THE FUNCTION -->
+
+The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. It offers the user an optional ad hoc way to filter both forecasts and observed values. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021 as well as 5 weeks of prior data, we can call: 
 
 ```{r forecast-visualisation, fig.width = 10, fig.cap = "Short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021."}
 plot_predictions(data = example_quantile,
@@ -320,148 +330,182 @@ plot_predictions(data = example_quantile,
                                      'target_end_date > "2021-05-22"'),
                  filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
                                          'forecast_date == "2021-06-28"')) + 
-  facet_wrap(target_type ~ location, ncol = 4) + 
+  facet_wrap(target_type ~ location, ncol = 4, scales = "free_y") + 
   theme(legend.position = "bottom")
 ```
 
 The output is shown in Figure \ref{fig:forecast-visualisation}.
 
-## Scoring forecasts with \fct{eval\_forecasts} {short-title="Scoring forecasts with score()"}
 
-The actual scoring of forecasts based on observed values can be performed using the function \fct{eval\_forecasts}. The function automatically detects the forecast type and format (as shown in the output of \fct{check\_forecasts}), applies the appropriate scoring metrics and can in addition also aggregate results as well as perform pairwise comparisons between models. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. 
+
+## Scoring forecasts with \fct{score} {short-title="Scoring forecasts with score()"}
+
+The function \fct{score} evaluates predictions against observed values and automatically applies the appropriate scoring metrics depending on the input data. 
 
 ```{r}
-scores <- score(example_quantile)
-glimpse(scores)
+score(example_quantile) |>
+  glimpse()
 ```
 
-The above produces one score for every forecast. However, we usually like to summarise scores to learn about average performance. 
-
-We can either run a separate function to summarise the scores, 
-
+The above produces one score for every forecast. However, we usually like to summarise scores to learn about average performance. This can be done using the function \fct{summarise\_scores}, which returns one summarised score per category specified in the argument \code{by}. 
 
 ```{r}
-summarised_scores <- 
-  summarise_scores(scores = scores, 
-                   by = c("model", "target_type"))
-```
-
-or we score and summarise in one function call: 
-
-```{r}
-summarised_scores <- 
-  score(example_quantile) %>%
+score(example_quantile) |>
   summarise_scores(by = c("model", "target_type"))
 ```
 
+While \fct{summarise\_scores} accepts arbitrary summary functions, care has to be taken when using something else than \fct{mean}, because scores may lose propriety when using other summary functions. For example, the median of several individual scores (individually based on a proper scoring rule) is usually not proper, and a forecaster judged by the median of several scores may be incentivised to misrepresent their true belief in a way that is not true for the mean score.  
+
+The user must exercise additional caution and should usually avoid aggregating scores across categories which differ in the magnitude of the quantity to forecast. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. 
+
+For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function \fct{add\_coverage}. This function also requires a \code{by} argument (this should be equal to the value of \code{by} used in \fct{summarise\_forecasts}) which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed.
+
 ```{r}
-summarised_scores
+score(example_quantile) |>
+  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) |>
+  summarise_scores(by = c("model", "target_type")) |>
+  glimpse()
 ```
 
-\fct{eval\_forecasts} and \fct{summarise\_scores} aggregate scores by taking the mean over according to the grouping specified in \code{summarise_by}. In the above example, if \code{summarise_by = c("model", "target_type")}, then scores would be averaged over all other categories to obtain one score per model and forecast target type. For a more detailed analysis we could for example specify \code{summarise_by = c("mode", "target_type", "location")} to additionally stratify by country. Summarised scores can be visualised using the function \fct{scores\_table} as is shown in Figure \ref{fig:score-table}. 
-
-If we wanted to have one score per quantile or one per prediction interval range, we could use something like \code{summarise_by = c("model", "quantile", "range")}. This would allow us to examine interval or quantile coverage or makes it possible to analyse the accuracy of the tails of the forecasts. In addition to the mean, we can also obtain the standard deviation of the scores over which we average, as well as any desired quantile, by specifying \code{sd = TRUE} and for example \code{quantiles = c(0.5)} for the median. 
-
-The user must, however, exercise some caution when aggregating scores. As explained above, many of the metrics are absolute and scale with the magnitude of the quantity to forecast. This makes it sometimes ill-advised to average over them. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while errors on death forecasts would have little influence. Similarly, aggregating over different forecast horizons is often not a good idea as the mean will be dominated by further ahead forecast horizons. 
-
-```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores."}
-plot_score_table(summarised_scores, y = "model") + 
-  facet_wrap( ~ target_type)
-```
+## Pairwise comparisons
 
 In order to obtain a model ranking, we recommend to look at the relative skill in terms of an appropriate proper scoring rule instead of the raw score. Relative skill scores can be aggregated more easily across different forecast targets as they are less influenced by the order of magnitude of the quantity to forecast than e.g. the WIS or the CRPS. 
 
-Again there are two possible ways to do pairwise comparisons. First, the function \fct{pairiwse\_comparison} can be called to compare models against each other. Here \code{summarise_by} denotes what relative skill scores shall be computed for. \code{summarise_by = "model"} means there will be one relative skill score per model, while \code{summarise_by = c("target_type", "target_type")} would mean there is one relative skill score per model, computed completely separately for different target types. 
+Relative skill scores can either be obtained by specifying \code{relative_skill = TRUE} in the function \fct{summarise\_scores}, or by calling the function \fct{pairiwse\_comparison}. In both cases, pairwise comparisons are computed according to the grouping specified in \code{by}: essentially, the \code{data.frame} with all scores gets split into different \code{data.frame}s according to the values specified in \code{by} (excluding the colum 'model') and relative scores are computed for every individual group separately. For example, specifying \code{by = c("model", "target_type")} would mean that there is one relative skill score per model, calculated seperately for the different forecasting targets. Relative skill can also be calculated with respect to a baseline (using the argument \code{baseline}). If a baseline is provided, then comparisons with that baseline are excluded from the computation of relative scores all other models (relative scores therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model. 
 
-When using \fct{pairwise\_comparison}, it is important that the scores used as input have not been summarised in any way. 
+Pairwise comparisons should usually be made based on unsummarised scores (\fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When computing relative skill scores using \fct{summarise_scores}, this happens by default. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values do not account for), it may be sensible to summaries over a few categories to reduce correlation and obtain more conservative p-values. 
 
 ```{r}
-pairwise <- pairwise_comparison(scores, 
-                                baseline = "EuroCOVIDhub-baseline")
-
-pairwise2 <- pairwise_comparison(scores, 
-                                by = c("model", "target_type"), 
-                                baseline = "EuroCOVIDhub-baseline")
+score(example_quantile) |>
+  pairwise_comparison(by = c("model", "target_type"), 
+                      baseline = "EuroCOVIDhub-baseline") |>
+  glimpse()
 ```
 
-Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
-Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
+Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as shown in Figure \@ref{fig:pairwise-plot} in the SI. 
 
-The result is a \code{data.table} with different scores and metrics in a tidy format that can easily be used for further manipulation and plotting. 
+## Visualising scores
 
+<!-- Could also move this part to the scoring part above and move the WIS to the part about calibration and visual model diagnostics -->
 
-```{r pairwise-plot, echo=TRUE, fig.width = 10, fig.cap="Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison."}
+Summarised scores can be visualised using the function \fct{scores\_table} as is shown in Figure \ref{fig:score-table}.  
+
+A single metric can be visualised as a heatmap using the function \fct{plot\_heatmap}. 
+
+```{r score-heatmap, fig.width = 10, fig.cap = "CAPTION"}
+score(example_continuous) %>%
+  summarise_scores(by = c("model", "location", "target_type")) %>%
+  plot_heatmap(x = "location", metric = "bias") + 
+    facet_wrap(~ target_type)
 
 ```
 
-## Visualising aggregate scores and rankings
-A good starting point for an evaluation is the following score table that visusalises the scores we produced above. We can facet the table to account for the different forecast targets: 
-
-
-The most informative metric in terms of model ranking is the relative\_skill. However, interpretation is not always straightforward and has to be done carefully. We can see that performance varied quite a bit across different metrics, where some models did well on one target, but poorly on another. Especially the Exponential growth/decline model stands out as it received the lowest relative skill score for hospital admissions, but the highest for the total number of beds occupied. Looking back at Figure \ref{fig:avail-forecasts}, we see that the model has only submitted very few forecasts over all. It may therefore be sensible to require all models to have submitted forecasts for at least 50\% of all forecast targets in order to enter the pairwise comparisons. For similar reasons, the interval score may be deceiving if looked at in isolation. As can be seen, the DetSEIRwithNB MLE model received a lower relative skill score, but a higher interval score than the DetSEIRwithNB MCMC model. This, again, can be explained by the fact that they forecasted different targets. The interval score, as an absolute metric, is highly influenced by the absolute value of the quantity that is forecasted. For the same reason, one should be careful when summarising interval scores from different locations or forecast targets, as the average score will be dominated by outliers as well as differences in the absolute level. Assuming a large enough set of available overlapping forecasts, the relative skill score is more robust. It therefore is reasonable to assume that the DetSEIRwithNB MLE forecasted quantities with a higher absolute value, but tended to perform worse than the DetSEIRwithNB MCMC model as far as we can tell based on the set of all pariwise comparisons. This can be confirmed for the direct comparison between the two by looking at the mean score ratios from the pairwise comparisons. These can be obtained by calling
-
-In terms of actually understanding \textit{why} one model performs well or badly, the other metrics shown in Figure \ref{fig:score-table} provide additional insight. We turn to them in the following. 
-
-## Visual model diagnostics
-
-For forecasts in an interval format, looking at the components of the weighted interval score separately is a natural next step. We can see in Figure \ref{fig:wis-components} that the majority of penalties come from over-and underprediction, instead of the sharpness component. We also see that most models tended to either over- or underpredict actual numbers.  
-
+For quantile-based forecasts, it is also interesting to visualise the decomposition of the weighted interval score into its components dispersion, over-prediction and under-prediction. This can be achieved using the function \fct{plot\_wis\_components}, as shown in Figure \@ref{wis-comonents} and Figure \@ref{wis-components-relative} in the SI. 
 
 
 ```{r wis-components, fig.width = 10, fig.cap = "CAPTION"}
-wis_components(summarised_scores, 
-               relative_contributions = TRUE, 
-               x_text_angle = 0) + 
+score(example_quantile) |>
+  summarise_scores(by = c("model", "target_type")) |>
+  plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
-             scales = "free_x") + 
-  coord_flip() + 
+             scales = "free_y") +
   theme(legend.position = "bottom")
 ```
 
-We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration \ref{gneitingProbabilisticForecastsCalibration2007}. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. We can see, for example, that the Exponential growth/decline model was consistently biased downwards. Figure \ref{fig:coverage}
+<!-- It may therefore be sensible to require all models to have submitted forecasts for at least 50\% of all forecast targets in order to enter the pairwise comparisons.  -->
 
+## Visual model diagnostics and calibration
 
-```{r pit-plots, out.width="49%", fig.show='hold'}
-pit <- pit(example_quantile, 
-              by = "model", "target")
+The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the true observed value. Ideally, pit values should be uniformly distributed after the transformation.
 
-plot_pit(pit)
+We can compute pit values as such:
+
+```{r}
+example_continuous %>%
+  pit(by = "model") 
 ```
+
+and visualise them using the function \fct{plot\_pit}, as shown in Figure \@ref{fig:pit-plots} (see a quantile-based example in Figure \@ref{fig:pit-plots-quantile} in the SI): 
+
+
+```{r pit-plots, fig.cap="CAPTION"}
+example_continuous %>%
+  pit(by = c("model", "target_type")) %>%
+  plot_pit() + 
+  facet_grid(model ~ target_type)
+```
+
+We can also look at interval and quantile coverage plots:
+
+
+<!-- We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration \ref{gneitingProbabilisticForecastsCalibration2007}. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. Figure \ref{fig:coverage} -->
 
 
 
 ```{r coverage, fig.width = 10, fig.show='hold', fig.cap = "Interval coverage"}
-cov_scores <- score(example_quantile) %>%
+cov_scores <- score(example_quantile) |>
   summarise_scores(by = c("model", "target_type", "range", "quantile"))
 
-interval_coverage(cov_scores) + 
+plot_interval_coverage(cov_scores) + 
   facet_wrap(~ target_type)
 ```
 
 ```{r quantile-coverage, fig.width = 10, fig.show='hold', fig.cap = "Quantile coverage"}
-quantile_coverage(cov_scores) + 
+plot_quantile_coverage(cov_scores) + 
   facet_wrap(~ target_type)
 ```
 
-DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTATION FOR QUANTILE FORECASTS
 
-```{r calibration-pit, fig.cap = "PIT histograms"}
-# pit-plots, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
-# out <- score(example_quantile, 
-#                      summarise_by = c("model"), 
-#                      pit_plots = TRUE)
+## Additional analyses and visualisations
 
+
+### Correlation between scores
+
+It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function correlation(). When dealing with quantile-based forecasts, it is important to call summarise_scorees() before correlation() to summarise over quantiles before computing correlations.
+
+```{r}
+example_quantile %>%
+  score() %>%
+  summarise_scores() %>%
+  correlation()
 ```
 
-Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
-```{r heatmap-location, fig.width = 10, fig.cap="Heatmap of interval scores by location"}
-scores <- score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type", "location_name"))
+and
 
-plot_heatmap(scores, 
-              metric = "interval_score", x = "location_name") + 
-  facet_wrap(~ target_type, scale = "free_x")
+```{r}
+example_quantile %>%
+  score() %>%
+  summarise_scores() %>%
+  correlation() %>%
+  plot_correlation()
+```
+
+
+### Scores by interval ranges
+
+If you would like to see how different forecast interval ranges contribute to average scores, you can viusalise scores by interval range:
+
+```{r}
+example_quantile %>%
+  score() %>%
+  summarise_scores(by = c("model", "range", "target_type")) %>%
+  plot_ranges() + 
+  facet_wrap(~ target_type, scales = "free")
+```
+
+## Tips and tricks - converting to sample-based forecasts
+
+Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values.
+
+You can convert your forecasts into a sample-based format using the function sample_to_quantile(). There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small.
+
+```{r}
+
+example_integer %>%
+  sample_to_quantile(quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)) %>%
+  score() %>%
+  add_coverage(by = c("model", "target_type"))
 ```
 
 
@@ -509,17 +553,78 @@ COMING SOON.
 
 data <- readRDS(system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils"))
 
-data[, 1:2] %>%
+data[, 1:2] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE,
                   escape = FALSE,
                   caption = "Detailed explanation of all the metrics,",
                   longtable = TRUE,
-                  linesep = c('\\addlinespace')) %>%
-  kableExtra::column_spec(1, width = "1.1in") %>%
-  kableExtra::column_spec(2, width = "4.625in") %>%
+                  linesep = c('\\addlinespace')) |>
+  kableExtra::column_spec(1, width = "1.1in") |>
+  kableExtra::column_spec(2, width = "4.625in") |>
   kableExtra::kable_styling(latex_options = c("striped", "repeat_header"))
 
 ```
+
+
+```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores."}
+library(patchwork)
+library(dplyr)
+
+# p1 <- 
+#   subset(example_quantile, 
+#        example_quantile$target_type == "Cases") |>
+#   score() |>
+#   summarise_scores(by = c("model", "target_type")) |>
+#   plot_score_table(y = "model") 
+# 
+# p2 <- 
+#   subset(example_quantile, 
+#        example_quantile$target_type == "Deaths") |>
+#   score() |>
+#   summarise_scores(by = c("model", "target_type")) |>
+#   plot_score_table(y = "model") 
+# 
+# p1 + p2
+
+score(example_quantile) |>
+  summarise_scores(by = c("model", "target_type")) |>
+  plot_score_table(y = "model") + 
+  facet_wrap(~ target_type)
+
+```
+
+
+```{r pairwise-plot, echo=TRUE, fig.width = 10, fig.cap="Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
+score(example_quantile) |>
+  pairwise_comparison(by = c("model", "target_type"), 
+                      baseline = "EuroCOVIDhub-baseline") |>
+  plot_pairwise_comparison() + 
+  facet_wrap(~ target_type)
+```
+
+
+
+```{r wis-components-relative, fig.width = 10, fig.cap = "CAPTION"}
+score(example_quantile) |>
+  summarise_scores(by = c("model", "target_type")) |>
+  plot_wis(relative_contributions = TRUE) + 
+  facet_wrap(~ target_type, 
+             scales = "free_x") + 
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5)) + 
+  theme(legend.position = "bottom")
+```
+
+
+
+```{r pit-plots-quantile, fig.cap="CAPTION"}
+subset(example_quantile, example_quantile$quantile %in% seq(0.1, 0.9, 0.1)) %>%
+  pit(by = c("model", "target_type")) %>%
+  plot_pit() + 
+  facet_grid(model ~ target_type)
+```
+
+
 
 
 \newpage
