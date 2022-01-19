@@ -323,7 +323,8 @@ get_unit_of_forecast <- function(data) {
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics()
+    "range", "boundary", available_metrics(),
+    names(data)[grepl("coverage_", names(data))]
   )
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)

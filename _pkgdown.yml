@@ -14,12 +14,7 @@ reference:
                 - has_keyword("metric")
         - title: Data wrangling helpers
           contents:
-                - ends_with("to_long")
-                - ends_with("to_wide")
-                - ends_with("to_quantile")
-                - ends_with("to_range")
-                - ends_with("to_range_long")
-                - merge_pred_and_obs
+                - has_keyword("data-handling")
         - title: Functions for plotting and data visualisation
           contents:
                 - starts_with("plot_")
