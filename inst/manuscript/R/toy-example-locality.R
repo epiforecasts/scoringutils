@@ -1,3 +1,6 @@
+library(scoringutils)
+library(ggplot2)
+library(data.table)
 
 quantiles <- seq(0.1, 1, 0.1)
 forecast_a <- c(0.3, 0.35, 0.25, 0.04, 0.02, 0.01, 0.01, 0.01, 0.005, 0.005)
@@ -28,8 +31,8 @@ df[, dss := ((true_value - mean_pred)^2) / sd_pred + 2 * log(sd_pred),
 sample_a <- sample(x=1:10, size = 1e5, replace = TRUE, prob = forecast_a)
 sample_b <- sample(x=1:10, size = 1e5, replace = TRUE, prob = forecast_b)
 
-crps_a <- scoringutils::crps(true_value_x, t(as.matrix(sample_a)))
-crps_b <- scoringutils::crps(true_value_x, t(as.matrix(sample_b)))
+crps_a <- scoringutils::crps(2, t(as.matrix(sample_a)))
+crps_b <- scoringutils::crps(2, t(as.matrix(sample_b)))
 
 ggplot(df, aes(x = factor(outcome), y = prob)) +
   geom_col() +
@@ -41,7 +44,7 @@ ggplot(df, aes(x = factor(outcome), y = prob)) +
   theme_light() +
   labs(y = "Probability assigned", x = "Possible outcomes")
 
-ggsave("inst/manuscript/plots/score-locality.png")
+ggsave("inst/manuscript/plots/score-locality.png", height = 3, width = 8)
 
 
 # test with WIS. Problem: that doesn't work at the moment as intervals are

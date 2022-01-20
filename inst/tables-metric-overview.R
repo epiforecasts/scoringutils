@@ -28,133 +28,225 @@ saveRDS(data, "inst/metrics-overview/forecast-types.Rda")
 #----------------- Overview with applicability of the metrics -----------------#
 #------------------------------------------------------------------------------#
 
+ae_point <- list(
+  `Metric` = "Absolute error (point forecast)",
+  `Name` = r"(\texttt{ae\_point})",
+  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `D` = r"($-$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Absolute error if 'quantile' is NA",
+  `References` = ""
+)
+
+aem <- list(
+  `Metric` = "Absolute error (median forecast)",
+  `Name` = r"(\texttt{aem})",
+  `Functions` = r"(\texttt{score()}, \texttt{ae\_median\_sample()}, \texttt{ae\_median\_quantile})",
+  `D` = r"($-$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Absolute error if 'quantile' is NA",
+  `References` = ""
+)
+
+
 crps <- list(
   `Metric` = "(Continuous) ranked probability score (CRPS)",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($-$)",
+  `Name` = r"(\texttt{crps})",
+  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($-$)",
   `Properties` = "proper scoring rule, global, stable handling of outliers",
   `References` = ""
 )
 
 log_score <- list(
   `Metric` = "Log score (logS)",
-  `Discrete` = r"($-$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($-$)",
+  `Name` = r"(\texttt{log\_score})",
+  `Functions` = r"(\texttt{score()}, \texttt{logs()}, \texttt{logs\_binary()})",
+  `D` = r"($-$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($\checkmark$)",
+  `Q` = r"($-$)",
   `Properties` = "proper scoring rule, log of predictive density evaluated at observed value, local, unstable for outliers",
   `References` = ""
 )
 
 wis <- list(
   Metric = "(Weighted) interval score (WIS)",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($\checkmark$)",
+  `Name` = r"(\texttt{interval\_score})",
+  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
   `Properties` = "proper scoring rule, global, stable handling of outliers, converges to crps for an increasing numbre of equally spaced intervals",
   `References` = ""
 )
 
 dss <- list(
   `Metric` = "Dawid-Sebastiani score (DSS)",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($-$)",
+  `Name` = r"(\texttt{dss})",
+  `Functions` = r"(\texttt{score()}, \texttt{dss()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($-$)",
   `Properties` = "proper scoring rule, somewhat global, somewhat stable handling of outliers",
   `References` = ""
 )
 
 brier_score <- list(
   `Metric` = "Brier score (BS)",
-  `Discrete` = r"($-$)",
-  `Continuous` = r"($-$)",
-  `Binary` = r"($\checkmark$)",
-  `Quantiles` = r"($-$)",
-  `Properties` = "proper scoring rule",
+  `Name` = r"(\texttt{brier\_score})",
+  `Functions` = r"(\texttt{score()}, \texttt{brier\_score()})",
+  `D` = r"($-$)",
+  `C` = r"($-$)",
+  `B` = r"($\checkmark$)",
+  `Q` = r"($-$)",
+  `Properties` = "Proper scoring rule for binary forecasts.",
   `References` = ""
 )
 
 interval_coverage <- list(
   `Metric` = "Interval coverage",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($-$)",
-  `Properties` = "measure for calibration",
+  `Name` = r"(\texttt{coverage})",
+  `Functions` = r"(\texttt{score()})",
+  `D` = r"($$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Percentage of observations falling inside a given central prediction interval.",
+  `References` = ""
+)
+
+coverage_deviation <- list(
+  `Metric` = "Coverage deviation",
+  `Name` = r"(\texttt{coverage\_deviation})",
+  `Functions` = r"(\texttt{score()})",
+  `D` = r"($$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Average difference between empirical and nominal interval coverage",
   `References` = ""
 )
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($-$)",
-  `Properties` = "measure for calibration",
+  `Name` = r"(\texttt{quantile\_coverage})",
+  `Functions` = r"(\texttt{score()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($-$)",
+  `Properties` = "Percentage of observations below a given quantile of predictive CDF.",
   `References` = ""
 )
 
-sharpness <- list(
-  `Metric` = "Sharpness",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($\checkmark$)",
-  `Properties` = "measures forecast dispersions",
+
+dispersion <- list(
+  `Metric` = "Dispersion",
+  `Name` = r"(\texttt{dispersion})",
+  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `D` = r"($-$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Dispersion component of weighted interval score",
+  `References` = ""
+)
+
+mad <- list(
+  `Metric` = "Median Absolute Deviation (Dispersion)",
+  `Name` = r"(\texttt{mad})",
+  `Functions` = r"(\texttt{score()}, \texttt{mad\_sample()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($-$)",
+  `Properties` = "Measure for dispersion: median of the absolute deviations from the median",
   `References` = ""
 )
 
 bias <- list(
   `Metric` = "Bias",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($\checkmark$)",
+  `Name` = r"(\texttt{crps})",
+  `Functions` = r"(\texttt{score()}, \texttt{bias\_sample()}, \texttt{bias\_quantile()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
   `Properties` = "captures tendency to over-or underpredict (aspect of calibration)",
+  `References` = ""
+)
+
+under_overprediction <- list(
+  `Metric` = "Under-, Over-prediction",
+  `Name` = r"(\texttt{underprediction}, \texttt{overprediction})",
+  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `D` = r"($-$)",
+  `C` = r"($-$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
+  `Properties` = "Absolute amount of over-or underprediction (components of WIS)",
   `References` = ""
 )
 
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
-  `Discrete` = r"($\checkmark$)",
-  `Continuous` = r"($\checkmark$)",
-  `Binary` = r"($-$)",
-  `Quantiles` = r"($\checkmark$)",
+  `Name` = r"(\texttt{crps})",
+  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `D` = r"($\checkmark$)",
+  `C` = r"($\checkmark$)",
+  `B` = r"($-$)",
+  `Q` = r"($\checkmark$)",
   `Properties` = "assesses calibration",
   `References` = ""
 )
 
 mean_score_ratio <- list(
   `Metric` = "Mean score ratio",
-  `Discrete` = r"($\sim$)",
-  `Continuous` = r"($\sim$)",
-  `Binary` = r"($\sim$)",
-  `Quantiles` = r"($\sim$)",
+  `Name` = r"(\texttt{mean\_scores\_ratio})",
+  `Functions` = r"(\texttt{pairwise\_comparison()})",
+  `D` = r"($\sim$)",
+  `C` = r"($\sim$)",
+  `B` = r"($\sim$)",
+  `Q` = r"($\sim$)",
   `Properties` = "compares performance of two models. Properties depend on the metric chosen for the comparison.",
   `References` = ""
 )
 
 relative_skill <- list(
-  `Metric` = "Relative skill",
-  `Discrete` = r"($\sim$)",
-  `Continuous` = r"($\sim$)",
-  `Binary` = r"($\sim$)",
-  `Quantiles` = r"($\sim$)",
+  `Metric` = "(Scaled) Relative skill",
+  `Name` = r"(\texttt{relative\_skill}, \texttt{scaled\_rel\_skill})",
+  `Functions` = r"(\texttt{score()}, \texttt{pairwise\_comparison()})",
+  `D` = r"($\sim$)",
+  `C` = r"($\sim$)",
+  `B` = r"($\sim$)",
+  `Q` = r"($\sim$)",
   `Properties` = "Ranks models based on pairwise comparisons. Properties depend on the metric chosen for the comparison.",
   `References` = ""
 )
 
-data <- rbind(as.data.table(crps),
+data <- rbind(as.data.table(ae_point),
+              as.data.table(aem),
+              as.data.table(crps),
               as.data.table(log_score),
               as.data.table(wis),
               as.data.table(dss),
               as.data.table(brier_score),
               as.data.table(interval_coverage),
+              as.data.table(coverage_deviation),
               as.data.table(quantile_coverage),
+              as.data.table(dispersion),
+              as.data.table(mad),
+              as.data.table(under_overprediction),
               as.data.table(pit),
               as.data.table(sharpness),
               as.data.table(bias),

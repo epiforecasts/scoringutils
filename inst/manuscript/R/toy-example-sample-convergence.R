@@ -64,8 +64,8 @@ ggplot(df, aes(x = n_samples)) +
   facet_wrap(~ score, scales = "free") +
   theme_minimal() +
   scale_x_continuous(trans = "log10", labels = label_fn) +
-  theme() +
+  theme_minimal() +
   labs(x = "Number of samples",
        y = "Score based on samples")
 
-ggsave("inst/manuscript/plots/sample-convergence.png")
+ggsave("inst/manuscript/plots/sample-convergence.png", height = 3, width = 8)
