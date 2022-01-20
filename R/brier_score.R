@@ -12,7 +12,9 @@
 #' probabilistic prediction and the true outcome.
 #'
 #' \deqn{
-#' Brier_Score = \frac{1}{N} \sum_{t = 1}^{n} (prediction_t - outcome_t)^2
+#'   \text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction_t} - \text{outcome_t})^2
+#' }{
+#'   Brier_Score = 1/N \sum_{t = 1}^{n} (prediction_t - outcome_t)²
 #' }
 #'
 #' @param true_values A vector with the true observed values of size n
