@@ -26,6 +26,8 @@ vector with the scoring values
 Absolute error of the median calculated as
 
 \deqn{
+  \text{abs}(\text{true_value} - \text{median_prediction})
+}{
   abs(true_value - median_prediction)
 }
 }

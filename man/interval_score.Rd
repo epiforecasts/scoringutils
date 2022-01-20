@@ -47,12 +47,17 @@ and Raftery (2007). Smaller values are better.
 The score is computed as
 
 \deqn{
+\text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower} - \text{true_value}) *
+\mathbf{1}(\text{true_value} < \text{lower}) + \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
+\mathbf{1}(\text{true_value} > \text{upper})
+}{
 score = (upper - lower) + 2/alpha * (lower - true_value) *
 1(true_values < lower) + 2/alpha * (true_value - upper) *
 1(true_value > upper)
 }
-where $1()$ is the indicator function and alpha is the decimal value that
-indicates how much is outside the prediction interval.
+where \eqn{\mathbf{1}()}{1()} is the indicator function and
+\eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
+the prediction interval.
 To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the

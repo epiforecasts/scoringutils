@@ -20,8 +20,8 @@ pit_df(
 \item{plot}{logical. If \code{TRUE}, a histogram of the PIT values will be
 returned as well}
 
-\item{full_output}{return all individual p_values and computed u_t values
-for the randomised PIT. Usually not needed.}
+\item{full_output}{return all individual p_values and computed \eqn{u_t}
+values for the randomised PIT. Usually not needed.}
 
 \item{n_replicates}{the number of tests to perform,
 each time re-randomising the PIT}
@@ -42,7 +42,7 @@ if \code{plot = TRUE}. Call
 \code{plot(PIT(...)$hist_PIT)} to display the histogram.
 \item \code{p_values}: all p_values generated from the Anderson-Darling tests on the
 (randomised) PIT. Only returned if \code{full_output = TRUE}
-\item \code{u}: the u_t values internally computed. Only returned if
+\item \code{u}: the \eqn{u_t} values internally computed. Only returned if
 \code{full_output = TRUE}
 }
 }

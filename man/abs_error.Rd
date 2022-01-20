@@ -19,6 +19,8 @@ vector with the absolute error
 Caclulate absolute error as
 
 \deqn{
+  \text{abs}(\text{true_value} - \text{prediction})
+}{
   abs(true_value - prediction)
 }
 }

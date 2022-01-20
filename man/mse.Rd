@@ -19,6 +19,8 @@ Mean Squared Error MSE of point forecasts.
 Calculated as
 
 \deqn{
+  \text{mean}((\text{true_values} - \text{predicted_values})^2)
+}{
   mean((true_values - predicted_values)^2)
 }
 }
