@@ -85,10 +85,10 @@ globalVariables(c(
 
 available_metrics <- function() {
   available_metrics <- c(
-    "ae_point", "aem", "log_score", "sharpness",
+    "ae_point", "aem", "log_score",
     "dispersion", "bias", "dss", "crps", "brier_score",
     "coverage", "coverage_deviation", "quantile_coverage",
-    "pit_p_val", "pit_sd", "interval_score",
+    "interval_score",
     "underprediction", "overprediction", "relative_skill",
     "scaled_rel_skill"
   )

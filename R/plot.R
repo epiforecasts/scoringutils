@@ -15,7 +15,7 @@
 #' `NULL` (default), all metrics present in `scores` will
 #' be shown
 #' @return A ggplot2 object with a coloured table of summarised scores
-#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian
+#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
 #' @importFrom stats sd
 #' @export
@@ -172,6 +172,7 @@ plot_score_table <- function(scores,
 #' Usually this will be "model"
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
+#' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes_string aes geom_linerange facet_wrap labs
@@ -193,14 +194,15 @@ plot_score_table <- function(scores,
 #'   x = "model",
 #'   relative_contributions = FALSE
 #' ) +
-#'   facet_wrap(~target_type)
+#'   facet_wrap(~target_type, scales = "free_x")
 #' @references
 #' Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 #' in an interval format. <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 
 plot_wis <- function(scores,
                      x = "model",
-                     relative_contributions = FALSE) {
+                     relative_contributions = FALSE,
+                     flip = FALSE) {
   scores <- data.table::as.data.table(scores)
 
   scores <- data.table::melt(scores,
@@ -216,22 +218,27 @@ plot_wis <- function(scores,
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
-  plot <- ggplot(scores, aes_string(x = x)) +
+  plot <- ggplot(scores, aes_string(y = x)) +
     geom_col(
       position = col_position,
-      aes(y = component_value, fill = wis_component_name)
+      aes(x = component_value, fill = wis_component_name)
     ) +
     theme_light() +
-    theme(
-      panel.spacing = unit(4, "mm"),
-      axis.text.x = element_text(
-        angle = 90,
-        vjust = 1,
-        hjust = 1
-      )
-    ) +
     guides(fill = guide_legend(title = "WIS component")) +
-    ylab("WIS contributions")
+    xlab("WIS contributions")
+
+  if (flip) {
+    plot <- plot +
+      theme(
+        panel.spacing = unit(4, "mm"),
+        axis.text.x = element_text(
+          angle = 90,
+          vjust = 1,
+          hjust = 1
+        )
+      ) +
+      coord_flip()
+  }
 
   return(plot)
 }
@@ -662,7 +669,7 @@ plot_interval_coverage <- function(scores,
     theme_light() +
     theme(legend.position = "bottom") +
     ylab("% Obs inside interval") +
-    xlab("Interval range") +
+    xlab("Nominal interval coverage") +
     coord_cartesian(expand = FALSE)
 
   return(p1)

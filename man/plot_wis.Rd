@@ -4,7 +4,7 @@
 \alias{plot_wis}
 \title{Plot Contributions to the Weighted Interval Score}
 \usage{
-plot_wis(scores, x = "model", relative_contributions = FALSE)
+plot_wis(scores, x = "model", relative_contributions = FALSE, flip = FALSE)
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
@@ -15,6 +15,8 @@ Usually this will be "model"}
 
 \item{relative_contributions}{show relative contributions instead of absolute
 contributions. Default is FALSE and this functionality is not available yet.}
+
+\item{flip}{boolean (default is \code{FALSE}), whether or not to flip the axes.}
 }
 \value{
 A ggplot2 object showing a contributions from the three components of
