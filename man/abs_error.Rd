@@ -19,6 +19,8 @@ vector with the absolute error
 Calculate absolute error as
 
 \deqn{
+  \text{abs}(\text{true_value} - \text{median_prediction})
+}{
   abs(true_value - prediction)
 }
 }

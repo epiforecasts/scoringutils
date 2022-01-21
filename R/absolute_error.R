@@ -4,6 +4,8 @@
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
+#'   \text{abs}(\text{true_value} - \text{median_prediction})
+#' }{
 #'   abs(true_value - median_prediction)
 #' }
 #'
@@ -40,6 +42,8 @@ ae_median_sample <- function(true_values, predictions) {
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
+#'   \text{abs}(\text{true_value} - \text{prediction})
+#' }{
 #'   abs(true_value - median_prediction)
 #' }
 #'
@@ -83,6 +87,8 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #' Calculate absolute error as
 #'
 #' \deqn{
+#'   \text{abs}(\text{true_value} - \text{median_prediction})
+#' }{
 #'   abs(true_value - prediction)
 #' }
 #'

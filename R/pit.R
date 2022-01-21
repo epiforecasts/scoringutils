@@ -19,12 +19,12 @@
 #' u_t = F_t (x_t)
 #' }
 #'
-#' where \eqn{x_t} is the observed data point at time \eqn{t in t_1, …, t_n},
-#' n being the number of forecasts, and $F_t$ is the (continuous) predictive
-#' cumulative probability distribution at time t. If the true probability
-#' distribution of outcomes at time t is \eqn{G_t} then the forecasts eqn{F_t} are
-#' said to be ideal if eqn{F_t = G_t} at all times t. In that case, the
-#' probabilities ut are distributed uniformly.
+#' where \eqn{x_t} is the observed data point at time \eqn{t in t_1, …, t_n}{t
+#' \text{ in } t_1, …, t_n}, n being the number of forecasts, and \eqn{F_t} is
+#' the (continuous) predictive cumulative probability distribution at time t. If
+#' the true probability distribution of outcomes at time t is \eqn{G_t} then the
+#' forecasts \eqn{F_t} are said to be ideal if \eqn{F_t = G_t} at all times t.
+#' In that case, the probabilities \eqn{u_t} are distributed uniformly.
 #'
 #' In the case of discrete outcomes such as incidence counts,
 #' the PIT is no longer uniform even when forecasts are ideal.
@@ -35,7 +35,7 @@
 #'
 #' where \eqn{k_t} is the observed count, \eqn{P_t(x)} is the predictive
 #' cumulative probability of observing incidence k at time t,
-#' eqn{P_t (-1) = 0} by definition and v is standard uniform and independent
+#' \eqn{P_t (-1) = 0} by definition and v is standard uniform and independent
 #' of k. If \eqn{P_t} is the true cumulative
 #' probability distribution, then \eqn{u_t} is standard uniform.
 #'

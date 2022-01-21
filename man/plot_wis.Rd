@@ -41,7 +41,7 @@ plot_wis(scores,
   x = "model",
   relative_contributions = FALSE
 ) +
-  facet_wrap(~target_type)
+  facet_wrap(~target_type, scales = "free_x")
 }
 \references{
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
