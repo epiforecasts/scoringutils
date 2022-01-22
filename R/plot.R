@@ -128,10 +128,15 @@ plot_score_table <- function(scores,
     identifier_columns <- y
   }
 
-  df[, identif := do.call(paste, c(.SD, sep = "_")),
-    .SDcols = identifier_columns
-  ]
-
+  # if there is only one column, leave column as is. Reason to do that is that
+  # users can then pass in a factor and keep the ordering of that column intact
+  if (length(identifier_columns) > 1) {
+    df[, identif := do.call(paste, c(.SD, sep = "_")),
+       .SDcols = identifier_columns
+    ]
+  } else {
+    setnames(df, old = eval(identifier_columns), new = "identif")
+  }
 
   # plot -----------------------------------------------------------------------
   # make plot with all metrics that are not NA
@@ -140,7 +145,7 @@ plot_score_table <- function(scores,
     aes(y = identif, x = metric)
   ) +
     # geom_tile(fill = "blue") +
-    geom_tile(aes(fill = value_scaled), colour = "white") +
+    geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identif, label = round(value, 2))) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_light() +
