@@ -119,3 +119,14 @@ score(example_continuous) %>%
 # Should the function bias_range() be exported? 
 
 I'm using it within score_quantile() and it used to be the only bias function available. But now that there is a quantile version available we maybe shouldn't export it? 
+
+
+---
+
+# Could add an argument `convert_to_quantiles` (or similar) to `score()`
+
+We have a function to calculate quantiles from samples. The reason we don't do that automatically is because it might be biased. Forcing users to convert manually to quantiles, e.g. if they want to compute coverage values, however, is clunky. If someone e.g. wants to have crps, but also coverage values, they would have to run `score()` twice with two different data sets and join the outputs. The reason we want manual action from the user is because estimating quantiles based on samples may be biased if the number of samples is small. But maybe having an extra argument suffices? we could also print out a message / warning when the user does that (or use the lifycycle package and print out a warning every 8 hours...)
+
+# Make plotting theme for plot functions consistent
+
+Do we want to have theme_minimal()? no theme? 

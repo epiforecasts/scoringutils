@@ -1,6 +1,7 @@
 %% My own packages added here
 \usepackage{colortbl}
 \usepackage{xcolor}
+\usepackage{multirow}
 
 %%
 %% This is file `jss.cls'

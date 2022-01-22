@@ -29,15 +29,30 @@ df[, model := factor(model, levels = c("N(0, 1)", "N(0.5, 1)",
 res <- score(df)
 res <- summarise_scores(res, by = c("model"))
 
-scores_table <- dcast(melt(res, id.vars = "model",
-                           variable.name = "score"),
-                      score ~ model)
-scores_table <- scores_table[, lapply(.SD, round, 2), by = score]
+# scores_table <- dcast(melt(res, id.vars = "model",
+#                            variable.name = "score"),
+#                       score ~ model)
+# scores_table <- scores_table[, lapply(.SD, round, 2), by = score]
+
+# setcolorder(
+#   scores_table,
+#   c("score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
+# )
+
+res[, model := factor(model, levels = c("N(0, 1)", "N(0.5, 1)",
+                                        "N(0, 1.4)", "N(0, 0.7)"))]
 
 setcolorder(
-  scores_table,
+  res,
   c("score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
 )
+
+scores_table_plot <- plot_score_table(res, y = "model") +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust = 0.5)) +
+  theme(legend.position = "none")
+
+
 
 saveRDS(object = scores_table,
         file = "inst/manuscript/plots/calibration-diagnostic-examples.Rda")
@@ -88,11 +103,12 @@ quantile_coverage <- plot_quantile_coverage(res_quantile) +
 pred_hist /
   pit_plots /
   interval_coverage /
-  quantile_coverage +
+  quantile_coverage /
+  scores_table_plot +
   plot_layout(guides = 'collect') &
   theme(legend.position = "bottom")
 
-ggsave("inst/manuscript/plots/calibration-diagnostic-examples.png", width = 12.5, height = 10)
+ggsave("inst/manuscript/plots/calibration-diagnostic-examples.png", width = 12.5, height = 11)
 
 
 
