@@ -162,11 +162,13 @@ interval_score <- function(true_values,
 #' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 #'
 #' qs_lower <- quantile_score(true_values,
-#'                            predictions = lower,
-#'                            quantiles = alpha/2)
+#'   predictions = lower,
+#'   quantiles = alpha / 2
+#' )
 #' qs_upper <- quantile_score(true_values,
-#'                            predictions = upper,
-#'                            quantiles = 1 - alpha/2)
+#'   predictions = upper,
+#'   quantiles = 1 - alpha / 2
+#' )
 #' interval_score <- (qs_lower + qs_upper) / 2
 #' @export
 #' @keywords metric
@@ -202,4 +204,3 @@ quantile_score <- function(true_values,
 
   return(score)
 }
-

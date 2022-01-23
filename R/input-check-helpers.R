@@ -19,7 +19,6 @@ check_predictions <- function(predictions,
                               true_values = NULL,
                               type = c("continuous", "integer", "binary"),
                               class = c("vector", "matrix")) {
-
   type <- match.arg(type)
   class <- match.arg(class)
 
@@ -151,9 +150,9 @@ check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
   lengths <- sapply(vars,
-                    FUN = function(x) {
-                      length(x)
-                    }
+    FUN = function(x) {
+      length(x)
+    }
   )
 
   lengths <- unique(lengths)
@@ -258,4 +257,3 @@ check_metrics <- function(metrics) {
   }
   return(metrics)
 }
-

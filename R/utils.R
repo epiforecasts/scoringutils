@@ -260,7 +260,6 @@ delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
 #' @keywords internal
 
 get_prediction_type <- function(data) {
-
   if (is.data.frame(data)) {
     if ("quantile" %in% names(data)) {
       return("quantile")
@@ -329,4 +328,3 @@ get_unit_of_forecast <- function(data) {
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
 }
-

@@ -56,4 +56,3 @@ avail_forecasts <- function(data,
 
   return(out[])
 }
-

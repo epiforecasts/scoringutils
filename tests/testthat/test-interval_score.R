@@ -387,9 +387,8 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
-
   true_values <- rnorm(10, mean = 1:10)
-  alphas <-c(0.1, 0.5, 0.9)
+  alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
@@ -405,22 +404,23 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     )
 
     qs_lower <- quantile_score(true_values,
-                               predictions = lower,
-                               quantiles = alpha/2,
-                               weigh = w)
+      predictions = lower,
+      quantiles = alpha / 2,
+      weigh = w
+    )
     qs_upper <- quantile_score(true_values,
-                               predictions = upper,
-                               quantiles = 1 - alpha/2,
-                               weigh = w)
+      predictions = upper,
+      quantiles = 1 - alpha / 2,
+      weigh = w
+    )
     expect_equal((qs_lower + qs_upper) / 2, is)
   }
 })
 
 
 test_that("Quantlie score and interval score yield the same result, weigh = TRUE", {
-
   true_values <- rnorm(10, mean = 1:10)
-  alphas <-c(0.1, 0.5, 0.9)
+  alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
@@ -436,16 +436,15 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     )
 
     qs_lower <- quantile_score(true_values,
-                               predictions = lower,
-                               quantiles = alpha/2,
-                               weigh = w)
+      predictions = lower,
+      quantiles = alpha / 2,
+      weigh = w
+    )
     qs_upper <- quantile_score(true_values,
-                               predictions = upper,
-                               quantiles = 1 - alpha/2,
-                               weigh = w)
+      predictions = upper,
+      quantiles = 1 - alpha / 2,
+      weigh = w
+    )
     expect_equal((qs_lower + qs_upper) / 2, is)
   }
 })
-
-
-

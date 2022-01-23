@@ -45,8 +45,8 @@
 #' ) +
 #'   facet_wrap(~target_type, ncol = 1)
 plot_score_table <- function(scores,
-                        y = NULL,
-                        select_metrics = NULL) {
+                             y = NULL,
+                             select_metrics = NULL) {
 
   # identify metrics -----------------------------------------------------------
   # identify metrics by looking at which of the available column names
@@ -132,7 +132,7 @@ plot_score_table <- function(scores,
   # users can then pass in a factor and keep the ordering of that column intact
   if (length(identifier_columns) > 1) {
     df[, identif := do.call(paste, c(.SD, sep = "_")),
-       .SDcols = identifier_columns
+      .SDcols = identifier_columns
     ]
   } else {
     setnames(df, old = eval(identifier_columns), new = "identif")
@@ -785,8 +785,7 @@ plot_quantile_coverage <- function(scores,
 #' scores <- score(example_quantile)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' plot_pairwise_comparison(pairwise) +
-#'   facet_wrap(~ target_type)
-
+#'   facet_wrap(~target_type)
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
                                      smaller_is_good = TRUE) {
@@ -799,16 +798,16 @@ plot_pairwise_comparison <- function(comparison_result,
   get_fill_scale <- function(values, breaks, plot_scales) {
     values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
     scale <- cut(values,
-                 breaks = breaks,
-                 include.lowest = TRUE,
-                 right = FALSE,
-                 labels = plot_scales
+      breaks = breaks,
+      include.lowest = TRUE,
+      right = FALSE,
+      labels = plot_scales
     )
     # scale[is.na(scale)] <- 0
     return(as.numeric(as.character(scale)))
   }
 
-  type = match.arg(type)
+  type <- match.arg(type)
 
   if (type == "together") {
     # obtain only the upper triangle of the comparison
@@ -878,7 +877,7 @@ plot_pairwise_comparison <- function(comparison_result,
     ) +
       ggplot2::geom_tile(width = 0.98, height = 0.98) +
       ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
-                         na.rm = TRUE
+        na.rm = TRUE
       ) +
       ggplot2::scale_fill_gradient2(
         low = "skyblue", mid = "grey95",
@@ -929,7 +928,7 @@ plot_pairwise_comparison <- function(comparison_result,
     fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
     lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
-                                               "< 0.001", var_of_interest
+      "< 0.001", var_of_interest
     )]
 
     plot <- plot +
@@ -970,7 +969,7 @@ plot_pairwise_comparison <- function(comparison_result,
     high_col <- "palegreen3"
     comparison_result[, var_of_interest := as.character(var_of_interest)]
     comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-                                                  "< 0.001", var_of_interest
+      "< 0.001", var_of_interest
     )]
   }
 
@@ -987,7 +986,7 @@ plot_pairwise_comparison <- function(comparison_result,
       width = 0.97, height = 0.97
     ) +
     ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
-                       na.rm = TRUE
+      na.rm = TRUE
     ) +
     ggplot2::scale_fill_gradient2(
       low = "skyblue", mid = "grey95",
@@ -1131,8 +1130,8 @@ plot_pit <- function(pit,
         aes(x = pit_value)
       ) +
         ggplot2::geom_histogram(aes(y = stat(count) / sum(count)),
-                                breaks = plot_quantiles,
-                                colour = "grey"
+          breaks = plot_quantiles,
+          colour = "grey"
         ) +
         facet_wrap(formula)
     }
@@ -1143,8 +1142,8 @@ plot_pit <- function(pit,
       aes(x = x)
     ) +
       geom_histogram(aes(y = stat(count) / sum(count)),
-                     breaks = plot_quantiles,
-                     colour = "grey"
+        breaks = plot_quantiles,
+        colour = "grey"
       )
   }
 
@@ -1209,7 +1208,7 @@ plot_avail_forecasts <- function(avail_forecasts,
     aes_string(y = y, x = x)
   ) +
     geom_tile(aes(fill = `Number forecasts`),
-              width = 0.97, height = 0.97
+      width = 0.97, height = 0.97
     ) +
     scale_fill_gradient(
       low = "grey95", high = "steelblue",
@@ -1233,4 +1232,3 @@ plot_avail_forecasts <- function(avail_forecasts,
 
   return(plot)
 }
-
