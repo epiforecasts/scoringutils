@@ -39,13 +39,13 @@ res <- summarise_scores(res, by = c("model"))
 #   c("score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
 # )
 
-res[, model := factor(model, levels = c("N(0, 1)", "N(0.5, 1)",
-                                        "N(0, 1.4)", "N(0, 0.7)"))]
-
-setcolorder(
-  res,
-  c("score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
-)
+# res[, model := factor(model, levels = c("N(0, 1)", "N(0.5, 1)",
+#                                         "N(0, 1.4)", "N(0, 0.7)"))]
+#
+# setcolorder(
+#   res,
+#   c("Score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
+# )
 
 scores_table_plot <- plot_score_table(res, y = "model") +
   coord_flip() +
