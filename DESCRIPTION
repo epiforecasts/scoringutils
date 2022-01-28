@@ -48,6 +48,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
+    forcats,
+    ggdist,
     ggplot2,
     scoringRules,
     stats,

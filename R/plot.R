@@ -430,6 +430,7 @@ plot_heatmap <- function(scores,
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' facet_wrap facet_grid sym geom_ribbon
 #' @importFrom data.table dcast
+#' @importFrom ggdist geom_lineribbon
 #' @export
 #'
 #' @examples
@@ -542,48 +543,38 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
+  plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
+    ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
+    ggplot2::theme_light()
 
-  plot <- ggplot(data = data, aes(x = !!sym(x))) +
-    scale_colour_manual("", values = c("black", "steelblue4")) +
-    scale_fill_manual(name = "range", values = pal(length(range))) +
-    theme_light()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
-      value.var = "prediction"
-    )
-    intervals[, range := factor(range,
-      levels = sort(unique(range), decreasing = TRUE),
-      ordered = TRUE
-    )]
+                                   value.var = "prediction")
 
-    # plot prediction ranges
-    plot <- plot +
-      geom_ribbon(
-        data = intervals,
-        aes(
-          ymin = lower, ymax = upper,
-          group = range, fill = range
-        )
-      )
-  }
-
-  # add median in a different colour
-  if (0 %in% range) {
     select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
-    median <- forecasts[select_median]
+    median <- forecasts[select_median, ]
+    median[, range := NULL]
 
-    if (nrow(median) > 0) {
-      plot <- plot +
-        geom_line(
-          data = median,
-          mapping = aes(y = prediction, colour = "median"),
-          lwd = 0.4
-        )
-    }
-  }
+    intervals[, .width := range / 100]
+
+    intervals <- merge.data.frame(intervals, median)
+
+    plot <- plot +
+      ggdist::geom_lineribbon(
+        data = intervals,
+        ggplot2::aes(ymin = lower, ymax = upper, y = prediction,
+                     fill_ramp = forcats::fct_rev(ordered(.width)),
+                     colour = "median"),
+        lwd = 0.4
+      ) +
+      ggdist::scale_fill_ramp_discrete(
+        name = "range",
+        labels = ~ as.numeric(as.character(.x)) * 100
+      )
+
+   }
 
   # add true_values
   if (nrow(truth_data) > 0) {
