@@ -11,9 +11,8 @@
 #'
 #' @param true_values A vector with the true observed values of size n
 #' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples. Alternatively, predictions can just be a vector
-#' of size n
+#' the number of data points and N (number of columns) the number of Monte
+#' Carlo samples. Alternatively, predictions can just be a vector of size n.
 #' @return vector with the scoring values
 #' @seealso [ae_median_quantile()], [abs_error()]
 #' @importFrom stats median
@@ -50,7 +49,6 @@ ae_median_sample <- function(true_values, predictions) {
 #' The function was created for internal use within [score()], but can also
 #' used as a standalone function.
 #'
-#' @param true_values A vector with the true observed values of size n
 #' @param predictions numeric vector with predictions, corresponding to the
 #' quantiles in a second vector, `quantiles`.
 #' @param quantiles numeric vector that denotes the quantile for the values
@@ -60,6 +58,7 @@ ae_median_sample <- function(true_values, predictions) {
 #' @return vector with the scoring values
 #' @seealso [ae_median_sample()], [abs_error()]
 #' @importFrom stats median
+#' @inheritParams ae_median_sample
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
@@ -71,7 +70,9 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
   if (!is.null(quantiles)) {
     if (!any(quantiles == 0.5) && !any(is.na(quantiles))) {
       return(NA_real_)
-      warning("in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?")
+      warning(
+        "in order to compute the absolute error of the median, `0.5` must be among the quantiles given. Maybe you want to use `abs_error()`?" # nolint
+      )
     }
     true_values <- true_values[quantiles == 0.5]
     predictions <- predictions[quantiles == 0.5]
@@ -92,10 +93,8 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #'   abs(true_value - prediction)
 #' }
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions numeric vector with predictions, corresponding to the
-#' quantiles in a second vector, `quantiles`.
 #' @return vector with the absolute error
+#' @inheritParams ae_median_quantile
 #' @seealso [ae_median_sample()], [ae_median_quantile()]
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
