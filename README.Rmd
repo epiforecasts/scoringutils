@@ -33,62 +33,34 @@ The goal of this package is to provide a tested and reliable collection of metri
 
 Predictions can be handled in various formats: `scoringutils` can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary. 
 
-## Input formats
 
-Most of the time, the `score()` function will be able to do the entire evaluation for you. All you need to do is to pass in a `data.frame` with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see `example_quantile` for the expected format), based on predictive samples (see `example_continuous` and `example_integer` for the expected format in each case) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below): 
+## Installation
 
-```{r, echo=FALSE}
-requirements <- data.table(
-  "Format" = c(
-    "quantile-based", "sample-based", "binary", "pairwise-comparisons"
-  ),
-  `Required columns` = c(
-    "'true_value', 'prediction', 'quantile'", "'true_value', 'prediction',
-    'sample'", "'true_value', 'prediction'", "additionally a column 'model'"
-  )
-)
-kable(requirements)
+Install the CRAN version of this package using:
+
+```{r, eval = FALSE}
+install.packages("scoringutils")
 ```
 
-Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. It is important, that there are only columns present which are relevant in order to group forecasts. A combination of different columns should uniquely define the *unit of a single forecast*, meaning that a single forecast is defined by the values in the other columns. 
+Install the stable development version of the package with:
 
-<!--- Might be nice to link to a grouping example here as it sounds a bit complicated --->
-
-
-## Checking the input data
-
-The function `check_forecasts()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
-
-```{r}
-head(example_quantile)
+```{r, eval = FALSE}
+install.packages("scoringutils", repos = "https://epiforecasts.r-universe.dev")
 ```
 
-```{r}
-check_forecasts(example_quantile)
+Install the unstable development from GitHub using the following, 
+
+```{r, eval = FALSE}
+remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 ```
 
-If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
+## Quick start
 
-## Showing available forecasts
+In this quick start guide we explore some of the functionality of the `scoringutils` package using quantile forecasts from the [ECDC forecasting hub](https://covid19forecasthub.eu/) as an example. For more detailed documentation please see the package vignettes, and individual function documentation.
 
-The function `avail_forecasts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
+### Plotting forecasts
 
-```{r}
-avail_forecasts(example_quantile, by = c("model", "target_type"))
-```
-
-We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts. 
-
-This information can also be visualised using the `plot_avail_forecasts()` function: 
-
-```{r, fig.width=11, fig.height=6}
-example_quantile %>%
-  avail_forecasts(by = c("model", "forecast_date", "target_type")) %>%
-  plot_avail_forecasts() + 
-  facet_wrap(~ target_type)
-```
-
-You can also visualise forecasts directly using the `plot_predictions()` function: 
+As a first step to evaluating the forecasts we visualise them. For the purposes of this example here we make use of `plot_predictions()` to filter the available forecasts for a single model, and forecast date.
 
 ```{r, fig.width = 9, fig.height = 6}
 example_quantile %>%
@@ -105,219 +77,40 @@ example_quantile %>%
   theme(legend.position = "bottom")
 ```
 
-## Scoring and summarising forecasts
+### Scoring forecasts
 
-Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores` takes care of summarising these scores to the level specified by the user. 
+Forecasts can be easily and quickly scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. Here we make use of additional functions from `scoringutils` to add empirical coverage-levels (`add_coverage()`), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
 
-```{r}
-score(example_quantile) %>%
-  head()
-```
-
-```{r}
+```{r score-example}
 example_quantile %>%
   score() %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
+  summarise_scores(
+    by = c("model", "target_type"),
+    relative_skill = TRUE,
+    baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
   kable()
 ```
 
-The `by` argument can be used to define the level of summary. By default, `by = NULL` is set to the unit of a single forecast. For quantile-based forecasts, unsummarised scores are returned for every quantile individually. It can therefore make sense to run `summarise_scores`even without any arguments provided. 
+`scoringutils` contains additional functionality to summarise these scores at different levels, to visualise them, and to explore the forecasts themselves. See the package vignettes and function documentation for more information.
 
-```{r}
-score(example_quantile) %>%
-  summarise_scores()
+## Citation
+
+If using `scoringutils` in your work please consider citing it using the following,
+
+```{r, echo = FALSE}
+citation("scoringutils")
 ```
 
-### Adding empirical coverage
+## How to make a bug report or feature request
 
-For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function `add_coverage()`. This function also requires a `by` argument which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed. 
+Please briefly describe your problem and what output you expect in an [issue](https://github.com/epiforecasts/scoringutils/issues). If you have a question, please don't open an issue. Instead, ask on our [Q and A page](https://github.com/epiforecasts/scoringutils/discussions/categories/q-a).
 
-```{r}
-score(example_quantile) %>%
-  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
-  summarise_scores(by = c("model", "target_type"))
-```
+## Contributing
 
-### Adding relative scores
+We welcome contributions and new contributors! We particularly appreciate help on priority problems in the [issues](https://github.com/epiforecasts/scoringutils/issues). Please check and add to the issues, and/or add a [pull request](https://github.com/epiforecasts/scoringutils/pulls).
 
-In order to better compare models against each other we can use relative scores which are computed based on pairwise comparisons (see details below). Relative scores can be added to the evaluation using the function `summarise_scores()`. This requires a column called 'model' to be present. Pairwise comparisons are computed according to the grouping specified in `by`: essentially, the data.frame with all scores gets split into different data.frames according to the values specified in `by` and relative scores are computed for every individual group separately. The `baseline` argumen allows us to specify a baseline that can be used to scale relative scores (all scores are divided by the baseline relative score). For example, to obtain relative scores separately for different forecast targets, we can run
-
-```{r}
-score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type"), 
-                   relative_skill = TRUE, 
-                   baseline = "EuroCOVIDhub-ensemble")
-```
-
-
-## Visualising scores
-
-### Coloured table
-
-A simple coloured table can be produced based on the scores: 
-
-```{r}
-score(example_integer) %>%
-  summarise_scores(by = c("model")) %>%
-  plot_score_table() 
-```
-
-### Score heatmap
-
-We can also summarise one particular metric across different categories using a simple heatmap: 
-
-```{r, fig.width=11, fig.height=6}
-score(example_continuous) %>%
-  summarise_scores(by = c("model", "location", "target_type")) %>%
-  plot_heatmap(x = "location", metric = "bias") + 
-    facet_wrap(~ target_type)
-```
-
-### Weighted interval score components
-
-The weighted interval score can be split up into three components: Over-prediction, under-prediction and dispersion. These can be visualised separately in the following way: 
-
-```{r}
-score(example_quantile) %>%
-  summarise_scores(by = c("target_type", "model")) %>%
-  plot_wis() + 
-  facet_wrap(~ target_type, scales = "free")
-```
-
-## Calibration
-
-Calibration is a measure statistical consistency between the forecasts and the observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the true observed value. Ideally, pit values should be uniformly distributed after the transformation. 
-
-We can compute pit values as such: 
-
-```{r}
-example_continuous %>%
-  pit(by = "model") 
-```
-
-And visualise the results as such: 
-
-```{r}
-example_continuous %>%
-  pit(by = c("model", "target_type")) %>%
-  plot_pit() + 
-  facet_grid(model ~ target_type)
-```
-
-Similarly for quantile-based forecasts: 
-
-```{r}
-example_quantile[quantile %in% seq(0.1, 0.9, 0.1), ] %>%
-  pit(by = c("model", "target_type")) %>%
-  plot_pit() + 
-  facet_grid(model ~ target_type)
-```
-
-Another way to look at calibration are interval coverage and quantile coverage. Interval coverage is the percentage of true values that fall inside a given central prediction interval. Quantile coverage is the percentage of observed values that fall below a given quantile level. 
-
-In order to plot interval coverage, you need to include "range" in the `by` argument to `summarise_scores()`. The green area on the plot marks conservative behaviour, i.e. your empirical coverage is greater than it nominally need be (e.g. 55% of true values covered by all 50% central prediction intervals.)
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "range")) %>%
-  plot_interval_coverage()
-```
-
-To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed. 
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "quantile")) %>%
-  plot_quantile_coverage()
-```
-
-## Pairwise comparisons
-
-Relative scores for different models can be computed using pairwise comparisons, a sort of pairwise tournament where all cominations of two models are compared against each other based on the overlapping set of available forecasts common to both models. Internally, a ratio of the mean scores of both models is computed. The relative score of a model is then the geometric mean of all mean score ratios which involve that model. When a baseline is provided, then that baseline is excluded from the relative scores for individual models (which therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model. 
-
-In `scoringutils`, pairwise comparisons can be made in two ways: Through the standalone function `pairwise_comparison()` or from within `summarise_scores` which simply adds relative scores to an existing set of scores. 
-
-```{r}
-example_quantile %>%
-  score() %>%
-  pairwise_comparison(by = "model", baseline = "EuroCOVIDhub-baseline")
-```
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores(by = "model", relative_skill = TRUE, baseline = "EuroCOVIDhub-baseline")
-```
-
-If using the `pairwise_comparison()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 
-
-```{r, fig.width=9, fig.height=7}
-example_quantile %>%
-  score() %>%
-  pairwise_comparison(by = c("model", "target_type")) %>%
-  plot_pairwise_comparison() + 
-  facet_wrap(~ target_type)
-```
-
-
-## Additional analyses and visualisations
-
-### Correlation between scores
-
-It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `correlation()` to summarise over quantiles before computing correlations.
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores() %>%
-  correlation()
-```
-
-Visualisng correlations: 
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores() %>%
-  correlation() %>%
-  plot_correlation()
-```
-
-### Scores by interval ranges
-
-If you would like to see how different forecast interval ranges contribute to average scores, you can viusalise scores by interval range: 
-
-```{r}
-example_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "range", "target_type")) %>%
-  plot_ranges() + 
-  facet_wrap(~ target_type, scales = "free")
-```
-
-## Tips and tricks - converting to sample-based forecasts
-
-Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values. 
-
-You can convert your forecasts into a sample-based format using the function `sample_to_quantile()`. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small. 
-
-```{r}
-example_integer %>%
-  sample_to_quantile(quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)) %>%
-  score() %>%
-  add_coverage(by = c("model", "target_type"))
-```
-
-## Available metrics
-
-An overview of available metrics can be found in the `metrics_summary` data set that is included in the package. 
-
-```{r}
-metrics_summary
-```
-
-## Lower level functions
-
-Most of these metrics are available as lower level functions and extensively documented. Have a look at the help files to understand these better. 
+## Code of Conduct
+  
+Please note that the `scoringutils` project is released with a [Contributor Code of Conduct](https://epiforecasts.io/scoringutils/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
