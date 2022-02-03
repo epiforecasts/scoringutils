@@ -18,12 +18,15 @@ A data frame with 346 rows and 10 columns:
 \item{prediction}{predicted value}
 }
 }
+\source{
+\url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+}
 \usage{
 example_binary
 }
 \description{
-A data set with binary predictions for COVID-19 cases and deaths constructed from data
-submitted to the European Forecast Hub.
+A data set with binary predictions for COVID-19 cases and deaths constructed
+from data submitted to the European Forecast Hub.
 }
 \details{
 Predictions in the data set were constructed based on the continuous example

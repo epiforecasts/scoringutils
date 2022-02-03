@@ -1,6 +1,7 @@
 #' Quantile Example Data
 #'
-#' A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
+#' A data set with predictions for COVID-19 cases and deaths submitted to the
+#' European Forecast Hub.
 #'
 #' @format A data frame with
 #' \describe{
@@ -15,14 +16,14 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/epiforecasts/covid19-forecast-hub-europe/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 "example_quantile"
 
 
 #' Continuous Forecast Example Data
 #'
-#' A data set with continuous predictions for COVID-19 cases and deaths constructed from data
-#' submitted to the European Forecast Hub.
+#' A data set with continuous predictions for COVID-19 cases and deaths
+#' constructed from data submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
@@ -37,13 +38,14 @@
 #'   \item{prediction}{predicted value}
 #'   \item{sample}{id for the corresponding sample}
 #' }
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 "example_continuous"
 
 
 #' Integer Forecast Example Data
 #'
-#' A data set with integer predictions for COVID-19 cases and deaths constructed from data
-#' submitted to the European Forecast Hub.
+#' A data set with integer predictions for COVID-19 cases and deaths
+#' constructed from data submitted to the European Forecast Hub.
 #'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
@@ -63,8 +65,8 @@
 
 #' Binary Forecast Example Data
 #'
-#' A data set with binary predictions for COVID-19 cases and deaths constructed from data
-#' submitted to the European Forecast Hub.
+#' A data set with binary predictions for COVID-19 cases and deaths constructed
+#' from data submitted to the European Forecast Hub.
 #'
 #' Predictions in the data set were constructed based on the continuous example
 #' data by looking at the number of samples below the mean prediction.
@@ -85,6 +87,7 @@
 #'   \item{horizon}{forecast horizon in weeks}
 #'   \item{prediction}{predicted value}
 #' }
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 "example_binary"
 
 
@@ -104,6 +107,7 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 "example_quantile_forecasts_only"
 
 
@@ -120,6 +124,7 @@
 #'   \item{true_value}{true observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 "example_truth_only"
 
 #' Summary information for selected metrics

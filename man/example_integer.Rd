@@ -23,7 +23,7 @@ A data frame with 13,429 rows and 10 columns:
 example_integer
 }
 \description{
-A data set with integer predictions for COVID-19 cases and deaths constructed from data
-submitted to the European Forecast Hub.
+A data set with integer predictions for COVID-19 cases and deaths
+constructed from data submitted to the European Forecast Hub.
 }
 \keyword{datasets}

@@ -20,12 +20,13 @@ A data frame with
 }
 }
 \source{
-\url{https://github.com/epiforecasts/covid19-forecast-hub-europe/}
+\url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 }
 \usage{
 example_quantile
 }
 \description{
-A data set with predictions for COVID-19 cases and deaths submitted to the European Forecast Hub.
+A data set with predictions for COVID-19 cases and deaths submitted to the
+European Forecast Hub.
 }
 \keyword{datasets}
