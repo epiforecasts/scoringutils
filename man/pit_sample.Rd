@@ -10,8 +10,8 @@ pit_sample(true_values, predictions, n_replicates = 100)
 \item{true_values}{A vector with the true observed values of size n}
 
 \item{predictions}{nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the
-number of Monte Carlo samples}
+the number of data points and N (number of columns) the number of Monte
+Carlo samples. Alternatively, predictions can just be a vector of size n.}
 
 \item{n_replicates}{the number of draws for the randomised PIT for
 integer predictions.}
@@ -76,7 +76,6 @@ In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.
 }
 \examples{
-library(scoringutils)
 ## continuous predictions
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
