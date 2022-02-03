@@ -2,26 +2,25 @@
 #'
 #' @description
 #' Plots a coloured table of summarised scores obtained using
-#' [score()]
+#' [score()].
 #'
-#' @param scores A data.frame of summarised scores as produced by
-#' [score()]
 #' @param y the variable to be shown on the y-axis. If `NULL` (default),
 #' all columns that are not scoring metrics will be used. Alternatively,
 #' you can specify a vector with column names, e.g.
 #' `y = c("model", "location")`. These column names will be concatenated
-#' to create a unique row identifier (e.g. "model1_location1")
+#' to create a unique row identifier (e.g. "model1_location1").
+#' 
 #' @param select_metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will
-#' be shown
+#' `NULL` (default), all metrics present in `scores` will be shown.
+#' 
 #' @return A ggplot2 object with a coloured table of summarised scores
+#' @inheritParams pairwise_comparison
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
 #' @importFrom stats sd
 #' @export
 #'
 #' @examples
-#' library("scoringutils")
 #' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
@@ -174,7 +173,7 @@ plot_score_table <- function(scores,
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()] and summarised using [summarise_scores()]
 #' @param x The variable from the scores you want to show on the x-Axis.
-#' Usually this will be "model"
+#' Usually this will be "model".
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
 #' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
