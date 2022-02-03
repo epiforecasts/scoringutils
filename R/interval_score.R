@@ -154,6 +154,7 @@ interval_score <- function(true_values,
 #' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
 #' @return vector with the scoring values
 #' @inheritParams interval_score
+#' @inheritParams ae_median_sample
 #' @examples
 #' true_values <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5

@@ -7,6 +7,8 @@
 correlation(scores, metrics = NULL)
 }
 \arguments{
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
+
 \item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will
 be shown}
