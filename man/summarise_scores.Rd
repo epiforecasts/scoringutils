@@ -55,4 +55,30 @@ permutations for a permutation test. Default is 999). See
 \description{
 Summarise scores as produced by \code{\link[=score]{score()}}-
 }
+\examples{
+library(magrittr) # pipe operator
+
+# summarise over samples or quantiles to get one score per forecast
+scores <- score(example_quantile)
+summarise_scores(scores)
+
+# get scores by model
+summarise_scores(scores, by = c("model"))
+
+# get scores by model and target type
+summarise_scores(scores, by = c("model", "target_type"))
+
+# get standard deviation
+summarise_scores(scores, by = "model", func = sd)
+
+# get quantiles of scores
+# make sure to aggregate over ranges first
+summarise_scores(scores,
+  by = "model", func = quantile,
+  probs = c(0.25, 0.5, 0.75)
+)
+
+# get ranges
+# summarise_scores(scores, by = "range")
+}
 \keyword{scoring}

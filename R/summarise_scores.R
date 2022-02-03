@@ -25,7 +25,7 @@
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
-#' @example
+#' @examples
 #' library(magrittr) # pipe operator
 #'
 #' # summarise over samples or quantiles to get one score per forecast
@@ -236,5 +236,5 @@ add_coverage <- function(scores,
   )
 
   scores_with_coverage <- merge(scores, coverages, by = by)
-  return(scores_with_coverage)
+  return(scores_with_coverage[])
 }
