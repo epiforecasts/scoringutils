@@ -315,7 +315,7 @@ compare_two_models <- function(scores,
   if (test_type == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
-      nPermutation = n_permutations,
+      n_permutation = n_permutations,
       one_sided = one_sided,
       comparison_mode = "difference"
     )

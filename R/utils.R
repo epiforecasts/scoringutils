@@ -188,7 +188,7 @@ available_metrics <- function() {
 
 permutation_test <- function(scores1,
                              scores2,
-                             nPermutation = 999,
+                             n_permutation = 999,
                              one_sided = FALSE,
                              comparison_mode = c("difference", "ratio")) {
   nTime <- length(scores1)
@@ -204,7 +204,7 @@ permutation_test <- function(scores1,
   } else {
     testStat_observed <- ifelse(one_sided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
   }
-  testStat_permuted <- replicate(nPermutation, {
+  testStat_permuted <- replicate(n_permutation, {
     sel <- rbinom(nTime, size = 1, prob = 0.5)
     g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1])) / nTime
     g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0])) / nTime
@@ -214,7 +214,7 @@ permutation_test <- function(scores1,
       ifelse(one_sided, g1 - g2, abs(g1 - g2))
     }
   })
-  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (nPermutation + 1)
+  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (n_permutation + 1)
   # plus ones to make sure p-val is never 0?
   return(pVal)
 }
@@ -231,6 +231,7 @@ permutation_test <- function(scores1,
 #' @return A data.table
 #'
 #' @keywords internal
+#' 
 delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
   df <- data.table::as.data.table(df)
   delete_columns <- names(df)[names(df) %in% cols_to_delete]
@@ -264,7 +265,9 @@ get_prediction_type <- function(data) {
   if (is.data.frame(data)) {
     if ("quantile" %in% names(data)) {
       return("quantile")
-    } else if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
+    } else if (isTRUE(
+      all.equal(data$prediction, as.integer(data$prediction)))
+    ) {
       return("integer")
     } else {
       return("continuous")
@@ -329,4 +332,3 @@ get_unit_of_forecast <- function(data) {
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
 }
-

@@ -95,14 +95,14 @@ test_that("pairwise comparisons works", {
     # perform permutation tests:
     if (permutation_test) {
       pval <- scoringutils:::permutation_test(sub$wis.x, sub$wis.y,
-        nPermutation = 999,
+        n_permutation = 999,
         comparison_mode = "difference"
       )
 
       # aggregate by forecast date:
       sub_fcd <- aggregate(cbind(wis.x, wis.y) ~ timezero, data = sub, FUN = mean)
       pval_fcd <- scoringutils:::permutation_test(sub_fcd$wis.x, sub_fcd$wis.y,
-        nPermutation = 999
+        n_permutation = 999
       )
     } else {
       pval <- NULL
