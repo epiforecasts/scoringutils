@@ -2,7 +2,6 @@
 #'
 #' @description
 #' Helper function to check inputs for lower-level score functions.
-#' @param true_values A vector with the true observed values of size n
 #' @param predictions an object with predictions. Depending on whether
 #' `class = vector` or `class = "matrix"` this can be either a vector of length
 #' n (corresponding to the length of the true_values) or a nxN matrix of
@@ -12,6 +11,7 @@
 #' defines the type of the forecast
 #' @param class character, either "vector" or "matrix" that determines the
 #' class the input has to correspond to
+#' @inheritParams ae_median_sample
 #' @return NULL
 #' @keywords internal
 
@@ -121,7 +121,7 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  for (i in 1:length(vars)) {
+  for (i in seq_along(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
@@ -141,7 +141,8 @@ check_not_null <- function(...) {
 #' @description
 #' Check whether variables all have the same length
 #' @param ... The variables to check
-#' @param one_allowed logical, allow arguments of length one that can be recycled
+#' @param one_allowed logical, allow arguments of length one that can be
+#' recycled
 #'
 #' @return The function returns `NULL`, but throws an error if variable lengths
 #' differ
@@ -180,11 +181,10 @@ check_equal_length <- function(...,
 #' @description Helper function to check that the input is in fact a data.frame
 #' or similar and remove rows with no value for `prediction` or `true_value`
 #'
-#' @param data A data.frame or similar as it gets passed to [score()].
 #' @param verbose Boolean (default is `TRUE`), whether or not to print warnings
 #'
 #' @return A data.table with NA values in `true_value` or `prediction` removed.
-#'
+#' @inheritParams avail_forecasts
 #' @importFrom data.table as.data.table
 #'
 #' @keywords internal
@@ -193,7 +193,7 @@ check_clean_data <- function(data, verbose = TRUE) {
   if (!is.data.frame(data)) {
     stop("Input should be a data.frame or similar")
   }
-  data <- as.data.table(data)
+  data <- data.table::as.data.table(data)
 
   # make sure necessary columns are present
   if (!all(c("true_value", "prediction") %in% colnames(data))) {
@@ -258,4 +258,3 @@ check_metrics <- function(metrics) {
   }
   return(metrics)
 }
-

@@ -7,7 +7,8 @@
 check_clean_data(data, verbose = TRUE)
 }
 \arguments{
-\item{data}{A data.frame or similar as it gets passed to \code{\link[=score]{score()}}.}
+\item{data}{data.frame with predictions in the same format required for
+\code{\link[=score]{score()}}.}
 
 \item{verbose}{Boolean (default is \code{TRUE}), whether or not to print warnings}
 }
