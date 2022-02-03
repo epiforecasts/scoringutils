@@ -9,8 +9,6 @@ quantile_score(true_values, predictions, quantiles, weigh = TRUE)
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{predictions}{vector of size n with the lower quantile of the given range}
-
 \item{quantiles}{vector of size n with the quantile values of the
 corresponding predictions.}
 
@@ -32,7 +30,6 @@ the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
 }
 \examples{
-library(scoringutils)
 true_values <- rnorm(10, mean = 1:10)
 alpha <- 0.5
 

@@ -41,8 +41,10 @@ default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Default:
-\code{TRUE}.}
+into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+decimal value that  represents how much is outside a central prediction
+interval (E.g. for a 90 percent central prediction interval, alpha is 0.1)
+Default: \code{TRUE}.}
 
 \item{count_median_twice}{logical that controls whether or not to count the
 median twice when summarising (default is \code{FALSE}). Counting the

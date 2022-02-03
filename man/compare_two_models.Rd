@@ -9,14 +9,13 @@ compare_two_models(
   name_model1,
   name_model2,
   metric,
-  oneSided = FALSE,
+  one_sided = FALSE,
   test_type = c("non_parametric", "permutation"),
   n_permutations = 999
 )
 }
 \arguments{
-\item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=score]{score()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{name_model1}{character, name of the first model}
 
@@ -27,8 +26,9 @@ comparison on. The default is "auto", meaning that either "interval_score",
 "crps", or "brier_score" will be selected where available.
 See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
 
-\item{oneSided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
-instead of a two-sided test to determine significance in a pairwise comparison}
+\item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test to determine significance in a pairwise
+comparison.}
 
 \item{test_type}{character, either "non_parametric" (the default) or
 "permutation". This determines which kind of test shall be conducted to
