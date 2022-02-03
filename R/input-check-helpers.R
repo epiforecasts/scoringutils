@@ -120,7 +120,7 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  for (i in seq_len(vars)) {
+  for (i in seq_along(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
