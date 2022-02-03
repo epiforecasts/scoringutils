@@ -10,10 +10,7 @@
 #' integer-valued Monte Carlo Samples. The Log Score can be used for specific
 #' integer valued probability distributions. See the scoringRules package for
 #' more details.
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams ae_median_sample
 #' @return vector with the scoring values
 #' @importFrom scoringRules logs_sample
 #' @examples
@@ -39,18 +36,13 @@ logs <- function(true_values, predictions) {
   )
 }
 
-
-
 #' @title Dawid-Sebastiani Score
 #'
 #' @description
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package.
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams logs
 #' @return vector with scoring values
 #' @importFrom scoringRules dss_sample
 #' @examples
@@ -75,7 +67,6 @@ dss <- function(true_values, predictions) {
   )
 }
 
-
 #' @title Ranked Probability Score
 #'
 #' @description
@@ -83,10 +74,7 @@ dss <- function(true_values, predictions) {
 #' function from the
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams logs
 #' @return vector with the scoring values
 #' @importFrom scoringRules crps_sample
 #' @examples
@@ -111,5 +99,3 @@ crps <- function(true_values, predictions) {
     dat = predictions
   )
 }
-
-
