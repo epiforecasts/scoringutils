@@ -8,10 +8,10 @@ avail_forecasts(data, by = NULL, collapse = c("quantile", "sample"))
 }
 \arguments{
 \item{data}{data.frame with predictions in the same format required for
-\code{\link[=score]{score()}}}
+\code{\link[=score]{score()}}.}
 
-\item{by}{character vector or \code{NULL} (the default) that
-denotes the categories over which the number of forecasts should be counted.
+\item{by}{character vector or \code{NULL} (the default) that denotes the
+categories over which the number of forecasts should be counted.
 By default (\code{by = NULL}) this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
 'prediction' and 'true value') plus "quantile" or "sample" where present).}
