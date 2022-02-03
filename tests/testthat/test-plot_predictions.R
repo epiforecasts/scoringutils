@@ -66,3 +66,26 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
   skip_on_cran()
   vdiffr::expect_doppelganger("many_quantiles_from_sample", p2)
 })
+
+test_that("plot_predictions() works without median", {
+
+  example3 <- subset(
+    scoringutils::range_example_data_long,
+    is.na(range) | range != 0
+  )
+
+  p <- scoringutils::plot_predictions(
+    example3, x = "value_date",
+    filter_truth = list('value_date <= "2020-06-22"',
+                        'value_date > "2020-05-01"'),
+    filter_forecasts = list("model == 'SIRCOVID'",
+                            'creation_date == "2020-06-22"'),
+    allow_truth_without_pred = TRUE,
+    facet_formula = geography ~ value_desc
+  )
+  expect_s3_class(p, "ggplot")
+
+  skip_on_cran()
+  vdiffr::expect_doppelganger('no_median', p)
+
+})

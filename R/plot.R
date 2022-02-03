@@ -544,43 +544,39 @@ plot_predictions <- function(data = NULL,
   }
 
   plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
-    ggplot2::scale_colour_manual("",values = c("black", "steelblue4")) +
+    ggplot2::scale_colour_manual("", values = c("black", "steelblue4")) +
     ggplot2::theme_light()
-
-  select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
-  median <- forecasts[select_median, ]
-  median[, range := NULL]
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
                                    value.var = "prediction")
 
-    intervals[, .width := range / 100]
-
-    intervals <- merge.data.frame(intervals, median)
-
     plot <- plot +
       ggdist::geom_lineribbon(
         data = intervals,
-        ggplot2::aes(ymin = lower, ymax = upper, y = prediction,
-                     fill_ramp = forcats::fct_rev(ordered(.width)),
-                     colour = "median"),
+        ggplot2::aes(ymin = lower, ymax = upper,
+                     fill_ramp = forcats::fct_rev(ordered(range))),
         lwd = 0.4
       ) +
       ggdist::scale_fill_ramp_discrete(
-        name = "range",
-        labels = ~ as.numeric(as.character(.x)) * 100
+        name = "range"
       )
 
-   } else {
+  }
 
-     plot <- plot +
-       ggplot2::geom_line(data = median,
-                          mapping = ggplot2::aes(y = prediction, colour = "median"),
-                          lwd = 0.4)
+  # add median in a different colour
+  if (0 %in% range) {
+    select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
+    median <- forecasts[select_median]
 
-   }
+    if (nrow(median) > 0) {
+      plot <- plot +
+        ggplot2::geom_line(data = median,
+                           mapping = ggplot2::aes(y = prediction, colour = "median"),
+                           lwd = 0.4)
+    }
+  }
 
   # add true_values
   if (nrow(truth_data) > 0) {
