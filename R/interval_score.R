@@ -7,8 +7,10 @@
 #' The score is computed as
 #'
 #' \deqn{
-#' \text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower} - \text{true_value}) *
-#' \mathbf{1}(\text{true_value} < \text{lower}) + \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
+#' \text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower}
+#'  - \text{true_value}) *
+#' \mathbf{1}(\text{true_value} < \text{lower}) +
+#' \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
 #' \mathbf{1}(\text{true_value} > \text{upper})
 #' }{
 #' score = (upper - lower) + 2/alpha * (lower - true_value) *
@@ -79,7 +81,7 @@
 #'
 #' Evaluating epidemic forecasts in an interval format,
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618> # nolint
 #'
 
 interval_score <- function(true_values,
@@ -95,7 +97,9 @@ interval_score <- function(true_values,
     methods::hasArg("upper"), methods::hasArg("interval_range")
   )
   if (!all(present)) {
-    stop("need all arguments 'true_values', 'lower', 'upper' and 'interval_range' in function 'interval_score()'")
+    stop(
+      "need all arguments 'true_values', 'lower', 'upper' and 'interval_range' in function 'interval_score()'" # nolint
+    )
   }
   check_not_null(
     true_values = true_values, lower = lower, upper = upper,
