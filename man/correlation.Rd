@@ -7,9 +7,6 @@
 correlation(scores, metrics = NULL)
 }
 \arguments{
-\item{scores}{A data.frame of scores as produced by
-\code{\link[=score]{score()}}}
-
 \item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will
 be shown}
@@ -19,10 +16,9 @@ A data.table with correlations for the different metrics
 }
 \description{
 Calculate the correlation between different metrics for a data.frame of
-scores as produced by \code{\link[=score]{score()}}
+scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{
-library(scoringutils)
 scores <- score(example_quantile)
 correlation(scores)
 }
