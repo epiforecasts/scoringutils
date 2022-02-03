@@ -61,9 +61,10 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
 $$</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>, quantiles <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>, quantiles <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>true_values</dt>
@@ -83,18 +84,17 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
     <h2>Value</h2>
     <p>vector with the scoring values</p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.53239015 1.07395512 2.30459994 0.07501671 1.85696591 2.06022888</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.66926734 1.77442998 1.90230890 0.34929136 2.82930685 1.07457577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.87261081 1.16601283 0.49142129 0.56798273 1.30534125 1.42228083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.37763997 0.67903727 0.70372114 0.05047248 0.56488271 0.24292501</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.12091533 0.20760924 0.00457653 0.20471873 1.63170608 0.11401308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.0823990 1.0951594 1.4760775 0.4225236 0.9819515 0.8331011 0.6031938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7605393 1.4629271 2.6074582 0.2920209 1.6678222 2.4123809 1.4735109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.7275337 2.7979253 1.7052414 0.5460384 0.9456109 0.6076628 0.4104693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.4529863 0.8422643 0.5954654 1.2948645 0.2297411 1.4018573 2.8632554</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.8494528 3.2012277</span>
 </code></pre></div>
     </div>
   </div>
@@ -109,7 +109,7 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

@@ -61,9 +61,10 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
 $$</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>true_values</dt>
@@ -76,18 +77,17 @@ quantiles in a second vector, <code>quantiles</code>.</p></dd>
     <h2>Value</h2>
     <p>vector with the absolute error</p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">abs_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.750657595 1.315054642 0.607062806 1.067938760 0.404114029 1.171129410</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.985616703 3.032901344 0.065242477 1.343649427 0.031171895 0.350657918</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.555799085 0.003453768 1.847406753 1.331271967 2.464726247 1.516100123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.734255918 0.098531733 0.833673040 1.275461866 0.431632994 2.003317358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.701795371 2.337694961 2.102959986 0.130839187 0.113269559 0.086461357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.3003350 1.1983171 0.5002037 0.2541159 0.8928215 0.9478483 2.2132311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4229864 3.4611467 0.9094228 0.6561996 0.2316410 1.6715863 0.5796345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 1.1514813 0.0154054 1.0752660 0.2275531 0.3475100 0.8526174 0.8597343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.9745180 1.8018320 1.3839005 1.4733456 0.9618699 1.7276817 0.7424417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.3386097 1.1038488</span>
 </code></pre></div>
     </div>
   </div>
@@ -102,7 +102,7 @@ quantiles in a second vector, <code>quantiles</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

@@ -59,9 +59,10 @@ automatically recognises, whether forecasts are continuous or
 integer valued and adapts the Bias function accordingly.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>true_values</dt>
@@ -108,26 +109,25 @@ region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
     <h2>Author</h2>
     <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="co">## integer valued forecasts</span></span>
 <span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.630 -0.090 -0.110 -0.405 -0.475  0.615  0.470 -0.060  0.500  0.505</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.145 -0.595 -0.610 -0.965  0.250 -0.940  0.030  0.305  0.940  0.175</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.390 -0.160  0.805  0.365 -0.980 -0.815 -0.115 -0.750 -0.935  0.815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.080 -0.525  0.410  0.020  0.855  0.580  0.485  0.715  0.020 -0.880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] -0.910 -0.365  0.225  0.735  0.085 -0.560  0.285 -0.225  0.835 -0.230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.595  0.525  0.085  0.815  0.165  0.835 -0.740 -0.680 -0.015  0.880</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## continuous forecasts</span></span>
 <span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">bias</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.50  0.73 -0.48 -0.06 -0.27 -0.22  0.86 -0.29 -0.27  0.79 -0.91 -0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.04  0.52  0.33 -0.45 -0.62  0.74 -0.86 -0.23  0.36 -0.83 -0.40 -0.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.43 -0.93 -0.15  0.44 -0.27 -0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.40  0.95  0.53  0.79 -0.05  0.15 -0.89 -0.85 -0.05 -0.26 -0.48 -0.16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.98  0.39 -0.74 -0.16 -0.11  0.10 -0.49 -0.74  0.12 -0.65 -0.62  0.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.57  0.84  0.84 -0.95  0.26  0.48</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 </code></pre></div>
@@ -144,7 +144,7 @@ region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

@@ -61,9 +61,10 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
 $$</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">ae_median_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ae_median_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>true_values</dt>
@@ -78,18 +79,17 @@ of size n</p></dd>
     <h2>Value</h2>
     <p>vector with the scoring values</p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.76291786 1.53249524 0.11709869 0.04775799 0.83596935 2.42612871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.13838198 2.88435066 0.28215673 1.20124918 0.04305495 0.09005689</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.71560306 0.53876500 0.32230057 1.40839201 0.49023873 1.59816610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.55914293 1.80667716 1.87734504 0.64396185 2.15390098 1.40079639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 2.91942970 0.98702452 1.71129017 0.92913383 0.91111345 1.29484381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.99372439 0.02581233 1.86127272 0.27273279 1.24653434 1.07227943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.23409677 0.08246609 0.59709919 0.91452256 2.90217271 2.63026176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.18071823 0.22790269 1.39388574 0.08743049 2.38810732 0.69211049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.48852450 4.71744809 1.77087010 1.08554160 0.53414263 0.60820361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.18708928 1.57092958 1.95419939 1.67394690 1.24262683 0.20118495</span>
 </code></pre></div>
     </div>
   </div>
@@ -104,7 +104,7 @@ of size n</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

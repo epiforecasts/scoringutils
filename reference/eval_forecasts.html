@@ -61,7 +61,8 @@ It can be used to score probabilistic or quantile forecasts of
 continuous, integer-valued or binary variables.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">eval_forecasts</span><span class="op">(</span>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">eval_forecasts</span><span class="op">(</span>
   data <span class="op">=</span> <span class="cn">NULL</span>,
   by <span class="op">=</span> <span class="cn">NULL</span>,
   summarise_by <span class="op">=</span> <span class="va">by</span>,
@@ -80,8 +81,8 @@ continuous, integer-valued or binary variables.</p>
   rel_skill_metric <span class="op">=</span> <span class="st">"auto"</span>,
   baseline <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
@@ -245,11 +246,10 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
     <h2>Author</h2>
     <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Probability Forecast for Binary Target</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Probability Forecast for Binary Target</span></span>
 <span class="r-in"><span class="va">binary_example</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="fu">scoringutils</span><span class="fu">::</span><span class="va"><a href="binary_example_data.html">binary_example_data</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">::</span><span class="fu">eval_forecasts</span><span class="op">(</span><span class="va">binary_example</span>,</span>
 <span class="r-in">                                     summarise_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span>,</span>
@@ -303,7 +303,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

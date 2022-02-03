@@ -55,9 +55,10 @@
     <p>Determines sharpness of a probabilistic forecast</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">sharpness</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sharpness</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>predictions</dt>
@@ -85,15 +86,14 @@ Assessing the performance of real-time epidemic forecasts: A case study of
 Ebola in the Western Area region of Sierra Leone, 2014-15.
 PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi:10.1371/journal.pcbi.1006785</a></p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">sharpness</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 4.4478 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478 5.1891</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 4.4478 5.1891 5.9304 4.4478 4.4478 4.4478 5.9304 5.9304 5.9304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 4.4478 5.1891 4.4478 4.4478 5.1891 4.4478 5.1891 4.4478 5.9304</span>
 </code></pre></div>
     </div>
   </div>
@@ -108,7 +108,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>

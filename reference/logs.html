@@ -71,9 +71,10 @@ integer valued probability distributions. See the scoringRules package for
 more details.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">logs</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">logs</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>true_values</dt>
@@ -92,17 +93,17 @@ number of Monte Carlo samples</p></dd>
     <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" class="external-link">https://arxiv.org/pdf/1709.04743.pdf</a></p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">logs</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.521314 2.099794 1.426211 2.773900 1.781897 3.778564 2.171637 2.099033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 2.201545 4.118327 3.167744 2.515577 2.719607 2.238035 2.682366 2.683720</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 2.572604 2.875912 2.670528 2.437675 2.607143 2.418438 2.950042 3.053461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 2.679063 2.645951 2.692891 2.606936 3.383689 4.671227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9074077 2.0774202 1.7369835 1.7797717 1.6074591 2.3780431 2.2357113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.7245183 2.0945605 2.7778915 2.3307772 2.3499451 2.7910577 2.3599910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.4380732 2.7408452 2.4065787 2.3880853 2.4585266 2.4650147 2.5211308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.6787787 2.6402874 3.6924427 5.0570521 3.5582763 2.6045067 2.6886668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 3.4416720 2.8665158</span>
 </code></pre></div>
     </div>
   </div>
@@ -117,7 +118,7 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer></div>
