@@ -70,18 +70,17 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 test_that("plot_predictions() works without median", {
 
   example3 <- subset(
-    scoringutils::range_example_data_long,
-    is.na(range) | range != 0
+    scoringutils::example_quantile,
+    is.na(quantile) | quantile != 0.5
   )
 
   p <- scoringutils::plot_predictions(
-    example3, x = "value_date",
-    filter_truth = list('value_date <= "2020-06-22"',
-                        'value_date > "2020-05-01"'),
-    filter_forecasts = list("model == 'SIRCOVID'",
-                            'creation_date == "2020-06-22"'),
-    allow_truth_without_pred = TRUE,
-    facet_formula = geography ~ value_desc
+    example3, x = "target_end_date",
+    filter_truth = list("target_end_date > '2021-06-25'",
+                        "target_end_date <= '2021-07-12'"),
+    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
+                            "forecast_date == '2021-07-12'"),
+    facet_formula = location_name ~ target_type
   )
   expect_s3_class(p, "ggplot")
 
