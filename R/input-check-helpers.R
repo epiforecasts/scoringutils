@@ -36,7 +36,7 @@ check_predictions <- function(predictions,
     }
     if (!is.null(true_values) && length(predictions) != length(true_values)) {
       msg <- sprintf(
-        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
+        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.", # nolint
         length(true_values), length(predictions)
       )
       stop(msg)
