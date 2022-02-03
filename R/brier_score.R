@@ -12,7 +12,8 @@
 #' probabilistic prediction and the true outcome.
 #'
 #' \deqn{
-#'   \text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction_t} - \text{outcome_t})^2
+#'   \text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction_t} -
+#'   \text{outcome_t})^2
 #' }{
 #'   Brier_Score = 1/N \sum_{t = 1}^{n} (prediction_t - outcome_t)²
 #' }
@@ -23,7 +24,6 @@
 #' that true_value = 1.
 #' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
-#' @importFrom methods hasArg
 #' @export
 #'
 #' @examples
