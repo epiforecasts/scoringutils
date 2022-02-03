@@ -120,7 +120,7 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  for (i in 1:length(vars)) {
+  for (i in seq_len(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
@@ -192,7 +192,7 @@ check_clean_data <- function(data, verbose = TRUE) {
   if (!is.data.frame(data)) {
     stop("Input should be a data.frame or similar")
   }
-  data <- as.data.table(data)
+  data <- data.table::as.data.table(data)
 
   # make sure necessary columns are present
   if (!all(c("true_value", "prediction") %in% colnames(data))) {
