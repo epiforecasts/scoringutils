@@ -2,7 +2,7 @@
 title: 'scoringutils: Utilities for Scoring and Assessing Predictions'
 output:
   github_document:
-    toc: true
+    toc: false
 ---
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/workflows/R-CMD-check/badge.svg)](https://github.com/epiforecasts/scoringutils/actions)
@@ -24,38 +24,43 @@ library(scoringutils)
 library(magrittr)
 library(data.table)
 library(ggplot2)
+library(knitr)
 ```
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. The `scoringutils` package offers convenient automated forecast evaluation in a data.table format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. The `scoringutils` package offers convenient automated forecast evaluation in a `data.table` format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
 
-The goal of this package is to provide a tested and reliable collection of metrics that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the `scoringRules` package, which provides a comprehensive collection of proper scoring rules (also used in `scoringutils`). In contrast to `scoringutils`, there is little functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models. 
+The goal of this package is to provide a tested and reliable collection of metrics that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the `scoringRules` package, which provides a comprehensive collection of proper scoring rules (also used in `scoringutils`). In contrast to other packages, `scoringutils` offers functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models. 
 
 Predictions can be handled in various formats: `scoringutils` can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary. 
 
 ## Input formats
 
-Most of the time, the `score` function will be able to do the entire evaluation for you. All you need to do is to pass in a `data.frame` with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see `example_quantile`), based on predictive samples (see `example_continuous` and `example_integer`) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below): 
+Most of the time, the `score()` function will be able to do the entire evaluation for you. All you need to do is to pass in a `data.frame` with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see `example_quantile` for the expected format), based on predictive samples (see `example_continuous` and `example_integer` for the expected format in each case) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below): 
 
 ```{r, echo=FALSE}
-requirements <- 
-  data.table(
-    "Format" = c("quantile-based", "sample-based", "binary", "pairwise-comparisons"), 
-    `Required columns` = c("'true_value', 'prediction', 'quantile'", 
-                           "'true_value', 'prediction', 'sample'", 
-                           "'true_value', 'prediction'", 
-                           "additionally a column 'model'")
+requirements <- data.table(
+  "Format" = c(
+    "quantile-based", "sample-based", "binary", "pairwise-comparisons"
+  ),
+  `Required columns` = c(
+    "'true_value', 'prediction', 'quantile'", "'true_value', 'prediction',
+    'sample'", "'true_value', 'prediction'", "additionally a column 'model'"
   )
-requirements
+)
+kable(requirements)
 ```
 
 Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. It is important, that there are only columns present which are relevant in order to group forecasts. A combination of different columns should uniquely define the *unit of a single forecast*, meaning that a single forecast is defined by the values in the other columns. 
+
+<!--- Might be nice to link to a grouping example here as it sounds a bit complicated --->
+
 
 ## Checking the input data
 
 The function `check_forecasts()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
 
 ```{r}
-example_quantile
+head(example_quantile)
 ```
 
 ```{r}
@@ -69,46 +74,51 @@ If you are unsure what your input data should look like, have a look at the `exa
 The function `avail_forecasts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r}
-avail_forecasts(example_quantile, 
-                by = c("model", "target_type"))
+avail_forecasts(example_quantile, by = c("model", "target_type"))
 ```
 
-We see that 'epiforecasts-EpiNow2' has some missing forecasts and that UMass-MechBayes has no case forecasts. 
+We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts. 
 
-This information can also be visualised: 
+This information can also be visualised using the `plot_avail_forecasts()` function: 
 
 ```{r, fig.width=11, fig.height=6}
-avail_forecasts(example_quantile, 
-                by = c("model", "forecast_date", "target_type")) %>%
+example_quantile %>%
+  avail_forecasts(by = c("model", "forecast_date", "target_type")) %>%
   plot_avail_forecasts() + 
   facet_wrap(~ target_type)
-
 ```
 
-You can visualise forecasts directly using the `plot_predictions` function: 
+You can also visualise forecasts directly using the `plot_predictions()` function: 
 
-```{r, fig.width=9, fig.height=6}
-plot_predictions(data = example_quantile,
-                 x = "target_end_date",
-                 filter_truth = list('target_end_date <= "2021-07-15"',
-                                     'target_end_date > "2021-05-22"'),
-                 filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                                         'forecast_date == "2021-06-28"')) +
+```{r, fig.width = 9, fig.height = 6}
+example_quantile %>%
+  plot_predictions(
+    x = "target_end_date",
+    filter_truth = list(
+      'target_end_date <= "2021-07-15"', 'target_end_date > "2021-05-22"'
+    ),
+    filter_forecasts = list(
+      "model == 'EuroCOVIDhub-ensemble'", 'forecast_date == "2021-06-28"'
+    )
+  ) +
   facet_wrap(target_type ~ location, ncol = 4, scales = "free") +
   theme(legend.position = "bottom")
 ```
 
 ## Scoring and summarising forecasts
 
-Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores` takes care of the summary. 
-
-```{r}
-score(example_quantile)
-```
+Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores` takes care of summarising these scores to the level specified by the user. 
 
 ```{r}
 score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type"))
+  head()
+```
+
+```{r}
+example_quantile %>%
+  score() %>%
+  summarise_scores(by = c("model", "target_type")) %>%
+  kable()
 ```
 
 The `by` argument can be used to define the level of summary. By default, `by = NULL` is set to the unit of a single forecast. For quantile-based forecasts, unsummarised scores are returned for every quantile individually. It can therefore make sense to run `summarise_scores`even without any arguments provided. 
