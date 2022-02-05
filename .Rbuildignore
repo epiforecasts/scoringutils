@@ -14,3 +14,4 @@
 ^inst/manuscript/manuscript_cache$
 ^\.lintr$
 ^docs$
+^\.devcontainer$
