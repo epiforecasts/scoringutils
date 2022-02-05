@@ -5,7 +5,7 @@ library(data.table)
 
 # generate predictions data.table
 n_truth = 1000
-n_samples = 100
+n_samples = 1000
 true_values <- rnorm(n_truth, 0, 1)
 predictions1 <- rnorm(n_truth * n_samples)
 predictions2 <- rnorm(n_truth * n_samples, mean = 0.5)
@@ -46,16 +46,15 @@ res <- summarise_scores(res, by = c("model"))
 #   res,
 #   c("Score", "N(0, 1)", "N(0.5, 1)", "N(0, 1.4)", "N(0, 0.7)")
 # )
+#
+# saveRDS(object = scores_table,
+#         file = "inst/manuscript/plots/calibration-diagnostic-examples.Rda")
+
 
 scores_table_plot <- plot_score_table(res, y = "model") +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust = 0.5)) +
   theme(legend.position = "none")
-
-
-
-saveRDS(object = scores_table,
-        file = "inst/manuscript/plots/calibration-diagnostic-examples.Rda")
 
 
 # create histogram true vs. predicted ------------------------------------------
