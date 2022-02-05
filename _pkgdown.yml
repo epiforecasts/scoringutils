@@ -1,3 +1,23 @@
+url: epiforecasts.io/scoringutils/
+template:
+  bootstrap: 5
+  package: preferably
+  params:
+    toggle: manual
+  twitter:
+    creator: "@nikosbosse"
+    card: summary_large_image
+
+development:
+  mode: release
+
+authors:
+  Nikos Bosse:
+    href: "https://followtheargument.org/"
+  Sam Abbott:
+    href: "https://www.samabbott.co.uk/"
+
+
 reference:
         - title: Package documentation
           contents:
