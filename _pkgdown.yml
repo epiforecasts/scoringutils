@@ -21,7 +21,8 @@ authors:
 reference:
         - title: Package documentation
           contents:
-                - scoringutils
+                - scoring-forecasts-directly
+                - metric-details
         - title: Functions to check and analyse inputs
           contents:
                 - has_keyword("check-forecasts")
