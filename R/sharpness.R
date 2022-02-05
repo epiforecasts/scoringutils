@@ -29,10 +29,8 @@
 #' @keywords metric
 
 mad_sample <- function(predictions) {
-
   check_predictions(predictions, class = "matrix")
 
   sharpness <- apply(predictions, MARGIN = 1, mad)
   return(sharpness)
 }
-

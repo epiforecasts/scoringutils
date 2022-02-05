@@ -12,4 +12,5 @@
 ^Meta$
 ^_pkgdown\.yml$
 ^inst/manuscript/manuscript_cache$
+^\.lintr$
 ^docs$

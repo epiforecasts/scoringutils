@@ -19,7 +19,6 @@ check_predictions <- function(predictions,
                               true_values = NULL,
                               type = c("continuous", "integer", "binary"),
                               class = c("vector", "matrix")) {
-
   type <- match.arg(type)
   class <- match.arg(class)
 
@@ -37,7 +36,7 @@ check_predictions <- function(predictions,
     }
     if (!is.null(true_values) && length(predictions) != length(true_values)) {
       msg <- sprintf(
-        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
+        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.", # nolint
         length(true_values), length(predictions)
       )
       stop(msg)
@@ -121,7 +120,7 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  for (i in 1:length(vars)) {
+  for (i in seq_along(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
@@ -151,9 +150,9 @@ check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
   lengths <- sapply(vars,
-                    FUN = function(x) {
-                      length(x)
-                    }
+    FUN = function(x) {
+      length(x)
+    }
   )
 
   lengths <- unique(lengths)
@@ -193,7 +192,7 @@ check_clean_data <- function(data, verbose = TRUE) {
   if (!is.data.frame(data)) {
     stop("Input should be a data.frame or similar")
   }
-  data <- as.data.table(data)
+  data <- data.table::as.data.table(data)
 
   # make sure necessary columns are present
   if (!all(c("true_value", "prediction") %in% colnames(data))) {
@@ -258,4 +257,3 @@ check_metrics <- function(metrics) {
   }
   return(metrics)
 }
-

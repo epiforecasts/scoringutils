@@ -1,5 +1,4 @@
 test_that("Lower-level input check functions work", {
-
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(20, rpois(n = 30, lambda = 1:30))
   expect_equal(length(crps(true_values, predictions)), 30)
@@ -7,36 +6,41 @@ test_that("Lower-level input check functions work", {
   # should error when wrong prediction type is given
   predictions2 <- rpois(30, lambda = 1)
   expect_error(crps(true_values, predictions2),
-               "'predictions' should be a matrix. Instead `integer` was found",
-               fixed = TRUE)
+    "'predictions' should be a matrix. Instead `integer` was found",
+    fixed = TRUE
+  )
 
   # predictions have wrong number of rows
   predictions3 <- replicate(20, rpois(n = 31, lambda = 1))
   expect_error(crps(true_values, predictions3),
-               "Mismatch: 'true_values' has length `30`, but 'predictions' has `31` rows.",
-               fixed = TRUE)
+    "Mismatch: 'true_values' has length `30`, but 'predictions' has `31` rows.",
+    fixed = TRUE
+  )
 
   # error with missing argument
   expect_error(crps(predictions = predictions),
-               "true_values argument is missing",
-               fixed = TRUE)
+    "true_values argument is missing",
+    fixed = TRUE
+  )
 
   # checks work for binary forecasts
-  true_values <- sample(c(0,1), size = 10, replace = TRUE)
+  true_values <- sample(c(0, 1), size = 10, replace = TRUE)
   predictions <- runif(n = 10)
   expect_equal(length(brier_score(true_values, predictions)), 10)
 
   # true values are not either 0 or 1
   true_values2 <- true_values + 2
   expect_error(brier_score(true_values2, predictions),
-               "For a binary forecast, all true_values should be either 0 or 1.",
-               fixed = TRUE)
+    "For a binary forecast, all true_values should be either 0 or 1.",
+    fixed = TRUE
+  )
 
   # predictions are not between 0 and 1
   predictions2 <- predictions + 2
   expect_error(brier_score(true_values, predictions2),
-               "For a binary forecast, all predictions should be probabilities between 0 or 1.",
-               fixed = TRUE)
+    "For a binary forecast, all predictions should be probabilities between 0 or 1.",
+    fixed = TRUE
+  )
 })
 
 
