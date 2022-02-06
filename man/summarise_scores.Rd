@@ -7,7 +7,7 @@
 summarise_scores(
   scores,
   by = NULL,
-  func = mean,
+  fun = mean,
   relative_skill = FALSE,
   metric = "auto",
   baseline = NULL,
@@ -23,7 +23,7 @@ over quantiles (in case of quantile-based forecasts), such that there is one
 score per forecast as defined by the unit of a single forecast (rather than
 one score for every quantile).}
 
-\item{func}{a function used for summarising scores. Default is \code{mean}.}
+\item{fun}{a function used for summarising scores. Default is \code{mean}.}
 
 \item{relative_skill}{logical, whether or not to compute relative
 performance between models based on pairwise comparisons.
@@ -69,12 +69,12 @@ summarise_scores(scores, by = c("model"))
 summarise_scores(scores, by = c("model", "target_type"))
 
 # get standard deviation
-summarise_scores(scores, by = "model", func = sd)
+summarise_scores(scores, by = "model", fun = sd)
 
 # get quantiles of scores
 # make sure to aggregate over ranges first
 summarise_scores(scores,
-  by = "model", func = quantile,
+  by = "model", fun = quantile,
   probs = c(0.25, 0.5, 0.75)
 )
 

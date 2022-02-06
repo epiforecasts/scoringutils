@@ -238,3 +238,43 @@ add_coverage <- function(scores,
   scores_with_coverage <- merge(scores, coverages, by = by)
   return(scores_with_coverage[])
 }
+
+
+
+
+#' @title Round scores
+#'
+#' @description Round scores as returned by [score()] or [summarise_scores()].
+#'
+#' @details
+#' The function rounds all metrics to a desired number of significant digits.
+#'
+#' @inheritParams summarise_scores
+#' @param digits the number of significant digits (if `signif = TRUE`) or
+#' decimal places (if `signif = FALSE`) to be used (default is 2).
+#' @param signif Whether to round using significant digits. For 2 significant
+#' digits, for example, 36340 would be rounded to 36000, and 0.36340 to 0.36.
+#' @return a data.table with rounded scores
+#' @examples
+#' library(magrittr) # pipe operator
+#'
+#' score(example_quantile) %>%
+#'   summarise_scores(by = c("model", "target_type")) %>%
+#'   round_scores()
+#' @export
+#' @keywords scoring
+
+round_scores <- function(scores,
+                         digits = 2,
+                         signif = TRUE) {
+
+  roundfun <- ifelse(signif, base::signif, round)
+
+  roundcols <- names(scores)[names(scores) %in% available_metrics()]
+
+  rounded <- scores[, lapply(.SD, FUN = roundfun, digits = digits),
+                    .SDcols = roundcols]
+
+  return(rounded)
+}
+
