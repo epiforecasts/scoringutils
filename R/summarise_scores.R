@@ -9,7 +9,7 @@
 #' over quantiles (in case of quantile-based forecasts), such that there is one
 #' score per forecast as defined by the unit of a single forecast (rather than
 #' one score for every quantile).
-#' @param func a function used for summarising scores. Default is `mean`.
+#' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
 #' If `TRUE` (default is `FALSE`), then a column called
@@ -39,12 +39,12 @@
 #' summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' # get standard deviation
-#' summarise_scores(scores, by = "model", func = sd)
+#' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # get quantiles of scores
 #' # make sure to aggregate over ranges first
 #' summarise_scores(scores,
-#'   by = "model", func = quantile,
+#'   by = "model", fun = quantile,
 #'   probs = c(0.25, 0.5, 0.75)
 #' )
 #'
@@ -55,7 +55,7 @@
 
 summarise_scores <- function(scores,
                              by = NULL,
-                             func = mean,
+                             fun = mean,
                              relative_skill = FALSE,
                              metric = "auto",
                              baseline = NULL,
@@ -114,7 +114,7 @@ summarise_scores <- function(scores,
   }
 
   # summarise scores -----------------------------------------------------------
-  scores <- scores[, lapply(.SD, func, ...),
+  scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
     .SDcols = colnames(scores) %like% cols_to_summarise
   ]
