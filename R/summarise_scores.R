@@ -41,6 +41,10 @@
 #' # get standard deviation
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
+#' # round digits
+#' summarise_scores(scores, by = c("model")) %>%
+#'   summarise_scores(fun = signif, digits = 2)
+#'
 #' # get quantiles of scores
 #' # make sure to aggregate over ranges first
 #' summarise_scores(scores,
