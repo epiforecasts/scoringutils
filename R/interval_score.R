@@ -31,7 +31,6 @@
 #' as the lower bound and the 0.7 quantile as the upper).
 #' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
-#' @param true_values A vector with the true observed values of size n
 #' @param lower vector of size n with the prediction for the lower quantile
 #' of the given range
 #' @param upper vector of size n with the prediction for the upper quantile
@@ -43,14 +42,17 @@
 #' in Gneiting and Raftery (2007). Internally, the range will be transformed
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
-#' into an interval score that, in the limit, corresponds to CRPS. Default:
-#' `TRUE`.
+#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+#' decimal value that  represents how much is outside a central prediction
+#' interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
+#' Default: `TRUE`.
 #' @param separate_results if `TRUE` (default is `FALSE`), then the separate
 #' parts of the interval score (dispersion penalty, penalties for over- and
 #' under-prediction get returned as separate elements of a list). If you want a
 #' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
 #' `separate_results` is `TRUE`.
+#' @inheritParams ae_median_sample
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
 #' interval_range <- rep(90, 30)
@@ -135,8 +137,6 @@ interval_score <- function(true_values,
   }
 }
 
-
-
 #' @title Quantile Score
 #'
 #' @description
@@ -146,8 +146,6 @@ interval_score <- function(true_values,
 #' the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions vector of size n with the lower quantile of the given range
 #' @param quantiles vector of size n with the quantile values of the
 #' corresponding predictions.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
@@ -157,8 +155,9 @@ interval_score <- function(true_values,
 #' represents how much is outside a central prediction interval (E.g. for a
 #' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
 #' @return vector with the scoring values
+#' @inheritParams interval_score
+#' @inheritParams ae_median_sample
 #' @examples
-#' library(scoringutils)
 #' true_values <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5
 #'
@@ -196,7 +195,9 @@ quantile_score <- function(true_values,
 
   # compute score - this is the version explained in the SI of Bracher et. al.
   error <- abs(predictions - true_values)
-  score <- 2 * ifelse(true_values <= predictions, 1 - quantiles, quantiles) * error
+  score <- 2 * ifelse(
+    true_values <= predictions, 1 - quantiles, quantiles
+  ) * error
 
   # adapt score such that mean of unweighted quantile scores corresponds to
   # unweighted interval score of the corresponding prediction interval

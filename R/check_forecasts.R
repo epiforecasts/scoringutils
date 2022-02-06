@@ -11,14 +11,14 @@
 #'
 #' @seealso Function to move from sample-based to quantile format:
 #' [sample_to_quantile()]
-#' @param data A data.frame or similar as would be used for [score()]
-#'
+#' @inheritParams avail_forecasts
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.
 #'
 #' - `target_type` the type of the prediction target as inferred from the
-#' input: 'binary', if all values in `true_value` are either 0 or 1 and values in
-#' `prediction` are between 0 and 1, 'discrete' if all true values are integers
+#' input: 'binary', if all values in `true_value` are either 0 or 1 and values
+#'  in `prediction` are between 0 and 1, 'discrete' if all true values are
+#'  integers.
 #' and 'continuous' if not.
 #' - `prediction_type` inferred type of the prediction. 'quantile', if there is
 #' a column called 'quantile', else 'discrete' if all values in `prediction`
@@ -42,15 +42,13 @@
 #' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' is.data.table
-#'
-#' @examples
-#' library(scoringutils)
-#' check <- check_forecasts(example_quantile)
-#' print(check)
-#' check_forecasts(example_binary)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
 #' @keywords check-forecasts
+#' @examples
+#' check <- check_forecasts(example_quantile)
+#' print(check)
+#' check_forecasts(example_binary)
 
 check_forecasts <- function(data) {
   check <- list()
@@ -98,7 +96,7 @@ check_forecasts <- function(data) {
     paste0(
       "The unit of a single forecast is defined by `",
       paste(check[["forecast_unit"]], collapse = "`, `"), "`. ",
-      "If this is not as intended, please DELETE UNNECESSARY columns or add new ones."
+      "If this is not as intended, please DELETE UNNECESSARY columns or add new ones." # nolint
     )
   )
 
@@ -107,7 +105,7 @@ check_forecasts <- function(data) {
     if (!check[["target_type"]] == "binary") {
       errors <- c(
         errors,
-        "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample"
+        "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" #nolint
       )
     }
   }
@@ -137,7 +135,7 @@ check_forecasts <- function(data) {
       msg,
       paste(
         "There is no column called `model` in the data.",
-        "scoringutils therefore thinks that all forecasts come from the same model"
+        "scoringutils therefore thinks that all forecasts come from the same model" #nolint
       )
     )
     data[, model := "Unspecified model"]
@@ -150,7 +148,7 @@ check_forecasts <- function(data) {
     warnings <- c(
       warnings,
       paste0(
-        "Some forecasts have different numbers of rows (e.g. quantiles or samples). ",
+        "Some forecasts have different numbers of rows (e.g. quantiles or samples). ", #nolint
         "scoringutils found: ", paste(n, collapse = ", "),
         ". This is not necessarily a problem, but make sure this is intended."
       )
@@ -185,6 +183,9 @@ check_forecasts <- function(data) {
 #' @return NULL
 #' @export
 #' @keywords check-forecasts
+#' @examples
+#' check <- check_forecasts(example_quantile)
+#' print(check)
 
 print.scoringutils_check <- function(x, ...) {
   print_elements <- names(x)[!(names(x) %in% c("messages"))]

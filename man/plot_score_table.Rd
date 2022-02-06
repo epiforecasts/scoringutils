@@ -7,28 +7,25 @@
 plot_score_table(scores, y = NULL, select_metrics = NULL)
 }
 \arguments{
-\item{scores}{A data.frame of summarised scores as produced by
-\code{\link[=score]{score()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{y}{the variable to be shown on the y-axis. If \code{NULL} (default),
 all columns that are not scoring metrics will be used. Alternatively,
 you can specify a vector with column names, e.g.
 \code{y = c("model", "location")}. These column names will be concatenated
-to create a unique row identifier (e.g. "model1_location1")}
+to create a unique row identifier (e.g. "model1_location1").}
 
 \item{select_metrics}{A character vector with the metrics to show. If set to
-\code{NULL} (default), all metrics present in \code{scores} will
-be shown}
+\code{NULL} (default), all metrics present in \code{scores} will be shown.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores
 }
 \description{
 Plots a coloured table of summarised scores obtained using
-\code{\link[=score]{score()}}
+\code{\link[=score]{score()}}.
 }
 \examples{
-library("scoringutils")
 library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type"))

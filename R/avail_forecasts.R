@@ -8,9 +8,9 @@
 #' This is useful to determine whether there are any missing forecasts.
 #'
 #' @param data data.frame with predictions in the same format required for
-#' [score()]
-#' @param by character vector or `NULL` (the default) that
-#' denotes the categories over which the number of forecasts should be counted.
+#' [score()].
+#' @param by character vector or `NULL` (the default) that denotes the
+#' categories over which the number of forecasts should be counted.
 #' By default (`by = NULL`) this will be the unit of a single forecast (i.e.
 #' all available columns (apart from a few "protected" columns such as
 #' 'prediction' and 'true value') plus "quantile" or "sample" where present).

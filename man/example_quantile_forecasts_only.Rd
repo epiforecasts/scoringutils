@@ -17,6 +17,9 @@ A data frame with 7,581 rows and 9 columns:
 \item{horizon}{forecast horizon in weeks}
 }
 }
+\source{
+\url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+}
 \usage{
 example_quantile_forecasts_only
 }

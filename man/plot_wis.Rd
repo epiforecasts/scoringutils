@@ -11,7 +11,7 @@ plot_wis(scores, x = "model", relative_contributions = FALSE, flip = FALSE)
 produced by \code{\link[=score]{score()}} and summarised using \code{\link[=summarise_scores]{summarise_scores()}}}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
-Usually this will be "model"}
+Usually this will be "model".}
 
 \item{relative_contributions}{show relative contributions instead of absolute
 contributions. Default is FALSE and this functionality is not available yet.}

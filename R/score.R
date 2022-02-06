@@ -49,19 +49,16 @@
 #' [summarise_scores()] on the unsummarised scores.
 #'
 #' @importFrom data.table ':=' as.data.table
-#' @importFrom methods hasArg
 #'
 #' @examples
-#' library("scoringutils")
 #' library(magrittr) # pipe operator
 #'
-#' # usual workflow:
 #' check_forecasts(example_quantile)
 #' score(example_quantile) %>%
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #'
-#' # Other forecast formats with different metrics
+#' # forecast formats with different metrics
 #' score(example_binary)
 #' score(example_quantile)
 #' score(example_integer)

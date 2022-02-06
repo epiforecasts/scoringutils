@@ -18,7 +18,6 @@
 #' value that is not a column in observations will be removed.
 #' @return a data.frame with forecasts and observations
 #' @examples
-#' library(scoringutils)
 #' forecasts <- example_quantile_forecasts_only
 #' observations <- example_truth_only
 #' merge_pred_and_obs(forecasts, observations)
@@ -96,11 +95,8 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @importFrom stats quantile
 #' @keywords data-handling
 #' @export
-#'
 #' @examples
-#' example_data <- scoringutils::example_integer
-#'
-#' quantile_data <- scoringutils::sample_to_quantile(example_data)
+#' sample_to_quantile(example_integer)
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
@@ -121,8 +117,6 @@ sample_to_quantile <- function(data,
 
   return(data[])
 }
-
-
 
 
 # ======================= functions below are deprecated =======================

@@ -7,7 +7,7 @@
 summarise_scores(
   scores,
   by = NULL,
-  FUN = mean,
+  func = mean,
   relative_skill = FALSE,
   metric = "auto",
   baseline = NULL,
@@ -15,17 +15,15 @@ summarise_scores(
 )
 }
 \arguments{
-\item{scores}{a data.table of unsummarised scores as produced by
-\code{\link[=score]{score()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{by}{character vector with column names to summarise scores by. Default
 is \code{NULL}, meaning that the only summary that takes is place is summarising
-over quantiles (in case of quantile-based forecasts),
-such that there is one score per forecast as
-defined by the unit of a single forecast
-(rather than one score for every quantile).}
+over quantiles (in case of quantile-based forecasts), such that there is one
+score per forecast as defined by the unit of a single forecast (rather than
+one score for every quantile).}
 
-\item{FUN}{a function used for summarising scores. Default is \code{mean}.}
+\item{func}{a function used for summarising scores. Default is \code{mean}.}
 
 \item{relative_skill}{logical, whether or not to compute relative
 performance between models based on pairwise comparisons.
@@ -45,25 +43,19 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{...}{additional parameters passed down to lower-level functions.
-For example, the following arguments can change how weighted interval
-scores are computed:
-\itemize{
-\item \code{count_median_twice} that controls how the interval scores for different
-intervals are summed up. This should be a logical (default is \code{FALSE}) that
-indicates whether or not to count the median twice when summarising.
-This would conceptually treat the
-median as a 0\% prediction interval, where the median is the lower as well as
-the upper bound. The alternative is to treat the median as a single quantile
-forecast instead of an interval. The interval score would then
-be better understood as an average of quantile scores.)
-}}
+\item{...}{additional arguments, such as test options that can get passed
+down to lower level functions. The following options are available:
+\code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test), \code{test_type} (character, either "non_parametric"
+or "permutation" determining which kind of test shall be conducted to
+determine p-values. Default is "non-parametric), \code{n_permutations} (number of
+permutations for a permutation test. Default is 999). See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \description{
 Summarise scores as produced by \code{\link[=score]{score()}}-
 }
 \examples{
-library(scoringutils)
 library(magrittr) # pipe operator
 
 # summarise over samples or quantiles to get one score per forecast
@@ -77,12 +69,12 @@ summarise_scores(scores, by = c("model"))
 summarise_scores(scores, by = c("model", "target_type"))
 
 # get standard deviation
-summarise_scores(scores, by = "model", FUN = sd)
+summarise_scores(scores, by = "model", func = sd)
 
 # get quantiles of scores
 # make sure to aggregate over ranges first
 summarise_scores(scores,
-  by = "model", FUN = quantile,
+  by = "model", func = quantile,
   probs = c(0.25, 0.5, 0.75)
 )
 

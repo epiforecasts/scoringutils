@@ -27,7 +27,7 @@ For a quantile-format forecast you should provide a column called \code{quantile
 
 \item{forecast_unit}{A character vector with the column names that define
 the unit of a single forecast, i.e. a forecast was made for a combination
-of the values in \code{forecast_unit}}
+of the values in \code{forecast_unit}.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
@@ -35,7 +35,7 @@ metrics see \code{\link[=available_metrics]{available_metrics()}}}
 }
 \value{
 A data.table with appropriate scores. For more information see
-\code{\link[=score]{score()}}
+\code{\link[=score]{score()}}.
 }
 \description{
 Evaluate forecasts in a Binary Format

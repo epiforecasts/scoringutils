@@ -35,7 +35,6 @@ in one or both data sets. If in doubt, you should probably merge the
 data sets manually.
 }
 \examples{
-library(scoringutils)
 forecasts <- example_quantile_forecasts_only
 observations <- example_truth_only
 merge_pred_and_obs(forecasts, observations)

@@ -2,16 +2,14 @@
 #'
 #' @description Summarise scores as produced by [score()]-
 #'
-#' @param scores a data.table of unsummarised scores as produced by
-#' [score()]
+#' @inheritParams pairwise_comparison
 #' @inheritParams score
 #' @param by character vector with column names to summarise scores by. Default
 #' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over quantiles (in case of quantile-based forecasts),
-#' such that there is one score per forecast as
-#' defined by the unit of a single forecast
-#' (rather than one score for every quantile).
-#' @param FUN a function used for summarising scores. Default is `mean`.
+#' over quantiles (in case of quantile-based forecasts), such that there is one
+#' score per forecast as defined by the unit of a single forecast (rather than
+#' one score for every quantile).
+#' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
 #' If `TRUE` (default is `FALSE`), then a column called
@@ -28,7 +26,6 @@
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @examples
-#' library(scoringutils)
 #' library(magrittr) # pipe operator
 #'
 #' # summarise over samples or quantiles to get one score per forecast
@@ -42,12 +39,12 @@
 #' summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' # get standard deviation
-#' summarise_scores(scores, by = "model", FUN = sd)
+#' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # get quantiles of scores
 #' # make sure to aggregate over ranges first
 #' summarise_scores(scores,
-#'   by = "model", FUN = quantile,
+#'   by = "model", fun = quantile,
 #'   probs = c(0.25, 0.5, 0.75)
 #' )
 #'
@@ -58,7 +55,7 @@
 
 summarise_scores <- function(scores,
                              by = NULL,
-                             FUN = mean,
+                             fun = mean,
                              relative_skill = FALSE,
                              metric = "auto",
                              baseline = NULL,
@@ -117,7 +114,7 @@ summarise_scores <- function(scores,
   }
 
   # summarise scores -----------------------------------------------------------
-  scores <- scores[, lapply(.SD, FUN, ...),
+  scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
     .SDcols = colnames(scores) %like% cols_to_summarise
   ]
@@ -134,8 +131,6 @@ summarise_scores <- function(scores,
 
   return(scores[])
 }
-
-
 
 #' @title Check input parameters for [summarise_scores()]
 #'
@@ -200,8 +195,7 @@ check_summary_params <- function(scores,
 #' for every model across the values present in all other columns which define
 #' the unit of a single forecast.
 #'
-#' @param scores a data.table of unsummarised scores as produced by
-#' [score()]
+#' @inheritParams summarise_scores
 #' @param by character vector with column names to add the coverage for.
 #' @param ranges numeric vector of the ranges of the central prediction intervals
 #' for which coverage values shall be added.
@@ -210,7 +204,6 @@ check_summary_params <- function(scores,
 #' is still unsummarised, note that for the coverage columns some level of
 #' summary is present according to the value specified in `by`.
 #' @examples
-#' library(scoringutils)
 #' library(magrittr) # pipe operator
 #'
 #' score(example_quantile) %>%
@@ -243,5 +236,5 @@ add_coverage <- function(scores,
   )
 
   scores_with_coverage <- merge(scores, coverages, by = by)
-  return(scores_with_coverage)
+  return(scores_with_coverage[])
 }

@@ -28,12 +28,9 @@
 #' In both cases, Bias can assume values between
 #' -1 and 1 and is 0 ideally.
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
 #' @return vector of length n with the biases of the predictive samples with
 #' respect to the true values.
+#' @inheritParams ae_median_sample
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
@@ -66,21 +63,19 @@ bias_sample <- function(true_values, predictions) {
 
   # empirical cdf
   n_pred <- ncol(predictions)
-  P_x <- rowSums(predictions <= true_values) / n_pred
+  p_x <- rowSums(predictions <= true_values) / n_pred
 
   if (prediction_type == "continuous") {
-    res <- 1 - 2 * P_x
+    res <- 1 - 2 * p_x
     return(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
-    P_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
+    p_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
 
-    res <- 1 - (P_x + P_xm1)
+    res <- 1 - (p_x + p_xm1)
     return(res)
   }
 }
-
-
 
 #' @title Determines Bias of Quantile Forecasts
 #'
@@ -93,16 +88,20 @@ bias_sample <- function(true_values, predictions) {
 #' For quantile forecasts, bias is measured as
 #'
 #' \deqn{
-#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) \mathbf{1}( x_t \leq q_{t, 0.5}) \\
-#' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\}) \mathbf{1}( x_t \geq q_{t, 0.5}),
+#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) 
+#' \mathbf{1}( x_t \leq q_{t, 0.5}) \\
+#' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
+#'  \mathbf{1}( x_t \geq q_{t, 0.5}),
 #' }{
-#' B_t = (1 - 2 * max(i | q_{t,i} in Q_t and q_{t,i} <= x_t\)) 1( x_t <= q_{t, 0.5})
-#' + (1 - 2 * min(i | q_{t,i} in Q_t and q_{t,i} >= x_t)) 1( x_t >= q_{t, 0.5}),
+#' B_t = (1 - 2 * max(i | q_{t,i} in Q_t and q_{t,i} <= x_t\)) 
+#' 1( x_t <= q_{t, 0.5}) + (1 - 2 * min(i | q_{t,i} in Q_t and q_{t,i} >= x_t))
+#'  1( x_t >= q_{t, 0.5}),
 #' }
 #'
 #' where \eqn{Q_t} is the set of quantiles that form the predictive
 #' distribution at time \eqn{t}. They represent our
-#' belief about what the true value \eqn{x_t} will be. For consistency, we define
+#' belief about what the true value \eqn{x_t} will be. For consistency, we
+#' define
 #' \eqn{Q_t} such that it always includes the element
 #' \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 #' \eqn{\mathbf{1}()}{1()} is the indicator function that is \eqn{1} if the
@@ -167,7 +166,10 @@ bias_range <- function(range, lower, upper,
     upper_predictions <- upper[!is.na(lower) & !is.na(upper)]
 
     # deal with the point forecast case where inputs may be NA
-    if (length(range) == 0 | length(lower_predictions) == 0 | length(upper_predictions) == 0) {
+    if (length(range) == 0 | 
+        length(lower_predictions) == 0 |
+        length(upper_predictions) == 0
+      ) {
       return(NA_real_)
     }
   }
@@ -209,8 +211,6 @@ bias_range <- function(range, lower, upper,
   }
 }
 
-
-
 #' @title Determines Bias of Quantile Forecasts
 #'
 #' @description
@@ -222,8 +222,10 @@ bias_range <- function(range, lower, upper,
 #' For quantile forecasts, bias is measured as
 #'
 #' \deqn{
-#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) 1( x_t \leq q_{t, 0.5}) \\
-#' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\}) 1( x_t \geq q_{t, 0.5}),}
+#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
+#'  1( x_t \leq q_{t, 0.5}) \\
+#' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
+#'  1( x_t \geq q_{t, 0.5}),}
 #'
 #' where \eqn{Q_t} is the set of quantiles that form the predictive
 #' distribution at time \eqn{t}. They represent our
@@ -249,7 +251,7 @@ bias_range <- function(range, lower, upper,
 #' that holds predictions
 #' @param quantiles vector of corresponding size with the quantiles for which
 #' predictions were made
-#' @param true_value a single true value
+#' @inheritParams bias_range
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples

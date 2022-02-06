@@ -9,8 +9,7 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param scores A data.frame of unsummarised scores as produced by
-#' [score()]
+#' @param scores A data.table of scores as produced by [score()].
 #' @param metric A character vector of length one with the metric to do the
 #' comparison on. The default is "auto", meaning that either "interval_score",
 #' "crps", or "brier_score" will be selected where available.
@@ -27,7 +26,7 @@
 #' model against which to compare other models.
 #' @param ... additional arguments, such as test options that can get passed
 #' down to lower level functions. The following options are available:
-#' `oneSided` (Boolean, default is `FALSE`, whether two conduct a one-sided
+#' `one_sided` (Boolean, default is `FALSE`, whether two conduct a one-sided
 #' instead of a two-sided test), `test_type` (character, either "non_parametric"
 #' or "permutation" determining which kind of test shall be conducted to
 #' determine p-values. Default is "non-parametric), `n_permutations` (number of
@@ -38,8 +37,9 @@
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
 #' @export
-#' @author Johannes Bracher, https://jbracher.github.io/
-#' @author Nikos Bosse
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
+#' @keywords scoring
 #' @examples
 #' df <- data.frame(
 #'   model = rep(c("model1", "model2", "model3"), each = 10),
@@ -49,16 +49,13 @@
 #'   aem = (abs(rnorm(30)))
 #' )
 #'
-#' res <- scoringutils::pairwise_comparison(df,
+#' res <- pairwise_comparison(df,
 #'   baseline = "model1"
 #' )
-#' scoringutils::plot_pairwise_comparison(res)
+#' plot_pairwise_comparison(res)
 #'
-#' eval <- scoringutils::score(scoringutils::example_quantile)
-#' pairwise <- pairwise_comparison(eval, by = c("model"))
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
-#' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
-#' @keywords scoring
+#' eval <- score(example_quantile)
+#' pairwise_comparison(eval, by = c("model"))
 
 pairwise_comparison <- function(scores,
                                 by = c("model"),
@@ -107,9 +104,8 @@ pairwise_comparison <- function(scores,
 
   out <- data.table::rbindlist(results)
 
-  return(out)
+  return(out[])
 }
-
 
 #' @title Do Pairwise Comparison for one Set of Forecasts
 #'
@@ -196,7 +192,6 @@ pairwise_comparison_one_group <- function(scores,
     "compare_against" = as.character(compare_against)
   )]
 
-
   # calculate relative skill as geometric mean
   # small theta is again better. If a baseline is given, exclude it
   # from the computation of the geometric mean
@@ -204,7 +199,9 @@ pairwise_comparison_one_group <- function(scores,
   if (!is.null(baseline)) {
     result_without_baseline <- data.table::copy(result)
     # filter out all ratios where compare_against is the baseline
-    result_without_baseline <- result_without_baseline[compare_against != baseline, ]
+    result_without_baseline <- result_without_baseline[
+      compare_against != baseline
+    ]
     result_without_baseline[, `:=`(theta = geom_mean_helper(ratio)),
       by = "model"
     ]
@@ -216,10 +213,10 @@ pairwise_comparison_one_group <- function(scores,
     result[, theta := unique(na.omit(theta)), by = "model"]
   } else {
     result[, `:=`(
-      theta = geom_mean_helper(ratio),
-      rel_to_baseline = NA_real_
-    ),
-    by = "model"
+        theta = geom_mean_helper(ratio),
+        rel_to_baseline = NA_real_
+      ),
+      by = "model"
     ]
   }
 
@@ -245,12 +242,6 @@ pairwise_comparison_one_group <- function(scores,
   return(out[])
 }
 
-
-
-
-
-
-
 #' @title Compare Two Models Based on Subset of Common Forecasts
 #'
 #' @description
@@ -267,8 +258,9 @@ pairwise_comparison_one_group <- function(scores,
 #' @inheritParams pairwise_comparison
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
-#' @param oneSided Boolean, default is `FALSE`, whether two conduct a one-sided
-#' instead of a two-sided test to determine significance in a pairwise comparison
+#' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test to determine significance in a pairwise
+#' comparison.
 #' @param test_type character, either "non_parametric" (the default) or
 #' "permutation". This determines which kind of test shall be conducted to
 #' determine p-values.
@@ -282,7 +274,7 @@ compare_two_models <- function(scores,
                                name_model1,
                                name_model2,
                                metric,
-                               oneSided = FALSE,
+                               one_sided = FALSE,
                                test_type = c("non_parametric", "permutation"),
                                n_permutations = 999) {
   scores <- data.table::as.data.table(scores)
@@ -294,8 +286,8 @@ compare_two_models <- function(scores,
   }
 
   # select only columns in c(by, var)
-  a <- scores[model == name_model1, ]
-  b <- scores[model == name_model2, ]
+  a <- scores[model == name_model1]
+  b <- scores[model == name_model2]
 
   # remove "model" from 'by' before merging
   merge_by <- setdiff(forecast_unit, "model")
@@ -323,8 +315,8 @@ compare_two_models <- function(scores,
   if (test_type == "permutation") {
     # adapted from the surveillance package
     pval <- permutation_test(values_x, values_y,
-      nPermutation = n_permutations,
-      oneSided = oneSided,
+      n_permutation = n_permutations,
+      one_sided = one_sided,
       comparison_mode = "difference"
     )
   } else {
@@ -338,26 +330,13 @@ compare_two_models <- function(scores,
   ))
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #' @title Infer metric for pairwise comparisons
 #'
 #' @description
 #' Helper function to infer the metric for which pairwise comparisons shall
 #' be made. The function simply checks the names of the available columns and
 #' chooses the most widely used metric.
-#' @param scores A data.table of scores as produced by [score()]
+#' @inheritParams pairwise_comparison
 #' @keywords internal
 
 infer_rel_skill_metric <- function(scores) {

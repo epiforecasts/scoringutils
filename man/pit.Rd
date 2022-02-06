@@ -29,8 +29,7 @@ Wrapper around \code{pit()} for use in data.frames
 see \code{\link[=pit]{pit()}}
 }
 \examples{
-example <- scoringutils::example_continuous
-result <- pit(example, by = "model")
+result <- pit(example_continuous, by = "model")
 plot_pit(result)
 
 # example with quantile data

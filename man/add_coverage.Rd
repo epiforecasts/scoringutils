@@ -7,8 +7,7 @@
 add_coverage(scores, by, ranges = c(50, 90))
 }
 \arguments{
-\item{scores}{a data.table of unsummarised scores as produced by
-\code{\link[=score]{score()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{by}{character vector with column names to add the coverage for.}
 
@@ -33,7 +32,6 @@ for every model across the values present in all other columns which define
 the unit of a single forecast.
 }
 \examples{
-library(scoringutils)
 library(magrittr) # pipe operator
 
 score(example_quantile) \%>\%

@@ -24,7 +24,6 @@
 #' that true_value = 1.
 #' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
-#' @importFrom methods hasArg
 #' @export
 #'
 #' @examples

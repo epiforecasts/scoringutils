@@ -8,7 +8,7 @@ plot_correlation(correlations)
 }
 \arguments{
 \item{correlations}{A data.table of correlations between scores as produced
-by \code{\link[=correlation]{correlation()}}}
+by \code{\link[=correlation]{correlation()}}.}
 }
 \value{
 A ggplot2 object showing a coloured matrix of correlations
@@ -18,7 +18,6 @@ between metrics
 Plots a heatmap of correlations between different metrics
 }
 \examples{
-library(scoringutils)
 scores <- score(example_quantile)
 correlations <- correlation(scores)
 plot_correlation(correlations)

@@ -10,9 +10,7 @@
 #' the median of the predictive samples. For details, see [mad()][stats::mad()]
 #' and the explanations given in Funk et al. (2019)
 #'
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams ae_median_sample
 #' @importFrom stats mad
 #' @return vector with dispersion values
 #'

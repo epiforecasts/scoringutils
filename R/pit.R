@@ -52,12 +52,9 @@
 #' In this context it should be noted, though, that uniformity of the
 #' PIT is a necessary but not sufficient condition of calibration.
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
 #' @param n_replicates the number of draws for the randomised PIT for
 #' integer predictions.
+#' @inheritParams ae_median_sample
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
 #' correspond to the length of `true_values`. For integer forecasts, a
 #' randomised PIT will be returned of length
@@ -65,7 +62,6 @@
 #' @seealso [pit()]
 #' @importFrom stats runif
 #' @examples
-#' library(scoringutils)
 #' ## continuous predictions
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
@@ -99,7 +95,9 @@ pit_sample <- function(true_values,
   # check if there is more than one observation
   n <- length(true_values)
   if (n == 1) {
-    message("you need more than one observation to assess uniformity of the PIT")
+    message(
+      "you need more than one observation to assess uniformity of the PIT"
+    )
     return(NA)
   }
 
@@ -135,18 +133,19 @@ pit_sample <- function(true_values,
 
   # calculate emipirical cumulative distribution function as
   # Portion of (y_true <= y_predicted)
-  P_x <- rowSums(predictions <= true_values) / n_pred
+  p_x <- rowSums(predictions <= true_values) / n_pred
 
   # calculate PIT for continuous predictions case
   if (continuous_predictions) {
-    pit_values <- P_x
+    pit_values <- p_x
   } else {
-    P_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
-    pit_values <- as.vector(replicate(n_replicates, P_xm1 + runif(1) * (P_x - P_xm1)))
+    p_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
+    pit_values <- as.vector(
+      replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
+    )
   }
   return(pit_values)
 }
-
 
 #' @title Probability Integral Transformation (data.frame Format)
 #'
@@ -165,8 +164,7 @@ pit_sample <- function(true_values,
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
-#' example <- scoringutils::example_continuous
-#' result <- pit(example, by = "model")
+#' result <- pit(example_continuous, by = "model")
 #' plot_pit(result)
 #'
 #' # example with quantile data
@@ -208,7 +206,7 @@ pit <- function(data,
       by = c(get_unit_of_forecast(coverage))
     ]
 
-    return(coverage)
+    return(coverage[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
@@ -225,5 +223,5 @@ pit <- function(data,
   .SDcols = grepl("InternalSampl_", names(data_wide))
   ]
 
-  return(pit)
+  return(pit[])
 }

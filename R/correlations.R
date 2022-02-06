@@ -2,20 +2,19 @@
 #'
 #' @description
 #' Calculate the correlation between different metrics for a data.frame of
-#' scores as produced by [score()]
+#' scores as produced by [score()].
 #'
-#' @param scores A data.frame of scores as produced by
-#' [score()]
 #' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will
 #' be shown
+#' @inheritParams avail_forecasts
+#' @inheritParams pairwise_comparison
 #' @return A data.table with correlations for the different metrics
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @export
 #' @keywords scoring
 #' @examples
-#' library(scoringutils)
 #' scores <- score(example_quantile)
 #' correlation(scores)
 correlation <- function(scores,
@@ -49,7 +48,11 @@ correlation <- function(scores,
   return(correlations[])
 }
 
-
+# define function to obtain upper triangle of matrix
+get_lower_tri <- function(cormat) {
+  cormat[lower.tri(cormat)] <- NA
+  return(cormat)
+}
 
 #' @title Plot Correlation Between Metrics
 #'
@@ -57,26 +60,18 @@ correlation <- function(scores,
 #' Plots a heatmap of correlations between different metrics
 #'
 #' @param correlations A data.table of correlations between scores as produced
-#' by [correlation()]
+#' by [correlation()].
 #' @return A ggplot2 object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
-#' element_text labs coord_cartesian theme theme_light
+#' element_text labs coord_cartesian theme theme_light element_blank
 #' @importFrom data.table setDT melt
 #' @export
-#'
 #' @examples
-#' library(scoringutils)
 #' scores <- score(example_quantile)
 #' correlations <- correlation(scores)
 #' plot_correlation(correlations)
 plot_correlation <- function(correlations) {
-
-  # define function to obtain upper triangle of matrix
-  get_lower_tri <- function(cormat) {
-    cormat[lower.tri(cormat)] <- NA
-    return(cormat)
-  }
 
   metrics <- names(correlations)[names(correlations) %in% available_metrics()]
 
@@ -84,11 +79,10 @@ plot_correlation <- function(correlations) {
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
-  plot_df <- as.data.table(lower_triangle)[, metric := metrics]
+  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
   plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
 
   # refactor levels according to the metrics
-  # metrics <- unique(plot_df$metric)
   plot_df[, metric := factor(metric, levels = metrics)]
   plot_df[, variable := factor(variable, rev(metrics))]
 

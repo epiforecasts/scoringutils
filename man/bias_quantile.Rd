@@ -27,8 +27,10 @@ for integer and continuous forecasts.
 For quantile forecasts, bias is measured as
 
 \deqn{
-B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) 1( x_t \leq q_{t, 0.5}) \\
-+ (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\}) 1( x_t \geq q_{t, 0.5}),}
+B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
+ 1( x_t \leq q_{t, 0.5}) \\
++ (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
+ 1( x_t \geq q_{t, 0.5}),}
 
 where \eqn{Q_t} is the set of quantiles that form the predictive
 distribution at time \eqn{t}. They represent our

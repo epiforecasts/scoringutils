@@ -7,15 +7,17 @@
 check_forecasts(data)
 }
 \arguments{
-\item{data}{A data.frame or similar as would be used for \code{\link[=score]{score()}}}
+\item{data}{data.frame with predictions in the same format required for
+\code{\link[=score]{score()}}.}
 }
 \value{
 A list with elements that give information about what \code{scoringutils}
 thinks you are trying to do and potential issues.
 \itemize{
 \item \code{target_type} the type of the prediction target as inferred from the
-input: 'binary', if all values in \code{true_value} are either 0 or 1 and values in
-\code{prediction} are between 0 and 1, 'discrete' if all true values are integers
+input: 'binary', if all values in \code{true_value} are either 0 or 1 and values
+in \code{prediction} are between 0 and 1, 'discrete' if all true values are
+integers.
 and 'continuous' if not.
 \item \code{prediction_type} inferred type of the prediction. 'quantile', if there is
 a column called 'quantile', else 'discrete' if all values in \code{prediction}
@@ -52,7 +54,6 @@ The data should come in one of three different formats:
 }
 }
 \examples{
-library(scoringutils)
 check <- check_forecasts(example_quantile)
 print(check)
 check_forecasts(example_binary)

@@ -7,8 +7,7 @@
 pairwise_comparison_one_group(scores, metric, baseline, by, ...)
 }
 \arguments{
-\item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=score]{score()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{metric}{A character vector of length one with the metric to do the
 comparison on. The default is "auto", meaning that either "interval_score",
@@ -29,7 +28,7 @@ split data.frames.}
 
 \item{...}{additional arguments, such as test options that can get passed
 down to lower level functions. The following options are available:
-\code{oneSided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
+\code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
 instead of a two-sided test), \code{test_type} (character, either "non_parametric"
 or "permutation" determining which kind of test shall be conducted to
 determine p-values. Default is "non-parametric), \code{n_permutations} (number of

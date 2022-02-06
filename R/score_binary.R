@@ -3,10 +3,10 @@
 #' @inheritParams score
 #' @param forecast_unit A character vector with the column names that define
 #' the unit of a single forecast, i.e. a forecast was made for a combination
-#' of the values in `forecast_unit`
+#' of the values in `forecast_unit`.
 #'
 #' @return A data.table with appropriate scores. For more information see
-#' [score()]
+#' [score()].
 #'
 #' @importFrom data.table ':='
 #'

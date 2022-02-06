@@ -28,6 +28,6 @@ logs_binary <- function(true_values, predictions) {
   check_true_values(true_values, type = "binary")
   check_predictions(predictions, true_values, type = "binary")
 
-  logs <- -(log(ifelse(true_values == 1, predictions, 1 - predictions)))
+  logs <- -log(ifelse(true_values == 1, predictions, 1 - predictions))
   return(logs)
 }

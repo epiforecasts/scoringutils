@@ -21,22 +21,9 @@ Authors@R: c(
            role = c("ctb"),
            email = "johannes.bracher@kit.edu",
            comment = c(ORCID = "0000-0002-3777-1410")), 
-    person("Joel", "Hellewell",
-           email = "joel.hellewell@lshtm.ac.uk", 
-           role = c("ctb"),
-           comment = c(ORCID = "0000-0003-2683-0849")),
-    person(given = "Sophie Meakins",
-           role = c("ctb"),
-           email = "sophie.meakins@lshtm.ac.uk"),  
-    person("James", "Munday", 
-           email = "james.munday@lshtm.ac.uk", 
-           role = c("ctb")),
-    person("Katharine", "Sherratt", 
-           email = "katharine.sherratt@lshtm.ac.uk", 
-           role = c("ctb")),
     person("Sebastian", "Funk", 
             email = "sebastian.funk@lshtm.ac.uk", 
-            role = c("aut")))
+            role = c("ctb")))
 Description: 
     Combines a collection of metrics and proper scoring rules 
     (Tilmann Gneiting & Adrian E Raftery (2007) 
