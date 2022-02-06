@@ -19,7 +19,6 @@ check_predictions <- function(predictions,
                               true_values = NULL,
                               type = c("continuous", "integer", "binary"),
                               class = c("vector", "matrix")) {
-
   type <- match.arg(type)
   class <- match.arg(class)
 
@@ -37,7 +36,7 @@ check_predictions <- function(predictions,
     }
     if (!is.null(true_values) && length(predictions) != length(true_values)) {
       msg <- sprintf(
-        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
+        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.", # nolint
         length(true_values), length(predictions)
       )
       stop(msg)
@@ -152,9 +151,9 @@ check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
   lengths <- sapply(vars,
-                    FUN = function(x) {
-                      length(x)
-                    }
+    FUN = function(x) {
+      length(x)
+    }
   )
 
   lengths <- unique(lengths)

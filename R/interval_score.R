@@ -7,8 +7,10 @@
 #' The score is computed as
 #'
 #' \deqn{
-#' \text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower} - \text{true_value}) *
-#' \mathbf{1}(\text{true_value} < \text{lower}) + \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
+#' \text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower}
+#'  - \text{true_value}) *
+#' \mathbf{1}(\text{true_value} < \text{lower}) +
+#' \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
 #' \mathbf{1}(\text{true_value} > \text{upper})
 #' }{
 #' score = (upper - lower) + 2/alpha * (lower - true_value) *
@@ -81,7 +83,7 @@
 #'
 #' Evaluating epidemic forecasts in an interval format,
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618> # nolint
 #'
 
 interval_score <- function(true_values,
@@ -163,11 +165,13 @@ interval_score <- function(true_values,
 #' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 #'
 #' qs_lower <- quantile_score(true_values,
-#'                            predictions = lower,
-#'                            quantiles = alpha/2)
+#'   predictions = lower,
+#'   quantiles = alpha / 2
+#' )
 #' qs_upper <- quantile_score(true_values,
-#'                            predictions = upper,
-#'                            quantiles = 1 - alpha/2)
+#'   predictions = upper,
+#'   quantiles = 1 - alpha / 2
+#' )
 #' interval_score <- (qs_lower + qs_upper) / 2
 #' @export
 #' @keywords metric

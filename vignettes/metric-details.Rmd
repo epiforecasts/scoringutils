@@ -27,10 +27,12 @@ This table gives an overview for when which metric can be applied and gives a ve
 
 ```{r, echo = FALSE, results = "asis"}
 
-data <- readRDS(system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils"))
+data <- readRDS(
+  system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils")
+)
 
 data[, 1:6] %>%
-  kbl(format = "html", 
+  kbl(format = "html",
       escape = FALSE,
       align = c("lccccl"),
       linesep = c('\\addlinespace')) %>%
@@ -50,7 +52,9 @@ data[, 1:6] %>%
 
 ```{r, echo = FALSE, results = "asis"}
 
-data <- readRDS(system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils"))
+data <- readRDS(
+  system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils")
+)
 
 data[, 1:2] %>%
   kbl(format = "html",

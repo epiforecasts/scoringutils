@@ -51,8 +51,10 @@ and Raftery (2007). Smaller values are better.
 The score is computed as
 
 \deqn{
-\text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower} - \text{true_value}) *
-\mathbf{1}(\text{true_value} < \text{lower}) + \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
+\text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower}
+ - \text{true_value}) *
+\mathbf{1}(\text{true_value} < \text{lower}) +
+\frac{2}{\alpha}(\text{true_value} - \text{upper}) *
 \mathbf{1}(\text{true_value} > \text{upper})
 }{
 score = (upper - lower) + 2/alpha * (lower - true_value) *
@@ -103,6 +105,6 @@ Statistical Association, Volume 102, 2007 - Issue 477
 
 Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
+\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618} # nolint
 }
 \keyword{metric}

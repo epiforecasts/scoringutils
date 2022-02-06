@@ -34,7 +34,6 @@
 #' @keywords metric
 
 brier_score <- function(true_values, predictions) {
-
   check_true_values(true_values, type = "binary")
   check_predictions(predictions, true_values, type = "binary")
 

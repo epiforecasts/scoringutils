@@ -261,7 +261,6 @@ delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
 #' @keywords internal
 
 get_prediction_type <- function(data) {
-
   if (is.data.frame(data)) {
     if ("quantile" %in% names(data)) {
       return("quantile")
