@@ -12,9 +12,15 @@
 #' @seealso Function to move from sample-based to quantile format:
 #' [sample_to_quantile()]
 #' @inheritParams avail_forecasts
-#' @return A list with elements that give information about what `scoringutils`
-#' thinks you are trying to do and potential issues.
-#'
+#' @param verbose logical, whether or not to print the output from the checks.
+#' Default is `TRUE`.
+#' @return An object of class `scoringutils_check`. This is essentially a
+#' data.table with checked and cleaned forecasts (e.g. `NA`-values removed).
+#' The output can be directly supplied to [score()]. In addition, the output
+#' contains an attribute "info" with additional information from checking the
+#' forecasts. These will be shown when you print the object and can directly
+#' accessed by calling `attributes(x)$info` on the output.
+#' The following additional information is stored:
 #' - `target_type` the type of the prediction target as inferred from the
 #' input: 'binary', if all values in `true_value` are either 0 or 1 and values
 #'  in `prediction` are between 0 and 1, 'discrete' if all true values are
@@ -37,8 +43,6 @@
 #' values, but rather the maximum number of unique values across the whole data.
 #' - `warnings` A vector with warnings. These can be ignored if you know what
 #' you are doing.
-#' - `errors` A vector with issues that will cause an error when running
-#' [score()].
 #' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' is.data.table
@@ -46,11 +50,17 @@
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' check <- check_forecasts(example_quantile)
-#' print(check)
-#' check_forecasts(example_binary)
+#' library(magrittr)
+#'
+#' # check forecasts
+#' check_forecasts(example_quantile)
+#'
+#' # check and score directly:
+#' example_quantile %>%
+#'  check_forecasts() %>%
+#'  score()
 
-check_forecasts <- function(data) {
+check_forecasts <- function(data, verbose = TRUE) {
   check <- list()
   msg <- list()
   warnings <- list()
@@ -163,11 +173,24 @@ check_forecasts <- function(data) {
 
   check[["messages"]] <- unlist(msg)
   check[["warnings"]] <- unlist(warnings)
-  check[["errors"]] <- unlist(errors)
 
-  class(check) <- c("scoringutils_check", "list")
+  if (length(errors) > 0) {
+    msg <- paste0(
+      "\n\n",
+      "The following errors were found: ",
+      paste(x$errors, collapse = "\n")
+    )
+    stop(msg)
+  }
 
-  return(check)
+  attr(data, "info") <- check
+  class(data) <- c("scoringutils_check", class(data))
+
+  if (verbose) {
+    print(data)
+  }
+
+  return(data)
 }
 
 
@@ -184,36 +207,38 @@ check_forecasts <- function(data) {
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' check <- check_forecasts(example_quantile)
-#' print(check)
+#' check_forecasts(example_quantile)
 
 print.scoringutils_check <- function(x, ...) {
-  print_elements <- names(x)[!(names(x) %in% c("messages"))]
-  print.default(x[print_elements])
+
+  info <- attributes(x)$info
+
+  # print only the cleaned data
+  attr(x, "info") <- NULL
+  class(x) <- c("data.table", "data.frame")
+  print(x)
+
+  cat("\nAdditional info. (access directly using attributes(x)$info): \n")
+
+  print_elements <- names(info)[!(names(info) %in% c("messages"))]
+  print.default(info[print_elements])
 
   cat(paste0(
     "\nBased on your input, scoringutils thinks:\n",
-    paste(x$messages, collapse = "\n")
+    paste(info$messages, collapse = "\n")
   ))
   cat(
     "\n$unique_values shows how many unique values there are per column per model",
     "(across the entire data)."
   )
 
-  if (length(x$warnings) > 0) {
+  if (length(info$warnings) > 0) {
     cat(paste0(
       "\n\n",
       "You should be aware of the following warnings:\n",
-      paste(x$warnings, collapse = "\n")
+      paste(info$warnings, collapse = "\n")
     ))
   }
-
-  if (length(x$errors) > 0) {
-    cat(paste0(
-      "\n\n",
-      "The following things will likely result in an error: ",
-      paste(x$errors, collapse = "\n")
-    ))
-  }
-  return(invisible(x))
+  return(invisible(NULL))
 }
+

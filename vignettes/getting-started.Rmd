@@ -60,6 +60,8 @@ head(example_quantile)
 check_forecasts(example_quantile)
 ```
 
+You can directly pass the output from `check_forecasts()` into the function `score()` (see below). Alternatively, you can access the additional information by using `attributes(x)$info` to access the additionally info from the output of `check_forecasts()`. 
+
 If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
 
 ## Showing available forecasts
@@ -103,7 +105,8 @@ example_quantile %>%
 Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores` takes care of summarising these scores to the level specified by the user. 
 
 ```{r}
-score(example_quantile) %>%
+example_quantile %>%
+  score(example_quantile) %>%
   head()
 ```
 

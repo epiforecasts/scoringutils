@@ -66,10 +66,12 @@ To obtain a quick overview of the evaluation metrics used, have a look at the
 \examples{
 library(magrittr) # pipe operator
 
-check_forecasts(example_quantile)
-score(example_quantile) \%>\%
+example_quantile \%>\%
+  check_forecasts \%>\%
+  score() \%>\%
   add_coverage(by = c("model", "target_type")) \%>\%
-  summarise_scores(by = c("model", "target_type"))
+  summarise_scores(by = c("model", "target_type")) \%>\%
+  summarise_scores(fun = signif, digits = 2)
 
 # forecast formats with different metrics
 score(example_binary)

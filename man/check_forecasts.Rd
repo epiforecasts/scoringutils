@@ -4,15 +4,23 @@
 \alias{check_forecasts}
 \title{Check forecasts}
 \usage{
-check_forecasts(data)
+check_forecasts(data, verbose = TRUE)
 }
 \arguments{
 \item{data}{data.frame with predictions in the same format required for
 \code{\link[=score]{score()}}.}
+
+\item{verbose}{logical, whether or not to print the output from the checks.
+Default is \code{TRUE}.}
 }
 \value{
-A list with elements that give information about what \code{scoringutils}
-thinks you are trying to do and potential issues.
+An object of class \code{scoringutils_check}. This is essentially a
+data.table with checked and cleaned forecasts (e.g. \code{NA}-values removed).
+The output can be directly supplied to \code{\link[=score]{score()}}. In addition, the output
+contains an attribute "info" with additional information from checking the
+forecasts. These will be shown when you print the object and can directly
+accessed by calling \code{attributes(x)$info} on the output.
+The following additional information is stored:
 \itemize{
 \item \code{target_type} the type of the prediction target as inferred from the
 input: 'binary', if all values in \code{true_value} are either 0 or 1 and values
@@ -36,8 +44,6 @@ present per model and column in the data. This doesn't directly show missing
 values, but rather the maximum number of unique values across the whole data.
 \item \code{warnings} A vector with warnings. These can be ignored if you know what
 you are doing.
-\item \code{errors} A vector with issues that will cause an error when running
-\code{\link[=score]{score()}}.
 \item \code{messages} A verbal explanation of the information provided above.
 }
 }
@@ -54,9 +60,15 @@ The data should come in one of three different formats:
 }
 }
 \examples{
-check <- check_forecasts(example_quantile)
-print(check)
-check_forecasts(example_binary)
+library(magrittr)
+
+# check forecasts
+check_forecasts(example_quantile)
+
+# check and score directly:
+example_quantile \%>\%
+ check_forecasts() \%>\%
+ score()
 }
 \seealso{
 Function to move from sample-based to quantile format:
