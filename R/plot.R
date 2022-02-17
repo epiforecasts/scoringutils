@@ -695,6 +695,7 @@ plot_interval_coverage <- function(scores,
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' scale_y_continuous
 #' @importFrom data.table dcast
 #' @export
 #'
@@ -738,7 +739,7 @@ plot_quantile_coverage <- function(scores,
     theme(legend.position = "bottom") +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
-    scale_y_continuous(label = function(x) {paste(100 * x)}) +
+    scale_y_continuous(labels = function(x) {paste(100 * x)}) +
     coord_cartesian(expand = FALSE)
 
   return(p2)
