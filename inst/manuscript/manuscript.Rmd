@@ -131,16 +131,16 @@ Some of the metrics focus on sharpness or calibration alone, others are so-calle
 # load data file from inst directory of the package
 data <- readRDS(system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils"))
 
+cap <- "Summary table of scores available in \\pkg{scoringutils} and when they are applicable. D (discrete), C (continuous), B (binary), and Q (quantile) refer to different forecast formats. While the distinction is not clear-cut (e.g. binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g. for 'global' and 'local' see section \\ref{}). For mathematical defintions of the metric see Table \\ref{}."
+
 data[, 1:6] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE, 
                   escape = FALSE,
                   longtable = TRUE,
-                  caption = "Summary table of scores available in \\pkg{scoringutils} and when they are applicable. ",
+                  caption = cap,
                   align = c("lccccl"),
                   linesep = c('\\addlinespace')) |>
   kableExtra::column_spec(1, width = "2.9cm") |>
-  # kableExtra::column_spec(2, width = "2.4cm") |>
-  # kableExtra::column_spec(3, width = "2.7cm") |>
   kableExtra::column_spec(6, width = "9.3cm") |>
   kableExtra::kable_styling(latex_options = c("striped", 
                                               "repeat_header, scale_down"), 
