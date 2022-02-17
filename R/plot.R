@@ -9,10 +9,10 @@
 #' you can specify a vector with column names, e.g.
 #' `y = c("model", "location")`. These column names will be concatenated
 #' to create a unique row identifier (e.g. "model1_location1").
-#' 
+#'
 #' @param select_metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will be shown.
-#' 
+#'
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @inheritParams pairwise_comparison
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
@@ -737,7 +737,8 @@ plot_quantile_coverage <- function(scores,
     theme_light() +
     theme(legend.position = "bottom") +
     xlab("Quantile") +
-    ylab("% obs below quantile") +
+    ylab("% Obs below quantile") +
+    scale_y_continuous(label = function(x) {paste(100 * x)}) +
     coord_cartesian(expand = FALSE)
 
   return(p2)
