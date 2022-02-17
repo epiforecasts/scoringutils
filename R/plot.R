@@ -427,8 +427,8 @@ plot_heatmap <- function(scores,
 #' to allow instances where there is truth data, but no forecast. If `FALSE`
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid sym geom_ribbon
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
+#' @importFrom ggplot2 facet_wrap facet_grid sym aes geom_line
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
@@ -543,9 +543,9 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  plot <- ggplot2::ggplot(data = data, aes(x = !!ggplot2::sym(x))) +
-    ggplot2::scale_colour_manual("", values = c("black", "steelblue4")) +
-    ggplot2::theme_light()
+  plot <- ggplot(data = data, aes(x = !!sym(x))) +
+    scale_colour_manual("", values = c("black", "steelblue4")) +
+    theme_light()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
@@ -555,8 +555,10 @@ plot_predictions <- function(data = NULL,
     plot <- plot +
       ggdist::geom_lineribbon(
         data = intervals,
-        ggplot2::aes(ymin = lower, ymax = upper,
-                     fill_ramp = forcats::fct_rev(ordered(range))),
+        aes(
+          ymin = lower, ymax = upper,
+          fill_ramp = forcats::fct_rev(ordered(range))
+        ),
         lwd = 0.4
       ) +
       ggdist::scale_fill_ramp_discrete(
@@ -572,9 +574,11 @@ plot_predictions <- function(data = NULL,
 
     if (nrow(median) > 0) {
       plot <- plot +
-        ggplot2::geom_line(data = median,
-                           mapping = ggplot2::aes(y = prediction, colour = "median"),
-                           lwd = 0.4)
+        geom_line(
+          data = median,
+          mapping = aes(y = prediction, colour = "median"),
+          lwd = 0.4
+        )
     }
   }
 
