@@ -100,7 +100,7 @@ example_quantile %>%
 
 ## Scoring and summarising forecasts
 
-Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores` takes care of summarising these scores to the level specified by the user. 
+Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. If you like, you can also use `sumarise_scores()` to round your outputs by specifying e.g. `signif()` as a summary function. 
 
 ```{r}
 score(example_quantile) %>%
@@ -111,6 +111,7 @@ score(example_quantile) %>%
 example_quantile %>%
   score() %>%
   summarise_scores(by = c("model", "target_type")) %>%
+  summarise_scores(fun = signif, digits = 2) %>%
   kable()
 ```
 
@@ -128,7 +129,8 @@ For quantile-based forecasts we are often interested in specific coverage-levels
 ```{r}
 score(example_quantile) %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
-  summarise_scores(by = c("model", "target_type"))
+  summarise_scores(by = c("model", "target_type")) %>%
+  summarise_scores(fun = signif, digits = 2)
 ```
 
 ### Adding relative scores
