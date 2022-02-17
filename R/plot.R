@@ -557,7 +557,7 @@ plot_predictions <- function(data = NULL,
         data = intervals,
         aes(
           ymin = lower, ymax = upper,
-          fill_ramp = forcats::fct_rev(ordered(range))
+          fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
         ),
         lwd = 0.4
       ) +
