@@ -30,142 +30,142 @@ saveRDS(data, "inst/metrics-overview/forecast-types.Rda")
 
 ae_point <- list(
   `Metric` = "Absolute error (point forecast)",
-  `Name` = r"(\texttt{ae\_point})",
-  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `Name` = r"(ae_point)",
+  `Functions` = r"(score(), ae_point())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Absolute error if 'quantile' is NA",
+  `Properties` = "Used within score() for forecasts that have an NA value in the quantile column",
   `References` = ""
 )
 
 aem <- list(
   `Metric` = "Absolute error (median forecast)",
-  `Name` = r"(\texttt{aem})",
-  `Functions` = r"(\texttt{score()}, \texttt{ae\_median\_sample()}, \texttt{ae\_median\_quantile})",
+  `Name` = r"(aem)",
+  `Functions` = r"(score(), ae_median_sample(), ae_median_quantile())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Absolute error if 'quantile' is NA",
+  `Properties` = "Used within score() for forecasts for which quantile = 0.5",
   `References` = ""
 )
 
 
 crps <- list(
   `Metric` = "(Continuous) ranked probability score (CRPS)",
-  `Name` = r"(\texttt{crps})",
-  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `Name` = r"(crps)",
+  `Functions` = r"(score(), ae_point)",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "proper scoring rule, global, stable handling of outliers",
+  `Properties` = "Proper scoring rule (smaller is better), global, penalises over- and under-confidence similarly, stable handling of outliers",
   `References` = ""
 )
 
 log_score <- list(
-  `Metric` = "Log score (logS)",
-  `Name` = r"(\texttt{log\_score})",
-  `Functions` = r"(\texttt{score()}, \texttt{logs()}, \texttt{logs\_binary()})",
+  `Metric` = "Log score",
+  `Name` = r"(log_score)",
+  `Functions` = r"(score(), logs(), logs_binary())",
   `D` = r"($-$)",
   `C` = r"($\checkmark$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "proper scoring rule, log of predictive density evaluated at observed value, local, unstable for outliers",
+  `Properties` = "Proper scoring rule (smaller is better), local (negative log of predictive density evaluated at observed value), penalises over-confidence severaly, susceptible to outliers",
   `References` = ""
 )
 
 wis <- list(
   Metric = "(Weighted) interval score (WIS)",
-  `Name` = r"(\texttt{interval\_score})",
-  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `Name` = r"(interval_score)",
+  `Functions` = r"(score(), interval_score())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "proper scoring rule, global, stable handling of outliers, converges to crps for an increasing numbre of equally spaced intervals",
+  `Properties` = "Proper scoring rule (smaller is better), similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals",
   `References` = ""
 )
 
 dss <- list(
   `Metric` = "Dawid-Sebastiani score (DSS)",
-  `Name` = r"(\texttt{dss})",
-  `Functions` = r"(\texttt{score()}, \texttt{dss()})",
+  `Name` = r"(dss)",
+  `Functions` = r"(score(), dss())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "proper scoring rule, somewhat global, somewhat stable handling of outliers",
+  `Properties` = "Proper scoring rule (smaller is better), global, susceptible to outliers",
   `References` = ""
 )
 
 brier_score <- list(
   `Metric` = "Brier score (BS)",
-  `Name` = r"(\texttt{brier\_score})",
-  `Functions` = r"(\texttt{score()}, \texttt{brier\_score()})",
+  `Name` = r"(brier_score)",
+  `Functions` = r"(score(), brier_score())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule for binary forecasts.",
+  `Properties` = "Proper scoring rule (smaller is better), equals CRPS for binary outcomes",
   `References` = ""
 )
 
 interval_coverage <- list(
   `Metric` = "Interval coverage",
-  `Name` = r"(\texttt{coverage})",
-  `Functions` = r"(\texttt{score()})",
-  `D` = r"($$)",
+  `Name` = r"(coverage)",
+  `Functions` = r"(score())",
+  `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Percentage of observations falling inside a given central prediction interval.",
+  `Properties` = "Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage')" ,
   `References` = ""
 )
 
 coverage_deviation <- list(
   `Metric` = "Coverage deviation",
-  `Name` = r"(\texttt{coverage\_deviation})",
-  `Functions` = r"(\texttt{score()})",
-  `D` = r"($$)",
+  `Name` = r"(coverage_deviation)",
+  `Functions` = r"(score())",
+  `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Average difference between empirical and nominal interval coverage",
+  `Properties` = "Average difference between empirical and nominal interval coverage (coverage that should have been realised)",
   `References` = ""
 )
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage",
-  `Name` = r"(\texttt{quantile\_coverage})",
-  `Functions` = r"(\texttt{score()})",
+  `Name` = r"(quantile_coverage)",
+  `Functions` = r"(score())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "Percentage of observations below a given quantile of predictive CDF.",
+  `Properties` = "Proportion of observations below a given quantile of the predictive CDF",
   `References` = ""
 )
 
 
 dispersion <- list(
   `Metric` = "Dispersion",
-  `Name` = r"(\texttt{dispersion})",
-  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `Name` = r"(dispersion)",
+  `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Dispersion component of weighted interval score",
+  `Properties` = "Dispersion component of WIS",
   `References` = ""
 )
 
 mad <- list(
   `Metric` = "Median Absolute Deviation (Dispersion)",
-  `Name` = r"(\texttt{mad})",
-  `Functions` = r"(\texttt{score()}, \texttt{mad\_sample()})",
+  `Name` = r"(mad)",
+  `Functions` = r"(score(), mad_sample())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
@@ -176,56 +176,56 @@ mad <- list(
 
 bias <- list(
   `Metric` = "Bias",
-  `Name` = r"(\texttt{crps})",
-  `Functions` = r"(\texttt{score()}, \texttt{bias\_sample()}, \texttt{bias\_quantile()})",
+  `Name` = r"(crps)",
+  `Functions` = r"(score(), bias_sample(), bias_quantile())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "captures tendency to over-or underpredict (aspect of calibration)",
+  `Properties` = "Measure of relative tendency to over- or under-predict (aspect of calibration), bounded between -1 and 1 (ideally 0)",
   `References` = ""
 )
 
 under_overprediction <- list(
   `Metric` = "Under-, Over-prediction",
-  `Name` = r"(\texttt{underprediction}, \texttt{overprediction})",
-  `Functions` = r"(\texttt{score()}, \texttt{interval\_score()})",
+  `Name` = r"(underprediction, overprediction)",
+  `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Absolute amount of over-or underprediction (components of WIS)",
+  `Properties` = "Absolute amount of over-or under-prediction (components of WIS)",
   `References` = ""
 )
 
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
-  `Name` = r"(\texttt{crps})",
-  `Functions` = r"(\texttt{score()}, \texttt{ae\_point()})",
+  `Name` = r"(crps)",
+  `Functions` = r"(score(), pit())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "assesses calibration",
+  `Properties` = "PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform. ",
   `References` = ""
 )
 
 mean_score_ratio <- list(
   `Metric` = "Mean score ratio",
-  `Name` = r"(\texttt{mean\_scores\_ratio})",
-  `Functions` = r"(\texttt{pairwise\_comparison()})",
+  `Name` = r"(mean_scores_ratio)",
+  `Functions` = r"(pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
-  `Properties` = "compares performance of two models. Properties depend on the metric chosen for the comparison.",
+  `Properties` = "Compares performance of two models. Properties depend on the metric chosen for the comparison.",
   `References` = ""
 )
 
 relative_skill <- list(
   `Metric` = "(Scaled) Relative skill",
-  `Name` = r"(\texttt{relative\_skill}, \texttt{scaled\_rel\_skill})",
-  `Functions` = r"(\texttt{score()}, \texttt{pairwise\_comparison()})",
+  `Name` = r"(relative_skill, scaled_rel_skill)",
+  `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
@@ -248,15 +248,14 @@ data <- rbind(as.data.table(ae_point),
               as.data.table(mad),
               as.data.table(under_overprediction),
               as.data.table(pit),
-              as.data.table(sharpness),
+              as.data.table(dispersion),
               as.data.table(bias),
               as.data.table(mean_score_ratio),
               as.data.table(relative_skill))
 
-# save for manuscript
-saveRDS(data, file = "inst/metrics-overview/metrics-summary.Rda")
-
-data[, references := NULL]
+data[, References := NULL]
+setnames(data, old = c("Properties"),
+         new = c("Info"))
 
 metrics_summary <- data[, lapply(.SD, FUN = function(x) {
   x <- gsub("$\\checkmark$", '+', x, fixed = TRUE)
@@ -264,8 +263,17 @@ metrics_summary <- data[, lapply(.SD, FUN = function(x) {
   x <- gsub("$\\sim$", '~', x, fixed = TRUE)
   return(x)
 })]
+setnames(metrics_summary, old = c("D", "C", "B", "Q"),
+         new = c("Discrete", "Continuous", "Binary", "Quantile"))
 
 usethis::use_data(metrics_summary, overwrite = TRUE)
+
+
+# save for manuscript
+data[, c("Name", "Functions") := NULL]
+saveRDS(data, file = "inst/metrics-overview/metrics-summary.Rda")
+
+
 
 #------------------------------------------------------------------------------#
 #------------------ Detailed explanation of all the metrics -------------------#
@@ -332,7 +340,7 @@ brier_score <- list(
 interval_coverage <- list(
   `Metric` = "Interval coverage",
   `Explanation` = r"(Interval coverage measures the proportion of observed values that fall in a given prediction interval range. Interval coverage for a single prediction interval range can be calculated as $$IC_{\alpha} = \text{nominal coverage} - \text{empirical coverage},$$
-  where nominal coverage is $1 - \alpha$ and empirical coverage is the percentage of true values actually covered by all $1 - \alpha$ prediction intervals.
+  where nominal coverage is $1 - \alpha$ and empirical coverage is the proportion of true values actually covered by all $1 - \alpha$ prediction intervals.
 
   To summarise interval coverage over different over multiple interval ranges, we can compute coverage deviation defined as the mean interval coverage over all $K$ interval ranges $\alpha_k$ with $k = 1, \dots, K$:
   $$\text{Coverage deviation} = \frac{1}{K} \sum_{k = 1}^{K} \text{IC}_{\alpha_k}$$
@@ -342,7 +350,7 @@ interval_coverage <- list(
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage",
-  `Explanation` = r"(Quantile coverage for a given quantile level is the percentage of true values smaller than the predictions corresponding to that quantile level.
+  `Explanation` = r"(Quantile coverage for a given quantile level is the proportion of true values smaller than the predictions corresponding to that quantile level.
 
   **Usage**: Quantile coverage is similar to interval coverage, but conveys more information. For example, it allows us to look at the 5\% and 95\% quantile separately, instead of jointly at the 90\% prediction interval). This helps to diagnose whether it is the upper or lower end of a prediction interval that is causing problems. Plots of quantile coverage are conceptually very similar to PIT histograms.)"
 )
