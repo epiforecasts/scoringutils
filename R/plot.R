@@ -428,7 +428,7 @@ plot_heatmap <- function(scores,
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid sym aes geom_line
+#' @importFrom ggplot2 facet_wrap facet_grid aes_string geom_line
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
@@ -543,7 +543,7 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  plot <- ggplot(data = data, aes(x = !!sym(x))) +
+  plot <- ggplot(data = data, aes_string(x = x)) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
     theme_light()
 
