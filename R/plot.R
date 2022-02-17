@@ -557,6 +557,9 @@ plot_predictions <- function(data = NULL,
         data = intervals,
         aes(
           ymin = lower, ymax = upper,
+          # We use the fill_ramp aesthetic for this instead of the default fill
+          # because we want to keep fill to be able to use it for other
+          # variables
           fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
         ),
         lwd = 0.4
@@ -567,7 +570,9 @@ plot_predictions <- function(data = NULL,
 
   }
 
-  # add median in a different colour
+  # We could treat this step as part of ggdist::geom_lineribbon() but we treat
+  # it separately here to deal with the case when only the median is provided
+  # (in which case ggdist::geom_lineribbon() will fail)
   if (0 %in% range) {
     select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]
