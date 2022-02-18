@@ -427,9 +427,10 @@ plot_heatmap <- function(scores,
 #' to allow instances where there is truth data, but no forecast. If `FALSE`
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' facet_wrap facet_grid sym geom_ribbon
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
+#' @importFrom ggplot2 facet_wrap facet_grid aes_string geom_line
 #' @importFrom data.table dcast
+#' @importFrom ggdist geom_lineribbon
 #' @export
 #'
 #' @examples
@@ -542,35 +543,36 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  pal <- grDevices::colorRampPalette(c("lightskyblue1", "steelblue3"))
-
-  plot <- ggplot(data = data, aes(x = !!sym(x))) +
+  plot <- ggplot(data = data, aes_string(x = x)) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
-    scale_fill_manual(name = "range", values = pal(length(range))) +
     theme_light()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
-      value.var = "prediction"
-    )
-    intervals[, range := factor(range,
-      levels = sort(unique(range), decreasing = TRUE),
-      ordered = TRUE
-    )]
+                                   value.var = "prediction")
 
-    # plot prediction ranges
     plot <- plot +
-      geom_ribbon(
+      ggdist::geom_lineribbon(
         data = intervals,
         aes(
           ymin = lower, ymax = upper,
-          group = range, fill = range
-        )
+          # We use the fill_ramp aesthetic for this instead of the default fill
+          # because we want to keep fill to be able to use it for other
+          # variables
+          fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
+        ),
+        lwd = 0.4
+      ) +
+      ggdist::scale_fill_ramp_discrete(
+        name = "range"
       )
+
   }
 
-  # add median in a different colour
+  # We could treat this step as part of ggdist::geom_lineribbon() but we treat
+  # it separately here to deal with the case when only the median is provided
+  # (in which case ggdist::geom_lineribbon() will fail)
   if (0 %in% range) {
     select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]

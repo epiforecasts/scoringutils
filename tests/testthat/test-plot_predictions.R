@@ -66,3 +66,25 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
   skip_on_cran()
   vdiffr::expect_doppelganger("many_quantiles_from_sample", p2)
 })
+
+test_that("plot_predictions() works without median", {
+
+  example3 <- subset(
+    scoringutils::example_quantile,
+    is.na(quantile) | quantile != 0.5
+  )
+
+  p <- scoringutils::plot_predictions(
+    example3, x = "target_end_date",
+    filter_truth = list("target_end_date > '2021-06-25'",
+                        "target_end_date <= '2021-07-12'"),
+    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
+                            "forecast_date == '2021-07-12'"),
+    facet_formula = location_name ~ target_type
+  )
+  expect_s3_class(p, "ggplot")
+
+  skip_on_cran()
+  vdiffr::expect_doppelganger('no_median', p)
+
+})
