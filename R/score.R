@@ -75,18 +75,17 @@ score <- function(data,
                   ...) {
 
   # preparations ---------------------------------------------------------------
-  # check relevant columns and remove NA values in true_values and prediction
-  data <- check_clean_data(data, verbose = FALSE)
+  check_data <-
+    suppressMessages(
+      check_forecasts(data)
+    )
+  data <- check_data$cleaned_data
+  prediction_type <- check_data$prediction_type
+  forecast_unit <- check_data$forecast_unit
+  target_type <- check_data$target_type
 
   # check metrics are available or set to all metrics --------------------------
   metrics <- check_metrics(metrics)
-
-  # obtain a value for the unit of a single observation ------------------------
-  forecast_unit <- get_unit_of_forecast(data)
-
-  # check prediction and target type -------------------------------------------
-  prediction_type <- get_prediction_type(data)
-  target_type <- get_target_type(data)
 
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {

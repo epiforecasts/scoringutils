@@ -32,9 +32,14 @@
 avail_forecasts <- function(data,
                             by = NULL,
                             collapse = c("quantile", "sample")) {
-  data <- check_clean_data(data, verbose = FALSE)
 
-  forecast_unit <- get_unit_of_forecast(data)
+  check_data <-
+    suppressMessages(
+      check_forecasts(data)
+    )
+
+  data <- check_data$cleaned_data
+  forecast_unit <- check_data$forecast_unit
 
   if (is.null(by)) {
     by <- forecast_unit
