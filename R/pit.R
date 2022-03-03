@@ -182,10 +182,7 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  check_data <-
-    suppressMessages(
-      check_forecasts(data)
-    )
+  check_data <- check_forecasts(data)
 
   data <- check_data$cleaned_data
   prediction_type <- check_data$prediction_type

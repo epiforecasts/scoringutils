@@ -33,10 +33,8 @@ avail_forecasts <- function(data,
                             by = NULL,
                             collapse = c("quantile", "sample")) {
 
-  check_data <-
-    suppressMessages(
-      check_forecasts(data)
-    )
+  check_data <- check_forecasts(data)
+
 
   data <- check_data$cleaned_data
   forecast_unit <- check_data$forecast_unit
