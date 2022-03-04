@@ -73,7 +73,7 @@ check_forecasts <- function(data) {
   if (any(colnames(data) %in% available_metrics())) {
     warnings <- c(
       warnings,
-      "At least one column in the data corresponds to the name of a metric that will be computed by scoringutils. This may be a problem. Please check `available_metrics()`" # nolint
+      "At least one column in the data corresponds to the name of a metric that will be computed by scoringutils. Please check `available_metrics()`" # nolint
     )
   }
 
@@ -111,7 +111,7 @@ check_forecasts <- function(data) {
 
 
   # get information about the forecasts ----------------------------------------
-  forecast_unit <- get_unit_of_forecast(data)
+  forecast_unit <- get_forecast_unit(data)
   target_type <- get_target_type(data)
   prediction_type <- get_prediction_type(data)
 
@@ -131,22 +131,17 @@ check_forecasts <- function(data) {
   # check whether there is more than one prediction for the same target, i.e.
   # the length of prediction is greater 1 for a sample / quantile for
   # a single forecast
-  type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
-  data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
 
-  if (any(data$InternalDuplicateCheck > 1)) {
+  check_duplicates <- find_duplicates(data)
+
+  if (nrow(check_duplicates) > 0) {
     errors <- c(
       errors,
       paste(
-        "There are instances with more than one forecast for the same target.",
-        "This can't be right and needs to be resolved. Maybe you need to check",
-        "the unit of a single forecast and add missing columns?"
+        "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows."
       )
     )
-    out[["duplicate_forecasts"]] <- data[InternalDuplicateCheck > 1]
   }
-  data[, InternalDuplicateCheck := NULL]
-
 
   # check whether there are the same number of quantiles, samples --------------
   data[, InternalNumCheck := length(prediction), by = forecast_unit]
@@ -197,32 +192,39 @@ check_forecasts <- function(data) {
 
   # generate messages, warnings, errors ----------------------------------------
   if (length(messages) > 0) {
-    msg <- paste("The following messages were produced when checking inputs:",
-      messages,
-      sep = "\n"
-    )
+    msg <- collapse_messages(type = "messages", messages)
     message(msg)
   }
   if (length(warnings) > 0) {
-    msg <- paste("The following warnings were produced when checking inputs:",
-      warnings,
-      sep = "\n"
-    )
+    msg <- collapse_messages(type = "warnings", warnings)
     warning(msg)
   }
   if (length(errors) > 0) {
-    print("Duplicate forecasts:")
-    print(out[["duplicate_forecasts"]])
-    msg <- paste("The following errors were produced when checking inputs:",
-      errors,
-      sep = "\n"
-    )
+    msg <- collapse_messages(type = "errors", errors)
     stop(msg)
   }
 
   # return check results
   class(out) <- c("scoringutils_check", "list")
   return(out)
+}
+
+
+#' @title Collapse several messages to one
+#'
+#' @description Internal helper function to facilitate generating messages
+#' and warnings in [check_forecasts()]
+#'
+#' @param type character, should be either "messages", "warnings" or "errors"
+#' @param messages the messages or warnings to collapse
+#'
+#' @return string with the message or warning
+#' @keywords internal
+collapse_messages <- function(type = "messages", messages) {
+  paste0(
+    "The following ",  type, " were produced when checking inputs:\n",
+    paste(paste0(seq_along(messages), ". "),
+          messages, collapse = "\n"))
 }
 
 
@@ -263,3 +265,31 @@ print.scoringutils_check <- function(x, ...) {
 
   return(invisible(x))
 }
+
+
+#' @title Find duplicate forecasts
+#'
+#' @description Helper function to identify duplicate forecasts, i.e.
+#' instances where there is more than one forecast for the same prediction
+#' target.
+#'
+#' @param data A data.frame as used for [score()]
+#'
+#' @return A data.frame with all rows for which a duplicate forecast was found
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' example <- rbind(example_quantile, example_quantile[1000:1010])
+#' find_duplicates(example)
+
+find_duplicates <- function(data) {
+  type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
+  forecast_unit <- get_forecast_unit(data)
+
+  data <- as.data.table(data)
+  data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
+  out <- data[InternalDuplicateCheck > 1]
+  out[, InternalDuplicateCheck := NULL]
+  return(out[])
+}
+

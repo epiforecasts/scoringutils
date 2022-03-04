@@ -321,7 +321,7 @@ get_target_type <- function(data) {
 #'
 #' @keywords internal
 
-get_unit_of_forecast <- function(data) {
+get_forecast_unit <- function(data) {
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "pit_value",

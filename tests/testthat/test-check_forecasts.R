@@ -27,5 +27,5 @@ test_that("check_forecasts() function throws an error with duplicate forecasts",
   example <- rbind(example_quantile,
                    example_quantile[1000:1010])
 
-  expect_error(check_forecasts(example))
+  expect_error(suppressWarnings(check_forecasts(example)))
 })

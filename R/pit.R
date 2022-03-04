@@ -202,7 +202,7 @@ pit <- function(data,
         quantile = c(quantile, 1),
         pit_value = diff(c(0, quantile_coverage, 1))
       ),
-      by = c(get_unit_of_forecast(coverage))
+      by = c(get_forecast_unit(coverage))
     ]
 
     return(coverage[])
