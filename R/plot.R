@@ -1104,7 +1104,7 @@ plot_pit <- function(pit,
 
   # function for data.frames
   if (is.data.frame(pit)) {
-    facet_cols <- get_unit_of_forecast(pit)
+    facet_cols <- get_forecast_unit(pit)
     formula <- as.formula(paste("~", paste(facet_cols, collapse = "+")))
 
     # quantile version

@@ -182,11 +182,10 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  # clean data by removing NA values
-  data <- check_clean_data(data, verbose = FALSE)
+  check_data <- check_forecasts(data)
 
-  # get prediction type
-  prediction_type <- get_prediction_type(data)
+  data <- check_data$cleaned_data
+  prediction_type <- check_data$prediction_type
 
   # if prediction type is quantile, simply extract coverage values from
   # score and returned a list with named vectors
@@ -203,7 +202,7 @@ pit <- function(data,
         quantile = c(quantile, 1),
         pit_value = diff(c(0, quantile_coverage, 1))
       ),
-      by = c(get_unit_of_forecast(coverage))
+      by = c(get_forecast_unit(coverage))
     ]
 
     return(coverage[])

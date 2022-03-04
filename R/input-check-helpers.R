@@ -175,58 +175,6 @@ check_equal_length <- function(...,
 }
 
 
-#' @title Clean forecast data
-#'
-#' @description Helper function to check that the input is in fact a data.frame
-#' or similar and remove rows with no value for `prediction` or `true_value`
-#'
-#' @param verbose Boolean (default is `TRUE`), whether or not to print warnings
-#'
-#' @return A data.table with NA values in `true_value` or `prediction` removed.
-#' @inheritParams avail_forecasts
-#' @importFrom data.table as.data.table
-#'
-#' @keywords internal
-
-check_clean_data <- function(data, verbose = TRUE) {
-  if (!is.data.frame(data)) {
-    stop("Input should be a data.frame or similar")
-  }
-  data <- data.table::as.data.table(data)
-
-  # make sure necessary columns are present
-  if (!all(c("true_value", "prediction") %in% colnames(data))) {
-    stop("Data needs to have columns called `true_value` and `prediction`")
-  }
-
-  if (any(colnames(data) %in% available_metrics())) {
-    warning(
-      "At least one column in the data corresponds to the name of a ",
-      "metric that will be computed by scoringutils. This may be a ",
-      "problem. Please check `available_metrics()`"
-    )
-  }
-
-  # remove rows where prediction or true value are NA
-  if (anyNA(data$true_value)) {
-    if (verbose) {
-      warning("Some values for `true_value` are NA in the data provided")
-    }
-  }
-  data <- data[!is.na(true_value)]
-
-  if (anyNA(data$prediction)) {
-    if (verbose) {
-      warning("Some values for `prediction` are NA in the data provided")
-    }
-  }
-  data <- data[!is.na(prediction)]
-  if (nrow(data) == 0) {
-    stop("After removing all NA true values and predictions, there were no observations left")
-  }
-  return(data)
-}
-
 
 #' @title Check whether the desired metrics are available in scoringutils
 #'

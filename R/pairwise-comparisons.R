@@ -70,7 +70,7 @@ pairwise_comparison <- function(scores,
   }
 
   # identify unit of single observation.
-  forecast_unit <- get_unit_of_forecast(scores)
+  forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
   if (identical(sort(by), sort(forecast_unit))) {
@@ -279,7 +279,7 @@ compare_two_models <- function(scores,
                                n_permutations = 999) {
   scores <- data.table::as.data.table(scores)
 
-  forecast_unit <- get_unit_of_forecast(scores)
+  forecast_unit <- get_forecast_unit(scores)
 
   if (!("model" %in% names(scores))) {
     stop("pairwise comparisons require a column called 'model'")

@@ -67,7 +67,7 @@ summarise_scores <- function(scores,
 
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
-  forecast_unit <- get_unit_of_forecast(scores)
+  forecast_unit <- get_forecast_unit(scores)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
@@ -113,7 +113,7 @@ summarise_scores <- function(scores,
     # merge back
     scores <- merge(scores, pairwise,
       all.x = TRUE,
-      by = get_unit_of_forecast(pairwise)
+      by = get_forecast_unit(pairwise)
     )
   }
 
