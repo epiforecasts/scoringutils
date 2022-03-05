@@ -1,4 +1,4 @@
-#' @title LogS
+#' @title Logarithmic score
 #'
 #' @description
 #' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
@@ -16,15 +16,14 @@
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' logs(true_values, predictions)
+#' logs_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 #' @keywords metric
 
-
-logs <- function(true_values, predictions) {
+logs_sample <- function(true_values, predictions) {
   check_true_values(true_values)
   check_predictions(predictions, true_values,
     class = "matrix"
@@ -42,20 +41,20 @@ logs <- function(true_values, predictions) {
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package.
-#' @inheritParams logs
+#' @inheritParams logs_sample
 #' @return vector with scoring values
 #' @importFrom scoringRules dss_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' dss(true_values, predictions)
+#' dss_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 #' @keywords metric
 
-dss <- function(true_values, predictions) {
+dss_sample <- function(true_values, predictions) {
   check_true_values(true_values)
   check_predictions(predictions, true_values,
     class = "matrix"
@@ -74,20 +73,20 @@ dss <- function(true_values, predictions) {
 #' function from the
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
-#' @inheritParams logs
+#' @inheritParams logs_sample
 #' @return vector with the scoring values
 #' @importFrom scoringRules crps_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' crps(true_values, predictions)
+#' crps_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
 #' @keywords metric
 
-crps <- function(true_values, predictions) {
+crps_sample <- function(true_values, predictions) {
 
   # check inputs
   check_true_values(true_values)

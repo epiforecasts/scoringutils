@@ -1,24 +1,24 @@
 test_that("Lower-level input check functions work", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(20, rpois(n = 30, lambda = 1:30))
-  expect_equal(length(crps(true_values, predictions)), 30)
+  expect_equal(length(crps_sample(true_values, predictions)), 30)
 
   # should error when wrong prediction type is given
   predictions2 <- rpois(30, lambda = 1)
-  expect_error(crps(true_values, predictions2),
+  expect_error(crps_sample(true_values, predictions2),
     "'predictions' should be a matrix. Instead `integer` was found",
     fixed = TRUE
   )
 
   # predictions have wrong number of rows
   predictions3 <- replicate(20, rpois(n = 31, lambda = 1))
-  expect_error(crps(true_values, predictions3),
+  expect_error(crps_sample(true_values, predictions3),
     "Mismatch: 'true_values' has length `30`, but 'predictions' has `31` rows.",
     fixed = TRUE
   )
 
   # error with missing argument
-  expect_error(crps(predictions = predictions),
+  expect_error(crps_sample(predictions = predictions),
     "true_values argument is missing",
     fixed = TRUE
   )

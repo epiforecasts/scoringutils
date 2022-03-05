@@ -41,14 +41,14 @@ score_sample <- function(data,
   }
   # DSS
   if ("dss" %in% metrics) {
-    data[, dss := scoringutils::dss(
+    data[, dss := scoringutils::dss_sample(
       unique(true_value),
       t(prediction)
     ), by = forecast_unit]
   }
   # CRPS
   if ("crps" %in% metrics) {
-    data[, crps := scoringutils::crps(
+    data[, crps := scoringutils::crps_sample(
       unique(true_value),
       t(prediction)
     ), by = forecast_unit]
@@ -57,7 +57,7 @@ score_sample <- function(data,
   if ("log_score" %in% metrics) {
     # only compute if prediction type is continuous
     if (prediction_type == "continuous") {
-      data[, log_score := scoringutils::logs(
+      data[, log_score := scoringutils::logs_sample(
         unique(true_value),
         t(prediction)
       ), by = forecast_unit]

@@ -68,7 +68,7 @@ crps <- list(
 log_score <- list(
   `Metric` = "Log score",
   `Name` = r"(log_score)",
-  `Functions` = r"(score(), logs(), logs_binary())",
+  `Functions` = r"(score(), logs_sample(), logs_binary())",
   `D` = r"($-$)",
   `C` = r"($\checkmark$)",
   `B` = r"($\checkmark$)",
@@ -92,7 +92,7 @@ wis <- list(
 dss <- list(
   `Metric` = "Dawid-Sebastiani score (DSS)",
   `Name` = r"(dss)",
-  `Functions` = r"(score(), dss())",
+  `Functions` = r"(score(), dss_sample())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",

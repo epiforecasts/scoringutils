@@ -36,9 +36,9 @@
 #' - [bias_quantile()]
 #' - [bias_range()]
 #' - [mad_sample()]
-#' - [crps()]
-#' - [logs()]
-#' - [dss()]
+#' - [crps_sample()]
+#' - [logs_sample()]
+#' - [dss_sample()]
 #' - [ae_median_sample()]
 #'
 #' Predictions can be evaluated in a lot of different formats. If you want to

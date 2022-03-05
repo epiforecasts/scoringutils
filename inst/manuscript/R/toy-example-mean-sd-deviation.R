@@ -22,9 +22,9 @@ res_sd <- data.table(sd = sd,
                      dss = NA_real_,
                      logs = NA_real_)
 
-res_sd[, `:=` (crps = mean(crps(y = true_values, family = "normal", mean = mu, sd = sd)),
-               logs = mean(logs(y = true_values, family = "normal", mean = mu, sd = sd)),
-               dss = mean(dss_norm(y = true_values, mean = mu, sd = sd))),
+res_sd[, `:=` (crps = mean(scoringRules::crps(y = true_values, family = "normal", mean = mu, sd = sd)),
+               logs = mean(scoringRules::logs(y = true_values, family = "normal", mean = mu, sd = sd)),
+               dss = mean(scoringRules::dss_norm(y = true_values, mean = mu, sd = sd))),
        by = "sd"]
 
 deviation_sd <- res_sd |>
@@ -44,8 +44,8 @@ deviation_sd <- res_sd |>
 #                      dss = NA_real_,
 #                      logs = NA_real_)
 #
-# res_mu[, `:=` (crps = mean(crps(y = true_values, family = "normal", mean = mu, sd = sd)),
-#                logs = mean(logs(y = true_values, family = "normal", mean = mu, sd = sd)),
+# res_mu[, `:=` (crps = mean(crps_sample(y = true_values, family = "normal", mean = mu, sd = sd)),
+#                logs = mean(logs_sample(y = true_values, family = "normal", mean = mu, sd = sd)),
 #                dss = mean(dss_norm(y = true_values, mean = mu, sd = sd))),
 #        by = "mu"]
 #
@@ -71,9 +71,9 @@ res_mu2 <- data.table(true_value = true_values,
                       dss = NA_real_,
                       logs = NA_real_)
 
-res_mu2[, `:=` (crps = crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
-                logs = logs(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
-                dss = dss_norm(y = true_value, mean = true_mu, sd = true_sd) / 10)]
+res_mu2[, `:=` (crps = scoringRules::crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
+                logs = scoringRules::logs(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
+                dss = scoringRules::dss_norm(y = true_value, mean = true_mu, sd = true_sd) / 10)]
 
 label_fn <- function(x) {
   paste(10*x)

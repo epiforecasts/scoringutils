@@ -129,7 +129,7 @@ integer valued forecasts. Smaller values are better.
 ```{r}
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-crps(true_values, predictions)
+crps_sample(true_values, predictions)
 ```
 
 
@@ -143,11 +143,11 @@ integer valued forecasts. Smaller values are better.
 ```{r}
 true_values <- rpois(30, lambda = 1:30)
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-dss(true_values, predictions)
+dss_sample(true_values, predictions)
 ```
 
 # Log Score
-Wrapper around the `log_sample()` function from the
+Wrapper around the `logs_sample()` function from the
 `scoringRules` package. For more information look at the manuals from the
 `scoringRules` package. The function should not be used for integer valued 
 forecasts. While Log Scores are in principle possible for integer valued 
@@ -157,7 +157,7 @@ for discrete values. Smaller values are better.
 ```{r}
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-logs(true_values, predictions)
+logs_sample(true_values, predictions)
 ```
 
 # Brier Score

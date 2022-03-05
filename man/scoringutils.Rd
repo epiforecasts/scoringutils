@@ -41,9 +41,9 @@ Alternatively, the following functions can be accessed directly:
 \item \code{\link[=bias_quantile]{bias_quantile()}}
 \item \code{\link[=bias_range]{bias_range()}}
 \item \code{\link[=mad_sample]{mad_sample()}}
-\item \code{\link[=crps]{crps()}}
-\item \code{\link[=logs]{logs()}}
-\item \code{\link[=dss]{dss()}}
+\item \code{\link[=crps_sample]{crps_sample()}}
+\item \code{\link[=logs_sample]{logs_sample()}}
+\item \code{\link[=dss_sample]{dss_sample()}}
 \item \code{\link[=ae_median_sample]{ae_median_sample()}}
 }
 
