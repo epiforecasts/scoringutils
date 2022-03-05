@@ -28,7 +28,9 @@ globalVariables(c(
   "count",
   "coverage_deviation",
   "CRPS",
+  "crps",
   "DSS",
+  "dss",
   "fill_col",
   "identif",
   "Interval_Score",
@@ -185,7 +187,15 @@ available_metrics <- function() {
   return(available_metrics)
 }
 
-
+#' @title Simple permutation test
+#'
+#' @description #' The implementation of the permutation test follows the
+#' function
+#' `permutationTest` from the `surveillance` package by Michael Höhle,
+#' Andrea Riebler and Michaela Paul.
+#'
+#' @return p-value of the permutation test
+#' @keywords internal
 permutation_test <- function(scores1,
                              scores2,
                              n_permutation = 999,
@@ -231,7 +241,7 @@ permutation_test <- function(scores1,
 #' @return A data.table
 #'
 #' @keywords internal
-#' 
+#'
 delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
   df <- data.table::as.data.table(df)
   delete_columns <- names(df)[names(df) %in% cols_to_delete]
