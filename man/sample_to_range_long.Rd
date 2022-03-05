@@ -29,4 +29,4 @@ a data.frame in a long interval range format
 Transform data from a format that is based on predictive samples to a format
 based on interval ranges
 }
-\keyword{deprecated}
+\keyword{internal}

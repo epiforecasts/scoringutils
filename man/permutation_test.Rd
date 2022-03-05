@@ -16,6 +16,9 @@ permutation_test(
 p-value of the permutation test
 }
 \description{
-Simple permutation test
+#' The implementation of the permutation test follows the
+function
+\code{permutationTest} from the \code{surveillance} package by Michael Höhle,
+Andrea Riebler and Michaela Paul.
 }
 \keyword{internal}

@@ -119,87 +119,8 @@ sample_to_quantile <- function(data,
 }
 
 
-# ======================= functions below are deprecated =======================
-
-#' @title Pivot Range Format Forecasts From Long to Wide Format
-#'
-#' @description
-#' Pivot range data from long to wide
-#'
-#' @param data a data.frame following the specifications from
-#' [score()]) for quantile forecasts.
-#' @return a data.frame in wide format
-#' @importFrom data.table dcast
-#' @keywords deprecated
-
-range_long_to_wide <- function(data) {
-  data <- data.table::as.data.table(data)
-
-  # remove quantile column if one is present
-  if ("quantile" %in% colnames(data)) {
-    data[, quantile := NULL]
-  }
-
-  out <- data.table::dcast(data, ... ~ boundary + range,
-    value.var = "prediction"
-  )
-
-  return(out[])
-}
-
-
-
-
-#' @title Pivot Range Format Forecasts From Wide to Long Format
-#'
-#' @description
-#' Pivot wide range format to long range format.
-#'
-#' @param data a data.frame following the specifications from
-#' [score()]) for quantile forecasts.
-#' @return a data.frame in long format
-#' @importFrom data.table melt
-#' @keywords deprecated
-
-range_wide_to_long <- function(data) {
-  data <- data.table::as.data.table(data)
-  colnames <- colnames(data)
-
-  # semi-wide format where only lower and upper are given independently
-  if (all(c("lower", "upper") %in% colnames)) {
-    id_vars <- colnames[!(colnames %in% c("lower", "upper"))]
-
-    # need to remove quantile column if present
-    if ("quantile" %in% colnames) {
-      data[, "quantile" := NULL]
-    }
-
-    data <- data.table::melt(data,
-      id.vars = id_vars,
-      measure.vars = c("lower", "upper"),
-      variable.name = "boundary",
-      value.name = "prediction"
-    )
-  } else {
-    # alternative is super-wide format where every range has its own column
-    ranges <- colnames[grepl("lower", colnames) | grepl("upper", colnames)]
-
-    id_vars <- colnames[!(colnames %in% ranges)]
-
-    data <- data.table::melt(data,
-      id.vars = id_vars,
-      measure.vars = ranges,
-      variable.name = "range",
-      value.name = "prediction"
-    )
-    data[, boundary := gsub("_.*", "", range)]
-    data[, range := as.numeric(gsub("^.*?_", "", range))]
-  }
-
-  return(data[])
-}
-
-
+# ==================== Functions internally used for scoring ===================
+# These functions would ideally be replaced in the future
 
 #' @title Change Data from a Range Format to a Quantile Format
 #'
@@ -214,7 +135,7 @@ range_wide_to_long <- function(data) {
 #' transformation (default is FALSE)
 #' @return a data.frame in a plain quantile format
 #' @importFrom data.table copy
-#' @keywords deprecated
+#' @keywords internal
 
 
 range_long_to_quantile <- function(data,
@@ -227,8 +148,8 @@ range_long_to_quantile <- function(data,
   data <- data[!(range == 0 & boundary == "upper"), ]
 
   data[, quantile := ifelse(boundary == "lower",
-    round((100 - range) / 200, 10),
-    round((1 - (100 - range) / 200), 10)
+                            round((100 - range) / 200, 10),
+                            round((1 - (100 - range) / 200), 10)
   )]
 
   if (!keep_range_col) {
@@ -238,7 +159,6 @@ range_long_to_quantile <- function(data,
 
   return(unique(data)[])
 }
-
 
 
 #' @title Change Data from a Plain Quantile Format to a Long Range Format
@@ -253,7 +173,7 @@ range_long_to_quantile <- function(data,
 #' output after transformation (default is FALSE)
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table copy
-#' @keywords deprecated
+#' @keywords internal
 
 quantile_to_range_long <- function(data,
                                    keep_quantile_col = TRUE) {
@@ -261,8 +181,8 @@ quantile_to_range_long <- function(data,
 
   data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
   data[, range := ifelse(boundary == "lower",
-    round((1 - 2 * quantile) * 100, 10),
-    round((2 * quantile - 1) * 100, 10)
+                         round((1 - 2 * quantile) * 100, 10),
+                         round((2 * quantile - 1) * 100, 10)
   )]
 
   # add median quantile
@@ -287,8 +207,6 @@ quantile_to_range_long <- function(data,
 }
 
 
-
-
 #' @title Change Data from a Sample Based Format to a Long Interval Range Format
 #'
 #' @description
@@ -306,7 +224,7 @@ quantile_to_range_long <- function(data,
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
-#' @keywords deprecated
+#' @keywords internal
 
 sample_to_range_long <- function(data,
                                  range = c(0, 50, 90),
@@ -319,12 +237,12 @@ sample_to_range_long <- function(data,
   quantiles <- sort(unique(c(lower_quantiles, upper_quantiles)))
 
   data <- sample_to_quantile(data,
-    quantiles = quantiles,
-    type = type
+                             quantiles = quantiles,
+                             type = type
   )
 
   data <- quantile_to_range_long(data,
-    keep_quantile_col = keep_quantile_col
+                                 keep_quantile_col = keep_quantile_col
   )
 
   return(data[])

@@ -19,4 +19,4 @@ a data.frame in a long interval range format
 Transform data from a format that uses quantiles only to one that uses
 interval ranges to denote quantiles.
 }
-\keyword{deprecated}
+\keyword{internal}
