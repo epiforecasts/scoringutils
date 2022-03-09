@@ -48,7 +48,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
-    ggdist (>= 3.1.0),
+    ggdist (>= 3.5.0),
     ggplot2,
     scoringRules,
     stats,
