@@ -48,7 +48,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table,
-    ggdist (>= 3.5.0),
+    ggdist (>= 3.1.0),
     ggplot2,
     scoringRules,
     stats,
@@ -69,5 +69,5 @@ URL: https://github.com/epiforecasts/scoringutils, https://epiforecasts.io/scori
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.1)
+    R (>= 3.5)
 Roxygen: list(markdown = TRUE)
