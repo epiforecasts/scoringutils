@@ -1,4 +1,4 @@
-url: epiforecasts.io/scoringutils/
+url: https://epiforecasts.io/scoringutils/
 template:
   bootstrap: 5
   package: preferably
