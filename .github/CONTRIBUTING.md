@@ -1,8 +1,6 @@
 # Contributing to scoringutils
 
 This outlines how to propose a change to scoringutils. 
-For more detailed info about contributing to this, and other tidyverse packages, please see the
-[**development contributing guide**](https://rstd.io/tidy-contrib). 
 
 ## Fixing typos
 

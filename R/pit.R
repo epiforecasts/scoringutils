@@ -108,7 +108,7 @@ pit_sample <- function(true_values,
   if (!is.matrix(predictions)) {
     msg <- sprintf(
       "'predictions' should be a matrix. Instead `%s` was found",
-      class(predictions[1])
+      class(predictions)[1]
     )
     stop(msg)
   }

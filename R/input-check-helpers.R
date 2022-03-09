@@ -7,9 +7,9 @@
 #' n (corresponding to the length of the true_values) or a nxN matrix of
 #' predictive samples, n (number of rows) being the number of data points and
 #' N (number of columns) the number of Monte Carlo samples
-#' @param type character, one of "continuous", "integer" or "binary" that
+#' @param type character, one of "continuous" (default), "integer" or "binary" that
 #' defines the type of the forecast
-#' @param class character, either "vector" or "matrix" that determines the
+#' @param class character, either "vector" (default) or "matrix" that determines the
 #' class the input has to correspond to
 #' @inheritParams ae_median_sample
 #' @return NULL
@@ -30,7 +30,7 @@ check_predictions <- function(predictions,
     if (!is.vector(predictions)) {
       msg <- sprintf(
         "'predictions' should be a vector. Instead `%s` was found",
-        class(predictions[1])
+        class(predictions)[1]
       )
       stop(msg)
     }
