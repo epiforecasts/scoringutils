@@ -30,7 +30,7 @@ check_predictions <- function(predictions,
     if (!is.vector(predictions)) {
       msg <- sprintf(
         "'predictions' should be a vector. Instead `%s` was found",
-        class(predictions[1])
+        class(predictions)[1]
       )
       stop(msg)
     }
