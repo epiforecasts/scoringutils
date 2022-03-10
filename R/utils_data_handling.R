@@ -88,28 +88,34 @@ merge_pred_and_obs <- function(forecasts, observations,
 #'
 #' @param data a data.frame with samples
 #' @param quantiles a numeric vector of quantiles to extract
-#' @param type type argument passed down to the quantile function. For more
-#' information, see [quantile()]
+#' @param ... Additional arguments that can be passed down to [quantile()].
+#' In contrast to the default behaviour of [quantile()], this function by
+#' default has `na.rm = TRUE`
 #' @return a data.frame in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
+#' @importFrom methods hasArg
 #' @keywords data-handling
 #' @export
 #' @examples
 #' sample_to_quantile(example_integer)
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
-                               type = 7) {
+                               ...) {
   data <- data.table::as.data.table(data)
 
   reserved_columns <- c("prediction", "sample")
   by <- setdiff(colnames(data), reserved_columns)
 
+  if(!hasArg("na.rm")) {
+    na.rm <- TRUE
+  }
+
   data <- data[, .(
     quantile = quantiles,
     prediction = quantile(prediction,
       prob = quantiles,
-      type = type, na.rm = TRUE
+      ..., na.rm = na.rm
     )
   ),
   by = by
