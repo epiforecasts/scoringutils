@@ -63,9 +63,6 @@ score_sample <- function(data,
       ), by = forecast_unit]
     }
   }
-  # coverage
-  if ("coverage" %in% metrics) {
-  }
 
   res <- data.table::copy(data)
 
