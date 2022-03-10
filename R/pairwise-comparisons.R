@@ -69,6 +69,13 @@ pairwise_comparison <- function(scores,
     metric <- infer_rel_skill_metric(scores)
   }
 
+  # check that all values of the chosen metric are positive
+  if (any(sign(scores[[metric]] < 0))) {
+    msg <- paste("Some values of", metric,
+                 "are negative. Pairwise comparisons do not make sense here.")
+    stop(msg)
+  }
+
   # identify unit of single observation.
   forecast_unit <- get_forecast_unit(scores)
 
