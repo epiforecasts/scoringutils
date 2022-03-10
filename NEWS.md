@@ -8,7 +8,7 @@ Major update to the package and most package functions with lots of breaking cha
 can easily be piped and have simplified arguments and outputs. 
 
 ### new functions and function changes
-- the function `eval_forecasts` was replaced by a function [score()] with a 
+- the function `eval_forecasts()` was replaced by a function [score()] with a 
 much reduced set of function arguments. 
 - Functionality to summarise scores and to add relative skill scores was moved
 to a function [summarise_scores()]
@@ -18,7 +18,10 @@ to a function [summarise_scores()]
 intervals
 - new function [avail_forecasts()] allows to visualise the number of available
 forecasts
-- all plotting functions were renamed to begin with `plot_`
+- new function [find_duplicates()] to find duplicate forecasts which cause an 
+error
+- all plotting functions were renamed to begin with `plot_`. Arguments were 
+simplified
 - the function [pit()] now works based on data.frames. The old `pit` function 
 was renamed to [pit_sample()]. PIT p-values were removed entirely. 
 - the function [plot_pit()] now works directly with input as produced by [pit()]
@@ -26,6 +29,8 @@ was renamed to [pit_sample()]. PIT p-values were removed entirely.
 restricted to sample-based, quantile-based or binary forecasts. 
 - the function [brier_score()] now returns all brier scores, rather than taking
 the mean before returning an output. 
+- `crps`, `dss` and `logs` were renamed to [crps_sample()], [dss_sample()], and
+[logs_sample()]
 
 ### package data updated
 - package data is now based on forecasts submitted to the European Forecast Hub
@@ -57,8 +62,8 @@ such that they don't have to be called twice to display the contents.
 
 ## Feature updates
 - added a function, `pairwise_comparison()` that runs pairwise comparisons 
-between models on the output of `score()`
-- added functionality to compute relative skill within `score()`
+between models on the output of `eval_forecasts()`
+- added functionality to compute relative skill within `eval_forecasts()`
 - added a function to visualise pairwise comparisons
 
 ## Package updates
@@ -71,13 +76,13 @@ forecasts.
 # scoringutils 0.1.
 
 ## Feature updates
-- `score()` can now handle a separate forecast and truth data set as 
+- `eval_forecasts()` can now handle a separate forecast and truth data set as 
 as input
-- `score()` now supports scoring point forecasts along side quantiles
+- `eval_forecasts()` now supports scoring point forecasts along side quantiles
 in a quantile-based format. Currently the only metric used is the absolute error
 
 ## Package updates
-- Many functions, especially `score()` got a major rewrite. While 
+- Many functions, especially `eval_forecasts()` got a major rewrite. While 
 functionality should be unchanged, the code should now be easier to maintain
 - Some of the data-handling functions got renamed, but old names are supported
 as well for now. 
