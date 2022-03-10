@@ -9,7 +9,7 @@ check_true_values(true_values, type = c("continuous", "integer", "binary"))
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{type}{character, one of "continuous", "integer" or "binary" that
+\item{type}{character, one of "continuous" (default), "integer" or "binary" that
 defines the type of the forecast}
 }
 \description{

@@ -20,10 +20,10 @@ N (number of columns) the number of Monte Carlo samples}
 
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{type}{character, one of "continuous", "integer" or "binary" that
+\item{type}{character, one of "continuous" (default), "integer" or "binary" that
 defines the type of the forecast}
 
-\item{class}{character, either "vector" or "matrix" that determines the
+\item{class}{character, either "vector" (default) or "matrix" that determines the
 class the input has to correspond to}
 }
 \description{
