@@ -49,6 +49,7 @@ globalVariables(c(
   "mean_scores_ratio",
   "metric",
   "metrics_select",
+  "metrics_summary",
   "model",
   "n_obs",
   "n_obs wis_component_name",
@@ -87,105 +88,7 @@ globalVariables(c(
 #' @keywords info
 
 available_metrics <- function() {
-  available_metrics <- c(
-    "ae_point", "ae_median", "log_score",
-    "dispersion", "bias", "dss", "crps", "brier_score",
-    "coverage", "coverage_deviation", "quantile_coverage",
-    "interval_score",
-    "underprediction", "overprediction", "relative_skill",
-    "scaled_rel_skill"
-  )
-
-  metrics <- list()
-  ae_point <- list(
-    id = "ae_point",
-    name = "Absolute error of the point forecast",
-    description = ""
-  )
-  ae_median <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  log_score <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-
-  sharpness <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  bias <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  dss <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  crps <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-
-  brier_score <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  coverage <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  coverage_deviation <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  quantile_coverage <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  pit_values <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  interval_score <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  underprediction <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  overprediction <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  relative_skill <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-  scaled_rel_skill <- list(
-    id = "",
-    name = "",
-    description = ""
-  )
-
-  return(available_metrics)
+  return(unique(metrics_summary$Name))
 }
 
 #' @title Simple permutation test

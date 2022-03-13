@@ -28,27 +28,27 @@ saveRDS(data, "inst/metrics-overview/forecast-types.Rda")
 #----------------- Overview with applicability of the metrics -----------------#
 #------------------------------------------------------------------------------#
 
-ae_point <- list(
-  `Metric` = "Absolute error (point forecast)",
-  `Name` = r"(ae_point)",
-  `Functions` = r"(score(), ae_point())",
+ae <- list(
+  `Metric` = "Absolute error",
+  `Name` = list("ae_point", "ae_median"),
+  `Functions` = r"(score(), ae_point()), ae_median_sample()",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Used within score() for forecasts that have an NA value in the quantile column",
+  `Properties` = "Absolute error, suitable for scoring the median of a predictive distribution.",
   `References` = ""
 )
 
-aem <- list(
-  `Metric` = "Absolute error (median forecast)",
-  `Name` = r"(aem)",
-  `Functions` = r"(score(), ae_median_sample(), ae_median_quantile())",
+se <- list(
+  `Metric` = "Squared error",
+  `Name` = list("se_point", "se_mean"),
+  `Functions` = r"(score(), se_point(), se_mean_sample())",
   `D` = r"($-$)",
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Used within score() for forecasts for which quantile = 0.5",
+  `Properties` = "Squared error, suitable for scoring the mean of a predictive distribution.",
   `References` = ""
 )
 
@@ -61,7 +61,7 @@ crps <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule (smaller is better), global, penalises over- and under-confidence similarly, stable handling of outliers",
+  `Properties` = "Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over- and under-confidence similarly, stable handling of outliers",
   `References` = ""
 )
 
@@ -73,7 +73,7 @@ log_score <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule (smaller is better), local (negative log of predictive density evaluated at observed value), penalises over-confidence severaly, susceptible to outliers",
+  `Properties` = "Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers",
   `References` = ""
 )
 
@@ -85,7 +85,7 @@ wis <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Proper scoring rule (smaller is better), similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals",
+  `Properties` = "Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals",
   `References` = ""
 )
 
@@ -97,7 +97,7 @@ dss <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule (smaller is better), global, susceptible to outliers",
+  `Properties` = "Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over-confidence severely",
   `References` = ""
 )
 
@@ -109,7 +109,7 @@ brier_score <- list(
   `C` = r"($-$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule (smaller is better), equals CRPS for binary outcomes",
+  `Properties` = "Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over- and under-confidence similarly",
   `References` = ""
 )
 
@@ -121,7 +121,7 @@ interval_coverage <- list(
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage')" ,
+  `Properties` = "Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage'). Used to assess probabilistic calibration." ,
   `References` = ""
 )
 
@@ -145,7 +145,7 @@ quantile_coverage <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "Proportion of observations below a given quantile of the predictive CDF",
+  `Properties` = "Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.",
   `References` = ""
 )
 
@@ -158,7 +158,7 @@ dispersion <- list(
   `C` = r"($-$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Dispersion component of WIS",
+  `Properties` = "Dispersion component of WIS, measures width of predictive intervals.",
   `References` = ""
 )
 
@@ -170,13 +170,13 @@ mad <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($-$)",
-  `Properties` = "Measure for dispersion: median of the absolute deviations from the median",
+  `Properties` = "Measure for dispersion of a forecast: median of the absolute deviations from the median",
   `References` = ""
 )
 
 bias <- list(
   `Metric` = "Bias",
-  `Name` = r"(crps)",
+  `Name` = r"(bias)",
   `Functions` = r"(score(), bias_sample(), bias_quantile())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
@@ -188,7 +188,7 @@ bias <- list(
 
 under_overprediction <- list(
   `Metric` = "Under-, Over-prediction",
-  `Name` = r"(underprediction, overprediction)",
+  `Name` = list("underprediction", "overprediction"),
   `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
   `C` = r"($-$)",
@@ -224,18 +224,18 @@ mean_score_ratio <- list(
 
 relative_skill <- list(
   `Metric` = "(Scaled) Relative skill",
-  `Name` = r"(relative_skill, scaled_rel_skill)",
+  `Name` = list("relative_skill", "scaled_rel_skill"),
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
-  `Properties` = "Ranks models based on pairwise comparisons. Properties depend on the metric chosen for the comparison.",
+  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.",
   `References` = ""
 )
 
-data <- rbind(as.data.table(ae_point),
-              as.data.table(aem),
+data <- rbind(as.data.table(ae),
+              as.data.table(se),
               as.data.table(crps),
               as.data.table(log_score),
               as.data.table(wis),
@@ -271,8 +271,7 @@ usethis::use_data(metrics_summary, overwrite = TRUE)
 
 # save for manuscript
 data[, c("Name", "Functions") := NULL]
-saveRDS(data, file = "inst/metrics-overview/metrics-summary.Rda")
-
+saveRDS(unique(data), file = "inst/metrics-overview/metrics-summary.Rda")
 
 
 #------------------------------------------------------------------------------#
