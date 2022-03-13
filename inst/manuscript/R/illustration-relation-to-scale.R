@@ -3,15 +3,12 @@ library(dplyr)
 library(ggplot2)
 library(data.table)
 
-
 library(data.table)
 library(dplyr)
 library(scoringutils)
 library(ggplot2)
 library(tidyr)
 library(patchwork)
-
-
 
 sizes_nbinom <- c(0.1, 1, 1e9)
 n = 1000
@@ -188,3 +185,93 @@ df |>
 
 ggsave("inst/manuscript/plots/illustration-effect-scale.png",
        width = 10, height = 4)
+
+
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# different illustration:
+# in this we see that the mean as well as the variance of the scores scale
+# for crps, while the variance stays constant for dss and log score
+
+
+library(scoringutils)
+library(dplyr)
+library(data.table)
+library(tidyr)
+library(ggplot2)
+
+simulate <- function(n_samples = 5e3,
+                     n_replicates = 1e3,
+                     true_value = 1,
+                     scale_mean = 1,
+                     scale_sd = scale_mean) {
+  pred <- rnorm(n_replicates * n_samples,
+                mean = true_value * scale_mean,
+                sd = true_value * scale_sd)
+
+  df <- data.table(
+    true_value = true_value * scale_mean,
+    prediction = pred,
+    sample = 1:n_samples,
+    id = paste0("id", rep(1:n_replicates, each = n_samples))
+  )
+
+  scores <- score_simulation(df, scale_mean = scale_mean, scale_sd = scale_sd)
+  return(scores)
+}
+
+score_simulation <- function(df, scale_mean = 1, scale_sd = scale_mean) {
+  scores <- score(df)
+  m <- summarise_scores(scores, by = "model", fun = mean) |>
+    melt(id.vars = "model", value.name = "mean", variable.name = "score")
+
+  s <- summarise_scores(scores, by = "model", fun = stats::sd) |>
+    melt(id.vars = "model", value.name = "sd", variable.name = "score")
+
+  out <- merge(m, s, by = c("model", "score")) |>
+    melt(id.vars = c("model", "score"), variable.name = "type")
+
+  return(out[])
+}
+
+scales_mean <- scales_sd <- c(1, 2, 5, 10, 20, 50)
+
+grid <- expand.grid(
+  scale_mean = scales_mean,
+  scale_sd = scales_sd
+) |>
+  setDT()
+
+res <- readRDS("inst/manuscript/plots/relation-to-scale-example.Rda")
+
+# res <- grid |>
+#   rowwise() |>
+#   mutate(simulation := list(simulate(scale_mean = scale_mean, scale_sd = scale_sd)))
+#
+# saveRDS(res, file = "inst/manuscript/plots/relation-to-scale-example.Rda")
+
+df <- res |>
+  tidyr::unnest(cols = "simulation")
+
+df |>
+  filter(scale_mean == 1,
+         score != "bias",
+         scale_sd < 20) |>
+  rename(Score = score) |>
+  mutate(type = ifelse(type == "mean", "Mean score", "Sd score")) |>
+  mutate(Score = ifelse(Score == "dss",
+                        "DSS",
+                        ifelse(Score == "crps", "CRPS", "Log score"))) |>
+  ggplot(aes(y = value, x = scale_sd, group = Score, color = Score)) +
+  geom_line() +
+  facet_wrap(~ type, scales = "free") +
+  scale_y_log10() +
+  scale_x_log10() +
+  theme_scoringutils() +
+  labs(y = "Value", x = "Sd scaling factor (mean held constant)")
+
+ggsave("inst/manuscript/plots/illustration-effect-scale-sim.png")

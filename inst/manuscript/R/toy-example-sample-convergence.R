@@ -16,26 +16,27 @@ true_logs <- scoringRules::logs(y = 0, family = "normal", mean = mu, sd = sd)
 true_dss <- scoringRules::dss_norm(y = 0, mean = mu, sd = sd)
 
 #
-results <- list()
-for (i in sample_sizes) {
-  samples <- as.data.table(
-    replicate(n_rep,
-              rnorm(n = i, mean = mu, sd = sd))
-  )
-  setnames(samples, as.character(1:n_rep))
-  samples[, sample := 1:i]
-  samples <- melt(samples, id.vars = "sample",
-                  variable.name = "repetition",
-                  value.name = "prediction")
-  samples[, true_value := true_value]
-  results[[paste(i)]] <- score(
-    samples, metrics = c("crps", "log_score", "dss")
-  )[, n_samples := i]
-}
+# results <- list()
+# for (i in sample_sizes) {
+#   samples <- as.data.table(
+#     replicate(n_rep,
+#               rnorm(n = i, mean = mu, sd = sd))
+#   )
+#   setnames(samples, as.character(1:n_rep))
+#   samples[, sample := 1:i]
+#   samples <- melt(samples, id.vars = "sample",
+#                   variable.name = "repetition",
+#                   value.name = "prediction")
+#   samples[, true_value := true_value]
+#   results[[paste(i)]] <- score(
+#     samples, metrics = c("crps", "log_score", "dss")
+#   )[, n_samples := i]
+# }
+# writeRDS(results2, "inst/manuscript/plots/sample-convergence.Rda")
 
+resuts2 <- readRDS("inst/manuscript/plots/sample-convergence.Rda")
 results2 <- rbindlist(results)
-
-results2 <- melt(results2, id.vars = c("n_samples", "repetition"),
+results2 <- melt(results2, id.vars = c("n_samples", "repetition", "model"),
                  variable.name = "score")
 
 label_fn <- function(x) {
@@ -54,6 +55,10 @@ df[score == "crps", true_score := true_crps]
 df[score == "log_score", true_score := true_logs]
 df[score == "dss", true_score := true_dss]
 
+df[, score := ifelse(score == "dss", "DSS",
+                     ifelse(score == "crps", "CRPS",
+                            "Log score"))]
+
 ggplot(df, aes(x = n_samples)) +
   geom_line(aes(y = mean)) +
   geom_ribbon(aes(ymax = quantile_0.95, ymin = quantile_0.05),
@@ -64,7 +69,7 @@ ggplot(df, aes(x = n_samples)) +
   facet_wrap(~ score, scales = "free") +
   theme_minimal() +
   scale_x_continuous(trans = "log10", labels = label_fn) +
-  theme_minimal() +
+  theme_scoringutils() +
   labs(x = "Number of samples",
        y = "Score based on samples")
 

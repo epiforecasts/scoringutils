@@ -32,6 +32,7 @@ res_summarised <- summarise_scores(res, by = c("true_distr"))
 
 scores_table_plot <- plot_score_table(res_summarised, y = "true_distr") +
   coord_flip() +
+  theme_scoringutils() +
   theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust = 0.5)) +
   theme(legend.position = "none")
 
@@ -44,7 +45,7 @@ pred_hist <- df |>
                  fill = "grey",
                  colour = "dark grey") +
   geom_function(fun = dnorm, colour = "black") +
-  theme_minimal() +
+  theme_scoringutils() +
   labs(y = "Density", x = "Value")
 
 
@@ -52,7 +53,7 @@ pred_hist <- df |>
 pit <- pit(df, by = "true_distr")
 pit_plots <- plot_pit(pit) +
   facet_wrap(~ true_distr, nrow = 1) +
-  theme_minimal()
+  theme_scoringutils()
 
 # create interval and quantile coverage plots ----------------------------------
 # create coverage plots by transforming to quantile format first
@@ -72,11 +73,11 @@ res_quantile[, model := true_distr]
 
 interval_coverage <- plot_interval_coverage(res_quantile) +
   facet_wrap(~ true_distr, nrow = 1) +
-  theme_minimal()
+  theme_scoringutils()
 
 quantile_coverage <- plot_quantile_coverage(res_quantile) +
   facet_wrap(~ model, nrow = 1) +
-  theme_minimal()
+  theme_scoringutils()
 
 
 # bring plot together ----------------------------------------------------------
@@ -86,9 +87,10 @@ p <- pred_hist /
   quantile_coverage /
   scores_table_plot +
   plot_layout(guides = 'collect') &
-  theme(legend.position = "none")
+  theme(legend.position = "none") &
+  theme(panel.spacing = unit(2, "lines"))
 
-ggsave("inst/manuscript/plots/calibration-diagnostic-examples.png", width = 12.5, height = 11)
+ggsave("inst/manuscript/plots/calibration-diagnostic-examples.png", width = 11.5, height = 11)
 
 
 

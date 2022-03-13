@@ -1,5 +1,6 @@
 library(ggplot2)
 library(patchwork)
+library(scoringutils)
 
 p1 <-
   ggplot(data.frame(x = seq(-8, 8, 0.01),
@@ -12,7 +13,7 @@ p1 <-
   expand_limits(y = c(0, 1.0), x = c(-3, 3)) +
   scale_y_continuous(breaks = seq(0, 1, 0.25)) +
   ggtitle("More sharp") +
-  theme_minimal()
+  theme_scoringutils()
 
 p2 <-
   ggplot(data.frame(x = seq(-8, 8, 0.01),
@@ -24,7 +25,7 @@ p2 <-
   expand_limits(y = c(0, 1.0), x = c(-3, 3)) +
   scale_y_continuous(breaks = seq(0, 1, 0.25)) +
   ggtitle("Less sharp") +
-  theme_minimal()
+  theme_scoringutils()
 
 p1 + p2
 
@@ -38,7 +39,8 @@ p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
   geom_function(fun = dnorm, colour = "black",
                 args = list(sd = 1)) +
   ggtitle("Well calibrated") +
-  theme_minimal()
+  labs(y = "Density") +
+  theme_scoringutils()
 
 p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                         x_example = rnorm(n = 1601, mean = 1, sd = 1.05)),
@@ -47,7 +49,8 @@ p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 2, sd = 1)) +
   ggtitle("Badly calibrated") +
-  theme_minimal()
+  labs(y = "Density") +
+  theme_scoringutils()
 
 p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                         x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
@@ -56,7 +59,8 @@ p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 0, sd = 2.05)) +
   ggtitle("Badly calibrated") +
-  theme_minimal()
+  labs(y = "Density") +
+  theme_scoringutils()
 
 
 p21 + p22 + p23
@@ -67,4 +71,4 @@ ggsave("inst/manuscript/plots/calibration-illustration.png",
 (p1 + p2) /
   (p21 + p22 + p23)
 ggsave("inst/manuscript/plots/calibration-sharpness-illustration.png",
-       width = 10, height = 6)
+       width = 8, height = 4.5)
