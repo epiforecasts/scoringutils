@@ -63,12 +63,22 @@ score_sample <- function(data,
       ), by = forecast_unit]
     }
   }
+  # absolute error
+  if (any(c("ae_median", "abs_error", "ae_point") %in% metrics)) {
+    data[, ae_median := abs(unique(true_value) - median(prediction)),
+         by = forecast_unit]
+  }
+  # squared error
+  if (any(c("se_mean", "squared_error", "se_point") %in% metrics)) {
+    data[, se_mean := (unique(true_value) - mean(prediction))^2,
+         by = forecast_unit]
+  }
 
   res <- data.table::copy(data)
 
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),
-    .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit",
+    .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit|se_mean|ae_median",
     by = forecast_unit
   ]
 
