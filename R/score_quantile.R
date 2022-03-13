@@ -94,7 +94,7 @@ score_quantile <- function(data,
 
   # score absolute error for point forecasts
   # these are marked by an NA in range, and a numeric value for point
-  if (any(c("ae_point", "aem") %in% metrics)) {
+  if (any(c("ae_point", "ae_median", "absolute_error") %in% metrics)) {
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
@@ -105,8 +105,8 @@ score_quantile <- function(data,
 
   # calculate scores on quantile format ----------------------------------------
   # compute absolute error of the median
-  if ("aem" %in% metrics) {
-    quantile_data[, aem := ae_median_quantile(
+  if ("ae_median" %in% metrics) {
+    quantile_data[, ae_median := ae_median_quantile(
       true_value,
       prediction,
       quantile
@@ -120,15 +120,15 @@ score_quantile <- function(data,
     quantile_data[, quantile_coverage := (true_value <= prediction)]
   }
 
-  # merge metrics computed on quantile data (i.e. aem, quantile_coverage) back
+  # merge metrics computed on quantile data (i.e. ae_median, quantile_coverage) back
   # into metrics computed on range data. One important side effect of this is
   # that it controls whether we count the median twice for the interval score
   # (row is then duplicated) or only once. However, merge only needs to happen
-  # if we computed either the interval score or the aem or quantile coverage
-  if (any(c("aem", "interval_score", "quantile_coverage") %in% metrics)) {
+  # if we computed either the interval score or the ae_median or quantile coverage
+  if (any(c("ae_median", "interval_score", "quantile_coverage") %in% metrics)) {
     # delete unnecessary columns before merging back
     keep_cols <- unique(c(
-      forecast_unit, "quantile", "aem", "quantile_coverage",
+      forecast_unit, "quantile", "ae_median", "quantile_coverage",
       "boundary", "range"
     ))
     delete_cols <- names(quantile_data)[!(names(quantile_data) %in% keep_cols)]
@@ -144,7 +144,7 @@ score_quantile <- function(data,
 
     # merge back with other metrics
     merge_cols <- setdiff(keep_cols, c(
-      "aem", "quantile_coverage", "quantile",
+      "ae_median", "quantile_coverage", "quantile",
       "boundary"
     ))
     # specify all.x = TRUE as the point forecasts got deleted when

@@ -24,7 +24,7 @@ test_that("WIS works within score for median forecast", {
   eval <- scoringutils::score(test_data,
     count_median_twice = TRUE
   )
-  expect_equal(eval$aem, eval$interval_score)
+  expect_equal(eval$ae_median, eval$interval_score)
 })
 
 

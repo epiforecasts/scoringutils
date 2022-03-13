@@ -33,7 +33,7 @@ df <- data.frame(
   model = rep(c("model1", "model2", "model3"), each = 10),
   id = rep(1:10),
   interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
-  aem = (abs(rnorm(30)))
+  ae_median = (abs(rnorm(30)))
 )
 
 scores <- score(example_quantile)

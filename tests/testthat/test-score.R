@@ -72,14 +72,14 @@ test_that("score() quantile produces desired metrics", {
   out <- score(data = data)
   metric_names <- c(
     "dispersion", "underprediction", "overprediction",
-    "bias", "aem", "coverage_deviation"
+    "bias", "ae_median", "coverage_deviation"
   )
 
   expect_true(all(metric_names %in% colnames(out)))
 })
 
 
-test_that("calculation of aem is correct for a quantile format case", {
+test_that("calculation of ae_median is correct for a quantile format case", {
   eval <- score(scoringutils::example_quantile[!is.na(prediction)])
 
   eval <- summarise_scores(eval, by = c("model"))
@@ -89,7 +89,7 @@ test_that("calculation of aem is correct for a quantile format case", {
     by = "model"
   ]$mean
 
-  expect_equal(sort(eval$aem), sort(ae))
+  expect_equal(sort(eval$ae_median), sort(ae))
 })
 
 
@@ -103,7 +103,7 @@ test_that("all quantile and range formats yield the same result", {
     by = "model"
   ]$mean
 
-  expect_equal(sort(eval1$aem), sort(ae))
+  expect_equal(sort(eval1$ae_median), sort(ae))
 })
 
 test_that("function produces output even if only some metrics are chosen", {

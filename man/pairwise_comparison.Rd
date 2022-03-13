@@ -58,7 +58,7 @@ df <- data.frame(
   date = as.Date("2020-01-01") + rep(1:5, each = 2),
   location = c(1, 2),
   interval_score = (abs(rnorm(30))),
-  aem = (abs(rnorm(30)))
+  ae_median = (abs(rnorm(30)))
 )
 
 res <- pairwise_comparison(df,

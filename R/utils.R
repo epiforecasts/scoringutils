@@ -16,7 +16,7 @@ globalVariables(c(
   ".SD",
   "adj_pval",
   "ae_point",
-  "aem",
+  "ae_median",
   "boundary",
   "bias",
   "brier_score",
@@ -87,7 +87,7 @@ globalVariables(c(
 
 available_metrics <- function() {
   available_metrics <- c(
-    "ae_point", "aem", "log_score",
+    "ae_point", "ae_median", "log_score",
     "dispersion", "bias", "dss", "crps", "brier_score",
     "coverage", "coverage_deviation", "quantile_coverage",
     "interval_score",
@@ -101,7 +101,7 @@ available_metrics <- function() {
     name = "Absolute error of the point forecast",
     description = ""
   )
-  aem <- list(
+  ae_median <- list(
     id = "",
     name = "",
     description = ""
