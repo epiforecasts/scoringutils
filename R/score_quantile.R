@@ -92,13 +92,14 @@ score_quantile <- function(data,
     ]
   }
 
-  # score absolute error for point forecasts
+  # compute absolute and squared error for point forecasts
   # these are marked by an NA in range, and a numeric value for point
-  if (any(c("ae_point", "ae_median", "absolute_error") %in% metrics)) {
+  if (any(c("se_point, se_mean, ae_point", "ae_median", "absolute_error") %in% metrics)) {
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
-        ae_point := abs_error(predictions = point, true_value)
+        `:=` (ae_point = abs_error(predictions = point, true_value),
+              se_point = squared_error(predictions = point, true_value))
       ]
     }
   }
@@ -153,7 +154,7 @@ score_quantile <- function(data,
   }
 
   # delete internal columns before returning result
-  res <- delete_columns(res, c("upper", "lower", "boundary"))
+  res <- delete_columns(res, c("upper", "lower", "boundary", "point", "true_value"))
 
   return(res[])
 }

@@ -78,7 +78,7 @@ score_sample <- function(data,
 
   # make scores unique to avoid redundancy.
   res <- res[, lapply(.SD, unique),
-    .SDcols = colnames(res) %like% "pit_|bias|sharpness|dss|crps|log_score|pit|se_mean|ae_median",
+    .SDcols = colnames(res) %like% paste(metrics, collapse = "|"),
     by = forecast_unit
   ]
 
