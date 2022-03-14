@@ -1,4 +1,4 @@
-\begin{thebibliography}{35}
+\begin{thebibliography}{36}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -16,6 +16,14 @@ Anderson TW, Darling DA (1952).
 \newblock \emph{The Annals of Mathematical Statistics}, \textbf{23}(2),
   193--212.
 \newblock ISSN 0003-4851.
+
+\bibitem[{Angus(1994)}]{angusProbabilityIntegralTransform1994}
+Angus JE (1994).
+\newblock \enquote{The {{Probability Integral Transform}} and {{Related
+  Results}}.}
+\newblock \emph{SIAM Review}, \textbf{36}(4), 652--654.
+\newblock ISSN 0036-1445.
+\newblock \doi{10.1137/1036146}.
 
 \bibitem[{Bracher \emph{et~al.}(2021{\natexlab{a}})Bracher, Ray, Gneiting, and
   Reich}]{bracherEvaluatingEpidemicForecasts2021}

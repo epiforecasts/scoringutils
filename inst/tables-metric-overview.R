@@ -299,7 +299,7 @@ log_score <- list(
   $$ \text{log score} = \log p_y, $$
   where $p_y$ is the probability assigned to outcome p by the forecast F.
 
-  **Usage and caveats**: Larger values are better, but sometimes the sign is reversed. The log score is ensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property is desirable for inferential purposes, for example in a Bayesian context (@winklerScoringRulesEvaluation1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
+  **Usage and caveats**: Larger values are better, but sometimes the sign is reversed. The log score is ensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
 )
 
 wis <- list(
@@ -319,7 +319,7 @@ quantile_score <- "yet to come"
 
 dss <- list(
   `Metric` = "DSS Dawid-Sebastiani score",
-  `Explanation` = r"(The Dawid-Sebastiani-Score is a proper scoring rule proposed by Gneiting and Raftery in [@gneitingStrictlyProperScoring2007] that only relies on the first moments of the predictive distribution and is therefore easy to compute. It is given as
+  `Explanation` = r"(The Dawid-Sebastiani-Score is a proper scoring rule proposed that only relies on the first moments of the predictive distribution and is therefore easy to compute. It is given as
 
   $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,$$
   where $F$ is the predictive distribution with mean $\mu$ and standard deviation $\sigma$ and $y$ is the true observed value.
@@ -358,7 +358,7 @@ sharpness <- list(
   `Metric` = "Sharpness",
   `Explanation` = r"(Sharpness is the ability to produce narrow forecasts and is a feature of the forecasts only and does not depend on the observations. Sharpness is therefore only of interest conditional on calibration: a very precise forecast is not useful if it is clearly wrong.
 
-  As suggested by @funkAssessingPerformanceRealtime2019, we measure sharpness for continuous and integer forecasts represented by predictive samples as the normalised median absolute deviation about the median (MADN) ), i.e.
+  As suggested by Funk et al. (2019), we measure sharpness for continuous and integer forecasts represented by predictive samples as the normalised median absolute deviation about the median (MADN) ), i.e.
   $$ S(F) = \frac{1}{0.675} \cdot \text{median}(|x - \text{median(x)}|), $$
   where $x$ is the vector of all predictive samples and $\frac{1}{0.675}$ is a normalising constant. If the predictive distribution $F$ is the CDF of a normal distribution, then sharpness will equal the standard deviation of $F$.
 
@@ -383,11 +383,11 @@ bias <- list(
 
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
-  `Explanation` = r"(The probability integral transform (PIT) @dawidPresentPositionPotential1984 represents a succinct way to visualise deviations between the predictive distribution $F$ and the true data-generating distribution $G$. The idea is to transform the observed values such that agreement between forecasts and data can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by
+  `Explanation` = r"(The probability integral transform (PIT, Dawid 1984) represents a succinct way to visualise deviations between the predictive distribution $F$ and the true data-generating distribution $G$. The idea is to transform the observed values such that agreement between forecasts and data can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by
   $$u = F (y),$$
-  where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the true observed value $y$. If $F = G$, then $u$ follows a uniform distribution (for a proof see e.g. @angusProbabilityIntegralTransform1994).
+  where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the true observed value $y$. If $F = G$, then $u$ follows a uniform distribution.
 
-  For integer outcomes, the PIT is no longer uniform even when forecasts are ideal. Instead, a randomised PIT (@funkAssessingPerformanceRealtime2019) can be used:
+  For integer outcomes, the PIT is no longer uniform even when forecasts are ideal. Instead, a randomised PIT can be used:
   $$u = P(y) + v \cdot (P(y) - P(y - 1) ),$$
   where $y$ is again the observed value $P()$ is the cumulative probability assigned to all values smaller or equal to $y$ (where $P(-1) = 0$ by definition, and $v$ is a standard uniform variable independent of $y$. If $P$ is equal to the true data-generating distribution function, then $u$ is standard uniform.  also propose a non-randomised version of the PIT for count data that could be used alternatively.
 

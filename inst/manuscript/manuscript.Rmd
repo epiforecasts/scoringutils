@@ -164,11 +164,11 @@ The form of calibration most commonly focused on is called probabilistic calibra
 One can visualise probabilistic calibration in different ways and \pkg{scoringutils} offers three options. *Interval coverage plots* (see row 3 in Figure \ref{fig:calibration-plots}) show nominal coverage of the central prediction intervals against the percentage of observed values that fall inside the corresponding prediction intervals. Ideally forecasters should lie on the diagonal line. A shift to the left means a forecaster is too conservative and issues a predictive distribution that is too wide and covers more of the observed values than needed. A shift to the right means a forecaster is too confident and the forecast distribution is too narrow. Similarly, *quantile coverage plots* (row 4 in Figure \ref{fig:calibration-plots}) show the quantiles of the predictive distribution against the percentage of observed values below the corresponding predictive quantiles. For quantiles below the median, a line to the right of the diagonal (predictive quantiles lower than the quantiles of the data-generating distribution) means a forecaster is too conservative, while for quantiles above the median, a line to the left of the diagonal line (predictive quantiles higher than the quantiles of the data-generating distribution) implies conservative predictions. 
 
 <!-- gneitingProbabilisticForecastsCalibration2007 -->
-A similar way to visualise the same information is the probability integral transform (PIT) histogram \citep{dawidPresentPositionPotential1984}. The PIT is equal to $F(x_t)$, the cumulative predictive distribution evaluated at the observed value $x_t$ (see more details in Table \ref{tab:score-table-detailed}). If forecasts are probabilistically calibrated, then the transformed values will be uniformly distributed. When plotting a histogram of PIT values (see row 2 in Figure \ref{fig:calibration-plots}), bias usually leads to a triangular shape, a U-shaped histogram corresponds to forecasts that are under-dispersed (too sharp) and a hump-shape appears when forecasts are over-dispersed (too wide). 
+A similar way to visualise the same information is the probability integral transform (PIT) histogram \citep{dawidPresentPositionPotential1984}. The PIT is equal to $F(x_t)$, the cumulative predictive distribution evaluated at the observed value $x_t$ (see more details in Table \ref{tab:score-table-detailed}). If forecasts are probabilistically calibrated, then the transformed values will be uniformly distributed (for a proof see e.g. @angusProbabilityIntegralTransform1994). When plotting a histogram of PIT values (see row 2 in Figure \ref{fig:calibration-plots}), bias usually leads to a triangular shape, a U-shaped histogram corresponds to forecasts that are under-dispersed (too sharp) and a hump-shape appears when forecasts are over-dispersed (too wide). 
 
 It is in principle possible to formally test probabilistic calibration, for example by employing a test on the uniformity of PIT values (e.g. the Anderson-Darling test \citep{andersonAsymptoticTheoryCertain1952}). In practice this can be difficult as forecasts and therefore also PIT values are often correlated. We therefore advise against using formal tests in most applied settings. It is also important to note that uniformity of the PIT histogram (or a diagonal on quantile and interval coverage plots) indicates probabilistic calibration, but does not guarantee that forecasts are indeed calibrated in every relevant sense. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are clearly mis-calibrated, but have uniform PIT histograms. 
 
-```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "Top row: Standard normal forecasting distribution (black, constant across all examples) against observations sampled from different predictive distributions (grey histograms based on 1000 samples). Second row: PIT histograms based the standard normal predictive distributions and the sampled observations shown in the first row. Third row: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the model is too wide (i.e. underconfident), covering more true values than it actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. Fourth row: Quantile coverage values, with green areas indicating too wide (i.e. conservative) forecasts. Last row: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
+```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "Top row: Standard normal forecasting distribution (black, constant across all examples) against observations sampled from different predictive distributions (grey histograms based on 1000 samples). Second row: PIT histograms based the standard normal predictive distributions and the sampled observations shown in the first row. Third row: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e. underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. Fourth row: Quantile coverage values, with green areas indicating too wide (i.e. conservative) forecasts. Last row: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
 include_graphics("plots/calibration-diagnostic-examples.png")
 
 # readRDS("plots/calibration-diagnostic-examples.Rda") |>
@@ -306,7 +306,7 @@ avail_forecasts(data = example_integer,
 
 and visualise results using the function \fct{plot\_avail\_forecasts}. The plot resulting from running the following code is displayed in Figure \ref{fig:avail-forecasts-plot}. 
 
-```{r avail-forecasts-plot, echo=TRUE, fig.pos = "!h", fig.width = 8, fig.height = 4, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
+```{r avail-forecasts-plot, echo=TRUE, fig.pos = "!h", fig.width = 8, fig.height = 3, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
 library(ggplot2)
 
 avail_forecasts(data = example_integer, 
@@ -351,11 +351,12 @@ score(example_quantile) |>
   glimpse()
 ```
 
-Summarised scores can then be visualised using the function \fct{scores\_table}. The output of the following is shown in Figure \ref{fig:score-table}: 
+Summarised scores can then be visualised using the function \fct{scores\_table}. In order to display scores it is often useful to round the output to e.g. two significant digits, which can be achieved through another call of \fct{summarise\_scores}. The output of the following is shown in Figure \ref{fig:score-table}: 
 
-```{r score-table, fig.width = 11, fig.cap="Coloured table to visualise the computed scores."}
+```{r score-table, fig.width = 11, fig.cap="Coloured table to visualise the computed scores. Red colours indicate that a value is higher than ideal, blue indicicates it is lower than ideal and the opacity indicates the strength of the deviation from the ideal."}
 score(example_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
+  summarise_scores(fun = signif, digits = 2) |>
   plot_score_table(y = "model") + 
   facet_wrap(~ target_type)
 ```
@@ -403,7 +404,7 @@ Pairwise comparisons should usually be made based on unsummarised scores (\fct{p
 
 Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models. The output of the following code is shown in Figure \ref{fig:pairwise-plot}. 
 
-```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
+```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
 score(example_quantile) |>
   pairwise_comparison(by = c("model", "target_type"), 
                       baseline = "EuroCOVIDhub-baseline") |>
@@ -413,11 +414,11 @@ score(example_quantile) |>
 
 ## Model diagnostics
 
-The \pkg{scoringutils} package offers a variety of functions to aid the user in diagnosing issues with models. Some additional analyses and visualisations can be found in section \ref{additional} in the SI. 
-
+The \pkg{scoringutils} package offers a variety of functions to aid the user in diagnosing issues with models.
+<!-- Some additional analyses and visualisations can be found in section \ref{additional} in the SI.  -->
 For example, to detect systematic patterns it may be useful to visualise a single metric across several dimensions. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}). 
 
-```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (under-prediction) and 1 (over-prediction) and are 0 ideally."}
+```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (under-prediction) and 1 (over-prediction) and should be 0 ideally. Red tiles indicate an upwards bias (over-prediction), while blue tiles indicate a downwards bias (under-predicction)"}
 score(example_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   plot_heatmap(x = "location", metric = "bias") + 
@@ -426,7 +427,9 @@ score(example_continuous) |>
 
 ```
 
-For quantile-based forecasts, it is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, over-prediction and under-prediction. This can be achieved using the function \fct{plot\_wis\_components}, as shown in Figure \ref{fig:wis-components} and Figure \ref{fig:wis-components-relative} in the SI. As described in section \ref{scoring} it is possible to convert from a sample-based to a quantile-based forecast format to make use of this decomposition even for sample-based forecasts. 
+For quantile-based forecasts, it is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, over-prediction and under-prediction. This can be achieved using the function \fct{plot\_wis\_components}, as shown in Figure \ref{fig:wis-components} 
+<!-- and Figure \ref{fig:wis-components-relative} in the SI.  -->
+As described in section \ref{scoring} it is possible to convert from a sample-based to a quantile-based forecast format to make use of this decomposition even for sample-based forecasts. 
 
 ```{r wis-components, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, over-prediction and under-prediction. The WIS components measure over- and under-prediction in absolute, rather than relative terms."}
 score(example_quantile) |>
@@ -446,7 +449,8 @@ example_continuous |>
   pit(by = "model") 
 ```
 
-and create PIT histograms using the function \fct{plot\_pit}. The output of the following is shown in Figure \ref{fig:pit-plots} (see a quantile-based example in Figure \ref{fig:pit-plots-quantile} in the SI): 
+and create PIT histograms using the function \fct{plot\_pit}. The output of the following is shown in Figure \ref{fig:pit-plots}: 
+<!-- (see a quantile-based example in Figure \ref{fig:pit-plots-quantile} in the SI):  -->
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_continuous |>
@@ -457,7 +461,7 @@ example_continuous |>
 
 We can also look at interval and quantile coverage plots (explained in more detail in section \ref{probabilistic-calibration}) using the functions \fct{plot\_interval\_coverage} and \fct{plot\_quantile\_coverage}. These plots require that the columns "range" and "quantile", respectively, be present in the scores to plot, and therefore need to be included in the `by` argument when summarising scores. The output of the following is shown in Figure \ref{fig:coverage}.  
 
-```{r coverage, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots."}
+```{r coverage, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e. underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
 cov_scores <- score(example_quantile) |>
   summarise_scores(by = c("model", "target_type", "range", "quantile"))
 
@@ -525,7 +529,7 @@ Funding statements
 
 # (APPENDIX) Supplementary information {-} 
 
-```{r score-table-detailed, echo=FALSE}
+```{r score-table-detailed, echo=FALSE, cache = FALSE}
 
 data <- readRDS(system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils"))
 
@@ -541,9 +545,9 @@ data[, 1:2] |>
 
 ```
 
-## Additional analyses and visualisations {#additional}
+<!-- ## Additional analyses and visualisations {#additional} -->
 
-```{r wis-components-relative, fig.width = 10, fig.cap = "Components of the weighted interval score normalised to one to show relative contribution of different penalties."}
+```{r wis-components-relative, eval = FALSE, echo = FALSE, include = FALSE, fig.width = 10, fig.cap = "Components of the weighted interval score normalised to one to show relative contribution of different penalties."}
 score(example_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = TRUE) + 
@@ -556,18 +560,19 @@ score(example_quantile) |>
 
 
 
-```{r pit-plots-quantile, fig.cap="PIT histograms based on a subset of ten equally-spaced quantiles of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias."}
+```{r pit-plots-quantile, eval = FALSE, echo = FALSE, include = FALSE, fig.cap="PIT histograms based on a subset of ten equally-spaced quantiles of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias."}
 subset(example_quantile, example_quantile$quantile %in% seq(0.1, 0.9, 0.1)) |>
   pit(by = c("model", "target_type")) |>
   plot_pit() + 
   facet_grid(model ~ target_type)
 ```
 
-### Scores by interval ranges
 
-If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:
+<!-- ### Scores by interval ranges -->
 
-```{r, fig.pos = "!h", fig.width=8, fig.height=4, fig.pos="!h"}
+<!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range: -->
+
+```{r, eval = FALSE, echo = FALSE, include = FALSE, fig.pos = "!h", fig.width=8, fig.height=4, fig.pos="!h"}
 example_quantile |>
   score() |>
   summarise_scores(by = c("model", "range", "target_type")) |>
