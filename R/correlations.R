@@ -113,8 +113,6 @@ plot_correlation <- function(correlations) {
       panel.grid.minor.x = element_blank()
     ) +
     labs(x = "", y = "") +
-    coord_cartesian(expand = FALSE) +
-    labs(title = "Correlation between metrics")
-
+    coord_cartesian(expand = FALSE)
   return(plot)
 }
