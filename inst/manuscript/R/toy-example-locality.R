@@ -34,14 +34,20 @@ sample_b <- sample(x=1:10, size = 1e5, replace = TRUE, prob = forecast_b)
 crps_a <- scoringutils::crps_sample(2, t(as.matrix(sample_a)))
 crps_b <- scoringutils::crps_sample(2, t(as.matrix(sample_b)))
 
+annotation <- df[, .(forecaster, crps, log_score, dss)] |> unique()
+
+
 ggplot(df, aes(x = factor(outcome), y = prob)) +
   geom_col() +
-  geom_text(x = 8, y = 0.3, aes(label = paste("CRPS: ", round(crps, 3)))) +
-  geom_text(x = 8, y = 0.27, aes(label = paste("LogS: ", round(log_score, 3)))) +
-  geom_text(x = 8, y = 0.24, aes(label = paste("DSS: ", round(dss, 3)))) +
+  geom_text(data = annotation, x = 4, y = 0.3, hjust = "left",
+            aes(label = paste("CRPS: ", round(crps, 3)))) +
+  geom_text(data = annotation,x = 4, y = 0.27, hjust = "left",
+            aes(label = paste("Log score: ", round(log_score, 3)))) +
+  geom_text(data = annotation, x = 4, y = 0.24, hjust = "left",
+            aes(label = paste("DSS: ", round(dss, 3)))) +
   facet_wrap(~ forecaster) +
   geom_vline(aes(xintercept = 2), linetype = "dashed") +
-  theme_light() +
+  theme_scoringutils() +
   labs(y = "Probability assigned", x = "Possible outcomes")
 
 ggsave("inst/manuscript/plots/score-locality.png", height = 3, width = 8)

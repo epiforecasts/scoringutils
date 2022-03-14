@@ -36,7 +36,7 @@ ae <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Absolute error, suitable for scoring the median of a predictive distribution.",
+  `Properties` = "Suitable for scoring the median of a predictive distribution",
   `References` = ""
 )
 
@@ -48,7 +48,7 @@ se <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
   `Q` = r"($\checkmark$)",
-  `Properties` = "Squared error, suitable for scoring the mean of a predictive distribution.",
+  `Properties` = "Suitable for scoring the mean of a predictive distribution.",
   `References` = ""
 )
 

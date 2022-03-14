@@ -1,4 +1,4 @@
-\begin{thebibliography}{33}
+\begin{thebibliography}{35}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -287,6 +287,13 @@ Jordan A, Kr{\"u}ger F, Lerch S (2019{\natexlab{b}}).
 \newblock ISSN 1548-7660.
 \newblock \doi{10.18637/jss.v090.i12}.
 
+\bibitem[{Jose(2009)}]{joseCharacterizationSphericalScoring2009}
+Jose VR (2009).
+\newblock \enquote{A {{Characterization}} for the {{Spherical Scoring Rule}}.}
+\newblock \emph{Theory and Decision}, \textbf{66}(3), 263--281.
+\newblock ISSN 1573-7187.
+\newblock \doi{10.1007/s11238-007-9067-x}.
+
 \bibitem[{Kukkonen \emph{et~al.}(2012)Kukkonen, Olsson, Schultz, Baklanov,
   Klein, Miranda, Monteiro, Hirtl, Tarvainen, Boy, Peuch, Poupkou,
   Kioutsioukis, Finardi, Sofiev, Sokhi, Lehtinen, Karatzas, San~Jos{\'e},
@@ -331,6 +338,14 @@ Matheson JE, Winkler RL (1976).
 \newblock \emph{Management Science}, \textbf{22}(10), 1087--1096.
 \newblock ISSN 0025-1909.
 \newblock \doi{10.1287/mnsc.22.10.1087}.
+
+\bibitem[{Murphy(1971)}]{murphyNoteRankedProbability1971a}
+Murphy AH (1971).
+\newblock \enquote{A {{Note}} on the {{Ranked Probability Score}}.}
+\newblock \emph{Journal of Applied Meteorology and Climatology},
+  \textbf{10}(1), 155--156.
+\newblock ISSN 1520-0450.
+\newblock \doi{10.1175/1520-0450(1971)010<0155:ANOTRP>2.0.CO;2}.
 
 \bibitem[{{R Core Team}(2021)}]{R}
 {R Core Team} (2021).

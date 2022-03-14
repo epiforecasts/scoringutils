@@ -64,7 +64,7 @@ get_lower_tri <- function(cormat) {
 #' @return A ggplot2 object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
-#' element_text labs coord_cartesian theme theme_light element_blank
+#' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
 #' @export
 #' @examples

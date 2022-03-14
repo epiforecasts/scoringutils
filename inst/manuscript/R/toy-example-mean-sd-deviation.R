@@ -17,23 +17,22 @@ mu <- seq(0, 100, length.out = n_steps)
 
 # look at effect of change in sd on score
 res_sd <- data.table(sd = sd,
-                     mu = true_mean,
-                     crps = NA_real_,
-                     dss = NA_real_,
-                     logs = NA_real_)
+                     mu = true_mean)
 
-res_sd[, `:=` (crps = mean(scoringRules::crps(y = true_values, family = "normal", mean = mu, sd = sd)),
-               logs = mean(scoringRules::logs(y = true_values, family = "normal", mean = mu, sd = sd)),
-               dss = mean(scoringRules::dss_norm(y = true_values, mean = mu, sd = sd))),
+res_sd[, `:=` (CRPS = mean(scoringRules::crps(y = true_values, family = "normal", mean = mu, sd = sd)),
+               `Log score` = mean(scoringRules::logs(y = true_values, family = "normal", mean = mu, sd = sd)),
+               DSS = mean(scoringRules::dss_norm(y = true_values, mean = mu, sd = sd))),
        by = "sd"]
 
 deviation_sd <- res_sd |>
   melt(id.vars = c("sd", "mu"), value.name = "value", variable.name = "Score") |>
   ggplot(aes(x = sd, y = value, color = Score)) +
   geom_line() +
-  theme_minimal() +
+  theme_scoringutils() +
   geom_vline(aes(xintercept = 5), linetype = "dashed") +
   coord_cartesian(ylim=c(0, 20)) +
+  annotate(geom="text", x=6, y=17, label="Sd of true \ndata-generating \ndistribution: 5",
+           color="black", hjust = "left") +
   labs(y = "Score", x = "Standard deviation of predictive distribution")
 
 #
@@ -66,14 +65,11 @@ true_sd = 1
 true_mu = 0
 
 # look at effect of change in sd on score
-res_mu2 <- data.table(true_value = true_values,
-                      crps = NA_real_,
-                      dss = NA_real_,
-                      logs = NA_real_)
+res_mu2 <- data.table(true_value = true_values)
 
-res_mu2[, `:=` (crps = scoringRules::crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
-                logs = scoringRules::logs(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
-                dss = scoringRules::dss_norm(y = true_value, mean = true_mu, sd = true_sd) / 10)]
+res_mu2[, `:=` (CRPS = scoringRules::crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
+                `Log score` = scoringRules::logs(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
+                DSS = scoringRules::dss_norm(y = true_value, mean = true_mu, sd = true_sd) / 10)]
 
 label_fn <- function(x) {
   paste(10*x)
@@ -83,9 +79,11 @@ outlier <- res_mu2 |>
   melt(id.vars = c("true_value"), value.name = "value", variable.name = "Score") |>
   ggplot(aes(x = true_value, y = value, color = Score)) +
   geom_line() +
-  theme_minimal() +
+  theme_scoringutils() +
+  annotate(geom="text", x=0, y=.8, label="Predictive distribution: \nN(0,1)",
+           color="black", hjust = "left") +
   labs(y = "Score", x = "Observed value") +
-  geom_vline(aes(xintercept = 0), linetype = "dashed") +
+  # geom_vline(aes(xintercept = 0), linetype = "dashed") +
   geom_area(stat = "function", fun = dnorm, color = "grey", fill = "grey", alpha = 0.5, xlim = c(0, 4)) +
   scale_y_continuous(label = label_fn)
 
@@ -95,4 +93,4 @@ deviation_sd + outlier +
   theme(legend.position = "bottom")
 
 ggsave("inst/manuscript/plots/score-deviation-sd-mu.png",
-       height = 4, width = 8)
+       height = 3, width = 8)
