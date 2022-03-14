@@ -70,7 +70,7 @@ pairwise_comparison <- function(scores,
   }
 
   # check that all values of the chosen metric are positive
-  if (any(sign(scores[[metric]] < 0))) {
+  if (any(sign(scores[[metric]]) < 0)) {
     if (any(sign(scores) > 0)) {
       msg <- paste("To compute pairwise comparisons, all values of", metric,
                    "must have the same sign.")
