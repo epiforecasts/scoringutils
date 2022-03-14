@@ -86,35 +86,35 @@ plot_correlation <- function(correlations) {
   plot_df[, metric := factor(metric, levels = metrics)]
   plot_df[, variable := factor(variable, rev(metrics))]
 
-  plot <- ggplot2::ggplot(plot_df, ggplot2::aes(
+  plot <- ggplot(plot_df, aes(
     x = variable, y = metric,
     fill = value
   )) +
-    ggplot2::geom_tile(
+    geom_tile(
       color = "white",
       width = 0.97, height = 0.97
     ) +
-    ggplot2::geom_text(ggplot2::aes(y = metric, label = value)) +
-    ggplot2::scale_fill_gradient2(
+    geom_text(aes(y = metric, label = value)) +
+    scale_fill_gradient2(
       low = "steelblue", mid = "white",
       high = "salmon",
       name = "Correlation",
       breaks = c(-1, -0.5, 0, 0.5, 1)
     ) +
-    ggplot2::theme_light() +
-    ggplot2::theme(
-      axis.text.x = ggplot2::element_text(
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
         angle = 90, vjust = 1,
         hjust = 1
       ),
-      panel.grid.major.y = ggplot2::element_blank(),
-      panel.grid.minor.y = ggplot2::element_blank(),
-      panel.grid.major.x = ggplot2::element_blank(),
-      panel.grid.minor.x = ggplot2::element_blank()
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank()
     ) +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::coord_cartesian(expand = FALSE) +
-    ggplot2::labs(title = "Correlation between metrics")
+    labs(x = "", y = "") +
+    coord_cartesian(expand = FALSE) +
+    labs(title = "Correlation between metrics")
 
   return(plot)
 }

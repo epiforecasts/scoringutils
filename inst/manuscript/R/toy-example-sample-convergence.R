@@ -67,7 +67,6 @@ ggplot(df, aes(x = n_samples)) +
               alpha = 0.3) +
   geom_hline(aes(yintercept = true_score), linetype = "dashed") +
   facet_wrap(~ score, scales = "free") +
-  theme_minimal() +
   scale_x_continuous(trans = "log10", labels = label_fn) +
   theme_scoringutils() +
   labs(x = "Number of samples",

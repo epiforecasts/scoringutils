@@ -147,7 +147,7 @@ plot_score_table <- function(scores,
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identif, label = round(value, 2))) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
-    theme_light() +
+    theme_scoringutils() +
     theme(
       legend.title = element_blank(),
       legend.position = "none",
@@ -227,7 +227,7 @@ plot_wis <- function(scores,
       position = col_position,
       aes(x = component_value, fill = wis_component_name)
     ) +
-    theme_light() +
+    theme_scoringutils() +
     guides(fill = guide_legend(title = "WIS component")) +
     xlab("WIS contributions")
 
@@ -300,7 +300,7 @@ plot_ranges <- function(scores,
       colour = "black",
       size = 0.01
     ) +
-    theme_light() +
+    theme_scoringutils() +
     expand_limits(y = 0) +
     scale_color_continuous(low = "steelblue", high = "salmon") +
     theme(
@@ -362,6 +362,7 @@ plot_heatmap <- function(scores,
     geom_tile() +
     geom_text(aes_string(label = metric)) +
     scale_fill_gradient2(low = "skyblue", high = "red") +
+    theme_scoringutils() +
     theme(axis.text.x = element_text(
       angle = 90, vjust = 1,
       hjust = 1
@@ -545,7 +546,7 @@ plot_predictions <- function(data = NULL,
 
   plot <- ggplot(data = data, aes_string(x = x)) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
-    theme_light()
+    theme_scoringutils()
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
@@ -672,7 +673,7 @@ plot_interval_coverage <- function(scores,
       linetype = "dashed"
     ) +
     geom_line(aes(y = coverage * 100)) +
-    theme_light() +
+    theme_scoringutils() +
     theme(legend.position = "bottom") +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
@@ -737,7 +738,7 @@ plot_quantile_coverage <- function(scores,
       linetype = "dashed"
     ) +
     geom_line(aes(y = quantile_coverage)) +
-    theme_light() +
+    theme_scoringutils() +
     theme(legend.position = "bottom") +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
@@ -772,7 +773,7 @@ plot_quantile_coverage <- function(scores,
 #' @importFrom data.table as.data.table setnames rbindlist
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
-#' element_text element_blank
+#' element_text element_blank ggtitle
 #' @export
 #'
 #' @examples
@@ -870,19 +871,19 @@ plot_pairwise_comparison <- function(comparison_result,
     )]
 
     # create mean_scores_ratios in plot
-    plot <- ggplot2::ggplot(
+    plot <- ggplot(
       upper_triangle_complete,
-      ggplot2::aes(
+      aes(
         x = compare_against,
         y = model,
         fill = fill_col
       )
     ) +
-      ggplot2::geom_tile(width = 0.98, height = 0.98) +
-      ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
+      geom_tile(width = 0.98, height = 0.98) +
+      geom_text(aes(label = var_of_interest),
         na.rm = TRUE
       ) +
-      ggplot2::scale_fill_gradient2(
+      scale_fill_gradient2(
         low = "skyblue", mid = "grey95",
         high = "brown1",
         na.value = "lightgrey",
@@ -890,25 +891,25 @@ plot_pairwise_comparison <- function(comparison_result,
         limits = c(-1, 1),
         name = NULL
       ) +
-      ggplot2::theme_light() +
-      ggplot2::theme(
-        axis.text.x = ggplot2::element_text(
+      theme_scoringutils() +
+      theme(
+        axis.text.x = element_text(
           angle = 90, vjust = 1,
           hjust = 1, color = "brown4"
         ),
-        axis.text.y = ggplot2::element_text(color = "steelblue4"),
-        panel.grid.major = ggplot2::element_blank(),
-        panel.grid.minor = ggplot2::element_blank(),
-        # panel.background = ggplot2::element_rect(fill = "grey90"),
-        # axis.line.y = ggplot2::element_line(color = "steelblue4", size = 4),
-        # axis.line.x = ggplot2::element_line(color = "brown3", size = 4),
+        axis.text.y = element_text(color = "steelblue4"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        # panel.background = element_rect(fill = "grey90"),
+        # axis.line.y = element_line(color = "steelblue4", size = 4),
+        # axis.line.x = element_line(color = "brown3", size = 4),
         legend.position = "none"
       ) +
-      ggplot2::labs(
+      labs(
         x = "", y = "",
         title = "Pairwise comparisons - mean_scores_ratio (upper) and pval (lower)"
       ) +
-      ggplot2::coord_cartesian(expand = FALSE)
+      coord_cartesian(expand = FALSE)
 
     # add pvalues to plot --------------------------------------------------------
     # obtain lower triangle for the pvalues
@@ -935,16 +936,16 @@ plot_pairwise_comparison <- function(comparison_result,
     )]
 
     plot <- plot +
-      ggplot2::geom_tile(
+      geom_tile(
         data = lower_triangle,
-        ggplot2::aes(alpha = fill_col),
+        aes(alpha = fill_col),
         fill = fill_rule,
         color = "white",
         width = 0.97, height = 0.97
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = lower_triangle,
-        ggplot2::aes(label = var_of_interest),
+        aes(label = var_of_interest),
         na.rm = TRUE
       )
   } else if (type == "mean_scores_ratio") {
@@ -976,22 +977,22 @@ plot_pairwise_comparison <- function(comparison_result,
     )]
   }
 
-  plot <- ggplot2::ggplot(
+  plot <- ggplot(
     comparison_result,
-    ggplot2::aes(
+    aes(
       y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean_helper),
       x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
       fill = fill_col
     )
   ) +
-    ggplot2::geom_tile(
+    geom_tile(
       color = "white",
       width = 0.97, height = 0.97
     ) +
-    ggplot2::geom_text(ggplot2::aes(label = var_of_interest),
+    geom_text(aes(label = var_of_interest),
       na.rm = TRUE
     ) +
-    ggplot2::scale_fill_gradient2(
+    scale_fill_gradient2(
       low = "skyblue", mid = "grey95",
       high = high_col,
       na.value = "lightgrey",
@@ -999,32 +1000,32 @@ plot_pairwise_comparison <- function(comparison_result,
       limits = c(-1, 1),
       name = NULL
     ) +
-    ggplot2::theme_light() +
-    ggplot2::theme(
-      axis.text.x = ggplot2::element_text(
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
         angle = 90, vjust = 1,
         hjust = 1
       ),
       legend.position = "none"
     ) +
-    ggplot2::labs(
+    labs(
       x = "", y = "",
       title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1"
     ) +
-    ggplot2::coord_cartesian(expand = FALSE)
+    coord_cartesian(expand = FALSE)
 
   if (type == "mean_scores_ratio") {
     plot <- plot +
-      ggplot2::theme(
-        panel.grid.major = ggplot2::element_blank(),
-        panel.grid.minor = ggplot2::element_blank(),
-        axis.text.x = ggplot2::element_text(
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(
           angle = 90, vjust = 1,
           hjust = 1, color = "brown4"
         ),
-        axis.text.y = ggplot2::element_text(color = "steelblue4")
+        axis.text.y = element_text(color = "steelblue4")
       ) +
-      ggplot2::ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
+      ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
   }
 
   return(plot)
@@ -1128,11 +1129,11 @@ plot_pit <- function(pit,
     }
 
     if (type == "sample-based") {
-      hist <- ggplot2::ggplot(
+      hist <- ggplot(
         data = pit,
         aes(x = pit_value)
       ) +
-        ggplot2::geom_histogram(aes(y = stat(count) / sum(count)),
+        geom_histogram(aes(y = stat(count) / sum(count)),
           breaks = plot_quantiles,
           colour = "grey"
         ) +
@@ -1153,7 +1154,7 @@ plot_pit <- function(pit,
   hist <- hist +
     xlab("PIT") +
     ylab("Frequency") +
-    theme_light()
+    theme_scoringutils()
 
   return(hist)
 }
@@ -1217,7 +1218,7 @@ plot_avail_forecasts <- function(avail_forecasts,
       low = "grey95", high = "steelblue",
       na.value = "lightgrey"
     ) +
-    theme_light() +
+    theme_scoringutils() +
     theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),

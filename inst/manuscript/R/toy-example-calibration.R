@@ -106,35 +106,35 @@ ggsave("inst/manuscript/plots/calibration-diagnostic-examples.png", width = 11.5
 
 #
 # # plot with observations
-# true_value_plot <- ggplot2::ggplot(data = data.frame(x = true_values),
-#                                    ggplot2::aes(x = x)) +
-#   ggplot2::geom_histogram(ggplot2::aes(y = ..density..),
+# true_value_plot <- ggplot(data = data.frame(x = true_values),
+#                                    aes(x = x)) +
+#   geom_histogram(aes(y = ..density..),
 #                           fill = "grey",
 #                           colour = "dark grey") +
 #   theme_minimal() +
-#   ggplot2::labs(x = "True values",
+#   labs(x = "True values",
 #                 y = "Density") +
-#   ggplot2::theme(legend.position = "bottom")
+#   theme(legend.position = "bottom")
 #
 # # plot with standard normal distribution
 # standard_normal <- true_value_plot +
-#   ggplot2::geom_function(fun = dnorm, colour = "black") +
-#   ggplot2::ggtitle("Normal(0, 1)")
+#   geom_function(fun = dnorm, colour = "black") +
+#   ggtitle("Normal(0, 1)")
 #
 # # plot with shifted mean
 # shifted_mean <- true_value_plot +
-#   ggplot2::geom_function(fun = dnorm, colour = "black", args = list(mean = 0.5)) +
-#   ggplot2::ggtitle("Normal(0.5, 1)")
+#   geom_function(fun = dnorm, colour = "black", args = list(mean = 0.5)) +
+#   ggtitle("Normal(0.5, 1)")
 #
 # # plot with overdispersion
 # overdispersion <- true_value_plot +
-#   ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 1.4)) +
-#   ggplot2::ggtitle("Normal(0, 1.4)")
+#   geom_function(fun = dnorm, colour = "black", args = list(sd = 1.4)) +
+#   ggtitle("Normal(0, 1.4)")
 #
 # # plot with underdispersion
 # underdispersion <- true_value_plot +
-#   ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 0.7)) +
-#   ggplot2::ggtitle("Normal(0, 0.7)")
+#   geom_function(fun = dnorm, colour = "black", args = list(sd = 0.7)) +
+#   ggtitle("Normal(0, 0.7)")
 #
 # (standard_normal | shifted_mean | overdispersion | underdispersion) /
 #   pit_plots /
