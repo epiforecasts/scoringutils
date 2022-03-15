@@ -32,7 +32,7 @@ globalVariables(c(
   "DSS",
   "dss",
   "fill_col",
-  "identif",
+  "identifCol",
   "Interval_Score",
   "overprediction",
   "underprediction",

@@ -4,18 +4,21 @@
 \alias{plot_score_table}
 \title{Plot Coloured Score Table}
 \usage{
-plot_score_table(scores, y = NULL, select_metrics = NULL)
+plot_score_table(scores, y = "model", by = NULL, metrics = NULL)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
-\item{y}{the variable to be shown on the y-axis. If \code{NULL} (default),
-all columns that are not scoring metrics will be used. Alternatively,
-you can specify a vector with column names, e.g.
+\item{y}{the variable to be shown on the y-axis. Instead of a single character string,
+you can also specify a vector with column names, e.g.
 \code{y = c("model", "location")}. These column names will be concatenated
 to create a unique row identifier (e.g. "model1_location1").}
 
-\item{select_metrics}{A character vector with the metrics to show. If set to
+\item{by}{A character vector that determines how the colour shading for the
+plot gets computed. By default (\code{NULL}), shading will be determined per
+metric, but you can provide additional column names (see examples).}
+
+\item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will be shown.}
 }
 \value{
@@ -27,25 +30,17 @@ Plots a coloured table of summarised scores obtained using
 }
 \examples{
 library(ggplot2)
-scores <- score(example_quantile)
-scores <- summarise_scores(scores, by = c("model", "target_type"))
+library(magrittr) # pipe operator
 
-plot_score_table(scores, y = "model") +
+scores <- score(example_quantile) \%>\%
+  summarise_scores(by = c("model", "target_type")) \%>\%
+  summarise_scores(fun = signif, digits = 2)
+
+plot_score_table(scores, y = "model", by = "target_type") +
   facet_wrap(~target_type, ncol = 1)
 
 # can also put target description on the y-axis
-plot_score_table(scores, y = c("model", "target_type"))
-
-# yields the same result in this case
-plot_score_table(scores)
-
-scores <- score(example_integer)
-scores <- summarise_scores(scores, by = c("model", "target_type"))
-
-# only show selected metrics
 plot_score_table(scores,
-  y = "model",
-  select_metrics = c("crps", "bias")
-) +
-  facet_wrap(~target_type, ncol = 1)
+                 y = c("model", "target_type"),
+                 by = "target_type")
 }

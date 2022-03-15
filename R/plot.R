@@ -4,13 +4,14 @@
 #' Plots a coloured table of summarised scores obtained using
 #' [score()].
 #'
-#' @param y the variable to be shown on the y-axis. If `NULL` (default),
-#' all columns that are not scoring metrics will be used. Alternatively,
-#' you can specify a vector with column names, e.g.
+#' @param y the variable to be shown on the y-axis. Instead of a single character string,
+#' you can also specify a vector with column names, e.g.
 #' `y = c("model", "location")`. These column names will be concatenated
 #' to create a unique row identifier (e.g. "model1_location1").
-#'
-#' @param select_metrics A character vector with the metrics to show. If set to
+#' @param by A character vector that determines how the colour shading for the
+#' plot gets computed. By default (`NULL`), shading will be determined per
+#' metric, but you can provide additional column names (see examples).
+#' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will be shown.
 #'
 #' @return A ggplot2 object with a coloured table of summarised scores
@@ -22,47 +23,34 @@
 #'
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
-#' scores <- summarise_scores(scores, by = c("model", "target_type"))
+#' library(magrittr) # pipe operator
 #'
-#' plot_score_table(scores, y = "model") +
+#' scores <- score(example_quantile) %>%
+#'   summarise_scores(by = c("model", "target_type")) %>%
+#'   summarise_scores(fun = signif, digits = 2)
+#'
+#' plot_score_table(scores, y = "model", by = "target_type") +
 #'   facet_wrap(~target_type, ncol = 1)
 #'
 #' # can also put target description on the y-axis
-#' plot_score_table(scores, y = c("model", "target_type"))
-#'
-#' # yields the same result in this case
-#' plot_score_table(scores)
-#'
-#' scores <- score(example_integer)
-#' scores <- summarise_scores(scores, by = c("model", "target_type"))
-#'
-#' # only show selected metrics
 #' plot_score_table(scores,
-#'   y = "model",
-#'   select_metrics = c("crps", "bias")
-#' ) +
-#'   facet_wrap(~target_type, ncol = 1)
+#'                  y = c("model", "target_type"),
+#'                  by = "target_type")
 plot_score_table <- function(scores,
-                             y = NULL,
-                             select_metrics = NULL) {
+                             y = "model",
+                             by = NULL,
+                             metrics = NULL) {
 
   # identify metrics -----------------------------------------------------------
-  # identify metrics by looking at which of the available column names
-  # are metrics. All other variables are treated as identifier variables
-  all_metrics <- available_metrics()
-
-  metrics <- names(scores)[names(scores) %in% all_metrics]
-  id_vars <- names(scores)[!(names(scores) %in% all_metrics)]
-
-
-  # metrics to delete
-  scores <- data.table::as.data.table(scores)
-
-  if (!is.null(select_metrics)) {
-    to_delete <- setdiff(metrics, select_metrics)
-    scores[, (to_delete) := NULL]
+  id_vars <- get_forecast_unit(scores)
+  if (is.null(metrics)) {
+    metrics <- names(scores)[names(scores) %in% available_metrics()]
   }
+
+  scores <- delete_columns(
+    scores,
+    names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  )
 
   # compute scaled values ------------------------------------------------------
   # scaling is done in order to colour the different scores
@@ -73,10 +61,9 @@ plot_score_table <- function(scores,
   # which not (metrics like bias where deviations in both directions are bad)
   metrics_zero_good <- c("bias", "coverage_deviation")
   metrics_no_color <- c("coverage")
-  metrics_p_val <- c("pit_p_val")
+
   metrics_min_good <- setdiff(metrics, c(
-    metrics_zero_good, metrics_p_val,
-    metrics_no_color
+    metrics_zero_good, metrics_no_color
   ))
 
   # write scale functions that can be used in data.table
@@ -88,13 +75,6 @@ plot_score_table <- function(scores,
     scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
     return(scaled)
   }
-  scale_p_val <- function(x) {
-    out <- rep(0, length(x))
-    out[x < 0.1] <- 0.2
-    out[x < 0.05] <- 0.5
-    out[x < 0.01] <- 1
-    return(out)
-  }
 
   # pivot longer and add scaled values
   df <- data.table::melt(scores,
@@ -104,48 +84,36 @@ plot_score_table <- function(scores,
   )
 
   df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-    by = metric
+    by = c("metric", by)
   ]
   df[metric %in% metrics_zero_good, value_scaled := scale(value),
-    by = metric
+    by = c("metric", by)
   ]
   df[metric %in% metrics_no_color, value_scaled := 0,
-    by = metric
-  ]
-  df[metric %in% metrics_p_val, value_scaled := scale_p_val(value),
-    by = metric
+    by = c("metric", by)
   ]
 
 
-  # create identifier column for plot if not given -----------------------------
-  if (is.null(y)) {
-    # create an identifier column by concatinating all columns that
-    # are not a metric
-    identifier_columns <- names(df)[!names(df) %in%
-      c("metric", "value", "value_scaled")]
-  } else {
-    identifier_columns <- y
-  }
-
+  # create identifier column for plot ------------------------------------------
   # if there is only one column, leave column as is. Reason to do that is that
   # users can then pass in a factor and keep the ordering of that column intact
-  if (length(identifier_columns) > 1) {
-    df[, identif := do.call(paste, c(.SD, sep = "_")),
-      .SDcols = identifier_columns
+  if (length(y) > 1) {
+    df[, identifCol := do.call(paste, c(.SD, sep = "_")),
+       .SDcols = y[y %in% names(df)]
     ]
   } else {
-    setnames(df, old = eval(identifier_columns), new = "identif")
+    setnames(df, old = eval(y), new = "identifCol")
   }
 
   # plot -----------------------------------------------------------------------
   # make plot with all metrics that are not NA
   plot <- ggplot(
     df[!is.na(value), ],
-    aes(y = identif, x = metric)
+    aes(y = identifCol, x = metric)
   ) +
     # geom_tile(fill = "blue") +
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
-    geom_text(aes(y = identif, label = round(value, 2))) +
+    geom_text(aes(y = identifCol, label = value)) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     theme(
