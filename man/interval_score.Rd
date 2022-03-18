@@ -16,9 +16,11 @@ interval_score(
 \arguments{
 \item{true_values}{A vector with the true observed values of size n}
 
-\item{lower}{vector of size n with the lower quantile of the given range}
+\item{lower}{vector of size n with the prediction for the lower quantile
+of the given range}
 
-\item{upper}{vector of size n with the upper quantile of the given range}
+\item{upper}{vector of size n with the prediction for the upper quantile
+of the given range}
 
 \item{interval_range}{the range of the prediction intervals. i.e. if you're
 forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
@@ -27,12 +29,14 @@ for different forecasts to be scored. This corresponds to (100-alpha)/100
 in Gneiting and Raftery (2007). Internally, the range will be transformed
 to alpha.}
 
-\item{weigh}{if TRUE, weigh the score by alpha / 4, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Default:
-\code{FALSE}.}
+\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
+into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+decimal value that  represents how much is outside a central prediction
+interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
+Default: \code{TRUE}.}
 
 \item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
-parts of the interval score (sharpness, penalties for over- and
+parts of the interval score (dispersion penalty, penalties for over- and
 under-prediction get returned as separate elements of a list). If you want a
 \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
 }
@@ -47,12 +51,21 @@ and Raftery (2007). Smaller values are better.
 The score is computed as
 
 \deqn{
+\text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower}
+ - \text{true_value}) *
+\mathbf{1}(\text{true_value} < \text{lower}) +
+\frac{2}{\alpha}(\text{true_value} - \text{upper}) *
+\mathbf{1}(\text{true_value} > \text{upper})
+}{
 score = (upper - lower) + 2/alpha * (lower - true_value) *
 1(true_values < lower) + 2/alpha * (true_value - upper) *
 1(true_value > upper)
 }
-where $1()$ is the indicator function and alpha is the decimal value that
+where \eqn{\mathbf{1}()}{1()} is the indicator function and
 indicates how much is outside the prediction interval.
+\eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
+the prediction interval.
+
 To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
@@ -60,27 +73,30 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed,
 but the range has to be symmetric (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper).
-
-The interval score is a proper scoring rule that scores a quantile forecast
+Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 }
 \examples{
 true_values <- rnorm(30, mean = 1:30)
-interval_range = rep(90, 30)
-alpha = (100 - interval_range) / 100
-lower = qnorm(alpha/2, rnorm(30, mean = 1:30))
-upper = qnorm((1- alpha/2), rnorm(30, mean = 1:30))
+interval_range <- rep(90, 30)
+alpha <- (100 - interval_range) / 100
+lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
+upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 
-interval_score(true_values = true_values,
-               lower = lower,
-               upper = upper,
-               interval_range = interval_range)
+interval_score(
+  true_values = true_values,
+  lower = lower,
+  upper = upper,
+  interval_range = interval_range
+)
 
 # example with missing values and separate results
-interval_score(true_values = c(true_values, NA),
-               lower = c(lower, NA),
-               upper = c(NA, upper),
-               separate_results = TRUE,
-               interval_range = 90)
+interval_score(
+  true_values = c(true_values, NA),
+  lower = c(lower, NA),
+  upper = c(NA, upper),
+  separate_results = TRUE,
+  interval_range = 90
+)
 }
 \references{
 Strictly Proper Scoring Rules, Prediction,and Estimation,
@@ -89,5 +105,6 @@ Statistical Association, Volume 102, 2007 - Issue 477
 
 Evaluating epidemic forecasts in an interval format,
 Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-\url{https://arxiv.org/abs/2005.12881}
+\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618} # nolint
 }
+\keyword{metric}

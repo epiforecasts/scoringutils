@@ -1,0 +1,132 @@
+---
+title: "scoringutils - to dos and open questions"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Documentation for `score()` function
+
+- there is currently no documentation for the metrics returned (maybe a list of possible metrics could also be included in `check_forecasts()`). Generally, that information could sit in the documentation for the main function, the subfunctions, or in a data.frame that is provided as package data (maybe not ideal?). 
+- there is a documentation for the `score_binary()`, `score_quantile()` and `score_sample()`, but that inherits the data description for all which is maybe slightly confusing. 
+
+---
+
+# Unit tests needed
+
+- for example checking how unnecessary arguments are handled with regards to the `...` arguments
+- handling of point forecasts in data.frames, i.e. forecasts where quantile is `NA` (also that option is poorly documented)
+- input checks
+
+---
+
+# Input checks
+
+check functions need to be applied consistently everywhere. Also maybe check functions could be improved
+
+---
+
+# Argument names and order
+
+Check that all function arguments are named and ordered consistently
+
+---
+
+# scoringutils.R help file
+
+I find the scoringutils.R file useful, so you can get some overview by calling `?scoringutils`. However, populating that file manually is quite annoying. Is there a way to auto-populate it? Or maybe just link to the website with the pkgdown yaml overview? 
+
+---
+
+# Check overall documentaion is ok
+
+---
+
+# Names of scoringRules wrapper functions
+
+Currently functions are called `dss`, `crps`, `logs`. Maybe it would be more consistent to call them `dss_sample`. `crps_sample`, `logss_sample`, as all other lower-level scoring functions also have that naming convention to show where they are applicable. Also there is a `logs_binary` function. 
+
+---
+
+# Check function naming is consistent
+
+---
+
+# Relative skill with and without baseline
+
+The relative skill is different when there is a baseline (not only the scaled relative skill), because the baseline is not taken into account when taking the geometric mean. Is this what we want? Maybe discuss again with Johannes? 
+
+---
+
+# Behaviour of `score()` and `summarise_scores()`
+
+Are we happy with what is sumamrised and what is not sumamrised? E.g. partial summarising over samples for sample-based, but nothing for quantiles? Are we also happy with the default `by = NULL` in `summarise_scores()`, where `NULL` means to summarise over quantiles for quantile-based predictions? 
+
+Do we want to have an additional `aggregate_by` or `aggregate_over` argument in `summarise_scores()` to save typing?
+
+---
+
+# Name of 'range' argument
+
+Some functions accept a 'range' argument. Should we rename "range" to "interval_range" to make it more clear? it is currently called `interval_range` in function `interval_score`, but 'range' somwhere else
+
+---
+
+# Available metrics function and data set
+
+The function available_metrics() maybe could be a data set. In any case it is not yet done and also the data set would need some updating. 
+
+--- 
+
+# Support for logging forecasts and data
+
+The `score()` function could have an argument for whether everything shall be scored on a log scale. Would have to think about the exact transformation (e.g. log(y + 1)?) and also what to do with negative forecasts. And binary questions. Maybe complicated. 
+
+
+---
+
+# Renaming columns and metrics
+
+Could rename 'true_value' to 'truth' in `score()`. Could also rename column 'interval_score' to 'wis'. Technically it may not always be weighted, as you can turn weighting off. But realistically nobody will ever do it. So could just call it 'wis'. 
+
+Would be a good idea to go over all metric names and see whether we are happy with it. The metric names currently are in inst/tables-metric-overview.R (or in inst/metrics-overview/metrics-summary.Rda)
+
+
+--- 
+
+# Rework `plot_predictions` function
+
+Maybe any filtering should be removed from the function? 
+
+--- 
+
+# Make colour for score tables account for facets
+
+currently the function plot_score_table() and plot_heatmap() just compute the colour per data.frame. This makes it hard to use facetting. 
+
+```{r}
+score(example_continuous) %>%
+  summarise_scores(by = c("model", "location", "target_type")) %>%
+  plot_heatmap(x = "location", metric = "bias") + 
+    facet_wrap(~ target_type)
+```
+
+
+---
+
+# Should the function bias_range() be exported? 
+
+I'm using it within score_quantile() and it used to be the only bias function available. But now that there is a quantile version available we maybe shouldn't export it? 
+
+
+---
+
+# Could add an argument `convert_to_quantiles` (or similar) to `score()`
+
+We have a function to calculate quantiles from samples. The reason we don't do that automatically is because it might be biased. Forcing users to convert manually to quantiles, e.g. if they want to compute coverage values, however, is clunky. If someone e.g. wants to have crps, but also coverage values, they would have to run `score()` twice with two different data sets and join the outputs. The reason we want manual action from the user is because estimating quantiles based on samples may be biased if the number of samples is small. But maybe having an extra argument suffices? we could also print out a message / warning when the user does that (or use the lifycycle package and print out a warning every 8 hours...)
+
+# Make plotting theme for plot functions consistent
+
+Do we want to have theme_minimal()? no theme? 

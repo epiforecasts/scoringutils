@@ -11,7 +11,7 @@ test_that("absolute error (sample based) works", {
 
 # covidHubUtils-tests
 
-test_that("abs error is correct within eval_forecasts, point forecast only", {
+test_that("abs error is correct within score, point forecast only", {
   # test is adapted from the package covidHubUtils, https://github.com/reichlab/covidHubUtils/
   y <- c(1, -15, 22)
 
@@ -27,7 +27,7 @@ test_that("abs error is correct within eval_forecasts, point forecast only", {
   forecast_target_variables <-
     rep(target_variables, times = 1)
 
-  point_forecast <- c(5,6,7)
+  point_forecast <- c(5, 6, 7)
 
   test_truth <- data.frame(
     model = rep("truth_source", length(y)),
@@ -61,8 +61,12 @@ test_that("abs error is correct within eval_forecasts, point forecast only", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils)
+  data_scoringutils <- merge_pred_and_obs(
+    forecasts = fc_scoringutils,
+    observations = truth_scoringutils
+  )
+
+  eval <- scoringutils::score(data_scoringutils)
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 
@@ -70,7 +74,6 @@ test_that("abs error is correct within eval_forecasts, point forecast only", {
 
   # expect_equal(actual$abs_error, expected)
   expect_equal(eval$ae_point, expected)
-
 })
 
 test_that("abs error is correct, point and median forecasts different", {
@@ -78,7 +81,8 @@ test_that("abs error is correct, point and median forecasts different", {
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
     c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4))
+    c(-2, 0, 3, 3, 4)
+  )
   forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[3]
@@ -98,7 +102,7 @@ test_that("abs error is correct, point and median forecasts different", {
   forecast_quantiles <- forecast_quantiles_matrix
   dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
 
-  point_forecast <- c(5,6,7)
+  point_forecast <- c(5, 6, 7)
 
   test_truth <- data.frame(
     model = rep("truth_source", length(y)),
@@ -118,9 +122,9 @@ test_that("abs error is correct, point and median forecasts different", {
     temporal_resolution = rep("wk", n_forecasts),
     target_variable = forecast_target_variables,
     target_end_date = forecast_target_end_dates,
-    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
-    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
-    value = c(point_forecast,forecast_quantiles),
+    type = c(rep("point", length(point_forecast)), rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA, length(point_forecast)), forecast_quantile_probs),
+    value = c(point_forecast, forecast_quantiles),
     stringsAsFactors = FALSE
   )
 
@@ -131,10 +135,12 @@ test_that("abs error is correct, point and median forecasts different", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils)
+  data_scoringutils <- merge_pred_and_obs(
+    forecasts = fc_scoringutils,
+    observations = truth_scoringutils
+  )
 
-  # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  eval <- scoringutils::score(data_scoringutils)
 
   expected <- abs(y - point_forecast)
   # expect_equal(actual$abs_error, expected)
@@ -146,7 +152,8 @@ test_that("abs error is correct, point and median forecasts same", {
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
     c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4))
+    c(-2, 0, 3, 3, 4)
+  )
   forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[3]
@@ -166,7 +173,7 @@ test_that("abs error is correct, point and median forecasts same", {
   forecast_quantiles <- forecast_quantiles_matrix
   dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
 
-  point_forecast <- c(1,2,3)
+  point_forecast <- c(1, 2, 3)
 
   test_truth <- data.frame(
     model = rep("truth_source", length(y)),
@@ -186,9 +193,9 @@ test_that("abs error is correct, point and median forecasts same", {
     temporal_resolution = rep("wk", n_forecasts),
     target_variable = forecast_target_variables,
     target_end_date = forecast_target_end_dates,
-    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
-    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
-    value = c(point_forecast,forecast_quantiles),
+    type = c(rep("point", length(point_forecast)), rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA, length(point_forecast)), forecast_quantile_probs),
+    value = c(point_forecast, forecast_quantiles),
     stringsAsFactors = FALSE
   )
 
@@ -200,9 +207,20 @@ test_that("abs error is correct, point and median forecasts same", {
   data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
   truth_scoringutils[, model := NULL]
 
-  eval <- scoringutils::eval_forecasts(forecasts = fc_scoringutils,
-                                       truth_data = truth_scoringutils,
-                                       summarise_by = c("location", "target_end_date", "target_variable", "horizon"))
+  data_scoringutils <- merge_pred_and_obs(
+    forecasts = fc_scoringutils,
+    observations = truth_scoringutils
+  )
+
+  eval <- score(data = data_scoringutils)
+  eval <- summarise_scores(eval,
+    by = c(
+      "location", "target_end_date",
+      "target_variable", "horizon"
+    ),
+    na.rm = TRUE
+  )
+
 
   # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 

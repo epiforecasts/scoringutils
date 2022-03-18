@@ -22,8 +22,6 @@ Transform data from a format that is based on predictive samples to a format
 based on plain quantiles.
 }
 \examples{
-example_data <- scoringutils::integer_example_data
-
-quantile_data <- scoringutils::sample_to_quantile(example_data)
-
+sample_to_quantile(example_integer)
 }
+\keyword{data-handling}

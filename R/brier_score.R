@@ -12,51 +12,31 @@
 #' probabilistic prediction and the true outcome.
 #'
 #' \deqn{
-#' Brier_Score = \frac{1}{N} \sum_{t = 1}^{n} (prediction_t - outcome_t)^2
+#'   \text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction_t} -
+#'   \text{outcome_t})^2
+#' }{
+#'   Brier_Score = 1/N \sum_{t = 1}^{n} (prediction_t - outcome_t)²
 #' }
 #'
-#' @param true_values A vector with the true observed values of size n
+#' @param true_values A vector with the true observed values of size n with
+#' all values equal to either 0 or 1
 #' @param predictions A vector with a predicted probability
 #' that true_value = 1.
 #' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
-#' @importFrom methods hasArg
 #' @export
 #'
 #' @examples
-#' true_values <- sample(c(0,1), size = 30, replace = TRUE)
+#' true_values <- sample(c(0, 1), size = 30, replace = TRUE)
 #' predictions <- runif(n = 30, min = 0, max = 1)
 #'
 #' brier_score(true_values, predictions)
-#'
+#' @keywords metric
 
-brier_score <- function (true_values, predictions) {
+brier_score <- function(true_values, predictions) {
+  check_true_values(true_values, type = "binary")
+  check_predictions(predictions, true_values, type = "binary")
 
-  # ============== Error handling ==============
-
-  if (!all(c(methods::hasArg("true_values"), methods::hasArg("predictions")))) {
-    stop("true_values or predictions argument missing")
-  }
-
-  if (!all(true_values %in% c(0,1))) {
-    stop("elements of true_values should be either zero or one")
-  }
-
-  n <- length(true_values)
-
-  if (length(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.",
-                   n, length(predictions))
-    stop(msg)
-  }
-
-  if (max(predictions) > 1 | min(predictions) < 0) {
-    stop("elements of 'predictions' should be probabilites between zero and one")
-  }
-  # ============================================
-
-  brierscore <- (sum((true_values - predictions)^2) ) / n
+  brierscore <- (true_values - predictions)^2
   return(brierscore)
 }
-
-

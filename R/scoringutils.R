@@ -12,42 +12,40 @@
 #' integer, or binary.
 #'
 #' A collection of different metrics and scoring rules can be accessed through
-#' the function [eval_forecasts()]. Given a data.frame of the
+#' the function [score()]. Given a data.frame of the
 #' correct form the function will automatically figure out the type of
 #' prediction and true values and return appropriate scoring metrics.
 #'
 #' The package also has a lot of default visualisation based on the output
-#' created by [eval_forecasts()].
+#' created by [score()].
 #'
-#' - [score_table()]
-#' - [correlation_plot()]
-#' - [wis_components()]
-#' - [range_plot()]
-#' - [score_heatmap()]
+#' - [plot_score_table()]
+#' - [plot_correlation()]
+#' - [plot_wis()]
+#' - [plot_ranges()]
+#' - [plot_heatmap()]
 #' - [plot_predictions()]
-#' - [interval_coverage()]
-#' - [quantile_coverage()]
+#' - [plot_interval_coverage()]
+#' - [plot_quantile_coverage()]
 #'
 #' Alternatively, the following functions can be accessed directly:
 #'
 #' - [brier_score()]
 #' - [pit()]
-#' - [bias()]
-#' - [quantile_bias()]
-#' - [sharpness()]
-#' - [crps()]
-#' - [logs()]
-#' - [dss()]
+#' - [bias_sample()]
+#' - [bias_quantile()]
+#' - [bias_range()]
+#' - [mad_sample()]
+#' - [crps_sample()]
+#' - [logs_sample()]
+#' - [dss_sample()]
 #' - [ae_median_sample()]
 #'
 #' Predictions can be evaluated in a lot of different formats. If you want to
 #' convert from one format to the other, the following helper functions can
 #' do that for you:
 #'
-#' - [sample_to_range_long()]
 #' - [sample_to_quantile()]
-#' - [quantile_to_range_long()]
-#' - [range_long_to_quantile()]
 #'
 #' @docType package
 #' @name scoringutils

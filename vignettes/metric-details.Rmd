@@ -1,0 +1,66 @@
+---
+title: "Details on the metrics implemented in `scoringutils`"
+author: "Nikos Bosse"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Details on the metrics implemented in `scoringutils`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(scoringutils)
+library(kableExtra)
+library(magrittr)
+library(knitr)
+library(data.table)
+```
+
+## Applicability of different metrics for different types of forecasts and formats
+
+This table gives an overview for when which metric can be applied and gives a very brief description. Note that this table on shows the metrics as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
+
+```{r, echo = FALSE, results = "asis"}
+
+data <- readRDS(
+  system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils")
+)
+
+data[, 1:6] %>%
+  kbl(format = "html",
+      escape = FALSE,
+      align = c("lccccl"),
+      linesep = c('\\addlinespace')) %>%
+  column_spec(1, width = "3.2cm") %>%
+  column_spec(2, width = "1.5cm") %>%
+  column_spec(3, width = "1.5cm") %>%
+  column_spec(4, width = "1.3cm") %>%
+  column_spec(5, width = "1.5cm") %>%
+  column_spec(6, width = "6.0cm") %>%
+  add_header_above(c(" " = 1, "Sample-based" = 2, "  " = 3)) %>%
+  row_spec(seq(1, nrow(data), 2), background = "Gainsboro") %>%
+  kable_styling()
+```
+
+
+## Detailed explanation of the metrics implemented in `scoringutils`
+
+```{r, echo = FALSE, results = "asis"}
+
+data <- readRDS(
+  system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils")
+)
+
+data[, 1:2] %>%
+  kbl(format = "html",
+      escape = TRUE) %>%
+  column_spec(1, width = "3.5cm") %>%
+  row_spec(seq(1, nrow(data), 2), background = "Gainsboro") %>%
+  column_spec(2, width = "15.5cm") %>%
+  kable_styling()
+```

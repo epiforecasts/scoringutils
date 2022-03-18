@@ -1,3 +1,3 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Note: The definition of the weighted interval score has slightly changed in version 0.1.5. If you want to use the old definition, use the argument `count_median_twice = TRUE` in the function `eval_forecasts()`")
+  packageStartupMessage('Note: scoringutils 1.0.0 introduces a lot of breaking changes and we apologise for any inconvenience. If you prefer the old interface, please download version 0.1.8 using remotes::install_github("epiforecasts/scoringutils@v0.1.8")')
 }

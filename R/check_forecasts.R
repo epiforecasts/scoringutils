@@ -1,24 +1,24 @@
 #' @title Check forecasts
 #'
 #' @description Function to check the input data before running
-#' [eval_forecasts()].
+#' [score()].
 #'
 #' The data should come in one of three different formats:
-#' - A format for binary predictions (see [binary_example_data])
+#' - A format for binary predictions (see [example_binary])
 #' - A sample-based format for discrete or continuous predictions
-#' (see [continuous_example_data] and [integer_example_data])
-#' - A quantile-based format (see [quantile_example_data])
+#' (see [example_continuous] and [example_integer])
+#' - A quantile-based format (see [example_quantile])
 #'
-#' @seealso Functions to move between different formats:
-#' [range_long_to_quantile()], [range_wide_to_long()]
-#' @param data A data.frame or similar as would be used for [eval_forecasts()]
-#'
+#' @seealso Function to move from sample-based to quantile format:
+#' [sample_to_quantile()]
+#' @inheritParams avail_forecasts
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.
 #'
 #' - `target_type` the type of the prediction target as inferred from the
-#' input: 'binary', if all values in `true_value` are either 0 or 1 and values in
-#' `prediction` are between 0 and 1, 'discrete' if all true values are integers
+#' input: 'binary', if all values in `true_value` are either 0 or 1 and values
+#'  in `prediction` are between 0 and 1, 'discrete' if all true values are
+#'  integers.
 #' and 'continuous' if not.
 #' - `prediction_type` inferred type of the prediction. 'quantile', if there is
 #' a column called 'quantile', else 'discrete' if all values in `prediction`
@@ -38,151 +38,180 @@
 #' - `warnings` A vector with warnings. These can be ignored if you know what
 #' you are doing.
 #' - `errors` A vector with issues that will cause an error when running
-#' [eval_forecasts()].
+#' [score()].
 #' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' is.data.table
-#'
-#' @examples
-#' library(scoringutils)
-#' check <- check_forecasts(quantile_example_data)
-#' print(check)
-#' check_forecasts(binary_example_data)
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
-
+#' @keywords check-forecasts
+#' @examples
+#' check <- check_forecasts(example_quantile)
+#' print(check)
+#' check_forecasts(example_binary)
 check_forecasts <- function(data) {
-  check <- list()
-  msg <- list()
+
+  # create lists to store results ----------------------------------------------
+  out <- list()
   warnings <- list()
   errors <- list()
+  messages <- list()
 
-  # check data looks ok and remove columns with no prediction or no true value
 
-  data <- withCallingHandlers(
-    tryCatch(
-      check_clean_data(data),
-      error = function(e) {
-        errors <<- c(errors, e$message)
-      }
-    ),
-    warning = function(w) {
-      warnings <<- c(warnings, w$message)
-      tryInvokeRestart("muffleWarning")
-    }
-  )
+  # check data columns ---------------------------------------------------------
+  if (!is.data.frame(data)) {
+    stop("Input should be a data.frame or similar")
+  }
+  data <- data.table::as.data.table(data)
 
-  if (length(errors) > 0 | !is.data.table(data)) {
-    stop(
-      "Can't check input. The following error has been produced:\n",
-      paste(errors, collapse = "\n")
+  # make sure true_value and prediction are present
+  if (!all(c("true_value", "prediction") %in% colnames(data))) {
+    stop("Data needs to have columns called `true_value` and `prediction`")
+  }
+
+  # check whether any column name is a scoringutils metric
+  if (any(colnames(data) %in% available_metrics())) {
+    warnings <- c(
+      warnings,
+      "At least one column in the data corresponds to the name of a metric that will be computed by scoringutils. Please check `available_metrics()`" # nolint
     )
   }
 
-  # obtain truth type
-
-  check[["target_type"]] <- get_target_type(data)
-  check[["prediction_type"]] <- get_prediction_type(data)
-
-  msg <- c(
-    msg,
-    paste0(
-      "Forecasts are for a `", check[["target_type"]], "` target ",
-      "using a `", check[["prediction_type"]], "` prediction format."
-    )
-  )
-
-  # obtain unit of a single forecast
-  protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile",
-    "range", "boundary"
-  )
-  obs_unit <- setdiff(colnames(data), protected_columns)
-  check[["forecast_unit"]] <- obs_unit
-  msg <- c(
-    msg,
-    paste0(
-      "The unit of a single forecast is defined by `",
-      paste(check[["forecast_unit"]], collapse = "`, `"), "`. ",
-      "If this is not as intended, please DELETE UNNECESSARY columns or add new ones."
-    )
-  )
-
-  # check what format is has right now and tell user to convert it.
-  if (!any(c("quantile", "sample") %in% colnames(data))) {
-    if ("range" %in% colnames(data) | any(grepl("lower_", colnames(data)))) {
-      errors <- c(
-        errors,
-        "It seems like you have a format based on forecast intervals (see `example_data_long`, `example_data_semi_wide`, `example_data_wide`). You need to convert this to a quantile-based format first using `range_wide_to_long()` and `range_long_to_quantile()`"
-      )
-    } else if (!check[["target_type"]] == "binary") {
-      errors <- c(
-        errors,
-        "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample"
-      )
-    }
-  }
-
-  # check whether there is more than one prediction for the same target, i.e.
-  # the length of prediction is greater 1 for a sample / quantile for
-  # a single forecast
-  type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
-  data[, InternalDuplicateCheck := .N, by = c(obs_unit, type)]
-
-  if (any(data$InternalDuplicateCheck > 1)) {
-    errors <- c(
-      errors,
-      paste(
-        "There are instances with more than one forecast for the same target.",
-        "This can't be right and needs to be resolved. Maybe you need to check",
-        "the unit of a single forecast and add missing columns?"
-      )
-    )
-    check[["duplicate_forecasts"]] <- data[InternalDuplicateCheck > 1]
-  }
-  data[, InternalDuplicateCheck := NULL]
-
-  # check whether there is a model column present. And if not, state what that means
+  # check whether there is a model column present
   if (!("model" %in% colnames(data))) {
-    msg <- c(
-      msg,
+    messages <- c(
+      messages,
       paste(
         "There is no column called `model` in the data.",
-        "scoringutils therefore thinks that all forecasts come from the same model"
+        "scoringutils therefore thinks that all forecasts come from the same model" # nolint
       )
     )
     data[, model := "Unspecified model"]
   }
 
-  # some checks whether there are the same number of quantiles, samples
-  data[, InternalNumCheck := length(prediction), by = obs_unit]
+
+  # remove rows where prediction or true value are NA --------------------------
+  if (anyNA(data$true_value)) {
+    messages <- c(
+      messages,
+      "Some values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+    )
+  }
+  if (anyNA(data$prediction)) {
+    messages <- c(
+      messages,
+      "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+    )
+  }
+  data <- data[!is.na(true_value) & !is.na(prediction)]
+
+  if (nrow(data) == 0) {
+    stop("After removing all NA true values and predictions, there were no observations left")
+  }
+
+
+  # get information about the forecasts ----------------------------------------
+  forecast_unit <- get_forecast_unit(data)
+  target_type <- get_target_type(data)
+  prediction_type <- get_prediction_type(data)
+
+
+  # check whether a column called 'quantile' or 'sample' is present ------------
+  if (!any(c("quantile", "sample") %in% colnames(data))) {
+    if (!target_type == "binary") {
+      errors <- c(
+        errors,
+        "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" # nolint
+      )
+    }
+  }
+
+
+  # check duplicate forecasts --------------------------------------------------
+  # check whether there is more than one prediction for the same target, i.e.
+  # the length of prediction is greater 1 for a sample / quantile for
+  # a single forecast
+
+  check_duplicates <- find_duplicates(data)
+
+  if (nrow(check_duplicates) > 0) {
+    errors <- c(
+      errors,
+      paste(
+        "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows."
+      )
+    )
+  }
+
+  # check whether there are the same number of quantiles, samples --------------
+  data[, InternalNumCheck := length(prediction), by = forecast_unit]
   n <- unique(data$InternalNumCheck)
   if (length(n) > 1) {
     warnings <- c(
       warnings,
       paste0(
-        "Some forecasts have different numbers of rows (e.g. quantiles or samples). ",
+        "Some forecasts have different numbers of rows (e.g. quantiles or samples). ", # nolint
         "scoringutils found: ", paste(n, collapse = ", "),
         ". This is not necessarily a problem, but make sure this is intended."
       )
     )
   }
-  check[["rows_per_forecast"]] <-
-    data[, .(rows_per_forecast = unique(InternalNumCheck)), by = model]
   data[, InternalNumCheck := NULL]
 
-  # get available unique values per model for the different columns
-  cols <- obs_unit[obs_unit != "model"]
-  check[["unique_values"]] <-
-    data[, vapply(.SD, FUN = function(x) length(unique(x)), integer(1)), by = "model"]
 
-  check[["messages"]] <- unlist(msg)
-  check[["warnings"]] <- unlist(warnings)
-  check[["errors"]] <- unlist(errors)
+  # store info so it can be accessed by the user -------------------------------
+  out[["cleaned_data"]] <- data
 
-  class(check) <- c("scoringutils_check", "list")
+  # available unique values per model for the different columns
+  cols <- forecast_unit[forecast_unit != "model"]
+  out[["unique_values"]] <-
+    data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
 
-  return(check)
+  # forecast infos
+  out[["forecast_unit"]] <- forecast_unit
+  out[["target_type"]] <- target_type
+  out[["prediction_type"]] <- prediction_type
+
+  out[["messages"]] <- unlist(messages)
+  out[["warnings"]] <- unlist(warnings)
+  out[["errors"]] <- unlist(errors)
+
+
+  # generate messages, warnings, errors ----------------------------------------
+  if (length(messages) > 0) {
+    msg <- collapse_messages(type = "messages", messages)
+    message(msg)
+  }
+  if (length(warnings) > 0) {
+    msg <- collapse_messages(type = "warnings", warnings)
+    warning(msg)
+  }
+  if (length(errors) > 0) {
+    msg <- collapse_messages(type = "errors", errors)
+    stop(msg)
+  }
+
+  # return check results
+  class(out) <- c("scoringutils_check", "list")
+  return(out)
+}
+
+
+#' @title Collapse several messages to one
+#'
+#' @description Internal helper function to facilitate generating messages
+#' and warnings in [check_forecasts()]
+#'
+#' @param type character, should be either "messages", "warnings" or "errors"
+#' @param messages the messages or warnings to collapse
+#'
+#' @return string with the message or warning
+#' @keywords internal
+collapse_messages <- function(type = "messages", messages) {
+  paste0(
+    "The following ",  type, " were produced when checking inputs:\n",
+    paste(paste0(seq_along(messages), ". "),
+          messages, collapse = "\n"))
 }
 
 
@@ -197,128 +226,57 @@ check_forecasts <- function(data) {
 #'
 #' @return NULL
 #' @export
-
+#' @keywords check-forecasts
+#' @examples
+#' check <- check_forecasts(example_quantile)
+#' print(check)
 print.scoringutils_check <- function(x, ...) {
-  print_elements <- names(x)[!(names(x) %in% c("messages"))]
-  print.default(x[print_elements])
+  cat("Your forecasts seem to be for a target of the following type:\n")
+  print(x["target_type"])
+  cat("and in the following format:\n")
+  print(x["prediction_type"])
 
-  cat(paste0(
-    "\nBased on your input, scoringutils thinks:\n",
-    paste(x$messages, collapse = "\n")
-  ))
-  cat("\n$rows_per_forecast shows how many rows (usually quantiles or samples are available per forecast.")
-  cat(
-    "\n$unique_values shows how many unique values there are per column per model",
-    "(across the entire data)."
-  )
+  cat("The unit of a single forecast is defined by:\n")
+  print(x["forecast_unit"])
 
-  if (length(x$warnings) > 0) {
-    cat(paste0(
-      "\n\n",
-      "You should be aware of the following warnings:\n",
-      paste(x$warnings, collapse = "\n")
-    ))
+  cat("Cleaned data, rows with NA values in prediction or true_value removed:\n")
+  print.default(x["cleaned_data"])
+
+  cat("Number of unique values per column per model:\n")
+  print.default(x["unique_values"])
+
+  colnames <- names(x)[names(x) %in% c("messages", "warnings", "errors")]
+  if (length(colnames) > 0) {
+    print.default(x[colnames])
   }
 
-  if (length(x$errors) > 0) {
-    cat(paste0(
-      "\n\n",
-      "The following things will likely result in an error:",
-      paste(x$errors, collapse = "\n")
-    ))
-  }
   return(invisible(x))
 }
 
 
+#' @title Find duplicate forecasts
+#'
+#' @description Helper function to identify duplicate forecasts, i.e.
+#' instances where there is more than one forecast for the same prediction
+#' target.
+#'
+#' @param data A data.frame as used for [score()]
+#'
+#' @return A data.frame with all rows for which a duplicate forecast was found
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' example <- rbind(example_quantile, example_quantile[1000:1010])
+#' find_duplicates(example)
 
-#' @title Get prediction type of a forecast
-#'
-#' @description Internal helper function to get the prediction type of a
-#' forecast. That is inferred based on the properties of the values in the
-#' `prediction` column.
-#'
-#' @inheritParams check_forecasts
-#'
-#' @return Character vector of length one with either "quantile", "integer", or
-#' "continuous".
-#'
-#' @keywords internal
+find_duplicates <- function(data) {
+  type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
+  forecast_unit <- get_forecast_unit(data)
 
-get_prediction_type <- function(data) {
-  if ("quantile" %in% names(data)) {
-    return("quantile")
-  } else if (all.equal(data$prediction, as.integer(data$prediction)) == TRUE) {
-    return("integer")
-  } else {
-    return("continuous")
-  }
-}
-
-
-#' @title Get type of the target true values of a forecast
-#'
-#' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the which columns
-#' are present in the data.
-#'
-#' @inheritParams check_forecasts
-#'
-#' @return Character vector of length one with either "binary", "integer", or
-#' "continous"
-#'
-#' @keywords internal
-
-get_target_type <- function(data) {
-  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
-    if (all(data$true_value %in% c(0, 1)) &&
-        all(data$prediction >= 0) && all(data$prediction <= 1)) {
-      return("binary")
-    } else {
-      return("integer")
-    }
-  } else {
-    return("continuous")
-  }
-}
-
-
-#' @title Clean forecast data
-#'
-#' @description Helper function to check that the input is in fact a data.frame
-#' or similar and remove rows with no value for `prediction` or `true_value`
-#'
-#' @param data A data.frame or similar as it gets passed to [eval_forecasts()].
-#'
-#' @return A data.table with NA values in `true_value` or `prediction` removed.
-#'
-#' @importFrom data.table as.data.table
-#'
-#' @keywords internal
-
-check_clean_data <- function(data) {
-  if (!is.data.frame(data)) {
-    stop("Input should be a data.frame or similar")
-  }
   data <- as.data.table(data)
-
-  # make sure necessary columns are present
-  if (!all(c("true_value", "prediction") %in% colnames(data))) {
-    stop("Data needs to have columns called `true_value` and `prediction`")
-  }
-
-  # remove rows where prediction or true value are NA
-  if (anyNA(data$true_value)) {
-    warning("Some values for `true_value` are NA in the data provided")
-  }
-  data <- data[!is.na(true_value)]
-
-  if (anyNA(data$prediction)) {
-    warning("Some values for `prediction` are NA in the data provided")
-  }
-  data <- data[!is.na(prediction)]
-  if (nrow(data) == 0) {
-    stop("After removing all NA true values and predictions, there were no observations left")
-  }
-  return(data)
+  data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
+  out <- data[InternalDuplicateCheck > 1]
+  out[, InternalDuplicateCheck := NULL]
+  return(out[])
 }
+

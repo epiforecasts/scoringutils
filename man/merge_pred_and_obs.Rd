@@ -13,7 +13,7 @@ merge_pred_and_obs(
 }
 \arguments{
 \item{forecasts}{data.frame with the forecast data (as can be passed to
-\code{\link[=eval_forecasts]{eval_forecasts()}}).}
+\code{\link[=score]{score()}}).}
 
 \item{observations}{data.frame with the observations}
 
@@ -34,3 +34,9 @@ aims to handle the merging well if additional columns are present
 in one or both data sets. If in doubt, you should probably merge the
 data sets manually.
 }
+\examples{
+forecasts <- example_quantile_forecasts_only
+observations <- example_truth_only
+merge_pred_and_obs(forecasts, observations)
+}
+\keyword{data-handling}

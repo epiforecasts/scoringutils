@@ -20,15 +20,12 @@ plot_predictions(
   scales = "free_y",
   allow_truth_without_pred = FALSE,
   remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
-    "interval"),
-  xlab = x,
-  ylab = "True and predicted values",
-  verbose = TRUE
+    "interval")
 )
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
-\code{\link[=eval_forecasts]{eval_forecasts()}}. The data.frame needs to have columns called
+\code{\link[=score]{score()}}. The data.frame needs to have columns called
 "true_value", "prediction" and then either a column called sample, or one
 called "quantile" or two columns called "range" and "boundary". Internally,
 these will be separated into a truth and forecast data set in order to be
@@ -88,12 +85,6 @@ models or forecasters don't cover the same periods. Removing these columns
 from the truth data makes sure that nevertheless all available truth data
 is plotted (instead of having different true values depending on the
 period covered by a certain model).}
-
-\item{xlab}{Label for the x-axis. Default is the variable name on the x-axis}
-
-\item{ylab}{Label for the y-axis. Default is "True and predicted values"}
-
-\item{verbose}{print out additional helpful messages (default is TRUE)}
 }
 \value{
 ggplot object with a plot of true vs predicted values
@@ -102,21 +93,20 @@ ggplot object with a plot of true vs predicted values
 Make a plot of observed and predicted values
 }
 \examples{
-example1 <- scoringutils::continuous_example_data
-example2 <- scoringutils::range_example_data_long
+example1 <- scoringutils::example_continuous
 
-scoringutils::plot_predictions(example1, x = "value_date",
-                               filter_truth = list('value_date <= "2020-06-22"',
-                                                   'value_date > "2020-05-01"'),
-                               filter_forecasts = list("model == 'SIRCOVID'",
-                                                       'creation_date == "2020-06-22"'),
-                               facet_formula = geography ~ value_desc)
-
-scoringutils::plot_predictions(example2, x = "value_date",
-                               filter_truth = list('value_date <= "2020-06-22"',
-                                                   'value_date > "2020-05-01"'),
-                               filter_forecasts = list("model == 'SIRCOVID'",
-                                                       'creation_date == "2020-06-22"'),
-                               allow_truth_without_pred = TRUE,
-                               facet_formula = geography ~ value_desc)
+plot_predictions(
+  example1,
+  x = "target_end_date",
+  filter_truth = list(
+    'target_end_date <= "2021-07-22"',
+    'target_end_date > "2021-05-01"'
+  ),
+  filter_forecasts = list(
+    "model == 'EuroCOVIDhub-ensemble'",
+    'forecast_date == "2021-06-07"'
+  ),
+  facet_formula = location ~ target_type,
+  range = c(0, 50, 90, 95)
+)
 }

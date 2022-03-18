@@ -12,3 +12,4 @@ A vector with the name of all available metrics
 \description{
 Available metrics in scoringutils
 }
+\keyword{info}

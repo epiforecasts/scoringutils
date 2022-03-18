@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2021/Arch Linux)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: manuscript.aux
+The style file: jss.bst
+Database file #1: references.bib
+Database file #2: scoringutils-paper.bib
+Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
+You've used 37 entries,
+            3215 wiz_defined-function locations,
+            955 strings with 22567 characters,
+and the built_in function-call counts, 111867 in all, are:
+= -- 11765
+> -- 4208
+< -- 25
++ -- 1591
+- -- 1540
+* -- 8786
+:= -- 12253
+add.period$ -- 195
+call.type$ -- 37
+change.case$ -- 664
+chr.to.int$ -- 38
+cite$ -- 37
+duplicate$ -- 11835
+empty$ -- 7374
+format.name$ -- 1642
+if$ -- 22611
+int.to.chr$ -- 4
+int.to.str$ -- 1
+missing$ -- 812
+newline$ -- 247
+num.names$ -- 148
+pop$ -- 6114
+preamble$ -- 1
+purify$ -- 661
+quote$ -- 0
+skip$ -- 1225
+stack$ -- 0
+substring$ -- 14481
+swap$ -- 1972
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 333
+warning$ -- 0
+while$ -- 675
+width$ -- 0
+write$ -- 589

@@ -1,4 +1,4 @@
-#' @title LogS
+#' @title Logarithmic score
 #'
 #' @description
 #' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
@@ -10,53 +10,30 @@
 #' integer-valued Monte Carlo Samples. The Log Score can be used for specific
 #' integer valued probability distributions. See the scoringRules package for
 #' more details.
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams ae_median_sample
 #' @return vector with the scoring values
 #' @importFrom scoringRules logs_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' logs(true_values, predictions)
+#' logs_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
+logs_sample <- function(true_values, predictions) {
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+    class = "matrix"
+  )
 
-logs <- function(true_values, predictions) {
-
-  # ============== Error handling ==============
-
-  if (missing(true_values) | missing(predictions)) {
-    stop("true_values or predictions argument missing")
-  }
-
-  n <- length(true_values)
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-  if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
-    stop(msg)
-  }
-  if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
-    stop(msg)
-  }
-
-  # ============================================
-
-  scoringRules::logs_sample(y = true_values,
-                            dat = predictions)
+  scoringRules::logs_sample(
+    y = true_values,
+    dat = predictions
+  )
 }
-
-
 
 #' @title Dawid-Sebastiani Score
 #'
@@ -64,53 +41,30 @@ logs <- function(true_values, predictions) {
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package.
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams logs_sample
 #' @return vector with scoring values
 #' @importFrom scoringRules dss_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' dss(true_values, predictions)
+#' dss_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
-dss <- function(true_values, predictions) {
+dss_sample <- function(true_values, predictions) {
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+    class = "matrix"
+  )
 
-  # ============== Error handling ==============
-  if (missing(true_values) | missing(predictions)) {
-    stop("true_values or predictions argument missing")
-  }
-
-  n <- length(true_values)
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-  if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
-    stop(msg)
-  }
-  if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
-    stop(msg)
-  }
-  # ============================================
-
-  scoringRules::dss_sample(y = true_values,
-                           dat = predictions)
+  scoringRules::dss_sample(
+    y = true_values,
+    dat = predictions
+  )
 }
-
-
-
-
-
 
 #' @title Ranked Probability Score
 #'
@@ -119,45 +73,29 @@ dss <- function(true_values, predictions) {
 #' function from the
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the
-#' number of Monte Carlo samples
+#' @inheritParams logs_sample
 #' @return vector with the scoring values
 #' @importFrom scoringRules crps_sample
 #' @examples
 #' true_values <- rpois(30, lambda = 1:30)
 #' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' crps(true_values, predictions)
+#' crps_sample(true_values, predictions)
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' @keywords metric
 
-crps <- function(true_values, predictions) {
+crps_sample <- function(true_values, predictions) {
 
-  # ============== Error handling ==============
-  if (missing(true_values) | missing(predictions)) {
-    stop("true_values or predictions argument missing")
-  }
+  # check inputs
+  check_true_values(true_values)
+  check_predictions(predictions, true_values,
+    class = "matrix"
+  )
 
-  n <- length(true_values)
-
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
-  }
-  if (!is.matrix(predictions)) {
-    msg <- sprintf("'predictions' should be a matrix. Instead `%s` was found",
-                   class(predictions[1]))
-    stop(msg)
-  }
-  if (nrow(predictions) != n) {
-    msg <- sprintf("Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-                   n, nrow(predictions))
-    stop(msg)
-  }
-  # ============================================
-
-  scoringRules::crps_sample(y = true_values,
-                            dat = predictions)
+  scoringRules::crps_sample(
+    y = true_values,
+    dat = predictions
+  )
 }

@@ -7,7 +7,8 @@
 brier_score(true_values, predictions)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{true_values}{A vector with the true observed values of size n with
+all values equal to either 0 or 1}
 
 \item{predictions}{A vector with a predicted probability
 that true_value = 1.}
@@ -28,13 +29,16 @@ The Brier Score is then computed as the mean squared error between the
 probabilistic prediction and the true outcome.
 
 \deqn{
-Brier_Score = \frac{1}{N} \sum_{t = 1}^{n} (prediction_t - outcome_t)^2
+  \text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction_t} -
+  \text{outcome_t})^2
+}{
+  Brier_Score = 1/N \sum_{t = 1}^{n} (prediction_t - outcome_t)²
 }
 }
 \examples{
-true_values <- sample(c(0,1), size = 30, replace = TRUE)
+true_values <- sample(c(0, 1), size = 30, replace = TRUE)
 predictions <- runif(n = 30, min = 0, max = 1)
 
 brier_score(true_values, predictions)
-
 }
+\keyword{metric}

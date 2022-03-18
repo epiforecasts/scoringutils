@@ -7,15 +7,17 @@
 check_forecasts(data)
 }
 \arguments{
-\item{data}{A data.frame or similar as would be used for \code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{data}{data.frame with predictions in the same format required for
+\code{\link[=score]{score()}}.}
 }
 \value{
 A list with elements that give information about what \code{scoringutils}
 thinks you are trying to do and potential issues.
 \itemize{
 \item \code{target_type} the type of the prediction target as inferred from the
-input: 'binary', if all values in \code{true_value} are either 0 or 1 and values in
-\code{prediction} are between 0 and 1, 'discrete' if all true values are integers
+input: 'binary', if all values in \code{true_value} are either 0 or 1 and values
+in \code{prediction} are between 0 and 1, 'discrete' if all true values are
+integers.
 and 'continuous' if not.
 \item \code{prediction_type} inferred type of the prediction. 'quantile', if there is
 a column called 'quantile', else 'discrete' if all values in \code{prediction}
@@ -35,32 +37,32 @@ values, but rather the maximum number of unique values across the whole data.
 \item \code{warnings} A vector with warnings. These can be ignored if you know what
 you are doing.
 \item \code{errors} A vector with issues that will cause an error when running
-\code{\link[=eval_forecasts]{eval_forecasts()}}.
+\code{\link[=score]{score()}}.
 \item \code{messages} A verbal explanation of the information provided above.
 }
 }
 \description{
 Function to check the input data before running
-\code{\link[=eval_forecasts]{eval_forecasts()}}.
+\code{\link[=score]{score()}}.
 
 The data should come in one of three different formats:
 \itemize{
-\item A format for binary predictions (see \link{binary_example_data})
+\item A format for binary predictions (see \link{example_binary})
 \item A sample-based format for discrete or continuous predictions
-(see \link{continuous_example_data} and \link{integer_example_data})
-\item A quantile-based format (see \link{quantile_example_data})
+(see \link{example_continuous} and \link{example_integer})
+\item A quantile-based format (see \link{example_quantile})
 }
 }
 \examples{
-library(scoringutils)
-check <- check_forecasts(quantile_example_data)
+check <- check_forecasts(example_quantile)
 print(check)
-check_forecasts(binary_example_data)
+check_forecasts(example_binary)
 }
 \seealso{
-Functions to move between different formats:
-\code{\link[=range_long_to_quantile]{range_long_to_quantile()}}, \code{\link[=range_wide_to_long]{range_wide_to_long()}}
+Function to move from sample-based to quantile format:
+\code{\link[=sample_to_quantile]{sample_to_quantile()}}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
+\keyword{check-forecasts}

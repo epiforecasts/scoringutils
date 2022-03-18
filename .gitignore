@@ -6,3 +6,9 @@ inst/doc
 R/sandbox.R
 doc
 Meta
+inst/manuscript/manuscript_cache/
+inst/manuscript/manuscript.log
+inst/manuscript/manuscript.pdf
+inst/manuscript/manuscript.tex
+inst/manuscript/manuscript_files/
+docs

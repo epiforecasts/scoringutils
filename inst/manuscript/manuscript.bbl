@@ -1,0 +1,407 @@
+\begin{thebibliography}{37}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Anderson and Darling(1952)}]{andersonAsymptoticTheoryCertain1952}
+Anderson TW, Darling DA (1952).
+\newblock \enquote{Asymptotic {{Theory}} of {{Certain}} "{{Goodness}} of
+  {{Fit}}" {{Criteria Based}} on {{Stochastic Processes}}.}
+\newblock \emph{The Annals of Mathematical Statistics}, \textbf{23}(2),
+  193--212.
+\newblock ISSN 0003-4851.
+
+\bibitem[{Angus(1994)}]{angusProbabilityIntegralTransform1994}
+Angus JE (1994).
+\newblock \enquote{The {{Probability Integral Transform}} and {{Related
+  Results}}.}
+\newblock \emph{SIAM Review}, \textbf{36}(4), 652--654.
+\newblock ISSN 0036-1445.
+\newblock \doi{10.1137/1036146}.
+
+\bibitem[{Bracher \emph{et~al.}(2021{\natexlab{a}})Bracher, Ray, Gneiting, and
+  Reich}]{bracherEvaluatingEpidemicForecasts2021}
+Bracher J, Ray EL, Gneiting T, Reich NG (2021{\natexlab{a}}).
+\newblock \enquote{Evaluating Epidemic Forecasts in an Interval Format.}
+\newblock \emph{PLoS computational biology}, \textbf{17}(2), e1008618.
+\newblock ISSN 1553-7358.
+\newblock \doi{10.1371/journal.pcbi.1008618}.
+
+\bibitem[{Bracher \emph{et~al.}(2021{\natexlab{b}})Bracher, Wolffram, Deuschel,
+  G{\"o}rgen, Ketterer, Ullrich, Abbott, Barbarossa, Bertsimas, Bhatia, Bodych,
+  Bosse, Burgard, Castro, Fairchild, Fuhrmann, Funk, Gogolewski, Gu, Heyder,
+  Hotz, Kheifetz, Kirsten, Krueger, Krymova, Li, Meinke, Michaud,
+  Niedzielewski, O{\.z}a{\'n}ski, Rakowski, Scholz, Soni, Srivastava,
+  Zieli{\'n}ski, Zou, Gneiting, and
+  Schienle}]{bracherShorttermForecastingCOVID192021}
+Bracher J, Wolffram D, Deuschel J, G{\"o}rgen K, Ketterer JL, Ullrich A, Abbott
+  S, Barbarossa MV, Bertsimas D, Bhatia S, Bodych M, Bosse NI, Burgard JP,
+  Castro L, Fairchild G, Fuhrmann J, Funk S, Gogolewski K, Gu Q, Heyder S, Hotz
+  T, Kheifetz Y, Kirsten H, Krueger T, Krymova E, Li ML, Meinke JH, Michaud IJ,
+  Niedzielewski K, O{\.z}a{\'n}ski T, Rakowski F, Scholz M, Soni S, Srivastava
+  A, Zieli{\'n}ski J, Zou D, Gneiting T, Schienle M (2021{\natexlab{b}}).
+\newblock \enquote{Short-Term Forecasting of {{COVID-19}} in {{Germany}} and
+  {{Poland}} during the Second Wave \textendash{} a Preregistered Study.}
+\newblock \emph{medRxiv}, p. 2020.12.24.20248826.
+\newblock \doi{10.1101/2020.12.24.20248826}.
+
+\bibitem[{Bracher \emph{et~al.}(2021{\natexlab{c}})Bracher, Wolffram, Deuschel,
+  G{\"o}rgen, Ketterer, Ullrich, Abbott, Barbarossa, Bertsimas, Bhatia, Bodych,
+  Bosse, Burgard, Fiedler, Fuhrmann, Funk, Gambin, Gogolewski, Heyder, Hotz,
+  Kheifetz, Kirsten, Krueger, Krymova, Leith{\"a}user, Li, Meinke, Miasojedow,
+  Mohring, Nouvellet, Nowosielski, Ozanski, Radwan, Rakowski, Scholz, Soni,
+  Srivastava, Gneiting, and Schienle}]{bracherNationalSubnationalShortterm2021}
+Bracher J, Wolffram D, Deuschel J, G{\"o}rgen K, Ketterer JL, Ullrich A, Abbott
+  S, Barbarossa MV, Bertsimas D, Bhatia S, Bodych M, Bosse NI, Burgard JP,
+  Fiedler J, Fuhrmann J, Funk S, Gambin A, Gogolewski K, Heyder S, Hotz T,
+  Kheifetz Y, Kirsten H, Krueger T, Krymova E, Leith{\"a}user N, Li ML, Meinke
+  JH, Miasojedow B, Mohring J, Nouvellet P, Nowosielski JM, Ozanski T, Radwan
+  M, Rakowski F, Scholz M, Soni S, Srivastava A, Gneiting T, Schienle M
+  (2021{\natexlab{c}}).
+\newblock \enquote{National and Subnational Short-Term Forecasting of
+  {{COVID-19}} in {{Germany}} and {{Poland}}, Early 2021.}
+\newblock \doi{10.1101/2021.11.05.21265810}.
+
+\bibitem[{Brier(1950)}]{brierVERIFICATIONFORECASTSEXPRESSED1950}
+Brier GW (1950).
+\newblock \enquote{{{VERIFICATION OF FORECASTS EXPRESSED IN TERMS OF
+  PROBABILITY}}.}
+\newblock \emph{Monthly Weather Review}, \textbf{78}(1), 1--3.
+\newblock ISSN 1520-0493, 0027-0644.
+\newblock \doi{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}.
+
+\bibitem[{Cramer \emph{et~al.}(2021)Cramer, Ray, Lopez, Bracher, Brennen,
+  Rivadeneira, Gerding, Gneiting, House, Huang, Jayawardena, Kanji, Khandelwal,
+  Le, M{\"u}hlemann, Niemi, Shah, Stark, Wang, Wattanachit, Zorn, Gu, Jain,
+  Bannur, Deva, Kulkarni, Merugu, Raval, Shingi, Tiwari, White, Woody, Dahan,
+  Fox, Gaither, Lachmann, Meyers, Scott, Tec, Srivastava, George, Cegan,
+  Dettwiller, England, Farthing, Hunter, Lafferty, Linkov, Mayo, Parno,
+  Rowland, Trump, Corsetti, Baer, Eisenberg, Falb, Huang, Martin, McCauley,
+  Myers, Schwarz, Sheldon, Gibson, Yu, Gao, Ma, Wu, Yan, Jin, Wang, Chen, Guo,
+  Zhao, Gu, Chen, Wang, Xu, Zhang, Zou, Biegel, Lega, Snyder, Wilson,
+  McConnell, Walraven, Shi, Ban, Hong, Kong, Turtle, {Ben-Nun}, Riley, Riley,
+  Koyluoglu, DesRoches, Hamory, Kyriakides, Leis, Milliken, Moloney, Morgan,
+  Ozcan, Schrader, Shakhnovich, Siegel, Spatz, Stiefeling, Wilkinson, Wong,
+  Gao, Bian, Cao, Ferres, Li, Liu, Xie, Zhang, Zheng, Vespignani, Chinazzi,
+  Davis, Mu, y~Piontti, Xiong, Zheng, Baek, Farias, Georgescu, Levi, Sinha,
+  Wilde, Penna, Celi, Sundar, Cavany, Espa{\~n}a, Moore, Oidtman, Perkins,
+  Osthus, Castro, Fairchild, Michaud, Karlen, Lee, Dent, Grantz, Kaminsky,
+  Kaminsky, Keegan, Lauer, Lemaitre, Lessler, Meredith, {Perez-Saez}, Shah,
+  Smith, Truelove, Wills, Kinsey, Obrecht, Tallaksen, Burant, Wang, Gao, Gu,
+  Kim, Li, Wang, Wang, Yu, Reiner, Barber, Gaikedu, Hay, Lim, Murray, Pigott,
+  Prakash, Adhikari, Cui, Rodr{\'i}guez, Tabassum, Xie, Keskinocak, Asplund,
+  Baxter, Oruc, Serban, Arik, Dusenberry, Epshteyn, Kanal, Le, Li, Pfister,
+  Sava, Sinha, Tsai, Yoder, Yoon, Zhang, Abbott, Bosse, Funk, Hellewel, Meakin,
+  Munday, Sherratt, Zhou, Kalantari, Yamana, Pei, Shaman, Ayer, Adee, Chhatwal,
+  Dalgic, Ladd, Linas, Mueller, Xiao, Li, Bertsimas, Lami, Soni, Bouardi, Wang,
+  Wang, Xie, Zeng, Green, Bien, Hu, Jahja, Narasimhan, Rajanala, Rumack, Simon,
+  Tibshirani, Tibshirani, Ventura, Wasserman, O'Dea, Drake, Pagano, Walker,
+  Slayton, Johansson, Biggerstaff, and
+  Reich}]{cramerEvaluationIndividualEnsemble2021}
+Cramer E, Ray EL, Lopez VK, Bracher J, Brennen A, Rivadeneira AJC, Gerding A,
+  Gneiting T, House KH, Huang Y, Jayawardena D, Kanji AH, Khandelwal A, Le K,
+  M{\"u}hlemann A, Niemi J, Shah A, Stark A, Wang Y, Wattanachit N, Zorn MW, Gu
+  Y, Jain S, Bannur N, Deva A, Kulkarni M, Merugu S, Raval A, Shingi S, Tiwari
+  A, White J, Woody S, Dahan M, Fox S, Gaither K, Lachmann M, Meyers LA, Scott
+  JG, Tec M, Srivastava A, George GE, Cegan JC, Dettwiller ID, England WP,
+  Farthing MW, Hunter RH, Lafferty B, Linkov I, Mayo ML, Parno MD, Rowland MA,
+  Trump BD, Corsetti SM, Baer TM, Eisenberg MC, Falb K, Huang Y, Martin ET,
+  McCauley E, Myers RL, Schwarz T, Sheldon D, Gibson GC, Yu R, Gao L, Ma Y, Wu
+  D, Yan X, Jin X, Wang YX, Chen Y, Guo L, Zhao Y, Gu Q, Chen J, Wang L, Xu P,
+  Zhang W, Zou D, Biegel H, Lega J, Snyder TL, Wilson DD, McConnell S, Walraven
+  R, Shi Y, Ban X, Hong QJ, Kong S, Turtle JA, {Ben-Nun} M, Riley P, Riley S,
+  Koyluoglu U, DesRoches D, Hamory B, Kyriakides C, Leis H, Milliken J, Moloney
+  M, Morgan J, Ozcan G, Schrader C, Shakhnovich E, Siegel D, Spatz R,
+  Stiefeling C, Wilkinson B, Wong A, Gao Z, Bian J, Cao W, Ferres JL, Li C, Liu
+  TY, Xie X, Zhang S, Zheng S, Vespignani A, Chinazzi M, Davis JT, Mu K,
+  y~Piontti AP, Xiong X, Zheng A, Baek J, Farias V, Georgescu A, Levi R, Sinha
+  D, Wilde J, Penna ND, Celi LA, Sundar S, Cavany S, Espa{\~n}a G, Moore S,
+  Oidtman R, Perkins A, Osthus D, Castro L, Fairchild G, Michaud I, Karlen D,
+  Lee EC, Dent J, Grantz KH, Kaminsky J, Kaminsky K, Keegan LT, Lauer SA,
+  Lemaitre JC, Lessler J, Meredith HR, {Perez-Saez} J, Shah S, Smith CP,
+  Truelove SA, Wills J, Kinsey M, Obrecht RF, Tallaksen K, Burant JC, Wang L,
+  Gao L, Gu Z, Kim M, Li X, Wang G, Wang Y, Yu S, Reiner RC, Barber R, Gaikedu
+  E, Hay S, Lim S, Murray C, Pigott D, Prakash BA, Adhikari B, Cui J,
+  Rodr{\'i}guez A, Tabassum A, Xie J, Keskinocak P, Asplund J, Baxter A, Oruc
+  BE, Serban N, Arik SO, Dusenberry M, Epshteyn A, Kanal E, Le LT, Li CL,
+  Pfister T, Sava D, Sinha R, Tsai T, Yoder N, Yoon J, Zhang L, Abbott S, Bosse
+  NI, Funk S, Hellewel J, Meakin SR, Munday JD, Sherratt K, Zhou M, Kalantari
+  R, Yamana TK, Pei S, Shaman J, Ayer T, Adee M, Chhatwal J, Dalgic OO, Ladd
+  MA, Linas BP, Mueller P, Xiao J, Li ML, Bertsimas D, Lami OS, Soni S, Bouardi
+  HT, Wang Y, Wang Q, Xie S, Zeng D, Green A, Bien J, Hu AJ, Jahja M,
+  Narasimhan B, Rajanala S, Rumack A, Simon N, Tibshirani R, Tibshirani R,
+  Ventura V, Wasserman L, O'Dea EB, Drake JM, Pagano R, Walker JW, Slayton RB,
+  Johansson M, Biggerstaff M, Reich NG (2021).
+\newblock \enquote{Evaluation of Individual and Ensemble Probabilistic
+  Forecasts of {{COVID-19}} Mortality in the {{US}}.}
+\newblock \emph{medRxiv}, p. 2021.02.03.21250974.
+\newblock \doi{10.1101/2021.02.03.21250974}.
+
+\bibitem[{Cramer \emph{et~al.}(2020)Cramer, Reich, Wang, Niemi, Hannan, House,
+  Gu, Xie, Horstman, {aniruddhadiga}, Walraven, {starkari}, Li, Gibson, Castro,
+  Karlen, Wattanachit, {jinghuichen}, {zyt9lsb}, {aagarwal1996}, Woody, Ray,
+  Xu, Biegel, GuidoEspana, X, Bracher, Lee, {har96}, and
+  {leyouz}}]{cramerCOVID19ForecastHub2020}
+Cramer E, Reich NG, Wang SY, Niemi J, Hannan A, House K, Gu Y, Xie S, Horstman
+  S, {aniruddhadiga}, Walraven R, {starkari}, Li ML, Gibson G, Castro L, Karlen
+  D, Wattanachit N, {jinghuichen}, {zyt9lsb}, {aagarwal1996}, Woody S, Ray E,
+  Xu FT, Biegel H, GuidoEspana, X X, Bracher J, Lee E, {har96}, {leyouz}
+  (2020).
+\newblock \enquote{{{COVID-19 Forecast Hub}}: 4 {{December}} 2020 Snapshot.}
+\newblock \doi{10.5281/zenodo.3963371}.
+
+\bibitem[{Dawid(1984)}]{dawidPresentPositionPotential1984}
+Dawid AP (1984).
+\newblock \enquote{Present {{Position}} and {{Potential Developments}}: {{Some
+  Personal Views Statistical Theory}} the {{Prequential Approach}}.}
+\newblock \emph{Journal of the Royal Statistical Society: Series A (General)},
+  \textbf{147}(2), 278--290.
+\newblock ISSN 2397-2327.
+\newblock \doi{10.2307/2981683}.
+
+\bibitem[{Dawid and Sebastiani(1999)}]{dawidCoherentDispersionCriteria1999}
+Dawid AP, Sebastiani P (1999).
+\newblock \enquote{Coherent Dispersion Criteria for Optimal Experimental
+  Design.}
+\newblock \emph{The Annals of Statistics}, \textbf{27}(1), 65--81.
+\newblock ISSN 0090-5364, 2168-8966.
+\newblock \doi{10.1214/aos/1018031101}.
+
+\bibitem[{Elliott and
+  Timmermann(2016)}]{elliottForecastingEconomicsFinance2016}
+Elliott G, Timmermann A (2016).
+\newblock \enquote{Forecasting in {{Economics}} and {{Finance}}.}
+\newblock \emph{Annual Review of Economics}, \textbf{8}(1), 81--110.
+\newblock \doi{10.1146/annurev-economics-080315-015346}.
+
+\bibitem[{Epstein(1969)}]{epsteinScoringSystemProbability1969}
+Epstein ES (1969).
+\newblock \enquote{A {{Scoring System}} for {{Probability Forecasts}} of
+  {{Ranked Categories}}.}
+\newblock \emph{Journal of Applied Meteorology}, \textbf{8}(6), 985--987.
+\newblock ISSN 0021-8952.
+\newblock \doi{10.1175/1520-0450(1969)008<0985:ASSFPF>2.0.CO;2}.
+
+\bibitem[{{European Covid-19 Forecast
+  Hub}(2021)}]{europeancovid-19forecasthubEuropeanCovid19Forecast2021}
+{European Covid-19 Forecast Hub} (2021).
+\newblock \enquote{European {{Covid-19 Forecast Hub}}.}
+\newblock https://covid19forecasthub.eu/.
+
+\bibitem[{Funk \emph{et~al.}(2020)Funk, Abbott, Atkins, Baguelin, Baillie,
+  Birrell, Blake, Bosse, Burton, Carruthers, Davies, Angelis, Dyson, Edmunds,
+  Eggo, Ferguson, Gaythorpe, Gorsich, {Guyver-Fletcher}, Hellewell, Hill,
+  Holmes, House, Jewell, Jit, Jombart, Joshi, Keeling, Kendall, Knock,
+  Kucharski, Lythgoe, Meakin, Munday, Openshaw, Overton, Pagani, Pearson,
+  {Perez-Guzman}, Pellis, Scarabel, Semple, Sherratt, Tang, Tildesley, Leeuwen,
+  Whittles, Group, Team, and Investigators}]{funkShorttermForecastsInform2020}
+Funk S, Abbott S, Atkins BD, Baguelin M, Baillie JK, Birrell P, Blake J, Bosse
+  NI, Burton J, Carruthers J, Davies NG, Angelis DD, Dyson L, Edmunds WJ, Eggo
+  RM, Ferguson NM, Gaythorpe K, Gorsich E, {Guyver-Fletcher} G, Hellewell J,
+  Hill EM, Holmes A, House TA, Jewell C, Jit M, Jombart T, Joshi I, Keeling MJ,
+  Kendall E, Knock ES, Kucharski AJ, Lythgoe KA, Meakin SR, Munday JD, Openshaw
+  PJM, Overton CE, Pagani F, Pearson J, {Perez-Guzman} PN, Pellis L, Scarabel
+  F, Semple MG, Sherratt K, Tang M, Tildesley MJ, Leeuwen EV, Whittles LK,
+  Group CCW, Team ICCR, Investigators I (2020).
+\newblock \enquote{Short-Term Forecasts to Inform the Response to the
+  {{Covid-19}} Epidemic in the {{UK}}.}
+\newblock \emph{medRxiv}, p. 2020.11.11.20220962.
+\newblock \doi{10.1101/2020.11.11.20220962}.
+
+\bibitem[{Funk \emph{et~al.}(2019)Funk, Camacho, Kucharski, Lowe, Eggo, and
+  Edmunds}]{funkAssessingPerformanceRealtime2019}
+Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019).
+\newblock \enquote{Assessing the Performance of Real-Time Epidemic Forecasts:
+  {{A}} Case Study of {{Ebola}} in the {{Western Area}} Region of {{Sierra
+  Leone}}, 2014-15.}
+\newblock \emph{PLOS Computational Biology}, \textbf{15}(2), e1006785.
+\newblock ISSN 1553-7358.
+\newblock \doi{10.1371/journal.pcbi.1006785}.
+
+\bibitem[{Gelman \emph{et~al.}(2014)Gelman, Hwang, and
+  Vehtari}]{gelmanUnderstandingPredictiveInformation2014}
+Gelman A, Hwang J, Vehtari A (2014).
+\newblock \enquote{Understanding Predictive Information Criteria for
+  {{Bayesian}} Models.}
+\newblock \emph{Statistics and Computing}, \textbf{24}(6), 997--1016.
+\newblock ISSN 1573-1375.
+\newblock \doi{10.1007/s11222-013-9416-2}.
+
+\bibitem[{Gneiting \emph{et~al.}(2007)Gneiting, Balabdaoui, and
+  Raftery}]{gneitingProbabilisticForecastsCalibration2007}
+Gneiting T, Balabdaoui F, Raftery AE (2007).
+\newblock \enquote{Probabilistic Forecasts, Calibration and Sharpness.}
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, \textbf{69}(2), 243--268.
+\newblock ISSN 1467-9868.
+\newblock \doi{10.1111/j.1467-9868.2007.00587.x}.
+
+\bibitem[{Gneiting and Raftery(2005)}]{gneitingWeatherForecastingEnsemble2005}
+Gneiting T, Raftery AE (2005).
+\newblock \enquote{Weather {{Forecasting}} with {{Ensemble Methods}}.}
+\newblock \emph{Science}, \textbf{310}(5746), 248--249.
+\newblock ISSN 0036-8075, 1095-9203.
+\newblock \doi{10.1126/science.1115255}.
+
+\bibitem[{Gneiting and Raftery(2007)}]{gneitingStrictlyProperScoring2007}
+Gneiting T, Raftery AE (2007).
+\newblock \enquote{Strictly {{Proper Scoring Rules}}, {{Prediction}}, and
+  {{Estimation}}.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{102}(477), 359--378.
+\newblock ISSN 0162-1459, 1537-274X.
+\newblock \doi{10.1198/016214506000001437}.
+
+\bibitem[{Good(1952)}]{goodRationalDecisions1952}
+Good IJ (1952).
+\newblock \enquote{Rational {{Decisions}}.}
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, \textbf{14}(1), 107--114.
+\newblock ISSN 0035-9246.
+
+\bibitem[{Hamill(2001)}]{hamillInterpretationRankHistograms2001a}
+Hamill TM (2001).
+\newblock \enquote{Interpretation of {{Rank Histograms}} for {{Verifying
+  Ensemble Forecasts}}.}
+\newblock \emph{Monthly Weather Review}, \textbf{129}(3), 550--560.
+\newblock ISSN 1520-0493, 0027-0644.
+\newblock \doi{10.1175/1520-0493(2001)129<0550:IORHFV>2.0.CO;2}.
+
+\bibitem[{Hamner and Frasco(2018)}]{Metrics}
+Hamner B, Frasco M (2018).
+\newblock \emph{Metrics: Evaluation Metrics for Machine Learning}.
+\newblock R package version 0.1.4,
+  \urlprefix\url{https://CRAN.R-project.org/package=Metrics}.
+
+\bibitem[{Jordan \emph{et~al.}(2019{\natexlab{a}})Jordan, Kr\"uger, and
+  Lerch}]{scoringRules}
+Jordan A, Kr\"uger F, Lerch S (2019{\natexlab{a}}).
+\newblock \enquote{Evaluating Probabilistic Forecasts with {scoringRules}.}
+\newblock \emph{Journal of Statistical Software}, \textbf{90}(12), 1--37.
+\newblock \doi{10.18637/jss.v090.i12}.
+
+\bibitem[{Jordan \emph{et~al.}(2019{\natexlab{b}})Jordan, Kr{\"u}ger, and
+  Lerch}]{jordanEvaluatingProbabilisticForecasts2019}
+Jordan A, Kr{\"u}ger F, Lerch S (2019{\natexlab{b}}).
+\newblock \enquote{Evaluating {{Probabilistic Forecasts}} with
+  {{{\textbf{scoringRules}}}}.}
+\newblock \emph{Journal of Statistical Software}, \textbf{90}(12).
+\newblock ISSN 1548-7660.
+\newblock \doi{10.18637/jss.v090.i12}.
+
+\bibitem[{Jose(2009)}]{joseCharacterizationSphericalScoring2009}
+Jose VR (2009).
+\newblock \enquote{A {{Characterization}} for the {{Spherical Scoring Rule}}.}
+\newblock \emph{Theory and Decision}, \textbf{66}(3), 263--281.
+\newblock ISSN 1573-7187.
+\newblock \doi{10.1007/s11238-007-9067-x}.
+
+\bibitem[{Kukkonen \emph{et~al.}(2012)Kukkonen, Olsson, Schultz, Baklanov,
+  Klein, Miranda, Monteiro, Hirtl, Tarvainen, Boy, Peuch, Poupkou,
+  Kioutsioukis, Finardi, Sofiev, Sokhi, Lehtinen, Karatzas, San~Jos{\'e},
+  Astitha, Kallos, Schaap, Reimer, Jakobs, and
+  Eben}]{kukkonenReviewOperationalRegionalscale2012}
+Kukkonen J, Olsson T, Schultz DM, Baklanov A, Klein T, Miranda AI, Monteiro A,
+  Hirtl M, Tarvainen V, Boy M, Peuch VH, Poupkou A, Kioutsioukis I, Finardi S,
+  Sofiev M, Sokhi R, Lehtinen KEJ, Karatzas K, San~Jos{\'e} R, Astitha M,
+  Kallos G, Schaap M, Reimer E, Jakobs H, Eben K (2012).
+\newblock \enquote{A Review of Operational, Regional-Scale, Chemical Weather
+  Forecasting Models in {{Europe}}.}
+\newblock \emph{Atmospheric Chemistry and Physics}, \textbf{12}(1), 1--87.
+\newblock ISSN 1680-7316.
+\newblock \doi{10.5194/acp-12-1-2012}.
+
+\bibitem[{Liboschik \emph{et~al.}(2017)Liboschik, Fokianos, and
+  Fried}]{tscount}
+Liboschik T, Fokianos K, Fried R (2017).
+\newblock \enquote{{tscount}: An {R} Package for Analysis of Count Time Series
+  Following Generalized Linear Models.}
+\newblock \emph{Journal of Statistical Software}, \textbf{82}(5), 1--51.
+\newblock \doi{10.18637/jss.v082.i05}.
+
+\bibitem[{Machete(2012)}]{macheteContrastingProbabilisticScoring2012}
+Machete RL (2012).
+\newblock \enquote{Contrasting {{Probabilistic Scoring Rules}}.}
+\newblock \emph{arXiv:1112.4530 [math, stat]}.
+\newblock \eprint{1112.4530}.
+
+\bibitem[{Mann and Whitney(1947)}]{mannTestWhetherOne1947}
+Mann HB, Whitney DR (1947).
+\newblock \enquote{On a {{Test}} of {{Whether}} One of {{Two Random Variables}}
+  Is {{Stochastically Larger}} than the {{Other}}.}
+\newblock \emph{The Annals of Mathematical Statistics}, \textbf{18}(1), 50--60.
+\newblock ISSN 0003-4851, 2168-8990.
+\newblock \doi{10.1214/aoms/1177730491}.
+
+\bibitem[{Matheson and Winkler(1976)}]{mathesonScoringRulesContinuous1976}
+Matheson JE, Winkler RL (1976).
+\newblock \enquote{Scoring {{Rules}} for {{Continuous Probability
+  Distributions}}.}
+\newblock \emph{Management Science}, \textbf{22}(10), 1087--1096.
+\newblock ISSN 0025-1909.
+\newblock \doi{10.1287/mnsc.22.10.1087}.
+
+\bibitem[{Murphy(1971)}]{murphyNoteRankedProbability1971a}
+Murphy AH (1971).
+\newblock \enquote{A {{Note}} on the {{Ranked Probability Score}}.}
+\newblock \emph{Journal of Applied Meteorology and Climatology},
+  \textbf{10}(1), 155--156.
+\newblock ISSN 1520-0450.
+\newblock \doi{10.1175/1520-0450(1971)010<0155:ANOTRP>2.0.CO;2}.
+
+\bibitem[{{R Core Team}(2021)}]{R}
+{R Core Team} (2021).
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+\newblock \urlprefix\url{https://www.R-project.org/}.
+
+\bibitem[{Reich \emph{et~al.}(2019)Reich, Brooks, Fox, Kandula, McGowan, Moore,
+  Osthus, Ray, Tushar, Yamana, Biggerstaff, Johansson, Rosenfeld, and
+  Shaman}]{reichCollaborativeMultiyearMultimodel2019}
+Reich NG, Brooks LC, Fox SJ, Kandula S, McGowan CJ, Moore E, Osthus D, Ray EL,
+  Tushar A, Yamana TK, Biggerstaff M, Johansson MA, Rosenfeld R, Shaman J
+  (2019).
+\newblock \enquote{A Collaborative Multiyear, Multimodel Assessment of Seasonal
+  Influenza Forecasting in the {{United States}}.}
+\newblock \emph{Proceedings of the National Academy of Sciences},
+  \textbf{116}(8), 3146--3154.
+\newblock ISSN 0027-8424, 1091-6490.
+\newblock \doi{10.1073/pnas.1812594116}.
+
+\bibitem[{Timmermann(2018)}]{timmermannForecastingMethodsFinance2018}
+Timmermann A (2018).
+\newblock \enquote{Forecasting {{Methods}} in {{Finance}}.}
+\newblock \emph{Annual Review of Financial Economics}, \textbf{10}(1),
+  449--479.
+\newblock \doi{10.1146/annurev-financial-110217-022713}.
+
+\bibitem[{Winkler \emph{et~al.}(1996)Winkler, Mu{\~n}oz, Cervera, Bernardo,
+  Blattenberger, Kadane, Lindley, Murphy, Oliver, and
+  {R{\'i}os-Insua}}]{winklerScoringRulesEvaluation1996}
+Winkler RL, Mu{\~n}oz J, Cervera JL, Bernardo JM, Blattenberger G, Kadane JB,
+  Lindley DV, Murphy AH, Oliver RM, {R{\'i}os-Insua} D (1996).
+\newblock \enquote{Scoring Rules and the Evaluation of Probabilities.}
+\newblock \emph{Test}, \textbf{5}(1), 1--60.
+\newblock ISSN 1863-8260.
+\newblock \doi{10.1007/BF02562681}.
+
+\bibitem[{Yan(2016)}]{MLmetrics}
+Yan Y (2016).
+\newblock \emph{MLmetrics: Machine Learning Evaluation Metrics}.
+\newblock R package version 1.1.1,
+  \urlprefix\url{https://CRAN.R-project.org/package=MLmetrics}.
+
+\bibitem[{Zeileis and Lang(2022)}]{topmodels}
+Zeileis A, Lang MN (2022).
+\newblock \emph{topmodels: Infrastructure for Inference and Forecasting in
+  Probabilistic Models}.
+\newblock R package version 0.1-0/r1498,
+  \urlprefix\url{https://R-Forge.R-project.org/projects/topmodels/}.
+
+\end{thebibliography}

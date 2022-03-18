@@ -1,61 +1,48 @@
+url: https://epiforecasts.io/scoringutils/
+template:
+  bootstrap: 5
+  package: preferably
+  params:
+    toggle: manual
+  twitter:
+    creator: "@nikosbosse"
+    card: summary_large_image
+
+development:
+  mode: release
+
+authors:
+  Nikos Bosse:
+    href: "https://followtheargument.org/"
+  Sam Abbott:
+    href: "https://www.samabbott.co.uk/"
+
+
 reference:
         - title: Package documentation
           contents:
-                - scoringutils
-        - title: Check input functions
+                - scoring-forecasts-directly
+                - metric-details
+        - title: Functions to check and analyse inputs
           contents:
-                - check_forecasts
-                - print.scoringutils_check
-        - title: Evaluation functions
+                - has_keyword("check-forecasts")
+        - title: Functions for convenient forecast evaluation
           contents:
-                - available_metrics
-                - compare_two_models
-                - starts_with("eval_")
-                - eval_forecasts
-                - eval_forecasts_binary
-                - eval_forecasts_sample
-                - pairwise_comparison
-                - pairwise_comparison_one_group
-        - title: Scoring functions
+                - has_keyword("scoring")
+                - starts_with("score_")
+        - title: Lower-level scoring functions
           contents:
-                - abs_error
-                - ae_median_quantile
-                - ae_median_sample
-                - bias
-                - brier_score
-                - crps
-                - dss
-                - interval_score
-                - logs
-                - mse
-                - pit
-                - pit_df
-                - pit_df_fast
-                - quantile_bias
-                - sharpness
+                - has_keyword("metric")
         - title: Data wrangling helpers
           contents:
-                - ends_with("to_long")
-                - ends_with("to_wide")
-                - ends_with("to_quantile")
-                - ends_with("to_range")
-                - ends_with("to_range_long")
-                - merge_pred_and_obs
-        - title: Plotting helpers
+                - has_keyword("data-handling")
+        - title: Functions for plotting and data visualisation
           contents:
                 - starts_with("plot_")
-                - ends_with("_plot")
-                - hist_PIT
-                - hist_PIT_quantile
-                - interval_coverage
-                - quantile_coverage
-                - score_table
-                - score_heatmap
-                - show_avail_forecasts
-                - wis_components
         - title: Internal functions
           contents:
                 - has_keyword("internal")
-        - title: Example data
+        - title: Example data and information
           contents:
                 - has_keyword("datasets")
+                - has_keyword("info")

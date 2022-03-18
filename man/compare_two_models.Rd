@@ -4,31 +4,38 @@
 \alias{compare_two_models}
 \title{Compare Two Models Based on Subset of Common Forecasts}
 \usage{
-compare_two_models(scores, name_model1, name_model2, metric, test_options, by)
+compare_two_models(
+  scores,
+  name_model1,
+  name_model2,
+  metric,
+  one_sided = FALSE,
+  test_type = c("non_parametric", "permutation"),
+  n_permutations = 999
+)
 }
 \arguments{
-\item{scores}{A data.frame of unsummarised scores as produced by
-\code{\link[=eval_forecasts]{eval_forecasts()}}}
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{name_model1}{character, name of the first model}
 
 \item{name_model2}{character, name of the model to compare against}
 
-\item{metric}{A character vector of length one with the metric to do
-the comparison on.}
+\item{metric}{A character vector of length one with the metric to do the
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See \code{\link[=available_metrics]{available_metrics()}} for available metrics.}
 
-\item{test_options}{list with options to pass down to \code{\link[=compare_two_models]{compare_two_models()}}.
-To change only one of the default options, just pass a list as input with
-the name of the argument you want to change. All elements not included in the
-list will be set to the default (so passing an empty list would result in the
-default options).}
+\item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test to determine significance in a pairwise
+comparison.}
 
-\item{by}{character vector of columns to group scoring by. This should be the
-lowest level of grouping possible, i.e. the unit of the individual
-observation. This is important as many functions work on individual
-observations. If you want a different level of aggregation, you should use
-\code{summarise_by} to aggregate the individual scores.
-Also not that the pit will be computed using \code{summarise_by} instead of \code{by}}
+\item{test_type}{character, either "non_parametric" (the default) or
+"permutation". This determines which kind of test shall be conducted to
+determine p-values.}
+
+\item{n_permutations}{numeric, the number of permutations for a
+permutation test. Default is 999.}
 }
 \description{
 This function compares two models based on the subset of forecasts for which
@@ -46,3 +53,4 @@ Johannes Bracher, \email{johannes.bracher@kit.edu}
 
 Nikos Bosse \email{nikosbosse@gmail.com}
 }
+\keyword{internal}
