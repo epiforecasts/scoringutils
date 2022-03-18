@@ -102,7 +102,7 @@ library(dplyr)
 library(magrittr)
 library(kableExtra)
 library(formatR)
-options(width = 70)
+
 opts_chunk$set(
   cache = TRUE,
   warning = FALSE, 

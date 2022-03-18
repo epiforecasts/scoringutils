@@ -110,8 +110,6 @@ example_quantile %>%
   kable()
 #> The following messages were produced when checking inputs:
 #> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
-#> Warning in any(sign(scores[[metric]] < 0)): coercing argument of type 'double'
-#> to logical
 ```
 
 | model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
