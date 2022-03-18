@@ -162,19 +162,6 @@ check_forecasts <- function(data) {
   # store info so it can be accessed by the user -------------------------------
   out[["cleaned_data"]] <- data
 
-  # info to be printed
-  out[["info"]] <- c(
-    paste0(
-      "Forecasts are for a `", target_type, "` target ",
-      "using a `", prediction_type, "` prediction format."
-    ),
-    paste0(
-      "The unit of a single forecast is defined by `",
-      paste(forecast_unit, collapse = "`, `"), "`. ",
-      "If this is not as intended, please DELETE UNNECESSARY columns or add new ones." # nolint
-    )
-  )
-
   # available unique values per model for the different columns
   cols <- forecast_unit[forecast_unit != "model"]
   out[["unique_values"]] <-
@@ -244,13 +231,13 @@ collapse_messages <- function(type = "messages", messages) {
 #' check <- check_forecasts(example_quantile)
 #' print(check)
 print.scoringutils_check <- function(x, ...) {
-  cat(paste0(
-    "\nBased on your input, scoringutils thinks:\n",
-    paste(x$info, collapse = "\n"),
-    "\n\n"
-  ))
+  cat("Your forecasts seem to be for a target of the following type:\n")
+  print(x["target_type"])
+  cat("and in the following format:\n")
+  print(x["prediction_type"])
 
-  print.default(x[c("forecast_unit", "target_type", "prediction_type")])
+  cat("The unit of a single forecast is defined by:\n")
+  print(x["forecast_unit"])
 
   cat("Cleaned data, rows with NA values in prediction or true_value removed:\n")
   print.default(x["cleaned_data"])

@@ -102,7 +102,7 @@ library(dplyr)
 library(magrittr)
 library(kableExtra)
 library(formatR)
-
+options(width = 70)
 opts_chunk$set(
   cache = TRUE,
   warning = FALSE, 
@@ -289,7 +289,7 @@ The example data included in the package and used in this paper consists of one 
 
 In the following, we will use the \fct{glimpse} function from the package \pkg{tibble} to display outputs more concisely. After loading the \pkg{scoringutils} package we can directly inspect the example data: 
 
-```{r}
+```{r, cache = FALSE}
 library(scoringutils)
 library(tibble) 
 
@@ -327,7 +327,7 @@ Additional columns may be present to indicate a grouping of forecasts. A combina
 
 The function \fct{check\_forecasts} allows to check whether input data conforms to the function requirements and returns a list with entries that provide information on what \pkg{scoringutils} infers from the data. 
 
-```{r,tidy=TRUE, tidy.opts=list(width.cutoff=I(70)), echo=TRUE}
+```{r,tidy=TRUE, width = 70, tidy.opts=list(width.cutoff=I(70)), echo=TRUE, cache = FALSE}
 check_forecasts(example_quantile)
 ```
 
