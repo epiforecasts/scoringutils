@@ -1,4 +1,4 @@
-\begin{thebibliography}{36}
+\begin{thebibliography}{37}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -396,5 +396,12 @@ Yan Y (2016).
 \newblock \emph{MLmetrics: Machine Learning Evaluation Metrics}.
 \newblock R package version 1.1.1,
   \urlprefix\url{https://CRAN.R-project.org/package=MLmetrics}.
+
+\bibitem[{Zeileis and Lang(2022)}]{topmodels}
+Zeileis A, Lang MN (2022).
+\newblock \emph{topmodels: Infrastructure for Inference and Forecasting in
+  Probabilistic Models}.
+\newblock R package version 0.1-0/r1498,
+  \urlprefix\url{https://R-Forge.R-project.org/projects/topmodels/}.
 
 \end{thebibliography}

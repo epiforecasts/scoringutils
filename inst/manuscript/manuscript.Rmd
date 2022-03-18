@@ -2,7 +2,7 @@
 documentclass: jss
 author:
   - name: Nikos I. Bosse
-    affiliation: London School of Hygiene & Tropical Medicine
+    affiliation: London School of Hygiene & Tropical Medicine (LSHTM) \AND
     address: |
       | Centre for Mathematical Modelling of Infectious Diseases
       | London School of Hygiene & Tropical Medicine
@@ -11,7 +11,7 @@ author:
     email: \email{nikos.bosse@lshtm.ac.uk}
     url: https://lshtm.ac.uk
   - name: Hugo Gruson
-    affiliation: London School of Hygiene & Tropical Medicine
+    affiliation: LSHTM
     address: |
       | Centre for Mathematical Modelling of Infectious Diseases
       | London School of Hygiene & Tropical Medicine
@@ -19,7 +19,7 @@ author:
       | London WC1E 7HT 
     email: \email{hugo.gruson@lshtm.ac.uk}
   - name: Anne Cori 
-    affiliation: Imperial College London
+    affiliation: Imperial College London 
     address: |
       | Department
       | Imperial College London
@@ -27,7 +27,7 @@ author:
       | City and Post code
     email: \email{a.cori@imperial.ac.uk}
   - name: Edwin van Leeuwen
-    affiliation: Public Health England
+    affiliation: Public Health England \AND
     address: |
       | Department
       | Institution
@@ -35,7 +35,7 @@ author:
       | City and Post code
     email: \email{Edwin.VanLeeuwen@phe.gov.uk}
   - name: Johannes Bracher
-    affiliation: Karlsruhe Institute of Technology
+    affiliation: Karlsruhe Institute of Technology 
     address: |
       | Department
       | Institution
@@ -43,7 +43,7 @@ author:
       | City and Post code
     email: \email{johannes.bracher@kit.edu}
   - name: Sebastian Funk
-    affiliation: London School of Hygiene & Tropical Medicine
+    affiliation: LSHTM
     # use this syntax to add text on several lines
     address: |
       | Centre for Mathematical Modelling of Infectious Diseases
@@ -52,7 +52,7 @@ author:
       | London WC1E 7HT 
     email: \email{sebastian.funk@lshtm.ac.uk}
   - name: Sam Abbott
-    affiliation: London School of Hygiene & Tropical Medicine
+    affiliation: LSHTM
     # use this syntax to add text on several lines
     address: |
       | Centre for Mathematical Modelling of Infectious Diseases
@@ -74,6 +74,7 @@ keywords:
   plain:     [keywords, not capitalized, R]
 preamble: >
   \usepackage{amsmath}
+  \shortcites{reichCollaborativeMultiyearMultimodel2019, kukkonenReviewOperationalRegionalscale2012, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}
   \usepackage{amssymb}
   \usepackage{caption}
   \captionsetup[table]{skip=10pt}

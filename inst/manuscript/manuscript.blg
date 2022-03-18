@@ -5,44 +5,44 @@ The style file: jss.bst
 Database file #1: references.bib
 Database file #2: scoringutils-paper.bib
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
-You've used 36 entries,
+You've used 37 entries,
             3215 wiz_defined-function locations,
-            949 strings with 22365 characters,
-and the built_in function-call counts, 111123 in all, are:
-= -- 11692
-> -- 4189
-< -- 24
-+ -- 1584
-- -- 1534
-* -- 8734
-:= -- 12159
-add.period$ -- 192
-call.type$ -- 36
-change.case$ -- 657
-chr.to.int$ -- 37
-cite$ -- 36
-duplicate$ -- 11759
-empty$ -- 7317
-format.name$ -- 1631
-if$ -- 22462
+            955 strings with 22567 characters,
+and the built_in function-call counts, 111867 in all, are:
+= -- 11765
+> -- 4208
+< -- 25
++ -- 1591
+- -- 1540
+* -- 8786
+:= -- 12253
+add.period$ -- 195
+call.type$ -- 37
+change.case$ -- 664
+chr.to.int$ -- 38
+cite$ -- 37
+duplicate$ -- 11835
+empty$ -- 7374
+format.name$ -- 1642
+if$ -- 22611
 int.to.chr$ -- 4
 int.to.str$ -- 1
-missing$ -- 804
-newline$ -- 242
-num.names$ -- 144
-pop$ -- 6076
+missing$ -- 812
+newline$ -- 247
+num.names$ -- 148
+pop$ -- 6114
 preamble$ -- 1
-purify$ -- 655
+purify$ -- 661
 quote$ -- 0
-skip$ -- 1207
+skip$ -- 1225
 stack$ -- 0
-substring$ -- 14420
-swap$ -- 1953
+substring$ -- 14481
+swap$ -- 1972
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 324
+type$ -- 333
 warning$ -- 0
-while$ -- 670
+while$ -- 675
 width$ -- 0
-write$ -- 576
+write$ -- 589
