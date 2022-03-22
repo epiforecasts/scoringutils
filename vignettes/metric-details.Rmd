@@ -31,6 +31,17 @@ setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
          new = c("D", "C", "B", "Q"))
 data[, c("Name", "Functions") := NULL]
 
+replace <- function(x) {
+  x <- gsub("+", "y", x, fixed = TRUE)
+  x <- gsub("-", "n", x, fixed = TRUE)
+  return(x)
+}
+
+data$D <- replace(data$D)
+data$C <- replace(data$C)
+data$B <- replace(data$B)
+data$Q <- replace(data$Q)
+
 data[, 1:6] %>%
   kbl(format = "html",
       escape = FALSE,

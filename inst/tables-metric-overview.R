@@ -1,31 +1,7 @@
-#------------------------------------------------------------------------------#
-#------------------ Overview of the different forecast types ------------------#
-#------------------------------------------------------------------------------#
 library(data.table)
-point_forecast <- list(
-  `Forecast type` = c("Point forecast"),
-  `Target type` = c("continuous \n discrete \n binary"),
-  `Representation of the predictive distribution` = c("one single number for the predicted outcome")
-)
-
-
-probabilistic_forecast <- list(
-  `Forecast type` = c("Probabilistic forecast", "Probabilistic forecast"),
-  `Target type` = c("continuous \n discrete",
-                    "binary"),
-  `Representation of the predictive distribution` = c(
-    "predictive samples \n  quantiles \n  closed analytical form",
-    "binary probabilities"
-  )
-)
-
-data <- rbind(as.data.table(point_forecast),
-              as.data.table(probabilistic_forecast))
-
-saveRDS(data, "inst/metrics-overview/forecast-types.Rda")
 
 #------------------------------------------------------------------------------#
-#----------------- Overview with applicability of the metrics -----------------#
+#---------------------- Metrics Summary and Overview --------------------------#
 #------------------------------------------------------------------------------#
 
 ae <- list(
@@ -257,21 +233,16 @@ data[, References := NULL]
 setnames(data, old = c("Properties"),
          new = c("Info"))
 
-metrics_summary <- data[, lapply(.SD, FUN = function(x) {
+metrics <- data[, lapply(.SD, FUN = function(x) {
   x <- gsub("$\\checkmark$", '+', x, fixed = TRUE)
   x <- gsub("$-$", '-', x, fixed = TRUE)
   x <- gsub("$\\sim$", '~', x, fixed = TRUE)
   return(x)
 })]
-setnames(metrics_summary, old = c("D", "C", "B", "Q"),
+setnames(metrics, old = c("D", "C", "B", "Q"),
          new = c("Discrete", "Continuous", "Binary", "Quantile"))
 
-usethis::use_data(metrics_summary, overwrite = TRUE)
-
-
-# save for manuscript
-data[, c("Name", "Functions") := NULL]
-saveRDS(unique(data), file = "inst/metrics-overview/metrics-summary.Rda")
+usethis::use_data(metrics, overwrite = TRUE)
 
 
 #------------------------------------------------------------------------------#
