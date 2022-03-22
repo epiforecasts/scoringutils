@@ -26,10 +26,10 @@ library(data.table)
 This table gives an overview for when which metric can be applied and gives a very brief description. Note that this table on shows the metrics as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
 
 ```{r, echo = FALSE, results = "asis"}
-
-data <- readRDS(
-  system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils")
-)
+data <- copy(metrics) 
+setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"), 
+         new = c("D", "C", "B", "Q"))
+data[, c("Name", "Functions") := NULL]
 
 data[, 1:6] %>%
   kbl(format = "html",

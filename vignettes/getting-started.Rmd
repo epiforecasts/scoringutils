@@ -311,10 +311,10 @@ example_integer %>%
 
 ## Available metrics
 
-An overview of available metrics can be found in the `metrics_summary` data set that is included in the package. 
+An overview of available metrics can be found in the `metrics` data set that is included in the package. 
 
 ```{r}
-metrics_summary
+metrics
 ```
 
 ## Lower level functions

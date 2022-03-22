@@ -12,7 +12,7 @@
 #' before scoring.
 #'
 #' To obtain a quick overview of the evaluation metrics used, have a look at the
-#' [metrics_summary] data included in the package.
+#' [metrics] data included in the package.
 #'
 #' @param data A data.frame or data.table with the predictions and observations.
 #' The following columns need to be present:

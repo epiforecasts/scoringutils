@@ -49,7 +49,7 @@ globalVariables(c(
   "mean_scores_ratio",
   "metric",
   "metrics_select",
-  "metrics_summary",
+  "metrics",
   "model",
   "n_obs",
   "n_obs wis_component_name",
@@ -88,7 +88,7 @@ globalVariables(c(
 #' @keywords info
 
 available_metrics <- function() {
-  return(unique(metrics_summary$Name))
+  return(unique(metrics$Name))
 }
 
 #' @title Simple permutation test

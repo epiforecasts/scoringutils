@@ -132,4 +132,4 @@
 #' A data set with summary information on selected metrics implemented in
 #' \pkg{scoringutils}
 #' @keywords info
-"metrics_summary"
+"metrics"

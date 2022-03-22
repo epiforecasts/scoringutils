@@ -61,7 +61,7 @@ You can (and should) check your input using the function \code{\link[=check_fore
 before scoring.
 
 To obtain a quick overview of the evaluation metrics used, have a look at the
-\link{metrics_summary} data included in the package.
+\link{metrics} data included in the package.
 }
 \examples{
 library(magrittr) # pipe operator
