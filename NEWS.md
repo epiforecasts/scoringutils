@@ -8,29 +8,29 @@ Major update to the package and most package functions with lots of breaking cha
 can easily be piped and have simplified arguments and outputs. 
 
 ### new functions and function changes
-- the function `eval_forecasts()` was replaced by a function [score()] with a 
+- the function `eval_forecasts()` was replaced by a function `score()` with a 
 much reduced set of function arguments. 
 - Functionality to summarise scores and to add relative skill scores was moved
-to a function [summarise_scores()]
-- new function [check_forecasts()] to analyse input data before scoring
-- new function [correlation()] to compute correlations between different metrics
-- new function [add_coverage()] to add coverage for specific central prediction
+to a function `summarise_scores()`
+- new function `check_forecasts()` to analyse input data before scoring
+- new function `correlation()` to compute correlations between different metrics
+- new function `add_coverage()` to add coverage for specific central prediction
 intervals
-- new function [avail_forecasts()] allows to visualise the number of available
+- new function `avail_forecasts()` allows to visualise the number of available
 forecasts
-- new function [find_duplicates()] to find duplicate forecasts which cause an 
+- new function `find_duplicates()` to find duplicate forecasts which cause an 
 error
 - all plotting functions were renamed to begin with `plot_`. Arguments were 
 simplified
-- the function [pit()] now works based on data.frames. The old `pit` function 
-was renamed to [pit_sample()]. PIT p-values were removed entirely. 
-- the function [plot_pit()] now works directly with input as produced by [pit()]
-- many data-handling functions were removed and input types for [score()] were
+- the function `pit()` now works based on data.frames. The old `pit` function 
+was renamed to `pit_sample()`. PIT p-values were removed entirely. 
+- the function `plot_pit()` now works directly with input as produced by `pit()`
+- many data-handling functions were removed and input types for `score()` were
 restricted to sample-based, quantile-based or binary forecasts. 
-- the function [brier_score()] now returns all brier scores, rather than taking
+- the function `brier_score()` now returns all brier scores, rather than taking
 the mean before returning an output. 
-- `crps`, `dss` and `logs` were renamed to [crps_sample()], [dss_sample()], and
-[logs_sample()]
+- `crps`, `dss` and `logs` were renamed to `crps_sample()`, `dss_sample()`, and
+`logs_sample()`
 
 ### package data updated
 - package data is now based on forecasts submitted to the European Forecast Hub
