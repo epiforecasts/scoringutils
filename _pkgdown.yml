@@ -21,13 +21,13 @@ authors:
 reference:
         - title: Package documentation
           contents:
-                - scoring-forecasts-directly
-                - metric-details
+                - scoringutils
         - title: Functions to check and analyse inputs
           contents:
                 - has_keyword("check-forecasts")
         - title: Functions for convenient forecast evaluation
           contents:
+                - score
                 - has_keyword("scoring")
                 - starts_with("score_")
         - title: Lower-level scoring functions
@@ -39,6 +39,7 @@ reference:
         - title: Functions for plotting and data visualisation
           contents:
                 - starts_with("plot_")
+                - theme_scoringutils
         - title: Internal functions
           contents:
                 - has_keyword("internal")
