@@ -83,20 +83,23 @@
 <li>the proposed scoring workflow was reworked. Functions were changed so they can easily be piped and have simplified arguments and outputs.</li>
 </ul><div class="section level4">
 <h4 id="new-functions-and-function-changes-1-0-0">new functions and function changes<a class="anchor" aria-label="anchor" href="#new-functions-and-function-changes-1-0-0"></a></h4>
-<ul><li>the function <code>eval_forecasts()</code> was replaced by a function [score()] with a much reduced set of function arguments.</li>
-<li>Functionality to summarise scores and to add relative skill scores was moved to a function [summarise_scores()]</li>
-<li>new function [check_forecasts()] to analyse input data before scoring</li>
-<li>new function [correlation()] to compute correlations between different metrics</li>
-<li>new function [add_coverage()] to add coverage for specific central prediction intervals</li>
-<li>new function [avail_forecasts()] allows to visualise the number of available forecasts</li>
-<li>new function [find_duplicates()] to find duplicate forecasts which cause an error</li>
+<ul><li>the function <code>eval_forecasts()</code> was replaced by a function <code><a href="../reference/score.html">score()</a></code> with a much reduced set of function arguments.</li>
+<li>Functionality to summarise scores and to add relative skill scores was moved to a function <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>
+</li>
+<li>new function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to analyse input data before scoring</li>
+<li>new function <code><a href="../reference/correlation.html">correlation()</a></code> to compute correlations between different metrics</li>
+<li>new function <code><a href="../reference/add_coverage.html">add_coverage()</a></code> to add coverage for specific central prediction intervals</li>
+<li>new function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> allows to visualise the number of available forecasts</li>
+<li>new function <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> to find duplicate forecasts which cause an error</li>
 <li>all plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified</li>
-<li>the function [pit()] now works based on data.frames. The old <code>pit</code> function was renamed to [pit_sample()]. PIT p-values were removed entirely.</li>
-<li>the function [plot_pit()] now works directly with input as produced by [pit()]</li>
-<li>many data-handling functions were removed and input types for [score()] were restricted to sample-based, quantile-based or binary forecasts.</li>
-<li>the function [brier_score()] now returns all brier scores, rather than taking the mean before returning an output.</li>
+<li>the function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
+<li>the function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code><a href="../reference/pit.html">pit()</a></code>
+</li>
+<li>many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
+<li>the function <code><a href="../reference/brier_score.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
 <li>
-<code>crps</code>, <code>dss</code> and <code>logs</code> were renamed to [crps_sample()], [dss_sample()], and [logs_sample()]</li>
+<code>crps</code>, <code>dss</code> and <code>logs</code> were renamed to <code><a href="../reference/crps_sample.html">crps_sample()</a></code>, <code><a href="../reference/dss_sample.html">dss_sample()</a></code>, and <code><a href="../reference/logs_sample.html">logs_sample()</a></code>
+</li>
 </ul></div>
 <div class="section level4">
 <h4 id="package-data-updated-1-0-0">package data updated<a class="anchor" aria-label="anchor" href="#package-data-updated-1-0-0"></a></h4>
