@@ -202,32 +202,13 @@ pairwise_comparison_one_group <- function(scores,
   )]
 
   # calculate relative skill as geometric mean
-  # small theta is again better. If a baseline is given, exclude it
-  # from the computation of the geometric mean
-  # maybe there is a more elegant way to do this
-  if (!is.null(baseline)) {
-    result_without_baseline <- data.table::copy(result)
-    # filter out all ratios where compare_against is the baseline
-    result_without_baseline <- result_without_baseline[
-      compare_against != baseline
-    ]
-    result_without_baseline[, `:=`(theta = geom_mean_helper(ratio)),
-      by = "model"
-    ]
-    # merge back to retain the ratios even for comparisons with the baseline
-    result <- merge(result, result_without_baseline, all.x = TRUE)
-    # avoid mixture of NA and NaN which can cause problems downstream
-    result[is.na(theta), theta := NA_real_]
-    # remove NAs form merge in the thetas
-    result[, theta := unique(na.omit(theta)), by = "model"]
-  } else {
-    result[, `:=`(
-        theta = geom_mean_helper(ratio),
-        rel_to_baseline = NA_real_
-      ),
-      by = "model"
-    ]
-  }
+  # small theta is again better (assuming that the score is negatively oriented)
+  result[, `:=`(
+    theta = geom_mean_helper(ratio),
+    rel_to_baseline = NA_real_
+  ),
+  by = "model"
+  ]
 
   if (!is.null(baseline)) {
     baseline_theta <- unique(result[model == baseline, ]$theta)
