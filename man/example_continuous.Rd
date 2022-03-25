@@ -29,4 +29,8 @@ example_continuous
 A data set with continuous predictions for COVID-19 cases and deaths
 constructed from data submitted to the European Forecast Hub.
 }
+\details{
+The data was created using the script create-example-data.R in the inst/
+folder (or the top level folder in a compiled package).
+}
 \keyword{datasets}

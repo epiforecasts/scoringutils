@@ -3,6 +3,9 @@
 #' A data set with predictions for COVID-19 cases and deaths submitted to the
 #' European Forecast Hub.
 #'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @format A data frame with
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
@@ -25,6 +28,9 @@
 #' A data set with continuous predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
 #'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
@@ -46,6 +52,9 @@
 #'
 #' A data set with integer predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
+#'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
 #'
 #' @format A data frame with 13,429 rows and 10 columns:
 #' \describe{
@@ -75,6 +84,9 @@
 #' This should not be understood as sound statistical practice, but rather
 #' as a practical way to create an example data set.
 #'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @format A data frame with 346 rows and 10 columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
@@ -96,6 +108,9 @@
 #' A data set with quantile predictions for COVID-19 cases and deaths
 #' submitted to the European Forecast Hub.
 #'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @format A data frame with 7,581 rows and 9 columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
@@ -116,6 +131,9 @@
 #' A data set with truth values for COVID-19 cases and deaths
 #' submitted to the European Forecast Hub.
 #'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @format A data frame with 140 rows and 5 columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
@@ -131,5 +149,9 @@
 #'
 #' A data set with summary information on selected metrics implemented in
 #' \pkg{scoringutils}
+#'
+#' The data was created using the script create-metric-tables.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
 #' @keywords info
 "metrics"

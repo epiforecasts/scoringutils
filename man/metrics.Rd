@@ -14,4 +14,8 @@ metrics
 A data set with summary information on selected metrics implemented in
 \pkg{scoringutils}
 }
+\details{
+The data was created using the script create-metric-tables.R in the inst/
+folder (or the top level folder in a compiled package).
+}
 \keyword{info}

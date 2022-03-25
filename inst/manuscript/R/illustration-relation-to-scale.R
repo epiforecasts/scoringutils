@@ -142,4 +142,4 @@ p2 + p1 + p_true +
   plot_annotation(tag_levels = 'A')
 
 ggsave("inst/manuscript/output/illustration-effect-scale.png",
-       height = 5, width = 8)
+       height = 4.3, width = 8)

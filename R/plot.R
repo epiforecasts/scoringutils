@@ -741,7 +741,7 @@ plot_quantile_coverage <- function(scores,
 #' @importFrom data.table as.data.table setnames rbindlist
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
-#' element_text element_blank ggtitle
+#' element_text element_blank
 #' @export
 #'
 #' @examples
@@ -992,8 +992,7 @@ plot_pairwise_comparison <- function(comparison_result,
           hjust = 1, color = "brown4"
         ),
         axis.text.y = element_text(color = "steelblue4")
-      ) +
-      ggtitle("Pairwise comparisons - ratio of mean scores (for overlapping forecast sets)")
+      )
   }
 
   return(plot)

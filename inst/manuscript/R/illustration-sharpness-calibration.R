@@ -62,4 +62,4 @@ p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
   plot_annotation(tag_levels = "A")
 
 ggsave("inst/manuscript/output/calibration-sharpness-illustration.png",
-       width = 8, height = 4.5)
+       width = 8, height = 3.8)
