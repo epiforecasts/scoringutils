@@ -4,40 +4,39 @@ library(ggplot2)
 library(data.table)
 library(dplyr)
 
+# generate predictions data.table
+n_truth = 2000
+n_samples = 2000
+truth <- rnorm(n_truth, mean = 0, sd = 1)
+predictions1 <- rnorm(n_truth * n_samples, mean = 0, sd = 1)
+predictions2 <- rnorm(n_truth * n_samples, mean = 0.5, sd = 1)
+predictions3 <- rnorm(n_truth * n_samples, mean = 0, sd = 2)
+predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd =  0.5)
+
+df <- data.table(true_value = rep(truth, each = n_samples),
+                 id = rep(1:n_truth, each = n_samples),
+                 prediction = c(predictions1, predictions2,
+                                predictions3, predictions4),
+                 sample = 1:n_samples,
+                 `model` = rep(c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"),
+                               each = n_truth * n_samples))
+
+df[, model := factor(`model`,
+                     levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) {
-  # generate predictions data.table
-  n_truth = 2000
-  n_samples = 2000
-  truth <- rnorm(n_truth, mean = 0, sd = 1)
-  predictions1 <- rnorm(n_truth * n_samples, mean = 0, sd = 1)
-  predictions2 <- rnorm(n_truth * n_samples, mean = 0.5, sd = 1)
-  predictions3 <- rnorm(n_truth * n_samples, mean = 0, sd = 2)
-  predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd =  0.5)
-
-  df <- data.table(true_value = rep(truth, each = n_samples),
-                   id = rep(1:n_truth, each = n_samples),
-                   prediction = c(predictions1, predictions2,
-                                  predictions3, predictions4),
-                   sample = 1:n_samples,
-                   `model` = rep(c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                   "Pred: N(0, 2)", "Pred: N(0, 0.5)"),
-                                 each = n_truth * n_samples))
-
-  df[, model := factor(`model`,
-                       levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                  "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
-
   res <- score(df)
   pit <- pit(df, by = "model")
 
-  stored <- list(df = df,
-                 res = res,
+  stored <- list(res = res,
                  pit = pit)
 
-  # obtain scores and create a table based on scores -----------------------------
-
   saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.Rda")
+
 } else {
+
   stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
 }
 
@@ -53,7 +52,7 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 
 
 # create histogram true vs. predicted ------------------------------------------
-pred_hist <- stored$df |>
+pred_hist <- df |>
   ggplot(aes(x = true_value)) +
   facet_wrap(~ model, nrow = 1) +
   geom_histogram(aes(y=..density..),
@@ -73,7 +72,7 @@ pit_plots <- plot_pit(stored$pit) +
 # create interval and quantile coverage plots ----------------------------------
 # create coverage plots by transforming to quantile format first
 quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-df_quantile <- sample_to_quantile(stored$df,
+df_quantile <- sample_to_quantile(df,
                                   quantiles = quantiles)
 
 res_quantile <- score(df_quantile)
