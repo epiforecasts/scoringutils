@@ -67,11 +67,11 @@ title:
   # For running headers, if needed
   short: "Evaluating Forecasts with \\pkg{scoringutils} in \\proglang{R}"
 abstract: >
-    Forecasts play an important role in a variety of fields. Their role in informing public policy has attracted increased attention from the general public with the emergence of the Covid-19 pandemic. Much theoretical work has been done on the development of proper scoring rules and other scoring metrics that can help evaluate these forecasts. However, there is a vast choice of scoring rules available for different types of data, and there has been less of a focus on facilitating their use by those without expertise in forecast evaluation. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that, given a set of forecasts and truth data, automatically chooses, applies and visualises a set of appropriate scores. It gives the user access to a wide range of scoring metrics for various types of forecasts as well as a variety of ways to visualise the evaluation. We give an overview of the evaluation process and the metrics implemented in \pkg{scoringutils} and show an example evaluation of forecasts for COVID-19 cases and deaths submitted to the European Forecast Hub between May and September 2021. 
+  Evaluating forecasts is essential in order to understand and improve forecasting and make forecasts useful to decision-makers. Much theoretical work has been done on the development of proper scoring rules and other scoring metrics that can help evaluate forecasts. In practice, however, conducting a forecast evaluation and comparison of different forecasters remains challenging. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that aims to greatly facilitates this process. It is especially geared towards comparing multiple forecasters, regardless of how forecasts were created, and visualising results. The package is able to handle missing forecasts and is the first \proglang{R} package to offer extensive support for forecasts represented through predictive quantiles, a format used by several COVID-19 Forecast Hubs. The paper gives a short introduction to forecast evaluation, discusses the metrics implemented in \pkg{scoringutils} and gives guidance on when they are appropriate to use, and illustrates the application of the package using example data of forecasts for COVID-19 cases and deaths submitted to the European Forecast Hub between May and September 2021. 
 keywords:
   # at least one keyword must be supplied
-  formatted: [keywords, not capitalized, "\\proglang{R}"]
-  plain:     [keywords, not capitalized, R]
+  formatted: [forecasting, forecast evaluation, proper scoring rules, scoring, "\\proglang{R}"]
+  plain:     [forecasting, forecast evaluation, proper scoring rules, scoring, R]
 preamble: >
   \usepackage{amsmath}
   \shortcites{reichCollaborativeMultiyearMultimodel2019, kukkonenReviewOperationalRegionalscale2012, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}
@@ -97,11 +97,13 @@ output:
 ```{r, setup, include=FALSE}
 options(prompt = 'R> ', continue = '+ ', width = 70)
 
+library(scoringutils)
 library(knitr)
 library(dplyr)
 library(magrittr)
 library(kableExtra)
 library(formatR)
+library(data.table)
 
 opts_chunk$set(
   cache = TRUE,
@@ -156,7 +158,7 @@ where $F$ and $G$ are both cumulative distribution functions. As we don't know t
 
 ```{r forecast-paradigm, echo = FALSE, fig.cap= "Schematic illustration of sharpness (top row) and calibration (bottom row). Sharpness is a property of the forecast (black distributions) only, while calibration is the consistency between the forecasts and the observations drawn from the true data-generating distribution (grey histograms). For illustrative purposes, the probability density function (PDF) rather than the cumulative density function (CDF) is shown.", fig.show="hold"}
 
-include_graphics("plots/calibration-sharpness-illustration.png")
+include_graphics("output/calibration-sharpness-illustration.png")
 ```
 
 # Scoring metrics implemented in \pkg{scoringutils} {short-title="Scoring metrics implemented in scoringutils" #metrics}
@@ -168,8 +170,19 @@ An overview of the metrics implemented in \pkg{scoringutils} can be found in Tab
 \newpage
 
 ```{r metrics-summary, echo = FALSE, cache=FALSE}
-# load data file from inst directory of the package
-data <- readRDS(system.file("metrics-overview/metrics-summary.Rda", package = "scoringutils"))
+# use package data and delete unnecessary columns
+data <- metrics |>
+  select(-Name, -Functions) |>
+  unique()
+
+data <- data[, lapply(.SD, FUN = function(x) {
+  x <- gsub("+", '$\\checkmark$', x, fixed = TRUE)
+  x <- gsub("-", '$-$', x, fixed = TRUE)
+  x <- gsub("~", '$\\sim$', x, fixed = TRUE)
+  return(x)
+})]
+setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
+         new = c("D", "C", "B", "Q"))
 
 cap <- "Summary table of scores available in \\pkg{scoringutils}. A version of this table which includes corresponding function names can be accessed in \\proglang{R} by calling \\code{scoringutils::metrics\\_summary}. Not all metrics are implemented for all types of forecasts and forecasting formats, as indicated by tickmarks, 'x', or '$\\sim$' (depends). D (discrete forecasts based on predictive samples), C (continuous, sample-based forecasts), B (binary forecasts), and Q (any forecasts in a quantile-based format) refer to different forecast formats. While the distinction is not clear-cut (e.g. binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g. for 'global' and 'local' see section \\ref{localglobal}). For mathematical defintions of the metrics see Table \\ref{tab:score-table-detailed}."
 
@@ -206,15 +219,7 @@ A similar way to visualise the same information is the probability integral tran
 It is in principle possible to formally test probabilistic calibration, for example by employing a test on the uniformity of PIT values (e.g. the Anderson-Darling test \citep{andersonAsymptoticTheoryCertain1952}). In practice this can be difficult as forecasts and therefore also PIT values are often correlated. We therefore advise against using formal tests in most applied settings. It is also important to note that uniformity of the PIT histogram (or a diagonal on quantile and interval coverage plots) indicates probabilistic calibration, but does not guarantee that forecasts are indeed calibrated in every relevant sense. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are clearly mis-calibrated, but have uniform PIT histograms. 
 
 ```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "Top row: Standard normal forecasting distribution (black, constant across all examples) against observations sampled from different predictive distributions (grey histograms based on 1000 samples). Second row: PIT histograms based the standard normal predictive distributions and the sampled observations shown in the first row. Third row: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e. underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. Fourth row: Quantile coverage values, with green areas indicating too wide (i.e. conservative) forecasts. Last row: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
-include_graphics("plots/calibration-diagnostic-examples.png")
-
-# readRDS("plots/calibration-diagnostic-examples.Rda") |>
-#   print()
-# 
-#   kableExtra::kbl(format = "latex", booktabs = TRUE, 
-#                   escape = FALSE,
-#                   linesep = c('\\addlinespace')) 
-
+include_graphics("output/calibration-diagnostic-examples.png")
 ```
 
 ### Bias
@@ -226,62 +231,63 @@ For forecasts in a quantile format, bias is also reflected in the over- and unde
 
 Sharpness is the ability to produce narrow forecasts. In contrast to calibration it does not depend on the actual observations and is a quality of the forecast only \citep{gneitingProbabilisticForecastsCalibration2007}. Sharpness is therefore only useful subject to calibration, as exemplified in Figure \ref{fig:forecast-paradigm}. For forecasts provided as samples from the predictive distribution, \pkg{scoringutils} calculates dispersion (the inverse of sharpness) as the normalised median absolute deviation about the median (MAD), following \cite{funkAssessingPerformanceRealtime2019} (for details see Table \ref{tab:metrics-summary}). For quantile forecasts, we instead report the dispersion component of the weighted interval score (see details in section \ref{wis} and \ref{tab:score-table-detailed}) which corresponds to a weighted average of the individual interval widths. 
 
-## Proper scoring rules for sample-based forecasts (CRPS, log score and DSS)
+## Proper scoring rules
+
+### Proper scoring rules for sample-based forecasts (CRPS, log score and DSS)
 
 For forecasts in a sample format, the \pkg{scoringutils} package implements the following proper scoring rules by providing wrappers to the corresponding functions in the \pkg{scoringRules} package: the (continuous) ranked probability score (CRPS) \citep{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976, gneitingStrictlyProperScoring2007}, the logarithmic score (log score) \citep{goodRationalDecisions1952}, and the Dawid-Sebastiani-score (DSS) \citep{dawidCoherentDispersionCriteria1999} (formal definitions are given in Table \ref{tab:score-table-detailed}). Compared to the implementations in the \pkg{scoringRules} these are exposed to the user through a slightly adapted interface. Other, closed form variants of the CRPS, log score and DSS are available in the \pkg{scoringRules} package. 
 
 When scoring forecasts in a sample-based format, the choice is usually between the log score and the CRPS. The DSS is much less commonly used. It is easier to compute, but apart from that does not have immediate advantages over the former two. DSS, CRPS and log score differ in several important aspects: ease of estimation and speed of convergence, treatment of over- and underconfidence, sensitivity to distance \cite{winklerScoringRulesEvaluation1996}, sensitivity to outlier predictions, and sensitivity to the order of magnitude of the forecast quantity. 
 
-### Estimation details and the number of samples required for accurate scoring
+#### Estimation details and the number of samples required for accurate scoring
 
 The CRPS, DSS and log score are in principle all applicable to continuous as well as discrete forecasts. However, they differ in how easily and accurately scores can be computed based on predictive samples. This is an issue for the log score in particular, which equals the negative log density of the predictive distribution evaluated at the observed value and therefore requires a density estimation. The kernel density estimation used in \pkg{scoringutils} (through the function \fct{log\_sample} from the \pkg{scoringRules} package) may be particularly inappropriate for discrete values (see also Table \ref{tab:score-table-detailed}). The log score is therefore not computed for discrete predictions in \pkg{scoringutils}. For a small number of samples, estimated scores may deviate considerably from the exact scores computed based on closed-form predictive functions. This is especially pronounced for the log score, as illustrated in Figure \ref{fig:score-convergence} (adapted from \citep{jordanEvaluatingProbabilisticForecasts2019}). 
 
 ```{r score-convergence, echo = FALSE, fig.cap="Top: Estimation of scores from predictive samples (adapted from \\citep{jordanEvaluatingProbabilisticForecasts2019}). Scores were computed based on samples of differing size (from 10 to 100,000). This was repeated 500 times for each sample size. The black line is the mean score across the 500 repetitions, shaded areas represent 50\\% and 90\\% intervals, and the dashed line represents the true calculated score.  Bottom left: Change in score when the uncertainty of the predictive distribution is changed. The true distribution is N(0,5) with the true standard deviation marked with a dashed line, while the standard deviation of the predictive distribution is varied along the x-axis. Log score and DSS clearly punish overconfidence much more severely than underconfidence. Bottom right: Score achieved for a standard normal predictive distribution (illustrated in grey) and different true observed values. Log score and DSS punish instances more harshly where the observed value is far away from the predictive distribution.", fig.show="hold"}
-include_graphics("plots/sample-convergence.png")
-include_graphics("plots/score-deviation-sd-mu.png")
+include_graphics("output/score-convergence-outliers.png")
 ```
 
-### Overconfidence, underconfidence and outliers
+#### Overconfidence, underconfidence and outliers
 
 Proper scoring rules differ in how they penalise over- or underconfident forecasts. The log score and the DSS pnealise overconfidence much more severely than underconfidence, while the CRPS does not distinguish between over- and underconfidence and penalises both rather leniently \citep{macheteContrastingProbabilisticScoring2012} (see Figure \ref{fig:score-convergence}B, left panel). Similarly, the CRPS is relatively lenient with regards to outlier predictions compared to the log score and the DSS (see Figure \ref{fig:score-convergence}B, right panel). The CRPS, which can be thought of as a generalisation of the absolute error to a predictive distribution, scales linearly with the distance between forecast distribution and true value. The log score, on the other hand, as the negative logarithm of the predictive density evaluated at the observed value, can quickly tend to infinity if the probability assigned to the observed outcome is close to zero. Whether or not harsh penalisation of overconfidence and bad predictions is desirable or not depends of course on the setting. If, for example, one wanted to forecast hospital bed capacity, it may be prudent to score forecasts using a log score as one might prefer to be too cautious rather than too confident. 
 
-### Sensitivity to distance - local vs\. global scores {#localglobal}
+#### Sensitivity to distance - local vs\. global scores {#localglobal}
 
 The CRPS and the DSS are so-called global scoring rules, which means that the score is sensitive to the distance of the entire predictive distribution from the observed value. The log score, on the other hand, is local and the resulting score depends only on the probability density assigned to the actual outcome, ignoring the rest of the predictive distribution (see Figure \ref{fig:score-locality}). 
 Sensitivity to distance (taking the entire predictive distribution into account) may be a desirable property in most settings that involve decision making. A prediction which assigns high probability to results far away from the observed value is arguably less useful than a forecast which assigns a lot of probability mass to values closer to the observed outcome (the probability assigned to the actual outcome being equal for both forecasts). The log score is only implicitly sensitive to distance in expectation if we assume that values close to the observed value are actually more likely to occur. The fact that the log score only depends on the outcome that actually realised, however, may make it more appropriate for inferential purposes (see \citep{winklerScoringRulesEvaluation1996}) and it is commonly used in Bayesian statistics \citep{gelmanUnderstandingPredictiveInformation2014}. 
 
 ```{r score-locality, echo = FALSE, fig.cap="Probabilities assigned by two hypothetical forecasters, A and B, to the possible number of goals in a football match. The true number later observed, 2, is marked with a dashed line. Both forecasters assign a probability of 0.35 to the observed outcome, 2. Forecaster A's prediction is centred around the observed value, while Forecaster B assigns significant probability to outcomes far away from the observed value. Judged by a local score like the Log Score, both forecasters receive the same score. A global score like the CRPS and the DSS penalises forecaster B more severely."}
 
-include_graphics("plots/score-locality.png")
+include_graphics("output/score-locality.png")
 ```
 
-### Sensitivity to the order of magnitude of the forecast quantity
+#### Sensitivity to the order of magnitude of the forecast quantity
 
-Average scores usually scale with the order of magnitude of the quantity we try to forecast (as the variance of the data-generating distribution usually increases with the mean). The effect is illustrated in Figure \ref{fig:score-scale}. This makes it harder to compare forecasts for very different targets, or assess average performance if the quantity of interest varies substantially over time. Average scores tend to be dominated by forecasts for targets with high absolute numbers. This is especially the case for the CRPS (as a generalisation of the absolute error), for which average scores tend to increase strongly with the order of magnitude of the quantity to forecast. The log score and the DSS tend to be more robust against this effect, depending on the exact relationship between mean and variance of the data-generating distribution. 
+Average scores usually scale with the order of magnitude of the quantity we try to forecast (as the variance of the data-generating distribution usually increases with the mean). Figure \ref{fig:score-scale} illustrates the effect of an increase in scale of the forecast target on average scores. This relation makes it harder to compare forecasts for very different targets, or assess average performance if the quantity of interest varies substantially over time. Average scores tend to be dominated by forecasts for targets with high absolute numbers. This is especially the case for the CRPS (as a generalisation of the absolute error), for which average scores tend to increase strongly with the order of magnitude of the quantity to forecast. The log score and the DSS tend to be more robust against this effect, depending on the exact relationship between mean and variance of the data-generating distribution. 
 
 ```{r score-scale, echo = FALSE, fig.cap="Scores depend on the variability of the data and therefore implicitly on the order of magnitude of the observed value. A: Mean and standard deviation of scores from a simulation of perfect forecasts with predictive distribution $F$ equal to the true data-generating distribution $G$. The standard deviation of the two distributions was held constant at $\\sigma$, and for different mean values $\\mu$ 100 pairs of forecasts and observations were simulated. Every simulated forecast consisted of 1000 draws from the data-generating distribution $G$ and 5000 draws from the (same) predictive distribution $F$. For all three scoring rules, mean and sd of the calculated scores stay constant regardless of the mean $\\mu$ of $F$ and $G$. B: Same setup, but now the mean of $F$ and $G$ was held constant at $\\mu = 1$ and the standard deviation $\\sigma$ was varied. Average scores increase for all three scoring rules, but most strongly for the CRPS. Standard deviations of the estimated scores stay roughly constant for the DSS and log score, but also increase for the CRPS. C: Scores for forecasts of COVID-19 cases and deaths from the European Forecast Hub ensemble based on the example data provided in the package."}
 
-include_graphics("plots/illustration-effect-scale.png")
+include_graphics("output/illustration-effect-scale.png")
 ```
 
 
-## Proper scoring rule for quantile-based forecasts (WIS) {#wis}
-For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness penalty) for the width of a prediction interval and penalties for over- and under-prediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing issues with forecasts. It may even be useful to estimate quantiles from predictive samples and use the WIS in addition to the CRPS to make use of this decomposition for this purpose (with the caveat that estimating quantiles from samples may be biased if the number of samples is small). 
-<!-- Think about this again -->
+### Proper scoring rule for quantile-based forecasts (WIS) {#wis}
+For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness penalty) for the width of a prediction interval and penalties for over- and under-prediction (if a value falls outside of a prediction interval). 
 
-## Proper scoring rules for binary outcomes (BS and log score)
+### Proper scoring rules for binary outcomes (BS and log score)
 
-Binary forecasts can be scored using the Brier score (BS) or the log score. The Brier score \citep{brierVERIFICATIONFORECASTSEXPRESSED1950} corresponds to the squared difference between the given probability and the outcome (either 0 or 1) and equals the ranked probability score for the case of only two possible outcomes \citep{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a}. The log score corresponds to the log of the probability assigned to the observed outcome. Just as with continuous forecasts, the log score penalises overconfidence much more harshly than underconfidence. The Brier score, on the other hand, does not distinguish between over- and underconfidence \citep{macheteContrastingProbabilisticScoring2012} and is therefore more forgiving of outlier predictions. 
+Binary forecasts can be scored using the Brier score (BS) or the log score. The Brier score \citep{brierVERIFICATIONFORECASTSEXPRESSED1950} corresponds to the squared difference between the given probability and the outcome (either 0 or 1) and equals the ranked probability score for the case of only two possible outcomes \citep{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a}. The log score corresponds to the log of the probability assigned to the observed outcome. Just as with continuous forecasts, the log score penalises overconfidence much more harshly than underconfidence. The Brier score, on the other hand, penalises over- and underconfidence similarly \citep{macheteContrastingProbabilisticScoring2012} and is more forgiving of outlier predictions. 
 
-## Pairwise comparisons
+## Pairwise comparisons {#pairwisetheory}
 
-In order to compare performance of different models fairly even if forecasts are missing, we can compute relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used. The method is able to account for missing forecasts, but it is nevertheless advisable to only compare forecasts that are at least 50\% complete. Furthermore, pairwise comparisons are only possible if all scores have the same sign. Then, a relative skill score smaller than 1 indicates that a model is performing better than the average model for negatively oriented scores. One can also compute a scaled relative skill score by providing baseline model. In that case those mean score rations which include the baseline are excluded when taking the geometric mean to obtain relative skill scores for individual models (which therefore differ slightly from relative scores without a baseline). All individual relative skill scores are then scaled by (i.e. divided by) the relative score of the baseline model. 
+Raw scores for different forecasting models are not directly comparable in the case of missing forecasts, as forecasting targets usually differ in their characteristics (e.g. the scale of the forecast target, how difficult targets are to forecast etc.). One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used (e.g. for the proper scoring rules presented above, a relative skill score below 1 indicates better performance). As two models can only be fairly compared if they have overlapping forecasts it is advisable to only compare forecasts that are at least 50\% complete. Furthermore, pairwise comparisons are only possible if all scores have the same sign. One can also compute a scaled relative skill score by providing baseline model. In that case those mean score rations which include the baseline are excluded when taking the geometric mean to obtain relative skill scores for individual models (which therefore differ slightly from relative scores without a baseline). All individual relative skill scores are then scaled by (i.e. divided by) the relative score of the baseline model. 
 
 It is in principle possible to compute p-values to determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g. if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
+
 # Evaluating forecasts using scoringutils {#evaluation-example}
 
-The \pkg{scoringutils} package offers comprehensive functionality to conduct a forecast evaluation and allows users to check inputs, score forecasts and visualise results. Most functions operate on a `data.frame`-based format, but the package also provides a set of reliable lower-level scoring metrics operating on vectors/matrices, which experienced users can use in their own evaluation pipelines. These will not be discussed in this paper and refer to the vignettes and package documentation for further information. Some helper functions for data-handling, as well as example data sets and tables with additional information about available scoring metrics are also included in the package. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. 
+The \pkg{scoringutils} package offers comprehensive functionality to conduct a forecast evaluation and allows users to check inputs, score forecasts and visualise results. Most functions operate on a `data.frame`-based format, but the package also provides a set of function to score individual forecasts directly which operate on vectors/matrices. These will not be discussed in this paper and we refer to the vignettes and package documentation for further information. Some helper functions for data-handling, as well as example data sets and tables with additional information about available scoring metrics are also included in the package. 
 
 ## Example data
 
@@ -331,7 +337,7 @@ The function \fct{check\_forecasts} allows to check whether input data conforms 
 check_forecasts(example_quantile)
 ```
 
-The values stored in the list elements \code{target_type} and \code{prediction_type} refer to type of the forecast and the target variable. \code{forecast_unit} contains a vector of the columns which \pkg{scoringutils} thinks denote the unit of a single forecast. This means that in this instance a single forecast (with a set of 23 quantiles) can uniquely be identified by the values in the columns "location", "target\_end\_date", "target\_type", "location\_name", "forecast\_date", "model", "horizon". In this example, having "location" as well as "location\_name" included does not make a difference, as they contain duplicated information. In general, however, it is strongly advised to remove all unnecessary columns that do not help identify a single forecast. \code{unique_values} gives an overview of the number of unique values per column across the entire data set, providing a first hint as to whether the forecast set is complete. \code{warnings} shows potential warnings about the data. In this example, \pkg{scoringutils} warns that there are observed values present for which there is no corresponding forecast. These warnings can often be ignored, but may provide important information. If there are errors that cannot be ignored, a list entry \code{errors} will appear. 
+The values stored in the list elements \code{target_type} and \code{prediction_type} refer to type of the forecast and the target variable. \code{forecast_unit} contains a vector of the columns which \pkg{scoringutils} thinks denote the unit of a single forecast. This means that in this instance a single forecast (with a set of 23 quantiles) can uniquely be identified by the values in the columns "location", "target\_end\_date", "target\_type", "location\_name", "forecast\_date", "model", "horizon". In this example, having "location" as well as "location\_name" included does not make a difference, as they contain duplicated information. In general, however, it is strongly advised to remove all unnecessary columns that do not help identify a single forecast. \code{unique_values} gives an overview of the number of unique values per column across the entire data set, providing a first hint as to whether the forecast set is complete. \code{messages} or \code{warnings} show messages and warnings created when checking the data. 
 
 ## Visualising forecast data
 
@@ -352,8 +358,7 @@ avail_forecasts(data = example_integer,
   plot_avail_forecasts(x = "forecast_date", 
                        show_numbers = FALSE) + 
   facet_wrap(~ target_type) + 
-  labs(y = "Model", x = "Forecast date") + 
-  theme(legend.position = "bottom")
+  labs(y = "Model", x = "Forecast date") 
 ```
 
 <!-- THIS NEEDS TO BE REWORKED DEPENDING ON WHAT WE DO WITH THE FUNCTION -->
@@ -368,7 +373,6 @@ plot_predictions(data = example_quantile,
                  filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
                                          'forecast_date == "2021-06-28"')) + 
   facet_wrap(target_type ~ location, ncol = 4, scales = "free_y") + 
-  theme(legend.position = "bottom") + 
   labs(x = "Target end date")
 ```
 
@@ -401,7 +405,7 @@ score(example_quantile) |>
 
 While \fct{summarise\_scores} accepts arbitrary summary functions, care has to be taken when using something else than \fct{mean}, because scores may lose propriety when using other summary functions. For example, the median of several individual scores (individually based on a proper scoring rule) is usually not proper. A forecaster judged by the median of several scores may be incentivised to misrepresent their true belief in a way that is not true for the mean score.  
 
-The user must exercise additional caution and should usually avoid aggregating scores across categories which differ much in the magnitude of the quantity to forecast, as forecast errors usually increase with the order of magnitude of the forecast target. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. 
+The user must exercise additional caution and should usually avoid aggregating scores across categories which differ much in the magnitude of the quantity to forecast, as forecast errors usually increase with the order of magnitude of the forecast target. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. In some instances it may be helpful to look at relative skill scores instead (see sections \ref{pairwisetheory} and \ref{pairwisecode}). 
 
 As a proxy for calibration, we are often interested in empirical coverage-levels of certain central prediction intervals, for example the percentage of true values which fell inside all 50% or 90% prediction intervals. For any quantile-based forecast, we can simply add this information using the function \fct{add\_coverage}. The function has a \code{by} argument which accepts a vector of column names defining the level of grouping for which empirical coverage is computed. Note that these column names should be equal to those passed to \code{by} in subsequent calls of \fct{summarise\_forecasts}. 
 
@@ -418,14 +422,12 @@ example_integer |>
   glimpse()
 ```
 
-The process is designed to require conscious action by the user, because the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large. The possibility to switch to a quantile-based format may also be useful for model analytics because of the decomposition of the weighted interval score which is not easily available for the CRPS. 
+The process is designed to require conscious action by the user, because the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large. 
 
-## Pairwise comparisons
+## Pairwise comparisons {#pairwisecode}
 
-In order to obtain a model ranking, we recommend looking at the relative skill in terms of an appropriate proper scoring rule instead of the raw score. Relative skill scores can be aggregated more easily across different forecast targets as they are less influenced by the order of magnitude of the quantity to forecast than e.g. the WIS or the CRPS. 
+In order to obtain a model ranking, we recommend looking at the relative skill in terms of an appropriate proper scoring rule instead of the raw score whenever forecasts are missing. 
 <!-- Maybe add some more details and pitfalls, e.g. that models with few locations make these locations relatively more important -->
-<!-- It may therefore be sensible to require all models to have submitted forecasts for at least 50\% of all forecast targets in order to enter the pairwise comparisons.  -->
-
 Relative skill scores can either be obtained by specifying \code{relative_skill = TRUE} in the function \fct{summarise\_scores}, or by calling the function \fct{pairiwse\_comparison}. In both cases, pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.frame} with all scores gets split into different \code{data.frame}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated separately for the different forecasting targets. Using the argument \code{baseline}, we can compute relative skill with respect to a baseline model. 
 
 ```{r}
@@ -438,7 +440,7 @@ score(example_quantile) |>
 When a baseline is provided, pairwise comparisons involving that baseline model are excluded from the computation of relative scores for all non-baseline models. Relative skill scores with a baseline included therefore differ slightly from relative scores without a baseline. Scaled relative skill scores are then computed by scaling (i.e. dividing) all relative scores by the relative score of the baseline model. 
 <!-- THINK ABOUT HOW TO HANDLE THIS AGAIN IN THE PACKAGE-->
 
-Pairwise comparisons should usually be made based on unsummarised scores (\fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When computing relative skill scores using \fct{summarise_scores}, this happens by default. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values do not account for), it may be sensible to summaries over a few categories to reduce correlation and obtain more conservative p-values. 
+Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values do not account for), it may be sensible to summaries over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
 
 Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models. The output of the following code is shown in Figure \ref{fig:pairwise-plot}. 
 
@@ -460,27 +462,23 @@ For example, to detect systematic patterns it may be useful to visualise a singl
 score(example_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   plot_heatmap(x = "location", metric = "bias") + 
-    facet_wrap(~ target_type) + 
-  theme(legend.position = "bottom")
+    facet_wrap(~ target_type) 
 
 ```
 
 For quantile-based forecasts, it is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, over-prediction and under-prediction. This can be achieved using the function \fct{plot\_wis\_components}, as shown in Figure \ref{fig:wis-components} 
-<!-- and Figure \ref{fig:wis-components-relative} in the SI.  -->
-As described in section \ref{scoring} it is possible to convert from a sample-based to a quantile-based forecast format to make use of this decomposition even for sample-based forecasts. 
 
 ```{r wis-components, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, over-prediction and under-prediction. The WIS components measure over- and under-prediction in absolute, rather than relative terms."}
 score(example_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
-             scales = "free_x") +
-  theme(legend.position = "bottom")
+             scales = "free_x") 
 ```
 
 Special attention should be given to calibration. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms, as explained in section \ref{probabilistic-calibration}. Ideally, PIT values should be uniformly distributed after the transformation.
 
-We can compute PIT values in the following way
+We can compute PIT values in the following way:
 
 ```{r}
 example_continuous |>
@@ -497,7 +495,7 @@ example_continuous |>
   facet_grid(target_type ~ model)
 ```
 
-We can also look at interval and quantile coverage plots (explained in more detail in section \ref{probabilistic-calibration}) using the functions \fct{plot\_interval\_coverage} and \fct{plot\_quantile\_coverage}. These plots require that the columns "range" and "quantile", respectively, be present in the scores to plot, and therefore need to be included in the `by` argument when summarising scores. The output of the following is shown in Figure \ref{fig:coverage}.  
+We can also look at interval and quantile coverage plots (explained in more detail in section \ref{probabilistic-calibration}) using the functions \fct{plot\_interval\_coverage} and \fct{plot\_quantile\_coverage}. These plots require that the columns "range" and "quantile", respectively, be present in the scores to plot, and therefore need to be included in the `by` argument when summarising scores. The output of the following is shown in Figure \ref{fig:coverage}. 
 
 ```{r coverage, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e. underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
 cov_scores <- score(example_quantile) |>
@@ -530,8 +528,6 @@ correlations |>
 Forecast evaluation is invaluable to understanding and improving current forecasts. The \pkg{scoringutils} package aims to facilitate this process and make it easier, even for less experienced users. It provides a fast, flexible and convenient evaluation framework based on `data.frame`s, but also makes a set of scoring functions available to more experienced users to be used in other packages or pipelines. A set of visualisations and plotting functions help with diagnosing issues with models and allow for thorough comparison between different forecasting approaches. 
 
 The package is still under active development and we warmly welcome contributions to \pkg{scoringutils}. In the future we hope to extend the number of scoring metrics supported. This includes spherical scoring rules \citep{gneitingStrictlyProperScoring2007, joseCharacterizationSphericalScoring2009, macheteContrastingProbabilisticScoring2012}, evaluation of multinomial prediction tasks, as well as a broader range of scoring metrics for point forecasts. We also plan to expand the plotting functionality and hope to make templates available for automated scoring reports. 
-
-NOT SURE WHAT ELSE TO DISCUSS?
 
 <!-- % The results in this paper were obtained using -->
 <!-- % \proglang{R}~\Sexpr{paste(R.Version()[6:7], collapse = ".")} with the -->
@@ -592,8 +588,7 @@ score(example_quantile) |>
   facet_wrap(~ target_type, 
              scales = "free_x") + 
   coord_flip() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5)) + 
-  theme(legend.position = "bottom")
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5)) 
 ```
 
 
