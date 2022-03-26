@@ -12,7 +12,8 @@
 #' before scoring.
 #'
 #' To obtain a quick overview of the evaluation metrics used, have a look at the
-#' [metrics] data included in the package.
+#' [metrics] data included in the package. The column `metrics$Name` gives an
+#' overview of all available metric names that can be computed.
 #'
 #' @param data A data.frame or data.table with the predictions and observations.
 #' The following columns need to be present:
@@ -31,7 +32,7 @@
 #'   - `quantile`: quantile to which the prediction corresponds
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
-#' metrics see [available_metrics()]
+#' metrics see [available_metrics()], or check the [metrics] data set.
 #' @param ... additional parameters passed down to lower-level functions.
 #' For example, the following arguments can change how weighted interval
 #' scores are computed:

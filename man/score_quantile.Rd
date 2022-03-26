@@ -38,7 +38,7 @@ of the values in \code{forecast_unit}}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}}
+metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Alpha is the
