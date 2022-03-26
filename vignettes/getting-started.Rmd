@@ -122,6 +122,17 @@ score(example_quantile) %>%
   summarise_scores()
 ```
 
+### Scoring point forecasts
+
+Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is importnat to use `na.rm = TRUE` when summarising. 
+
+```{r}
+score(example_point) %>% 
+  summarise_scores(by = "model", na.rm = TRUE)
+```
+
+
+
 ### Adding empirical coverage
 
 For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function `add_coverage()`. This function also requires a `by` argument which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed. 
