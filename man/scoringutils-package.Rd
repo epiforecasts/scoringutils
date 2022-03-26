@@ -11,8 +11,8 @@ Combines a collection of metrics and proper scoring rules (Tilmann Gneiting & Ad
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/epiforecasts/scoringutils}
   \item \url{https://epiforecasts.io/scoringutils/}
+  \item \url{https://github.com/epiforecasts/scoringutils}
   \item Report bugs at \url{https://github.com/epiforecasts/scoringutils/issues}
 }
 

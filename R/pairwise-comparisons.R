@@ -69,6 +69,22 @@ pairwise_comparison <- function(scores,
     metric <- infer_rel_skill_metric(scores)
   }
 
+  # check that values of the chosen metric are not NA
+  if (any(is.na(scores[[metric]]))) {
+    msg <- paste0("Some values for the metric '", metric,
+                  "' are NA. These have been removed. ",
+                  "Maybe choose a different metric?")
+    warning(msg)
+
+    scores <- scores[!is.na(scores[[metric]])]
+    if (nrow(scores) == 0) {
+      msg <- paste0("After removing NA values for '", metric,
+                    "', no values were left.")
+      warning(msg)
+      return(NULL)
+    }
+  }
+
   # check that all values of the chosen metric are positive
   if (any(sign(scores[[metric]]) < 0)) {
     if (any(sign(scores) > 0)) {
@@ -138,6 +154,10 @@ pairwise_comparison_one_group <- function(scores,
                                           ...) {
   if (!("model" %in% names(scores))) {
     stop("pairwise compairons require a column called 'model'")
+  }
+
+  if (nrow(scores) == 0) {
+    return(NULL)
   }
 
   # get list of models
