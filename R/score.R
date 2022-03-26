@@ -66,9 +66,7 @@
 #' score(example_continuous)
 #'
 #' # score point forecasts (marked by 'NA' in the quantile column)
-#' example <- data.table::copy(example_quantile)
-#' example[quantile == 0.5, quantile := NA_real_]
-#' score(example) %>%
+#' score(example_point) %>%
 #'   summarise_scores(by = "model", na.rm = TRUE)
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}

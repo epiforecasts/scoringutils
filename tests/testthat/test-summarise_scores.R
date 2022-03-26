@@ -44,11 +44,11 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
                    na.rm = TRUE,
                    relative_skill = TRUE)
 
+  scores <- score(example_point[is.na(quantile)])
+
   expect_warning(
     expect_warning(
-      ex[is.na(quantile)] |>
-        score() |>
-        summarise_scores(by = "model", relative_skill = TRUE, na.rm = TRUE)
+      summarise_scores(scores, by = "model", relative_skill = TRUE, na.rm = TRUE)
     )
   )
 })

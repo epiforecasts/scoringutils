@@ -116,6 +116,13 @@ data.table::setDT(example_quantile)
 # make model a character instead of a factor
 usethis::use_data(example_quantile, overwrite = TRUE)
 
+
+# create data with point forecasts ---------------------------------------------
+example_point <- data.table::copy(example_quantile)
+example_point[quantile == 0.5, quantile := NA_real_]
+usethis::use_data(example_point, overwrite = TRUE)
+
+
 # get continuous sample data ---------------------------------------------------
 # define gamma function
 fn_gamma <- function(par, x) {

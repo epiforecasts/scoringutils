@@ -304,17 +304,19 @@ example_quantile |>
 
 ## Expected input formats and data checking
 
-Depending on the format of the forecast, a `data.frame` (or similar) is required for most functions with column names as shown in Table \ref{tab:column-requirements}. 
+Depending on the format of the forecast, a `data.frame` (or similar) is required for most functions with column names as shown in Table \ref{tab:column-requirements}. Point forecasts are defined as forecasts that follow a quantile-based format (and can be mixed with quantile-based forecasts), but which have an `NA` value in the column `"quantile"`. 
+
 ```{r, column-requirements, echo=FALSE}
 library(data.table)
 requirements <- 
   data.table(
-    "Format" = c("quantile-based", "sample-based", "binary", "pairwise-comparisons"), 
+    "Format" = c("quantile-based", "sample-based", "binary", "point-forecasts", "pairwise-comparisons"), 
     `Required columns` = c("'true_value', 'prediction', 'quantile'", 
                            "'true_value', 'prediction', 'sample'", 
                            "'true_value', 'prediction'", 
+                           "like quantile-based, but with \n NA in the 'quantile' column", 
                            "additionally a column 'model'"), 
-    "Example data" = c("example_quantile", "example_integer, \n  example_continuous", "example_binary", "~")
+    "Example data" = c("example_quantile", "example_integer, \n  example_continuous", "example_binary", "example_point", "~")
   )
 
 requirements |>
@@ -322,6 +324,7 @@ requirements |>
       booktabs = TRUE,
       linesep = c('\\addlinespace'),
       caption = "Overview of the columns required for different input formats.") |>
+  kableExtra::column_spec(2, width = "6cm") |>
   kableExtra::column_spec(3, width = "3.7cm") |>
   kableExtra::kable_styling(latex_options = c("striped", 
                                               "repeat_header, scale_down")) 
@@ -376,7 +379,9 @@ plot_predictions(data = example_quantile,
 
 ## Scoring forecasts with \fct{score} {short-title="Scoring forecasts with score()" #scoring}
 
-The function \fct{score} evaluates predictions against observed values and automatically applies the appropriate scoring metrics depending on the input data. We can simply call: 
+The function \fct{score} evaluates predictions against observed values and automatically applies the appropriate scoring metrics depending on the input data. 
+
+We can simply call: 
 
 ```{r}
 score(example_quantile) |>
