@@ -104,7 +104,7 @@
       <img src="" class="logo" alt=""><h1>Details on the metrics implemented in `scoringutils`</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-03-24</h4>
+            <h4 data-toc-skip class="date">2022-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/metric-details.Rmd" class="external-link"><code>vignettes/metric-details.Rmd</code></a></small>
       <div class="d-none name"><code>metric-details.Rmd</code></div>
@@ -156,16 +156,16 @@ Info
 Absolute error
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Suitable for scoring the median of a predictive distribution
@@ -173,19 +173,59 @@ Suitable for scoring the median of a predictive distribution
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
+Absolute error
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; ">
+Suitable for scoring the median of a predictive distribution
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
+Squared error
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
+Suitable for scoring the mean of a predictive distribution.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; ">
 Squared error
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Suitable for scoring the mean of a predictive distribution.
@@ -196,16 +236,16 @@ Suitable for scoring the mean of a predictive distribution.
 (Continuous) ranked probability score (CRPS)
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over- and under-confidence similarly, stable handling of outliers
@@ -216,16 +256,16 @@ Proper scoring rule (smaller is better), takes entire predictive distribution in
 Log score
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers
@@ -236,16 +276,16 @@ Proper scoring rule, smaller is better, only evaluates predictive density at obs
 (Weighted) interval score (WIS)
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals
@@ -256,16 +296,16 @@ Proper scoring rule, smaller is better, similar properties to CRPS and converges
 Dawid-Sebastiani score (DSS)
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over-confidence severely
@@ -276,16 +316,16 @@ Proper scoring rule, smaller is better, evaluates forecast based on mean and sd 
 Brier score (BS)
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over- and under-confidence similarly
@@ -296,16 +336,16 @@ Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalis
 Interval coverage
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Proportion of observations falling inside a given central prediction interval (= ‘empirical interval coverage’). Used to assess probabilistic calibration.
@@ -316,16 +356,16 @@ Proportion of observations falling inside a given central prediction interval (=
 Coverage deviation
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Average difference between empirical and nominal interval coverage (coverage that should have been realised)
@@ -336,16 +376,16 @@ Average difference between empirical and nominal interval coverage (coverage tha
 Quantile coverage
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.
@@ -356,16 +396,16 @@ Proportion of observations below a given quantile of the predictive CDF. Used to
 Dispersion
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Dispersion component of WIS, measures width of predictive intervals.
@@ -376,16 +416,16 @@ Dispersion component of WIS, measures width of predictive intervals.
 Median Absolute Deviation (Dispersion)
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Measure for dispersion of a forecast: median of the absolute deviations from the median
@@ -396,16 +436,16 @@ Measure for dispersion of a forecast: median of the absolute deviations from the
 Under-, Over-prediction
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Absolute amount of over-or under-prediction (components of WIS)
@@ -413,22 +453,62 @@ Absolute amount of over-or under-prediction (components of WIS)
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Probability integral transform (PIT)
+Under-, Over-prediction
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
+Absolute amount of over-or under-prediction (components of WIS)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
+Probability integral transform (PIT)
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; ">
+Dispersion
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.3cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; ">
+Dispersion component of WIS, measures width of predictive intervals.
 </td>
 </tr>
 <tr>
@@ -436,16 +516,16 @@ PIT transform is the CDF of the predictive distribution evaluated at the observe
 Bias
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(-\)</span>
+n
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\checkmark\)</span>
+y
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 Measure of relative tendency to over- or under-predict (aspect of calibration), bounded between -1 and 1 (ideally 0)
@@ -456,16 +536,16 @@ Measure of relative tendency to over- or under-predict (aspect of calibration), 
 Mean score ratio
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.3cm; ">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:left;width: 6.0cm; ">
 Compares performance of two models. Properties depend on the metric chosen for the comparison.
@@ -476,18 +556,38 @@ Compares performance of two models. Properties depend on the metric chosen for t
 (Scaled) Relative skill
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-<span class="math inline">\(\sim\)</span>
+~
 </td>
 <td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
+Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; ">
+(Scaled) Relative skill
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+~
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+~
+</td>
+<td style="text-align:center;width: 1.3cm; ">
+~
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+~
+</td>
+<td style="text-align:left;width: 6.0cm; ">
 Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.
 </td>
 </tr>

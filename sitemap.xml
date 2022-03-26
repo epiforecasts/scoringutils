@@ -112,6 +112,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/example_integer.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/example_point.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/example_quantile.html</loc>
   </url>
   <url>
@@ -157,7 +160,7 @@
     <loc>https://epiforecasts.io/scoringutils/reference/merge_pred_and_obs.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/metrics_summary.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/reference/metrics.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/pairwise_comparison.html</loc>
@@ -238,7 +241,7 @@
     <loc>https://epiforecasts.io/scoringutils/reference/score_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/scoringutils.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/reference/scoringutils-package.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/se_mean_sample.html</loc>
