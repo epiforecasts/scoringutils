@@ -103,18 +103,20 @@ summarise_scores <- function(scores,
       by = by
     )
 
-    # delete unnecessary columns
-    pairwise[, c(
-      "compare_against", "mean_scores_ratio",
-      "pval", "adj_pval"
-    ) := NULL]
-    pairwise <- unique(pairwise)
+    if (!is.null(pairwise)) {
+      # delete unnecessary columns
+      pairwise[, c(
+        "compare_against", "mean_scores_ratio",
+        "pval", "adj_pval"
+      ) := NULL]
+      pairwise <- unique(pairwise)
 
-    # merge back
-    scores <- merge(scores, pairwise,
-      all.x = TRUE,
-      by = get_forecast_unit(pairwise)
-    )
+      # merge back
+      scores <- merge(scores, pairwise,
+                      all.x = TRUE,
+                      by = get_forecast_unit(pairwise)
+      )
+    }
   }
 
   # summarise scores -----------------------------------------------------------

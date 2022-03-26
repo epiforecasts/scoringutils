@@ -35,5 +35,8 @@ The outcome was constructed as whether or not the actually
 observed value was below or above that mean prediction.
 This should not be understood as sound statistical practice, but rather
 as a practical way to create an example data set.
+
+The data was created using the script create-example-data.R in the inst/
+folder (or the top level folder in a compiled package).
 }
 \keyword{datasets}

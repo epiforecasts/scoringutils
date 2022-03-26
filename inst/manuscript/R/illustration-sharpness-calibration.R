@@ -27,11 +27,6 @@ p2 <-
   ggtitle("Less sharp") +
   theme_scoringutils()
 
-p1 + p2
-
-ggsave("inst/manuscript/plots/sharpness-illustration.png",
-       width = 10, height = 4)
-
 p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                         x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
              aes(x = x)) +
@@ -62,13 +57,9 @@ p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
   labs(y = "Density") +
   theme_scoringutils()
 
-
-p21 + p22 + p23
-
-ggsave("inst/manuscript/plots/calibration-illustration.png",
-       width = 10, height = 4)
-
 (p1 + p2) /
-  (p21 + p22 + p23)
-ggsave("inst/manuscript/plots/calibration-sharpness-illustration.png",
-       width = 8, height = 4.5)
+  (p21 + p22 + p23) &
+  plot_annotation(tag_levels = "A")
+
+ggsave("inst/manuscript/output/calibration-sharpness-illustration.png",
+       width = 8, height = 3.8)

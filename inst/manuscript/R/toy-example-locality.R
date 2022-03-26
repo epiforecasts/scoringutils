@@ -39,23 +39,15 @@ annotation <- df[, .(forecaster, crps, log_score, dss)] |> unique()
 
 ggplot(df, aes(x = factor(outcome), y = prob)) +
   geom_col() +
-  geom_text(data = annotation, x = 4, y = 0.3, hjust = "left",
-            aes(label = paste("CRPS: ", round(crps, 3)))) +
-  geom_text(data = annotation,x = 4, y = 0.27, hjust = "left",
-            aes(label = paste("Log score: ", round(log_score, 3)))) +
-  geom_text(data = annotation, x = 4, y = 0.24, hjust = "left",
-            aes(label = paste("DSS: ", round(dss, 3)))) +
+  geom_text(data = annotation, x = 4, y = 0.3, hjust = "left", size = 3,
+            aes(label = paste("CRPS: ", round(crps, 2)))) +
+  geom_text(data = annotation,x = 4, y = 0.27, hjust = "left", size = 3,
+            aes(label = paste("Log score: ", round(log_score, 2)))) +
+  geom_text(data = annotation, x = 4, y = 0.24, hjust = "left", size = 3,
+            aes(label = paste("DSS: ", round(dss, 2)))) +
   facet_wrap(~ forecaster) +
   geom_vline(aes(xintercept = 2), linetype = "dashed") +
   theme_scoringutils() +
   labs(y = "Probability assigned", x = "Possible outcomes")
 
-ggsave("inst/manuscript/plots/score-locality.png", height = 3, width = 8)
-
-
-# test with WIS. Problem: that doesn't work at the moment as intervals are
-# not symmetric
-# dt <- copy(df)
-# dt[, quantile := cumsum(prob_b)]
-# dt[, prediction := outcome]
-# score(dt[, .(true_value, prediction, quantile)])
+ggsave("inst/manuscript/output/score-locality.png", height = 3, width = 8)

@@ -29,3 +29,29 @@ test_that("summarise_scores() handles wrong by argument well", {
     fixed = TRUE
   )
 })
+
+test_that("summarise_scores() works with point forecasts in a quantile format", {
+  ex <- data.table::copy(example_quantile)
+
+  ex[quantile == 0.5, quantile := NA_real_]
+
+  scores <- score(ex)
+
+  summarise_scores(scores, by = "model",
+                   na.rm = TRUE)
+
+  summarise_scores(scores, by = "model",
+                   na.rm = TRUE,
+                   relative_skill = TRUE)
+
+  scores <- score(example_point[is.na(quantile)])
+
+  expect_warning(
+    expect_warning(
+      summarise_scores(scores, by = "model", relative_skill = TRUE, na.rm = TRUE)
+    )
+  )
+})
+
+
+

@@ -27,7 +27,7 @@ For a quantile-format forecast you should provide a column called \code{quantile
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}}
+metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
 
 \item{...}{additional parameters passed down to lower-level functions.
 For example, the following arguments can change how weighted interval
@@ -61,7 +61,8 @@ You can (and should) check your input using the function \code{\link[=check_fore
 before scoring.
 
 To obtain a quick overview of the evaluation metrics used, have a look at the
-\link{metrics_summary} data included in the package.
+\link{metrics} data included in the package. The column \code{metrics$Name} gives an
+overview of all available metric names that can be computed.
 }
 \examples{
 library(magrittr) # pipe operator
@@ -76,6 +77,11 @@ score(example_binary)
 score(example_quantile)
 score(example_integer)
 score(example_continuous)
+
+# score point forecasts (marked by 'NA' in the quantile column)
+score(example_point) \%>\%
+  summarise_scores(by = "model", na.rm = TRUE)
+
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
