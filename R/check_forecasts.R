@@ -94,13 +94,19 @@ check_forecasts <- function(data) {
   if (anyNA(data$true_value)) {
     messages <- c(
       messages,
-      "Some values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+      paste(
+        sum(is.na(data$true_value)),
+        "values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+      )
     )
   }
   if (anyNA(data$prediction)) {
     messages <- c(
       messages,
-      "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+      paste(
+        sum(is.na(data$prediction)),
+        "values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+      )
     )
   }
   data <- data[!is.na(true_value) & !is.na(prediction)]
