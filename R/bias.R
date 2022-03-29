@@ -88,12 +88,12 @@ bias_sample <- function(true_values, predictions) {
 #' For quantile forecasts, bias is measured as
 #'
 #' \deqn{
-#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\}) 
+#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
 #' \mathbf{1}( x_t \leq q_{t, 0.5}) \\
 #' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
 #'  \mathbf{1}( x_t \geq q_{t, 0.5}),
 #' }{
-#' B_t = (1 - 2 * max(i | q_{t,i} in Q_t and q_{t,i} <= x_t\)) 
+#' B_t = (1 - 2 * max(i | q_{t,i} in Q_t and q_{t,i} <= x_t\))
 #' 1( x_t <= q_{t, 0.5}) + (1 - 2 * min(i | q_{t,i} in Q_t and q_{t,i} >= x_t))
 #'  1( x_t >= q_{t, 0.5}),
 #' }
@@ -160,13 +160,13 @@ bias_range <- function(range, lower, upper,
   lower_predictions <- lower
   upper_predictions <- upper
 
-  if (any(is.na(upper)) | any(is.na(lower))) {
+  if (anyNA(upper) | anyNA(lower)) {
     range <- range[!is.na(upper) & !is.na(lower)]
     lower_predictions <- lower[!is.na(lower) & !is.na(upper)]
     upper_predictions <- upper[!is.na(lower) & !is.na(upper)]
 
     # deal with the point forecast case where inputs may be NA
-    if (length(range) == 0 | 
+    if (length(range) == 0 |
         length(lower_predictions) == 0 |
         length(upper_predictions) == 0
       ) {
@@ -184,8 +184,8 @@ bias_range <- function(range, lower, upper,
     median_prediction <- upper_predictions[range == 0]
   } else {
     median_prediction <-
-      0.5 * upper_predictions[range == min(range)] +
-      0.5 * lower_predictions[range == min(range)]
+      0.5 * upper_predictions[which.min(range)] +
+      0.5 * lower_predictions[which.min(range)]
   }
 
 
@@ -277,7 +277,7 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     stop("predictions and quantiles must have the same length")
   }
 
-  if (any(is.na(predictions))) {
+  if (anyNA(predictions)) {
     quantiles <- quantiles[!is.na(predictions)]
     predictions <- predictions[!is.na(predictions)]
   }

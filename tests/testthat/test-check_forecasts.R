@@ -8,10 +8,13 @@ test_that("check_forecasts() function has an error for empty data.frame", {
 })
 
 test_that("check_forecasts() function returns a message with NA in the data", {
-  check <- check_forecasts(example_quantile)
-  expect_equal(
+  expect_message(
+    { check <- check_forecasts(example_quantile) },
+    "\\d+ values for `prediction` are NA"
+  )
+  expect_match(
     unlist(check$messages),
-    "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."
+    "\\d+ values for `prediction` are NA"
   )
 })
 

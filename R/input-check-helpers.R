@@ -120,15 +120,16 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
+  calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+
   for (i in seq_along(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
-      stop(paste0(
+      stop(
         "variable '", varname,
         "' is `NULL` in the following function call: '",
         calling_function, "'"
-      ))
+      )
     }
   }
   return(invisible(NULL))
@@ -150,11 +151,7 @@ check_not_null <- function(...) {
 check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
-  lengths <- sapply(vars,
-    FUN = function(x) {
-      length(x)
-    }
-  )
+  lengths <- lengths(vars)
 
   lengths <- unique(lengths)
 

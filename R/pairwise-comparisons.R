@@ -62,6 +62,9 @@ pairwise_comparison <- function(scores,
                                 metric = "auto",
                                 baseline = NULL,
                                 ...) {
+
+  metric <- match.arg(metric, c("auto", available_metrics()))
+
   scores <- data.table::as.data.table(scores)
 
   # determine metric automatically
@@ -70,7 +73,7 @@ pairwise_comparison <- function(scores,
   }
 
   # check that values of the chosen metric are not NA
-  if (any(is.na(scores[[metric]]))) {
+  if (anyNA(scores[[metric]])) {
     msg <- paste0("Some values for the metric '", metric,
                   "' are NA. These have been removed. ",
                   "Maybe choose a different metric?")
@@ -98,7 +101,7 @@ pairwise_comparison <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
-  if (identical(sort(by), sort(forecast_unit))) {
+  if (setequal(by, forecast_unit)) {
     by <- "model"
     message("relative skill can only be computed if `by` is different from the unit of a single forecast. `by` was set to 'model'")
   }
