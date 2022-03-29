@@ -70,7 +70,7 @@ pairwise_comparison <- function(scores,
   }
 
   # check that values of the chosen metric are not NA
-  if (any(is.na(scores[[metric]]))) {
+  if (anyNA(scores[[metric]])) {
     msg <- paste0("Some values for the metric '", metric,
                   "' are NA. These have been removed. ",
                   "Maybe choose a different metric?")
