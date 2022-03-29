@@ -7,7 +7,6 @@
 #' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will
 #' be shown
-#' @inheritParams avail_forecasts
 #' @inheritParams pairwise_comparison
 #' @return A data.table with correlations for the different metrics
 #' @importFrom data.table setDT
