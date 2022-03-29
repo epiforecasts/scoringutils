@@ -184,8 +184,8 @@ bias_range <- function(range, lower, upper,
     median_prediction <- upper_predictions[range == 0]
   } else {
     median_prediction <-
-      0.5 * upper_predictions[range == min(range)] +
-      0.5 * lower_predictions[range == min(range)]
+      0.5 * upper_predictions[which.min(range)] +
+      0.5 * lower_predictions[which.min(range)]
   }
 
 
