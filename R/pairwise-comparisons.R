@@ -98,7 +98,7 @@ pairwise_comparison <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
-  if (identical(sort(by), sort(forecast_unit))) {
+  if (setequal(by, forecast_unit)) {
     by <- "model"
     message("relative skill can only be computed if `by` is different from the unit of a single forecast. `by` was set to 'model'")
   }
