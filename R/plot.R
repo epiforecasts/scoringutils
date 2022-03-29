@@ -114,7 +114,7 @@ plot_score_table <- function(scores,
     # geom_tile(fill = "blue") +
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identifCol, label = value)) +
-    scale_fill_gradient2(low = "steelblue", high = "salmon") +
+    colorspace::scale_fill_continuous_divergingx("Geyser") +
     theme_scoringutils() +
     theme(
       legend.title = element_blank(),
@@ -270,7 +270,6 @@ plot_ranges <- function(scores,
     ) +
     theme_scoringutils() +
     expand_limits(y = 0) +
-    scale_color_continuous(low = "steelblue", high = "salmon") +
     theme(
       legend.position = "right",
       axis.text.x = element_text(
@@ -329,7 +328,7 @@ plot_heatmap <- function(scores,
   ) +
     geom_tile() +
     geom_text(aes_string(label = metric)) +
-    scale_fill_gradient2(low = "skyblue", high = "red") +
+    colorspace::scale_fill_continuous_divergingx("Geyser") +
     theme_scoringutils() +
     theme(axis.text.x = element_text(
       angle = 90, vjust = 1,
@@ -851,14 +850,7 @@ plot_pairwise_comparison <- function(comparison_result,
       geom_text(aes(label = var_of_interest),
         na.rm = TRUE
       ) +
-      scale_fill_gradient2(
-        low = "skyblue", mid = "grey95",
-        high = "brown1",
-        na.value = "lightgrey",
-        midpoint = 0,
-        limits = c(-1, 1),
-        name = NULL
-      ) +
+      colorspace::scale_fill_continuous_divergingx("Geyser") +
       theme_scoringutils() +
       theme(
         axis.text.x = element_text(
@@ -960,14 +952,7 @@ plot_pairwise_comparison <- function(comparison_result,
     geom_text(aes(label = var_of_interest),
       na.rm = TRUE
     ) +
-    scale_fill_gradient2(
-      low = "skyblue", mid = "grey95",
-      high = high_col,
-      na.value = "lightgrey",
-      midpoint = 0,
-      limits = c(-1, 1),
-      name = NULL
-    ) +
+    colorspace::scale_fill_continuous_divergingx("Geyser") +
     theme_scoringutils() +
     theme(
       axis.text.x = element_text(
@@ -1180,10 +1165,6 @@ plot_avail_forecasts <- function(avail_forecasts,
   ) +
     geom_tile(aes(fill = `Number forecasts`),
       width = 0.97, height = 0.97
-    ) +
-    scale_fill_gradient(
-      low = "grey95", high = "steelblue",
-      na.value = "lightgrey"
     ) +
     theme_scoringutils() +
     theme(

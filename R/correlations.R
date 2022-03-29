@@ -95,12 +95,7 @@ plot_correlation <- function(correlations) {
       width = 0.97, height = 0.97
     ) +
     geom_text(aes(y = metric, label = value)) +
-    scale_fill_gradient2(
-      low = "steelblue", mid = "white",
-      high = "salmon",
-      name = "Correlation",
-      breaks = c(-1, -0.5, 0, 0.5, 1)
-    ) +
+    colorspace::scale_fill_continuous_divergingx("Geyser") +
     theme_scoringutils() +
     theme(
       axis.text.x = element_text(
