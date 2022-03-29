@@ -150,11 +150,7 @@ check_not_null <- function(...) {
 check_equal_length <- function(...,
                                one_allowed = TRUE) {
   vars <- list(...)
-  lengths <- sapply(vars,
-    FUN = function(x) {
-      length(x)
-    }
-  )
+  lengths <- lengths(vars)
 
   lengths <- unique(lengths)
 
