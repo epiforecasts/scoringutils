@@ -119,7 +119,7 @@ invert the mean scores ratio)</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="fu"><a href="pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">plot_pairwise_comparison</span><span class="op">(</span><span class="va">pairwise</span><span class="op">)</span> <span class="op">+</span></span>
 <span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span><span class="op">)</span></span>

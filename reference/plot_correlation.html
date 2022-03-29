@@ -100,7 +100,7 @@ between metrics</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="correlation.html">correlation</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There is a column called 'quantile' in the scores. Usually, you should call 'summarise_scores()' to summarise over quantiles and obtain one score per forecast before calculating correlations. You can ignore this warning if you know what you're doing.</span>
 <span class="r-in"><span class="fu">plot_correlation</span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span></span>

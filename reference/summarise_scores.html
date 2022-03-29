@@ -140,7 +140,7 @@ permutations for a permutation test. Default is 999). See
 <span class="r-in"><span class="co"># summarise over samples or quantiles to get one score per forecast</span></span>
 <span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location target_end_date target_type location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE      2021-05-08       Cases       Germany    2021-05-03</span>

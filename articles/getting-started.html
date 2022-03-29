@@ -104,7 +104,7 @@
       <img src="" class="logo" alt=""><h1>Getting started</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-03-26</h4>
+            <h4 data-toc-skip class="date">2022-03-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -173,7 +173,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt; Your forecasts seem to be for a target of the following type:</span>
 <span class="co">#&gt; $target_type</span>
 <span class="co">#&gt; [1] "integer"</span>
@@ -228,7 +228,7 @@
 <span class="co">#&gt; 4:             4            11       23       1058       3</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $messages</span>
-<span class="co">#&gt; [1] "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span></code></pre></div>
+<span class="co">#&gt; [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span></code></pre></div>
 <p>If you are unsure what your input data should look like, have a look at the <code>example_quantile</code>, <code>example_integer</code>, <code>example_continuous</code> and <code>example_binary</code> data sets provided in the package.</p>
 </div>
 <div class="section level2">
@@ -238,7 +238,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/avail_forecasts.html">avail_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                    model target_type Number forecasts</span>
 <span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases              128</span>
 <span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases              128</span>
@@ -255,7 +255,7 @@
   <span class="fu"><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="1056"></p>
 <p>You can also visualise forecasts directly using the <code><a href="../reference/plot_predictions.html">plot_predictions()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -281,7 +281,7 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;    location target_end_date target_type location_name forecast_date</span>
 <span class="co">#&gt; 1:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
 <span class="co">#&gt; 2:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
@@ -317,7 +317,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="17%">
@@ -426,7 +426,7 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;      location target_end_date target_type location_name forecast_date</span>
 <span class="co">#&gt;   1:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
 <span class="co">#&gt;   2:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
@@ -471,7 +471,7 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                    model interval_score dispersion underprediction</span>
 <span class="co">#&gt; 1: EuroCOVIDhub-baseline     14092.7647 2192.26967      4996.92898</span>
 <span class="co">#&gt; 2: EuroCOVIDhub-ensemble      8852.4196 1930.80064      2005.56357</span>
@@ -498,7 +498,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                    model target_type interval_score dispersion underprediction</span>
 <span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases          28000       4100         10000.0</span>
 <span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths            160         91             2.1</span>
@@ -526,7 +526,7 @@
                    relative_skill <span class="op">=</span> <span class="cn">TRUE</span>, 
                    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                    model target_type interval_score dispersion underprediction</span>
 <span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases    28483.57465 4102.50094    10284.972826</span>
 <span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths      159.40387   91.40625        2.098505</span>
@@ -565,7 +565,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/plot_score_table.html">plot_score_table</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 </div>
 <div class="section level3">
@@ -578,7 +578,7 @@
   <span class="fu"><a href="../reference/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"location"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-14-1.png" width="1056"></p>
 </div>
 <div class="section level3">
@@ -591,7 +591,7 @@
   <span class="fu"><a href="../reference/plot_wis.html">plot_wis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
 </div>
 </div>
@@ -604,7 +604,7 @@
 <code class="sourceCode R"><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> 
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                      model pit_value</span>
 <span class="co">#&gt;   1: EuroCOVIDhub-baseline     0.025</span>
 <span class="co">#&gt;   2: EuroCOVIDhub-baseline     0.525</span>
@@ -624,7 +624,7 @@
   <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">model</span> <span class="op">~</span> <span class="va">target_type</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
 <p>Similarly for quantile-based forecasts:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -641,7 +641,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"range"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/plot_interval_coverage.html">plot_interval_coverage</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
 <p>To visualise quantile coverage, you need to include “quantile” in <code>by</code>. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -650,7 +650,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"quantile"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/plot_quantile_coverage.html">plot_quantile_coverage</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 </div>
 <div class="section level2">
@@ -663,7 +663,7 @@
   <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                     model       compare_against mean_scores_ratio         pval</span>
 <span class="co">#&gt;  1: EuroCOVIDhub-baseline  epiforecasts-EpiNow2         1.3703452 9.164893e-18</span>
 <span class="co">#&gt;  2: EuroCOVIDhub-baseline EuroCOVIDhub-ensemble         1.5925819 2.608666e-32</span>
@@ -705,7 +705,7 @@
     by <span class="op">=</span> <span class="st">"model"</span>, relative_skill <span class="op">=</span> <span class="cn">TRUE</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span>
   <span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                    model interval_score dispersion underprediction</span>
 <span class="co">#&gt; 1: EuroCOVIDhub-baseline    14321.48926 2096.95360      5143.53567</span>
 <span class="co">#&gt; 2: EuroCOVIDhub-ensemble     8992.62316 1846.85278      2120.64029</span>
@@ -729,7 +729,7 @@
   <span class="fu"><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-23-1.png" width="864"></p>
 </div>
 <div class="section level2">
@@ -745,7 +745,7 @@
   <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;    interval_score dispersion underprediction overprediction coverage_deviation</span>
 <span class="co">#&gt; 1:           1.00       0.46            0.28           0.94              -0.34</span>
 <span class="co">#&gt; 2:           0.46       1.00            0.15           0.32              -0.12</span>
@@ -770,7 +770,7 @@
   <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/plot_correlation.html">plot_correlation</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
 </div>
 <div class="section level3">
@@ -784,7 +784,7 @@
   <span class="fu"><a href="../reference/plot_ranges.html">plot_ranges</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 </div>
 </div>
@@ -801,7 +801,7 @@
   <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/add_coverage.html">add_coverage</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="co">#&gt; 1.  3312 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="co">#&gt;                        model target_type location location_name target_end_date</span>
 <span class="co">#&gt;     1: EuroCOVIDhub-baseline       Cases       DE       Germany      2021-05-08</span>
 <span class="co">#&gt;     2: EuroCOVIDhub-baseline       Cases       DE       Germany      2021-05-08</span>

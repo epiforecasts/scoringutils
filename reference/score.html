@@ -169,7 +169,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Your forecasts seem to be for a target of the following type:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $target_type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "integer"</span>
@@ -224,13 +224,13 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:             4            11       23       1058       3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $messages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="add_coverage.html">add_coverage</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model target_type interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline       Cases    28483.57465 4102.50094    10284.972826</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-baseline      Deaths      159.40387   91.40625        2.098505</span>
@@ -259,8 +259,8 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-in"><span class="co"># forecast formats with different metrics</span></span>
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
@@ -287,7 +287,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:  epiforecasts-EpiNow2       2      0.300          0    0.090000 0.3566749</span>
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
@@ -338,7 +338,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20401:       108              TRUE</span>
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
@@ -377,7 +377,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:      73.5 1.262252e+04</span>
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
@@ -419,7 +419,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="doi:10.1371/journal.pcbi.1006785">doi
 <span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline     14092.7647 2192.26967      4996.92898</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble      8852.4196 1930.80064      2005.56357</span>

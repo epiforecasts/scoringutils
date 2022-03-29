@@ -153,7 +153,7 @@ you are doing.</p></li>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">check</span> <span class="op">&lt;-</span> <span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">check</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Your forecasts seem to be for a target of the following type:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $target_type</span>
@@ -209,12 +209,12 @@ you are doing.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:             4            11       23       1058       3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $messages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  Some values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Your forecasts seem to be for a target of the following type:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $target_type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "binary"</span>
@@ -269,8 +269,8 @@ you are doing.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:            11       3         10          2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $messages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Some values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "144 values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
