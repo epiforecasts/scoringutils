@@ -641,7 +641,6 @@ plot_interval_coverage <- function(scores,
     ) +
     geom_line(aes(y = coverage * 100)) +
     theme_scoringutils() +
-    theme(legend.position = "bottom") +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
     coord_cartesian(expand = FALSE)
@@ -706,7 +705,6 @@ plot_quantile_coverage <- function(scores,
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +
-    theme(legend.position = "bottom") +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
     scale_y_continuous(labels = function(x) {paste(100 * x)}) +
@@ -858,11 +856,6 @@ plot_pairwise_comparison <- function(comparison_result,
           hjust = 1, color = "brown4"
         ),
         axis.text.y = element_text(color = "steelblue4"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        # panel.background = element_rect(fill = "grey90"),
-        # axis.line.y = element_line(color = "steelblue4", size = 4),
-        # axis.line.x = element_line(color = "brown3", size = 4),
         legend.position = "none"
       ) +
       labs(
@@ -970,8 +963,6 @@ plot_pairwise_comparison <- function(comparison_result,
   if (type == "mean_scores_ratio") {
     plot <- plot +
       theme(
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
         axis.text.x = element_text(
           angle = 90, vjust = 1,
           hjust = 1, color = "brown4"
@@ -1168,8 +1159,6 @@ plot_avail_forecasts <- function(avail_forecasts,
     ) +
     theme_scoringutils() +
     theme(
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
       axis.text.x = element_text(
         angle = 90, vjust = 1,
         hjust = 1
