@@ -147,8 +147,8 @@ plot_score_table <- function(scores,
 #' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
-#' @importFrom ggplot2 ggplot aes_string aes geom_linerange facet_wrap labs
-#' theme theme_light unit guides guide_legend
+#' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
+#' theme theme_light unit guides guide_legend .data
 #' @export
 #'
 #' @examples
@@ -190,7 +190,7 @@ plot_wis <- function(scores,
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
-  plot <- ggplot(scores, aes_string(y = x)) +
+  plot <- ggplot(scores, aes(y = .data[[x]])) +
     geom_col(
       position = col_position,
       aes(x = component_value, fill = wis_component_name)
@@ -235,7 +235,7 @@ plot_wis <- function(scores,
 #' for colouring dots. The Default is "range".
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
-#' @importFrom ggplot2 ggplot aes_string aes geom_point geom_line
+#' @importFrom ggplot2 ggplot aes aes geom_point geom_line
 #' expand_limits theme theme_light element_text scale_color_continuous labs
 #' @export
 #'
@@ -257,9 +257,9 @@ plot_ranges <- function(scores,
                         colour = "range") {
   plot <- ggplot(
     scores,
-    aes_string(
-      x = x,
-      y = y,
+    aes(
+      x = .data[[x]],
+      y = .data[[y]],
       colour = colour
     )
   ) +
@@ -300,7 +300,7 @@ plot_ranges <- function(scores,
 #' tiles of the heatmap
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
-#' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
+#' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
 #'
@@ -320,14 +320,14 @@ plot_heatmap <- function(scores,
 
   plot <- ggplot(
     scores,
-    aes_string(
-      y = y,
-      x = x,
-      fill = metric
+    aes(
+      y = .data[[y]],
+      x = .data[[x]],
+      fill = .data[[metric]]
     )
   ) +
     geom_tile() +
-    geom_text(aes_string(label = metric)) +
+    geom_text(aes(label = .data[[metric]])) +
     colorspace::scale_fill_continuous_divergingx("Geyser") +
     theme_scoringutils() +
     theme(axis.text.x = element_text(
@@ -396,7 +396,7 @@ plot_heatmap <- function(scores,
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid aes_string geom_line
+#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
@@ -511,7 +511,7 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  plot <- ggplot(data = data, aes_string(x = x)) +
+  plot <- ggplot(data = data, aes(x = .data[[x]])) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
     theme_scoringutils()
 
@@ -604,7 +604,7 @@ plot_predictions <- function(data = NULL,
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
 #' facet_wrap facet_grid geom_polygon
 #' @importFrom data.table dcast
 #' @export
@@ -617,9 +617,9 @@ plot_predictions <- function(data = NULL,
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(scores, aes_string(
-    x = "range",
-    colour = colour
+  p1 <- ggplot(scores, aes(
+    x = range,
+    colour = .data[[colour]]
   )) +
     geom_polygon(
       data = data.frame(
@@ -663,7 +663,7 @@ plot_interval_coverage <- function(scores,
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
 #' scale_y_continuous
 #' @importFrom data.table dcast
 #' @export
@@ -677,7 +677,7 @@ plot_quantile_coverage <- function(scores,
                                    colour = "model") {
   p2 <- ggplot(
     data = scores,
-    aes_string(x = "quantile", colour = colour)
+    aes(x = quantile, colour = .data[[colour]])
   ) +
     geom_polygon(
       data = data.frame(
@@ -1121,7 +1121,7 @@ plot_pit <- function(pit,
 #' or not to show the actual count numbers on the plot
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' geom_tile scale_fill_gradient aes_string
+#' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
 #' @export
 #'
@@ -1152,7 +1152,7 @@ plot_avail_forecasts <- function(avail_forecasts,
 
   plot <- ggplot(
     avail_forecasts,
-    aes_string(y = y, x = x)
+    aes(y = .data[[y]], x = .data[[x]])
   ) +
     geom_tile(aes(fill = `Number forecasts`),
       width = 0.97, height = 0.97
