@@ -114,7 +114,7 @@ plot_score_table <- function(scores,
     # geom_tile(fill = "blue") +
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identifCol, label = value)) +
-    colorspace::scale_fill_continuous_divergingx("Geyser") +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     theme(
       legend.title = element_blank(),
@@ -196,6 +196,7 @@ plot_wis <- function(scores,
       aes(x = component_value, fill = wis_component_name)
     ) +
     theme_scoringutils() +
+    colorspace::scale_fill_discrete_qualitative("Set2") +
     guides(fill = guide_legend(title = "WIS component")) +
     xlab("WIS contributions")
 
@@ -260,7 +261,7 @@ plot_ranges <- function(scores,
     aes(
       x = .data[[x]],
       y = .data[[y]],
-      colour = colour
+      colour = .data[[colour]]
     )
   ) +
     geom_point(size = 2) +
@@ -268,6 +269,7 @@ plot_ranges <- function(scores,
       colour = "black",
       size = 0.01
     ) +
+    scale_color_continuous(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     expand_limits(y = 0) +
     theme(
@@ -328,7 +330,7 @@ plot_heatmap <- function(scores,
   ) +
     geom_tile() +
     geom_text(aes(label = .data[[metric]])) +
-    colorspace::scale_fill_continuous_divergingx("Geyser") +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     theme(axis.text.x = element_text(
       angle = 90, vjust = 1,
@@ -640,6 +642,7 @@ plot_interval_coverage <- function(scores,
       linetype = "dashed"
     ) +
     geom_line(aes(y = coverage * 100)) +
+    colorspace::scale_color_discrete_qualitative("Set2") +
     theme_scoringutils() +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
@@ -707,6 +710,7 @@ plot_quantile_coverage <- function(scores,
     theme_scoringutils() +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
+    colorspace::scale_color_discrete_qualitative("Set2") +
     scale_y_continuous(labels = function(x) {paste(100 * x)}) +
     coord_cartesian(expand = FALSE)
 
@@ -848,7 +852,14 @@ plot_pairwise_comparison <- function(comparison_result,
       geom_text(aes(label = var_of_interest),
         na.rm = TRUE
       ) +
-      colorspace::scale_fill_continuous_divergingx("Geyser") +
+      scale_fill_gradient2(
+        low = "steelblue", mid = "grey95",
+        high = "salmon",
+        na.value = "lightgrey",
+        midpoint = 0,
+        limits = c(-1, 1),
+        name = NULL
+      ) +
       theme_scoringutils() +
       theme(
         axis.text.x = element_text(
@@ -912,7 +923,7 @@ plot_pairwise_comparison <- function(comparison_result,
       breaks, plot_scales
     )]
 
-    high_col <- "brown1"
+    high_col <- "salmon"
   } else {
     comparison_result[, var_of_interest := round(pval, 3)]
     # implemnt breaks for colour heatmap
@@ -945,7 +956,14 @@ plot_pairwise_comparison <- function(comparison_result,
     geom_text(aes(label = var_of_interest),
       na.rm = TRUE
     ) +
-    colorspace::scale_fill_continuous_divergingx("Geyser") +
+    scale_fill_gradient2(
+      low = "steelblue", mid = "grey95",
+      high = high_col,
+      na.value = "lightgrey",
+      midpoint = 0,
+      limits = c(-1, 1),
+      name = NULL
+    ) +
     theme_scoringutils() +
     theme(
       axis.text.x = element_text(
@@ -1157,6 +1175,10 @@ plot_avail_forecasts <- function(avail_forecasts,
     geom_tile(aes(fill = `Number forecasts`),
       width = 0.97, height = 0.97
     ) +
+    scale_fill_gradient(
+      low = "grey95", high = "steelblue",
+      na.value = "lightgrey"
+    ) +
     theme_scoringutils() +
     theme(
       axis.text.x = element_text(
@@ -1174,6 +1196,66 @@ plot_avail_forecasts <- function(avail_forecasts,
   return(plot)
 }
 
+
+
+#' @title Plot Correlation Between Metrics
+#'
+#' @description
+#' Plots a heatmap of correlations between different metrics
+#'
+#' @param correlations A data.table of correlations between scores as produced
+#' by [correlation()].
+#' @return A ggplot2 object showing a coloured matrix of correlations
+#' between metrics
+#' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
+#' element_text labs coord_cartesian theme element_blank
+#' @importFrom data.table setDT melt
+#' @export
+#' @examples
+#' scores <- score(example_quantile)
+#' correlations <- correlation(scores)
+#' plot_correlation(correlations)
+plot_correlation <- function(correlations) {
+
+  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+
+  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+  rownames(lower_triangle) <- colnames(lower_triangle)
+
+  # get plot data.frame
+  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
+  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
+
+  # refactor levels according to the metrics
+  plot_df[, metric := factor(metric, levels = metrics)]
+  plot_df[, variable := factor(variable, rev(metrics))]
+
+  plot <- ggplot(plot_df, aes(
+    x = variable, y = metric,
+    fill = value
+  )) +
+    geom_tile(
+      color = "white",
+      width = 0.97, height = 0.97
+    ) +
+    geom_text(aes(y = metric, label = value)) +
+    scale_fill_gradient2(
+      low = "steelblue", mid = "white",
+      high = "salmon",
+      name = "Correlation",
+      breaks = c(-1, -0.5, 0, 0.5, 1)
+    ) +
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    labs(x = "", y = "") +
+    coord_cartesian(expand = FALSE)
+  return(plot)
+}
 
 
 
@@ -1194,3 +1276,6 @@ theme_scoringutils <- function() {
           panel.background = element_blank(),
           legend.position = "bottom")
 }
+
+
+

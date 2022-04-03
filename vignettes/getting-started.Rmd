@@ -164,8 +164,10 @@ A simple coloured table can be produced based on the scores:
 
 ```{r}
 score(example_integer) %>%
-  summarise_scores(by = c("model")) %>%
-  plot_score_table()
+  summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
+  summarise_scores(fun = signif, digits = 2) %>%
+  plot_score_table(by = "target_type") + 
+  facet_wrap(~ target_type, nrow = 1)
 ```
 
 ### Score heatmap
