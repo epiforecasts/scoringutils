@@ -148,6 +148,7 @@ plot_score_table <- function(scores,
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
+#' scale_fill_discrete
 #' theme theme_light unit guides guide_legend .data
 #' @export
 #'
@@ -196,7 +197,7 @@ plot_wis <- function(scores,
       aes(x = component_value, fill = wis_component_name)
     ) +
     theme_scoringutils() +
-    colorspace::scale_fill_discrete_qualitative("Set2") +
+    scale_fill_discrete(type = c("#DF536B", "#61D04F", "#2297E6")) +
     guides(fill = guide_legend(title = "WIS component")) +
     xlab("WIS contributions")
 
@@ -642,7 +643,6 @@ plot_interval_coverage <- function(scores,
       linetype = "dashed"
     ) +
     geom_line(aes(y = coverage * 100)) +
-    colorspace::scale_color_discrete_qualitative("Set2") +
     theme_scoringutils() +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
@@ -710,7 +710,6 @@ plot_quantile_coverage <- function(scores,
     theme_scoringutils() +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
-    colorspace::scale_color_discrete_qualitative("Set2") +
     scale_y_continuous(labels = function(x) {paste(100 * x)}) +
     coord_cartesian(expand = FALSE)
 

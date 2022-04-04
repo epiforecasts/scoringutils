@@ -52,8 +52,7 @@ Imports:
     ggplot2,
     scoringRules,
     stats,
-    methods,
-    colorspace
+    methods
 Suggests: 
     testthat,
     kableExtra,
