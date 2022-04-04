@@ -26,14 +26,18 @@ the data.frame will be split according \code{by} (but removing "model" before
 splitting) and the pairwise comparisons will be computed separately for the
 split data.frames.}
 
-\item{...}{additional arguments, such as test options that can get passed
-down to lower level functions. The following options are available:
-\code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
-instead of a two-sided test), \code{test_type} (character, either "non_parametric"
+\item{...}{additional arguments for the comparison between two models.
+The following options are available:
+\itemize{
+\item \code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
+instead of a two-sided test),
+\item \code{test_type} (character, either "non_parametric"
 or "permutation" determining which kind of test shall be conducted to
-determine p-values. Default is "non-parametric), \code{n_permutations} (number of
-permutations for a permutation test. Default is 999). See
-\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
+determine p-values. Default is "non-parametric),
+\item \code{n_permutations} (number of permutations for a permutation test.
+Default is 999). See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.
+}}
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but

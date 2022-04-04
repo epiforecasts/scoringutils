@@ -29,19 +29,7 @@ For a quantile-format forecast you should provide a column called \code{quantile
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
 
-\item{...}{additional parameters passed down to lower-level functions.
-For example, the following arguments can change how weighted interval
-scores are computed:
-\itemize{
-\item \code{count_median_twice} that controls how the interval scores for different
-intervals are summed up. This should be a logical (default is \code{FALSE}) that
-indicates whether or not to count the median twice when summarising.
-This would conceptually treat the
-median as a 0\% prediction interval, where the median is the lower as well as
-the upper bound. The alternative is to treat the median as a single quantile
-forecast instead of an interval. The interval score would then
-be better understood as an average of quantile scores.)
-}}
+\item{...}{additional parameters passed down to \code{\link[=quantile_score]{quantile_score()}}.#'}
 }
 \value{
 A data.table with unsummarised scores. There will be one score per

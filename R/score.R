@@ -33,18 +33,7 @@
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
 #' metrics see [available_metrics()], or check the [metrics] data set.
-#' @param ... additional parameters passed down to lower-level functions.
-#' For example, the following arguments can change how weighted interval
-#' scores are computed:
-#' - `count_median_twice` that controls how the interval scores for different
-#' intervals are summed up. This should be a logical (default is `FALSE`) that
-#' indicates whether or not to count the median twice when summarising.
-#' This would conceptually treat the
-#' median as a 0% prediction interval, where the median is the lower as well as
-#' the upper bound. The alternative is to treat the median as a single quantile
-#' forecast instead of an interval. The interval score would then
-#' be better understood as an average of quantile scores.)
-#'
+#' @param ... additional parameters passed down to [quantile_score()].#'
 #' @return A data.table with unsummarised scores. There will be one score per
 #' quantile or sample, which is usually not desired, so you should always run
 #' [summarise_scores()] on the unsummarised scores.

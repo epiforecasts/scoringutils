@@ -43,14 +43,9 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{...}{additional arguments, such as test options that can get passed
-down to lower level functions. The following options are available:
-\code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
-instead of a two-sided test), \code{test_type} (character, either "non_parametric"
-or "permutation" determining which kind of test shall be conducted to
-determine p-values. Default is "non-parametric), \code{n_permutations} (number of
-permutations for a permutation test. Default is 999). See
-\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
+\item{...}{additional parameters that can be passed to the summary function
+provided to \code{fun}. For more information see the documentation of the
+respective function.}
 }
 \description{
 Summarise scores as produced by \code{\link[=score]{score()}}-

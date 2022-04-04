@@ -25,6 +25,9 @@
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
+#' @param ... additional parameters that can be passed to the summary function
+#' provided to `fun`. For more information see the documentation of the
+#' respective function.
 #' @examples
 #' library(magrittr) # pipe operator
 #'
