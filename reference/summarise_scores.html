@@ -123,14 +123,9 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (<code>NULL</code>), relative skill will not be scaled with
 respect to a baseline model.</p></dd>
 <dt>...</dt>
-<dd><p>additional arguments, such as test options that can get passed
-down to lower level functions. The following options are available:
-<code>one_sided</code> (Boolean, default is <code>FALSE</code>, whether two conduct a one-sided
-instead of a two-sided test), <code>test_type</code> (character, either "non_parametric"
-or "permutation" determining which kind of test shall be conducted to
-determine p-values. Default is "non-parametric), <code>n_permutations</code> (number of
-permutations for a permutation test. Default is 999). See
-<code><a href="compare_two_models.html">compare_two_models()</a></code> for more information.</p></dd>
+<dd><p>additional parameters that can be passed to the summary function
+provided to <code>fun</code>. For more information see the documentation of the
+respective function.</p></dd>
 </dl></div>
 
     <div class="section level2">

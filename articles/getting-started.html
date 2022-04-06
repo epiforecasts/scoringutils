@@ -104,7 +104,7 @@
       <img src="" class="logo" alt=""><h1>Getting started</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-03-29</h4>
+            <h4 data-toc-skip class="date">2022-04-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -562,8 +562,10 @@
 <p>A simple coloured table can be produced based on the scores:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/plot_score_table.html">plot_score_table</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/plot_score_table.html">plot_score_table</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
 <span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
