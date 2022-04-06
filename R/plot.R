@@ -147,8 +147,9 @@ plot_score_table <- function(scores,
 #' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
-#' @importFrom ggplot2 ggplot aes_string aes geom_linerange facet_wrap labs
-#' theme theme_light unit guides guide_legend
+#' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
+#' scale_fill_discrete
+#' theme theme_light unit guides guide_legend .data
 #' @export
 #'
 #' @examples
@@ -190,12 +191,13 @@ plot_wis <- function(scores,
   # stack or fill the geom_col position
   col_position <- ifelse(relative_contributions, "fill", "stack")
 
-  plot <- ggplot(scores, aes_string(y = x)) +
+  plot <- ggplot(scores, aes(y = .data[[x]])) +
     geom_col(
       position = col_position,
       aes(x = component_value, fill = wis_component_name)
     ) +
     theme_scoringutils() +
+    scale_fill_discrete(type = c("#DF536B", "#61D04F", "#2297E6")) +
     guides(fill = guide_legend(title = "WIS component")) +
     xlab("WIS contributions")
 
@@ -235,7 +237,7 @@ plot_wis <- function(scores,
 #' for colouring dots. The Default is "range".
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
-#' @importFrom ggplot2 ggplot aes_string aes geom_point geom_line
+#' @importFrom ggplot2 ggplot aes aes geom_point geom_line
 #' expand_limits theme theme_light element_text scale_color_continuous labs
 #' @export
 #'
@@ -257,10 +259,10 @@ plot_ranges <- function(scores,
                         colour = "range") {
   plot <- ggplot(
     scores,
-    aes_string(
-      x = x,
-      y = y,
-      colour = colour
+    aes(
+      x = .data[[x]],
+      y = .data[[y]],
+      colour = .data[[colour]]
     )
   ) +
     geom_point(size = 2) +
@@ -268,9 +270,9 @@ plot_ranges <- function(scores,
       colour = "black",
       size = 0.01
     ) +
+    scale_color_continuous(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     expand_limits(y = 0) +
-    scale_color_continuous(low = "steelblue", high = "salmon") +
     theme(
       legend.position = "right",
       axis.text.x = element_text(
@@ -301,7 +303,7 @@ plot_ranges <- function(scores,
 #' tiles of the heatmap
 #' @return A ggplot2 object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
-#' @importFrom ggplot2 ggplot aes_string aes geom_tile geom_text
+#' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
 #'
@@ -321,15 +323,15 @@ plot_heatmap <- function(scores,
 
   plot <- ggplot(
     scores,
-    aes_string(
-      y = y,
-      x = x,
-      fill = metric
+    aes(
+      y = .data[[y]],
+      x = .data[[x]],
+      fill = .data[[metric]]
     )
   ) +
     geom_tile() +
-    geom_text(aes_string(label = metric)) +
-    scale_fill_gradient2(low = "skyblue", high = "red") +
+    geom_text(aes(label = .data[[metric]])) +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     theme(axis.text.x = element_text(
       angle = 90, vjust = 1,
@@ -397,7 +399,7 @@ plot_heatmap <- function(scores,
 #' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid aes_string geom_line
+#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
@@ -512,7 +514,7 @@ plot_predictions <- function(data = NULL,
     intervals[, quantile := NULL]
   }
 
-  plot <- ggplot(data = data, aes_string(x = x)) +
+  plot <- ggplot(data = data, aes(x = .data[[x]])) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
     theme_scoringutils()
 
@@ -605,7 +607,7 @@ plot_predictions <- function(data = NULL,
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
 #' facet_wrap facet_grid geom_polygon
 #' @importFrom data.table dcast
 #' @export
@@ -618,9 +620,9 @@ plot_predictions <- function(data = NULL,
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(scores, aes_string(
-    x = "range",
-    colour = colour
+  p1 <- ggplot(scores, aes(
+    x = range,
+    colour = .data[[colour]]
   )) +
     geom_polygon(
       data = data.frame(
@@ -642,7 +644,6 @@ plot_interval_coverage <- function(scores,
     ) +
     geom_line(aes(y = coverage * 100)) +
     theme_scoringutils() +
-    theme(legend.position = "bottom") +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
     coord_cartesian(expand = FALSE)
@@ -665,7 +666,7 @@ plot_interval_coverage <- function(scores,
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
 #' scale_y_continuous
 #' @importFrom data.table dcast
 #' @export
@@ -679,7 +680,7 @@ plot_quantile_coverage <- function(scores,
                                    colour = "model") {
   p2 <- ggplot(
     data = scores,
-    aes_string(x = "quantile", colour = colour)
+    aes(x = quantile, colour = .data[[colour]])
   ) +
     geom_polygon(
       data = data.frame(
@@ -707,7 +708,6 @@ plot_quantile_coverage <- function(scores,
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +
-    theme(legend.position = "bottom") +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
     scale_y_continuous(labels = function(x) {paste(100 * x)}) +
@@ -852,8 +852,8 @@ plot_pairwise_comparison <- function(comparison_result,
         na.rm = TRUE
       ) +
       scale_fill_gradient2(
-        low = "skyblue", mid = "grey95",
-        high = "brown1",
+        low = "steelblue", mid = "grey95",
+        high = "salmon",
         na.value = "lightgrey",
         midpoint = 0,
         limits = c(-1, 1),
@@ -866,11 +866,6 @@ plot_pairwise_comparison <- function(comparison_result,
           hjust = 1, color = "brown4"
         ),
         axis.text.y = element_text(color = "steelblue4"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        # panel.background = element_rect(fill = "grey90"),
-        # axis.line.y = element_line(color = "steelblue4", size = 4),
-        # axis.line.x = element_line(color = "brown3", size = 4),
         legend.position = "none"
       ) +
       labs(
@@ -927,7 +922,7 @@ plot_pairwise_comparison <- function(comparison_result,
       breaks, plot_scales
     )]
 
-    high_col <- "brown1"
+    high_col <- "salmon"
   } else {
     comparison_result[, var_of_interest := round(pval, 3)]
     # implemnt breaks for colour heatmap
@@ -961,7 +956,7 @@ plot_pairwise_comparison <- function(comparison_result,
       na.rm = TRUE
     ) +
     scale_fill_gradient2(
-      low = "skyblue", mid = "grey95",
+      low = "steelblue", mid = "grey95",
       high = high_col,
       na.value = "lightgrey",
       midpoint = 0,
@@ -985,8 +980,6 @@ plot_pairwise_comparison <- function(comparison_result,
   if (type == "mean_scores_ratio") {
     plot <- plot +
       theme(
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
         axis.text.x = element_text(
           angle = 90, vjust = 1,
           hjust = 1, color = "brown4"
@@ -1145,7 +1138,7 @@ plot_pit <- function(pit,
 #' or not to show the actual count numbers on the plot
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' geom_tile scale_fill_gradient aes_string
+#' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
 #' @export
 #'
@@ -1176,7 +1169,7 @@ plot_avail_forecasts <- function(avail_forecasts,
 
   plot <- ggplot(
     avail_forecasts,
-    aes_string(y = y, x = x)
+    aes(y = .data[[y]], x = .data[[x]])
   ) +
     geom_tile(aes(fill = `Number forecasts`),
       width = 0.97, height = 0.97
@@ -1187,8 +1180,6 @@ plot_avail_forecasts <- function(avail_forecasts,
     ) +
     theme_scoringutils() +
     theme(
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
       axis.text.x = element_text(
         angle = 90, vjust = 1,
         hjust = 1
@@ -1206,16 +1197,76 @@ plot_avail_forecasts <- function(avail_forecasts,
 
 
 
+#' @title Plot Correlation Between Metrics
+#'
+#' @description
+#' Plots a heatmap of correlations between different metrics
+#'
+#' @param correlations A data.table of correlations between scores as produced
+#' by [correlation()].
+#' @return A ggplot2 object showing a coloured matrix of correlations
+#' between metrics
+#' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
+#' element_text labs coord_cartesian theme element_blank
+#' @importFrom data.table setDT melt
+#' @export
+#' @examples
+#' scores <- score(example_quantile)
+#' correlations <- correlation(scores)
+#' plot_correlation(correlations)
+plot_correlation <- function(correlations) {
+
+  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+
+  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+  rownames(lower_triangle) <- colnames(lower_triangle)
+
+  # get plot data.frame
+  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
+  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
+
+  # refactor levels according to the metrics
+  plot_df[, metric := factor(metric, levels = metrics)]
+  plot_df[, variable := factor(variable, rev(metrics))]
+
+  plot <- ggplot(plot_df, aes(
+    x = variable, y = metric,
+    fill = value
+  )) +
+    geom_tile(
+      color = "white",
+      width = 0.97, height = 0.97
+    ) +
+    geom_text(aes(y = metric, label = value)) +
+    scale_fill_gradient2(
+      low = "steelblue", mid = "white",
+      high = "salmon",
+      name = "Correlation",
+      breaks = c(-1, -0.5, 0, 0.5, 1)
+    ) +
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    labs(x = "", y = "") +
+    coord_cartesian(expand = FALSE)
+  return(plot)
+}
+
+
 
 #' @title Scoringutils ggplot2 theme
 #'
 #' @description
 #' A theme for ggplot2 plots used in scoringutils
 #' @return A ggplot2 theme
-#' @importFrom ggplot2 theme theme_minimal element_line
+#' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
 #' @export
 theme_scoringutils <- function() {
-  theme_minimal() +
+  theme_minimal() %+replace%
     theme(axis.line = element_line(colour = "grey80"),
           axis.ticks = element_line(colour = "grey80"),
           panel.grid.major = element_blank(),
@@ -1224,3 +1275,6 @@ theme_scoringutils <- function() {
           panel.background = element_blank(),
           legend.position = "bottom")
 }
+
+
+

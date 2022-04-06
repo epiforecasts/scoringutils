@@ -110,6 +110,7 @@ deviation_sd <- res_sd |>
   melt(id.vars = c("sd", "mu"), value.name = "value", variable.name = "Score") |>
   ggplot(aes(x = sd, y = value, color = Score)) +
   geom_line() +
+  scale_color_discrete(type = c("#E69F00", "#56B4E9", "#009E73")) +
   theme_scoringutils() +
   geom_vline(aes(xintercept = 5), linetype = "dashed") +
   coord_cartesian(ylim=c(0, 20)) +
@@ -144,6 +145,7 @@ outlier <- res_mu2 |>
            color="black", hjust = "left", size = 3) +
   labs(y = "Score", x = "Observed value") +
   # geom_vline(aes(xintercept = 0), linetype = "dashed") +
+  scale_color_discrete(type = c("#E69F00", "#56B4E9", "#009E73")) +
   geom_area(stat = "function", fun = dnorm, color = "grey", fill = "grey", alpha = 0.5, xlim = c(0, 4)) +
   scale_y_continuous(label = label_fn)
 
