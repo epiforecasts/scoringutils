@@ -24,13 +24,15 @@
 #' split data.frames.
 #' @param baseline character vector of length one that denotes the baseline
 #' model against which to compare other models.
-#' @param ... additional arguments, such as test options that can get passed
-#' down to lower level functions. The following options are available:
-#' `one_sided` (Boolean, default is `FALSE`, whether two conduct a one-sided
-#' instead of a two-sided test), `test_type` (character, either "non_parametric"
+#' @param ... additional arguments for the comparison between two models.
+#' The following options are available:
+#' - `one_sided` (Boolean, default is `FALSE`, whether two conduct a one-sided
+#' instead of a two-sided test),
+#' - `test_type` (character, either "non_parametric"
 #' or "permutation" determining which kind of test shall be conducted to
-#' determine p-values. Default is "non-parametric), `n_permutations` (number of
-#' permutations for a permutation test. Default is 999). See
+#' determine p-values. Default is "non-parametric),
+#' - `n_permutations` (number of permutations for a permutation test.
+#' Default is 999). See
 #' [compare_two_models()] for more information.
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @importFrom data.table as.data.table data.table setnames copy

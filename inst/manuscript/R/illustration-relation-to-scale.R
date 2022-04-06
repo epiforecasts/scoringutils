@@ -22,17 +22,17 @@ df <- ex[sample == 1] |>
 
 df[, `Scoring rule` := factor(`Scoring rule`, levels = c("CRPS", "DSS", "Log score"))]
 
-p_true <- df |>
+ p_true <- df |>
   filter(horizon == 3, location == "DE") |>
   ggplot(aes(x = true_value, y = Score, ,group = `Scoring rule`,
              colour = `Scoring rule`)) +
   geom_line() +
+  scale_color_discrete(type = c("#E69F00", "#56B4E9", "#009E73")) +
   scale_y_log10() +
   scale_x_log10() +
   labs(x = "Observed value") +
   theme_scoringutils() +
   theme(legend.position = "bottom")
-
 
 
 # ------------------------------------------------------------------------------
@@ -114,6 +114,7 @@ p1 <- df |>
   geom_line() +
   facet_wrap(~ type, scales = "free") +
   scale_y_log10() +
+  scale_color_discrete(type = c("#E69F00", "#56B4E9", "#009E73")) +
   scale_x_log10() +
   theme_scoringutils() +
   labs(y = "Score", x = "Sd of F and G (mean constant)")
@@ -128,6 +129,7 @@ p2 <- df |>
   facet_wrap(~ type, scales = "free") +
   scale_y_log10() +
   scale_x_log10() +
+  scale_color_discrete(type = c("#E69F00", "#56B4E9", "#009E73")) +
   theme_scoringutils() +
   labs(y = "Score", x = "Mean of F and G (sd constant)")
 
