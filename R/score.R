@@ -33,7 +33,8 @@
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
 #' default), all available metrics will be computed. For a list of available
 #' metrics see [available_metrics()], or check the [metrics] data set.
-#' @param ... additional parameters passed down to [quantile_score()].#'
+#' @param ... additional parameters passed down to [score_quantile()] (internal
+#' function used for scoring forecasts in a quantile-based format).
 #' @return A data.table with unsummarised scores. There will be one score per
 #' quantile or sample, which is usually not desired, so you should always run
 #' [summarise_scores()] on the unsummarised scores.

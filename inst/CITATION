@@ -3,14 +3,15 @@ citHeader("To cite scoringutils in publications use:")
 citEntry(entry = "Manual",
   title        = "scoringutils: Utilities for Scoring and Assessing Predictions",
   author       = personList(as.person("Nikos I. Bosse"),
-                            as.person("Sam Abbott"),
+                            as.person("Hugo Gruson"),
+                            as.person("Sebastian Funk"),
                             as.person("EpiForecasts"),
-                            as.person("Sebastian Funk")),
+                            as.person("Sam Abbott")),
   year         = "2020",
   doi          = "10.5281/zenodo.4618017",
   textVersion  =
-  paste("Nikos I. Bosse, Sam Abbott, EpiForecasts, and Sebastian Funk (2020).",
-        "scoringutils: Utilities for Scoring and Assessing Predictions, ",
+  paste("Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam Abbott (2020).",
+        "scoringutils: Utilities for Scoring and Assessing Predictions,",
         "DOI: 10.5281/zenodo.4618017")
 )
 
