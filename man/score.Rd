@@ -29,7 +29,8 @@ For a quantile-format forecast you should provide a column called \code{quantile
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
 
-\item{...}{additional parameters passed down to \code{\link[=quantile_score]{quantile_score()}}.#'}
+\item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
+function used for scoring forecasts in a quantile-based format).}
 }
 \value{
 A data.table with unsummarised scores. There will be one score per
