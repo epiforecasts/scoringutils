@@ -360,14 +360,6 @@ plot_heatmap <- function(scores,
 #' These data sets, however, need to be mergeable, in order to connect forecasts
 #' and truth data for plotting.
 #' @param x character vector of length one that denotes the name of the variable
-#' @param forecasts data.frame with forecasts, that should follow the same
-#' general guidelines as the `data` input. Argument can be used to supply
-#' forecasts and truth data independently. Default is `NULL`.
-#' @param truth_data data.frame with a column called `true_value`
-#' on the x-axis. Usually, this will be "date", but it can be anything else.
-#' @param merge_by character vector with column names that `forecasts` and
-#' `truth_data` should be merged on. Default is `NULL` and merge will be
-#' attempted automatically.
 #' @param filter_truth a list with character strings that are used to filter
 #' the truth data. Every element is parsed as an expression and evaluated
 #' in order to filter the truth data.
@@ -421,10 +413,10 @@ plot_heatmap <- function(scores,
 #'   facet_formula = location ~ target_type,
 #'   range = c(0, 50, 90, 95)
 #' )
+#'
+
+
 plot_predictions <- function(data = NULL,
-                             forecasts = NULL,
-                             truth_data = NULL,
-                             merge_by = NULL,
                              x = "date",
                              filter_truth = list(),
                              filter_forecasts = list(),
@@ -439,16 +431,8 @@ plot_predictions <- function(data = NULL,
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
-  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
-    stop("need arguments 'data' in function 'score()', or alternatively 'forecasts' and 'truth_data'")
-  }
-
   if (is.null(data)) {
-    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by, join = "full")
-    if (nrow(data) == 0) {
-      warning("After attempting to merge, only an empty data.table was left")
-      return(data)
-    }
+    stop("need arguments 'data' in function 'score()")
   }
 
   # split truth data and forecasts in order to apply different filtering

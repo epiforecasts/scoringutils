@@ -6,9 +6,6 @@
 \usage{
 plot_predictions(
   data = NULL,
-  forecasts = NULL,
-  truth_data = NULL,
-  merge_by = NULL,
   x = "date",
   filter_truth = list(),
   filter_forecasts = list(),
@@ -33,17 +30,6 @@ able to apply different filtering to truth data and forecasts. Alternatively
 you can directly provide a separate truth and forecasts data frame as input.
 These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.}
-
-\item{forecasts}{data.frame with forecasts, that should follow the same
-general guidelines as the \code{data} input. Argument can be used to supply
-forecasts and truth data independently. Default is \code{NULL}.}
-
-\item{truth_data}{data.frame with a column called \code{true_value}
-on the x-axis. Usually, this will be "date", but it can be anything else.}
-
-\item{merge_by}{character vector with column names that \code{forecasts} and
-\code{truth_data} should be merged on. Default is \code{NULL} and merge will be
-attempted automatically.}
 
 \item{x}{character vector of length one that denotes the name of the variable}
 
@@ -109,4 +95,5 @@ plot_predictions(
   facet_formula = location ~ target_type,
   range = c(0, 50, 90, 95)
 )
+
 }
