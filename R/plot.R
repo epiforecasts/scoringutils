@@ -351,27 +351,13 @@ plot_heatmap <- function(scores,
 #' Make a plot of observed and predicted values
 #'
 #' @param data a data.frame that follows the same specifications outlined in
-#' [score()]. The data.frame needs to have columns called
-#' "true_value", "prediction" and then either a column called sample, or one
-#' called "quantile" or two columns called "range" and "boundary". Internally,
-#' these will be separated into a truth and forecast data set in order to be
-#' able to apply different filtering to truth data and forecasts. Alternatively
-#' you can directly provide a separate truth and forecasts data frame as input.
-#' These data sets, however, need to be mergeable, in order to connect forecasts
-#' and truth data for plotting.
+#' [score()]. To customise your plotting, you can filter your data using the
+#' function [filter_data()].
 #' @param by character vector with column names that denote categories by which
 #' the plot should be stratified. If for example you want to have a facetted
 #' plot, this should be a character vector with the columns used in facetting
 #' (note that the facetting still needs to be done outside of the function call)
 #' @param x character vector of length one that denotes the name of the variable
-#' @param filter_truth a list with character strings that are used to filter
-#' the truth data. Every element is parsed as an expression and evaluated
-#' in order to filter the truth data.
-#' @param filter_forecasts a list with character strings that are used to filter
-#' the truth data. Every element is parsed as an expression and evaluated
-#' in order to filter the forecasts data.
-#' @param filter_both same as `filter_truth` and `filter_forecasts`, but
-#' applied to both data sets for convenience.
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
 #' @return ggplot object with a plot of true vs predicted values
@@ -383,21 +369,24 @@ plot_heatmap <- function(scores,
 #'
 #' @examples
 #' library(ggplot2)
+#' library(magrittr)
 #'
-#' plot_predictions(
-#'   data = example_continuous,
-#'   x = "target_end_date",
-#'   by = c("target_type", "location"),
-#'   filter_truth = list(
-#'     'target_end_date <= "2021-07-22"',
-#'     'target_end_date > "2021-05-01"'
-#'   ),
-#'   filter_forecasts = list(
-#'     "model == 'EuroCOVIDhub-ensemble'",
-#'     'forecast_date == "2021-06-07"'
-#'   ),
-#'   range = c(0, 50, 90, 95)
-#' ) +
+#' example_continuous %>%
+#'   filter_data (
+#'     what = "truth",
+#'     target_end_date <= "2021-07-22",
+#'     target_end_date > "2021-05-01"
+#'   ) %>%
+#'   filter_data (
+#'     what = "forecast",
+#'     model == 'EuroCOVIDhub-ensemble',
+#'     forecast_date == "2021-06-07"
+#'   ) %>%
+#'   plot_predictions (
+#'     x = "target_end_date",
+#'     by = c("target_type", "location"),
+#'     range = c(0, 50, 90, 95)
+#'   ) +
 #'   facet_wrap(~ location + target_type, scales = "free_y")
 #'
 
@@ -405,9 +394,6 @@ plot_heatmap <- function(scores,
 plot_predictions <- function(data = NULL,
                              by = NULL,
                              x = "date",
-                             filter_truth = list(),
-                             filter_forecasts = list(),
-                             filter_both = list(),
                              range = c(0, 50, 90)) {
 
   # preparations ---------------------------------------------------------------
@@ -428,19 +414,6 @@ plot_predictions <- function(data = NULL,
     del_cols,
     make_unique = TRUE
   )
-
-  # function to filter forecast and truth data
-  filter_df <- function(data, filter_list) {
-    data <- data.table::copy(data)
-    # filter as specified by the user
-    for (expr in filter_list) {
-      data <- data[eval(parse(text = expr)), ]
-    }
-    return(data)
-  }
-
-  truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
-  forecasts <- filter_df(forecasts, c(filter_both, filter_forecasts))
 
   # find out what type of predictions we have. convert sample based to
   # range data
@@ -491,7 +464,6 @@ plot_predictions <- function(data = NULL,
       ggdist::scale_fill_ramp_discrete(
         name = "range"
       )
-
   }
 
   # We could treat this step as part of ggdist::geom_lineribbon() but we treat
@@ -531,8 +503,61 @@ plot_predictions <- function(data = NULL,
 
 
 
+#' @title Filter Data Used for Plotting
+#'
+#' @description
+#' Filter data before it gets passed to [plot_predictions()] using arbitrary
+#' filter statements. In contrast to the usual behaviour of filtering functions,
+#' rows do net get removed, but instead corresponding values of either
+#' 'true_value' or 'predction' will be replaced with `NA`. This allows to filter
+#' truth and prediction data independently (either turning 'true_value' or
+#' 'prediction' or both into `NA`).
+#'
+#' @param data a data.frame that follows the same specifications outlined in
+#' [score()].
+#' @param what character vector that determines which values should be turned
+#' into `NA`. If `what = truth`, values in the column 'true_value' will be
+#' turned into `NA`. If `what = forecast`, values in the column 'prediction'
+#' will be turned into `NA`. If `what = both`, values in both column will be
+#' turned into `NA`.
+#' @param ... logical statements used to filter the data
+#' @return A data.table
+#' @importFrom rlang enexprs
+#' @export
+#'
+#' @examples
+#' filter_data (
+#'     example_continuous,
+#'     what = "truth",
+#'     target_end_date <= "2021-07-22",
+#'     target_end_date > "2021-05-01"
+#'   )
 
+filter_data <- function(data = NULL,
+                        what = c("truth", "forecast", "both"),
+                        ...) {
 
+  check_not_null(data = data)
+
+  data <- data.table::copy(data)
+  what <- match.arg(what)
+
+  # turn ... arguments into expressions
+  args <- enexprs(...)
+
+  vars <- c()
+  if (what %in% c("forecast", "both")) {
+    vars <- c(vars, "prediction")
+  }
+  if (what %in% c("truth", "both")) {
+    vars <- c(vars, "true_value")
+  }
+
+  for (expr in args) {
+    data <- data[!eval(expr), eval(vars) := NA_real_]
+  }
+  return(data[])
+}
 
 
 #' @title Plot Interval Coverage

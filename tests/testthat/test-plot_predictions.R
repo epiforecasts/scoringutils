@@ -1,20 +1,21 @@
+library(magrittr)
+
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
   d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
 
-  p <- scoringutils::plot_predictions(
-    data = d,
-    by = c("location", "target_type"),
-    x = "target_end_date",
-    filter_truth = list(
-      'target_end_date <= "2021-07-22"',
-      'target_end_date > "2021-05-01"'
-    ),
-    filter_forecasts = list(
-      "model == 'EuroCOVIDhub-ensemble'",
-      'forecast_date == "2021-06-07"'
-    )
-  ) +
+  p <-
+    d %>%
+    filter_data(what = "truth",
+                target_end_date > '2021-05-01',
+                target_end_date <= '2021-07-22') %>%
+    filter_data(what = "forecast",
+                model == 'EuroCOVIDhub-ensemble',
+                forecast_date == '2021-06-07') %>%
+    plot_predictions(
+      by = c("location", "target_type"),
+      x = "target_end_date",
+    ) +
     facet_wrap(location ~ target_type, scales = "free_y")
 
   expect_s3_class(p, "ggplot")
@@ -26,20 +27,19 @@ test_that("plot_predictions() works with point forecasts", {
 test_that("plot_predictions() can handle an arbitrary number of quantiles", {
   example2 <- scoringutils::example_quantile
 
-  p <- scoringutils::plot_predictions(
-    example2,
-    by = c("location", "target_type"),
-    x = "target_end_date",
-    filter_truth = list(
-      'target_end_date <= "2021-07-22"',
-      'target_end_date > "2021-05-01"'
-    ),
-    filter_forecasts = list(
-      "model == 'EuroCOVIDhub-ensemble'",
-      'forecast_date == "2021-06-07"'
-    ),
-    range = c(0, 10, 20, 30, 40, 50, 60)
-  ) +
+  p <-
+    example2 %>%
+    filter_data(what = "truth",
+                target_end_date > '2021-05-01',
+                target_end_date <= '2021-07-22') %>%
+    filter_data(what = "forecast",
+                model == 'EuroCOVIDhub-ensemble',
+                forecast_date == '2021-06-07') %>%
+    plot_predictions(
+      by = c("location", "target_type"),
+      x = "target_end_date",
+      range = c(0, 10, 20, 30, 40, 50, 60)
+    ) +
     facet_wrap(location ~ target_type, scales = "free_y")
 
   expect_s3_class(p, "ggplot")
@@ -49,20 +49,19 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   example1 <- scoringutils::example_continuous
 
-  p2 <- scoringutils::plot_predictions(
-    example1,
-    by = c("location", "target_type"),
-    x = "target_end_date",
-    filter_truth = list(
-      'target_end_date <= "2021-07-22"',
-      'target_end_date > "2021-05-01"'
-    ),
-    filter_forecasts = list(
-      "model == 'EuroCOVIDhub-ensemble'",
-      'forecast_date == "2021-06-07"'
-    ),
-    range = c(0, 50, 90, 95)
-  ) +
+  p2 <-
+    example1 %>%
+    filter_data(what = "truth",
+                target_end_date > '2021-05-01',
+                target_end_date <= '2021-07-22') %>%
+    filter_data(what = "forecast",
+                model == 'EuroCOVIDhub-ensemble',
+                forecast_date == '2021-06-07') %>%
+    plot_predictions(
+      by = c("location", "target_type"),
+      x = "target_end_date",
+      range = c(0, 50, 90, 95)
+    ) +
     facet_wrap(location ~ target_type, scales = "free_y")
   expect_s3_class(p2, "ggplot")
 
@@ -77,18 +76,40 @@ test_that("plot_predictions() works without median", {
     is.na(quantile) | quantile != 0.5
   )
 
-  p <- scoringutils::plot_predictions(
-    example3, x = "target_end_date",
-    by = c("location_name", "target_type"),
-    filter_truth = list("target_end_date > '2021-06-25'",
-                        "target_end_date <= '2021-07-12'"),
-    filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                            "forecast_date == '2021-07-12'")
-  ) +
+  p <- example3 %>%
+    filter_data(what = "truth",
+                target_end_date > '2021-06-25',
+                target_end_date <= '2021-07-12') %>%
+    filter_data(what = "forecast",
+                model == 'EuroCOVIDhub-ensemble',
+                forecast_date == '2021-07-12') %>%
+    plot_predictions(
+      x = "target_end_date",
+      by = c("location_name", "target_type")
+    ) +
     facet_wrap(location_name ~ target_type, scales = "free_y")
+
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()
   vdiffr::expect_doppelganger('no_median', p)
 
+})
+
+
+test_that("filter_data() works", {
+
+  example_quantile %>%
+    filter_data(what = "both",
+                target_end_date > "1999-01-01")
+
+  expect_error(filter_data(example_quantile, what = "something wrong"))
+
+  expect_error(filter_data())
+
+  expect_error(
+    example_quantile %>%
+      filter_data(what = "truth",
+                  this_is_wrong > "1999-01-01")
+  )
 })
