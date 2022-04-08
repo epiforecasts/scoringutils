@@ -1,8 +1,10 @@
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
   d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
+
   p <- scoringutils::plot_predictions(
-    d,
+    data = d,
+    by = c("location", "target_type"),
     x = "target_end_date",
     filter_truth = list(
       'target_end_date <= "2021-07-22"',
@@ -11,10 +13,9 @@ test_that("plot_predictions() works with point forecasts", {
     filter_forecasts = list(
       "model == 'EuroCOVIDhub-ensemble'",
       'forecast_date == "2021-06-07"'
-    ),
-    allow_truth_without_pred = TRUE,
-    facet_formula = location ~ target_type
-  )
+    )
+  ) +
+    facet_wrap(location ~ target_type, scales = "free_y")
 
   expect_s3_class(p, "ggplot")
 
@@ -27,6 +28,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   p <- scoringutils::plot_predictions(
     example2,
+    by = c("location", "target_type"),
     x = "target_end_date",
     filter_truth = list(
       'target_end_date <= "2021-07-22"',
@@ -36,10 +38,10 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
       "model == 'EuroCOVIDhub-ensemble'",
       'forecast_date == "2021-06-07"'
     ),
-    allow_truth_without_pred = TRUE,
-    facet_formula = location ~ target_type,
     range = c(0, 10, 20, 30, 40, 50, 60)
-  )
+  ) +
+    facet_wrap(location ~ target_type, scales = "free_y")
+
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()
@@ -49,6 +51,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   p2 <- scoringutils::plot_predictions(
     example1,
+    by = c("location", "target_type"),
     x = "target_end_date",
     filter_truth = list(
       'target_end_date <= "2021-07-22"',
@@ -58,9 +61,9 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
       "model == 'EuroCOVIDhub-ensemble'",
       'forecast_date == "2021-06-07"'
     ),
-    facet_formula = location ~ target_type,
     range = c(0, 50, 90, 95)
-  )
+  ) +
+    facet_wrap(location ~ target_type, scales = "free_y")
   expect_s3_class(p2, "ggplot")
 
   skip_on_cran()
@@ -76,12 +79,13 @@ test_that("plot_predictions() works without median", {
 
   p <- scoringutils::plot_predictions(
     example3, x = "target_end_date",
+    by = c("location_name", "target_type"),
     filter_truth = list("target_end_date > '2021-06-25'",
                         "target_end_date <= '2021-07-12'"),
     filter_forecasts = list("model == 'EuroCOVIDhub-ensemble'",
-                            "forecast_date == '2021-07-12'"),
-    facet_formula = location_name ~ target_type
-  )
+                            "forecast_date == '2021-07-12'")
+  ) +
+    facet_wrap(location_name ~ target_type, scales = "free_y")
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()

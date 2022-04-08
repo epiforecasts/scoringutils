@@ -6,18 +6,12 @@
 \usage{
 plot_predictions(
   data = NULL,
+  by = NULL,
   x = "date",
   filter_truth = list(),
   filter_forecasts = list(),
   filter_both = list(),
-  range = c(0, 50, 90),
-  facet_formula = NULL,
-  facet_wrap_or_grid = "facet_wrap",
-  ncol = NULL,
-  scales = "free_y",
-  allow_truth_without_pred = FALSE,
-  remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample",
-    "interval")
+  range = c(0, 50, 90)
 )
 }
 \arguments{
@@ -30,6 +24,11 @@ able to apply different filtering to truth data and forecasts. Alternatively
 you can directly provide a separate truth and forecasts data frame as input.
 These data sets, however, need to be mergeable, in order to connect forecasts
 and truth data for plotting.}
+
+\item{by}{character vector with column names that denote categories by which
+the plot should be stratified. If for example you want to have a facetted
+plot, this should be a character vector with the columns used in facetting
+(note that the facetting still needs to be done outside of the function call)}
 
 \item{x}{character vector of length one that denotes the name of the variable}
 
@@ -46,31 +45,6 @@ applied to both data sets for convenience.}
 
 \item{range}{numeric vector indicating the interval ranges to plot. If 0 is
 included in range, the median prediction will be shown.}
-
-\item{facet_formula}{formula for facetting in ggplot. If this is \code{NULL}
-(the default), no facetting will take place}
-
-\item{facet_wrap_or_grid}{Use ggplot2's \code{facet_wrap} or
-\code{facet_grid}? Anything other than "facet_wrap" will be interpreted as
-\code{facet_grid}. This only takes effect if \code{facet_formula} is not
-\code{NULL}}
-
-\item{ncol}{Number of columns for facet wrap. Only relevant if
-\code{facet_formula} is given and \code{facet_wrap_or_grid == "facet_wrap"}}
-
-\item{scales}{scales argument that gets passed down to ggplot. Only necessary
-if you make use of facetting. Default is "free_y"}
-
-\item{allow_truth_without_pred}{logical, whether or not
-to allow instances where there is truth data, but no forecast. If \code{FALSE}
-(the default), these get filtered out.}
-
-\item{remove_from_truth}{character vector of columns to remove from the
-truth data. The reason these columns are removed is that sometimes different
-models or forecasters don't cover the same periods. Removing these columns
-from the truth data makes sure that nevertheless all available truth data
-is plotted (instead of having different true values depending on the
-period covered by a certain model).}
 }
 \value{
 ggplot object with a plot of true vs predicted values
@@ -79,11 +53,12 @@ ggplot object with a plot of true vs predicted values
 Make a plot of observed and predicted values
 }
 \examples{
-example1 <- scoringutils::example_continuous
+library(ggplot2)
 
 plot_predictions(
-  example1,
+  data = example_continuous,
   x = "target_end_date",
+  by = c("target_type", "location"),
   filter_truth = list(
     'target_end_date <= "2021-07-22"',
     'target_end_date > "2021-05-01"'
@@ -92,8 +67,8 @@ plot_predictions(
     "model == 'EuroCOVIDhub-ensemble'",
     'forecast_date == "2021-06-07"'
   ),
-  facet_formula = location ~ target_type,
   range = c(0, 50, 90, 95)
-)
+) +
+  facet_wrap(~ location + target_type, scales = "free_y")
 
 }

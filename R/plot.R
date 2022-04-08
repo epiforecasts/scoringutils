@@ -359,6 +359,10 @@ plot_heatmap <- function(scores,
 #' you can directly provide a separate truth and forecasts data frame as input.
 #' These data sets, however, need to be mergeable, in order to connect forecasts
 #' and truth data for plotting.
+#' @param by character vector with column names that denote categories by which
+#' the plot should be stratified. If for example you want to have a facetted
+#' plot, this should be a character vector with the columns used in facetting
+#' (note that the facetting still needs to be done outside of the function call)
 #' @param x character vector of length one that denotes the name of the variable
 #' @param filter_truth a list with character strings that are used to filter
 #' the truth data. Every element is parsed as an expression and evaluated
@@ -368,27 +372,8 @@ plot_heatmap <- function(scores,
 #' in order to filter the forecasts data.
 #' @param filter_both same as `filter_truth` and `filter_forecasts`, but
 #' applied to both data sets for convenience.
-#' @param remove_from_truth character vector of columns to remove from the
-#' truth data. The reason these columns are removed is that sometimes different
-#' models or forecasters don't cover the same periods. Removing these columns
-#' from the truth data makes sure that nevertheless all available truth data
-#' is plotted (instead of having different true values depending on the
-#' period covered by a certain model).
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
-#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
-#' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param allow_truth_without_pred logical, whether or not
-#' to allow instances where there is truth data, but no forecast. If `FALSE`
-#' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
 #' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
@@ -397,11 +382,12 @@ plot_heatmap <- function(scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::example_continuous
+#' library(ggplot2)
 #'
 #' plot_predictions(
-#'   example1,
+#'   data = example_continuous,
 #'   x = "target_end_date",
+#'   by = c("target_type", "location"),
 #'   filter_truth = list(
 #'     'target_end_date <= "2021-07-22"',
 #'     'target_end_date > "2021-05-01"'
@@ -410,24 +396,19 @@ plot_heatmap <- function(scores,
 #'     "model == 'EuroCOVIDhub-ensemble'",
 #'     'forecast_date == "2021-06-07"'
 #'   ),
-#'   facet_formula = location ~ target_type,
 #'   range = c(0, 50, 90, 95)
-#' )
+#' ) +
+#'   facet_wrap(~ location + target_type, scales = "free_y")
 #'
 
 
 plot_predictions <- function(data = NULL,
+                             by = NULL,
                              x = "date",
                              filter_truth = list(),
                              filter_forecasts = list(),
                              filter_both = list(),
-                             range = c(0, 50, 90),
-                             facet_formula = NULL,
-                             facet_wrap_or_grid = "facet_wrap",
-                             ncol = NULL,
-                             scales = "free_y",
-                             allow_truth_without_pred = FALSE,
-                             remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval")) {
+                             range = c(0, 50, 90)) {
 
   # preparations ---------------------------------------------------------------
   # check data argument is provided
@@ -439,6 +420,14 @@ plot_predictions <- function(data = NULL,
   truth_data <- data.table::as.data.table(data)[!is.na(true_value)]
   forecasts <- data.table::as.data.table(data)[!is.na(prediction)]
 
+  del_cols <-
+    colnames(truth_data)[!(colnames(truth_data) %in% c(by, "true_value", x))]
+
+  truth_data <- delete_columns(
+    truth_data,
+    del_cols,
+    make_unique = TRUE
+  )
 
   # function to filter forecast and truth data
   filter_df <- function(data, filter_list) {
@@ -453,36 +442,15 @@ plot_predictions <- function(data = NULL,
   truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
   forecasts <- filter_df(forecasts, c(filter_both, filter_forecasts))
 
-  # if specified, get all combinations of the facet variables present in the
-  # forecasts and filter the truth_data accordingly
-  if (!allow_truth_without_pred && !is.null(facet_formula)) {
-    facet_vars <- all.vars(facet_formula)
-    index <- colnames(forecasts)[(colnames(forecasts) %in% facet_vars)]
-    combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
-    data.table::setkey(combinations_forecasts)
-    data.table::setkey(truth_data)
-
-    # keep part where predictions are na so they don't get removed by merging
-    truth_without_pred <- truth_data[is.na(prediction)]
-    truth_data <- merge(truth_data, combinations_forecasts)
-    # add back together
-    truth_data <- data.table::rbindlist(list(truth_without_pred, truth_data),
-      use.names = TRUE
-    )
-  }
-
-  # delete certain columns that denominate the forecaster from the truth data
-  truth_data <- delete_columns(truth_data, remove_from_truth, make_unique = TRUE)
-
   # find out what type of predictions we have. convert sample based to
   # range data
-  colnames <- colnames(forecasts)
-  if ("sample" %in% colnames) {
+  prediction_type <- get_prediction_type(data)
+  if (any(c("integer", "continuous") %in% prediction_type)) {
     forecasts <- sample_to_range_long(forecasts,
       range = range,
       keep_quantile_col = FALSE
     )
-  } else if ("quantile" %in% colnames) {
+  } else if (prediction_type == "quantile") {
     forecasts <- quantile_to_range_long(forecasts,
       keep_quantile_col = FALSE
     )
@@ -500,7 +468,8 @@ plot_predictions <- function(data = NULL,
 
   plot <- ggplot(data = data, aes(x = .data[[x]])) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
-    theme_scoringutils()
+    theme_scoringutils() +
+    ylab("True and predicted values")
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
@@ -555,20 +524,6 @@ plot_predictions <- function(data = NULL,
         aes(y = true_value, colour = "actual"),
         lwd = 0.2
       )
-  }
-
-  plot <- plot +
-    ylab("True and predicted values")
-
-  # facet if specified by the user
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        facet_wrap(facet_formula, scales = scales, ncol = ncol)
-    } else {
-      plot <- plot +
-        facet_grid(facet_formula, scales = scales)
-    }
   }
 
   return(plot)
