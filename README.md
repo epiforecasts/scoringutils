@@ -2,6 +2,7 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 ================
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://codecov.io/gh/epiforecasts/scoringutils/)
 [![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
@@ -70,17 +71,19 @@ filter the available forecasts for a single model, and forecast date.
 
 ``` r
 example_quantile %>%
+  filter_data(what = "truth", 
+              target_end_date <= "2021-07-15", 
+              target_end_date > "2021-05-22"
+  ) %>%
+  filter_data(what = "forecast",
+              model == 'EuroCOVIDhub-ensemble', 
+              forecast_date == "2021-06-28"
+  ) %>%
   plot_predictions(
     x = "target_end_date",
-    filter_truth = list(
-      'target_end_date <= "2021-07-15"', 'target_end_date > "2021-05-22"'
-    ),
-    filter_forecasts = list(
-      "model == 'EuroCOVIDhub-ensemble'", 'forecast_date == "2021-06-28"'
-    )
+    by = c("target_type", "location")
   ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free") +
-  theme(legend.position = "bottom")
+  facet_wrap(target_type ~ location, ncol = 4, scales = "free") 
 ```
 
 ![](man/figures/unnamed-chunk-4-1.png)<!-- -->
@@ -110,7 +113,7 @@ example_quantile %>%
   ) %>%
   kable()
 #> The following messages were produced when checking inputs:
-#> 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
+#> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
 | model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
@@ -136,15 +139,15 @@ following,
     #> 
     #> To cite scoringutils in publications use:
     #> 
-    #>   Nikos I. Bosse, Sam Abbott, EpiForecasts, and Sebastian Funk (2020).
-    #>   scoringutils: Utilities for Scoring and Assessing Predictions, DOI:
-    #>   10.5281/zenodo.4618017
+    #>   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam
+    #>   Abbott (2020). scoringutils: Utilities for Scoring and Assessing
+    #>   Predictions, DOI: 10.5281/zenodo.4618017
     #> 
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
     #>     title = {scoringutils: Utilities for Scoring and Assessing Predictions},
-    #>     author = {Nikos I. Bosse and Sam Abbott and {EpiForecasts} and Sebastian Funk},
+    #>     author = {Nikos I. Bosse and Hugo Gruson and Sebastian Funk and {EpiForecasts} and Sam Abbott},
     #>     year = {2020},
     #>     doi = {10.5281/zenodo.4618017},
     #>   }
