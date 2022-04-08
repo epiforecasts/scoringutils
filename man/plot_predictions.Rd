@@ -4,26 +4,12 @@
 \alias{plot_predictions}
 \title{Plot Predictions vs True Values}
 \usage{
-plot_predictions(
-  data = NULL,
-  by = NULL,
-  x = "date",
-  filter_truth = list(),
-  filter_forecasts = list(),
-  filter_both = list(),
-  range = c(0, 50, 90)
-)
+plot_predictions(data = NULL, by = NULL, x = "date", range = c(0, 50, 90))
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
-\code{\link[=score]{score()}}. The data.frame needs to have columns called
-"true_value", "prediction" and then either a column called sample, or one
-called "quantile" or two columns called "range" and "boundary". Internally,
-these will be separated into a truth and forecast data set in order to be
-able to apply different filtering to truth data and forecasts. Alternatively
-you can directly provide a separate truth and forecasts data frame as input.
-These data sets, however, need to be mergeable, in order to connect forecasts
-and truth data for plotting.}
+\code{\link[=score]{score()}}. To customise your plotting, you can filter your data using the
+function \code{\link[=filter_data]{filter_data()}}.}
 
 \item{by}{character vector with column names that denote categories by which
 the plot should be stratified. If for example you want to have a facetted
@@ -31,17 +17,6 @@ plot, this should be a character vector with the columns used in facetting
 (note that the facetting still needs to be done outside of the function call)}
 
 \item{x}{character vector of length one that denotes the name of the variable}
-
-\item{filter_truth}{a list with character strings that are used to filter
-the truth data. Every element is parsed as an expression and evaluated
-in order to filter the truth data.}
-
-\item{filter_forecasts}{a list with character strings that are used to filter
-the truth data. Every element is parsed as an expression and evaluated
-in order to filter the forecasts data.}
-
-\item{filter_both}{same as \code{filter_truth} and \code{filter_forecasts}, but
-applied to both data sets for convenience.}
 
 \item{range}{numeric vector indicating the interval ranges to plot. If 0 is
 included in range, the median prediction will be shown.}
@@ -54,21 +29,24 @@ Make a plot of observed and predicted values
 }
 \examples{
 library(ggplot2)
+library(magrittr)
 
-plot_predictions(
-  data = example_continuous,
-  x = "target_end_date",
-  by = c("target_type", "location"),
-  filter_truth = list(
-    'target_end_date <= "2021-07-22"',
-    'target_end_date > "2021-05-01"'
-  ),
-  filter_forecasts = list(
-    "model == 'EuroCOVIDhub-ensemble'",
-    'forecast_date == "2021-06-07"'
-  ),
-  range = c(0, 50, 90, 95)
-) +
+example_continuous \%>\%
+  filter_data (
+    what = "truth",
+    target_end_date <= "2021-07-22",
+    target_end_date > "2021-05-01"
+  ) \%>\%
+  filter_data (
+    what = "forecast",
+    model == 'EuroCOVIDhub-ensemble',
+    forecast_date == "2021-06-07"
+  ) \%>\%
+  plot_predictions (
+    x = "target_end_date",
+    by = c("target_type", "location"),
+    range = c(0, 50, 90, 95)
+  ) +
   facet_wrap(~ location + target_type, scales = "free_y")
 
 }

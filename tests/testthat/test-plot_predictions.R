@@ -103,6 +103,11 @@ test_that("filter_data() works", {
     filter_data(what = "both",
                 target_end_date > "1999-01-01")
 
+  example_quantile %>%
+    filter_data(what = "both",
+                'target_end_date > "1999-01-01"')
+
+
   expect_error(filter_data(example_quantile, what = "something wrong"))
 
   expect_error(filter_data())
