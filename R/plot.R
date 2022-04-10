@@ -513,8 +513,7 @@ plot_predictions <- function(data = NULL,
 #' truth and prediction data independently (either turning 'true_value' or
 #' 'prediction' or both into `NA`).
 #'
-#' @param data a data.frame that follows the same specifications outlined in
-#' [score()].
+#' @inheritParams score
 #' @param what character vector that determines which values should be turned
 #' into `NA`. If `what = truth`, values in the column 'true_value' will be
 #' turned into `NA`. If `what = forecast`, values in the column 'prediction'
