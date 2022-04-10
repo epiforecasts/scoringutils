@@ -418,7 +418,7 @@ plot_predictions <- function(data = NULL,
   # find out what type of predictions we have. convert sample based to
   # range data
   prediction_type <- get_prediction_type(data)
-  if (any(c("integer", "continuous") %in% prediction_type)) {
+  if (prediction_type %in% c("integer", "continuous")) {
     forecasts <- sample_to_range_long(forecasts,
       range = range,
       keep_quantile_col = FALSE
