@@ -522,6 +522,7 @@ plot_predictions <- function(data = NULL,
 #' @param ... logical statements used to filter the data
 #' @return A data.table
 #' @importFrom rlang enexprs
+#' @keywords plotting
 #' @export
 #'
 #' @examples
@@ -1227,6 +1228,7 @@ plot_correlation <- function(correlations) {
 #' A theme for ggplot2 plots used in scoringutils
 #' @return A ggplot2 theme
 #' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
+#' @keywords plotting
 #' @export
 theme_scoringutils <- function() {
   theme_minimal() %+replace%
