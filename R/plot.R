@@ -515,9 +515,9 @@ plot_predictions <- function(data = NULL,
 #'
 #' @inheritParams score
 #' @param what character vector that determines which values should be turned
-#' into `NA`. If `what = truth`, values in the column 'true_value' will be
-#' turned into `NA`. If `what = forecast`, values in the column 'prediction'
-#' will be turned into `NA`. If `what = both`, values in both column will be
+#' into `NA`. If `what = "truth"`, values in the column 'true_value' will be
+#' turned into `NA`. If `what = "forecast"`, values in the column 'prediction'
+#' will be turned into `NA`. If `what = "both"`, values in both column will be
 #' turned into `NA`.
 #' @param ... logical statements used to filter the data
 #' @return A data.table
