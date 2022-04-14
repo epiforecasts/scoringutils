@@ -32,18 +32,8 @@ See \code{\link[=available_metrics]{available_metrics()}} for available metrics.
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
 
-\item{...}{additional arguments for the comparison between two models.
-The following options are available:
-\itemize{
-\item \code{one_sided} (Boolean, default is \code{FALSE}, whether two conduct a one-sided
-instead of a two-sided test),
-\item \code{test_type} (character, either "non_parametric"
-or "permutation" determining which kind of test shall be conducted to
-determine p-values. Default is "non-parametric),
-\item \code{n_permutations} (number of permutations for a permutation test.
-Default is 999). See
-\code{\link[=compare_two_models]{compare_two_models()}} for more information.
-}}
+\item{...}{additional arguments for the comparison between two models. See
+\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores
