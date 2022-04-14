@@ -12,3 +12,4 @@ A ggplot2 theme
 \description{
 A theme for ggplot2 plots used in scoringutils
 }
+\keyword{plotting}

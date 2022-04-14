@@ -343,60 +343,21 @@ plot_heatmap <- function(scores,
 }
 
 
-
-
 #' @title Plot Predictions vs True Values
 #'
 #' @description
 #' Make a plot of observed and predicted values
 #'
 #' @param data a data.frame that follows the same specifications outlined in
-#' [score()]. The data.frame needs to have columns called
-#' "true_value", "prediction" and then either a column called sample, or one
-#' called "quantile" or two columns called "range" and "boundary". Internally,
-#' these will be separated into a truth and forecast data set in order to be
-#' able to apply different filtering to truth data and forecasts. Alternatively
-#' you can directly provide a separate truth and forecasts data frame as input.
-#' These data sets, however, need to be mergeable, in order to connect forecasts
-#' and truth data for plotting.
+#' [score()]. To customise your plotting, you can filter your data using the
+#' function [make_NA()].
+#' @param by character vector with column names that denote categories by which
+#' the plot should be stratified. If for example you want to have a facetted
+#' plot, this should be a character vector with the columns used in facetting
+#' (note that the facetting still needs to be done outside of the function call)
 #' @param x character vector of length one that denotes the name of the variable
-#' @param forecasts data.frame with forecasts, that should follow the same
-#' general guidelines as the `data` input. Argument can be used to supply
-#' forecasts and truth data independently. Default is `NULL`.
-#' @param truth_data data.frame with a column called `true_value`
-#' on the x-axis. Usually, this will be "date", but it can be anything else.
-#' @param merge_by character vector with column names that `forecasts` and
-#' `truth_data` should be merged on. Default is `NULL` and merge will be
-#' attempted automatically.
-#' @param filter_truth a list with character strings that are used to filter
-#' the truth data. Every element is parsed as an expression and evaluated
-#' in order to filter the truth data.
-#' @param filter_forecasts a list with character strings that are used to filter
-#' the truth data. Every element is parsed as an expression and evaluated
-#' in order to filter the forecasts data.
-#' @param filter_both same as `filter_truth` and `filter_forecasts`, but
-#' applied to both data sets for convenience.
-#' @param remove_from_truth character vector of columns to remove from the
-#' truth data. The reason these columns are removed is that sometimes different
-#' models or forecasters don't cover the same periods. Removing these columns
-#' from the truth data makes sure that nevertheless all available truth data
-#' is plotted (instead of having different true values depending on the
-#' period covered by a certain model).
 #' @param range numeric vector indicating the interval ranges to plot. If 0 is
 #' included in range, the median prediction will be shown.
-#' @param facet_formula formula for facetting in ggplot. If this is `NULL`
-#' (the default), no facetting will take place
-#' @param facet_wrap_or_grid Use ggplot2's `facet_wrap` or
-#' `facet_grid`? Anything other than "facet_wrap" will be interpreted as
-#' `facet_grid`. This only takes effect if `facet_formula` is not
-#' `NULL`
-#' @param ncol Number of columns for facet wrap. Only relevant if
-#' `facet_formula` is given and `facet_wrap_or_grid == "facet_wrap"`
-#' @param scales scales argument that gets passed down to ggplot. Only necessary
-#' if you make use of facetting. Default is "free_y"
-#' @param allow_truth_without_pred logical, whether or not
-#' to allow instances where there is truth data, but no forecast. If `FALSE`
-#' (the default), these get filtered out.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
 #' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
@@ -405,100 +366,56 @@ plot_heatmap <- function(scores,
 #' @export
 #'
 #' @examples
-#' example1 <- scoringutils::example_continuous
+#' library(ggplot2)
+#' library(magrittr)
 #'
-#' plot_predictions(
-#'   example1,
-#'   x = "target_end_date",
-#'   filter_truth = list(
-#'     'target_end_date <= "2021-07-22"',
-#'     'target_end_date > "2021-05-01"'
-#'   ),
-#'   filter_forecasts = list(
-#'     "model == 'EuroCOVIDhub-ensemble'",
-#'     'forecast_date == "2021-06-07"'
-#'   ),
-#'   facet_formula = location ~ target_type,
-#'   range = c(0, 50, 90, 95)
-#' )
-plot_predictions <- function(data = NULL,
-                             forecasts = NULL,
-                             truth_data = NULL,
-                             merge_by = NULL,
+#' example_continuous %>%
+#'   make_NA (
+#'     what = "truth",
+#'     target_end_date <= "2021-07-22",
+#'     target_end_date > "2021-05-01"
+#'   ) %>%
+#'   make_NA (
+#'     what = "forecast",
+#'     model != 'EuroCOVIDhub-ensemble',
+#'     forecast_date != "2021-06-07"
+#'   ) %>%
+#'   plot_predictions (
+#'     x = "target_end_date",
+#'     by = c("target_type", "location"),
+#'     range = c(0, 50, 90, 95)
+#'   ) +
+#'   facet_wrap(~ location + target_type, scales = "free_y")
+#'
+
+
+plot_predictions <- function(data,
+                             by = NULL,
                              x = "date",
-                             filter_truth = list(),
-                             filter_forecasts = list(),
-                             filter_both = list(),
-                             range = c(0, 50, 90),
-                             facet_formula = NULL,
-                             facet_wrap_or_grid = "facet_wrap",
-                             ncol = NULL,
-                             scales = "free_y",
-                             allow_truth_without_pred = FALSE,
-                             remove_from_truth = c("model", "forecaster", "quantile", "prediction", "sample", "interval")) {
-
-  # preparations ---------------------------------------------------------------
-  # check data argument is provided
-  if (is.null(data) && (is.null(truth_data) | is.null(forecasts))) {
-    stop("need arguments 'data' in function 'score()', or alternatively 'forecasts' and 'truth_data'")
-  }
-
-  if (is.null(data)) {
-    data <- merge_pred_and_obs(forecasts, truth_data, by = merge_by, join = "full")
-    if (nrow(data) == 0) {
-      warning("After attempting to merge, only an empty data.table was left")
-      return(data)
-    }
-  }
+                             range = c(0, 50, 90)) {
 
   # split truth data and forecasts in order to apply different filtering
   truth_data <- data.table::as.data.table(data)[!is.na(true_value)]
   forecasts <- data.table::as.data.table(data)[!is.na(prediction)]
 
+  del_cols <-
+    colnames(truth_data)[!(colnames(truth_data) %in% c(by, "true_value", x))]
 
-  # function to filter forecast and truth data
-  filter_df <- function(data, filter_list) {
-    data <- data.table::copy(data)
-    # filter as specified by the user
-    for (expr in filter_list) {
-      data <- data[eval(parse(text = expr)), ]
-    }
-    return(data)
-  }
-
-  truth_data <- filter_df(truth_data, c(filter_both, filter_truth))
-  forecasts <- filter_df(forecasts, c(filter_both, filter_forecasts))
-
-  # if specified, get all combinations of the facet variables present in the
-  # forecasts and filter the truth_data accordingly
-  if (!allow_truth_without_pred && !is.null(facet_formula)) {
-    facet_vars <- all.vars(facet_formula)
-    index <- colnames(forecasts)[(colnames(forecasts) %in% facet_vars)]
-    combinations_forecasts <- unique(data.table::copy(forecasts)[, ..index])
-    data.table::setkey(combinations_forecasts)
-    data.table::setkey(truth_data)
-
-    # keep part where predictions are na so they don't get removed by merging
-    truth_without_pred <- truth_data[is.na(prediction)]
-    truth_data <- merge(truth_data, combinations_forecasts)
-    # add back together
-    truth_data <- data.table::rbindlist(list(truth_without_pred, truth_data),
-      use.names = TRUE
-    )
-  }
-
-  # delete certain columns that denominate the forecaster from the truth data
-  truth_data <- delete_columns(truth_data, remove_from_truth, make_unique = TRUE)
+  truth_data <- delete_columns(
+    truth_data,
+    del_cols,
+    make_unique = TRUE
+  )
 
   # find out what type of predictions we have. convert sample based to
   # range data
-  colnames <- colnames(forecasts)
-  if ("sample" %in% colnames) {
+  prediction_type <- get_prediction_type(data)
+  if (prediction_type %in% c("integer", "continuous")) {
     forecasts <- sample_to_range_long(forecasts,
       range = range,
       keep_quantile_col = FALSE
     )
-  } else if ("quantile" %in% colnames) {
+  } else if (prediction_type == "quantile") {
     forecasts <- quantile_to_range_long(forecasts,
       keep_quantile_col = FALSE
     )
@@ -516,7 +433,8 @@ plot_predictions <- function(data = NULL,
 
   plot <- ggplot(data = data, aes(x = .data[[x]])) +
     scale_colour_manual("", values = c("black", "steelblue4")) +
-    theme_scoringutils()
+    theme_scoringutils() +
+    ylab("True and predicted values")
 
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
@@ -538,7 +456,6 @@ plot_predictions <- function(data = NULL,
       ggdist::scale_fill_ramp_discrete(
         name = "range"
       )
-
   }
 
   # We could treat this step as part of ggdist::geom_lineribbon() but we treat
@@ -573,27 +490,67 @@ plot_predictions <- function(data = NULL,
       )
   }
 
-  plot <- plot +
-    ylab("True and predicted values")
-
-  # facet if specified by the user
-  if (!is.null(facet_formula)) {
-    if (facet_wrap_or_grid == "facet_wrap") {
-      plot <- plot +
-        facet_wrap(facet_formula, scales = scales, ncol = ncol)
-    } else {
-      plot <- plot +
-        facet_grid(facet_formula, scales = scales)
-    }
-  }
-
   return(plot)
 }
 
 
+#' @title Make Rows NA in Data for Plotting
+#'
+#' @description
+#' Filters the data and turns values into `NA` before the data gets passed to
+#' [plot_predictions()]. The reason to do this is to this is that it allows to
+#' 'filter' prediction and truth data separately. Any value that is NA will then
+#' be removed in the subsequent call to [plot_predictions()].
+#'
+#' @inheritParams score
+#' @param what character vector that determines which values should be turned
+#' into `NA`. If `what = "truth"`, values in the column 'true_value' will be
+#' turned into `NA`. If `what = "forecast"`, values in the column 'prediction'
+#' will be turned into `NA`. If `what = "both"`, values in both column will be
+#' turned into `NA`.
+#' @param ... logical statements used to filter the data
+#' @return A data.table
+#' @importFrom rlang enexprs
+#' @keywords plotting
+#' @export
+#'
+#' @examples
+#' make_NA (
+#'     example_continuous,
+#'     what = "truth",
+#'     target_end_date >= "2021-07-22",
+#'     target_end_date < "2021-05-01"
+#'   )
 
+make_NA <- function(data = NULL,
+                    what = c("truth", "forecast", "both"),
+                    ...) {
 
+  check_not_null(data = data)
 
+  data <- data.table::copy(data)
+  what <- match.arg(what)
+
+  # turn ... arguments into expressions
+  args <- enexprs(...)
+
+  vars <- c()
+  if (what %in% c("forecast", "both")) {
+    vars <- c(vars, "prediction")
+  }
+  if (what %in% c("truth", "both")) {
+    vars <- c(vars, "true_value")
+  }
+  for (expr in args) {
+    data <- data[eval(expr), eval(vars) := NA_real_]
+  }
+  return(data[])
+}
+
+#' @rdname make_NA
+#' @keywords plotting
+#' @export
+make_na <- make_NA
 
 
 #' @title Plot Interval Coverage
@@ -1264,6 +1221,7 @@ plot_correlation <- function(correlations) {
 #' A theme for ggplot2 plots used in scoringutils
 #' @return A ggplot2 theme
 #' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
+#' @keywords plotting
 #' @export
 theme_scoringutils <- function() {
   theme_minimal() %+replace%

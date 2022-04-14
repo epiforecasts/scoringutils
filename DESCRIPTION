@@ -50,15 +50,16 @@ Imports:
     data.table,
     ggdist (>= 3.1.0),
     ggplot2,
+    methods,
+    rlang,
     scoringRules,
-    stats,
-    methods
+    stats
 Suggests: 
-    testthat,
     kableExtra,
-    magrittr,
     knitr,
+    magrittr,
     rmarkdown,
+    testthat,
     vdiffr
 Config/Needs/website: 
     r-lib/pkgdown,

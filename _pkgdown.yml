@@ -39,7 +39,7 @@ reference:
         - title: Functions for plotting and data visualisation
           contents:
                 - starts_with("plot_")
-                - theme_scoringutils
+                - has_keyword("plotting")
         - title: Internal functions
           contents:
                 - has_keyword("internal")
