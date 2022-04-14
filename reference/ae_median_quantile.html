@@ -126,11 +126,11 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8562264 0.3128713 0.3351774 0.7225605 0.6823002 2.6181927 0.7427324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.1777195 2.1903129 1.7670559 0.4705188 0.5196953 1.3756224 1.7815297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.4156940 0.2729890 0.3528994 1.0014369 1.8127036 2.2496215 1.3252141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 1.2466423 2.7476351 1.4334484 3.4541522 1.5646568 3.6389026 1.3940331</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.3492193 0.6549966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.67315493 3.33913656 1.07922658 1.06654206 1.19659528 1.10288943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.36637752 0.24311878 2.22400333 0.78572480 1.57422227 0.54474111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.22389928 0.17208262 1.40825508 0.59662588 0.47083144 2.58039412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.73920426 3.75632600 0.46782898 1.28144141 2.06339192 1.06429256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.96099842 0.29556184 0.49672298 0.08181273 0.10909674 0.93269963</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
