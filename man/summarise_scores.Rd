@@ -2,9 +2,20 @@
 % Please edit documentation in R/summarise_scores.R
 \name{summarise_scores}
 \alias{summarise_scores}
+\alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
 summarise_scores(
+  scores,
+  by = NULL,
+  fun = mean,
+  relative_skill = FALSE,
+  metric = "auto",
+  baseline = NULL,
+  ...
+)
+
+summarize_scores(
   scores,
   by = NULL,
   fun = mean,

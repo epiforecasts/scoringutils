@@ -141,6 +141,12 @@ summarise_scores <- function(scores,
   return(scores[])
 }
 
+#' @rdname summarise_scores
+#' @keywords scoring
+#' @export
+summarize_scores <- summarise_scores
+
+
 #' @title Check input parameters for [summarise_scores()]
 #'
 #' @description A helper function to check the input parameters for
