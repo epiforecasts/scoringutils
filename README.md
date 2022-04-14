@@ -71,13 +71,13 @@ filter the available forecasts for a single model, and forecast date.
 
 ``` r
 example_quantile %>%
-  filter_NA(what = "truth", 
-            target_end_date >= "2021-07-15", 
-            target_end_date < "2021-05-22"
+  make_NA(what = "truth", 
+          target_end_date >= "2021-07-15", 
+          target_end_date < "2021-05-22"
   ) %>%
-  filter_NA(what = "forecast",
-            model != 'EuroCOVIDhub-ensemble', 
-            forecast_date != "2021-06-28"
+  make_NA(what = "forecast",
+          model != 'EuroCOVIDhub-ensemble', 
+          forecast_date != "2021-06-28"
   ) %>%
   plot_predictions(
     x = "target_end_date",
@@ -137,20 +137,22 @@ If using `scoringutils` in your work please consider citing it using the
 following,
 
     #> 
-    #> To cite scoringutils in publications use:
+    #> To cite scoringutils in publications use the following. If you use the
+    #> CRPS, DSS, or Log Score, please also cite scoringRules.
     #> 
     #>   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam
     #>   Abbott (2020). scoringutils: Utilities for Scoring and Assessing
     #>   Predictions, DOI: 10.5281/zenodo.4618017
     #> 
-    #> A BibTeX entry for LaTeX users is
+    #> To cite scoringRules in publications use:
     #> 
-    #>   @Manual{,
-    #>     title = {scoringutils: Utilities for Scoring and Assessing Predictions},
-    #>     author = {Nikos I. Bosse and Hugo Gruson and Sebastian Funk and {EpiForecasts} and Sam Abbott},
-    #>     year = {2020},
-    #>     doi = {10.5281/zenodo.4618017},
-    #>   }
+    #>   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating
+    #>   Probabilistic Forecasts with scoringRules. Journal of Statistical
+    #>   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12
+    #> 
+    #> To see these entries in BibTeX format, use 'print(<citation>,
+    #> bibtex=TRUE)', 'toBibtex(.)', or set
+    #> 'options(citation.bibtex.max=999)'.
 
 ## How to make a bug report or feature request
 
