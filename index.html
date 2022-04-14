@@ -163,13 +163,13 @@
 <p>As a first step to evaluating the forecasts we visualise them. For the purposes of this example here we make use of <code><a href="reference/plot_predictions.html">plot_predictions()</a></code> to filter the available forecasts for a single model, and forecast date.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">example_quantile</span> <span class="op">%&gt;%</span>
-  <span class="fu">filter_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>, 
-            <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>, 
-            <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span>
+  <span class="fu"><a href="reference/make_NA.html">make_NA</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>, 
+          <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>, 
+          <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span>
   <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">filter_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,
-            <span class="va">model</span> <span class="op">!=</span> <span class="st">'EuroCOVIDhub-ensemble'</span>, 
-            <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span>
+  <span class="fu"><a href="reference/make_NA.html">make_NA</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,
+          <span class="va">model</span> <span class="op">!=</span> <span class="st">'EuroCOVIDhub-ensemble'</span>, 
+          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span>
   <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/plot_predictions.html">plot_predictions</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="st">"target_end_date"</span>,
@@ -345,20 +345,22 @@
 </h2>
 <p>If using <code>scoringutils</code> in your work please consider citing it using the following,</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use:</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Abbott (2020). scoringutils: Utilities for Scoring and Assessing</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Predictions, DOI: 10.5281/zenodo.4618017</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   @Manual{,</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     title = {scoringutils: Utilities for Scoring and Assessing Predictions},</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     author = {Nikos I. Bosse and Hugo Gruson and Sebastian Funk and {EpiForecasts} and Sam Abbott},</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     year = {2020},</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     doi = {10.5281/zenodo.4618017},</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   }</span></span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Abbott (2020). scoringutils: Utilities for Scoring and Assessing</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Predictions, DOI: 10.5281/zenodo.4618017</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Probabilistic Forecasts with scoringRules. Journal of Statistical</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="how-to-make-a-bug-report-or-feature-request">How to make a bug report or feature request<a class="anchor" aria-label="anchor" href="#how-to-make-a-bug-report-or-feature-request"></a>
