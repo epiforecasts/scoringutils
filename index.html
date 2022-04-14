@@ -163,17 +163,19 @@
 <p>As a first step to evaluating the forecasts we visualise them. For the purposes of this example here we make use of <code><a href="reference/plot_predictions.html">plot_predictions()</a></code> to filter the available forecasts for a single model, and forecast date.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">example_quantile</span> <span class="op">%&gt;%</span>
+  <span class="fu">filter_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>, 
+            <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>, 
+            <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">filter_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,
+            <span class="va">model</span> <span class="op">!=</span> <span class="st">'EuroCOVIDhub-ensemble'</span>, 
+            <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/plot_predictions.html">plot_predictions</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="st">"target_end_date"</span>,
-    filter_truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      <span class="st">'target_end_date &lt;= "2021-07-15"'</span>, <span class="st">'target_end_date &gt; "2021-05-22"'</span>
-    <span class="op">)</span>,
-    filter_forecasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      <span class="st">"model == 'EuroCOVIDhub-ensemble'"</span>, <span class="st">'forecast_date == "2021-06-28"'</span>
-    <span class="op">)</span>
+    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"location"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></code></pre></div>
+  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> </code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-4-1.png"><!-- --></p>
 </div>
 <div class="section level3">
@@ -195,7 +197,7 @@
   <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The following messages were produced when checking inputs:</span>
-<span class="co">#&gt; 1.  Some values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
+<span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -345,15 +347,15 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use:</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Sam Abbott, EpiForecasts, and Sebastian Funk (2020).</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   scoringutils: Utilities for Scoring and Assessing Predictions, DOI:</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   10.5281/zenodo.4618017</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Abbott (2020). scoringutils: Utilities for Scoring and Assessing</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Predictions, DOI: 10.5281/zenodo.4618017</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   @Manual{,</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     title = {scoringutils: Utilities for Scoring and Assessing Predictions},</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     author = {Nikos I. Bosse and Sam Abbott and {EpiForecasts} and Sebastian Funk},</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     author = {Nikos I. Bosse and Hugo Gruson and Sebastian Funk and {EpiForecasts} and Sam Abbott},</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     year = {2020},</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     doi = {10.5281/zenodo.4618017},</span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   }</span></span></code></pre></div>
