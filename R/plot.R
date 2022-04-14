@@ -343,8 +343,6 @@ plot_heatmap <- function(scores,
 }
 
 
-
-
 #' @title Plot Predictions vs True Values
 #'
 #' @description
@@ -352,7 +350,7 @@ plot_heatmap <- function(scores,
 #'
 #' @param data a data.frame that follows the same specifications outlined in
 #' [score()]. To customise your plotting, you can filter your data using the
-#' function [filter_data()].
+#' function [make_NA()].
 #' @param by character vector with column names that denote categories by which
 #' the plot should be stratified. If for example you want to have a facetted
 #' plot, this should be a character vector with the columns used in facetting
@@ -372,15 +370,15 @@ plot_heatmap <- function(scores,
 #' library(magrittr)
 #'
 #' example_continuous %>%
-#'   filter_data (
+#'   make_NA (
 #'     what = "truth",
 #'     target_end_date <= "2021-07-22",
 #'     target_end_date > "2021-05-01"
 #'   ) %>%
-#'   filter_data (
+#'   make_NA (
 #'     what = "forecast",
-#'     model == 'EuroCOVIDhub-ensemble',
-#'     forecast_date == "2021-06-07"
+#'     model != 'EuroCOVIDhub-ensemble',
+#'     forecast_date != "2021-06-07"
 #'   ) %>%
 #'   plot_predictions (
 #'     x = "target_end_date",
@@ -391,16 +389,10 @@ plot_heatmap <- function(scores,
 #'
 
 
-plot_predictions <- function(data = NULL,
+plot_predictions <- function(data,
                              by = NULL,
                              x = "date",
                              range = c(0, 50, 90)) {
-
-  # preparations ---------------------------------------------------------------
-  # check data argument is provided
-  if (is.null(data)) {
-    stop("need arguments 'data' in function 'score()")
-  }
 
   # split truth data and forecasts in order to apply different filtering
   truth_data <- data.table::as.data.table(data)[!is.na(true_value)]
@@ -502,16 +494,13 @@ plot_predictions <- function(data = NULL,
 }
 
 
-
-#' @title Filter Data Used for Plotting
+#' @title Make Rows NA in Data for Plotting
 #'
 #' @description
-#' Filter data before it gets passed to [plot_predictions()] using arbitrary
-#' filter statements. In contrast to the usual behaviour of filtering functions,
-#' rows do net get removed, but instead corresponding values of either
-#' 'true_value' or 'predction' will be replaced with `NA`. This allows to filter
-#' truth and prediction data independently (either turning 'true_value' or
-#' 'prediction' or both into `NA`).
+#' Filters the data and turns values into `NA` before the data gets passed to
+#' [plot_predictions()]. The reason to do this is to this is that it allows to
+#' 'filter' prediction and truth data separately. Any value that is NA will then
+#' be removed in the subsequent call to [plot_predictions()].
 #'
 #' @inheritParams score
 #' @param what character vector that determines which values should be turned
@@ -526,16 +515,16 @@ plot_predictions <- function(data = NULL,
 #' @export
 #'
 #' @examples
-#' filter_data (
+#' make_NA (
 #'     example_continuous,
 #'     what = "truth",
-#'     target_end_date <= "2021-07-22",
-#'     target_end_date > "2021-05-01"
+#'     target_end_date >= "2021-07-22",
+#'     target_end_date < "2021-05-01"
 #'   )
 
-filter_data <- function(data = NULL,
-                        what = c("truth", "forecast", "both"),
-                        ...) {
+make_NA <- function(data = NULL,
+                    what = c("truth", "forecast", "both"),
+                    ...) {
 
   check_not_null(data = data)
 
@@ -552,12 +541,16 @@ filter_data <- function(data = NULL,
   if (what %in% c("truth", "both")) {
     vars <- c(vars, "true_value")
   }
-
   for (expr in args) {
-    data <- data[!eval(expr), eval(vars) := NA_real_]
+    data <- data[eval(expr), eval(vars) := NA_real_]
   }
   return(data[])
 }
+
+#' @rdname make_NA
+#' @keywords plotting
+#' @export
+make_na <- make_NA
 
 
 #' @title Plot Interval Coverage

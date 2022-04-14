@@ -6,12 +6,12 @@ test_that("plot_predictions() works with point forecasts", {
 
   p <-
     d %>%
-    filter_data(what = "truth",
-                target_end_date > '2021-05-01',
-                target_end_date <= '2021-07-22') %>%
-    filter_data(what = "forecast",
-                model == 'EuroCOVIDhub-ensemble',
-                forecast_date == '2021-06-07') %>%
+    make_NA(what = "truth",
+            target_end_date <= '2021-05-01',
+            target_end_date > '2021-07-22') %>%
+    make_NA(what = "forecast",
+            model != 'EuroCOVIDhub-ensemble',
+            forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
@@ -29,12 +29,12 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   p <-
     example2 %>%
-    filter_data(what = "truth",
-                target_end_date > '2021-05-01',
-                target_end_date <= '2021-07-22') %>%
-    filter_data(what = "forecast",
-                model == 'EuroCOVIDhub-ensemble',
-                forecast_date == '2021-06-07') %>%
+    make_NA(what = "truth",
+            target_end_date <= '2021-05-01',
+            target_end_date > '2021-07-22') %>%
+    make_NA(what = "forecast",
+            model != 'EuroCOVIDhub-ensemble',
+            forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
@@ -51,12 +51,12 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   p2 <-
     example1 %>%
-    filter_data(what = "truth",
-                target_end_date > '2021-05-01',
-                target_end_date <= '2021-07-22') %>%
-    filter_data(what = "forecast",
-                model == 'EuroCOVIDhub-ensemble',
-                forecast_date == '2021-06-07') %>%
+    make_NA(what = "truth",
+            target_end_date <= '2021-05-01',
+            target_end_date > '2021-07-22') %>%
+    make_NA(what = "forecast",
+            model != 'EuroCOVIDhub-ensemble',
+            forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
@@ -77,12 +77,12 @@ test_that("plot_predictions() works without median", {
   )
 
   p <- example3 %>%
-    filter_data(what = "truth",
-                target_end_date > '2021-06-25',
-                target_end_date <= '2021-07-12') %>%
-    filter_data(what = "forecast",
-                model == 'EuroCOVIDhub-ensemble',
-                forecast_date == '2021-07-12') %>%
+    make_NA(what = "truth",
+            target_end_date <= '2021-06-25',
+            target_end_date > '2021-07-12') %>%
+    make_NA(what = "forecast",
+            model != 'EuroCOVIDhub-ensemble',
+            forecast_date != '2021-07-12') %>%
     plot_predictions(
       x = "target_end_date",
       by = c("location_name", "target_type")
@@ -97,24 +97,24 @@ test_that("plot_predictions() works without median", {
 })
 
 
-test_that("filter_data() works", {
+test_that("make_NA() works", {
 
   example_quantile %>%
-    filter_data(what = "both",
-                target_end_date > "1999-01-01")
+    make_NA(what = "both",
+            target_end_date < "1999-01-01")
 
   example_quantile %>%
-    filter_data(what = "both",
-                'target_end_date > "1999-01-01"')
+    make_NA(what = "both",
+            'target_end_date < "1999-01-01"')
 
 
-  expect_error(filter_data(example_quantile, what = "something wrong"))
+  expect_error(make_NA(example_quantile, what = "something wrong"))
 
-  expect_error(filter_data())
+  expect_error(make_NA())
 
   expect_error(
     example_quantile %>%
-      filter_data(what = "truth",
-                  this_is_wrong > "1999-01-01")
+      make_NA(what = "truth",
+              this_is_wrong < "1999-01-01")
   )
 })

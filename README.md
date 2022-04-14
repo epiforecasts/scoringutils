@@ -71,13 +71,13 @@ filter the available forecasts for a single model, and forecast date.
 
 ``` r
 example_quantile %>%
-  filter_data(what = "truth", 
-              target_end_date <= "2021-07-15", 
-              target_end_date > "2021-05-22"
+  filter_NA(what = "truth", 
+            target_end_date >= "2021-07-15", 
+            target_end_date < "2021-05-22"
   ) %>%
-  filter_data(what = "forecast",
-              model == 'EuroCOVIDhub-ensemble', 
-              forecast_date == "2021-06-28"
+  filter_NA(what = "forecast",
+            model != 'EuroCOVIDhub-ensemble', 
+            forecast_date != "2021-06-28"
   ) %>%
   plot_predictions(
     x = "target_end_date",

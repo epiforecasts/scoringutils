@@ -4,12 +4,12 @@
 \alias{plot_predictions}
 \title{Plot Predictions vs True Values}
 \usage{
-plot_predictions(data = NULL, by = NULL, x = "date", range = c(0, 50, 90))
+plot_predictions(data, by = NULL, x = "date", range = c(0, 50, 90))
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
 \code{\link[=score]{score()}}. To customise your plotting, you can filter your data using the
-function \code{\link[=filter_data]{filter_data()}}.}
+function \code{\link[=make_NA]{make_NA()}}.}
 
 \item{by}{character vector with column names that denote categories by which
 the plot should be stratified. If for example you want to have a facetted
@@ -32,15 +32,15 @@ library(ggplot2)
 library(magrittr)
 
 example_continuous \%>\%
-  filter_data (
+  make_NA (
     what = "truth",
     target_end_date <= "2021-07-22",
     target_end_date > "2021-05-01"
   ) \%>\%
-  filter_data (
+  make_NA (
     what = "forecast",
-    model == 'EuroCOVIDhub-ensemble',
-    forecast_date == "2021-06-07"
+    model != 'EuroCOVIDhub-ensemble',
+    forecast_date != "2021-06-07"
   ) \%>\%
   plot_predictions (
     x = "target_end_date",
