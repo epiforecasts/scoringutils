@@ -136,7 +136,6 @@
 <div class="page-header"><h1 id="scoringutils-utilities-for-scoring-and-assessing-predictions">scoringutils: Utilities for Scoring and Assessing Predictions<a class="anchor" aria-label="anchor" href="#scoringutils-utilities-for-scoring-and-assessing-predictions"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. The <code>scoringutils</code> package offers convenient automated forecast evaluation in a <code>data.table</code> format (using the function <code><a href="reference/score.html">score()</a></code>), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases.</p>
 <p>The goal of this package is to provide a tested and reliable collection of metrics that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the <code>scoringRules</code> package, which provides a comprehensive collection of proper scoring rules (also used in <code>scoringutils</code>). In contrast to other packages, <code>scoringutils</code> offers functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models.</p>
 <p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary.</p>
@@ -443,7 +442,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -1,11 +1,11 @@
 pandoc: 2.14.2
-pkgdown: 2.0.2.9000
-pkgdown_sha: bb864aa6edf4e03038ada3e9224871dff50a6f5e
+pkgdown: 2.0.3.9000
+pkgdown_sha: feb91bf46c3ea78f8a03aead9f9a4934e3965ba4
 articles:
   getting-started: getting-started.html
   metric-details: metric-details.html
   scoring-forecasts-directly: scoring-forecasts-directly.html
-last_built: 2022-04-22T21:34Z
+last_built: 2022-04-26T11:43Z
 urls:
   reference: https://epiforecasts.io/scoringutils/reference
   article: https://epiforecasts.io/scoringutils/articles

@@ -114,11 +114,11 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dss_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8503834 1.1445078 1.0767048 3.5311169 1.5893054 3.3813632 2.4816437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.6228447 6.1814862 3.3066120 2.3164882 7.1006651 3.1951936 3.7720200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.9347223 3.8150759 9.1013450 2.7747047 3.1996872 7.5316416 3.7310958</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 3.7150346 3.4133053 5.4050065 3.2941337 6.7429096 3.2238871 3.4257144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 3.3281303 4.4931815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7702627 0.6830985 1.4797276 1.7614763 1.5406424 2.4805476 2.0474682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 5.3190650 4.5860791 3.9734342 3.9737417 2.7390163 2.8992080 6.9527873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.6279661 5.6493145 2.9412816 3.4842987 6.2247233 3.4256478 3.7463236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 4.3190880 3.6811919 5.5169716 4.0298865 4.5477104 4.8929451 3.4012683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 3.6977870 3.7102390</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -130,7 +130,7 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

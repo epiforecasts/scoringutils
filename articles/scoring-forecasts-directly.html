@@ -104,7 +104,7 @@
       <img src="" class="logo" alt=""><h1>Scoring forecasts directly</h1>
                         <h4 data-toc-skip class="author">Nikos Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-04-22</h4>
+            <h4 data-toc-skip class="date">2022-04-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoring-forecasts-directly.Rmd" class="external-link"><code>vignettes/scoring-forecasts-directly.Rmd</code></a></small>
       <div class="d-none name"><code>scoring-forecasts-directly.Rmd</code></div>
@@ -128,17 +128,17 @@
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1]  0.30  0.33 -0.22 -0.16 -0.70 -0.84 -0.73 -0.40  0.87 -0.35 -0.72  0.34</span>
-<span class="co">#&gt; [13] -0.39 -0.06  0.82  0.07  0.23  0.64 -0.09 -0.28 -0.87  0.28  0.05 -0.01</span>
-<span class="co">#&gt; [25]  0.72 -0.37 -0.83 -0.90  0.02 -0.31</span>
+<span class="co">#&gt;  [1]  0.22 -0.29  0.23 -0.31 -0.26 -0.98 -0.50  0.30  0.34  0.09  0.46  0.15</span>
+<span class="co">#&gt; [13] -0.79 -0.74 -0.99 -0.33 -0.11 -0.62  0.55 -0.94 -0.12 -0.83  0.15  0.03</span>
+<span class="co">#&gt; [25] -0.21  0.59 -0.75  0.42 -0.71  0.97</span>
 
 <span class="co">## continuous forecasts</span>
 <span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.75  0.93  0.69  0.90  0.38 -0.63  0.61 -0.92  0.81 -0.38  0.55  0.54</span>
-<span class="co">#&gt; [13] -0.95  0.81  0.79  0.69  0.31  0.09 -0.09  0.03  0.52  0.17 -0.84 -0.41</span>
-<span class="co">#&gt; [25]  0.16 -0.81 -0.16 -0.16 -0.68  0.99</span></code></pre></div>
+<span class="co">#&gt;  [1] -0.71 -0.38  0.24  0.38  0.21 -0.41 -0.58 -0.73 -0.42 -0.84 -0.61  0.07</span>
+<span class="co">#&gt; [13]  0.22 -0.25  0.15  0.08  0.47 -0.22  0.02  0.84  1.00 -0.75 -0.65 -0.10</span>
+<span class="co">#&gt; [25] -0.55 -0.46 -0.34 -0.87 -0.79  0.85</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sharpness">Sharpness<a class="anchor" aria-label="anchor" href="#sharpness"></a>
@@ -148,9 +148,9 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mad_sample.html">mad_sample</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 1.4826 2.9652 2.9652 2.9652 2.9652</span>
-<span class="co">#&gt; [11] 2.9652 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span>
-<span class="co">#&gt; [21] 4.4478 4.4478 4.4478 4.4478 4.4478 5.1891 4.4478 5.9304 5.9304 4.4478</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652</span>
+<span class="co">#&gt; [11] 4.4478 2.9652 4.4478 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478</span>
+<span class="co">#&gt; [21] 4.4478 4.4478 4.4478 5.1891 4.4478 4.4478 5.9304 4.4478 5.1891 5.9304</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
@@ -173,11 +173,11 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/crps_sample.html">crps_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1]  1.698100  0.757775  0.658125  1.325750  0.873825  0.524150  1.231025</span>
-<span class="co">#&gt;  [8]  1.895475  1.415150  0.849775  1.419025  2.240450  5.013350  1.272850</span>
-<span class="co">#&gt; [15]  0.930275  2.948800  1.157125  3.894750  1.293100  2.214325  5.177475</span>
-<span class="co">#&gt; [22]  1.246625  2.033825  1.169475  2.346125  2.207175 11.780275  2.682525</span>
-<span class="co">#&gt; [29]  7.932875  3.359775</span></code></pre></div>
+<span class="co">#&gt;  [1]  0.503900  0.357150  0.412150  0.576750  1.985550  0.683300  0.871875</span>
+<span class="co">#&gt;  [8]  0.874275  2.117125  0.919200  3.400900  0.725550  5.274775  0.923825</span>
+<span class="co">#&gt; [15]  1.149825  3.711800  4.191675  1.484875  2.559225  3.679400  2.266600</span>
+<span class="co">#&gt; [22] 11.572950  1.871550  1.609775  1.119200  6.414850  3.208325  5.583375</span>
+<span class="co">#&gt; [29]  2.783600  6.981450</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="dawid-sebastiani-score-dss">Dawid-Sebastiani Score (DSS)<a class="anchor" aria-label="anchor" href="#dawid-sebastiani-score-dss"></a>
@@ -187,11 +187,11 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/dss_sample.html">dss_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] -0.02531702  4.96631343  1.42102560  1.38003251  4.99044199  1.75526883</span>
-<span class="co">#&gt;  [7]  3.22366476  2.26534342  4.31752135  8.28697461  3.14127856  5.40014262</span>
-<span class="co">#&gt; [13]  2.78083987  5.93703243  3.05043994  2.95450310  2.78365443  3.33879433</span>
-<span class="co">#&gt; [19]  3.07918123  3.04951000  3.49364632  3.06609160  3.56507400  6.24751075</span>
-<span class="co">#&gt; [25]  3.35525762  3.41391485  3.37583255  4.34698921  4.06962671  3.47062470</span></code></pre></div>
+<span class="co">#&gt;  [1] -0.01004992  2.91954233  2.48693488  3.32114891  2.43477965  2.64751270</span>
+<span class="co">#&gt;  [7]  2.13393756  2.00955578  2.20755790  3.26969467  3.39443281  2.96667138</span>
+<span class="co">#&gt; [13]  2.82437734  3.66300459  2.84386328  2.71231384  6.19644951  2.92585307</span>
+<span class="co">#&gt; [19]  3.64115836  3.83116860  8.03942468  3.20653110  5.69199174  5.25456444</span>
+<span class="co">#&gt; [25]  3.40639925  4.52593433  3.85883961  3.24058727  3.39015261  5.74391286</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="log-score">Log Score<a class="anchor" aria-label="anchor" href="#log-score"></a>
@@ -201,11 +201,11 @@
 <code class="sourceCode R"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/logs_sample.html">logs_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 1.2268421 3.3592205 1.6968690 1.0345107 2.6398164 1.7385313 1.1842037</span>
-<span class="co">#&gt;  [8] 1.2083830 1.1866741 0.9887700 1.8346437 1.0360102 1.9769494 1.6890694</span>
-<span class="co">#&gt; [15] 1.1276888 1.1218154 1.3760508 0.9713227 1.0403044 1.0569659 1.2909191</span>
-<span class="co">#&gt; [22] 1.2382936 2.4021456 2.0634692 1.6732953 2.0852512 0.9373518 0.9507280</span>
-<span class="co">#&gt; [29] 4.0475393 1.3856940</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.0121487 1.1372639 0.8873815 2.8210940 0.9216140 0.9683401 1.0975524</span>
+<span class="co">#&gt;  [8] 1.9994463 1.2726018 1.1576762 1.3447173 2.4423919 1.1208921 0.9310009</span>
+<span class="co">#&gt; [15] 1.3765194 1.3470297 1.6750096 1.1013935 1.6961505 0.8496602 1.0450523</span>
+<span class="co">#&gt; [22] 0.9839354 1.3014942 1.5831875 1.1210904 1.2217648 2.2071232 1.0020604</span>
+<span class="co">#&gt; [29] 1.0251556 1.1255270</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="brier-score">Brier Score<a class="anchor" aria-label="anchor" href="#brier-score"></a>
@@ -218,11 +218,11 @@
 <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/brier_score.html">brier_score</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;  [1] 0.931427720 0.528164350 0.169868767 0.989387513 0.991207025 0.495473382</span>
-<span class="co">#&gt;  [7] 0.999615133 0.068845942 0.251619661 0.286500705 0.976085872 0.023159367</span>
-<span class="co">#&gt; [13] 0.021923228 0.155789206 0.235260983 0.349058026 0.001748518 0.230505366</span>
-<span class="co">#&gt; [19] 0.949324764 0.009267713 0.128164000 0.251824050 0.520059162 0.891539595</span>
-<span class="co">#&gt; [25] 0.808408283 0.014957867 0.031654441 0.987573706 0.889379833 0.172883134</span></code></pre></div>
+<span class="co">#&gt;  [1] 0.903836069 0.535294998 0.011987234 0.883277594 0.294168698 0.036165820</span>
+<span class="co">#&gt;  [7] 0.346838433 0.139553397 0.049430379 0.021331428 0.791551792 0.074717837</span>
+<span class="co">#&gt; [13] 0.070603046 0.544989542 0.003371806 0.156314834 0.666410479 0.091850613</span>
+<span class="co">#&gt; [19] 0.183370166 0.876525629 0.259898508 0.940846817 0.545211146 0.418625889</span>
+<span class="co">#&gt; [25] 0.001971603 0.028603705 0.398663165 0.287384177 0.185041865 0.643195106</span></code></pre></div>
 <div class="section level3">
 <h3 id="interval-score">Interval Score<a class="anchor" aria-label="anchor" href="#interval-score"></a>
 </h3>
@@ -246,11 +246,11 @@
   upper <span class="op">=</span> <span class="va">upper</span>,
   interval_range <span class="op">=</span> <span class="va">interval_range</span>
 <span class="op">)</span>
-<span class="co">#&gt;  [1] 0.1681125 0.2550003 0.1605944 0.1255734 0.1620328 0.1808755 0.6278504</span>
-<span class="co">#&gt;  [8] 0.8754886 0.2262083 1.8378431 0.2399368 0.1955218 0.1697131 2.2107514</span>
-<span class="co">#&gt; [15] 2.0135608 1.1851773 0.1050099 0.2853087 0.2698068 0.1806463 0.1776928</span>
-<span class="co">#&gt; [22] 0.2504453 0.1425478 0.2335636 0.3666330 0.1436868 0.2097526 0.1448018</span>
-<span class="co">#&gt; [29] 0.1928879 0.1597773</span></code></pre></div>
+<span class="co">#&gt;  [1] 1.38596406 0.56848357 0.33967128 0.63077826 0.11548175 0.32989842</span>
+<span class="co">#&gt;  [7] 0.15866431 0.20454874 0.89568943 0.69693837 0.19988145 0.26313638</span>
+<span class="co">#&gt; [13] 0.08692053 0.12694561 0.07131060 0.39757589 0.21476382 0.14953532</span>
+<span class="co">#&gt; [19] 1.51004075 0.20618878 0.16697450 0.10680314 0.07493815 0.12773516</span>
+<span class="co">#&gt; [25] 0.08429036 0.18167515 0.20028182 0.14876609 0.08802094 0.11021290</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -266,7 +266,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
