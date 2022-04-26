@@ -34,8 +34,8 @@ library(magrittr)
 example_continuous \%>\%
   make_NA (
     what = "truth",
-    target_end_date <= "2021-07-22",
-    target_end_date > "2021-05-01"
+    target_end_date >= "2021-07-22",
+    target_end_date < "2021-05-01"
   ) \%>\%
   make_NA (
     what = "forecast",
