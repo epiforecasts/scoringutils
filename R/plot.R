@@ -111,7 +111,6 @@ plot_score_table <- function(scores,
     df[!is.na(value), ],
     aes(y = identifCol, x = metric)
   ) +
-    # geom_tile(fill = "blue") +
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identifCol, label = value)) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
