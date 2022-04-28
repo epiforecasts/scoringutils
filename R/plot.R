@@ -659,12 +659,14 @@ plot_quantile_coverage <- function(scores,
 #'
 #' @param comparison_result A data.frame as produced by
 #' [pairwise_comparison()]
-#' @param type character vector of length one that is either "mean_scores_ratio" or "pval".
-#' This denotes whether to visualise the ratio or the p-value of the
-#' pairwise comparison. Default is "mean_scores_ratio"
+#' @param type character vector of length one that is either
+#'  "mean_scores_ratio", "pval", or "together". This denotes whether to
+#' visualise the ratio or the p-value of the pairwise comparison or both. 
+#' Default is "mean_scores_ratio".
 #' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
-#' invert the mean scores ratio)
+#' invert the mean scores ratio). This option is not supported when type =
+#' "pval"
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -855,6 +857,9 @@ plot_pairwise_comparison <- function(comparison_result,
 
       high_col <- "salmon"
     } else {
+      if (!smaller_is_good) {
+        stop("smaller_is_good is the only supported option with type pval")
+      }
       comparison_result[, var_of_interest := round(pval, 3)]
       # implemnt breaks for colour heatmap
       breaks <- c(0, 0.01, 0.05, 0.1, 1)
