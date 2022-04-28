@@ -1065,17 +1065,13 @@ plot_pit <- function(pit,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' avail_forecasts <- avail_forecasts(example_quantile,
-#'   by = c(
-#'     "model", "target_type",
-#'     "target_end_date"
-#'   )
+#' avail_forecasts <- avail_forecasts(
+#'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
-#' plot_avail_forecasts(avail_forecasts,
-#'   x = "target_end_date",
-#'   show_numbers = FALSE
+#' plot_avail_forecasts(
+#'  avail_forecasts, x = "target_end_date", show_numbers = FALSE
 #' ) +
-#'   facet_wrap("target_type")
+#'  facet_wrap("target_type")
 
 plot_avail_forecasts <- function(avail_forecasts,
                                  y = "model",
