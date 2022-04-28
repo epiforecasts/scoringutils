@@ -32,3 +32,25 @@ test_that("check_forecasts() function throws an error with duplicate forecasts",
 
   expect_error(suppressMessages(suppressWarnings(check_forecasts(example))))
 })
+
+test_that("check_forecasts() function throws an error when no model column is
+           present", {
+  no_model <- data.table::copy(example_quantile)[, model := NULL]
+  expect_error(suppressMessages(suppressWarnings(check_forecasts(no_model))))
+})
+
+test_that("check_forecasts() function throws an error when no predictions or
+           true values are present", {
+  expect_error(suppressMessages(suppressWarnings(check_forecasts(
+    data.table::copy(example_quantile)[, prediction := NA]
+  ))))
+  expect_error(suppressMessages(suppressWarnings(check_forecasts(
+    data.table::copy(example_quantile)[, true_value := NA]
+  ))))
+})
+
+test_that("check_forecasts() function throws an sample/quantile not present", {
+  expect_error(suppressMessages(suppressWarnings(check_forecasts(
+    data.table::copy(example_quantile)[, quantile := NULL]
+  ))))
+})
