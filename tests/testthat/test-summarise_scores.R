@@ -1,5 +1,4 @@
 test_that("summarise_scores() works without any arguments", {
-  scores <- suppressMessages(score(example_quantile))
   expect_true("quantile" %in% names(scores))
 
   scores <- summarise_scores(scores)
@@ -17,15 +16,14 @@ test_that("summarise_scores() works without any arguments", {
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
-  scores <- suppressMessages(score(example_quantile))
 
   expect_error(summarise_scores(scores, by = "not_present"),
-    "The following items in `by` are notvalid column names of the data: 'not_present'. Check and run `summarise_scores()` again",
+    "The following items in `by` are notvalid column names of the data: 'not_present'. Check and run `summarise_scores()` again", # nolint
     fixed = TRUE
   )
 
   expect_error(summarise_scores(scores, by = "sample"),
-    "The following items in `by` are notvalid column names of the data: 'sample'. Check and run `summarise_scores()` again",
+    "The following items in `by` are notvalid column names of the data: 'sample'. Check and run `summarise_scores()` again", # nolint
     fixed = TRUE
   )
 })
