@@ -301,6 +301,7 @@ plot_ranges <- function(scores,
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
+
 plot_heatmap <- function(scores,
                          y = "model",
                          x,
@@ -477,7 +478,6 @@ plot_predictions <- function(data,
   return(plot)
 }
 
-
 #' @title Make Rows NA in Data for Plotting
 #'
 #' @description
@@ -535,7 +535,6 @@ make_NA <- function(data = NULL,
 #' @keywords plotting
 #' @export
 make_na <- make_NA
-
 
 #' @title Plot Interval Coverage
 #'
