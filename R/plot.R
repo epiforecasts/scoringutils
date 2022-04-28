@@ -232,7 +232,7 @@ plot_wis <- function(scores,
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes aes geom_point geom_line
 #' expand_limits theme theme_light element_text scale_color_continuous labs
-#' @expor
+#' @export
 #' @examples
 #' library(ggplot2)
 #' scores <- score(example_quantile)

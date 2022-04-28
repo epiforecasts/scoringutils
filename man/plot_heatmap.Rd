@@ -28,7 +28,6 @@ groups, e.g. the interval score obtained by several forecasting models in
 different locations.
 }
 \examples{
-library("scoringutils")
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 

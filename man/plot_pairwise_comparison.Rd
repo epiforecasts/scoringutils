@@ -28,7 +28,6 @@ between models
 }
 \examples{
 library(ggplot2)
-library(scoringutils)
 df <- data.frame(
   model = rep(c("model1", "model2", "model3"), each = 10),
   id = rep(1:10),

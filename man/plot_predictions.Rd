@@ -48,5 +48,4 @@ example_continuous \%>\%
     range = c(0, 50, 90, 95)
   ) +
   facet_wrap(~ location + target_type, scales = "free_y")
-
 }

@@ -30,7 +30,6 @@ interval ranges contribute to the overall interval score, or how
 sharpness / dispersion changes by range.
 }
 \examples{
-library("scoringutils")
 library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
