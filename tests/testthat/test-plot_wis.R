@@ -26,3 +26,15 @@ test_that("plot_wis() works as expected without relative contributions", {
   skip_on_cran()
   vdiffr::expect_doppelganger("plot_wis_no_relative", p)
 })
+
+test_that("plot_wis() works as expected when flipped", {
+  p <- plot_wis(sum_scores,
+    x = "model",
+    relative_contributions = TRUE,
+    flip = TRUE
+  ) +
+    facet_wrap(~target_type)
+  expect_s3_class(p, "ggplot")
+  skip_on_cran()
+  vdiffr::expect_doppelganger("plot_wis_flip", p)
+})
