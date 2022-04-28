@@ -25,21 +25,22 @@ Authors@R: c(
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("ctb")))
 Description: 
-    The scoringutils package provides convenient tools to evaluate forecasts and
-    compare predictive performance of different forecasts. It offers a variety
-    of metrics and proper scoring rules (Tilmann Gneiting & Adrian E Raftery 
-    (2007) <doi:10.1198/016214506000001437>), as well as tools to visualise 
-    forecasts and scores. 
-    The scoringutils package allows users to evaluate different types of 
-    predictions (e.g. binary, discrete, continuous) which may come in different 
-    formats (e.g. forecasts represented by predictive samples or by quantiles
-    of the predictive distribution). 
-    Please cite scoringutils if you use it in your work. Call 
-    `citation("scoringutils") for more information.`
-    Some proper scoring rules are implemented as a wrapper around functions from 
-    the scoringRules package (Jordan, A., Krüger, F., & Lerch, S. (2019)
-    <doi:10.18637/jss.v090.i12>). If you use these, please also cite the 
-    scoringRules package. 
+    Combines a collection of metrics and proper scoring rules 
+    (Tilmann Gneiting & Adrian E Raftery (2007) 
+    <doi:10.1198/016214506000001437>, Jordan, A., Krüger, F., & Lerch, S. (2019)
+    <doi:10.18637/jss.v090.i12>) within a consistent framework to streamline
+    evaluation and visualisation of forecasts. In addition to proper scoring
+    rules functions are provided to assess bias, sharpness and calibration
+    (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind
+    M. Eggo, W. John Edmunds (2019) <doi:10.1371/journal.pcbi.1006785>) of forecasts. 
+    Several types of predictions can be evaluated: 
+    probabilistic forecasts, quantile forecasts or point forecasts. Observed values
+    and predictions can be either continuous, integer, or binary. Users can either
+    choose to apply these rules separately in a vector / matrix format that can be
+    flexibly used within other packages, or they can choose to use higher level
+    functionality to assist with their forecast evaluation. All functionality has been
+    implemented with a focus on performance, is robustly tested, and minimises
+    dependencies. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
