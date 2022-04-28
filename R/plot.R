@@ -486,7 +486,7 @@ plot_predictions <- function(data,
         data = truth_data,
         show.legend = FALSE,
         inherit.aes = FALSE,
-        aes(y = true_value, x = .data[[x]]),
+        aes(x = .data[[x]], y = true_value),
         color = "black",
         size = 0.5
       ) +
