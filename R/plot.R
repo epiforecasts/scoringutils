@@ -1127,7 +1127,9 @@ plot_avail_forecasts <- function(avail_forecasts,
 #' @export
 #' @examples
 #' scores <- score(example_quantile)
-#' correlations <- correlation(scores)
+#' correlations <- correlation(
+#'  summarise_scores(scores)
+#' )
 #' plot_correlation(correlations)
 
 plot_correlation <- function(correlations) {
