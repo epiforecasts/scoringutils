@@ -1,5 +1,3 @@
-suppressMessages(library(magrittr))
-
 test_that("plot_score_table() works as expected", {
   p <- suppressMessages(
     scores %>%

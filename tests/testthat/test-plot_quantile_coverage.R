@@ -1,5 +1,3 @@
-library(ggplot2, quietly = TRUE)
-
 test_that("plot_quantile_coverage() works as expected", {
   scores <- suppressMessages(
     summarise_scores(scores, by = c("model", "quantile"))

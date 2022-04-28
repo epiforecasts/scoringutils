@@ -1,5 +1,3 @@
-library(ggplot2, quietly = TRUE)
-
 sum_scores <- suppressMessages(
   summarise_scores(scores, by = c("model", "target_type", "range"))
 )

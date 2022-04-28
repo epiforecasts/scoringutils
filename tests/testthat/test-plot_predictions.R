@@ -1,5 +1,3 @@
-suppressMessages(library(magrittr))
-
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
   d <- d[d$quantile == 0.5 | is.na(d$quantile), ]

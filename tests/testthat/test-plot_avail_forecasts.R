@@ -1,5 +1,3 @@
-library(ggplot2, quietly = TRUE)
-
 test_that("plot_avail_forecasts() works as expected", {
   avail_forecasts <- suppressMessages(
     avail_forecasts(example_quantile,

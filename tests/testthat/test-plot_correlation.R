@@ -1,5 +1,3 @@
-suppressMessages(library(magrittr))
-
 test_that("plot_correlation() works as expected", {
   correlations <- correlation(summarise_scores(scores))
   p <- plot_correlation(correlations)

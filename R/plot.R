@@ -820,7 +820,9 @@ plot_pairwise_comparison <- function(comparison_result,
       breaks, plot_scales
     )]
 
-    fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
+    fill_rule <- ifelse(
+      lower_triangle$fill_col == 0.000001, "grey95", "palegreen3"
+    )
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
     lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
       "< 0.001", var_of_interest
@@ -839,35 +841,35 @@ plot_pairwise_comparison <- function(comparison_result,
         aes(label = var_of_interest),
         na.rm = TRUE
       )
-  } else if (type == "mean_scores_ratio") {
-    comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
+  } else{
+    if (type == "mean_scores_ratio") {
+      comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
-    # implemnt breaks for colour heatmap
-    breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
-    plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
-    comparison_result[, fill_col := get_fill_scale(
-      var_of_interest,
-      breaks, plot_scales
-    )]
+      # implemnt breaks for colour heatmap
+      breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
+      plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+      comparison_result[, fill_col := get_fill_scale(
+        var_of_interest,
+        breaks, plot_scales
+      )]
 
-    high_col <- "salmon"
-  } else {
-    comparison_result[, var_of_interest := round(pval, 3)]
-    # implemnt breaks for colour heatmap
-    breaks <- c(0, 0.01, 0.05, 0.1, 1)
-    plot_scales <- c(1, 0.5, 0.1, 0)
-    comparison_result[, fill_col := get_fill_scale(
-      var_of_interest,
-      breaks, plot_scales
-    )]
+      high_col <- "salmon"
+    } else {
+      comparison_result[, var_of_interest := round(pval, 3)]
+      # implemnt breaks for colour heatmap
+      breaks <- c(0, 0.01, 0.05, 0.1, 1)
+      plot_scales <- c(1, 0.5, 0.1, 0)
+      comparison_result[, fill_col := get_fill_scale(
+        var_of_interest,
+        breaks, plot_scales
+      )]
 
-    high_col <- "palegreen3"
-    comparison_result[, var_of_interest := as.character(var_of_interest)]
-    comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-      "< 0.001", var_of_interest
-    )]
-  }
-
+      high_col <- "palegreen3"
+      comparison_result[, var_of_interest := as.character(var_of_interest)]
+      comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
+        "< 0.001", var_of_interest
+      )]
+    }
   plot <- ggplot(
     comparison_result,
     aes(
@@ -904,16 +906,16 @@ plot_pairwise_comparison <- function(comparison_result,
       title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1"
     ) +
     coord_cartesian(expand = FALSE)
-
-  if (type == "mean_scores_ratio") {
-    plot <- plot +
-      theme(
-        axis.text.x = element_text(
-          angle = 90, vjust = 1,
-          hjust = 1, color = "brown4"
-        ),
-        axis.text.y = element_text(color = "steelblue4")
-      )
+    if (type == "mean_scores_ratio") {
+      plot <- plot +
+        theme(
+          axis.text.x = element_text(
+            angle = 90, vjust = 1,
+            hjust = 1, color = "brown4"
+          ),
+          axis.text.y = element_text(color = "steelblue4")
+        )
+    }
   }
 
   return(plot)

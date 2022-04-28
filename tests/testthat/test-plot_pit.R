@@ -1,5 +1,3 @@
-suppressMessages(library(magrittr))
-
 test_that("plot_pit() works as expected with quantile forecasts", {
   pit <- suppressMessages(
     pit(example_quantile, by = c("model"))
