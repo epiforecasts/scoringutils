@@ -685,6 +685,7 @@ plot_quantile_coverage <- function(scores,
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' plot_pairwise_comparison(pairwise) +
 #'   facet_wrap(~target_type)
+
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
                                      smaller_is_good = TRUE) {
