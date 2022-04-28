@@ -32,24 +32,28 @@ test_that("pairwise comparisons works", {
   )
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval_without_baseline <- score(data_formatted)
+  eval_without_baseline <- suppressMessages(score(data_formatted))
 
-  eval_without_baseline <- summarise_scores(eval_without_baseline,
-    relative_skill = TRUE,
-    by = c(
-      "model", "location", "target_end_date",
-      "target_variable"
+  eval_without_baseline <- suppressMessages(
+    summarise_scores(eval_without_baseline,
+      relative_skill = TRUE,
+      by = c(
+        "model", "location", "target_end_date",
+        "target_variable"
+      )
     )
   )
-  eval_with_baseline <- scoringutils::score(data_formatted,
+  eval_with_baseline <- suppressMessages(score(data_formatted,
     count_median_twice = FALSE
-  )
-  eval_with_baseline <- summarise_scores(eval_with_baseline,
-    baseline = "m1",
-    relative_skill = TRUE,
-    by = c(
-      "model", "location", "target_end_date",
-      "target_variable"
+  ))
+  eval_with_baseline <- suppressMessages(
+    summarise_scores(eval_with_baseline,
+      baseline = "m1",
+      relative_skill = TRUE,
+      by = c(
+        "model", "location", "target_end_date",
+        "target_variable"
+      )
     )
   )
 
@@ -182,9 +186,10 @@ test_that("pairwise comparisons works", {
   ratios_scaled <- geom_mean_ratios / geom_mean_ratios["m1"]
   names(ratios_scaled) <- NULL
 
-  eval_with_baseline <- scoringutils::score(data_formatted,
+  eval_with_baseline <- suppressMessages(
+    suppressMessages(score(data_formatted,
     count_median_twice = FALSE
-  )
+  )))
   eval_with_baseline <- summarise_scores(eval_with_baseline,
     baseline = "m1",
     relative_skill = TRUE,
@@ -203,16 +208,20 @@ test_that("pairwise comparisons works", {
 })
 
 test_that("Pairwise comparisons work in score() with integer data", {
-  eval <- score(data = example_integer)
-  eval <- summarise_scores(eval, by = "model", relative_skill = TRUE)
+  eval <- suppressMessages(score(data = example_integer))
+  eval <- suppressMessages(
+    summarise_scores(eval, by = "model", relative_skill = TRUE)
+  )
 
   expect_true("relative_skill" %in% colnames(eval))
 })
 
 
 test_that("Pairwise comparisons work in score() with binary data", {
-  eval <- score(data = example_binary)
-  eval <- summarise_scores(eval, by = "model", relative_skill = TRUE)
+  eval <- suppressMessages(score(data = example_binary))
+  eval <- suppressMessages(
+    summarise_scores(eval, by = "model", relative_skill = TRUE)
+  )
 
   expect_true("relative_skill" %in% colnames(eval))
 })
@@ -229,9 +238,9 @@ test_that("pairwise_comparison() works", {
     ae_median = (abs(rnorm(30)))
   )
 
-  res <- pairwise_comparison(df,
+  res <- suppressMessages(pairwise_comparison(df,
     baseline = "model1"
-  )
+  ))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
@@ -243,14 +252,14 @@ test_that("pairwise_comparison() works", {
 
 
 test_that("pairwise_comparison() works inside and outside of score()", {
-  eval <- score(data = example_continuous)
+  eval <- suppressMessages(score(data = example_continuous))
 
-  pairwise <- pairwise_comparison(eval,
+  pairwise <- suppressMessages(pairwise_comparison(eval,
     by = "model",
     metric = "crps"
-  )
+  ))
 
-  eval2 <- score(data = example_continuous)
+  eval2 <- suppressMessages(score(data = example_continuous))
   eval2 <- summarise_scores(eval2, by = "model", relative_skill = TRUE)
 
   expect_equal(

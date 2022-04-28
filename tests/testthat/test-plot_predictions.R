@@ -1,4 +1,4 @@
-library(magrittr)
+suppressMessages(library(magrittr))
 
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
@@ -92,12 +92,11 @@ test_that("plot_predictions() works without median", {
   expect_s3_class(p, "ggplot")
 
   skip_on_cran()
-  vdiffr::expect_doppelganger('no_median', p)
-
+  vdiffr::expect_doppelganger("no_median", p)
 })
 
 
-test_that("make_NA() works", {
+test_that("make_NA() works as expected", {
 
   example_quantile %>%
     make_NA(what = "both",
