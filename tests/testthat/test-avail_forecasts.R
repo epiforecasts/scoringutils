@@ -22,4 +22,8 @@ test_that("avail_forecasts() works as expected", {
   )
   expect_equal(nrow(af), 4)
   expect_equal(af$`Number forecasts`, c(5888, 5888, 5681, 2944))
+  af <- suppressMessages(
+    avail_forecasts(example_quantile)
+  )
+  expect_equal(nrow(af), 887)
 })
