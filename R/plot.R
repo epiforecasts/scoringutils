@@ -387,7 +387,23 @@ plot_heatmap <- function(scores,
 #'   facet_wrap(~ location + target_type, scales = "free_y") +
 #'   aes(fill = model, color = model)
 #'
-#'
+#' example_continuous %>%
+#'   make_NA (
+#'     what = "truth",
+#'     target_end_date >= "2021-07-22",
+#'     target_end_date < "2021-05-01"
+#'   ) %>%
+#'   make_NA (
+#'     what = "forecast",
+#'     forecast_date != "2021-06-07"
+#'   ) %>%
+#'   plot_predictions (
+#'     x = "target_end_date",
+#'     by = c("target_type", "location"),
+#'     range = c(0)
+#'   ) +
+#'   facet_wrap(~ location + target_type, scales = "free_y") +
+#'   aes(fill = model, color = model)
 
 
 plot_predictions <- function(data,
@@ -457,6 +473,9 @@ plot_predictions <- function(data,
         ) +
         ggdist::scale_fill_ramp_discrete(
           name = "range",
+          # range arguemnt was added to make sure that the line for the median
+          # and the ribbon don't have the same opacity, making the line
+          # invisible
           range = c(0.15, 0.75)
         )
     }
@@ -496,16 +515,10 @@ plot_predictions <- function(data,
         show.legend = FALSE,
         aes(x = .data[[x]], y = true_value),
         linetype = 1,
-        color = "black",
-        alpha = 0.75,
+        color = "grey40",
         lwd = 0.2
       )
   }
-
-  # if ("model" %in% names(data)) {
-  #   plot <- plot +
-  #     aes(color = model, fill = model)
-  # }
 
   return(plot)
 }
