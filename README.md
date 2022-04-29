@@ -12,28 +12,31 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://c
 <!-- badges: end -->
 
 The `scoringutils` package provides a collection of metrics and proper
-scoring rules that make it simple to score probabilistic forecasts
-against the true observed values. The `scoringutils` package offers
-convenient automated forecast evaluation in a `data.table` format (using
-the function `score()`), but also provides experienced users with a set
-of reliable lower-level scoring metrics operating on vectors/matriced
-they can build upon in other applications. In addition it implements a
-wide range of flexible plots that are able to cover many use cases.
+scoring rules and aims to make it simple to score probabilistic
+forecasts against the true observed values. The `scoringutils` package
+offers convenient automated forecast evaluation in a `data.table` format
+(using the function `score()`), but also provides experienced users with
+a set of reliable lower-level scoring metrics operating on
+vectors/matriced they can build upon in other applications. In addition
+it implements a wide range of flexible plots designed to cover many use
+cases.
 
-The goal of this package is to provide a tested and reliable collection
-of metrics that can be used for scoring probabilistic forecasts
-(forecasts with a full predictive distribution, rather than point
-forecasts). It has a much stronger focus on convenience than e.g. the
-`scoringRules` package, which provides a comprehensive collection of
-proper scoring rules (also used in `scoringutils`). In contrast to other
-packages, `scoringutils` offers functionality to automatically evaluate
-forecasts, to visualise scores and to obtain relative scores between
-models.
+Where available `scoringutils` depends on functionality from
+`scoringRules` which provides a comprehensive collection of proper
+scoring rules for predictive probability distributions represented as
+sample or parametric distributions. For some forecast types, such as
+quantile forecasts, `scoringutils` also implements additional metrics
+for evaluating forecasts. On top of providing an interface to the proper
+scoring rules implemented in `scoringRules` and natively, `scoringutils`
+also offers utilities for summarising and visualising forecasts and
+scores, and to obtain relative scores between models which may be useful
+for non-overlapping forecasts and forecasts across scales.
 
 Predictions can be handled in various formats: `scoringutils` can handle
 probabilistic forecasts in either a sample based or a quantile based
 format. For more detail on the expected input formats please see below.
-True values can be integer, continuous or binary.
+True values can be integer, continuous or binary, and appropriate scores
+for each of these value types are selected automatically.
 
 ## Installation
 
