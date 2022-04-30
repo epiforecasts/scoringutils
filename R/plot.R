@@ -36,6 +36,7 @@
 #' plot_score_table(scores,
 #'                  y = c("model", "target_type"),
 #'                  by = "target_type")
+
 plot_score_table <- function(scores,
                              y = "model",
                              by = NULL,
@@ -93,7 +94,6 @@ plot_score_table <- function(scores,
     by = c("metric", by)
   ]
 
-
   # create identifier column for plot ------------------------------------------
   # if there is only one column, leave column as is. Reason to do that is that
   # users can then pass in a factor and keep the ordering of that column intact
@@ -129,8 +129,6 @@ plot_score_table <- function(scores,
   return(plot)
 }
 
-
-
 #' @title Plot Contributions to the Weighted Interval Score
 #'
 #' @description
@@ -150,9 +148,7 @@ plot_score_table <- function(scores,
 #' scale_fill_discrete
 #' theme theme_light unit guides guide_legend .data
 #' @export
-#'
 #' @examples
-#' library("scoringutils")
 #' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
@@ -216,8 +212,6 @@ plot_wis <- function(scores,
   return(plot)
 }
 
-
-
 #' @title Plot Metrics by Range of the Prediction Interval
 #'
 #' @description
@@ -239,9 +233,7 @@ plot_wis <- function(scores,
 #' @importFrom ggplot2 ggplot aes aes geom_point geom_line
 #' expand_limits theme theme_light element_text scale_color_continuous labs
 #' @export
-#'
 #' @examples
-#' library("scoringutils")
 #' library(ggplot2)
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
@@ -252,6 +244,7 @@ plot_wis <- function(scores,
 #' # visualise dispersion instead of interval score
 #' plot_ranges(scores, y = "dispersion", x = "model") +
 #'   facet_wrap(~target_type)
+
 plot_ranges <- function(scores,
                         y = "interval_score",
                         x = "model",
@@ -283,8 +276,6 @@ plot_ranges <- function(scores,
   return(plot)
 }
 
-
-
 #' @title Create a Heatmap of a Scoring Metric
 #'
 #' @description
@@ -305,13 +296,12 @@ plot_ranges <- function(scores,
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
-#'
 #' @examples
-#' library("scoringutils")
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
+
 plot_heatmap <- function(scores,
                          y = "model",
                          x,
@@ -341,7 +331,6 @@ plot_heatmap <- function(scores,
   return(plot)
 }
 
-
 #' @title Plot Predictions vs True Values
 #'
 #' @description
@@ -363,7 +352,6 @@ plot_heatmap <- function(scores,
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
-#'
 #' @examples
 #' library(ggplot2)
 #' library(magrittr)
@@ -404,7 +392,6 @@ plot_heatmap <- function(scores,
 #'   ) +
 #'   facet_wrap(~ location + target_type, scales = "free_y") +
 #'   aes(fill = model, color = model)
-
 
 plot_predictions <- function(data,
                              by = NULL,
@@ -521,7 +508,6 @@ plot_predictions <- function(data,
   return(plot)
 }
 
-
 #' @title Make Rows NA in Data for Plotting
 #'
 #' @description
@@ -580,7 +566,6 @@ make_NA <- function(data = NULL,
 #' @export
 make_na <- make_NA
 
-
 #' @title Plot Interval Coverage
 #'
 #' @description
@@ -596,12 +581,12 @@ make_na <- make_NA
 #' facet_wrap facet_grid geom_polygon
 #' @importFrom data.table dcast
 #' @export
-#'
 #' @examples
 #' library("scoringutils")
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "range"))
 #' plot_interval_coverage(scores)
+
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
@@ -636,10 +621,6 @@ plot_interval_coverage <- function(scores,
   return(p1)
 }
 
-
-
-
-
 #' @title Plot Quantile Coverage
 #'
 #' @description
@@ -655,12 +636,11 @@ plot_interval_coverage <- function(scores,
 #' scale_y_continuous
 #' @importFrom data.table dcast
 #' @export
-#'
 #' @examples
-#' library("scoringutils")
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "quantile"))
 #' plot_quantile_coverage(scores)
+
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
   p2 <- ggplot(
@@ -701,12 +681,6 @@ plot_quantile_coverage <- function(scores,
   return(p2)
 }
 
-
-
-
-
-
-
 #' @title Plot Heatmap of Pairwise Comparisons
 #'
 #' @description
@@ -715,12 +689,14 @@ plot_quantile_coverage <- function(scores,
 #'
 #' @param comparison_result A data.frame as produced by
 #' [pairwise_comparison()]
-#' @param type character vector of length one that is either "mean_scores_ratio" or "pval".
-#' This denotes whether to visualise the ratio or the p-value of the
-#' pairwise comparison. Default is "mean_scores_ratio"
+#' @param type character vector of length one that is either
+#'  "mean_scores_ratio", "pval", or "together". This denotes whether to
+#' visualise the ratio or the p-value of the pairwise comparison or both. 
+#' Default is "mean_scores_ratio".
 #' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
-#' invert the mean scores ratio)
+#' invert the mean scores ratio). This option is not supported when type =
+#' "pval"
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -728,10 +704,8 @@ plot_quantile_coverage <- function(scores,
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
 #' element_text element_blank
 #' @export
-#'
 #' @examples
 #' library(ggplot2)
-#' library(scoringutils)
 #' df <- data.frame(
 #'   model = rep(c("model1", "model2", "model3"), each = 10),
 #'   id = rep(1:10),
@@ -743,6 +717,7 @@ plot_quantile_coverage <- function(scores,
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' plot_pairwise_comparison(pairwise) +
 #'   facet_wrap(~target_type)
+
 plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval", "together"),
                                      smaller_is_good = TRUE) {
@@ -877,7 +852,9 @@ plot_pairwise_comparison <- function(comparison_result,
       breaks, plot_scales
     )]
 
-    fill_rule <- ifelse(lower_triangle$fill_col == 0.000001, "grey95", "palegreen3")
+    fill_rule <- ifelse(
+      lower_triangle$fill_col == 0.000001, "grey95", "palegreen3"
+    )
     lower_triangle[, var_of_interest := as.character(var_of_interest)]
     lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
       "< 0.001", var_of_interest
@@ -896,35 +873,38 @@ plot_pairwise_comparison <- function(comparison_result,
         aes(label = var_of_interest),
         na.rm = TRUE
       )
-  } else if (type == "mean_scores_ratio") {
-    comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
+  } else{
+    if (type == "mean_scores_ratio") {
+      comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
-    # implemnt breaks for colour heatmap
-    breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
-    plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
-    comparison_result[, fill_col := get_fill_scale(
-      var_of_interest,
-      breaks, plot_scales
-    )]
+      # implemnt breaks for colour heatmap
+      breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
+      plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+      comparison_result[, fill_col := get_fill_scale(
+        var_of_interest,
+        breaks, plot_scales
+      )]
 
-    high_col <- "salmon"
-  } else {
-    comparison_result[, var_of_interest := round(pval, 3)]
-    # implemnt breaks for colour heatmap
-    breaks <- c(0, 0.01, 0.05, 0.1, 1)
-    plot_scales <- c(1, 0.5, 0.1, 0)
-    comparison_result[, fill_col := get_fill_scale(
-      var_of_interest,
-      breaks, plot_scales
-    )]
+      high_col <- "salmon"
+    } else {
+      if (!smaller_is_good) {
+        stop("smaller_is_good is the only supported option with type pval")
+      }
+      comparison_result[, var_of_interest := round(pval, 3)]
+      # implemnt breaks for colour heatmap
+      breaks <- c(0, 0.01, 0.05, 0.1, 1)
+      plot_scales <- c(1, 0.5, 0.1, 0)
+      comparison_result[, fill_col := get_fill_scale(
+        var_of_interest,
+        breaks, plot_scales
+      )]
 
-    high_col <- "palegreen3"
-    comparison_result[, var_of_interest := as.character(var_of_interest)]
-    comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-      "< 0.001", var_of_interest
-    )]
-  }
-
+      high_col <- "palegreen3"
+      comparison_result[, var_of_interest := as.character(var_of_interest)]
+      comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
+        "< 0.001", var_of_interest
+      )]
+    }
   plot <- ggplot(
     comparison_result,
     aes(
@@ -961,21 +941,20 @@ plot_pairwise_comparison <- function(comparison_result,
       title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1"
     ) +
     coord_cartesian(expand = FALSE)
-
-  if (type == "mean_scores_ratio") {
-    plot <- plot +
-      theme(
-        axis.text.x = element_text(
-          angle = 90, vjust = 1,
-          hjust = 1, color = "brown4"
-        ),
-        axis.text.y = element_text(color = "steelblue4")
-      )
+    if (type == "mean_scores_ratio") {
+      plot <- plot +
+        theme(
+          axis.text.x = element_text(
+            angle = 90, vjust = 1,
+            hjust = 1, color = "brown4"
+          ),
+          axis.text.y = element_text(color = "steelblue4")
+        )
+    }
   }
 
   return(plot)
 }
-
 
 #' @title PIT Histogram
 #'
@@ -1001,8 +980,6 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom ggplot2 geom_col
 #' @return vector with the scoring values
 #' @examples
-#' library(scoringutils)
-#'
 #' # PIT histogram in vector based format
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
@@ -1018,7 +995,6 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
 #' @export
-
 
 plot_pit <- function(pit,
                      num_bins = "auto",
@@ -1104,7 +1080,6 @@ plot_pit <- function(pit,
   return(hist)
 }
 
-
 #' @title Visualise Where Forecasts Are Available
 #'
 #' @description
@@ -1126,21 +1101,16 @@ plot_pit <- function(pit,
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
 #' @export
-#'
 #' @examples
-#' library(scoringutils)
 #' library(ggplot2)
-#' avail_forecasts <- avail_forecasts(example_quantile,
-#'   by = c(
-#'     "model", "target_type",
-#'     "target_end_date"
-#'   )
+#' avail_forecasts <- avail_forecasts(
+#'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
-#' plot_avail_forecasts(avail_forecasts,
-#'   x = "target_end_date",
-#'   show_numbers = FALSE
+#' plot_avail_forecasts(
+#'  avail_forecasts, x = "target_end_date", show_numbers = FALSE
 #' ) +
-#'   facet_wrap("target_type")
+#'  facet_wrap("target_type")
+
 plot_avail_forecasts <- function(avail_forecasts,
                                  y = "model",
                                  x = "forecast_date",
@@ -1180,8 +1150,6 @@ plot_avail_forecasts <- function(avail_forecasts,
   return(plot)
 }
 
-
-
 #' @title Plot Correlation Between Metrics
 #'
 #' @description
@@ -1197,8 +1165,11 @@ plot_avail_forecasts <- function(avail_forecasts,
 #' @export
 #' @examples
 #' scores <- score(example_quantile)
-#' correlations <- correlation(scores)
+#' correlations <- correlation(
+#'  summarise_scores(scores)
+#' )
 #' plot_correlation(correlations)
+
 plot_correlation <- function(correlations) {
 
   metrics <- names(correlations)[names(correlations) %in% available_metrics()]
@@ -1241,8 +1212,6 @@ plot_correlation <- function(correlations) {
   return(plot)
 }
 
-
-
 #' @title Scoringutils ggplot2 theme
 #'
 #' @description
@@ -1261,6 +1230,3 @@ theme_scoringutils <- function() {
           panel.background = element_blank(),
           legend.position = "bottom")
 }
-
-
-

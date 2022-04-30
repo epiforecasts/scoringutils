@@ -14,13 +14,15 @@ plot_pairwise_comparison(
 \item{comparison_result}{A data.frame as produced by
 \code{\link[=pairwise_comparison]{pairwise_comparison()}}}
 
-\item{type}{character vector of length one that is either "mean_scores_ratio" or "pval".
-This denotes whether to visualise the ratio or the p-value of the
-pairwise comparison. Default is "mean_scores_ratio"}
+\item{type}{character vector of length one that is either
+"mean_scores_ratio", "pval", or "together". This denotes whether to
+visualise the ratio or the p-value of the pairwise comparison or both.
+Default is "mean_scores_ratio".}
 
 \item{smaller_is_good}{logical (default is \code{TRUE}) that indicates whether
 smaller or larger values are to be interpreted as 'good' (as you could just
-invert the mean scores ratio)}
+invert the mean scores ratio). This option is not supported when type =
+"pval"}
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
@@ -28,7 +30,6 @@ between models
 }
 \examples{
 library(ggplot2)
-library(scoringutils)
 df <- data.frame(
   model = rep(c("model1", "model2", "model3"), each = 10),
   id = rep(1:10),

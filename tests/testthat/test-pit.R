@@ -48,13 +48,13 @@ test_that("pit_sample() function works for continuous true_values and prediction
 })
 
 test_that("pit function works for continuous integer and quantile data", {
-  pit1 <- pit(example_quantile, by = "model")
-  pit2 <- pit(example_continuous,
+  pit1 <- suppressMessages(pit(example_quantile, by = "model"))
+  pit2 <- suppressMessages(pit(example_continuous,
     by = c("model", "target_type")
-  )
-  pit3 <- pit(example_integer,
+  ))
+  pit3 <- suppressMessages(pit(example_integer,
     by = c("model", "location")
-  )
+  ))
 
   expect_equal(names(pit1), c("model", "quantile", "pit_value"))
   expect_equal(names(pit2), c("model", "target_type", "pit_value"))

@@ -27,7 +27,6 @@ Visualise the components of the weighted interval score: penalties for
 over-prediction, under-prediction and for high dispersion (lack of sharpness)
 }
 \examples{
-library("scoringutils")
 library(ggplot2)
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "target_type"))

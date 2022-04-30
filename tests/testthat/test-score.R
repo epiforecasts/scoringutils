@@ -1,6 +1,6 @@
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
-  expect_error(score(data = NULL))
+  expect_error(suppressMessages(score(data = NULL)))
 })
 
 test_that("score() warns if column name equals a metric name", {
@@ -13,7 +13,7 @@ test_that("score() warns if column name equals a metric name", {
     bias = 3
   )
 
-  expect_warning(score(data = data))
+  expect_warning(suppressMessages(score(data = data)))
 })
 
 
@@ -21,7 +21,7 @@ test_that("score() warns if column name equals a metric name", {
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- score(binary_example[!is.na(prediction)])
+  eval <- suppressMessages(score(binary_example[!is.na(prediction)]))
   eval <- summarise_scores(eval, by = c("model", "target_type"))
 
   expect_equal(
@@ -41,7 +41,7 @@ test_that("function produces output for a binary case", {
 
 test_that("function produces score for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- score(binary_example[!is.na(prediction)])
+  eval <- suppressMessages(score(binary_example[!is.na(prediction)]))
   eval <- summarise_scores(eval, by = c("model", "target_type"))
   expect_true("brier_score" %in% names(eval))
 })
@@ -52,7 +52,7 @@ test_that("function produces score for a binary case", {
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- score(quantile_example[!is.na(prediction)])
+  eval <- suppressMessages(score(quantile_example[!is.na(prediction)]))
 
   expect_equal(
     nrow(eval) > 1,
@@ -69,7 +69,7 @@ test_that("score() quantile produces desired metrics", {
     quantile = rep(c(0.1, 0.9), times = 10)
   )
 
-  out <- score(data = data)
+  out <- suppressMessages(score(data = data))
   metric_names <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median", "coverage_deviation"
@@ -80,7 +80,9 @@ test_that("score() quantile produces desired metrics", {
 
 
 test_that("calculation of ae_median is correct for a quantile format case", {
-  eval <- score(scoringutils::example_quantile[!is.na(prediction)])
+  eval <- suppressMessages(
+    score(scoringutils::example_quantile[!is.na(prediction)])
+  )
 
   eval <- summarise_scores(eval, by = c("model"))
 
@@ -96,10 +98,12 @@ test_that("calculation of ae_median is correct for a quantile format case", {
 test_that("all quantile and range formats yield the same result", {
   quantile_example1 <- data.table::setDT(scoringutils::example_quantile)
 
-  eval1 <- score(quantile_example1[!is.na(prediction)])
+  eval1 <- suppressMessages(score(quantile_example1[!is.na(prediction)]))
   eval1 <- summarise_scores(eval1, by = "model")
 
-  ae <- quantile_example1[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- quantile_example1[
+    quantile == 0.5, ae := abs(true_value - prediction)][
+    !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -109,7 +113,7 @@ test_that("all quantile and range formats yield the same result", {
 test_that("function produces output even if only some metrics are chosen", {
   example <- scoringutils::example_quantile
 
-  eval <- scoringutils::score(example, metrics = "coverage")
+  eval <- suppressMessages(score(example, metrics = "coverage"))
 
   expect_equal(
     nrow(eval) > 1,
@@ -118,11 +122,11 @@ test_that("function produces output even if only some metrics are chosen", {
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
-  eval <- scoringutils::score(example_quantile,
+  eval <- suppressMessages(score(example_quantile,
     metrics = "interval_score"
-  )
+  ))
 
-  eval2 <- scoringutils::score(example_quantile)
+  eval2 <- suppressMessages(score(example_quantile))
 
   expect_equal(
     sum(eval$interval_score),
@@ -137,9 +141,9 @@ test_that("WIS is the same with other metrics omitted or included", {
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
   example <- data.table::setDT(scoringutils::example_continuous)
-  eval <- score(example[!is.na(prediction)])
+  eval <- suppressMessages(score(example[!is.na(prediction)]))
 
-  eval2 <- scoringutils::score(example)
+  eval2 <- suppressMessages(score(example))
 
   data.table::setcolorder(eval2, colnames(eval))
   eval <- eval[order(model)]
