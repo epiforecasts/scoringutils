@@ -103,7 +103,7 @@ example_quantile %>%
 
 ## Citation
 
-If using `scoringutils` in your work please consider citing it using the following,
+If using `scoringutils` in your work please consider citing it using the output of `citation("scoringutils")`:
 
 ```{r, echo = FALSE}
 citation("scoringutils")

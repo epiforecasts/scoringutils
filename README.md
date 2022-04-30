@@ -137,7 +137,7 @@ documentation for more information.
 ## Citation
 
 If using `scoringutils` in your work please consider citing it using the
-following,
+output of `citation("scoringutils")`:
 
     #> 
     #> To cite scoringutils in publications use the following. If you use the
