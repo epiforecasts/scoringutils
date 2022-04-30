@@ -458,27 +458,25 @@ plot_predictions <- function(data,
                                    value.var = "prediction")
 
     # only plot ranges if there are ranges to plot
-    if (!all(range == 0)) {
-      plot <- plot +
-        ggdist::geom_lineribbon(
-          data = intervals,
-          aes(
-            ymin = lower, ymax = upper,
-            # We use the fill_ramp aesthetic for this instead of the default fill
-            # because we want to keep fill to be able to use it for other
-            # variables
-            fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
-          ),
-          lwd = 0.4
-        ) +
-        ggdist::scale_fill_ramp_discrete(
-          name = "range",
-          # range arguemnt was added to make sure that the line for the median
-          # and the ribbon don't have the same opacity, making the line
-          # invisible
-          range = c(0.15, 0.75)
-        )
-    }
+    plot <- plot +
+      ggdist::geom_lineribbon(
+        data = intervals,
+        aes(
+          ymin = lower, ymax = upper,
+          # We use the fill_ramp aesthetic for this instead of the default fill
+          # because we want to keep fill to be able to use it for other
+          # variables
+          fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
+        ),
+        lwd = 0.4
+      ) +
+      ggdist::scale_fill_ramp_discrete(
+        name = "range",
+        # range arguemnt was added to make sure that the line for the median
+        # and the ribbon don't have the same opacity, making the line
+        # invisible
+        range = c(0.15, 0.75)
+      )
   }
 
   # We could treat this step as part of ggdist::geom_lineribbon() but we treat
