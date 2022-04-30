@@ -384,8 +384,26 @@ plot_heatmap <- function(scores,
 #'     by = c("target_type", "location"),
 #'     range = c(0, 50, 90, 95)
 #'   ) +
-#'   facet_wrap(~ location + target_type, scales = "free_y")
+#'   facet_wrap(~ location + target_type, scales = "free_y") +
+#'   aes(fill = model, color = model)
 #'
+#' example_continuous %>%
+#'   make_NA (
+#'     what = "truth",
+#'     target_end_date >= "2021-07-22",
+#'     target_end_date < "2021-05-01"
+#'   ) %>%
+#'   make_NA (
+#'     what = "forecast",
+#'     forecast_date != "2021-06-07"
+#'   ) %>%
+#'   plot_predictions (
+#'     x = "target_end_date",
+#'     by = c("target_type", "location"),
+#'     range = c(0)
+#'   ) +
+#'   facet_wrap(~ location + target_type, scales = "free_y") +
+#'   aes(fill = model, color = model)
 
 
 plot_predictions <- function(data,
@@ -431,7 +449,6 @@ plot_predictions <- function(data,
   }
 
   plot <- ggplot(data = data, aes(x = .data[[x]])) +
-    scale_colour_manual("", values = c("black", "steelblue4")) +
     theme_scoringutils() +
     ylab("True and predicted values")
 
@@ -440,6 +457,7 @@ plot_predictions <- function(data,
     intervals <- data.table::dcast(intervals, ... ~ boundary,
                                    value.var = "prediction")
 
+    # only plot ranges if there are ranges to plot
     plot <- plot +
       ggdist::geom_lineribbon(
         data = intervals,
@@ -453,7 +471,11 @@ plot_predictions <- function(data,
         lwd = 0.4
       ) +
       ggdist::scale_fill_ramp_discrete(
-        name = "range"
+        name = "range",
+        # range arguemnt was added to make sure that the line for the median
+        # and the ribbon don't have the same opacity, making the line
+        # invisible
+        range = c(0.15, 0.75)
       )
   }
 
@@ -468,7 +490,7 @@ plot_predictions <- function(data,
       plot <- plot +
         geom_line(
           data = median,
-          mapping = aes(y = prediction, colour = "median"),
+          mapping = aes(y = prediction),
           lwd = 0.4
         )
     }
@@ -479,12 +501,19 @@ plot_predictions <- function(data,
     plot <- plot +
       geom_point(
         data = truth_data,
-        aes(y = true_value, colour = "actual"),
+        show.legend = FALSE,
+        inherit.aes = FALSE,
+        aes(x = .data[[x]], y = true_value),
+        color = "black",
         size = 0.5
       ) +
       geom_line(
         data = truth_data,
-        aes(y = true_value, colour = "actual"),
+        inherit.aes = FALSE,
+        show.legend = FALSE,
+        aes(x = .data[[x]], y = true_value),
+        linetype = 1,
+        color = "grey40",
         lwd = 0.2
       )
   }
