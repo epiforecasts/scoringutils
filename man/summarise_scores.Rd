@@ -46,7 +46,7 @@ Relative skill will be calculated for the aggregation level specified in
 
 \item{metric}{character with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
-this will be either interval score, crps or brier score (depending on which
+this will be either interval score, CRPS or Brier score (depending on which
 of these is available in the input data)}
 
 \item{baseline}{character string with the name of a model. If a baseline is

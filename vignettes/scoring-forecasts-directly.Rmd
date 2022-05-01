@@ -116,7 +116,7 @@ some evidence that it was miscalibrated if $0.01 < p < 0.1$, and good
 evidence that it was miscalibrated if $p <= 0.01$.
 In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration. It should
-als be noted that the test only works given sufficient samples, otherwise the 
+also be noted that the test only works given sufficient samples, otherwise the 
 Null hypothesis will often be rejected outright. 
 
 

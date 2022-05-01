@@ -126,7 +126,7 @@ score(example_quantile) %>%
 
 ### Scoring point forecasts
 
-Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is importnat to use `na.rm = TRUE` when summarising. 
+Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
 
 ```{r}
 score(example_point) %>% 
@@ -148,7 +148,7 @@ score(example_quantile) %>%
 
 ### Adding relative scores
 
-In order to better compare models against each other we can use relative scores which are computed based on pairwise comparisons (see details below). Relative scores can be added to the evaluation using the function `summarise_scores()`. This requires a column called 'model' to be present. Pairwise comparisons are computed according to the grouping specified in `by`: essentially, the data.frame with all scores gets split into different data.frames according to the values specified in `by` and relative scores are computed for every individual group separately. The `baseline` argumen allows us to specify a baseline that can be used to scale relative scores (all scores are divided by the baseline relative score). For example, to obtain relative scores separately for different forecast targets, we can run
+In order to better compare models against each other we can use relative scores which are computed based on pairwise comparisons (see details below). Relative scores can be added to the evaluation using the function `summarise_scores()`. This requires a column called 'model' to be present. Pairwise comparisons are computed according to the grouping specified in `by`: essentially, the data.frame with all scores gets split into different data.frames according to the values specified in `by` and relative scores are computed for every individual group separately. The `baseline` argument allows us to specify a baseline that can be used to scale relative scores (all scores are divided by the baseline relative score). For example, to obtain relative scores separately for different forecast targets, we can run
 
 ```{r}
 score(example_quantile) %>%
@@ -245,7 +245,7 @@ example_quantile %>%
 
 ## Pairwise comparisons
 
-Relative scores for different models can be computed using pairwise comparisons, a sort of pairwise tournament where all cominations of two models are compared against each other based on the overlapping set of available forecasts common to both models. Internally, a ratio of the mean scores of both models is computed. The relative score of a model is then the geometric mean of all mean score ratios which involve that model. When a baseline is provided, then that baseline is excluded from the relative scores for individual models (which therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model. 
+Relative scores for different models can be computed using pairwise comparisons, a sort of pairwise tournament where all combinations of two models are compared against each other based on the overlapping set of available forecasts common to both models. Internally, a ratio of the mean scores of both models is computed. The relative score of a model is then the geometric mean of all mean score ratios which involve that model. When a baseline is provided, then that baseline is excluded from the relative scores for individual models (which therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model. 
 
 In `scoringutils`, pairwise comparisons can be made in two ways: Through the standalone function `pairwise_comparison()` or from within `summarise_scores()` which simply adds relative scores to an existing set of scores. 
 
@@ -299,7 +299,7 @@ example_quantile %>%
 
 ### Scores by interval ranges
 
-If you would like to see how different forecast interval ranges contribute to average scores, you can viusalise scores by interval range: 
+If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range: 
 
 ```{r}
 example_quantile %>%

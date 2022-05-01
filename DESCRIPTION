@@ -39,7 +39,7 @@ Description:
     come in different formats (e.g. forecasts represented by predictive samples 
     or by quantiles of the predictive distribution) can be evaluated. 
     Scoring metrics can be used either through a convenient data.frame format, 
-    or can be applied as individual fuctions in a vector / matrix format. 
+    or can be applied as individual functions in a vector / matrix format. 
     All functionality has been implemented with a focus on performance and is 
     robustly tested. 
 License: MIT + file LICENSE

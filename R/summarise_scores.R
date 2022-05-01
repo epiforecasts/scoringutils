@@ -19,7 +19,7 @@
 #' `by`.
 #' @param metric character with the name of the metric for which
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, crps or brier score (depending on which
+#' this will be either interval score, CRPS or Brier score (depending on which
 #' of these is available in the input data)
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
