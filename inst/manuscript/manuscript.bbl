@@ -1,4 +1,4 @@
-\begin{thebibliography}{37}
+\begin{thebibliography}{36}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -8,14 +8,6 @@
   \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
-
-\bibitem[{Anderson and Darling(1952)}]{andersonAsymptoticTheoryCertain1952}
-Anderson TW, Darling DA (1952).
-\newblock \enquote{Asymptotic {{Theory}} of {{Certain}} "{{Goodness}} of
-  {{Fit}}" {{Criteria Based}} on {{Stochastic Processes}}.}
-\newblock \emph{The Annals of Mathematical Statistics}, \textbf{23}(2),
-  193--212.
-\newblock ISSN 0003-4851.
 
 \bibitem[{Angus(1994)}]{angusProbabilityIntegralTransform1994}
 Angus JE (1994).
