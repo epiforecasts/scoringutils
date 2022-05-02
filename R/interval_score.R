@@ -7,11 +7,11 @@
 #' The score is computed as
 #'
 #' \deqn{
-#' \text{score} = (\text{upper} - \text{lower}) + \frac{2}{\alpha}(\text{lower}
-#'  - \text{true_value}) *
-#' \mathbf{1}(\text{true_value} < \text{lower}) +
-#' \frac{2}{\alpha}(\text{true_value} - \text{upper}) *
-#' \mathbf{1}(\text{true_value} > \text{upper})
+#' \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
+#'  - \textrm{true_value}) *
+#' \mathbf{1}(\textrm{true_value} < \textrm{lower}) +
+#' \frac{2}{\alpha}(\textrm{true_value} - \textrm{upper}) *
+#' \mathbf{1}(\textrm{true_value} > \textrm{upper})
 #' }{
 #' score = (upper - lower) + 2/alpha * (lower - true_value) *
 #' 1(true_values < lower) + 2/alpha * (true_value - upper) *
