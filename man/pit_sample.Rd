@@ -43,7 +43,7 @@ u_t = F_t (x_t)
 }
 
 where \eqn{x_t} is the observed data point at time \eqn{t in t_1, …, t_n}{t
-\text{ in } t_1, …, t_n}, n being the number of forecasts, and \eqn{F_t} is
+\textrm{ in } t_1, …, t_n}, n being the number of forecasts, and \eqn{F_t} is
 the (continuous) predictive cumulative probability distribution at time t. If
 the true probability distribution of outcomes at time t is \eqn{G_t} then the
 forecasts \eqn{F_t} are said to be ideal if \eqn{F_t = G_t} at all times t.
