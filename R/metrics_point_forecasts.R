@@ -3,9 +3,9 @@
 #' @description
 #' Absolute error of the median calculated as
 #'
-#' \deqn{
+#' \deqn{%
 #'   \textrm{abs}(\textrm{true_value} - \textrm{median_prediction})
-#' }{
+#' }{%
 #'   abs(true_value - median_prediction)
 #' }
 #'
