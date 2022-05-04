@@ -32,7 +32,7 @@ probabilistic prediction and the true outcome.
   \textrm{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\textrm{prediction_t} -
   \textrm{outcome_t})^2
 }{
-  Brier_Score = 1/N \sum_{t = 1}^{n} (prediction_t - outcome_t)²
+  Brier_Score = 1/N sum_{t = 1}^{n} (prediction_t - outcome_t)²
 }
 }
 \examples{
