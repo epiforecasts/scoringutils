@@ -8,10 +8,10 @@
 #'
 #' \deqn{
 #' \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
-#'  - \textrm{true_value}) *
-#' \mathbf{1}(\textrm{true_value} < \textrm{lower}) +
-#' \frac{2}{\alpha}(\textrm{true_value} - \textrm{upper}) *
-#' \mathbf{1}(\textrm{true_value} > \textrm{upper})
+#'  - \textrm{true\_value}) *
+#' \mathbf{1}(\textrm{true\_value} < \textrm{lower}) +
+#' \frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
+#' \mathbf{1}(\textrm{true\_value} > \textrm{upper})
 #' }{
 #' score = (upper - lower) + 2/alpha * (lower - true_value) *
 #' 1(true_values < lower) + 2/alpha * (true_value - upper) *

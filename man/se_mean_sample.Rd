@@ -20,7 +20,7 @@ vector with the scoring values
 Squared error of the mean calculated as
 
 \deqn{
-  \textrm{mean}(\textrm{true_value} - \textrm{prediction})^2
+  \textrm{mean}(\textrm{true\_value} - \textrm{prediction})^2
 }{
   mean(true_value - mean_prediction)^2
 }

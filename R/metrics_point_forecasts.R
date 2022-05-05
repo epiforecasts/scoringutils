@@ -4,7 +4,7 @@
 #' Absolute error of the median calculated as
 #'
 #' \deqn{%
-#'   \textrm{abs}(\textrm{true_value} - \textrm{median_prediction})
+#'   \textrm{abs}(\textrm{true\_value} - \textrm{median\_prediction})
 #' }{%
 #'   abs(true_value - median_prediction)
 #' }
@@ -41,7 +41,7 @@ ae_median_sample <- function(true_values, predictions) {
 #' Squared error of the mean calculated as
 #'
 #' \deqn{
-#'   \textrm{mean}(\textrm{true_value} - \textrm{prediction})^2
+#'   \textrm{mean}(\textrm{true\_value} - \textrm{prediction})^2
 #' }{
 #'   mean(true_value - mean_prediction)^2
 #' }
@@ -73,7 +73,7 @@ se_mean_sample <- function(true_values, predictions) {
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
-#'   \textrm{abs}(\textrm{true_value} - \textrm{prediction})
+#'   \textrm{abs}(\textrm{true\_value} - \textrm{prediction})
 #' }{
 #'   abs(true_value - median_prediction)
 #' }
@@ -122,7 +122,7 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #' Calculate absolute error as
 #'
 #' \deqn{
-#'   \textrm{abs}(\textrm{true_value} - \textrm{median_prediction})
+#'   \textrm{abs}(\textrm{true\_value} - \textrm{median_prediction})
 #' }{
 #'   abs(true_value - prediction)
 #' }
@@ -148,6 +148,8 @@ abs_error <- function(true_values, predictions) {
 #' Squared Error SE calculated as
 #'
 #' \deqn{
+#'   (\textrm{true\_values} - \textrm{predicted\_values})^2
+#' }{
 #'   (true_values - predicted_values)^2
 #' }
 #'

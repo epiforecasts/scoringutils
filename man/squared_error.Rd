@@ -18,6 +18,8 @@ vector with the scoring values
 Squared Error SE calculated as
 
 \deqn{
+  (\textrm{true\_values} - \textrm{predicted\_values})^2
+}{
   (true_values - predicted_values)^2
 }
 }
