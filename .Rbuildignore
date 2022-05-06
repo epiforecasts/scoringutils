@@ -15,3 +15,4 @@
 ^\.lintr$
 ^docs$
 ^\.devcontainer$
+^CODE_OF_CONDUCT\.md$
