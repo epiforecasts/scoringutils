@@ -78,7 +78,7 @@
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 #' Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
-#' region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
+#' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
 
 pit_sample <- function(true_values,
@@ -176,7 +176,7 @@ pit_sample <- function(true_values,
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 #' Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
-#' region of Sierra Leone, 2014-15, <doi:10.1371/journal.pcbi.1006785>
+#' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords scoring
 
 pit <- function(data,
