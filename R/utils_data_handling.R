@@ -107,8 +107,8 @@ sample_to_quantile <- function(data,
   by <- setdiff(colnames(data), reserved_columns)
 
   data <- data[, .(quantile = quantiles,
-                   prediction = quantile(x = prediction, prob = quantiles,
-                                         type = type, na.rm = TRUE)),
+                   prediction = quantile(x = prediction, prob = ..quantiles,
+                                         type = ..type, na.rm = TRUE)),
                by = by]
 
   return(data[])
