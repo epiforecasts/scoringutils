@@ -64,17 +64,14 @@ test_that("sample_to_quantiles works", {
   )
 
   quantile <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
+    date = rep(as.Date("2020-01-01") + 1:10, each = 2),
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
-    quantile = rep(c(0.25, 0.75), each = 10)
+    true_value = rep(1:10, each = 2),
+    quantile = c(0.25, 0.75),
+    prediction = rep(2:11, each = 2) + c(0, 2)
   )
 
-
   quantile2 <- scoringutils::sample_to_quantile(samples, quantiles = c(0.25, 0.75))
-  quantile2 <- quantile2[order(model, quantile, date)]
-  data.table::setcolorder(quantile2, names(quantile))
 
   expect_equal(quantile, as.data.frame(quantile2))
 })
