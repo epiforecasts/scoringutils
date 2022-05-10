@@ -74,6 +74,20 @@ test_that("sample_to_quantiles works", {
   quantile2 <- scoringutils::sample_to_quantile(samples, quantiles = c(0.25, 0.75))
 
   expect_equal(quantile, as.data.frame(quantile2))
+
+  # Verify that `type` is correctly scoped in sample_to_quantile(), as it is
+  # also an argument.
+  # If it's not scoped well, the call to `sample_to_quantile()` will fail.
+  samples$type <- "test"
+
+  quantile3 <- sample_to_quantile(samples, quantiles = c(0.25, 0.75))
+  quantile3$type <- NULL
+
+  expect_identical(
+    quantile2,
+    quantile3
+  )
+
 })
 
 
