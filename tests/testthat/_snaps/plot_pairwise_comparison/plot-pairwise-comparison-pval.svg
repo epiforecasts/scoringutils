@@ -133,6 +133,6 @@
 <polyline points='122.51,296.89 125.25,296.89 ' style='stroke-width: 1.07; stroke: #CCCCCC; stroke-linecap: butt;' />
 <polyline points='122.51,193.29 125.25,193.29 ' style='stroke-width: 1.07; stroke: #CCCCCC; stroke-linecap: butt;' />
 <polyline points='122.51,89.68 125.25,89.68 ' style='stroke-width: 1.07; stroke: #CCCCCC; stroke-linecap: butt;' />
-<text x='125.25' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='404.32px' lengthAdjust='spacingAndGlyphs'>Pairwise comparisons - p-value whether mean scores ratio equal to 1</text>
+<text x='125.25' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='184.20px' lengthAdjust='spacingAndGlyphs'>plot_pairwise_comparison_pval</text>
 </g>
 </svg>
