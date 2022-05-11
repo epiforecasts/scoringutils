@@ -691,7 +691,7 @@ plot_quantile_coverage <- function(scores,
 #' [pairwise_comparison()]
 #' @param type character vector of length one that is either
 #'  "mean_scores_ratio", "pval", or "together". This denotes whether to
-#' visualise the ratio or the p-value of the pairwise comparison or both. 
+#' visualise the ratio or the p-value of the pairwise comparison or both.
 #' Default is "mean_scores_ratio".
 #' @param smaller_is_good logical (default is `TRUE`) that indicates whether
 #' smaller or larger values are to be interpreted as 'good' (as you could just
@@ -937,8 +937,7 @@ plot_pairwise_comparison <- function(comparison_result,
       legend.position = "none"
     ) +
     labs(
-      x = "", y = "",
-      title = "Pairwise comparisons - p-value whether mean scores ratio equal to 1"
+      x = "", y = ""
     ) +
     coord_cartesian(expand = FALSE)
     if (type == "mean_scores_ratio") {

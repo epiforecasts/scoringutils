@@ -32,6 +32,11 @@ the mean before returning an output.
 - `crps`, `dss` and `logs` were renamed to `crps_sample()`, `dss_sample()`, and
 `logs_sample()`
 
+### Bug fixes
+- Testing was expanded
+- minor bugs were fixed, for example a bug in the sample_to_quantile function
+(https://github.com/epiforecasts/scoringutils/pull/223)
+
 ### package data updated
 - package data is now based on forecasts submitted to the European Forecast Hub
 (https://covid19forecasthub.eu/). 
