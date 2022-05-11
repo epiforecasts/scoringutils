@@ -12,6 +12,8 @@ geom_mean_helper <- function(x) {
 
 globalVariables(c(
   "..index",
+  "..quantiles",
+  "..type",
   ".",
   ".SD",
   "adj_pval",
