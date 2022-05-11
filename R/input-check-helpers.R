@@ -156,6 +156,11 @@ check_equal_length <- function(...,
   lengths <- unique(lengths)
 
   if (one_allowed) {
+    # check passes if all have length 1
+    if (all(lengths == 1)) {
+      return(invisible(NULL))
+    }
+    # ignore those where length is one for later checks, as we allow length 1
     lengths <- lengths[lengths != 1]
   }
 
