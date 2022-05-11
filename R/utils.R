@@ -88,7 +88,7 @@ globalVariables(c(
 #' @keywords info
 
 available_metrics <- function() {
-  return(unique(metrics$Name))
+  return(unique(scoringutils::metrics$Name))
 }
 
 #' @title Simple permutation test
