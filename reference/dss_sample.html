@@ -106,7 +106,7 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" class="external-link">https://arxiv.org/pdf/1709.04743.pdf</a></p>
+Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v090i12" class="external-link">https://www.jstatsoft.org/article/view/v090i12</a></p>
     </div>
 
     <div class="section level2">
@@ -114,10 +114,11 @@ Forecasts with scoringRules, <a href="https://arxiv.org/pdf/1709.04743.pdf" clas
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dss_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.225306 2.723604 6.942093 2.515477 1.673355 2.563029 2.039870 2.519288</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 4.184988 2.410604 7.474331 2.637572 2.652482 2.664615 3.049513 3.321790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 4.386353 3.095879 3.060583 3.892560 3.142961 3.068269 3.521705 5.181404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 3.526332 3.209953 3.294480 3.541943 3.567639 3.306589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.01980302 1.04836183 2.47321664 1.63842443 3.03951409 1.99107558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 3.32061244 2.18077556 2.48585678 2.58790285 2.55973937 3.15382116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 4.06259022 2.69707249 3.71733059 2.64900818 3.79356202 4.35124434</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 3.45312071 3.21188926 3.64708936 3.19683883 4.01739951 4.42800557</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 5.97113456 3.49064161 4.33592560 3.53857238 3.48257407 3.55093274</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
