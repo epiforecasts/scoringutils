@@ -20,7 +20,7 @@
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
 logs_sample <- function(true_values, predictions) {
@@ -51,7 +51,7 @@ logs_sample <- function(true_values, predictions) {
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
 dss_sample <- function(true_values, predictions) {
@@ -83,7 +83,7 @@ dss_sample <- function(true_values, predictions) {
 #' @export
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-#' Forecasts with scoringRules, <https://arxiv.org/pdf/1709.04743.pdf>
+#' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
 crps_sample <- function(true_values, predictions) {

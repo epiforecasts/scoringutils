@@ -34,6 +34,6 @@ logs_sample(true_values, predictions)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
-Forecasts with scoringRules, \url{https://arxiv.org/pdf/1709.04743.pdf}
+Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12}
 }
 \keyword{metric}
