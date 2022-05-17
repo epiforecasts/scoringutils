@@ -52,9 +52,9 @@ author:
       | London WC1E 7HT 
     email: \email{sam.abbott@lshtm.ac.uk}
 title:
-  formatted: "Evaluating Forecasts using \\pkg{scoringutils} in \\proglang{R}"
+  formatted: "Evaluating Forecasts with \\pkg{scoringutils} in \\proglang{R}"
   # If you use tex in the formatted title, also supply version without
-  plain: "Evaluating Forecasts using scoringutils in R"
+  plain: "Evaluating Forecasts with scoringutils in R"
   # For running headers, if needed
   short: "Evaluating Forecasts with \\pkg{scoringutils} in \\proglang{R}"
 abstract: >
