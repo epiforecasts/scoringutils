@@ -258,7 +258,7 @@ crps <- list(
   For integer-valued forecasts, the RPS is given as
   $$ \text{RPS}(F, y) = \sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. $$
 
-  **Usage and caveats** Smaller values are better. The crps is a good choice for most practical purposes that involve decision making, as it takes the entire predictive distribution into account. If two forecasters assign the same probability to the true event $y$, then the forecaster who assigned high probability to events far away from $y$ will still get a worse score. The crps (in contrast to the log score) can at times be quite lenient towards extreme mispredictions. Also, due to it's similarity to the absolute error, the level of scores depend a lot on the absolute value of what is predicted, which makes it hard to compare scores of forecasts for quantities that are orders of magnitude apart.)"
+  \textbf{Usage and caveats} Smaller values are better. The crps is a good choice for most practical purposes that involve decision making, as it takes the entire predictive distribution into account. If two forecasters assign the same probability to the true event $y$, then the forecaster who assigned high probability to events far away from $y$ will still get a worse score. The crps (in contrast to the log score) can at times be quite lenient towards extreme mispredictions. Also, due to it's similarity to the absolute error, the level of scores depend a lot on the absolute value of what is predicted, which makes it hard to compare scores of forecasts for quantities that are orders of magnitude apart.)"
 )
 
 
@@ -270,7 +270,7 @@ log_score <- list(
   $$ \text{log score} = \log p_y, $$
   where $p_y$ is the probability assigned to outcome p by the forecast F.
 
-  **Usage and caveats**: Larger values are better, but sometimes the sign is reversed. The log score is ensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
+  \textbf{Usage and caveats}: Larger values are better, but sometimes the sign is reversed. The log score is ensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
 )
 
 wis <- list(
@@ -281,7 +281,7 @@ wis <- list(
   $$WIS = \frac{1}{K + 0.5} \cdot (w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)),$$
   where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$.
 
-  **Usage and caveats**:
+  \textbf{Usage and caveats}:
   Smaller scores are better. Applicable to all quantile forecasts, takes the entire predictive distribution into account. Just as the crps, the wis is based on measures of absolute error. When averaging across multiple targets, it will therefore be dominated by targets with higher absolute values. The decomposition into sharpness, over- and underprediction make it easy to interpret scores and use them for model improvement. )"
 )
 
@@ -295,7 +295,7 @@ dss <- list(
   $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,$$
   where $F$ is the predictive distribution with mean $\mu$ and standard deviation $\sigma$ and $y$ is the true observed value.
 
-  **Usage and caveats** The dss is applicable to continuous and integer forecasts and easy to compute. Apart from the ease of computation we see little advantage in using it over other scores.)"
+  \textbf{Usage and caveats} The dss is applicable to continuous and integer forecasts and easy to compute. Apart from the ease of computation we see little advantage in using it over other scores.)"
 )
 
 brier_score <- list(
@@ -304,7 +304,7 @@ brier_score <- list(
   $$\text{Brier Score} = \frac{1}{N} \sum_{n = 1}^{N} (f_n - y_n),$$
   where $f_n$, with $n = 1, \dots, N$ are the predicted probablities that the corresponding events, $y_n \in (0, 1)$ will be equal to one.)
 
-  **Usage**: Applicable to all binary forecasts.)"
+  \textbf{Usage}: Applicable to all binary forecasts.)"
 )
 
 interval_coverage <- list(
@@ -315,14 +315,14 @@ interval_coverage <- list(
   To summarise interval coverage over different over multiple interval ranges, we can compute coverage deviation defined as the mean interval coverage over all $K$ interval ranges $\alpha_k$ with $k = 1, \dots, K$:
   $$\text{Coverage deviation} = \frac{1}{K} \sum_{k = 1}^{K} \text{IC}_{\alpha_k}$$
 
-  **Usage**: Interval coverage for a set of chosen intervals, (e.g. 50\% and 90\%) gives a good indication of marginal calibration and is easy to interpret. Reporting coverage deviation has the advantage of summarising calibration in a single number, but loses some of the nuance.)"
+  \textbf{Usage}: Interval coverage for a set of chosen intervals, (e.g. 50\% and 90\%) gives a good indication of marginal calibration and is easy to interpret. Reporting coverage deviation has the advantage of summarising calibration in a single number, but loses some of the nuance.)"
 )
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage",
   `Explanation` = r"(Quantile coverage for a given quantile level is the proportion of true values smaller than the predictions corresponding to that quantile level.
 
-  **Usage**: Quantile coverage is similar to interval coverage, but conveys more information. For example, it allows us to look at the 5\% and 95\% quantile separately, instead of jointly at the 90\% prediction interval). This helps to diagnose whether it is the upper or lower end of a prediction interval that is causing problems. Plots of quantile coverage are conceptually very similar to PIT histograms.)"
+  \textbf{Usage}: Quantile coverage is similar to interval coverage, but conveys more information. For example, it allows us to look at the 5\% and 95\% quantile separately, instead of jointly at the 90\% prediction interval). This helps to diagnose whether it is the upper or lower end of a prediction interval that is causing problems. Plots of quantile coverage are conceptually very similar to PIT histograms.)"
 )
 
 sharpness <- list(
@@ -348,7 +348,7 @@ bias <- list(
 
   For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the true value is smaller than the median of the predictive distribution. If the true value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the true value. If the true value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed true value, and this metric coincides with the one for continuous forecasts.
 
-  **Usage**:
+  \textbf{Usage}:
   In contrast to the over- and underprediction penalties of the interval score it is bound between 0 and 1 and represents the tendency of forecasts to be biased rather than the absolute amount of over- and underprediction. It is therefore a more robust measurement, but harder to interpet. It largely depends on the application whether one is more interested in the tendency to be biased or in the absolute value of over- and underpredictions.)"
 )
 
@@ -362,7 +362,7 @@ pit <- list(
   $$u = P(y) + v \cdot (P(y) - P(y - 1) ),$$
   where $y$ is again the observed value $P()$ is the cumulative probability assigned to all values smaller or equal to $y$ (where $P(-1) = 0$ by definition, and $v$ is a standard uniform variable independent of $y$. If $P$ is equal to the true data-generating distribution function, then $u$ is standard uniform.  also propose a non-randomised version of the PIT for count data that could be used alternatively.
 
-  **Usage**:
+  \textbf{Usage}:
   One can plot a histogram of $u$ values to look for deviations from uniformity. U-shaped histograms often result from predictions that are too narrow, while hump-shaped histograms indicate that predictions may be too wide. Biased predictions will usually result in a triangle-shaped histogram. One can also test for deviations from normality, using for example an Anderson-Darling test. This, however, proves to be overly strict in practice and even slight deviations from perfect calibration are punished in a way that makes it very hard to compare models at all. In addition, errors from forecasts may be correlated (i.e. forecasts made on a given date), potentially violating the assumptions of the Anderson-Darling test. We therefore do not recommend it for most use cases.)"
 )
 
@@ -372,7 +372,7 @@ mean_score_ratio <- list(
   $$\theta_{ij} =\frac{\text{mean score model } i \text{ on } \mathcal{A}_{ij}}{\text{mean score model } j \text{ on } \mathcal{A}_{ij}}.$$
   The mean score ratio can in principle be computed for any arbitrary score.
 
-  **Usage**:
+  \textbf{Usage}:
   Mean scores ratios are usually calculated in the context of pairwise comparisons, where a set of models is compared by looking at mean score ratios of all possible parings. Whether smaller or larger values are better depends on the orientation of the original score used)"
 )
 
@@ -382,7 +382,7 @@ relative_skill <- list(
   $$ \theta_{i} = \left(\prod_{m = 1}^M \theta_{im}\right)^{1/M}, $$
   where M is the number of models.
 
-  **Usage and caveats**:
+  \textbf{Usage and caveats}:
   Relative skill is a helpful way to obtain a model ranking. Whether smaller or larger values are better depends on the orientation of the original score used.
   It is in principle relatively robust against biases that arise when models only forecast some of the available targets and is a reasonable way to handle missing forecasts. One possible precautionary measure to reduces issues with missing forecasts is to only compare models that have forecasted at least half of all possible targets (this ensures that there is always an overlap between models). If there is no overlap between models, the relative skill implicitly estimates how a model would have forecasted on those missing targets. )"
 )
