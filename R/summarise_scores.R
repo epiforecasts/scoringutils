@@ -92,7 +92,7 @@ summarise_scores <- function(scores,
   # takes the mean over ranges and quantiles first, if neither range nor
   # quantile are in `by`. Reason to do this is that summaries may be
   # inaccurate if we treat individual quantiles as independent forecasts
-  scores <- scores[, lapply(.SD, mean, ...),
+  scores <- scores[, lapply(.SD, base::mean, ...),
     by = c(unique(c(forecast_unit, by))),
     .SDcols = colnames(scores) %like% cols_to_summarise
   ]
