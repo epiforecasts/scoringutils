@@ -114,13 +114,19 @@ check_true_values <- function(true_values,
 #' @param ... The variables to check
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
+#' @example
+#' test_function <- function(argument = NULL) {
+#'   scoringutils:::check_not_null("argument" = argument)
+#'   paste("Input:", argument)
+#' }
+#' test_function("works")
 #'
 #' @keywords internal
 check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+  calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
 
   for (i in seq_along(vars)) {
     varname <- varnames[i]
@@ -165,7 +171,7 @@ check_equal_length <- function(...,
   }
 
   if (length(unique(lengths)) != 1) {
-    calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+    calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
     stop(paste0(
       "Arguments passed to the following function call: '",
       calling_function,
