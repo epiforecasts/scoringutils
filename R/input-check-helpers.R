@@ -120,7 +120,7 @@ check_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
-  calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+  calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
 
   for (i in seq_along(vars)) {
     varname <- varnames[i]
@@ -165,7 +165,7 @@ check_equal_length <- function(...,
   }
 
   if (length(unique(lengths)) != 1) {
-    calling_function <- deparse1(sys.calls()[[sys.nframe() - 1]])
+    calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
     stop(paste0(
       "Arguments passed to the following function call: '",
       calling_function,

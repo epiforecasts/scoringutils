@@ -9,3 +9,14 @@ test_that("Check equal length works if all arguments have length 1", {
   )
   expect_equal(out, 0.05)
 })
+
+
+test_that("Check_not_null works", {
+  test_function <- function(argument = NULL) {
+    scoringutils:::check_not_null("argument" = argument)
+    return(paste("Input:", argument))
+  }
+  out <- test_function("works")
+  expect_equal(out, "Input: works")
+  expect_error(test_function())
+})
