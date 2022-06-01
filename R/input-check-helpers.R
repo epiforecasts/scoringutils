@@ -114,12 +114,6 @@ check_true_values <- function(true_values,
 #' @param ... The variables to check
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
-#' @example
-#' test_function <- function(argument = NULL) {
-#'   scoringutils:::check_not_null("argument" = argument)
-#'   paste("Input:", argument)
-#' }
-#' test_function("works")
 #'
 #' @keywords internal
 check_not_null <- function(...) {
