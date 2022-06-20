@@ -70,10 +70,17 @@ check_forecasts <- function(data) {
   }
 
   # check whether any column name is a scoringutils metric
-  if (any(colnames(data) %in% available_metrics())) {
+  clashing_colnames <- intersect(colnames(data), available_metrics())
+  if (length(clashing_colnames) > 0) {
+    clashing_colnames <- paste0('"', clashing_colnames, '"')
     warnings <- c(
       warnings,
-      "At least one column in the data corresponds to the name of a metric that will be computed by scoringutils. Please check `available_metrics()`" # nolint
+      paste0(
+        "At least one column in the data ",
+        "(", paste(clashing_colnames, collapse = ", "), ") ",
+        "corresponds to the name of a metric that will be computed by ",
+        "scoringutils. Please check `available_metrics()`"
+      )
     )
   }
 
