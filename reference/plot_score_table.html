@@ -84,50 +84,59 @@ score()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scores</dt>
 <dd><p>A data.table of scores as produced by <code><a href="score.html">score()</a></code>.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>the variable to be shown on the y-axis. Instead of a single character string,
 you can also specify a vector with column names, e.g.
 <code>y = c("model", "location")</code>. These column names will be concatenated
 to create a unique row identifier (e.g. "model1_location1").</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A character vector that determines how the colour shading for the
 plot gets computed. By default (<code>NULL</code>), shading will be determined per
 metric, but you can provide additional column names (see examples).</p></dd>
+
+
 <dt>metrics</dt>
 <dd><p>A character vector with the metrics to show. If set to
 <code>NULL</code> (default), all metrics present in <code>scores</code> will be shown.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A ggplot2 object with a coloured table of summarised scores</p>
+    
+
+<p>A ggplot2 object with a coloured table of summarised scores</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_score_table-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># can also put target description on the y-axis</span></span>
-<span class="r-in"><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>,</span>
-<span class="r-in">                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
-<span class="r-in">                 by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># can also put target description on the y-axis</span></span></span>
+<span class="r-in"><span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>,</span></span>
+<span class="r-in"><span>                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_score_table-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -140,7 +149,7 @@ metric, but you can provide additional column names (see examples).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

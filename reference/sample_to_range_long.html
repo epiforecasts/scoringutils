@@ -84,30 +84,39 @@ based on interval ranges</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sample_to_range_long</span><span class="op">(</span>
-  <span class="va">data</span>,
-  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>,
-  type <span class="op">=</span> <span class="fl">7</span>,
-  keep_quantile_col <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_to_range_long</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  keep_quantile_col <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>a data.frame with samples</p></dd>
+
+
 <dt>range</dt>
 <dd><p>a numeric vector of interval ranges to extract
 (e.g. <code>c(0, 50, 90)</code>)</p></dd>
+
+
 <dt>type</dt>
 <dd><p>type argument passed down to the quantile function. For more
 information, see <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code></p></dd>
+
+
 <dt>keep_quantile_col</dt>
 <dd><p>keep quantile column, default is TRUE</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a data.frame in a long interval range format</p>
+    
+
+<p>a data.frame in a long interval range format</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -119,7 +128,7 @@ information, see <code><a href="https://rdrr.io/r/stats/quantile.html" class="ex
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -111,7 +111,7 @@ overview of all available metric names that can be computed.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -131,17 +131,24 @@ binary predictions.</p></li>
 </ul><p>For scoring predictions in a quantile-format forecast you should provide
 a column called <code>quantile</code>:</p><ul><li><p><code>quantile</code>: quantile to which the prediction corresponds</p></li>
 </ul></dd>
+
+
 <dt>metrics</dt>
 <dd><p>the metrics you want to have in the output. If <code>NULL</code> (the
 default), all available metrics will be computed. For a list of available
 metrics see <code><a href="available_metrics.html">available_metrics()</a></code>, or check the <a href="metrics.html">metrics</a> data set.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional parameters passed down to <code><a href="score_quantile.html">score_quantile()</a></code> (internal
 function used for scoring forecasts in a quantile-based format).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.table with unsummarised scores. There will be one score per
+    
+
+<p>A data.table with unsummarised scores. There will be one score per
 quantile or sample, which is usually not desired, so you should always run
 <code><a href="summarise_scores.html">summarise_scores()</a></code> on the unsummarised scores.</p>
     </div>
@@ -159,9 +166,9 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Your forecasts seem to be for a target of the following type:</span>
@@ -220,9 +227,9 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> $messages</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_coverage.html">add_coverage</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_coverage.html">add_coverage</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model target_type interval_score dispersion underprediction</span>
@@ -249,9 +256,9 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:   0.8750000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:   0.7890625</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:   0.9075630</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># forecast formats with different metrics</span></span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># forecast formats with different metrics</span></span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
@@ -279,7 +286,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 885:       UMass-MechBayes       2      0.450          0    0.202500 0.5978370</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:  epiforecasts-EpiNow2       3      0.375          0    0.140625 0.4700036</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:  epiforecasts-EpiNow2       2      0.300          0    0.090000 0.3566749</span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type location_name forecast_date</span>
@@ -330,7 +337,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20399:       108              TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20400:       108             FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20401:       108              TRUE</span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
@@ -369,7 +376,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 885:      42.5 2.159926e+03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:       8.0 3.214890e+03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:      73.5 1.262252e+04</span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
@@ -408,10 +415,10 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 885:  5.321013    42.271396 2.153122e+03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:  5.709216     7.760566 3.212150e+03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:  5.736238    73.670518 1.263027e+04</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># score point forecasts (marked by 'NA' in the quantile column)</span></span>
-<span class="r-in"><span class="fu">score</span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># score point forecasts (marked by 'NA' in the quantile column)</span></span></span>
+<span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
@@ -429,7 +436,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       NaN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       NaN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       NaN</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -441,7 +448,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

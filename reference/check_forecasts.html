@@ -102,7 +102,7 @@ A quantile-based format (see example_quantile)
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">check_forecasts</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_forecasts</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -110,10 +110,16 @@ A quantile-based format (see example_quantile)
     <dl><dt>data</dt>
 <dd><p>data.frame with predictions in the same format required for
 <code><a href="score.html">score()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with elements that give information about what <code>scoringutils</code>thinks you are trying to do and potential issues.</p><ul><li><p><code>target_type</code> the type of the prediction target as inferred from the
+    
+
+<p>A list with elements that give information about what <code>scoringutils</code></p>
+
+
+<p>thinks you are trying to do and potential issues.</p><ul><li><p><code>target_type</code> the type of the prediction target as inferred from the
 input: 'binary', if all values in <code>true_value</code> are either 0 or 1 and values
 in <code>prediction</code> are between 0 and 1, 'discrete' if all true values are
 integers.
@@ -151,10 +157,10 @@ you are doing.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">check</span> <span class="op">&lt;-</span> <span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">check</span> <span class="op">&lt;-</span> <span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">check</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">check</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Your forecasts seem to be for a target of the following type:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $target_type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "integer"</span>
@@ -211,7 +217,7 @@ you are doing.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $messages</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">check_forecasts</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
@@ -283,7 +289,7 @@ you are doing.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

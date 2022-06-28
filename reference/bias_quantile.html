@@ -87,7 +87,7 @@ for integer and continuous forecasts.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, <span class="va">true_value</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, <span class="va">true_value</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -95,15 +95,22 @@ for integer and continuous forecasts.</p>
     <dl><dt>predictions</dt>
 <dd><p>vector of length corresponding to the number of quantiles
 that holds predictions</p></dd>
+
+
 <dt>quantiles</dt>
 <dd><p>vector of corresponding size with the quantiles for which
 predictions were made</p></dd>
+
+
 <dt>true_value</dt>
 <dd><p>a single true value</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>scalar with the quantile bias for a single quantile prediction</p>
+    
+
+<p>scalar with the quantile bias for a single quantile prediction</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -140,19 +147,19 @@ continuous forecasts.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fl">705.500</span>, <span class="fl">1127.000</span>, <span class="fl">4006.250</span>, <span class="fl">4341.500</span>, <span class="fl">4709.000</span>, <span class="fl">4821.996</span>,</span>
-<span class="r-in">  <span class="fl">5340.500</span>, <span class="fl">5451.000</span>, <span class="fl">5703.500</span>, <span class="fl">6087.014</span>, <span class="fl">6329.500</span>, <span class="fl">6341.000</span>,</span>
-<span class="r-in">  <span class="fl">6352.500</span>, <span class="fl">6594.986</span>, <span class="fl">6978.500</span>, <span class="fl">7231.000</span>, <span class="fl">7341.500</span>, <span class="fl">7860.004</span>,</span>
-<span class="r-in">  <span class="fl">7973.000</span>, <span class="fl">8340.500</span>, <span class="fl">8675.750</span>, <span class="fl">11555.000</span>, <span class="fl">11976.500</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">quantiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">true_value</span> <span class="op">&lt;-</span> <span class="fl">8062</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, true_value <span class="op">=</span> <span class="va">true_value</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">705.500</span>, <span class="fl">1127.000</span>, <span class="fl">4006.250</span>, <span class="fl">4341.500</span>, <span class="fl">4709.000</span>, <span class="fl">4821.996</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">5340.500</span>, <span class="fl">5451.000</span>, <span class="fl">5703.500</span>, <span class="fl">6087.014</span>, <span class="fl">6329.500</span>, <span class="fl">6341.000</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">6352.500</span>, <span class="fl">6594.986</span>, <span class="fl">6978.500</span>, <span class="fl">7231.000</span>, <span class="fl">7341.500</span>, <span class="fl">7860.004</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">7973.000</span>, <span class="fl">8340.500</span>, <span class="fl">8675.750</span>, <span class="fl">11555.000</span>, <span class="fl">11976.500</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">quantiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">true_value</span> <span class="op">&lt;-</span> <span class="fl">8062</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, true_value <span class="op">=</span> <span class="va">true_value</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.8</span>
 </code></pre></div>
     </div>
@@ -165,7 +172,7 @@ continuous forecasts.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

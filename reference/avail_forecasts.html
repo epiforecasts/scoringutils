@@ -90,7 +90,7 @@ This is useful to determine whether there are any missing forecasts.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">avail_forecasts</span><span class="op">(</span><span class="va">data</span>, by <span class="op">=</span> <span class="cn">NULL</span>, collapse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span>, <span class="st">"sample"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">avail_forecasts</span><span class="op">(</span><span class="va">data</span>, by <span class="op">=</span> <span class="cn">NULL</span>, collapse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span>, <span class="st">"sample"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -98,31 +98,38 @@ This is useful to determine whether there are any missing forecasts.</p>
     <dl><dt>data</dt>
 <dd><p>data.frame with predictions in the same format required for
 <code><a href="score.html">score()</a></code>.</p></dd>
+
+
 <dt>by</dt>
 <dd><p>character vector or <code>NULL</code> (the default) that denotes the
 categories over which the number of forecasts should be counted.
 By default (<code>by = NULL</code>) this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
 'prediction' and 'true value') plus "quantile" or "sample" where present).</p></dd>
+
+
 <dt>collapse</dt>
 <dd><p>character vector (default is <code>c("quantile", "sample"</code>) with
 names of categories for which the number of rows should be collapsed to one
 when counting. For example, a single forecast is usually represented by a
 set of several quantiles or samples and collapsing these to one makes sure
 that a single forecast only gets counted once.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.table with columns as specified in <code>by</code> and an additional
+    
+
+<p>A data.table with columns as specified in <code>by</code> and an additional
 column with the number of forecasts.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">avail_forecasts</span><span class="op">(</span><span class="va">example_quantile</span>,</span>
-<span class="r-in">  collapse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span><span class="op">)</span>,</span>
-<span class="r-in">  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">avail_forecasts</span><span class="op">(</span><span class="va">example_quantile</span>,</span></span>
+<span class="r-in"><span>  collapse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model target_type Number forecasts</span>
@@ -144,7 +151,7 @@ column with the number of forecasts.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

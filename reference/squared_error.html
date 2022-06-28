@@ -90,32 +90,37 @@ $$</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">squared_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">squared_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>true_values</dt>
 <dd><p>A vector with the true observed values of size n</p></dd>
+
+
 <dt>predictions</dt>
 <dd><p>A vector with predicted values of size n</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>vector with the scoring values</p>
+    
+
+<p>vector with the scoring values</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">squared_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.3080142853 0.2898305616 2.2778814533 0.2743690112 0.0823475721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 1.3800904000 0.4044870396 0.4248811778 0.0102204349 7.1107559062</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.2221958766 1.0454830657 1.0999354839 0.0154747188 4.4319389141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 0.4239928367 4.6342510666 0.4233601606 1.7499027950 0.2009974054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 3.7704294752 0.0146104138 0.0399511609 1.2042699646 0.0866698134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 0.1911788765 3.2697187117 1.0781212665 0.0006092094 2.9451981077</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">squared_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.740473e-02 3.173287e-01 2.352114e+00 1.069097e+01 6.377811e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 4.390210e+00 1.095213e+00 1.293066e-01 1.706316e+00 1.011714e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 9.385155e-03 5.516509e-01 9.225830e-01 2.934123e-01 4.637129e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 1.331656e+00 1.053408e+01 1.276393e+01 4.040347e-05 1.117336e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 1.125073e+00 7.460791e-04 6.958247e-01 2.464428e+00 7.590528e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 1.795848e-02 1.422046e-02 1.496122e+00 2.752739e-01 4.553987e+00</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -127,7 +132,7 @@ $$</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -90,21 +90,26 @@ $$</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>true_values</dt>
 <dd><p>A vector with the true observed values of size n</p></dd>
+
+
 <dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>vector with the scoring values</p>
+    
+
+<p>vector with the scoring values</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -113,15 +118,15 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.020001e-01 1.266409e+00 8.397120e-02 4.679079e+00 1.321087e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 1.814468e-07 8.977640e-02 1.392524e-01 1.210649e-01 2.374005e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 1.046848e+00 2.921633e-02 1.245676e+00 3.115104e-01 2.534157e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 1.345708e-01 6.512688e-02 5.568562e-03 4.439828e-02 1.673964e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 7.543956e-02 1.749810e-01 3.556362e+00 9.604204e-01 2.165203e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 6.850295e+00 1.587552e+00 2.146148e+00 8.094184e+00 1.253605e+00</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.001683633  0.183128334  4.762042918  4.193984124  0.069827535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6]  0.012504968  0.734334835  0.203129687  1.525274061  0.238724499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  1.975204319  1.010283915  0.026873417  0.814457971  0.001175809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16]  0.229067950  2.845698986  0.267321158  0.011392468  0.701593676</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 10.965540419  0.038792307  2.257165746  2.171784113  0.752312046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0.041556556  2.879022689  0.527128004  2.649639564  0.255726796</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -133,7 +138,7 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

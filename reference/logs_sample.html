@@ -105,21 +105,26 @@ more details.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>true_values</dt>
 <dd><p>A vector with the true observed values of size n</p></dd>
+
+
 <dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>vector with the scoring values</p>
+    
+
+<p>vector with the scoring values</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -129,14 +134,14 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8374171 2.3137232 1.6038440 1.9192328 2.0233090 1.8397734 2.0491754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.9572714 2.5413513 2.5334687 2.6845841 2.2445129 2.1648398 2.8275054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.2122135 2.6390246 3.0704715 2.9251279 2.4733833 2.3392435 2.9764494</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.6697691 3.1723428 2.6645688 2.5597389 3.3394033 3.2032411 3.4389258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.6656102 2.6821642</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7826877 1.2628169 5.1571066 1.6953405 2.0093696 1.8938031 2.1586317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.0652161 2.0015453 3.7394433 2.4819950 3.9269463 3.4605418 2.8344812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.7275874 2.4531255 2.3345817 2.6060484 3.5347789 2.7672390 3.1484479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 3.0435186 2.7531222 3.3053218 2.5912369 2.6100858 2.5799619 2.8055596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.7165314 2.7803677</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -148,7 +153,7 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

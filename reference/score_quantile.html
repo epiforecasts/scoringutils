@@ -81,14 +81,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">score_quantile</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">forecast_unit</span>,
-  <span class="va">metrics</span>,
-  weigh <span class="op">=</span> <span class="cn">TRUE</span>,
-  count_median_twice <span class="op">=</span> <span class="cn">FALSE</span>,
-  separate_results <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">score_quantile</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">forecast_unit</span>,</span>
+<span>  <span class="va">metrics</span>,</span>
+<span>  weigh <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  count_median_twice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  separate_results <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,20 +108,28 @@ binary predictions.</p></li>
 </ul><p>For scoring predictions in a quantile-format forecast you should provide
 a column called <code>quantile</code>:</p><ul><li><p><code>quantile</code>: quantile to which the prediction corresponds</p></li>
 </ul></dd>
+
+
 <dt>forecast_unit</dt>
 <dd><p>A character vector with the column names that define
 the unit of a single forecast, i.e. a forecast was made for a combination
 of the values in <code>forecast_unit</code></p></dd>
+
+
 <dt>metrics</dt>
 <dd><p>the metrics you want to have in the output. If <code>NULL</code> (the
 default), all available metrics will be computed. For a list of available
 metrics see <code><a href="available_metrics.html">available_metrics()</a></code>, or check the <a href="metrics.html">metrics</a> data set.</p></dd>
+
+
 <dt>weigh</dt>
 <dd><p>if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Alpha is the
 decimal value that  represents how much is outside a central prediction
 interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
 Default: <code>TRUE</code>.</p></dd>
+
+
 <dt>count_median_twice</dt>
 <dd><p>logical that controls whether or not to count the
 median twice when summarising (default is <code>FALSE</code>). Counting the
@@ -130,16 +138,23 @@ the median is the lower as well as the upper bound. The alternative is to
 treat the median as a single quantile forecast instead of an interval. The
 interval score would then be better understood as an average of quantile
 scores.</p></dd>
+
+
 <dt>separate_results</dt>
 <dd><p>if <code>TRUE</code> (default is <code>FALSE</code>), then the separate
 parts of the interval score (dispersion penalty, penalties for over- and
 under-prediction get returned as separate elements of a list). If you want a
 <code>data.frame</code> instead, simply call <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the output.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.table with appropriate scores. For more information see
+    
+
+<p>A data.table with appropriate scores. For more information see
 <code><a href="score.html">score()</a></code></p>
+
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -162,7 +177,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

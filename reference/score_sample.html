@@ -81,7 +81,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">score_sample</span><span class="op">(</span><span class="va">data</span>, <span class="va">forecast_unit</span>, <span class="va">metrics</span>, <span class="va">prediction_type</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">score_sample</span><span class="op">(</span><span class="va">data</span>, <span class="va">forecast_unit</span>, <span class="va">metrics</span>, <span class="va">prediction_type</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,21 +101,32 @@ binary predictions.</p></li>
 </ul><p>For scoring predictions in a quantile-format forecast you should provide
 a column called <code>quantile</code>:</p><ul><li><p><code>quantile</code>: quantile to which the prediction corresponds</p></li>
 </ul></dd>
+
+
 <dt>forecast_unit</dt>
 <dd><p>A character vector with the column names that define
 the unit of a single forecast, i.e. a forecast was made for a combination
 of the values in <code>forecast_unit</code></p></dd>
+
+
 <dt>metrics</dt>
 <dd><p>the metrics you want to have in the output. If <code>NULL</code> (the
 default), all available metrics will be computed. For a list of available
 metrics see <code><a href="available_metrics.html">available_metrics()</a></code>, or check the <a href="metrics.html">metrics</a> data set.</p></dd>
+
+
 <dt>prediction_type</dt>
 <dd><p>character, should be either "continuous" or "integer"</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.table with appropriate scores. For more information see
+    
+
+<p>A data.table with appropriate scores. For more information see
 <code><a href="score.html">score()</a></code></p>
+
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -138,7 +149,7 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

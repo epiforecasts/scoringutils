@@ -81,39 +81,45 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">summarise_scores</span><span class="op">(</span>
-  <span class="va">scores</span>,
-  by <span class="op">=</span> <span class="cn">NULL</span>,
-  fun <span class="op">=</span> <span class="va">mean</span>,
-  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,
-  metric <span class="op">=</span> <span class="st">"auto"</span>,
-  baseline <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">summarize_scores</span><span class="op">(</span>
-  <span class="va">scores</span>,
-  by <span class="op">=</span> <span class="cn">NULL</span>,
-  fun <span class="op">=</span> <span class="va">mean</span>,
-  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,
-  metric <span class="op">=</span> <span class="st">"auto"</span>,
-  baseline <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarise_scores</span><span class="op">(</span></span>
+<span>  <span class="va">scores</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
+<span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">summarize_scores</span><span class="op">(</span></span>
+<span>  <span class="va">scores</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
+<span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scores</dt>
 <dd><p>A data.table of scores as produced by <code><a href="score.html">score()</a></code>.</p></dd>
+
+
 <dt>by</dt>
 <dd><p>character vector with column names to summarise scores by. Default
 is <code>NULL</code>, meaning that the only summary that takes is place is summarising
 over quantiles (in case of quantile-based forecasts), such that there is one
 score per forecast as defined by the unit of a single forecast (rather than
 one score for every quantile).</p></dd>
+
+
 <dt>fun</dt>
 <dd><p>a function used for summarising scores. Default is <code>mean</code>.</p></dd>
+
+
 <dt>relative_skill</dt>
 <dd><p>logical, whether or not to compute relative
 performance between models based on pairwise comparisons.
@@ -122,31 +128,38 @@ If <code>TRUE</code> (default is <code>FALSE</code>), then a column called
 the computation of relative skill, see <code><a href="pairwise_comparison.html">pairwise_comparison()</a></code>.
 Relative skill will be calculated for the aggregation level specified in
 <code>by</code>.</p></dd>
+
+
 <dt>metric</dt>
 <dd><p>character with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 this will be either interval score, CRPS or Brier score (depending on which
 of these is available in the input data)</p></dd>
+
+
 <dt>baseline</dt>
 <dd><p>character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (<code>NULL</code>), relative skill will not be scaled with
 respect to a baseline model.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional parameters that can be passed to the summary function
 provided to <code>fun</code>. For more information see the documentation of the
 respective function.</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># summarise over samples or quantiles to get one score per forecast</span></span>
-<span class="r-in"><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># summarise over samples or quantiles to get one score per forecast</span></span></span>
+<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location target_end_date target_type location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE      2021-05-08       Cases       Germany    2021-05-03</span>
@@ -183,9 +196,9 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 885:       5.304348         0.13652174  0.40        30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:      17.826087        -0.21130435  0.80        46</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:      40.608696        -0.29826087  0.90       108</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get scores by model</span></span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get scores by model</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline    14321.48926 2096.95360      5143.53567</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble     8992.62316 1846.85278      2120.64029</span>
@@ -196,9 +209,9 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    5025.130095         0.04871603  0.00812500 12077.10156</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:    6179.439535        -0.05516986 -0.04336032 14521.10526</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       8.978601        -0.02312500 -0.02234375    78.47656</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get scores by model and target type</span></span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get scores by model and target type</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model target_type interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline       Cases    28483.57465 4102.50094    10284.972826</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble       Cases    17943.82383 3663.52458     4237.177310</span>
@@ -215,9 +228,9 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       7.138247         0.19528533  0.07265625    53.13281</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       8.978601        -0.02312500 -0.02234375    78.47656</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:      18.892583        -0.04287176 -0.00512605   104.74790</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get standard deviation</span></span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">sd</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get standard deviation</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">sd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline      43157.488  2682.7722      18417.2012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble      38788.740  3863.3379       7179.5954</span>
@@ -228,10 +241,10 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     36978.7730          0.2726646 0.5707267 42500.79359</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     38832.5598          0.2838865 0.6632842 49800.66917</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:        18.3498          0.2705116 0.6457779    74.79904</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># round digits</span></span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">summarise_scores</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># round digits</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">summarise_scores</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline          14000       2100            5100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble           9000       1800            2100</span>
@@ -242,13 +255,13 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           5000              0.049  0.0081     12000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:           6200             -0.055 -0.0430     15000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:              9             -0.023 -0.0220        78</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get quantiles of scores</span></span>
-<span class="r-in"><span class="co"># make sure to aggregate over ranges first</span></span>
-<span class="r-in"><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>,</span>
-<span class="r-in">  by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">quantile</span>,</span>
-<span class="r-in">  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get quantiles of scores</span></span></span>
+<span class="r-in"><span><span class="co"># make sure to aggregate over ranges first</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">quantile</span>,</span></span>
+<span class="r-in"><span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: EuroCOVIDhub-baseline      130.23793   87.81804      0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: EuroCOVIDhub-baseline      934.41870  163.28739      0.00000000</span>
@@ -275,9 +288,9 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10:      0.0000000         -0.2113043 -0.60     24.75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11:      0.0000000         -0.0373913 -0.05     52.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12:     10.2500000          0.2234783  0.60    106.00</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get ranges</span></span>
-<span class="r-in"><span class="co"># summarise_scores(scores, by = "range")</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get ranges</span></span></span>
+<span class="r-in"><span><span class="co"># summarise_scores(scores, by = "range")</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -289,7 +302,7 @@ respective function.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

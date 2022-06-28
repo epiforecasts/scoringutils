@@ -90,9 +90,9 @@ be removed in the subsequent call to <code><a href="plot_predictions.html">plot_
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_NA</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth"</span>, <span class="st">"forecast"</span>, <span class="st">"both"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">make_na</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth"</span>, <span class="st">"forecast"</span>, <span class="st">"both"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_NA</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth"</span>, <span class="st">"forecast"</span>, <span class="st">"both"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">make_na</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth"</span>, <span class="st">"forecast"</span>, <span class="st">"both"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -112,28 +112,35 @@ binary predictions.</p></li>
 </ul><p>For scoring predictions in a quantile-format forecast you should provide
 a column called <code>quantile</code>:</p><ul><li><p><code>quantile</code>: quantile to which the prediction corresponds</p></li>
 </ul></dd>
+
+
 <dt>what</dt>
 <dd><p>character vector that determines which values should be turned
 into <code>NA</code>. If <code>what = "truth"</code>, values in the column 'true_value' will be
 turned into <code>NA</code>. If <code>what = "forecast"</code>, values in the column 'prediction'
 will be turned into <code>NA</code>. If <code>what = "both"</code>, values in both column will be
 turned into <code>NA</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>logical statements used to filter the data</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.table</p>
+    
+
+<p>A data.table</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">make_NA</span> <span class="op">(</span></span>
-<span class="r-in">    <span class="va">example_continuous</span>,</span>
-<span class="r-in">    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span class="r-in">    <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-22"</span>,</span>
-<span class="r-in">    <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-01"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">make_NA</span> <span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">example_continuous</span>,</span></span>
+<span class="r-in"><span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span></span>
+<span class="r-in"><span>    <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-22"</span>,</span></span>
+<span class="r-in"><span>    <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-01"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        location location_name target_end_date target_type forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE       Germany      2021-01-02       Cases          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE       Germany      2021-01-02      Deaths          &lt;NA&gt;</span>
@@ -169,7 +176,7 @@ turned into <code>NA</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

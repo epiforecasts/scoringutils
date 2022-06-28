@@ -93,20 +93,26 @@ central prediction intervals.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>, <span class="va">quantiles</span>, weigh <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span>, <span class="va">quantiles</span>, weigh <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>true_values</dt>
 <dd><p>A vector with the true observed values of size n</p></dd>
+
+
 <dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
+
+
 <dt>quantiles</dt>
 <dd><p>vector of size n with the quantile values of the
 corresponding predictions.</p></dd>
+
+
 <dt>weigh</dt>
 <dd><p>if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Alpha is the
@@ -114,10 +120,13 @@ value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
 and will be computed from the quantile. Alpha is the decimal value that
 represents how much is outside a central prediction interval (E.g. for a
 90 percent central prediction interval, alpha is 0.1). Default: <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>vector with the scoring values</p>
+    
+
+<p>vector with the scoring values</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -131,21 +140,21 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">qs_lower</span> <span class="op">&lt;-</span> <span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>,</span>
-<span class="r-in">  predictions <span class="op">=</span> <span class="va">lower</span>,</span>
-<span class="r-in">  quantiles <span class="op">=</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">qs_upper</span> <span class="op">&lt;-</span> <span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>,</span>
-<span class="r-in">  predictions <span class="op">=</span> <span class="va">upper</span>,</span>
-<span class="r-in">  quantiles <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">interval_score</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">qs_lower</span> <span class="op">+</span> <span class="va">qs_upper</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">qs_lower</span> <span class="op">&lt;-</span> <span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>,</span></span>
+<span class="r-in"><span>  predictions <span class="op">=</span> <span class="va">lower</span>,</span></span>
+<span class="r-in"><span>  quantiles <span class="op">=</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">qs_upper</span> <span class="op">&lt;-</span> <span class="fu">quantile_score</span><span class="op">(</span><span class="va">true_values</span>,</span></span>
+<span class="r-in"><span>  predictions <span class="op">=</span> <span class="va">upper</span>,</span></span>
+<span class="r-in"><span>  quantiles <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">interval_score</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">qs_lower</span> <span class="op">+</span> <span class="va">qs_upper</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -157,7 +166,7 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
