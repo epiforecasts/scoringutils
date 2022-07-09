@@ -60,6 +60,22 @@ test_that("function produces output for a quantile format case", {
   )
 })
 
+test_that("score_quantile correctly handles separate results = FALSE", {
+  quantile_example <- data.table::setDT(scoringutils::example_quantile)
+  eval <- suppressMessages(
+    score(
+      quantile_example[!is.na(prediction)],
+      separate_results = FALSE
+    )
+  )
+
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
+})
+
+
 test_that("score() quantile produces desired metrics", {
   data <- data.frame(
     true_value = rep(1:10, each = 2),
