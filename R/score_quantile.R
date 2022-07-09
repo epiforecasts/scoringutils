@@ -71,7 +71,7 @@ score_quantile <- function(data,
       list(true_value, lower,
         upper, range,
         weigh,
-        separate_results = TRUE
+        separate_results = separate_results
       )
     )]
   }
