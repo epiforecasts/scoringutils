@@ -32,7 +32,7 @@ Non-symmetric quantiles can be scored using the function quantile_score()."><!--
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/5/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Interval Score — interval_score • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interval Score — interval_score"><meta property="og:description" content="Proper Scoring Rule to score quantile predictions, following Gneiting
+</script><title>Interval Score — interval_score • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interval Score — interval_score"><meta property="og:description" content="Proper Scoring Rule to score quantile predictions, following Gneiting
 and Raftery (2007). Smaller values are better.
 The score is computed as
 $$
@@ -225,11 +225,11 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  upper <span class="op">=</span> <span class="va">upper</span>,</span></span>
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="va">interval_range</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.25767891 0.17447245 1.18306767 0.28950947 0.15326625 0.28654630</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.14174140 0.14335154 0.25363446 0.30776287 0.17776553 0.10118664</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.27477934 0.23043602 0.24217907 0.13358886 0.28753082 0.12659884</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.16940693 0.28523562 0.12616908 0.31192861 0.31382471 0.22307209</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.69247017 0.60931239 0.11737727 0.32013963 0.08925896 0.13894875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.19782732 0.21369225 0.07188841 0.24775171 0.21787615 0.12865792</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.25873731 0.21867596 0.26056695 0.78166275 0.16871750 0.06792618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.31221375 0.19729819 0.23571902 0.07937585 0.13194195 0.23565902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.24178417 0.13203459 0.28093851 0.11734888 0.90174251 0.17755928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.86424589 0.12544901 0.15809523 0.19696713 0.22472514 0.18545529</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example with missing values and separate results</span></span></span>
 <span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span></span></span>
@@ -240,34 +240,36 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="fl">90</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 0.23855287 1.02319669 0.19554942 0.17422596 0.24962447</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.10128084 0.04917439 0.19775964 0.29208535 0.45336049 0.09541192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.18471311 0.20529748 1.27525756 0.15906703 0.13982244 0.13682562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.15305331 0.20105007 0.09058310 0.36014826 0.17905657 1.22066924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.75933038 2.09342008 0.09497208 0.81131961 0.21388277 1.04871176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 0.17362873 0.11070872 0.13651380 0.20888239 0.12447732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.05411146 0.22690055 0.19718984 0.70763542 0.15103766 0.07361241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.24460540 0.15298972 0.16140241 0.10095262 1.42314212 0.10335880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.24238331 0.11753817 0.15826040 0.16549522 1.48963751 1.96602166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.79095141 0.06902239 0.13631649 0.13566062 0.21019729 0.12720933</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]          NA 0.238552875 0.008014425 0.195549419 0.174225964 0.249624473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.101280837 0.049174389 0.197759637 0.118110220 0.139141775 0.095411924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.184713110 0.205297480 0.116187808 0.159067026 0.139822438 0.136825621</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.153053314 0.201050068 0.090583099 0.167886718 0.179056565 0.050014758</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.112680214 0.099739965 0.094972078 0.068716735 0.213882771 0.072427967</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]          NA 0.173628729 0.110708722 0.136513803 0.067388413 0.071166375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.086171515 0.157444322 0.197189842 0.085122882 0.151037658 0.073612413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.003369554 0.152989723 0.161402415 0.100952617 0.013045908 0.103358803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.242383312 0.117538166 0.158260398 0.165495225 0.019356680 0.074755458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.023682781 0.069022394 0.136316488 0.135660618 0.194669007 0.127209325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [31]          NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.0000000 0.0000000 0.3142187 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 1.1590698 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.1922615 0.0000000 1.1706545 0.0000000 1.9936801 0.0000000 0.7426029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.9762838        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 0.00000000 0.00000000 0.00000000 0.00000000 0.05331095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.96793994 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.00000000 0.00000000 0.00000000 0.00000000 1.41009621 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.00000000 0.00000000 0.00000000 0.00000000 1.47028083 1.89126620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.00000000 0.00000000 0.00000000 0.00000000 0.01552828 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 1.0151823 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.0000000 0.1739751 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.6466502 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.00000000 0.00000000 0.00000000 0.00000000 0.14149398 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.00000000 0.06945622 0.00000000 0.62251253 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.24123585 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.76726863 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -280,7 +282,7 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
