@@ -977,6 +977,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' `num_bins`.
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
+#' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
 #' # PIT histogram in vector based format
