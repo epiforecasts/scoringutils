@@ -26,7 +26,7 @@ scoringRules package."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,11 +119,11 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">dss_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.04401757 1.21184254 1.51270698 1.83750041 3.32249071 2.21255113</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.13259393 2.53000697 2.65054767 3.97407385 2.82512946 2.75831693</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.73854712 3.75615401 3.17134916 3.07269561 4.38406767 4.34048410</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 3.04263118 7.15989191 4.83390368 3.49621553 6.06658303 8.60926683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 7.12123454 4.30691103 3.57520151 3.89787742 3.55422781 3.41395072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9806811 0.7608785 2.6332915 1.4036517 1.7237172 1.6297739 1.9264891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 3.2351518 2.0241964 2.3897167 4.6329688 2.5014360 3.0794010 3.8054904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.8127334 4.7795776 3.1200998 3.7203713 4.0776926 3.8218990 3.0699138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 3.8703203 3.2170403 3.5088546 3.2537212 3.4372010 6.0491761 3.8122605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 4.6576479 7.5824389</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
