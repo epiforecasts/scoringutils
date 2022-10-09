@@ -977,6 +977,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' `num_bins`.
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
+#' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
 #' # PIT histogram in vector based format
@@ -1053,7 +1054,7 @@ plot_pit <- function(pit,
         data = pit,
         aes(x = pit_value)
       ) +
-        geom_histogram(aes(y = stat(count) / sum(count)),
+        geom_histogram(aes(y = stat(width * density)),
           breaks = plot_quantiles,
           colour = "grey"
         ) +
@@ -1065,7 +1066,7 @@ plot_pit <- function(pit,
       data = data.frame(x = pit),
       aes(x = x)
     ) +
-      geom_histogram(aes(y = stat(count) / sum(count)),
+      geom_histogram(aes(y = stat(width*density)),
         breaks = plot_quantiles,
         colour = "grey"
       )
