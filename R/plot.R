@@ -1054,7 +1054,7 @@ plot_pit <- function(pit,
         data = pit,
         aes(x = pit_value)
       ) +
-        geom_histogram(aes(y = stat(width*density)),
+        geom_histogram(aes(y = stat(width * density)),
           breaks = plot_quantiles,
           colour = "grey"
         ) +
