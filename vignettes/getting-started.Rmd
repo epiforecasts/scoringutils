@@ -37,8 +37,9 @@ requirements <- data.table(
     "quantile-based", "sample-based", "binary", "pairwise-comparisons"
   ),
   `Required columns` = c(
-    "'true_value', 'prediction', 'quantile'", "'true_value', 'prediction',
-    'sample'", "'true_value', 'prediction'", "additionally a column 'model'"
+    "'true_value', 'prediction', 'quantile'",
+    "'true_value', 'prediction', 'sample'", "'true_value', 'prediction'",
+    "additionally a column 'model'"
   )
 )
 kable(requirements)
