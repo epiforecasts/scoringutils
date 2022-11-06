@@ -97,6 +97,7 @@ library("xtable")
 library("formatR")
 library("data.table")
 library("patchwork")
+library("ggplot2")
 
 xtable2kable <- function(x) {
   out <- capture.output(print(x, table.placement = NULL))[-(1:2)]
