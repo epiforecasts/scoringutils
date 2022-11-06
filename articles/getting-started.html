@@ -102,9 +102,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Getting started</h1>
-                        <h4 data-toc-skip class="author">Nikos Bosse</h4>
+                        <h4 data-toc-skip class="author">Nikos
+Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-10-11</h4>
+            <h4 data-toc-skip class="date">2022-11-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -112,13 +113,43 @@
 
     
     
-<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. The <code>scoringutils</code> package offers convenient automated forecast evaluation in a <code>data.table</code> format (using the function <code><a href="../reference/score.html">score()</a></code>), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases.</p>
-<p>The goal of this package is to provide a tested and reliable collection of metrics that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the <code>scoringRules</code> package, which provides a comprehensive collection of proper scoring rules (also used in <code>scoringutils</code>). In contrast to other packages, <code>scoringutils</code> offers functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models.</p>
-<p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary.</p>
+<p>The <code>scoringutils</code> package provides a collection of
+metrics and proper scoring rules that make it simple to score
+probabilistic forecasts against the true observed values. The
+<code>scoringutils</code> package offers convenient automated forecast
+evaluation in a <code>data.table</code> format (using the function
+<code><a href="../reference/score.html">score()</a></code>), but also provides experienced users with a set of
+reliable lower-level scoring metrics operating on vectors/matriced they
+can build upon in other applications. In addition it implements a wide
+range of flexible plots that are able to cover many use cases.</p>
+<p>The goal of this package is to provide a tested and reliable
+collection of metrics that can be used for scoring probabilistic
+forecasts (forecasts with a full predictive distribution, rather than
+point forecasts). It has a much stronger focus on convenience than
+e.g. the <code>scoringRules</code> package, which provides a
+comprehensive collection of proper scoring rules (also used in
+<code>scoringutils</code>). In contrast to other packages,
+<code>scoringutils</code> offers functionality to automatically evaluate
+forecasts, to visualise scores and to obtain relative scores between
+models.</p>
+<p>Predictions can be handled in various formats:
+<code>scoringutils</code> can handle probabilistic forecasts in either a
+sample based or a quantile based format. For more detail on the expected
+input formats please see below. True values can be integer, continuous
+or binary.</p>
 <div class="section level2">
 <h2 id="input-formats">Input formats<a class="anchor" aria-label="anchor" href="#input-formats"></a>
 </h2>
-<p>Most of the time, the <code><a href="../reference/score.html">score()</a></code> function will be able to do the entire evaluation for you. All you need to do is to pass in a <code>data.frame</code> with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see <code>example_quantile</code> for the expected format), based on predictive samples (see <code>example_continuous</code> and <code>example_integer</code> for the expected format in each case) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below):</p>
+<p>Most of the time, the <code><a href="../reference/score.html">score()</a></code> function will be able to
+do the entire evaluation for you. All you need to do is to pass in a
+<code>data.frame</code> with the appropriate columns. Which columns are
+required depends on the format the forecasts come in. The forecast
+format can either be based on quantiles (see
+<code>example_quantile</code> for the expected format), based on
+predictive samples (see <code>example_continuous</code> and
+<code>example_integer</code> for the expected format in each case) or in
+a binary format. The following table gives an overview (pairwise
+comparisons will be explained in more detail below):</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Format</th>
@@ -143,13 +174,25 @@
 </tr>
 </tbody>
 </table>
-<p>Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. It is important, that there are only columns present which are relevant in order to group forecasts. A combination of different columns should uniquely define the <em>unit of a single forecast</em>, meaning that a single forecast is defined by the values in the other columns.</p>
+<p>Additional columns may be present to indicate a grouping of
+forecasts. For example, we could have forecasts made by different models
+in various locations at different time points, each for several weeks
+into the future. It is important, that there are only columns present
+which are relevant in order to group forecasts. A combination of
+different columns should uniquely define the <em>unit of a single
+forecast</em>, meaning that a single forecast is defined by the values
+in the other columns.</p>
 <!--- Might be nice to link to a grouping example here as it sounds a bit complicated --->
 </div>
 <div class="section level2">
 <h2 id="checking-the-input-data">Checking the input data<a class="anchor" aria-label="anchor" href="#checking-the-input-data"></a>
 </h2>
-<p>The function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> can be used to check the input data. It gives a summary of what <code>scoringutils</code> thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.</p>
+<p>The function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> can be used to check the
+input data. It gives a summary of what <code>scoringutils</code> thinks
+you are trying to achieve. It infers the type of the prediction target,
+the prediction format, and the unit of a single forecasts, gives an
+overview of the number of unique values per column (helpful for spotting
+missing data) and returns warnings or errors.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    location target_end_date target_type true_value location_name forecast_date</span></span>
@@ -225,12 +268,18 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $messages</span></span>
 <span><span class="co">#&gt; [1] "144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected."</span></span></code></pre></div>
-<p>If you are unsure what your input data should look like, have a look at the <code>example_quantile</code>, <code>example_integer</code>, <code>example_continuous</code> and <code>example_binary</code> data sets provided in the package.</p>
+<p>If you are unsure what your input data should look like, have a look
+at the <code>example_quantile</code>, <code>example_integer</code>,
+<code>example_continuous</code> and <code>example_binary</code> data
+sets provided in the package.</p>
 </div>
 <div class="section level2">
 <h2 id="showing-available-forecasts">Showing available forecasts<a class="anchor" aria-label="anchor" href="#showing-available-forecasts"></a>
 </h2>
-<p>The function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> may also be helpful to determine where forecasts are available. Using the <code>by</code> argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run</p>
+<p>The function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> may also be helpful to
+determine where forecasts are available. Using the <code>by</code>
+argument you can specify the level of summary. For example, to see how
+many forecasts there are per model and target_type, we can run</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avail_forecasts.html">avail_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
@@ -243,8 +292,11 @@
 <span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths              128</span></span>
 <span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths              128</span></span>
 <span><span class="co">#&gt; 7:  epiforecasts-EpiNow2      Deaths              119</span></span></code></pre></div>
-<p>We see that ‘epiforecasts-EpiNow2’ has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts.</p>
-<p>This information can also be visualised using the <code><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts()</a></code> function:</p>
+<p>We see that ‘epiforecasts-EpiNow2’ has some missing forecasts for the
+deaths forecast target and that UMass-MechBayes has no case
+forecasts.</p>
+<p>This information can also be visualised using the
+<code><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts()</a></code> function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/avail_forecasts.html">avail_forecasts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -253,7 +305,8 @@
 <span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
 <span><span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="1056"></p>
-<p>You can also visualise forecasts directly using the <code><a href="../reference/plot_predictions.html">plot_predictions()</a></code> function:</p>
+<p>You can also visualise forecasts directly using the
+<code><a href="../reference/plot_predictions.html">plot_predictions()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/make_NA.html">make_NA</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>, </span>
@@ -274,7 +327,13 @@
 <div class="section level2">
 <h2 id="scoring-and-summarising-forecasts">Scoring and summarising forecasts<a class="anchor" aria-label="anchor" href="#scoring-and-summarising-forecasts"></a>
 </h2>
-<p>Forecasts can easily be scored using the <code><a href="../reference/score.html">score()</a></code> function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> takes care of summarising these scores to the level specified by the user. If you like, you can also use <code>sumarise_scores()</code> to round your outputs by specifying e.g. <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> as a summary function.</p>
+<p>Forecasts can easily be scored using the <code><a href="../reference/score.html">score()</a></code>
+function. This function returns unsumarised scores, which in most cases
+is not what the user wants. A second function,
+<code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> takes care of summarising these scores
+to the level specified by the user. If you like, you can also use
+<code>sumarise_scores()</code> to round your outputs by specifying
+e.g. <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> as a summary function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -419,7 +478,12 @@
 </tr>
 </tbody>
 </table>
-<p>The <code>by</code> argument can be used to define the level of summary. By default, <code>by = NULL</code> is set to the unit of a single forecast. For quantile-based forecasts, unsummarised scores are returned for every quantile individually. It can therefore make sense to run <code>summarise_scores</code>even without any arguments provided.</p>
+<p>The <code>by</code> argument can be used to define the level of
+summary. By default, <code>by = NULL</code> is set to the unit of a
+single forecast. For quantile-based forecasts, unsummarised scores are
+returned for every quantile individually. It can therefore make sense to
+run <code>summarise_scores</code>even without any arguments
+provided.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -464,7 +528,12 @@
 <div class="section level3">
 <h3 id="scoring-point-forecasts">Scoring point forecasts<a class="anchor" aria-label="anchor" href="#scoring-point-forecasts"></a>
 </h3>
-<p>Point forecasts can be scored by making use of the quantile-based format, but with a value of <code>NA</code> or <code>"point"</code> in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of <code>NA</code> for metrics designed for probabilistic forecasts, it is important to use <code>na.rm = TRUE</code> when summarising.</p>
+<p>Point forecasts can be scored by making use of the quantile-based
+format, but with a value of <code>NA</code> or <code>"point"</code> in
+the quantile column. Point forecasts can be scored alongside other
+quantile-based forecasts. As point forecasts will have values of
+<code>NA</code> for metrics designed for probabilistic forecasts, it is
+important to use <code>na.rm = TRUE</code> when summarising.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -489,7 +558,13 @@
 <div class="section level3">
 <h3 id="adding-empirical-coverage">Adding empirical coverage<a class="anchor" aria-label="anchor" href="#adding-empirical-coverage"></a>
 </h3>
-<p>For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function <code><a href="../reference/add_coverage.html">add_coverage()</a></code>. This function also requires a <code>by</code> argument which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed.</p>
+<p>For quantile-based forecasts we are often interested in specific
+coverage-levels, for example, what percentage of true values fell
+between all 50% or the 90% prediction intervals. We can add this
+information using the function <code><a href="../reference/add_coverage.html">add_coverage()</a></code>. This
+function also requires a <code>by</code> argument which defines the
+level of grouping for which the percentage of true values covered by
+certain prediction intervals is computed.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_coverage.html">add_coverage</a></span><span class="op">(</span>ranges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -517,7 +592,19 @@
 <div class="section level3">
 <h3 id="adding-relative-scores">Adding relative scores<a class="anchor" aria-label="anchor" href="#adding-relative-scores"></a>
 </h3>
-<p>In order to better compare models against each other we can use relative scores which are computed based on pairwise comparisons (see details below). Relative scores can be added to the evaluation using the function <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. This requires a column called ‘model’ to be present. Pairwise comparisons are computed according to the grouping specified in <code>by</code>: essentially, the data.frame with all scores gets split into different data.frames according to the values specified in <code>by</code> and relative scores are computed for every individual group separately. The <code>baseline</code> argument allows us to specify a baseline that can be used to scale relative scores (all scores are divided by the baseline relative score). For example, to obtain relative scores separately for different forecast targets, we can run</p>
+<p>In order to better compare models against each other we can use
+relative scores which are computed based on pairwise comparisons (see
+details below). Relative scores can be added to the evaluation using the
+function <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. This requires a column called
+‘model’ to be present. Pairwise comparisons are computed according to
+the grouping specified in <code>by</code>: essentially, the data.frame
+with all scores gets split into different data.frames according to the
+values specified in <code>by</code> and relative scores are computed for
+every individual group separately. The <code>baseline</code> argument
+allows us to specify a baseline that can be used to scale relative
+scores (all scores are divided by the baseline relative score). For
+example, to obtain relative scores separately for different forecast
+targets, we can run</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, </span>
@@ -571,7 +658,8 @@
 <div class="section level3">
 <h3 id="score-heatmap">Score heatmap<a class="anchor" aria-label="anchor" href="#score-heatmap"></a>
 </h3>
-<p>We can also summarise one particular metric across different categories using a simple heatmap:</p>
+<p>We can also summarise one particular metric across different
+categories using a simple heatmap:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -584,7 +672,9 @@
 <div class="section level3">
 <h3 id="weighted-interval-score-components">Weighted interval score components<a class="anchor" aria-label="anchor" href="#weighted-interval-score-components"></a>
 </h3>
-<p>The weighted interval score can be split up into three components: Over-prediction, under-prediction and dispersion. These can be visualised separately in the following way:</p>
+<p>The weighted interval score can be split up into three components:
+Over-prediction, under-prediction and dispersion. These can be
+visualised separately in the following way:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -598,7 +688,13 @@
 <div class="section level2">
 <h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
 </h2>
-<p>Calibration is a measure statistical consistency between the forecasts and the observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the true observed value. Ideally, pit values should be uniformly distributed after the transformation.</p>
+<p>Calibration is a measure statistical consistency between the
+forecasts and the observed values. The most common way of assessing
+calibration (more precisely: probabilistic calibration) are PIT
+histograms. The probability integral transform (PIT) is equal to the
+cumulative distribution function of a forecast evaluated at the true
+observed value. Ideally, pit values should be uniformly distributed
+after the transformation.</p>
 <p>We can compute pit values as such:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -633,8 +729,16 @@
 <span>  <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">model</span> <span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
-<p>Another way to look at calibration are interval coverage and quantile coverage. Interval coverage is the percentage of true values that fall inside a given central prediction interval. Quantile coverage is the percentage of observed values that fall below a given quantile level.</p>
-<p>In order to plot interval coverage, you need to include “range” in the <code>by</code> argument to <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. The green area on the plot marks conservative behaviour, i.e. your empirical coverage is greater than it nominally need be (e.g. 55% of true values covered by all 50% central prediction intervals.)</p>
+<p>Another way to look at calibration are interval coverage and quantile
+coverage. Interval coverage is the percentage of true values that fall
+inside a given central prediction interval. Quantile coverage is the
+percentage of observed values that fall below a given quantile
+level.</p>
+<p>In order to plot interval coverage, you need to include “range” in
+the <code>by</code> argument to <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. The
+green area on the plot marks conservative behaviour, i.e. your empirical
+coverage is greater than it nominally need be (e.g. 55% of true values
+covered by all 50% central prediction intervals.)</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -643,7 +747,10 @@
 <span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
 <span><span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
-<p>To visualise quantile coverage, you need to include “quantile” in <code>by</code>. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.</p>
+<p>To visualise quantile coverage, you need to include “quantile” in
+<code>by</code>. Again, the green area corresponds to conservative
+forecasts, where central prediction intervals would cover more than
+needed.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -656,8 +763,21 @@
 <div class="section level2">
 <h2 id="pairwise-comparisons">Pairwise comparisons<a class="anchor" aria-label="anchor" href="#pairwise-comparisons"></a>
 </h2>
-<p>Relative scores for different models can be computed using pairwise comparisons, a sort of pairwise tournament where all combinations of two models are compared against each other based on the overlapping set of available forecasts common to both models. Internally, a ratio of the mean scores of both models is computed. The relative score of a model is then the geometric mean of all mean score ratios which involve that model. When a baseline is provided, then that baseline is excluded from the relative scores for individual models (which therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model.</p>
-<p>In <code>scoringutils</code>, pairwise comparisons can be made in two ways: Through the standalone function <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> or from within <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> which simply adds relative scores to an existing set of scores.</p>
+<p>Relative scores for different models can be computed using pairwise
+comparisons, a sort of pairwise tournament where all combinations of two
+models are compared against each other based on the overlapping set of
+available forecasts common to both models. Internally, a ratio of the
+mean scores of both models is computed. The relative score of a model is
+then the geometric mean of all mean score ratios which involve that
+model. When a baseline is provided, then that baseline is excluded from
+the relative scores for individual models (which therefore differ
+slightly from relative scores without a baseline) and all relative
+scores are scaled by (i.e. divided by) the relative score of the
+baseline model.</p>
+<p>In <code>scoringutils</code>, pairwise comparisons can be made in two
+ways: Through the standalone function <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code>
+or from within <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> which simply adds
+relative scores to an existing set of scores.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -721,7 +841,16 @@
 <span><span class="co">#&gt; 2:        0.5036559</span></span>
 <span><span class="co">#&gt; 3:        0.4662919</span></span>
 <span><span class="co">#&gt; 4:        0.6444541</span></span></code></pre></div>
-<p>If using the <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty.</p>
+<p>If using the <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> function, we can also
+visualise pairwise comparisons by showing the mean score ratios between
+models. By default, smaller values are better and the model we care
+about is showing on the y axis on the left, while the model against it
+is compared is shown on the x-axis on the bottom. In the example above,
+the EuroCOVIDhub-ensemble performs best (it only has values smaller 1),
+while the EuroCOVIDhub-baseline performs worst (and only has values
+larger than 1). For cases, the UMass-MechBayes model is of course
+excluded as there are no case forecasts available and therefore the set
+of overlapping forecasts is empty.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -738,7 +867,12 @@
 <div class="section level3">
 <h3 id="correlation-between-scores">Correlation between scores<a class="anchor" aria-label="anchor" href="#correlation-between-scores"></a>
 </h3>
-<p>It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function <code><a href="../reference/correlation.html">correlation()</a></code>. When dealing with quantile-based forecasts, it is important to call <code>summarise_scorees()</code> before <code><a href="../reference/correlation.html">correlation()</a></code> to summarise over quantiles before computing correlations.</p>
+<p>It may sometimes be interesting to see how different scores correlate
+with each other. We can examine this using the function
+<code><a href="../reference/correlation.html">correlation()</a></code>. When dealing with quantile-based forecasts,
+it is important to call <code>summarise_scorees()</code> before
+<code><a href="../reference/correlation.html">correlation()</a></code> to summarise over quantiles before computing
+correlations.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -776,7 +910,9 @@
 <div class="section level3">
 <h3 id="scores-by-interval-ranges">Scores by interval ranges<a class="anchor" aria-label="anchor" href="#scores-by-interval-ranges"></a>
 </h3>
-<p>If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:</p>
+<p>If you would like to see how different forecast interval ranges
+contribute to average scores, you can visualise scores by interval
+range:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -791,8 +927,17 @@
 <div class="section level2">
 <h2 id="tips-and-tricks---converting-to-sample-based-forecasts">Tips and tricks - converting to sample-based forecasts<a class="anchor" aria-label="anchor" href="#tips-and-tricks---converting-to-sample-based-forecasts"></a>
 </h2>
-<p>Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values.</p>
-<p>You can convert your forecasts into a sample-based format using the function <code><a href="../reference/sample_to_quantile.html">sample_to_quantile()</a></code>. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small.</p>
+<p>Different metrics are available for different forecasting formats. In
+some cases, you may for example have forecasts in a sample-based format,
+but wish to make use of some of the functionality only available to
+quantile-based forecasts. For example, you may want to use the
+decomposition of the weighted interval score, or may like to compute
+interval coverage values.</p>
+<p>You can convert your forecasts into a sample-based format using the
+function <code><a href="../reference/sample_to_quantile.html">sample_to_quantile()</a></code>. There is, however, one
+caveat: Quantiles will be calculated based on the predictive samples,
+which may introduce a bias if the number of available samples is
+small.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_integer</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/sample_to_quantile.html">sample_to_quantile</a></span><span class="op">(</span></span>
@@ -854,7 +999,8 @@
 <div class="section level2">
 <h2 id="available-metrics">Available metrics<a class="anchor" aria-label="anchor" href="#available-metrics"></a>
 </h2>
-<p>An overview of available metrics can be found in the <code>metrics</code> data set that is included in the package.</p>
+<p>An overview of available metrics can be found in the
+<code>metrics</code> data set that is included in the package.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metrics</span></span>
 <span><span class="co">#&gt;                                           Metric               Name</span></span>
@@ -933,7 +1079,9 @@
 <div class="section level2">
 <h2 id="lower-level-functions">Lower level functions<a class="anchor" aria-label="anchor" href="#lower-level-functions"></a>
 </h2>
-<p>Most of these metrics are available as lower level functions and extensively documented. Have a look at the help files to understand these better.</p>
+<p>Most of these metrics are available as lower level functions and
+extensively documented. Have a look at the help files to understand
+these better.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

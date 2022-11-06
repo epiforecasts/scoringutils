@@ -102,9 +102,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Scoring forecasts directly</h1>
-                        <h4 data-toc-skip class="author">Nikos Bosse</h4>
+                        <h4 data-toc-skip class="author">Nikos
+Bosse</h4>
             
-            <h4 data-toc-skip class="date">2022-10-11</h4>
+            <h4 data-toc-skip class="date">2022-11-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoring-forecasts-directly.Rmd" class="external-link"><code>vignettes/scoring-forecasts-directly.Rmd</code></a></small>
       <div class="d-none name"><code>scoring-forecasts-directly.Rmd</code></div>
@@ -112,127 +113,204 @@
 
     
     
-<p>A variety of metrics and scoring rules can also be accessed directly through the <code>scoringutils</code> package.</p>
-<p>The following gives an overview of (most of) the implemented metrics.</p>
+<p>A variety of metrics and scoring rules can also be accessed directly
+through the <code>scoringutils</code> package.</p>
+<p>The following gives an overview of (most of) the implemented
+metrics.</p>
 <div class="section level2">
 <h2 id="bias">Bias<a class="anchor" aria-label="anchor" href="#bias"></a>
 </h2>
-<p>The function <code>bias</code> determines bias from predictive Monte-Carlo samples, automatically recognising whether forecasts are continuous or integer valued.</p>
-<p>For continuous forecasts, Bias is measured as <span class="math display">\[B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t))\]</span></p>
-<p>where <span class="math inline">\(P_t\)</span> is the empirical cumulative distribution function of the prediction for the true value <span class="math inline">\(x_t\)</span>. Computationally, <span class="math inline">\(P_t (x_t)\)</span> is just calculated as the fraction of predictive samples for <span class="math inline">\(x_t\)</span> that are smaller than <span class="math inline">\(x_t\)</span>.</p>
+<p>The function <code>bias</code> determines bias from predictive
+Monte-Carlo samples, automatically recognising whether forecasts are
+continuous or integer valued.</p>
+<p>For continuous forecasts, Bias is measured as <span class="math display">\[B_t (P_t, x_t) = 1 - 2 \cdot (P_t
+(x_t))\]</span></p>
+<p>where <span class="math inline">\(P_t\)</span> is the empirical
+cumulative distribution function of the prediction for the true value
+<span class="math inline">\(x_t\)</span>. Computationally, <span class="math inline">\(P_t (x_t)\)</span> is just calculated as the
+fraction of predictive samples for <span class="math inline">\(x_t\)</span> that are smaller than <span class="math inline">\(x_t\)</span>.</p>
 <p>For integer valued forecasts, Bias is measured as</p>
-<p><span class="math display">\[B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1))\]</span></p>
-<p>to adjust for the integer nature of the forecasts. In both cases, Bias can assume values between -1 and 1 and is 0 ideally.</p>
+<p><span class="math display">\[B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t
+(x_t + 1))\]</span></p>
+<p>to adjust for the integer nature of the forecasts. In both cases,
+Bias can assume values between -1 and 1 and is 0 ideally.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## integer valued forecasts</span></span>
 <span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] -0.81 -0.36 -0.19  0.28 -0.86  0.77  0.97  0.00  0.28  0.74  0.68 -0.99</span></span>
-<span><span class="co">#&gt; [13] -0.40 -0.69  0.41 -0.59  0.29  0.32  0.82  0.11 -0.76  0.09  0.86 -0.31</span></span>
-<span><span class="co">#&gt; [25]  0.07  0.36 -0.20 -0.02 -0.03 -0.39</span></span>
+<span><span class="co">#&gt;  [1]  0.23 -0.72 -0.15 -0.66 -0.99 -0.49 -0.19 -0.44  0.36  0.36 -0.91 -0.23</span></span>
+<span><span class="co">#&gt; [13] -0.50 -0.87 -0.93 -0.12 -0.82 -0.12  0.11 -0.57 -0.86 -0.10 -0.72 -0.44</span></span>
+<span><span class="co">#&gt; [25]  0.20 -0.13 -0.38  0.78  0.30 -0.22</span></span>
 <span></span>
 <span><span class="co">## continuous forecasts</span></span>
 <span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1]  0.55 -0.04  0.91  0.12  0.98  0.69 -0.41 -0.63 -0.21  0.84  0.58 -0.15</span></span>
-<span><span class="co">#&gt; [13]  0.48 -0.54 -0.46 -0.41  0.64  0.10 -0.45 -0.81 -0.20 -0.02 -0.26 -0.34</span></span>
-<span><span class="co">#&gt; [25]  0.35  0.02 -0.28  0.59  0.39 -0.84</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] -0.94 -0.77 -0.37 -0.63  0.69 -0.40  0.08  0.58 -0.75  0.87 -0.84 -0.73</span></span>
+<span><span class="co">#&gt; [13]  0.17  0.86 -0.81 -0.62  0.81 -0.89 -0.72  0.97  0.92 -0.67 -0.48  0.25</span></span>
+<span><span class="co">#&gt; [25]  0.85 -0.94  0.97  0.05 -1.00  0.62</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sharpness">Sharpness<a class="anchor" aria-label="anchor" href="#sharpness"></a>
 </h2>
-<p>Sharpness is the ability of the model to generate predictions within a narrow range. It is a data-independent measure, and is purely a feature of the forecasts themselves.</p>
-<p>Sharpness / dispersion of predictive samples corresponding to one single true value is measured as the normalised median of the absolute deviation from the median of the predictive samples. For details, see <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">?stats::mad</a></code></p>
+<p>Sharpness is the ability of the model to generate predictions within
+a narrow range. It is a data-independent measure, and is purely a
+feature of the forecasts themselves.</p>
+<p>Sharpness / dispersion of predictive samples corresponding to one
+single true value is measured as the normalised median of the absolute
+deviation from the median of the predictive samples. For details, see
+<code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">?stats::mad</a></code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/mad_sample.html">mad_sample</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652</span></span>
-<span><span class="co">#&gt; [11] 2.9652 2.9652 2.9652 3.7065 2.9652 3.7065 4.4478 4.4478 4.4478 5.1891</span></span>
-<span><span class="co">#&gt; [21] 4.4478 4.4478 4.4478 4.4478 4.4478 5.9304 5.1891 5.9304 5.9304 5.9304</span></span></code></pre></div>
+<span><span class="co">#&gt; [11] 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478</span></span>
+<span><span class="co">#&gt; [21] 4.4478 4.4478 5.1891 4.4478 4.4478 5.9304 5.9304 4.4478 5.9304 5.1891</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
 </h2>
-<p>Calibration or reliability of forecasts is the ability of a model to correctly identify its own uncertainty in making predictions. In a model with perfect calibration, the observed data at each time point look as if they came from the predictive probability distribution at that time.</p>
-<p>Equivalently, one can inspect the probability integral transform of the predictive distribution at time t,</p>
+<p>Calibration or reliability of forecasts is the ability of a model to
+correctly identify its own uncertainty in making predictions. In a model
+with perfect calibration, the observed data at each time point look as
+if they came from the predictive probability distribution at that
+time.</p>
+<p>Equivalently, one can inspect the probability integral transform of
+the predictive distribution at time t,</p>
 <p><span class="math display">\[u_t = F_t (x_t)\]</span></p>
-<p>where <span class="math inline">\(x_t\)</span> is the observed data point at time <span class="math inline">\(t \text{ in } t_1, …, t_n\)</span>, n being the number of forecasts, and <span class="math inline">\(F_t\)</span> is the (continuous) predictive cumulative probability distribution at time t. If the true probability distribution of outcomes at time t is <span class="math inline">\(G_t\)</span> then the forecasts <span class="math inline">\(F_t\)</span> are said to be ideal if <span class="math inline">\(F_t = G_t\)</span> at all times <span class="math inline">\(t\)</span>. In that case, the probabilities ut are distributed uniformly.</p>
-<p>In the case of discrete outcomes such as incidence counts, the PIT is no longer uniform even when forecasts are ideal. In that case a randomised PIT can be used instead:</p>
-<p><span class="math display">\[u_t = P_t(k_t) + v \cdot (P_t(k_t) - P_t(k_t - 1) )\]</span></p>
-<p>where <span class="math inline">\(k_t\)</span> is the observed count, <span class="math inline">\(P_t(x)\)</span> is the predictive cumulative probability of observing incidence <span class="math inline">\(k\)</span> at time <span class="math inline">\(t\)</span>, <span class="math inline">\(P_t (-1) = 0\)</span> by definition and <span class="math inline">\(v\)</span> is standard uniform and independent of <span class="math inline">\(k\)</span>. If <span class="math inline">\(P_t\)</span> is the true cumulative probability distribution, then <span class="math inline">\(u_t\)</span> is standard uniform.</p>
-<p>The function checks whether integer or continuous forecasts were provided. It then applies the (randomised) probability integral and tests the values <span class="math inline">\(u_t\)</span> for uniformity using the Anderson-Darling test.</p>
-<p>As a rule of thumb, there is no evidence to suggest a forecasting model is miscalibrated if the p-value found was greater than a threshold of <span class="math inline">\(p &gt;= 0.1\)</span>, some evidence that it was miscalibrated if <span class="math inline">\(0.01 &lt; p &lt; 0.1\)</span>, and good evidence that it was miscalibrated if <span class="math inline">\(p &lt;= 0.01\)</span>. In this context it should be noted, though, that uniformity of the PIT is a necessary but not sufficient condition of calibration. It should also be noted that the test only works given sufficient samples, otherwise the Null hypothesis will often be rejected outright.</p>
+<p>where <span class="math inline">\(x_t\)</span> is the observed data
+point at time <span class="math inline">\(t \text{ in } t_1, …,
+t_n\)</span>, n being the number of forecasts, and <span class="math inline">\(F_t\)</span> is the (continuous) predictive
+cumulative probability distribution at time t. If the true probability
+distribution of outcomes at time t is <span class="math inline">\(G_t\)</span> then the forecasts <span class="math inline">\(F_t\)</span> are said to be ideal if <span class="math inline">\(F_t = G_t\)</span> at all times <span class="math inline">\(t\)</span>. In that case, the probabilities ut are
+distributed uniformly.</p>
+<p>In the case of discrete outcomes such as incidence counts, the PIT is
+no longer uniform even when forecasts are ideal. In that case a
+randomised PIT can be used instead:</p>
+<p><span class="math display">\[u_t = P_t(k_t) + v \cdot (P_t(k_t) -
+P_t(k_t - 1) )\]</span></p>
+<p>where <span class="math inline">\(k_t\)</span> is the observed count,
+<span class="math inline">\(P_t(x)\)</span> is the predictive cumulative
+probability of observing incidence <span class="math inline">\(k\)</span> at time <span class="math inline">\(t\)</span>, <span class="math inline">\(P_t (-1) =
+0\)</span> by definition and <span class="math inline">\(v\)</span> is
+standard uniform and independent of <span class="math inline">\(k\)</span>. If <span class="math inline">\(P_t\)</span> is the true cumulative probability
+distribution, then <span class="math inline">\(u_t\)</span> is standard
+uniform.</p>
+<p>The function checks whether integer or continuous forecasts were
+provided. It then applies the (randomised) probability integral and
+tests the values <span class="math inline">\(u_t\)</span> for uniformity
+using the Anderson-Darling test.</p>
+<p>As a rule of thumb, there is no evidence to suggest a forecasting
+model is miscalibrated if the p-value found was greater than a threshold
+of <span class="math inline">\(p &gt;= 0.1\)</span>, some evidence that
+it was miscalibrated if <span class="math inline">\(0.01 &lt; p &lt;
+0.1\)</span>, and good evidence that it was miscalibrated if <span class="math inline">\(p &lt;= 0.01\)</span>. In this context it should
+be noted, though, that uniformity of the PIT is a necessary but not
+sufficient condition of calibration. It should also be noted that the
+test only works given sufficient samples, otherwise the Null hypothesis
+will often be rejected outright.</p>
 </div>
 <div class="section level2">
 <h2 id="continuous-ranked-probability-score-crps">Continuous Ranked Probability Score (CRPS)<a class="anchor" aria-label="anchor" href="#continuous-ranked-probability-score-crps"></a>
 </h2>
-<p>Wrapper around the <code><a href="../reference/crps_sample.html">crps_sample()</a></code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
+<p>Wrapper around the <code><a href="../reference/crps_sample.html">crps_sample()</a></code> function from the
+<code>scoringRules</code> package. For more information look at the
+manuals from the <code>scoringRules</code> package. The function can be
+used for continuous as well as integer valued forecasts. Smaller values
+are better.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/crps_sample.html">crps_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1]  0.215850  0.421775  0.605350  1.157325  0.500200  0.715375  1.775325</span></span>
-<span><span class="co">#&gt;  [8]  1.036050  0.857425  4.334575  0.884025  3.493600  1.720725  1.156000</span></span>
-<span><span class="co">#&gt; [15]  3.266825  2.458400  2.450800  1.063400  1.059875  4.117650  1.254200</span></span>
-<span><span class="co">#&gt; [22]  3.854500  7.061725  1.507325  1.091625  7.105100  3.398875  5.706425</span></span>
-<span><span class="co">#&gt; [29]  2.544775 10.656500</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.194725 0.419725 0.688675 0.424325 1.113850 0.826225 0.609700 2.631275</span></span>
+<span><span class="co">#&gt;  [9] 1.877600 3.532725 2.649050 1.297350 1.341275 0.963975 1.889700 1.057500</span></span>
+<span><span class="co">#&gt; [17] 3.521900 3.176700 2.096100 2.445925 2.587650 1.501000 6.245300 2.456675</span></span>
+<span><span class="co">#&gt; [25] 3.721200 1.150800 1.163925 1.926450 2.245675 1.358350</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="dawid-sebastiani-score-dss">Dawid-Sebastiani Score (DSS)<a class="anchor" aria-label="anchor" href="#dawid-sebastiani-score-dss"></a>
 </h2>
-<p>Wrapper around the <code><a href="../reference/dss_sample.html">dss_sample()</a></code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function can be used for continuous as well as integer valued forecasts. Smaller values are better.</p>
+<p>Wrapper around the <code><a href="../reference/dss_sample.html">dss_sample()</a></code> function from the
+<code>scoringRules</code> package. For more information look at the
+manuals from the <code>scoringRules</code> package. The function can be
+used for continuous as well as integer valued forecasts. Smaller values
+are better.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dss_sample.html">dss_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.8868717 0.6956480 2.1409307 2.2583167 1.7942763 2.3060109 2.0759463</span></span>
-<span><span class="co">#&gt;  [8] 3.5561852 2.6927529 2.6620450 2.6891130 2.3690199 5.4174016 6.1035771</span></span>
-<span><span class="co">#&gt; [15] 7.6308824 3.5048729 3.0318010 4.4169459 8.5079687 3.0263560 3.4008686</span></span>
-<span><span class="co">#&gt; [22] 3.0812425 3.1853710 3.2496777 4.7716914 3.3289005 3.6845578 4.4922015</span></span>
-<span><span class="co">#&gt; [29] 6.6786064 3.5813745</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 1.125981 1.186453 2.413120 1.296098 1.805361 1.998735 3.122792 2.757503</span></span>
+<span><span class="co">#&gt;  [9] 2.637811 2.318459 2.538563 5.764798 3.804033 4.377179 7.415119 3.329223</span></span>
+<span><span class="co">#&gt; [17] 3.402217 3.007566 3.573740 4.716900 3.900120 3.329547 4.668900 3.492566</span></span>
+<span><span class="co">#&gt; [25] 3.935293 3.514280 5.130296 3.910575 3.512676 4.457736</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="log-score">Log Score<a class="anchor" aria-label="anchor" href="#log-score"></a>
 </h2>
-<p>Wrapper around the <code><a href="../reference/logs_sample.html">logs_sample()</a></code> function from the <code>scoringRules</code> package. For more information look at the manuals from the <code>scoringRules</code> package. The function should not be used for integer valued forecasts. While Log Scores are in principle possible for integer valued forecasts they require a kernel density estimate which is not well defined for discrete values. Smaller values are better.</p>
+<p>Wrapper around the <code><a href="../reference/logs_sample.html">logs_sample()</a></code> function from the
+<code>scoringRules</code> package. For more information look at the
+manuals from the <code>scoringRules</code> package. The function should
+not be used for integer valued forecasts. While Log Scores are in
+principle possible for integer valued forecasts they require a kernel
+density estimate which is not well defined for discrete values. Smaller
+values are better.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/logs_sample.html">logs_sample</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 2.8133814 1.5914959 0.9611705 1.0997894 1.0122454 2.1276593 1.1873967</span></span>
-<span><span class="co">#&gt;  [8] 1.4495394 1.1572605 1.0827458 1.1815210 1.3757341 1.0548981 1.2745559</span></span>
-<span><span class="co">#&gt; [15] 2.0994894 1.4781833 1.5478003 1.0825117 1.1536153 1.0291053 2.2924730</span></span>
-<span><span class="co">#&gt; [22] 1.1759208 0.8935008 0.9820770 1.0299560 1.2701913 2.6673763 1.2185118</span></span>
-<span><span class="co">#&gt; [29] 0.9537430 0.9453565</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 1.0075776 0.9650958 0.8962044 1.6641774 1.0312630 2.2639073 3.7132540</span></span>
+<span><span class="co">#&gt;  [8] 0.9937763 3.6555109 0.9803767 1.5756398 0.9942688 0.9064329 0.9122798</span></span>
+<span><span class="co">#&gt; [15] 1.0149752 1.6846699 1.6069559 1.9039281 0.9804694 1.1199815 1.1833572</span></span>
+<span><span class="co">#&gt; [22] 2.5457280 0.8694577 0.9509030 3.1469670 1.0377928 1.1093931 1.0983779</span></span>
+<span><span class="co">#&gt; [29] 1.5364635 1.8159003</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="brier-score">Brier Score<a class="anchor" aria-label="anchor" href="#brier-score"></a>
 </h2>
-<p>The Brier score is a proper score rule that assesses the accuracy of probabilistic binary predictions. The outcomes can be either 0 or 1, the predictions must be a probability that the true outcome will be 1.</p>
-<p>The Brier Score is then computed as the mean squared error between the probabilistic prediction and the true outcome.</p>
-<p><span class="math display">\[\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2\]</span></p>
+<p>The Brier score is a proper score rule that assesses the accuracy of
+probabilistic binary predictions. The outcomes can be either 0 or 1, the
+predictions must be a probability that the true outcome will be 1.</p>
+<p>The Brier Score is then computed as the mean squared error between
+the probabilistic prediction and the true outcome.</p>
+<p><span class="math display">\[\text{Brier_Score} = \frac{1}{N} \sum_{t
+= 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2\]</span></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/brier_score.html">brier_score</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.11247318 0.54993767 0.49531074 0.98810115 0.68907140 0.24543699</span></span>
-<span><span class="co">#&gt;  [7] 0.35869126 0.40875508 0.82392179 0.03539494 0.26003212 0.86731260</span></span>
-<span><span class="co">#&gt; [13] 0.44915073 0.12824016 0.55400259 0.77864898 0.90826496 0.06670921</span></span>
-<span><span class="co">#&gt; [19] 0.07126996 0.63493918 0.37273470 0.23833090 0.47827458 0.72964211</span></span>
-<span><span class="co">#&gt; [25] 0.89449417 0.55760846 0.64123249 0.03889732 0.37745518 0.62846934</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.708260536 0.094615062 0.345159847 0.015353938 0.002806473 0.132809471</span></span>
+<span><span class="co">#&gt;  [7] 0.808627523 0.314377745 0.313593368 0.028480209 0.186891531 0.510876637</span></span>
+<span><span class="co">#&gt; [13] 0.117324497 0.390824854 0.040661521 0.119597680 0.011095403 0.056057535</span></span>
+<span><span class="co">#&gt; [19] 0.957249212 0.243548798 0.145898588 0.386574636 0.059294039 0.285080027</span></span>
+<span><span class="co">#&gt; [25] 0.067544731 0.044963010 0.160558520 0.426345165 0.001211683 0.072229366</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="interval-score">Interval Score<a class="anchor" aria-label="anchor" href="#interval-score"></a>
 </h3>
-<p>The Interval Score is a Proper Scoring Rule to score quantile predictions, following Gneiting and Raftery (2007). Smaller values are better.</p>
+<p>The Interval Score is a Proper Scoring Rule to score quantile
+predictions, following Gneiting and Raftery (2007). Smaller values are
+better.</p>
 <p>The score is computed as</p>
-<p><span class="math display">\[ \text{score} = (\text{upper} - \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot 1(\text{true_values} &lt; \text{lower}) + \\
+<p><span class="math display">\[ \text{score} = (\text{upper} -
+\text{lower}) + \\
+\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot
+1(\text{true_values} &lt; \text{lower}) + \\
 \frac{2}{\alpha} \cdot (\text{true_value} - \text{upper}) \cdot
 1(\text{true_value} &gt; \text{upper})\]</span></p>
-<p>where <span class="math inline">\(1()\)</span> is the indicator function and <span class="math inline">\(\alpha\)</span> is the decimal value that indicates how much is outside the prediction interval. To improve usability, the user is asked to provide an interval range in percentage terms, i.e. interval_range = 90 (percent) for a 90 percent prediction interval. Correspondingly, the user would have to provide the 5% and 95% quantiles (the corresponding alpha would then be 0.1). No specific distribution is assumed, but the range has to be symmetric (i.e you can’t use the 0.1 quantile as the lower bound and the 0.7 quantile as the upper). Setting <code>weigh = TRUE</code> will weigh the score by <span class="math inline">\(\frac{\alpha}{2}\)</span> such that the Interval Score converges to the CRPS for increasing number of quantiles.</p>
+<p>where <span class="math inline">\(1()\)</span> is the indicator
+function and <span class="math inline">\(\alpha\)</span> is the decimal
+value that indicates how much is outside the prediction interval. To
+improve usability, the user is asked to provide an interval range in
+percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
+prediction interval. Correspondingly, the user would have to provide the
+5% and 95% quantiles (the corresponding alpha would then be 0.1). No
+specific distribution is assumed, but the range has to be symmetric (i.e
+you can’t use the 0.1 quantile as the lower bound and the 0.7 quantile
+as the upper). Setting <code>weigh = TRUE</code> will weigh the score by
+<span class="math inline">\(\frac{\alpha}{2}\)</span> such that the
+Interval Score converges to the CRPS for increasing number of
+quantiles.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">interval_range</span> <span class="op">&lt;-</span> <span class="fl">90</span></span>
@@ -246,11 +324,11 @@
 <span>  upper <span class="op">=</span> <span class="va">upper</span>,</span>
 <span>  interval_range <span class="op">=</span> <span class="va">interval_range</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.22572380 0.23288614 0.10041725 0.62932848 0.19517444 0.19085096</span></span>
-<span><span class="co">#&gt;  [7] 0.25901340 2.37070067 1.09863632 0.19121758 0.18899186 0.08424210</span></span>
-<span><span class="co">#&gt; [13] 0.09606428 0.10487264 0.22984753 0.04960823 1.21683994 0.51523334</span></span>
-<span><span class="co">#&gt; [19] 0.48021979 1.35853668 2.06606465 1.20369610 0.24678453 0.23529509</span></span>
-<span><span class="co">#&gt; [25] 0.23666222 0.21974320 0.13287720 0.12088204 0.15124433 0.44409777</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.18568977 0.26982647 1.56827161 0.13455277 0.17804267 0.07275924</span></span>
+<span><span class="co">#&gt;  [7] 0.76984632 0.21867609 0.34549279 0.16620779 0.28166214 0.74341463</span></span>
+<span><span class="co">#&gt; [13] 0.45224238 0.16823004 0.19936188 0.19624507 0.22102832 0.24368388</span></span>
+<span><span class="co">#&gt; [19] 0.15047730 0.16543187 0.23519249 0.21115056 0.19938513 0.21869067</span></span>
+<span><span class="co">#&gt; [25] 0.23659420 0.27407773 0.10482925 0.20795345 0.29108113 0.15420413</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
