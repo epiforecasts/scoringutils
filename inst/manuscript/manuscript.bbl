@@ -152,7 +152,7 @@ Cramer E, Reich NG, Wang SY, Niemi J, Hannan A, House K, Gu Y, Xie S, Horstman
 Dawid AP (1984).
 \newblock \enquote{Present {{Position}} and {{Potential Developments}}: {{Some
   Personal Views Statistical Theory}} the {{Prequential Approach}}.}
-\newblock \emph{Journal of the Royal Statistical Society: Series A (General)},
+\newblock \emph{Journal of the Royal Statistical Society A (General)},
   \textbf{147}(2), 278--290.
 \newblock ISSN 2397-2327.
 \newblock \doi{10.2307/2981683}.
@@ -229,7 +229,7 @@ Gelman A, Hwang J, Vehtari A (2014).
   Raftery}]{gneitingProbabilisticForecastsCalibration2007}
 Gneiting T, Balabdaoui F, Raftery AE (2007).
 \newblock \enquote{Probabilistic Forecasts, Calibration and Sharpness.}
-\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+\newblock \emph{Journal of the Royal Statistical Society B (Statistical
   Methodology)}, \textbf{69}(2), 243--268.
 \newblock ISSN 1467-9868.
 \newblock \doi{10.1111/j.1467-9868.2007.00587.x}.

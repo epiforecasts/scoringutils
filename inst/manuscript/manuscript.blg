@@ -7,7 +7,7 @@ Database file #2: scoringutils-paper.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 You've used 36 entries,
             3215 wiz_defined-function locations,
-            948 strings with 22335 characters,
+            948 strings with 22319 characters,
 and the built_in function-call counts, 110905 in all, are:
 = -- 11669
 > -- 4189
