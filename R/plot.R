@@ -260,7 +260,7 @@ plot_ranges <- function(scores,
     geom_point(size = 2) +
     geom_line(aes(group = range),
       colour = "black",
-      size = 0.01
+      linewidth = 0.01
     ) +
     scale_color_continuous(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
