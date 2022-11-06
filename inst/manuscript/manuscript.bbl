@@ -1,4 +1,4 @@
-\begin{thebibliography}{36}
+\begin{thebibliography}{39}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -62,8 +62,8 @@ Bracher J, Wolffram D, Deuschel J, G{\"o}rgen K, Ketterer JL, Ullrich A, Abbott
 
 \bibitem[{Brier(1950)}]{brierVERIFICATIONFORECASTSEXPRESSED1950}
 Brier GW (1950).
-\newblock \enquote{{{VERIFICATION OF FORECASTS EXPRESSED IN TERMS OF
-  PROBABILITY}}.}
+\newblock \enquote{{{Verification of Forecasts Expressed in Terms of
+  Probability}}.}
 \newblock \emph{Monthly Weather Review}, \textbf{78}(1), 1--3.
 \newblock ISSN 1520-0493, 0027-0644.
 \newblock \doi{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}.
@@ -152,7 +152,7 @@ Cramer E, Reich NG, Wang SY, Niemi J, Hannan A, House K, Gu Y, Xie S, Horstman
 Dawid AP (1984).
 \newblock \enquote{Present {{Position}} and {{Potential Developments}}: {{Some
   Personal Views Statistical Theory}} the {{Prequential Approach}}.}
-\newblock \emph{Journal of the Royal Statistical Society: Series A (General)},
+\newblock \emph{Journal of the Royal Statistical Society A (General)},
   \textbf{147}(2), 278--290.
 \newblock ISSN 2397-2327.
 \newblock \doi{10.2307/2981683}.
@@ -229,7 +229,7 @@ Gelman A, Hwang J, Vehtari A (2014).
   Raftery}]{gneitingProbabilisticForecastsCalibration2007}
 Gneiting T, Balabdaoui F, Raftery AE (2007).
 \newblock \enquote{Probabilistic Forecasts, Calibration and Sharpness.}
-\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+\newblock \emph{Journal of the Royal Statistical Society B (Statistical
   Methodology)}, \textbf{69}(2), 243--268.
 \newblock ISSN 1467-9868.
 \newblock \doi{10.1111/j.1467-9868.2007.00587.x}.
@@ -347,6 +347,12 @@ Murphy AH (1971).
 \newblock ISSN 1520-0450.
 \newblock \doi{10.1175/1520-0450(1971)010<0155:ANOTRP>2.0.CO;2}.
 
+\bibitem[{Müller and Wickham(2022)}]{tibble}
+Müller K, Wickham H (2022).
+\newblock \emph{tibble: Simple Data Frames}.
+\newblock R package version 3.1.7,
+  \urlprefix\url{https://CRAN.R-project.org/package=tibble}.
+
 \bibitem[{{R Core Team}(2021)}]{R}
 {R Core Team} (2021).
 \newblock \emph{R: A Language and Environment for Statistical Computing}.
@@ -373,6 +379,13 @@ Timmermann A (2018).
   449--479.
 \newblock \doi{10.1146/annurev-financial-110217-022713}.
 
+\bibitem[{Wickham(2016)}]{ggplot2}
+Wickham H (2016).
+\newblock \emph{ggplot2: Elegant Graphics for Data Analysis}.
+\newblock Springer-Verlag New York.
+\newblock ISBN 978-3-319-24277-4.
+\newblock \urlprefix\url{https://ggplot2.tidyverse.org}.
+
 \bibitem[{Winkler \emph{et~al.}(1996)Winkler, Mu{\~n}oz, Cervera, Bernardo,
   Blattenberger, Kadane, Lindley, Murphy, Oliver, and
   {R{\'i}os-Insua}}]{winklerScoringRulesEvaluation1996}
@@ -395,5 +408,12 @@ Zeileis A, Lang MN (2022).
   Probabilistic Models}.
 \newblock R package version 0.1-0/r1498,
   \urlprefix\url{https://R-Forge.R-project.org/projects/topmodels/}.
+
+\bibitem[{Zhu(2021)}]{kableExtra}
+Zhu H (2021).
+\newblock \emph{kableExtra: Construct Complex Table with 'kable' and Pipe
+  Syntax}.
+\newblock R package version 1.3.4,
+  \urlprefix\url{https://CRAN.R-project.org/package=kableExtra}.
 
 \end{thebibliography}
