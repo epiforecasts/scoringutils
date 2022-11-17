@@ -260,7 +260,7 @@ plot_ranges <- function(scores,
     geom_point(size = 2) +
     geom_line(aes(group = range),
       colour = "black",
-      size = 0.01
+      linewidth = 0.01
     ) +
     scale_color_continuous(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
@@ -993,7 +993,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' # sample-based pit
 #' pit <- pit(example_integer, by = c("model"))
 #' plot_pit(pit)
-#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
+#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
 
 plot_pit <- function(pit,
@@ -1054,7 +1054,7 @@ plot_pit <- function(pit,
         data = pit,
         aes(x = pit_value)
       ) +
-        geom_histogram(aes(y = stat(width * density)),
+        geom_histogram(aes(y = after_stat(width * density)),
           breaks = plot_quantiles,
           colour = "grey"
         ) +
@@ -1066,7 +1066,7 @@ plot_pit <- function(pit,
       data = data.frame(x = pit),
       aes(x = x)
     ) +
-      geom_histogram(aes(y = stat(width*density)),
+      geom_histogram(aes(y = after_stat(width * density)),
         breaks = plot_quantiles,
         colour = "grey"
       )

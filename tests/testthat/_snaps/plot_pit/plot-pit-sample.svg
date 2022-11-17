@@ -25,15 +25,15 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMzUuMjR8NzE0LjUyfDIyLjc4fDU0NS4xMQ==)'>
-<rect x='66.11' y='46.53' width='68.61' height='474.84' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='134.73' y='468.61' width='68.61' height='52.76' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='203.34' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='271.96' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='340.57' y='257.57' width='68.61' height='263.80' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='409.19' y='415.85' width='68.61' height='105.52' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='477.80' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='546.42' y='521.37' width='68.61' height='0.00' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
-<rect x='615.03' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #595959;' />
+<rect x='66.11' y='46.53' width='68.61' height='474.84' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='134.73' y='468.61' width='68.61' height='52.76' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='203.34' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='271.96' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='340.57' y='257.57' width='68.61' height='263.80' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='409.19' y='415.85' width='68.61' height='105.52' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='477.80' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='546.42' y='521.37' width='68.61' height='0.00' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
+<rect x='615.03' y='363.09' width='68.61' height='158.28' style='stroke-width: 1.07; stroke: #BEBEBE; stroke-linecap: butt; stroke-linejoin: miter; fill: #595959;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='35.24,545.11 35.24,22.78 ' style='stroke-width: 1.07; stroke: #CCCCCC; stroke-linecap: butt;' />
