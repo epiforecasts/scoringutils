@@ -993,7 +993,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' # sample-based pit
 #' pit <- pit(example_integer, by = c("model"))
 #' plot_pit(pit)
-#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light
+#' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
 
 plot_pit <- function(pit,
