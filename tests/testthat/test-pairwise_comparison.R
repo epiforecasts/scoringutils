@@ -269,7 +269,10 @@ test_that("pairwise_comparison() works inside and outside of score()", {
 })
 
 test_that("pairwise_comparison() realises when there is no baseline model", {
-  expect_error(pairwise_comparison(eval_with_baseline,
-    baseline = "missing_model"
+
+  scores <- score(example_quantile)
+
+  expect_error(pairwise_comparison(scores,
+                                   baseline = "missing_model"
   ), "missing")
 })
