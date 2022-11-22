@@ -229,6 +229,9 @@ pairwise_comparison_one_group <- function(scores,
 
   if (!is.null(baseline)) {
     baseline_theta <- unique(result[model == baseline, ]$theta)
+    if (length(baseline_theta) == 0) {
+      stop("Baseline model ", baseline, " missing.")
+    }
     result[, rel_to_baseline := theta / baseline_theta]
   }
 
