@@ -86,7 +86,8 @@
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  relative_skill_metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -96,7 +97,8 @@
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  relative_skill_metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -130,11 +132,16 @@ Relative skill will be calculated for the aggregation level specified in
 <code>by</code>.</p></dd>
 
 
-<dt>metric</dt>
+<dt>relative_skill_metric</dt>
 <dd><p>character with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 this will be either interval score, CRPS or Brier score (depending on which
 of these is available in the input data)</p></dd>
+
+
+<dt>metric</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Deprecated in 1.1.0. Use
+<code>relative_skill_metric</code> instead.</p></dd>
 
 
 <dt>baseline</dt>
