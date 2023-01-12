@@ -9,7 +9,7 @@ template:
     card: summary_large_image
 
 development:
-  mode: release
+  mode: auto
 
 authors:
   Nikos Bosse:
