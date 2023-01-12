@@ -56,17 +56,18 @@ test_that("summarise_scores() can compute relative measures", {
   ex <- data.table::copy(example_quantile)
   scores <- suppressMessages(score(ex))
 
-  expect_snapshot(
-    summarise_scores(
-      scores, by = "model", relative_skill = TRUE
-    )
-  )
-
-  expect_snapshot(
+  expect_snapshot(summarise_scores(
     summarise_scores(
       scores, by = "model", relative_skill = TRUE,
-      relative_skill_metric = "ae_median"
-    )
+      fun = round, digits = 2
+    ))
+  )
+
+  expect_snapshot(summarise_scores(
+    summarise_scores(
+      scores, by = "model", relative_skill = TRUE,
+      relative_skill_metric = "ae_median", fun = round, digits = 2
+    ))
   )
 })
 
@@ -75,6 +76,8 @@ test_that("summarise_scores(): metric is deprecated", {
   scores <- suppressMessages(score(ex))
 
   expect_snapshot(summarise_scores(
-    scores, by = "model", metric = "auto", relative_skill = TRUE)
-  )
+    summarise_scores(
+    scores, by = "model", metric = "auto", relative_skill = TRUE,
+    fun = round, digits = 2
+  )))
 })
