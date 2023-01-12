@@ -28,10 +28,8 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{metric}{character with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-this will be either interval score, CRPS or Brier score (depending on which
-of these is available in the input data)}
+\item{metric}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated in 1.1.0. Use
+\code{relative_skill_metric} instead.}
 }
 \description{
 A helper function to check the input parameters for
