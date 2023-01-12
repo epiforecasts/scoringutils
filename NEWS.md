@@ -1,3 +1,14 @@
+# scoringutils 1.1.0
+
+A minor update to the package with some bug fixes and minor changes.
+
+## Feature updates
+
+## Package updates
+
+- Removed the on attach message which warned of breaking changes in `1.0.0`.
+## Bug fixes
+
 # scoringutils 1.0.0
 
 Major update to the package and most package functions with lots of breaking changes. 
