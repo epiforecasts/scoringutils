@@ -122,11 +122,10 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">crps_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.186900  0.516950  2.014225  1.486975  0.653925  0.535700  2.937950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  1.900225  0.883000  1.148750  4.080475  2.513900  0.888350  1.002625</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]  4.352350  5.498475  1.266650  2.577050  1.332150  1.129525  7.233125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]  3.095800  1.199525  1.235400 12.716000  2.046375  5.204975  9.892575</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]  2.478025  2.840000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.380850 0.262275 1.137825 1.254300 1.362550 1.660800 1.269250 0.861750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.761475 5.647250 2.642325 3.374000 0.925650 1.238300 1.310525 1.677300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 2.193350 1.736500 1.394500 3.182850 1.995700 1.206450 1.161300 4.519100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 7.636925 1.151500 1.454825 1.288500 2.399150 3.113125</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
