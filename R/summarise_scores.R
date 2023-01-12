@@ -17,10 +17,12 @@
 #' the computation of relative skill, see [pairwise_comparison()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
-#' @param metric character with the name of the metric for which
+#' @param relative_skill_metric character with the name of the metric for which
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
 #' this will be either interval score, CRPS or Brier score (depending on which
 #' of these is available in the input data)
+#' @param metric  `r lifecycle::badge("deprecated")` Deprecated in 1.1.0. Use
+#' `relative_skill_metric` instead.
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
@@ -64,10 +66,16 @@ summarise_scores <- function(scores,
                              by = NULL,
                              fun = mean,
                              relative_skill = FALSE,
-                             metric = "auto",
+                             relative_skill_metric = "auto",
+                             metric = deprecated(),
                              baseline = NULL,
                              ...) {
-
+  if (lifecycle::is_present(metric)) {
+    lifecycle::deprecate_warn(
+      "1.1.0", "summarise_scores(metric)",
+      "summarise_scores(relative_skill_metric)"
+    )
+  }
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
@@ -83,7 +91,7 @@ summarise_scores <- function(scores,
     by = by,
     relative_skill = relative_skill,
     baseline = baseline,
-    metric = metric
+    metric = relative_skill_metric
   )
 
   # get all available metrics to determine names of columns to summarise over
@@ -101,7 +109,7 @@ summarise_scores <- function(scores,
   if (relative_skill) {
     pairwise <- pairwise_comparison(
       scores = scores,
-      metric = metric,
+      metric = relative_skill_metric,
       baseline = baseline,
       by = by
     )
@@ -131,10 +139,10 @@ summarise_scores <- function(scores,
   # remove unnecessary columns -------------------------------------------------
   # if neither quantile nor range are in by, remove coverage and
   # quantile_coverage because averaging does not make sense
-  if (!("range" %in% by) & ("coverage" %in% colnames(scores))) {
+  if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
     scores[, c("coverage") := NULL]
   }
-  if (!("quantile" %in% by) & "quantile_coverage" %in% names(scores)) {
+  if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
     scores[, c("quantile_coverage") := NULL]
   }
 

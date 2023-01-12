@@ -46,7 +46,45 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
 
   expect_warning(
     expect_warning(
-      summarise_scores(scores, by = "model", relative_skill = TRUE, na.rm = TRUE)
+      summarise_scores(
+        scores, by = "model", relative_skill = TRUE, na.rm = TRUE)
     )
   )
+})
+
+test_that("summarise_scores() can compute relative measures", {
+  ex <- data.table::copy(example_quantile)
+  scores <- suppressMessages(score(ex))
+
+  expect_equal(
+    summarise_scores(
+      scores, by = "model", relative_skill = TRUE
+    )[, relative_skill],
+    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
+  )
+
+  expect_equal(
+    summarise_scores(
+      scores, by = "model", relative_skill = TRUE,
+      relative_skill_metric = "ae_median"
+    )[, relative_skill],
+    c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
+  )
+})
+
+test_that("summarise_scores(): metric is deprecated", {
+  ex <- data.table::copy(example_quantile)
+  scores <- suppressMessages(score(ex))
+
+  expect_equal(
+    suppressWarnings(summarise_scores(
+    scores, by = "model", metric = "auto", relative_skill = TRUE
+  ))[, relative_skill],
+    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
+  )  
+  expect_snapshot(
+    x <- summarise_scores(
+      scores, by = "model", metric = "auto", relative_skill = TRUE
+    )
+  )  
 })

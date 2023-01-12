@@ -10,7 +10,8 @@ summarise_scores(
   by = NULL,
   fun = mean,
   relative_skill = FALSE,
-  metric = "auto",
+  relative_skill_metric = "auto",
+  metric = deprecated(),
   baseline = NULL,
   ...
 )
@@ -20,7 +21,8 @@ summarize_scores(
   by = NULL,
   fun = mean,
   relative_skill = FALSE,
-  metric = "auto",
+  relative_skill_metric = "auto",
+  metric = deprecated(),
   baseline = NULL,
   ...
 )
@@ -44,10 +46,13 @@ the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwis
 Relative skill will be calculated for the aggregation level specified in
 \code{by}.}
 
-\item{metric}{character with the name of the metric for which
+\item{relative_skill_metric}{character with the name of the metric for which
 a relative skill shall be computed. If equal to 'auto' (the default), then
 this will be either interval score, CRPS or Brier score (depending on which
 of these is available in the input data)}
+
+\item{metric}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated in 1.1.0. Use
+\code{relative_skill_metric} instead.}
 
 \item{baseline}{character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
