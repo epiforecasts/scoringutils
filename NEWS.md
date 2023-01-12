@@ -15,6 +15,7 @@ column in the input data more explicit.
 
 - Missing baseline forecasts in `pairwise_comparison()` now trigger an explicit and informative error message.
 - The requirements table in the getting started vignette is now correct.
+- Added support for an optional `sample` column when using a quantile forecast format. Previously this resulted in an error.
 
 # scoringutils 1.0.0
 
