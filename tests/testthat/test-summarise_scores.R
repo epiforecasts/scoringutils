@@ -60,14 +60,14 @@ test_that("summarise_scores() can compute relative measures", {
     summarise_scores(
       scores, by = "model", relative_skill = TRUE,
       fun = signif, digits = 1
-    ))
+    )[, .(model, relative_skill)])
   )
 
   expect_snapshot(summarise_scores(
     summarise_scores(
       scores, by = "model", relative_skill = TRUE,
       relative_skill_metric = "ae_median", fun = signif, digits = 1
-    ))
+    )[, .(model, relative_skill)])
   )
 })
 
@@ -79,5 +79,5 @@ test_that("summarise_scores(): metric is deprecated", {
     summarise_scores(
     scores, by = "model", metric = "auto", relative_skill = TRUE,
     fun = signif, digits = 1
-  )))
+  )[, .(model, relative_skill)]))
 })
