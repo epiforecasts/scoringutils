@@ -171,3 +171,17 @@ test_that("function produces output for a continuous format case", {
     TRUE
   )
 })
+
+test_that("score() can support a sample column when a quantile forecast is
+ used", {
+  ex <- example_quantile[!is.na(quantile)][1:200, ]
+  ex <- rbind(
+    data.table::copy(ex)[, sample := 1],
+    ex[, sample := 2]
+  )
+  scores <- suppressWarnings(score(ex))
+  expect_snapshot(summarise_scores(
+    summarise_scores(scores, by = "model"), by = "model", 
+    fun = signif, digits = 2
+  ))
+ })
