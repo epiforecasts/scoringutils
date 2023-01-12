@@ -15,8 +15,6 @@ score_quantile(
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
-For examples, look at the \link{example_quantile}, \link{example_continuous},
-\link{example_integer}, and \link{example_binary} data sets.
 For scoring using \code{\link[=score]{score()}}, the following columns need to be present:
 \itemize{
 \item \code{true_value} - the true observed values
@@ -33,7 +31,15 @@ For scoring predictions in a quantile-format forecast you should provide
 a column called \code{quantile}:
 \itemize{
 \item \code{quantile}: quantile to which the prediction corresponds
-}}
+}
+
+In addition a \code{model} column is suggested and if not present this will be
+flagged and added to the input data with all forecasts assigned as an
+"unspecified model").
+
+You can check the format of your data using \code{\link[=check_forecasts]{check_forecasts()}} and there
+are examples for each format (\link{example_quantile}, \link{example_continuous},
+\link{example_integer}, and \link{example_binary}).}
 
 \item{forecast_unit}{A character vector with the column names that define
 the unit of a single forecast, i.e. a forecast was made for a combination
@@ -41,7 +47,7 @@ of the values in \code{forecast_unit}}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
+metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Alpha is the
