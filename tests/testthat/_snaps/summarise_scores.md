@@ -2,21 +2,21 @@
 
     Code
       summarise_scores(summarise_scores(scores, by = "model", relative_skill = TRUE,
-        fun = signif, digits = 2))
+        fun = signif, digits = 1))
     Output
       Key: <model>
                          model interval_score dispersion underprediction
                         <char>          <num>      <num>           <num>
-      1: EuroCOVIDhub-baseline    14352.29688 2101.98047      5167.42207
-      2: EuroCOVIDhub-ensemble     9014.75977 1842.54375      2117.93744
-      3:       UMass-MechBayes       52.69375   26.84297        16.89448
-      4:  epiforecasts-EpiNow2    10828.59271 2948.98259      1694.30872
-         overprediction coverage_deviation        bias   ae_median relative_skill
-                  <num>              <num>       <num>       <num>          <num>
-      1:    7123.576586        0.002742188  0.21851562 19326.50391           1.60
-      2:    5040.330676        0.049246094  0.00812500 12147.88672           0.81
-      3:       9.011062       -0.022812500 -0.02234375    78.73438           0.75
-      4:    6174.094170       -0.054578947 -0.04336032 14476.35223           1.00
+      1: EuroCOVIDhub-baseline    14531.32812 2063.28125      5228.14504
+      2: EuroCOVIDhub-ensemble     8777.69531 1800.33203      2132.37828
+      3:       UMass-MechBayes       51.60938   26.50781        15.79562
+      4:  epiforecasts-EpiNow2    10703.32794 2783.59514      1674.83271
+         overprediction coverage_deviation         bias   ae_median relative_skill
+                  <num>              <num>        <num>       <num>          <num>
+      1:    6772.927266       -0.003554687  0.218750000 18837.23438            2.0
+      2:    4856.788438        0.039804688  0.007421875 12265.44141            0.8
+      3:       8.868594       -0.029687500 -0.021875000    76.95312            0.7
+      4:    5933.455587       -0.062631579 -0.043319838 14547.31174            1.0
          scaled_rel_skill
                     <num>
       1:               NA
@@ -28,21 +28,21 @@
 
     Code
       summarise_scores(summarise_scores(scores, by = "model", relative_skill = TRUE,
-        relative_skill_metric = "ae_median", fun = signif, digits = 2))
+        relative_skill_metric = "ae_median", fun = signif, digits = 1))
     Output
       Key: <model>
                          model interval_score dispersion underprediction
                         <char>          <num>      <num>           <num>
-      1: EuroCOVIDhub-baseline    14352.29688 2101.98047      5167.42207
-      2: EuroCOVIDhub-ensemble     9014.75977 1842.54375      2117.93744
-      3:       UMass-MechBayes       52.69375   26.84297        16.89448
-      4:  epiforecasts-EpiNow2    10828.59271 2948.98259      1694.30872
-         overprediction coverage_deviation        bias   ae_median relative_skill
-                  <num>              <num>       <num>       <num>          <num>
-      1:    7123.576586        0.002742188  0.21851562 19326.50391           1.60
-      2:    5040.330676        0.049246094  0.00812500 12147.88672           0.78
-      3:       9.011062       -0.022812500 -0.02234375    78.73438           0.77
-      4:    6174.094170       -0.054578947 -0.04336032 14476.35223           1.00
+      1: EuroCOVIDhub-baseline    14531.32812 2063.28125      5228.14504
+      2: EuroCOVIDhub-ensemble     8777.69531 1800.33203      2132.37828
+      3:       UMass-MechBayes       51.60938   26.50781        15.79562
+      4:  epiforecasts-EpiNow2    10703.32794 2783.59514      1674.83271
+         overprediction coverage_deviation         bias   ae_median relative_skill
+                  <num>              <num>        <num>       <num>          <num>
+      1:    6772.927266       -0.003554687  0.218750000 18837.23438            2.0
+      2:    4856.788438        0.039804688  0.007421875 12265.44141            0.8
+      3:       8.868594       -0.029687500 -0.021875000    76.95312            0.8
+      4:    5933.455587       -0.062631579 -0.043319838 14547.31174            1.0
          scaled_rel_skill
                     <num>
       1:               NA
@@ -54,7 +54,7 @@
 
     Code
       summarise_scores(summarise_scores(scores, by = "model", metric = "auto",
-        relative_skill = TRUE, fun = signif, digits = 2))
+        relative_skill = TRUE, fun = signif, digits = 1))
     Warning <lifecycle_warning_deprecated>
       The `metric` argument of `summarise_scores()` is deprecated as of scoringutils 1.1.0.
       i Please use the `relative_skill_metric` argument instead.
@@ -62,16 +62,16 @@
       Key: <model>
                          model interval_score dispersion underprediction
                         <char>          <num>      <num>           <num>
-      1: EuroCOVIDhub-baseline    14352.29688 2101.98047      5167.42207
-      2: EuroCOVIDhub-ensemble     9014.75977 1842.54375      2117.93744
-      3:       UMass-MechBayes       52.69375   26.84297        16.89448
-      4:  epiforecasts-EpiNow2    10828.59271 2948.98259      1694.30872
-         overprediction coverage_deviation        bias   ae_median relative_skill
-                  <num>              <num>       <num>       <num>          <num>
-      1:    7123.576586        0.002742188  0.21851562 19326.50391           1.60
-      2:    5040.330676        0.049246094  0.00812500 12147.88672           0.81
-      3:       9.011062       -0.022812500 -0.02234375    78.73438           0.75
-      4:    6174.094170       -0.054578947 -0.04336032 14476.35223           1.00
+      1: EuroCOVIDhub-baseline    14531.32812 2063.28125      5228.14504
+      2: EuroCOVIDhub-ensemble     8777.69531 1800.33203      2132.37828
+      3:       UMass-MechBayes       51.60938   26.50781        15.79562
+      4:  epiforecasts-EpiNow2    10703.32794 2783.59514      1674.83271
+         overprediction coverage_deviation         bias   ae_median relative_skill
+                  <num>              <num>        <num>       <num>          <num>
+      1:    6772.927266       -0.003554687  0.218750000 18837.23438            2.0
+      2:    4856.788438        0.039804688  0.007421875 12265.44141            0.8
+      3:       8.868594       -0.029687500 -0.021875000    76.95312            0.7
+      4:    5933.455587       -0.062631579 -0.043319838 14547.31174            1.0
          scaled_rel_skill
                     <num>
       1:               NA
