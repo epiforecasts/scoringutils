@@ -65,5 +65,5 @@ test_that("metric is deprecated", {
 
   scores <- suppressMessages(score(ex))
 
-  expect_snapshot(summarise_scores(scores, metric = "auto"))
+  expect_snapshot(summarise_scores(scores, by = "model", metric = "auto"))
 })
