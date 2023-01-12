@@ -15,12 +15,12 @@ A minor update to the package with some bug fixes and minor changes.
 
 # scoringutils 1.0.0
 
-Major update to the package and most package functions with lots of breaking changes. 
+Major update to the package and most package functions with lots of breaking changes.
 
 ## Feature updates
 - new and updated Readme and vignette
-- the proposed scoring workflow was reworked. Functions were changed so they 
-can easily be piped and have simplified arguments and outputs. 
+- the proposed scoring workflow was reworked. Functions were changed so they
+can easily be piped and have simplified arguments and outputs.
 
 ### new functions and function changes
 - the function `eval_forecasts()` was replaced by a function `score()` with a 
