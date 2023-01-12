@@ -7,6 +7,7 @@ A minor update to the package with some bug fixes and minor changes.
 ## Package updates
 
 - Removed the on attach message which warned of breaking changes in `1.0.0`.
+
 ## Bug fixes
 
 # scoringutils 1.0.0
