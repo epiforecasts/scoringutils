@@ -10,6 +10,9 @@ A minor update to the package with some bug fixes and minor changes.
 
 ## Bug fixes
 
+- Missing baseline forecasts in `pairwise_comparison()` now trigger an explicit and informative error message.
+- The requirements table in the getting started vignette is now correct.
+
 # scoringutils 1.0.0
 
 Major update to the package and most package functions with lots of breaking changes. 
