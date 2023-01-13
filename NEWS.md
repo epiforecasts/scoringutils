@@ -8,8 +8,7 @@ A minor update to the package with some bug fixes and minor changes.
 
 - Removed the on attach message which warned of breaking changes in `1.0.0`.
 - Renamed the `metric` argument of `summarise_scores()` to `relative_skill_metric`. This argument is now deprecated and will be removed in a future version of the package. Please use the new argument instead.
-- Updated the documentation for `score()` and related functions to make the soft requirement for a `model`
-column in the input data more explicit.
+- Updated the documentation for `score()` and related functions to make the soft requirement for a `model` column in the input data more explicit.
 
 ## Bug fixes
 
