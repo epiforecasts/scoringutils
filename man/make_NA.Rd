@@ -11,8 +11,6 @@ make_na(data = NULL, what = c("truth", "forecast", "both"), ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
-For examples, look at the \link{example_quantile}, \link{example_continuous},
-\link{example_integer}, and \link{example_binary} data sets.
 For scoring using \code{\link[=score]{score()}}, the following columns need to be present:
 \itemize{
 \item \code{true_value} - the true observed values
@@ -29,7 +27,15 @@ For scoring predictions in a quantile-format forecast you should provide
 a column called \code{quantile}:
 \itemize{
 \item \code{quantile}: quantile to which the prediction corresponds
-}}
+}
+
+In addition a \code{model} column is suggested and if not present this will be
+flagged and added to the input data with all forecasts assigned as an
+"unspecified model").
+
+You can check the format of your data using \code{\link[=check_forecasts]{check_forecasts()}} and there
+are examples for each format (\link{example_quantile}, \link{example_continuous},
+\link{example_integer}, and \link{example_binary}).}
 
 \item{what}{character vector that determines which values should be turned
 into \code{NA}. If \code{what = "truth"}, values in the column 'true_value' will be

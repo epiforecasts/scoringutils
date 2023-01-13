@@ -8,8 +8,6 @@ score(data, metrics = NULL, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
-For examples, look at the \link{example_quantile}, \link{example_continuous},
-\link{example_integer}, and \link{example_binary} data sets.
 For scoring using \code{\link[=score]{score()}}, the following columns need to be present:
 \itemize{
 \item \code{true_value} - the true observed values
@@ -26,35 +24,47 @@ For scoring predictions in a quantile-format forecast you should provide
 a column called \code{quantile}:
 \itemize{
 \item \code{quantile}: quantile to which the prediction corresponds
-}}
+}
+
+In addition a \code{model} column is suggested and if not present this will be
+flagged and added to the input data with all forecasts assigned as an
+"unspecified model").
+
+You can check the format of your data using \code{\link[=check_forecasts]{check_forecasts()}} and there
+are examples for each format (\link{example_quantile}, \link{example_continuous},
+\link{example_integer}, and \link{example_binary}).}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}, or check the \link{metrics} data set.}
+metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
 
 \item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
 function used for scoring forecasts in a quantile-based format).}
 }
 \value{
 A data.table with unsummarised scores. There will be one score per
-quantile or sample, which is usually not desired, so you should always run
-\code{\link[=summarise_scores]{summarise_scores()}} on the unsummarised scores.
+quantile or sample, which is usually not desired, so you should almost
+always run \code{\link[=summarise_scores]{summarise_scores()}} on the unsummarised scores.
 }
 \description{
-The function \code{score} allows automatic scoring of forecasts and
-wraps the lower level functions in the \pkg{scoringutils} package.
+This function allows automatic scoring of forecasts using a
+range of metrics. For most users it will be the workhorse for
+scoring forecasts as it wraps the lower level functions package functions.
+However, these functions are also available if you wish to make use of them
+independently.
 
-It can be used to score forecasts in a quantile-based, sample-based, or
-binary format. To obtain an overview of what input is expected, have a look
-at the \link{example_quantile}, \link{example_continuous}, \link{example_integer}, and
-\link{example_binary} data sets.
+A range of forecasts formats are supported, including quantile-based,
+sample-based, binary forecasts. Prior to scoring, users may wish to make use
+of \code{\link[=check_forecasts]{check_forecasts()}} to ensure that the input data is in a supported
+format though this will also be run internally by \code{\link[=score]{score()}}. Examples for
+each format are also provided (see the documentation for \code{data} below or in
+\code{\link[=check_forecasts]{check_forecasts()}}).
 
-You can (and should) check your input using the function \code{\link[=check_forecasts]{check_forecasts()}}
-before scoring.
-
-To obtain a quick overview of the evaluation metrics used, have a look at the
-\link{metrics} data included in the package. The column \code{metrics$Name} gives an
-overview of all available metric names that can be computed.
+To obtain a quick overview of the currrently supported evaluation metrics,
+have a look at the \link{metrics} data included in the package. The column
+\code{metrics$Name} gives an overview of all available metric names that can be
+computed. If interested in an unsupported metric please open a \href{https://github.com/epiforecasts/scoringutils/issues}{feature request} or consider
+contributing a pull request.
 }
 \examples{
 library(magrittr) # pipe operator
