@@ -78,7 +78,8 @@ summarise_scores <- function(scores,
   }
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
-  forecast_unit <- get_forecast_unit(scores)
+  prediction_type <- get_prediction_type(scores)
+  forecast_unit <- get_forecast_unit(scores, prediction_type = prediction_type)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {

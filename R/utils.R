@@ -230,6 +230,9 @@ get_target_type <- function(data) {
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for
 #'
+#' @param prediction_type The prediction type of the forecast. This is used to
+#' adjust the list of protected columns.
+#'
 #' @inheritParams check_forecasts
 #'
 #' @return A character vector with the column names that define the unit of
@@ -237,13 +240,19 @@ get_target_type <- function(data) {
 #'
 #' @keywords internal
 
-get_forecast_unit <- function(data) {
+get_forecast_unit <- function(data, prediction_type) {
+
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     names(data)[grepl("coverage_", names(data))]
   )
+  if (!missing(prediction_type)) {
+    if (prediction_type == "quantile") {
+      protected_columns <- setdiff(protected_columns, "sample")
+    }
+  }
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
 }

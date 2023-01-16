@@ -124,9 +124,10 @@ check_forecasts <- function(data) {
 
 
   # get information about the forecasts ----------------------------------------
-  forecast_unit <- get_forecast_unit(data)
-  target_type <- get_target_type(data)
   prediction_type <- get_prediction_type(data)
+  forecast_unit <- get_forecast_unit(data, prediction_type = prediction_type)
+  target_type <- get_target_type(data)
+
 
 
   # check whether a column called 'quantile' or 'sample' is present ------------
@@ -145,7 +146,7 @@ check_forecasts <- function(data) {
   # the length of prediction is greater 1 for a sample / quantile for
   # a single forecast
 
-  check_duplicates <- find_duplicates(data)
+  check_duplicates <- find_duplicates(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {
     errors <- c(
@@ -275,6 +276,10 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #' @param data A data.frame as used for [score()]
 #'
+#' @param forecast_unit A character vector with the column names that define
+#' the unit of a single forecast. If missing the function tries to infer the
+#'
+#' @param ... Additional arguments passed to [get_forecast_unit()].
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @keywords check-forecasts
@@ -282,14 +287,14 @@ print.scoringutils_check <- function(x, ...) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' find_duplicates(example)
 
-find_duplicates <- function(data) {
+find_duplicates <- function(data, forecast_unit, ...) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
-  forecast_unit <- get_forecast_unit(data)
-
+  if (missing(forecast_unit)) {
+     forecast_unit <- get_forecast_unit(data, ...)
+  }
   data <- as.data.table(data)
   data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[InternalDuplicateCheck > 1]
   out[, InternalDuplicateCheck := NULL]
   return(out[])
 }
-
