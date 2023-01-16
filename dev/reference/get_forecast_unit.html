@@ -84,7 +84,7 @@ the column names that define where a single forecast was made for</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_forecast_unit</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_forecast_unit</span><span class="op">(</span><span class="va">data</span>, <span class="va">prediction_type</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -107,6 +107,11 @@ flagged and added to the input data with all forecasts assigned as an
 <p>You can check the format of your data using <code><a href="check_forecasts.html">check_forecasts()</a></code> and there
 are examples for each format (<a href="example_quantile.html">example_quantile</a>, <a href="example_continuous.html">example_continuous</a>,
 <a href="example_integer.html">example_integer</a>, and <a href="example_binary.html">example_binary</a>).</p></dd>
+
+
+<dt>prediction_type</dt>
+<dd><p>The prediction type of the forecast. This is used to
+adjust the list of protected columns.</p></dd>
 
 </dl></div>
     <div class="section level2">
