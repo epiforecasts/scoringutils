@@ -704,7 +704,7 @@ plot_quantile_coverage <- function(scores,
 #' library(ggplot2)
 #' scores <- score(example_quantile)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise, type = "mean_score_ratio") +
+#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
 plot_pairwise_comparison <- function(comparison_result,
