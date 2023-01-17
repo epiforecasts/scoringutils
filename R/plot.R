@@ -693,10 +693,6 @@ plot_quantile_coverage <- function(scores,
 #'  "mean_scores_ratio", "pval", or "together". This denotes whether to
 #' visualise the ratio or the p-value of the pairwise comparison or both.
 #' Default is "mean_scores_ratio".
-#' @param smaller_is_good logical (default is `TRUE`) that indicates whether
-#' smaller or larger values are to be interpreted as 'good' (as you could just
-#' invert the mean scores ratio). This option is not supported when type =
-#' "pval"
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -706,26 +702,17 @@ plot_quantile_coverage <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' df <- data.frame(
-#'   model = rep(c("model1", "model2", "model3"), each = 10),
-#'   id = rep(1:10),
-#'   interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
-#'   ae_median = (abs(rnorm(30)))
-#' )
-#'
 #' scores <- score(example_quantile)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise) +
+#' plot_pairwise_comparison(pairwise, type = "mean_score_ratio") +
 #'   facet_wrap(~target_type)
 
 plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval", "together"),
-                                     smaller_is_good = TRUE) {
+                                     type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
   comparison_result[, model := reorder(model, -relative_skill)]
   levels <- levels(comparison_result$model)
-
 
   get_fill_scale <- function(values, breaks, plot_scales) {
     values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
@@ -735,176 +722,40 @@ plot_pairwise_comparison <- function(comparison_result,
       right = FALSE,
       labels = plot_scales
     )
-    # scale[is.na(scale)] <- 0
     return(as.numeric(as.character(scale)))
   }
 
   type <- match.arg(type)
 
-  if (type == "together") {
-    # obtain only the upper triangle of the comparison
-    # that is used for showing ratios
-    # need to change the order if larger is good
-    if (smaller_is_good) {
-      unique_comb <- as.data.frame(t(combn(rev(levels), 2)))
-    } else {
-      unique_comb <- as.data.frame(t(combn((levels), 2)))
-    }
+  if (type == "mean_scores_ratio") {
+    comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
 
-    colnames(unique_comb) <- c("model", "compare_against")
-    upper_triangle <- merge(comparison_result, unique_comb)
-
-    # change levels for plotting order
-    upper_triangle[, `:=`(
-      model = factor(model, levels),
-      compare_against = factor(compare_against, levels)
-    )]
-
-    # reverse y and x if larger is better
-    if (!smaller_is_good) {
-      data.table::setnames(
-        upper_triangle,
-        c("model", "compare_against"),
-        c("compare_against", "model")
-      )
-    }
-
-    # modify upper triangle ------------------------------------------------------
-    # add columns where a model is compared with itself. make adj_pval NA
-    # to plot it as grey later on
-    equal <- data.table::data.table(
-      model = levels,
-      compare_against = levels,
-      mean_scores_ratio = 1,
-      pval = NA,
-      adj_pval = NA
-    )
-    upper_triangle_complete <- data.table::rbindlist(list(
-      upper_triangle,
-      equal
-    ), fill = TRUE)
-
-    # define interest variable
-    upper_triangle_complete[, var_of_interest := round(mean_scores_ratio, 2)]
-
-    # implemnt breaks for colour heatmap
+    # implement breaks for colour heatmap
     breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
     plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
-    if (!smaller_is_good) {
-      plot_scales <- rev(plot_scales)
-    }
-    upper_triangle_complete[, fill_col := get_fill_scale(
+    comparison_result[, fill_col := get_fill_scale(
       var_of_interest,
       breaks, plot_scales
     )]
 
-    # create mean_scores_ratios in plot
-    plot <- ggplot(
-      upper_triangle_complete,
-      aes(
-        x = compare_against,
-        y = model,
-        fill = fill_col
-      )
-    ) +
-      geom_tile(width = 0.98, height = 0.98) +
-      geom_text(aes(label = var_of_interest),
-        na.rm = TRUE
-      ) +
-      scale_fill_gradient2(
-        low = "steelblue", mid = "grey95",
-        high = "salmon",
-        na.value = "lightgrey",
-        midpoint = 0,
-        limits = c(-1, 1),
-        name = NULL
-      ) +
-      theme_scoringutils() +
-      theme(
-        axis.text.x = element_text(
-          angle = 90, vjust = 1,
-          hjust = 1, color = "brown4"
-        ),
-        axis.text.y = element_text(color = "steelblue4"),
-        legend.position = "none"
-      ) +
-      labs(
-        x = "", y = "",
-        title = "Pairwise comparisons - mean_scores_ratio (upper) and pval (lower)"
-      ) +
-      coord_cartesian(expand = FALSE)
-
-    # add pvalues to plot --------------------------------------------------------
-    # obtain lower triangle for the pvalues
-    lower_triangle <- data.table::copy(upper_triangle)
-    data.table::setnames(
-      lower_triangle,
-      c("model", "compare_against"),
-      c("compare_against", "model")
-    )
-
-    lower_triangle[, var_of_interest := round(adj_pval, 3)]
+    high_col <- "salmon"
+  } else if (type == "pval") {
+    comparison_result[, var_of_interest := round(pval, 3)]
     # implemnt breaks for colour heatmap
     breaks <- c(0, 0.01, 0.05, 0.1, 1)
-    plot_scales <- c(0.8, 0.5, 0.1, 0.000001)
-    lower_triangle[, fill_col := get_fill_scale(
+    plot_scales <- c(1, 0.5, 0.1, 0)
+    comparison_result[, fill_col := get_fill_scale(
       var_of_interest,
       breaks, plot_scales
     )]
 
-    fill_rule <- ifelse(
-      lower_triangle$fill_col == 0.000001, "grey95", "palegreen3"
-    )
-    lower_triangle[, var_of_interest := as.character(var_of_interest)]
-    lower_triangle[, var_of_interest := ifelse(var_of_interest == "0",
-      "< 0.001", var_of_interest
-    )]
-
-    plot <- plot +
-      geom_tile(
-        data = lower_triangle,
-        aes(alpha = fill_col),
-        fill = fill_rule,
-        color = "white",
-        width = 0.97, height = 0.97
-      ) +
-      geom_text(
-        data = lower_triangle,
-        aes(label = var_of_interest),
-        na.rm = TRUE
-      )
-  } else{
-    if (type == "mean_scores_ratio") {
-      comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
-
-      # implemnt breaks for colour heatmap
-      breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
-      plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
-      comparison_result[, fill_col := get_fill_scale(
-        var_of_interest,
-        breaks, plot_scales
-      )]
-
-      high_col <- "salmon"
-    } else {
-      if (!smaller_is_good) {
-        stop("smaller_is_good is the only supported option with type pval")
-      }
-      comparison_result[, var_of_interest := round(pval, 3)]
-      # implemnt breaks for colour heatmap
-      breaks <- c(0, 0.01, 0.05, 0.1, 1)
-      plot_scales <- c(1, 0.5, 0.1, 0)
-      comparison_result[, fill_col := get_fill_scale(
-        var_of_interest,
-        breaks, plot_scales
-      )]
-
-      high_col <- "palegreen3"
+    high_col <- "palegreen3"
       comparison_result[, var_of_interest := as.character(var_of_interest)]
       comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-        "< 0.001", var_of_interest
+                                                    "< 0.001", var_of_interest
       )]
-    }
+  }
+
   plot <- ggplot(
     comparison_result,
     aes(
@@ -918,7 +769,7 @@ plot_pairwise_comparison <- function(comparison_result,
       width = 0.97, height = 0.97
     ) +
     geom_text(aes(label = var_of_interest),
-      na.rm = TRUE
+              na.rm = TRUE
     ) +
     scale_fill_gradient2(
       low = "steelblue", mid = "grey95",
@@ -940,20 +791,20 @@ plot_pairwise_comparison <- function(comparison_result,
       x = "", y = ""
     ) +
     coord_cartesian(expand = FALSE)
-    if (type == "mean_scores_ratio") {
-      plot <- plot +
-        theme(
-          axis.text.x = element_text(
-            angle = 90, vjust = 1,
-            hjust = 1, color = "brown4"
-          ),
-          axis.text.y = element_text(color = "steelblue4")
-        )
-    }
+  if (type == "mean_scores_ratio") {
+    plot <- plot +
+      theme(
+        axis.text.x = element_text(
+          angle = 90, vjust = 1,
+          hjust = 1, color = "brown4"
+        ),
+        axis.text.y = element_text(color = "steelblue4")
+      )
   }
 
   return(plot)
 }
+
 
 #' @title PIT Histogram
 #'
