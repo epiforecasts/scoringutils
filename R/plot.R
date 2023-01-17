@@ -690,8 +690,8 @@ plot_quantile_coverage <- function(scores,
 #' @param comparison_result A data.frame as produced by
 #' [pairwise_comparison()]
 #' @param type character vector of length one that is either
-#'  "mean_scores_ratio", "pval", or "together". This denotes whether to
-#' visualise the ratio or the p-value of the pairwise comparison or both.
+#'  "mean_scores_ratio" or "pval". This denotes whether to
+#' visualise the ratio or the p-value of the pairwise comparison.
 #' Default is "mean_scores_ratio".
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
