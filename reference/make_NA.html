@@ -28,7 +28,7 @@ be removed in the subsequent call to plot_predictions()."><!-- mathjax --><scrip
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0.2000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,8 +99,6 @@ be removed in the subsequent call to <code><a href="plot_predictions.html">plot_
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data.frame or data.table with the predictions and observations.
-For examples, look at the <a href="example_quantile.html">example_quantile</a>, <a href="example_continuous.html">example_continuous</a>,
-<a href="example_integer.html">example_integer</a>, and <a href="example_binary.html">example_binary</a> data sets.
 For scoring using <code><a href="score.html">score()</a></code>, the following columns need to be present:</p><ul><li><p><code>true_value</code> - the true observed values</p></li>
 <li><p><code>prediction</code> - predictions or predictive samples for one
 true value. (You only don't need to provide a prediction column if
@@ -111,7 +109,12 @@ necessary for continuous and integer forecasts, not for
 binary predictions.</p></li>
 </ul><p>For scoring predictions in a quantile-format forecast you should provide
 a column called <code>quantile</code>:</p><ul><li><p><code>quantile</code>: quantile to which the prediction corresponds</p></li>
-</ul></dd>
+</ul><p>In addition a <code>model</code> column is suggested and if not present this will be
+flagged and added to the input data with all forecasts assigned as an
+"unspecified model").</p>
+<p>You can check the format of your data using <code><a href="check_forecasts.html">check_forecasts()</a></code> and there
+are examples for each format (<a href="example_quantile.html">example_quantile</a>, <a href="example_continuous.html">example_continuous</a>,
+<a href="example_integer.html">example_integer</a>, and <a href="example_binary.html">example_binary</a>).</p></dd>
 
 
 <dt>what</dt>

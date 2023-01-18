@@ -78,7 +78,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0.2000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,7 +135,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against the true observed values. The <code>scoringutils</code> package offers convenient automated forecast evaluation in a <code>data.table</code> format (using the function <code><a href="reference/score.html">score()</a></code>), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.</p>
+<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against the true observed values. The <code>scoringutils</code> package offers convenient automated forecast evaluation in a <code>data.table</code> format (using the function <code><a href="reference/score.html">score()</a></code>), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.</p>
 <p>Where available <code>scoringutils</code> depends on functionality from <code>scoringRules</code> which provides a comprehensive collection of proper scoring rules for predictive probability distributions represented as sample or parametric distributions. For some forecast types, such as quantile forecasts, <code>scoringutils</code> also implements additional metrics for evaluating forecasts. On top of providing an interface to the proper scoring rules implemented in <code>scoringRules</code> and natively, <code>scoringutils</code> also offers utilities for summarising and visualising forecasts and scores, and to obtain relative scores between models which may be useful for non-overlapping forecasts and forecasts across scales.</p>
 <p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary, and appropriate scores for each of these value types are selected automatically.</p>
 <div class="section level2">
@@ -149,7 +149,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scoringutils"</span>, repos <span class="op">=</span> <span class="st">"https://epiforecasts.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
 <p>Install the unstable development from GitHub using the following,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -179,7 +179,7 @@
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. This function returns unsumarised scores, which in most cases is not what the user wants. Here we make use of additional functions from <code>scoringutils</code> to add empirical coverage-levels (<code><a href="reference/add_coverage.html">add_coverage()</a></code>), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
+<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. This function returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from <code>scoringutils</code> to add empirical coverage-levels (<code><a href="reference/add_coverage.html">add_coverage()</a></code>), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -196,14 +196,14 @@
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
 <span><span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="11%">
 <col width="6%">
 <col width="8%">
-<col width="6%">
+<col width="5%">
 <col width="8%">
-<col width="8%">
+<col width="7%">
 <col width="10%">
 <col width="4%">
 <col width="5%">
@@ -346,9 +346,9 @@
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, EpiForecasts, and Sam</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Abbott (2020). scoringutils: Utilities for Scoring and Assessing</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Predictions, DOI: 10.5281/zenodo.4618017</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   scoringutils in R, arXiv. DOI: 10.48550/ARXIV.2205.07090</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>

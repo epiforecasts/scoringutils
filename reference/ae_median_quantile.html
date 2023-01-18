@@ -32,7 +32,7 @@ used as a standalone function."><!-- mathjax --><script src="https://cdnjs.cloud
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0.2000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,11 +133,11 @@ be kept. If <code>quantiles</code> is <code>NULL</code>, then all <code>predicti
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ae_median_quantile</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span>, quantiles <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.151305728 0.609180852 2.517729350 1.223588345 1.462708883 0.128903020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.008172223 0.732328580 1.342476119 0.072310861 0.205633938 1.447427269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.879506075 0.522769244 0.730868417 1.863173268 2.069418955 1.116663249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.019062557 0.643539470 1.220285066 0.049908889 0.153768455 0.924216388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.292548577 0.160710083 2.424711986 0.899482020 0.203076106 2.708917357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.08342210 0.31127574 1.57876797 1.24767185 0.31553704 1.38908599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.49671715 1.50380358 1.88939105 0.51025751 1.51798615 1.72137452</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.02990061 0.84035532 1.05825568 2.44858096 1.91748844 2.37927285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.69326147 0.16403427 1.19713279 0.53966981 0.24425445 0.84155725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.13389554 0.18374454 1.83162945 2.93060398 0.05913908 0.42725831</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
