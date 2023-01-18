@@ -278,6 +278,7 @@ print.scoringutils_check <- function(x, ...) {
 #'
 #' @param forecast_unit A character vector with the column names that define
 #' the unit of a single forecast. If missing the function tries to infer the
+#' unit of a single forecast.
 #'
 #' @param ... Additional arguments passed to [get_forecast_unit()].
 #' @return A data.frame with all rows for which a duplicate forecast was found

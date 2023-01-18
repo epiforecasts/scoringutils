@@ -10,7 +10,8 @@ find_duplicates(data, forecast_unit, ...)
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
 
 \item{forecast_unit}{A character vector with the column names that define
-the unit of a single forecast. If missing the function tries to infer the}
+the unit of a single forecast. If missing the function tries to infer the
+unit of a single forecast.}
 
 \item{...}{Additional arguments passed to \code{\link[=get_forecast_unit]{get_forecast_unit()}}.}
 }

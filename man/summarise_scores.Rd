@@ -69,7 +69,7 @@ provided to \code{fun}. For more information see the documentation of the
 respective function.}
 }
 \description{
-Summarise scores as produced by \code{\link[=score]{score()}}-
+Summarise scores as produced by \code{\link[=score]{score()}}
 }
 \examples{
 library(magrittr) # pipe operator
