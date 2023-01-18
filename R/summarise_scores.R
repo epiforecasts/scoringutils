@@ -6,9 +6,14 @@
 #' @inheritParams score
 #' @param by character vector with column names to summarise scores by. Default
 #' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over quantiles (in case of quantile-based forecasts), such that there is one
-#' score per forecast as defined by the unit of a single forecast (rather than
-#' one score for every quantile).
+#' over samples or quantiles (in case of quantile-based forecasts), such that
+#' there is one score per forecast as defined by the *unit of a single forecast*
+#' (rather than one score for every sample or quantile).
+#' The *unit of a single forecast* is determined by the columns present in the
+#' input data that do not correspond to a metric produced by [score()], which
+#' indicate indicate a grouping of forecasts (for example there may be one
+#' forecast per day, location and model). Adding additional, unrelated, columns
+#' may alter results in an unpredictable way.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
@@ -32,6 +37,9 @@
 #' respective function.
 #' @examples
 #' library(magrittr) # pipe operator
+#'
+#' scores <- score(example_continuous)
+#' summarise_scores(scores)
 #'
 #' # summarise over samples or quantiles to get one score per forecast
 #' scores <- score(example_quantile)
