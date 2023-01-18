@@ -60,11 +60,23 @@ format though this will also be run internally by \code{\link[=score]{score()}}.
 each format are also provided (see the documentation for \code{data} below or in
 \code{\link[=check_forecasts]{check_forecasts()}}).
 
-To obtain a quick overview of the currrently supported evaluation metrics,
+Each format has a set of required columns (see below). Additional columns may
+be present to indicate a grouping of forecasts. For example, we could have
+forecasts made by different models in various locations at different time
+points, each for several weeks into the future. It is important, that there
+are only columns present which are relevant in order to group forecasts.
+A combination of different columns should uniquely define the
+\emph{unit of a single forecast}, meaning that a single forecast is defined by the
+values in the other columns. Adding additional unrelated columns may alter
+results.
+
+To obtain a quick overview of the currently supported evaluation metrics,
 have a look at the \link{metrics} data included in the package. The column
 \code{metrics$Name} gives an overview of all available metric names that can be
 computed. If interested in an unsupported metric please open a \href{https://github.com/epiforecasts/scoringutils/issues}{feature request} or consider
 contributing a pull request.
+
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/getting-started.html}{Getting Started Vignette}.
 }
 \examples{
 library(magrittr) # pipe operator
