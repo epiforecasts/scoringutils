@@ -87,10 +87,12 @@ score(example_quantile) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
 # forecast formats with different metrics
+\dontrun{
 score(example_binary)
 score(example_quantile)
 score(example_integer)
 score(example_continuous)
+}
 
 # score point forecasts (marked by 'NA' in the quantile column)
 score(example_point) \%>\%

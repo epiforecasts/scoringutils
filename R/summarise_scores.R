@@ -1,6 +1,6 @@
 #' @title Summarise scores as produced by [score()]
 #'
-#' @description Summarise scores as produced by [score()]-
+#' @description Summarise scores as produced by [score()]
 #'
 #' @inheritParams pairwise_comparison
 #' @inheritParams score
@@ -38,8 +38,11 @@
 #' @examples
 #' library(magrittr) # pipe operator
 #'
+#'
+#'\dontrun{
 #' scores <- score(example_continuous)
 #' summarise_scores(scores)
+#' }
 #'
 #' # summarise over samples or quantiles to get one score per forecast
 #' scores <- score(example_quantile)
