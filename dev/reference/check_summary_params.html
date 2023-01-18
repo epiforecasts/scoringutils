@@ -96,9 +96,14 @@ score()."><meta name="robots" content="noindex"><!-- mathjax --><script src="htt
 <dt>by</dt>
 <dd><p>character vector with column names to summarise scores by. Default
 is <code>NULL</code>, meaning that the only summary that takes is place is summarising
-over quantiles (in case of quantile-based forecasts), such that there is one
-score per forecast as defined by the unit of a single forecast (rather than
-one score for every quantile).</p></dd>
+over samples or quantiles (in case of quantile-based forecasts), such that
+there is one score per forecast as defined by the <em>unit of a single forecast</em>
+(rather than one score for every sample or quantile).
+The <em>unit of a single forecast</em> is determined by the columns present in the
+input data that do not correspond to a metric produced by <code><a href="score.html">score()</a></code>, which
+indicate indicate a grouping of forecasts (for example there may be one
+forecast per day, location and model). Adding additional, unrelated, columns
+may alter results in an unpredictable way.</p></dd>
 
 
 <dt>relative_skill</dt>
