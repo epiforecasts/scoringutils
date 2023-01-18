@@ -6,8 +6,7 @@
 \usage{
 plot_pairwise_comparison(
   comparison_result,
-  type = c("mean_scores_ratio", "pval", "together"),
-  smaller_is_good = TRUE
+  type = c("mean_scores_ratio", "pval")
 )
 }
 \arguments{
@@ -15,14 +14,9 @@ plot_pairwise_comparison(
 \code{\link[=pairwise_comparison]{pairwise_comparison()}}}
 
 \item{type}{character vector of length one that is either
-"mean_scores_ratio", "pval", or "together". This denotes whether to
-visualise the ratio or the p-value of the pairwise comparison or both.
+"mean_scores_ratio" or "pval". This denotes whether to
+visualise the ratio or the p-value of the pairwise comparison.
 Default is "mean_scores_ratio".}
-
-\item{smaller_is_good}{logical (default is \code{TRUE}) that indicates whether
-smaller or larger values are to be interpreted as 'good' (as you could just
-invert the mean scores ratio). This option is not supported when type =
-"pval"}
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
@@ -30,15 +24,8 @@ between models
 }
 \examples{
 library(ggplot2)
-df <- data.frame(
-  model = rep(c("model1", "model2", "model3"), each = 10),
-  id = rep(1:10),
-  interval_score = abs(rnorm(30, mean = rep(c(1, 1.3, 2), each = 10))),
-  ae_median = (abs(rnorm(30)))
-)
-
 scores <- score(example_quantile)
 pairwise <- pairwise_comparison(scores, by = "target_type")
-plot_pairwise_comparison(pairwise) +
+plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
   facet_wrap(~target_type)
 }

@@ -9,6 +9,7 @@ A minor update to the package with some bug fixes and minor changes.
 - Removed the on attach message which warned of breaking changes in `1.0.0`.
 - Renamed the `metric` argument of `summarise_scores()` to `relative_skill_metric`. This argument is now deprecated and will be removed in a future version of the package. Please use the new argument instead.
 - Updated the documentation for `score()` and related functions to make the soft requirement for a `model` column in the input data more explicit.
+- Simplified the function `plot_pairwise_comparison()` which now only supports plotting mean score ratios or p-values and removed the hybrid option to print both at the same time. 
 
 ## Bug fixes
 

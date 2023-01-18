@@ -47,21 +47,12 @@ The implementation of the permutation test follows the function
 Andrea Riebler and Michaela Paul.
 }
 \examples{
-df <- data.frame(
-  model = rep(c("model1", "model2", "model3"), each = 10),
-  date = as.Date("2020-01-01") + rep(1:5, each = 2),
-  location = c(1, 2),
-  interval_score = (abs(rnorm(30))),
-  ae_median = (abs(rnorm(30)))
-)
+scores <- score(example_quantile)
+pairwise <- pairwise_comparison(scores, by = "target_type")
 
-res <- pairwise_comparison(df,
-  baseline = "model1"
-)
-plot_pairwise_comparison(res)
-
-eval <- score(example_quantile)
-pairwise_comparison(eval, by = c("model"))
+library(ggplot2)
+plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+  facet_wrap(~target_type)
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
