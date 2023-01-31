@@ -76,16 +76,18 @@ In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.
 }
 \examples{
+data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+
 ## continuous predictions
-true_values <- rnorm(30, mean = 1:30)
-predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
+true_values <- rnorm(20, mean = 1:20)
+predictions <- replicate(100, rnorm(n = 20, mean = 1:20))
 pit <- pit_sample(true_values, predictions)
 plot_pit(pit)
 
 ## integer predictions
-true_values <- rpois(100, lambda = 1:100)
-predictions <- replicate(5000, rpois(n = 100, lambda = 1:100))
-pit <- pit_sample(true_values, predictions, n_replicates = 50)
+true_values <- rpois(50, lambda = 1:50)
+predictions <- replicate(2000, rpois(n = 50, lambda = 1:50))
+pit <- pit_sample(true_values, predictions, n_replicates = 30)
 plot_pit(pit)
 }
 \references{

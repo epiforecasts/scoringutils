@@ -21,7 +21,7 @@ ggplot object with a plot of interval coverage
 Plot interval coverage
 }
 \examples{
-library("scoringutils")
+data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "range"))
 plot_interval_coverage(scores)
