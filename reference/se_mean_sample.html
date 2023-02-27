@@ -121,12 +121,11 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.460323058  0.815717232  1.883969621  0.981215680  2.422839946</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6]  0.150233877  0.237509197  2.619761909  0.135102631  0.097085893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.626442694  0.009101128 14.007013269  0.273403964  1.073117757</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]  9.578322616  1.441241702  3.405351090  1.694524275  1.670192754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  1.245871599  0.252199899  0.287277657  5.461960291  3.967268486</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0.006138519  4.166241247  0.064454711  2.185005471  4.171047654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.20876858 0.35414754 0.58512883 0.18864001 0.70159225 4.76762020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.70647368 0.37764126 1.72724419 4.11382797 3.65711289 0.25560340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.53981981 0.82443265 0.07146569 0.21295381 0.04561307 0.80388656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.34191870 1.96397891 0.03250531 3.00032344 0.28113224 0.57160631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.69810574 0.63878884 0.56507257 3.85980023 0.72462908 2.62093342</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

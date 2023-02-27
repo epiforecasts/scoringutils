@@ -165,13 +165,50 @@ respective function.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># only needed to avoid issues on CRAN</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># pipe operator</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      model horizon         mad  bias       dss         crps</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: EuroCOVIDhub-ensemble       1 17641.24334  0.55 20.601386  7482.975177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: EuroCOVIDhub-baseline       1 19341.68942  0.95 22.443370 20371.250988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  epiforecasts-EpiNow2       1 32348.79978  0.80 22.310568 24810.424753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: EuroCOVIDhub-ensemble       1   267.13585  0.20 11.112388    67.510511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: EuroCOVIDhub-baseline       1   397.09371 -0.05 11.541040    86.462930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883: EuroCOVIDhub-baseline       2   168.03093  0.45 12.913561    66.515150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       UMass-MechBayes       3    24.76457  0.10  6.353679     6.616381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       UMass-MechBayes       2    39.96542  0.80  8.765716    29.446723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:  epiforecasts-EpiNow2       3   107.93293  0.10 10.283832    28.863742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:  epiforecasts-EpiNow2       2    93.54245  0.65 10.563729    49.998906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      log_score    ae_median      se_mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: 10.989568  9413.839675 2.303980e+08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 11.941135 29378.807513 9.128538e+08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 12.007007 36512.810659 1.603609e+09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  6.516954    77.077318 8.593954e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  6.913879    27.429626 2.123067e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:  6.067282    58.606302 6.065218e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:  4.242600     5.071742 6.043161e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:  5.321013    42.271396 2.153122e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:  5.709216     7.760566 3.212150e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:  5.736238    73.670518 1.263027e+04</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># summarise over samples or quantiles to get one score per forecast</span></span></span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
