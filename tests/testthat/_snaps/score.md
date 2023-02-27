@@ -6,13 +6,11 @@
       digits = 2)
     Output
                          model interval_score dispersion underprediction
-                        <char>          <num>      <num>           <num>
       1: EuroCOVIDhub-baseline           8500        850               0
       2: EuroCOVIDhub-ensemble             NA         NA              NA
       3:  epiforecasts-EpiNow2          13000       4100               0
       4:       UMass-MechBayes            120         77              39
          overprediction coverage_deviation  bias ae_median
-                  <num>              <num> <num>     <num>
       1:           7600             -0.081  0.62     13000
       2:          11000                 NA  0.60     21000
       3:           8600              0.050  0.50     22000
