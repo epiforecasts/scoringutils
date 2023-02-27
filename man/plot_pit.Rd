@@ -32,6 +32,8 @@ Make a simple histogram of the probability integral transformed values to
 visually check whether a uniform distribution seems likely.
 }
 \examples{
+data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+
 # PIT histogram in vector based format
 true_values <- rnorm(30, mean = 1:30)
 predictions <- replicate(200, rnorm(n = 30, mean = 1:30))

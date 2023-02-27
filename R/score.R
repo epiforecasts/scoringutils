@@ -73,6 +73,7 @@
 #'
 #' @examples
 #' library(magrittr) # pipe operator
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
 #' check_forecasts(example_quantile)
 #' score(example_quantile) %>%

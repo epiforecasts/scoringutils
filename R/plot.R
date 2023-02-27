@@ -24,6 +24,7 @@
 #' @examples
 #' library(ggplot2)
 #' library(magrittr) # pipe operator
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
 #' scores <- score(example_quantile) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
@@ -582,7 +583,7 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' library("scoringutils")
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "range"))
 #' plot_interval_coverage(scores)
@@ -831,6 +832,8 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#'
 #' # PIT histogram in vector based format
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))

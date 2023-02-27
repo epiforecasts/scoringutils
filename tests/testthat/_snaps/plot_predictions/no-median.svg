@@ -337,7 +337,9 @@
 <text transform='translate(13.05,281.00) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='127.20px' lengthAdjust='spacingAndGlyphs'>True and predicted values</text>
 <text x='329.03' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='28.14px' lengthAdjust='spacingAndGlyphs'>range</text>
 <rect x='362.64' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #F1F1F1;' />
+<line x1='364.37' y1='556.40' x2='378.19' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
 <rect x='400.67' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #BCBCBC;' />
+<line x1='402.40' y1='556.40' x2='416.22' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
 <text x='385.40' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>90</text>
 <text x='423.43' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>50</text>
 <text x='47.73' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='65.32px' lengthAdjust='spacingAndGlyphs'>no_median</text>
