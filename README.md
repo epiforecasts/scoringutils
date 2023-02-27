@@ -4,7 +4,7 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://app.codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
+[![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
 [![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
 [![develVersion](https://img.shields.io/badge/devel%20version-1.1.0-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
 [![metacran
