@@ -5,6 +5,9 @@
 #' out the linked reference.
 #'
 #' @inheritParams score
+#' @param fun A function used to transform both true values and predictions
+#' @param label A string for the newly created 'scale' column to denote the
+#' newly transformed values.
 #' @return A data.table that includes the original data as well as a
 #' transformation of the original data. There will be one additional column,
 #' 'scale', present which will be set to "natural" for the untransformed

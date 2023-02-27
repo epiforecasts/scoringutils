@@ -41,6 +41,11 @@ You can check the format of your data using \code{\link[=check_forecasts]{check_
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
 
+\item{fun}{A function used to transform both true values and predictions}
+
+\item{label}{A string for the newly created 'scale' column to denote the
+newly transformed values.}
+
 \item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
 function used for scoring forecasts in a quantile-based format).}
 }
