@@ -242,12 +242,7 @@ get_target_type <- function(data) {
 
 get_forecast_unit <- function(data, prediction_type) {
 
-  protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile", "upper", "lower",
-    "pit_value",
-    "range", "boundary", available_metrics(),
-    names(data)[grepl("coverage_", names(data))]
-  )
+  protected_columns <- get_protected_columns(data)
   if (!missing(prediction_type)) {
     if (prediction_type == "quantile") {
       protected_columns <- setdiff(protected_columns, "sample")
@@ -256,3 +251,31 @@ get_forecast_unit <- function(data, prediction_type) {
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
 }
+
+
+#' @title Get protected columns from a data frame
+#'
+#' @description Helper function to get the names of protected columns
+#'
+#'
+#' @inheritParams check_forecasts
+#'
+#' @return A character vector with the column names that define the unit of
+#' a single forecast
+#'
+#' @keywords internal
+
+get_protected_columns <- function(data) {
+  protected_columns <- c(
+    "prediction", "true_value", "sample", "quantile", "upper", "lower",
+    "pit_value",
+    "range", "boundary", available_metrics(),
+    names(data)[grepl("coverage_", names(data))]
+  )
+
+  return(protected_columns)
+}
+
+
+
+

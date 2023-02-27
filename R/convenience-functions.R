@@ -43,3 +43,49 @@ add_transformation <- function(data,
 
   return(out)
 }
+
+
+
+
+#' @title Set unit of a single forecast manually
+#'
+#' @description Helper function to set the unit of a single forecast manually.
+#' This simple function keeps the columns specified in `forecast_unit` (plus
+#' additional protected columns, e.g. for true values, predictions or quantile
+#' levels) and removes duplicate rows.
+#'
+#' @inheritParams score
+#' @return A data.table that includes the original data as well as a
+#' transformation of the original data. There will be one additional column,
+#' 'scale', present which will be set to "natural" for the untransformed
+#' forecasts.
+#'
+#' @importFrom data.table ':=' is.data.table copy
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @export
+#' @references Transformation of forecasts for evaluating predictive
+#' performance in an epidemiological context
+#' Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
+#' Sebastian Funk
+#' medRxiv 2023.01.23.23284722
+#' \doi{https://doi.org/10.1101/2023.01.23.23284722}
+#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
+
+#' @keywords check-forecasts
+#' @examples
+#' add_transformation(example_quantile)
+
+set_forecast_unit <- function(data,
+                              forecast_unit = NULL) {
+  keep_cols <- intersect(
+    colnames(data),
+    get_protected_columns(data)
+  )
+  keep_cols <- c(keep_cols, forecast_unit)
+  out <- unique(data[, .SD, .SDcols = keep_cols])[]
+  return(out)
+}
+
+
+
+
