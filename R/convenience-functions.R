@@ -55,10 +55,8 @@ add_transformation <- function(data,
 #' levels) and removes duplicate rows.
 #'
 #' @inheritParams score
-#' @return A data.table that includes the original data as well as a
-#' transformation of the original data. There will be one additional column,
-#' 'scale', present which will be set to "natural" for the untransformed
-#' forecasts.
+#' @return A data.table with only those columns kept that are relevant to
+#' scoring or denote the unit of a single forecast as specified by the user.
 #'
 #' @importFrom data.table ':=' is.data.table copy
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -71,20 +69,35 @@ add_transformation <- function(data,
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 
-#' @keywords check-forecasts
+#' @keywords data-handling
 #' @examples
-#' add_transformation(example_quantile)
+#'
 
 set_forecast_unit <- function(data,
                               forecast_unit = NULL) {
+
+  datacols <- colnames(data)
+  missing <- forecast_unit[!(forecast_unit %in% datacols)]
+
+  if (length(missing) > 0) {
+    warning(
+      paste0(
+        "Column(s) '",
+        missing,
+        "' are not columns of the data"
+      )
+    )
+  }
+
   keep_cols <- intersect(
-    colnames(data),
+    datacols,
     get_protected_columns(data)
   )
   keep_cols <- c(keep_cols, forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])[]
   return(out)
 }
+
 
 
 
