@@ -114,8 +114,10 @@ interval_score <- function(true_values,
 
   # calculate three components of WIS
   dispersion <- (upper - lower)
-  overprediction <- 2 / alpha * (lower - true_values) * (true_values < lower)
-  underprediction <- 2 / alpha * (true_values - upper) * (true_values > upper)
+  overprediction <-
+    2 / alpha * (lower - true_values) * as.numeric(true_values < lower)
+  underprediction <-
+    2 / alpha * (true_values - upper) * as.numeric(true_values > upper)
 
   if (weigh) {
     dispersion <- dispersion * alpha / 2
