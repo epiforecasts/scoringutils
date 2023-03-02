@@ -1,3 +1,7 @@
+# scoringutils 1.1.1
+
+- added a small change to `interval_score()` which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn't allow the implict conversion.  
+
 # scoringutils 1.1.0
 
 A minor update to the package with some bug fixes and minor changes.
