@@ -89,6 +89,11 @@ transform_forecasts(transformed)
 
 # specifying an offset manually for the log transformation removes the warning
 transform_forecasts(transformed, offset = 1)
+
+# adding multiple transformations
+transformed |>
+  transform_forecasts(offset = 1) |>
+  transform_forecasts(fun = sqrt, label = "sqrt")
 }
 \references{
 Transformation of forecasts for evaluating predictive
