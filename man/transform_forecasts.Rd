@@ -84,8 +84,9 @@ rule.
 }
 \examples{
 
+library(magrittr) #(pipe operator)
 # replace negative values with zero
-transformed <- example_quantile |>
+transformed <- example_quantile \%>\%
   transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
 
 # add log transformed forecasts (produces a warning as some values are zero)
@@ -95,10 +96,10 @@ transform_forecasts(transformed)
 transform_forecasts(transformed, offset = 1)
 
 # adding multiple transformations
-transformed |>
-  transform_forecasts(offset = 1) |>
-  transform_forecasts(fun = sqrt, label = "sqrt") |>
-  score() |>
+transformed \%>\%
+  transform_forecasts(offset = 1) \%>\%
+  transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
+  score() \%>\%
   summarise_scores(by = c("model", "scale"))
 }
 \references{
