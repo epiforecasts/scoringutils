@@ -4,14 +4,7 @@
 \alias{transform_forecasts}
 \title{Add transformations}
 \usage{
-transform_forecasts(
-  data,
-  transform = c("log", "sqrt"),
-  fun = NULL,
-  add = TRUE,
-  label = transform,
-  ...
-)
+transform_forecasts(data, fun = log, add = TRUE, label = "log", ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -43,25 +36,59 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 
 \item{fun}{A function used to transform both true values and predictions}
 
+\item{add}{whether or not to add a transformed version of the data to the
+currently existing data (default is TRUE). If selected, the data gets
+transformed and appended to the existing data frame, making it possible to
+use the outcome directly in \code{score()}. An additional column, 'scale', gets
+created that denotes which rows or untransformed ('scale' has the value
+"natural") and which have been transformed ('scale' has the value passed to
+the argument \code{label}).}
+
 \item{label}{A string for the newly created 'scale' column to denote the
-newly transformed values.}
+newly transformed values. Only relevant if \code{add = TRUE}.}
 
 \item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
 function used for scoring forecasts in a quantile-based format).}
 }
 \value{
-A data.table that includes the original data as well as a
+A data.table with either a transformed version of the data, or one
+with both the untransformed and the transformed data. includes the original data as well as a
 transformation of the original data. There will be one additional column,
 'scale', present which will be set to "natural" for the untransformed
 forecasts.
 }
 \description{
 Add transformations of the forecasts and observations for
-later scoring. For more information on why this might be desirable, check
-out the linked reference.
+later scoring.
+}
+\details{
+There are a few reasons, depending on the circumstances, for
+why this might be desirable (check out the linked reference for more info).
+In epidemiology, for example, it may be useful to log-transform incidence
+counts before evaluating forecasts using scores such as the weighted interval
+score (WIS) or the continuous ranked probability score (CRPS).
+Log-transforming forecasts and observations changes the interpretation of
+the score from a measure of absolute distance between forecast and
+observation to a score that evaluates a forecast of the exponential growth
+rate. Another motivation can be to apply a variance-stabilising
+transformation or to standardise incidence counts by population.
+
+Note that if you want to apply a transformation, it is important to transform
+the forecasts and observations and then apply the score. Applying a
+transformation after the score risks losing propriety of the proper scoring
+rule.
 }
 \examples{
-add_transformation(example_quantile)
+
+# replace negative values with zero
+transformed <- example_quantile |>
+  transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
+
+# add log transformed forecasts (produces a warning as some values are zero)
+transform_forecasts(transformed)
+
+# specifying an offset manually for the log transformation removes the warning
+transform_forecasts(transformed, offset = 1)
 }
 \references{
 Transformation of forecasts for evaluating predictive
