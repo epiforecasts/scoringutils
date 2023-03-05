@@ -20,7 +20,11 @@
 #' rule.
 #'
 #' @inheritParams score
-#' @param fun A function used to transform both true values and predictions
+#' @param fun A function used to transform both true values and predictions.
+#' If `fun = log` it automatically checks internally whether there are any
+#' zero values. If so, the function tries to apply `log(x + 1)` instead and
+#' gives a warning. You can pass an argument `offset = 1` (or any other value)
+#' to the function to avoid the warning.
 #' @param add whether or not to add a transformed version of the data to the
 #' currently existing data (default is TRUE). If selected, the data gets
 #' transformed and appended to the existing data frame, making it possible to
@@ -50,8 +54,9 @@
 #' @keywords check-forecasts
 #' @examples
 #'
+#' library(magrittr) #(pipe operator)
 #' # replace negative values with zero
-#' transformed <- example_quantile |>
+#' transformed <- example_quantile %>%
 #'   transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
 #'
 #' # add log transformed forecasts (produces a warning as some values are zero)
@@ -61,9 +66,11 @@
 #' transform_forecasts(transformed, offset = 1)
 #'
 #' # adding multiple transformations
-#' transformed |>
-#'   transform_forecasts(offset = 1) |>
-#'   transform_forecasts(fun = sqrt, label = "sqrt")
+#' transformed %>%
+#'   transform_forecasts(offset = 1) %>%
+#'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
+#'   score() %>%
+#'   summarise_scores(by = c("model", "scale"))
 
 transform_forecasts <- function(data,
                                 fun = log,
@@ -117,7 +124,17 @@ transform_forecasts <- function(data,
 
   if (add) {
     data <- as.data.table(data)
-    data[, scale := "natural"]
+
+    if (!("scale" %in% colnames(data))) {
+      data[, scale := "natural"]
+    } else if  (label %in% data$scale) {
+      warning(
+        paste0(
+          "Adding new transformations with label '", label,
+          "', even though that entry is already present in column 'scale'."
+        )
+      )
+    }
     transformed_data[, scale := label]
     out <- rbind(data, transformed_data)
     return(out[])

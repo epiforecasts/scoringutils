@@ -34,7 +34,11 @@ You can check the format of your data using \code{\link[=check_forecasts]{check_
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
 
-\item{fun}{A function used to transform both true values and predictions}
+\item{fun}{A function used to transform both true values and predictions.
+If \code{fun = log} it automatically checks internally whether there are any
+zero values. If so, the function tries to apply \code{log(x + 1)} instead and
+gives a warning. You can pass an argument \code{offset = 1} (or any other value)
+to the function to avoid the warning.}
 
 \item{add}{whether or not to add a transformed version of the data to the
 currently existing data (default is TRUE). If selected, the data gets
@@ -93,7 +97,9 @@ transform_forecasts(transformed, offset = 1)
 # adding multiple transformations
 transformed |>
   transform_forecasts(offset = 1) |>
-  transform_forecasts(fun = sqrt, label = "sqrt")
+  transform_forecasts(fun = sqrt, label = "sqrt") |>
+  score() |>
+  summarise_scores(by = c("model", "scale"))
 }
 \references{
 Transformation of forecasts for evaluating predictive

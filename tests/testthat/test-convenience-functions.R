@@ -16,4 +16,14 @@ test_that("function transform_forecasts works", {
   two <- transform_forecasts(predictions, fun = sqrt, label = "sqrt")
   expect_equal(two$prediction,
                c(predictions$prediction, sqrt(predictions$prediction)))
+
+
+  # expect a warning if existing transformation is overwritte
+  expect_warning(
+    transform_forecasts(one, fun = sqrt)
+  )
+
+  # multiple transformations
+  three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
+  expect_equal(unique(three$scale), c("natural", "log", "sqrt"))
 })
