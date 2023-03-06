@@ -34,6 +34,10 @@
 #' the argument `label`).
 #' @param label A string for the newly created 'scale' column to denote the
 #' newly transformed values. Only relevant if `add = TRUE`.
+#' @param ... Additional parameters to pass to the function you supplied. If
+#' you're using `fun = log`, one parameter added by default is the option to
+#' set `offset = 1` (or any other number) to apply the function
+#' `log (1 + offset)` instead (useful if you have e.g zero values in the data).
 #' @return A data.table with either a transformed version of the data, or one
 #' with both the untransformed and the transformed data. includes the original data as well as a
 #' transformation of the original data. There will be one additional column,
@@ -60,7 +64,7 @@
 #'   transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
 #'
 #' # add log transformed forecasts (produces a warning as some values are zero)
-#' transform_forecasts(transformed)
+#' transform_forecasts(transformed, fun = log)
 #'
 #' # specifying an offset manually for the log transformation removes the warning
 #' transform_forecasts(transformed, offset = 1)

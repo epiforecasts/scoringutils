@@ -51,8 +51,10 @@ the argument \code{label}).}
 \item{label}{A string for the newly created 'scale' column to denote the
 newly transformed values. Only relevant if \code{add = TRUE}.}
 
-\item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
-function used for scoring forecasts in a quantile-based format).}
+\item{...}{Additional parameters to pass to the function you supplied. If
+you're using \code{fun = log}, one parameter added by default is the option to
+set \code{offset = 1} (or any other number) to apply the function
+\code{log (1 + offset)} instead (useful if you have e.g zero values in the data).}
 }
 \value{
 A data.table with either a transformed version of the data, or one
@@ -90,7 +92,7 @@ transformed <- example_quantile \%>\%
   transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
 
 # add log transformed forecasts (produces a warning as some values are zero)
-transform_forecasts(transformed)
+transform_forecasts(transformed, fun = log)
 
 # specifying an offset manually for the log transformation removes the warning
 transform_forecasts(transformed, offset = 1)
