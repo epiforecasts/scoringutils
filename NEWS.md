@@ -1,3 +1,11 @@
+# scoringutils 1.1.2
+
+## Feature updates
+
+- added a new function, `transform_forecasts()` to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1. 
+- added another function, `log_shift()` that implements the default transformation function. The function allows to truncate negative values and add an offset before applying the logarithm. 
+
+
 # scoringutils 1.1.1
 
 - added a small change to `interval_score()` which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn't allow the implict conversion.  

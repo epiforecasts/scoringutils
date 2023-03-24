@@ -2,9 +2,9 @@
 % Please edit documentation in R/convenience-functions.R
 \name{transform_forecasts}
 \alias{transform_forecasts}
-\title{Add transformations}
+\title{Transform forecasts and observed values}
 \usage{
-transform_forecasts(data, fun = log, add = TRUE, label = "log", ...)
+transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -40,8 +40,8 @@ zero values. If so, the function tries to apply \code{log(x + 1)} instead and
 gives a warning. You can pass an argument \code{offset = 1} (or any other value)
 to the function to avoid the warning.}
 
-\item{add}{whether or not to add a transformed version of the data to the
-currently existing data (default is TRUE). If selected, the data gets
+\item{append}{whether or not to append a transformed version of the data to
+the currently existing data (default is TRUE). If selected, the data gets
 transformed and appended to the existing data frame, making it possible to
 use the outcome directly in \code{score()}. An additional column, 'scale', gets
 created that denotes which rows or untransformed ('scale' has the value
@@ -49,7 +49,7 @@ created that denotes which rows or untransformed ('scale' has the value
 the argument \code{label}).}
 
 \item{label}{A string for the newly created 'scale' column to denote the
-newly transformed values. Only relevant if \code{add = TRUE}.}
+newly transformed values. Only relevant if \code{append = TRUE}.}
 
 \item{...}{Additional parameters to pass to the function you supplied. If
 you're using \code{fun = log}, one parameter added by default is the option to
@@ -64,8 +64,7 @@ transformation of the original data. There will be one additional column,
 forecasts.
 }
 \description{
-Add transformations of the forecasts and observations for
-later scoring.
+Function to transform forecasts and true values before scoring.
 }
 \details{
 There are a few reasons, depending on the circumstances, for
@@ -86,19 +85,17 @@ rule.
 }
 \examples{
 
-library(magrittr) #(pipe operator)
-# replace negative values with zero
-transformed <- example_quantile \%>\%
-  transform_forecasts(fun = function(x) {pmax(0, x)}, add = FALSE)
-
 # add log transformed forecasts (produces a warning as some values are zero)
-transform_forecasts(transformed, fun = log)
+transform_forecasts(example_quantile, truncate = TRUE, append = FALSE)
 
 # specifying an offset manually for the log transformation removes the warning
-transform_forecasts(transformed, offset = 1)
+transform_forecasts(example_quantile, truncate = TRUE, offset = 1)
 
 # adding multiple transformations
-transformed \%>\%
+library(magrittr) # pipe operator
+example_quantile \%>\%
+  # truncate all negative values for both log and sqrt
+  transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
   transform_forecasts(offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
