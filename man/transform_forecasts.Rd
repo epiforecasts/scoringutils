@@ -35,15 +35,15 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 \link{example_integer}, and \link{example_binary}).}
 
 \item{fun}{A function used to transform both true values and predictions.
-If \code{fun = log} it automatically checks internally whether there are any
-zero values. If so, the function tries to apply \code{log(x + 1)} instead and
-gives a warning. You can pass an argument \code{offset = 1} (or any other value)
-to the function to avoid the warning.}
+The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
+the same as \code{\link[=log]{log()}}, but has two additional arguments (\code{offset} and
+\code{truncate}) that allow you to truncate negative values to zero and add an
+offset before applying the logarithm.}
 
 \item{append}{whether or not to append a transformed version of the data to
 the currently existing data (default is TRUE). If selected, the data gets
 transformed and appended to the existing data frame, making it possible to
-use the outcome directly in \code{score()}. An additional column, 'scale', gets
+use the outcome directly in \code{\link[=score]{score()}}. An additional column, 'scale', gets
 created that denotes which rows or untransformed ('scale' has the value
 "natural") and which have been transformed ('scale' has the value passed to
 the argument \code{label}).}
@@ -51,10 +51,7 @@ the argument \code{label}).}
 \item{label}{A string for the newly created 'scale' column to denote the
 newly transformed values. Only relevant if \code{append = TRUE}.}
 
-\item{...}{Additional parameters to pass to the function you supplied. If
-you're using \code{fun = log}, one parameter added by default is the option to
-set \code{offset = 1} (or any other number) to apply the function
-\code{log (1 + offset)} instead (useful if you have e.g zero values in the data).}
+\item{...}{Additional parameters to pass to the function you supplied.}
 }
 \value{
 A data.table with either a transformed version of the data, or one
@@ -94,12 +91,14 @@ transform_forecasts(example_quantile, truncate = TRUE, offset = 1)
 # adding multiple transformations
 library(magrittr) # pipe operator
 example_quantile \%>\%
-  # truncate all negative values for both log and sqrt
+  transform_forecasts(offset = 1, truncate = TRUE) \%>\%
+  # manually truncate all negative values before applying sqrt
   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
-  transform_forecasts(offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
   summarise_scores(by = c("model", "scale"))
+
+
 }
 \references{
 Transformation of forecasts for evaluating predictive

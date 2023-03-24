@@ -25,7 +25,8 @@ Function that shifts a value by some offset and then applies the
 natural logarithm to it.
 }
 \details{
-The output is computed as log(x + offset).
+The output is computed as log(x + offset) (or
+log(pmax(0, x) + offset)) if \code{truncate = TRUE}.
 }
 \examples{
 

@@ -18,7 +18,7 @@ test_that("function transform_forecasts works", {
                c(predictions$prediction, sqrt(predictions$prediction)))
 
 
-  # expect a warning if existing transformation is overwritte
+  # expect a warning if existing transformation is overwritten
   expect_warning(
     transform_forecasts(one, fun = sqrt)
   )
@@ -26,4 +26,13 @@ test_that("function transform_forecasts works", {
   # multiple transformations
   three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
   expect_equal(unique(three$scale), c("natural", "log", "sqrt"))
+
+  # multiple transformations without append
+  four <- transform_forecasts(two, fun = log_shift, offset = 1, append = FALSE)
+  compare <- c(
+    one$prediction[one$scale == "log"],
+    three$prediction[three$scale == "sqrt"]
+  )
+
+  expect_equal(four$prediction, compare)
 })
