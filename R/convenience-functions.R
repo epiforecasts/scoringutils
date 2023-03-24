@@ -65,12 +65,10 @@
 #' example_quantile %>%
 #'   transform_forecasts(offset = 1, truncate = TRUE) %>%
 #'   # manually truncate all negative values before applying sqrt
-#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) %>%
+#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE, label = "natural") %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
-#'
-#'
 
 transform_forecasts <- function(data,
                                 fun = log_shift,
