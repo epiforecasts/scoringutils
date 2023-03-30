@@ -37,7 +37,7 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 \item{fun}{A function used to transform both true values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
 the same as \code{\link[=log]{log()}}, but has two additional arguments (\code{offset} and
-\code{truncate}) that allow you to truncate negative values to zero and add an
+\code{negative_to_zero}) that allow you to truncate negative values to zero and add an
 offset before applying the logarithm.}
 
 \item{append}{whether or not to append a transformed version of the data to
@@ -83,17 +83,22 @@ rule.
 \examples{
 
 # add log transformed forecasts (produces a warning as some values are zero)
-transform_forecasts(example_quantile, truncate = TRUE, append = FALSE)
+transform_forecasts(example_quantile, negative_to_zero = TRUE, append = FALSE)
 
 # specifying an offset manually for the log transformation removes the warning
-transform_forecasts(example_quantile, truncate = TRUE, offset = 1)
+transform_forecasts(example_quantile, negative_to_zero = TRUE, offset = 1)
+
+# truncating forecasts manually before sqrt
+library(magrittr) # pipe operator
+example_quantile \%>\%
+  transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
+  transform_forecasts(fun = sqrt, label = "sqrt")
 
 # adding multiple transformations
 library(magrittr) # pipe operator
 example_quantile \%>\%
-  transform_forecasts(offset = 1, truncate = TRUE) \%>\%
-  # manually truncate all negative values before applying sqrt
-  transform_forecasts(fun = function(x) pmax(0, x), append = FALSE, label = "natural") \%>\%
+  transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
+  transform_forecasts(offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
   summarise_scores(by = c("model", "scale"))

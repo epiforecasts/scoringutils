@@ -22,7 +22,7 @@
 #' @param fun A function used to transform both true values and predictions.
 #' The default function is [log_shift()], a custom function that is essentially
 #' the same as [log()], but has two additional arguments (`offset` and
-#' `truncate`) that allow you to truncate negative values to zero and add an
+#' `negative_to_zero`) that allow you to truncate negative values to zero and add an
 #' offset before applying the logarithm.
 #' @param append whether or not to append a transformed version of the data to
 #' the currently existing data (default is TRUE). If selected, the data gets
@@ -55,17 +55,22 @@
 #' @examples
 #'
 #' # add log transformed forecasts (produces a warning as some values are zero)
-#' transform_forecasts(example_quantile, truncate = TRUE, append = FALSE)
+#' transform_forecasts(example_quantile, negative_to_zero = TRUE, append = FALSE)
 #'
 #' # specifying an offset manually for the log transformation removes the warning
-#' transform_forecasts(example_quantile, truncate = TRUE, offset = 1)
+#' transform_forecasts(example_quantile, negative_to_zero = TRUE, offset = 1)
+#'
+#' # truncating forecasts manually before sqrt
+#' library(magrittr) # pipe operator
+#' example_quantile %>%
+#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) %>%
+#'   transform_forecasts(fun = sqrt, label = "sqrt")
 #'
 #' # adding multiple transformations
 #' library(magrittr) # pipe operator
 #' example_quantile %>%
-#'   transform_forecasts(offset = 1, truncate = TRUE) %>%
-#'   # manually truncate all negative values before applying sqrt
-#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE, label = "natural") %>%
+#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) %>%
+#'   transform_forecasts(offset = 1) %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
@@ -75,18 +80,20 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-
   original_data <- as.data.table(data)
   scale_col_present <- ("scale" %in% colnames(original_data))
 
   # Error handling
   if (scale_col_present) {
     if (!("natural" %in% original_data$scale)) {
-      stop("If a column 'scale' is present, entries with scale =='natural' are required for the transformation")
+      stop(
+        "If a column 'scale' is present, entries with scale =='natural' are required for the transformation"
+      )
     }
     if (append && (label %in% original_data$scale)) {
       w <- paste0(
-        "Appending new transformations with label '", label,
+        "Appending new transformations with label '",
+        label,
         "', even though that entry is already present in column 'scale'."
       )
       warning(w)
@@ -95,7 +102,8 @@ transform_forecasts <- function(data,
 
   if (append) {
     if (scale_col_present) {
-      transformed_data <- data.table::copy(original_data)[scale == "natural"]
+      transformed_data <-
+        data.table::copy(original_data)[scale == "natural"]
     } else {
       transformed_data <- data.table::copy(original_data)
       original_data[, scale := "natural"]
@@ -131,12 +139,13 @@ transform_forecasts <- function(data,
 #' natural logarithm to it.
 #'
 #' @details The output is computed as log(x + offset) (or
-#' log(pmax(0, x) + offset)) if `truncate = TRUE`.
+#' log(pmax(0, x) + offset)) if `negative_to_zero = TRUE`.
 #'
 #' @param x vector of input values to be transformed
 #' @param offset number to add to the input value before taking the natural
 #' logarithm
-#' @param truncate whether to truncate negative values to 0. Default is FALSE.
+#' @param negative_to_zero whether or not to replace all negative values with
+#' zero before applying the log transformation. Default is FALSE.
 #' @param base a positive or complex number: the base with respect to which
 #' logarithms are computed. Defaults to e = exp(1).
 #' @return A numeric vector with transformed values
@@ -154,41 +163,33 @@ transform_forecasts <- function(data,
 #'
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
-#' log_shift(-1:9, offset = 1, truncate = TRUE)
+#' log_shift(-1:9, offset = 1, negative_to_zero = TRUE)
 #'
 #' transform_forecasts(
 #'   example_quantile,
 #'   fun = log_shift,
 #'   offset = 1,
-#'   truncate = TRUE
+#'   negative_to_zero = TRUE
 #'  )
 
-log_shift <- function(
-    x,
-    offset = 0,
-    truncate = FALSE,
-    base = exp(1)
-) {
-
-  if (truncate) {
+log_shift <- function(x,
+                      offset = 0,
+                      negative_to_zero = FALSE,
+                      base = exp(1)) {
+  if (negative_to_zero) {
     x <- pmax(0, x)
   }
 
   if (any (x < 0, na.rm = TRUE)) {
-    w <- paste(
-      "Detected input values < 0.",
-      "Try truncating negative values (use truncate = TRUE)"
-    )
+    w <- paste("Detected input values < 0.",
+               "Try truncating negative values (use negative_to_zero = TRUE)")
     warning(w)
   }
 
   if (any(x == 0, na.rm = TRUE) && offset == 0) {
-    w <- paste0(
-      "Detected zeros in input values.",
-      "Try specifying offset = 1 (or any other offset)."
-    )
+    w <- paste0("Detected zeros in input values.",
+                "Try specifying offset = 1 (or any other offset).")
     warning(w)
   }
   log(x + offset, base = base)
 }
-
