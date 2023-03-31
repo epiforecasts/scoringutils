@@ -23,7 +23,7 @@
 #' the prediction interval.
 #'
 #' To improve usability, the user is asked to provide an interval range in
-#' percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
+#' percentage terms, i.e. interval_range = 0.9 for a 90 percent
 #' prediction interval. Correspondingly, the user would have to provide the
 #' 5% and 95% quantiles (the corresponding alpha would then be 0.1).
 #' No specific distribution is assumed,
@@ -36,9 +36,9 @@
 #' @param upper vector of size n with the prediction for the upper quantile
 #' of the given range
 #' @param interval_range the range of the prediction intervals. i.e. if you're
-#' forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
+#' forecasting the 0.05 and 0.95 quantile, the interval_range would be 0.9.
 #' Can be either a single number or a vector of size n, if the range changes
-#' for different forecasts to be scored. This corresponds to (100-alpha)/100
+#' for different forecasts to be scored. This corresponds to (1-alpha)
 #' in Gneiting and Raftery (2007). Internally, the range will be transformed
 #' to alpha.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
@@ -55,8 +55,8 @@
 #' @inheritParams ae_median_sample
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
-#' interval_range <- rep(90, 30)
-#' alpha <- (100 - interval_range) / 100
+#' interval_range <- rep(0.9, 30)
+#' alpha <- (1 - interval_range)
 #' lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
 #' upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 #'
@@ -73,7 +73,7 @@
 #'   lower = c(lower, NA),
 #'   upper = c(NA, upper),
 #'   separate_results = TRUE,
-#'   interval_range = 90
+#'   interval_range = 0.9
 #' )
 #' @export
 #' @keywords metric
@@ -109,8 +109,12 @@ interval_score <- function(true_values,
   )
   check_equal_length(true_values, lower, interval_range, upper)
 
+  if (any(interval_range<0) || any(interval_range>=1)) {
+    stop("Please provide interval_range as a number between 0 and 1.")
+  }
+
   # calculate alpha from the interval range
-  alpha <- (100 - interval_range) / 100
+  alpha <- (1 - interval_range)
 
   # calculate three components of WIS
   dispersion <- (upper - lower)
