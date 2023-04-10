@@ -36,9 +36,8 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 
 \item{fun}{A function used to transform both true values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
-the same as \code{\link[=log]{log()}}, but has two additional arguments (\code{offset} and
-\code{negative_to_zero}) that allow you to first truncate negative values to zero
-and then add an offset before applying the logarithm.}
+the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
+that allows you add an offset before applying the logarithm.}
 
 \item{append}{whether or not to append a transformed version of the data to
 the currently existing data (default is TRUE). If selected, the data gets
@@ -85,12 +84,15 @@ rule.
 library(magrittr) # pipe operator
 
 # add log transformed forecasts (produces a warning as some values are zero)
+# negative values need to be handled (here by replacing them with 0)
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
   transform_forecasts(append = FALSE)
 
 # alternatively:
-transform_forecasts(example_quantile, negative_to_zero = TRUE, append = FALSE)
+transform_forecasts(example_quantile,
+                    fun = function(x) {log_shift(pmax(0, x))},
+                    append = FALSE)
 
 # specifying an offset manually for the log transformation removes the warning
 example_quantile \%>\%

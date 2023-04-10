@@ -4,16 +4,13 @@
 \alias{log_shift}
 \title{Log transformation with an additive shift}
 \usage{
-log_shift(x, offset = 0, negative_to_zero = FALSE, base = exp(1))
+log_shift(x, offset = 0, base = exp(1))
 }
 \arguments{
 \item{x}{vector of input values to be transformed}
 
 \item{offset}{number to add to the input value before taking the natural
 logarithm}
-
-\item{negative_to_zero}{whether or not to replace all negative values with
-zero before applying the log transformation. Default is FALSE.}
 
 \item{base}{a positive or complex number: the base with respect to which
 logarithms are computed. Defaults to e = exp(1).}
@@ -26,20 +23,17 @@ Function that shifts a value by some offset and then applies the
 natural logarithm to it.
 }
 \details{
-The output is computed as log(x + offset) (or
-log(pmax(0, x) + offset)) if \code{negative_to_zero = TRUE}.
+The output is computed as log(x + offset)
 }
 \examples{
 
 log_shift(1:10)
 log_shift(0:9, offset = 1)
-log_shift(-1:9, offset = 1, negative_to_zero = TRUE)
 
 transform_forecasts(
-  example_quantile,
+  example_quantile[true_value > 0, ],
   fun = log_shift,
-  offset = 1,
-  negative_to_zero = TRUE
+  offset = 1
  )
 }
 \references{

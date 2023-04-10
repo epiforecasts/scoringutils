@@ -21,9 +21,8 @@
 #' @inheritParams score
 #' @param fun A function used to transform both true values and predictions.
 #' The default function is [log_shift()], a custom function that is essentially
-#' the same as [log()], but has two additional arguments (`offset` and
-#' `negative_to_zero`) that allow you to first truncate negative values to zero
-#' and then add an offset before applying the logarithm.
+#' the same as [log()], but has an additional arguments (`offset`)
+#' that allows you add an offset before applying the logarithm.
 #' @param append whether or not to append a transformed version of the data to
 #' the currently existing data (default is TRUE). If selected, the data gets
 #' transformed and appended to the existing data frame, making it possible to
@@ -63,7 +62,9 @@
 #'   transform_forecasts(append = FALSE)
 #'
 #' # alternatively:
-#' transform_forecasts(example_quantile, negative_to_zero = TRUE, append = FALSE)
+#' transform_forecasts(example_quantile,
+#'                     fun = function(x) {log_shift(pmax(0, x))},
+#'                     append = FALSE)
 #'
 #' # specifying an offset manually for the log transformation removes the warning
 #' example_quantile %>%
@@ -152,14 +153,11 @@ transform_forecasts <- function(data,
 #' @description Function that shifts a value by some offset and then applies the
 #' natural logarithm to it.
 #'
-#' @details The output is computed as log(x + offset) (or
-#' log(pmax(0, x) + offset)) if `negative_to_zero = TRUE`.
+#' @details The output is computed as log(x + offset)
 #'
 #' @param x vector of input values to be transformed
 #' @param offset number to add to the input value before taking the natural
 #' logarithm
-#' @param negative_to_zero whether or not to replace all negative values with
-#' zero before applying the log transformation. Default is FALSE.
 #' @param base a positive or complex number: the base with respect to which
 #' logarithms are computed. Defaults to e = exp(1).
 #' @return A numeric vector with transformed values
@@ -177,27 +175,20 @@ transform_forecasts <- function(data,
 #'
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
-#' log_shift(-1:9, offset = 1, negative_to_zero = TRUE)
 #'
 #' transform_forecasts(
-#'   example_quantile,
+#'   example_quantile[true_value > 0, ],
 #'   fun = log_shift,
-#'   offset = 1,
-#'   negative_to_zero = TRUE
+#'   offset = 1
 #'  )
 
 log_shift <- function(x,
                       offset = 0,
-                      negative_to_zero = FALSE,
                       base = exp(1)) {
-  if (negative_to_zero) {
-    x <- pmax(0, x)
-  }
 
   if (any (x < 0, na.rm = TRUE)) {
-    w <- paste("Detected input values < 0.",
-               "Try truncating negative values (use negative_to_zero = TRUE)")
-    warning(w)
+    w <- paste("Detected input values < 0.")
+    stop(w)
   }
 
   if (any(x == 0, na.rm = TRUE) && offset == 0) {
