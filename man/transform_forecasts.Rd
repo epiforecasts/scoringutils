@@ -37,8 +37,8 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 \item{fun}{A function used to transform both true values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
 the same as \code{\link[=log]{log()}}, but has two additional arguments (\code{offset} and
-\code{negative_to_zero}) that allow you to truncate negative values to zero and add an
-offset before applying the logarithm.}
+\code{negative_to_zero}) that allow you to first truncate negative values to zero
+and then add an offset before applying the logarithm.}
 
 \item{append}{whether or not to append a transformed version of the data to
 the currently existing data (default is TRUE). If selected, the data gets
@@ -82,14 +82,27 @@ rule.
 }
 \examples{
 
+library(magrittr) # pipe operator
+
 # add log transformed forecasts (produces a warning as some values are zero)
+example_quantile \%>\%
+  .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
+  transform_forecasts(append = FALSE)
+
+# alternatively:
 transform_forecasts(example_quantile, negative_to_zero = TRUE, append = FALSE)
 
 # specifying an offset manually for the log transformation removes the warning
-transform_forecasts(example_quantile, negative_to_zero = TRUE, offset = 1)
+example_quantile \%>\%
+  .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
+  transform_forecasts(offset = 1, append = FALSE)
 
 # truncating forecasts manually before sqrt
-library(magrittr) # pipe operator
+example_quantile \%>\%
+  .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
+  transform_forecasts(fun = sqrt, label = "sqrt")
+
+# alternatively, this achieves the same
 example_quantile \%>\%
   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt")
@@ -97,7 +110,7 @@ example_quantile \%>\%
 # adding multiple transformations
 library(magrittr) # pipe operator
 example_quantile \%>\%
-  transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) \%>\%
+  .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
   transform_forecasts(offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
