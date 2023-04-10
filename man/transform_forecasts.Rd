@@ -95,7 +95,7 @@ transform_forecasts(example_quantile,
                     append = FALSE)
 
 # specifying an offset for the log transformation removes the
-warning caused by zeros in the data
+# warning caused by zeros in the data
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
   transform_forecasts(offset = 1, append = FALSE)
