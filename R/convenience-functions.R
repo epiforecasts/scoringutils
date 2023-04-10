@@ -49,46 +49,40 @@
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
-
 #' @keywords check-forecasts
 #' @examples
 #'
 #' library(magrittr) # pipe operator
 #'
-#' # add log transformed forecasts (produces a warning as some values are zero)
+#' # transform forecasts using the natural logarithm
 #' # negative values need to be handled (here by replacing them with 0)
 #' example_quantile %>%
 #'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
 #'   transform_forecasts(append = FALSE)
 #'
-#' # alternatively:
+#' # alternatively, integrating the truncation in the transformation function:
 #' transform_forecasts(example_quantile,
 #'                     fun = function(x) {log_shift(pmax(0, x))},
 #'                     append = FALSE)
 #'
-#' # specifying an offset manually for the log transformation removes the warning
+#' # specifying an offset for the log transformation removes the
+#' warning caused by zeros in the data
 #' example_quantile %>%
 #'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
 #'   transform_forecasts(offset = 1, append = FALSE)
 #'
-#' # truncating forecasts manually before sqrt
+#' # adding square root transformed forecasts to the orginal ones
 #' example_quantile %>%
 #'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
-#'   transform_forecasts(fun = sqrt, label = "sqrt")
-#'
-#' # alternatively, this achieves the same
-#' example_quantile %>%
-#'   transform_forecasts(fun = function(x) pmax(0, x), append = FALSE) %>%
-#'   transform_forecasts(fun = sqrt, label = "sqrt")
-#'
-#' # adding multiple transformations
-#' library(magrittr) # pipe operator
-#' example_quantile %>%
-#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
-#'   transform_forecasts(offset = 1) %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
+#'
+#' # adding multiple transformations
+#' example_quantile %>%
+#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+#'   transform_forecasts(fun = log_shift, offset = 1) %>%
+#'   transform_forecasts(fun = sqrt, label = "sqrt")
 
 transform_forecasts <- function(data,
                                 fun = log_shift,
@@ -169,7 +163,6 @@ transform_forecasts <- function(data,
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
-
 #' @keywords check-forecasts
 #' @examples
 #'
