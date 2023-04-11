@@ -151,6 +151,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/interval_score.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/log_shift.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/logs_binary.html</loc>
   </url>
   <url>
@@ -260,5 +263,8 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/theme_scoringutils.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/transform_forecasts.html</loc>
   </url>
 </urlset>

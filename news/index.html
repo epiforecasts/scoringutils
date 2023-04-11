@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,14 @@
       <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.2" id="scoringutils-112">scoringutils 1.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-112"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-1-2">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-2"></a></h3>
+<ul><li>added a new function, <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1</a>.</li>
+<li>added another function, <code><a href="../reference/log_shift.html">log_shift()</a></code> that implements the default transformation function. The function allows add an offset before applying the logarithm.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="scoringutils-111">scoringutils 1.1.1<a class="anchor" aria-label="anchor" href="#scoringutils-111"></a></h2>
 <ul><li>added a small change to <code><a href="../reference/interval_score.html">interval_score()</a></code> which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn’t allow the implict conversion.</li>
