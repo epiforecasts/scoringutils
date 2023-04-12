@@ -199,14 +199,26 @@ mean_score_ratio <- list(
 )
 
 relative_skill <- list(
-  `Metric` = "(Scaled) Relative skill",
-  `Name` = list("relative_skill", "scaled_rel_skill"),
+  `Metric` = "Relative skill",
+  `Name` = list("relative_skill"),
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
   `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.",
+  `References` = ""
+)
+
+scaled_relative_skill <- list(
+  `Metric` = "Scaled relative skill",
+  `Name` = list("scaled_rel_skill"),
+  `Functions` = r"(score(), pairwise_comparison())",
+  `D` = r"($\sim$)",
+  `C` = r"($\sim$)",
+  `B` = r"($\sim$)",
+  `Q` = r"($\sim$)",
+  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Scaled (i.e. divided) by the score of a baseline model. Properties depend on the metric chosen for the comparison.",
   `References` = ""
 )
 
@@ -227,7 +239,8 @@ data <- rbind(as.data.table(ae),
               as.data.table(dispersion),
               as.data.table(bias),
               as.data.table(mean_score_ratio),
-              as.data.table(relative_skill))
+              as.data.table(relative_skill),
+              as.data.table(scaled_relative_skill))
 
 data[, References := NULL]
 setnames(data, old = c("Properties"),
