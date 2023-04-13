@@ -105,7 +105,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2023-04-11</h4>
+            <h4 data-toc-skip class="date">2023-04-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -1024,8 +1024,8 @@ small.</p>
 <span><span class="co">#&gt; 18:                                   Dispersion         dispersion</span></span>
 <span><span class="co">#&gt; 19:                                         Bias               bias</span></span>
 <span><span class="co">#&gt; 20:                             Mean score ratio  mean_scores_ratio</span></span>
-<span><span class="co">#&gt; 21:                      (Scaled) Relative skill     relative_skill</span></span>
-<span><span class="co">#&gt; 22:                      (Scaled) Relative skill   scaled_rel_skill</span></span>
+<span><span class="co">#&gt; 21:                               Relative skill     relative_skill</span></span>
+<span><span class="co">#&gt; 22:                        Scaled relative skill   scaled_rel_skill</span></span>
 <span><span class="co">#&gt;                                           Metric               Name</span></span>
 <span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
 <span><span class="co">#&gt;  1: score(), ae_point()), ae_median_sample(        +          +      -        +</span></span>
@@ -1051,30 +1051,30 @@ small.</p>
 <span><span class="co">#&gt; 21:          score(), pairwise_comparison()        ~          ~      ~        ~</span></span>
 <span><span class="co">#&gt; 22:          score(), pairwise_comparison()        ~          ~      ~        ~</span></span>
 <span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                 Info</span></span>
-<span><span class="co">#&gt;  1:                                                                                                                     Suitable for scoring the median of a predictive distribution</span></span>
-<span><span class="co">#&gt;  2:                                                                                                                     Suitable for scoring the median of a predictive distribution</span></span>
-<span><span class="co">#&gt;  3:                                                                                                                      Suitable for scoring the mean of a predictive distribution.</span></span>
-<span><span class="co">#&gt;  4:                                                                                                                      Suitable for scoring the mean of a predictive distribution.</span></span>
-<span><span class="co">#&gt;  5: Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over- and under-confidence similarly, stable handling of outliers</span></span>
-<span><span class="co">#&gt;  6:                 Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers</span></span>
-<span><span class="co">#&gt;  7:                                    Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals</span></span>
-<span><span class="co">#&gt;  8: Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over-confidence severely</span></span>
-<span><span class="co">#&gt;  9:                                                          Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over- and under-confidence similarly</span></span>
-<span><span class="co">#&gt; 10:                       Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage'). Used to assess probabilistic calibration.</span></span>
-<span><span class="co">#&gt; 11:                                                                     Average difference between empirical and nominal interval coverage (coverage that should have been realised)</span></span>
-<span><span class="co">#&gt; 12:                                                               Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.</span></span>
-<span><span class="co">#&gt; 13:                                                                                                             Dispersion component of WIS, measures width of predictive intervals.</span></span>
-<span><span class="co">#&gt; 14:                                                                                          Measure for dispersion of a forecast: median of the absolute deviations from the median</span></span>
-<span><span class="co">#&gt; 15:                                                                                                                  Absolute amount of over-or under-prediction (components of WIS)</span></span>
-<span><span class="co">#&gt; 16:                                                                                                                  Absolute amount of over-or under-prediction (components of WIS)</span></span>
-<span><span class="co">#&gt; 17:                                                         PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform. </span></span>
-<span><span class="co">#&gt; 18:                                                                                                             Dispersion component of WIS, measures width of predictive intervals.</span></span>
-<span><span class="co">#&gt; 19:                                                             Measure of relative tendency to over- or under-predict (aspect of calibration), bounded between -1 and 1 (ideally 0)</span></span>
-<span><span class="co">#&gt; 20:                                                                                   Compares performance of two models. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt; 21:                               Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt; 22:                               Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                 Info</span></span></code></pre></div>
+<span><span class="co">#&gt;                                                                                                                                                                                                           Info</span></span>
+<span><span class="co">#&gt;  1:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
+<span><span class="co">#&gt;  2:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
+<span><span class="co">#&gt;  3:                                                                                                                                                Suitable for scoring the mean of a predictive distribution.</span></span>
+<span><span class="co">#&gt;  4:                                                                                                                                                Suitable for scoring the mean of a predictive distribution.</span></span>
+<span><span class="co">#&gt;  5:                           Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over- and under-confidence similarly, stable handling of outliers</span></span>
+<span><span class="co">#&gt;  6:                                           Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers</span></span>
+<span><span class="co">#&gt;  7:                                                              Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals</span></span>
+<span><span class="co">#&gt;  8:                           Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over-confidence severely</span></span>
+<span><span class="co">#&gt;  9:                                                                                    Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over- and under-confidence similarly</span></span>
+<span><span class="co">#&gt; 10:                                                 Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage'). Used to assess probabilistic calibration.</span></span>
+<span><span class="co">#&gt; 11:                                                                                               Average difference between empirical and nominal interval coverage (coverage that should have been realised)</span></span>
+<span><span class="co">#&gt; 12:                                                                                         Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.</span></span>
+<span><span class="co">#&gt; 13:                                                                                                                                       Dispersion component of WIS, measures width of predictive intervals.</span></span>
+<span><span class="co">#&gt; 14:                                                                                                                    Measure for dispersion of a forecast: median of the absolute deviations from the median</span></span>
+<span><span class="co">#&gt; 15:                                                                                                                                            Absolute amount of over-or under-prediction (components of WIS)</span></span>
+<span><span class="co">#&gt; 16:                                                                                                                                            Absolute amount of over-or under-prediction (components of WIS)</span></span>
+<span><span class="co">#&gt; 17:                                                                                   PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform. </span></span>
+<span><span class="co">#&gt; 18:                                                                                                                                       Dispersion component of WIS, measures width of predictive intervals.</span></span>
+<span><span class="co">#&gt; 19:                                                                                       Measure of relative tendency to over- or under-predict (aspect of calibration), bounded between -1 and 1 (ideally 0)</span></span>
+<span><span class="co">#&gt; 20:                                                                                                             Compares performance of two models. Properties depend on the metric chosen for the comparison.</span></span>
+<span><span class="co">#&gt; 21:                                                         Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.</span></span>
+<span><span class="co">#&gt; 22: Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Scaled (i.e. divided) by the score of a baseline model. Properties depend on the metric chosen for the comparison.</span></span>
+<span><span class="co">#&gt;                                                                                                                                                                                                           Info</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="lower-level-functions">Lower level functions<a class="anchor" aria-label="anchor" href="#lower-level-functions"></a>
