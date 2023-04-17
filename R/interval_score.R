@@ -113,10 +113,10 @@ interval_score <- function(true_values,
   )
   check_equal_length(true_values, lower, interval_range, upper)
 
-  if (any(interval_range < 0)) {
+  if (any(interval_range < 0, na.rm = TRUE)) {
     stop("interval ranges must be positive")
   }
-  if (any(interval_range > 0 & interval_range < 1)) {
+  if (any(interval_range > 0 & interval_range < 1, na.rm = TRUE)) {
     msg <- paste("Found interval ranges between 0 and 1. Are you sure that's right?",
                  "An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval.",
                  "If you want to score a (25%, 75%) prediction interval, set interval_range = 50.")
