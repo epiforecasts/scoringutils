@@ -172,8 +172,8 @@ test_that("function produces output for a continuous format case", {
   )
 })
 
-test_that("score() can support a sample column when a quantile forecast is
- used", {
+test_that(
+  "score() can support a sample column when a quantile forecast is used", {
   ex <- example_quantile[!is.na(quantile)][1:200, ]
   ex <- rbind(
     data.table::copy(ex)[, sample := 1],
