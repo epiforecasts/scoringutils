@@ -24,7 +24,7 @@
 #' The default function is [log_shift()], a custom function that is essentially
 #' the same as [log()], but has an additional arguments (`offset`)
 #' that allows you add an offset before applying the logarithm. This is often
-#'  helpful as the natural log transformation is not define at zero. A common,
+#'  helpful as the natural log transformation is not defined at zero. A common,
 #'  and pragmatic solution, is to add a small offset to the data before applying
 #'  the log transformation. In our work we have often used an offset of 1 but
 #' the precise value will depend on your application.
