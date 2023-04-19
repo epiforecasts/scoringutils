@@ -197,7 +197,7 @@ log_shift <- function(x,
                       offset = 0,
                       base = exp(1)) {
 
-  if (any (x < 0, na.rm = TRUE)) {
+  if (any(x < 0, na.rm = TRUE)) {
     w <- paste("Detected input values < 0.")
     stop(w)
   }
