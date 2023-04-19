@@ -253,7 +253,7 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:      40.608696        -0.29826087  0.90       108</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get scores by model</span></span></span>
-<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>,by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline    14321.48926 2096.95360      5143.53567</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-ensemble     8992.62316 1846.85278      2120.64029</span>
@@ -298,7 +298,7 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:        18.3498          0.2705116 0.6457779    74.79904</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># round digits</span></span></span>
-<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>,by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">summarise_scores</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model interval_score dispersion underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-baseline          14000       2100            5100</span>
