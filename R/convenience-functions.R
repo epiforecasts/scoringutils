@@ -58,7 +58,7 @@
 #' Sebastian Funk
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
-#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> 
+#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1>
 #' @keywords check-forecasts
 #' @examples
 #'

@@ -38,7 +38,7 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
 the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
 that allows you add an offset before applying the logarithm. This is often
-helpful as the natural log transformation is not define at zero. A common,
+helpful as the natural log transformation is not defined at zero. A common,
 and pragmatic solution, is to add a small offset to the data before applying
 the log transformation. In our work we have often used an offset of 1 but
 the precise value will depend on your application.}
