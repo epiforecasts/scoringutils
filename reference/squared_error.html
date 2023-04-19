@@ -28,7 +28,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,12 +115,11 @@ $$</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">squared_error</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.237232e-01 4.149316e-01 8.802343e+00 2.690688e-01 9.360299e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 1.820815e+00 1.478327e+00 1.009635e+00 1.649771e+00 3.335891e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 3.920164e+00 9.404561e-04 3.708494e+00 4.584795e-01 2.154968e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 2.156713e+00 3.016502e-01 1.122698e+00 1.993707e+01 2.036401e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 2.097418e+00 1.140176e-02 9.450725e-01 1.582009e-04 9.167721e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 4.276019e-02 4.900819e-01 2.093283e-01 4.680617e+00 4.555076e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.77806349  0.04237804  2.33178118  0.04512484  2.10032244  0.12407099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.11049625 16.47963736  2.30871341  0.56564729  0.11891830  2.46477472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  6.28675060  0.08040935  0.88229300  9.08684890  0.33861835  0.04493006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  0.71073831  6.20209305  7.68697024  2.34389127 21.81785410  0.36748900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.65658291  0.21911225  0.01451180  0.03497867  0.99284391  2.72234581</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -128,7 +127,7 @@ $$</p>
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson.</p>
+  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

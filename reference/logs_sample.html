@@ -38,7 +38,7 @@ more details."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,11 +137,11 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5153239 2.2461375 1.7460964 1.8363847 1.9394258 2.1675015 1.9776275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.9635337 2.1987038 3.2107222 2.1744498 4.0465125 2.4234535 2.2055106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.5285794 2.3477560 3.0984828 2.4545129 4.8051961 2.5245894 2.6023515</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.5591431 3.2443033 3.9982821 4.7789892 2.5974162 3.7469484 2.6983791</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.9567411 2.9359740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7977197 2.1498654 2.3722604 1.6779798 2.2421455 2.0883311 2.0758609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.9939776 2.1417876 2.2823698 2.2017235 5.1763653 2.6940015 2.8128634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.2915510 2.8211713 2.4268253 3.0599834 2.6720472 3.7178397 3.0961987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.5546467 2.5454929 2.8665291 2.8377401 3.0213736 2.8200351 3.2687399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.8010277 4.0519343</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -149,7 +149,7 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson.</p>
+  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

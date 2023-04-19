@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,11 +118,11 @@ smaller values are better.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">logs_binary</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.55598680 0.94607432 3.99517006 0.01203967 2.67926703 3.48510869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.43431253 0.57543429 3.46747885 1.77087273 1.53194799 0.43318868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.67675276 0.13480248 1.64701426 0.33638801 1.92118599 0.22089913</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.40870733 0.56971098 0.97703034 1.15223164 0.50909440 1.14013363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.23992685 0.31379387 0.71436904 0.43772561 1.17699501 0.02334384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.33248998 1.90662902 0.62752104 1.32648512 0.38015541 1.87713916</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.42386317 1.63472545 1.41747780 0.40346198 0.25006154 0.10564529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.60357304 0.57660593 0.62291447 0.55209596 2.79315005 0.38386402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.08459298 1.00118846 0.18151041 0.04639154 0.13633281 2.08636145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.23268314 3.72560163 1.46079218 1.46295385 2.40563643 0.18449497</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -130,7 +130,7 @@ smaller values are better.</p>
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson.</p>
+  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">

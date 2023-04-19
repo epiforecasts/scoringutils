@@ -28,7 +28,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,12 +121,11 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.391125236  0.005101002  4.075270346  5.905206464  1.772781926</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6]  6.178510993  0.191259375  1.471204914  0.017735818  0.011832881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  5.890458468  1.701329942  0.632523817  5.753052541  0.445649182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]  3.183207452 14.452008770  0.037037582  0.002709628  0.399426539</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  2.127346211  4.386856790  0.006300098  2.615280726  9.809336805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0.253172996  3.447045220  6.154322027  0.804101266  2.836004096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3.01715411  0.45966067  1.84710783  2.49726475  1.83256606 18.39096738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.56509293  0.15778535  1.24075345  0.09662527  1.60198639  1.21139399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  2.28565915  0.66576689  0.52389431  5.18471659  0.55978526  0.13427225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  4.57936653  0.50617166  0.68206712  1.78501891  2.08058843  0.09780362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  2.40200681  5.42759190  0.01268233  0.53487157 12.20936044  5.71682611</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -134,7 +133,7 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson.</p>
+  <p></p><p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
 
 <div class="pkgdown">
