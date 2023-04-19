@@ -10,6 +10,12 @@
 - Added a new function, `transform_forecasts()` to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1.
 - Added a function, `log_shift()` that implements the default transformation function. The function allows add an offset before applying the logarithm.
 
+## Package updates
+
+- Switched to a linting GitHub Action that only triggers on changes. Inspired by @bisaloo recent contribution to the [`epinowcast` package](https://github.com/epinowcast/epinowcast/pull/220).
+- Updated package linters to be more extensive. Inspired by @bisaloo recent contribution to the [`epinowcast` package](https://github.com/epinowcast/epinowcast/pull/220).
+- Resolved all flagged linting issues across the package.
+
 # scoringutils 1.1.1
 
 - Added a small change to `interval_score()` which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn't allow the implicit conversion.  
