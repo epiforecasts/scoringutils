@@ -678,7 +678,11 @@ plot_quantile_coverage <- function(scores,
     theme_scoringutils() +
     xlab("Quantile") +
     ylab("% Obs below quantile") +
-    scale_y_continuous(labels = function(x) {paste(100 * x)}) +
+    scale_y_continuous(
+      labels = function(x) {
+        paste(100 * x)
+      }
+    ) +
     coord_cartesian(expand = FALSE)
 
   return(p2)

@@ -168,7 +168,7 @@
 #'   \item{true_value}{true observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/} #nolint
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/} # nolint
 "example_truth_only"
 
 #' Summary information for selected metrics

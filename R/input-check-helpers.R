@@ -166,12 +166,12 @@ check_equal_length <- function(...,
 
   if (length(unique(lengths)) != 1) {
     calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
-    stop(paste0(
+    stop(
       "Arguments passed to the following function call: '",
       calling_function,
       "' should have the same length (or length one). Arguments have the following lengths: ",
-      paste0(lengths, collapse = ", ")
-    ))
+      toString(lengths)
+    )
   }
   return(invisible(NULL))
 }

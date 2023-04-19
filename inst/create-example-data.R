@@ -2,7 +2,7 @@ library(data.table)
 library(dplyr)
 library(devtools)
 library(here)
-library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils") #nolint
+library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils") # nolint
 library(purrr)
 library(data.table)
 library(stringr)

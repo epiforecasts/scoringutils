@@ -180,7 +180,6 @@ check_forecasts <- function(data) {
   out[["cleaned_data"]] <- data
 
   # available unique values per model for the different columns
-  cols <- forecast_unit[forecast_unit != "model"]
   out[["unique_values"]] <-
     data[, lapply(.SD, FUN = function(x) length(unique(x))), by = "model"]
 

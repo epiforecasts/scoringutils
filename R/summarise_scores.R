@@ -151,7 +151,7 @@ summarise_scores <- function(scores,
   # if neither quantile nor range are in by, remove coverage and
   # quantile_coverage because averaging does not make sense
   if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
-    scores[, c("coverage") := NULL]
+    scores[, "coverage" := NULL]
   }
   if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
     scores[, "quantile_coverage" := NULL]
