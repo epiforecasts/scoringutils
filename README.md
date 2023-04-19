@@ -79,7 +79,7 @@ example_quantile %>%
           target_end_date < "2021-05-22"
   ) %>%
   make_NA(what = "forecast",
-          model != 'EuroCOVIDhub-ensemble', 
+          model != "EuroCOVIDhub-ensemble", 
           forecast_date != "2021-06-28"
   ) %>%
   plot_predictions(

@@ -100,7 +100,7 @@ test_that("calculation of ae_median is correct for a quantile format case", {
     score(scoringutils::example_quantile[!is.na(prediction)])
   )
 
-  eval <- summarise_scores(eval, by = c("model"))
+  eval <- summarise_scores(eval,by = "model")
 
   example <- scoringutils::example_quantile
   ae <- example[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),

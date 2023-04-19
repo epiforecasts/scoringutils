@@ -62,7 +62,7 @@ plot_score_table <- function(scores,
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
   metrics_zero_good <- c("bias", "coverage_deviation")
-  metrics_no_color <- c("coverage")
+  metrics_no_color <- "coverage"
 
   metrics_min_good <- setdiff(metrics, c(
     metrics_zero_good, metrics_no_color
@@ -365,7 +365,7 @@ plot_heatmap <- function(scores,
 #'   ) %>%
 #'   make_NA (
 #'     what = "forecast",
-#'     model != 'EuroCOVIDhub-ensemble',
+#'     model != "EuroCOVIDhub-ensemble",
 #'     forecast_date != "2021-06-07"
 #'   ) %>%
 #'   plot_predictions (
@@ -549,7 +549,7 @@ make_NA <- function(data = NULL,
   # turn ... arguments into expressions
   args <- enexprs(...)
 
-  vars <- c()
+  vars <- NULL
   if (what %in% c("forecast", "both")) {
     vars <- c(vars, "prediction")
   }
@@ -599,7 +599,8 @@ plot_interval_coverage <- function(scores,
       data = data.frame(
         x = c(0, 0, 100),
         y = c(0, 100, 100),
-        g = c("o", "o", "o")
+        g = c("o", "o", "o"),
+        stringsAsFactors = TRUE
       ),
       aes(
         x = x, y = y, group = g,
@@ -658,7 +659,8 @@ plot_quantile_coverage <- function(scores,
           0, 0, 0.5,
           0.5, 1, 1
         ),
-        g = c("o", "o", "o")
+        g = c("o", "o", "o"),
+        stringsAsFactors = TRUE
       ),
       aes(
         x = x, y = y, group = g,
@@ -841,11 +843,11 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit(example_quantile, by = c("model"))
+#' pit <- pit(example_quantile,by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit(example_integer, by = c("model"))
+#' pit <- pit(example_integer,by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
@@ -862,7 +864,7 @@ plot_pit <- function(pit,
   # use breaks if explicitly given, otherwise assign based on number of bins
   if (!is.null(breaks)) {
     plot_quantiles <- breaks
-  } else if (is.null(num_bins) | num_bins == "auto") {
+  } else if (is.null(num_bins) || num_bins == "auto") {
     # automatically set number of bins
     if (type == "sample-based") {
       num_bins <- 10
@@ -917,7 +919,7 @@ plot_pit <- function(pit,
   } else {
     # non data.frame version
     hist <- ggplot(
-      data = data.frame(x = pit),
+      data = data.frame(x = pit, stringsAsFactors = TRUE),
       aes(x = x)
     ) +
       geom_histogram(aes(y = after_stat(width * density)),

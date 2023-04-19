@@ -90,7 +90,7 @@ pit_sample <- function(true_values,
   # error handling--------------------------------------------------------------
   # check al arguments are provided
   # this could be integrated into check_not_null
-  if (missing("true_values") | missing("predictions")) {
+  if (missing("true_values") || missing("predictions")) {
     stop("`true_values` or `predictions` missing in function 'pit_sample()'")
   }
   check_not_null(true_values = true_values, predictions = predictions)
@@ -213,7 +213,7 @@ pit <- function(data,
 
   # if prediction type is not quantile, calculate PIT values based on samples
   data_wide <- data.table::dcast(data,
-    ... ~ paste("InternalSampl_", sample, sep = ""),
+    ... ~ paste0("InternalSampl_", sample),
     value.var = "prediction"
   )
 
@@ -222,7 +222,7 @@ pit <- function(data,
     predictions = as.matrix(.SD)
   )),
   by = by,
-  .SDcols = grepl("InternalSampl_", names(data_wide))
+  .SDcols = grepl("InternalSampl_", names(data_wide), fixed = TRUE)
   ]
 
   return(pit[])

@@ -201,7 +201,7 @@ check_metrics <- function(metrics) {
   if (!all(metrics %in% available_metrics)) {
     msg <- paste(
       "The following metrics are not available:",
-      paste(setdiff(metrics, available_metrics), collapse = ", ")
+      toString(setdiff(metrics, available_metrics))
     )
     warning(msg)
   }

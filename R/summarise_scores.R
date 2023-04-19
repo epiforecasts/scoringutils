@@ -48,7 +48,7 @@
 #' summarise_scores(scores)
 #'
 #' # get scores by model
-#' summarise_scores(scores, by = c("model"))
+#' summarise_scores(scores,by = "model")
 #'
 #' # get scores by model and target type
 #' summarise_scores(scores, by = c("model", "target_type"))
@@ -57,7 +57,7 @@
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # round digits
-#' summarise_scores(scores, by = c("model")) %>%
+#' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #'
 #' # get quantiles of scores
@@ -154,7 +154,7 @@ summarise_scores <- function(scores,
     scores[, c("coverage") := NULL]
   }
   if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
-    scores[, c("quantile_coverage") := NULL]
+    scores[, "quantile_coverage" := NULL]
   }
 
   return(scores[])

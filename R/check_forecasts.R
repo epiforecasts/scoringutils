@@ -77,7 +77,7 @@ check_forecasts <- function(data) {
       warnings,
       paste0(
         "At least one column in the data ",
-        "(", paste(clashing_colnames, collapse = ", "), ") ",
+        "(", toString(clashing_colnames), ") ",
         "corresponds to the name of a metric that will be computed by ",
         "scoringutils. Please check `available_metrics()`"
       )
@@ -151,8 +151,11 @@ check_forecasts <- function(data) {
   if (nrow(check_duplicates) > 0) {
     errors <- c(
       errors,
-      paste(
-        "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows."
+      paste0(
+        "There are instances with more than one forecast for the same target. ",
+         "This can't be right and needs to be resolved. Maybe you need to ",
+         "check the unit of a single forecast and add missing columns? Use ",
+         "the  function find_duplicates() to identify duplicate rows."
       )
     )
   }
@@ -165,7 +168,7 @@ check_forecasts <- function(data) {
       warnings,
       paste0(
         "Some forecasts have different numbers of rows (e.g. quantiles or samples). ", # nolint
-        "scoringutils found: ", paste(n, collapse = ", "),
+        "scoringutils found: ", toString(n),
         ". This is not necessarily a problem, but make sure this is intended."
       )
     )

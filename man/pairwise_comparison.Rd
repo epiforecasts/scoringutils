@@ -6,7 +6,7 @@
 \usage{
 pairwise_comparison(
   scores,
-  by = c("model"),
+  by = "model",
   metric = "auto",
   baseline = NULL,
   ...

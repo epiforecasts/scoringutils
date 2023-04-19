@@ -1,6 +1,6 @@
 test_that("plot_pit() works as expected with quantile forecasts", {
   pit <- suppressMessages(
-    pit(example_quantile, by = c("model"))
+    pit(example_quantile,by = "model")
   )
   p <- plot_pit(pit, breaks = seq(0.1, 1, 0.1))
   expect_s3_class(p, "ggplot")
@@ -10,7 +10,7 @@ test_that("plot_pit() works as expected with quantile forecasts", {
 
 test_that("plot_pit() works as expected with integer forecasts", {
   pit <- suppressMessages(
-    pit(example_integer, by = c("model"))
+    pit(example_integer,by = "model")
   )
   p <- plot_pit(pit)
   expect_s3_class(p, "ggplot")
