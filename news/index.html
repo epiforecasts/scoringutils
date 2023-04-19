@@ -85,13 +85,13 @@
 <h2 class="pkg-version" data-toc-text="1.1.2" id="scoringutils-112">scoringutils 1.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-112"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-1-1-2">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-2"></a></h3>
-<ul><li>added a new function, <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1</a>.</li>
-<li>added another function, <code><a href="../reference/log_shift.html">log_shift()</a></code> that implements the default transformation function. The function allows add an offset before applying the logarithm.</li>
+<ul><li>Added a new function, <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1</a>.</li>
+<li>Added a function, <code><a href="../reference/log_shift.html">log_shift()</a></code> that implements the default transformation function. The function allows add an offset before applying the logarithm.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="scoringutils-111">scoringutils 1.1.1<a class="anchor" aria-label="anchor" href="#scoringutils-111"></a></h2>
-<ul><li>added a small change to <code><a href="../reference/interval_score.html">interval_score()</a></code> which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn’t allow the implict conversion.</li>
+<ul><li>Added a small change to <code><a href="../reference/interval_score.html">interval_score()</a></code> which explicitly converts the logical vector to a numeric one. This should happen implicitly anyway, but is now done explicitly in order to avoid issues that may come up if the input vector has a type that doesn’t allow the implicit conversion.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="scoringutils-110">scoringutils 1.1.0<a class="anchor" aria-label="anchor" href="#scoringutils-110"></a></h2><p class="text-muted">CRAN release: 2023-01-30</p>
@@ -104,7 +104,7 @@
 <ul><li>Removed the on attach message which warned of breaking changes in <code>1.0.0</code>.</li>
 <li>Renamed the <code>metric</code> argument of <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> to <code>relative_skill_metric</code>. This argument is now deprecated and will be removed in a future version of the package. Please use the new argument instead.</li>
 <li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code> and related functions to make the soft requirement for a <code>model</code> column in the input data more explicit.</li>
-<li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code>, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> and <code>summaris_scores()</code> to make it clearer what the unit of a single forecast is that is required for computations</li>
+<li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code>, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> and <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> to make it clearer what the unit of a single forecast is that is required for computations</li>
 <li>Simplified the function <code><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison()</a></code> which now only supports plotting mean score ratios or p-values and removed the hybrid option to print both at the same time.</li>
 </ul></div>
 <div class="section level3">
@@ -119,40 +119,38 @@
 <p>Major update to the package and most package functions with lots of breaking changes.</p>
 <div class="section level3">
 <h3 id="feature-updates-1-0-0">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-0-0"></a></h3>
-<ul><li>new and updated Readme and vignette</li>
-<li>the proposed scoring workflow was reworked. Functions were changed so they can easily be piped and have simplified arguments and outputs.</li>
+<ul><li>New and updated Readme and vignette.</li>
+<li>The proposed scoring workflow was reworked. Functions were changed so they can easily be piped and have simplified arguments and outputs.</li>
 </ul><div class="section level4">
-<h4 id="new-functions-and-function-changes-1-0-0">new functions and function changes<a class="anchor" aria-label="anchor" href="#new-functions-and-function-changes-1-0-0"></a></h4>
-<ul><li>the function <code>eval_forecasts()</code> was replaced by a function <code><a href="../reference/score.html">score()</a></code> with a much reduced set of function arguments.</li>
+<h4 id="new-functions-and-function-changes-1-0-0">New functions and function changes<a class="anchor" aria-label="anchor" href="#new-functions-and-function-changes-1-0-0"></a></h4>
+<ul><li>The function <code>eval_forecasts()</code> was replaced by a function <code><a href="../reference/score.html">score()</a></code> with a much reduced set of function arguments.</li>
 <li>Functionality to summarise scores and to add relative skill scores was moved to a function <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>
 </li>
-<li>new function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to analyse input data before scoring</li>
-<li>new function <code><a href="../reference/correlation.html">correlation()</a></code> to compute correlations between different metrics</li>
-<li>new function <code><a href="../reference/add_coverage.html">add_coverage()</a></code> to add coverage for specific central prediction intervals</li>
-<li>new function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> allows to visualise the number of available forecasts</li>
-<li>new function <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> to find duplicate forecasts which cause an error</li>
-<li>all plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified</li>
-<li>the function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
-<li>the function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code><a href="../reference/pit.html">pit()</a></code>
+<li>New function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to analyse input data before scoring</li>
+<li>New function <code><a href="../reference/correlation.html">correlation()</a></code> to compute correlations between different metrics</li>
+<li>New function <code><a href="../reference/add_coverage.html">add_coverage()</a></code> to add coverage for specific central prediction intervals.</li>
+<li>New function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> allows to visualise the number of available forecasts.</li>
+<li>New function <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> to find duplicate forecasts which cause an error.</li>
+<li>All plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified.</li>
+<li>The function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
+<li>The function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code><a href="../reference/pit.html">pit()</a></code>
 </li>
-<li>many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
-<li>the function <code><a href="../reference/brier_score.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
+<li>Many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
+<li>The function <code><a href="../reference/brier_score.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
 <li>
-<code>crps</code>, <code>dss</code> and <code>logs</code> were renamed to <code><a href="../reference/crps_sample.html">crps_sample()</a></code>, <code><a href="../reference/dss_sample.html">dss_sample()</a></code>, and <code><a href="../reference/logs_sample.html">logs_sample()</a></code>
+<code>crps()</code>, <code>dss()</code> and <code>logs()</code> were renamed to <code><a href="../reference/crps_sample.html">crps_sample()</a></code>, <code><a href="../reference/dss_sample.html">dss_sample()</a></code>, and <code><a href="../reference/logs_sample.html">logs_sample()</a></code>
 </li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-1-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h4>
 <ul><li>Testing was expanded</li>
-<li>minor bugs were fixed, for example a bug in the sample_to_quantile function (<a href="https://github.com/epiforecasts/scoringutils/pull/223" class="external-link uri">https://github.com/epiforecasts/scoringutils/pull/223</a>)</li>
+<li>Minor bugs were fixed, for example a bug in the <code><a href="../reference/sample_to_quantile.html">sample_to_quantile()</a></code> function (<a href="https://github.com/epiforecasts/scoringutils/pull/223" class="external-link uri">https://github.com/epiforecasts/scoringutils/pull/223</a>)</li>
 </ul></div>
 <div class="section level4">
-<h4 id="package-data-updated-1-0-0">package data updated<a class="anchor" aria-label="anchor" href="#package-data-updated-1-0-0"></a></h4>
-<ul><li>package data is now based on forecasts submitted to the European Forecast Hub (<a href="https://covid19forecasthub.eu/" class="external-link uri">https://covid19forecasthub.eu/</a>).</li>
-<li>all example data files were renamed to begin with <code>example_</code>
-</li>
-<li>a new data set, <code>summary_metrics</code> was included that contains a summary of the metrics implemented in <code>scoringutils</code>
-</li>
+<h4 id="package-data-updated-1-0-0">Package data updated<a class="anchor" aria-label="anchor" href="#package-data-updated-1-0-0"></a></h4>
+<ul><li>Package data is now based on forecasts submitted to the European Forecast Hub (<a href="https://covid19forecasthub.eu/" class="external-link uri">https://covid19forecasthub.eu/</a>).</li>
+<li>All example data files were renamed to begin with <code>example_</code>.</li>
+<li>A new data set, <code>summary_metrics</code> was included that contains a summary of the metrics implemented in <code>scoringutils</code>.</li>
 </ul></div>
 </div>
 <div class="section level3">
@@ -164,30 +162,29 @@
 <h2 class="pkg-version" data-toc-text="0.1.8" id="scoringutils-018">scoringutils 0.1.8<a class="anchor" aria-label="anchor" href="#scoringutils-018"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-0-1-8">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-8"></a></h3>
-<ul><li>now added a function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> that runs some basic checks on the input data and provides feedback</li>
+<ul><li>Added a function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> that runs some basic checks on the input data and provides feedback.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.7.2" id="scoringutils-0172">scoringutils 0.1.7.2<a class="anchor" aria-label="anchor" href="#scoringutils-0172"></a></h2><p class="text-muted">CRAN release: 2021-07-21</p>
 <div class="section level3">
 <h3 id="package-updates-0-1-7-2">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-7-2"></a></h3>
-<ul><li>minor bug fixes (previously, ‘interval_score’ needed to be among the selected metrics)</li>
-<li>all data.tables are now returned as <code>table[]</code> rather than as <code>table</code>, such that they don’t have to be called twice to display the contents.</li>
+<ul><li>Minor bug fixes (previously, ‘interval_score’ needed to be among the selected metrics).</li>
+<li>All data.tables are now returned as <code>table[]</code> rather than as <code>table</code>, such that they don’t have to be called twice to display the contents.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.7" id="scoringutils-017">scoringutils 0.1.7<a class="anchor" aria-label="anchor" href="#scoringutils-017"></a></h2><p class="text-muted">CRAN release: 2021-07-14</p>
 <div class="section level3">
 <h3 id="feature-updates-0-1-7">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-7"></a></h3>
-<ul><li>added a function, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> that runs pairwise comparisons between models on the output of <code>eval_forecasts()</code>
+<ul><li>Added a function, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> that runs pairwise comparisons between models on the output of <code>eval_forecasts()</code>
 </li>
-<li>added functionality to compute relative skill within <code>eval_forecasts()</code>
-</li>
-<li>added a function to visualise pairwise comparisons</li>
+<li>Added functionality to compute relative skill within <code>eval_forecasts()</code>.</li>
+<li>Added a function to visualise pairwise comparisons.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-0-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-7"></a></h3>
-<ul><li>The WIS definition change introduced in version 0.1.5 was partly corrected such that the difference in weighting is only introduced when summarising over scores from different interval ranges</li>
+<ul><li>The WIS definition change introduced in version 0.1.5 was partly corrected such that the difference in weighting is only introduced when summarising over scores from different interval ranges.</li>
 <li>“sharpness” was renamed to ‘mad’ in the output of [score()] for sample-based forecasts.</li>
 </ul></div>
 </div>
@@ -196,9 +193,9 @@
 <div class="section level3">
 <h3 id="feature-updates-0-1">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1"></a></h3>
 <ul><li>
-<code>eval_forecasts()</code> can now handle a separate forecast and truth data set as as input</li>
+<code>eval_forecasts()</code> can now handle a separate forecast and truth data set as as input.</li>
 <li>
-<code>eval_forecasts()</code> now supports scoring point forecasts along side quantiles in a quantile-based format. Currently the only metric used is the absolute error</li>
+<code>eval_forecasts()</code> now supports scoring point forecasts along side quantiles in a quantile-based format. Currently the only metric used is the absolute error.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-0-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1"></a></h3>
@@ -210,81 +207,78 @@
 <h2 class="pkg-version" data-toc-text="0.1.5" id="scoringutils-015">scoringutils 0.1.5<a class="anchor" aria-label="anchor" href="#scoringutils-015"></a></h2>
 <div class="section level3">
 <h3 id="package-updates-0-1-5">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-5"></a></h3>
-<ul><li>changed the default definition of the weighted interval score. Previously, the median prediction was counted twice, but is no only counted once. If you want to go back to the old behaviour, you can call the interval_score function with the argument <code>count_median_twice = FALSE</code>.</li>
+<ul><li>Changed the default definition of the weighted interval score. Previously, the median prediction was counted twice, but is no only counted once. If you want to go back to the old behaviour, you can call the interval_score function with the argument <code>count_median_twice = FALSE</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="scoringutils-014">scoringutils 0.1.4<a class="anchor" aria-label="anchor" href="#scoringutils-014"></a></h2><p class="text-muted">CRAN release: 2020-11-17</p>
 <div class="section level3">
 <h3 id="feature-updates-0-1-4">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-4"></a></h3>
-<ul><li>we added basic plotting functionality to visualise scores. You can now easily obtain diagnostic plots based on scores as produced by <code>score</code>.</li>
+<ul><li>Added basic plotting functionality to visualise scores. You can now easily obtain diagnostic plots based on scores as produced by <code>score</code>.</li>
 <li>
-<code>correlation_plot</code> shows correlation between metrics</li>
+<code>correlation_plot()</code> shows correlation between metrics.</li>
 <li>
-<code>plot_ranges</code> shows contribution of different prediction intervals to some chosen metric</li>
+<code><a href="../reference/plot_ranges.html">plot_ranges()</a></code> shows contribution of different prediction intervals to some chosen metric.</li>
 <li>
-<code>plot_heatmap</code> visualises scores as heatmap</li>
+<code><a href="../reference/plot_heatmap.html">plot_heatmap()</a></code> visualises scores as heatmap.</li>
 <li>
-<code>plot_score_table</code> shows a coloured summary table of scores</li>
+<code><a href="../reference/plot_score_table.html">plot_score_table()</a></code> shows a coloured summary table of scores.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-0-1-4">package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-4"></a></h3>
-<ul><li>renamed “calibration” to “coverage”</li>
-<li>renamed “true_values” to “true_value” in data.frames</li>
-<li>renamed “predictions” to “prediction” in data.frames</li>
-<li>renamed “is_overprediction” to “overprediction”</li>
-<li>renamed “is_underprediction” to “underprediction”</li>
+<ul><li>Renamed “calibration” to “coverage”.</li>
+<li>Renamed “true_values” to “true_value” in data.frames.</li>
+<li>Renamed “predictions” to “prediction” in data.frames.</li>
+<li>Renamed “is_overprediction” to “overprediction”.</li>
+<li>Renamed “is_underprediction” to “underprediction”.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.3" id="scoringutils-013">scoringutils 0.1.3<a class="anchor" aria-label="anchor" href="#scoringutils-013"></a></h2>
 <div class="section level3">
 <h3 id="potentially-breaking-changes-0-1-3">(Potentially) Breaking changes<a class="anchor" aria-label="anchor" href="#potentially-breaking-changes-0-1-3"></a></h3>
-<ul><li>the by argument in <code>score</code> now has a slightly changed meaning. It now denotes the lowest possible grouping unit, i.e. the unit of one observation and needs to be specified explicitly. The default is now <code>NULL</code>. The reason for this change is that most metrics need scoring on the observation level and this the most consistent implementation of this principle. The pit function receives its grouping now from <code>summarise_by</code>. In a similar spirit, <code>summarise_by</code> has to be specified explicitly and e.g. doesn’t assume anymore that you want ‘range’ to be included.</li>
-<li>for the interval score, <code>weigh = TRUE</code> is now the default option.</li>
-<li>(potentially planned) rename true_values to true_value and predictions to prediction.</li>
+<ul><li>The by argument in <code>score</code> now has a slightly changed meaning. It now denotes the lowest possible grouping unit, i.e. the unit of one observation and needs to be specified explicitly. The default is now <code>NULL</code>. The reason for this change is that most metrics need scoring on the observation level and this the most consistent implementation of this principle. The pit function receives its grouping now from <code>summarise_by</code>. In a similar spirit, <code>summarise_by</code> has to be specified explicitly and e.g. doesn’t assume anymore that you want ‘range’ to be included.</li>
+<li>For the interval score, <code>weigh = TRUE</code> is now the default option.</li>
+<li>Renamed true_values to true_value and predictions to prediction.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="feature-updates-0-1-3">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-3"></a></h3>
-<ul><li>updated quantile evaluation metrics in <code>score</code>. Bias as well as calibration now take all quantiles into account</li>
-<li>Included option to summarise scores according to a <code>summarise_by</code> argument in <code>score</code> The summary can return the mean, the standard deviation as well as an arbitrary set of quantiles.</li>
+<ul><li>Updated quantile evaluation metrics in <code>score</code>. Bias as well as calibration now take all quantiles into account.</li>
+<li>Included option to summarise scores according to a <code>summarise_by</code> argument in <code><a href="../reference/score.html">score()</a></code> The summary can return the mean, the standard deviation as well as an arbitrary set of quantiles.</li>
 <li>
-<code>score</code> can now return pit histograms.</li>
-<li>switched to ggplot2 for plotting</li>
+<code><a href="../reference/score.html">score()</a></code> can now return pit histograms.</li>
+<li>Switched to <code>ggplot2</code> for plotting.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="scoringutils-012">scoringutils 0.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-012"></a></h2>
 <div class="section level3">
 <h3 id="potentially-breaking-changes-0-1-2">(Potentially) Breaking changes<a class="anchor" aria-label="anchor" href="#potentially-breaking-changes-0-1-2"></a></h3>
-<ul><li>all scores in score were consistently renamed to lower case. Interval_score is now interval_score, CRPS is now crps etc.</li>
+<ul><li>All scores in score were consistently renamed to lower case. <code>Interval_score</code> is now <code>interval_score</code>, <code>CRPS</code> is now <code>crps</code> etc.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="feature-updates-0-1-2">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-2"></a></h3>
-<ul><li>included support for grouping scores according to a vector of column names in <code>score</code>
+<ul><li>Included support for grouping scores according to a vector of column names in <code><a href="../reference/score.html">score()</a></code>.</li>
+<li>Included support for passing down arguments to lower-level functions in <code><a href="../reference/score.html">score()</a></code>
 </li>
-<li>included support for passing down arguments to lower-level functions in <code>score</code>
-</li>
-<li>included support for three new metrics to score quantiles with <code>score</code>: bias, sharpness and calibration</li>
+<li>Included support for three new metrics to score quantiles with <code><a href="../reference/score.html">score()</a></code>: bias, sharpness and calibration</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-0-1-2">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-2"></a></h3>
-<ul><li>example data now has a horizon column to illustrate the use of grouping</li>
-<li>documentation updated to explain the above listed changes</li>
+<ul><li>Example data now has a horizon column to illustrate the use of grouping.</li>
+<li>Documentation updated to explain the above listed changes.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="scoringutils-011">scoringutils 0.1.1<a class="anchor" aria-label="anchor" href="#scoringutils-011"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-0-1-1">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-1"></a></h3>
-<ul><li>included support for a long as well as wide input formats for quantile forecasts that are scored with <code>score</code>
-</li>
+<ul><li>Included support for a long as well as wide input formats for quantile forecasts that are scored with <code><a href="../reference/score.html">score()</a></code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-0-1-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-1"></a></h3>
-<ul><li>updated documentation for the <code>score</code>
-</li>
-<li>added badges to the Readme</li>
+<ul><li>Updated documentation for the <code><a href="../reference/score.html">score()</a></code>.</li>
+<li>Added badges to the <code>README</code>.</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
