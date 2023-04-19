@@ -4,12 +4,13 @@ linters: linters_with_tags(
     extraction_operator_linter = NULL,
     undesirable_function_linter = NULL,
     function_argument_linter = NULL,
-    indentation_linter = NULL,
     object_name_linter = NULL,
+    line_length_linter(120),
     cyclocomp_linter(20L)
   )
 exclusions: c(
     list.files("tests", recursive = TRUE, full.names = TRUE),
-    list.files("inst", recursive = TRUE, full.names = TRUE)
+    list.files("inst", recursive = TRUE, full.names = TRUE),
+    "vignettes/metric-details.Rmd"
   )
 exclude: "# nolint"
