@@ -246,7 +246,7 @@ get_forecast_unit <- function(data, prediction_type) {
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
-    names(data)[grepl("coverage_", names(data))]
+    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   if (!missing(prediction_type)) {
     if (prediction_type == "quantile") {

@@ -86,19 +86,19 @@ You can also visualise forecasts directly using the `plot_predictions()` functio
 
 ```{r, fig.width = 9, fig.height = 6}
 example_quantile %>%
-  make_NA(what = "truth", 
-          target_end_date >= "2021-07-15", 
+  make_NA(what = "truth",
+          target_end_date >= "2021-07-15",
           target_end_date < "2021-05-22"
   ) %>%
   make_NA(what = "forecast",
-          model != 'EuroCOVIDhub-ensemble', 
+          model != 'EuroCOVIDhub-ensemble',
           forecast_date != "2021-06-28"
   ) %>%
   plot_predictions(
     x = "target_end_date",
     by = c("target_type", "location")
   ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free") 
+  facet_wrap(target_type ~ location, ncol = 4, scales = "free")
 ```
 
 ## Scoring and summarising forecasts
@@ -130,7 +130,7 @@ score(example_quantile) %>%
 Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
 
 ```{r}
-score(example_point) %>% 
+score(example_point) %>%
   summarise_scores(by = "model", na.rm = TRUE)
 ```
 
@@ -153,8 +153,8 @@ In order to better compare models against each other we can use relative scores 
 
 ```{r}
 score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type"), 
-                   relative_skill = TRUE, 
+  summarise_scores(by = c("model", "target_type"),
+                   relative_skill = TRUE,
                    baseline = "EuroCOVIDhub-ensemble")
 ```
 
@@ -169,7 +169,7 @@ A simple coloured table can be produced based on the scores:
 score(example_integer) %>%
   summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
   summarise_scores(fun = signif, digits = 2) %>%
-  plot_score_table(by = "target_type") + 
+  plot_score_table(by = "target_type") +
   facet_wrap(~ target_type, nrow = 1)
 ```
 
@@ -180,7 +180,7 @@ We can also summarise one particular metric across different categories using a 
 ```{r, fig.width=11, fig.height=6}
 score(example_continuous) %>%
   summarise_scores(by = c("model", "location", "target_type")) %>%
-  plot_heatmap(x = "location", metric = "bias") + 
+  plot_heatmap(x = "location", metric = "bias") +
     facet_wrap(~ target_type)
 ```
 
@@ -191,7 +191,7 @@ The weighted interval score can be split up into three components: Over-predicti
 ```{r}
 score(example_quantile) %>%
   summarise_scores(by = c("target_type", "model")) %>%
-  plot_wis() + 
+  plot_wis() +
   facet_wrap(~ target_type, scales = "free")
 ```
 
@@ -203,7 +203,7 @@ We can compute pit values as such:
 
 ```{r}
 example_continuous %>%
-  pit(by = "model") 
+  pit(by = "model")
 ```
 
 And visualise the results as such: 
@@ -211,7 +211,7 @@ And visualise the results as such:
 ```{r}
 example_continuous %>%
   pit(by = c("model", "target_type")) %>%
-  plot_pit() + 
+  plot_pit() +
   facet_grid(model ~ target_type)
 ```
 

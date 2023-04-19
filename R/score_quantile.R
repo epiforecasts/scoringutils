@@ -98,8 +98,8 @@ score_quantile <- function(data,
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
-        `:=` (ae_point = abs_error(predictions = point, true_value),
-              se_point = squared_error(predictions = point, true_value))
+        `:=`(ae_point = abs_error(predictions = point, true_value),
+             se_point = squared_error(predictions = point, true_value))
       ]
     }
   }

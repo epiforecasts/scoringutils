@@ -186,7 +186,7 @@ check_summary_params <- function(scores,
     msg <- paste0(
       "The following items in `by` are not",
       "valid column names of the data: '",
-      paste(not_present, collapse = ", "),
+      toString(not_present),
       "'. Check and run `summarise_scores()` again"
     )
     stop(msg)
@@ -195,20 +195,32 @@ check_summary_params <- function(scores,
   # error handling for relative skill computation ------------------------------
   if (relative_skill) {
     if (!("model" %in% colnames(scores))) {
-      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+      warning(
+        "to compute relative skills, there must column present ",
+        "called model'. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     models <- unique(scores$model)
     if (length(models) < 2 + (!is.null(baseline))) {
-      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+      warning(
+        "you need more than one model non-baseline model to make model ",
+        "comparisons. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     if (!is.null(baseline) && !(baseline %in% models)) {
-      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+      warning(
+        "The baseline you provided for the relative skill is not one of ",
+        "the models in the data. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     if (metric != "auto" && !(metric %in% available_metrics())) {
-      warning("argument 'metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+      warning(
+        "argument 'metric' must either be 'auto' or one of the metrics that ",
+        "can be computed. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
   }

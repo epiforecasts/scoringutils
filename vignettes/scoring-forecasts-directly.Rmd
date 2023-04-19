@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 library(scoringutils)
-library(magrittr)
 library(data.table)
 library(ggplot2)
 ```
