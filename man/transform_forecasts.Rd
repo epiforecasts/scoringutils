@@ -37,27 +37,32 @@ are examples for each format (\link{example_quantile}, \link{example_continuous}
 \item{fun}{A function used to transform both true values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
 the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
-that allows you add an offset before applying the logarithm.}
+that allows you add an offset before applying the logarithm. This is often
+helpful as the natural log transformation is not define at zero. A common,
+and pragmatic solution, is to add a small offset to the data before applying
+the log transformation. In our work we have often used an offset of 1 but
+the precise value will depend on your application.}
 
-\item{append}{whether or not to append a transformed version of the data to
-the currently existing data (default is TRUE). If selected, the data gets
-transformed and appended to the existing data frame, making it possible to
-use the outcome directly in \code{\link[=score]{score()}}. An additional column, 'scale', gets
-created that denotes which rows or untransformed ('scale' has the value
-"natural") and which have been transformed ('scale' has the value passed to
-the argument \code{label}).}
+\item{append}{Logical, defaults to \code{TRUE}. Whether or not to append a
+transformed version of the data to the currently existing data (\code{TRUE}). If
+selected, the data gets transformed and appended to the existing data frame,
+making it possible to use the outcome directly in \code{\link[=score]{score()}}. An additional
+column, 'scale', gets created that denotes which rows or untransformed
+('scale' has the value "natural") and which have been transformed ('scale'
+has the value passed to the argument \code{label}).}
 
 \item{label}{A string for the newly created 'scale' column to denote the
 newly transformed values. Only relevant if \code{append = TRUE}.}
 
-\item{...}{Additional parameters to pass to the function you supplied.}
+\item{...}{Additional parameters to pass to the function you supplied. For
+the default option of \code{\link[=log_shift]{log_shift()}} this could be the \code{offset} argument.}
 }
 \value{
-A data.table with either a transformed version of the data, or one
-with both the untransformed and the transformed data. includes the original data as well as a
-transformation of the original data. There will be one additional column,
-'scale', present which will be set to "natural" for the untransformed
-forecasts.
+A \code{data.table} with either a transformed version of the data, or one
+with both the untransformed and the transformed data. includes the original
+data as well as a transformation of the original data. There will be one
+additional column, `scale', present which will be set to "natural" for the
+untransformed forecasts.
 }
 \description{
 Function to transform forecasts and true values before scoring.
@@ -87,20 +92,27 @@ library(magrittr) # pipe operator
 # negative values need to be handled (here by replacing them with 0)
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
-  transform_forecasts(append = FALSE)
+# Here we use the default function log_shift() which is essentially the same
+# as log(), but has an additional arguments (offset) that allows you add an
+# offset before applying the logarithm.
+  transform_forecasts(append = FALSE) \%>\%
+  head()
 
 # alternatively, integrating the truncation in the transformation function:
-transform_forecasts(example_quantile,
-                    fun = function(x) {log_shift(pmax(0, x))},
-                    append = FALSE)
+example_quantile \%>\%
+ transform_forecasts(
+   fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
+ ) \%>\%
+ head()
 
 # specifying an offset for the log transformation removes the
 # warning caused by zeros in the data
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
-  transform_forecasts(offset = 1, append = FALSE)
+  transform_forecasts(offset = 1, append = FALSE) \%>\%
+  head()
 
-# adding square root transformed forecasts to the orginal ones
+# adding square root transformed forecasts to the original ones
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
@@ -111,7 +123,8 @@ example_quantile \%>\%
 example_quantile \%>\%
   .[, true_value := ifelse(true_value < 0, 0, true_value)] \%>\%
   transform_forecasts(fun = log_shift, offset = 1) \%>\%
-  transform_forecasts(fun = sqrt, label = "sqrt")
+  transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
+  head()
 }
 \references{
 Transformation of forecasts for evaluating predictive
@@ -120,7 +133,7 @@ Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
 Sebastian Funk
 medRxiv 2023.01.23.23284722
 \doi{https://doi.org/10.1101/2023.01.23.23284722}
-\url{https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1} # nolint
+\url{https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
