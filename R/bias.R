@@ -160,14 +160,14 @@ bias_range <- function(range, lower, upper,
   lower_predictions <- lower
   upper_predictions <- upper
 
-  if (anyNA(upper) | anyNA(lower)) {
+  if (anyNA(upper) || anyNA(lower)) {
     range <- range[!is.na(upper) & !is.na(lower)]
     lower_predictions <- lower[!is.na(lower) & !is.na(upper)]
     upper_predictions <- upper[!is.na(lower) & !is.na(upper)]
 
     # deal with the point forecast case where inputs may be NA
-    if (length(range) == 0 |
-        length(lower_predictions) == 0 |
+    if (length(range) == 0 ||
+        length(lower_predictions) == 0 ||
         length(upper_predictions) == 0
       ) {
       return(NA_real_)
@@ -282,7 +282,7 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     predictions <- predictions[!is.na(predictions)]
   }
   # if there is no input, return NA
-  if (length(quantiles) == 0 | length(predictions) == 0) {
+  if (length(quantiles) == 0 || length(predictions) == 0) {
     return(NA_real_)
   }
 

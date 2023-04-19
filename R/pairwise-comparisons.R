@@ -62,7 +62,7 @@
 #'   facet_wrap(~target_type)
 
 pairwise_comparison <- function(scores,
-                                by = c("model"),
+                               by = "model",
                                 metric = "auto",
                                 baseline = NULL,
                                 ...) {
@@ -107,7 +107,10 @@ pairwise_comparison <- function(scores,
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
   if (setequal(by, forecast_unit)) {
     by <- "model"
-    message("relative skill can only be computed if `by` is different from the unit of a single forecast. `by` was set to 'model'")
+    message(
+      "relative skill can only be computed if `by` is different from the ",
+      "unit of a single forecast. `by` was set to 'model'"
+    )
   }
 
   # summarise scores over everything (e.g. quantiles, ranges or samples) in
@@ -124,7 +127,7 @@ pairwise_comparison <- function(scores,
 
   results <- lapply(split_scores,
     FUN = function(scores) {
-      out <- pairwise_comparison_one_group(
+      pairwise_comparison_one_group(
         scores = scores,
         metric = metric,
         baseline = baseline,

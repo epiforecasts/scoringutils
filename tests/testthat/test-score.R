@@ -100,7 +100,7 @@ test_that("calculation of ae_median is correct for a quantile format case", {
     score(scoringutils::example_quantile[!is.na(prediction)])
   )
 
-  eval <- summarise_scores(eval, by = c("model"))
+  eval <- summarise_scores(eval,by = "model")
 
   example <- scoringutils::example_quantile
   ae <- example[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
@@ -172,8 +172,8 @@ test_that("function produces output for a continuous format case", {
   )
 })
 
-test_that("score() can support a sample column when a quantile forecast is
- used", {
+test_that(
+  "score() can support a sample column when a quantile forecast is used", {
   ex <- example_quantile[!is.na(quantile)][1:200, ]
   ex <- rbind(
     data.table::copy(ex)[, sample := 1],

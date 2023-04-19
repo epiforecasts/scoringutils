@@ -1,4 +1,4 @@
-# summarise_scores(): metric is deprecated
+# summarise_scores() metric is deprecated
 
     Code
       x <- summarise_scores(scores, by = "model", metric = "auto", relative_skill = TRUE)

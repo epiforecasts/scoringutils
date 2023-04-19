@@ -48,7 +48,7 @@
 #' summarise_scores(scores)
 #'
 #' # get scores by model
-#' summarise_scores(scores, by = c("model"))
+#' summarise_scores(scores,by = "model")
 #'
 #' # get scores by model and target type
 #' summarise_scores(scores, by = c("model", "target_type"))
@@ -57,7 +57,7 @@
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # round digits
-#' summarise_scores(scores, by = c("model")) %>%
+#' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #'
 #' # get quantiles of scores
@@ -151,10 +151,10 @@ summarise_scores <- function(scores,
   # if neither quantile nor range are in by, remove coverage and
   # quantile_coverage because averaging does not make sense
   if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
-    scores[, c("coverage") := NULL]
+    scores[, "coverage" := NULL]
   }
   if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
-    scores[, c("quantile_coverage") := NULL]
+    scores[, "quantile_coverage" := NULL]
   }
 
   return(scores[])
@@ -186,7 +186,7 @@ check_summary_params <- function(scores,
     msg <- paste0(
       "The following items in `by` are not",
       "valid column names of the data: '",
-      paste(not_present, collapse = ", "),
+      toString(not_present),
       "'. Check and run `summarise_scores()` again"
     )
     stop(msg)
@@ -195,20 +195,32 @@ check_summary_params <- function(scores,
   # error handling for relative skill computation ------------------------------
   if (relative_skill) {
     if (!("model" %in% colnames(scores))) {
-      warning("to compute relative skills, there must column present called 'model'. Relative skill will not be computed")
+      warning(
+        "to compute relative skills, there must column present ",
+        "called model'. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     models <- unique(scores$model)
     if (length(models) < 2 + (!is.null(baseline))) {
-      warning("you need more than one model non-baseline model to make model comparisons. Relative skill will not be computed")
+      warning(
+        "you need more than one model non-baseline model to make model ",
+        "comparisons. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     if (!is.null(baseline) && !(baseline %in% models)) {
-      warning("The baseline you provided for the relative skill is not one of the models in the data. Relative skill will not be computed")
+      warning(
+        "The baseline you provided for the relative skill is not one of ",
+        "the models in the data. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
     if (metric != "auto" && !(metric %in% available_metrics())) {
-      warning("argument 'metric' must either be 'auto' or one of the metrics that can be computed. Relative skill will not be computed")
+      warning(
+        "argument 'metric' must either be 'auto' or one of the metrics that ",
+        "can be computed. Relative skill will not be computed"
+      )
       relative_skill <- FALSE
     }
   }

@@ -58,7 +58,7 @@
 #' Sebastian Funk
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
-#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> 
+#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1>
 #' @keywords check-forecasts
 #' @examples
 #'
@@ -197,7 +197,7 @@ log_shift <- function(x,
                       offset = 0,
                       base = exp(1)) {
 
-  if (any (x < 0, na.rm = TRUE)) {
+  if (any(x < 0, na.rm = TRUE)) {
     w <- paste("Detected input values < 0.")
     stop(w)
   }

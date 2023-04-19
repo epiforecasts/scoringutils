@@ -1,5 +1,4 @@
-# score() can support a sample column when a quantile forecast is
- used
+# score() can support a sample column when a quantile forecast is used
 
     Code
       summarise_scores(summarise_scores(scores, by = "model"), by = "model", fun = signif,

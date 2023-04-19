@@ -40,7 +40,7 @@ if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) 
   stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
 }
 
-res_summarised <- summarise_scores(stored$res, by = c("model"))
+res_summarised <- summarise_scores(stored$res,by = "model")
 
 scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) |>
   select(-mad) |>

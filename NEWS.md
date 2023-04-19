@@ -1,7 +1,14 @@
 # scoringutils 1.1.3
 
 ## Package updates
-- added a warning to `interval_score()` if the interval range is between 0 and 1. Thanks to @adrian-lison (see #277) 
+
+- Added a warning to `interval_score()` if the interval range is between 0 and 1. Thanks to @adrian-lison (see #277) for the suggestion.
+
+## Package updates
+
+- Switched to a linting GitHub Action that only triggers on changes. Inspired by @bisaloo recent contribution to the [`epinowcast` package](https://github.com/epinowcast/epinowcast/pull/220).
+- Updated package linters to be more extensive. Inspired by @bisaloo recent contribution to the [`epinowcast` package](https://github.com/epinowcast/epinowcast/pull/220).
+- Resolved all flagged linting issues across the package.
 
 # scoringutils 1.1.2
 
