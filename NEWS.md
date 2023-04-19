@@ -1,3 +1,8 @@
+# scoringutils 1.1.3
+
+## Package updates
+- added a warning to `interval_score()` if the interval range is between 0 and 1. Thanks to @adrian-lison (see #277) 
+
 # scoringutils 1.1.2
 
 ## Feature updates

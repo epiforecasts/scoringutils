@@ -34,12 +34,12 @@ Authors:
 \itemize{
   \item Sam Abbott \email{contact@samabbott.co.uk} (\href{https://orcid.org/0000-0001-8057-8037}{ORCID})
   \item Hugo Gruson \email{hugo.gruson@lshtm.ac.uk} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
+  \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
 
 Other contributors:
 \itemize{
   \item Johannes Bracher \email{johannes.bracher@kit.edu} (\href{https://orcid.org/0000-0002-3777-1410}{ORCID}) [contributor]
-  \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk} [contributor]
 }
 
 }

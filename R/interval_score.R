@@ -52,6 +52,7 @@
 #' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
 #' `separate_results` is `TRUE`.
+#' @importFrom rlang warn
 #' @inheritParams ae_median_sample
 #' @examples
 #' true_values <- rnorm(30, mean = 1:30)
@@ -66,6 +67,9 @@
 #'   upper = upper,
 #'   interval_range = interval_range
 #' )
+#'
+#' # gives a warning, as the interval_range should likely be 50 instead of 0.5
+#' interval_score(true_value = 4, upper = 2, lower = 8, interval_range = 0.5)
 #'
 #' # example with missing values and separate results
 #' interval_score(
@@ -108,6 +112,16 @@ interval_score <- function(true_values,
     interval_range = interval_range
   )
   check_equal_length(true_values, lower, interval_range, upper)
+
+  if (any(interval_range < 0, na.rm = TRUE)) {
+    stop("interval ranges must be positive")
+  }
+  if (any(interval_range > 0 & interval_range < 1, na.rm = TRUE)) {
+    msg <- paste("Found interval ranges between 0 and 1. Are you sure that's right?",
+                 "An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval.",
+                 "If you want to score a (25%, 75%) prediction interval, set interval_range = 50.")
+    rlang::warn(message = msg, .frequency = "once", .frequency_id = "small_interval_range")
+  }
 
   # calculate alpha from the interval range
   alpha <- (100 - interval_range) / 100
