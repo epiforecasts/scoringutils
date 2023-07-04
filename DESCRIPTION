@@ -1,6 +1,6 @@
 Package: scoringutils
 Title: Utilities for Scoring and Assessing Predictions
-Version: 1.1.3
+Version: 1.1.4
 Language: en-GB
 Authors@R: c(
     person(given = "Nikos",

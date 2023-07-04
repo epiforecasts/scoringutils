@@ -1,3 +1,9 @@
+# scoringutils 1.1.4
+
+## Package updates
+- added links to the scoringutils paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) to the package. 
+- updated citation formatting to comply with newer standards. 
+
 # scoringutils 1.1.3
 
 ## Package updates
