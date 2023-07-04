@@ -41,7 +41,8 @@ Description:
     Scoring metrics can be used either through a convenient data.frame format, 
     or can be applied as individual functions in a vector / matrix format. 
     All functionality has been implemented with a focus on performance and is 
-    robustly tested. 
+    robustly tested. Find more information about scoringutils in the 
+    accompanying paper (Bosse et al., 2022) <arXiv:2205.07090v1>. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -66,7 +67,7 @@ Config/Needs/website:
     amirmasoudabdol/preferably
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
-URL: https://epiforecasts.io/scoringutils/, https://github.com/epiforecasts/scoringutils
+URL: https://doi.org/10.48550/arXiv.2205.07090, https://epiforecasts.io/scoringutils/, https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 

@@ -31,7 +31,9 @@
 #' contributing a pull request.
 #'
 #' For additional help and examples, check out the [Getting Started
-#' Vignette](https://epiforecasts.io/scoringutils/articles/getting-started.html).
+#' Vignette](https://epiforecasts.io/scoringutils/articles/getting-started.html)
+#' as well as the paper [Evaluating Forecasts with scoringutils in
+#' R](https://arxiv.org/abs/2205.07090).
 #'
 #' @param data A data.frame or data.table with the predictions and observations.
 #' For scoring using [score()], the following columns need to be present:
