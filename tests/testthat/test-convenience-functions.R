@@ -36,3 +36,26 @@ test_that("function transform_forecasts works", {
 
   expect_equal(four$prediction, compare)
 })
+
+
+
+test_that("function set_forecast_unit() works", {
+
+  # some columns in the example data have duplicated information. So we can remove
+  # these and see whether the result stays the same.
+
+  scores1 <- suppressMessages(score(example_quantile))
+  scores1 <- scores1[order(location, target_end_date, target_type, horizon, model), ]
+
+  ex2 <- set_forecast_unit(
+    example_quantile,
+    c("location", "target_end_date", "target_type", "horizon", "model")
+  )
+  scores2 <- suppressMessages(score(ex2))
+  scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
+
+  expect_equal(scores1$interval_score, scores2$interval_score)
+})
+
+
+
