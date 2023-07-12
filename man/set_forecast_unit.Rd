@@ -44,6 +44,13 @@ This simple function keeps the columns specified in \code{forecast_unit} (plus
 additional protected columns, e.g. for true values, predictions or quantile
 levels) and removes duplicate rows.
 }
+\examples{
+set_forecast_unit(
+  example_quantile,
+  c("location", "target_end_date", "target_type", "horizon", "model")
+)
+
+}
 \references{
 Transformation of forecasts for evaluating predictive
 performance in an epidemiological context

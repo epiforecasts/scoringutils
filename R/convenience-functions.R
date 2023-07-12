@@ -237,6 +237,10 @@ log_shift <- function(x,
 
 #' @keywords data-handling
 #' @examples
+#' set_forecast_unit(
+#'   example_quantile,
+#'   c("location", "target_end_date", "target_type", "horizon", "model")
+#' )
 #'
 
 set_forecast_unit <- function(data,
