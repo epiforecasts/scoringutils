@@ -78,7 +78,7 @@ score_quantile <- function(data,
 
   # compute coverage for every single observation
   if ("coverage" %in% metrics) {
-    res[, coverage := ifelse(true_value <= upper & true_value >= lower, 1, 0)]
+    res[, coverage := ifelse(true_value <= upper & true_value >= lower, 1, 0)] # nolint
     res[, coverage_deviation := coverage - range / 100]
   }
 
@@ -98,8 +98,8 @@ score_quantile <- function(data,
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
-        `:=` (ae_point = abs_error(predictions = point, true_value),
-              se_point = squared_error(predictions = point, true_value))
+        `:=`(ae_point = abs_error(predictions = point, true_value),
+             se_point = squared_error(predictions = point, true_value))
       ]
     }
   }

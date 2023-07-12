@@ -89,6 +89,9 @@ interval_score(
   interval_range = interval_range
 )
 
+# gives a warning, as the interval_range should likely be 50 instead of 0.5
+interval_score(true_value = 4, upper = 2, lower = 8, interval_range = 0.5)
+
 # example with missing values and separate results
 interval_score(
   true_values = c(true_values, NA),

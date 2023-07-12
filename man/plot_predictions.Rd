@@ -39,7 +39,7 @@ example_continuous \%>\%
   ) \%>\%
   make_NA (
     what = "forecast",
-    model != 'EuroCOVIDhub-ensemble',
+    model != "EuroCOVIDhub-ensemble",
     forecast_date != "2021-06-07"
   ) \%>\%
   plot_predictions (

@@ -84,7 +84,7 @@ scores <- score(example_quantile)
 summarise_scores(scores)
 
 # get scores by model
-summarise_scores(scores, by = c("model"))
+summarise_scores(scores,by = "model")
 
 # get scores by model and target type
 summarise_scores(scores, by = c("model", "target_type"))
@@ -93,7 +93,7 @@ summarise_scores(scores, by = c("model", "target_type"))
 summarise_scores(scores, by = "model", fun = sd)
 
 # round digits
-summarise_scores(scores, by = c("model")) \%>\%
+summarise_scores(scores,by = "model") \%>\%
   summarise_scores(fun = signif, digits = 2)
 
 # get quantiles of scores

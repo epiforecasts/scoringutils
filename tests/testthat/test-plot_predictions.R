@@ -8,7 +8,7 @@ test_that("plot_predictions() works with point forecasts", {
             target_end_date <= '2021-05-01',
             target_end_date > '2021-07-22') %>%
     make_NA(what = "forecast",
-            model != 'EuroCOVIDhub-ensemble',
+            model != "EuroCOVIDhub-ensemble",
             forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
@@ -31,7 +31,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
             target_end_date <= '2021-05-01',
             target_end_date > '2021-07-22') %>%
     make_NA(what = "forecast",
-            model != 'EuroCOVIDhub-ensemble',
+            model != "EuroCOVIDhub-ensemble",
             forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
@@ -53,7 +53,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
             target_end_date <= '2021-05-01',
             target_end_date > '2021-07-22') %>%
     make_NA(what = "forecast",
-            model != 'EuroCOVIDhub-ensemble',
+            model != "EuroCOVIDhub-ensemble",
             forecast_date != '2021-06-07') %>%
     plot_predictions(
       by = c("location", "target_type"),
@@ -79,7 +79,7 @@ test_that("plot_predictions() works without median", {
             target_end_date <= '2021-06-25',
             target_end_date > '2021-07-12') %>%
     make_NA(what = "forecast",
-            model != 'EuroCOVIDhub-ensemble',
+            model != "EuroCOVIDhub-ensemble",
             forecast_date != '2021-07-12') %>%
     plot_predictions(
       x = "target_end_date",

@@ -72,7 +72,7 @@ test_that("summarise_scores() can compute relative measures", {
   )
 })
 
-test_that("summarise_scores(): metric is deprecated", {
+test_that("summarise_scores() metric is deprecated", {
   ex <- data.table::copy(example_quantile)
   scores <- suppressMessages(score(ex))
 

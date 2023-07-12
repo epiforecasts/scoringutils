@@ -112,7 +112,7 @@ if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) 
   stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
 }
 
-res_summarised <- summarise_scores(stored$res, by = c("model"))
+res_summarised <- summarise_scores(stored$res,by = "model")
 
 scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) |>
   select(-mad) |>
@@ -273,7 +273,7 @@ mu <- seq(0, 100, length.out = n_steps)
 res_sd <- data.table(sd = sd,
                      mu = true_mean)
 
-res_sd[, `:=` (CRPS = mean(scoringRules::crps(y = true_values, family = "normal", mean = mu, sd = sd)),
+res_sd[, `:=`(CRPS = mean(scoringRules::crps(y = true_values, family = "normal", mean = mu, sd = sd)),
                `Log score` = mean(scoringRules::logs(y = true_values, family = "normal", mean = mu, sd = sd)),
                DSS = mean(scoringRules::dss_norm(y = true_values, mean = mu, sd = sd))),
        by = "sd"]
@@ -300,7 +300,7 @@ true_mu = 0
 # look at effect of change in sd on score
 res_mu2 <- data.table(true_value = true_values)
 
-res_mu2[, `:=` (CRPS = scoringRules::crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
+res_mu2[, `:=`(CRPS = scoringRules::crps(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
                 `Log score` = scoringRules::logs(y = true_value, family = "normal", mean = true_mu, sd = true_sd) / 10,
                 DSS = scoringRules::dss_norm(y = true_value, mean = true_mu, sd = true_sd) / 10)]
 

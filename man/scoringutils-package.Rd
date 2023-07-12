@@ -6,13 +6,14 @@
 \alias{scoringutils-package}
 \title{scoringutils: Utilities for Scoring and Assessing Predictions}
 \description{
-Provides a collection of metrics and proper scoring rules (Tilmann Gneiting & Adrian E Raftery (2007) \doi{10.1198/016214506000001437}, Jordan, A., Krüger, F., & Lerch, S. (2019) \doi{10.18637/jss.v090.i12}) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) \doi{10.1371/journal.pcbi.1006785}) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested.
+Provides a collection of metrics and proper scoring rules (Tilmann Gneiting & Adrian E Raftery (2007) \doi{10.1198/016214506000001437}, Jordan, A., Krüger, F., & Lerch, S. (2019) \doi{10.18637/jss.v090.i12}) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) \doi{10.1371/journal.pcbi.1006785}) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about scoringutils in the accompanying paper (Bosse et al., 2022) \href{https://arxiv.org/abs/2205.07090v1}{arXiv:2205.07090v1}.
 
-Provides a collection of metrics and proper scoring rules (Tilmann Gneiting & Adrian E Raftery (2007) \doi{10.1198/016214506000001437}, Jordan, A., Krüger, F., & Lerch, S. (2019) \doi{10.18637/jss.v090.i12}) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) \doi{10.1371/journal.pcbi.1006785}) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested.
+Provides a collection of metrics and proper scoring rules (Tilmann Gneiting & Adrian E Raftery (2007) \doi{10.1198/016214506000001437}, Jordan, A., Krüger, F., & Lerch, S. (2019) \doi{10.18637/jss.v090.i12}) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) \doi{10.1371/journal.pcbi.1006785}) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about scoringutils in the accompanying paper (Bosse et al., 2022) \href{https://arxiv.org/abs/2205.07090v1}{arXiv:2205.07090v1}.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \doi{10.48550/arXiv.2205.07090}
   \item \url{https://epiforecasts.io/scoringutils/}
   \item \url{https://github.com/epiforecasts/scoringutils}
   \item Report bugs at \url{https://github.com/epiforecasts/scoringutils/issues}
@@ -21,6 +22,7 @@ Useful links:
 
 Useful links:
 \itemize{
+  \item \doi{10.48550/arXiv.2205.07090}
   \item \url{https://epiforecasts.io/scoringutils/}
   \item \url{https://github.com/epiforecasts/scoringutils}
   \item Report bugs at \url{https://github.com/epiforecasts/scoringutils/issues}
@@ -34,12 +36,12 @@ Authors:
 \itemize{
   \item Sam Abbott \email{contact@samabbott.co.uk} (\href{https://orcid.org/0000-0001-8057-8037}{ORCID})
   \item Hugo Gruson \email{hugo.gruson@lshtm.ac.uk} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
+  \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
 
 Other contributors:
 \itemize{
   \item Johannes Bracher \email{johannes.bracher@kit.edu} (\href{https://orcid.org/0000-0002-3777-1410}{ORCID}) [contributor]
-  \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk} [contributor]
 }
 
 }

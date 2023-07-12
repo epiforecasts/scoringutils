@@ -255,13 +255,12 @@ get_forecast_unit <- function(data, prediction_type) {
 
 #' @title Get protected columns from a data frame
 #'
-#' @description Helper function to get the names of protected columns
-#'
+#' @description Helper function to get the names of all columns in a data frame
+#' that are protected columns.
 #'
 #' @inheritParams check_forecasts
 #'
-#' @return A character vector with the column names that define the unit of
-#' a single forecast
+#' @return A character vector with the names of protected columns in the data
 #'
 #' @keywords internal
 
@@ -275,7 +274,3 @@ get_protected_columns <- function(data) {
 
   return(protected_columns)
 }
-
-
-
-
