@@ -221,6 +221,8 @@ log_shift <- function(x,
 #' levels) and removes duplicate rows.
 #'
 #' @inheritParams score
+#' @param forecast_unit character vector with the names of the columns that
+#' uniquely identify a single forecast
 #' @return A data.table with only those columns kept that are relevant to
 #' scoring or denote the unit of a single forecast as specified by the user.
 #'

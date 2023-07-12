@@ -33,6 +33,9 @@ flagged and added to the input data with all forecasts assigned as an
 You can check the format of your data using \code{\link[=check_forecasts]{check_forecasts()}} and there
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
+
+\item{forecast_unit}{character vector with the names of the columns that
+uniquely identify a single forecast}
 }
 \value{
 A data.table with only those columns kept that are relevant to
