@@ -1,3 +1,10 @@
+# scoringutils 1.1.5
+
+## Feature updates
+- Added a new function, `set_forecast_unit()` that allows the user to set the 
+forecast unit manually. They can then pipe the result directly into 
+`check_forecasts()` and check the result. 
+
 # scoringutils 1.1.4
 
 ## Package updates
