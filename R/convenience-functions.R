@@ -209,3 +209,62 @@ log_shift <- function(x,
   }
   log(x + offset, base = base)
 }
+
+
+
+
+#' @title Set unit of a single forecast manually
+#'
+#' @description Helper function to set the unit of a single forecast manually.
+#' This simple function keeps the columns specified in `forecast_unit` (plus
+#' additional protected columns, e.g. for true values, predictions or quantile
+#' levels) and removes duplicate rows.
+#'
+#' @inheritParams score
+#' @return A data.table with only those columns kept that are relevant to
+#' scoring or denote the unit of a single forecast as specified by the user.
+#'
+#' @importFrom data.table ':=' is.data.table copy
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @export
+#' @references Transformation of forecasts for evaluating predictive
+#' performance in an epidemiological context
+#' Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
+#' Sebastian Funk
+#' medRxiv 2023.01.23.23284722
+#' \doi{https://doi.org/10.1101/2023.01.23.23284722}
+#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
+
+#' @keywords data-handling
+#' @examples
+#'
+
+set_forecast_unit <- function(data,
+                              forecast_unit = NULL) {
+
+  datacols <- colnames(data)
+  missing <- forecast_unit[!(forecast_unit %in% datacols)]
+
+  if (length(missing) > 0) {
+    warning(
+      paste0(
+        "Column(s) '",
+        missing,
+        "' are not columns of the data"
+      )
+    )
+  }
+
+  keep_cols <- intersect(
+    datacols,
+    get_protected_columns(data)
+  )
+  keep_cols <- c(keep_cols, forecast_unit)
+  out <- unique(data[, .SD, .SDcols = keep_cols])[]
+  return(out)
+}
+
+
+
+
+
