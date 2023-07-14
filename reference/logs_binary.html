@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,11 +118,11 @@ smaller values are better.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">logs_binary</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.361591799 0.032209760 1.240568905 1.086201974 3.399777619 0.989955664</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.911830126 0.417541856 0.049785209 1.062871374 0.013533302 1.467830601</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.642827410 0.724437862 1.385057336 3.374077612 2.222171464 0.411728645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.830742750 0.154601859 1.031408009 0.393923845 3.185155851 0.265809796</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.493633061 0.922925689 0.004984756 2.406482055 0.082225581 0.085999929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.951246125 0.444199021 0.570978247 2.636318664 0.785765294 0.062521325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.101117912 1.292512469 0.300700492 0.771985513 0.155473745 1.417921671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.006268669 1.060810430 0.006168597 0.176053433 0.518669208 1.626866373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.524938695 0.786271942 2.635739362 0.566603565 1.666543602 0.407308251</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 3.179314971 0.995298744 3.357601287 2.721886124 0.576365060 0.852888514</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

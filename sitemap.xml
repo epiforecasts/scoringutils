@@ -139,6 +139,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/get_prediction_type.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/get_protected_columns.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/get_target_type.html</loc>
   </url>
   <url>
@@ -254,6 +257,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/se_mean_sample.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/set_forecast_unit.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/squared_error.html</loc>

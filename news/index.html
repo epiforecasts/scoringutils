@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,13 @@
       <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.5" id="scoringutils-115">scoringutils 1.1.5<a class="anchor" aria-label="anchor" href="#scoringutils-115"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-1-5">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-5"></a></h3>
+<ul><li>Added a new function, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, <code>scoringutils</code> attempts to determine the unit of a single automatically by simply assuming that all column names are relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/268" class="external-link">#268</a>). When used as part of a workflow, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> can be directly piped into <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to check everything is in order.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.4" id="scoringutils-114">scoringutils 1.1.4<a class="anchor" aria-label="anchor" href="#scoringutils-114"></a></h2>
 <div class="section level3">
