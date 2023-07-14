@@ -30,6 +30,10 @@ Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
 relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue #268). 
 When used as part of a workflow, `set_forecast_unit()` can be directly piped into `check_forecasts()` to
 check everything is in order.
+- Made `check_forecasts()` and `score()` pipeable (see issue #290). This means that
+users can now directly use the output of `check_forecasts()` as input for 
+`score()`. As `score()` otherwise runs `check_forecasts()` internally anyway 
+this simply makes the step explicit and helps writing clearer code. 
 
 # scoringutils 1.1.4
 
