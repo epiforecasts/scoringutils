@@ -47,9 +47,19 @@ requirements <- data.table(
 kable(requirements)
 ```
 
-Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. It is important, that there are only columns present which are relevant in order to group forecasts. A combination of different columns should uniquely define the *unit of a single forecast*, meaning that a single forecast is defined by the values in the other columns. 
+Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. 
+`scoringutils` automatically tries to determine the *unit of a single forecast*, i.e. the combination of existing columns that are able to uniquely identify a single forecast. It uses all existing columns for this, which can sometimes lead to issues. We therefore recommend using the function `set_forecast_unit()` to determine the forecast unit manually. The function simply drops unneeded columns, while making sure that some necessary, 'protected columns' like "prediction" or "true_value" are retained. 
 
-<!--- Might be nice to link to a grouping example here as it sounds a bit complicated --->
+```{r}
+colnames(example_quantile)
+
+set_forecast_unit(
+  example_quantile, 
+  c("location", "target_end_date", "target_type", "horizon", "model")
+) %>% 
+  colnames()
+```
+
 
 ## Checking the input data
 
@@ -64,6 +74,8 @@ check_forecasts(example_quantile)
 ```
 
 If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
+
+The output of `check_forecasts()` can later be directly used as input to `score()` (otherwise, `score()` will just run `check_forecasts()` anyway internally). 
 
 ## Showing available forecasts
 
@@ -107,26 +119,92 @@ example_quantile %>%
 
 ## Scoring and summarising forecasts
 
-Forecasts can easily be scored using the `score()` function. This function returns unsumarised scores, which in most cases is not what the user wants. A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. If you like, you can also use `sumarise_scores()` to round your outputs by specifying e.g. `signif()` as a summary function. 
+Forecasts can easily be scored using the `score()` function. 
+
+For clarity, we suggest setting the forecast unit explicitly and you may also want to call `check_forecasts()` explicitly. 
 
 ```{r}
-score(example_quantile) %>%
-  head()
+scores <- example_quantile %>%
+  set_forecast_unit(
+    c("location", "target_end_date", "target_type", "location_name", 
+      "forecast_date", "model", "horizon")
+  ) %>%
+  check_forecasts() %>%
+  score() 
+
+head(scores)
 ```
+
+Note that in the above example some columns contain duplicated information with regards to the forecast unit, e.g. "location" and "location_name", and could also be dropped. 
 
 ```{r}
 example_quantile %>%
-  score() %>%
+  set_forecast_unit(
+    c("location", "target_end_date", "target_type", 
+      "forecast_date", "model", "horizon")
+  ) %>%
+  check_forecasts()
+```
+
+If we drop, for example, the "target_type" column, we'll get an error informing us that the forecasts aren't uniquely identified any more. 
+
+```{r, error=TRUE}
+example_quantile %>%
+  set_forecast_unit(
+    c("location", "target_end_date", 
+      "forecast_date", "model", "horizon")
+  ) %>%
+  check_forecasts()
+```
+
+The function `find_duplicates()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
+
+```{r}
+duplicates <- example_quantile %>%
+  set_forecast_unit(
+    c("location", "target_end_date", 
+      "forecast_date", "model", "horizon")
+  ) %>%
+  find_duplicates()
+
+duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
+  head()
+```
+
+The function `score()` returns unsumarised scores, which in most cases is not what the user wants. It returns a single score per forecast (as determined by the forecast unit). For forecasts in a quantile format, it returns one score per quantile. 
+
+A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = NULL` and the summary unit is assumed to be the same as the unit of a single forecast. For continuous forecasts, this means that nothing happens if `by` isn't specified. 
+
+```{r}
+scores <- score(example_continuous)
+all(scores == summarise_scores(scores), na.rm = TRUE)
+```
+
+For quantile based forecasts, if `by = NULL`, then scores are summarised across quantiles and instead of one score per forecast_unit and quantile we only get one score per forecast unit. 
+
+```{r}
+scores <- example_quantile %>%
+    set_forecast_unit(
+    c("location", "target_end_date", "target_type",
+      "forecast_date", "model", "horizon")
+  ) %>%
+  check_forecasts() %>%
+  score()
+
+head(scores)
+
+scores %>%
+  summarise_scores() %>%
+  head()
+```
+
+Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
+
+```{r}
+scores %>%
   summarise_scores(by = c("model", "target_type")) %>%
   summarise_scores(fun = signif, digits = 2) %>%
   kable()
-```
-
-The `by` argument can be used to define the level of summary. By default, `by = NULL` is set to the unit of a single forecast. For quantile-based forecasts, unsummarised scores are returned for every quantile individually. It can therefore make sense to run `summarise_scores`even without any arguments provided. 
-
-```{r}
-score(example_quantile) %>%
-  summarise_scores()
 ```
 
 ### Scoring point forecasts
