@@ -1,3 +1,9 @@
+# scoringutils 1.2.0
+
+## Package updates
+
+- The documentation was updated to reflect the recent changes since scoringutils 1.1.0. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now docuemnted in the Vignettes.
+
 # scoringutils 1.1.7
 
 Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
@@ -21,25 +27,28 @@ Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
 # scoringutils 1.1.6
 
 ## Feature updates
+
 - Added a new argument, `across`, to `summarise_scores()`. This argument allows the user to summarise scores across different forecast units as an alternative to specifying `by`. See the documentation for `summarise_scores()` for more details and an example use case.
 
 # scoringutils 1.1.5
 
 ## Feature updates
+
 - Added a new function, `set_forecast_unit()` that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, `scoringutils` attempts to determine the unit of a single automatically by simply assuming that all column names are
 relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue #268). 
 When used as part of a workflow, `set_forecast_unit()` can be directly piped into `check_forecasts()` to
 check everything is in order.
 - Made `check_forecasts()` and `score()` pipeable (see issue #290). This means that
-users can now directly use the output of `check_forecasts()` as input for 
-`score()`. As `score()` otherwise runs `check_forecasts()` internally anyway 
-this simply makes the step explicit and helps writing clearer code. 
+users can now directly use the output of `check_forecasts()` as input for
+`score()`. As `score()` otherwise runs `check_forecasts()` internally anyway
+this simply makes the step explicit and helps writing clearer code.
 
 # scoringutils 1.1.4
 
 ## Package updates
-- added links to the scoringutils paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) to the package. 
-- updated citation formatting to comply with newer standards. 
+
+- Added links to the scoringutils paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) to the package.
+- Updated citation formatting to comply with newer standards.
 
 # scoringutils 1.1.3
 
@@ -58,7 +67,7 @@ this simply makes the step explicit and helps writing clearer code.
 ## Feature updates
 
 - Added a new function, `transform_forecasts()` to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1.
-- Added a function, `log_shift()` that implements the default transformation function. The function allows add an offset before applying the logarithm.
+- Added a function, `log_shift()` that implements the default transformation function. The function allows to add an offset before applying the logarithm.
 
 # scoringutils 1.1.1
 
