@@ -75,7 +75,7 @@ test_that("function get_forecast_unit() and set_forecast_unit() work together", 
 
   ex <- set_forecast_unit(
     example_binary,
-    fu
+    fu_set
   )
 
   fu_get <- get_forecast_unit(ex)

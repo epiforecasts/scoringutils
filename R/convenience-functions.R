@@ -156,10 +156,6 @@ transform_forecasts <- function(data,
 }
 
 
-
-
-
-
 #' @title Log transformation with an additive shift
 #'
 #' @description Function that shifts a value by some offset and then applies the
@@ -183,7 +179,6 @@ transform_forecasts <- function(data,
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords check-forecasts
 #' @examples
-#'
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
 #'
@@ -240,14 +235,12 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
-
 #' @keywords data-handling
 #' @examples
 #' set_forecast_unit(
 #'   example_quantile,
 #'   c("location", "target_end_date", "target_type", "horizon", "model")
 #' )
-#'
 
 set_forecast_unit <- function(data, forecast_unit = NULL) {
 

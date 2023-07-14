@@ -60,7 +60,6 @@ set_forecast_unit(
   example_quantile,
   c("location", "target_end_date", "target_type", "horizon", "model")
 )
-
 }
 \references{
 Transformation of forecasts for evaluating predictive
