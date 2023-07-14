@@ -265,11 +265,18 @@ get_forecast_unit <- function(data, prediction_type) {
 #' @keywords internal
 
 get_protected_columns <- function(data) {
+
+  datacols <- colnames(data)
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
-    "pit_value",
-    "range", "boundary", available_metrics(),
+    "pit_value", "range", "boundary", available_metrics(),
     names(data)[grepl("coverage_", names(data))]
+  )
+
+  # only return protected columns that are present
+  protected_columns <- intersect(
+    datacols,
+    protected_columns
   )
 
   return(protected_columns)

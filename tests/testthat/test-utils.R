@@ -7,8 +7,9 @@ test_that("get_protected columns returns the correct result", {
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
+  manual <- intersect(manual, colnames(example_quantile))
   auto <- get_protected_columns(data)
-  expect_equal(manual, auto)
+  expect_equal(sort(manual), sort(auto))
 
 
   data <- example_binary
@@ -18,8 +19,9 @@ test_that("get_protected columns returns the correct result", {
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
+  manual <- intersect(manual, colnames(example_binary))
   auto <- get_protected_columns(data)
-  expect_equal(manual, auto)
+  expect_equal(sort(manual), sort(auto))
 
   data <- example_continuous
   manual <- protected_columns <- c(
@@ -28,7 +30,7 @@ test_that("get_protected columns returns the correct result", {
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
+  manual <- intersect(manual, colnames(example_continuous))
   auto <- get_protected_columns(data)
-  expect_equal(manual, auto)
-
+  expect_equal(sort(manual), sort(auto))
 })
