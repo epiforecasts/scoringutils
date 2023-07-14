@@ -4,22 +4,33 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/epiforecasts/scoringutils/branch/master/graphs/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
-[![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
-[![develVersion](https://img.shields.io/badge/devel%20version-1.1.0-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
+[![codecov](https://codecov.io/github/epiforecasts/scoringutils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
+[![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 [![metacran
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
-forecasts against the true observed values. The `scoringutils` package
-offers convenient automated forecast evaluation in a `data.table` format
-(using the function `score()`), but also provides experienced users with
-a set of reliable lower-level scoring metrics operating on
-vectors/matrices they can build upon in other applications. In addition
-it implements a wide range of flexible plots designed to cover many use
-cases.
+forecasts against the true observed values.
+
+You can find additional information and examples in the paper
+[Evaluating Forecasts with scoringutils in
+R](https://arxiv.org/abs/2205.07090) as well as the Vignettes ([Getting
+started](https://epiforecasts.io/scoringutils/articles/getting-started.html),
+[Details on the metrics
+implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
+and [Scoring forecasts
+directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+
+The `scoringutils` package offers convenient automated forecast
+evaluation in a `data.table` format (using the function `score()`), but
+also provides experienced users with a set of reliable lower-level
+scoring metrics operating on vectors/matrices they can build upon in
+other applications. In addition it implements a wide range of flexible
+plots designed to cover many use cases.
 
 Where available `scoringutils` depends on functionality from
 `scoringRules` which provides a comprehensive collection of proper
@@ -119,15 +130,15 @@ example_quantile %>%
 #> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
-| model                 | target\_type | interval\_score | dispersion | underprediction | overprediction | coverage\_deviation |     bias | ae\_median | coverage\_50 | coverage\_90 | relative\_skill | scaled\_rel\_skill |
-| :-------------------- | :----------- | --------------: | ---------: | --------------: | -------------: | ------------------: | -------: | ---------: | -----------: | -----------: | --------------: | -----------------: |
-| EuroCOVIDhub-baseline | Cases        |           28000 |       4100 |         10000.0 |        14000.0 |             \-0.110 |   0.0980 |      38000 |         0.33 |         0.82 |            1.30 |                1.6 |
-| EuroCOVIDhub-baseline | Deaths       |             160 |         91 |             2.1 |           66.0 |               0.120 |   0.3400 |        230 |         0.66 |         1.00 |            2.30 |                3.8 |
-| EuroCOVIDhub-ensemble | Cases        |           18000 |       3700 |          4200.0 |        10000.0 |             \-0.098 | \-0.0560 |      24000 |         0.39 |         0.80 |            0.82 |                1.0 |
-| EuroCOVIDhub-ensemble | Deaths       |              41 |         30 |             4.1 |            7.1 |               0.200 |   0.0730 |         53 |         0.88 |         1.00 |            0.60 |                1.0 |
-| UMass-MechBayes       | Deaths       |              53 |         27 |            17.0 |            9.0 |             \-0.023 | \-0.0220 |         78 |         0.46 |         0.88 |            0.75 |                1.3 |
-| epiforecasts-EpiNow2  | Cases        |           21000 |       5700 |          3300.0 |        12000.0 |             \-0.067 | \-0.0790 |      28000 |         0.47 |         0.79 |            0.95 |                1.2 |
-| epiforecasts-EpiNow2  | Deaths       |              67 |         32 |            16.0 |           19.0 |             \-0.043 | \-0.0051 |        100 |         0.42 |         0.91 |            0.98 |                1.6 |
+| model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
+|:----------------------|:------------|---------------:|-----------:|----------------:|---------------:|-------------------:|--------:|----------:|------------:|------------:|---------------:|-----------------:|
+| EuroCOVIDhub-baseline | Cases       |          28000 |       4100 |         10000.0 |        14000.0 |             -0.110 |  0.0980 |     38000 |        0.33 |        0.82 |           1.30 |              1.6 |
+| EuroCOVIDhub-baseline | Deaths      |            160 |         91 |             2.1 |           66.0 |              0.120 |  0.3400 |       230 |        0.66 |        1.00 |           2.30 |              3.8 |
+| EuroCOVIDhub-ensemble | Cases       |          18000 |       3700 |          4200.0 |        10000.0 |             -0.098 | -0.0560 |     24000 |        0.39 |        0.80 |           0.82 |              1.0 |
+| EuroCOVIDhub-ensemble | Deaths      |             41 |         30 |             4.1 |            7.1 |              0.200 |  0.0730 |        53 |        0.88 |        1.00 |           0.60 |              1.0 |
+| UMass-MechBayes       | Deaths      |             53 |         27 |            17.0 |            9.0 |             -0.023 | -0.0220 |        78 |        0.46 |        0.88 |           0.75 |              1.3 |
+| epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | -0.0790 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
+| epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | -0.0051 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
 
 `scoringutils` contains additional functionality to summarise these
 scores at different levels, to visualise them, and to explore the
@@ -139,7 +150,6 @@ documentation for more information.
 If using `scoringutils` in your work please consider citing it using the
 output of `citation("scoringutils")`:
 
-    #> 
     #> To cite scoringutils in publications use the following. If you use the
     #> CRPS, DSS, or Log Score, please also cite scoringRules.
     #> 
@@ -167,7 +177,7 @@ page](https://github.com/epiforecasts/scoringutils/discussions/categories/q-a).
 
 ## Contributing
 
-We welcome contributions and new contributors\! We particularly
+We welcome contributions and new contributors! We particularly
 appreciate help on priority problems in the
 [issues](https://github.com/epiforecasts/scoringutils/issues). Please
 check and add to the issues, and/or add a [pull
