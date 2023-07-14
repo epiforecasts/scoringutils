@@ -212,11 +212,11 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' additional protected columns, e.g. for true values, predictions or quantile
 #' levels) and removes duplicate rows.
 #' If not done manually, `scoringutils` attempts to determine the unit
-#' of a single automatically by simply assuming that all column names are
-#' relevant to determine the forecast unit. This can lead to unexpected
+#' of a single forecast automatically by simply assuming that all column names
+#' are relevant to determine the forecast unit. This may lead to unexpected
 #' behaviour, so setting the forecast unit explicitly can help make the code
 #' easier to debug and easier to read. When used as part of a workflow,
-#' `set_forecast_unit()` can then directly be piped into `check_forecasts()` to
+#' `set_forecast_unit()` can be directly piped into `check_forecasts()` to
 #' check everything is in order.
 #'
 #' @inheritParams score
@@ -226,15 +226,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' scoring or denote the unit of a single forecast as specified by the user.
 #'
 #' @importFrom data.table ':=' is.data.table copy
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
-#' @references Transformation of forecasts for evaluating predictive
-#' performance in an epidemiological context
-#' Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
-#' Sebastian Funk
-#' medRxiv 2023.01.23.23284722
-#' \doi{https://doi.org/10.1101/2023.01.23.23284722}
-#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords data-handling
 #' @examples
 #' set_forecast_unit(
@@ -242,7 +234,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #'   c("location", "target_end_date", "target_type", "horizon", "model")
 #' )
 
-set_forecast_unit <- function(data, forecast_unit = NULL) {
+set_forecast_unit <- function(data, forecast_unit) {
 
   datacols <- colnames(data)
   missing <- forecast_unit[!(forecast_unit %in% datacols)]
