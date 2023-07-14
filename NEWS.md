@@ -8,7 +8,8 @@ attempts to determine the unit
 of a single automatically by simply assuming that all column names are
 relevant to determine the forecast unit. This can lead to unexpected
 behaviour, so setting the forecast unit explicitly can help make the code
-easier to debug and easier to read. When used as part of a workflow,
+easier to debug and easier to read (see issue #268). 
+When used as part of a workflow,
 `set_forecast_unit()` can then directly be piped into `check_forecasts()` to
 check everything is in order.
 
