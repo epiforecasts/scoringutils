@@ -4,7 +4,7 @@
 \alias{set_forecast_unit}
 \title{Set unit of a single forecast manually}
 \usage{
-set_forecast_unit(data, forecast_unit = NULL)
+set_forecast_unit(data, forecast_unit)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -48,11 +48,11 @@ This simple function keeps the columns specified in \code{forecast_unit} (plus
 additional protected columns, e.g. for true values, predictions or quantile
 levels) and removes duplicate rows.
 If not done manually, \code{scoringutils} attempts to determine the unit
-of a single automatically by simply assuming that all column names are
-relevant to determine the forecast unit. This can lead to unexpected
+of a single forecast automatically by simply assuming that all column names
+are relevant to determine the forecast unit. This may lead to unexpected
 behaviour, so setting the forecast unit explicitly can help make the code
 easier to debug and easier to read. When used as part of a workflow,
-\code{set_forecast_unit()} can then directly be piped into \code{check_forecasts()} to
+\code{set_forecast_unit()} can be directly piped into \code{check_forecasts()} to
 check everything is in order.
 }
 \examples{
@@ -60,17 +60,5 @@ set_forecast_unit(
   example_quantile,
   c("location", "target_end_date", "target_type", "horizon", "model")
 )
-}
-\references{
-Transformation of forecasts for evaluating predictive
-performance in an epidemiological context
-Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
-Sebastian Funk
-medRxiv 2023.01.23.23284722
-\doi{https://doi.org/10.1101/2023.01.23.23284722}
-\url{https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1} # nolint
-}
-\author{
-Nikos Bosse \email{nikosbosse@gmail.com}
 }
 \keyword{data-handling}
