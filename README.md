@@ -4,10 +4,9 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/github/epiforecasts/scoringutils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
+[![codecov](https://app.codecov.io/gh/epiforecasts/scoringutilsbranch/master/graphs/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
 [![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
-![GitHub R package
-version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
+[![develVersion](https://img.shields.io/badge/devel%20version-1.1.0-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
 [![metacran
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
@@ -105,8 +104,15 @@ example_quantile %>%
 ### Scoring forecasts
 
 Forecasts can be easily and quickly scored using the `score()` function.
-This function returns unsummarised scores, which in most cases is not
-what the user wants. Here we make use of additional functions from
+`score()` automatically tries to determine the `forecast_unit`, i.e. the
+set of columns that uniquely defines a single forecast, by taking all
+column names of the data into account. It is recommended to set the
+forecast unit manually to avoid errors. The function
+`set_forecast_unit()` will simply drop unneeded columns. To verify
+everything is in order, the function `check_forecasts()` should be used.
+The result of that check can then passed directly into `score()`.
+`score()` returns unsummarised scores, which in most cases is not what
+the user wants. Here we make use of additional functions from
 `scoringutils` to add empirical coverage-levels (`add_coverage()`), and
 scores relative to a baseline model (here chosen to be the
 EuroCOVIDhub-ensemble model). See the getting started vignette for more
@@ -114,6 +120,8 @@ details. Finally we summarise these scores by model and target type.
 
 ``` r
 example_quantile %>%
+  set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
+  check_forecasts() %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
