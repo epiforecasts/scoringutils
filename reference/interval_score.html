@@ -225,11 +225,11 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  upper <span class="op">=</span> <span class="va">upper</span>,</span></span>
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="va">interval_range</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.18198732 0.13001717 0.13268644 0.20013000 0.11661828 0.83464863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.06785036 2.02186879 0.23124513 0.83176269 0.94021827 0.15545194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.03358854 0.20705888 0.22594847 0.41347432 0.12342050 0.80549458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 2.11000953 0.33882556 0.21991574 0.04304129 1.86691809 0.26774496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.04584884 0.16043290 0.97496019 1.21558624 0.26086445 0.22723638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.02406868 0.20558775 0.19012647 0.18430468 0.14839830 0.09245040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.19809148 0.22330364 0.18338428 0.24780582 0.21162933 0.11409234</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.16758360 0.17061538 0.24748676 0.17041933 0.04986238 0.47692122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.43821160 0.46254890 0.07086680 0.06702101 0.07373058 0.06031506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 2.33863152 0.13644439 0.19495228 1.06215087 0.18596402 1.96816862</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># gives a warning, as the interval_range should likely be 50 instead of 0.5</span></span></span>
 <span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span>true_value <span class="op">=</span> <span class="fl">4</span>, upper <span class="op">=</span> <span class="fl">2</span>, lower <span class="op">=</span> <span class="fl">8</span>, interval_range <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
@@ -246,36 +246,35 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="fl">90</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 0.10446824 0.03774929 0.13134152 0.11781577 0.74327483</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.07405748 2.76253259 0.08573208 0.19370085 0.82219333 0.08545337</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.05928989 1.45828719 0.13603203 0.29263575 0.22915508 0.84505223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 2.01978302 0.21007879 0.23400049 0.08686311 1.82552349 1.06031563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.13418006 1.47155713 0.20328253 2.73744967 1.68807425 0.20493424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 2.64539721 0.16449218 0.14188411 0.61208467 0.04266648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.05772938 0.23571865 0.11622940 0.16117965 0.22103263 0.10047281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.92778115 0.21094987 0.19536471 0.12382156 0.11153160 2.99008669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.34635572 0.45517489 0.05604108 0.06540352 1.99969042 0.07919636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 3.30272329 1.43130092 0.20095300 0.99500922 0.16510088 1.64225078</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]           NA  0.104468245  0.037749287  0.131341517  0.117815768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6]  0.045931300  0.074057476  0.070285611  0.085732077  0.193700846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.032857954  0.085453371  0.059289892  0.055025308  0.136032028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]  0.145433208  0.229155083  0.187869097 -0.010825264  0.210078794</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.234000494  0.055424421 -0.092006729 -0.055806086  0.134180062</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0.005430442  0.203282529 -0.021452693  0.032960704  0.204934242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]          NA  0.06331528  0.16449218  0.14188411  0.08238555  0.04266648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.05772938  0.23571865  0.11622940  0.16117965  0.22103263  0.10047281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.06162416  0.21094987  0.12951154  0.12382156  0.11153160  0.02836952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  0.08900993  0.17730090  0.05604108  0.06540352 -0.05525368  0.07919636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.04655420 -0.04054278  0.20095300  0.03482704  0.16510088  0.13104618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]          NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.6922470 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 1.4032619</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.0000000 0.0000000 0.6571831 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.9737548 0.0000000 1.4661267 0.0000000 2.7589024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.6551135 0.0000000        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 2.58208193 0.00000000 0.00000000 0.52969913 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.86615699 0.00000000 0.06585317 0.00000000 0.00000000 2.96171717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.00000000 0.00000000 0.00000000 0.00000000 2.05494410 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 3.25616910 1.47184369 0.00000000 0.00000000 0.00000000 1.51120460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.69734353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.00000000 0.00000000 0.00000000 0.00000000 0.78933537 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.00000000 0.00000000 0.00000000 0.14720254 0.00000000 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 2.03060828 0.00000000 0.00000000 0.03143869 1.91753022 0.14236695</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.0000000 0.0000000 0.0000000 1.2573458 0.2778740 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.9601822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
