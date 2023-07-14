@@ -2,8 +2,15 @@
 
 ## Feature updates
 - Added a new function, `set_forecast_unit()` that allows the user to set the 
-forecast unit manually. They can then pipe the result directly into 
-`check_forecasts()` and check the result. 
+forecast unit manually. The function removes all columns that are not relevant
+for uniquely identifying a single forecast. If not done manually, `scoringutils` 
+attempts to determine the unit
+of a single automatically by simply assuming that all column names are
+relevant to determine the forecast unit. This can lead to unexpected
+behaviour, so setting the forecast unit explicitly can help make the code
+easier to debug and easier to read. When used as part of a workflow,
+`set_forecast_unit()` can then directly be piped into `check_forecasts()` to
+check everything is in order.
 
 # scoringutils 1.1.4
 
