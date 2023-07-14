@@ -54,3 +54,12 @@ test_that("check_forecasts() function throws an sample/quantile not present", {
     data.table::copy(example_quantile)[, quantile := NULL]
   ))))
 })
+
+test_that("output of check_forecasts() is accepted as input to score()", {
+  check <- suppressMessages(check_forecasts(example_binary))
+  expect_no_error(
+    score_check <- score(check)
+  )
+  expect_equal(score_check, suppressMessages(score(example_binary)))
+})
+

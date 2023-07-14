@@ -82,6 +82,14 @@
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #'
+#' # set forecast unit and check forecasts in workflow
+#' example_quantile %>%
+#'   set_forecast_unit(
+#'     c("location", "target_end_date", "target_type", "horizon", "model")
+#'   ) %>%
+#'   check_forecasts() %>%
+#'   score()
+#'
 #' # forecast formats with different metrics
 #' \dontrun{
 #' score(example_binary)
@@ -106,7 +114,14 @@ score <- function(data,
                   ...) {
 
   # preparations ---------------------------------------------------------------
-  check_data <- check_forecasts(data)
+  if (is(data, "scoringutils_check") &&
+    !any(is.null(data$cleaned_data), is.null(data$prediction_type),
+         is.null(data$forecast_unit), is.null(data$target_type))
+    ) {
+    check_data <- data
+  } else {
+    check_data <- check_forecasts(data)
+  }
 
   data <- check_data$cleaned_data
   prediction_type <- check_data$prediction_type

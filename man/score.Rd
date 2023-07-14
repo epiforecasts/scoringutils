@@ -88,6 +88,14 @@ score(example_quantile) \%>\%
   add_coverage(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
+# set forecast unit and check forecasts in workflow
+example_quantile \%>\%
+  set_forecast_unit(
+    c("location", "target_end_date", "target_type", "horizon", "model")
+  ) \%>\%
+  check_forecasts() \%>\%
+  score()
+
 # forecast formats with different metrics
 \dontrun{
 score(example_binary)
