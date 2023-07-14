@@ -58,4 +58,27 @@ test_that("function set_forecast_unit() works", {
 })
 
 
+test_that("function set_forecast_unit() gives warning when column is not there", {
+
+  expect_warning(
+    set_forecast_unit(
+      example_quantile,
+      c("location", "target_end_date", "target_type", "horizon", "model", "test")
+    )
+  )
+})
+
+
+test_that("function get_forecast_unit() and set_forecast_unit() work together", {
+
+  fu_set <- c("location", "target_end_date", "target_type", "horizon", "model")
+
+  ex <- set_forecast_unit(
+    example_binary,
+    fu
+  )
+
+  fu_get <- get_forecast_unit(ex)
+  expect_equal(fu_set, fu_get)
+})
 
