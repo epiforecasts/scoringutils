@@ -242,12 +242,7 @@ get_target_type <- function(data) {
 
 get_forecast_unit <- function(data, prediction_type) {
 
-  protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile", "upper", "lower",
-    "pit_value",
-    "range", "boundary", available_metrics(),
-    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
-  )
+  protected_columns <- get_protected_columns(data)
   if (!missing(prediction_type)) {
     if (prediction_type == "quantile") {
       protected_columns <- setdiff(protected_columns, "sample")
@@ -255,4 +250,34 @@ get_forecast_unit <- function(data, prediction_type) {
   }
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
+}
+
+
+#' @title Get protected columns from a data frame
+#'
+#' @description Helper function to get the names of all columns in a data frame
+#' that are protected columns.
+#'
+#' @inheritParams check_forecasts
+#'
+#' @return A character vector with the names of protected columns in the data
+#'
+#' @keywords internal
+
+get_protected_columns <- function(data) {
+
+  datacols <- colnames(data)
+  protected_columns <- c(
+    "prediction", "true_value", "sample", "quantile", "upper", "lower",
+    "pit_value", "range", "boundary", available_metrics(),
+    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
+  )
+
+  # only return protected columns that are present
+  protected_columns <- intersect(
+    datacols,
+    protected_columns
+  )
+
+  return(protected_columns)
 }

@@ -156,10 +156,6 @@ transform_forecasts <- function(data,
 }
 
 
-
-
-
-
 #' @title Log transformation with an additive shift
 #'
 #' @description Function that shifts a value by some offset and then applies the
@@ -183,7 +179,6 @@ transform_forecasts <- function(data,
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords check-forecasts
 #' @examples
-#'
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
 #'
@@ -193,9 +188,7 @@ transform_forecasts <- function(data,
 #'   offset = 1
 #'  )
 
-log_shift <- function(x,
-                      offset = 0,
-                      base = exp(1)) {
+log_shift <- function(x, offset = 0, base = exp(1)) {
 
   if (any(x < 0, na.rm = TRUE)) {
     w <- paste("Detected input values < 0.")
@@ -208,4 +201,54 @@ log_shift <- function(x,
     warning(w)
   }
   log(x + offset, base = base)
+}
+
+
+#' @title Set unit of a single forecast manually
+#'
+#' @description Helper function to set the unit of a single forecast (i.e. the
+#' combination of columns that uniquely define a single forecast) manually.
+#' This simple function keeps the columns specified in `forecast_unit` (plus
+#' additional protected columns, e.g. for true values, predictions or quantile
+#' levels) and removes duplicate rows.
+#' If not done manually, `scoringutils` attempts to determine the unit
+#' of a single forecast automatically by simply assuming that all column names
+#' are relevant to determine the forecast unit. This may lead to unexpected
+#' behaviour, so setting the forecast unit explicitly can help make the code
+#' easier to debug and easier to read. When used as part of a workflow,
+#' `set_forecast_unit()` can be directly piped into `check_forecasts()` to
+#' check everything is in order.
+#'
+#' @inheritParams score
+#' @param forecast_unit Character vector with the names of the columns that
+#' uniquely identify a single forecast.
+#' @return A data.table with only those columns kept that are relevant to
+#' scoring or denote the unit of a single forecast as specified by the user.
+#'
+#' @importFrom data.table ':=' is.data.table copy
+#' @export
+#' @keywords data-handling
+#' @examples
+#' set_forecast_unit(
+#'   example_quantile,
+#'   c("location", "target_end_date", "target_type", "horizon", "model")
+#' )
+
+set_forecast_unit <- function(data, forecast_unit) {
+
+  datacols <- colnames(data)
+  missing <- forecast_unit[!(forecast_unit %in% datacols)]
+
+  if (length(missing) > 0) {
+    warning(
+      "Column(s) '",
+      missing,
+      "' are not columns of the data and will be ignored."
+    )
+    forecast_unit <- intersect(forecast_unit, datacols)
+  }
+
+  keep_cols <- c(get_protected_columns(data), forecast_unit)
+  out <- unique(data[, .SD, .SDcols = keep_cols])[]
+  return(out)
 }

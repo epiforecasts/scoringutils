@@ -26,7 +26,6 @@ natural logarithm to it.
 The output is computed as log(x + offset)
 }
 \examples{
-
 log_shift(1:10)
 log_shift(0:9, offset = 1)
 
