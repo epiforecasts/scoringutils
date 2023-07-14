@@ -34,18 +34,26 @@ You can check the format of your data using \code{\link[=check_forecasts]{check_
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
 
-\item{forecast_unit}{character vector with the names of the columns that
-uniquely identify a single forecast}
+\item{forecast_unit}{Character vector with the names of the columns that
+uniquely identify a single forecast.}
 }
 \value{
 A data.table with only those columns kept that are relevant to
 scoring or denote the unit of a single forecast as specified by the user.
 }
 \description{
-Helper function to set the unit of a single forecast manually.
+Helper function to set the unit of a single forecast (i.e. the
+combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in \code{forecast_unit} (plus
 additional protected columns, e.g. for true values, predictions or quantile
 levels) and removes duplicate rows.
+If not done manually, \code{scoringutils} attempts to determine the unit
+of a single automatically by simply assuming that all column names are
+relevant to determine the forecast unit. This can lead to unexpected
+behaviour, so setting the forecast unit explicitly can help make the code
+easier to debug and easier to read. When used as part of a workflow,
+\code{set_forecast_unit()} can then directly be piped into \code{check_forecasts()} to
+check everything is in order.
 }
 \examples{
 set_forecast_unit(

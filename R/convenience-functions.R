@@ -193,9 +193,7 @@ transform_forecasts <- function(data,
 #'   offset = 1
 #'  )
 
-log_shift <- function(x,
-                      offset = 0,
-                      base = exp(1)) {
+log_shift <- function(x, offset = 0, base = exp(1)) {
 
   if (any(x < 0, na.rm = TRUE)) {
     w <- paste("Detected input values < 0.")
@@ -211,18 +209,24 @@ log_shift <- function(x,
 }
 
 
-
-
 #' @title Set unit of a single forecast manually
 #'
-#' @description Helper function to set the unit of a single forecast manually.
+#' @description Helper function to set the unit of a single forecast (i.e. the
+#' combination of columns that uniquely define a single forecast) manually.
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for true values, predictions or quantile
 #' levels) and removes duplicate rows.
+#' If not done manually, `scoringutils` attempts to determine the unit
+#' of a single automatically by simply assuming that all column names are
+#' relevant to determine the forecast unit. This can lead to unexpected
+#' behaviour, so setting the forecast unit explicitly can help make the code
+#' easier to debug and easier to read. When used as part of a workflow,
+#' `set_forecast_unit()` can then directly be piped into `check_forecasts()` to
+#' check everything is in order.
 #'
 #' @inheritParams score
-#' @param forecast_unit character vector with the names of the columns that
-#' uniquely identify a single forecast
+#' @param forecast_unit Character vector with the names of the columns that
+#' uniquely identify a single forecast.
 #' @return A data.table with only those columns kept that are relevant to
 #' scoring or denote the unit of a single forecast as specified by the user.
 #'
@@ -245,32 +249,21 @@ log_shift <- function(x,
 #' )
 #'
 
-set_forecast_unit <- function(data,
-                              forecast_unit = NULL) {
+set_forecast_unit <- function(data, forecast_unit = NULL) {
 
   datacols <- colnames(data)
   missing <- forecast_unit[!(forecast_unit %in% datacols)]
 
   if (length(missing) > 0) {
     warning(
-      paste0(
-        "Column(s) '",
-        missing,
-        "' are not columns of the data"
-      )
+      "Column(s) '",
+      missing,
+      "' are not columns of the data and will be ignored."
     )
+    forecast_unit <- intersect(forecast_unit, datacols)
   }
 
-  keep_cols <- intersect(
-    datacols,
-    get_protected_columns(data)
-  )
-  keep_cols <- c(keep_cols, forecast_unit)
+  keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])[]
   return(out)
 }
-
-
-
-
-
