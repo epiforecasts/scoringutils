@@ -270,7 +270,7 @@ get_protected_columns <- function(data) {
   protected_columns <- c(
     "prediction", "true_value", "sample", "quantile", "upper", "lower",
     "pit_value", "range", "boundary", available_metrics(),
-    names(data)[grepl("coverage_", names(data))]
+    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
 
   # only return protected columns that are present
