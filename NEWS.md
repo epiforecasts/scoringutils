@@ -2,7 +2,7 @@
 
 ## Package updates
 
-- The documentation was updated to reflect the recent changes since scoringutils 1.1.0. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now docuemnted in the Vignettes.
+- The documentation was updated to reflect the recent changes since scoringutils 1.1.0. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now documented in the Vignettes.
 
 # scoringutils 1.1.7
 
