@@ -1,3 +1,8 @@
+# scoringutils 1.1.6
+
+## Feature updates
+- Added a new argument, `across`, to `summarise_scores()`. This argument allows the user to summarise scores across different forecast units as an alternative to specifying `by`. See the documentation for `summarise_scores()` for more details and an example use case.
+
 # scoringutils 1.1.5
 
 ## Feature updates
