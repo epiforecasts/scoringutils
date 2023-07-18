@@ -14,6 +14,10 @@
 #' indicate indicate a grouping of forecasts (for example there may be one
 #' forecast per day, location and model). Adding additional, unrelated, columns
 #' may alter results in an unpredictable way.
+#' @param across character vector with column names from the vector of variables
+#' that define the *unit of a single forecast* (see above) to summarise across.
+#' If `NULL` (default), then `by`` will be used. Only one of `across` and `by` 
+#' may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
@@ -53,6 +57,11 @@
 #' # get scores by model and target type
 #' summarise_scores(scores, by = c("model", "target_type"))
 #'
+#' # Get scores summarised across horizon, forecast date, and target end date
+#' summarise_scores(
+#'  scores, across = c("horizon", "forecast_date", "target_end_date")
+#' )
+#'
 #' # get standard deviation
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
@@ -74,6 +83,7 @@
 
 summarise_scores <- function(scores,
                              by = NULL,
+                             across = NULL,
                              fun = mean,
                              relative_skill = FALSE,
                              relative_skill_metric = "auto",
@@ -86,6 +96,11 @@ summarise_scores <- function(scores,
       "summarise_scores(relative_skill_metric)"
     )
   }
+
+  if (!is.null(across) && !is.null(by)) {
+    stop("You cannot specify both 'across' and 'by'. Please choose one.")
+  }
+
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   prediction_type <- get_prediction_type(scores)
@@ -94,6 +109,11 @@ summarise_scores <- function(scores,
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
     by <- forecast_unit
+  }
+
+  # if across is provided, remove from by
+  if (!is.null(across)) {
+    by <- setdiff(by, across)
   }
 
   # check input arguments and check whether relative skill can be computed
