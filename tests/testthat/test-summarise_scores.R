@@ -88,3 +88,23 @@ test_that("summarise_scores() metric is deprecated", {
     )
   )  
 })
+
+test_that("summarise_scores() across argument works as expected", {
+  ex <- data.table::copy(example_quantile)
+  scores <- suppressMessages(score(ex))[, location_name := NULL]
+
+  expect_error(
+    summarise_scores(
+      scores, by = "model", across = "horizon"
+    ),
+    regexp = "You cannot specify both"
+  )
+  expect_equal(
+    summarise_scores(
+      scores, across = c("horizon", "model", "forecast_date", "target_end_date")
+    ),
+    summarise_scores(
+      scores, by = c("location", "target_type")
+    )
+  )
+})
