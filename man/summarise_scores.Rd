@@ -8,6 +8,7 @@
 summarise_scores(
   scores,
   by = NULL,
+  across = NULL,
   fun = mean,
   relative_skill = FALSE,
   relative_skill_metric = "auto",
@@ -19,6 +20,7 @@ summarise_scores(
 summarize_scores(
   scores,
   by = NULL,
+  across = NULL,
   fun = mean,
   relative_skill = FALSE,
   relative_skill_metric = "auto",
@@ -40,6 +42,11 @@ input data that do not correspond to a metric produced by \code{\link[=score]{sc
 indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.}
+
+\item{across}{character vector with column names from the vector of variables
+that define the \emph{unit of a single forecast} (see above) to summarise across.
+If \code{NULL} (default), then \verb{by`` will be used. Only one of }across\code{and}by`
+may be used at a time.}
 
 \item{fun}{a function used for summarising scores. Default is \code{mean}.}
 
@@ -88,6 +95,11 @@ summarise_scores(scores,by = "model")
 
 # get scores by model and target type
 summarise_scores(scores, by = c("model", "target_type"))
+
+# Get scores summarised across horizon, forecast date, and target end date
+summarise_scores(
+ scores, across = c("horizon", "forecast_date", "target_end_date")
+)
 
 # get standard deviation
 summarise_scores(scores, by = "model", fun = sd)
