@@ -45,8 +45,8 @@ may alter results in an unpredictable way.}
 
 \item{across}{character vector with column names from the vector of variables
 that define the \emph{unit of a single forecast} (see above) to summarise across.
-If \code{NULL} (default), then \verb{by`` will be used. Only one of }across\code{and}by`
-may be used at a time.}
+If \code{NULL} (default), then \code{by} will be used or inferred internally if also
+not specified. Only one of \code{across} and \code{by}  may be used at a time.}
 
 \item{fun}{a function used for summarising scores. Default is \code{mean}.}
 

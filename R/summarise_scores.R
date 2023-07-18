@@ -16,8 +16,8 @@
 #' may alter results in an unpredictable way.
 #' @param across character vector with column names from the vector of variables
 #' that define the *unit of a single forecast* (see above) to summarise across.
-#' If `NULL` (default), then `by`` will be used. Only one of `across` and `by` 
-#' may be used at a time.
+#' If `NULL` (default), then `by` will be used or inferred internally if also
+#' not specified. Only one of `across` and `by`  may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
