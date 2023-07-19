@@ -15,9 +15,11 @@
 #' forecast per day, location and model). Adding additional, unrelated, columns
 #' may alter results in an unpredictable way.
 #' @param across character vector with column names from the vector of variables
-#' that define the *unit of a single forecast* (see above) to summarise across.
-#' If `NULL` (default), then `by` will be used or inferred internally if also
-#' not specified. Only one of `across` and `by`  may be used at a time.
+#' that define the *unit of a single forecast* (see above) to summarise scores
+#' across (meaning that the specified columns will be dropped). This is an
+#' , and in essentially a reverse of, specifying `by`. If `NULL` (default),
+#' then `by` will be used or inferred internally if also not specified. Only
+#' one of `across` and `by`  may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
 #' performance between models based on pairwise comparisons.
