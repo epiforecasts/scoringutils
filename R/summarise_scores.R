@@ -18,7 +18,7 @@
 #' that define the *unit of a single forecast* (see above) to summarise scores
 #' across (meaning that the specified columns will be dropped). This is an
 #' alternative to specifying `by` directly. If `NULL` (default), then `by` will
-#' be used or inferred internally if also not specified. Only  one of `across` 
+#' be used or inferred internally if also not specified. Only  one of `across`
 #' and `by`  may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param relative_skill logical, whether or not to compute relative
