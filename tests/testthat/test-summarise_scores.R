@@ -105,6 +105,12 @@ test_that("summarise_scores() across argument works as expected", {
     ),
     regexp = "The columns specified in 'across' must be a subset "
   )
+  expect_error(
+    summarise_scores(
+      scores, across = c("horizon", "horizons"),
+    ),
+    regexp = "The columns specified in 'across' must be a subset"
+  )
   expect_equal(
     summarise_scores(
       scores, across = c("horizon", "model", "forecast_date", "target_end_date")

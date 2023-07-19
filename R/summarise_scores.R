@@ -115,10 +115,13 @@ summarise_scores <- function(scores,
 
   # if across is provided, remove from by
   if (!is.null(across)) {
-    if (length(intersect(by, across)) == 0) {
+    if (!all(across %in% by)) {
       stop(
         "The columns specified in 'across' must be a subset of the columns ",
-        "that define the forecast unit. Please check your input and try again.")
+        "that define the forecast unit (possible options are ",
+        toString(by),
+        "). Please check your input and try again."
+      )
     }
     by <- setdiff(by, across)
   }
