@@ -180,28 +180,25 @@ get_prediction_type <- function(data) {
   if (is.data.frame(data)) {
     if ("quantile" %in% names(data)) {
       return("quantile")
-    } else if (isTRUE(
-      all.equal(data$prediction, as.integer(data$prediction)))
-    ) {
-      return("integer")
-    } else {
-      if (suppressWarnings(all(!is.na(as.numeric(data$prediction))))) {
-        return("continuous")
-      } else {
-        stop("Input is not numeric and cannot be coerced to numeric")
-      }
-      return("continuous")
     }
-  } else {
-    if (isTRUE(all.equal(as.vector(data), as.integer(data)))) {
-      return("integer")
-    } else {
-      # error if hte inpuut is not coerceble to numeric
-      if (suppressWarnings(all(!is.na(as.numeric(data))))) {
-        return("continuous")
-      } else {
-        stop("Input is not numeric and cannot be coerced to numeric")
+    else{
+      if ("prediction" %in% names(data)) {
+        data <- data$prediction
+      }else {
+        stop("Input does not contain a column named 'prediction'")
       }
+    }
+  }
+
+  if (isTRUE(all.equal(as.vector(data), as.integer(data))) &&
+        !all(is.na(as.integer(data)))) {
+    return("integer")
+  } else {
+    # error if hte inpuut is not coerceble to numeric
+    if (suppressWarnings(!all(is.na(as.numeric(data))))) {
+      return("continuous")
+    } else {
+      stop("Input is not numeric and cannot be coerced to numeric")
     }
   }
 }
