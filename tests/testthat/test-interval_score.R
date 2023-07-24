@@ -27,7 +27,6 @@ test_that("WIS works within score for median forecast", {
   expect_equal(eval$ae_median, eval$interval_score)
 })
 
-
 test_that("wis works, 1 interval only", {
   y <- c(1, -15, 22)
   lower <- c(0, 1, 0)
@@ -55,9 +54,9 @@ test_that("WIS works within score for one interval", {
     date = rep(1:3, times = 2)
   )
 
-  eval <- scoringutils::score(test_data,
+  eval <- suppressMessages(scoringutils::score(test_data,
     count_median_twice = TRUE
-  )
+  ))
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
@@ -69,11 +68,6 @@ test_that("WIS works within score for one interval", {
 
   expect_equal(expected, eval$interval_score)
 })
-
-
-
-
-
 
 test_that("wis works, 1 interval and median", {
   test_data <- data.frame(
@@ -103,7 +97,6 @@ test_that("wis works, 1 interval and median", {
 
   expect_identical(eval$interval_score, expected)
 })
-
 
 test_that("wis works, 2 intervals and median", {
   test_data <- data.frame(
@@ -142,15 +135,7 @@ test_that("wis works, 2 intervals and median", {
   )
 })
 
-
-
-
-
-
-
-
 # additional tests from the covidhubutils repo
-
 test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
@@ -221,8 +206,6 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 })
 
 
-
-
 test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
@@ -283,9 +266,9 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::score(data_formatted,
+  eval <- suppressMessages(scoringutils::score(data_formatted,
     count_median_twice = FALSE
-  )
+  ))
 
   eval <- summarise_scores(eval,
     by = c(
@@ -382,10 +365,6 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   expect_equal(eval$interval_score, expected)
 })
 
-
-
-
-
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
   true_values <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
@@ -416,7 +395,6 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     expect_equal((qs_lower + qs_upper) / 2, is)
   }
 })
-
 
 test_that("Quantlie score and interval score yield the same result, weigh = TRUE", {
   true_values <- rnorm(10, mean = 1:10)
