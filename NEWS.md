@@ -3,6 +3,9 @@
 ## Package updates
 
 - Made imputation of the median in `bias_range()` and `bias_quantile()` more obvious to the user as this may cause unexpected behaviour.
+- Simplified `bias_range()` so that it uses `bias_quantile()` internally.
+- Added additional input checks to `bias_range()` and `bias_quantile()` to make sure that the input is valid.
+- Improve the coverage of unit tests for `bias_range()`, `bias_quantile()`, and `bias_sample()`.
 
 ## Bug fixes
 
