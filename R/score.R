@@ -83,7 +83,7 @@
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
-#' determine the forecast unit automatically) and check forecasts before scoring
+#' # determine the forecast unit automatically), check forecasts before scoring
 #' example_quantile %>%
 #'   set_forecast_unit(
 #'     c("location", "target_end_date", "target_type", "horizon", "model")

@@ -310,6 +310,8 @@ get_protected_columns <- function(data) {
 #' @param data An object of class `scoringutils_check()` as produced by
 #' [check_forecasts()].
 #'
+#' @importFrom methods is
+#'
 #' @return Logical, either TRUE or FALSE
 #'
 #' @keywords internal
