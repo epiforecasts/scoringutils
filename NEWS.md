@@ -9,7 +9,7 @@
 
 ## Bug fixes
 
-- Fixed a bug in `get_prediction_type()` which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted `bias_sample()`.
+- Fixed a bug in `get_prediction_type()` which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted `bias_sample()` and also `score()` when used with integer forecasts resulting in lower bias scores than expected.
 
 
 # scoringutils 1.1.6
