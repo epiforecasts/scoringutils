@@ -1,7 +1,26 @@
 # scoringutils 1.2.0
 
 ## Package updates
-- The documentation was updated to reflect the recent changes since scoringutils 1.1.0. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like `data |> set_forceast_unit("location", "model") |> check_forecasts() |> score()`. The function `transform_forecasts()` allows the user to easily add transformations of forecasts, as suggested in the paper ["Scoring epidemiological forecasts on transformed scales"](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1). In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. One can now use something like `data |> transform_forcasts(fun = log) |> score() |> summarise_scores(by = c("model", "scale")`. 
+- The documentation was updated to reflect the recent changes since scoringutils 1.1.0. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following: 
+
+```
+example_quantile |> 
+  set_forecast_unit(c("model", "location", "forecast_date", "horizon", "target_type")) |> 
+  check_forecasts() |> 
+  score()
+```
+
+The function `transform_forecasts()` allows the user to easily add transformations of forecasts, as suggested in the paper ["Scoring epidemiological forecasts on transformed scales"](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1). In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. Users can now do something like the following to score a transformed version of the data in addition to the original one: 
+
+```
+data <- example_quantile[true_value > 0, ]
+data |>
+  transform_forecasts(fun = log_shift, offset = 1) |> 
+  score() |> 
+  summarise_scores(by = c("model", "scale"))
+```
+
+The function `log_shift()` is a newly introduced helper function that acts just like `log()`, but has an additional argument `offset` that can add a number to every prediction and observed value before applying the log transformation. 
 
 # scoringutils 1.1.7
 
