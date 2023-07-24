@@ -205,3 +205,11 @@ test_that("bias_quantile and bias_range() give the same result", {
   )
   expect_equal(range_bias, range_quantile)
 })
+
+test_that("bias_range() works with point forecasts", {
+  predictions <- 1
+  true_value <- 1
+  range <- c(0)
+
+  expect_equal(bias_range(predictions, predictions, range, true_value), 0)
+})

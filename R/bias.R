@@ -280,8 +280,10 @@ bias_quantile <- function(predictions, quantiles, true_value) {
 
 bias_range <- function(lower, upper, range, true_value) {
 
-  if (!all(diff(range) > 0)) {
-    stop("Range must be increasing")
+  if (length(range) > 1) {
+    if (!all(diff(range) > 0)) {
+      stop("Range must be increasing")
+    }
   }
 
   if (length(lower) != length(upper) || length(range) != length(lower)) {
