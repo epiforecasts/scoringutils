@@ -4,7 +4,7 @@ author: "Nikos Bosse"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{scoringutils}
+  %\VignetteIndexEntry{Scoring forecasts directly}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
