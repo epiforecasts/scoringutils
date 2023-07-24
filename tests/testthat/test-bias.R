@@ -52,7 +52,6 @@ test_that("bias_sample() works for continuous true_values and predictions", {
   )
 })
 
-
 test_that("bias_sample() works as expected", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
@@ -154,6 +153,31 @@ test_that("bias_quantile(): quantiles must be unique", {
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
+})
+
+test_that("bias_sample() approx equals bias_quantile() for many samples", {
+  set.seed(123)
+
+  # Generate true value
+  true_value <- 3
+  
+  # Generate many sample predictions
+  predictions <- sample(rnorm(1000, mean = true_value, sd = 2), 1000)
+
+  # Get sample based bias
+  bias_sample_result <- bias_sample(
+    true_value, matrix(predictions, nrow = 1)
+  )
+
+  # Convert predictions to quantiles
+  quantiles <- seq(0, 1, length.out = 100)
+  quantile_preds <- quantile(predictions, probs = quantiles)
+
+  # Get quantile based bias
+  bias_quantile_result <- bias_quantile(quantile_preds, quantiles, true_value)
+  
+  # Difference should be small
+  expect_equal(bias_quantile_result, bias_sample_result, tolerance = 0.1)
 })
 
 test_that("bias_quantile and bias_range() give the same result", {
