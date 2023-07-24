@@ -240,7 +240,7 @@ get_prediction_type <- function(data) {
 get_target_type <- function(data) {
   if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
     if (all(data$true_value %in% c(0, 1)) &&
-      all(data$prediction >= 0) && all(data$prediction <= 1)) {
+          all(data$prediction >= 0) && all(data$prediction <= 1)) {
       return("binary")
     } else {
       return("integer")

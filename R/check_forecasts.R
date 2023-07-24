@@ -156,9 +156,9 @@ check_forecasts <- function(data) {
       errors,
       paste0(
         "There are instances with more than one forecast for the same target. ",
-         "This can't be right and needs to be resolved. Maybe you need to ",
-         "check the unit of a single forecast and add missing columns? Use ",
-         "the  function find_duplicates() to identify duplicate rows."
+        "This can't be right and needs to be resolved. Maybe you need to ",
+        "check the unit of a single forecast and add missing columns? Use ",
+        "the  function find_duplicates() to identify duplicate rows."
       )
     )
   }
@@ -229,8 +229,8 @@ check_forecasts <- function(data) {
 collapse_messages <- function(type = "messages", messages) {
   paste0(
     "The following ",  type, " were produced when checking inputs:\n",
-    paste(paste0(seq_along(messages), ". "),
-          messages, collapse = "\n"))
+    paste(paste0(seq_along(messages), ". "), messages, collapse = "\n")
+  )
 }
 
 
@@ -296,7 +296,7 @@ print.scoringutils_check <- function(x, ...) {
 find_duplicates <- function(data, forecast_unit, ...) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
   if (missing(forecast_unit)) {
-     forecast_unit <- get_forecast_unit(data, ...)
+    forecast_unit <- get_forecast_unit(data, ...)
   }
   data <- as.data.table(data)
   data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
