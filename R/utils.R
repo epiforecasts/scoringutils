@@ -188,7 +188,7 @@ get_prediction_type <- function(data) {
       return("continuous")
     }
   } else {
-    if (isTRUE(all.equal(data, as.integer(data)))) {
+    if (isTRUE(all.equal(as.vector(data), as.integer(data)))) {
       return("integer")
     } else {
       return("continuous")
