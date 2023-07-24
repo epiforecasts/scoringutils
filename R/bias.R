@@ -173,7 +173,7 @@ bias_quantile <- function(predictions, quantiles, true_value) {
   } else {
     # if median is not available, compute as mean of two innermost quantiles
     message(
-      "Median not available, computing as mean of two innermost quantiles", 
+      "Median not available, computing as mean of two innermost quantiles",
       " in order to compute bias."
     )
     median_prediction <-
