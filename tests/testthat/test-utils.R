@@ -160,3 +160,12 @@ test_that("prediction_is_quantile() handles NA values", {
   
   expect_true(prediction_is_quantile(data))
 })
+
+test_that("is.scoringutils_check() is working", {
+  checked <- suppressMessages(check_forecasts(example_binary))
+  expect_true(is.scoringutils_check(checked))
+
+  checked$cleaned_data <- NULL
+  expect_error(is.scoringutils_check(checked))
+})
+

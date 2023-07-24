@@ -115,10 +115,7 @@ score <- function(data,
                   ...) {
 
   # preparations ---------------------------------------------------------------
-  if (is(data, "scoringutils_check") &&
-    !any(is.null(data$cleaned_data), is.null(data$prediction_type),
-         is.null(data$forecast_unit), is.null(data$target_type))
-    ) {
+  if (is.scoringutils_check(data)) {
     check_data <- data
   } else {
     check_data <- check_forecasts(data)

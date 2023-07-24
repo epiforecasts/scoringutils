@@ -88,7 +88,8 @@ score(example_quantile) \%>\%
   add_coverage(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
-# set forecast unit and check forecasts in workflow
+# set forecast unit manually (to avoid issues with scoringutils trying to
+determine the forecast unit automatically) and check forecasts before scoring
 example_quantile \%>\%
   set_forecast_unit(
     c("location", "target_end_date", "target_type", "horizon", "model")
