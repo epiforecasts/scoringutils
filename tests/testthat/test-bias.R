@@ -68,57 +68,6 @@ test_that("bias_sample() works as expected", {
   expect_equal(scoringutils, scoringutils2)
 })
 
-
-test_that("bias_range() works", {
-  lower <- c(
-    6341.000, 6329.500, 6087.014, 5703.500,
-    5451.000, 5340.500, 4821.996, 4709.000,
-    4341.500, 4006.250, 1127.000, 705.500
-  )
-
-  upper <- c(
-    6341.000, 6352.500, 6594.986, 6978.500,
-    7231.000, 7341.500, 7860.004, 7973.000,
-    8340.500, 8675.750, 11555.000, 11976.500
-  )
-
-  range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
-
-  true_value <- 8062
-
-  scoringutils2 <- bias_range(
-    lower = lower, upper = upper,
-    range = range, true_value = true_value
-  )
-  scoringutils <- bias_range(
-    lower = lower, upper = upper,
-    range = range, true_value = true_value
-  )
-
-  expect_equal(scoringutils, scoringutils2)
-})
-
-test_that("bias_quantile and bias_range() give the same result", {
-  predictions <- order(rnorm(23))
-  lower <- rev(predictions[1:12])
-  upper <- predictions[12:23]
-
-  range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
-  quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-  true_value <- 8062
-
-  scoringutils2 <- bias_range(
-    lower = lower, upper = upper,
-    range = range, true_value = true_value
-  )
-  scoringutils <- bias_quantile(
-    predictions = predictions, quantiles = quantiles,
-    true_value = true_value
-  )
-
-  expect_equal(scoringutils, scoringutils2)
-})
-
 test_that("bias_quantile() handles NA values", {
   predictions <- c(NA, 1, 2, 3) 
   quantiles <- c(0.1, 0.5, 0.9)
@@ -205,4 +154,24 @@ test_that("bias_quantile(): quantiles must be unique", {
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
+})
+
+test_that("bias_quantile and bias_range() give the same result", {
+  predictions <- order(rnorm(23))
+  lower <- rev(predictions[1:12])
+  upper <- predictions[12:23]
+
+  range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
+  quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+  true_value <- 8062
+
+  range_bias <- bias_range(
+    lower = lower, upper = upper,
+    range = range, true_value = true_value
+  )
+  range_quantile <- bias_quantile(
+    predictions = predictions, quantiles = quantiles,
+    true_value = true_value
+  )
+  expect_equal(range_bias, range_quantile)
 })
