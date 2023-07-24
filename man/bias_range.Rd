@@ -2,14 +2,12 @@
 % Please edit documentation in R/bias.R
 \name{bias_range}
 \alias{bias_range}
-\title{Determines Bias of Quantile Forecasts}
+\title{Determines Bias of Quantile Forecasts based on the range of the
+prediction intervals}
 \usage{
-bias_range(range, lower, upper, true_value)
+bias_range(lower, upper, range, true_value)
 }
 \arguments{
-\item{range}{vector of corresponding size with information about the width
-of the central prediction interval}
-
 \item{lower}{vector of length corresponding to the number of central
 prediction intervals that holds predictions for the lower bounds of a
 prediction interval}
@@ -18,15 +16,19 @@ prediction interval}
 prediction intervals that holds predictions for the upper bounds of a
 prediction interval}
 
+\item{range}{vector of corresponding size with information about the width
+of the central prediction interval}
+
 \item{true_value}{a single true value}
 }
 \value{
 scalar with the quantile bias for a single quantile prediction
 }
 \description{
-Determines bias from quantile forecasts. For an increasing number of
-quantiles this measure converges against the sample based bias version
-for integer and continuous forecasts.
+Determines bias from quantile forecasts based on the range of the
+prediction intervals. For an increasing number of quantiles this measure
+converges against the sample based bias version for integer and continuous
+forecasts.
 }
 \details{
 For quantile forecasts, bias is measured as
@@ -86,6 +88,9 @@ bias_range(
   lower = lower, upper = upper,
   range = range, true_value = true_value
 )
+}
+\seealso{
+bias_quantile bias_sample
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

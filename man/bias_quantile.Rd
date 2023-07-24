@@ -11,7 +11,8 @@ bias_quantile(predictions, quantiles, true_value)
 that holds predictions}
 
 \item{quantiles}{vector of corresponding size with the quantiles for which
-predictions were made}
+predictions were made. If this does not contain the median (0.5) then the
+median is imputed as being the mean of the two innermost quantiles.}
 
 \item{true_value}{a single true value}
 }
@@ -51,7 +52,7 @@ observed true value, and this metric coincides with the one for
 continuous forecasts.
 
 Bias can assume values between
--1 and 1 and is 0 ideally.
+-1 and 1 and is 0 ideally (i.e. unbiased).
 }
 \examples{
 
