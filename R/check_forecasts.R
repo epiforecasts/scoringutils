@@ -125,7 +125,10 @@ check_forecasts <- function(data) {
 
   # get information about the forecasts ----------------------------------------
   prediction_type <- get_prediction_type(data)
-  forecast_unit <- get_forecast_unit(data, prediction_type = prediction_type)
+  quantile_prediction <- prediction_is_quantile(data)
+  forecast_unit <- get_forecast_unit(
+    data, quantile_prediction = quantile_prediction
+  )
   target_type <- get_target_type(data)
 
 

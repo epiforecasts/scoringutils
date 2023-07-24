@@ -161,6 +161,28 @@ delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
   return(df)
 }
 
+#' @title Check if predictions are quantile forecasts
+#'
+#' @description Internal helper function to check if a data frame contains
+#' quantile forecast predictions. This is determined by checking if the
+#' "quantile" column is present.
+#'
+#' @param data Data frame containing forecast predictions
+#'
+#' @return Logical indicating whether predictions are quantile forecasts
+#'
+#' @keywords internal
+
+prediction_is_quantile <- function(data) {
+  if (is.data.frame(data)) {
+    if ("quantile" %in% names(data)) {
+      return(TRUE)
+    }
+    return(FALSE)
+  }
+  stop("Input is not a data.frame")
+}
+
 
 
 #' @title Get prediction type of a forecast
@@ -180,8 +202,7 @@ get_prediction_type <- function(data) {
   if (is.data.frame(data)) {
     if ("quantile" %in% names(data)) {
       return("quantile")
-    }
-    else{
+    } else {
       if ("prediction" %in% names(data)) {
         data <- data$prediction
       }else {
@@ -236,8 +257,8 @@ get_target_type <- function(data) {
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for
 #'
-#' @param prediction_type The prediction type of the forecast. This is used to
-#' adjust the list of protected columns.
+#' @param quantile_prediction Logical indicating whether the forecast is a
+#' quantile forecast.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -246,13 +267,11 @@ get_target_type <- function(data) {
 #'
 #' @keywords internal
 
-get_forecast_unit <- function(data, prediction_type) {
+get_forecast_unit <- function(data, quantile_prediction = FALSE) {
 
   protected_columns <- get_protected_columns(data)
-  if (!missing(prediction_type)) {
-    if (prediction_type == "quantile") {
-      protected_columns <- setdiff(protected_columns, "sample")
-    }
+  if (quantile_prediction) {
+    protected_columns <- setdiff(protected_columns, "sample")
   }
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
