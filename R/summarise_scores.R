@@ -166,9 +166,8 @@ summarise_scores <- function(scores,
       pairwise <- unique(pairwise)
 
       # merge back
-      scores <- merge(scores, pairwise,
-                      all.x = TRUE,
-                      by = get_forecast_unit(pairwise)
+      scores <- merge(
+        scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
       )
     }
   }
