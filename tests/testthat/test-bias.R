@@ -167,3 +167,42 @@ test_that("bias_quantile() returns -1 if true value above max prediction", {
 
   expect_equal(bias_quantile(predictions, quantiles, true_value = 6), -1)  
 })
+
+test_that("bias_quantile(): quantiles must be between 0 and 1", {
+  predictions <- 1:4
+  
+  # Failing example
+  quantiles <- c(-0.1, 0.3, 0.5, 0.8)
+  expect_error(bias_quantile(predictions, quantiles, true_value = 3),
+               "quantiles must be between 0 and 1")
+               
+  # Passing counter example               
+  quantiles <- c(0.1, 0.3, 0.5, 0.8)
+  expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
+})
+
+test_that("bias_quantile(): quantiles must be increasing", {
+  predictions <- 1:4
+  
+  # Failing example
+  quantiles <- c(0.8, 0.3, 0.5, 0.9)
+  expect_error(bias_quantile(predictions, quantiles, true_value = 3),
+               "quantiles must be increasing")
+               
+  # Passing counter example
+  quantiles <- c(0.3, 0.5, 0.8, 0.9)
+  expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
+})
+
+test_that("bias_quantile(): quantiles must be unique", {
+  predictions <- 1:4
+  
+  # Failing example
+  quantiles <- c(0.3, 0.3, 0.5, 0.8) 
+  expect_error(bias_quantile(predictions, quantiles, true_value = 3),
+               "quantiles must be increasing")
+               
+  # Passing example
+  quantiles <- c(0.3, 0.5, 0.8, 0.9)
+  expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
+})
