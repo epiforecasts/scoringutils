@@ -84,15 +84,17 @@ test_that("bias_quantile() returns NA if no predictions", {
 test_that("bias_quantile() returns correct bias if value below the median", {
   predictions <- c(1, 2, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
-  
-  expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 0.8)
+  suppressMessages(
+    expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 0.8)
+  )
 })
 
 test_that("bias_quantile() returns correct bias if value above median", {
   predictions <- c(1, 2, 4, 5) 
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
-  
-  expect_equal(bias_quantile(predictions, quantiles, true_value = 5), -0.8)  
+  suppressMessages(
+    expect_equal(bias_quantile(predictions, quantiles, true_value = 5), -0.8) 
+  )
 })
 
 test_that("bias_quantile() returns correct bias if value at the median", {
@@ -106,7 +108,9 @@ test_that("bias_quantile() returns 1 if true value below min prediction", {
   predictions <- c(2, 3, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
   
-  expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 1)
+  suppressMessages(
+    expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 1)
+  )
 })
 
 test_that("bias_quantile() returns -1 if true value above max prediction", {
@@ -174,8 +178,10 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
   quantile_preds <- quantile(predictions, probs = quantiles)
 
   # Get quantile based bias
-  bias_quantile_result <- bias_quantile(quantile_preds, quantiles, true_value)
-  
+  bias_quantile_result <-   suppressMessages(
+    bias_quantile(quantile_preds, quantiles, true_value)
+  )
+
   # Difference should be small
   expect_equal(bias_quantile_result, bias_sample_result, tolerance = 0.1)
 })
