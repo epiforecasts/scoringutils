@@ -185,17 +185,26 @@ get_prediction_type <- function(data) {
     ) {
       return("integer")
     } else {
+      if (suppressWarnings(all(!is.na(as.numeric(data$prediction))))) {
+        return("continuous")
+      } else {
+        stop("Input is not numeric and cannot be coerced to numeric")
+      }
       return("continuous")
     }
   } else {
     if (isTRUE(all.equal(as.vector(data), as.integer(data)))) {
       return("integer")
     } else {
-      return("continuous")
+      # error if hte inpuut is not coerceble to numeric
+      if (suppressWarnings(all(!is.na(as.numeric(data))))) {
+        return("continuous")
+      } else {
+        stop("Input is not numeric and cannot be coerced to numeric")
+      }
     }
   }
 }
-
 
 #' @title Get type of the target true values of a forecast
 #'

@@ -1,4 +1,4 @@
-test_that("get_protected columns returns the correct result", {
+test_that("get_protected_columns() returns the correct result", {
 
   data <- example_quantile
   manual <- protected_columns <- c(
@@ -33,4 +33,39 @@ test_that("get_protected columns returns the correct result", {
   manual <- intersect(manual, colnames(example_continuous))
   auto <- get_protected_columns(data)
   expect_equal(sort(manual), sort(auto))
+})
+
+test_that("get_prediction_type() correctly identifies quantile predictions", {
+  data <- data.frame(
+    prediction = 1:3,
+    quantile = c(0.1, 0.5, 0.9) 
+  )
+  
+  expect_equal(get_prediction_type(data), "quantile")
+})
+
+test_that("correctly identifies integer predictions", {
+  data <- data.frame(
+    prediction = as.integer(1:5)
+  )
+  
+  expect_equal(get_prediction_type(data), "integer")
+})
+
+test_that("get_prediction_type() correctly identifies continuous predictions", {
+  data <- data.frame(
+    prediction = rnorm(5)
+  )
+  
+  expect_equal(get_prediction_type(data), "continuous") 
+})
+
+test_that("works with vector input", {
+  predictions <- rnorm(5)
+  
+  expect_equal(get_prediction_type(predictions), "continuous")
+})
+
+test_that("get_prediction_type() returns error on invalid input", {
+  suppressWarnings(expect_error(get_prediction_type("foo")))
 })
