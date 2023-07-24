@@ -131,18 +131,14 @@ check_forecasts <- function(data) {
   )
   target_type <- get_target_type(data)
 
-
-
   # check whether a column called 'quantile' or 'sample' is present ------------
-  if (!any(c("quantile", "sample") %in% colnames(data))) {
-    if (!target_type == "binary") {
-      errors <- c(
-        errors,
-        "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" # nolint
-      )
-    }
+  if (!any(c("quantile", "sample") %in% colnames(data)) &&
+       !target_type == "binary") {
+    errors <- c(
+      errors,
+      "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" # nolint
+    )
   }
-
 
   # check duplicate forecasts --------------------------------------------------
   # check whether there is more than one prediction for the same target, i.e.
