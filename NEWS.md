@@ -1,3 +1,12 @@
+# scoringutils 1.1.7
+
+## Package updates
+
+## Bug fixes
+
+- Fixed a bug in `get_prediction_type()` which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted `bias_sample()`.
+
+
 # scoringutils 1.1.6
 
 ## Feature updates
