@@ -318,7 +318,7 @@ brier_score <- list(
   `Metric` = "Brier score",
   `Explanation` = r"(Proper scoring rule for binary forecasts. The Brier score is computed as
   $$\text{Brier Score} = \frac{1}{N} \sum_{n = 1}^{N} (f_n - y_n),$$
-  where $f_n$, with $n = 1, \dots, N$ are the predicted probablities that the corresponding events, $y_n \in (0, 1)$ will be equal to one.)
+  where $f_n$, with $n = 1, \dots, N$ are the predicted probablities that the corresponding events, $y_n \in (0, 1)$ will be equal to one.
 
   **Usage**:
   Applicable to all binary forecasts.)"
