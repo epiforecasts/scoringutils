@@ -25,8 +25,7 @@ test_that("plot_predictions() works with point forecasts", {
 test_that("plot_predictions() can handle an arbitrary number of quantiles", {
   example2 <- scoringutils::example_quantile
 
-  p <-
-    example2 %>%
+  p <- example2 %>%
     make_NA(what = "truth",
             target_end_date <= '2021-05-01',
             target_end_date > '2021-07-22') %>%
@@ -47,8 +46,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
 
   example1 <- scoringutils::example_continuous
 
-  p2 <-
-    example1 %>%
+  p2 <- example1 %>%
     make_NA(what = "truth",
             target_end_date <= '2021-05-01',
             target_end_date > '2021-07-22') %>%
