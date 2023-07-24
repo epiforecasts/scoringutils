@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarise_scores</span><span class="op">(</span></span>
 <span>  <span class="va">scores</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  across <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  relative_skill_metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
@@ -95,6 +96,7 @@
 <span><span class="fu">summarize_scores</span><span class="op">(</span></span>
 <span>  <span class="va">scores</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  across <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fun <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  relative_skill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  relative_skill_metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
@@ -121,6 +123,15 @@ input data that do not correspond to a metric produced by <code><a href="score.h
 indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.</p></dd>
+
+
+<dt>across</dt>
+<dd><p>character vector with column names from the vector of variables
+that define the <em>unit of a single forecast</em> (see above) to summarise scores
+across (meaning that the specified columns will be dropped). This is an
+alternative to specifying <code>by</code> directly. If <code>NULL</code> (default), then <code>by</code> will
+be used or inferred internally if also not specified. Only  one of <code>across</code>
+and <code>by</code>  may be used at a time.</p></dd>
 
 
 <dt>fun</dt>
@@ -283,6 +294,101 @@ respective function.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       7.138247         0.19528533  0.07265625    53.13281</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       8.978601        -0.02312500 -0.02234375    78.47656</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:      18.892583        -0.04287176 -0.00512605   104.74790</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get scores summarised across horizon, forecast date, and target end date</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span></span></span>
+<span class="r-in"><span> <span class="va">scores</span>, across <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_end_date"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     location target_type  location_name                 model interval_score</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:       DE       Cases        Germany EuroCOVIDhub-baseline    14506.65500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:       DE       Cases        Germany EuroCOVIDhub-ensemble     6286.66495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:       DE       Cases        Germany  epiforecasts-EpiNow2    11684.72865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:       DE      Deaths        Germany EuroCOVIDhub-baseline      155.91235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:       DE      Deaths        Germany EuroCOVIDhub-ensemble       44.46077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:       DE      Deaths        Germany       UMass-MechBayes       68.91583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:       DE      Deaths        Germany  epiforecasts-EpiNow2       93.33921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:       FR       Cases         France EuroCOVIDhub-baseline    54147.68308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       FR       Cases         France EuroCOVIDhub-ensemble    44537.04769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:       FR       Cases         France  epiforecasts-EpiNow2    50141.70361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:       FR      Deaths         France EuroCOVIDhub-baseline      187.63842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:       FR      Deaths         France EuroCOVIDhub-ensemble       56.70677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:       FR      Deaths         France       UMass-MechBayes       74.17250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:       FR      Deaths         France  epiforecasts-EpiNow2       96.69760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:       GB       Cases United Kingdom EuroCOVIDhub-baseline    36032.52912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:       GB       Cases United Kingdom EuroCOVIDhub-ensemble    16010.55516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:       GB       Cases United Kingdom  epiforecasts-EpiNow2    18303.21825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:       GB      Deaths United Kingdom EuroCOVIDhub-baseline       95.17583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:       GB      Deaths United Kingdom EuroCOVIDhub-ensemble       20.04649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:       GB      Deaths United Kingdom       UMass-MechBayes       33.45330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:       GB      Deaths United Kingdom  epiforecasts-EpiNow2       25.77830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:       IT       Cases          Italy EuroCOVIDhub-baseline     9247.43141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:       IT       Cases          Italy EuroCOVIDhub-ensemble     4941.02753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:       IT       Cases          Italy  epiforecasts-EpiNow2     3196.57595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:       IT      Deaths          Italy EuroCOVIDhub-baseline      198.88887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:       IT      Deaths          Italy EuroCOVIDhub-ensemble       44.47594</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:       IT      Deaths          Italy       UMass-MechBayes       34.06615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:       IT      Deaths          Italy  epiforecasts-EpiNow2       59.20908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     location target_type  location_name                 model interval_score</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      dispersion underprediction overprediction coverage_deviation        bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  2923.63054    1.147921e+02   1.146823e+04        -0.08630435  0.49062500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2286.83071    4.768886e+02   3.522946e+03        -0.06184783  0.17375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3382.48817    9.200027e+02   7.382238e+03        -0.14608696  0.13375000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    78.26697    0.000000e+00   7.764538e+01         0.02510870  0.52812500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    35.27327    4.533967e+00   4.653533e+00         0.23842391 -0.06875000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    31.75822    3.715761e+01   0.000000e+00        -0.07271739 -0.63312500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    44.37726    3.803397e+01   1.092799e+01        -0.06184783 -0.45937500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  6294.16678    8.578344e+03   3.927517e+04        -0.13521739  0.16250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  4834.10747    6.054179e+03   3.364876e+04        -0.13521739  0.02281250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  7852.48758    7.281398e+03   3.500782e+04        -0.06456522 -0.05718750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:   101.19685    0.000000e+00   8.644158e+01         0.07945652  0.46562500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    41.62796    7.942935e+00   7.135870e+00         0.20445652  0.06562500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:    40.59505    2.091984e+01   1.265761e+01         0.05635870  0.08812500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:    60.31008    1.061815e+01   2.576938e+01         0.02310019 -0.07173913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:  4300.45982    3.166997e+04   6.210326e+01        -0.18141304 -0.63156250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:  6016.72500    8.891671e+03   1.102159e+03        -0.09445652 -0.50937500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 10391.44923    3.617322e+03   4.294447e+03         0.01695652 -0.28125000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:    86.38914    8.266304e+00   5.203804e-01         0.29956522 -0.10625000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:    16.20003    1.241848e+00   2.604620e+00         0.19358696  0.15937500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:    14.34596    4.891304e-02   1.905842e+01        -0.12978261  0.64468750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:    13.71580    1.086957e-02   1.205163e+01        -0.01701087  0.54875000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:  2891.74663    7.767894e+02   5.578895e+03        -0.04554348  0.37031250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:  1516.43514    1.525970e+03   1.898622e+03        -0.09989130  0.08718750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:  1031.08682    1.222700e+03   9.427894e+02        -0.07271739 -0.11093750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:    99.77202    1.277174e-01   9.898913e+01         0.06043478  0.46875000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:    27.62268    2.694293e+00   1.415897e+01         0.14467391  0.13437500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:    20.79034    9.077446e+00   4.198370e+00         0.05364130 -0.18906250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:    17.02701    1.342663e+01   2.875543e+01        -0.09717391 -0.05687500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      dispersion underprediction overprediction coverage_deviation        bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 21109.81250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  9949.12500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 18315.09375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:   261.03125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    51.93750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   124.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   154.62500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 67726.87500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 52432.93750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 60549.84375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:   293.59375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    72.12500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:    88.53125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:   143.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 49934.03125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 26422.84375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 27901.06250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:    59.03125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:    22.96875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:    55.34375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:    40.62500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 15123.68750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:  7599.37500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:  4929.25000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:   319.37500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:    65.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:    45.53125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:    91.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ae_median</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get standard deviation</span></span></span>
 <span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">sd</span><span class="op">)</span></span></span>
