@@ -290,6 +290,9 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     median_prediction <- predictions[quantiles == 0.5]
   } else {
     # if median is not available, compute as mean of two innermost quantiles
+    message(
+      "Median not available, computing as mean of two innermost quantiles"
+    )
     median_prediction <-
       0.5 * predictions[quantiles == max(quantiles[quantiles < 0.5])] +
       0.5 * predictions[quantiles == min(quantiles[quantiles > 0.5])]
