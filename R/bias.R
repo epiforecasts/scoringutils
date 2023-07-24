@@ -288,7 +288,10 @@ bias_range <- function(lower, upper, range, true_value) {
   }
 
   # Convert range to quantiles
-  quantiles <- c(abs(100 - range) / (2 * 100), abs(100 + range) / (2 * 100))
+  quantiles <- c(
+    rev(abs(100 - range) / (2 * 100)),
+    abs(100 + range[range != 0]) / (2 * 100)
+  )
 
   # Combine predictions
   upper_without_median <- upper[range != 0]
