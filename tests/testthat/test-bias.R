@@ -1,4 +1,4 @@
-test_that("function throws an error when missing true_values", {
+test_that("bias_sample() throws an error when missing true_values", {
   true_values <- rpois(10, lambda = 1:10)
   predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
@@ -8,7 +8,7 @@ test_that("function throws an error when missing true_values", {
   )
 })
 
-test_that("function throws an error when missing 'predictions'", {
+test_that("bias_sample() throws an error when missing 'predictions'", {
   true_values <- rpois(10, lambda = 1:10)
   predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
 
@@ -18,7 +18,7 @@ test_that("function throws an error when missing 'predictions'", {
   )
 })
 
-test_that("function works for integer true_values and predictions", {
+test_that("bias_sample() works for integer true_values and predictions", {
   true_values <- rpois(10, lambda = 1:10)
   predictions <- replicate(10, rpois(10, lambda = 1:10))
   output <- bias_sample(
@@ -35,7 +35,7 @@ test_that("function works for integer true_values and predictions", {
   )
 })
 
-test_that("function works for continuous true_values and predictions", {
+test_that("bias_sample() works for continuous true_values and predictions", {
   true_values <- rnorm(10)
   predictions <- replicate(10, rnorm(10))
   output <- bias_sample(
@@ -53,8 +53,7 @@ test_that("function works for continuous true_values and predictions", {
 })
 
 
-
-test_that("bias works", {
+test_that("bias_sample() works as expected", {
   true_values <- rpois(30, lambda = 1:30)
   predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
   expect_true(all(bias_sample(true_values, predictions) == bias_sample(true_values, predictions)))
@@ -70,7 +69,7 @@ test_that("bias works", {
 })
 
 
-test_that("range bias works", {
+test_that("bias_range() works", {
   lower <- c(
     6341.000, 6329.500, 6087.014, 5703.500,
     5451.000, 5340.500, 4821.996, 4709.000,
@@ -99,7 +98,7 @@ test_that("range bias works", {
   expect_equal(scoringutils, scoringutils2)
 })
 
-test_that("quantile bias and range bias have the same result", {
+test_that("bias_quantile and bias_range() give the same result", {
   predictions <- order(rnorm(23))
   lower <- rev(predictions[1:12])
   upper <- predictions[12:23]
@@ -118,4 +117,53 @@ test_that("quantile bias and range bias have the same result", {
   )
 
   expect_equal(scoringutils, scoringutils2)
+})
+
+test_that("bias_quantile() handles NA values", {
+  predictions <- c(NA, 1, 2, 3) 
+  quantiles <- c(0.1, 0.5, 0.9)
+  
+  expect_error(
+    bias_quantile(predictions, quantiles, true_value = 2),
+    "predictions and quantiles must have the same length"
+  )
+})
+
+test_that("bias_quantile() returns NA if no predictions", {
+  expect_true(is.na(bias_quantile(numeric(0), numeric(0), true_value = 2)))
+})
+
+test_that("bias_quantile() returns correct bias if value below the median", {
+  predictions <- c(1, 2, 4, 5)
+  quantiles <- c(0.1, 0.3, 0.7, 0.9)
+  
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 0.8)
+})
+
+test_that("bias_quantile() returns correct bias if value above median", {
+  predictions <- c(1, 2, 4, 5) 
+  quantiles <- c(0.1, 0.3, 0.7, 0.9)
+  
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 5), -0.8)  
+})
+
+test_that("bias_quantile() returns correct bias if value at the median", {
+  predictions <- c(1, 2, 3, 4)
+  quantiles <- c(0.1, 0.3, 0.5, 0.7) 
+  
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 3), 0)
+})
+
+test_that("bias_quantile() returns 1 if true value below min prediction", {
+  predictions <- c(2, 3, 4, 5)
+  quantiles <- c(0.1, 0.3, 0.7, 0.9)
+  
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 1)
+})
+
+test_that("bias_quantile() returns -1 if true value above max prediction", {
+  predictions <- c(1, 2, 3, 4)
+  quantiles <- c(0.1, 0.3, 0.5, 0.7)
+
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 6), -1)  
 })

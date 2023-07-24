@@ -82,7 +82,7 @@ bias_sample <- function(true_values, predictions) {
 #' @description
 #' Determines bias from quantile forecasts. For an increasing number of
 #' quantiles this measure converges against the sample based bias version
-#' for integer and continuous forecasts.
+#' for integer and continuous forecasts.#
 #'
 #' @details
 #' For quantile forecasts, bias is measured as
