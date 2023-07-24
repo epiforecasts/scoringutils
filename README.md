@@ -28,11 +28,13 @@ and [Scoring forecasts
 directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
 
 The `scoringutils` package offers convenient automated forecast
-evaluation in a `data.table` format (using the function `score()`), but
-also provides experienced users with a set of reliable lower-level
-scoring metrics operating on vectors/matrices they can build upon in
-other applications. In addition it implements a wide range of flexible
-plots designed to cover many use cases.
+evaluation through the function `score()`. The function operates on
+data.frames (it uses `data.table` internally for speed and efficiency)
+and can easily be integrated in a workflow based on `dplyr` or
+`data.table`. It also provides experienced users with a set of reliable
+lower-level scoring metrics operating on vectors/matrices they can build
+upon in other applications. In addition it implements a wide range of
+flexible plots designed to cover many use cases.
 
 Where available `scoringutils` depends on functionality from
 `scoringRules` which provides a comprehensive collection of proper
@@ -109,17 +111,19 @@ example_quantile %>%
 Forecasts can be easily and quickly scored using the `score()` function.
 `score()` automatically tries to determine the `forecast_unit`, i.e. the
 set of columns that uniquely defines a single forecast, by taking all
-column names of the data into account. It is recommended to set the
-forecast unit manually to avoid errors. The function
-`set_forecast_unit()` will simply drop unneeded columns. To verify
-everything is in order, the function `check_forecasts()` should be used.
-The result of that check can then passed directly into `score()`.
-`score()` returns unsummarised scores, which in most cases is not what
-the user wants. Here we make use of additional functions from
-`scoringutils` to add empirical coverage-levels (`add_coverage()`), and
-scores relative to a baseline model (here chosen to be the
-EuroCOVIDhub-ensemble model). See the getting started vignette for more
-details. Finally we summarise these scores by model and target type.
+column names of the data into account. However, it is recommended to set
+the forecast unit manually using `set_forecast_unit()` as this may help
+to avoid errors, especially when scoringutils is used in automated
+pipelines. The function `set_forecast_unit()` will simply drop unneeded
+columns. To verify everything is in order, the function
+`check_forecasts()` should be used. The result of that check can then
+passed directly into `score()`. `score()` returns unsummarised scores,
+which in most cases is not what the user wants. Here we make use of
+additional functions from `scoringutils` to add empirical
+coverage-levels (`add_coverage()`), and scores relative to a baseline
+model (here chosen to be the EuroCOVIDhub-ensemble model). See the
+getting started vignette for more details. Finally we summarise these
+scores by model and target type.
 
 ``` r
 example_quantile %>%
@@ -151,10 +155,10 @@ example_quantile %>%
 | epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | -0.0790 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
 | epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | -0.0051 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
 
-`scoringutils` contains additional functionality to transform forecasts
-before scoring (see ), to summarise scores at different levels, to
-visualise them, and to explore the forecasts themselves. See the package
-vignettes and function documentation for more information.
+`scoringutils` contains additional functionality to transform forecasts,
+to summarise scores at different levels, to visualise them, and to
+explore the forecasts themselves. See the package vignettes and function
+documentation for more information.
 
 You may want to score forecasts based on transformations of the original
 data in order to obtain a more complete evaluation (see [this

@@ -85,7 +85,7 @@ example_quantile %>%
 
 ### Scoring forecasts
 
-Forecasts can be easily and quickly scored using the `score()` function. `score()` automatically tries to determine the `forecast_unit`, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. It is recommended to set the forecast unit manually to avoid errors. The function `set_forecast_unit()` will simply drop unneeded columns. To verify everything is in order, the function `check_forecasts()` should be used. The result of that check can then passed directly into `score()`. `score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from `scoringutils` to add empirical coverage-levels (`add_coverage()`), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
+Forecasts can be easily and quickly scored using the `score()` function. `score()` automatically tries to determine the `forecast_unit`, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually using `set_forecast_unit()` as this may help to avoid errors, especially when scoringutils is used in automated pipelines. The function `set_forecast_unit()` will simply drop unneeded columns. To verify everything is in order, the function `check_forecasts()` should be used. The result of that check can then passed directly into `score()`. `score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from `scoringutils` to add empirical coverage-levels (`add_coverage()`), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
 
 ```{r score-example}
 example_quantile %>%
@@ -105,7 +105,7 @@ example_quantile %>%
   kable()
 ```
 
-`scoringutils` contains additional functionality to transform forecasts before scoring (see ), to summarise scores at different levels, to visualise them, and to explore the forecasts themselves. See the package vignettes and function documentation for more information.
+`scoringutils` contains additional functionality to transform forecasts, to summarise scores at different levels, to visualise them, and to explore the forecasts themselves. See the package vignettes and function documentation for more information.
 
 You may want to score forecasts based on transformations of the original data in order to obtain a more complete evaluation (see [this paper](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1) for more information). This can be done using the function `transform_forecasts()`. In the following example, we truncate values at 0 and use the function `log_shift()` to add 1 to all values before applying the natural logarithm. 
 
