@@ -1,5 +1,11 @@
 # scoringutils 1.1.7
 
+## Breaking changes
+
+- The `prediction_type` argument of `get_forecast_unit()` has been changed to
+`quantile_prediction` and is now a logical. Whilst this is an internal function
+it may impact some users as it is accessible via `find_duplicates().
+
 ## Package updates
 
 - Made imputation of the median in `bias_range()` and `bias_quantile()` more obvious to the user as this may cause unexpected behaviour.

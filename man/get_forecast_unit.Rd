@@ -4,7 +4,7 @@
 \alias{get_forecast_unit}
 \title{Get unit of a single forecast}
 \usage{
-get_forecast_unit(data, prediction_type)
+get_forecast_unit(data, quantile_prediction = FALSE)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -34,8 +34,8 @@ You can check the format of your data using \code{\link[=check_forecasts]{check_
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
 
-\item{prediction_type}{The prediction type of the forecast. This is used to
-adjust the list of protected columns.}
+\item{quantile_prediction}{Logical indicating whether the forecast is a
+quantile forecast.}
 }
 \value{
 A character vector with the column names that define the unit of

@@ -103,3 +103,57 @@ test_that("get_prediction_type() handles NA values across prediction types", {
    "Input is not numeric and cannot be coerced to numeric"
   )
 })
+
+test_that("prediction_is_quantile() correctly identifies quantile predictions", {
+  data <- data.frame(
+    prediction = 1:3, 
+    quantile = c(0.1, 0.5, 0.9)
+  )
+
+  expect_true(prediction_is_quantile(data))
+})
+
+test_that("prediction_is_quantile() returns false for non-quantile predictions", {
+  data <- data.frame(
+    prediction = rnorm(5)
+  )
+  
+  expect_false(prediction_is_quantile(data))
+})
+
+test_that("prediction_is_quantile() returns false if quantile column has wrong values", {
+  data <- data.frame(
+    prediction = rnorm(5),
+    quantile = rnorm(5)
+  )
+
+  expect_true(prediction_is_quantile(data)) 
+})
+
+test_that("prediction_is_quantile() returns false if quantile column is character", {
+  data <- data.frame(
+    prediction = rep(rnorm(5), 3),
+    quantile = c("A", "B", "C")
+  )
+
+  expect_true(prediction_is_quantile(data))
+})
+
+test_that("prediction_is_quantile() errors on non-data.frame input", {
+  expect_error(prediction_is_quantile(1:5))
+})
+
+test_that("prediction_is_quantile() handles empty data frame", {
+  data <- data.frame(prediction = numeric(0))
+  
+  expect_false(prediction_is_quantile(data))
+})
+
+test_that("prediction_is_quantile() handles NA values", {
+  data <- data.frame(
+    prediction = c(1, NA, 3),
+    quantile = c(0.1, NA, 0.5) 
+  )
+  
+  expect_true(prediction_is_quantile(data))
+})
