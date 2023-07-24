@@ -149,6 +149,16 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     predictions <- predictions[!is.na(predictions)]
   }
 
+  if (anyNA(quantiles)) {
+    quantiles <- quantiles[!is.na(quantiles)]
+    predictions <- predictions[!is.na(quantiles)]
+  }
+
+  # if there is no input, return NA
+  if (length(quantiles) == 0 || length(predictions) == 0) {
+    return(NA_real_)
+  }
+
   # quantiles must be between 0 and 1, increase, and be unique
   if (any(quantiles < 0) || any(quantiles > 1)) {
     stop("quantiles must be between 0 and 1")
@@ -156,11 +166,6 @@ bias_quantile <- function(predictions, quantiles, true_value) {
 
   if (!all(diff(quantiles) > 0)) {
     stop("quantiles must be increasing")
-  }
-
-  # if there is no input, return NA
-  if (length(quantiles) == 0 || length(predictions) == 0) {
-    return(NA_real_)
   }
 
   if (0.5 %in% quantiles) {
