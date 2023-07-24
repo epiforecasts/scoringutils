@@ -361,9 +361,9 @@ bias <- list(
   $$B(F, y) = 1 - 2 \cdot (F (y)), $$
   where $F$ is the CDF of the predictive distribution and $y$ is the observed value.
 
-  For integer-valued forecasts, bias can be calculated as
+  For integer-valued forecasts, maximum and minimum bias with respect to any data point $y$ are $\pm (1 - p(y))$, where $p(y)$ is the predicted probability mass at the data point. It can be calculated as
   $$B(P, y) = 1 - (P(y) + P(y + 1)), $$
-  where $P(y)$ is the cumulative probability assigned to all outcomes smaller or equal to $y$.
+  where $P(y)$ is the cumulative probability assigned to all outcomes smaller or equal to $y$, i.e. the cumulative probability mass function corresponding to $p(y)$.
 
   For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the true value is smaller than the median of the predictive distribution. If the true value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the true value. If the true value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed true value, and this metric coincides with the one for continuous forecasts.
 
