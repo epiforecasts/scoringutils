@@ -1,4 +1,4 @@
-test_that("pairwise comparisons works", {
+test_that("pairwise_comparison() works", {
   # define some toy data using a format suitable for github.com/reichlab/covidHubUtils
   test_truth <- data.frame(
     model = rep("truth_source", 30),
@@ -6,18 +6,39 @@ test_that("pairwise comparisons works", {
     target_end_date = as.Date("2020-01-01") + rep(1:10, times = 3),
     target_variable = "inc death",
     value = c(
-      4, 1, 5, 5, 6, 12, 4, 5, 12, 53, 8, 6, 3, 1, 46, 6, 3, 5,
-      8, 5, 3, 1, 5, 7, 7, 3, 2, 6, 8, 5
-    )
+      sort(c(4, 1, 5, 5, 6)), sort(c(12, 4, 5, 12, 53)),
+      sort(c(8, 6, 3, 1, 46)), sort(c(6, 3, 5, 8, 5)),
+      sort(c(3, 1, 5, 7, 7)), sort(c(3, 2, 6, 8, 5))
+      )
   )
-  test_forecasts <- expand.grid(
-    model = c("m1", "m2", "m3", "m4"),
-    location = c("location_1", "location_2", "location_3"),
-    target_end_date = as.Date("2020-01-01") + 1:10,
-    quantile = c(0.05, 0.25, 0.5, 0.75, 0.95)
+
+  test_forecasts <- data.table::as.data.table(test_truth)
+  test_forecasts <- data.table::CJ(
+    model = "m",
+    model_sd = c(1, 2, 3, 4),
+    samples = 1:100
   )
+  test_forecasts[, model := paste0(model, model_sd)]
+  test_forecasts <- merge(
+    test_forecasts[, dummy_id := 1],
+    data.table::as.data.table(test_truth)[, dummy_id := 1][, model := NULL],
+    by = "dummy_id", allow.cartesian = TRUE
+  )[, dummy_id := NULL]
+
   set.seed(123)
-  test_forecasts$value <- rnorm(n = nrow(test_forecasts))
+  test_forecasts[, value := sapply(value, function(x) {
+      abs(rnorm(n = 1, mean = x, sd = model_sd))
+    }), 
+    by = .(model, target_end_date, location, target_variable)
+  ]
+
+  quantiles <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+  test_forecasts <- test_forecasts[,
+    .(quantile = quantiles, value = quantile(value, quantiles)),
+    by = .(
+      model, location, target_end_date, target_variable
+    )
+  ]
 
   # make a version of that data that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
@@ -56,7 +77,6 @@ test_that("pairwise comparisons works", {
       )
     )
   )
-
 
   # extract the relative_skill values
   relative_skills_without <- eval_without_baseline[, .(
@@ -207,7 +227,7 @@ test_that("pairwise comparisons works", {
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })
 
-test_that("Pairwise comparisons work in score() with integer data", {
+test_that("pairwise_comparison() work in score() with integer data", {
   eval <- suppressMessages(score(data = example_integer))
   eval <- suppressMessages(
     summarise_scores(eval, by = "model", relative_skill = TRUE)
@@ -217,7 +237,7 @@ test_that("Pairwise comparisons work in score() with integer data", {
 })
 
 
-test_that("Pairwise comparisons work in score() with binary data", {
+test_that("pairwise_comparison() work in score() with binary data", {
   eval <- suppressMessages(score(data = example_binary))
   eval <- suppressMessages(
     summarise_scores(eval, by = "model", relative_skill = TRUE)
@@ -238,9 +258,7 @@ test_that("pairwise_comparison() works", {
     ae_median = (abs(rnorm(30)))
   )
 
-  res <- suppressMessages(pairwise_comparison(df,
-    baseline = "model1"
-  ))
+  res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
@@ -263,16 +281,15 @@ test_that("pairwise_comparison() works inside and outside of score()", {
   eval2 <- summarise_scores(eval2, by = "model", relative_skill = TRUE)
 
   expect_equal(
-    sort(unique(pairwise$relative_skill)),
-    sort(eval2$relative_skill)
+    sort(unique(pairwise$relative_skill)), sort(eval2$relative_skill)
   )
 })
 
 test_that("pairwise_comparison() realises when there is no baseline model", {
 
-  scores <- score(example_quantile)
+  scores <- suppressMessages(score(example_quantile))
 
-  expect_error(pairwise_comparison(scores,
-                                   baseline = "missing_model"
-  ), "missing")
+  expect_error(
+    pairwise_comparison(scores, baseline = "missing_model"), "missing"
+  )
 })
