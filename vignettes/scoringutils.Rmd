@@ -134,7 +134,7 @@ score(example_quantile) %>%
 Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
 
 ```{r}
-score(example_point) %>%
+suppressMessages(score(example_point)) %>%
   summarise_scores(by = "model", na.rm = TRUE)
 ```
 

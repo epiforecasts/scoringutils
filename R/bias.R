@@ -293,6 +293,15 @@ check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
 
 bias_range <- function(lower, upper, range, true_value) {
 
+  if (anyNA(range)) {
+    if (is.na(range[1]) && !any(range[-1] == 0)) {
+      range[1] <- 0
+    }
+    range <- range[!is.na(range)]
+    lower <- lower[!is.na(range)]
+    upper <- upper[!is.na(range)]
+  }
+
   if (length(range) > 1 && !all(diff(range) > 0)) {
     stop("Range must be increasing")
   }
