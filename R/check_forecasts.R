@@ -278,7 +278,6 @@ print.scoringutils_check <- function(x, ...) {
 #' the unit of a single forecast. If missing the function tries to infer the
 #' unit of a single forecast.
 #'
-#' @param ... Additional arguments passed to [get_forecast_unit()].
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @keywords check-forecasts
@@ -286,10 +285,10 @@ print.scoringutils_check <- function(x, ...) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' find_duplicates(example)
 
-find_duplicates <- function(data, forecast_unit, ...) {
+find_duplicates <- function(data, forecast_unit) {
   type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
   if (missing(forecast_unit)) {
-    forecast_unit <- get_forecast_unit(data, ...)
+    forecast_unit <- get_forecast_unit(data)
   }
   data <- as.data.table(data)
   data[, InternalDuplicateCheck := .N, by = c(forecast_unit, type)]

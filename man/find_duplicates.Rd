@@ -4,7 +4,7 @@
 \alias{find_duplicates}
 \title{Find duplicate forecasts}
 \usage{
-find_duplicates(data, forecast_unit, ...)
+find_duplicates(data, forecast_unit)
 }
 \arguments{
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
@@ -12,8 +12,6 @@ find_duplicates(data, forecast_unit, ...)
 \item{forecast_unit}{A character vector with the column names that define
 the unit of a single forecast. If missing the function tries to infer the
 unit of a single forecast.}
-
-\item{...}{Additional arguments passed to \code{\link[=get_forecast_unit]{get_forecast_unit()}}.}
 }
 \value{
 A data.frame with all rows for which a duplicate forecast was found
