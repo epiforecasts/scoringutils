@@ -10,8 +10,8 @@
       3:  epiforecasts-EpiNow2          13000       4100               0
       4:       UMass-MechBayes            120         77              39
          overprediction coverage_deviation  bias ae_median
-      1:           7600             -0.081  0.98     13000
-      2:          11000                 NA  0.71     21000
-      3:           8600              0.050  0.98     22000
+      1:           7600             -0.081  0.62     13000
+      2:          11000                 NA  0.58     21000
+      3:           8600              0.050  0.50     22000
       4:              0              0.050 -0.50       210
 
