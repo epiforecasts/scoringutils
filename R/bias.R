@@ -301,7 +301,7 @@ bias_range <- function(lower, upper, range, true_value) {
 
   # Combine predictions
   upper_without_median <- upper[range != 0]
-  predictions <- c(lower, upper_without_median)
+  predictions <- c(rev(lower), upper_without_median)
 
   # Call bias_quantile
   bias <- bias_quantile(predictions, quantiles, true_value)
