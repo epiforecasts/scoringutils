@@ -105,10 +105,7 @@ summarise_scores <- function(scores,
 
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
-  quantile_prediction <- prediction_is_quantile(scores)
-  forecast_unit <- get_forecast_unit(
-    scores, quantile_prediction = quantile_prediction
-  )
+  forecast_unit <- get_forecast_unit(scores)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {

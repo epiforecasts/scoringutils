@@ -125,10 +125,7 @@ check_forecasts <- function(data) {
 
   # get information about the forecasts ----------------------------------------
   prediction_type <- get_prediction_type(data)
-  quantile_prediction <- prediction_is_quantile(data)
-  forecast_unit <- get_forecast_unit(
-    data, quantile_prediction = quantile_prediction
-  )
+  forecast_unit <- get_forecast_unit(data)
   target_type <- get_target_type(data)
 
   # check whether a column called 'quantile' or 'sample' is present ------------
