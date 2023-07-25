@@ -88,13 +88,15 @@ You can also visualise forecasts directly using the `plot_predictions()` functio
 
 ```{r, fig.width = 9, fig.height = 6}
 example_quantile %>%
-  make_NA(what = "truth",
-          target_end_date >= "2021-07-15",
-          target_end_date < "2021-05-22"
+  make_NA(
+    what = "truth",
+    target_end_date >= "2021-07-15",
+    target_end_date < "2021-05-22"
   ) %>%
-  make_NA(what = "forecast",
-          model != "EuroCOVIDhub-ensemble",
-          forecast_date != "2021-06-28"
+  make_NA(
+    what = "forecast",
+    model != "EuroCOVIDhub-ensemble",
+    forecast_date != "2021-06-28"
   ) %>%
   plot_predictions(
     x = "target_end_date",
@@ -183,7 +185,7 @@ We can also summarise one particular metric across different categories using a 
 score(example_continuous) %>%
   summarise_scores(by = c("model", "location", "target_type")) %>%
   plot_heatmap(x = "location", metric = "bias") +
-    facet_wrap(~ target_type)
+  facet_wrap(~ target_type)
 ```
 
 ### Weighted interval score components
