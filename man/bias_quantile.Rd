@@ -29,7 +29,7 @@ For quantile forecasts, bias is measured as
 
 \deqn{
 B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
- 1( x_t \leq q_{t, 0.5}) \\
+ \mathbf{1}( x_t \leq q_{t, 0.5}) \\
 + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
  1( x_t \geq q_{t, 0.5}),}
 
@@ -37,7 +37,7 @@ where \eqn{Q_t} is the set of quantiles that form the predictive
 distribution at time \eqn{t}. They represent our
 belief about what the true value $x_t$ will be. For consistency, we define
 \eqn{Q_t} such that it always includes the element
-\eqn{q_{t, 0} = - \infty and q_{t,1} = \infty}.
+\eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 \eqn{1()} is the indicator function that is \eqn{1} if the
 condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
 defined as the maximum percentile rank for which the corresponding quantile
