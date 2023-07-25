@@ -24,10 +24,10 @@
 #' @keywords metric
 
 ae_median_sample <- function(true_values, predictions) {
-  median_predictions <- apply(as.matrix(predictions),
-                              MARGIN = 1, # rowwise
-                              FUN = median
-  )
+  median_predictions <- apply(
+    as.matrix(predictions),
+    MARGIN = 1, # rowwise
+    FUN = median)
 
   ae_median <- abs(true_values - median_predictions)
 

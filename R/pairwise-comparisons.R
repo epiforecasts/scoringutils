@@ -62,7 +62,7 @@
 #'   facet_wrap(~target_type)
 
 pairwise_comparison <- function(scores,
-                               by = "model",
+                                by = "model",
                                 metric = "auto",
                                 baseline = NULL,
                                 ...) {
