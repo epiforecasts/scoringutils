@@ -240,9 +240,7 @@ sample_to_range_long <- function(data,
     type = type
   )
 
-  data <- quantile_to_range_long(data,
-                                 keep_quantile_col = keep_quantile_col
-  )
+  data <- quantile_to_range_long(data, keep_quantile_col = keep_quantile_col)
 
   return(data[])
 }

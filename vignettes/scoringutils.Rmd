@@ -183,7 +183,7 @@ For quantile based forecasts, if `by = NULL`, then scores are summarised across 
 
 ```{r}
 scores <- example_quantile %>%
-    set_forecast_unit(
+  set_forecast_unit(
     c("location", "target_end_date", "target_type",
       "forecast_date", "model", "horizon")
   ) %>%

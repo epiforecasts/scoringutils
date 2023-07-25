@@ -115,7 +115,7 @@ score <- function(data,
                   ...) {
 
   # preparations ---------------------------------------------------------------
-  if (is.scoringutils_check(data)) {
+  if (is_scoringutils_check(data)) {
     check_data <- data
   } else {
     check_data <- check_forecasts(data)

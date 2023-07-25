@@ -316,7 +316,7 @@ get_protected_columns <- function(data) {
 #'
 #' @keywords internal
 
-is.scoringutils_check <- function(data) {
+is_scoringutils_check <- function(data) {
 
   result <- is(data, "scoringutils_check")
 
