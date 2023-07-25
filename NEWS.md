@@ -4,9 +4,7 @@ Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
 
 ## Breaking changes
 
-- The `prediction_type` argument of `get_forecast_unit()` has been changed to
-`quantile_prediction` and is now a logical. Whilst this is an internal function
-it may impact some users as it is accessible via `find_duplicates().
+- The `prediction_type` argument of `get_forecast_unit()` has been changed dropped. Instead a new internal function `prediction_is_quantile()` is used to detect if a quantile variable is present. Whilst this is an internal function it may impact some users as it is accessible via `find_duplicates().
 
 ## Package updates
 

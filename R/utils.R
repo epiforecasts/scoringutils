@@ -254,9 +254,6 @@ get_target_type <- function(data) {
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for
 #'
-#' @param quantile_prediction Logical indicating whether the forecast is a
-#' quantile forecast.
-#'
 #' @inheritParams check_forecasts
 #'
 #' @return A character vector with the column names that define the unit of
@@ -264,10 +261,10 @@ get_target_type <- function(data) {
 #'
 #' @keywords internal
 
-get_forecast_unit <- function(data, quantile_prediction = FALSE) {
+get_forecast_unit <- function(data) {
 
   protected_columns <- get_protected_columns(data)
-  if (quantile_prediction) {
+  if (prediction_is_quantile(data)) {
     protected_columns <- setdiff(protected_columns, "sample")
   }
   forecast_unit <- setdiff(colnames(data), protected_columns)
