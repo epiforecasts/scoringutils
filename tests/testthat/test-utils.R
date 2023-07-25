@@ -44,7 +44,7 @@ test_that("get_prediction_type() correctly identifies quantile predictions", {
   expect_equal(get_prediction_type(data), "quantile")
 })
 
-test_that("correctly identifies integer predictions", {
+test_that("get_prediction_type() correctly identifies integer predictions", {
   data <- data.frame(
     prediction = as.integer(1:5)
   )
