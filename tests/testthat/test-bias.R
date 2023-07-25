@@ -224,3 +224,19 @@ test_that("bias_range() works with point forecasts", {
 
   expect_equal(bias_range(predictions, predictions, range, true_value), 0)
 })
+
+test_that("bias_range(): ranges must be between 0 and 100", {
+  lower <- 4:1 
+  upper <- 5:8
+  
+  # Failing example
+  range <- c(-10, 0, 10, 20)
+  expect_error(
+    bias_range(lower, upper, range, true_value = 3),
+    "range must be between 0 and 100"
+  )
+               
+  # Passing counter example               
+  range <- c(0, 10, 20, 30)
+  expect_silent(bias_range(lower, upper, range, true_value = 3))
+})
