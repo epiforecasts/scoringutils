@@ -105,7 +105,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2023-07-24</h4>
+            <h4 data-toc-skip class="date">2023-07-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/metric-details.Rmd" class="external-link"><code>vignettes/metric-details.Rmd</code></a></small>
       <div class="d-none name"><code>metric-details.Rmd</code></div>
@@ -654,17 +654,16 @@ true value. In this represenation we can simply replace <span class="math inline
 combinations to obtain the CRPS. For integer-valued forecasts, the RPS
 is given as <span class="math display">\[ \text{RPS}(F, y) = \sum_{x =
 0}^\infty (F(x) - 1(x \geq y))^2. \]</span></p>
-Smaller values are better. The crps is a good choice for most practical
-purposes that involve decision making, as it takes the entire predictive
-distribution into account. If two forecasters assign the same
-probability to the true event <span class="math inline">\(y\)</span>,
-then the forecaster who assigned high probability to events far away
-from <span class="math inline">\(y\)</span> will still get a worse
-score. The crps (in contrast to the log score) can at times be quite
-lenient towards extreme mispredictions. Also, due to it’s similarity to
-the absolute error, the level of scores depend a lot on the absolute
-value of what is predicted, which makes it hard to compare scores of
-forecasts for quantities that are orders of magnitude apart.
+<strong>Usage and caveats</strong>: Smaller values are better. The crps
+is a good choice for most practical purposes that involve decision
+making, as it takes the entire predictive distribution into account. If
+two forecasters assign the same probability to the true event <span class="math inline">\(y\)</span>, then the forecaster who assigned high
+probability to events far away from <span class="math inline">\(y\)</span> will still get a worse score. The crps
+(in contrast to the log score) can at times be quite lenient towards
+extreme mispredictions. Also, due to it’s similarity to the absolute
+error, the level of scores depend a lot on the absolute value of what is
+predicted, which makes it hard to compare scores of forecasts for
+quantities that are orders of magnitude apart.
 </td>
 </tr>
 <tr>
@@ -680,10 +679,11 @@ predictive density function and y is the true value. For integer-valued
 forecasts, the log score can be computed as <span class="math display">\[ \text{log score} = \log p_y, \]</span> where
 <span class="math inline">\(p_y\)</span> is the probability assigned to
 outcome p by the forecast F.</p>
-: Larger values are better, but sometimes the sign is reversed. The log
-score is ensitive to outliers, as individual negative log score
-contributions quickly can become very large if the event falls in the
-tails of the predictive distribution, where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
+<strong>Usage and caveats</strong>: Larger values are better, but
+sometimes the sign is reversed. The log score is ensitive to outliers,
+as individual negative log score contributions quickly can become very
+large if the event falls in the tails of the predictive distribution,
+where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
 that is desirable depends ont the application. In scoringutils, the log
 score cannot be used for integer-valued forecasts, as the implementation
 requires a predictive density. In contrast to the crps, the log score is
@@ -705,27 +705,25 @@ forecasts that converges to the crps for an increasing number of
 intervals. The score can be decomposed into a sharpness (uncertainty)
 component and penalties for over- and underprediction. For a single
 interval, the score is computed as <span class="math display">\[IS_\alpha(F,y) = (u-l) + \frac{2}{\alpha} \cdot
-(l-y) \cdot 1(y \leq l) + \frac{2}{\alpha} \cdot (y-u) \cdot 1(y \geq
-u), \]</span> where <span class="math inline">\(1()\)</span> is the
-indicator function, <span class="math inline">\(y\)</span> is the true
-value, and <span class="math inline">\(l\)</span> and <span class="math inline">\(u\)</span> are the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1 - \frac{\alpha}{2}\)</span> quantiles of the
+(l-y) \cdot \mathbf{1}(y \leq l) + \frac{2}{\alpha} \cdot (y-u) \cdot
+\mathbf{1}(y \geq u), \]</span> where <span class="math inline">\(\mathbf{1}()\)</span> is the indicator function,
+<span class="math inline">\(y\)</span> is the true value, and <span class="math inline">\(l\)</span> and <span class="math inline">\(u\)</span> are the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1 - \frac{\alpha}{2}\)</span> quantiles of the
 predictive distribution <span class="math inline">\(F\)</span>, i.e. the
 lower and upper bound of a single prediction interval. For a set of
 <span class="math inline">\(K\)</span> prediction intervals and the
 median <span class="math inline">\(m\)</span>, the score is computed as
 a weighted sum, <span class="math display">\[WIS = \frac{1}{K + 0.5}
-\cdot (w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F,
-y)),\]</span> where <span class="math inline">\(w_k\)</span> is a weight
-for every interval. Usually, <span class="math inline">\(w_k =
-\frac{\alpha_k}{2}\)</span> and <span class="math inline">\(w_0 =
-0.5\)</span>.</p>
-: Smaller scores are better. Applicable to all quantile forecasts, takes
-the entire predictive distribution into account. Just as the crps, the
-wis is based on measures of absolute error. When averaging across
-multiple targets, it will therefore be dominated by targets with higher
-absolute values. The decomposition into sharpness, over- and
-underprediction make it easy to interpret scores and use them for model
-improvement.
+\cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot
+IS_{\alpha}(F, y)\right),\]</span> where <span class="math inline">\(w_k\)</span> is a weight for every interval.
+Usually, <span class="math inline">\(w_k = \frac{\alpha_k}{2}\)</span>
+and <span class="math inline">\(w_0 = 0.5\)</span>.</p>
+<strong>Usage and caveats</strong>: Smaller values are better.
+Applicable to all quantile forecasts, takes the entire predictive
+distribution into account. Just as the crps, the wis is based on
+measures of absolute error. When averaging across multiple targets, it
+will therefore be dominated by targets with higher absolute values. The
+decomposition into sharpness, over- and underprediction make it easy to
+interpret scores and use them for model improvement.
 </td>
 </tr>
 <tr>
@@ -740,9 +738,9 @@ therefore easy to compute. It is given as</p>
 \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,\]</span> where <span class="math inline">\(F\)</span> is the predictive distribution with
 mean <span class="math inline">\(\mu\)</span> and standard deviation
 <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(y\)</span> is the true observed value.</p>
-The dss is applicable to continuous and integer forecasts and easy to
-compute. Apart from the ease of computation we see little advantage in
-using it over other scores.
+<strong>Usage and caveats</strong>: The dss is applicable to continuous
+and integer forecasts and easy to compute. Apart from the ease of
+computation we see little advantage in using it over other scores.
 </td>
 </tr>
 <tr>
@@ -755,8 +753,8 @@ as <span class="math display">\[\text{Brier Score} = \frac{1}{N} \sum_{n
 = 1}^{N} (f_n - y_n),\]</span> where <span class="math inline">\(f_n\)</span>, with <span class="math inline">\(n =
 1, \dots, N\)</span> are the predicted probablities that the
 corresponding events, <span class="math inline">\(y_n \in (0,
-1)\)</span> will be equal to one.)</p>
-: Applicable to all binary forecasts.
+1)\)</span> will be equal to one.</p>
+<strong>Usage</strong>: Applicable to all binary forecasts.
 </td>
 </tr>
 <tr>
@@ -774,10 +772,11 @@ ranges, we can compute coverage deviation defined as the mean interval
 coverage over all <span class="math inline">\(K\)</span> interval ranges
 <span class="math inline">\(\alpha_k\)</span> with <span class="math inline">\(k = 1, \dots, K\)</span>: <span class="math display">\[\text{Coverage deviation} = \frac{1}{K} \sum_{k =
 1}^{K} \text{IC}_{\alpha_k}\]</span></p>
-: Interval coverage for a set of chosen intervals, (e.g. 50% and 90%)
-gives a good indication of marginal calibration and is easy to
-interpret. Reporting coverage deviation has the advantage of summarising
-calibration in a single number, but loses some of the nuance.
+<strong>Usage</strong>: Interval coverage for a set of chosen intervals,
+(e.g. 50% and 90%) gives a good indication of marginal calibration and
+is easy to interpret. Reporting coverage deviation has the advantage of
+summarising calibration in a single number, but loses some of the
+nuance.
 </td>
 </tr>
 <tr>
@@ -788,12 +787,12 @@ Quantile coverage
 <p>Quantile coverage for a given quantile level is the proportion of
 true values smaller than the predictions corresponding to that quantile
 level.</p>
-: Quantile coverage is similar to interval coverage, but conveys more
-information. For example, it allows us to look at the 5% and 95%
-quantile separately, instead of jointly at the 90% prediction interval).
-This helps to diagnose whether it is the upper or lower end of a
-prediction interval that is causing problems. Plots of quantile coverage
-are conceptually very similar to PIT histograms.
+<strong>Usage</strong>: Quantile coverage is similar to interval
+coverage, but conveys more information. For example, it allows us to
+look at the 5% and 95% quantile separately, instead of jointly at the
+90% prediction interval). This helps to diagnose whether it is the upper
+or lower end of a prediction interval that is causing problems. Plots of
+quantile coverage are conceptually very similar to PIT histograms.
 </td>
 </tr>
 <tr>
@@ -820,18 +819,18 @@ independent of <span class="math inline">\(y\)</span>. If <span class="math inli
 distribution function, then <span class="math inline">\(u\)</span> is
 standard uniform. also propose a non-randomised version of the PIT for
 count data that could be used alternatively.</p>
-: One can plot a histogram of <span class="math inline">\(u\)</span>
-values to look for deviations from uniformity. U-shaped histograms often
-result from predictions that are too narrow, while hump-shaped
-histograms indicate that predictions may be too wide. Biased predictions
-will usually result in a triangle-shaped histogram. One can also test
-for deviations from normality, using for example an Anderson-Darling
-test. This, however, proves to be overly strict in practice and even
-slight deviations from perfect calibration are punished in a way that
-makes it very hard to compare models at all. In addition, errors from
-forecasts may be correlated (i.e. forecasts made on a given date),
-potentially violating the assumptions of the Anderson-Darling test. We
-therefore do not recommend it for most use cases.
+<strong>Usage</strong>: One can plot a histogram of <span class="math inline">\(u\)</span> values to look for deviations from
+uniformity. U-shaped histograms often result from predictions that are
+too narrow, while hump-shaped histograms indicate that predictions may
+be too wide. Biased predictions will usually result in a triangle-shaped
+histogram. One can also test for deviations from normality, using for
+example an Anderson-Darling test. This, however, proves to be overly
+strict in practice and even slight deviations from perfect calibration
+are punished in a way that makes it very hard to compare models at all.
+In addition, errors from forecasts may be correlated (i.e. forecasts
+made on a given date), potentially violating the assumptions of the
+Anderson-Darling test. We therefore do not recommend it for most use
+cases.
 </td>
 </tr>
 <tr>
@@ -866,9 +865,12 @@ underpredict. For continuous forecasts, bias is given as <span class="math displ
 <span class="math inline">\(F\)</span> is the CDF of the predictive
 distribution and <span class="math inline">\(y\)</span> is the observed
 value.</p>
-<p>For integer-valued forecasts, bias can be calculated as <span class="math display">\[B(P, y) = 1 - (P(y) + P(y + 1)), \]</span> where
+<p>For integer-valued forecasts, maximum and minimum bias with respect
+to any data point <span class="math inline">\(y\)</span> are <span class="math inline">\(\pm (1 - p(y))\)</span>, where <span class="math inline">\(p(y)\)</span> is the predicted probability mass at
+the data point. Bias can be calculated as <span class="math display">\[B(P, y) = 1 - (P(y) + P(y + 1)), \]</span> where
 <span class="math inline">\(P(y)\)</span> is the cumulative probability
-assigned to all outcomes smaller or equal to <span class="math inline">\(y\)</span>.</p>
+assigned to all outcomes smaller or equal to <span class="math inline">\(y\)</span>, i.e. the cumulative probability mass
+function corresponding to <span class="math inline">\(p(y)\)</span>.</p>
 <p>For quantile forecasts, Bias can be calculated as the maximum
 percentile rank for which the prediction is smaller than <span class="math inline">\(y\)</span>, if the true value is smaller than the
 median of the predictive distribution. If the true value is above the
@@ -879,13 +881,13 @@ zero. For a large enough number of quantiles, the percentile rank will
 equal the proportion of predictive samples below the observed true
 value, and this metric coincides with the one for continuous
 forecasts.</p>
-: In contrast to the over- and underprediction penalties of the interval
-score it is bound between 0 and 1 and represents the tendency of
-forecasts to be biased rather than the absolute amount of over- and
-underprediction. It is therefore a more robust measurement, but harder
-to interpet. It largely depends on the application whether one is more
-interested in the tendency to be biased or in the absolute value of
-over- and underpredictions.
+<strong>Usage</strong>: In contrast to the over- and underprediction
+penalties of the interval score it is bound between -1 and 1 and
+represents the tendency of forecasts to be biased rather than the
+absolute amount of over- and underprediction. It is therefore a more
+robust measurement, but harder to interpet. It largely depends on the
+application whether one is more interested in the tendency to be biased
+or in the absolute value of over- and underpredictions.
 </td>
 </tr>
 <tr>
@@ -903,10 +905,11 @@ score ratio <span class="math inline">\(\theta_{ij}\)</span> as <span class="mat
 \text{ on } \mathcal{A}_{ij}}{\text{mean score model } j \text{ on }
 \mathcal{A}_{ij}}.\]</span> The mean score ratio can in principle be
 computed for any arbitrary score.</p>
-: Mean scores ratios are usually calculated in the context of pairwise
-comparisons, where a set of models is compared by looking at mean score
-ratios of all possible parings. Whether smaller or larger values are
-better depends on the orientation of the original score used
+<strong>Usage</strong>: Mean scores ratios are usually calculated in the
+context of pairwise comparisons, where a set of models is compared by
+looking at mean score ratios of all possible parings. Whether smaller or
+larger values are better depends on the orientation of the original
+score used
 </td>
 </tr>
 <tr>
@@ -920,16 +923,17 @@ skill <span class="math inline">\(\theta_i\)</span> of model <span class="math i
 score ratios that involve model <span class="math inline">\(i\)</span>,
 i.e. <span class="math display">\[ \theta_{i} = \left(\prod_{m = 1}^M
 \theta_{im}\right)^{1/M}, \]</span> where M is the number of models.</p>
-: Relative skill is a helpful way to obtain a model ranking. Whether
-smaller or larger values are better depends on the orientation of the
-original score used. It is in principle relatively robust against biases
-that arise when models only forecast some of the available targets and
-is a reasonable way to handle missing forecasts. One possible
-precautionary measure to reduces issues with missing forecasts is to
-only compare models that have forecasted at least half of all possible
-targets (this ensures that there is always an overlap between models).
-If there is no overlap between models, the relative skill implicitly
-estimates how a model would have forecasted on those missing targets.
+<strong>Usage and caveats</strong>: Relative skill is a helpful way to
+obtain a model ranking. Whether smaller or larger values are better
+depends on the orientation of the original score used. It is in
+principle relatively robust against biases that arise when models only
+forecast some of the available targets and is a reasonable way to handle
+missing forecasts. One possible precautionary measure to reduces issues
+with missing forecasts is to only compare models that have forecasted at
+least half of all possible targets (this ensures that there is always an
+overlap between models). If there is no overlap between models, the
+relative skill implicitly estimates how a model would have forecasted on
+those missing targets.
 </td>
 </tr>
 </tbody>
