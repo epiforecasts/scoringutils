@@ -199,17 +199,6 @@ bias_quantile <- function(predictions, quantiles, true_value) {
   return(bias)
 }
 
-# quantiles must be between 0 and 1, increase, and be unique
-check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
-  if (any(quantiles < range[1]) || any(quantiles > range[2])) {
-    stop(name, " must be between ", range[1], " and ", range[2])
-  }
-
-  if (!all(diff(quantiles) > 0)) {
-    stop(name, " must be increasing")
-  }
-}
-
 #' @title Determines Bias of Quantile Forecasts based on the range of the
 #' prediction intervals
 #'
