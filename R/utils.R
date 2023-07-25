@@ -215,7 +215,7 @@ get_prediction_type <- function(data) {
         !all(is.na(as.integer(data)))) {
     return("integer")
   } else {
-    # error if hte inpuut is not coerceble to numeric
+    # error if the input is not coercible to numeric
     if (suppressWarnings(!all(is.na(as.numeric(data))))) {
       return("continuous")
     } else {
