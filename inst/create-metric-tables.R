@@ -361,7 +361,7 @@ bias <- list(
   $$B(F, y) = 1 - 2 \cdot (F (y)), $$
   where $F$ is the CDF of the predictive distribution and $y$ is the observed value.
 
-  For integer-valued forecasts, maximum and minimum bias with respect to any data point $y$ are $\pm (1 - p(y))$, where $p(y)$ is the predicted probability mass at the data point. It can be calculated as
+  For integer-valued forecasts, maximum and minimum bias with respect to any data point $y$ are $\pm (1 - p(y))$, where $p(y)$ is the predicted probability mass at the data point. Bias can be calculated as
   $$B(P, y) = 1 - (P(y) + P(y + 1)), $$
   where $P(y)$ is the cumulative probability assigned to all outcomes smaller or equal to $y$, i.e. the cumulative probability mass function corresponding to $p(y)$.
 
