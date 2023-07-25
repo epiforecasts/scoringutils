@@ -186,14 +186,14 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
   expect_equal(bias_quantile_result, bias_sample_result, tolerance = 0.1)
 })
 
-test_that("bias_quantile and bias_range() give the same result", {
-  predictions <- order(rnorm(23))
+test_that("bias_quantile() and bias_range() give the same result", {
+  predictions <- sort(rnorm(23))
   lower <- rev(predictions[1:12])
   upper <- predictions[12:23]
 
   range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
   quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-  true_value <- 8062
+  true_value <- rnorm(1)
 
   range_bias <- bias_range(
     lower = lower, upper = upper,
