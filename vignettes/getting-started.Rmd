@@ -312,11 +312,11 @@ example_quantile %>%
   facet_wrap(~ target_type, scales = "free")
 ```
 
-## Tips and tricks - converting to sample-based forecasts
+## Converting to quantile-based forecasts
 
-Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values. 
+Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values.
 
-You can convert your forecasts into a sample-based format using the function `sample_to_quantile()`. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small. 
+You can convert your sample-based forecasts into a quantile-based format using the function `sample_to_quantile()`. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small.
 
 ```{r}
 example_integer %>%
