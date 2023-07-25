@@ -60,16 +60,21 @@ check_predictions <- function(predictions,
     }
   }
 
-  if (type == "integer") {
-    if (isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))) {
-      warning("Prediction type should be 'integer', but some of the predictions are not integers")
-    }
+  if (type == "integer" &&
+        isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))
+  ) {
+    warning(
+      "Prediction type should be 'integer', but some of the predictions are",  " not integers"
+    )
   }
 
-  if (type == "binary") {
-    if (isFALSE(all(predictions >= 0) & all(predictions <= 1))) {
-      stop("For a binary forecast, all predictions should be probabilities between 0 or 1.")
-    }
+  if (type == "binary" &&
+        isFALSE(all(predictions >= 0) && all(predictions <= 1))
+  ) {
+    stop(
+      "For a binary forecast, all predictions should be probabilities between",
+      " 0 or 1."
+    )
   }
 
   return(NULL)
@@ -91,19 +96,18 @@ check_true_values <- function(true_values,
     stop("true_values argument is missing")
   }
 
-  if (type == "integer") {
-    if (isFALSE(all.equal(true_values, as.integer(true_values)))) {
-      stop("Some of the true_values are not integers")
-    }
+  if (type == "integer" &&
+        isFALSE(all.equal(true_values, as.integer(true_values)))
+  ) {
+    stop("Some of the true_values are not integers")
   }
 
-  if (type == "binary") {
-    if (isFALSE(all(true_values %in% c(0, 1)))) {
-      stop("For a binary forecast, all true_values should be either 0 or 1.")
-    }
+  if (type == "binary" &&
+        isFALSE(all(true_values %in% c(0, 1)))
+  ) {
+    stop("For a binary forecast, all true_values should be either 0 or 1.")
   }
 }
-
 
 #' @title Check Variable is not NULL
 #'
