@@ -89,7 +89,7 @@ bias_sample <- function(true_values, predictions) {
 #'
 #' \deqn{
 #' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
-#'  1( x_t \leq q_{t, 0.5}) \\
+#'  \mathbf{1}( x_t \leq q_{t, 0.5}) \\
 #' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
 #'  1( x_t \geq q_{t, 0.5}),}
 #'
