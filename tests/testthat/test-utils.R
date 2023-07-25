@@ -50,6 +50,9 @@ test_that("get_prediction_type() correctly identifies integer predictions", {
   )
   
   expect_equal(get_prediction_type(data), "integer")
+  
+  data <- matrix(as.integer(1:9), nrow = 3)
+  expect_equal(get_prediction_type(data), "integer")
 })
 
 test_that("get_prediction_type() correctly identifies continuous predictions", {
