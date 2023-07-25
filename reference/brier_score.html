@@ -30,13 +30,15 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/scoringutils.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
     <a class="dropdown-item" href="../articles/metric-details.html">Details on the metrics implemented in `scoringutils`</a>
     <a class="dropdown-item" href="../articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>
   </div>
@@ -122,12 +124,11 @@ $$</p>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">brier_score</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0619831079 0.5628107436 0.0005477358 0.9169513301 0.0084559719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 0.7034426225 0.3386647511 0.0753322514 0.1678525525 0.1225920336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.1153588484 0.1317881802 0.9613410467 0.0357896930 0.0707705475</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 0.3147245784 0.0150810332 0.9361132201 0.1791387798 0.7423055111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 0.3605814940 0.9145929883 0.1727508404 0.1717659462 0.0002453064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 0.1855887298 0.0099363023 0.1907400497 0.3412989965 0.5093201893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.502894247 0.027719475 0.596768501 0.101284737 0.861648122 0.349593506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.031914041 0.001232118 0.490628822 0.649489899 0.146421120 0.266896212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.074622385 0.011748994 0.087158077 0.960644321 0.481308331 0.075425367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.019678547 0.152030130 0.573245548 0.787997292 0.869456659 0.012668363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.211593672 0.945331830 0.422836185 0.459605580 0.952573624 0.498219788</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

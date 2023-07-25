@@ -36,13 +36,15 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/scoringutils.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
     <a class="dropdown-item" href="../articles/metric-details.html">Details on the metrics implemented in `scoringutils`</a>
     <a class="dropdown-item" href="../articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>
   </div>
@@ -121,11 +123,12 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 8.38460124 4.83062497 3.65706319 1.64614929 1.18028600 1.22553518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.58779259 1.50134912 4.51465136 7.62665919 0.09555613 4.80780365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.50458719 0.14966330 0.48797476 0.06576434 0.65281435 1.11806768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.77224824 0.97186542 0.12718674 0.17993498 1.44446501 0.20053791</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.17796124 1.04786614 1.03804162 1.17078302 0.21583713 0.70582839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.754928e-01 2.187899e+00 7.388062e-01 5.016455e-03 1.314183e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 9.881166e-01 1.264748e+00 1.926057e-01 4.026627e-02 3.378652e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 1.810658e+00 9.599744e-01 1.372444e+00 5.492946e+00 8.281144e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 6.402111e+00 1.523272e+00 4.588713e+00 1.750183e-02 4.245681e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 1.054935e+00 4.792797e-02 3.754341e-02 1.066304e-01 1.205611e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 9.270407e-01 2.772079e+00 6.379228e+00 7.947212e-01 1.768778e+00</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

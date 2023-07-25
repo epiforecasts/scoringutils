@@ -36,13 +36,15 @@ valued forecasts"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/scoringutils.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
     <a class="dropdown-item" href="../articles/metric-details.html">Details on the metrics implemented in `scoringutils`</a>
     <a class="dropdown-item" href="../articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>
   </div>
@@ -122,11 +124,10 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">crps_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.471975  1.395975  0.420575  1.227925  2.035725  0.556850  1.835650</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  1.073650  1.141950  1.155125  0.754125  0.939475  1.801175  5.766475</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]  1.355475  0.942350  1.841500  3.827525  3.687625  1.055825  6.549400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]  1.565200  5.252825  6.063350  1.190875 10.212425  2.044825  1.039550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]  1.652250 10.668775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.666925 3.466175 0.595075 1.848900 0.427450 4.119825 0.658450 0.671625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.798300 0.720725 0.856875 1.233075 0.839250 1.277150 0.864650 3.273925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 2.298325 2.320550 3.550275 0.949175 4.660675 1.048800 1.307425 5.031700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 9.457225 6.241225 1.949800 1.882575 1.301425 2.806900</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
