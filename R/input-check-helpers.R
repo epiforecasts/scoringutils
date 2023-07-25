@@ -215,8 +215,8 @@ check_metrics <- function(metrics) {
 #' Check that quantiles are valid
 #'
 #' @description
-#' Helper function to check that input quantiles are valid. 
-#' Quantiles must be in the range specified, increase monotonically, 
+#' Helper function to check that input quantiles are valid.
+#' Quantiles must be in the range specified, increase monotonically,
 #' and contain no duplicates.
 #'
 #' This is used in [bias_range()]() and [bias_quantile()]() to
