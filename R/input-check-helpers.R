@@ -61,7 +61,7 @@ check_predictions <- function(predictions,
   }
 
   if (type == "integer") {
-    if (isFALSE(all.equal(predictions, as.integer(predictions)))) {
+    if (isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))) {
       warning("Prediction type should be 'integer', but some of the predictions are not integers")
     }
   }

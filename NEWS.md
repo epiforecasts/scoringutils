@@ -1,5 +1,7 @@
 # scoringutils 1.1.7
 
+Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
+
 ## Breaking changes
 
 - The `prediction_type` argument of `get_forecast_unit()` has been changed to
@@ -10,13 +12,13 @@ it may impact some users as it is accessible via `find_duplicates().
 
 - Made imputation of the median in `bias_range()` and `bias_quantile()` more obvious to the user as this may cause unexpected behaviour.
 - Simplified `bias_range()` so that it uses `bias_quantile()` internally.
-- Added additional input checks to `bias_range()` and `bias_quantile()` to make sure that the input is valid.
+- Added additional input checks to `bias_range()`, `bias_quantile()`, and `check_predictions()` to make sure that the input is valid.
 - Improve the coverage of unit tests for `bias_range()`, `bias_quantile()`, and `bias_sample()`.
+- Updated pairwise comparison unit tests to use more realistic data.
 
 ## Bug fixes
 
 - Fixed a bug in `get_prediction_type()` which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted `bias_sample()` and also `score()` when used with integer forecasts resulting in lower bias scores than expected.
-
 
 # scoringutils 1.1.6
 
