@@ -146,6 +146,17 @@ test_that("bias_quantile(): quantiles must be increasing", {
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
 })
 
+test_that("bias_quantile(): predictions must be increasing", {
+  predictions <- c(1, 2, 4, 3)
+  quantiles <- c(0.1, 0.3, 0.5, 0.9)
+  
+  expect_error(
+    bias_quantile(predictions, quantiles, true_value = 3),
+    "predictions must be increasing"
+  )
+  expect_silent(bias_quantile(1:4, quantiles, true_value = 3))
+})
+
 test_that("bias_quantile(): quantiles must be unique", {
   predictions <- 1:4
   

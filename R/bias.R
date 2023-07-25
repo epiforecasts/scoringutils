@@ -168,6 +168,10 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     stop("quantiles must be increasing")
   }
 
+  if (!all(diff(predictions) >= 0)) {
+    stop("predictions must be increasing")
+  }
+
   if (0.5 %in% quantiles) {
     median_prediction <- predictions[quantiles == 0.5]
   } else {
