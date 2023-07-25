@@ -321,8 +321,8 @@ is_scoringutils_check <- function(data) {
   result <- is(data, "scoringutils_check")
 
   if (result &&
-      any(is.null(data$cleaned_data), is.null(data$prediction_type),
-          is.null(data$forecast_unit), is.null(data$target_type))) {
+        any(is.null(data$cleaned_data), is.null(data$prediction_type),
+            is.null(data$forecast_unit), is.null(data$target_type))) {
     stop("Input seems to be an output of `scoringutils_check()`, ",
          "but at least one of the required list items ",
          "'cleaned_data', 'prediction_type', 'forecast_unit', or
