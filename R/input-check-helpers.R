@@ -61,7 +61,7 @@ check_predictions <- function(predictions,
   }
 
   if (type == "integer" &&
-        isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))
+      isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))
   ) {
     warning(
       "Prediction type should be 'integer', but some of the predictions are",  " not integers"
@@ -69,7 +69,7 @@ check_predictions <- function(predictions,
   }
 
   if (type == "binary" &&
-        isFALSE(all(predictions >= 0) && all(predictions <= 1))
+      isFALSE(all(predictions >= 0) && all(predictions <= 1))
   ) {
     stop(
       "For a binary forecast, all predictions should be probabilities between",
@@ -97,13 +97,13 @@ check_true_values <- function(true_values,
   }
 
   if (type == "integer" &&
-        isFALSE(all.equal(true_values, as.integer(true_values)))
+      isFALSE(all.equal(true_values, as.integer(true_values)))
   ) {
     stop("Some of the true_values are not integers")
   }
 
   if (type == "binary" &&
-        isFALSE(all(true_values %in% c(0, 1)))
+      isFALSE(all(true_values %in% c(0, 1)))
   ) {
     stop("For a binary forecast, all true_values should be either 0 or 1.")
   }
