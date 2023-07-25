@@ -133,7 +133,7 @@ check_forecasts <- function(data) {
 
   # check whether a column called 'quantile' or 'sample' is present ------------
   if (!any(c("quantile", "sample") %in% colnames(data)) &&
-       !target_type == "binary") {
+        !target_type == "binary") {
     errors <- c(
       errors,
       "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" # nolint
