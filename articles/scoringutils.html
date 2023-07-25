@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -544,20 +544,18 @@ quantile-based forecasts. As point forecasts will have values of
 <code>NA</code> for metrics designed for probabilistic forecasts, it is
 important to use <code>na.rm = TRUE</code> when summarising.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
-<span><span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span>
 <span><span class="co">#&gt;                    model interval_score dispersion underprediction</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline     14092.7647 2192.26967      4996.92898</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-ensemble      8852.4196 1930.80064      2005.56357</span></span>
 <span><span class="co">#&gt; 3:  epiforecasts-EpiNow2     10659.5125 3084.85850      1604.96135</span></span>
 <span><span class="co">#&gt; 4:       UMass-MechBayes        51.4781   28.09387        15.32315</span></span>
 <span><span class="co">#&gt;    overprediction coverage_deviation        bias    ae_point     se_point</span></span>
-<span><span class="co">#&gt; 1:     6903.56605        0.002102273  0.23905983 19353.42969 2.883446e+09</span></span>
-<span><span class="co">#&gt; 2:     4916.05540        0.050752841  0.01027027 12077.10156 1.945118e+09</span></span>
-<span><span class="co">#&gt; 3:     5969.69268       -0.057861612 -0.04915929 14521.10526 2.680928e+09</span></span>
-<span><span class="co">#&gt; 4:        8.06108       -0.024886364 -0.02847458    78.47656 1.170976e+04</span></span>
+<span><span class="co">#&gt; 1:     6903.56605        0.002102273  0.21851562 19353.42969 2.883446e+09</span></span>
+<span><span class="co">#&gt; 2:     4916.05540        0.050752841  0.00812500 12077.10156 1.945118e+09</span></span>
+<span><span class="co">#&gt; 3:     5969.69268       -0.057861612 -0.04376518 14521.10526 2.680928e+09</span></span>
+<span><span class="co">#&gt; 4:        8.06108       -0.024886364 -0.02312500    78.47656 1.170976e+04</span></span>
 <span><span class="co">#&gt;    ae_median</span></span>
 <span><span class="co">#&gt; 1:       NaN</span></span>
 <span><span class="co">#&gt; 2:       NaN</span></span>

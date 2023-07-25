@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,6 +76,26 @@
       <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.7" id="scoringutils-117">scoringutils 1.1.7<a class="anchor" aria-label="anchor" href="#scoringutils-117"></a></h2>
+<p>Release by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> in <a href="https://github.com/epiforecasts/scoringutils/issues/305" class="external-link">#305</a>. Reviewed by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and <a href="https://github.com/sbfnk" class="external-link">@sbfnk</a>.</p>
+<div class="section level3">
+<h3 id="breaking-changes-1-1-7">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-7"></a></h3>
+<ul><li>The <code>prediction_type</code> argument of <code><a href="../reference/get_forecast_unit.html">get_forecast_unit()</a></code> has been changed dropped. Instead a new internal function <code><a href="../reference/prediction_is_quantile.html">prediction_is_quantile()</a></code> is used to detect if a quantile variable is present. Whilst this is an internal function it may impact some users as it is accessible via `find_duplicates().</li>
+</ul></div>
+<div class="section level3">
+<h3 id="package-updates-1-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-1-7"></a></h3>
+<ul><li>Made imputation of the median in <code><a href="../reference/bias_range.html">bias_range()</a></code> and <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> more obvious to the user as this may cause unexpected behaviour.</li>
+<li>Simplified <code><a href="../reference/bias_range.html">bias_range()</a></code> so that it uses <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> internally.</li>
+<li>Added additional input checks to <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> to make sure that the input is valid.</li>
+<li>Improve the coverage of unit tests for <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/bias_sample.html">bias_sample()</a></code>.</li>
+<li>Updated pairwise comparison unit tests to use more realistic data.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-7"></a></h3>
+<ul><li>Fixed a bug in <code><a href="../reference/get_prediction_type.html">get_prediction_type()</a></code> which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted <code><a href="../reference/bias_sample.html">bias_sample()</a></code> and also <code><a href="../reference/score.html">score()</a></code> when used with integer forecasts resulting in lower bias scores than expected.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.6" id="scoringutils-116">scoringutils 1.1.6<a class="anchor" aria-label="anchor" href="#scoringutils-116"></a></h2>
 <div class="section level3">

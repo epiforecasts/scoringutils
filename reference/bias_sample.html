@@ -26,7 +26,7 @@ integer valued and adapts the Bias function accordingly."><!-- mathjax --><scrip
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,17 +151,17 @@ region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
 <span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.40 -0.89  0.72 -0.99  0.42 -0.20 -0.93 -0.93 -0.18  0.19 -0.11  0.74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.31  0.38 -0.32  0.79 -0.08 -0.19 -0.71  0.40 -0.91  0.54  0.71  0.85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.64 -0.15 -0.07  0.15 -0.09 -0.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.590 -0.775 -0.680  0.275  0.620 -0.090  0.490 -0.675  0.485 -0.980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.120 -0.165  0.685  0.825 -0.850  0.480 -0.760 -0.160 -0.115  0.495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] -0.980 -0.690  0.470 -0.365 -0.350 -0.120  0.765  0.665 -0.865 -0.415</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## continuous forecasts</span></span></span>
 <span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.49  0.46  0.28  0.60  0.34 -0.94 -0.32  0.73  0.17 -0.17 -0.58  0.84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.75 -0.74 -0.81  0.69 -0.57  0.34 -0.89  0.69 -0.52  0.84 -0.55 -0.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.86  0.80 -0.63 -0.33  0.62  0.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.95  0.34 -0.22 -0.15 -0.26  0.25 -0.83  1.00 -0.76 -0.14 -0.09 -0.42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.04 -0.60  0.92  0.82  0.99 -0.76  0.85  0.53  0.95  0.70  0.14  0.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.83 -0.28  0.10 -0.06 -0.87  0.91</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

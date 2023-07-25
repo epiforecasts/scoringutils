@@ -82,6 +82,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/check_predictions.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/check_quantiles.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/check_summary_params.html</loc>
   </url>
   <url>
@@ -221,6 +224,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/plot_wis.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/prediction_is_quantile.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/print.scoringutils_check.html</loc>
