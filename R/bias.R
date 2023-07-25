@@ -159,14 +159,7 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     return(NA_real_)
   }
 
-  # quantiles must be between 0 and 1, increase, and be unique
-  if (any(quantiles < 0) || any(quantiles > 1)) {
-    stop("quantiles must be between 0 and 1")
-  }
-
-  if (!all(diff(quantiles) > 0)) {
-    stop("quantiles must be increasing")
-  }
+  check_quantiles(quantiles)
 
   if (!all(diff(predictions) >= 0)) {
     stop("predictions must be increasing with quantiles")
@@ -204,6 +197,17 @@ bias_quantile <- function(predictions, quantiles, true_value) {
     }
   }
   return(bias)
+}
+
+# quantiles must be between 0 and 1, increase, and be unique
+check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
+  if (any(quantiles < range[1]) || any(quantiles > range[2])) {
+    stop(name, " must be between ", range[1], " and ", range[2])
+  }
+
+  if (!all(diff(quantiles) > 0)) {
+    stop(name, " must be increasing")
+  }
 }
 
 #' @title Determines Bias of Quantile Forecasts based on the range of the
@@ -296,6 +300,8 @@ bias_range <- function(lower, upper, range, true_value) {
   if (length(lower) != length(upper) || length(range) != length(lower)) {
     stop("Inputs must have same length")
   }
+
+  check_quantiles(range, name = "range", range = c(0, 100))
 
   # Convert range to quantiles
   quantiles <- c(
