@@ -130,15 +130,15 @@ example_quantile %>%
 #> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
-| model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation | bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
-|:----------------------|:------------|---------------:|-----------:|----------------:|---------------:|-------------------:|-----:|----------:|------------:|------------:|---------------:|-----------------:|
-| EuroCOVIDhub-baseline | Cases       |          28000 |       4100 |         10000.0 |        14000.0 |             -0.110 | 0.28 |     38000 |        0.33 |        0.82 |           1.30 |              1.6 |
-| EuroCOVIDhub-baseline | Deaths      |            160 |         91 |             2.1 |           66.0 |              0.120 | 0.77 |       230 |        0.66 |        1.00 |           2.30 |              3.8 |
-| EuroCOVIDhub-ensemble | Cases       |          18000 |       3700 |          4200.0 |        10000.0 |             -0.098 | 0.14 |     24000 |        0.39 |        0.80 |           0.82 |              1.0 |
-| EuroCOVIDhub-ensemble | Deaths      |             41 |         30 |             4.1 |            7.1 |              0.200 | 0.42 |        53 |        0.88 |        1.00 |           0.60 |              1.0 |
-| UMass-MechBayes       | Deaths      |             53 |         27 |            17.0 |            9.0 |             -0.023 | 0.19 |        78 |        0.46 |        0.88 |           0.75 |              1.3 |
-| epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | 0.11 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
-| epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | 0.22 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
+| model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
+|:----------------------|:------------|---------------:|-----------:|----------------:|---------------:|-------------------:|--------:|----------:|------------:|------------:|---------------:|-----------------:|
+| EuroCOVIDhub-baseline | Cases       |          28000 |       4100 |         10000.0 |        14000.0 |             -0.110 |  0.0980 |     38000 |        0.33 |        0.82 |           1.30 |              1.6 |
+| EuroCOVIDhub-baseline | Deaths      |            160 |         91 |             2.1 |           66.0 |              0.120 |  0.3400 |       230 |        0.66 |        1.00 |           2.30 |              3.8 |
+| EuroCOVIDhub-ensemble | Cases       |          18000 |       3700 |          4200.0 |        10000.0 |             -0.098 | -0.0560 |     24000 |        0.39 |        0.80 |           0.82 |              1.0 |
+| EuroCOVIDhub-ensemble | Deaths      |             41 |         30 |             4.1 |            7.1 |              0.200 |  0.0730 |        53 |        0.88 |        1.00 |           0.60 |              1.0 |
+| UMass-MechBayes       | Deaths      |             53 |         27 |            17.0 |            9.0 |             -0.023 | -0.0220 |        78 |        0.46 |        0.88 |           0.75 |              1.3 |
+| epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | -0.0790 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
+| epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | -0.0051 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
 
 `scoringutils` contains additional functionality to summarise these
 scores at different levels, to visualise them, and to explore the
