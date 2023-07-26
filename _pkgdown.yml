@@ -1,9 +1,8 @@
 url: https://epiforecasts.io/scoringutils/
 template:
   bootstrap: 5
-  package: preferably
-  params:
-    toggle: manual
+  bslib:
+    font_weight_base : 300
   twitter:
     creator: "@nikosbosse"
     card: summary_large_image
