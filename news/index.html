@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,44 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="scoringutils-120">scoringutils 1.2.0<a class="anchor" aria-label="anchor" href="#scoringutils-120"></a></h2>
+<p>This major release contains a range of new features and bug fixes that have been introduced in minor releases since <code>1.1.0</code>. The most important changes are:</p>
+<ul><li>Documentation updated to reflect changes since version 1.1.0, including new transform and workflow functions.</li>
+<li>New <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> function allows manual setting of forecast unit.</li>
+<li>
+<code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> gains new <code>across</code> argument for summarizing across variables.</li>
+<li>New <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> and <code><a href="../reference/log_shift.html">log_shift()</a></code> functions allow forecast transformations. See the documentation for <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> for more details and an example use case.</li>
+<li>Input checks and test coverage improved for bias functions.</li>
+<li>Bug fix in <code><a href="../reference/get_prediction_type.html">get_prediction_type()</a></code> for integer matrix input.</li>
+<li>Links to scoringutils paper and citation updates.</li>
+<li>Warning added in <code><a href="../reference/interval_score.html">interval_score()</a></code> for small interval ranges.</li>
+<li>Linting updates and improvements.</li>
+</ul><p>Thanks to <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a>, <a href="https://github.com/seabbs" class="external-link">@seabbs</a>, and <a href="https://github.com/sbfnk" class="external-link">@sbfnk</a> for code and review contributions. Thanks to <a href="https://github.com/bisaloo" class="external-link">@bisaloo</a> for the suggestion to use a linting GitHub Action that only triggers on changes, and <a href="https://github.com/adrian-lison" class="external-link">@adrian-lison</a> for the suggestion to add a warning to <code><a href="../reference/interval_score.html">interval_score()</a></code> if the interval range is between 0 and 1.</p>
+<div class="section level3">
+<h3 id="package-updates-1-2-0">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-0"></a></h3>
+<ul><li>The documentation was updated to reflect the recent changes since <code>scoringutils 1.1.0</code>. In particular, usage of the functions <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code>, <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> and <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following:</li>
+</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">example_quantile</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"horizon"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Documentation for the <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> has also been extended. This functions allows the user to easily add transformations of forecasts, as suggested in the paper <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">“Scoring epidemiological forecasts on transformed scales”</a>. In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. Users can now do something like the following to score a transformed version of the data in addition to the original one:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span><span class="op">[</span><span class="va">true_value</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
+<span><span class="va">data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Here we use the <code><a href="../reference/log_shift.html">log_shift()</a></code> function to apply a logarithmic transformation to the forecasts. This function was introduced in <code>scoringutils 1.1.2</code> as a helper function that acts just like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code>, but has an additional argument <code>offset</code> that can add a number to every prediction and observed value before applying the log transformation.</p>
+</div>
+<div class="section level3">
+<h3 id="feature-updates-1-2-0">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-2-0"></a></h3>
+<ul><li>Made <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> and <code><a href="../reference/score.html">score()</a></code> pipeable (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/290" class="external-link">#290</a>). This means that users can now directly use the output of <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> as input for <code><a href="../reference/score.html">score()</a></code>. As <code><a href="../reference/score.html">score()</a></code> otherwise runs <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> internally anyway this simply makes the step explicit and helps writing clearer code.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.7" id="scoringutils-117">scoringutils 1.1.7<a class="anchor" aria-label="anchor" href="#scoringutils-117"></a></h2>
 <p>Release by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> in <a href="https://github.com/epiforecasts/scoringutils/issues/305" class="external-link">#305</a>. Reviewed by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and <a href="https://github.com/sbfnk" class="external-link">@sbfnk</a>.</p>
 <div class="section level3">
@@ -114,8 +152,8 @@
 <h2 class="pkg-version" data-toc-text="1.1.4" id="scoringutils-114">scoringutils 1.1.4<a class="anchor" aria-label="anchor" href="#scoringutils-114"></a></h2>
 <div class="section level3">
 <h3 id="package-updates-1-1-4">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-1-4"></a></h3>
-<ul><li>added links to the scoringutils paper <a href="https://arxiv.org/abs/2205.07090" class="external-link">Evaluating Forecasts with scoringutils in R</a> to the package.</li>
-<li>updated citation formatting to comply with newer standards.</li>
+<ul><li>Added links to the scoringutils paper <a href="https://arxiv.org/abs/2205.07090" class="external-link">Evaluating Forecasts with scoringutils in R</a> to the package.</li>
+<li>Updated citation formatting to comply with newer standards.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -136,7 +174,7 @@
 <div class="section level3">
 <h3 id="feature-updates-1-1-2">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-2"></a></h3>
 <ul><li>Added a new function, <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1</a>.</li>
-<li>Added a function, <code><a href="../reference/log_shift.html">log_shift()</a></code> that implements the default transformation function. The function allows add an offset before applying the logarithm.</li>
+<li>Added a function, <code><a href="../reference/log_shift.html">log_shift()</a></code> that implements the default transformation function. The function allows to add an offset before applying the logarithm.</li>
 </ul></div>
 </div>
     <div class="section level2">

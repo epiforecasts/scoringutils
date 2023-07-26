@@ -74,7 +74,7 @@ as well as the paper Evaluating Forecasts with scoringutils in R."><!-- mathjax 
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -310,6 +310,53 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:   0.8750000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:   0.7890625</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:   0.9075630</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set forecast unit manually (to avoid issues with scoringutils trying to</span></span></span>
+<span class="r-in"><span><span class="co"># determine the forecast unit automatically), check forecasts before scoring</span></span></span>
+<span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"horizon"</span>, <span class="st">"model"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">score</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type horizon                 model range</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20397:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2    90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20398:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2    95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20399:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2    95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20400:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2    98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20401:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2    98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        interval_score dispersion underprediction overprediction coverage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:       25620.00       0.00               0          25620        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:       25599.50     184.50               0          25415        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:       25599.50     184.50               0          25415        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:       25481.00     556.00               0          24925        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:       25481.00     556.00               0          24925        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20397:          15.85      15.85               0              0        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20398:          11.75      11.75               0              0        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20399:          11.75      11.75               0              0        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20400:           6.52       6.52               0              0        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20401:           6.52       6.52               0              0        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        coverage_deviation bias quantile ae_median quantile_coverage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:               0.00 0.95    0.500     25620              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:              -0.10 0.95    0.450     25620              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:              -0.10 0.95    0.550     25620              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:              -0.20 0.95    0.400     25620              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:              -0.20 0.95    0.600     25620              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20397:               0.10 0.50    0.950        26              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20398:               0.05 0.50    0.025        26             FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20399:               0.05 0.50    0.975        26              TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20400:               0.02 0.50    0.010        26             FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20401:               0.02 0.50    0.990        26              TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># forecast formats with different metrics</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
