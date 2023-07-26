@@ -76,7 +76,7 @@ have a look at the \link{metrics} data included in the package. The column
 computed. If interested in an unsupported metric please open a \href{https://github.com/epiforecasts/scoringutils/issues}{feature request} or consider
 contributing a pull request.
 
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/getting-started.html}{Getting Started Vignette}
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette}
 as well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
 \examples{
