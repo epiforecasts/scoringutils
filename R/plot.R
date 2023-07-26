@@ -100,8 +100,7 @@ plot_score_table <- function(scores,
   # users can then pass in a factor and keep the ordering of that column intact
   if (length(y) > 1) {
     df[, identifCol := do.call(paste, c(.SD, sep = "_")),
-       .SDcols = y[y %in% names(df)]
-    ]
+       .SDcols = y[y %in% names(df)]]
   } else {
     setnames(df, old = eval(y), new = "identifCol")
   }
@@ -757,10 +756,9 @@ plot_pairwise_comparison <- function(comparison_result,
     )]
 
     high_col <- "palegreen3"
-      comparison_result[, var_of_interest := as.character(var_of_interest)]
-      comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
-                                                    "< 0.001", var_of_interest
-      )]
+    comparison_result[, var_of_interest := as.character(var_of_interest)]
+    comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
+                                                  "< 0.001", var_of_interest)]
   }
 
   plot <- ggplot(
@@ -776,8 +774,7 @@ plot_pairwise_comparison <- function(comparison_result,
       width = 0.97, height = 0.97
     ) +
     geom_text(aes(label = var_of_interest),
-              na.rm = TRUE
-    ) +
+              na.rm = TRUE) +
     scale_fill_gradient2(
       low = "steelblue", mid = "grey95",
       high = high_col,

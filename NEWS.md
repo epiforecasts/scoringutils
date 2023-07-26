@@ -1,3 +1,49 @@
+# scoringutils 1.2.0
+
+This major release contains a range of new features and bug fixes that have been introduced in minor releases since `1.1.0`. The most important changes are:
+
+- Documentation updated to reflect changes since version 1.1.0, including new transform and workflow functions.
+- New `set_forecast_unit()` function allows manual setting of forecast unit.
+- `summarise_scores()` gains new `across` argument for summarizing across variables.
+- New `transform_forecasts()` and `log_shift()` functions allow forecast transformations. See the documentation for `transform_forecasts()` for more details and an example use case.
+- Input checks and test coverage improved for bias functions.
+- Bug fix in `get_prediction_type()` for integer matrix input.
+- Links to scoringutils paper and citation updates.
+- Warning added in `interval_score()` for small interval ranges.
+- Linting updates and improvements.
+
+Thanks to @nikosbosse, @seabbs, and @sbfnk for code and review contributions. Thanks to @bisaloo for the suggestion to use a linting GitHub Action that only triggers on changes, and @adrian-lison for the suggestion to add a warning to `interval_score()` if the interval range is between 0 and 1.
+
+## Package updates
+
+- The documentation was updated to reflect the recent changes since `scoringutils 1.1.0`. In particular, usage of the functions `set_forecast_unit()`, `check_forecasts()` and `transform_forecasts()` are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following:
+
+```r
+example_quantile |> 
+  set_forecast_unit(c("model", "location", "forecast_date", "horizon", "target_type")) |> 
+  check_forecasts() |> 
+  score()
+```
+
+Documentation for the `transform_forecasts()` has also been extended. This functions allows the user to easily add transformations of forecasts, as suggested in the paper ["Scoring epidemiological forecasts on transformed scales"](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1). In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. Users can now do something like the following to score a transformed version of the data in addition to the original one:
+
+```r
+data <- example_quantile[true_value > 0, ]
+data |>
+  transform_forecasts(fun = log_shift, offset = 1) |> 
+  score() |> 
+  summarise_scores(by = c("model", "scale"))
+```
+
+Here we use the `log_shift()` function to apply a logarithmic transformation to the forecasts. This function was introduced in `scoringutils 1.1.2` as a helper function that acts just like `log()`, but has an additional argument `offset` that can add a number to every prediction and observed value before applying the log transformation.
+
+## Feature updates
+
+- Made `check_forecasts()` and `score()` pipeable (see issue #290). This means that
+users can now directly use the output of `check_forecasts()` as input for
+`score()`. As `score()` otherwise runs `check_forecasts()` internally anyway
+this simply makes the step explicit and helps writing clearer code.
+
 # scoringutils 1.1.7
 
 Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
@@ -21,21 +67,21 @@ Release by @seabbs in #305. Reviewed by @nikosbosse and @sbfnk.
 # scoringutils 1.1.6
 
 ## Feature updates
+
 - Added a new argument, `across`, to `summarise_scores()`. This argument allows the user to summarise scores across different forecast units as an alternative to specifying `by`. See the documentation for `summarise_scores()` for more details and an example use case.
 
 # scoringutils 1.1.5
 
 ## Feature updates
-- Added a new function, `set_forecast_unit()` that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, `scoringutils` attempts to determine the unit of a single automatically by simply assuming that all column names are
-relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue #268). 
-When used as part of a workflow, `set_forecast_unit()` can be directly piped into `check_forecasts()` to
-check everything is in order.
+
+- Added a new function, `set_forecast_unit()` that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, `scoringutils` attempts to determine the unit of a single automatically by simply assuming that all column names are relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue #268). When used as part of a workflow, `set_forecast_unit()` can be directly piped into `check_forecasts()` to check everything is in order.
 
 # scoringutils 1.1.4
 
 ## Package updates
-- added links to the scoringutils paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) to the package. 
-- updated citation formatting to comply with newer standards. 
+
+- Added links to the scoringutils paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) to the package.
+- Updated citation formatting to comply with newer standards.
 
 # scoringutils 1.1.3
 
@@ -54,7 +100,7 @@ check everything is in order.
 ## Feature updates
 
 - Added a new function, `transform_forecasts()` to make it easy to transform forecasts before scoring them, as suggested in Bosse et al. (2023), https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1.
-- Added a function, `log_shift()` that implements the default transformation function. The function allows add an offset before applying the logarithm.
+- Added a function, `log_shift()` that implements the default transformation function. The function allows to add an offset before applying the logarithm.
 
 # scoringutils 1.1.1
 

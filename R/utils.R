@@ -300,3 +300,34 @@ get_protected_columns <- function(data) {
 
   return(protected_columns)
 }
+
+
+#' @title Check whether object has been checked with check_forecasts()
+#'
+#' @description Helper function to determine whether an object has been checked
+#' by and passed [check_forecasts()].
+#'
+#' @param data An object of class `scoringutils_check()` as produced by
+#' [check_forecasts()].
+#'
+#' @importFrom methods is
+#'
+#' @return Logical, either TRUE or FALSE
+#'
+#' @keywords internal
+
+is_scoringutils_check <- function(data) {
+
+  result <- is(data, "scoringutils_check")
+
+  if (result &&
+        any(is.null(data$cleaned_data), is.null(data$prediction_type),
+            is.null(data$forecast_unit), is.null(data$target_type))) {
+    stop("Input seems to be an output of `scoringutils_check()`, ",
+         "but at least one of the required list items ",
+         "'cleaned_data', 'prediction_type', 'forecast_unit', or
+         'target_type' is missing. Try running check_forecasts() again.")
+  }
+
+  return(result)
+}

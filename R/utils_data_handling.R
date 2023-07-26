@@ -143,9 +143,10 @@ range_long_to_quantile <- function(data,
   # a point forecast. This should probably be dealt with in the future
   data <- data[!(range == 0 & boundary == "upper"), ]
 
-  data[, quantile := ifelse(boundary == "lower",
-                            round((100 - range) / 200, 10),
-                            round((1 - (100 - range) / 200), 10)
+  data[, quantile := ifelse(
+    boundary == "lower",
+    round((100 - range) / 200, 10),
+    round((1 - (100 - range) / 200), 10)
   )]
 
   if (!keep_range_col) {
@@ -176,9 +177,10 @@ quantile_to_range_long <- function(data,
   data <- data.table::as.data.table(data)
 
   data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
-  data[, range := ifelse(boundary == "lower",
-                         round((1 - 2 * quantile) * 100, 10),
-                         round((2 * quantile - 1) * 100, 10)
+  data[, range := ifelse(
+    boundary == "lower",
+    round((1 - 2 * quantile) * 100, 10),
+    round((2 * quantile - 1) * 100, 10)
   )]
 
   # add median quantile
@@ -232,14 +234,13 @@ sample_to_range_long <- function(data,
   upper_quantiles <- 1 - lower_quantiles
   quantiles <- sort(unique(c(lower_quantiles, upper_quantiles)))
 
-  data <- sample_to_quantile(data,
-                             quantiles = quantiles,
-                             type = type
+  data <- sample_to_quantile(
+    data,
+    quantiles = quantiles,
+    type = type
   )
 
-  data <- quantile_to_range_long(data,
-                                 keep_quantile_col = keep_quantile_col
-  )
+  data <- quantile_to_range_long(data, keep_quantile_col = keep_quantile_col)
 
   return(data[])
 }

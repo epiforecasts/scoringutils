@@ -162,11 +162,12 @@ check_forecasts <- function(data) {
   if (length(n) > 1) {
     warnings <- c(
       warnings,
-      paste0(
-        "Some forecasts have different numbers of rows (e.g. quantiles or samples). ", # nolint
-        "scoringutils found: ", toString(n),
-        ". This is not necessarily a problem, but make sure this is intended."
-      )
+      "Some forecasts have different numbers of rows ",
+      "(e.g. quantiles or samples). ",
+      "scoringutils found: ", toString(n),
+      ". This may be a problem (it can potentially distort scores, ",
+      "making it more difficult to compare them), ",
+      "so make sure this is intended."
     )
   }
   data[, InternalNumCheck := NULL]

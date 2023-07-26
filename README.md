@@ -4,10 +4,9 @@ scoringutils: Utilities for Scoring and Assessing Predictions
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/github/epiforecasts/scoringutils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
+[![codecov](https://app.codecov.io/gh/epiforecasts/scoringutilsbranch/master/graphs/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
 [![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
-![GitHub R package
-version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
+[![develVersion](https://img.shields.io/badge/devel%20version-1.2.0-green.svg?style=flat)](https://github.com/epiforecasts/scoringutils)
 [![metacran
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
@@ -16,9 +15,12 @@ The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
 forecasts against the true observed values.
 
-You can find additional information and examples in the paper
+You can find additional information and examples in the papers
 [Evaluating Forecasts with scoringutils in
-R](https://arxiv.org/abs/2205.07090) as well as the Vignettes ([Getting
+R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts
+on transformed
+scales](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1)
+as well as the Vignettes ([Getting
 started](https://epiforecasts.io/scoringutils/articles/getting-started.html),
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
@@ -26,11 +28,13 @@ and [Scoring forecasts
 directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
 
 The `scoringutils` package offers convenient automated forecast
-evaluation in a `data.table` format (using the function `score()`), but
-also provides experienced users with a set of reliable lower-level
-scoring metrics operating on vectors/matrices they can build upon in
-other applications. In addition it implements a wide range of flexible
-plots designed to cover many use cases.
+evaluation through the function `score()`. The function operates on
+data.frames (it uses `data.table` internally for speed and efficiency)
+and can easily be integrated in a workflow based on `dplyr` or
+`data.table`. It also provides experienced users with a set of reliable
+lower-level scoring metrics operating on vectors/matrices they can build
+upon in other applications. In addition it implements a wide range of
+flexible plots designed to cover many use cases.
 
 Where available `scoringutils` depends on functionality from
 `scoringRules` which provides a comprehensive collection of proper
@@ -105,15 +109,26 @@ example_quantile %>%
 ### Scoring forecasts
 
 Forecasts can be easily and quickly scored using the `score()` function.
-This function returns unsummarised scores, which in most cases is not
-what the user wants. Here we make use of additional functions from
-`scoringutils` to add empirical coverage-levels (`add_coverage()`), and
-scores relative to a baseline model (here chosen to be the
-EuroCOVIDhub-ensemble model). See the getting started vignette for more
-details. Finally we summarise these scores by model and target type.
+`score()` automatically tries to determine the `forecast_unit`, i.e. the
+set of columns that uniquely defines a single forecast, by taking all
+column names of the data into account. However, it is recommended to set
+the forecast unit manually using `set_forecast_unit()` as this may help
+to avoid errors, especially when scoringutils is used in automated
+pipelines. The function `set_forecast_unit()` will simply drop unneeded
+columns. To verify everything is in order, the function
+`check_forecasts()` should be used. The result of that check can then
+passed directly into `score()`. `score()` returns unsummarised scores,
+which in most cases is not what the user wants. Here we make use of
+additional functions from `scoringutils` to add empirical
+coverage-levels (`add_coverage()`), and scores relative to a baseline
+model (here chosen to be the EuroCOVIDhub-ensemble model). See the
+getting started vignette for more details. Finally we summarise these
+scores by model and target type.
 
 ``` r
 example_quantile %>%
+  set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
+  check_forecasts() %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
@@ -140,10 +155,43 @@ example_quantile %>%
 | epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | -0.0790 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
 | epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | -0.0051 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
 
-`scoringutils` contains additional functionality to summarise these
-scores at different levels, to visualise them, and to explore the
-forecasts themselves. See the package vignettes and function
+`scoringutils` contains additional functionality to transform forecasts,
+to summarise scores at different levels, to visualise them, and to
+explore the forecasts themselves. See the package vignettes and function
 documentation for more information.
+
+You may want to score forecasts based on transformations of the original
+data in order to obtain a more complete evaluation (see [this
+paper](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1)
+for more information). This can be done using the function
+`transform_forecasts()`. In the following example, we truncate values at
+0 and use the function `log_shift()` to add 1 to all values before
+applying the natural logarithm.
+
+``` r
+example_quantile %>%
+ .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+  transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
+  score %>%
+  summarise_scores(by = c("model", "target_type", "scale")) %>%
+  head()
+#> The following messages were produced when checking inputs:
+#> 1.  288 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
+#>                    model target_type   scale interval_score   dispersion
+#> 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146
+#> 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443
+#> 3: EuroCOVIDhub-ensemble       Cases     log   5.500974e-01    0.1011850
+#> 4: EuroCOVIDhub-ensemble       Cases natural   1.155071e+04 3663.5245788
+#> 5:  epiforecasts-EpiNow2       Cases     log   6.005778e-01    0.1066329
+#> 6:  epiforecasts-EpiNow2       Cases natural   1.443844e+04 5664.3779484
+#>    underprediction overprediction coverage_deviation        bias    ae_median
+#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726563 1.185905e+00
+#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726563 3.208048e+04
+#> 3:    1.356563e-01      0.3132561        -0.09785326 -0.05640625 7.410484e-01
+#> 4:    4.237177e+03   3650.0047554        -0.09785326 -0.05640625 1.770795e+04
+#> 5:    1.858699e-01      0.3080750        -0.06660326 -0.07890625 7.656591e-01
+#> 6:    3.260356e+03   5513.7058424        -0.06660326 -0.07890625 2.153070e+04
+```
 
 ## Citation
 
