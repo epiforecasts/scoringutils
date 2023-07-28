@@ -48,4 +48,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.md 
           git diff-index --quiet HEAD || git commit -m "Automatic readme update"
-          git push origin || echo "No changes to push"
+          git status -sb | grep -q ahead && git push origin
