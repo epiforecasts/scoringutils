@@ -1,3 +1,12 @@
+# scoringutils 1.2.1
+
+## Package updates
+- This minor update fixes a few issues related to gh actions and the vignettes displayed at epiforecasts.io/scoringutils. It
+  - gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn't work properly
+  - updates the gh pages deploy action to v4 and also cleans up files when triggered
+  - introduces a gh action to automatically render the Readme from Readme.Rmd
+  - removes links to vignettes that have been renamed
+
 # scoringutils 1.2.0
 
 This major release contains a range of new features and bug fixes that have been introduced in minor releases since `1.1.0`. The most important changes are:
