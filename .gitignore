@@ -8,6 +8,8 @@ doc
 Meta
 inst/manuscript/manuscript_cache/
 inst/manuscript/manuscript.log
+inst/manuscript/manuscript.aux
+inst/manuscript/manuscript.blg
 inst/manuscript/manuscript.pdf
 inst/manuscript/manuscript.tex
 inst/manuscript/manuscript_files/
