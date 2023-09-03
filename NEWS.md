@@ -4,6 +4,7 @@ This minor update addresses comments made by review from the Journal of Statisti
 
 ## Package updates
 - add documentation for the return value of `summarise_scores()`. 
+- remove hard-coded rounding value for `correlation()`. Previously, the function always rounded correlations to two digits. 
 
 # scoringutils 1.2.1
 

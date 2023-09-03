@@ -43,7 +43,7 @@ correlation <- function(scores,
   df <- df[, .SD, .SDcols = names(df) %in% metrics]
 
   # define correlation matrix
-  cor_mat <- round(cor(as.matrix(df)), 2)
+  cor_mat <- cor(as.matrix(df))
 
   correlations <- setDT(as.data.frame((cor_mat)),
     keep.rownames = TRUE
