@@ -29,7 +29,6 @@ p2 <-
   ggplot(data.frame(x = seq(-8, 8, 0.01),
                     x_example = rnorm(n = 1601, mean = 0, sd = 1.25)),
          aes(x = x)) +
-  # geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(sd = 1.25)) +
   expand_limits(y = c(0, 1.0), x = c(-3, 3)) +
@@ -40,7 +39,7 @@ p2 <-
 p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(sd = 1)) +
   ggtitle("Well calibrated") +
@@ -50,7 +49,7 @@ p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
 p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 1, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 2, sd = 1)) +
   ggtitle("Badly calibrated") +
@@ -60,7 +59,7 @@ p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
 p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 0, sd = 2.05)) +
   ggtitle("Badly calibrated") +
@@ -127,10 +126,10 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 pred_hist <- df |>
   ggplot(aes(x = true_value)) +
   facet_wrap(~ model, nrow = 1) +
-  geom_histogram(aes(y=..density..),
+  geom_histogram(aes(y=after_stat(density)),
                  fill = "grey",
                  colour = "dark grey") +
-  geom_density(aes(y=..density.., x = prediction),
+  geom_density(aes(y=after_stat(density), x = prediction),
                colour = "black") +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")

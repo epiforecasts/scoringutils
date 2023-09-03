@@ -55,10 +55,10 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 pred_hist <- df |>
   ggplot(aes(x = true_value)) +
   facet_wrap(~ model, nrow = 1) +
-  geom_histogram(aes(y=..density..),
+  geom_histogram(aes(y = after_stat(density)),
                  fill = "grey",
                  colour = "dark grey") +
-  geom_density(aes(y=..density.., x = prediction),
+  geom_density(aes(y = after_stat(density), x = prediction),
                  colour = "black") +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")
