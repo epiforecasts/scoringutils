@@ -20,7 +20,8 @@ Plots a heatmap of correlations between different metrics
 \examples{
 scores <- score(example_quantile)
 correlations <- correlation(
- summarise_scores(scores)
+ summarise_scores(scores),
+ digits = 2
 )
 plot_correlation(correlations)
 }
