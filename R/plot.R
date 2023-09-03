@@ -979,11 +979,13 @@ plot_available_forecasts <- function(available_forecasts,
     available_forecasts[, eval(x) := as.factor(get(x))]
   }
 
+  setnames(available_forecasts, old = "count", new = "Count")
+
   plot <- ggplot(
     available_forecasts,
     aes(y = .data[[y]], x = .data[[x]])
   ) +
-    geom_tile(aes(fill = `count`),
+    geom_tile(aes(fill = `Count`),
       width = 0.97, height = 0.97
     ) +
     scale_fill_gradient(
@@ -1001,7 +1003,7 @@ plot_available_forecasts <- function(available_forecasts,
 
   if (show_numbers) {
     plot <- plot +
-      geom_text(aes(label = `count`))
+      geom_text(aes(label = `Count`))
   }
 
   return(plot)
