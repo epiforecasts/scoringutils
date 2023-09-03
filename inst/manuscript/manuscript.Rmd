@@ -690,7 +690,7 @@ We thank Community Jameel for Institute and research funding
 
 ```{r score-table-detailed, echo=FALSE, cache = FALSE, eval = FALSE}
 
-data <- readRDS(system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils"))
+data <- readRDS(system.file("metrics-overview/metrics-detailed.rds", package = "scoringutils"))
 
 data[, 1:2] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE,
