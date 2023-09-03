@@ -942,7 +942,7 @@ plot_pit <- function(pit,
 #' @description
 #' Visualise Where Forecasts Are Available
 #'
-#' @param available_forecasts data.frame with a column called `Number forecasts`
+#' @param available_forecasts data.frame with a column called `count`
 #' as produced by [available_forecasts()]
 #' @param y character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
@@ -983,7 +983,7 @@ plot_available_forecasts <- function(available_forecasts,
     available_forecasts,
     aes(y = .data[[y]], x = .data[[x]])
   ) +
-    geom_tile(aes(fill = `Number forecasts`),
+    geom_tile(aes(fill = `count`),
       width = 0.97, height = 0.97
     ) +
     scale_fill_gradient(
@@ -1001,7 +1001,7 @@ plot_available_forecasts <- function(available_forecasts,
 
   if (show_numbers) {
     plot <- plot +
-      geom_text(aes(label = `Number forecasts`))
+      geom_text(aes(label = `count`))
   }
 
   return(plot)

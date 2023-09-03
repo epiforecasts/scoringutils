@@ -20,7 +20,7 @@
 #' that a single forecast only gets counted once.
 #'
 #' @return A data.table with columns as specified in `by` and an additional
-#' column with the number of forecasts.
+#' column "count" with the number of forecasts.
 #'
 #' @inheritParams score
 #' @importFrom data.table .I .N
@@ -59,7 +59,7 @@ available_forecasts <- function(data,
   data <- data[data[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- data[, .(`Number forecasts` = .N), by = by]
+  out <- data[, .(`count` = .N), by = by]
 
   return(out[])
 }

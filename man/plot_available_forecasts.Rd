@@ -22,7 +22,7 @@ plot_avail_forecasts(
 )
 }
 \arguments{
-\item{available_forecasts}{data.frame with a column called \verb{Number forecasts}
+\item{available_forecasts}{data.frame with a column called \code{count}
 as produced by \code{\link[=available_forecasts]{available_forecasts()}}}
 
 \item{y}{character vector of length one that denotes the name of the column

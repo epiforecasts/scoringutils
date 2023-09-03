@@ -51,7 +51,7 @@ that a single forecast only gets counted once.}
 }
 \value{
 A data.table with columns as specified in \code{by} and an additional
-column with the number of forecasts.
+column "count" with the number of forecasts.
 }
 \description{
 Given a data set with forecasts, count the number of available forecasts

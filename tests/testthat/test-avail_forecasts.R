@@ -6,22 +6,22 @@ test_that("available_forecasts() works as expected", {
   )
   expect_type(af, "list")
   expect_type(af$target_type, "character")
-  expect_type(af$`Number forecasts`, "integer")
-  expect_equal(nrow(af[is.na(`Number forecasts`)]), 0)
+  expect_type(af$`count`, "integer")
+  expect_equal(nrow(af[is.na(`count`)]), 0)
   af <- suppressMessages(
     available_forecasts(example_quantile,
      by = "model"
     )
   )
   expect_equal(nrow(af), 4)
-  expect_equal(af$`Number forecasts`, c(256, 256, 247, 128))
+  expect_equal(af$`count`, c(256, 256, 247, 128))
   af <- suppressMessages(
     available_forecasts(example_quantile,
      by = "model", collapse = c()
     )
   )
   expect_equal(nrow(af), 4)
-  expect_equal(af$`Number forecasts`, c(5888, 5888, 5681, 2944))
+  expect_equal(af$`count`, c(5888, 5888, 5681, 2944))
   af <- suppressMessages(
     available_forecasts(example_quantile)
   )
