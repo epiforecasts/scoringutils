@@ -1,3 +1,10 @@
+# scoringutils 1.2.2
+
+This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
+
+## Package updates
+- add documentation for the return value of `summarise_scores()`. 
+
 # scoringutils 1.2.1
 
 ## Package updates
