@@ -419,4 +419,4 @@ data <- rbind(as.data.frame(crps),
               as.data.frame(mean_score_ratio),
               as.data.frame(relative_skill))
 
-saveRDS(data, "inst/metrics-overview/metrics-detailed.Rda")
+saveRDS(data, "inst/metrics-overview/metrics-detailed.rds")
