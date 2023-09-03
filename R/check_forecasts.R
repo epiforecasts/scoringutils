@@ -11,7 +11,7 @@
 #'
 #' @seealso Function to move from sample-based to quantile format:
 #' [sample_to_quantile()]
-#' @inheritParams avail_forecasts
+#' @inheritParams available_forecasts
 #' @return A list with elements that give information about what `scoringutils`
 #' thinks you are trying to do and potential issues.
 #'

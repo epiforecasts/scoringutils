@@ -29,13 +29,13 @@
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
-#' avail_forecasts(example_quantile,
+#' available_forecasts(example_quantile,
 #'   collapse = c("quantile"),
 #'   by = c("model", "target_type")
 #' )
-avail_forecasts <- function(data,
-                            by = NULL,
-                            collapse = c("quantile", "sample")) {
+available_forecasts <- function(data,
+                                by = NULL,
+                                collapse = c("quantile", "sample")) {
 
   check_data <- check_forecasts(data)
 
@@ -63,3 +63,8 @@ avail_forecasts <- function(data,
 
   return(out[])
 }
+
+#' @rdname available_forecasts
+#' @keywords check-forecasts
+#' @export
+avail_forecasts <- available_forecasts

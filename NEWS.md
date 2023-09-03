@@ -1,3 +1,10 @@
+# scoringutils 1.2.2
+
+This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
+
+## Package updates
+- the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. Similarly, `plot_avail_forecasts()` was renamed to `plot_available_forecasts()`. The old functions, `avail_forecasts()` and `plot_avail_forecasts()` are still available as aliases. 
+
 # scoringutils 1.2.1
 
 ## Package updates
@@ -153,7 +160,7 @@ to a function `summarise_scores()`
 - New function `check_forecasts()` to analyse input data before scoring
 - New function `correlation()` to compute correlations between different metrics
 - New function `add_coverage()` to add coverage for specific central prediction intervals.
-- New function `avail_forecasts()` allows to visualise the number of available forecasts.
+- New function `available_forecasts()` allows to visualise the number of available forecasts.
 - New function `find_duplicates()` to find duplicate forecasts which cause an error.
 - All plotting functions were renamed to begin with `plot_`. Arguments were
 simplified.

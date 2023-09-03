@@ -218,6 +218,6 @@
 <line x1='466.04' y1='537.85' x2='466.04' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <line x1='487.57' y1='537.85' x2='487.57' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <line x1='509.10' y1='537.85' x2='509.10' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<text x='125.25' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='116.69px' lengthAdjust='spacingAndGlyphs'>plot_avail_forecasts</text>
+<text x='125.25' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='116.69px' lengthAdjust='spacingAndGlyphs'>plot_available_forecasts</text>
 </g>
 </svg>
