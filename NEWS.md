@@ -3,7 +3,9 @@
 This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
 
 ## Package updates
-- the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. Similarly, `plot_avail_forecasts()` was renamed to `plot_available_forecasts()`. The old functions, `avail_forecasts()` and `plot_avail_forecasts()` are still available as aliases. 
+- the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. Similarly, `plot_avail_forecasts()` was renamed to `plot_available_forecasts()`. The old functions, `avail_forecasts()` and `plot_avail_forecasts()` are still available as aliases.
+- For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 
+- `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows. 
 
 # scoringutils 1.2.1
 

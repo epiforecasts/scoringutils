@@ -14,16 +14,16 @@ test_that("available_forecasts() works as expected", {
     )
   )
   expect_equal(nrow(af), 4)
-  expect_equal(af$`count`, c(256, 256, 247, 128))
+  expect_equal(af$`count`, c(256, 256, 128, 247))
   af <- suppressMessages(
     available_forecasts(example_quantile,
      by = "model", collapse = c()
     )
   )
   expect_equal(nrow(af), 4)
-  expect_equal(af$`count`, c(5888, 5888, 5681, 2944))
+  expect_equal(af$`count`, c(5888, 5888, 2944, 5681))
   af <- suppressMessages(
     available_forecasts(example_quantile)
   )
-  expect_equal(nrow(af), 887)
+  expect_equal(nrow(af), 50688)
 })

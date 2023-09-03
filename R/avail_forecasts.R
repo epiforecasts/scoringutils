@@ -23,7 +23,7 @@
 #' column "count" with the number of forecasts.
 #'
 #' @inheritParams score
-#' @importFrom data.table .I .N
+#' @importFrom data.table .I .N nafill
 #' @export
 #' @keywords check-forecasts
 #' @examples
@@ -38,7 +38,6 @@ available_forecasts <- function(data,
                                 collapse = c("quantile", "sample")) {
 
   check_data <- check_forecasts(data)
-
 
   data <- check_data$cleaned_data
   forecast_unit <- check_data$forecast_unit
@@ -60,6 +59,16 @@ available_forecasts <- function(data,
 
   # count number of rows = number of forecasts
   out <- data[, .(`count` = .N), by = by]
+
+  # make sure that all combinations in "by" are included in the output (with
+  # count = 0). To achieve that, take the unique values in data and expand grid
+  col_vecs <- unclass(out)
+  col_vecs$count <- NULL
+  col_vecs <- lapply(col_vecs, unique)
+  out_empty <- expand.grid(col_vecs, stringsAsFactors = FALSE)
+
+  out <- merge(out, out_empty, by = by, all.y = TRUE)
+  out[, count := nafill(count, fill = 0)]
 
   return(out[])
 }
