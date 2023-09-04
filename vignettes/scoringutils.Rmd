@@ -87,12 +87,12 @@ available_forecasts(example_quantile, by = c("model", "target_type"))
 
 We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts. 
 
-This information can also be visualised using the `plot_available_forecasts()` function: 
+This information can also be visualised using `plot()`: 
 
 ```{r, fig.width=11, fig.height=6}
 example_quantile %>%
   available_forecasts(by = c("model", "forecast_date", "target_type")) %>%
-  plot_available_forecasts() +
+  plot() +
   facet_wrap(~ target_type)
 ```
 
