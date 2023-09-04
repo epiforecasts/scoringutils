@@ -3,6 +3,7 @@
 This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)). 
 
 ## Package updates
+- replaces the deprecated `..density..` with `after_stat(density)` in ggplot calls.
 - files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or readRDS()`. 
 
 # scoringutils 1.2.1
