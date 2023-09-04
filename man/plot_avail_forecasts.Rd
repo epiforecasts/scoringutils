@@ -22,12 +22,12 @@ to appear on the y-axis of the plot. Default is "model".}
 \item{x}{character vector of length one that denotes the name of the column
 to appear on the x-axis of the plot. Default is "forecast_date".}
 
-\item{show_numbers}{logical (default is \code{TRUE}) that indicates whether
-or not to show the actual count numbers on the plot}
-
-\item{make_xv_factor}{logical (default is TRUE). Whether or not to convert
+\item{make_x_factor}{logical (default is TRUE). Whether or not to convert
 the variable on the x-axis to a factor. This has an effect e.g. if dates
 are shown on the x-axis.}
+
+\item{show_numbers}{logical (default is \code{TRUE}) that indicates whether
+or not to show the actual count numbers on the plot}
 }
 \description{
 Old version of \code{\link[=plot.scoringutils_available_forecasts]{plot.scoringutils_available_forecasts()}} for compatibility.

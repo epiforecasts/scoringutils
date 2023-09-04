@@ -1029,7 +1029,7 @@ plot.scoringutils_available_forecasts <- function(x,
 #' to appear on the y-axis of the plot. Default is "model".
 #' @param x character vector of length one that denotes the name of the column
 #' to appear on the x-axis of the plot. Default is "forecast_date".
-#' @param make_xv_factor logical (default is TRUE). Whether or not to convert
+#' @param make_x_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
 #' @export
