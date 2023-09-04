@@ -26,18 +26,18 @@ df[, model := factor(`model`,
                      levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
 
-if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) {
+if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
   pit <- pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
 
-  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.rds")
 
 } else {
 
-  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.rds")
 }
 
 res_summarised <- summarise_scores(stored$res,by = "model")

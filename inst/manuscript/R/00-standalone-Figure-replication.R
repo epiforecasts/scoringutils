@@ -97,18 +97,18 @@ df[, model := factor(`model`,
                      levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
 
-if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) {
+if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
   pit <- pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
 
-  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.rds")
 
 } else {
 
-  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.rds")
 }
 
 res_summarised <- summarise_scores(stored$res,by = "model")
@@ -196,7 +196,7 @@ true_crps <- scoringRules::crps(y = 0, family = "normal", mean = mu, sd = sd)
 true_logs <- scoringRules::logs(y = 0, family = "normal", mean = mu, sd = sd)
 true_dss <- scoringRules::dss_norm(y = 0, mean = mu, sd = sd)
 
-if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
+if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
   results <- list()
   for (i in sample_sizes) {
     samples <- as.data.table(
@@ -213,9 +213,9 @@ if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
       samples, metrics = c("crps", "log_score", "dss")
     )[, n_samples := i]
   }
-  saveRDS(results, "inst/manuscript/output/sample-convergence.Rda")
+  saveRDS(results, "inst/manuscript/output/sample-convergence.rds")
 } else {
-  results <- readRDS("inst/manuscript/output/sample-convergence.Rda")
+  results <- readRDS("inst/manuscript/output/sample-convergence.rds")
 }
 
 results <- rbindlist(results)
@@ -471,14 +471,14 @@ grid <- expand.grid(
   setDT()
 
 
-if (!file.exists("inst/manuscript/output/relation-to-scale-example.Rda")) {
+if (!file.exists("inst/manuscript/output/relation-to-scale-example.rds")) {
   res <- grid |>
     rowwise() |>
     mutate(simulation := list(simulate(scale_mean = scale_mean, scale_sd = scale_sd)))
 
-  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.Rda")
+  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.rds")
 } else {
-  res <- readRDS("inst/manuscript/output/relation-to-scale-example.Rda")
+  res <- readRDS("inst/manuscript/output/relation-to-scale-example.rds")
 }
 
 df <- res |>
