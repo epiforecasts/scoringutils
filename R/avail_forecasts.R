@@ -75,7 +75,7 @@ available_forecasts <- function(data,
   return(out[])
 }
 
-#' @title Deprecated: Count Number of Available Forecasts
+#' @title Count Number of Available Forecasts `r lifecycle::badge("deprecated")`
 #' @details `r lifecycle::badge("deprecated")` Deprecated in 1.2.2. Use
 #' [available_forecasts()] instead.
 #' @inherit available_forecasts

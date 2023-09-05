@@ -1011,7 +1011,7 @@ plot.scoringutils_available_forecasts <- function(x,
 }
 
 
-#' @title Visualise Where Forecasts Are Available (deprecated)
+#' @title Visualise Where Forecasts Are Available `r lifecycle::badge("deprecated")`
 #'
 #' @description
 #' Old version of [plot.scoringutils_available_forecasts()] for compatibility.

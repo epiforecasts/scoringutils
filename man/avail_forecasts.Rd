@@ -2,7 +2,7 @@
 % Please edit documentation in R/avail_forecasts.R
 \name{avail_forecasts}
 \alias{avail_forecasts}
-\title{Deprecated: Count Number of Available Forecasts}
+\title{Count Number of Available Forecasts \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 avail_forecasts(data, by = NULL, collapse = c("quantile", "sample"))
 }
