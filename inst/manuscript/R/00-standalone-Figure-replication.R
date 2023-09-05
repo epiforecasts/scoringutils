@@ -29,7 +29,6 @@ p2 <-
   ggplot(data.frame(x = seq(-8, 8, 0.01),
                     x_example = rnorm(n = 1601, mean = 0, sd = 1.25)),
          aes(x = x)) +
-  # geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(sd = 1.25)) +
   expand_limits(y = c(0, 1.0), x = c(-3, 3)) +
@@ -40,7 +39,7 @@ p2 <-
 p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(sd = 1)) +
   ggtitle("Well calibrated") +
@@ -50,7 +49,7 @@ p21 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
 p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 1, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 2, sd = 1)) +
   ggtitle("Badly calibrated") +
@@ -60,7 +59,7 @@ p22 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
 p23 <- ggplot(data.frame(x = seq(-8, 8, 0.01),
                          x_example = rnorm(n = 1601, mean = 0, sd = 1.05)),
               aes(x = x)) +
-  geom_histogram(aes(x = x_example, y = ..density..), colour = "white", fill = "grey50") +
+  geom_histogram(aes(x = x_example, y = after_stat(density)), colour = "white", fill = "grey50") +
   geom_function(fun = dnorm, colour = "black",
                 args = list(mean = 0, sd = 2.05)) +
   ggtitle("Badly calibrated") +
@@ -98,18 +97,18 @@ df[, model := factor(`model`,
                      levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
 
-if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) {
+if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
   pit <- pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
 
-  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.rds")
 
 } else {
 
-  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.rds")
 }
 
 res_summarised <- summarise_scores(stored$res,by = "model")
@@ -127,10 +126,10 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 pred_hist <- df |>
   ggplot(aes(x = true_value)) +
   facet_wrap(~ model, nrow = 1) +
-  geom_histogram(aes(y=..density..),
+  geom_histogram(aes(y=after_stat(density)),
                  fill = "grey",
                  colour = "dark grey") +
-  geom_density(aes(y=..density.., x = prediction),
+  geom_density(aes(y=after_stat(density), x = prediction),
                colour = "black") +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")
@@ -197,7 +196,7 @@ true_crps <- scoringRules::crps(y = 0, family = "normal", mean = mu, sd = sd)
 true_logs <- scoringRules::logs(y = 0, family = "normal", mean = mu, sd = sd)
 true_dss <- scoringRules::dss_norm(y = 0, mean = mu, sd = sd)
 
-if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
+if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
   results <- list()
   for (i in sample_sizes) {
     samples <- as.data.table(
@@ -214,9 +213,9 @@ if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
       samples, metrics = c("crps", "log_score", "dss")
     )[, n_samples := i]
   }
-  saveRDS(results, "inst/manuscript/output/sample-convergence.Rda")
+  saveRDS(results, "inst/manuscript/output/sample-convergence.rds")
 } else {
-  results <- readRDS("inst/manuscript/output/sample-convergence.Rda")
+  results <- readRDS("inst/manuscript/output/sample-convergence.rds")
 }
 
 results <- rbindlist(results)
@@ -472,14 +471,14 @@ grid <- expand.grid(
   setDT()
 
 
-if (!file.exists("inst/manuscript/output/relation-to-scale-example.Rda")) {
+if (!file.exists("inst/manuscript/output/relation-to-scale-example.rds")) {
   res <- grid |>
     rowwise() |>
     mutate(simulation := list(simulate(scale_mean = scale_mean, scale_sd = scale_sd)))
 
-  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.Rda")
+  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.rds")
 } else {
-  res <- readRDS("inst/manuscript/output/relation-to-scale-example.Rda")
+  res <- readRDS("inst/manuscript/output/relation-to-scale-example.rds")
 }
 
 df <- res |>

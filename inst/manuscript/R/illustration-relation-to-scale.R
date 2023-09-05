@@ -85,14 +85,14 @@ grid <- expand.grid(
   setDT()
 
 
-if (!file.exists("inst/manuscript/output/relation-to-scale-example.Rda")) {
+if (!file.exists("inst/manuscript/output/relation-to-scale-example.rds")) {
   res <- grid |>
     rowwise() |>
     mutate(simulation := list(simulate(scale_mean = scale_mean, scale_sd = scale_sd)))
 
-  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.Rda")
+  saveRDS(res, file = "inst/manuscript/output/relation-to-scale-example.rds")
 } else {
-  res <- readRDS("inst/manuscript/output/relation-to-scale-example.Rda")
+  res <- readRDS("inst/manuscript/output/relation-to-scale-example.rds")
 }
 
 df <- res |>

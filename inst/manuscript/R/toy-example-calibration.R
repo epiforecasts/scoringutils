@@ -26,18 +26,18 @@ df[, model := factor(`model`,
                      levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
 
-if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.Rda")) {
+if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
   pit <- pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
 
-  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.rds")
 
 } else {
 
-  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.Rda")
+  stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.rds")
 }
 
 res_summarised <- summarise_scores(stored$res,by = "model")
@@ -55,10 +55,10 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 pred_hist <- df |>
   ggplot(aes(x = true_value)) +
   facet_wrap(~ model, nrow = 1) +
-  geom_histogram(aes(y=..density..),
+  geom_histogram(aes(y = after_stat(density)),
                  fill = "grey",
                  colour = "dark grey") +
-  geom_density(aes(y=..density.., x = prediction),
+  geom_density(aes(y = after_stat(density), x = prediction),
                  colour = "black") +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")
