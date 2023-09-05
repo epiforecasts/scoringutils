@@ -941,14 +941,14 @@ plot_pit <- function(pit,
 #'
 #' @description
 #' Visualise Where Forecasts Are Available
-#'
-#' @param avail_forecasts data.frame with a column called `Number forecasts` as
-#' produced by [avail_forecasts()]
-#' @param y character vector of length one that denotes the name of the column
+#' @inheritParams print.scoringutils_check
+#' @param x an S3 object of class "scoringutils_available_forecasts"
+#' as produced by [available_forecasts()]
+#' @param yvar character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
-#' @param x character vector of length one that denotes the name of the column
+#' @param xvar character vector of length one that denotes the name of the column
 #' to appear on the x-axis of the plot. Default is "forecast_date".
-#' @param make_x_factor logical (default is TRUE). Whether or not to convert
+#' @param make_xvar_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
 #' @param show_numbers logical (default is `TRUE`) that indicates whether
@@ -960,30 +960,33 @@ plot_pit <- function(pit,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' avail_forecasts <- avail_forecasts(
+#' available_forecasts <- available_forecasts(
 #'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
-#' plot_avail_forecasts(
-#'  avail_forecasts, x = "target_end_date", show_numbers = FALSE
+#' plot(
+#'  available_forecasts, xvar = "target_end_date", show_numbers = FALSE
 #' ) +
 #'  facet_wrap("target_type")
 
-plot_avail_forecasts <- function(avail_forecasts,
-                                 y = "model",
-                                 x = "forecast_date",
-                                 make_x_factor = TRUE,
-                                 show_numbers = TRUE) {
-  avail_forecasts <- as.data.table(avail_forecasts)
+plot.scoringutils_available_forecasts <- function(x,
+                                                  yvar = "model",
+                                                  xvar = "forecast_date",
+                                                  make_xvar_factor = TRUE,
+                                                  show_numbers = TRUE,
+                                                  ...) {
+  x <- as.data.table(x)
 
-  if (make_x_factor) {
-    avail_forecasts[, eval(x) := as.factor(get(x))]
+  if (make_xvar_factor) {
+    x[, eval(xvar) := as.factor(get(xvar))]
   }
 
+  setnames(x, old = "count", new = "Count")
+
   plot <- ggplot(
-    avail_forecasts,
-    aes(y = .data[[y]], x = .data[[x]])
+    x,
+    aes(y = .data[[yvar]], x = .data[[xvar]])
   ) +
-    geom_tile(aes(fill = `Number forecasts`),
+    geom_tile(aes(fill = `Count`),
       width = 0.97, height = 0.97
     ) +
     scale_fill_gradient(
@@ -1001,11 +1004,50 @@ plot_avail_forecasts <- function(avail_forecasts,
 
   if (show_numbers) {
     plot <- plot +
-      geom_text(aes(label = `Number forecasts`))
+      geom_text(aes(label = `Count`))
   }
 
   return(plot)
 }
+
+
+#' @title Visualise Where Forecasts Are Available (deprecated)
+#'
+#' @description
+#' Old version of [plot.scoringutils_available_forecasts()] for compatibility.
+#' @inheritParams plot.scoringutils_available_forecasts
+#' @param available_forecasts an S3 object of class "scoringutils_available_forecasts"
+#' as produced by [available_forecasts()]
+#' @param y character vector of length one that denotes the name of the column
+#' to appear on the y-axis of the plot. Default is "model".
+#' @param x character vector of length one that denotes the name of the column
+#' to appear on the x-axis of the plot. Default is "forecast_date".
+#' @param make_x_factor logical (default is TRUE). Whether or not to convert
+#' the variable on the x-axis to a factor. This has an effect e.g. if dates
+#' are shown on the x-axis.
+#' @export
+plot_avail_forecasts <- function(available_forecasts,
+                                 y = "model",
+                                 x = "forecast_date",
+                                 make_x_factor = TRUE,
+                                 show_numbers = TRUE) {
+
+  lifecycle::deprecate_warn(
+    "1.2.2", "plot_avail_forecasts()",
+    "plot()"
+  )
+
+  plot.scoringutils_available_forecasts(
+    x = available_forecasts,
+    yvar = y,
+    xvar = x,
+    make_xvar_factor = make_x_factor,
+    show_numbers = show_numbers
+  )
+}
+
+
+
 
 #' @title Plot Correlation Between Metrics
 #'

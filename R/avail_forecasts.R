@@ -20,25 +20,24 @@
 #' that a single forecast only gets counted once.
 #'
 #' @return A data.table with columns as specified in `by` and an additional
-#' column with the number of forecasts.
+#' column "count" with the number of forecasts.
 #'
 #' @inheritParams score
-#' @importFrom data.table .I .N
+#' @importFrom data.table .I .N nafill
 #' @export
 #' @keywords check-forecasts
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
-#' avail_forecasts(example_quantile,
+#' available_forecasts(example_quantile,
 #'   collapse = c("quantile"),
 #'   by = c("model", "target_type")
 #' )
-avail_forecasts <- function(data,
-                            by = NULL,
-                            collapse = c("quantile", "sample")) {
+available_forecasts <- function(data,
+                                by = NULL,
+                                collapse = c("quantile", "sample")) {
 
   check_data <- check_forecasts(data)
-
 
   data <- check_data$cleaned_data
   forecast_unit <- check_data$forecast_unit
@@ -59,7 +58,24 @@ avail_forecasts <- function(data,
   data <- data[data[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- data[, .(`Number forecasts` = .N), by = by]
+  out <- data[, .(`count` = .N), by = by]
+
+  # make sure that all combinations in "by" are included in the output (with
+  # count = 0). To achieve that, take the unique values in data and expand grid
+  col_vecs <- unclass(out)
+  col_vecs$count <- NULL
+  col_vecs <- lapply(col_vecs, unique)
+  out_empty <- expand.grid(col_vecs, stringsAsFactors = FALSE)
+
+  out <- merge(out, out_empty, by = by, all.y = TRUE)
+  out[, count := nafill(count, fill = 0)]
+
+  class(out) <- c("scoringutils_available_forecasts", class(out))
 
   return(out[])
 }
+
+#' @rdname available_forecasts
+#' @keywords check-forecasts
+#' @export
+avail_forecasts <- available_forecasts

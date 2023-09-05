@@ -534,9 +534,9 @@ p2 + p1 + p_true +
 # =============================================================================#
 # Figure 6
 # =============================================================================#
-avail_forecasts(data = example_integer,
+available_forecasts(data = example_integer,
                 by = c("model", "target_type", "forecast_date")) |>
-  plot_avail_forecasts(x = "forecast_date",
+  plot_available_forecasts(x = "forecast_date",
                        show_numbers = FALSE) +
   facet_wrap(~ target_type) +
   labs(y = "Model", x = "Forecast date")
