@@ -3,9 +3,10 @@
 This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
 
 ## Package updates
-- the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. Similarly, `plot_avail_forecasts()` was renamed to `plot_available_forecasts()`. The old functions, `avail_forecasts()` and `plot_avail_forecasts()` are still available as aliases.
+- the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias.
 - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 
 - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows. 
+- `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
 
 # scoringutils 1.2.1
 
