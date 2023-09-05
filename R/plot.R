@@ -974,13 +974,6 @@ plot.scoringutils_available_forecasts <- function(x,
                                                   make_xvar_factor = TRUE,
                                                   show_numbers = TRUE,
                                                   ...) {
-
-  # input checks
-  if (!inherits(x, "scoringutils_available_forecasts")) {
-    stop("The input object must be of class 'scoringutils_available_forecasts', ",
-         "as produced by the function available_forecasts()")
-  }
-
   x <- as.data.table(x)
 
   if (make_xvar_factor) {
