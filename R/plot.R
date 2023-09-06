@@ -845,16 +845,15 @@ plot_pairwise_comparison <- function(comparison_result,
 }
 
 
-#' @title PIT Histogram
+#' @title Plot a PIT Histogram
 #'
 #' @description
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param pit either a vector with the PIT values of size n, or a data.frame as
-#' produced by [pit()]
+#' @param x an S3 object of class `scoringutils_pit` as produced by [pit()]
 #' @param num_bins the number of bins in the PIT histogram, default is "auto".
-#' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
+#' When `num_bins == "auto"`, [plot.scoringutils_pit()] will either display 10 bins, or it
 #' will display a bin for each available quantile in case you passed in data in
 #' a quantile-based format.
 #' You can control the number of bins by supplying a number. This is fine for
@@ -865,6 +864,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' PIT histogram. This is preferred when creating a PIT histogram based on
 #' quantile-based data. Default is `NULL` and breaks will be determined by
 #' `num_bins`.
+#' @inheritParams print.scoringutils_check
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
@@ -877,21 +877,24 @@ plot_pairwise_comparison <- function(comparison_result,
 #' true_values <- rnorm(30, mean = 1:30)
 #' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
 #' pit <- pit_sample(true_values, predictions)
-#' plot_pit(pit)
+#' plot(pit)
 #'
 #' # quantile-based pit
 #' pit <- pit(example_quantile,by = "model")
-#' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
+#' plot(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
 #' pit <- pit(example_integer,by = "model")
-#' plot_pit(pit)
+#' plot(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
 
-plot_pit <- function(pit,
-                     num_bins = "auto",
-                     breaks = NULL) {
+plot.scoringutils_pit <- function(x,
+                                  num_bins = "auto",
+                                  breaks = NULL,
+                                  ...) {
+  pit <- as.data.table(x)
+
   if ("quantile" %in% names(pit)) {
     type <- "quantile-based"
   } else {
@@ -918,51 +921,40 @@ plot_pit <- function(pit,
   }
 
   # function for data.frames
-  if (is.data.frame(pit)) {
-    facet_cols <- get_forecast_unit(pit)
-    formula <- as.formula(paste("~", paste(facet_cols, collapse = "+")))
 
-    # quantile version
-    if (type == "quantile-based") {
-      if (num_bins == "auto") {
-      } else {
-        width <- 1 / num_bins
-        plot_quantiles <- seq(width, 1, width)
-      }
+  facet_cols <- get_forecast_unit(pit)
+  formula <- as.formula(paste("~", paste(facet_cols, collapse = "+")))
 
-      if (!is.null(breaks)) {
-        plot_quantiles <- breaks
-      }
-
-      hist <- ggplot(
-        data = pit[quantile %in% plot_quantiles],
-        aes(x = quantile, y = pit_value)
-      ) +
-        geom_col(position = "dodge") +
-        facet_wrap(formula)
+  # quantile version
+  if (type == "quantile-based") {
+    if (num_bins == "auto") {
+    } else {
+      width <- 1 / num_bins
+      plot_quantiles <- seq(width, 1, width)
     }
 
-    if (type == "sample-based") {
-      hist <- ggplot(
-        data = pit,
-        aes(x = pit_value)
-      ) +
-        geom_histogram(aes(y = after_stat(width * density)),
-          breaks = plot_quantiles,
-          colour = "grey"
-        ) +
-        facet_wrap(formula)
+    if (!is.null(breaks)) {
+      plot_quantiles <- breaks
     }
-  } else {
-    # non data.frame version
+
     hist <- ggplot(
-      data = data.frame(x = pit, stringsAsFactors = TRUE),
-      aes(x = x)
+      data = pit[quantile %in% plot_quantiles],
+      aes(x = quantile, y = pit_value)
+    ) +
+      geom_col(position = "dodge") +
+      facet_wrap(formula)
+  }
+
+  if (type == "sample-based") {
+    hist <- ggplot(
+      data = pit,
+      aes(x = pit_value)
     ) +
       geom_histogram(aes(y = after_stat(width * density)),
-        breaks = plot_quantiles,
-        colour = "grey"
-      )
+                     breaks = plot_quantiles,
+                     colour = "grey"
+      ) +
+      facet_wrap(formula)
   }
 
   hist <- hist +
@@ -1182,4 +1174,30 @@ theme_scoringutils <- function() {
           panel.border = element_blank(),
           panel.background = element_blank(),
           legend.position = "bottom")
+}
+
+
+
+#' @title `r lifecycle::badge("deprecated")` PIT Histogram
+#'
+#' @description
+#' Deprecated version of [plot.scoringutils_pit()]
+#'
+#' @param pit either a vector with the PIT values of size n, or a data.frame as
+#' produced by [pit()]
+#'
+#' @inherit plot.scoringutils_pit
+#' @export
+plot_pit <- function(pit,
+                     num_bins = "auto",
+                     breaks = NULL) {
+
+  lifecycle::deprecate_warn(
+    "1.2.2", "plot_pit()",
+    "plot()"
+  )
+
+  plot.scoringutils_pit(x = pit,
+                        num_bins = num_bins,
+                        breaks = breaks)
 }
