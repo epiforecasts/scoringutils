@@ -48,3 +48,17 @@ plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 pit <- pit(example_integer,by = "model")
 plot_pit(pit)
 }
+\seealso{
+Other plotting functions: 
+\code{\link{plot.scoringutils_available_forecasts}()},
+\code{\link{plot.scoringutils_correlation}()},
+\code{\link{plot.scoringutils_pairwise}()},
+\code{\link{plot_heatmap}()},
+\code{\link{plot_interval_coverage}()},
+\code{\link{plot_predictions}()},
+\code{\link{plot_quantile_coverage}()},
+\code{\link{plot_ranges}()},
+\code{\link{plot_score_table}()},
+\code{\link{plot_wis}()}
+}
+\concept{plotting functions}

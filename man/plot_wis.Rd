@@ -46,3 +46,17 @@ plot_wis(scores,
 Bracher J, Ray E, Gneiting T, Reich, N (2020) Evaluating epidemic forecasts
 in an interval format. \url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
 }
+\seealso{
+Other plotting functions: 
+\code{\link{plot.scoringutils_available_forecasts}()},
+\code{\link{plot.scoringutils_correlation}()},
+\code{\link{plot.scoringutils_pairwise}()},
+\code{\link{plot_heatmap}()},
+\code{\link{plot_interval_coverage}()},
+\code{\link{plot_pit}()},
+\code{\link{plot_predictions}()},
+\code{\link{plot_quantile_coverage}()},
+\code{\link{plot_ranges}()},
+\code{\link{plot_score_table}()}
+}
+\concept{plotting functions}

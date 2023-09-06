@@ -26,3 +26,17 @@ scores <- score(example_quantile)
 scores <- summarise_scores(scores, by = c("model", "range"))
 plot_interval_coverage(scores)
 }
+\seealso{
+Other plotting functions: 
+\code{\link{plot.scoringutils_available_forecasts}()},
+\code{\link{plot.scoringutils_correlation}()},
+\code{\link{plot.scoringutils_pairwise}()},
+\code{\link{plot_heatmap}()},
+\code{\link{plot_pit}()},
+\code{\link{plot_predictions}()},
+\code{\link{plot_quantile_coverage}()},
+\code{\link{plot_ranges}()},
+\code{\link{plot_score_table}()},
+\code{\link{plot_wis}()}
+}
+\concept{plotting functions}

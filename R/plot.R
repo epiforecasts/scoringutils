@@ -19,6 +19,7 @@
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
 #' @importFrom stats sd
+#' @family plotting functions
 #' @export
 #'
 #' @examples
@@ -148,6 +149,7 @@ plot_score_table <- function(scores,
 #' scale_fill_discrete
 #' theme theme_light unit guides guide_legend .data
 #' @export
+#' @family plotting functions
 #' @examples
 #' library(ggplot2)
 #' scores <- score(example_quantile)
@@ -233,6 +235,7 @@ plot_wis <- function(scores,
 #' @importFrom ggplot2 ggplot aes aes geom_point geom_line
 #' expand_limits theme theme_light element_text scale_color_continuous labs
 #' @export
+#' @family plotting functions
 #' @examples
 #' library(ggplot2)
 #' scores <- score(example_quantile)
@@ -296,6 +299,7 @@ plot_ranges <- function(scores,
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
+#' @family plotting functions
 #' @examples
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
@@ -352,6 +356,7 @@ plot_heatmap <- function(scores,
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
+#' @family plotting functions
 #' @examples
 #' library(ggplot2)
 #' library(magrittr)
@@ -581,6 +586,7 @@ make_na <- make_NA
 #' facet_wrap facet_grid geom_polygon
 #' @importFrom data.table dcast
 #' @export
+#' @family plotting functions
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' scores <- score(example_quantile)
@@ -637,6 +643,7 @@ plot_interval_coverage <- function(scores,
 #' scale_y_continuous
 #' @importFrom data.table dcast
 #' @export
+#' @family plotting functions
 #' @examples
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "quantile"))
@@ -710,6 +717,7 @@ plot_quantile_coverage <- function(scores,
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
 #' element_text element_blank
 #' @export
+#' @family plotting functions
 #' @examples
 #' library(ggplot2)
 #' scores <- score(example_quantile)
@@ -860,6 +868,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
+#' @family plotting functions
 #' @return vector with the scoring values
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
@@ -986,6 +995,7 @@ plot_pit <- function(pit,
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
 #' @export
+#' @family plotting functions
 #' @examples
 #' library(ggplot2)
 #' available_forecasts <- available_forecasts(
@@ -1088,6 +1098,7 @@ plot_avail_forecasts <- function(available_forecasts,
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
 #' @export
+#' @family plotting functions
 #' @examples
 #' scores <- score(example_quantile)
 #' correlations <- correlation(
