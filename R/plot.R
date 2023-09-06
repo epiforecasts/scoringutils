@@ -1054,8 +1054,9 @@ plot_avail_forecasts <- function(available_forecasts,
 #' @description
 #' Plots a heatmap of correlations between different metrics
 #'
-#' @param correlations A data.table of correlations between scores as produced
-#' by [correlation()].
+#' @param x An S3 object with correlations between scores as produced by
+#' [correlation()].
+#' @inheritParams print.scoringutils_check
 #' @return A ggplot2 object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
@@ -1067,13 +1068,13 @@ plot_avail_forecasts <- function(available_forecasts,
 #' correlations <- correlation(
 #'  summarise_scores(scores)
 #' )
-#' plot_correlation(correlations)
+#' plot(correlations)
 
-plot_correlation <- function(correlations) {
+plot.scoringutils_correlation <- function(x, ...) {
 
-  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+  metrics <- names(x)[names(x) %in% available_metrics()]
 
-  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+  lower_triangle <- get_lower_tri(x[, .SD, .SDcols = metrics])
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
@@ -1110,6 +1111,24 @@ plot_correlation <- function(correlations) {
     coord_cartesian(expand = FALSE)
   return(plot)
 }
+
+
+#' @title `r lifecycle::badge("deprecated")` Plot Correlation Between Metrics
+#'
+#' @description
+#' Deprecated version of [plot.scoringutils_correlation()] for compatibility.
+#' @inherit plot.scoringutils_correlation
+#' @param correlations A data.table with correalations as produced by
+#' [correlation()]
+#' @export
+plot_correlation <- function(correlations) {
+  lifecycle::deprecate_warn(
+    "1.2.2", "plot_correlation()",
+    "plot()"
+  )
+  plot.scoringutils_correlation(x = correlations)
+}
+
 
 #' @title Scoringutils ggplot2 theme
 #'

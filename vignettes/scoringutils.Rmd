@@ -376,7 +376,7 @@ example_quantile %>%
   score() %>%
   summarise_scores() %>%
   correlation() %>%
-  plot_correlation()
+  plot()
 ```
 
 ### Scores by interval ranges

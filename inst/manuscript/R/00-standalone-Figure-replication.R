@@ -660,4 +660,4 @@ correlations |>
   glimpse()
 
 correlations |>
-  plot_correlation()
+  plot()

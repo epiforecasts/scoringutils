@@ -49,6 +49,8 @@ correlation <- function(scores,
     keep.rownames = TRUE
   )[, metric := rn][, rn := NULL]
 
+  class(correlations) <- c("scoringutils_correlation", class(correlations))
+
   return(correlations[])
 }
 

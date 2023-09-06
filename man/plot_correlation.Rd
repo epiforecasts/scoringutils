@@ -2,25 +2,25 @@
 % Please edit documentation in R/plot.R
 \name{plot_correlation}
 \alias{plot_correlation}
-\title{Plot Correlation Between Metrics}
+\title{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Plot Correlation Between Metrics}
 \usage{
 plot_correlation(correlations)
 }
 \arguments{
-\item{correlations}{A data.table of correlations between scores as produced
-by \code{\link[=correlation]{correlation()}}.}
+\item{correlations}{A data.table with correalations as produced by
+\code{\link[=correlation]{correlation()}}}
 }
 \value{
 A ggplot2 object showing a coloured matrix of correlations
 between metrics
 }
 \description{
-Plots a heatmap of correlations between different metrics
+Deprecated version of \code{\link[=plot.scoringutils_correlation]{plot.scoringutils_correlation()}} for compatibility.
 }
 \examples{
 scores <- score(example_quantile)
 correlations <- correlation(
  summarise_scores(scores)
 )
-plot_correlation(correlations)
+plot(correlations)
 }

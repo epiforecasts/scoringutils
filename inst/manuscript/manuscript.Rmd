@@ -642,8 +642,7 @@ correlations <- example_quantile |>
 correlations |>
   glimpse()
 
-correlations |>
-  plot_correlation()
+plot(correlations)
 ```
 
 ## Summary and discussion
