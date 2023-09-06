@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_avail_forecasts}
 \alias{plot_avail_forecasts}
-\title{Visualise Where Forecasts Are Available (deprecated)}
+\title{Visualise Where Forecasts Are Available \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 plot_avail_forecasts(
   available_forecasts,
