@@ -527,7 +527,7 @@ Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean sc
 score(example_quantile) |>
   pairwise_comparison(by = c("model", "target_type"), 
                       baseline = "EuroCOVIDhub-baseline") |>
-  plot_pairwise_comparison() + 
+  plot() + 
   facet_wrap(~ target_type)
 ```
 

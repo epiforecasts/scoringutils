@@ -10,17 +10,6 @@ plot_correlation(correlations)
 \item{correlations}{A data.table with correalations as produced by
 \code{\link[=correlation]{correlation()}}}
 }
-\value{
-A ggplot2 object showing a coloured matrix of correlations
-between metrics
-}
 \description{
 Deprecated version of \code{\link[=plot.scoringutils_correlation]{plot.scoringutils_correlation()}} for compatibility.
-}
-\examples{
-scores <- score(example_quantile)
-correlations <- correlation(
- summarise_scores(scores)
-)
-plot(correlations)
 }

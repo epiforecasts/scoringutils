@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_pairwise_comparison}
 \alias{plot_pairwise_comparison}
-\title{Plot Heatmap of Pairwise Comparisons}
+\title{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Plot Heatmap of Pairwise Comparisons}
 \usage{
 plot_pairwise_comparison(
   comparison_result,
@@ -18,14 +18,32 @@ plot_pairwise_comparison(
 visualise the ratio or the p-value of the pairwise comparison.
 Default is "mean_scores_ratio".}
 }
+\value{
+ggplot object with a plot of interval coverage
+
+A ggplot2 object showing a coloured matrix of correlations
+between metrics
+}
 \description{
-Creates a heatmap of the ratios or pvalues from a pairwise comparison
-between models
+Deprecated version of \code{\link[=plot.scoringutils_pairwise]{plot.scoringutils_pairwise()}}
 }
 \examples{
 library(ggplot2)
 scores <- score(example_quantile)
 pairwise <- pairwise_comparison(scores, by = "target_type")
-plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+plot(pairwise, type = "mean_scores_ratio") +
   facet_wrap(~target_type)
+library(ggplot2)
+available_forecasts <- available_forecasts(
+  example_quantile, by = c("model", "target_type", "target_end_date")
+)
+plot(
+ available_forecasts, xvar = "target_end_date", show_numbers = FALSE
+) +
+ facet_wrap("target_type")
+scores <- score(example_quantile)
+correlations <- correlation(
+ summarise_scores(scores)
+)
+plot(correlations)
 }

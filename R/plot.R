@@ -1,3 +1,13 @@
+#' @title Various Plotting Methods for Outputs of scoringutils Functions
+#' @param x S3 object to be plotted, as produced by various scoringutils
+#' functions.
+#' @param ... other arguments
+#' @export
+plot <- function(x, ...) {
+  UseMethod("plot")
+}
+
+
 #' @title Plot Coloured Score Table
 #'
 #' @description
@@ -687,18 +697,20 @@ plot_quantile_coverage <- function(scores,
   return(p2)
 }
 
+#' @rdname plot
 #' @title Plot Heatmap of Pairwise Comparisons
 #'
 #' @description
 #' Creates a heatmap of the ratios or pvalues from a pairwise comparison
 #' between models
 #'
-#' @param comparison_result A data.frame as produced by
+#' @param x An S3 object as produced by
 #' [pairwise_comparison()]
 #' @param type character vector of length one that is either
 #'  "mean_scores_ratio" or "pval". This denotes whether to
 #' visualise the ratio or the p-value of the pairwise comparison.
 #' Default is "mean_scores_ratio".
+#' @inheritParams print.scoringutils_check
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -710,12 +722,13 @@ plot_quantile_coverage <- function(scores,
 #' library(ggplot2)
 #' scores <- score(example_quantile)
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' plot(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval")) {
-  comparison_result <- data.table::as.data.table(comparison_result)
+plot.scoringutils_pairwise <- function(x,
+                                       type = c("mean_scores_ratio", "pval"),
+                                       ...) {
+  comparison_result <- data.table::as.data.table(x)
 
   comparison_result[, model := reorder(model, -relative_skill)]
   levels <- levels(comparison_result$model)
@@ -807,6 +820,28 @@ plot_pairwise_comparison <- function(comparison_result,
   }
 
   return(plot)
+}
+
+
+#' @title `r lifecycle::badge("deprecated")` Plot Heatmap of Pairwise Comparisons
+#'
+#' @description
+#' Deprecated version of [plot.scoringutils_pairwise()]
+#'
+#' @param comparison_result A data.frame as produced by
+#' [pairwise_comparison()]
+#' @inherit plot.scoringutils_pairwise
+#' @export
+plot_pairwise_comparison <- function(comparison_result,
+                                     type = c("mean_scores_ratio", "pval")) {
+
+  lifecycle::deprecate_warn(
+    "1.2.2", "plot_pairwise_comparison()",
+    "plot()"
+  )
+
+  plot.scoringutils_pairwise(x = comparison_result,
+                             type = type)
 }
 
 
@@ -937,6 +972,7 @@ plot_pit <- function(pit,
   return(hist)
 }
 
+#' @rdname plot
 #' @title Visualise Where Forecasts Are Available
 #'
 #' @description
@@ -1048,7 +1084,7 @@ plot_avail_forecasts <- function(available_forecasts,
 
 
 
-
+#' @rdname plot
 #' @title Plot Correlation Between Metrics
 #'
 #' @description
@@ -1117,7 +1153,6 @@ plot.scoringutils_correlation <- function(x, ...) {
 #'
 #' @description
 #' Deprecated version of [plot.scoringutils_correlation()] for compatibility.
-#' @inherit plot.scoringutils_correlation
 #' @param correlations A data.table with correalations as produced by
 #' [correlation()]
 #' @export

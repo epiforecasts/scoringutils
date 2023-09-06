@@ -351,7 +351,7 @@ If using the `pairwise_comparison()` function, we can also visualise pairwise co
 example_quantile %>%
   score() %>%
   pairwise_comparison(by = c("model", "target_type")) %>%
-  plot_pairwise_comparison() +
+  plot() +
   facet_wrap(~ target_type)
 ```
 

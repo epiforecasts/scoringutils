@@ -12,6 +12,7 @@ This minor update addresses comments made by review from the Journal of Statisti
 ### New S3 plotting methods
 - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
 - `plot_correlation()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
+- `plot_pairwise_comparison()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
 
 ### other
 - the deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
