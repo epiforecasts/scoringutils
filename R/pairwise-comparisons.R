@@ -43,7 +43,9 @@
 #' model against which to compare other models.
 #' @param ... additional arguments for the comparison between two models. See
 #' [compare_two_models()] for more information.
-#' @return A ggplot2 object with a coloured table of summarised scores
+#' @return A data.table with pairwise comparisons. In addition, the output is
+#' of class `scoringutils_pairwise` and can be visualised using [plot()] (which
+#' dispatches [plot.scoringutils_pairwise()].
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -51,6 +53,7 @@
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @keywords scoring
+#' @seealso [plot.scoringutils_pairwise()]
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'

@@ -1,13 +1,3 @@
-#' @title Various Plotting Methods for Outputs of scoringutils Functions
-#' @param x S3 object to be plotted, as produced by various scoringutils
-#' functions.
-#' @param ... other arguments
-#' @export
-plot <- function(x, ...) {
-  UseMethod("plot")
-}
-
-
 #' @title Plot Coloured Score Table
 #'
 #' @description
@@ -697,7 +687,7 @@ plot_quantile_coverage <- function(scores,
   return(p2)
 }
 
-#' @rdname plot
+
 #' @title Plot Heatmap of Pairwise Comparisons
 #'
 #' @description
@@ -711,6 +701,8 @@ plot_quantile_coverage <- function(scores,
 #' visualise the ratio or the p-value of the pairwise comparison.
 #' Default is "mean_scores_ratio".
 #' @inheritParams print.scoringutils_check
+#' @return A data.table with pairwise comparisons. In addition, the output is
+#' of class `scoringutils_pairwise` and can be visualised using [plot()].
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
 #' scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
@@ -972,7 +964,7 @@ plot_pit <- function(pit,
   return(hist)
 }
 
-#' @rdname plot
+
 #' @title Visualise Where Forecasts Are Available
 #'
 #' @description
@@ -1083,10 +1075,7 @@ plot_avail_forecasts <- function(available_forecasts,
 }
 
 
-
-#' @rdname plot
 #' @title Plot Correlation Between Metrics
-#'
 #' @description
 #' Plots a heatmap of correlations between different metrics
 #'

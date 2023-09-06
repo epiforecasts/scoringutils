@@ -2,20 +2,25 @@
 #'
 #' @description
 #' Calculate the correlation between different metrics for a data.frame of
-#' scores as produced by [score()].
+#' scores as produced by [score()]. You can visualise results
 #'
 #' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will
 #' be shown
 #' @inheritParams pairwise_comparison
-#' @return A data.table with correlations for the different metrics
+#' @return A data.table with correlations for the different metrics. In addition,
+#' the output is of class `scoringutils_correlation` and can e.g. be visualised
+#' using [plot()] (which dispatches [plot.scoringutils_correlation()].
+#'
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @export
 #' @keywords scoring
+#' @seealso [plot.scoringutils_correlation()]
 #' @examples
 #' scores <- score(example_quantile)
-#' correlation(scores)
+#' corrs <- correlation(scores)
+#' plot(corrs)
 correlation <- function(scores,
                         metrics = NULL) {
   metrics <- check_metrics(metrics)

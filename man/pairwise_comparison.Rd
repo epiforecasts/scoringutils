@@ -36,7 +36,9 @@ model against which to compare other models.}
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A ggplot2 object with a coloured table of summarised scores
+A data.table with pairwise comparisons. In addition, the output is
+of class \code{scoringutils_pairwise} and can be visualised using \code{\link[=plot]{plot()}} (which
+dispatches \code{\link[=plot.scoringutils_pairwise]{plot.scoringutils_pairwise()}}.
 }
 \description{
 Compute relative scores between different models making pairwise
@@ -72,6 +74,9 @@ pairwise <- pairwise_comparison(scores, by = "target_type")
 library(ggplot2)
 plot(pairwise, type = "mean_scores_ratio") +
   facet_wrap(~target_type)
+}
+\seealso{
+\code{\link[=plot.scoringutils_pairwise]{plot.scoringutils_pairwise()}}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

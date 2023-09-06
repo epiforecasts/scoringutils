@@ -14,14 +14,20 @@ correlation(scores, metrics = NULL)
 be shown}
 }
 \value{
-A data.table with correlations for the different metrics
+A data.table with correlations for the different metrics. In addition,
+the output is of class \code{scoringutils_correlation} and can e.g. be visualised
+using \code{\link[=plot]{plot()}} (which dispatches \code{\link[=plot.scoringutils_correlation]{plot.scoringutils_correlation()}}.
 }
 \description{
 Calculate the correlation between different metrics for a data.frame of
-scores as produced by \code{\link[=score]{score()}}.
+scores as produced by \code{\link[=score]{score()}}. You can visualise results
 }
 \examples{
 scores <- score(example_quantile)
-correlation(scores)
+corrs <- correlation(scores)
+plot(corrs)
+}
+\seealso{
+\code{\link[=plot.scoringutils_correlation]{plot.scoringutils_correlation()}}
 }
 \keyword{scoring}

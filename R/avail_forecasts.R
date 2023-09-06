@@ -20,11 +20,14 @@
 #' that a single forecast only gets counted once.
 #'
 #' @return A data.table with columns as specified in `by` and an additional
-#' column "count" with the number of forecasts.
+#' column "count" with the number of forecasts. In addition the output has class
+#' `scoringutils_available_forecasts` and can e.g. be visualised
+#' using [plot()] (which dispatches [plot.scoringutils_available_forecasts()].
 #'
 #' @inheritParams score
 #' @importFrom data.table .I .N nafill
 #' @export
+#' @seealso [plot.scoringutils_available_forecasts()]
 #' @keywords check-forecasts
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN

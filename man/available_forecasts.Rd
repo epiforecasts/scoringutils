@@ -51,7 +51,9 @@ that a single forecast only gets counted once.}
 }
 \value{
 A data.table with columns as specified in \code{by} and an additional
-column "count" with the number of forecasts.
+column "count" with the number of forecasts. In addition the output has class
+\code{scoringutils_available_forecasts} and can e.g. be visualised
+using \code{\link[=plot]{plot()}} (which dispatches \code{\link[=plot.scoringutils_available_forecasts]{plot.scoringutils_available_forecasts()}}.
 }
 \description{
 Given a data set with forecasts, count the number of available forecasts
@@ -66,5 +68,8 @@ available_forecasts(example_quantile,
   collapse = c("quantile"),
   by = c("model", "target_type")
 )
+}
+\seealso{
+\code{\link[=plot.scoringutils_available_forecasts]{plot.scoringutils_available_forecasts()}}
 }
 \keyword{check-forecasts}
