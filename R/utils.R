@@ -331,3 +331,23 @@ is_scoringutils_check <- function(data) {
 
   return(result)
 }
+
+
+#' @title Check whether object is of class scoringutils
+#'
+#' @description Helper function to determine whether an object is of class
+#' scoringutils.
+#'
+#' @param data An object to be checked
+#'
+#' @importFrom methods is
+#'
+#' @return Logical, either TRUE or FALSE
+#'
+#' @keywords internal
+
+is_scoringutils <- function(data) {
+
+  result <- is(data, "scoringutils")
+  return(result)
+}

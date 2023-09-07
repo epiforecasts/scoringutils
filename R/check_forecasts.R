@@ -182,8 +182,11 @@ check_forecasts <- function(data) {
 
   # forecast infos
   out[["forecast_unit"]] <- forecast_unit
+  attr(out, "forecast_unit") <- forecast_unit
   out[["target_type"]] <- target_type
+  attr(out, "target_type") <- target_type
   out[["prediction_type"]] <- prediction_type
+  attr(out, "prediction_type") <- prediction_type
 
   out[["messages"]] <- unlist(messages)
   out[["warnings"]] <- unlist(warnings)
@@ -205,7 +208,7 @@ check_forecasts <- function(data) {
   }
 
   # return check results
-  class(out) <- c("scoringutils_check", "list")
+  class(out) <- c("scoringutils_check", "scoringutils", "list")
   return(out)
 }
 

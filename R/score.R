@@ -158,5 +158,9 @@ score <- function(data,
     )
   }
 
+  attr(scores, "forecast_unit") <- forecast_unit
+  attr(scores, "target_type") <- target_type
+  attr(scores, "prediction_type") <- prediction_type
+
   return(scores[])
 }
