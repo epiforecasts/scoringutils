@@ -60,11 +60,7 @@
 #' are examples for each format ([example_quantile], [example_continuous],
 #' [example_integer], and [example_binary]).
 #'
-#' @param metrics the metrics you want to have in the output. If `NULL` (the
-#' default), all available metrics will be computed. For a list of available
-#' metrics see [available_metrics()], or  check the [metrics] data set.
-#'
-#' @param ... additional parameters passed down to [score_quantile()] (internal
+#' @param ... additional parameters passed down to [score.scoringutils_quantile()] (internal
 #' function used for scoring forecasts in a quantile-based format).
 #'
 #' @return A data.table with unsummarised scores. There will be one score per
@@ -111,8 +107,10 @@
 #' @export
 
 score <- function(data,
-                  metrics = NULL,
                   ...) {
+
+  # need to deal with the fact that the argument is now called "x" instead of "data".
+  # can we get around that and keep calling it data?
 
   # preparations ---------------------------------------------------------------
   if (is_scoringutils_check(data)) {
@@ -121,55 +119,26 @@ score <- function(data,
     check_data <- check_forecasts(data)
   }
 
-  data <- check_data$cleaned_data
+  score_data <- copy(check_data$cleaned_data)
   prediction_type <- check_data$prediction_type
   forecast_unit <- check_data$forecast_unit
   target_type <- check_data$target_type
 
   # check metrics are available or set to all metrics --------------------------
-  metrics <- check_metrics(metrics)
+  setattr(score_data, "forecast_unit", forecast_unit)
+  setattr(score_data, "target_type", target_type)
+  setattr(score_data, "prediction_type", prediction_type)
+
+  class(score_data) <- c(class(score_data), "scoringutils")
 
   # do some kind of checking for which attribute is appropriate.
   if (target_type == "binary") {
-    # class(data) <- c("scoringutils_binary", class(data))
+    class(score_data) <- c("scoringutils_binary", class(score_data))
   } else if (prediction_type == "quantile") {
+    class(score_data) <- c("scoringutils_quantile", class(score_data))
   } else if (prediction_type %in% c("integer", "continuous")) {
+    class(score_data) <- c("scoringutils_sample", class(score_data))
   }
 
-  # Score binary predictions ---------------------------------------------------
-  if (target_type == "binary") {
-    scores <- score_binary(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics
-    )
-  }
-
-  # Score quantile predictions -------------------------------------------------
-  if (prediction_type == "quantile") {
-    scores <- score_quantile(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics,
-      ...
-    )
-  }
-
-  # Score integer or continuous predictions ------------------------------------
-  if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
-    scores <- score_sample(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics,
-      prediction_type = prediction_type
-    )
-  }
-
-  setattr(scores, "forecast_unit", forecast_unit)
-  setattr(scores, "target_type", target_type)
-  setattr(scores, "prediction_type", prediction_type)
-
-  class(scores) <- c("scoringutils", class(scores))
-
-  return(scores[])
+  UseMethod(generic = "score", object = score_data)
 }
