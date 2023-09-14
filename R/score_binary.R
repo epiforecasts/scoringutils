@@ -21,14 +21,18 @@ score.scoringutils_binary <- function(x,
 
   metrics <- check_metrics(metrics)
   if ("brier_score" %in% metrics) {
-    data[, "brier_score" := brier_score(true_value, prediction),
-      by = forecast_unit
+    data[, "brier_score" := do.call(
+      brier_score, args = list(true_value, prediction)
+    ),
+    by = forecast_unit
     ]
   }
 
   if ("log_score" %in% metrics) {
-    data[, "log_score" := logs_binary(true_value, prediction),
-      by = forecast_unit
+    data[, "log_score" := do.call(
+      logs_binary, args = list(true_value, prediction)
+    ),
+    by = forecast_unit
     ]
   }
 
