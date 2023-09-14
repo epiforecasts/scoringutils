@@ -298,12 +298,6 @@ check_summary_params <- function(scores,
 add_coverage <- function(scores,
                          by,
                          ranges = c(50, 90)) {
-  # we ok to force this?
-  if (!is_scoringutils(scores)) {
-    stop("Input 'scores' doesn't seem to be an object as produced ",
-         "by `summarise_scores()`")
-  }
-
   summarised_scores <- summarise_scores(
     scores,
     by = c(by, "range")
