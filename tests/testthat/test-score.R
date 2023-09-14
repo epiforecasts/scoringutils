@@ -47,6 +47,17 @@ test_that("function produces score for a binary case", {
 })
 
 
+test_that("score() gives same result for binary as regular function", {
+  binary_example <- data.table::setDT(scoringutils::example_binary)
+  binary_example <- binary_example[!is.na(prediction)]
+  eval <- suppressMessages(score(binary_example[!is.na(prediction)]))
+  manual_eval <- brier_score(
+    binary_example$true_value,
+    binary_example$prediction
+  )
+  expect_equal(eval$brier_score, manual_eval)
+})
+
 
 
 # test quantile case -----------------------------------------------------------
@@ -181,7 +192,7 @@ test_that(
   )
   scores <- suppressWarnings(score(ex))
   expect_snapshot(summarise_scores(
-    summarise_scores(scores, by = "model"), by = "model", 
+    summarise_scores(scores, by = "model"), by = "model",
     fun = signif, digits = 2
   ))
  })
