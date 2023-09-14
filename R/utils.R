@@ -66,6 +66,7 @@ globalVariables(c(
   "rel_to_baseline",
   "relative_skill",
   "rn",
+  "score_data",
   "se_mean",
   "sharpness",
   "theta",

@@ -4,7 +4,7 @@
 \alias{score}
 \title{Evaluate forecasts}
 \usage{
-score(data, metrics = NULL, ...)
+score(data, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -34,11 +34,7 @@ You can check the format of your data using \code{\link[=check_forecasts]{check_
 are examples for each format (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, and \link{example_binary}).}
 
-\item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
-
-\item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
+\item{...}{additional parameters passed down to \code{\link[=score.scoringutils_quantile]{score.scoringutils_quantile()}} (internal
 function used for scoring forecasts in a quantile-based format).}
 }
 \value{

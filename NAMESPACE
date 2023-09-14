@@ -2,6 +2,9 @@
 
 S3method(plot,scoringutils_available_forecasts)
 S3method(print,scoringutils_check)
+S3method(score,scoringutils_binary)
+S3method(score,scoringutils_quantile)
+S3method(score,scoringutils_sample)
 export(abs_error)
 export(add_coverage)
 export(ae_median_quantile)

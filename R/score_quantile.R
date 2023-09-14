@@ -2,6 +2,10 @@
 #'
 #' @inheritParams score
 #' @inheritParams interval_score
+#' @param x PLACEHOLDER
+#' @param metrics the metrics you want to have in the output. If `NULL` (the
+#' default), all available metrics will be computed. For a list of available
+#' metrics see [available_metrics()], or  check the [metrics] data set.
 #' @param count_median_twice logical that controls whether or not to count the
 #' median twice when summarising (default is \code{FALSE}). Counting the
 #' median twice would conceptually treat it as a 0\% prediction interval, where
@@ -9,9 +13,6 @@
 #' treat the median as a single quantile forecast instead of an interval. The
 #' interval score would then be better understood as an average of quantile
 #' scores.
-#' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast, i.e. a forecast was made for a combination
-#' of the values in `forecast_unit`
 #'
 #' @return A data.table with appropriate scores. For more information see
 #' [score()]
@@ -30,9 +31,9 @@ score.scoringutils_quantile <- function(x,
                                         separate_results = TRUE,
                                         ...) {
 
-  data <- as.data.table(x)
+  data <- as.data.table(score_data)
 
-  forecast_unit <- attr(x, "forecast_unit")
+  forecast_unit <- attr(data, "forecast_unit")
   metrics <- check_metrics(metrics)
 
   # make sure to have both quantile as well as range format --------------------

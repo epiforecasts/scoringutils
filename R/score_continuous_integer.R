@@ -1,11 +1,7 @@
 #' @title Evaluate forecasts in a Sample-Based Format (Integer or Continuous)
 #'
 #' @inheritParams score
-#' @param prediction_type character, should be either "continuous" or "integer"
-#' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast, i.e. a forecast was made for a combination
-#' of the values in `forecast_unit`
-#'
+#' @inheritParams score.scoringutils_quantile
 #' @return A data.table with appropriate scores. For more information see
 #' [score()]
 #'
@@ -20,9 +16,9 @@ score.scoringutils_sample <- function(x,
                                       metrics = NULL,
                                       ...) {
 
-  data <- as.data.table(x)
-  forecast_unit <- attr(x, "forecast_unit")
-  prediction_type <- attr(x, "prediction_type")
+  data <- as.data.table(score_data)
+  forecast_unit <- attr(data, "forecast_unit")
+  prediction_type <- attr(data, "prediction_type")
 
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
