@@ -20,14 +20,20 @@
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @inherit score references
-#' @keywords internal
+#' @export
+#' @keywords scoring
 
-score_quantile <- function(data,
-                           forecast_unit,
-                           metrics,
-                           weigh = TRUE,
-                           count_median_twice = FALSE,
-                           separate_results = TRUE) {
+score.scoringutils_quantile <- function(x,
+                                        forecast_unit,
+                                        metrics = NULL,
+                                        weigh = TRUE,
+                                        count_median_twice = FALSE,
+                                        separate_results = TRUE,
+                                        ...) {
+
+  data <- as.data.table(x)
+
+  metrics <- check_metrics(metrics)
 
   # make sure to have both quantile as well as range format --------------------
   range_data <- quantile_to_range_long(data,

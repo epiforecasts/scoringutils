@@ -11,11 +11,18 @@
 #' @importFrom data.table ':='
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
-#' @keywords internal
+#' @export
+#' @keywords scoring
 
-score_binary <- function(data,
-                         forecast_unit,
-                         metrics) {
+
+score.scoringutils_binary <- function(x,
+                                      forecast_unit,
+                                      metrics = NULL,
+                                      ...) {
+
+  data <- as.data.table(x)
+
+  metrics <- check_metrics(metrics)
   if ("brier_score" %in% metrics) {
     data[, "brier_score" := brier_score(true_value, prediction),
       by = forecast_unit

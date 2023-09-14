@@ -13,12 +13,17 @@
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @inherit score references
-#' @keywords internal
+#' @export
+#' @keywords scoring
 
-score_sample <- function(data,
-                         forecast_unit,
-                         metrics,
-                         prediction_type) {
+score.scoringutils_sample <- function(x,
+                                      forecast_unit,
+                                      metrics = NULL,
+                                      prediction_type,
+                                      ...) {
+
+  data <- as.data.table(x)
+
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
       prediction_type <- "integer"
@@ -27,6 +32,7 @@ score_sample <- function(data,
     }
   }
 
+  metrics <- check_metrics(metrics)
   # calculate scores -----------------------------------------------------------
   # sharpness
   if (any(c("sharpness", "mad") %in% metrics)) {
