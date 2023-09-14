@@ -105,10 +105,11 @@ summarise_scores <- function(scores,
 
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
-  forecast_unit <- attr(scores, "forecast_unit")
-  if (is.null(forecast_unit)) {
-    forecast_unit <- get_forecast_unit(scores)
-  }
+  # forecast_unit <- attr(scores, "forecast_unit")
+  # if (is.null(forecast_unit)) {
+  #   forecast_unit <- get_forecast_unit(scores)
+  # }
+  forecast_unit <- get_forecast_unit(scores)
 
   # check if the 'by' attribute has already been set, e.g. in previous calls
   # to summarise_score
@@ -131,7 +132,7 @@ summarise_scores <- function(scores,
     by <- setdiff(by, across)
   }
 
-  attr(scores, "by") <- by
+  setattr(scores, "by", by)
 
   # check input arguments and check whether relative skill can be computed
   relative_skill <- check_summary_params(
@@ -297,6 +298,7 @@ check_summary_params <- function(scores,
 add_coverage <- function(scores,
                          by,
                          ranges = c(50, 90)) {
+  # we ok to force this?
   if (!is_scoringutils(scores)) {
     stop("Input 'scores' doesn't seem to be an object as produced ",
          "by `summarise_scores()`")

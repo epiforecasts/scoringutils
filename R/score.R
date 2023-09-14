@@ -71,7 +71,7 @@
 #' quantile or sample, which is usually not desired, so you should almost
 #' always run [summarise_scores()] on the unsummarised scores.
 #'
-#' @importFrom data.table ':=' as.data.table
+#' @importFrom data.table ':=' as.data.table setattr
 #'
 #' @examples
 #' library(magrittr) # pipe operator
@@ -129,6 +129,13 @@ score <- function(data,
   # check metrics are available or set to all metrics --------------------------
   metrics <- check_metrics(metrics)
 
+  # do some kind of checking for which attribute is appropriate.
+  if (target_type == "binary") {
+    # class(data) <- c("scoringutils_binary", class(data))
+  } else if (prediction_type == "quantile") {
+  } else if (prediction_type %in% c("integer", "continuous")) {
+  }
+
   # Score binary predictions ---------------------------------------------------
   if (target_type == "binary") {
     scores <- score_binary(
@@ -158,9 +165,11 @@ score <- function(data,
     )
   }
 
-  attr(scores, "forecast_unit") <- forecast_unit
-  attr(scores, "target_type") <- target_type
-  attr(scores, "prediction_type") <- prediction_type
+  setattr(scores, "forecast_unit", forecast_unit)
+  setattr(scores, "target_type", target_type)
+  setattr(scores, "prediction_type", prediction_type)
+
+  class(scores) <- c("scoringutils", class(scores))
 
   return(scores[])
 }
