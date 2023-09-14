@@ -21,6 +21,7 @@ score.scoringutils_binary <- function(x,
                                       ...) {
 
   data <- as.data.table(x)
+  forecast_unit <- attr(x, "forecast_unit")
 
   metrics <- check_metrics(metrics)
   if ("brier_score" %in% metrics) {

@@ -24,7 +24,6 @@
 #' @keywords scoring
 
 score.scoringutils_quantile <- function(x,
-                                        forecast_unit,
                                         metrics = NULL,
                                         weigh = TRUE,
                                         count_median_twice = FALSE,
@@ -33,6 +32,7 @@ score.scoringutils_quantile <- function(x,
 
   data <- as.data.table(x)
 
+  forecast_unit <- attr(x, "forecast_unit")
   metrics <- check_metrics(metrics)
 
   # make sure to have both quantile as well as range format --------------------

@@ -17,12 +17,12 @@
 #' @keywords scoring
 
 score.scoringutils_sample <- function(x,
-                                      forecast_unit,
                                       metrics = NULL,
-                                      prediction_type,
                                       ...) {
 
   data <- as.data.table(x)
+  forecast_unit <- attr(x, "forecast_unit")
+  prediction_type <- attr(x, "prediction_type")
 
   if (missing(prediction_type)) {
     if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
