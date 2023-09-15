@@ -20,14 +20,6 @@ score.scoringutils_sample <- function(x,
   forecast_unit <- attr(data, "forecast_unit")
   prediction_type <- attr(data, "prediction_type")
 
-  if (missing(prediction_type)) {
-    if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
-      prediction_type <- "integer"
-    } else {
-      prediction_type <- "continuous"
-    }
-  }
-
   metrics <- check_metrics(metrics)
   # calculate scores -----------------------------------------------------------
   # sharpness
