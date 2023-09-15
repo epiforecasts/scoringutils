@@ -417,10 +417,10 @@ The values stored in the list elements \code{target_type} and \code{prediction_t
 
 ## Visualising forecast data
 
-It is helpful to start the evaluation process by examining forecast availability, as missing forecasts can impact the evaluation if missingness correlates with performance. The function \fct{avail_forecasts} returns information about the number of available forecasts, given a level of summary that can be specified through the \code{by} argument. For example, to see how many forecasts there are per model and target_type, we can run
+It is helpful to start the evaluation process by examining forecast availability, as missing forecasts can impact the evaluation if missingness correlates with performance. The function \fct{available_forecasts} returns information about the number of available forecasts, given a level of summary that can be specified through the \code{by} argument. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r avail-forecasts, echo=TRUE, fig.width = 10, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
-avail_forecasts(data = example_integer, 
+available_forecasts(data = example_integer, 
                 by = c("model", "target_type"))
 ```
 
@@ -429,9 +429,9 @@ and visualise results using the function \fct{plot\_avail\_forecasts}. The plot 
 ```{r avail-forecasts-plot, echo=TRUE, fig.pos = "!h", fig.width = 8, fig.height = 3, eval = TRUE, fig.cap="Overview of the number of available forecasts."}
 library("ggplot2")
 
-avail_forecasts(data = example_integer, 
+available_forecasts(data = example_integer, 
                 by = c("model", "target_type", "forecast_date")) |>
-  plot_avail_forecasts(x = "forecast_date", 
+  plot_available_forecasts(x = "forecast_date", 
                        show_numbers = FALSE) + 
   facet_wrap(~ target_type) + 
   labs(y = "Model", x = "Forecast date") 
@@ -690,7 +690,7 @@ We thank Community Jameel for Institute and research funding
 
 ```{r score-table-detailed, echo=FALSE, cache = FALSE, eval = FALSE}
 
-data <- readRDS(system.file("metrics-overview/metrics-detailed.Rda", package = "scoringutils"))
+data <- readRDS(system.file("metrics-overview/metrics-detailed.rds", package = "scoringutils"))
 
 data[, 1:2] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE,

@@ -19,7 +19,7 @@ true_crps <- scoringRules::crps(y = 0, family = "normal", mean = mu, sd = sd)
 true_logs <- scoringRules::logs(y = 0, family = "normal", mean = mu, sd = sd)
 true_dss <- scoringRules::dss_norm(y = 0, mean = mu, sd = sd)
 
-if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
+if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
   results <- list()
   for (i in sample_sizes) {
     samples <- as.data.table(
@@ -36,9 +36,9 @@ if (!file.exists("inst/manuscript/output/sample-convergence.Rda")) {
       samples, metrics = c("crps", "log_score", "dss")
     )[, n_samples := i]
   }
-  saveRDS(results, "inst/manuscript/output/sample-convergence.Rda")
+  saveRDS(results, "inst/manuscript/output/sample-convergence.rds")
 } else {
-  results <- readRDS("inst/manuscript/output/sample-convergence.Rda")
+  results <- readRDS("inst/manuscript/output/sample-convergence.rds")
 }
 
 results <- rbindlist(results)

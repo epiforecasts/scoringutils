@@ -55,7 +55,7 @@ globalVariables(c(
   "model",
   "n_obs",
   "n_obs wis_component_name",
-  "Number forecasts",
+  "Count",
   "pit_p_val",
   "pit_value",
   "point",

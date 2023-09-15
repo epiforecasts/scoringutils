@@ -2,10 +2,10 @@
 % Please edit documentation in R/plot.R
 \name{plot_avail_forecasts}
 \alias{plot_avail_forecasts}
-\title{Visualise Where Forecasts Are Available}
+\title{Visualise Where Forecasts Are Available \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 plot_avail_forecasts(
-  avail_forecasts,
+  available_forecasts,
   y = "model",
   x = "forecast_date",
   make_x_factor = TRUE,
@@ -13,8 +13,8 @@ plot_avail_forecasts(
 )
 }
 \arguments{
-\item{avail_forecasts}{data.frame with a column called \verb{Number forecasts} as
-produced by \code{\link[=avail_forecasts]{avail_forecasts()}}}
+\item{available_forecasts}{an S3 object of class "scoringutils_available_forecasts"
+as produced by \code{\link[=available_forecasts]{available_forecasts()}}}
 
 \item{y}{character vector of length one that denotes the name of the column
 to appear on the y-axis of the plot. Default is "model".}
@@ -29,19 +29,6 @@ are shown on the x-axis.}
 \item{show_numbers}{logical (default is \code{TRUE}) that indicates whether
 or not to show the actual count numbers on the plot}
 }
-\value{
-ggplot object with a plot of interval coverage
-}
 \description{
-Visualise Where Forecasts Are Available
-}
-\examples{
-library(ggplot2)
-avail_forecasts <- avail_forecasts(
-  example_quantile, by = c("model", "target_type", "target_end_date")
-)
-plot_avail_forecasts(
- avail_forecasts, x = "target_end_date", show_numbers = FALSE
-) +
- facet_wrap("target_type")
+Old version of \code{\link[=plot.scoringutils_available_forecasts]{plot.scoringutils_available_forecasts()}} for compatibility.
 }
