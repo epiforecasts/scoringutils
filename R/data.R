@@ -101,7 +101,10 @@
 #' Binary Forecast Example Data
 #'
 #' A data set with binary predictions for COVID-19 cases and deaths constructed
-#' from data submitted to the European Forecast Hub.
+#' from data submitted to the European Forecast Hub. All binary forecasts need
+#' to have columns called "true_value" (either 0 or 1) and "prediction" (a
+#' probability that "true_value" will be 1). All other columns define a grouping
+#' of the predictions.
 #'
 #' Predictions in the data set were constructed based on the continuous example
 #' data by looking at the number of samples below the mean prediction.
