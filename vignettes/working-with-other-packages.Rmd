@@ -1,0 +1,90 @@
+---
+title: "scoringutils and other packages"
+author: "Nikos Bosse"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{scoringutils and other packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.width = 7,
+                      collapse = TRUE,
+                      comment = "#>")
+library(scoringutils)
+library(magrittr)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(knitr)
+```
+
+`scoringutils` can work well with other exsiting packages. This vignettes shows some examples. 
+
+## `yardstick`
+
+`yardstick` (belonging to the `tidymodels` family of R packages) is a package designed to evaluate predictions against observed values. It is similar to `scoringutils` in the sense that it makes a large variety of metrics available to users through a consistent framework. However, it mostly focuses on binary / multinomial forecasts and point forecasts (it also has a few functions for analsys of survival data). It does not currently implement metrics for full probabilistic forecasts. 
+
+### Binary class prediction
+
+```{r}
+library(yardstick)
+
+class_metrics <- metric_set(accuracy, kap)
+
+example_binary |>
+  to_yardstick_binary_class() |>
+  group_by(model) |>
+  class_metrics(truth = true_value, estimate = prediction)
+
+```
+
+### Binary class probability prediction
+
+```{r}
+example_binary |>
+  to_yardstick_binary_class_prob() |>
+  group_by(model) |>
+  filter(!is.na(prediction)) |>
+  average_precision(truth = true_value, prediction, event_level = "first")
+```
+
+### Numeric predictions
+
+```{r}
+example_continuous |>
+  group_by(model) |>
+  mae(truth = true_value, estimate = prediction)
+```
+
+
+## `probably`
+
+The [`probably`](https://probably.tidymodels.org/) package (part of the tidymodels family) contains tools to facilitate the assessment of calibration, conversion of probabilties to class predictions and optimal probability thresholds. 
+
+Plots to assess the calibration of binary forecasts can directly be used with the output of [score()]. 
+
+```{r, eval =FALSE}
+s <- score(example_binary)
+s <- s[model %in% c("EuroCOVIDhub-baseline", "EuroCOVIDhub-ensemble")]
+
+library(probably)
+cal_plot_breaks(.data = s, truth = true_value, estimate = prediction, .by = model)
+cal_plot_windowed(.data = s, truth = true_value, estimate = prediction, .by = model)
+cal_plot_logistic(.data = s, truth = true_value, estimate = prediction, .by = model)
+```
+
+
+## `predtools`
+
+```{r}
+s <- score(example_binary)
+s <- s[model %in% c("EuroCOVIDhub-baseline", "EuroCOVIDhub-ensemble")]
+
+library(predtools)
+calibration_plot(data = s, obs = "true_value",
+                 pred = "prediction", group = "model")
+```

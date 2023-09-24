@@ -61,7 +61,11 @@ Suggests:
     magrittr,
     rmarkdown,
     testthat,
-    vdiffr
+    vdiffr,
+    dplyr,
+    probably,
+    yardstick,
+    predtools
 Config/Needs/website: 
     r-lib/pkgdown,
     amirmasoudabdol/preferably
