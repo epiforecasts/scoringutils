@@ -81,10 +81,75 @@ cal_plot_logistic(.data = s, truth = true_value, estimate = prediction, .by = mo
 ## `predtools`
 
 ```{r}
+library(predtools)
 s <- score(example_binary)
 s <- s[model %in% c("EuroCOVIDhub-baseline", "EuroCOVIDhub-ensemble")]
 
-library(predtools)
 calibration_plot(data = s, obs = "true_value",
                  pred = "prediction", group = "model")
 ```
+
+
+
+```{r}
+library(scoring)
+calcscore(true_value ~ prediction, data = example_binary, fam="pow", param=2, bounds=c(-1,1))
+```
+
+
+```{r}
+library(verification)
+
+# discrimination plot for binary data
+# shows how often models made forecasts with different levels of confidence --> can visually assess the forecasts
+df <- example_binary[!is.na(prediction)]
+discrimination.plot(df$model, df$prediction)
+
+# receiver operating characteristic curve for binary predicitons
+roc.plot(x = df$true_value, pred = df$prediction)
+
+
+# scoring binary forecasts with verification - binary/probabilistic case
+df <- example_binary[(model == "EuroCOVIDhub-ensemble" & horizon == 2 & target_type == "Cases")]
+res <- verify(obs = df$true_value, pred = df$prediction)
+summary(res)
+
+# attribute plot and reliability plot
+attribute(res)
+reliability.plot(res)
+
+
+# scoring continuous point forecasts
+df <- example_continuous[(model == "EuroCOVIDhub-ensemble" & horizon == 2 & target_type == "Cases")][,
+                         .('obs' = mean(true_value),
+                           'pred' = mean(prediction)
+                         ),
+                         by = c("location", "target_end_date")
+]
+
+res <- verify(obs = df$obs, pred = df$pred, obs.type = "cont", frcst.type = "cont")
+summary(res)
+# plot(res)
+
+# scoring quantile forecasts
+df <- example_quantile[(model == "EuroCOVIDhub-ensemble" & horizon == 2 & target_type == "Cases")]
+
+res_scoringutils <- score(df) |>
+  summarise_scores(by = "model")
+
+qs <- quantile_score(true_values = df$true_value, predictions = df$prediction, 
+               quantiles = df$quantile)
+
+all.equal(mean(qs), res_scoringutils$interval_score)
+```
+
+
+
+```{r}
+library(yardstick)
+
+
+
+```
+
+

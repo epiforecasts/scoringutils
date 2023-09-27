@@ -65,7 +65,9 @@ Suggests:
     dplyr,
     probably,
     yardstick,
-    predtools
+    predtools, 
+    scoring, 
+    verification
 Config/Needs/website: 
     r-lib/pkgdown,
     amirmasoudabdol/preferably
