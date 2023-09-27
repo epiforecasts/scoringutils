@@ -32,8 +32,8 @@ test_that("function produces output for a binary case", {
     colnames(eval),
     c(
       "model", "target_type",
-      "brier_score",
-      "log_score"
+      "log_score",
+      "brier_score"
     )
   )
 })
@@ -181,7 +181,7 @@ test_that(
   )
   scores <- suppressWarnings(score(ex))
   expect_snapshot(summarise_scores(
-    summarise_scores(scores, by = "model"), by = "model", 
+    summarise_scores(scores, by = "model"), by = "model",
     fun = signif, digits = 2
   ))
  })

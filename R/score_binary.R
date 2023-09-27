@@ -16,17 +16,31 @@
 score_binary <- function(data,
                          forecast_unit,
                          metrics) {
-  if ("brier_score" %in% metrics) {
-    data[, "brier_score" := brier_score(true_value, prediction),
-      by = forecast_unit
-    ]
-  }
 
-  if ("log_score" %in% metrics) {
-    data[, "log_score" := logs_binary(true_value, prediction),
-      by = forecast_unit
-    ]
+  # get a list of the functions to be applied.
+  # this should be done by some helper function / more elegantly
+  metrics <- as.list(metrics)
+  if ("brier_score" %in% metrics) {
+    names(metrics)[metrics == "brier_score"] <- "brier_score"
+    metrics[["brier_score"]] <- list(brier_score)
   }
+  if ("log_score" %in% metrics) {
+    names(metrics)[metrics == "log_score"] <- "log_score"
+    metrics["log_score"] <- list(logs_binary)
+  }
+  metrics <- metrics[!is.na(names(metrics))]
+
+  # need to check the functions used here
+  # i.e. check the function has the relevant arguments.
+
+
+  lapply(seq_along(metrics), function(x) {
+    metric_name <- names(metrics[x])
+    fun <- metrics[[x]]
+
+    data[, (metric_name) := fun(true_value, prediction)]
+    return()
+  })
 
   return(data[])
 }
