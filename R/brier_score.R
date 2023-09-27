@@ -22,6 +22,7 @@
 #' all values equal to either 0 or 1
 #' @param predictions A vector with a predicted probability
 #' that true_value = 1.
+#' @param ... additional arguments (not currently used)
 #' @return A numeric value with the Brier Score, i.e. the mean squared
 #' error of the given probability forecasts
 #' @export
@@ -33,7 +34,7 @@
 #' brier_score(true_values, predictions)
 #' @keywords metric
 
-brier_score <- function(true_values, predictions) {
+brier_score <- function(true_values, predictions, ...) {
   check_true_values(true_values, type = "binary")
   check_predictions(predictions, true_values, type = "binary")
 

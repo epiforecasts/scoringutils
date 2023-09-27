@@ -4,7 +4,7 @@
 \alias{brier_score}
 \title{Brier Score}
 \usage{
-brier_score(true_values, predictions)
+brier_score(true_values, predictions, ...)
 }
 \arguments{
 \item{true_values}{A vector with the true observed values of size n with
@@ -12,6 +12,8 @@ all values equal to either 0 or 1}
 
 \item{predictions}{A vector with a predicted probability
 that true_value = 1.}
+
+\item{...}{additional arguments (not currently used)}
 }
 \value{
 A numeric value with the Brier Score, i.e. the mean squared

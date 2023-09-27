@@ -4,7 +4,7 @@
 \alias{score_binary}
 \title{Evaluate forecasts in a Binary Format}
 \usage{
-score_binary(data, forecast_unit, metrics)
+score_binary(data, forecast_unit, metrics, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the predictions and observations.
@@ -41,6 +41,9 @@ of the values in \code{forecast_unit}.}
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
+
+\item{...}{additional parameters passed down to \code{\link[=score_quantile]{score_quantile()}} (internal
+function used for scoring forecasts in a quantile-based format).}
 }
 \value{
 A data.table with appropriate scores. For more information see

@@ -24,7 +24,7 @@
 #' predictions <- runif(n = 30, min = 0, max = 1)
 
 #' logs_binary(true_values, predictions)
-logs_binary <- function(true_values, predictions) {
+logs_binary <- function(true_values, predictions, ...) {
   check_true_values(true_values, type = "binary")
   check_predictions(predictions, true_values, type = "binary")
 

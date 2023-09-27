@@ -134,7 +134,8 @@ score <- function(data,
     scores <- score_binary(
       data = data,
       forecast_unit = forecast_unit,
-      metrics = metrics
+      metrics = metrics,
+      ...
     )
   }
 
