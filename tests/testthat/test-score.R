@@ -185,3 +185,42 @@ test_that(
     fun = signif, digits = 2
   ))
  })
+
+
+test_that(
+  "passing additional functions to score binary works", {
+    test_fun <- function(x, y, ...) {
+      if (hasArg("test")) {
+        print("test argument found")
+        return(111)
+      }
+      return(y)
+    }
+
+    df <- example_binary[model == "EuroCOVIDhub-ensemble" & target_type == "Cases"]
+
+    # passing a simple function works
+    score(df,
+          metrics = list("identity" = function(x, y) {return(y)}))
+
+    # passing an additional argument that is not part of the function
+    # definition works
+    score(df,
+          metrics = list("identity" = function(x, y) {return(y)}),
+          additional_arg = "something")
+
+    # passing an additional function to one that accepts ... works
+    res <- score(df,
+          metrics = list("test_function" = test_fun),
+          test = "something")
+    expect_equal(unique(res$test_function), 111)
+
+    # passing an argument that's the same as a named argument
+    score(df,
+          metrics = list("test_function" = test_fun),
+          y = "something")
+
+    # this one is currently not working
+    # score(example_binary, test_fun)
+  }
+)

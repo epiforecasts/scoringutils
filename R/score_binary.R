@@ -30,17 +30,27 @@ score_binary <- function(data,
   }
   metrics <- metrics[sapply(metrics, is.function)]
 
+  # fix names if there are none provided
+  # todo
+
   # need to check the functions used here
   # i.e. check the function has the relevant arguments.
 
 
-  lapply(seq_along(metrics), function(x, ...) {
-    metric_name <- names(metrics[x])
-    fun <- metrics[[x]]
+  lapply(seq_along(metrics), function(function_to_call, ...) {
+    metric_name <- names(metrics[function_to_call])
+    fun <- metrics[[function_to_call]]
 
-    data[, (metric_name) := fun(true_value, prediction, ...)]
+    fun_accepts_ellipsis <- any(names(formals(fun)) == "...")
+
+    if (fun_accepts_ellipsis) {
+      data[, (metric_name) := fun(true_value, prediction, ...)]
+    } else {
+      data[, (metric_name) := fun(true_value, prediction)]
+    }
+
     return()
-  })
+  }, ...)
 
   return(data[])
 }
