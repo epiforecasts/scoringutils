@@ -195,19 +195,59 @@ check_equal_length <- function(...,
 #' @keywords internal
 
 check_metrics <- function(metrics) {
-  # use all available metrics if none are given
+
+  # use all available metrics if no metrics are provided at all and return
+  available_metrics <- available_metrics()
   if (is.null(metrics)) {
-    metrics <- available_metrics()
+    metrics <- available_metrics
+    names(metrics) <- metrics
+    return(metrics)
+  }
+
+  # assign names to the metrics if there aren't named arguments
+  # construct substitute names bases on what's provided to the
+  # parent function, i.e. score()
+  # get the call object and extract the metrics part of it
+  substitute_names <- as.character(sys.call(-1)[["metrics"]])
+  # if there is no named metrics argument, try getting the argument by position
+  if (length(substitute_names) == 0) {
+    substitute_names <- as.character(sys.call(-1)[[3]])
+  }
+  substitute_names <- substitute_names[substitute_names != "c"]
+
+  # if all metrics names are NULL, just assign the substitute names
+  if (is.null(names(metrics))) {
+    # make sure metrics is a vector / list before assigning names
+    metrics <- c(metrics)
+    names(metrics) <- substitute_names
+  }
+
+  # if some names are given, but not all, get those
+  is_missing_name <- is.null(names(metrics)) | names(metrics) == ""
+  names(metrics)[is_missing_name] <- substitute_names[is_missing_name]
+
+  # go through all metrics
+    # check whether there are in available_metrics
+      # in that case eventually the actual function should be looked up.
+      # But that can be left for later
+    # check whether they are a function
+  unknown_metrics <- c()
+  for (i in seq_along(metrics)) {
+    if (is.function(metrics[[i]])) {
+      next
+    } else if (metrics[[i]] %in% available_metrics) {
+      next
+    }
+    unknown_metrics <- c(unknown_metrics, metrics[[i]])
   }
 
   # check desired metrics are actually available in scoringutils
-  available_metrics <- available_metrics()
-  if (!all(metrics %in% available_metrics)) {
-    msg <- paste(
-      "The following metrics are not available:",
-      toString(setdiff(metrics, available_metrics))
+  if (length(unknown_metrics > 0)) {
+    warning(
+      "The following metrics are neither available in scoringutils, ",
+      "nor a valid function: ",
+      toString(unknown_metrics)
     )
-    warning(msg)
   }
   return(metrics)
 }

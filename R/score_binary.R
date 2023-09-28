@@ -30,9 +30,6 @@ score_binary <- function(data,
   }
   metrics <- metrics[sapply(metrics, is.function)]
 
-  # fix names if there are none provided
-  # todo
-
   # need to check the functions used here
   # i.e. check the function has the relevant arguments.
 
