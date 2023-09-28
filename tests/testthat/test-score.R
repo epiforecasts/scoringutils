@@ -188,16 +188,16 @@ test_that(
 
 
 test_that(
-  "passing additional functions to score binary works", {
+  "passing additional functions to score binary works and check_forecasts handles them", {
     test_fun <- function(x, y, ...) {
       if (hasArg("test")) {
-        print("test argument found")
-        return(111)
+        message("test argument found")
       }
       return(y)
     }
 
-    df <- example_binary[model == "EuroCOVIDhub-ensemble" & target_type == "Cases"]
+    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
+                           target_type == "Cases" & location == "DE"]
 
     # passing a simple function works
     score(df,
@@ -210,17 +210,42 @@ test_that(
           additional_arg = "something")
 
     # passing an additional function to one that accepts ... works
-    res <- score(df,
-          metrics = list("test_function" = test_fun),
-          test = "something")
-    expect_equal(unique(res$test_function), 111)
+    expect_message(
+      score(df,
+            metrics = list("test_function" = test_fun),
+            test = "something"),
+      "test argument found"
+    )
 
     # passing an argument that's the same as a named argument
     score(df,
           metrics = list("test_function" = test_fun),
           y = "something")
 
-    # this one is currently not working
-    # score(example_binary, test_fun)
+    ## Additional tests for check_metrics()
+    # passing several functions, one of them named
+    res <- score(df, metrics = c(test_fun, "test" = test_fun))
+    expect_equal(res$test_fun, res$test)
+
+    # passing in something that's not a function or a known metric
+    expect_warning(
+      score(df, metrics = c(test_fun, "test" = test_fun, "hi", 3)),
+      "The following metrics are neither available in scoringutils, nor a valid function: hi, 3"
+    )
+
+    # passing a single unnamed argument for metrics by position
+    expect_contains(names(score(df, test_fun)), "test_fun")
+
+    # passing several unnamed arguments to metrics by position
+    fun2 <- test_fun
+    expect_contains(names(score(df, c(test_fun, fun2))), c("test_fun", "fun2"))
+
+    # providing no additional function argument works
+    score(example_binary)
+
+    # providing an additional, unrelated function argument works
+    score(example_binary, unnecessary_argument = "unnecessary")
+    score(example_binary, metrics = brier_score, unnecessary_argument = "unnecessary")
+
   }
 )
