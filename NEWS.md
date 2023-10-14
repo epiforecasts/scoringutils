@@ -8,8 +8,10 @@ This minor update addresses comments made by review from the Journal of Statisti
   - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 
   - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows. 
   - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
+- remove hard-coded rounding value for `correlation()`. Previously, the function always rounded correlations to two digits. Instead, a new argument, `digits` was introduced and the default set to 0, meaning that no rounding takes place. 
 - the deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or readRDS()`. 
+- add documentation for the return value of `summarise_scores()`. 
 
 # scoringutils 1.2.1
 

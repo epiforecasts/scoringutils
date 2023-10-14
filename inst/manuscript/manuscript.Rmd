@@ -637,7 +637,7 @@ It may sometimes be interesting to see how different scores correlate with each 
 correlations <- example_quantile |>
   score() |>
   summarise_scores() |>
-  correlation() 
+  correlation(digits = 2) 
 
 correlations |>
   glimpse()
