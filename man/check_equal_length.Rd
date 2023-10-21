@@ -4,13 +4,17 @@
 \alias{check_equal_length}
 \title{Check Length}
 \usage{
-check_equal_length(..., one_allowed = TRUE)
+check_equal_length(..., one_allowed = TRUE, call_levels_up = 2)
 }
 \arguments{
 \item{...}{The variables to check}
 
 \item{one_allowed}{logical, allow arguments of length one that can be
 recycled}
+
+\item{call_levels_up}{How many levels to go up when including the function
+call in the error message. This is useful when calling \code{check_equal_length()}
+within another checking function.}
 }
 \value{
 The function returns \code{NULL}, but throws an error if variable lengths

@@ -224,8 +224,8 @@ get_prediction_type <- function(data) {
 #' @title Get type of the target true values of a forecast
 #'
 #' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the which columns
-#' are present in the data.
+#' true values of a forecast. That is inferred based on the type and the
+#' content of the `true_value` column.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -235,13 +235,11 @@ get_prediction_type <- function(data) {
 #' @keywords internal
 
 get_target_type <- function(data) {
+  if (is.factor(data$true_value)) {
+    return("classification")
+  }
   if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
-    if (all(data$true_value %in% c(0, 1)) &&
-          all(data$prediction >= 0) && all(data$prediction <= 1)) {
-      return("binary")
-    } else {
-      return("integer")
-    }
+    return("integer")
   } else {
     return("continuous")
   }

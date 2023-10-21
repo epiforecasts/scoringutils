@@ -130,7 +130,7 @@ score <- function(data,
   metrics <- check_metrics(metrics)
 
   # Score binary predictions ---------------------------------------------------
-  if (target_type == "binary") {
+  if (target_type == "classification") {
     scores <- score_binary(
       data = data,
       forecast_unit = forecast_unit,
@@ -149,7 +149,7 @@ score <- function(data,
   }
 
   # Score integer or continuous predictions ------------------------------------
-  if (prediction_type %in% c("integer", "continuous") && (target_type != "binary")) {
+  if (prediction_type %in% c("integer", "continuous") && (target_type != "classification")) {
     scores <- score_sample(
       data = data,
       forecast_unit = forecast_unit,

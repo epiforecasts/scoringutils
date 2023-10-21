@@ -40,7 +40,7 @@ Character vector of length one with either "binary", "integer", or
 }
 \description{
 Internal helper function to get the type of the target
-true values of a forecast. That is inferred based on the which columns
-are present in the data.
+true values of a forecast. That is inferred based on the type and the
+content of the \code{true_value} column.
 }
 \keyword{internal}

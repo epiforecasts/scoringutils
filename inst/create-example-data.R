@@ -224,7 +224,8 @@ example_binary[, true_value := true_value > mean_val]
 # delete unnecessary columns and take unique values
 example_binary[, `:=`(
   sample = NULL, mean_val = NULL,
-  true_value = as.numeric(true_value)
+  true_value = factor(as.numeric(true_value))
 )]
 example_binary <- unique(example_binary)
+
 usethis::use_data(example_binary, overwrite = TRUE)
