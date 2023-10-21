@@ -366,7 +366,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
-  true_values <- rnorm(10, mean = 1:10)
+  observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
@@ -375,20 +375,20 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 
     w <- FALSE
     is <- interval_score(
-      true_values = true_values,
+      observed = observed,
       lower = lower,
       upper = upper,
       interval_range = (1 - alpha) * 100,
       weigh = w
     )
 
-    qs_lower <- quantile_score(true_values,
-      predictions = lower,
+    qs_lower <- quantile_score(observed,
+      predicted = lower,
       quantiles = alpha / 2,
       weigh = w
     )
-    qs_upper <- quantile_score(true_values,
-      predictions = upper,
+    qs_upper <- quantile_score(observed,
+      predicted = upper,
       quantiles = 1 - alpha / 2,
       weigh = w
     )
@@ -397,7 +397,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = TRUE", {
-  true_values <- rnorm(10, mean = 1:10)
+  observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
@@ -406,20 +406,20 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
 
     w <- TRUE
     is <- interval_score(
-      true_values = true_values,
+      observed = observed,
       lower = lower,
       upper = upper,
       interval_range = (1 - alpha) * 100,
       weigh = w
     )
 
-    qs_lower <- quantile_score(true_values,
-      predictions = lower,
+    qs_lower <- quantile_score(observed,
+      predicted = lower,
       quantiles = alpha / 2,
       weigh = w
     )
-    qs_upper <- quantile_score(true_values,
-      predictions = upper,
+    qs_upper <- quantile_score(observed,
+      predicted = upper,
       quantiles = 1 - alpha / 2,
       weigh = w
     )

@@ -4,31 +4,31 @@
 #' Absolute error of the median calculated as
 #'
 #' \deqn{%
-#'   \textrm{abs}(\textrm{true\_value} - \textrm{median\_prediction})
+#'   \textrm{abs}(\textrm{observevd} - \textrm{median\_prediction})
 #' }{%
-#'   abs(true_value - median_prediction)
+#'   abs(observed - median_prediction)
 #' }
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
+#' @param observed A vector with the observed values of size n
+#' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the number of Monte
-#' Carlo samples. Alternatively, predictions can just be a vector of size n.
+#' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @return vector with the scoring values
 #' @seealso [ae_median_quantile()], [abs_error()]
 #' @importFrom stats median
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
-#' ae_median_sample(true_values, predicted_values)
+#' ae_median_sample(observed, predicted_values)
 #' @export
 #' @keywords metric
 
-ae_median_sample <- function(true_values, predictions) {
+ae_median_sample <- function(observed, predicted) {
   median_predictions <- apply(
-    as.matrix(predictions), MARGIN = 1, FUN = median # this is rowwise
+    as.matrix(predicted), MARGIN = 1, FUN = median # this is rowwise
   )
 
-  ae_median <- abs(true_values - median_predictions)
+  ae_median <- abs(observed - median_predictions)
 
   return(ae_median)
 }
@@ -39,27 +39,27 @@ ae_median_sample <- function(true_values, predictions) {
 #' Squared error of the mean calculated as
 #'
 #' \deqn{
-#'   \textrm{mean}(\textrm{true\_value} - \textrm{prediction})^2
+#'   \textrm{mean}(\textrm{observed} - \textrm{prediction})^2
 #' }{
-#'   mean(true_value - mean_prediction)^2
+#'   mean(observed - mean_prediction)^2
 #' }
 #'
-#' @param true_values A vector with the true observed values of size n
-#' @param predictions nxN matrix of predictive samples, n (number of rows) being
+#' @param observed A vector with the observed values of size n
+#' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the number of Monte
-#' Carlo samples. Alternatively, predictions can just be a vector of size n.
+#' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @return vector with the scoring values
 #' @seealso [squared_error()]
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
-#' se_mean_sample(true_values, predicted_values)
+#' se_mean_sample(observed, predicted_values)
 #' @export
 #' @keywords metric
 
-se_mean_sample <- function(true_values, predictions) {
-  mean_predictions <- rowMeans(as.matrix(predictions))
-  se_mean <- (true_values - mean_predictions)^2
+se_mean_sample <- function(observed, predicted) {
+  mean_predictions <- rowMeans(as.matrix(predicted))
+  se_mean <- (observed - mean_predictions)^2
 
   return(se_mean)
 }
@@ -71,32 +71,32 @@ se_mean_sample <- function(true_values, predictions) {
 #' Absolute error of the median calculated as
 #'
 #' \deqn{
-#'   \textrm{abs}(\textrm{true\_value} - \textrm{prediction})
+#'   \textrm{abs}(\textrm{observed} - \textrm{prediction})
 #' }{
-#'   abs(true_value - median_prediction)
+#'   abs(observed - median_prediction)
 #' }
 #'
 #' The function was created for internal use within [score()], but can also
 #' used as a standalone function.
 #'
-#' @param predictions numeric vector with predictions, corresponding to the
+#' @param predicted numeric vector with predictions, corresponding to the
 #' quantiles in a second vector, `quantiles`.
 #' @param quantiles numeric vector that denotes the quantile for the values
-#' in `predictions`. Only those predictions where `quantiles == 0.5` will
-#' be kept. If `quantiles` is `NULL`, then all `predictions` and
-#' `true_values` will be used (this is then the same as [abs_error()])
+#' in `predicted`. Only those predictions where `quantiles == 0.5` will
+#' be kept. If `quantiles` is `NULL`, then all `predicted` and
+#' `observed` will be used (this is then the same as [abs_error()])
 #' @return vector with the scoring values
 #' @seealso [ae_median_sample()], [abs_error()]
 #' @importFrom stats median
 #' @inheritParams ae_median_sample
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
-#' ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
+#' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
 #' @export
 #' @keywords metric
 
-ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
+ae_median_quantile <- function(observed, predicted, quantiles = NULL) {
   if (!is.null(quantiles)) {
     if (!any(quantiles == 0.5) && !anyNA(quantiles)) {
       return(NA_real_)
@@ -105,10 +105,10 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
         "among the quantiles given. Maybe you want to use `abs_error()`?"
       )
     }
-    true_values <- true_values[quantiles == 0.5]
-    predictions <- predictions[quantiles == 0.5]
+    observed <- observed[quantiles == 0.5]
+    predicted <- predicted[quantiles == 0.5]
   }
-  abs_error_median <- abs(true_values - predictions)
+  abs_error_median <- abs(observed - predicted)
   return(abs_error_median)
 }
 
@@ -121,23 +121,23 @@ ae_median_quantile <- function(true_values, predictions, quantiles = NULL) {
 #' Calculate absolute error as
 #'
 #' \deqn{
-#'   \textrm{abs}(\textrm{true\_value} - \textrm{median\_prediction})
+#'   \textrm{abs}(\textrm{observed} - \textrm{median\_prediction})
 #' }{
-#'   abs(true_value - prediction)
+#'   abs(observed - prediction)
 #' }
 #'
 #' @return vector with the absolute error
 #' @inheritParams ae_median_quantile
 #' @seealso [ae_median_sample()], [ae_median_quantile()]
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
-#' abs_error(true_values, predicted_values)
+#' abs_error(observed, predicted_values)
 #' @export
 #' @keywords metric
 
-abs_error <- function(true_values, predictions) {
-  return(abs(true_values - predictions))
+abs_error <- function(observed, predicted) {
+  return(abs(observed - predicted))
 }
 
 
@@ -147,22 +147,22 @@ abs_error <- function(true_values, predictions) {
 #' Squared Error SE calculated as
 #'
 #' \deqn{
-#'   (\textrm{true\_values} - \textrm{predicted\_values})^2
+#'   (\textrm{observed} - \textrm{predicted})^2
 #' }{
-#'   (true_values - predicted_values)^2
+#'   (observed - predicted)^2
 #' }
 #'
-#' @param predictions A vector with predicted values of size n
+#' @param predicted A vector with predicted values of size n
 #' @return vector with the scoring values
 #' @inheritParams ae_median_sample
 #' @export
 #' @keywords metric
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
-#' squared_error(true_values, predicted_values)
+#' squared_error(observed, predicted_values)
 
-squared_error <- function(true_values, predictions) {
-  se <- (true_values - predictions)^2
+squared_error <- function(observed, predicted) {
+  se <- (observed - predicted)^2
   return(se)
 }

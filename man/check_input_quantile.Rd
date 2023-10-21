@@ -4,16 +4,16 @@
 \alias{check_input_quantile}
 \title{Check input for sample-based forecast}
 \usage{
-check_input_quantile(true_value, prediction, quantile)
+check_input_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{true_value}{Input to be checked. Should be a vector with the true
+\item{observed}{Input to be checked. Should be a vector with the true
 observed values of size n}
 
-\item{prediction}{Input to be checked. Should be nxN matrix of predictive
+\item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
 (number of columns) the number of quantiles per forecast.
-If \code{true_value} is just a single number, then predictions can just be a
+If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
 \item{quantile}{Input to be checked. Should be a vector of size N that

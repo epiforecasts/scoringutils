@@ -4,14 +4,14 @@
 \alias{dss_sample}
 \title{Dawid-Sebastiani Score}
 \usage{
-dss_sample(true_values, predictions)
+dss_sample(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
 vector with scoring values
@@ -22,9 +22,9 @@ function from the
 \pkg{scoringRules} package.
 }
 \examples{
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-dss_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+dss_sample(observed, predicted)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic

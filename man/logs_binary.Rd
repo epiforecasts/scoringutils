@@ -4,18 +4,18 @@
 \alias{logs_binary}
 \title{Log Score for Binary outcomes}
 \usage{
-logs_binary(true_values, predictions)
+logs_binary(observed, predicted)
 }
 \arguments{
-\item{true_values}{A factor of length n with exactly two levels, holding
+\item{observed}{A factor of length n with exactly two levels, holding
 the observed values.
 The highest factor level is assumed to be the reference level. This means
-that \code{predictions} represents the probability that the observed value is
+that \code{predicted} represents the probability that the observed value is
 equal to the highest factor level.}
 
-\item{predictions}{A numeric vector of length n, holding probabilities.
+\item{predicted}{A numeric vector of length n, holding probabilities.
 Values represent the probability that the corresponding outcome is equal to
-the highest level of the factor \code{true_value}.}
+the highest level of the factor \code{observed}.}
 }
 \value{
 A numeric vector with log scores
@@ -35,7 +35,7 @@ smaller values are better.
 The function requires users to provide observed values as a factor in order
 to distinguish its input from the input format required for scoring point
 forecasts. Internally, however, factors will be converted to numeric values.
-A factor \verb{true_value = factor(c(0, 1, 1, 0, 1)} with two levels (\code{0} and \code{1})
+A factor \verb{observed = factor(c(0, 1, 1, 0, 1)} with two levels (\code{0} and \code{1})
 would internally be coerced to a numeric vector (in this case this would
 result in the numeric vector c(1, 2, 2, 1, 1)). After subtracting 1, the
 resulting vector (\code{c(0, 1, 1, 0)} in this case) is used for internal
@@ -43,13 +43,13 @@ calculations. All predictions are assumed represent the probability that the
 outcome is equal of the highest factor level (in this case that the
 outcome is equal to 1).
 You could alternatively also provide a vector like
-\code{true_value = c("a", "b", "b", "a")} (with two levels, \code{a} and \code{b}),
+\code{observed = c("a", "b", "b", "a")} (with two levels, \code{a} and \code{b}),
 which would result in exactly the same internal representation. Probabilities
 then represent the probability that the outcome is equal to "b".
 }
 \examples{
-true_values <- factor(sample(c(0, 1), size = 30, replace = TRUE))
-predictions <- runif(n = 30, min = 0, max = 1)
-logs_binary(true_values, predictions)
+observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))
+predicted <- runif(n = 30, min = 0, max = 1)
+logs_binary(observed, predicted)
 }
 \keyword{metric}

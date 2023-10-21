@@ -4,14 +4,14 @@
 \alias{ae_median_sample}
 \title{Absolute Error of the Median (Sample-based Version)}
 \usage{
-ae_median_sample(true_values, predictions)
+ae_median_sample(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
 vector with the scoring values
@@ -20,15 +20,15 @@ vector with the scoring values
 Absolute error of the median calculated as
 
 \deqn{%
-  \textrm{abs}(\textrm{true\_value} - \textrm{median\_prediction})
+  \textrm{abs}(\textrm{observevd} - \textrm{median\_prediction})
 }{%
-  abs(true_value - median_prediction)
+  abs(observed - median_prediction)
 }
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
-ae_median_sample(true_values, predicted_values)
+ae_median_sample(observed, predicted_values)
 }
 \seealso{
 \code{\link[=ae_median_quantile]{ae_median_quantile()}}, \code{\link[=abs_error]{abs_error()}}

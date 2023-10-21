@@ -4,12 +4,12 @@
 \alias{abs_error}
 \title{Absolute Error}
 \usage{
-abs_error(true_values, predictions)
+abs_error(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{numeric vector with predictions, corresponding to the
+\item{predicted}{numeric vector with predictions, corresponding to the
 quantiles in a second vector, \code{quantiles}.}
 }
 \value{
@@ -19,15 +19,15 @@ vector with the absolute error
 Calculate absolute error as
 
 \deqn{
-  \textrm{abs}(\textrm{true\_value} - \textrm{median\_prediction})
+  \textrm{abs}(\textrm{observed} - \textrm{median\_prediction})
 }{
-  abs(true_value - prediction)
+  abs(observed - prediction)
 }
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
-abs_error(true_values, predicted_values)
+abs_error(observed, predicted_values)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=ae_median_quantile]{ae_median_quantile()}}

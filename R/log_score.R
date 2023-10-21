@@ -15,7 +15,7 @@
 #' The function requires users to provide observed values as a factor in order
 #' to distinguish its input from the input format required for scoring point
 #' forecasts. Internally, however, factors will be converted to numeric values.
-#' A factor `true_value = factor(c(0, 1, 1, 0, 1)` with two levels (`0` and `1`)
+#' A factor `observed = factor(c(0, 1, 1, 0, 1)` with two levels (`0` and `1`)
 #' would internally be coerced to a numeric vector (in this case this would
 #' result in the numeric vector c(1, 2, 2, 1, 1)). After subtracting 1, the
 #' resulting vector (`c(0, 1, 1, 0)` in this case) is used for internal
@@ -23,7 +23,7 @@
 #' outcome is equal of the highest factor level (in this case that the
 #' outcome is equal to 1).
 #' You could alternatively also provide a vector like
-#' `true_value = c("a", "b", "b", "a")` (with two levels, `a` and `b`),
+#' `observed = c("a", "b", "b", "a")` (with two levels, `a` and `b`),
 #' which would result in exactly the same internal representation. Probabilities
 #' then represent the probability that the outcome is equal to "b".
 #'
@@ -34,13 +34,13 @@
 #' @keywords metric
 #'
 #' @examples
-#' true_values <- factor(sample(c(0, 1), size = 30, replace = TRUE))
-#' predictions <- runif(n = 30, min = 0, max = 1)
+#' observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))
+#' predicted <- runif(n = 30, min = 0, max = 1)
 
-#' logs_binary(true_values, predictions)
-logs_binary <- function(true_values, predictions) {
-  check_input_binary(true_values, predictions)
-  true_values <- as.numeric(true_values) - 1
-  logs <- -log(ifelse(true_values == 1, predictions, 1 - predictions))
+#' logs_binary(observed, predicted)
+logs_binary <- function(observed, predicted) {
+  check_input_binary(observed, predicted)
+  observed <- as.numeric(observed) - 1
+  logs <- -log(ifelse(observed == 1, predicted, 1 - predicted))
   return(logs)
 }

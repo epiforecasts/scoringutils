@@ -4,16 +4,16 @@
 \alias{check_input_sample}
 \title{Check input for sample-based forecast}
 \usage{
-check_input_sample(true_value, prediction)
+check_input_sample(observed, predicted)
 }
 \arguments{
-\item{true_value}{Input to be checked. Should be a vector with the true
+\item{observed}{Input to be checked. Should be a vector with the true
 observed values of size n}
 
-\item{predictions}{Input to be checked. Should be nxN matrix of predictive
+\item{predicted}{Input to be checked. Should be nxN matrix of predictive
 samples, n (number of rows) being the number of data points and N (number of
 columns) the number of samples per forecast.
-If \code{true_value} is just a single number, then predictions can just be a
+If \code{observed} is just a single number, then predicted values can just be a
 vector of size N.}
 }
 \value{

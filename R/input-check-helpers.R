@@ -2,42 +2,42 @@
 #'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @param true_value Input to be checked. Should be a vector with the true
+#' @param observed Input to be checked. Should be a vector with the true
 #' observed values of size n
-#' @param predictions Input to be checked. Should be nxN matrix of predictive
+#' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' samples, n (number of rows) being the number of data points and N (number of
 #' columns) the number of samples per forecast.
-#' If `true_value` is just a single number, then predictions can just be a
+#' If `observed` is just a single number, then predicted values can just be a
 #' vector of size N.
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @return Returns NULL invisibly if the check was successful and throws an
 #' error otherwise.
 #' @keywords internal
 
-check_input_sample <- function(true_value, prediction) {
+check_input_sample <- function(observed, predicted) {
   # things that need to be checked
-  # - true_value and prediction need to be numeric
-  # - true_value needs to be a scalar or a vector of size n x 1
-  # - prediction needs to be a vector or a matrix of size n x N
+  # - observed and predicted need to be numeric
+  # - observed needs to be a scalar or a vector of size n x 1
+  # - predicted needs to be a vector or a matrix of size n x N
 
-  assert_numeric(true_value, min.len = 1)
-  n_obs <- length(true_value)
+  assert_numeric(observed, min.len = 1)
+  n_obs <- length(observed)
 
   if (n_obs == 1) {
     assert(
       # allow one of two options
-      check_numeric_vector(prediction, min.len = 1),
-      check_matrix(prediction, mode = "numeric")
+      check_numeric_vector(predicted, min.len = 1),
+      check_matrix(predicted, mode = "numeric")
       )
   } else {
-    assert(check_matrix(prediction, mode = "numeric"))
+    assert(check_matrix(predicted, mode = "numeric"))
   }
 
-  if (n_obs != nrow(prediction)) {
+  if (n_obs != nrow(predicted)) {
     # create custom, more informative error message
     msg <- sprintf(
-      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-      n_obs, nrow(prediction)
+      "Mismatch: 'observed' has length `%s`, but 'predicted' has `%s` rows.",
+      n_obs, nrow(predicted)
     )
     stop(msg)
   }
@@ -48,12 +48,12 @@ check_input_sample <- function(true_value, prediction) {
 #'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @param true_value Input to be checked. Should be a vector with the true
+#' @param observed Input to be checked. Should be a vector with the true
 #' observed values of size n
-#' @param prediction Input to be checked. Should be nxN matrix of predictive
+#' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' quantiles, n (number of rows) being the number of data points and N
 #' (number of columns) the number of quantiles per forecast.
-#' If `true_value` is just a single number, then predictions can just be a
+#' If `observed` is just a single number, then predicted can just be a
 #' vector of size N.
 #' @param quantile Input to be checked. Should be a vector of size N that
 #' denotes the quantile levels corresponding to the columns of the prediction
@@ -63,21 +63,21 @@ check_input_sample <- function(true_value, prediction) {
 #' error otherwise.
 #' @keywords internal
 
-check_input_quantile <- function(true_value, prediction, quantile) {
+check_input_quantile <- function(observed, predicted, quantile) {
   # things that need to be checked
   # - all inputs need to be numeric
   # - quantile needs to be a numeric vector of size N between 0 and 1
-  # - true_value needs to be a scalar or a vector of size n x 1
-  # - prediction needs to be a vector or a matrix of size n x N
+  # - observed needs to be a scalar or a vector of size n x 1
+  # - predicted needs to be a vector or a matrix of size n x N
 
-  assert_numeric(true_value, min.len = 1)
-  n_obs <- length(true_value)
+  assert_numeric(observed, min.len = 1)
+  n_obs <- length(observed)
 
   assert_numeric(quantile, min.len = 1, lower = 0, upper = 1)
   n_quantiles <- length(quantile)
   assert(
-    check_numeric_vector(prediction, min.len = 1),
-    check_matrix(prediction, mode = "numeric",
+    check_numeric_vector(predicted, min.len = 1),
+    check_matrix(predicted, mode = "numeric",
                  nrows = n_obs, ncols = n_quantiles)
   )
   return(invisible(NULL))
@@ -87,44 +87,44 @@ check_input_quantile <- function(true_value, prediction, quantile) {
 #'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @param true_value Input to be checked. Should be a factor of length n with
+#' @param observed Input to be checked. Should be a factor of length n with
 #' exactly two levels, holding the observed values.
 #' The highest factor level is assumed to be the reference level. This means
-#' that `prediction` represents the probability that the observed value is equal
+#' that `predicted` represents the probability that the observed value is equal
 #' to the highest factor level.
-#' @param prediction Input to be checked. Prediction should be a vector of
+#' @param predicted Input to be checked. `predicted` should be a vector of
 #' length n, holding probabilities. Values represent the probability that
-#' the corresponding value in `true_value` will be equal to the highest
+#' the corresponding value in `observed` will be equal to the highest
 #' available factor level.
 #' @importFrom checkmate assert assert_factor
 #' @return Returns NULL invisibly if the check was successful and throws an
 #' error otherwise.
 #' @keywords internal
-check_input_binary <- function(true_value, prediction) {
+check_input_binary <- function(observed, predicted) {
   # things that need to be checked
   # - all inputs need to be vectors of the same length
-  # - true_value needs to be a factor
+  # - observed needs to be a factor
   # - they need to have the same levels
-  # - prediction needs to be numeric between 0 and 1
+  # - predicted needs to be numeric between 0 and 1
 
-  check_equal_length(true_value, prediction)
-  assert_factor(true_value, n.levels = 2)
-  levels <- levels(true_value)
+  check_equal_length(observed, predicted)
+  assert_factor(observed, n.levels = 2)
+  levels <- levels(observed)
   assert(
-    check_numeric_vector(prediction, min.len = 1, lower = 0, upper = 1)
+    check_numeric_vector(predicted, min.len = 1, lower = 0, upper = 1)
   )
   return(invisible(NULL))
 }
 
-check_input_point <- function(true_value, prediction) {
+check_input_point <- function(observed, predicted) {
   # things that need to be checked
   # - all inputs need to be numeric vectors
   # - they need to have the same length
 
-  assert(check_numeric_vector(true_value, min.len = 1))
-  assert(check_numeric_vector(prediction, min.len = 1))
-  if (length(true_value) != length(prediction)) {
-    stop("true_value and prediction need to be",
+  assert(check_numeric_vector(observed, min.len = 1))
+  assert(check_numeric_vector(predicted, min.len = 1))
+  if (length(observed) != length(predicted)) {
+    stop("observed and predicted need to be",
          "of same length when scoring point forecasts")
   }
   return(invisible(NULL))
@@ -160,9 +160,9 @@ check_numeric_vector = function(x, ...) {
 #'
 #' @description
 #' Helper function to check inputs for lower-level score functions.
-#' @param predictions an object with predictions. Depending on whether
+#' @param predicted an object with predictions. Depending on whether
 #' `class = vector` or `class = "matrix"` this can be either a vector of length
-#' n (corresponding to the length of the true_values) or a nxN matrix of
+#' n (corresponding to the length of the observed values) or a nxN matrix of
 #' predictive samples, n (number of rows) being the number of data points and
 #' N (number of columns) the number of Monte Carlo samples
 #' @param type character, one of "continuous" (default), "integer" or "binary" that
@@ -173,64 +173,64 @@ check_numeric_vector = function(x, ...) {
 #' @return NULL
 #' @keywords internal
 
-check_predictions <- function(predictions,
-                              true_values = NULL,
+check_predicted <- function(predicted,
+                              observed = NULL,
                               type = c("continuous", "integer", "binary"),
                               class = c("vector", "matrix")) {
   type <- match.arg(type)
   class <- match.arg(class)
 
-  if (missing(predictions)) {
-    stop("argument 'predictions' missing")
+  if (missing(predicted)) {
+    stop("argument 'predicted' missing")
   }
 
   if (class == "vector") {
-    if (!is.vector(predictions)) {
+    if (!is.vector(predicted)) {
       msg <- sprintf(
-        "'predictions' should be a vector. Instead `%s` was found",
-        class(predictions)[1]
+        "'predicted' should be a vector. Instead `%s` was found",
+        class(predicted)[1]
       )
       stop(msg)
     }
-    if (!is.null(true_values) && length(predictions) != length(true_values)) {
+    if (!is.null(observed) && length(predicted) != length(observed)) {
       msg <- sprintf(
-        "Mismatch: 'true_values' has length `%s`, but 'predictions' has length `%s`.", # nolint
-        length(true_values), length(predictions)
+        "Mismatch: 'observed' has length `%s`, but 'predicted' has length `%s`.", # nolint
+        length(observed), length(predicted)
       )
       stop(msg)
     }
   }
 
   if (class == "matrix") {
-    if (!is.matrix(predictions)) {
+    if (!is.matrix(predicted)) {
       msg <- sprintf(
-        "'predictions' should be a matrix. Instead `%s` was found",
-        class(predictions[1])
+        "'predicted' should be a matrix. Instead `%s` was found",
+        class(predicted[1])
       )
       stop(msg)
     }
-    if (!is.null(true_values) && nrow(predictions) != length(true_values)) {
+    if (!is.null(observed) && nrow(predicted) != length(observed)) {
       msg <- sprintf(
-        "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-        length(true_values), nrow(predictions)
+        "Mismatch: 'observed' has length `%s`, but 'predicted' has `%s` rows.",
+        length(observed), nrow(predicted)
       )
       stop(msg)
     }
   }
 
   if (type == "integer" &&
-      isFALSE(all.equal(as.vector(predictions), as.integer(predictions)))
+      isFALSE(all.equal(as.vector(predicted), as.integer(predicted)))
   ) {
     warning(
-      "Prediction type should be 'integer', but some of the predictions are",  " not integers"
+      "Prediction type should be 'integer', but some of the predicted values are",  " not integers"
     )
   }
 
   if (type == "binary" &&
-      isFALSE(all(predictions >= 0) && all(predictions <= 1))
+      isFALSE(all(predicted >= 0) && all(predicted <= 1))
   ) {
     stop(
-      "For a binary forecast, all predictions should be probabilities between",
+      "For a binary forecast, all predicted values should be probabilities between",
       " 0 or 1."
     )
   }
@@ -243,27 +243,27 @@ check_predictions <- function(predictions,
 #'
 #' @description
 #' Helper function to check inputs for lower-level score functions.
-#' @inheritParams check_predictions
+#' @inheritParams check_predicted
 #' @return NULL
 #' @keywords internal
 
-check_true_values <- function(true_values,
+check_observed <- function(observed,
                               type = c("continuous", "integer", "binary")) {
   type <- match.arg(type)
-  if (missing(true_values)) {
-    stop("true_values argument is missing")
+  if (missing(observed)) {
+    stop("observed argument is missing")
   }
 
   if (type == "integer" &&
-      isFALSE(all.equal(true_values, as.integer(true_values)))
+      isFALSE(all.equal(observed, as.integer(observed)))
   ) {
-    stop("Some of the true_values are not integers")
+    stop("Some of the observed values are not integers")
   }
 
   if (type == "binary" &&
-      isFALSE(all(true_values %in% c(0, 1)))
+      isFALSE(all(observed %in% c(0, 1)))
   ) {
-    stop("For a binary forecast, all true_values should be either 0 or 1.")
+    stop("For a binary forecast, all observed values should be either 0 or 1.")
   }
 }
 

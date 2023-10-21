@@ -13,9 +13,9 @@
 #' \frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
 #' \mathbf{1}(\textrm{true\_value} > \textrm{upper})
 #' }{
-#' score = (upper - lower) + 2/alpha * (lower - true_value) *
-#' 1(true_values < lower) + 2/alpha * (true_value - upper) *
-#' 1(true_value > upper)
+#' score = (upper - lower) + 2/alpha * (lower - observed) *
+#' 1(observed < lower) + 2/alpha * (observed - upper) *
+#' 1(observed > upper)
 #' }
 #' where \eqn{\mathbf{1}()}{1()} is the indicator function and
 #' indicates how much is outside the prediction interval.
@@ -55,25 +55,25 @@
 #' @importFrom rlang warn
 #' @inheritParams ae_median_sample
 #' @examples
-#' true_values <- rnorm(30, mean = 1:30)
+#' observed <- rnorm(30, mean = 1:30)
 #' interval_range <- rep(90, 30)
 #' alpha <- (100 - interval_range) / 100
 #' lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
 #' upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 #'
 #' interval_score(
-#'   true_values = true_values,
+#'   observed = observed,
 #'   lower = lower,
 #'   upper = upper,
 #'   interval_range = interval_range
 #' )
 #'
 #' # gives a warning, as the interval_range should likely be 50 instead of 0.5
-#' interval_score(true_value = 4, upper = 2, lower = 8, interval_range = 0.5)
+#' interval_score(observed = 4, upper = 2, lower = 8, interval_range = 0.5)
 #'
 #' # example with missing values and separate results
 #' interval_score(
-#'   true_values = c(true_values, NA),
+#'   observed = c(observed, NA),
 #'   lower = c(lower, NA),
 #'   upper = c(NA, upper),
 #'   separate_results = TRUE,
@@ -90,7 +90,7 @@
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618> # nolint
 #'
 
-interval_score <- function(true_values,
+interval_score <- function(observed,
                            lower,
                            upper,
                            interval_range,
@@ -99,19 +99,19 @@ interval_score <- function(true_values,
 
   # error handling - not sure how I can make this better
   present <- c(
-    methods::hasArg("true_values"), methods::hasArg("lower"),
+    methods::hasArg("observed"), methods::hasArg("lower"),
     methods::hasArg("upper"), methods::hasArg("interval_range")
   )
   if (!all(present)) {
     stop(
-      "need all arguments 'true_values', 'lower', 'upper' and 'interval_range' in function 'interval_score()'" # nolint
+      "need all arguments 'observed', 'lower', 'upper' and 'interval_range' in function 'interval_score()'" # nolint
     )
   }
   check_not_null(
-    true_values = true_values, lower = lower, upper = upper,
+    observed = observed, lower = lower, upper = upper,
     interval_range = interval_range
   )
-  check_equal_length(true_values, lower, interval_range, upper)
+  check_equal_length(observed, lower, interval_range, upper)
 
   if (any(interval_range < 0, na.rm = TRUE)) {
     stop("interval ranges must be positive")
@@ -129,9 +129,9 @@ interval_score <- function(true_values,
   # calculate three components of WIS
   dispersion <- (upper - lower)
   overprediction <-
-    2 / alpha * (lower - true_values) * as.numeric(true_values < lower)
+    2 / alpha * (lower - observed) * as.numeric(observed < lower)
   underprediction <-
-    2 / alpha * (true_values - upper) * as.numeric(true_values > upper)
+    2 / alpha * (observed - upper) * as.numeric(observed > upper)
 
   if (weigh) {
     dispersion <- dispersion * alpha / 2
@@ -162,7 +162,7 @@ interval_score <- function(true_values,
 #' the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'
-#' @param quantiles vector of size n with the quantile values of the
+#' @param quantiles vector of size n with the quantile levels of the
 #' corresponding predictions.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
@@ -174,18 +174,18 @@ interval_score <- function(true_values,
 #' @inheritParams interval_score
 #' @inheritParams ae_median_sample
 #' @examples
-#' true_values <- rnorm(10, mean = 1:10)
+#' observed <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5
 #'
 #' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
 #' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 #'
-#' qs_lower <- quantile_score(true_values,
-#'   predictions = lower,
+#' qs_lower <- quantile_score(observed,
+#'   predicted = lower,
 #'   quantiles = alpha / 2
 #' )
-#' qs_upper <- quantile_score(true_values,
-#'   predictions = upper,
+#' qs_upper <- quantile_score(observed,
+#'   predicted = upper,
 #'   quantiles = 1 - alpha / 2
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
@@ -200,8 +200,8 @@ interval_score <- function(true_values,
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 #
 
-quantile_score <- function(true_values,
-                           predictions,
+quantile_score <- function(observed,
+                           predicted,
                            quantiles,
                            weigh = TRUE) {
 
@@ -210,9 +210,9 @@ quantile_score <- function(true_values,
   alpha <- 1 - central_interval
 
   # compute score - this is the version explained in the SI of Bracher et. al.
-  error <- abs(predictions - true_values)
+  error <- abs(predicted - observed)
   score <- 2 * ifelse(
-    true_values <= predictions, 1 - quantiles, quantiles
+    observed <= predicted, 1 - quantiles, quantiles
   ) * error
 
   # adapt score such that mean of unweighted quantile scores corresponds to

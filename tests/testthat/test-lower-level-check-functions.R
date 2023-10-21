@@ -1,113 +1,113 @@
 test_that("Lower-level input check functions work", {
-  true_values <- rpois(30, lambda = 1:30)
-  predictions <- replicate(20, rpois(n = 30, lambda = 1:30))
-  expect_equal(length(crps_sample(true_values, predictions)), 30)
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
+  expect_equal(length(crps_sample(observed, predicted)), 30)
 
   # should error when wrong prediction type is given
-  predictions2 <- rpois(30, lambda = 1)
-  expect_error(crps_sample(true_values, predictions2),
-    "Assertion on 'prediction' failed: Must be of type 'matrix', not 'integer'",
+  predicted2 <- rpois(30, lambda = 1)
+  expect_error(crps_sample(observed, predicted2),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'integer'",
     fixed = TRUE
   )
 
   # predictions have wrong number of rows
-  predictions3 <- replicate(20, rpois(n = 31, lambda = 1))
-  expect_error(crps_sample(true_values, predictions3),
-    "Mismatch: 'true_values' has length `30`, but 'predictions' has `31` rows.",
+  predicted3 <- replicate(20, rpois(n = 31, lambda = 1))
+  expect_error(crps_sample(observed, predicted3),
+    "Mismatch: 'observed' has length `30`, but 'predicted' has `31` rows.",
     fixed = TRUE
   )
 
   # error with missing argument
-  expect_error(crps_sample(predictions = predictions),
-    'argument "true_value" is missing, with no default',
+  expect_error(crps_sample(predicted = predicted),
+    'argument "observed" is missing, with no default',
     fixed = TRUE
   )
 
   # checks work for binary forecasts
-  true_values <- factor(sample(c(0, 1), size = 10, replace = TRUE))
-  predictions <- runif(n = 10)
-  expect_equal(length(brier_score(true_values, predictions)), 10)
+  observed <- factor(sample(c(0, 1), size = 10, replace = TRUE))
+  predicted <- runif(n = 10)
+  expect_equal(length(brier_score(observed, predicted)), 10)
 
   # predictions are not between 0 and 1
-  predictions2 <- predictions + 2
+  predicted2 <- predicted + 2
   expect_error(
-    brier_score(true_values, predictions2),
-    "Assertion on 'prediction' failed: Element 1 is not <= 1.",
+    brier_score(observed, predicted2),
+    "Assertion on 'predicted' failed: Element 1 is not <= 1.",
     fixed = TRUE
   )
 })
 
 
-test_that("function throws an error when missing true_values or predictions", {
-  true_values <- sample(c(0, 1), size = 10, replace = TRUE)
-  predictions <- replicate(
+test_that("function throws an error when missing observed or predicted", {
+  observed <- sample(c(0, 1), size = 10, replace = TRUE)
+  predicted <- replicate(
     20,
     sample(c(0, 1), size = 10, replace = TRUE)
   )
 
   expect_error(
-    brier_score(predictions = predictions),
-    'argument "true_values" is missing, with no default'
+    brier_score(predicted = predicted),
+    'argument "observed" is missing, with no default'
   )
 
   expect_error(
-    brier_score(true_values = true_values),
-    'argument "predictions" is missing, with no default'
+    brier_score(observed = observed),
+    'argument "predicted" is missing, with no default'
   )
 })
 
 
 
-test_that("function throws an error for wrong format of true_value", {
-  true_values <- factor(rpois(10, lambda = 1:10))
-  predictions <- runif(10, min = 0, max = 1)
+test_that("function throws an error for wrong format of `observed`", {
+  observed <- factor(rpois(10, lambda = 1:10))
+  predicted <- runif(10, min = 0, max = 1)
 
   expect_error(
     brier_score(
-      true_values = true_values,
-      predictions = predictions
+      observed = observed,
+      predicted = predicted
     ),
-    "Assertion on 'true_value' failed: Must have exactly 2 levels."
+    "Assertion on 'observed' failed: Must have exactly 2 levels."
   )
 
-  true_values <- rnorm(10)
+  observed <- rnorm(10)
   expect_error(
     brier_score(
-      true_values = true_values,
-      predictions = predictions
+      observed = observed,
+      predicted = predicted
     ),
-    "Assertion on 'true_value' failed: Must be of type 'factor', not 'double'."
+    "Assertion on 'observed' failed: Must be of type 'factor', not 'double'."
   )
 })
 
 test_that("function throws an error for wrong format of predictions", {
-  true_values <- factor(sample(c(0, 1), size = 10, replace = TRUE))
-  predictions <- runif(10, min = 0, max = 3)
+  observed <- factor(sample(c(0, 1), size = 10, replace = TRUE))
+  predicted <- runif(10, min = 0, max = 3)
   expect_error(
     brier_score(
-      true_values = true_values,
-      predictions = predictions
+      observed = observed,
+      predicted = predicted
     ),
     #"For a binary forecast, all predictions should be probabilities between 0 or 1."
-    "Assertion on 'prediction' failed: Element 1 is not <= 1."
+    "Assertion on 'predicted' failed: Element 1 is not <= 1."
   )
 
-  predictions <- runif(10, min = 0, max = 1)
+  predicted <- runif(10, min = 0, max = 1)
   expect_error(
     brier_score(
-      true_values = true_values,
-      predictions = list(predictions)
+      observed = observed,
+      predicted = list(predicted)
     ),
-    "Assertion on 'prediction' failed: Must be of type 'numeric', not 'list'."
+    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
   )
 
-  predictions <- runif(15, min = 0, max = 1)
+  predicted <- runif(15, min = 0, max = 1)
   expect_error(
     brier_score(
-      true_values = true_values,
-      predictions = predictions
+      observed = observed,
+      predicted = predicted
     ),
-    "Arguments to the following function call: 'brier_score(true_values = true_values, predictions = predictions)' should have the same length (or length one). Actual lengths: 10, 15",
+    "Arguments to the following function call: 'brier_score(observed = observed, predicted = predicted)' should have the same length (or length one). Actual lengths: 10, 15",
     fixed = TRUE
   )
 })

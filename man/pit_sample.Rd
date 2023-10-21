@@ -4,23 +4,23 @@
 \alias{pit_sample}
 \title{Probability Integral Transformation (sample-based version)}
 \usage{
-pit_sample(true_values, predictions, n_replicates = 100)
+pit_sample(observed, predicted, n_replicates = 100)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
 \item{n_replicates}{the number of draws for the randomised PIT for
 integer predictions.}
 }
 \value{
 A vector with PIT-values. For continuous forecasts, the vector will
-correspond to the length of \code{true_values}. For integer forecasts, a
+correspond to the length of \code{observed}. For integer forecasts, a
 randomised PIT will be returned of length
-\code{length(true_values) * n_replicates}
+\code{length(observed) * n_replicates}
 }
 \description{
 Uses a Probability Integral Transformation (PIT) (or a
@@ -79,15 +79,15 @@ PIT is a necessary but not sufficient condition of calibration.
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
 ## continuous predictions
-true_values <- rnorm(20, mean = 1:20)
-predictions <- replicate(100, rnorm(n = 20, mean = 1:20))
-pit <- pit_sample(true_values, predictions)
+observed <- rnorm(20, mean = 1:20)
+predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
+pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 ## integer predictions
-true_values <- rpois(50, lambda = 1:50)
-predictions <- replicate(2000, rpois(n = 50, lambda = 1:50))
-pit <- pit_sample(true_values, predictions, n_replicates = 30)
+observed <- rpois(50, lambda = 1:50)
+predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+pit <- pit_sample(observed, predicted, n_replicates = 30)
 plot_pit(pit)
 }
 \references{

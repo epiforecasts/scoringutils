@@ -4,18 +4,18 @@
 \alias{check_input_binary}
 \title{Check input for binary forecast}
 \usage{
-check_input_binary(true_value, prediction)
+check_input_binary(observed, predicted)
 }
 \arguments{
-\item{true_value}{Input to be checked. Should be a factor of length n with
+\item{observed}{Input to be checked. Should be a factor of length n with
 exactly two levels, holding the observed values.
 The highest factor level is assumed to be the reference level. This means
-that \code{prediction} represents the probability that the observed value is equal
+that \code{predicted} represents the probability that the observed value is equal
 to the highest factor level.}
 
-\item{prediction}{Input to be checked. Prediction should be a vector of
+\item{predicted}{Input to be checked. \code{predicted} should be a vector of
 length n, holding probabilities. Values represent the probability that
-the corresponding value in \code{true_value} will be equal to the highest
+the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
 }
 \value{

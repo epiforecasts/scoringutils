@@ -86,7 +86,7 @@ score_quantile <- function(data,
   if ("bias" %in% metrics) {
     res[, bias := bias_range(
       range = range, lower = lower, upper = upper,
-      true_value = unique(true_value)
+      observed = unique(true_value)
     ),
     by = forecast_unit
     ]
@@ -98,8 +98,8 @@ score_quantile <- function(data,
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
-        `:=`(ae_point = abs_error(predictions = point, true_value),
-             se_point = squared_error(predictions = point, true_value))
+        `:=`(ae_point = abs_error(predicted = point, true_value),
+             se_point = squared_error(predicted = point, true_value))
       ]
     }
   }

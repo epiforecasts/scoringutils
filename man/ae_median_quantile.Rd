@@ -4,18 +4,18 @@
 \alias{ae_median_quantile}
 \title{Absolute Error of the Median (Quantile-based Version)}
 \usage{
-ae_median_quantile(true_values, predictions, quantiles = NULL)
+ae_median_quantile(observed, predicted, quantiles = NULL)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{numeric vector with predictions, corresponding to the
+\item{predicted}{numeric vector with predictions, corresponding to the
 quantiles in a second vector, \code{quantiles}.}
 
 \item{quantiles}{numeric vector that denotes the quantile for the values
-in \code{predictions}. Only those predictions where \code{quantiles == 0.5} will
-be kept. If \code{quantiles} is \code{NULL}, then all \code{predictions} and
-\code{true_values} will be used (this is then the same as \code{\link[=abs_error]{abs_error()}})}
+in \code{predicted}. Only those predictions where \code{quantiles == 0.5} will
+be kept. If \code{quantiles} is \code{NULL}, then all \code{predicted} and
+\code{observed} will be used (this is then the same as \code{\link[=abs_error]{abs_error()}})}
 }
 \value{
 vector with the scoring values
@@ -24,18 +24,18 @@ vector with the scoring values
 Absolute error of the median calculated as
 
 \deqn{
-  \textrm{abs}(\textrm{true\_value} - \textrm{prediction})
+  \textrm{abs}(\textrm{observed} - \textrm{prediction})
 }{
-  abs(true_value - median_prediction)
+  abs(observed - median_prediction)
 }
 
 The function was created for internal use within \code{\link[=score]{score()}}, but can also
 used as a standalone function.
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
-ae_median_quantile(true_values, predicted_values, quantiles = 0.5)
+ae_median_quantile(observed, predicted_values, quantiles = 0.5)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=abs_error]{abs_error()}}
