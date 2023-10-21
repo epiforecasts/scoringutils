@@ -4,12 +4,18 @@
 \alias{mad_sample}
 \title{Determine dispersion of a probabilistic forecast}
 \usage{
-mad_sample(predictions)
+mad_sample(true_values = NULL, predictions, ...)
 }
 \arguments{
+\item{true_values}{place holder, argument will be ignored and exists only for
+consistency with other scoring functions. The output does not depend on
+any observed values.}
+
 \item{predictions}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, predictions can just be a vector of size n.}
+
+\item{...}{additional arguments passed to \link[stats:mad]{mad()}.}
 }
 \value{
 vector with dispersion values
@@ -30,7 +36,7 @@ and the explanations given in Funk et al. (2019)
 }
 \examples{
 predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-mad_sample(predictions)
+mad_sample(predictions = predictions)
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
