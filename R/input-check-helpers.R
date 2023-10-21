@@ -116,45 +116,6 @@ check_input_binary <- function(true_value, prediction) {
   return(invisible(NULL))
 }
 
-
-#' @title Check input for binary forecast
-#'
-#' @description Helper function to check whether the input is suitable for
-#' scoring.
-#' @param true_value Input to be checked. Should be a factor with the true
-#' observed values of size n. Factor levels denote the possible values
-#' `true_values` can assume.
-#' @param prediction Input to be checked. Prediction should be a vector of
-#' probabilities. Values should denote the probability that the corresponding
-#' value in `true_value` will be equal to the corresponding value denoted
-#' in `class`.
-#' @param class Input to be checked. Should be a vector of size n that denote
-#' the outcome for which a prediction was made. Values in `prediction` then
-#' denote the probability that the `true_value` assumes the value in `class`.
-#' one of several outcomes.
-#' @importFrom checkmate assert assert_factor
-#' @return Returns NULL invisibly if the check was successful and throws an
-#' error otherwise.
-#' @keywords internal
-check_input_binary2 <- function(true_value, prediction, class) {
-  # things that need to be checked
-  # - all inputs need to be vectors of the same length
-  # - true_value needs to be a factor
-  # - class needs to be a factor
-  # - they need to have the same levels
-  # - prediction needs to be numeric between 0 and 1
-
-  check_equal_length(true_value, prediction)
-  assert_factor(true_value)
-  levels <- levels(true_value)
-  assert_factor(class, levels = levels)
-  assert(
-    check_numeric_vector(prediction, min.len = 1, lower = 0, upper = 1)
-  )
-  return(invisible(NULL))
-}
-
-
 check_input_point <- function(true_value, prediction) {
   # things that need to be checked
   # - all inputs need to be numeric vectors
@@ -344,13 +305,17 @@ check_not_null <- function(...) {
 #' @param ... The variables to check
 #' @param one_allowed logical, allow arguments of length one that can be
 #' recycled
+#' @param call_levels_up How many levels to go up when including the function
+#' call in the error message. This is useful when calling `check_equal_length()`
+#' within another checking function.
 #'
 #' @return The function returns `NULL`, but throws an error if variable lengths
 #' differ
 #'
 #' @keywords internal
 check_equal_length <- function(...,
-                               one_allowed = TRUE) {
+                               one_allowed = TRUE,
+                               call_levels_up = 2) {
   vars <- list(...)
   lengths <- lengths(vars)
 
@@ -366,11 +331,18 @@ check_equal_length <- function(...,
   }
 
   if (length(unique(lengths)) != 1) {
-    calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
+    calling_function <- deparse(sys.calls()[[sys.nframe() - call_levels_up]])
+
+    lengths_message <- ifelse(
+      one_allowed,
+      "' should have the same length (or length one). Actual lengths: ",
+      "' should have the same length. Actual lengths: "
+      )
+
     stop(
-      "Arguments passed to the following function call: '",
+      "Arguments to the following function call: '",
       calling_function,
-      "' should have the same length (or length one). Arguments have the following lengths: ",
+      lengths_message,
       toString(lengths)
     )
   }
