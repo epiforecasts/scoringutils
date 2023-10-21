@@ -56,9 +56,7 @@
 
 bias_sample <- function(true_values, predictions) {
 
-  # check inputs
-  check_true_values(true_values)
-  check_predictions(predictions, true_values, class = "matrix")
+  check_input_sample(true_values, predictions)
   prediction_type <- get_prediction_type(predictions)
 
   # empirical cdf

@@ -6,7 +6,7 @@ test_that("Lower-level input check functions work", {
   # should error when wrong prediction type is given
   predictions2 <- rpois(30, lambda = 1)
   expect_error(crps_sample(true_values, predictions2),
-    "'predictions' should be a matrix. Instead `integer` was found",
+    "Assertion on 'prediction' failed: Must be of type 'matrix', not 'integer'",
     fixed = TRUE
   )
 
@@ -19,7 +19,7 @@ test_that("Lower-level input check functions work", {
 
   # error with missing argument
   expect_error(crps_sample(predictions = predictions),
-    "true_values argument is missing",
+    'argument "true_value" is missing, with no default',
     fixed = TRUE
   )
 
@@ -53,12 +53,14 @@ test_that("function throws an error when missing true_values or predictions", {
 
   expect_error(
     brier_score(predictions = predictions),
-    "true_values argument is missing"
+    "true_values argument is missing",
+    # 'argument "true_values" is missing, with no default'
   )
 
   expect_error(
     brier_score(true_values = true_values),
-    "argument 'predictions' missing"
+    "argument 'predictions' missing",
+    # 'argument "predictions" is missing, with no default'
   )
 })
 

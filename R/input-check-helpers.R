@@ -1,3 +1,200 @@
+#' @title Check input for sample-based forecast
+#'
+#' @description Helper function to check whether the input is suitable for
+#' scoring.
+#' @param true_value Input to be checked. Should be a vector with the true
+#' observed values of size n
+#' @param predictions Input to be checked. Should be nxN matrix of predictive
+#' samples, n (number of rows) being the number of data points and N (number of
+#' columns) the number of samples per forecast.
+#' If `true_value` is just a single number, then predictions can just be a
+#' vector of size N.
+#' @importFrom checkmate assert assert_numeric check_matrix
+#' @return Returns NULL invisibly if the check was successful and throws an
+#' error otherwise.
+#' @keywords internal
+
+check_input_sample <- function(true_value, prediction) {
+  # things that need to be checked
+  # - true_value and prediction need to be numeric
+  # - true_value needs to be a scalar or a vector of size n x 1
+  # - prediction needs to be a vector or a matrix of size n x N
+
+  assert_numeric(true_value, min.len = 1)
+  n_obs <- length(true_value)
+
+  if (n_obs == 1) {
+    assert(
+      # allow one of two options
+      check_numeric_vector(prediction, min.len = 1),
+      check_matrix(prediction, mode = "numeric")
+      )
+  } else {
+    assert(check_matrix(prediction, mode = "numeric"))
+  }
+
+  if (n_obs != nrow(prediction)) {
+    # create custom, more informative error message
+    msg <- sprintf(
+      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
+      n_obs, nrow(prediction)
+    )
+    stop(msg)
+  }
+  return(invisible(NULL))
+}
+
+#' @title Check input for sample-based forecast
+#'
+#' @description Helper function to check whether the input is suitable for
+#' scoring.
+#' @param true_value Input to be checked. Should be a vector with the true
+#' observed values of size n
+#' @param prediction Input to be checked. Should be nxN matrix of predictive
+#' quantiles, n (number of rows) being the number of data points and N
+#' (number of columns) the number of quantiles per forecast.
+#' If `true_value` is just a single number, then predictions can just be a
+#' vector of size N.
+#' @param quantile Input to be checked. Should be a vector of size N that
+#' denotes the quantile levels corresponding to the columns of the prediction
+#' matrix.
+#' @importFrom checkmate assert assert_numeric check_matrix
+#' @return Returns NULL invisibly if the check was successful and throws an
+#' error otherwise.
+#' @keywords internal
+
+check_input_quantile <- function(true_value, prediction, quantile) {
+  # things that need to be checked
+  # - all inputs need to be numeric
+  # - quantile needs to be a numeric vector of size N between 0 and 1
+  # - true_value needs to be a scalar or a vector of size n x 1
+  # - prediction needs to be a vector or a matrix of size n x N
+
+  assert_numeric(true_value, min.len = 1)
+  n_obs <- length(true_value)
+
+  assert_numeric(quantile, min.len = 1, lower = 0, upper = 1)
+  n_quantiles <- length(quantile)
+  assert(
+    check_numeric_vector(prediction, min.len = 1),
+    check_matrix(prediction, mode = "numeric",
+                 nrows = n_obs, ncols = n_quantiles)
+  )
+  return(invisible(NULL))
+}
+
+#' @title Check input for binary forecast
+#'
+#' @description Helper function to check whether the input is suitable for
+#' scoring.
+#' @param true_value Input to be checked. Should be a factor of length n with
+#' exactly two levels, holding the observed values.
+#' The highest factor level is assumed to be the reference level. This means
+#' that `prediction` represents the probability that the observed value is equal
+#' to the highest factor level.
+#' @param prediction Input to be checked. Prediction should be a vector of
+#' length n, holding probabilities. Values represent the probability that
+#' the corresponding value in `true_value` will be equal to the highest
+#' available factor level.
+#' @importFrom checkmate assert assert_factor
+#' @return Returns NULL invisibly if the check was successful and throws an
+#' error otherwise.
+#' @keywords internal
+check_input_binary <- function(true_value, prediction) {
+  # things that need to be checked
+  # - all inputs need to be vectors of the same length
+  # - true_value needs to be a factor
+  # - they need to have the same levels
+  # - prediction needs to be numeric between 0 and 1
+
+  check_equal_length(true_value, prediction)
+  assert_factor(true_value, n.levels = 2)
+  levels <- levels(true_value)
+  assert(
+    check_numeric_vector(prediction, min.len = 1, lower = 0, upper = 1)
+  )
+  return(invisible(NULL))
+}
+
+
+#' @title Check input for binary forecast
+#'
+#' @description Helper function to check whether the input is suitable for
+#' scoring.
+#' @param true_value Input to be checked. Should be a factor with the true
+#' observed values of size n. Factor levels denote the possible values
+#' `true_values` can assume.
+#' @param prediction Input to be checked. Prediction should be a vector of
+#' probabilities. Values should denote the probability that the corresponding
+#' value in `true_value` will be equal to the corresponding value denoted
+#' in `class`.
+#' @param class Input to be checked. Should be a vector of size n that denote
+#' the outcome for which a prediction was made. Values in `prediction` then
+#' denote the probability that the `true_value` assumes the value in `class`.
+#' one of several outcomes.
+#' @importFrom checkmate assert assert_factor
+#' @return Returns NULL invisibly if the check was successful and throws an
+#' error otherwise.
+#' @keywords internal
+check_input_binary2 <- function(true_value, prediction, class) {
+  # things that need to be checked
+  # - all inputs need to be vectors of the same length
+  # - true_value needs to be a factor
+  # - class needs to be a factor
+  # - they need to have the same levels
+  # - prediction needs to be numeric between 0 and 1
+
+  check_equal_length(true_value, prediction)
+  assert_factor(true_value)
+  levels <- levels(true_value)
+  assert_factor(class, levels = levels)
+  assert(
+    check_numeric_vector(prediction, min.len = 1, lower = 0, upper = 1)
+  )
+  return(invisible(NULL))
+}
+
+
+check_input_point <- function(true_value, prediction) {
+  # things that need to be checked
+  # - all inputs need to be numeric vectors
+  # - they need to have the same length
+
+  assert(check_numeric_vector(true_value, min.len = 1))
+  assert(check_numeric_vector(prediction, min.len = 1))
+  if (length(true_value) != length(prediction)) {
+    stop("true_value and prediction need to be",
+         "of same length when scoring point forecasts")
+  }
+  return(invisible(NULL))
+}
+
+
+#' @title Check whether an input is an atomic vector of mode 'numeric'
+#'
+#' @description Helper function
+#' @param x input to check
+#' @param x additional arguments to pass to `check_numeric()`
+#' @importFrom checkmate check_atomic_vector check_numeric
+#' @return Either TRUE if the test is successful or a string with an error
+#' message
+#' @keywords internal
+check_numeric_vector = function(x, ...) {
+  # check functions must return TRUE on success
+  # and a custom error message otherwise
+  numeric <- check_numeric(x, ...)
+  vector <- check_atomic_vector(x)
+  if (!isTRUE(numeric)) {
+    return(numeric)
+  } else if (!isTRUE(vector)) {
+    return(vector)
+  }
+  return(TRUE)
+}
+
+
+
+
 #' @title Check Prediction Input For Lower-level Scoring Functions
 #'
 #' @description

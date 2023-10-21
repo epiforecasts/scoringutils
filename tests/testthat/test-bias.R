@@ -4,7 +4,7 @@ test_that("bias_sample() throws an error when missing true_values", {
 
   expect_error(
     bias_sample(predictions = predictions),
-    "true_values argument is missing"
+    'argument "true_value" is missing, with no default'
   )
 })
 
@@ -14,7 +14,7 @@ test_that("bias_sample() throws an error when missing 'predictions'", {
 
   expect_error(
     bias_sample(true_values = true_values),
-    "argument 'predictions' missing"
+    'argument "predictions" is missing, with no default'
   )
 })
 
@@ -68,9 +68,9 @@ test_that("bias_sample() works as expected", {
 })
 
 test_that("bias_quantile() handles NA values", {
-  predictions <- c(NA, 1, 2, 3) 
+  predictions <- c(NA, 1, 2, 3)
   quantiles <- c(0.1, 0.5, 0.9)
-  
+
   expect_error(
     bias_quantile(predictions, quantiles, true_value = 2),
     "predictions and quantiles must have the same length"
@@ -90,24 +90,24 @@ test_that("bias_quantile() returns correct bias if value below the median", {
 })
 
 test_that("bias_quantile() returns correct bias if value above median", {
-  predictions <- c(1, 2, 4, 5) 
+  predictions <- c(1, 2, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
   suppressMessages(
-    expect_equal(bias_quantile(predictions, quantiles, true_value = 5), -0.8) 
+    expect_equal(bias_quantile(predictions, quantiles, true_value = 5), -0.8)
   )
 })
 
 test_that("bias_quantile() returns correct bias if value at the median", {
   predictions <- c(1, 2, 3, 4)
-  quantiles <- c(0.1, 0.3, 0.5, 0.7) 
-  
+  quantiles <- c(0.1, 0.3, 0.5, 0.7)
+
   expect_equal(bias_quantile(predictions, quantiles, true_value = 3), 0)
 })
 
 test_that("bias_quantile() returns 1 if true value below min prediction", {
   predictions <- c(2, 3, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
-  
+
   suppressMessages(
     expect_equal(bias_quantile(predictions, quantiles, true_value = 1), 1)
   )
@@ -117,30 +117,30 @@ test_that("bias_quantile() returns -1 if true value above max prediction", {
   predictions <- c(1, 2, 3, 4)
   quantiles <- c(0.1, 0.3, 0.5, 0.7)
 
-  expect_equal(bias_quantile(predictions, quantiles, true_value = 6), -1)  
+  expect_equal(bias_quantile(predictions, quantiles, true_value = 6), -1)
 })
 
 test_that("bias_quantile(): quantiles must be between 0 and 1", {
   predictions <- 1:4
-  
+
   # Failing example
   quantiles <- c(-0.1, 0.3, 0.5, 0.8)
   expect_error(bias_quantile(predictions, quantiles, true_value = 3),
                "quantiles must be between 0 and 1")
-               
-  # Passing counter example               
+
+  # Passing counter example
   quantiles <- c(0.1, 0.3, 0.5, 0.8)
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
 })
 
 test_that("bias_quantile(): quantiles must be increasing", {
   predictions <- 1:4
-  
+
   # Failing example
   quantiles <- c(0.8, 0.3, 0.5, 0.9)
   expect_error(bias_quantile(predictions, quantiles, true_value = 3),
                "quantiles must be increasing")
-               
+
   # Passing counter example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
@@ -149,7 +149,7 @@ test_that("bias_quantile(): quantiles must be increasing", {
 test_that("bias_quantile(): predictions must be increasing", {
   predictions <- c(1, 2, 4, 3)
   quantiles <- c(0.1, 0.3, 0.5, 0.9)
-  
+
   expect_error(
     bias_quantile(predictions, quantiles, true_value = 3),
     "predictions must be increasing"
@@ -159,12 +159,12 @@ test_that("bias_quantile(): predictions must be increasing", {
 
 test_that("bias_quantile(): quantiles must be unique", {
   predictions <- 1:4
-  
+
   # Failing example
-  quantiles <- c(0.3, 0.3, 0.5, 0.8) 
+  quantiles <- c(0.3, 0.3, 0.5, 0.8)
   expect_error(bias_quantile(predictions, quantiles, true_value = 3),
                "quantiles must be increasing")
-               
+
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(predictions, quantiles, true_value = 3))
@@ -175,7 +175,7 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
 
   # Generate true value
   true_value <- 3
-  
+
   # Generate many sample predictions
   predictions <- sample(rnorm(1000, mean = true_value, sd = 2), 1000)
 
@@ -226,17 +226,17 @@ test_that("bias_range() works with point forecasts", {
 })
 
 test_that("bias_range(): ranges must be between 0 and 100", {
-  lower <- 4:1 
+  lower <- 4:1
   upper <- 5:8
-  
+
   # Failing example
   range <- c(-10, 0, 10, 20)
   expect_error(
     bias_range(lower, upper, range, true_value = 3),
     "range must be between 0 and 100"
   )
-               
-  # Passing counter example               
+
+  # Passing counter example
   range <- c(0, 10, 20, 30)
   expect_silent(bias_range(lower, upper, range, true_value = 3))
 })

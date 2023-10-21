@@ -24,11 +24,7 @@
 #' @keywords metric
 
 logs_sample <- function(true_values, predictions) {
-  check_true_values(true_values)
-  check_predictions(predictions, true_values,
-    class = "matrix"
-  )
-
+  check_input_sample(true_values, predictions)
   scoringRules::logs_sample(
     y = true_values,
     dat = predictions
@@ -55,10 +51,7 @@ logs_sample <- function(true_values, predictions) {
 #' @keywords metric
 
 dss_sample <- function(true_values, predictions) {
-  check_true_values(true_values)
-  check_predictions(predictions, true_values,
-    class = "matrix"
-  )
+  check_input_sample(true_values, predictions)
 
   scoringRules::dss_sample(
     y = true_values,
@@ -87,12 +80,7 @@ dss_sample <- function(true_values, predictions) {
 #' @keywords metric
 
 crps_sample <- function(true_values, predictions) {
-
-  # check inputs
-  check_true_values(true_values)
-  check_predictions(predictions, true_values,
-    class = "matrix"
-  )
+  check_input_sample(true_values, predictions)
 
   scoringRules::crps_sample(
     y = true_values,
