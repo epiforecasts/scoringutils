@@ -266,21 +266,21 @@ crps <- list(
   `Metric` = "CRPS (Continuous) ranked probability score",
   `Explanation` = r"(The crps is a proper scoring rule that generalises the absolute error to probabilistic forecasts. It measures the 'distance' of the predictive distribution to the observed data-generating distribution. The CRPS is given as
   $$\text{CRPS}(F, y) = \int_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,$$
-  where y is the true observed value and F the CDF of predictive distribution. Often An alternative representation is used:
-  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the true value. In this represenation we can simply replace $X$ and $X'$ by samples sum over all possible combinations to obtain the CRPS.
+  where y is the observed value and F the CDF of predictive distribution. Often An alternative representation is used:
+  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the observed value. In this represenation we can simply replace $X$ and $X'$ by samples sum over all possible combinations to obtain the CRPS.
   For integer-valued forecasts, the RPS is given as
   $$ \text{RPS}(F, y) = \sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. $$
 
   **Usage and caveats**:
-  Smaller values are better. The crps is a good choice for most practical purposes that involve decision making, as it takes the entire predictive distribution into account. If two forecasters assign the same probability to the true event $y$, then the forecaster who assigned high probability to events far away from $y$ will still get a worse score. The crps (in contrast to the log score) can at times be quite lenient towards extreme mispredictions. Also, due to it's similarity to the absolute error, the level of scores depend a lot on the absolute value of what is predicted, which makes it hard to compare scores of forecasts for quantities that are orders of magnitude apart.)"
+  Smaller values are better. The crps is a good choice for most practical purposes that involve decision making, as it takes the entire predictive distribution into account. If two forecasters assign the same probability to the observed event $y$, then the forecaster who assigned high probability to events far away from $y$ will still get a worse score. The crps (in contrast to the log score) can at times be quite lenient towards extreme mispredictions. Also, due to it's similarity to the absolute error, the level of scores depend a lot on the absolute value of what is predicted, which makes it hard to compare scores of forecasts for quantities that are orders of magnitude apart.)"
 )
 
 
 log_score <- list(
   `Metric` = "Log score",
-  `Explanation` = r"(The Log score is a proper scoring rule that is simply compuated as the log of the predictive density evaluated at the true observed value. It is given as
+  `Explanation` = r"(The Log score is a proper scoring rule that is simply compuated as the log of the predictive density evaluated at the observed value. It is given as
   $$ \text{log score} = \log f(y), $$
-  where $f$ is the predictive density function and y is the true value. For integer-valued forecasts, the log score can be computed as
+  where $f$ is the predictive density function and y is the observed value. For integer-valued forecasts, the log score can be computed as
   $$ \text{log score} = \log p_y, $$
   where $p_y$ is the probability assigned to outcome p by the forecast F.
 
@@ -292,7 +292,7 @@ wis <- list(
   Metric = "WIS (Weighted) interval score",
   `Explanation` = r"(The (weighted) interval score is a proper scoring rule for quantile forecasts that converges to the crps for an increasing number of intervals. The score can be decomposed into a sharpness (uncertainty) component and penalties for over- and underprediction. For a single interval, the score is computed as
   $$IS_\alpha(F,y) = (u-l) + \frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l) + \frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u), $$
-  where $\mathbf{1}()$ is the indicator function, $y$ is the true value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
+  where $\mathbf{1}()$ is the indicator function, $y$ is the observed value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
   $$WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)\right),$$
   where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$.
 
@@ -308,7 +308,7 @@ dss <- list(
   `Explanation` = r"(The Dawid-Sebastiani-Score is a proper scoring rule proposed that only relies on the first moments of the predictive distribution and is therefore easy to compute. It is given as
 
   $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,$$
-  where $F$ is the predictive distribution with mean $\mu$ and standard deviation $\sigma$ and $y$ is the true observed value.
+  where $F$ is the predictive distribution with mean $\mu$ and standard deviation $\sigma$ and $y$ is the observed value.
 
   **Usage and caveats**:
   The dss is applicable to continuous and integer forecasts and easy to compute. Apart from the ease of computation we see little advantage in using it over other scores.)"
@@ -327,7 +327,7 @@ brier_score <- list(
 interval_coverage <- list(
   `Metric` = "Interval coverage",
   `Explanation` = r"(Interval coverage measures the proportion of observed values that fall in a given prediction interval range. Interval coverage for a single prediction interval range can be calculated as $$IC_{\alpha} = \text{nominal coverage} - \text{empirical coverage},$$
-  where nominal coverage is $1 - \alpha$ and empirical coverage is the proportion of true values actually covered by all $1 - \alpha$ prediction intervals.
+  where nominal coverage is $1 - \alpha$ and empirical coverage is the proportion of observed values actually covered by all $1 - \alpha$ prediction intervals.
 
   To summarise interval coverage over different over multiple interval ranges, we can compute coverage deviation defined as the mean interval coverage over all $K$ interval ranges $\alpha_k$ with $k = 1, \dots, K$:
   $$\text{Coverage deviation} = \frac{1}{K} \sum_{k = 1}^{K} \text{IC}_{\alpha_k}$$
@@ -338,7 +338,7 @@ interval_coverage <- list(
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage",
-  `Explanation` = r"(Quantile coverage for a given quantile level is the proportion of true values smaller than the predictions corresponding to that quantile level.
+  `Explanation` = r"(Quantile coverage for a given quantile level is the proportion of observed values smaller than the predictions corresponding to that quantile level.
 
   **Usage**:
   Quantile coverage is similar to interval coverage, but conveys more information. For example, it allows us to look at the 5\% and 95\% quantile separately, instead of jointly at the 90\% prediction interval). This helps to diagnose whether it is the upper or lower end of a prediction interval that is causing problems. Plots of quantile coverage are conceptually very similar to PIT histograms.)"
@@ -365,7 +365,7 @@ bias <- list(
   $$B(P, y) = 1 - (P(y) + P(y + 1)), $$
   where $P(y)$ is the cumulative probability assigned to all outcomes smaller or equal to $y$, i.e. the cumulative probability mass function corresponding to $p(y)$.
 
-  For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the true value is smaller than the median of the predictive distribution. If the true value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the true value. If the true value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed true value, and this metric coincides with the one for continuous forecasts.
+  For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the observed value is smaller than the median of the predictive distribution. If the observed value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the observed value. If the observed value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and this metric coincides with the one for continuous forecasts.
 
   **Usage**:
   In contrast to the over- and underprediction penalties of the interval score it is bound between -1 and 1 and represents the tendency of forecasts to be biased rather than the absolute amount of over- and underprediction. It is therefore a more robust measurement, but harder to interpet. It largely depends on the application whether one is more interested in the tendency to be biased or in the absolute value of over- and underpredictions.)"
@@ -375,7 +375,7 @@ pit <- list(
   `Metric` = "Probability integral transform (PIT)",
   `Explanation` = r"(The probability integral transform (PIT, Dawid 1984) represents a succinct way to visualise deviations between the predictive distribution $F$ and the true data-generating distribution $G$. The idea is to transform the observed values such that agreement between forecasts and data can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by
   $$u = F (y),$$
-  where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the true observed value $y$. If $F = G$, then $u$ follows a uniform distribution.
+  where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the observed value $y$. If $F = G$, then $u$ follows a uniform distribution.
 
   For integer outcomes, the PIT is no longer uniform even when forecasts are ideal. Instead, a randomised PIT can be used:
   $$u = P(y) + v \cdot (P(y) - P(y - 1) ),$$

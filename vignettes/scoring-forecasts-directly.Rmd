@@ -35,7 +35,7 @@ For continuous forecasts, Bias is measured as
 $$B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t))$$
 
 where $P_t$ is the empirical cumulative distribution function of the
-prediction for the true value $x_t$. Computationally, $P_t (x_t)$ is
+prediction for the observed value $x_t$. Computationally, $P_t (x_t)$ is
 just calculated as the fraction of predictive samples for $x_t$
 that are smaller than $x_t$.
 
@@ -64,7 +64,7 @@ Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
 of the forecasts themselves.
 
-Sharpness / dispersion of predictive samples corresponding to one single true value is
+Sharpness / dispersion of predictive samples corresponding to one single observed value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see `?stats::mad`
 
@@ -162,10 +162,10 @@ logs_sample(observed, predicted)
 # Brier Score
 The Brier score is a proper score rule that assesses the accuracy of
 probabilistic binary predictions. The outcomes can be either 0 or 1,
-the predictions must be a probability that the true outcome will be 1.
+the predictions must be a probability that the observed outcome will be 1.
 
 The Brier Score is then computed as the mean squared error between the
-probabilistic prediction and the true outcome.
+probabilistic prediction and the observed outcome.
 
 $$\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2$$
 
@@ -184,9 +184,9 @@ following Gneiting and Raftery (2007). Smaller values are better.
 The score is computed as
 
 $$ \text{score} = (\text{upper} - \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot 1(\text{observed} < \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{true_value} - \text{upper}) \cdot
-1(\text{true_value} > \text{upper})$$
+\frac{2}{\alpha} \cdot (\text{lower} - \text{observed}) \cdot 1(\text{observed} < \text{lower}) + \\
+\frac{2}{\alpha} \cdot (\text{observed} - \text{upper}) \cdot
+1(\text{observed} > \text{upper})$$
 
 
 where $1()$ is the indicator function and $\alpha$ is the decimal value that
