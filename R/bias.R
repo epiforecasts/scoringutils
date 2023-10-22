@@ -113,9 +113,9 @@ bias_sample <- function(observed, predicted) {
 #' -1 and 1 and is 0 ideally (i.e. unbiased).
 #' @param predicted vector of length corresponding to the number of quantiles
 #' that holds predictions
-#' @param quantiles vector of corresponding size with the quantiles for which
-#' predictions were made. If this does not contain the median (0.5) then the
-#' median is imputed as being the mean of the two innermost quantiles.
+#' @param quantile vector of corresponding size with the quantile levels for
+#' which predictions were made. If this does not contain the median (0.5) then
+#' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_range
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -128,43 +128,43 @@ bias_sample <- function(observed, predicted) {
 #'   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
 #' )
 #'
-#' quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+#' quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 #'
 #' observed <- 8062
 #'
-#' bias_quantile(predicted, quantiles, observed = observed)
+#' bias_quantile(observed, predicted, quantile)
 #' @export
 #' @keywords metric
 
-bias_quantile <- function(predicted, quantiles, observed) {
-  # check that predictions and quantiles have the same length
-  if (!length(predicted) == length(quantiles)) {
-    stop("predictions and quantiles must have the same length")
+bias_quantile <- function(observed, predicted, quantile) {
+  # check that predictions and quantile have the same length
+  if (!length(predicted) == length(quantile)) {
+    stop("`predicted` and `quantile` must have the same length")
   }
 
   if (anyNA(predicted)) {
-    quantiles <- quantiles[!is.na(predicted)]
+    quantile <- quantile[!is.na(predicted)]
     predicted <- predicted[!is.na(predicted)]
   }
 
-  if (anyNA(quantiles)) {
-    quantiles <- quantiles[!is.na(quantiles)]
-    predicted <- predicted[!is.na(quantiles)]
+  if (anyNA(quantile)) {
+    quantile <- quantile[!is.na(quantile)]
+    predicted <- predicted[!is.na(quantile)]
   }
 
   # if there is no input, return NA
-  if (length(quantiles) == 0 || length(predicted) == 0) {
+  if (length(quantile) == 0 || length(predicted) == 0) {
     return(NA_real_)
   }
 
-  check_quantiles(quantiles)
+  check_quantiles(quantile)
 
   if (!all(diff(predicted) >= 0)) {
     stop("predictions must be increasing with quantiles")
   }
 
-  if (0.5 %in% quantiles) {
-    median_prediction <- predicted[quantiles == 0.5]
+  if (0.5 %in% quantile) {
+    median_prediction <- predicted[quantile == 0.5]
   } else {
     # if median is not available, compute as mean of two innermost quantiles
     message(
@@ -172,8 +172,8 @@ bias_quantile <- function(predicted, quantiles, observed) {
       " in order to compute bias."
     )
     median_prediction <-
-      0.5 * predicted[quantiles == max(quantiles[quantiles < 0.5])] +
-      0.5 * predicted[quantiles == min(quantiles[quantiles > 0.5])]
+      0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
+      0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
   }
 
   if (observed == median_prediction) {
@@ -183,14 +183,14 @@ bias_quantile <- function(predicted, quantiles, observed) {
     if (observed < min(predicted)) {
       bias <- 1
     } else {
-      q <- max(quantiles[predicted <= observed])
+      q <- max(quantile[predicted <= observed])
       bias <- 1 - 2 * q
     }
   } else if (observed > median_prediction) {
     if (observed > max(predicted)) {
       bias <- -1
     } else {
-      q <- min(quantiles[predicted >= observed])
+      q <- min(quantile[predicted >= observed])
       bias <- 1 - 2 * q
     }
   }
@@ -300,7 +300,7 @@ bias_range <- function(lower, upper, range, observed) {
   check_quantiles(range, name = "range", range = c(0, 100))
 
   # Convert range to quantiles
-  quantiles <- c(
+  quantile <- c(
     rev(abs(100 - range) / (2 * 100)),
     abs(100 + range[range != 0]) / (2 * 100)
   )
@@ -310,7 +310,7 @@ bias_range <- function(lower, upper, range, observed) {
   predicted <- c(rev(lower), upper_without_median)
 
   # Call bias_quantile
-  bias <- bias_quantile(predicted, quantiles, observed)
+  bias <- bias_quantile(observed, predicted, quantile)
 
   return(bias)
 }

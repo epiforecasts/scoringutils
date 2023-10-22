@@ -4,17 +4,17 @@
 \alias{bias_quantile}
 \title{Determines Bias of Quantile Forecasts}
 \usage{
-bias_quantile(predicted, quantiles, observed)
+bias_quantile(observed, predicted, quantile)
 }
 \arguments{
+\item{observed}{a single observed value}
+
 \item{predicted}{vector of length corresponding to the number of quantiles
 that holds predictions}
 
-\item{quantiles}{vector of corresponding size with the quantiles for which
-predictions were made. If this does not contain the median (0.5) then the
-median is imputed as being the mean of the two innermost quantiles.}
-
-\item{observed}{a single observed value}
+\item{quantile}{vector of corresponding size with the quantile levels for
+which predictions were made. If this does not contain the median (0.5) then
+the median is imputed as being the mean of the two innermost quantiles.}
 }
 \value{
 scalar with the quantile bias for a single quantile prediction
@@ -63,11 +63,11 @@ predicted <- c(
   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
 )
 
-quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 
 observed <- 8062
 
-bias_quantile(predicted, quantiles, observed = observed)
+bias_quantile(observed, predicted, quantile)
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

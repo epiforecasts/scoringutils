@@ -72,20 +72,20 @@ test_that("bias_quantile() handles NA values", {
   quantiles <- c(0.1, 0.5, 0.9)
 
   expect_error(
-    bias_quantile(predicted, quantiles, observed = 2),
-    "predictions and quantiles must have the same length"
+    bias_quantile(observed = 2, predicted, quantiles),
+    "`predicted` and `quantile` must have the same length"
   )
 })
 
 test_that("bias_quantile() returns NA if no predictions", {
-  expect_true(is.na(bias_quantile(numeric(0), numeric(0), observed = 2)))
+  expect_true(is.na(bias_quantile(observed = 2, numeric(0), numeric(0))))
 })
 
 test_that("bias_quantile() returns correct bias if value below the median", {
   predicted <- c(1, 2, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
   suppressMessages(
-    expect_equal(bias_quantile(predicted, quantiles, observed = 1), 0.8)
+    expect_equal(bias_quantile(observed = 1, predicted, quantiles), 0.8)
   )
 })
 
@@ -93,7 +93,7 @@ test_that("bias_quantile() returns correct bias if value above median", {
   predicted <- c(1, 2, 4, 5)
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
   suppressMessages(
-    expect_equal(bias_quantile(predicted, quantiles, observed = 5), -0.8)
+    expect_equal(bias_quantile(observed = 5, predicted, quantiles), -0.8)
   )
 })
 
@@ -101,7 +101,7 @@ test_that("bias_quantile() returns correct bias if value at the median", {
   predicted <- c(1, 2, 3, 4)
   quantiles <- c(0.1, 0.3, 0.5, 0.7)
 
-  expect_equal(bias_quantile(predicted, quantiles, observed = 3), 0)
+  expect_equal(bias_quantile(observed = 3, predicted, quantiles), 0)
 })
 
 test_that("bias_quantile() returns 1 if true value below min prediction", {
@@ -109,7 +109,7 @@ test_that("bias_quantile() returns 1 if true value below min prediction", {
   quantiles <- c(0.1, 0.3, 0.7, 0.9)
 
   suppressMessages(
-    expect_equal(bias_quantile(predicted, quantiles, observed = 1), 1)
+    expect_equal(bias_quantile(observed = 1, predicted, quantiles), 1)
   )
 })
 
@@ -117,7 +117,7 @@ test_that("bias_quantile() returns -1 if true value above max prediction", {
   predicted <- c(1, 2, 3, 4)
   quantiles <- c(0.1, 0.3, 0.5, 0.7)
 
-  expect_equal(bias_quantile(predicted, quantiles, observed = 6), -1)
+  expect_equal(bias_quantile(observed = 6, predicted, quantiles), -1)
 })
 
 test_that("bias_quantile(): quantiles must be between 0 and 1", {
@@ -125,12 +125,12 @@ test_that("bias_quantile(): quantiles must be between 0 and 1", {
 
   # Failing example
   quantiles <- c(-0.1, 0.3, 0.5, 0.8)
-  expect_error(bias_quantile(predicted, quantiles, observed = 3),
+  expect_error(bias_quantile(observed = 3, predicted, quantiles),
                "quantiles must be between 0 and 1")
 
   # Passing counter example
   quantiles <- c(0.1, 0.3, 0.5, 0.8)
-  expect_silent(bias_quantile(predicted, quantiles, observed = 3))
+  expect_silent(bias_quantile(observed = 3, predicted, quantiles))
 })
 
 test_that("bias_quantile(): quantiles must be increasing", {
@@ -138,12 +138,12 @@ test_that("bias_quantile(): quantiles must be increasing", {
 
   # Failing example
   quantiles <- c(0.8, 0.3, 0.5, 0.9)
-  expect_error(bias_quantile(predicted, quantiles, observed = 3),
+  expect_error(bias_quantile(observed = 3, predicted, quantiles),
                "quantiles must be increasing")
 
   # Passing counter example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
-  expect_silent(bias_quantile(predicted, quantiles, observed = 3))
+  expect_silent(bias_quantile(observed = 3, predicted, quantiles))
 })
 
 test_that("bias_quantile(): predictions must be increasing", {
@@ -151,10 +151,10 @@ test_that("bias_quantile(): predictions must be increasing", {
   quantiles <- c(0.1, 0.3, 0.5, 0.9)
 
   expect_error(
-    bias_quantile(predicted, quantiles, observed = 3),
+    bias_quantile(observed = 3, predicted, quantiles),
     "predictions must be increasing"
   )
-  expect_silent(bias_quantile(1:4, quantiles, observed = 3))
+  expect_silent(bias_quantile( observed = 3, 1:4, quantiles))
 })
 
 test_that("bias_quantile(): quantiles must be unique", {
@@ -162,12 +162,12 @@ test_that("bias_quantile(): quantiles must be unique", {
 
   # Failing example
   quantiles <- c(0.3, 0.3, 0.5, 0.8)
-  expect_error(bias_quantile(predicted, quantiles, observed = 3),
+  expect_error(bias_quantile(observed = 3, predicted, quantiles),
                "quantiles must be increasing")
 
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
-  expect_silent(bias_quantile(predicted, quantiles, observed = 3))
+  expect_silent(bias_quantile(observed = 3, predicted, quantiles))
 })
 
 test_that("bias_sample() approx equals bias_quantile() for many samples", {
@@ -190,7 +190,7 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
 
   # Get quantile based bias
   bias_quantile_result <-   suppressMessages(
-    bias_quantile(quantile_preds, quantiles, observed)
+    bias_quantile(observed, quantile_preds, quantiles)
   )
 
   # Difference should be small
@@ -211,8 +211,9 @@ test_that("bias_quantile() and bias_range() give the same result", {
     range = range, observed = observed
   )
   range_quantile <- bias_quantile(
-    predicted = predicted, quantiles = quantiles,
-    observed = observed
+    observed = observed,
+    predicted = predicted,
+    quantile = quantiles
   )
   expect_equal(range_bias, range_quantile)
 })
