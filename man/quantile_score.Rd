@@ -4,7 +4,7 @@
 \alias{quantile_score}
 \title{Quantile Score}
 \usage{
-quantile_score(observed, predicted, quantiles, weigh = TRUE)
+quantile_score(observed, predicted, quantile, weigh = TRUE)
 }
 \arguments{
 \item{observed}{A vector with the observed values of size n}
@@ -13,7 +13,7 @@ quantile_score(observed, predicted, quantiles, weigh = TRUE)
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{quantiles}{vector of size n with the quantile levels of the
+\item{quantile}{vector of size n with the quantile levels of the
 corresponding predictions.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
@@ -42,11 +42,11 @@ upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 
 qs_lower <- quantile_score(observed,
   predicted = lower,
-  quantiles = alpha / 2
+  quantile = alpha / 2
 )
 qs_upper <- quantile_score(observed,
   predicted = upper,
-  quantiles = 1 - alpha / 2
+  quantile = 1 - alpha / 2
 )
 interval_score <- (qs_lower + qs_upper) / 2
 }

@@ -162,7 +162,7 @@ interval_score <- function(observed,
 #' the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'
-#' @param quantiles vector of size n with the quantile levels of the
+#' @param quantile vector of size n with the quantile levels of the
 #' corresponding predictions.
 #' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
 #' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
@@ -182,11 +182,11 @@ interval_score <- function(observed,
 #'
 #' qs_lower <- quantile_score(observed,
 #'   predicted = lower,
-#'   quantiles = alpha / 2
+#'   quantile = alpha / 2
 #' )
 #' qs_upper <- quantile_score(observed,
 #'   predicted = upper,
-#'   quantiles = 1 - alpha / 2
+#'   quantile = 1 - alpha / 2
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
 #' @export
@@ -202,17 +202,17 @@ interval_score <- function(observed,
 
 quantile_score <- function(observed,
                            predicted,
-                           quantiles,
+                           quantile,
                            weigh = TRUE) {
 
   # get central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantiles) * 2
+  central_interval <- abs(0.5 - quantile) * 2
   alpha <- 1 - central_interval
 
   # compute score - this is the version explained in the SI of Bracher et. al.
   error <- abs(predicted - observed)
   score <- 2 * ifelse(
-    observed <= predicted, 1 - quantiles, quantiles
+    observed <= predicted, 1 - quantile, quantile
   ) * error
 
   # adapt score such that mean of unweighted quantile scores corresponds to

@@ -85,14 +85,14 @@ test_that("wis works, 1 interval and median", {
   eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
-  quantiles <- rbind(c(0, 1, 2), c(1, 2, 2), c(0, 3, 3))
+  quantile <- rbind(c(0, 1, 2), c(1, 2, 2), c(0, 3, 3))
   quantile_probs <- c(0.25, 0.5, 0.75)
 
   alpha <- 0.5
 
   expected <- 0.5 * (
-    abs(y - quantiles[, 2]) +
-      (quantiles[, 3] - quantiles[, 1]) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
+    abs(y - quantile[, 2]) +
+      (quantile[, 3] - quantile[, 1]) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
   expect_identical(eval$interval_score, expected)
@@ -117,16 +117,16 @@ test_that("wis works, 2 intervals and median", {
   eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
-  quantiles <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
+  quantile <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
   quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
   alpha1 <- 0.2
   alpha2 <- 0.5
 
   expected <- (1 / 3) * (
-    abs(y - quantiles[, 3]) +
-      (quantiles[, 5] - quantiles[, 1]) * (alpha1 / 2) + c(0, (-2) - (-15), 22 - 4) +
-      (quantiles[, 4] - quantiles[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
+    abs(y - quantile[, 3]) +
+      (quantile[, 5] - quantile[, 1]) * (alpha1 / 2) + c(0, (-2) - (-15), 22 - 4) +
+      (quantile[, 4] - quantile[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
   expect_equal(
@@ -384,12 +384,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 
     qs_lower <- quantile_score(observed,
       predicted = lower,
-      quantiles = alpha / 2,
+      quantile = alpha / 2,
       weigh = w
     )
     qs_upper <- quantile_score(observed,
       predicted = upper,
-      quantiles = 1 - alpha / 2,
+      quantile = 1 - alpha / 2,
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
@@ -415,12 +415,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
 
     qs_lower <- quantile_score(observed,
       predicted = lower,
-      quantiles = alpha / 2,
+      quantile = alpha / 2,
       weigh = w
     )
     qs_upper <- quantile_score(observed,
       predicted = upper,
-      quantiles = 1 - alpha / 2,
+      quantile = 1 - alpha / 2,
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
