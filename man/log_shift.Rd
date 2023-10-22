@@ -30,7 +30,7 @@ log_shift(1:10)
 log_shift(0:9, offset = 1)
 
 transform_forecasts(
-  example_quantile[true_value > 0, ],
+  example_quantile[observed > 0, ],
   fun = log_shift,
   offset = 1
  )

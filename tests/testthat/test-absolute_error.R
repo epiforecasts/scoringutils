@@ -57,8 +57,8 @@ test_that("abs error is correct within score, point forecast only", {
   # bring in scoringutils format
   truth_scoringutils <- data.table::as.data.table(test_truth)
   fc_scoringutils <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(truth_scoringutils, old = "value", new = "true_value")
-  data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
+  data.table::setnames(truth_scoringutils, old = "value", new = "observed")
+  data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
   data_scoringutils <- merge_pred_and_obs(
@@ -131,8 +131,8 @@ test_that("abs error is correct, point and median forecasts different", {
   # bring in scoringutils format
   truth_scoringutils <- data.table::as.data.table(test_truth)
   fc_scoringutils <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(truth_scoringutils, old = "value", new = "true_value")
-  data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
+  data.table::setnames(truth_scoringutils, old = "value", new = "observed")
+  data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
   data_scoringutils <- merge_pred_and_obs(
@@ -203,8 +203,8 @@ test_that("abs error is correct, point and median forecasts same", {
   # bring in scoringutils format
   truth_scoringutils <- data.table::as.data.table(test_truth)
   fc_scoringutils <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(truth_scoringutils, old = "value", new = "true_value")
-  data.table::setnames(fc_scoringutils, old = "value", new = "prediction")
+  data.table::setnames(truth_scoringutils, old = "value", new = "observed")
+  data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
   data_scoringutils <- merge_pred_and_obs(

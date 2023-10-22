@@ -7,7 +7,7 @@
 check_input_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{Input to be checked. Should be a vector with the true
+\item{observed}{Input to be checked. Should be a vector with the
 observed values of size n}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive

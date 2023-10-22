@@ -11,11 +11,11 @@ A data frame with 346 rows and 10 columns:
 \item{location_name}{name of the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
 \item{target_type}{the target to be predicted (cases or deaths)}
-\item{true_value}{A factor with the observed values}
+\item{observed}{A factor with the observed values}
 \item{forecast_date}{the date on which a prediction was made}
 \item{model}{name of the model that generated the forecasts}
 \item{horizon}{forecast horizon in weeks}
-\item{prediction}{predicted value}
+\item{predicted}{predicted value}
 }
 }
 \source{

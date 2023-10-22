@@ -2,7 +2,7 @@
 #'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @param observed Input to be checked. Should be a vector with the true
+#' @param observed Input to be checked. Should be a vector with the
 #' observed values of size n
 #' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' samples, n (number of rows) being the number of data points and N (number of
@@ -48,7 +48,7 @@ check_input_sample <- function(observed, predicted) {
 #'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @param observed Input to be checked. Should be a vector with the true
+#' @param observed Input to be checked. Should be a vector with the
 #' observed values of size n
 #' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' quantiles, n (number of rows) being the number of data points and N

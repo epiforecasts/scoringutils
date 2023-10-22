@@ -35,9 +35,9 @@ visually check whether a uniform distribution seems likely.
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
 # PIT histogram in vector based format
-true_values <- rnorm(30, mean = 1:30)
-predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-pit <- pit_sample(true_values, predictions)
+observed <- rnorm(30, mean = 1:30)
+predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
+pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit

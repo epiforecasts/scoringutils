@@ -5,7 +5,7 @@
 #' It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
 #'
-#' Dispersion of predictive samples corresponding to one single true value is
+#' Dispersion of predictive samples corresponding to one single observed value is
 #' measured as the normalised median of the absolute deviation from
 #' the median of the predictive samples. For details, see [mad()][stats::mad()]
 #' and the explanations given in Funk et al. (2019)

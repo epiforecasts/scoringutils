@@ -5,8 +5,8 @@ test_that("function throws an error if data is missing", {
 
 test_that("score() warns if column name equals a metric name", {
   data <- data.frame(
-    true_value = rep(1:10, each = 2),
-    prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+    observed = rep(1:10, each = 2),
+    predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
     model = "Model 1",
     date = as.Date("2020-01-01") + rep(1:10, each = 2),
     quantile = rep(c(0.1, 0.9), times = 10),
@@ -21,7 +21,7 @@ test_that("score() warns if column name equals a metric name", {
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- suppressMessages(score(binary_example[!is.na(prediction)]))
+  eval <- suppressMessages(score(binary_example[!is.na(predicted)]))
   eval <- summarise_scores(eval, by = c("model", "target_type"))
 
   expect_equal(
@@ -41,7 +41,7 @@ test_that("function produces output for a binary case", {
 
 test_that("function produces score for a binary case", {
   binary_example <- data.table::setDT(scoringutils::example_binary)
-  eval <- suppressMessages(score(binary_example[!is.na(prediction)]))
+  eval <- suppressMessages(score(binary_example[!is.na(predicted)]))
   eval <- summarise_scores(eval, by = c("model", "target_type"))
   expect_true("brier_score" %in% names(eval))
 })
@@ -52,7 +52,7 @@ test_that("function produces score for a binary case", {
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
-  eval <- suppressMessages(score(quantile_example[!is.na(prediction)]))
+  eval <- suppressMessages(score(quantile_example[!is.na(predicted)]))
 
   expect_equal(
     nrow(eval) > 1,
@@ -64,7 +64,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
   quantile_example <- data.table::setDT(scoringutils::example_quantile)
   eval <- suppressMessages(
     score(
-      quantile_example[!is.na(prediction)],
+      quantile_example[!is.na(predicted)],
       separate_results = FALSE
     )
   )
@@ -78,8 +78,8 @@ test_that("score_quantile correctly handles separate results = FALSE", {
 
 test_that("score() quantile produces desired metrics", {
   data <- data.frame(
-    true_value = rep(1:10, each = 2),
-    prediction = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+    observed = rep(1:10, each = 2),
+    predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
     model = "Model 1",
     date = as.Date("2020-01-01") + rep(1:10, each = 2),
     quantile = rep(c(0.1, 0.9), times = 10)
@@ -97,13 +97,13 @@ test_that("score() quantile produces desired metrics", {
 
 test_that("calculation of ae_median is correct for a quantile format case", {
   eval <- suppressMessages(
-    score(scoringutils::example_quantile[!is.na(prediction)])
+    score(scoringutils::example_quantile[!is.na(predicted)])
   )
 
   eval <- summarise_scores(eval,by = "model")
 
   example <- scoringutils::example_quantile
-  ae <- example[quantile == 0.5, ae := abs(true_value - prediction)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- example[quantile == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -114,11 +114,11 @@ test_that("calculation of ae_median is correct for a quantile format case", {
 test_that("all quantile and range formats yield the same result", {
   quantile_example1 <- data.table::setDT(scoringutils::example_quantile)
 
-  eval1 <- suppressMessages(score(quantile_example1[!is.na(prediction)]))
+  eval1 <- suppressMessages(score(quantile_example1[!is.na(predicted)]))
   eval1 <- summarise_scores(eval1, by = "model")
 
   ae <- quantile_example1[
-    quantile == 0.5, ae := abs(true_value - prediction)][
+    quantile == 0.5, ae := abs(observed - predicted)][
     !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
@@ -157,7 +157,7 @@ test_that("WIS is the same with other metrics omitted or included", {
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
   example <- data.table::setDT(scoringutils::example_continuous)
-  eval <- suppressMessages(score(example[!is.na(prediction)]))
+  eval <- suppressMessages(score(example[!is.na(predicted)]))
 
   eval2 <- suppressMessages(score(example))
 
@@ -176,12 +176,12 @@ test_that(
   "score() can support a sample column when a quantile forecast is used", {
   ex <- example_quantile[!is.na(quantile)][1:200, ]
   ex <- rbind(
-    data.table::copy(ex)[, sample := 1],
-    ex[, sample := 2]
+    data.table::copy(ex)[, sample_id := 1],
+    ex[, sample_id := 2]
   )
   scores <- suppressWarnings(score(ex))
   expect_snapshot(summarise_scores(
-    summarise_scores(scores, by = "model"), by = "model", 
+    summarise_scores(scores, by = "model"), by = "model",
     fun = signif, digits = 2
   ))
  })

@@ -158,7 +158,7 @@ pit_sample <- function(observed,
 #' see [pit()]
 #'
 #' @param data a data.frame with the following columns: `observed`,
-#' `predicted`, `sample`.
+#' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
@@ -213,12 +213,12 @@ pit <- function(data,
 
   # if prediction type is not quantile, calculate PIT values based on samples
   data_wide <- data.table::dcast(data,
-    ... ~ paste0("InternalSampl_", sample),
-    value.var = "prediction"
+    ... ~ paste0("InternalSampl_", sample_id),
+    value.var = "predicted"
   )
 
   pit <- data_wide[, .("pit_value" = pit_sample(
-    observed = true_value,
+    observed = observed,
     predicted = as.matrix(.SD)
   )),
   by = by,

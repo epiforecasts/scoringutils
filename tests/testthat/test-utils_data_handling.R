@@ -2,8 +2,8 @@ test_that("range_long_to_quantile works", {
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
+    observed = 1:10,
+    predicted = c(2:11, 4:13),
     range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
@@ -11,8 +11,8 @@ test_that("range_long_to_quantile works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
+    observed = 1:10,
+    predicted = c(2:11, 4:13),
     quantile = rep(c(0.25, 0.75), each = 10)
   )
 
@@ -26,16 +26,16 @@ test_that("quantile_to_range_long works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
+    observed = 1:10,
+    predicted = c(2:11, 4:13),
     quantile = rep(c(0.25, 0.75), each = 10)
   )
 
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
+    observed = 1:10,
+    predicted = c(2:11, 4:13),
     range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
@@ -58,17 +58,17 @@ test_that("sample_to_quantiles works", {
   samples <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
-    sample = rep(1:5, each = 10)
+    observed = 1:10,
+    predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
+    sample_id = rep(1:5, each = 10)
   )
 
   quantile <- data.frame(
     date = rep(as.Date("2020-01-01") + 1:10, each = 2),
     model = "model1",
-    true_value = rep(1:10, each = 2),
+    observed = rep(1:10, each = 2),
     quantile = c(0.25, 0.75),
-    prediction = rep(2:11, each = 2) + c(0, 2)
+    predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
   quantile2 <- scoringutils::sample_to_quantile(samples, quantiles = c(0.25, 0.75))
@@ -96,16 +96,16 @@ test_that("sample_to_range_long works", {
   samples <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
-    sample = rep(1:5, each = 10)
+    observed = 1:10,
+    predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
+    sample_id = rep(1:5, each = 10)
   )
 
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
-    true_value = 1:10,
-    prediction = c(2:11, 4:13),
+    observed = 1:10,
+    predicted = c(2:11, 4:13),
     range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )

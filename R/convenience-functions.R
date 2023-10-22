@@ -1,6 +1,6 @@
 #' @title Transform forecasts and observed values
 #'
-#' @description Function to transform forecasts and true values before scoring.
+#' @description Function to transform forecasts and observed values before scoring.
 #'
 #' @details There are a few reasons, depending on the circumstances, for
 #' why this might be desirable (check out the linked reference for more info).
@@ -20,7 +20,7 @@
 #'
 #' @inheritParams score
 #'
-#' @param fun A function used to transform both true values and predictions.
+#' @param fun A function used to transform both observed values and predictions.
 #' The default function is [log_shift()], a custom function that is essentially
 #' the same as [log()], but has an additional arguments (`offset`)
 #' that allows you add an offset before applying the logarithm. This is often
@@ -67,7 +67,7 @@
 #' # transform forecasts using the natural logarithm
 #' # negative values need to be handled (here by replacing them with 0)
 #' example_quantile %>%
-#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #' # Here we use the default function log_shift() which is essentially the same
 #' # as log(), but has an additional arguments (offset) that allows you add an
 #' # offset before applying the logarithm.
@@ -84,20 +84,20 @@
 #' # specifying an offset for the log transformation removes the
 #' # warning caused by zeros in the data
 #' example_quantile %>%
-#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(offset = 1, append = FALSE) %>%
 #'   head()
 #'
 #' # adding square root transformed forecasts to the original ones
 #' example_quantile %>%
-#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
 #'
 #' # adding multiple transformations
 #' example_quantile %>%
-#'   .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(fun = log_shift, offset = 1) %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   head()
@@ -135,8 +135,8 @@ transform_forecasts <- function(data,
       transformed_data <- data.table::copy(original_data)
       original_data[, scale := "natural"]
     }
-    transformed_data[, prediction := fun(prediction, ...)]
-    transformed_data[, true_value := fun(true_value, ...)]
+    transformed_data[, predicted := fun(predicted, ...)]
+    transformed_data[, observed := fun(observed, ...)]
     transformed_data[, scale := label]
     out <- rbind(original_data, transformed_data)
     return(out[])
@@ -145,12 +145,12 @@ transform_forecasts <- function(data,
   # check if a column called "scale" is already present and if so, only
   # restrict to transformations of the original data
   if (scale_col_present) {
-    original_data[scale == "natural", prediction := fun(prediction, ...)]
-    original_data[scale == "natural", true_value := fun(true_value, ...)]
+    original_data[scale == "natural", predicted := fun(predicted, ...)]
+    original_data[scale == "natural", observed := fun(observed, ...)]
     original_data[scale == "natural", scale := label]
   } else {
-    original_data[, prediction := fun(prediction, ...)]
-    original_data[, true_value := fun(true_value, ...)]
+    original_data[, predicted := fun(predicted, ...)]
+    original_data[, observed := fun(observed, ...)]
   }
   return(original_data[])
 }
@@ -183,7 +183,7 @@ transform_forecasts <- function(data,
 #' log_shift(0:9, offset = 1)
 #'
 #' transform_forecasts(
-#'   example_quantile[true_value > 0, ],
+#'   example_quantile[observed > 0, ],
 #'   fun = log_shift,
 #'   offset = 1
 #'  )
@@ -209,8 +209,8 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' @description Helper function to set the unit of a single forecast (i.e. the
 #' combination of columns that uniquely define a single forecast) manually.
 #' This simple function keeps the columns specified in `forecast_unit` (plus
-#' additional protected columns, e.g. for true values, predictions or quantile
-#' levels) and removes duplicate rows.
+#' additional protected columns, e.g. for observed values, predictions or
+#' quantile levels) and removes duplicate rows.
 #' If not done manually, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names
 #' are relevant to determine the forecast unit. This may lead to unexpected

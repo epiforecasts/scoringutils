@@ -399,11 +399,11 @@ plot_predictions <- function(data,
                              range = c(0, 50, 90)) {
 
   # split truth data and forecasts in order to apply different filtering
-  truth_data <- data.table::as.data.table(data)[!is.na(true_value)]
-  forecasts <- data.table::as.data.table(data)[!is.na(prediction)]
+  truth_data <- data.table::as.data.table(data)[!is.na(observed)]
+  forecasts <- data.table::as.data.table(data)[!is.na(predicted)]
 
   del_cols <-
-    colnames(truth_data)[!(colnames(truth_data) %in% c(by, "true_value", x))]
+    colnames(truth_data)[!(colnames(truth_data) %in% c(by, "observed", x))]
 
   truth_data <- delete_columns(
     truth_data,
@@ -442,7 +442,7 @@ plot_predictions <- function(data,
   if (nrow(intervals) != 0) {
     # pivot wider and convert range to a factor
     intervals <- data.table::dcast(intervals, ... ~ boundary,
-                                   value.var = "prediction")
+                                   value.var = "predicted")
 
     # only plot ranges if there are ranges to plot
     plot <- plot +
@@ -477,20 +477,20 @@ plot_predictions <- function(data,
       plot <- plot +
         geom_line(
           data = median,
-          mapping = aes(y = prediction),
+          mapping = aes(y = predicted),
           lwd = 0.4
         )
     }
   }
 
-  # add true_values
+  # add observed values
   if (nrow(truth_data) > 0) {
     plot <- plot +
       geom_point(
         data = truth_data,
         show.legend = FALSE,
         inherit.aes = FALSE,
-        aes(x = .data[[x]], y = true_value),
+        aes(x = .data[[x]], y = observed),
         color = "black",
         size = 0.5
       ) +
@@ -498,7 +498,7 @@ plot_predictions <- function(data,
         data = truth_data,
         inherit.aes = FALSE,
         show.legend = FALSE,
-        aes(x = .data[[x]], y = true_value),
+        aes(x = .data[[x]], y = observed),
         linetype = 1,
         color = "grey40",
         lwd = 0.2
@@ -518,7 +518,7 @@ plot_predictions <- function(data,
 #'
 #' @inheritParams score
 #' @param what character vector that determines which values should be turned
-#' into `NA`. If `what = "truth"`, values in the column 'true_value' will be
+#' into `NA`. If `what = "truth"`, values in the column 'observed' will be
 #' turned into `NA`. If `what = "forecast"`, values in the column 'prediction'
 #' will be turned into `NA`. If `what = "both"`, values in both column will be
 #' turned into `NA`.
@@ -550,10 +550,10 @@ make_NA <- function(data = NULL,
 
   vars <- NULL
   if (what %in% c("forecast", "both")) {
-    vars <- c(vars, "prediction")
+    vars <- c(vars, "predicted")
   }
   if (what %in% c("truth", "both")) {
-    vars <- c(vars, "true_value")
+    vars <- c(vars, "observed")
   }
   for (expr in args) {
     data <- data[eval(expr), eval(vars) := NA_real_]
@@ -838,9 +838,9 @@ plot_pairwise_comparison <- function(comparison_result,
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
 #' # PIT histogram in vector based format
-#' true_values <- rnorm(30, mean = 1:30)
-#' predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-#' pit <- pit_sample(true_values, predictions)
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
+#' pit <- pit_sample(observed, predicted)
 #' plot_pit(pit)
 #'
 #' # quantile-based pit

@@ -2,7 +2,7 @@ library(data.table)
 library(dplyr)
 library(devtools)
 library(here)
-library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils") # nolint
+library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils@v0.1.8") # nolint
 library(purrr)
 library(data.table)
 library(stringr)
@@ -25,7 +25,7 @@ truth <- covidHubUtils::load_truth(hub = "ECDC") |>
   )) |>
   rename(
     target_type = target_variable,
-    true_value = value
+    observed = value
   ) |>
   select(-model)
 
@@ -70,13 +70,13 @@ prediction_data <- map_dfr(file_paths,
     ),
     horizon = as.numeric(substr(target, 1, 1))
   ) %>%
-  rename(prediction = value) %>%
+  rename(predicted = value) %>%
   filter(
     type == "quantile",
     grepl("inc", target)
   ) %>%
   select(
-    location, forecast_date, quantile, prediction,
+    location, forecast_date, quantile, predicted,
     model, target_end_date, target, target_type, horizon
   )
 
@@ -105,6 +105,8 @@ truth <- truth |>
 
 # save example data with forecasts only
 example_quantile_forecasts_only <- hub_data
+example_quantile_forecasts_only[, quantile := round(quantile, 3)]
+
 usethis::use_data(example_quantile_forecasts_only, overwrite = TRUE)
 
 example_truth_only <- truth
@@ -165,13 +167,13 @@ get_samples <- function(values, quantiles, n_samples = 1000) {
 setDT(example_quantile)
 n_samples <- 40
 example_continuous <- example_quantile[, .(
-  prediction = get_samples(
-    prediction,
+  predicted = get_samples(
+    predicted,
     quantile,
     n_samples = n_samples
   ),
-  sample = 1:n_samples,
-  true_value = unique(true_value)
+  sample_id = 1:n_samples,
+  observed = unique(observed)
 ),
 by = c(
   "location", "location_name",
@@ -180,18 +182,15 @@ by = c(
 )
 ]
 # remove unnecessary rows where no predictions are available
-example_continuous[is.na(prediction), sample := NA]
+example_continuous[is.na(predicted), sample_id := NA]
 example_continuous <- unique(example_continuous)
 usethis::use_data(example_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
 example_integer <- data.table::copy(example_continuous)
-example_integer <- example_integer[, prediction := round(prediction)]
+example_integer <- example_integer[, predicted := round(predicted)]
 usethis::use_data(example_integer, overwrite = TRUE)
-
-
-
 
 
 # get binary example data ------------------------------------------------------
@@ -209,22 +208,22 @@ by <- c(
 )
 
 # calculate mean value
-example_binary[, mean_val := mean(prediction),
+example_binary[, mean_val := mean(predicted),
   by = by
 ]
 
 # calculate binary prediction as percentage above mean
-example_binary[, prediction := mean(prediction > mean_val),
+example_binary[, predicted := mean(predicted > mean_val),
   by = by
 ]
 
 # calculate true value as whether or not observed was above mean
-example_binary[, true_value := true_value > mean_val]
+example_binary[, observed := observed > mean_val]
 
 # delete unnecessary columns and take unique values
 example_binary[, `:=`(
-  sample = NULL, mean_val = NULL,
-  true_value = factor(as.numeric(true_value))
+  sample_id = NULL, mean_val = NULL,
+  observed = factor(as.numeric(observed))
 )]
 example_binary <- unique(example_binary)
 

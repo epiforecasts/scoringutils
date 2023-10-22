@@ -8,7 +8,7 @@ pit(data, by, n_replicates = 100)
 }
 \arguments{
 \item{data}{a data.frame with the following columns: \code{observed},
-\code{predicted}, \code{sample}.}
+\code{predicted}, \code{sample_id}.}
 
 \item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and

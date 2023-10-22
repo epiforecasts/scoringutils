@@ -20,7 +20,7 @@ score_sample <- function(data,
                          metrics,
                          prediction_type) {
   if (missing(prediction_type)) {
-    if (isTRUE(all.equal(data$prediction, as.integer(data$prediction)))) {
+    if (isTRUE(all.equal(data$predicted, as.integer(data$predicted)))) {
       prediction_type <- "integer"
     } else {
       prediction_type <- "continuous"
@@ -30,27 +30,27 @@ score_sample <- function(data,
   # calculate scores -----------------------------------------------------------
   # sharpness
   if (any(c("sharpness", "mad") %in% metrics)) {
-    data[, mad := mad_sample(predicted = t(prediction)), by = forecast_unit]
+    data[, mad := mad_sample(predicted = t(predicted)), by = forecast_unit]
   }
   # bias
   if ("bias" %in% metrics) {
     data[, bias := bias_sample(
-      unique(true_value),
-      t(prediction)
+      unique(observed),
+      t(predicted)
     ), by = forecast_unit]
   }
   # DSS
   if ("dss" %in% metrics) {
     data[, dss := scoringutils::dss_sample(
-      unique(true_value),
-      t(prediction)
+      unique(observed),
+      t(predicted)
     ), by = forecast_unit]
   }
   # CRPS
   if ("crps" %in% metrics) {
     data[, crps := scoringutils::crps_sample(
-      unique(true_value),
-      t(prediction)
+      unique(observed),
+      t(predicted)
     ), by = forecast_unit]
   }
   # Log Score
@@ -58,19 +58,19 @@ score_sample <- function(data,
     # only compute if prediction type is continuous
     if (prediction_type == "continuous") {
       data[, log_score := scoringutils::logs_sample(
-        unique(true_value),
-        t(prediction)
+        unique(observed),
+        t(predicted)
       ), by = forecast_unit]
     }
   }
   # absolute error
   if (any(c("ae_median", "abs_error", "ae_point") %in% metrics)) {
-    data[, ae_median := abs(unique(true_value) - median(prediction)),
+    data[, ae_median := abs(unique(observed) - median(predicted)),
          by = forecast_unit]
   }
   # squared error
   if (any(c("se_mean", "squared_error", "se_point") %in% metrics)) {
-    data[, se_mean := (unique(true_value) - mean(prediction))^2,
+    data[, se_mean := (unique(observed) - mean(predicted))^2,
          by = forecast_unit]
   }
 

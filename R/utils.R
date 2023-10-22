@@ -59,7 +59,7 @@ globalVariables(c(
   "pit_p_val",
   "pit_value",
   "point",
-  "prediction",
+  "predicted",
   "pval",
   "quantile",
   "ratio",
@@ -69,7 +69,7 @@ globalVariables(c(
   "se_mean",
   "sharpness",
   "theta",
-  "true_value",
+  "observed",
   "type",
   "upper",
   "value",
@@ -189,7 +189,7 @@ prediction_is_quantile <- function(data) {
 #'
 #' @description Internal helper function to get the prediction type of a
 #' forecast. That is inferred based on the properties of the values in the
-#' `prediction` column.
+#' `predicted` column.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -203,10 +203,10 @@ get_prediction_type <- function(data) {
     if ("quantile" %in% names(data)) {
       return("quantile")
     } else {
-      if ("prediction" %in% names(data)) {
-        data <- data$prediction
+      if ("predicted" %in% names(data)) {
+        data <- data$predicted
       }else {
-        stop("Input does not contain a column named 'prediction'")
+        stop("Input does not contain a column named 'predicted'")
       }
     }
   }
@@ -225,7 +225,7 @@ get_prediction_type <- function(data) {
 #'
 #' @description Internal helper function to get the type of the target
 #' true values of a forecast. That is inferred based on the type and the
-#' content of the `true_value` column.
+#' content of the `observed` column.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -235,10 +235,10 @@ get_prediction_type <- function(data) {
 #' @keywords internal
 
 get_target_type <- function(data) {
-  if (is.factor(data$true_value)) {
+  if (is.factor(data$observed)) {
     return("classification")
   }
-  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
+  if (isTRUE(all.equal(data$observed, as.integer(data$observed)))) {
     return("integer")
   } else {
     return("continuous")
@@ -263,7 +263,7 @@ get_forecast_unit <- function(data) {
 
   protected_columns <- get_protected_columns(data)
   if (prediction_is_quantile(data)) {
-    protected_columns <- setdiff(protected_columns, "sample")
+    protected_columns <- setdiff(protected_columns, "sample_id")
   }
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
@@ -285,7 +285,7 @@ get_protected_columns <- function(data) {
 
   datacols <- colnames(data)
   protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
     "pit_value", "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )

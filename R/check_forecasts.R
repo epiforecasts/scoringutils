@@ -16,17 +16,17 @@
 #' thinks you are trying to do and potential issues.
 #'
 #' - `target_type` the type of the prediction target as inferred from the
-#' input: 'binary', if all values in `true_value` are either 0 or 1 and values
-#'  in `prediction` are between 0 and 1, 'discrete' if all true values are
+#' input: 'binary', if all values in `observed` are either 0 or 1 and values
+#'  in `predicted` are between 0 and 1, 'discrete' if all observed values are
 #'  integers.
 #' and 'continuous' if not.
 #' - `prediction_type` inferred type of the prediction. 'quantile', if there is
-#' a column called 'quantile', else 'discrete' if all values in `prediction`
+#' a column called 'quantile', else 'discrete' if all values in `predicted`
 #' are integer, else 'continuous.
 #' - `forecast_unit` unit of a single forecast, i.e. the grouping that uniquely
 #' defines a single forecast. This is assumed to be all
 #' present columns apart from the following protected columns:
-#' `c("prediction", "true_value", "sample", "quantile","range", "boundary")`.
+#' `c("predicted", "observed", "sample_id", "quantile","range", "boundary")`.
 #' It is important that you remove all unnecessary columns before scoring.
 #' - `rows_per_forecast` a data.frame that shows how many rows (usually
 #' quantiles or samples there are available per forecast. If a forecast model
@@ -64,9 +64,9 @@ check_forecasts <- function(data) {
   }
   data <- data.table::as.data.table(data)
 
-  # make sure true_value and prediction are present
-  if (!all(c("true_value", "prediction") %in% colnames(data))) {
-    stop("Data needs to have columns called `true_value` and `prediction`")
+  # make sure observed and predicted are present
+  if (!all(c("observed", "predicted") %in% colnames(data))) {
+    stop("Data needs to have columns called `observed` and `predicted`")
   }
 
   # check whether any column name is a scoringutils metric
@@ -97,29 +97,29 @@ check_forecasts <- function(data) {
   }
 
 
-  # remove rows where prediction or true value are NA --------------------------
-  if (anyNA(data$true_value)) {
+  # remove rows where predicted or observed value are NA --------------------------
+  if (anyNA(data$observed)) {
     messages <- c(
       messages,
       paste(
-        sum(is.na(data$true_value)),
-        "values for `true_value` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+        sum(is.na(data$observed)),
+        "values for `observed` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
       )
     )
   }
-  if (anyNA(data$prediction)) {
+  if (anyNA(data$predicted)) {
     messages <- c(
       messages,
       paste(
-        sum(is.na(data$prediction)),
-        "values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
+        sum(is.na(data$predicted)),
+        "values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected." # nolint
       )
     )
   }
-  data <- data[!is.na(true_value) & !is.na(prediction)]
+  data <- data[!is.na(observed) & !is.na(predicted)]
 
   if (nrow(data) == 0) {
-    stop("After removing all NA true values and predictions, there were no observations left")
+    stop("After removing all NA observed values and predictions, there were no observations left")
   }
 
 
@@ -128,18 +128,18 @@ check_forecasts <- function(data) {
   forecast_unit <- get_forecast_unit(data)
   target_type <- get_target_type(data)
 
-  # check whether a column called 'quantile' or 'sample' is present ------------
-  if (!any(c("quantile", "sample") %in% colnames(data)) &&
+  # check whether a column called 'quantile' or 'sample_id' is present ------------
+  if (!any(c("quantile", "sample_id") %in% colnames(data)) &&
         !target_type == "classification") {
     errors <- c(
       errors,
-      "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample" # nolint
+      "This forecast does not seem to be for a binary prediction target, so we need a column called quantile or sample_id" # nolint
     )
   }
 
   # check duplicate forecasts --------------------------------------------------
   # check whether there is more than one prediction for the same target, i.e.
-  # the length of prediction is greater 1 for a sample / quantile for
+  # the length of predicted is greater 1 for a sample / quantile for
   # a single forecast
 
   check_duplicates <- find_duplicates(data, forecast_unit = forecast_unit)
@@ -157,7 +157,7 @@ check_forecasts <- function(data) {
   }
 
   # check whether there are the same number of quantiles, samples --------------
-  data[, InternalNumCheck := length(prediction), by = forecast_unit]
+  data[, InternalNumCheck := length(predicted), by = forecast_unit]
   n <- unique(data$InternalNumCheck)
   if (length(n) > 1) {
     warnings <- c(
@@ -252,7 +252,7 @@ print.scoringutils_check <- function(x, ...) {
   cat("The unit of a single forecast is defined by:\n")
   print(x["forecast_unit"])
 
-  cat("Cleaned data, rows with NA values in prediction or true_value removed:\n")
+  cat("Cleaned data, rows with NA values in predicted or observed removed:\n")
   print.default(x["cleaned_data"])
 
   cat("Number of unique values per column per model:\n")
@@ -287,7 +287,7 @@ print.scoringutils_check <- function(x, ...) {
 #' find_duplicates(example)
 
 find_duplicates <- function(data, forecast_unit) {
-  type <- c("sample", "quantile")[c("sample", "quantile") %in% colnames(data)]
+  type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
   if (missing(forecast_unit)) {
     forecast_unit <- get_forecast_unit(data)
   }

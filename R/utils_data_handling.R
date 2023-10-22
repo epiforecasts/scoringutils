@@ -32,7 +32,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 
   if (is.null(by)) {
     protected_columns <- c(
-      "prediction", "true_value", "sample", "quantile",
+      "predicted", "observed", "sample_id", "quantile",
       "range", "boundary"
     )
     by <- setdiff(colnames(forecasts), protected_columns)
@@ -103,11 +103,11 @@ sample_to_quantile <- function(data,
                                type = 7) {
   data <- data.table::as.data.table(data)
 
-  reserved_columns <- c("prediction", "sample")
+  reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
   data <- data[, .(quantile = quantiles,
-                   prediction = quantile(x = prediction, prob = ..quantiles,
+                   predicted = quantile(x = predicted, prob = ..quantiles,
                                          type = ..type, na.rm = TRUE)),
                by = by]
 
