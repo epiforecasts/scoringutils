@@ -1,15 +1,3 @@
-#' @title Calculate Geometric Mean
-#'
-#' @param x numeric vector of values for which to calculate the geometric mean
-#' @return the geometric mean of the values in `x`
-#'
-#' @keywords internal
-geom_mean_helper <- function(x) {
-  geom_mean <- exp(mean(log(x[!is.na(x)])))
-  return(geom_mean)
-}
-
-
 globalVariables(c(
   "..index",
   "..quantiles",
@@ -91,48 +79,6 @@ globalVariables(c(
 
 available_metrics <- function() {
   return(unique(scoringutils::metrics$Name))
-}
-
-#' @title Simple permutation test
-#'
-#' @description #' The implementation of the permutation test follows the
-#' function
-#' `permutationTest` from the `surveillance` package by Michael Höhle,
-#' Andrea Riebler and Michaela Paul.
-#'
-#' @return p-value of the permutation test
-#' @keywords internal
-permutation_test <- function(scores1,
-                             scores2,
-                             n_permutation = 999,
-                             one_sided = FALSE,
-                             comparison_mode = c("difference", "ratio")) {
-  nTime <- length(scores1)
-  meanscores1 <- mean(scores1)
-  meanscores2 <- mean(scores2)
-  comparison_mode <- match.arg(comparison_mode)
-  if (comparison_mode == "ratio") {
-    # distinguish between on-sided and two-sided:
-    testStat_observed <- ifelse(one_sided,
-      meanscores1 / meanscores2,
-      max(meanscores1 / meanscores2, meanscores2 / meanscores1)
-    )
-  } else {
-    testStat_observed <- ifelse(one_sided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
-  }
-  testStat_permuted <- replicate(n_permutation, {
-    sel <- rbinom(nTime, size = 1, prob = 0.5)
-    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1])) / nTime
-    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0])) / nTime
-    if (comparison_mode == "ratio") {
-      ifelse(one_sided, g1 / g2, max(g1 / g2, g2 / g1))
-    } else {
-      ifelse(one_sided, g1 - g2, abs(g1 - g2))
-    }
-  })
-  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (n_permutation + 1)
-  # plus ones to make sure p-val is never 0?
-  return(pVal)
 }
 
 
