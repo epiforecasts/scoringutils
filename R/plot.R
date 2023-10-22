@@ -764,8 +764,8 @@ plot_pairwise_comparison <- function(comparison_result,
   plot <- ggplot(
     comparison_result,
     aes(
-      y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean_helper),
-      x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean_helper),
+      y = reorder(model, 1 / mean_scores_ratio, FUN = geom_mean),
+      x = reorder(compare_against, mean_scores_ratio, FUN = geom_mean),
       fill = fill_col
     )
   ) +

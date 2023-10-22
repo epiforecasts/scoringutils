@@ -2,7 +2,7 @@
 % Please edit documentation in R/pairwise-comparisons.R
 \name{permutation_test}
 \alias{permutation_test}
-\title{Simple permutation test}
+\title{Simple permutation testa}
 \usage{
 permutation_test(
   scores1,
@@ -21,6 +21,6 @@ function
 \code{permutationTest} from the \code{surveillance} package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
 
-Used in \code{\link[=pairwise_comparisons]{pairwise_comparisons()}}.
+Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 }
 \keyword{internal}

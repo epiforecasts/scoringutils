@@ -13,6 +13,6 @@ infer_rel_skill_metric(scores)
 Helper function to infer the metric for which pairwise comparisons shall
 be made. The function simply checks the names of the available columns and
 chooses the most widely used metric.
-Used in \code{\link[=pairwise_comparisons]{pairwise_comparisons()}}.
+Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 }
 \keyword{internal}

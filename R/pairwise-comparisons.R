@@ -359,7 +359,7 @@ compare_two_models <- function(scores,
 #' Helper function to infer the metric for which pairwise comparisons shall
 #' be made. The function simply checks the names of the available columns and
 #' chooses the most widely used metric.
-#' Used in [pairwise_comparisons()].
+#' Used in [pairwise_comparison()].
 #'
 #' @inheritParams pairwise_comparison
 #' @keywords internal
@@ -384,7 +384,7 @@ infer_rel_skill_metric <- function(scores) {
 
 #' @title Calculate Geometric Mean
 #'
-#' Used in [pairwise_comparisons()].
+#' Used in [pairwise_comparison()].
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
 #' @return the geometric mean of the values in `x`
@@ -395,14 +395,14 @@ geom_mean <- function(x) {
   return(geom_mean)
 }
 
-#' @title Simple permutation test
+#' @title Simple permutation testa
 #'
 #' @description The implementation of the permutation test follows the
 #' function
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' Used in [pairwise_comparisons()].
+#' Used in [pairwise_comparison()].
 #'
 #' @return p-value of the permutation test
 #' @keywords internal

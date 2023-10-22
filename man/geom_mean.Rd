@@ -4,7 +4,7 @@
 \alias{geom_mean}
 \title{Calculate Geometric Mean
 
-Used in \code{\link[=pairwise_comparisons]{pairwise_comparisons()}}.}
+Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.}
 \usage{
 geom_mean(x)
 }
@@ -17,6 +17,6 @@ the geometric mean of the values in \code{x}
 \description{
 Calculate Geometric Mean
 
-Used in \code{\link[=pairwise_comparisons]{pairwise_comparisons()}}.
+Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 }
 \keyword{internal}
