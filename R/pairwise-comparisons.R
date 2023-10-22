@@ -384,6 +384,7 @@ infer_rel_skill_metric <- function(scores) {
 
 #' @title Calculate Geometric Mean
 #'
+#' @details
 #' Used in [pairwise_comparison()].
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
@@ -395,7 +396,7 @@ geom_mean <- function(x) {
   return(geom_mean)
 }
 
-#' @title Simple permutation testa
+#' @title Simple permutation test
 #'
 #' @description The implementation of the permutation test follows the
 #' function

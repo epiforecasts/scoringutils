@@ -42,6 +42,7 @@
 #' - `messages` A verbal explanation of the information provided above.
 #'
 #' @importFrom data.table ':=' is.data.table
+#' @importFrom checkmate assert_data_frame
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
 #' @keywords check-forecasts
@@ -50,6 +51,9 @@
 #' print(check)
 #' check_forecasts(example_binary)
 check_forecasts <- function(data) {
+  # things to check:
+  # - input needs to be data.frame with columns `observed` and `predicted`
+  # there should not be a name clash between a metric and a column name
 
   # create lists to store results ----------------------------------------------
   out <- list()
@@ -59,15 +63,9 @@ check_forecasts <- function(data) {
 
 
   # check data columns ---------------------------------------------------------
-  if (!is.data.frame(data)) {
-    stop("Input should be a data.frame or similar")
-  }
+  assert_data_frame(data, min.rows = 1)
   data <- data.table::as.data.table(data)
-
-  # make sure observed and predicted are present
-  if (!all(c("observed", "predicted") %in% colnames(data))) {
-    stop("Data needs to have columns called `observed` and `predicted`")
-  }
+  assert(check_columns_present(data, "observed", "predicted"))
 
   # check whether any column name is a scoringutils metric
   clashing_colnames <- intersect(colnames(data), available_metrics())
@@ -141,20 +139,7 @@ check_forecasts <- function(data) {
   # check whether there is more than one prediction for the same target, i.e.
   # the length of predicted is greater 1 for a sample / quantile for
   # a single forecast
-
-  check_duplicates <- find_duplicates(data, forecast_unit = forecast_unit)
-
-  if (nrow(check_duplicates) > 0) {
-    errors <- c(
-      errors,
-      paste0(
-        "There are instances with more than one forecast for the same target. ",
-        "This can't be right and needs to be resolved. Maybe you need to ",
-        "check the unit of a single forecast and add missing columns? Use ",
-        "the  function find_duplicates() to identify duplicate rows."
-      )
-    )
-  }
+  assert(check_duplicates(data, forecast_unit = forecast_unit))
 
   # check whether there are the same number of quantiles, samples --------------
   data[, InternalNumCheck := length(predicted), by = forecast_unit]
@@ -207,6 +192,20 @@ check_forecasts <- function(data) {
   # return check results
   class(out) <- c("scoringutils_check", "list")
   return(out)
+}
+
+
+
+check_columns_present <- function(data, ...) {
+  colnames <- colnames(data)
+  check_names <- unlist(list(...))
+  for (x in check_names){
+    if (!(x %in% colnames)) {
+      msg <- paste0("Data needs to have a column called '", x, "'")
+      return(msg)
+    }
+  }
+  return(TRUE)
 }
 
 
@@ -276,8 +275,8 @@ print.scoringutils_check <- function(x, ...) {
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. If missing the function tries to infer the
-#' unit of a single forecast.
+#' the unit of a single forecast. If `NULL` (the default) the function tries
+#' to infer the unit of a single forecast.
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
@@ -286,9 +285,9 @@ print.scoringutils_check <- function(x, ...) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' find_duplicates(example)
 
-find_duplicates <- function(data, forecast_unit) {
+find_duplicates <- function(data, forecast_unit = NULL) {
   type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
-  if (missing(forecast_unit)) {
+  if (is.null(forecast_unit)) {
     forecast_unit <- get_forecast_unit(data)
   }
   data <- as.data.table(data)
@@ -296,4 +295,19 @@ find_duplicates <- function(data, forecast_unit) {
   out <- data[InternalDuplicateCheck > 1]
   out[, InternalDuplicateCheck := NULL]
   return(out[])
+}
+
+check_duplicates <- function(data, forecast_unit = NULL) {
+  check_duplicates <- find_duplicates(data, forecast_unit = forecast_unit)
+
+  if (nrow(check_duplicates) > 0) {
+    msg <- paste0(
+      "There are instances with more than one forecast for the same target. ",
+      "This can't be right and needs to be resolved. Maybe you need to ",
+      "check the unit of a single forecast and add missing columns? Use ",
+      "the function find_duplicates() to identify duplicate rows."
+    )
+    return(msg)
+  }
+  return(TRUE)
 }

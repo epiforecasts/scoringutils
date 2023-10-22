@@ -2,7 +2,7 @@
 % Please edit documentation in R/pairwise-comparisons.R
 \name{permutation_test}
 \alias{permutation_test}
-\title{Simple permutation testa}
+\title{Simple permutation test}
 \usage{
 permutation_test(
   scores1,

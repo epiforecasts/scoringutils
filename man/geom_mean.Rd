@@ -2,9 +2,7 @@
 % Please edit documentation in R/pairwise-comparisons.R
 \name{geom_mean}
 \alias{geom_mean}
-\title{Calculate Geometric Mean
-
-Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.}
+\title{Calculate Geometric Mean}
 \usage{
 geom_mean(x)
 }
@@ -16,7 +14,8 @@ the geometric mean of the values in \code{x}
 }
 \description{
 Calculate Geometric Mean
-
+}
+\details{
 Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 }
 \keyword{internal}

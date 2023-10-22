@@ -7,6 +7,28 @@ test_that("check_forecasts() function has an error for empty data.frame", {
   expect_error(suppressMessages(check_forecasts(data.frame())))
 })
 
+test_that("check_columns_present() works", {
+  expect_equal(
+    check_columns_present(example_quantile, c("observed", "predicted"), "nop"),
+    "Data needs to have a column called 'nop'"
+  )
+  expect_equal(
+    check_columns_present(example_quantile, "observed", "predicted"),
+    TRUE
+  )
+})
+
+test_that("check_duplicates() works", {
+  bad <- rbind(
+    example_quantile[1000:1010],
+    example_quantile[1000:1010]
+  )
+
+  expect_equal(scoringutils:::check_duplicates(bad),
+    "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows."
+  )
+})
+
 test_that("check_forecasts() function returns a message with NA in the data", {
   expect_message(
     { check <- check_forecasts(example_quantile) },
