@@ -11,6 +11,8 @@
 #' integer valued probability distributions. See the scoringRules package for
 #' more details.
 #' @inheritParams ae_median_sample
+#' @param ... additional arguments passed to
+#' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
 #' @return vector with the scoring values
 #' @importFrom scoringRules logs_sample
 #' @examples
@@ -23,11 +25,12 @@
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
-logs_sample <- function(observed, predicted) {
+logs_sample <- function(observed, predicted, ...) {
   check_input_sample(observed, predicted)
   scoringRules::logs_sample(
     y = observed,
-    dat = predicted
+    dat = predicted,
+    ...
   )
 }
 
@@ -38,6 +41,8 @@ logs_sample <- function(observed, predicted) {
 #' function from the
 #' \pkg{scoringRules} package.
 #' @inheritParams logs_sample
+#' @param ... additional arguments passed to
+#' [dss_sample()][scoringRules::dss_sample()] from the scoringRules package.
 #' @return vector with scoring values
 #' @importFrom scoringRules dss_sample
 #' @examples
@@ -50,12 +55,13 @@ logs_sample <- function(observed, predicted) {
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
-dss_sample <- function(observed, predicted) {
+dss_sample <- function(observed, predicted, ...) {
   check_input_sample(observed, predicted)
 
   scoringRules::dss_sample(
     y = observed,
-    dat = predicted
+    dat = predicted,
+    ...
   )
 }
 
@@ -67,6 +73,8 @@ dss_sample <- function(observed, predicted) {
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
 #' @inheritParams logs_sample
+#' @param ... additional arguments passed to
+#' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
 #' @return vector with the scoring values
 #' @importFrom scoringRules crps_sample
 #' @examples
@@ -79,11 +87,12 @@ dss_sample <- function(observed, predicted) {
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
-crps_sample <- function(observed, predicted) {
+crps_sample <- function(observed, predicted, ...) {
   check_input_sample(observed, predicted)
 
   scoringRules::crps_sample(
     y = observed,
-    dat = predicted
+    dat = predicted,
+    ...
   )
 }

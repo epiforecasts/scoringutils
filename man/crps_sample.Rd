@@ -4,7 +4,7 @@
 \alias{crps_sample}
 \title{Ranked Probability Score}
 \usage{
-crps_sample(observed, predicted)
+crps_sample(observed, predicted, ...)
 }
 \arguments{
 \item{observed}{A vector with the observed values of size n}
@@ -12,6 +12,9 @@ crps_sample(observed, predicted)
 \item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
+
+\item{...}{additional arguments passed to
+\link[scoringRules:scores_sample_univ]{crps_sample()} from the scoringRules package.}
 }
 \value{
 vector with the scoring values

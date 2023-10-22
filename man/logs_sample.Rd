@@ -4,7 +4,7 @@
 \alias{logs_sample}
 \title{Logarithmic score}
 \usage{
-logs_sample(observed, predicted)
+logs_sample(observed, predicted, ...)
 }
 \arguments{
 \item{observed}{A vector with the observed values of size n}
@@ -12,6 +12,9 @@ logs_sample(observed, predicted)
 \item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
+
+\item{...}{additional arguments passed to
+\link[scoringRules:scores_sample_univ]{logs_sample()} from the scoringRules package.}
 }
 \value{
 vector with the scoring values
