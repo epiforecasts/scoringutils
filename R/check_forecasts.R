@@ -195,7 +195,13 @@ check_forecasts <- function(data) {
 }
 
 
-
+#' Check column names are present in a data.frame
+#' @param data A data.frame or similar to be checked
+#' @param ... names of columns to be checked
+#' @return Returns an string with an error message if any of the column names
+#' is not in data, otherwise returns TRUE
+#'
+#' @keywords internal
 check_columns_present <- function(data, ...) {
   colnames <- colnames(data)
   check_names <- unlist(list(...))
@@ -297,6 +303,15 @@ find_duplicates <- function(data, forecast_unit = NULL) {
   return(out[])
 }
 
+#' Check that there are no duplicate forecasts
+#'
+#' @description
+#' Runs [find_duplicates()] and returns a message if an issue is encountered
+#' @inheritParams find_duplicates
+#' @return Returns an string with an error message if an issue is found,
+#' otherwise returns TRUE
+#'
+#' @keywords internal
 check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- find_duplicates(data, forecast_unit = forecast_unit)
 
