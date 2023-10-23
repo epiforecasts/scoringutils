@@ -26,7 +26,7 @@
 #' @keywords metric
 
 logs_sample <- function(observed, predicted, ...) {
-  check_input_sample(observed, predicted)
+  assert_input_sample(observed, predicted)
   scoringRules::logs_sample(
     y = observed,
     dat = predicted,
@@ -56,7 +56,7 @@ logs_sample <- function(observed, predicted, ...) {
 #' @keywords metric
 
 dss_sample <- function(observed, predicted, ...) {
-  check_input_sample(observed, predicted)
+  assert_input_sample(observed, predicted)
 
   scoringRules::dss_sample(
     y = observed,
@@ -88,7 +88,7 @@ dss_sample <- function(observed, predicted, ...) {
 #' @keywords metric
 
 crps_sample <- function(observed, predicted, ...) {
-  check_input_sample(observed, predicted)
+  assert_input_sample(observed, predicted)
 
   scoringRules::crps_sample(
     y = observed,

@@ -163,7 +163,7 @@ abs_error <- function(observed, predicted) {
 #' squared_error(observed, predicted_values)
 
 squared_error <- function(observed, predicted) {
-  check_input_point(observed, predicted)
+  assert_input_point(observed, predicted)
   se <- (observed - predicted)^2
   return(se)
 }

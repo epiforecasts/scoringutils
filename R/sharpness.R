@@ -37,7 +37,7 @@ mad_sample <- function(observed = NULL, predicted, ...) {
          "Please assign the `predicted` argument explicitly.")
   }
   observed <- rep(NA_real_, nrow(predicted))
-  check_input_sample(observed, predicted)
+  assert_input_sample(observed, predicted)
 
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)

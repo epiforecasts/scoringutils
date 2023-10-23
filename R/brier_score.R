@@ -53,7 +53,7 @@
 #' @keywords metric
 
 brier_score <- function(observed, predicted) {
-  check_input_binary(observed, predicted)
+  assert_input_binary(observed, predicted)
 
   observed <- as.numeric(observed) - 1
   brierscore <- (observed - predicted)^2
