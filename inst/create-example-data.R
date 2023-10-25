@@ -121,7 +121,7 @@ usethis::use_data(example_quantile, overwrite = TRUE)
 
 # create data with point forecasts ---------------------------------------------
 example_point <- data.table::copy(example_quantile)
-exmple_point <- example_point[quantile %in% c(NA, 0.5)][, quantile := NULL]
+example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile := NULL]
 usethis::use_data(example_point, overwrite = TRUE)
 
 
