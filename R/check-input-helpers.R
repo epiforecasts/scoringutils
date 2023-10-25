@@ -438,3 +438,73 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #   )
 # }
 
+
+#' Check column names are present in a data.frame
+#' @param data A data.frame or similar to be checked
+#' @param columns names of columns to be checked
+#' @return Returns string with a message with the first issue encountered if
+#'  any of the column names are not in data, otherwise returns TRUE
+#'
+#' @keywords check-inputs
+check_columns_present <- function(data, columns) {
+  colnames <- colnames(data)
+  for (x in columns){
+    if (!(x %in% colnames)) {
+      msg <- paste0("Data needs to have a column called '", x, "'")
+      return(msg)
+    }
+  }
+  return(TRUE)
+}
+
+#' Test whether all column names are present in a data.frame
+#' @param data A data.frame or similar to be checked
+#' @param columns names of columns to be checked
+#' @return Returns TRUE if all columns are present and FALSE otherwise
+#' @keywords internal
+test_columns_present <- function(data, columns) {
+  check <- check_columns_present(data, columns)
+  return(is.logical(check))
+}
+
+#' Test whether column names are NOT present in a data.frame
+#' @param data A data.frame or similar to be checked
+#' @param columns names of columns to be checked
+#' @return Returns TRUE if none of the columns are present and FALSE otherwise
+#' @keywords internal
+test_columns_not_present <- function(data, columns) {
+  if (any(columns %in% colnames(data))) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
+#' Check whether data is data.frame with correct columns
+#' @description Checks whether data is a data.frame, whether columns
+#' "observed" and "predicted" are presents
+#' and checks that only one of "quantile" and "sample_id" is present.
+#' @param data A data.frame or similar to be checked
+#' @importFrom checkmate check_data_frame
+#' @return Returns TRUE if basic requirements are satisfied and a string with
+#' an error message otherwise
+#' @keywords check-inputs
+check_data_columns <- function(data) {
+  is_data <- check_data_frame(data, min.rows = 1)
+  if (!is.logical(is_data)) {
+    return(is_data)
+  }
+  needed <- test_columns_present(data, c("observed", "predicted"))
+  if (!needed) {
+    return("Both columns `observed` and predicted` are needed")
+  }
+  problem <- test_columns_present(data, c("sample_id", "quantile"))
+  if (problem) {
+    return(
+      "Found columns `quantile` and `sample_id`. Only one of these is allowed"
+    )
+  }
+  return(TRUE)
+}
+
+

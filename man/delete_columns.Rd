@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{delete_columns}
 \alias{delete_columns}
-\title{Delete Columns From a Data.table}
+\title{Safely delete Columns From a Data.table}
 \usage{
 delete_columns(df, cols_to_delete, make_unique = FALSE)
 }
