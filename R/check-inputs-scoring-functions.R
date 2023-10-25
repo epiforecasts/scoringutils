@@ -26,10 +26,10 @@ assert_input_sample <- function(observed, predicted) {
     assert(
       # allow one of two options
       check_numeric_vector(predicted, min.len = 1),
-      check_matrix(predicted, mode = "numeric")
+      check_matrix(predicted, mode = "numeric", nrows = n_obs)
     )
   } else {
-    assert(check_matrix(predicted, mode = "numeric"))
+    assert(check_matrix(predicted, mode = "numeric", nrows = n_obs))
   }
   return(invisible(NULL))
 }
@@ -78,11 +78,19 @@ assert_input_quantile <- function(observed, predicted, quantile) {
 
   assert_numeric(quantile, min.len = 1, lower = 0, upper = 1)
   n_quantiles <- length(quantile)
-  assert(
-    check_numeric_vector(predicted, min.len = 1),
-    check_matrix(predicted, mode = "numeric",
-                 nrows = n_obs, ncols = n_quantiles)
-  )
+  if (n_obs == 1) {
+    assert(
+      # allow one of two options
+      check_numeric_vector(predicted, min.len = 1),
+      check_matrix(predicted, mode = "numeric",
+                   nrows = n_obs, ncols = n_quantiles)
+    )
+  } else {
+    assert(
+      check_matrix(predicted, mode = "numeric",
+                   nrows = n_obs, ncols = n_quantiles)
+    )
+  }
   return(invisible(NULL))
 }
 
@@ -113,6 +121,7 @@ check_input_quantile <- function(observed, predicted, quantile) {
 #' length n, holding probabilities. Values represent the probability that
 #' the corresponding value in `observed` will be equal to the highest
 #' available factor level.
+#' @param ... additional arguments passed to other functions
 #' @importFrom checkmate assert assert_factor
 #' @return Returns NULL invisibly if the check was successful and throws an
 #' error otherwise.
@@ -125,7 +134,7 @@ assert_input_binary <- function(observed, predicted, ...) {
   # - predicted needs to be numeric between 0 and 1
 
   if (length(observed) != length(predicted)) {
-    stop("`observed` and `predicted` need to be",
+    stop("`observed` and `predicted` need to be ",
          "of same length when scoring binary forecasts")
   }
   assert_factor(observed, n.levels = 2)
@@ -169,7 +178,7 @@ assert_input_point <- function(observed, predicted) {
   assert(check_numeric_vector(observed, min.len = 1))
   assert(check_numeric_vector(predicted, min.len = 1))
   if (length(observed) != length(predicted)) {
-    stop("`observed` and `predicted` need to be",
+    stop("`observed` and `predicted` need to be ",
          "of same length when scoring point forecasts")
   }
   return(invisible(NULL))
