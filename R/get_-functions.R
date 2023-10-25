@@ -181,3 +181,35 @@ get_protected_columns <- function(data = NULL) {
 
   return(protected_columns)
 }
+
+
+#' @title Find duplicate forecasts
+#'
+#' @description Helper function to identify duplicate forecasts, i.e.
+#' instances where there is more than one forecast for the same prediction
+#' target.
+#'
+#' @param data A data.frame as used for [score()]
+#'
+#' @param forecast_unit A character vector with the column names that define
+#' the unit of a single forecast. If `NULL` (the default) the function tries
+#' to infer the unit of a single forecast.
+#'
+#' @return A data.frame with all rows for which a duplicate forecast was found
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' example <- rbind(example_quantile, example_quantile[1000:1010])
+#' get_duplicate_forecasts(example)
+
+get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
+  type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
+  if (is.null(forecast_unit)) {
+    forecast_unit <- get_forecast_unit(data)
+  }
+  data <- as.data.table(data)
+  data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
+  out <- data[scoringutils_InternalDuplicateCheck > 1]
+  out[, scoringutils_InternalDuplicateCheck := NULL]
+  return(out[])
+}

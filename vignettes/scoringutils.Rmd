@@ -156,7 +156,7 @@ example_quantile %>%
   validate()
 ```
 
-The function `find_duplicates()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
+The function `get_duplicate_forecasts()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
 
 ```{r}
 duplicates <- example_quantile %>%
@@ -164,7 +164,7 @@ duplicates <- example_quantile %>%
     c("location", "target_end_date",
       "forecast_date", "model", "horizon")
   ) %>%
-  find_duplicates()
+  get_duplicate_forecasts()
 
 duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
   head()

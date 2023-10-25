@@ -18,6 +18,6 @@ Returns an string with an error message if an issue is found,
 otherwise returns TRUE
 }
 \description{
-Runs \code{\link[=find_duplicates]{find_duplicates()}} and returns a message if an issue is encountered
+Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is encountered
 }
 \keyword{internal}

@@ -25,7 +25,7 @@ test_that("check_duplicates() works", {
   )
 
   expect_equal(scoringutils:::check_duplicates(bad),
-    "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows"
+    "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows"
   )
 })
 
@@ -54,7 +54,7 @@ test_that("validate() function throws an error with duplicate forecasts", {
 
   expect_error(
     suppressMessages(suppressWarnings(validate(example))),
-    "Assertion on 'data' failed: There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function find_duplicates() to identify duplicate rows.", #nolint
+    "Assertion on 'data' failed: There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows.", #nolint
     fixed = TRUE
   )
 })
