@@ -37,10 +37,9 @@ available_forecasts <- function(data,
                                 by = NULL,
                                 collapse = c("quantile", "sample")) {
 
-  check_data <- check_forecasts(data)
-
-  data <- check_data$cleaned_data
-  forecast_unit <- check_data$forecast_unit
+  data <- validate(data)
+  forecast_unit <- attr(data, "forecast_unit")
+  data <- remove_na_observed_predicted(data)
 
   if (is.null(by)) {
     by <- forecast_unit
