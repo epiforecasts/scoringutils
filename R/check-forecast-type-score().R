@@ -5,7 +5,7 @@
 #' The function runs additional checks to make sure the data satisfies
 #' requirements and throws an informative error if any issues are found.
 #'
-#' @inheritParams check_forecasts
+#' @inheritParams validate
 #'
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
@@ -13,69 +13,57 @@
 #' @keywords internal
 
 get_forecast_type <- function(data) {
-  # error if both quantile and sample_id column are present
-  both_cols_present <- test_columns_present(data, c("sample_id", "quantile"))
-  if (both_cols_present) {
-    stop(
-      "Checking `data`:",
-      "found column `quantile` as well as `sample_id`. Only one of these is allowed."
-    )
-  }
-
   if (test_forecast_is_binary(data)) {
-    columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
-    if (!columns_correct) {
-      stop("Checking `data`: Input looks like a binary forecast, but an",
-           "additional column called `sample_id` or `quantile` was found.",
-           "Please remove the column.")
-    }
-    input_check <- check_input_binary(data$observed, data$predicted)
-    if (!is.logical(input_check)) {
-      stop("Checking `data`:",
-           "Input looks like a binary forecast, but found the following issue: ",
-           input_check)
-    }
     return("binary")
   }
-
   if (test_forecast_is_quantile(data)) {
-    input_check <- check_input_quantile(data$observed, data$predicted, data$quantile)
-    if (!is.logical(input_check)) {
-      stop("Checking `data`:",
-           "Input looks like a quantile forecast, but found the following issue: ",
-           input_check)
-    }
     return("quantile")
   }
-
   if (test_forecast_is_sample(data)) {
-    input_check <- check_input_sample(data$observed, data$predicted)
-    if (!is.logical(input_check)) {
-      stop("Checking `data`:",
-           "Input looks like a sample-based forecast, but found the following issue: ",
-           input_check)
-    }
     return("sample")
   }
   if (test_forecast_is_point(data)) {
-    input_check <- check_input_point(data$observed, data$predicted)
-    if (!is.logical(input_check)) {
-      stop("Checking `data`:",
-           "Input looks like a point forecast, but found the following issue: ",
-           input_check)
-    }
     return("point")
   }
-
-  # more helfpul things: is there a column sample_id? A column quantile?
   stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
        "Are you missing a column `quantile` or `sample_id`?",
        "Please check the vignette for additional info.")
 }
 
+
+#' Check whether data is data.frame with correct columns
+#' @description Checks whether data is a data.frame, whether columns
+#' "observed" and "predicted" are presents
+#' and checks that only one of "quantile" and "sample_id" is present.
+#' @param data A data.frame or similar to be checked
+#' @importFrom checkmate check_data_frame
+#' @return Returns TRUE if basic requirements are satisfied and a string with
+#' an error message otherwise
+#' @keywords check-inputs
+check_data_columns <- function(data) {
+  is_data <- check_data_frame(data, min.rows = 1)
+  if (!is.logical(is_data)) {
+    return(is_data)
+  }
+  needed <- test_columns_present(data, c("observed", "predicted"))
+  if (!needed) {
+    return("Both columns `observed` and predicted` are needed")
+  }
+  problem <- test_columns_present(data, c("sample_id", "quantile"))
+  if (problem) {
+    return(
+      "Found columns `quantile` and `sample_id`. Only one of these is allowed"
+    )
+  }
+  return(TRUE)
+}
+
+
+
 #' Test whether data could be a binary forecast.
 #' @description Checks type of the necessary columns.
 #' @param data A data.frame or similar to be checked
+#' @importFrom checkmate test_factor test_numeric
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords check-inputs
 test_forecast_is_binary <- function(data) {
