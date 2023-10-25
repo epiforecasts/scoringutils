@@ -116,20 +116,19 @@ column names of the data into account. However, it is recommended to set
 the forecast unit manually using `set_forecast_unit()` as this may help
 to avoid errors, especially when scoringutils is used in automated
 pipelines. The function `set_forecast_unit()` will simply drop unneeded
-columns. To verify everything is in order, the function
-`check_forecasts()` should be used. The result of that check can then
-passed directly into `score()`. `score()` returns unsummarised scores,
-which in most cases is not what the user wants. Here we make use of
-additional functions from `scoringutils` to add empirical
-coverage-levels (`add_coverage()`), and scores relative to a baseline
-model (here chosen to be the EuroCOVIDhub-ensemble model). See the
-getting started vignette for more details. Finally we summarise these
-scores by model and target type.
+columns. To verify everything is in order, the function `validate()`
+should be used. The result of that check can then passed directly into
+`score()`. `score()` returns unsummarised scores, which in most cases is
+not what the user wants. Here we make use of additional functions from
+`scoringutils` to add empirical coverage-levels (`add_coverage()`), and
+scores relative to a baseline model (here chosen to be the
+EuroCOVIDhub-ensemble model). See the getting started vignette for more
+details. Finally we summarise these scores by model and target type.
 
 ``` r
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
-  check_forecasts() %>%
+  validate() %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
@@ -142,8 +141,6 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> The following messages were produced when checking inputs:
-#> 1.  144 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
 | model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
@@ -176,8 +173,6 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
-#> The following messages were produced when checking inputs:
-#> 1.  288 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 #>                    model target_type   scale interval_score   dispersion
 #> 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146
 #> 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443
