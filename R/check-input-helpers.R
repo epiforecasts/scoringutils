@@ -186,26 +186,6 @@ check_equal_length <- function(...,
 }
 
 
-check_has_attribute <- function(object, attribute) {
-  if (is.null(attr(object, attribute))) {
-    return(
-      paste0("Attribute `", attribute, "` is missing")
-    )
-  } else {
-    return(TRUE)
-  }
-}
-
-test_has_attribute <- function(object, attribute) {
-  check <- check_has_attribute(object, attribute)
-  if (is.logical(check)) {
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
-}
-
-
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
   if (!is.null(existing) && !identical(existing, expected)) {
