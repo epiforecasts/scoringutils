@@ -18,6 +18,8 @@ This major update introduces a lot of breaking changes and addresses comments ma
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`. 
+- `check_forecasts()` was replaced by a new function `validate()`. `validate()` validates the input and in that sense fulfills the purpose of `check_forecasts()`. It has different methods: `validate.default()` assigns the input a class based on their forecast type. Other methods validate the input specifically for the various forecast types. 
+- The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - changes to `avail_forecasts()` and `plot_avail_forecasts()`:
   - the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future. 
   - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 
