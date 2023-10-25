@@ -17,6 +17,8 @@ to the highest factor level.}
 length n, holding probabilities. Values represent the probability that
 the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
+
+\item{...}{additional arguments passed to other functions}
 }
 \value{
 Returns NULL invisibly if the check was successful and throws an
