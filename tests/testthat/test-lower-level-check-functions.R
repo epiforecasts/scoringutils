@@ -12,8 +12,10 @@ test_that("Lower-level input check functions work", {
 
   # predictions have wrong number of rows
   predicted3 <- replicate(20, rpois(n = 31, lambda = 1))
-  expect_error(crps_sample(observed, predicted3),
-    "Mismatch: 'observed' has length `30`, but 'predicted' has `31` rows.",
+  expect_error(
+    crps_sample(observed, predicted3),
+    "Assertion on 'predicted' failed: Must have exactly 30 rows, but has 31 rows.",
+    # "Mismatch: 'observed' has length `30`, but 'predicted' has `31` rows.",
     fixed = TRUE
   )
 
@@ -96,7 +98,7 @@ test_that("function throws an error for wrong format of predictions", {
   expect_error(
     brier_score(
       observed = observed,
-      predicted = list(predicted)
+      predicted = as.list(predicted)
     ),
     "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
   )
@@ -107,7 +109,8 @@ test_that("function throws an error for wrong format of predictions", {
       observed = observed,
       predicted = predicted
     ),
-    "Arguments to the following function call: 'brier_score(observed = observed, predicted = predicted)' should have the same length (or length one). Actual lengths: 10, 15",
+    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
+    # "Arguments to the following function call: 'brier_score(observed = observed, predicted = predicted)' should have the same length (or length one). Actual lengths: 10, 15",
     fixed = TRUE
   )
 })

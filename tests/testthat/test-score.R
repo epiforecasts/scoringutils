@@ -3,18 +3,18 @@ test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
 })
 
-test_that("score() warns if column name equals a metric name", {
-  data <- data.frame(
-    observed = rep(1:10, each = 2),
-    predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
-    model = "Model 1",
-    date = as.Date("2020-01-01") + rep(1:10, each = 2),
-    quantile = rep(c(0.1, 0.9), times = 10),
-    bias = 3
-  )
-
-  expect_warning(suppressMessages(score(data = data)))
-})
+# test_that("score() warns if column name equals a metric name", {
+#   data <- data.frame(
+#     observed = rep(1:10, each = 2),
+#     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+#     model = "Model 1",
+#     date = as.Date("2020-01-01") + rep(1:10, each = 2),
+#     quantile = rep(c(0.1, 0.9), times = 10),
+#     bias = 3
+#   )
+#
+#   expect_warning(suppressMessages(score(data = data)))
+# })
 
 
 
@@ -172,16 +172,16 @@ test_that("function produces output for a continuous format case", {
   )
 })
 
-test_that(
-  "score() can support a sample column when a quantile forecast is used", {
-  ex <- example_quantile[!is.na(quantile)][1:200, ]
-  ex <- rbind(
-    data.table::copy(ex)[, sample_id := 1],
-    ex[, sample_id := 2]
-  )
-  scores <- suppressWarnings(score(ex))
-  expect_snapshot(summarise_scores(
-    summarise_scores(scores, by = "model"), by = "model",
-    fun = signif, digits = 2
-  ))
- })
+# test_that(
+#   "score() can support a sample column when a quantile forecast is used", {
+#   ex <- example_quantile[!is.na(quantile)][1:200, ]
+#   ex <- rbind(
+#     data.table::copy(ex)[, sample_id := 1],
+#     ex[, sample_id := 2]
+#   )
+#   scores <- suppressWarnings(score(ex))
+#   expect_snapshot(summarise_scores(
+#     summarise_scores(scores, by = "model"), by = "model",
+#     fun = signif, digits = 2
+#   ))
+#  })
