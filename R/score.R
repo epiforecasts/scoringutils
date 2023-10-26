@@ -120,10 +120,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   lapply(seq_along(metrics), function(i, ...) {
     metric_name <- names(metrics[i])
     fun <- metrics[[i]]
-
-    # Identify the arguments that fun() accepts and only keep valid ones
-    valid_args <- names(formals(fun))
-    matching_args <- args[names(args) %in% valid_args]
+    matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
       fun, c(list(observed, predicted), matching_args))
@@ -134,6 +131,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   return(data[])
 
 }
+
 
 #' @importFrom Metrics se ae ape
 #' @rdname score
@@ -148,10 +146,7 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   lapply(seq_along(metrics), function(i, ...) {
     metric_name <- names(metrics[i])
     fun <- metrics[[i]]
-
-    # Identify the arguments that fun() accepts and only keep valid ones
-    valid_args <- names(formals(fun))
-    matching_args <- args[names(args) %in% valid_args]
+    matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
       fun, c(list(observed, predicted), matching_args))
@@ -174,10 +169,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   lapply(seq_along(metrics), function(i, ...) {
     metric_name <- names(metrics[i])
     fun <- metrics[[i]]
-
-    # Identify the arguments that fun() accepts and only keep valid ones
-    valid_args <- names(formals(fun))
-    matching_args <- args[names(args) %in% valid_args]
+    matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
       fun, c(list(unique(observed), t(predicted)), matching_args)),
