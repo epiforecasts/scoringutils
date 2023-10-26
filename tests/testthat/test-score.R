@@ -54,6 +54,103 @@ test_that("score.scoringutils_binary() errors with only NA values", {
   )
 })
 
+test_that("score() gives same result for binary as regular function", {
+  binary_example <- data.table::setDT(scoringutils::example_binary[!is.na(predicted)])
+  eval <- suppressMessages(score(binary_example))
+  manual_eval <- brier_score(
+    factor(binary_example$observed),
+    binary_example$predicted
+  )
+  expect_equal(eval$brier_score, manual_eval)
+})
+
+test_that(
+  "passing additional functions to score binary works handles them", {
+    test_fun <- function(x, y, ...) {
+      if (hasArg("test")) {
+        message("test argument found")
+      }
+      return(y)
+    }
+
+    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
+                           target_type == "Cases" & location == "DE"]
+
+    # passing a simple function works
+    expect_equal(
+      score(df,
+            metrics = list("identity" = function(x, y) {return(y)}))$identity,
+      df$predicted
+    )
+
+
+    # passing an additional argument that is not part of the function
+    # definition works
+    expect_equal(
+      score(df,
+            metrics = list("identity" = function(x, y) {return(y)}),
+            additional_arg = "something")$identity,
+      df$predicted
+    )
+
+    # passing an additional function to one that accepts ... works
+    expect_message(
+      score(df,
+            metrics = list("test_function" = test_fun),
+            test = "something"),
+      "test argument found"
+    )
+
+    # passing an argument that's the same as a named argument
+    expect_equal(
+      unique(
+        score(df,
+              metrics = list("test_function" = test_fun),
+              y = "something")$test_function
+      ),
+      "something"
+    )
+
+
+    ## Additional tests for check_metrics()
+    # passing several functions, one of them named
+    res <- score(df, metrics = c(test_fun, "test" = test_fun))
+    expect_equal(res$test_fun, res$test)
+
+    # passing in something that's not a function or a known metric
+    expect_warning(
+      expect_warning(
+        score(df, metrics = list(test_fun, "test" = test_fun, "hi", 3)),
+        "`Metrics` element number 3 is not a valid function"
+      ),
+      "`Metrics` element number 4 is not a valid function")
+
+    # passing a single named argument for metrics by position
+    expect_contains(
+      names(score(df, list("hi" = test_fun))),
+      "hi")
+
+    # passing several unnamed arguments to metrics by position
+    fun2 <- test_fun
+    expect_contains(names(score(df, metrics = c(test_fun, fun2))), c("test_fun", "fun2"))
+
+    # not working: passing an unnamed argument with only unnamed list elements
+
+    # providing no additional function argument works
+    score(example_binary)
+
+    # providing an additional, unrelated function argument works
+    score(example_binary, unnecessary_argument = "unnecessary")
+    # score(example_binary, metrics = brier_score, unnecessary_argument = "unnecessary")
+
+  }
+)
+
+
+
+
+
+
 # test point case --------------------------------------------------------------
 test_that("function produces output for a point case", {
   point_example <- data.table::setDT(scoringutils::example_point)

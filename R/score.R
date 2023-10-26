@@ -239,13 +239,15 @@ validate_metrics <- function(metrics) {
     names(metrics)[is_missing_name] <- substitute_names[is_missing_name]
   }
 
+
   for (i in seq_along(metrics)) {
     check_fun <- check_function(metrics[[i]])
     if (!is.logical(check_fun)) {
       warning("`Metrics` element number ", i, " is not a valid function")
-      metrics[[i]] <- NULL
+      names(metrics)[i] <- "scoringutils_delete"
     }
   }
+  metrics[names(metrics) == "scoringutils_delete"] <- NULL
 
   assert_list(metrics, min.len = 1, .var.name = "valid metrics")
 
