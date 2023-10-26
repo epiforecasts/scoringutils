@@ -180,3 +180,34 @@
 #'
 #' @keywords info
 "metrics"
+
+#' Default metrics for binary forecasts.
+#'
+#' A named list with functions:
+#' - "brier_score" = [brier_score()]
+#' - "log_score" = [logs_binary()]
+#' @keywords info
+"metrics_binary"
+
+#' Default metrics for point forecasts.
+#'
+#' A named list with functions:
+#' - "ae_point" = [ae()][Metrics::ae()]
+#' - "se_point" = [se()][Metrics::se()]
+#' - "ape" = [ape()][Metrics::ape()]
+#' @keywords info
+"metrics_point"
+
+#' Default metrics for sample-based forecasts.
+#'
+#' A named list with functions:
+#' - "mad" = [mad_sample()]
+#' - "bias" = [bias_sample()]
+#' - "dss" = [dss_sample()]
+#' - "crps" = [crps_sample()]
+#' - "log_score" = [logs_sample()]
+#' - "mad" = [mad_sample()]
+#' - "ae_median" = [ae_median_sample()]
+#' - "se_mean" = [se_mean_sample()]
+#' @keywords info
+"metrics_sample"
