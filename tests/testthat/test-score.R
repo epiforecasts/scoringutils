@@ -46,8 +46,41 @@ test_that("function produces score for a binary case", {
   expect_true("brier_score" %in% names(eval))
 })
 
+test_that("score.scoringutils_binary() errors with only NA values", {
+  only_nas <- copy(example_binary)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
 
+# test point case --------------------------------------------------------------
+test_that("function produces output for a point case", {
+  point_example <- data.table::setDT(scoringutils::example_point)
+  eval <- suppressMessages(score(point_example))
+  eval <- summarise_scores(eval, by = c("model", "target_type"))
 
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
+  expect_equal(
+    colnames(eval),
+    c(
+      "model", "target_type",
+      "ae_point",
+      "se_point"
+    )
+  )
+})
+
+test_that("score.scoringutils_point() errors with only NA values", {
+  only_nas <- copy(example_point)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
 
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
@@ -151,6 +184,15 @@ test_that("WIS is the same with other metrics omitted or included", {
 })
 
 
+test_that("score.scoringutils_quantile() errors with only NA values", {
+  only_nas <- copy(example_quantile)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
+
+
 
 
 
@@ -166,10 +208,25 @@ test_that("function produces output for a continuous format case", {
   eval2 <- eval2[order(model)]
   all(eval == eval2, na.rm = TRUE)
 
+  only_nas <- copy(example_continuous)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+
   expect_equal(
     nrow(eval) > 1,
     TRUE
   )
+
+  expect_equal(
+    nrow(eval),
+    887
+  )
+})
+
+test_that("function throws an error if data is missing", {
+  expect_error(suppressMessages(score(data = NULL)))
 })
 
 # test_that(

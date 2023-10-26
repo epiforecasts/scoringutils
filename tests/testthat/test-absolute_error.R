@@ -64,7 +64,7 @@ test_that("abs error is correct within score, point forecast only", {
   data_scoringutils <- merge_pred_and_obs(
     forecasts = fc_scoringutils,
     observations = truth_scoringutils
-  )
+  )[, quantile := NULL]
 
   eval <- scoringutils::score(data_scoringutils)
 
@@ -73,7 +73,7 @@ test_that("abs error is correct within score, point forecast only", {
   expected <- abs(y - point_forecast)
 
   # expect_equal(actual$abs_error, expected)
-  expect_equal(eval$ae_point, expected)
+  expect_equal(eval$ae, expected)
 })
 
 test_that("abs error is correct, point and median forecasts different", {
@@ -138,13 +138,14 @@ test_that("abs error is correct, point and median forecasts different", {
   data_scoringutils <- merge_pred_and_obs(
     forecasts = fc_scoringutils,
     observations = truth_scoringutils
-  )
+  )[, quantile := NULL]
+
 
   eval <- scoringutils::score(data_scoringutils)
 
   expected <- abs(y - point_forecast)
   # expect_equal(actual$abs_error, expected)
-  expect_equal(eval[!is.na(ae_point)]$ae_point, expected)
+  expect_equal(eval[type == "point"]$ae_point, expected)
 })
 
 test_that("abs error is correct, point and median forecasts same", {
@@ -212,17 +213,16 @@ test_that("abs error is correct, point and median forecasts same", {
     observations = truth_scoringutils
   )
 
-  eval <- score(data = data_scoringutils)
+  data_scoringutils_point <- data_scoringutils[type == "point"][, quantile := NULL]
+
+  eval <- score(data = data_scoringutils_point)
   eval <- summarise_scores(eval,
     by = c(
       "location", "target_end_date",
-      "target_variable", "horizon"
+      "horizon"
     ),
     na.rm = TRUE
   )
-
-
-  # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
 
   expected <- abs(y - point_forecast)
 

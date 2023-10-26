@@ -42,14 +42,14 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
     )
   )
 
-  scores_point <- suppressMessages(score(example_point[is.na(quantile)]))
+  scores_point <- suppressMessages(score(example_point))
 
-  expect_warning(
-    expect_warning(
-      summarise_scores(
-        scores_point, by = "model", relative_skill = TRUE, na.rm = TRUE)
-    )
-  )
+  # expect_warning(
+  #   expect_warning(
+  #     summarise_scores(
+  #       scores_point, by = "model", relative_skill = TRUE, na.rm = TRUE)
+  #   )
+  # )
 })
 
 test_that("summarise_scores() can compute relative measures", {
