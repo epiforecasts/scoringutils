@@ -278,11 +278,6 @@ crps_sample <- function(observed, predicted, ...) {
 
 mad_sample <- function(observed = NULL, predicted, ...) {
 
-  if(!is.null(observed)) {
-    message("`observed` argument was provided. Since the mad is a feature of ",
-            "the predictions only and does not depend on observations, those ",
-            "will be ignored")
-  }
   assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
 
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
