@@ -14,11 +14,6 @@
 #' error otherwise.
 #' @keywords check-inputs
 assert_input_sample <- function(observed, predicted) {
-  # things that need to be checked
-  # - observed and predicted need to be numeric
-  # - observed needs to be a scalar or a vector of size n x 1
-  # - predicted needs to be a vector or a matrix of size n x N
-
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
 
@@ -67,12 +62,6 @@ check_input_sample <- function(observed, predicted) {
 #' error otherwise.
 #' @keywords internal
 assert_input_quantile <- function(observed, predicted, quantile) {
-  # things that need to be checked
-  # - all inputs need to be numeric
-  # - quantile needs to be a numeric vector of size N between 0 and 1
-  #      we can also think about allowing a nx N matrix in the future
-  # - observed needs to be a scalar or a vector of size n x 1
-  # - predicted needs to be a vector or a matrix of size n x N
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
 
@@ -127,12 +116,6 @@ check_input_quantile <- function(observed, predicted, quantile) {
 #' error otherwise.
 #' @keywords check-inputs
 assert_input_binary <- function(observed, predicted, ...) {
-  # things that need to be checked
-  # - all inputs need to be vectors of the same length
-  # - observed needs to be a factor
-  # - they need to have the same levels
-  # - predicted needs to be numeric between 0 and 1
-
   if (length(observed) != length(predicted)) {
     stop("`observed` and `predicted` need to be ",
          "of same length when scoring binary forecasts")
@@ -171,10 +154,6 @@ check_input_binary <- function(observed, predicted) {
 #' error otherwise.
 #' @keywords check-inputs
 assert_input_point <- function(observed, predicted) {
-  # things that need to be checked
-  # - all inputs need to be numeric vectors
-  # - they need to have the same length
-
   assert(check_numeric_vector(observed, min.len = 1))
   assert(check_numeric_vector(predicted, min.len = 1))
   if (length(observed) != length(predicted)) {

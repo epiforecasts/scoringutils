@@ -14,7 +14,7 @@ interval_score(
 )
 }
 \arguments{
-\item{observed}{A vector with the observed values of size n}
+\item{observed}{A vector with observed values of size n}
 
 \item{lower}{vector of size n with the prediction for the lower quantile
 of the given range}

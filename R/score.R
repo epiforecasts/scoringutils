@@ -36,7 +36,7 @@
 #' R](https://arxiv.org/abs/2205.07090).
 #'
 #' @param data A data.frame or data.table with the following columns:
-#' - `observed` - the observed values
+#' - `observed` - observed values
 #' - `predicted` - predictions, predictive samples or predictive quantiles
 #' - `model` - name of the model or forecaster who made a prediction
 #'

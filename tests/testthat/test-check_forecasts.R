@@ -12,9 +12,8 @@ test_that("check_columns_present() works", {
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),
     "Data needs to have a column called 'nop'"
   )
-  expect_equal(
-    check_columns_present(example_quantile, c("observed", "predicted")),
-    TRUE
+  expect_true(
+    check_columns_present(example_quantile, c("observed", "predicted"))
   )
 })
 

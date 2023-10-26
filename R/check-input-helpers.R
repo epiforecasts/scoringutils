@@ -7,7 +7,7 @@
 #' @return Either TRUE if the test is successful or a string with an error
 #' message
 #' @keywords internal
-check_numeric_vector = function(x, ...) {
+check_numeric_vector <- function(x, ...) {
   # check functions must return TRUE on success
   # and a custom error message otherwise
   numeric <- check_numeric(x, ...)

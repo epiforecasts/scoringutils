@@ -28,10 +28,14 @@
 #' calculations. All predictions are assumed represent the probability that the
 #' outcome is equal of the highest factor level (in this case that the
 #' outcome is equal to 1).
+#'
 #' You could alternatively also provide a vector like
-#' `observed = c("a", "b", "b", "a")` (with two levels, `a` and `b`),
+#' `observed = factor(c("a", "b", "b", "a"))` (with two levels, `a` and `b`),
 #' which would result in exactly the same internal representation. Probabilities
 #' then represent the probability that the outcome is equal to "b".
+#' If you want your predictions to be probabilities that the outcome is "a",
+#' then you could of course make `observed` a factor with levels swapped, i.e.
+#' `observed = factor(c("a", "b", "b", "a"), levels = c("b", "a"))`
 #'
 #' @param observed A factor of length n with exactly two levels, holding
 #' the observed values.
@@ -86,9 +90,12 @@ brier_score <- function(observed, predicted) {
 #' outcome is equal of the highest factor level (in this case that the
 #' outcome is equal to 1).
 #' You could alternatively also provide a vector like
-#' `observed = c("a", "b", "b", "a")` (with two levels, `a` and `b`),
+#' `observed = factor(c("a", "b", "b", "a"))` (with two levels, `a` and `b`),
 #' which would result in exactly the same internal representation. Probabilities
 #' then represent the probability that the outcome is equal to "b".
+#' If you want your predictions to be probabilities that the outcome is "a",
+#' then you could of course make `observed` a factor with levels swapped, i.e.
+#' `observed = factor(c("a", "b", "b", "a"), levels = c("b", "a"))`
 #'
 #' @inheritParams brier_score
 #' @return A numeric vector with log scores

@@ -16,7 +16,7 @@ score_quantile(
 \arguments{
 \item{data}{A data.frame or data.table with the following columns:
 \itemize{
-\item \code{observed} - the observed values
+\item \code{observed} - observed values
 \item \code{predicted} - predictions, predictive samples or predictive quantiles
 \item \code{model} - name of the model or forecaster who made a prediction
 }

@@ -43,9 +43,12 @@ calculations. All predictions are assumed represent the probability that the
 outcome is equal of the highest factor level (in this case that the
 outcome is equal to 1).
 You could alternatively also provide a vector like
-\code{observed = c("a", "b", "b", "a")} (with two levels, \code{a} and \code{b}),
+\code{observed = factor(c("a", "b", "b", "a"))} (with two levels, \code{a} and \code{b}),
 which would result in exactly the same internal representation. Probabilities
 then represent the probability that the outcome is equal to "b".
+If you want your predictions to be probabilities that the outcome is "a",
+then you could of course make \code{observed} a factor with levels swapped, i.e.
+\code{observed = factor(c("a", "b", "b", "a"), levels = c("b", "a"))}
 }
 \examples{
 observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))

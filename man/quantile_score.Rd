@@ -7,7 +7,7 @@
 quantile_score(observed, predicted, quantile, weigh = TRUE)
 }
 \arguments{
-\item{observed}{A vector with the observed values of size n}
+\item{observed}{A vector with observed values of size n}
 
 \item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte

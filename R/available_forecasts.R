@@ -89,4 +89,3 @@ avail_forecasts <- function(data,
   )
   available_forecasts(data, by, collapse)
 }
-

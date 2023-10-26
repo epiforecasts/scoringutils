@@ -87,7 +87,7 @@ bias_sample <- function(observed, predicted) {
 #'   abs(observed - median_prediction)
 #' }
 #'
-#' @param observed A vector with the observed values of size n
+#' @param observed A vector with observed values of size n
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the number of Monte
 #' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
@@ -123,7 +123,7 @@ ae_median_sample <- function(observed, predicted) {
 #'   mean(observed - mean_prediction)^2
 #' }
 #'
-#' @param observed A vector with the observed values of size n
+#' @param observed A vector with observed values of size n
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the number of Monte
 #' Carlo samples. Alternatively, `predicted` can just be a vector of size n.

@@ -7,7 +7,7 @@
 abs_error(observed, predicted)
 }
 \arguments{
-\item{observed}{A vector with the observed values of size n}
+\item{observed}{A vector with observed values of size n}
 
 \item{predicted}{numeric vector with predictions, corresponding to the
 quantiles in a second vector, \code{quantiles}.}

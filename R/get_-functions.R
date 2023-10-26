@@ -89,8 +89,10 @@ get_prediction_type <- function(data) {
   if (is.data.frame(data)) {
     data <- data$predicted
   }
-  if (isTRUE(all.equal(as.vector(data), as.integer(data))) &&
-      !all(is.na(as.integer(data)))) {
+  if (
+    isTRUE(all.equal(as.vector(data), as.integer(data))) &&
+    !all(is.na(as.integer(data)))
+  ) {
     return("discrete")
   } else if (suppressWarnings(!all(is.na(as.numeric(data))))) {
     return("continuous")
@@ -168,7 +170,7 @@ get_protected_columns <- function(data = NULL) {
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
 
-  if(is.null(data)) {
+  if (is.null(data)) {
     return(protected_columns)
   }
 

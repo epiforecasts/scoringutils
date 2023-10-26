@@ -12,6 +12,21 @@ permutation_test(
   comparison_mode = c("difference", "ratio")
 )
 }
+\arguments{
+\item{scores1}{vector of scores to compare against another vector of scores}
+
+\item{scores2}{A second vector of scores to compare against the first}
+
+\item{n_permutation}{The number of replications to use for a permutation
+test. More replications yield more exact results, but require more
+computation.}
+
+\item{one_sided}{Whether or not to compute a one-sided test. Default is
+\code{FALSE},}
+
+\item{comparison_mode}{How to compute the test statistic for the comparison
+of the two scores. Should be either "difference" or "ratio".}
+}
 \value{
 p-value of the permutation test
 }
@@ -20,6 +35,10 @@ The implementation of the permutation test follows the
 function
 \code{permutationTest} from the \code{surveillance} package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
+The function compares two vectors of scores. It computes the mean of each
+vector independently and then takes either the difference or the ratio of
+the two. This observed difference or ratio is compared against the same
+test statistic based on permutations of the original data.
 
 Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 }

@@ -7,7 +7,7 @@
 squared_error(observed, predicted)
 }
 \arguments{
-\item{observed}{A vector with the observed values of size n}
+\item{observed}{A vector with observed values of size n}
 
 \item{predicted}{A vector with predicted values of size n}
 }

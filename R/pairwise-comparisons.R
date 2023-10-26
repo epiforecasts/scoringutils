@@ -234,7 +234,7 @@ pairwise_comparison_one_group <- function(scores,
   # calculate relative skill as geometric mean
   # small theta is again better (assuming that the score is negatively oriented)
   result[, `:=`(
-    theta = geom_mean(ratio),
+    theta = geometric_mean(ratio),
     rel_to_baseline = NA_real_
   ),
   by = "model"
@@ -388,12 +388,12 @@ infer_rel_skill_metric <- function(scores) {
 #' Used in [pairwise_comparison()].
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
-#' @return the geometric mean of the values in `x`
+#' @return the geometric mean of the values in `x`. `NA` values are ignored.
 #'
 #' @keywords internal
-geom_mean <- function(x) {
-  geom_mean <- exp(mean(log(x[!is.na(x)])))
-  return(geom_mean)
+geometric_mean <- function(x) {
+  geometric_mean <- exp(mean(log(x[!is.na(x)])))
+  return(geometric_mean)
 }
 
 #' @title Simple permutation test
@@ -402,8 +402,22 @@ geom_mean <- function(x) {
 #' function
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
+#' The function compares two vectors of scores. It computes the mean of each
+#' vector independently and then takes either the difference or the ratio of
+#' the two. This observed difference or ratio is compared against the same
+#' test statistic based on permutations of the original data.
 #'
 #' Used in [pairwise_comparison()].
+#'
+#' @param scores1 vector of scores to compare against another vector of scores
+#' @param scores2 A second vector of scores to compare against the first
+#' @param n_permutation The number of replications to use for a permutation
+#' test. More replications yield more exact results, but require more
+#' computation.
+#' @param one_sided Whether or not to compute a one-sided test. Default is
+#' `FALSE`,
+#' @param comparison_mode How to compute the test statistic for the comparison
+#' of the two scores. Should be either "difference" or "ratio".
 #'
 #' @return p-value of the permutation test
 #' @keywords internal
@@ -418,14 +432,19 @@ permutation_test <- function(scores1,
   comparison_mode <- match.arg(comparison_mode)
   if (comparison_mode == "ratio") {
     # distinguish between on-sided and two-sided:
-    testStat_observed <- ifelse(one_sided,
-                                meanscores1 / meanscores2,
-                                max(meanscores1 / meanscores2, meanscores2 / meanscores1)
+    test_stat_observed <- ifelse(
+      one_sided,
+      meanscores1 / meanscores2,
+      max(meanscores1 / meanscores2, meanscores2 / meanscores1)
     )
   } else {
-    testStat_observed <- ifelse(one_sided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
+    test_stat_observed <- ifelse(
+      one_sided,
+      meanscores1 - meanscores2,
+      abs(meanscores1 - meanscores2)
+    )
   }
-  testStat_permuted <- replicate(n_permutation, {
+  test_stat_permuted <- replicate(n_permutation, {
     sel <- rbinom(nTime, size = 1, prob = 0.5)
     g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1])) / nTime
     g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0])) / nTime
@@ -435,7 +454,7 @@ permutation_test <- function(scores1,
       ifelse(one_sided, g1 - g2, abs(g1 - g2))
     }
   })
-  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (n_permutation + 1)
+  pVal <- (1 + sum(test_stat_permuted >= test_stat_observed)) / (n_permutation + 1)
   # plus ones to make sure p-val is never 0?
   return(pVal)
 }
