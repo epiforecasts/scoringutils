@@ -2,15 +2,24 @@
 % Please edit documentation in R/score.R
 \name{score}
 \alias{score}
+\alias{score.default}
+\alias{score.scoringutils_binary}
 \alias{score.scoringutils_point}
 \alias{score.scoringutils_sample}
+\alias{score.scoringutils_quantile}
 \title{Evaluate forecasts}
 \usage{
 score(data, ...)
 
-\method{score}{scoringutils_point}(data, metrics = NULL, ...)
+\method{score}{default}(data, ...)
 
-\method{score}{scoringutils_sample}(data, metrics = NULL, ...)
+\method{score}{scoringutils_binary}(data, metrics = metrics_binary, ...)
+
+\method{score}{scoringutils_point}(data, metrics = metrics_point, ...)
+
+\method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
+
+\method{score}{scoringutils_quantile}(data, metrics = NULL, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the following columns:

@@ -101,20 +101,19 @@ score <- function(data, ...) {
   UseMethod("score")
 }
 
+#' @rdname score
 #' @export
 score.default <- function(data, ...) {
   data <- validate(data)
   score(data, ...)
 }
 
+#' @rdname score
 #' @export
-score.scoringutils_binary <- function(data, metrics = NULL, ...) {
+score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
-
-  metrics <- list("brier_score" = brier_score,
-                  "log_score" = logs_binary)
 
   # Extract the arguments passed in ...
   args <- list(...)
@@ -136,16 +135,13 @@ score.scoringutils_binary <- function(data, metrics = NULL, ...) {
 
 }
 
-#' @importFrom Metrics se
+#' @importFrom Metrics se ae ape
 #' @rdname score
 #' @export
-score.scoringutils_point <- function(data, metrics = NULL, ...) {
+score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
-
-  metrics <- list("ae_point" = abs_error,
-                  "se_point" = se)
 
   # Extract the arguments passed in ...
   args <- list(...)
@@ -168,17 +164,10 @@ score.scoringutils_point <- function(data, metrics = NULL, ...) {
 
 #' @rdname score
 #' @export
-score.scoringutils_sample <- function(data, metrics = NULL, ...) {
+score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
-
-  metrics <- list("bias" = bias_sample,
-                  "dss" = dss_sample,
-                  "crps" = crps_sample,
-                  "log_score" = logs_sample, # need to think
-                  "ae_median" = ae_median_sample,
-                  "se_mean" = se_mean_sample)
 
   # Extract the arguments passed in ...
   args <- list(...)
@@ -207,7 +196,8 @@ score.scoringutils_sample <- function(data, metrics = NULL, ...) {
   return(data[])
 }
 
-
+#' @rdname score
+#' @export
 score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
