@@ -2,9 +2,15 @@
 % Please edit documentation in R/score.R
 \name{score}
 \alias{score}
+\alias{score.scoringutils_point}
+\alias{score.scoringutils_sample}
 \title{Evaluate forecasts}
 \usage{
-score(data, metrics = NULL, ...)
+score(data, ...)
+
+\method{score}{scoringutils_point}(data, metrics = NULL, ...)
+
+\method{score}{scoringutils_sample}(data, metrics = NULL, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the following columns:
@@ -24,11 +30,11 @@ For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
 
+\item{...}{additional parameters passed down to other functions.}
+
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
 default), all available metrics will be computed. For a list of available
 metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
-
-\item{...}{additional parameters passed down to other functions.}
 }
 \value{
 A data.table with unsummarised scores. There will be one score per

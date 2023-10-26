@@ -97,63 +97,129 @@
 #' PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
 #' @export
 
-# score <- function(data, ...) {
-#   UseMethod("score")
-# }
-#
-# score.default <- function(data, ...) {
-#   data <- validate(data)
-#   score(checked_data)
-# }
+score <- function(data, ...) {
+  UseMethod("score")
+}
 
-
-score <- function(data,
-                  metrics = NULL,
-                  ...) {
-
+#' @export
+score.default <- function(data, ...) {
   data <- validate(data)
+  score(data, ...)
+}
 
-  data <- data[!is.na(observed) & !is.na(predicted)]
-  if (nrow(data) == 0) {
-    stop("After removing NA values in `observed` and `predicted`, there were no observations left")
-  }
-
+#' @export
+score.scoringutils_binary <- function(data, metrics = NULL, ...) {
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
-  forecast_type <-attr(data, "forecast_type")
 
-  # check metrics are available or set to all metrics --------------------------
+  metrics <- list("brier_score" = brier_score,
+                  "log_score" = logs_binary)
+
+  # Extract the arguments passed in ...
+  args <- list(...)
+  lapply(seq_along(metrics), function(i, ...) {
+    metric_name <- names(metrics[i])
+    fun <- metrics[[i]]
+
+    # Identify the arguments that fun() accepts and only keep valid ones
+    valid_args <- names(formals(fun))
+    matching_args <- args[names(args) %in% valid_args]
+
+    data[, (metric_name) := do.call(
+      fun, c(list(observed, predicted), matching_args))
+    ]
+    return()
+  }, ...)
+
+  return(data[])
+
+}
+
+#' @importFrom Metrics se
+#' @rdname score
+#' @export
+score.scoringutils_point <- function(data, metrics = NULL, ...) {
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
+  forecast_unit <- attr(data, "forecast_unit")
+
+  metrics <- list("ae_point" = abs_error,
+                  "se_point" = se)
+
+  # Extract the arguments passed in ...
+  args <- list(...)
+  lapply(seq_along(metrics), function(i, ...) {
+    metric_name <- names(metrics[i])
+    fun <- metrics[[i]]
+
+    # Identify the arguments that fun() accepts and only keep valid ones
+    valid_args <- names(formals(fun))
+    matching_args <- args[names(args) %in% valid_args]
+
+    data[, (metric_name) := do.call(
+      fun, c(list(observed, predicted), matching_args))
+    ]
+    return()
+  }, ...)
+
+  return(data[])
+}
+
+#' @rdname score
+#' @export
+score.scoringutils_sample <- function(data, metrics = NULL, ...) {
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
+  forecast_unit <- attr(data, "forecast_unit")
+
+  metrics <- list("bias" = bias_sample,
+                  "dss" = dss_sample,
+                  "crps" = crps_sample,
+                  "log_score" = logs_sample, # need to think
+                  "ae_median" = ae_median_sample,
+                  "se_mean" = se_mean_sample)
+
+  # Extract the arguments passed in ...
+  args <- list(...)
+  lapply(seq_along(metrics), function(i, ...) {
+    metric_name <- names(metrics[i])
+    fun <- metrics[[i]]
+
+    # Identify the arguments that fun() accepts and only keep valid ones
+    valid_args <- names(formals(fun))
+    matching_args <- args[names(args) %in% valid_args]
+
+    data[, (metric_name) := do.call(
+      fun, c(list(unique(observed), t(predicted)), matching_args)),
+      by = forecast_unit
+    ]
+    return()
+  }, ...)
+
+  data <- data[
+    , lapply(.SD, unique),
+    .SDcols = colnames(data) %like% paste(names(metrics), collapse = "|"),
+    by = forecast_unit
+  ]
+
+
+  return(data[])
+}
+
+
+score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
+  forecast_unit <- attr(data, "forecast_unit")
+
   metrics <- check_metrics(metrics)
-
-  # Score binary predictions ---------------------------------------------------
-  if (forecast_type == "binary") {
-    scores <- score_binary(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics
-    )
-  }
-
-  # Score quantile predictions -------------------------------------------------
-  if (forecast_type == "quantile") {
-    scores <- score_quantile(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics,
-      ...
-    )
-  }
-
-  # Score integer or continuous predictions ------------------------------------
-  if (forecast_type == "sample") {
-    prediction_type <- get_prediction_type(data)
-
-    scores <- score_sample(
-      data = data,
-      forecast_unit = forecast_unit,
-      metrics = metrics,
-      prediction_type = prediction_type
-    )
-  }
+  scores <- score_quantile(
+    data = data,
+    forecast_unit = forecast_unit,
+    metrics = metrics,
+    ...
+  )
 
   return(scores[])
 }
