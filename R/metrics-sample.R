@@ -61,7 +61,7 @@ bias_sample <- function(observed, predicted) {
 
   # empirical cdf
   n_pred <- ncol(predicted)
-  p_x <- rowSums(predicted <= observed) / n_preda
+  p_x <- rowSums(predicted <= observed) / n_pred
 
   if (prediction_type == "continuous") {
     res <- 1 - 2 * p_x
@@ -279,11 +279,11 @@ crps_sample <- function(observed, predicted, ...) {
 mad_sample <- function(observed = NULL, predicted, ...) {
 
   if(!is.null(observed)) {
-    stop("`observed` argument was provided, but should be NULL.",
-         "Please assign the `predicted` argument explicitly.")
+    message("`observed` argument was provided. Since the mad is a feature of ",
+            "the predictions only and does not depend on observations, those ",
+            "will be ignored")
   }
-  observed <- rep(NA_real_, nrow(predicted))
-  assert_input_sample(observed, predicted)
+  assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
 
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)
