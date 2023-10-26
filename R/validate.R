@@ -151,7 +151,6 @@ validate_general <- function(data) {
 }
 
 
-
 #' @title Class constructor for scoringutils objects
 #'
 #' @description
@@ -171,4 +170,38 @@ new_scoringutils <- function(data, classname) {
   class(data) <- c(classname, class(data))
   data <- copy(data)
   return(data[])
+}
+
+
+#' @title Validate metrics
+#'
+#' @description This function validates whether the list of metrics is a list
+#' of valid functions.
+#'
+#' The function is used in [score()] to make sure that all metrics are valid
+#' functions
+#'
+#' @param metrics A named list with metrics. Every element should be a scoring
+#' function to be applied to the data.
+#'
+#' @return A named list of metrics, with those filtered out that are not
+#' valid functions
+#' @importFrom checkmate assert_list test_list check_function
+
+validate_metrics <- function(metrics) {
+
+  assert_list(metrics, min.len = 1, names = "named")
+
+  for (i in seq_along(metrics)) {
+    check_fun <- check_function(metrics[[i]])
+    if (!is.logical(check_fun)) {
+      warning("`Metrics` element number ", i, " is not a valid function")
+      names(metrics)[i] <- "scoringutils_delete"
+    }
+  }
+  metrics[names(metrics) == "scoringutils_delete"] <- NULL
+
+  assert_list(metrics, min.len = 1, .var.name = "valid metrics")
+
+  return(metrics)
 }
