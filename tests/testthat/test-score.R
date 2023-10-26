@@ -112,15 +112,13 @@ test_that(
     )
 
 
-    ## Additional tests for check_metrics()
-    # passing several functions, one of them named
-    res <- score(df, metrics = c(test_fun, "test" = test_fun))
-    expect_equal(res$test_fun, res$test)
-
+    ## Additional tests for validate_metrics()
     # passing in something that's not a function or a known metric
     expect_warning(
       expect_warning(
-        score(df, metrics = list(test_fun, "test" = test_fun, "hi", 3)),
+        score(df, metrics = list(
+          "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3)
+        ),
         "`Metrics` element number 3 is not a valid function"
       ),
       "`Metrics` element number 4 is not a valid function")
@@ -130,19 +128,14 @@ test_that(
       names(score(df, list("hi" = test_fun))),
       "hi")
 
-    # passing several unnamed arguments to metrics by position
-    fun2 <- test_fun
-    expect_contains(names(score(df, metrics = c(test_fun, fun2))), c("test_fun", "fun2"))
-
-    # not working: passing an unnamed argument with only unnamed list elements
-
-    # providing no additional function argument works
-    score(example_binary)
-
     # providing an additional, unrelated function argument works
-    score(example_binary, unnecessary_argument = "unnecessary")
-    # score(example_binary, metrics = brier_score, unnecessary_argument = "unnecessary")
-
+    expect_no_error(
+      score(example_binary, unnecessary_argument = "unnecessary")
+    )
+    expect_no_error(
+      score(example_binary, metrics = list("brier_score" = brier_score),
+            unnecessary_argument = "unnecessary")
+    )
   }
 )
 
