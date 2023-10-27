@@ -324,7 +324,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #' @param columns names of columns to be checked
 #' @return Returns string with a message with the first issue encountered if
 #'  any of the column names are not in data, otherwise returns TRUE
-#'
+#' @importFrom checkmate assert_character
 #' @keywords check-inputs
 check_columns_present <- function(data, columns) {
   if (is.null(columns)) {
@@ -334,7 +334,7 @@ check_columns_present <- function(data, columns) {
   colnames <- colnames(data)
   for (x in columns){
     if (!(x %in% colnames)) {
-      msg <- paste0("Data needs to have a column called '", x, "'")
+      msg <- paste0("Column '", x, "' not found in data")
       return(msg)
     }
   }
