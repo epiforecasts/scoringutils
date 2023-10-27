@@ -98,12 +98,10 @@ summarise_scores <- function(scores,
          the metrics that were used for scoring.")
   }
 
-  # store attributes as they may be dropped in data.table operations
-  stored_attributes <- get_scoringutils_attributes(scores)
-
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
+  check_attribute_conflict(scores, "forecast_unit", forecast_unit)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
@@ -112,19 +110,26 @@ summarise_scores <- function(scores,
 
   # if across is provided, remove from by
   if (!is.null(across)) {
-    if (!all(across %in% by)) {
+    if (!all(across %in% forecast_unit)) {
       stop(
         "The columns specified in 'across' must be a subset of the columns ",
         "that define the forecast unit (possible options are ",
-        toString(by),
+        toString(forecast_unit),
         "). Please check your input and try again."
       )
     }
-    by <- setdiff(by, across)
+    by <- setdiff(forecast_unit, across)
   }
 
   # check input arguments and check whether relative skill can be computed
   assert(check_columns_present(scores, by))
+
+  # store attributes as they may be dropped in data.table operations
+  stored_attributes <- c(
+    get_scoringutils_attributes(scores),
+    "scoringutils_by" = by,
+    "unsummarised_scores" =  scores
+  )
 
   # get all available metrics to determine names of columns to summarise over
   cols_to_summarise <- paste0(available_metrics(), collapse = "|")
@@ -166,6 +171,7 @@ summarise_scores <- function(scores,
   }
 
   scores <- assign_attributes(scores, stored_attributes)
+
 
   return(scores[])
 }
