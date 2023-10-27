@@ -129,6 +129,8 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
     return()
   }, ...)
 
+  setattr(data, "metrics", names(metrics))
+
   return(data[])
 
 }
@@ -155,6 +157,8 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
     ]
     return()
   }, ...)
+
+  setattr(data, "metrics", names(metrics))
 
   return(data[])
 }
@@ -187,6 +191,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     by = forecast_unit
   ]
 
+  setattr(data, "metrics", names(metrics))
 
   return(data[])
 }
@@ -205,6 +210,8 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
     metrics = metrics,
     ...
   )
+
+  setattr(data, "metrics", metrics)
 
   return(scores[])
 }
