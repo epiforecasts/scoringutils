@@ -32,8 +32,6 @@
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
 #' this will be either interval score, CRPS or Brier score (depending on which
 #' of these is available in the input data)
-#' @param metric  `r lifecycle::badge("deprecated")` Deprecated in 1.1.0. Use
-#' `relative_skill_metric` instead.
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
@@ -89,16 +87,8 @@ summarise_scores <- function(scores,
                              fun = mean,
                              relative_skill = FALSE,
                              relative_skill_metric = "auto",
-                             metric = deprecated(),
                              baseline = NULL,
                              ...) {
-  if (lifecycle::is_present(metric)) {
-    lifecycle::deprecate_warn(
-      "1.1.0", "summarise_scores(metric)",
-      "summarise_scores(relative_skill_metric)"
-    )
-  }
-
   if (!is.null(across) && !is.null(by)) {
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
   }
