@@ -134,13 +134,7 @@ summarise_scores <- function(scores,
   }
 
   # check input arguments and check whether relative skill can be computed
-  relative_skill <- check_summary_params(
-    scores = scores,
-    by = by,
-    relative_skill = relative_skill,
-    baseline = baseline,
-    metric = relative_skill_metric
-  )
+  assert(check_columns_present(scores, by))
 
   # get all available metrics to determine names of columns to summarise over
   cols_to_summarise <- paste0(available_metrics(), collapse = "|")
@@ -155,26 +149,14 @@ summarise_scores <- function(scores,
 
   # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
-    pairwise <- pairwise_comparison(
+
+    scores <- add_pairwise_comparison(
       scores = scores,
-      metric = relative_skill_metric,
-      baseline = baseline,
-      by = by
+      by = by,
+      relative_skill = relative_skill,
+      relative_skill_metric = relative_skill_metric,
+      baseline = baseline
     )
-
-    if (!is.null(pairwise)) {
-      # delete unnecessary columns
-      pairwise[, c(
-        "compare_against", "mean_scores_ratio",
-        "pval", "adj_pval"
-      ) := NULL]
-      pairwise <- unique(pairwise)
-
-      # merge back
-      scores <- merge(
-        scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
-      )
-    }
   }
 
   # summarise scores -----------------------------------------------------------
@@ -202,6 +184,49 @@ summarise_scores <- function(scores,
 #' @keywords scoring
 #' @export
 summarize_scores <- summarise_scores
+
+
+add_pairwise_comparison <- function(scores,
+                                    by = NULL,
+                                    relative_skill = FALSE,
+                                    relative_skill_metric = "auto",
+                                    baseline = NULL) {
+  # check input arguments and check whether relative skill can be computed
+  relative_skill <- check_summary_params(
+    scores = scores,
+    by = by,
+    relative_skill = relative_skill,
+    baseline = baseline,
+    metric = relative_skill_metric
+  )
+
+  # do pairwise comparisons ----------------------------------------------------
+  if (relative_skill) {
+    pairwise <- pairwise_comparison(
+      scores = scores,
+      metric = relative_skill_metric,
+      baseline = baseline,
+      by = by
+    )
+
+    if (!is.null(pairwise)) {
+      # delete unnecessary columns
+      pairwise[, c(
+        "compare_against", "mean_scores_ratio",
+        "pval", "adj_pval"
+      ) := NULL]
+      pairwise <- unique(pairwise)
+
+      # merge back
+      scores <- merge(
+        scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+      )
+    }
+  }
+  return(scores)
+}
+
+
 
 
 #' @title Check input parameters for [summarise_scores()]
