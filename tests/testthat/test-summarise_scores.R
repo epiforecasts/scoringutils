@@ -17,13 +17,15 @@ test_that("summarise_scores() works without any arguments", {
 
 test_that("summarise_scores() handles wrong by argument well", {
 
-  expect_error(summarise_scores(scores, by = "not_present"),
-    "The following items in `by` are notvalid column names of the data: 'not_present'. Check and run `summarise_scores()` again", # nolint
+  expect_error(
+    summarise_scores(scores, by = "not_present"),
+    "Column 'not_present' not found in data.", # nolint
     fixed = TRUE
   )
 
-  expect_error(summarise_scores(scores, by = "sample_id"),
-    "The following items in `by` are notvalid column names of the data: 'sample_id'. Check and run `summarise_scores()` again", # nolint
+  expect_error(
+    summarise_scores(scores, by = "sample_id"),
+    "Column 'sample_id' not found in data.",
     fixed = TRUE
   )
 })
