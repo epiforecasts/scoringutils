@@ -327,6 +327,10 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #'
 #' @keywords check-inputs
 check_columns_present <- function(data, columns) {
+  if (is.null(columns)) {
+    return(TRUE)
+  }
+  assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   for (x in columns){
     if (!(x %in% colnames)) {
