@@ -142,6 +142,9 @@ filter_function_args <- function(fun, args) {
 #' `attribute_list`
 #' @keywords internal
 assign_attributes <- function(object, attribute_list) {
+  if (is.null(object)) {
+    return(NULL)
+  }
   for (i in seq_along(attribute_list)) {
     setattr(object, names(attribute_list)[i], attribute_list[[i]])
   }
