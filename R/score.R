@@ -129,7 +129,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
     return()
   }, ...)
 
-  setattr(data, "metrics", names(metrics))
+  setattr(data, "metric_names", names(metrics))
 
   return(data[])
 
@@ -158,7 +158,7 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
     return()
   }, ...)
 
-  setattr(data, "metrics", names(metrics))
+  setattr(data, "metric_names", names(metrics))
 
   return(data[])
 }
@@ -191,7 +191,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     by = forecast_unit
   ]
 
-  setattr(data, "metrics", names(metrics))
+  setattr(data, "metric_names", names(metrics))
 
   return(data[])
 }
@@ -211,7 +211,11 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
     ...
   )
 
-  setattr(data, "metrics", metrics)
+  setattr(scores, "metric_names", metrics)
+  # manual hack to make sure that the correct attributes are there.
+  setattr(scores, "forecast_unit", forecast_unit)
+  setattr(scores, "forecast_type", "quantile")
+  scores <- new_scoringutils(scores, "scoringutils_quantile")
 
   return(scores[])
 }

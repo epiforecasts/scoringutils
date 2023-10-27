@@ -103,6 +103,14 @@ summarise_scores <- function(scores,
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
   }
 
+  if (is.null(attr(scores, "metric_names"))) {
+    stop("`scores` needs to have an attribute `metric_names` with the names of
+         the metrics that were used for scoring.")
+  }
+
+  # store attributes as they may be dropped in data.table operations
+  stored_attributes <- get_scoringutils_attributes(scores)
+
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
@@ -184,6 +192,8 @@ summarise_scores <- function(scores,
   if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
     scores[, "quantile_coverage" := NULL]
   }
+
+  scores <- assign_attributes(scores, stored_attributes)
 
   return(scores[])
 }
@@ -289,6 +299,9 @@ check_summary_params <- function(scores,
 add_coverage <- function(scores,
                          by,
                          ranges = c(50, 90)) {
+
+  stored_attributes <- get_scoringutils_attributes(scores)
+
   summarised_scores <- summarise_scores(
     scores,
     by = c(by, "range")
@@ -310,5 +323,9 @@ add_coverage <- function(scores,
   )
 
   scores_with_coverage <- merge(scores, coverages, by = by)
+  scores_with_coverage <- assign_attributes(
+    scores_with_coverage, stored_attributes
+  )
   return(scores_with_coverage[])
 }
+

@@ -215,3 +215,27 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
 }
+
+
+#' @title Get a list of all attributes of a scoringutils object
+#'
+#' @param object A object of class `scoringutils_`
+#'
+#' @return A named list with the attributes of that object.
+#' @keywords internal
+get_scoringutils_attributes <- function(object) {
+  possible_attributes <- c(
+    "by",
+    "forecast_unit",
+    "forecast_type",
+    "metric_names",
+    "messages",
+    "warnings"
+  )
+
+  attr_list <- list()
+  for (attr_name in possible_attributes) {
+    attr_list[[attr_name]] <- attr(object, attr_name)
+  }
+  return(attr_list)
+}
