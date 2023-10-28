@@ -133,7 +133,8 @@ get_target_type <- function(data) {
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
-#' [get_protected_columns()].
+#' [get_protected_columns()] as well as the names of the metrics that were
+#' specified during scoring, if any.
 #'
 #' @inheritParams validate
 #'
@@ -144,7 +145,9 @@ get_target_type <- function(data) {
 
 get_forecast_unit <- function(data) {
   protected_columns <- get_protected_columns(data)
-  forecast_unit <- setdiff(colnames(data), protected_columns)
+  protected_columns <- c(protected_columns, attr(data, "metric_names"))
+
+  forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
 
