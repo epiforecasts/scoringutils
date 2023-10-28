@@ -159,7 +159,8 @@ test_that("function produces output for a point case", {
     c(
       "model", "target_type",
       "ae_point",
-      "se_point"
+      "se_point",
+      "ape"
     )
   )
 })

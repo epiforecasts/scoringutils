@@ -75,7 +75,8 @@ summarise_scores <- function(scores,
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
   }
 
-  if (is.null(attr(scores, "metric_names"))) {
+  metric_names <- attr(scores, "metric_names")
+  if (is.null(metric_names)) {
     stop("`scores` needs to have an attribute `metric_names` with the names of
          the metrics that were used for scoring.")
   }
@@ -115,21 +116,18 @@ summarise_scores <- function(scores,
     )
   )
 
-  # get all available metrics to determine names of columns to summarise over
-  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
-
   # takes the mean over ranges and quantiles first, if neither range nor
   # quantile are in `by`. Reason to do this is that summaries may be
   # inaccurate if we treat individual quantiles as independent forecasts
   scores <- scores[, lapply(.SD, base::mean, ...),
     by = c(unique(c(forecast_unit, by))),
-    .SDcols = colnames(scores) %like% cols_to_summarise
+    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
   ]
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
-    .SDcols = colnames(scores) %like% cols_to_summarise
+    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
   ]
 
   # remove unnecessary columns -------------------------------------------------
@@ -187,6 +185,11 @@ add_pairwise_comparison <- function(scores,
 
   stored_attributes <- get_scoringutils_attributes(scores)
 
+  if (is.null(stored_attributes[["metric_names"]])) {
+    stop("`scores` needs to have an attribute `metric_names` with the names of
+         the metrics that were used for scoring.")
+  }
+
   if (!is.null(attr(scores, "unsummarised_scores"))) {
     scores <- attr(scores, "unsummarised_scores")
   }
@@ -232,18 +235,13 @@ add_pairwise_comparison <- function(scores,
     }
   }
 
-
-  # get all available metrics to determine names of columns to summarise over
-  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
-  scores <- scores[, lapply(.SD, mean),
-                   by = c(by),
-                   .SDcols = colnames(scores) %like% cols_to_summarise
-  ]
-  # Maybe this should use summarise scores instead?
-  # scores <- summarise_scores(scores, by = by, fun = mean)
-
+  # add relative skill to list of metric names
+  stored_attributes[["metric_names"]] <- c(
+    stored_attributes[["metric_names"]],
+    "relative_skill", "scaled_rel_skill"
+  )
   scores <- assign_attributes(scores, stored_attributes)
-
+  scores <- summarise_scores(scores, by = by)
   return(scores)
 }
 
