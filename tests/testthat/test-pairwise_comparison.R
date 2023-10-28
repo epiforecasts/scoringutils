@@ -278,3 +278,14 @@ test_that("pairwise_comparison() realises when there is no baseline model", {
     pairwise_comparison(scores, baseline = "missing_model"), "missing"
   )
 })
+
+test_that("You can run `add_pairwise_comparison()` on unsummarised data", {
+  pw1 <- suppressMessages(add_pairwise_comparison(scores))
+  pw1_sum <- summarise_scores(pw1, by = "model")
+
+  pw2 <- summarise_scores(scores, by = "model")
+  pw2 <- add_pairwise_comparison(pw2)
+
+  expect_true(all(pw1_sum == pw2, na.rm = TRUE))
+  expect_true(all(names(attributes(pw2)) == names(attributes(pw1_sum))))
+})
