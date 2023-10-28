@@ -69,7 +69,11 @@ pairwise_comparison <- function(scores,
 
   metric <- match.arg(metric, c("auto", available_metrics()))
 
-  scores <- data.table::as.data.table(scores)
+  if (!is.data.table(scores)) {
+    scores <- as.data.table(scores)
+  } else {
+    scores <- copy(scores)
+  }
 
   # determine metric automatically
   if (metric == "auto") {

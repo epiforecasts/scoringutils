@@ -94,8 +94,9 @@ example_quantile %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
-    by = c("model", "target_type"),
-    relative_skill = TRUE,
+    by = c("model", "target_type")
+  ) %>%
+  add_pairwise_comparison(
     baseline = "EuroCOVIDhub-ensemble"
   ) %>%
   summarise_scores(

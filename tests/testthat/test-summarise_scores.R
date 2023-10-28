@@ -46,8 +46,21 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
   scores_point <- suppressMessages(score(example_point))
   summarised_scores <- summarise_scores(scores_point, by = "model")
 
-  # this currently does not work and needs to be fixed
-  # add_pairwise_comparison(summarised_scores, relative_skill_metric = "se_point")
+  expect_no_condition(
+    pw_point <- add_pairwise_comparison(
+      summarised_scores,
+      relative_skill_metric = "se_point"
+    )
+  )
+
+  pw_manual <- pairwise_comparison(
+    scores_point, by = "model", metric = "se_point"
+  )
+
+  expect_equal(
+    pw_point$relative_skill,
+    unique(pw_manual$relative_skill)
+  )
 })
 
 test_that("summarise_scores() can compute relative measures", {
