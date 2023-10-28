@@ -132,8 +132,9 @@ example_quantile %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
-    by = c("model", "target_type"),
-    relative_skill = TRUE,
+    by = c("model", "target_type")
+  ) %>%
+  add_pairwise_comparison(
     baseline = "EuroCOVIDhub-ensemble"
   ) %>%
   summarise_scores(
@@ -181,8 +182,8 @@ example_quantile %>%
 #> 5:  epiforecasts-EpiNow2       Cases     log   6.005778e-01    0.1066329
 #> 6:  epiforecasts-EpiNow2       Cases natural   1.443844e+04 5664.3779484
 #>    underprediction overprediction coverage_deviation        bias    ae_median
-#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726563 1.185905e+00
-#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726563 3.208048e+04
+#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726562 1.185905e+00
+#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726562 3.208048e+04
 #> 3:    1.356563e-01      0.3132561        -0.09785326 -0.05640625 7.410484e-01
 #> 4:    4.237177e+03   3650.0047554        -0.09785326 -0.05640625 1.770795e+04
 #> 5:    1.858699e-01      0.3080750        -0.06660326 -0.07890625 7.656591e-01
