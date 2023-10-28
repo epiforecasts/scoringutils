@@ -7,7 +7,9 @@
 check_has_attribute(object, attribute)
 }
 \arguments{
-\item{data}{An object to be checked}
+\item{object}{An object to be checked}
+
+\item{attribute}{name of an attribute to be checked}
 }
 \value{
 Returns TRUE if attribute is there and an error message as

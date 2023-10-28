@@ -2,9 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{assign_attributes}
 \alias{assign_attributes}
-\title{Assign attributes to an object from a named list
-
-Every list item will be made an attribute of the object.}
+\title{Assign attributes to an object from a named list}
 \usage{
 assign_attributes(object, attribute_list)
 }
@@ -18,8 +16,6 @@ The object with new attributes according to the contents of
 \code{attribute_list}
 }
 \description{
-Assign attributes to an object from a named list
-
 Every list item will be made an attribute of the object.
 }
 \keyword{internal}

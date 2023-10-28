@@ -21,21 +21,6 @@
 #' be used or inferred internally if also not specified. Only  one of `across`
 #' and `by`  may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
-#' @param relative_skill logical, whether or not to compute relative
-#' performance between models based on pairwise comparisons.
-#' If `TRUE` (default is `FALSE`), then a column called
-#' 'model' must be present in the input data. For more information on
-#' the computation of relative skill, see [pairwise_comparison()].
-#' Relative skill will be calculated for the aggregation level specified in
-#' `by`.
-#' @param relative_skill_metric character with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, CRPS or Brier score (depending on which
-#' of these is available in the input data)
-#' @param baseline character string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
@@ -167,6 +152,33 @@ summarise_scores <- function(scores,
 summarize_scores <- summarise_scores
 
 
+
+#' @title Add pairwise comparisons
+#' @description Adds a columns with relative skills computed by running
+#' pairwise comparisons on the scores.
+#'
+#' a column called
+#' 'model' must be present in the input data. For more information on
+#' the computation of relative skill, see [pairwise_comparison()].
+#' Relative skill will be calculated for the aggregation level specified in
+#' `by`.
+#' WRITE MORE INFO HERE.
+#'
+#'
+#' @param scores MORE INFO HERE.
+#' @param by character vector with column names to summarise scores by. Default
+#' is `NULL`, meaning that the only summary that takes is place is summarising
+#' over samples or quantiles (in case of quantile-based forecasts), such that
+#' there is one score per forecast as defined by the *unit of a single forecast*
+#' (rather than one score for every sample or quantile).
+#' @param relative_skill_metric character with the name of the metric for which
+#' a relative skill shall be computed. If equal to 'auto' (the default), then
+#' this will be either interval score, CRPS or Brier score (depending on which
+#' of these is available in the input data)
+#' @param baseline character string with the name of a model. If a baseline is
+#' given, then a scaled relative skill with respect to the baseline will be
+#' returned. By default (`NULL`), relative skill will not be scaled with
+#' respect to a baseline model.
 #' @export
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
@@ -306,7 +318,6 @@ check_summary_params <- function(scores,
 #' @description Adds a column with the coverage of central prediction intervals
 #' to unsummarised scores as produced by [score()]
 #'
-#' @details
 #' The coverage values that are added are computed according to the values
 #' specified in `by`. If, for example, `by = "model"`, then there will be one
 #' coverage value for every model and [add_coverage()] will compute the coverage

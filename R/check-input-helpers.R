@@ -394,32 +394,18 @@ check_data_columns <- function(data) {
 
 #' Check whether an attribute is present
 #' @description Checks whether an object has an attribute
-#' @param data An object to be checked
+#' @param object An object to be checked
+#' @param attribute name of an attribute to be checked
 #' @return Returns TRUE if attribute is there and an error message as
 #' a string otherwise
 #' @keywords check-inputs
 check_has_attribute <- function(object, attribute) {
   if (is.null(attr(object, attribute))) {
     return(
-      paste0("Found no attribue `", attribute, "`")
+      paste0("Found no attribute `", attribute, "`")
     )
   } else {
     return(TRUE)
-  }
-}
-
-#' Test whether an attribute is present
-#' @description Tests whether an object has an attribute
-#' @param data An object to be checked
-#' @return Returns TRUE if attribute is there and FALSE otherwise
-#' a string otherwise
-#' @keywords check-inputs
-test_has_attribute <- function(object, attribute) {
-  check <- check_has_attribute(object, attribute)
-  if (is.logical(check)) {
-    return(TRUE)
-  } else {
-    return(FALSE)
   }
 }
 

@@ -23,8 +23,7 @@ summary is present according to the value specified in \code{by}.
 \description{
 Adds a column with the coverage of central prediction intervals
 to unsummarised scores as produced by \code{\link[=score]{score()}}
-}
-\details{
+
 The coverage values that are added are computed according to the values
 specified in \code{by}. If, for example, \code{by = "model"}, then there will be one
 coverage value for every model and \code{\link[=add_coverage]{add_coverage()}} will compute the coverage

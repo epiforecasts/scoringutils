@@ -5,29 +5,9 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(
-  scores,
-  by = NULL,
-  across = NULL,
-  fun = mean,
-  relative_skill = FALSE,
-  relative_skill_metric = "auto",
-  metric = deprecated(),
-  baseline = NULL,
-  ...
-)
+summarise_scores(scores, by = NULL, across = NULL, fun = mean, ...)
 
-summarize_scores(
-  scores,
-  by = NULL,
-  across = NULL,
-  fun = mean,
-  relative_skill = FALSE,
-  relative_skill_metric = "auto",
-  metric = deprecated(),
-  baseline = NULL,
-  ...
-)
+summarize_scores(scores, by = NULL, across = NULL, fun = mean, ...)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
@@ -51,27 +31,6 @@ be used or inferred internally if also not specified. Only  one of \code{across}
 and \code{by}  may be used at a time.}
 
 \item{fun}{a function used for summarising scores. Default is \code{mean}.}
-
-\item{relative_skill}{logical, whether or not to compute relative
-performance between models based on pairwise comparisons.
-If \code{TRUE} (default is \code{FALSE}), then a column called
-'model' must be present in the input data. For more information on
-the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
-Relative skill will be calculated for the aggregation level specified in
-\code{by}.}
-
-\item{relative_skill_metric}{character with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-this will be either interval score, CRPS or Brier score (depending on which
-of these is available in the input data)}
-
-\item{metric}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated in 1.1.0. Use
-\code{relative_skill_metric} instead.}
-
-\item{baseline}{character string with the name of a model. If a baseline is
-given, then a scaled relative skill with respect to the baseline will be
-returned. By default (\code{NULL}), relative skill will not be scaled with
-respect to a baseline model.}
 
 \item{...}{additional parameters that can be passed to the summary function
 provided to \code{fun}. For more information see the documentation of the

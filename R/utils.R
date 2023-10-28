@@ -134,6 +134,7 @@ filter_function_args <- function(fun, args) {
 
 #' @title Assign attributes to an object from a named list
 #'
+#' @description
 #' Every list item will be made an attribute of the object.
 #' @param object An object to assign attributes to
 #' @param attribute_list A named list of attributes to assign to the object.

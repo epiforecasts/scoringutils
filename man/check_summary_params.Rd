@@ -19,22 +19,6 @@ input data that do not correspond to a metric produced by \code{\link[=score]{sc
 indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.}
-
-\item{relative_skill}{logical, whether or not to compute relative
-performance between models based on pairwise comparisons.
-If \code{TRUE} (default is \code{FALSE}), then a column called
-'model' must be present in the input data. For more information on
-the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
-Relative skill will be calculated for the aggregation level specified in
-\code{by}.}
-
-\item{baseline}{character string with the name of a model. If a baseline is
-given, then a scaled relative skill with respect to the baseline will be
-returned. By default (\code{NULL}), relative skill will not be scaled with
-respect to a baseline model.}
-
-\item{metric}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated in 1.1.0. Use
-\code{relative_skill_metric} instead.}
 }
 \description{
 A helper function to check the input parameters for
