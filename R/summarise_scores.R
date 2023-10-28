@@ -85,9 +85,6 @@ summarise_scores <- function(scores,
                              by = NULL,
                              across = NULL,
                              fun = mean,
-                             relative_skill = FALSE,
-                             relative_skill_metric = "auto",
-                             baseline = NULL,
                              ...) {
   if (!is.null(across) && !is.null(by)) {
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
@@ -127,8 +124,10 @@ summarise_scores <- function(scores,
   # store attributes as they may be dropped in data.table operations
   stored_attributes <- c(
     get_scoringutils_attributes(scores),
-    "scoringutils_by" = by,
-    "unsummarised_scores" =  scores
+    list(
+      "scoringutils_by" = by,
+      "unsummarised_scores" =  scores
+    )
   )
 
   # get all available metrics to determine names of columns to summarise over
@@ -141,18 +140,6 @@ summarise_scores <- function(scores,
     by = c(unique(c(forecast_unit, by))),
     .SDcols = colnames(scores) %like% cols_to_summarise
   ]
-
-  # do pairwise comparisons ----------------------------------------------------
-  if (relative_skill) {
-
-    scores <- add_pairwise_comparison(
-      scores = scores,
-      by = by,
-      relative_skill = relative_skill,
-      relative_skill_metric = relative_skill_metric,
-      baseline = baseline
-    )
-  }
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
@@ -171,8 +158,6 @@ summarise_scores <- function(scores,
   }
 
   scores <- assign_attributes(scores, stored_attributes)
-
-
   return(scores[])
 }
 
@@ -182,16 +167,31 @@ summarise_scores <- function(scores,
 summarize_scores <- summarise_scores
 
 
+#' @export
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
-                                    relative_skill = FALSE,
                                     relative_skill_metric = "auto",
                                     baseline = NULL) {
+
+  stored_attributes <- get_scoringutils_attributes(scores)
+
+  if (!is.null(attr(scores, "unsummarised_scores"))) {
+    scores <- attr(scores, "unsummarised_scores")
+  }
+
+  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
+    by <- stored_attributes[["scoringutils_by"]]
+  } else if (is.null(by)) {
+    # This needs to be double checked, because getting the forecast unit is not
+    # so when you can name your own metrics.
+    by <- get_forecast_unit(scores)
+  }
+
   # check input arguments and check whether relative skill can be computed
   relative_skill <- check_summary_params(
     scores = scores,
     by = by,
-    relative_skill = relative_skill,
+    relative_skill = TRUE,
     baseline = baseline,
     metric = relative_skill_metric
   )
@@ -219,6 +219,19 @@ add_pairwise_comparison <- function(scores,
       )
     }
   }
+
+
+  # get all available metrics to determine names of columns to summarise over
+  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
+  scores <- scores[, lapply(.SD, mean),
+                   by = c(by),
+                   .SDcols = colnames(scores) %like% cols_to_summarise
+  ]
+  # Maybe this should use summarise scores instead?
+  # scores <- summarise_scores(scores, by = by, fun = mean)
+
+  scores <- assign_attributes(scores, stored_attributes)
+
   return(scores)
 }
 

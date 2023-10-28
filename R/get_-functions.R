@@ -225,7 +225,7 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
 #' @keywords internal
 get_scoringutils_attributes <- function(object) {
   possible_attributes <- c(
-    "by",
+    "scoringutils_by",
     "forecast_unit",
     "forecast_type",
     "metric_names",
