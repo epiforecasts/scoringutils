@@ -30,7 +30,6 @@
 #' @param metric A character vector of length one with the metric to do the
 #' comparison on. The default is "auto", meaning that either "interval_score",
 #' "crps", or "brier_score" will be selected where available.
-#' See [available_metrics()] for available metrics.
 #' @param by character vector with names of columns present in the input
 #' data.frame. `by` determines how pairwise comparisons will be computed.
 #' You will get a relative skill score for every grouping level determined in
@@ -67,6 +66,7 @@ pairwise_comparison <- function(scores,
                                 baseline = NULL,
                                 ...) {
 
+  # metric_names <- get_metrics(scores)
   metric <- match.arg(metric, c("auto", available_metrics()))
 
   if (!is.data.table(scores)) {

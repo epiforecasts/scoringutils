@@ -42,8 +42,7 @@ For more information see the vignettes and the example data
 \item{...}{additional parameters passed down to other functions.}
 
 \item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed. For a list of available
-metrics see \code{\link[=available_metrics]{available_metrics()}}, or  check the \link{metrics} data set.}
+default), all available metrics will be computed.}
 }
 \value{
 A data.table with unsummarised scores. There will be one score per

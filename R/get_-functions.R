@@ -126,6 +126,31 @@ get_target_type <- function(data) {
 }
 
 
+#' @title Get metrics that were used for scoring
+#'
+#' @description Internal helper function to get the metrics that were used
+#' to score forecasts.
+#' @param score A data.table with an attribute `metric_names`
+#'
+#' @return Character vector with the metrics that were used for scoring.
+#'
+#' @keywords internal
+
+get_metrics <- function(scores) {
+  metric_names <- attr(scores, "metric_names")
+  if (is.null(metric_names)) {
+    stop("The data needs to have an attribute `metric_names` with the names ",
+         " of the metrics that were used for scoring. This should be the case ",
+         "if the data was produced using `score()`. Either run `score()` ",
+         "again, or set the attribute manually using ",
+         "`attr(data, 'metric_names') <- names_of_the_scoring_metrics")
+  }
+  return(metric_names)
+}
+
+
+
+
 
 #' @title Get unit of a single forecast
 #'
@@ -169,7 +194,8 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile", "upper", "lower",
-    "pit_value", "range", "boundary", available_metrics(),
+    "pit_value", "range", "boundary", "relative_skill", "scaled_rel_skill",
+    available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
 
