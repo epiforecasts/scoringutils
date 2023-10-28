@@ -279,7 +279,7 @@ test_that("pairwise_comparison() realises when there is no baseline model", {
   )
 })
 
-test_that("You can run `add_pairwise_comparison()` on unsummarised data", {
+test_that("Order of `add_pairwise_comparison()` and `summarise_scores()` doesn't matter", {
   pw1 <- suppressMessages(add_pairwise_comparison(scores))
   pw1_sum <- summarise_scores(pw1, by = "model")
 

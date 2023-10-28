@@ -4,7 +4,7 @@
 \alias{add_coverage}
 \title{Add coverage of central prediction intervals}
 \usage{
-add_coverage(scores, by, ranges = c(50, 90))
+add_coverage(scores, by = NULL, ranges = c(50, 90))
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}

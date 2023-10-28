@@ -197,8 +197,6 @@ add_pairwise_comparison <- function(scores,
   if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
     by <- stored_attributes[["scoringutils_by"]]
   } else if (is.null(by)) {
-    # This needs to be double checked, because getting the forecast unit is not
-    # so when you can name your own metrics.
     by <- get_forecast_unit(scores)
   }
 
@@ -340,10 +338,21 @@ check_summary_params <- function(scores,
 #' @keywords scoring
 
 add_coverage <- function(scores,
-                         by,
+                         by = NULL,
                          ranges = c(50, 90)) {
 
   stored_attributes <- get_scoringutils_attributes(scores)
+  if (!is.null(attr(scores, "unsummarised_scores"))) {
+    scores <- attr(scores, "unsummarised_scores")
+  }
+
+  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
+    by <- stored_attributes[["scoringutils_by"]]
+  } else if (is.null(by)) {
+    # Need to check this again.
+    # (mentioned in https://github.com/epiforecasts/scoringutils/issues/346)
+    by <- get_forecast_unit(scores)
+  }
 
   summarised_scores <- summarise_scores(
     scores,
@@ -369,6 +378,7 @@ add_coverage <- function(scores,
   scores_with_coverage <- assign_attributes(
     scores_with_coverage, stored_attributes
   )
+
   return(scores_with_coverage[])
 }
 
