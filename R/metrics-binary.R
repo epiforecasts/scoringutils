@@ -1,21 +1,5 @@
 #' Metrics for Binary Outcomes
 #'
-#' @description
-#' **Brier score**
-#'
-#' The Brier Score is the mean squared error between the probabilistic
-#' prediction and the observed outcome. The Brier score is a proper scoring
-#' rule. Small values are better (best is 0, the worst is 1).
-#'
-#' \deqn{
-#'   \textrm{Brier\_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\textrm{prediction}_t -
-#'   \textrm{outcome}_t)^2,
-#' }{
-#'   Brier_Score = 1/N sum_{t = 1}^{n} (prediction_t - outcome_t)²,
-#' } where \eqn{\textrm{outcome}_t \in \{0, 1\}}{outcome_t in {0, 1}}, and
-#' \eqn{\textrm{prediction}_t \in [0, 1]}{prediction_t in [0, 1]} represents
-#' the probability that the outcome is equal to 1.
-#'
 #' @details
 #' The functions require users to provide observed values as a factor in order
 #' to distinguish its input from the input format required for scoring point
@@ -44,16 +28,34 @@
 #' @param predicted A numeric vector of length n, holding probabilities.
 #' Values represent the probability that the corresponding outcome is equal to
 #' the highest level of the factor `observed`.
-#' @return A numeric vector of size n with the Brier scores
-#' @export
-#'
 #' @examples
 #' observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))
 #' predicted <- runif(n = 30, min = 0, max = 1)
 #'
 #' brier_score(observed, predicted)
 #' logs_binary(observed, predicted)
+#' @rdname binary-metrics
+binary_metrics <- function(observed, predicted) {}
+
+
+#' @description
+#' **Brier score**
+#'
+#' The Brier Score is the mean squared error between the probabilistic
+#' prediction and the observed outcome. The Brier score is a proper scoring
+#' rule. Small values are better (best is 0, the worst is 1).
+#'
+#' \deqn{
+#'   \textrm{Brier\_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\textrm{prediction}_t -
+#'   \textrm{outcome}_t)^2,
+#' }{
+#'   Brier_Score = 1/N sum_{t = 1}^{n} (prediction_t - outcome_t)²,
+#' } where \eqn{\textrm{outcome}_t \in \{0, 1\}}{outcome_t in {0, 1}}, and
+#' \eqn{\textrm{prediction}_t \in [0, 1]}{prediction_t in [0, 1]} represents
+#' the probability that the outcome is equal to 1.
+#' @return A numeric vector of size n with the Brier scores
 #' @keywords metric
+#' @export
 #' @rdname binary-metrics
 brier_score <- function(observed, predicted) {
   assert_input_binary(observed, predicted)
