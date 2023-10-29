@@ -2,7 +2,7 @@
 #'
 #' @description Helper function
 #' @param x input to check
-#' @param x additional arguments to pass to `check_numeric()`
+#' @param ... additional arguments to pass to `check_numeric()`
 #' @importFrom checkmate check_atomic_vector check_numeric
 #' @return Either TRUE if the test is successful or a string with an error
 #' message
@@ -68,9 +68,6 @@ check_try <- function(expr) {
   msg <- conditionMessage(attr(result, "condition"))
   return(msg)
 }
-
-
-
 
 
 #' @title Check Variable is not NULL
@@ -191,7 +188,7 @@ assure_model_column <- function(data) {
 
 
 #' Check that all forecasts have the same number of quantiles or samples
-#' @param data data.frame to check
+#' @inheritParams check_data_doc_template
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
 #' @return Returns an string with a message if any forecasts have differing
 #' numbers of samples or quantiles, otherwise returns TRUE
@@ -295,8 +292,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 
 
 #' Check column names are present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
+#' @inheritParams check_data_doc_template
 #' @return Returns string with a message with the first issue encountered if
 #'  any of the column names are not in data, otherwise returns TRUE
 #' @importFrom checkmate assert_character
@@ -317,8 +313,7 @@ check_columns_present <- function(data, columns) {
 }
 
 #' Test whether all column names are present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
+#' @inheritParams check_data_doc_template
 #' @return Returns TRUE if all columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_present <- function(data, columns) {
@@ -327,8 +322,7 @@ test_columns_present <- function(data, columns) {
 }
 
 #' Test whether column names are NOT present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
+#' @inheritParams check_data_doc_template
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_not_present <- function(data, columns) {
@@ -343,7 +337,7 @@ test_columns_not_present <- function(data, columns) {
 #' @description Checks whether data is a data.frame, whether columns
 #' "observed" and "predicted" are presents
 #' and checks that only one of "quantile" and "sample_id" is present.
-#' @param data A data.frame or similar to be checked
+#' @inheritParams check_data_doc_template
 #' @importFrom checkmate check_data_frame
 #' @return Returns TRUE if basic requirements are satisfied and a string with
 #' an error message otherwise

@@ -9,7 +9,7 @@ check_columns_present(data, columns)
 \arguments{
 \item{data}{A data.frame or similar to be checked}
 
-\item{columns}{names of columns to be checked}
+\item{columns}{A character vector of column names to check}
 }
 \value{
 Returns string with a message with the first issue encountered if

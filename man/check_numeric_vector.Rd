@@ -7,7 +7,9 @@
 check_numeric_vector(x, ...)
 }
 \arguments{
-\item{x}{additional arguments to pass to \code{check_numeric()}}
+\item{x}{input to check}
+
+\item{...}{additional arguments to pass to \code{check_numeric()}}
 }
 \value{
 Either TRUE if the test is successful or a string with an error

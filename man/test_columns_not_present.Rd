@@ -9,7 +9,7 @@ test_columns_not_present(data, columns)
 \arguments{
 \item{data}{A data.frame or similar to be checked}
 
-\item{columns}{names of columns to be checked}
+\item{columns}{A character vector of column names to check}
 }
 \value{
 Returns TRUE if none of the columns are present and FALSE otherwise

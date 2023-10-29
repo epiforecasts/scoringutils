@@ -7,7 +7,7 @@
 check_number_per_forecast(data, forecast_unit)
 }
 \arguments{
-\item{data}{data.frame to check}
+\item{data}{A data.frame or similar to be checked}
 
 \item{forecast_unit}{Character vector denoting the unit of a single forecast.}
 }
