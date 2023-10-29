@@ -44,7 +44,7 @@ plot_score_table <- function(scores,
                              metrics = NULL) {
 
   # identify metrics -----------------------------------------------------------
-  id_vars <- get_forecast_unit(scores, check = FALSE)
+  id_vars <- get_forecast_unit(scores)
   metrics <- get_metrics(scores)
 
   scores <- delete_columns(

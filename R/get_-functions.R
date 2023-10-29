@@ -186,7 +186,6 @@ get_forecast_unit <- function(data, check_conflict = FALSE) {
 #' protected in scoringutils.
 #'
 #' @keywords internal
-
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
