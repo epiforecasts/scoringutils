@@ -201,7 +201,10 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
 
-  metrics <- check_metrics(metrics)
+  if (is.null(metrics)) {
+    metrics <- available_metrics()
+  }
+  metrics <- metrics[metrics %in% available_metrics()]
   scores <- score_quantile(
     data = data,
     forecast_unit = forecast_unit,

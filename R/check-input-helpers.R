@@ -21,36 +21,6 @@ check_numeric_vector <- function(x, ...) {
 }
 
 
-#' @title Check whether the desired metrics are available in scoringutils
-#'
-#' @description Helper function to check whether desired metrics are
-#' available. If the input is `NULL`, all metrics will be returned.
-#'
-#' @param metrics character vector with desired metrics
-#'
-#' @return A character vector with metrics that can be used for downstream
-#' computation
-#'
-#' @keywords internal
-
-check_metrics <- function(metrics) {
-  # use all available metrics if none are given
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-
-  # check desired metrics are actually available in scoringutils
-  available_metrics <- available_metrics()
-  if (!all(metrics %in% available_metrics)) {
-    msg <- paste(
-      "The following metrics are not available:",
-      toString(setdiff(metrics, available_metrics))
-    )
-    warning(msg)
-  }
-  return(metrics)
-}
-
 #' Check that quantiles are valid
 #'
 #' @description

@@ -18,10 +18,8 @@
 #' correlation(scores)
 correlation <- function(scores,
                         metrics = NULL) {
-  metrics <- check_metrics(metrics)
 
-  # check metrics are present
-  metrics <- names(scores)[names(scores) %in% metrics]
+  metrics <- get_metrics(scores)
 
   # if quantile column is present, throw a warning
   if ("quantile" %in% names(scores)) {
