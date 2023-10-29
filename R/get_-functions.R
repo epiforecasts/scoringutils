@@ -15,20 +15,23 @@
 #' @keywords internal
 get_forecast_type <- function(data) {
   if (test_forecast_type_is_binary(data)) {
-    return("binary")
-  }
-  if (test_forecast_type_is_quantile(data)) {
-    return("quantile")
-  }
-  if (test_forecast_type_is_sample(data)) {
-    return("sample")
-  }
-  if (test_forecast_type_is_point(data)) {
-    return("point")
-  }
-  stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
+    forecast_type <- "binary"
+  } else if (test_forecast_type_is_quantile(data)) {
+    forecast_type <- "quantile"
+  } else if (test_forecast_type_is_sample(data)) {
+    forecast_type <- "sample"
+  } else if (test_forecast_type_is_point(data)) {
+    forecast_type <- "point"
+  } else {
+    stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
        "Are you missing a column `quantile` or `sample_id`?",
        "Please check the vignette for additional info.")
+  }
+  conflict <- check_attribute_conflict(data, "forecast_type", forecast_type)
+  if (!is.logical(conflict)) {
+    warning(conflict)
+  }
+  return(forecast_type)
 }
 
 
@@ -148,17 +151,25 @@ get_metrics <- function(scores) {
 #' specified during scoring, if any.
 #'
 #' @inheritParams validate
+#' @param check_conflict Whether or not to check whether there is a conflict
+#' between a stored attribute and the inferred forecast unit. Defaults to FALSE.
 #'
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
 #'
 #' @keywords internal
-
-get_forecast_unit <- function(data) {
+get_forecast_unit <- function(data, check_conflict = FALSE) {
+  # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "metric_names"))
 
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
+
+  conflict <- check_attribute_conflict(data,  "forecast_unit", forecast_unit)
+  if (check_conflict && !is.logical(conflict)) {
+    warning(conflict)
+  }
+
   return(forecast_unit)
 }
 

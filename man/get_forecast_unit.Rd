@@ -4,7 +4,7 @@
 \alias{get_forecast_unit}
 \title{Get unit of a single forecast}
 \usage{
-get_forecast_unit(data)
+get_forecast_unit(data, check_conflict = FALSE)
 }
 \arguments{
 \item{data}{A data.frame or data.table with the following columns:
@@ -23,6 +23,9 @@ Depending on the forecast type, one of the following columns may be required:
 For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_continuous},
 \link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
+
+\item{check_conflict}{Whether or not to check whether there is a conflict
+between a stored attribute and the inferred forecast unit. Defaults to FALSE.}
 }
 \value{
 A character vector with the column names that define the unit of

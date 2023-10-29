@@ -198,6 +198,8 @@ pit <- function(data,
     coverage <- summarise_scores(coverage,
       by = unique(c(by, "quantile"))
     )
+    # remove all existing attributes and class
+    coverage <- remove_scoringutils_class(coverage)
 
     coverage <- coverage[order(quantile),
       .(

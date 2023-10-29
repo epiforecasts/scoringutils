@@ -122,10 +122,9 @@ validate_general <- function(data) {
 
   # assign forecast type and unit as an attribute and make sure there is no clash
   forecast_type <- get_forecast_type(data)
-  assert(check_attribute_conflict(data, "forecast_type", forecast_type))
   setattr(data, "forecast_type", forecast_type)
-  forecast_unit <- get_forecast_unit(data)
-  assert(check_attribute_conflict(data, "forecast_unit", forecast_unit))
+
+  forecast_unit <- get_forecast_unit(data, check_conflict = TRUE)
   setattr(data, "forecast_unit", forecast_unit)
 
   # check that there aren't any duplicated forecasts

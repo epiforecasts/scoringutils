@@ -158,10 +158,15 @@ check_equal_length <- function(...,
 
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
+  if (is.vector(existing) && is.vector(expected)) {
+    existing <- sort(existing)
+    expected <- sort(expected)
+  }
+
   if (!is.null(existing) && !identical(existing, expected)) {
     msg <- paste0(
       "Object has an attribute `", attribute, "`, but it looks different ",
-      "from what's expected.\n",
+      "from what's expected based on the data.\n",
       "Existing: ", toString(existing), "\n",
       "Expected: ", toString(expected), "\n",
       "Running `validate()` again might solve the problem"

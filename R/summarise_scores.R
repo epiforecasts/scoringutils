@@ -84,7 +84,6 @@ summarise_scores <- function(scores,
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
-  check_attribute_conflict(scores, "forecast_unit", forecast_unit)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
