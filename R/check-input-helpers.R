@@ -143,7 +143,7 @@ check_equal_length <- function(...,
       one_allowed,
       "' should have the same length (or length one). Actual lengths: ",
       "' should have the same length. Actual lengths: "
-      )
+    )
 
     stop(
       "Arguments to the following function call: '",
@@ -162,8 +162,8 @@ check_attribute_conflict <- function(object, attribute, expected) {
     msg <- paste0(
       "Object has an attribute `", attribute, "`, but it looks different ",
       "from what's expected.\n",
-      "Existing: ", paste(existing, collapse = ", "), "\n",
-      "Expected: ", paste(expected, collapse = ", "), "\n",
+      "Existing: ", toString(existing), "\n",
+      "Expected: ", toString(expected), "\n",
       "Running `validate()` again might solve the problem"
     )
     return(msg)
@@ -171,7 +171,7 @@ check_attribute_conflict <- function(object, attribute, expected) {
   return(TRUE)
 }
 
-
+toString
 
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
@@ -378,5 +378,3 @@ check_has_attribute <- function(object, attribute) {
     return(TRUE)
   }
 }
-
-

@@ -55,7 +55,8 @@ additional column, `scale', present which will be set to "natural" for the
 untransformed forecasts.
 }
 \description{
-Function to transform forecasts and observed values before scoring.
+Function to transform forecasts and observed values before
+scoring.
 }
 \details{
 There are a few reasons, depending on the circumstances, for

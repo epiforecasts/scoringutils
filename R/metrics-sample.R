@@ -283,4 +283,3 @@ mad_sample <- function(observed = NULL, predicted, ...) {
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)
 }
-

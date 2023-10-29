@@ -272,5 +272,3 @@ bias_range <- function(lower, upper, range, observed) {
 
   return(bias)
 }
-
-

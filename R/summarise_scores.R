@@ -381,4 +381,3 @@ add_coverage <- function(scores,
 
   return(scores_with_coverage[])
 }
-

@@ -105,8 +105,9 @@ get_type <- function(x) {
   if (is.integer(x)) {
     return("integer")
   }
-  if (isTRUE(all.equal(as.vector(x), as.integer(x))) &&
-      !all(is.na(as.integer(x)))) {
+  if (
+    isTRUE(all.equal(as.vector(x), as.integer(x))) && !all(is.na(as.integer(x)))
+  ) {
     return("integer")
   } else {
     return("continuous")

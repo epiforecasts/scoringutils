@@ -1,6 +1,7 @@
 #' @title Transform forecasts and observed values
 #'
-#' @description Function to transform forecasts and observed values before scoring.
+#' @description Function to transform forecasts and observed values before
+#' scoring.
 #'
 #' @details There are a few reasons, depending on the circumstances, for
 #' why this might be desirable (check out the linked reference for more info).
@@ -114,7 +115,8 @@ transform_forecasts <- function(data,
   if (scale_col_present) {
     if (!("natural" %in% original_data$scale)) {
       stop(
-        "If a column 'scale' is present, entries with scale =='natural' are required for the transformation"
+        "If a column 'scale' is present, entries with scale =='natural' ",
+        "are required for the transformation"
       )
     }
     if (append && (label %in% original_data$scale)) {

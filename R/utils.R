@@ -151,4 +151,3 @@ assign_attributes <- function(object, attribute_list) {
   }
   return(object)
 }
-

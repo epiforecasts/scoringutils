@@ -111,7 +111,6 @@ score.default <- function(data, ...) {
 score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
   # Extract the arguments passed in ...
@@ -122,8 +121,8 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args))
-    ]
+      fun, c(list(observed, predicted), matching_args)
+    )]
     return()
   }, ...)
 
@@ -140,7 +139,6 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
 score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
   # Extract the arguments passed in ...
@@ -151,8 +149,8 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args))
-    ]
+      fun, c(list(observed, predicted), matching_args)
+    )]
     return()
   }, ...)
 
@@ -177,11 +175,11 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(unique(observed), t(predicted)), matching_args)),
-      by = forecast_unit
-    ]
+      fun, c(list(unique(observed), t(predicted)), matching_args)
+    ), by = forecast_unit]
     return()
-  }, ...)
+  },
+  ...)
 
   data <- data[
     , lapply(.SD, unique),

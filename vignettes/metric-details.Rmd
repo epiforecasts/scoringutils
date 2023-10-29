@@ -26,8 +26,8 @@ library(data.table)
 This table gives an overview for when which metric can be applied and gives a very brief description. Note that this table on shows the metrics as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
 
 ```{r, echo = FALSE, results = "asis"}
-data <- copy(metrics) 
-setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"), 
+data <- copy(metrics)
+setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
          new = c("D", "C", "B", "Q"))
 data[, c("Name", "Functions") := NULL]
 
@@ -45,8 +45,8 @@ data$Q <- replace(data$Q)
 data[, 1:6] %>%
   kbl(format = "html",
       escape = FALSE,
-      align = c("lccccl"),
-      linesep = c('\\addlinespace')) %>%
+      align = "lccccl",
+      linesep = "\\addlinespace") %>%
   column_spec(1, width = "3.2cm") %>%
   column_spec(2, width = "1.5cm") %>%
   column_spec(3, width = "1.5cm") %>%
@@ -62,9 +62,11 @@ data[, 1:6] %>%
 ## Detailed explanation of the metrics implemented in `scoringutils`
 
 ```{r, echo = FALSE, results = "asis"}
-
 data <- readRDS(
-  system.file("metrics-overview/metrics-detailed.rds", package = "scoringutils")
+  system.file(
+    "metrics-overview", "metrics-detailed.rds", 
+    package = "scoringutils"
+  )
 )
 
 data[, 1:2] %>%
