@@ -30,11 +30,13 @@ By default (\code{by = NULL}) this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
 'predicted' and 'observed') plus "quantile" or "sample_id" where present).}
 
-\item{collapse}{character vector (default is \verb{c("quantile", "sample"}) with
-names of categories for which the number of rows should be collapsed to one
-when counting. For example, a single forecast is usually represented by a
+\item{collapse}{character vector (default is \verb{c("quantile", "sample_id"})
+with names of categories for which the number of rows should be collapsed to
+one when counting. For example, a single forecast is usually represented by a
 set of several quantiles or samples and collapsing these to one makes sure
-that a single forecast only gets counted once.}
+that a single forecast only gets counted once. Setting \code{collapse = c()}
+would mean that all quantiles / samples would be counted as individual
+forecasts.}
 }
 \value{
 A data.table with columns as specified in \code{by} and an additional
@@ -54,7 +56,6 @@ This is useful to determine whether there are any missing forecasts.
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
 available_forecasts(example_quantile,
-  collapse = c("quantile"),
   by = c("model", "target_type")
 )
 }
