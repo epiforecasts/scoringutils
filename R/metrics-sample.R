@@ -57,7 +57,7 @@
 bias_sample <- function(observed, predicted) {
 
   assert_input_sample(observed, predicted)
-  prediction_type <- get_prediction_type(predicted)
+  prediction_type <- get_type(predicted)
 
   # empirical cdf
   n_pred <- ncol(predicted)

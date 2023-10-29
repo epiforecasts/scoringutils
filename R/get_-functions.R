@@ -13,7 +13,6 @@
 #' "sample" or "point".
 #'
 #' @keywords internal
-
 get_forecast_type <- function(data) {
   if (test_forecast_type_is_binary(data)) {
     return("binary")
@@ -82,43 +81,32 @@ test_forecast_type_is_quantile <- function(data) {
 }
 
 
-
-
-# need to think about whether we want or keep this function
-get_prediction_type <- function(data) {
-  if (is.data.frame(data)) {
-    data <- data$predicted
-  }
-  if (
-    isTRUE(all.equal(as.vector(data), as.integer(data))) &&
-    !all(is.na(as.integer(data)))
-  ) {
-    return("discrete")
-  } else if (suppressWarnings(!all(is.na(as.numeric(data))))) {
-    return("continuous")
-  } else {
-    stop("Input is not numeric and cannot be coerced to numeric")
-  }
-}
-
-#' @title Get type of the target true values of a forecast
+#' @title Get type of a vector or matrix of observed values or predictions
 #'
-#' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the type and the
-#' content of the `observed` column.
+#' @description Internal helper function to get the type of a vector (usually
+#' of observed or predicted values). The function checks whether the input is
+#' a factor, or else whether it is integer (or can be coerced to integer) or
+#' whether it's continuous.
 #'
-#' @inheritParams validate
+#' @param x Input used to get the type.
 #'
-#' @return Character vector of length one with either "binary", "integer", or
-#' "continuous"
+#' @return Character vector of length one with either "classification",
+#' "integer", or "continuous"
 #'
 #' @keywords internal
-
-get_target_type <- function(data) {
-  if (is.factor(data$observed)) {
+get_type <- function(x) {
+  if (is.factor(x)) {
     return("classification")
   }
-  if (isTRUE(all.equal(data$observed, as.integer(data$observed)))) {
+  assert_numeric(as.vector(x))
+  if (all(is.na(as.vector(x)))) {
+    stop("Can't get type: all values of are NA")
+  }
+  if (is.integer(x)) {
+    return("integer")
+  }
+  if (isTRUE(all.equal(as.vector(x), as.integer(x))) &&
+      !all(is.na(as.integer(x)))) {
     return("integer")
   } else {
     return("continuous")
@@ -147,9 +135,6 @@ get_metrics <- function(scores) {
   }
   return(metric_names)
 }
-
-
-
 
 
 #' @title Get unit of a single forecast
