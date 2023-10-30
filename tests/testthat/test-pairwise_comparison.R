@@ -254,15 +254,14 @@ test_that("pairwise_comparison() works", {
 
 
 test_that("pairwise_comparison() works inside and outside of score()", {
-  eval <- suppressMessages(score(data = example_continuous))
+  eval <- scores_continuous
 
   pairwise <- suppressMessages(pairwise_comparison(eval,
     by = "model",
     metric = "crps"
   ))
 
-  eval2 <- suppressMessages(score(data = example_continuous))
-  eval2_summarised <- summarise_scores(eval2, by = "model")
+  eval2_summarised <- summarise_scores(scores_continuous, by = "model")
   eval2 <- add_pairwise_comparison(eval2_summarised)
 
   expect_equal(
@@ -271,19 +270,16 @@ test_that("pairwise_comparison() works inside and outside of score()", {
 })
 
 test_that("pairwise_comparison() realises when there is no baseline model", {
-
-  scores <- suppressMessages(score(example_quantile))
-
   expect_error(
-    pairwise_comparison(scores, baseline = "missing_model"), "missing"
+    pairwise_comparison(scores_quantile, baseline = "missing_model"), "missing"
   )
 })
 
 test_that("Order of `add_pairwise_comparison()` and `summarise_scores()` doesn't matter", {
-  pw1 <- suppressMessages(add_pairwise_comparison(scores))
+  pw1 <- suppressMessages(add_pairwise_comparison(scores_quantile))
   pw1_sum <- summarise_scores(pw1, by = "model")
 
-  pw2 <- summarise_scores(scores, by = "model")
+  pw2 <- summarise_scores(scores_quantile, by = "model")
   pw2 <- add_pairwise_comparison(pw2)
 
   expect_true(all(pw1_sum == pw2, na.rm = TRUE))

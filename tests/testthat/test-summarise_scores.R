@@ -1,10 +1,10 @@
 test_that("summarise_scores() works without any arguments", {
-  expect_true("quantile" %in% names(scores))
+  expect_true("quantile" %in% names(scores_quantile))
 
-  scores <- summarise_scores(scores)
-  expect_false("quantile" %in% names(scores))
+  summarised_scores <- summarise_scores(scores_quantile)
+  expect_false("quantile" %in% names(summarised_scores))
 
-  s2 <- summarise_scores(scores,
+  s2 <- summarise_scores(scores_quantile,
     by = c(
       "location", "target_end_date", "target_type",
       "location_name", "forecast_date", "model",
@@ -12,19 +12,19 @@ test_that("summarise_scores() works without any arguments", {
     )
   )
 
-  expect_equal(nrow(scores), nrow(s2))
+  expect_equal(nrow(summarised_scores), nrow(s2))
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
 
   expect_error(
-    summarise_scores(scores, by = "not_present"),
+    summarise_scores(scores_quantile, by = "not_present"),
     "Column 'not_present' not found in data.", # nolint
     fixed = TRUE
   )
 
   expect_error(
-    summarise_scores(scores, by = "sample_id"),
+    summarise_scores(scores_quantile, by = "sample_id"),
     "Column 'sample_id' not found in data.",
     fixed = TRUE
   )
@@ -43,7 +43,6 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
     )
   )
 
-  scores_point <- suppressMessages(score(example_point))
   summarised_scores <- summarise_scores(scores_point, by = "model")
 
   expect_no_condition(
@@ -64,11 +63,8 @@ test_that("summarise_scores() works with point forecasts in a quantile format", 
 })
 
 test_that("summarise_scores() can compute relative measures", {
-  ex <- data.table::copy(example_quantile)
-  scores <- suppressMessages(score(ex))
-
   scores_with <- add_pairwise_comparison(
-    summarise_scores(scores, by = "model")
+    summarise_scores(scores_quantile, by = "model")
   )
 
   expect_equal(
@@ -77,7 +73,7 @@ test_that("summarise_scores() can compute relative measures", {
   )
 
   scores_with <- add_pairwise_comparison(
-    summarise_scores(scores, by = "model"),
+    summarise_scores(scores_quantile, by = "model"),
     relative_skill_metric = "ae_median"
   )
 

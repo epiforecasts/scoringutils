@@ -1,5 +1,5 @@
 pairwise <- suppressMessages(
-  pairwise_comparison(scores, by = "target_type")
+  pairwise_comparison(scores_quantile, by = "target_type")
 )
 
 test_that("plot_pairwise_comparison() works as expected", {

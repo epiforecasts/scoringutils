@@ -2,7 +2,7 @@ test_that("absolute error (sample based) works", {
   observed <- rnorm(30, mean = 1:30)
   predicted_values <- rnorm(30, mean = 1:30)
 
-  scoringutils <- scoringutils::ae_median_sample(observed, predicted_values)
+  scoringutils <- ae_median_sample(observed, predicted_values)
 
   ae <- abs(observed - predicted_values)
   expect_equal(ae, scoringutils)
@@ -68,11 +68,7 @@ test_that("abs error is correct within score, point forecast only", {
 
   eval <- scoringutils::score(data_scoringutils)
 
-  # actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
-
   expected <- abs(y - point_forecast)
-
-  # expect_equal(actual$abs_error, expected)
   expect_equal(eval$ae, expected)
 })
 

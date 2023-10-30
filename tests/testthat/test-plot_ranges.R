@@ -1,5 +1,5 @@
 sum_scores <- suppressMessages(
-  summarise_scores(scores, by = c("model", "target_type", "range"))
+  summarise_scores(scores_quantile, by = c("model", "target_type", "range"))
 )
 
 test_that("plot_ranges() works as expected with interval score", {
