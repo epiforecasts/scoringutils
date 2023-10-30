@@ -4,8 +4,10 @@
 \alias{document_score_data}
 \title{Documentation template for scoring input data}
 \arguments{
-\item{data}{A data frame or data.table of forecasts following the
+\item{data}{A data frame (or similar) of forecasts following the
 specifications detailed in \code{\link[=score]{score()}}.}
+
+\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 }
 \description{
 Documentation template for scoring input data

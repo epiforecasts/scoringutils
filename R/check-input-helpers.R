@@ -37,7 +37,6 @@ check_numeric_vector <- function(x, ...) {
 #' @return None. Function errors if quantiles are invalid.
 #'
 #' @keywords internal
-
 check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
   if (any(quantiles < range[1]) || any(quantiles > range[2])) {
     stop(name, " must be between ", range[1], " and ", range[2])
@@ -59,7 +58,6 @@ check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @inherit document_check_functions return
 #' @keywords internal
-
 check_try <- function(expr) {
   result <- try(expr, silent = TRUE)
   if (is.null(result)) {
@@ -77,11 +75,12 @@ check_try <- function(expr) {
 #' variable and the function call where the variable is missing. This function
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
+#' @inherit document_assert_functions return
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
 #' @keywords internal
-check_not_null <- function(...) {
+assert_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
@@ -109,14 +108,12 @@ check_not_null <- function(...) {
 #' @param one_allowed logical, allow arguments of length one that can be
 #' recycled
 #' @param call_levels_up How many levels to go up when including the function
-#' call in the error message. This is useful when calling `check_equal_length()`
+#' call in the error message. This is useful when calling `assert_equal_length()`
 #' within another checking function.
-#'
-#' @return The function returns `NULL`, but throws an error if variable lengths
-#' differ
+#' @inherit document_assert_functions return
 #'
 #' @keywords internal
-check_equal_length <- function(...,
+assert_equal_length <- function(...,
                                one_allowed = TRUE,
                                call_levels_up = 2) {
   vars <- list(...)

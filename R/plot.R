@@ -540,7 +540,7 @@ make_NA <- function(data = NULL,
                     what = c("truth", "forecast", "both"),
                     ...) {
 
-  check_not_null(data = data)
+  assert_not_null(data = data)
 
   data <- data.table::copy(data)
   what <- match.arg(what)
