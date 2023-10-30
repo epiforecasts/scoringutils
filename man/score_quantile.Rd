@@ -14,29 +14,16 @@ score_quantile(
 )
 }
 \arguments{
-\item{data}{A data.frame or data.table with the following columns:
-\itemize{
-\item \code{observed} - observed values
-\item \code{predicted} - predictions, predictive samples or predictive quantiles
-\item \code{model} - name of the model or forecaster who made a prediction
-}
-
-Depending on the forecast type, one of the following columns may be required:
-\itemize{
-\item \code{sample_id} - index for the predictive samples in the 'predicted' column
-\item \code{quantile}: quantile-level of the corresponding value in \code{predicted}
-}
-
-For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous},
-\link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
+\item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{forecast_unit}{A character vector with the column names that define
 the unit of a single forecast, i.e. a forecast was made for a combination
 of the values in \code{forecast_unit}}
 
-\item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed.}
+\item{metrics}{A named list of scoring functions. Names will be used as
+column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
+\code{metrics_quantile()}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+default metrics used.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
 into an interval score that, in the limit, corresponds to CRPS. Alpha is the
@@ -65,10 +52,9 @@ A data.table with appropriate scores. For more information see
 Evaluate forecasts in a Quantile-Based Format
 }
 \references{
-Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
-(2019) Assessing the performance of real-time epidemic forecasts: A
-case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
-PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
+Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
+(2022) Evaluating Forecasts with scoringutils in R.
+\doi{10.48550/arXiv.2205.07090}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

@@ -9,11 +9,47 @@ check_numeric_vector(x, ...)
 \arguments{
 \item{x}{input to check}
 
-\item{...}{additional arguments to pass to \code{check_numeric()}}
+\item{...}{
+  Arguments passed on to \code{\link[checkmate:checkNumeric]{checkmate::check_numeric}}
+  \describe{
+    \item{\code{lower}}{[\code{numeric(1)}]\cr
+Lower value all elements of \code{x} must be greater than or equal to.}
+    \item{\code{upper}}{[\code{numeric(1)}]\cr
+Upper value all elements of \code{x} must be lower than or equal to.}
+    \item{\code{finite}}{[\code{logical(1)}]\cr
+Check for only finite values? Default is \code{FALSE}.}
+    \item{\code{any.missing}}{[\code{logical(1)}]\cr
+Are vectors with missing values allowed? Default is \code{TRUE}.}
+    \item{\code{all.missing}}{[\code{logical(1)}]\cr
+Are vectors with no non-missing values allowed? Default is \code{TRUE}.
+Note that empty vectors do not have non-missing values.}
+    \item{\code{len}}{[\code{integer(1)}]\cr
+Exact expected length of \code{x}.}
+    \item{\code{min.len}}{[\code{integer(1)}]\cr
+Minimal length of \code{x}.}
+    \item{\code{max.len}}{[\code{integer(1)}]\cr
+Maximal length of \code{x}.}
+    \item{\code{unique}}{[\code{logical(1)}]\cr
+Must all values be unique? Default is \code{FALSE}.}
+    \item{\code{sorted}}{[\code{logical(1)}]\cr
+Elements must be sorted in ascending order. Missing values are ignored.}
+    \item{\code{names}}{[\code{character(1)}]\cr
+Check for names. See \code{\link[checkmate]{checkNamed}} for possible values.
+Default is \dQuote{any} which performs no check at all.
+Note that you can use \code{\link[checkmate]{checkSubset}} to check for a specific set of names.}
+    \item{\code{typed.missing}}{[\code{logical(1)}]\cr
+If set to \code{FALSE} (default), all types of missing values (\code{NA}, \code{NA_integer_},
+\code{NA_real_}, \code{NA_character_} or \code{NA_character_}) as well as empty vectors are allowed
+while type-checking atomic input.
+Set to \code{TRUE} to enable strict type checking.}
+    \item{\code{null.ok}}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, \code{x} may also be \code{NULL}.
+In this case only a type check of \code{x} is performed, all additional checks are disabled.}
+  }}
 }
 \value{
-Either TRUE if the test is successful or a string with an error
-message
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
 Helper function

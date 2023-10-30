@@ -7,22 +7,7 @@
 transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with the following columns:
-\itemize{
-\item \code{observed} - observed values
-\item \code{predicted} - predictions, predictive samples or predictive quantiles
-\item \code{model} - name of the model or forecaster who made a prediction
-}
-
-Depending on the forecast type, one of the following columns may be required:
-\itemize{
-\item \code{sample_id} - index for the predictive samples in the 'predicted' column
-\item \code{quantile}: quantile-level of the corresponding value in \code{predicted}
-}
-
-For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous},
-\link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
+\item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{fun}{A function used to transform both observed values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially

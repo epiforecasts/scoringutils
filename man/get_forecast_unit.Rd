@@ -7,22 +7,7 @@
 get_forecast_unit(data, check_conflict = FALSE)
 }
 \arguments{
-\item{data}{A data.frame or data.table with the following columns:
-\itemize{
-\item \code{observed} - observed values
-\item \code{predicted} - predictions, predictive samples or predictive quantiles
-\item \code{model} - name of the model or forecaster who made a prediction
-}
-
-Depending on the forecast type, one of the following columns may be required:
-\itemize{
-\item \code{sample_id} - index for the predictive samples in the 'predicted' column
-\item \code{quantile}: quantile-level of the corresponding value in \code{predicted}
-}
-
-For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous},
-\link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
+\item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{check_conflict}{Whether or not to check whether there is a conflict
 between a stored attribute and the inferred forecast unit. Defaults to FALSE.}

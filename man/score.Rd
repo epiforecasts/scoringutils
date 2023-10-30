@@ -7,7 +7,7 @@
 \alias{score.scoringutils_point}
 \alias{score.scoringutils_sample}
 \alias{score.scoringutils_quantile}
-\title{Evaluate forecasts}
+\title{Evaluate forecasts in a data.frame format}
 \usage{
 score(data, ...)
 
@@ -22,73 +22,113 @@ score(data, ...)
 \method{score}{scoringutils_quantile}(data, metrics = NULL, ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with the following columns:
-\itemize{
-\item \code{observed} - observed values
-\item \code{predicted} - predictions, predictive samples or predictive quantiles
-\item \code{model} - name of the model or forecaster who made a prediction
-}
+\item{data}{A data.frame or data.table with predicted and observed values.}
 
-Depending on the forecast type, one of the following columns may be required:
-\itemize{
-\item \code{sample_id} - index for the predictive samples in the 'predicted' column
-\item \code{quantile}: quantile-level of the corresponding value in \code{predicted}
-}
+\item{...}{additional arguments}
 
-For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous},
-\link{example_integer}, \code{\link[=example_point]{example_point()}}, and \link{example_binary}).}
-
-\item{...}{additional parameters passed down to other functions.}
-
-\item{metrics}{the metrics you want to have in the output. If \code{NULL} (the
-default), all available metrics will be computed.}
+\item{metrics}{A named list of scoring functions. Names will be used as
+column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
+\code{metrics_quantile()}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+default metrics used.}
 }
 \value{
-A data.table with unsummarised scores. There will be one score per
-quantile or sample_id, which is usually not desired, so you should almost
-always run \code{\link[=summarise_scores]{summarise_scores()}} on the unsummarised scores.
+A data.table with unsummarised scores. This will generally be
+one score per forecast (as defined by the unit of a single forecast).
+
+For quantile-based forecasts, one score per quantile will be returned
+instead. This is done as scores can be computed and may be of interest
+for individual quantiles. You can call \code{\link[=summarise_scores]{summarise_scores()}}) on the
+unsummarised scores to obtain one score per forecast unit for quantile-based
+forecasts.
 }
 \description{
-This function allows automatic scoring of forecasts using a
-range of metrics. For most users it will be the workhorse for
-scoring forecasts as it wraps the lower level functions package functions.
-However, these functions are also available if you wish to make use of them
-independently.
+\code{score()} applies a selection of scoring metrics to a data.frame
+of forecasts. It is the workhorse of the \code{scoringutils} package.
+\code{score()} is a generic that dispatches to different methods depending on the
+class of the input data. The default method is \code{score.default()}, which
+validates the input, assigns as class based on the forecast type, and then
+calls \code{score()} again to dispatch to the appropriate method. See below for
+more information on how forecast types are determined.
+}
+\details{
+\strong{Forecast types and input format}
 
-A range of forecasts formats are supported, including quantile-based,
-sample-based, binary forecasts. Prior to scoring, users may wish to make use
-of \code{\link[=validate]{validate()}} to ensure that the input data is in a supported
-format though this will also be run internally by \code{\link[=score]{score()}}. Examples for
-each format are also provided (see the documentation for \code{data} below or in
-\code{\link[=validate]{validate()}}).
+Various different forecast types / forecast formats are supported. At the
+moment, those are
+\itemize{
+\item point forecasts
+\item binary forecasts ("soft binary classification")
+\item Probabilistic forecasts in a quantile-based format (a forecast is
+represented as a set of predictive quantiles)
+\item Probabilistic forecasts in a sample-based format (a forecast is represented
+as a set of predictive samples)
+}
 
-Each format has a set of required columns (see below). Additional columns may
-be present to indicate a grouping of forecasts. For example, we could have
-forecasts made by different models in various locations at different time
-points, each for several weeks into the future. It is important, that there
-are only columns present which are relevant in order to group forecasts.
-A combination of different columns should uniquely define the
-\emph{unit of a single forecast}, meaning that a single forecast is defined by the
-values in the other columns. Adding additional unrelated columns may alter
-results.
+Forecast types are determined based on the columns present in the input data.
 
-To obtain a quick overview of the currently supported evaluation metrics,
-have a look at the \link{metrics} data included in the package. The column
-\code{metrics$Name} gives an overview of all available metric names that can be
-computed. If interested in an unsupported metric please open a \href{https://github.com/epiforecasts/scoringutils/issues}{feature request} or consider
-contributing a pull request.
+\emph{Point forecasts} require a column \code{observed} of type numeric and a column
+\code{predicted} of type numeric.
 
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette}
-as well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
+\emph{Binary forecasts} require a column \code{observed} of type factor with exactly
+two levels and a column \code{predicted} of type numeric with probabilities,
+corresponding to the probability that \code{observed} is equal to the second
+factor level. See \code{\link[=metrics_binary]{metrics_binary()}} for details.
+
+\emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
+a column \code{predicted} of type numeric, and a column \code{quantile} of type numeric
+with quantile-levels (between 0 and 1).
+
+\emph{Sample-based forecasts} require a column \code{observed} of type numeric,
+a column \code{predicted} of type numeric, and a column \code{sample_id} of type
+numeric with sample indices.
+
+For more information see the vignettes and the example data
+(\link{example_quantile}, \link{example_continuous}, \link{example_integer},
+\code{\link[=example_point]{example_point()}}, and \link{example_binary}).
+
+\strong{Forecast unit}
+
+In order to score forecasts, \code{scoringutils} needs to know which of the rows
+of the data belong together and jointly form a single forecasts. This is
+easy e.g. for point forecast, where there is one row per forecast. For
+quantile or sample-based forecasts, however, there are multiple rows that
+belong to single forecast.
+
+The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
+combination of columns that uniquely identify a single forecast.
+For example, we could have forecasts made by different models in various
+locations at different time points, each for several weeks into the future.
+The forecast unit could then be described as
+\code{forecast_unit = c("model", "location", "forecast_date", "forecast_horizon")}.
+\code{scoringutils} automatically tries to determine the unit of a single
+forecast. It uses all existing columns for this, which means that no columns
+must be present that are unrelated to the forecast unit. As a very simplistic
+example, if you had an additional row, "even", that is one if the row number
+is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
+then thinks that this column was relevant in defining the forecast unit.
+
+In order to avoid issues, we recommend using the function
+\code{\link[=set_forecast_unit]{set_forecast_unit()}} to determine the forecast unit manually.
+The function simply drops unneeded columns, while making sure that all
+necessary, 'protected columns' like "predicted" or "observed" are retained.
+
+\strong{Validating inputs}
+
+We recommend that users validate their input prior to scoring using the
+function \code{\link[=validate]{validate()}} (though this will also be run internally by \code{\link[=score]{score()}}).
+The function checks the input data and provides helpful information.
+
+\strong{Further help}
+
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
 \examples{
 library(magrittr) # pipe operator
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
-validate(example_quantile)
-score(example_quantile) \%>\%
-  add_coverage(by = c("model", "target_type")) \%>\%
+validated <- validate(example_quantile)
+score(validated) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
 # set forecast unit manually (to avoid issues with scoringutils trying to
@@ -104,20 +144,16 @@ example_quantile \%>\%
 \dontrun{
 score(example_binary)
 score(example_quantile)
+score(example_point)
 score(example_integer)
 score(example_continuous)
 }
 
-# score point forecasts (marked by 'NA' in the quantile column)
-score(example_point) \%>\%
-  summarise_scores(by = "model", na.rm = TRUE)
-
 }
 \references{
-Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
-(2019) Assessing the performance of real-time epidemic forecasts: A
-case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
-PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
+Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
+(2022) Evaluating Forecasts with scoringutils in R.
+\doi{10.48550/arXiv.2205.07090}
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

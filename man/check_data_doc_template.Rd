@@ -3,9 +3,6 @@
 \name{check_data_doc_template}
 \alias{check_data_doc_template}
 \title{Documentation template for various checks on a data.frame}
-\usage{
-check_data_doc_template(data, columns)
-}
 \arguments{
 \item{data}{A data.frame or similar to be checked}
 
