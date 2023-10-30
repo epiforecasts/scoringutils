@@ -40,6 +40,8 @@ check_input_sample <- function(observed, predicted) {
 #' @title Assert that inputs are correct for quantile-based forecast
 #' @description Function assesses whether the inputs correspond to the
 #' requirements for scoring quantile-based forecasts.
+#' @param observed Input to be checked. Should be a numeric vector with the
+#' observed values of size n
 #' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' quantiles, n (number of rows) being the number of data points and N
 #' (number of columns) the number of quantiles per forecast.

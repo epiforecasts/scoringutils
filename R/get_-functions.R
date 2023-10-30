@@ -37,7 +37,7 @@ get_forecast_type <- function(data) {
 
 #' Test whether data could be a binary forecast.
 #' @description Checks type of the necessary columns.
-#' @inheritParams check_data_doc_template
+#' @inheritParams document_check_functions
 #' @importFrom checkmate test_factor test_numeric
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
@@ -49,7 +49,7 @@ test_forecast_type_is_binary <- function(data) {
 
 #' Test whether data could be a sample-based forecast.
 #' @description Checks type of the necessary columns.
-#' @inheritParams check_data_doc_template
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_sample <- function(data) {
@@ -61,7 +61,7 @@ test_forecast_type_is_sample <- function(data) {
 
 #' Test whether data could be a point forecast.
 #' @description Checks type of the necessary columns.
-#' @inheritParams check_data_doc_template
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_point <- function(data) {
@@ -73,7 +73,7 @@ test_forecast_type_is_point <- function(data) {
 
 #' Test whether data could be a quantile forecast.
 #' @description Checks type of the necessary columns.
-#' @inheritParams check_data_doc_template
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_quantile <- function(data) {

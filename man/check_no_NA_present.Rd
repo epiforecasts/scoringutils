@@ -12,10 +12,12 @@ check_no_NA_present(data, columns)
 \item{columns}{A character vector of column names to check}
 }
 \value{
-Returns an string with a message if any of the column names
-have NA values, otherwise returns TRUE
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
-Check columns in data.frame don't have NA values
+Function checks whether any of the columns in a data.frame,
+as specified in \code{columns}, have NA values. If so, it returns a string with
+an error message, otherwise it returns TRUE.
 }
 \keyword{internal}

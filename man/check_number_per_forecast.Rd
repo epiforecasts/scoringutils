@@ -12,10 +12,12 @@ check_number_per_forecast(data, forecast_unit)
 \item{forecast_unit}{Character vector denoting the unit of a single forecast.}
 }
 \value{
-Returns an string with a message if any forecasts have differing
-numbers of samples or quantiles, otherwise returns TRUE
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
-Check that all forecasts have the same number of quantiles or samples
+Function checks the number of quantiles or samples per forecast.
+If the number of quantiles or samples is the same for all forecasts, it
+returns TRUE and a string with an error message otherwise.
 }
 \keyword{internal}

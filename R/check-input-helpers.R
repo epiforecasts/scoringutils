@@ -100,7 +100,7 @@ assert_not_null <- function(...) {
 }
 
 
-#' @title Check Length
+#' @title Check Length of Two Vectors is Equal
 #'
 #' @description
 #' Check whether variables all have the same length
@@ -150,6 +150,18 @@ assert_equal_length <- function(...,
 }
 
 
+#' @title Check Whether There Is a Conflict Between Data and Attributes
+#' @description
+#' Check whether there is a conflict between a stored attribute and the
+#' same value as inferred from the data. For example, this could be if
+#' an attribute `forecast_unit` is stored, but is different from the
+#' `forecast_unit` inferred from the data. The check is successful if
+#' the stored and the inferred value are the same.
+#' @param object The object to check
+#' @param attribute The name of the attribute to check
+#' @param expected The expected value of the attribute
+#' @inherit document_check_functions return
+#' @keywords internal
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
   if (is.vector(existing) && is.vector(expected)) {
@@ -170,6 +182,14 @@ check_attribute_conflict <- function(object, attribute, expected) {
   return(TRUE)
 }
 
+
+#' @title Assure that Data Has a `model` Column
+#'
+#' @description
+#' Check whether the data.table has a column called `model`.
+#' If not, a column called `model` is added with the value `Unspecified model`.
+#' @return The data.table with a column called `model`
+#' @keywords internal
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
     message(
@@ -183,11 +203,11 @@ assure_model_column <- function(data) {
 
 
 #' Check that all forecasts have the same number of quantiles or samples
-#' @inheritParams check_data_doc_template
+#' @description Function checks the number of quantiles or samples per forecast.
+#' If the number of quantiles or samples is the same for all forecasts, it
+#' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
-#' @return Returns an string with a message if any forecasts have differing
-#' numbers of samples or quantiles, otherwise returns TRUE
-#'
+#' @inherit document_check_functions params return
 #' @keywords internal
 check_number_per_forecast <- function(data, forecast_unit) {
   # check whether there are the same number of quantiles, samples --------------
@@ -209,13 +229,11 @@ check_number_per_forecast <- function(data, forecast_unit) {
 }
 
 
-
-
-
 #' Check columns in data.frame don't have NA values
-#' @inheritParams check_columns_present
-#' @return Returns an string with a message if any of the column names
-#' have NA values, otherwise returns TRUE
+#' @description Function checks whether any of the columns in a data.frame,
+#' as specified in `columns`, have NA values. If so, it returns a string with
+#' an error message, otherwise it returns TRUE.
+#' @inherit document_check_functions params return
 #'
 #' @keywords internal
 check_no_NA_present <- function(data, columns) {
@@ -247,9 +265,7 @@ diagnose <- function(data) {
 #' @description
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
 #' @inheritParams get_duplicate_forecasts
-#' @return Returns an string with an error message if an issue is found,
-#' otherwise returns TRUE
-#'
+#' @inherit document_check_functions return
 #' @keywords internal
 check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
@@ -287,9 +303,11 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 
 
 #' Check column names are present in a data.frame
-#' @inheritParams check_data_doc_template
-#' @return Returns string with a message with the first issue encountered if
-#'  any of the column names are not in data, otherwise returns TRUE
+#' @description
+#' The functions loops over the column names and checks whether they are
+#' present. If an issue is encountered, the function immediately stops
+#' and returns a message with the first issue encountered.
+#' @inherit document_check_functions params return
 #' @importFrom checkmate assert_character
 #' @keywords check-inputs
 check_columns_present <- function(data, columns) {
@@ -308,7 +326,10 @@ check_columns_present <- function(data, columns) {
 }
 
 #' Test whether all column names are present in a data.frame
-#' @inheritParams check_data_doc_template
+#' @description The function checks whether all column names are present. If
+#' one or more columns are missing, the function returns FALSE. If all columns
+#' are present, the function returns TRUE.
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if all columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_present <- function(data, columns) {
@@ -317,7 +338,10 @@ test_columns_present <- function(data, columns) {
 }
 
 #' Test whether column names are NOT present in a data.frame
-#' @inheritParams check_data_doc_template
+#' @description The function checks whether all column names are NOT present.
+#' If none of the columns are present, the function returns TRUE. If one or
+#' more columns are present, the function returns FALSE.
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_not_present <- function(data, columns) {
@@ -330,12 +354,10 @@ test_columns_not_present <- function(data, columns) {
 
 #' Check whether data is data.frame with correct columns
 #' @description Checks whether data is a data.frame, whether columns
-#' "observed" and "predicted" are presents
-#' and checks that only one of "quantile" and "sample_id" is present.
-#' @inheritParams check_data_doc_template
+#' "observed" and "predicted" are present, and checks that only one of
+#' "quantile" and "sample_id" is present.
+#' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
-#' @return Returns TRUE if basic requirements are satisfied and a string with
-#' an error message otherwise
 #' @keywords check-inputs
 check_data_columns <- function(data) {
   is_data <- check_data_frame(data, min.rows = 1)
@@ -360,8 +382,7 @@ check_data_columns <- function(data) {
 #' @description Checks whether an object has an attribute
 #' @param object An object to be checked
 #' @param attribute name of an attribute to be checked
-#' @return Returns TRUE if attribute is there and an error message as
-#' a string otherwise
+#' @inherit document_check_functions return
 #' @keywords check-inputs
 check_has_attribute <- function(object, attribute) {
   if (is.null(attr(object, attribute))) {

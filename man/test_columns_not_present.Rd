@@ -15,6 +15,8 @@ test_columns_not_present(data, columns)
 Returns TRUE if none of the columns are present and FALSE otherwise
 }
 \description{
-Test whether column names are NOT present in a data.frame
+The function checks whether all column names are NOT present.
+If none of the columns are present, the function returns TRUE. If one or
+more columns are present, the function returns FALSE.
 }
 \keyword{internal}

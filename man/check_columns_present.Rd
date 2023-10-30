@@ -12,10 +12,12 @@ check_columns_present(data, columns)
 \item{columns}{A character vector of column names to check}
 }
 \value{
-Returns string with a message with the first issue encountered if
-any of the column names are not in data, otherwise returns TRUE
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
-Check column names are present in a data.frame
+The functions loops over the column names and checks whether they are
+present. If an issue is encountered, the function immediately stops
+and returns a message with the first issue encountered.
 }
 \keyword{check-inputs}

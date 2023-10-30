@@ -2,7 +2,7 @@
 % Please edit documentation in R/check-input-helpers.R
 \name{assert_equal_length}
 \alias{assert_equal_length}
-\title{Check Length}
+\title{Check Length of Two Vectors is Equal}
 \usage{
 assert_equal_length(..., one_allowed = TRUE, call_levels_up = 2)
 }

@@ -14,8 +14,8 @@ the unit of a single forecast. If \code{NULL} (the default) the function tries
 to infer the unit of a single forecast.}
 }
 \value{
-Returns an string with an error message if an issue is found,
-otherwise returns TRUE
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
 Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is encountered

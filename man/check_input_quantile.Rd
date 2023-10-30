@@ -7,6 +7,9 @@
 check_input_quantile(observed, predicted, quantile)
 }
 \arguments{
+\item{observed}{Input to be checked. Should be a numeric vector with the
+observed values of size n}
+
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
 (number of columns) the number of quantiles per forecast.

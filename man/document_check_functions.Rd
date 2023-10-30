@@ -3,6 +3,11 @@
 \name{document_check_functions}
 \alias{document_check_functions}
 \title{Documentation template for check functions}
+\arguments{
+\item{data}{A data.frame or similar to be checked}
+
+\item{columns}{A character vector of column names to check}
+}
 \value{
 Returns TRUE if the check was successful and a string with an
 error message otherwise
