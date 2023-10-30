@@ -2,10 +2,9 @@
 #'
 #' @description Helper function
 #' @param x input to check
-#' @param ... additional arguments to pass to `check_numeric()`
+#' @inheritDotParams checkmate::check_numeric
 #' @importFrom checkmate check_atomic_vector check_numeric
-#' @return Either TRUE if the test is successful or a string with an error
-#' message
+#' @inherit document_check_functions return
 #' @keywords internal
 check_numeric_vector <- function(x, ...) {
   # check functions must return TRUE on success
@@ -53,11 +52,12 @@ check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description Tries to execute an expression. Internally, this is used to
-#' see whether assertions fail when checking inputs
+#' see whether assertions fail when checking inputs (i.e. to convert an
+#' `assert_*()` statement into a check). If the expression fails, the error
+#' message is returned. If the expression succeeds, `TRUE` is returned.
 #' @param expr an expression to be evaluated
 #' @importFrom checkmate assert assert_numeric check_matrix
-#' @return Returns TRUE if expression was executed successfully, otherwise
-#' returns a string with the resulting error message
+#' @inherit document_check_functions return
 #' @keywords internal
 
 check_try <- function(expr) {

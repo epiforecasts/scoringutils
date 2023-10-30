@@ -14,11 +14,11 @@ observed values of size n}
 predicted values of size n}
 }
 \value{
-Returns NULL invisibly if the check was successful and throws an
+Returns NULL invisibly if the assertion was successful and throws an
 error otherwise.
 }
 \description{
-Helper function to assert whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring point forecasts.
 }
 \keyword{check-inputs}

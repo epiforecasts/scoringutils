@@ -7,9 +7,6 @@
 check_input_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
-
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
 (number of columns) the number of quantiles per forecast.
@@ -21,11 +18,11 @@ denotes the quantile levels corresponding to the columns of the prediction
 matrix.}
 }
 \value{
-Returns TRUE if the check was successful and a string with the
+Returns TRUE if the check was successful and a string with an
 error message otherwise
 }
 \description{
-Helper function to check whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring quantile-based forecasts.
 }
 \keyword{check-inputs}

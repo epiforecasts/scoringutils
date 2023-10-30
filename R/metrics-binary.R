@@ -34,8 +34,8 @@
 #'
 #' brier_score(observed, predicted)
 #' logs_binary(observed, predicted)
-#' @rdname binary-metrics
-binary_metrics <- function(observed, predicted) {}
+#' @name scoring-functions-binary
+NULL
 
 
 #' @description
@@ -56,7 +56,7 @@ binary_metrics <- function(observed, predicted) {}
 #' @return A numeric vector of size n with the Brier scores
 #' @keywords metric
 #' @export
-#' @rdname binary-metrics
+#' @rdname scoring-functions-binary
 brier_score <- function(observed, predicted) {
   assert_input_binary(observed, predicted)
 
@@ -79,7 +79,7 @@ brier_score <- function(observed, predicted) {
 #' @importFrom methods hasArg
 #' @export
 #' @keywords metric
-#' @rdname binary-metrics
+#' @rdname scoring-functions-binary
 logs_binary <- function(observed, predicted) {
   assert_input_binary(observed, predicted)
   observed <- as.numeric(observed) - 1

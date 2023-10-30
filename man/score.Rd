@@ -72,7 +72,7 @@ Forecast types are determined based on the columns present in the input data.
 \emph{Binary forecasts} require a column \code{observed} of type factor with exactly
 two levels and a column \code{predicted} of type numeric with probabilities,
 corresponding to the probability that \code{observed} is equal to the second
-factor level. See \code{\link[=metrics_binary]{metrics_binary()}} for details.
+factor level. See details \link[=brier_score]{here} for more information.
 
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{quantile} of type numeric

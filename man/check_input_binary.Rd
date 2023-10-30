@@ -19,11 +19,11 @@ the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
 }
 \value{
-Returns TRUE if the check was successful and a string with the
+Returns TRUE if the check was successful and a string with an
 error message otherwise
 }
 \description{
-Helper function to check whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring binary forecasts.
 }
 \keyword{check-inputs}

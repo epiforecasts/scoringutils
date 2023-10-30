@@ -28,7 +28,7 @@
 #' *Binary forecasts* require a column `observed` of type factor with exactly
 #' two levels and a column `predicted` of type numeric with probabilities,
 #' corresponding to the probability that `observed` is equal to the second
-#' factor level. See [metrics_binary()] for details.
+#' factor level. See details [here][brier_score()] for more information.
 #'
 #' *Quantile-based forecasts* require a column `observed` of type numeric,
 #' a column `predicted` of type numeric, and a column `quantile` of type numeric

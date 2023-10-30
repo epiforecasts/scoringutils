@@ -19,11 +19,11 @@ the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
 }
 \value{
-Returns NULL invisibly if the check was successful and throws an
+Returns NULL invisibly if the assertion was successful and throws an
 error otherwise.
 }
 \description{
-Helper function to assert whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring binary forecasts.
 }
 \keyword{check-inputs}
