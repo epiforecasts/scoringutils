@@ -42,9 +42,10 @@ Summarise scores as produced by \code{\link[=score]{score()}}
 \examples{
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 library(magrittr) # pipe operator
-
+\dontrun{
 scores <- score(example_continuous)
 summarise_scores(scores)
+}
 
 
 # summarise over samples or quantiles to get one score per forecast
