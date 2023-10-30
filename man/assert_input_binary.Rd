@@ -4,7 +4,7 @@
 \alias{assert_input_binary}
 \title{Assert that inputs are correct for binary forecast}
 \usage{
-assert_input_binary(observed, predicted, ...)
+assert_input_binary(observed, predicted)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a factor of length n with
@@ -17,8 +17,6 @@ to the highest factor level.}
 length n, holding probabilities. Values represent the probability that
 the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
-
-\item{...}{additional arguments passed to other functions}
 }
 \value{
 Returns NULL invisibly if the check was successful and throws an

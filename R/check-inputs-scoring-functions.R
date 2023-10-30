@@ -1,5 +1,4 @@
 #' @title Assert that inputs are correct for sample-based forecast
-#'
 #' @description Helper function to assert whether the input is suitable for
 #' scoring.
 #' @param observed Input to be checked. Should be a numeric vector with the
@@ -10,7 +9,7 @@
 #' If `observed` is just a single number, then predicted values can just be a
 #' vector of size N.
 #' @importFrom checkmate assert assert_numeric check_matrix
-#' @return Returns NULL invisibly if the check was successful and throws an
+#' @returns Returns NULL invisibly if the check was successful and throws an
 #' error otherwise.
 #' @keywords check-inputs
 assert_input_sample <- function(observed, predicted) {
@@ -30,10 +29,9 @@ assert_input_sample <- function(observed, predicted) {
 }
 
 #' @title Check that inputs are correct for sample-based forecast
-#'
 #' @description Helper function to check whether the input is suitable for
 #' scoring.
-#' @inheritParams assert_input_sample
+#' @inherit assert_input_sample params
 #' @return Returns TRUE if the check was successful and a string with the
 #' error message otherwise
 #' @keywords check-inputs
@@ -43,12 +41,8 @@ check_input_sample <- function(observed, predicted) {
 }
 
 
-#' @title Assert that inputs are correct for sample-based forecast
-#'
-#' @description Helper function to assert whether the input is suitable for
-#' scoring.
-#' @param observed Input to be checked. Should be a vector with the
-#' observed values of size n
+#' @title Assert that inputs are correct for quantile-based forecast
+#' @inheritParams assert_input_sample
 #' @param predicted Input to be checked. Should be nxN matrix of predictive
 #' quantiles, n (number of rows) being the number of data points and N
 #' (number of columns) the number of quantiles per forecast.
@@ -58,8 +52,7 @@ check_input_sample <- function(observed, predicted) {
 #' denotes the quantile levels corresponding to the columns of the prediction
 #' matrix.
 #' @importFrom checkmate assert assert_numeric check_matrix
-#' @return Returns NULL invisibly if the check was successful and throws an
-#' error otherwise.
+#' @inherit assert_input_sample return description
 #' @keywords internal
 assert_input_quantile <- function(observed, predicted, quantile) {
   assert_numeric(observed, min.len = 1)
@@ -84,12 +77,8 @@ assert_input_quantile <- function(observed, predicted, quantile) {
 }
 
 #' @title Check that inputs are correct for quantile-based forecast
-#'
-#' @description Helper function to check whether the input is suitable for
-#' scoring.
 #' @inheritParams assert_input_quantile
-#' @return Returns TRUE if the check was successful and a string with the
-#' error message otherwise
+#' @inherit check_input_sample return description
 #' @keywords check-inputs
 check_input_quantile <- function(observed, predicted, quantile) {
   result <- check_try(assert_input_quantile(observed, predicted, quantile))
@@ -98,9 +87,6 @@ check_input_quantile <- function(observed, predicted, quantile) {
 
 
 #' @title Assert that inputs are correct for binary forecast
-#'
-#' @description Helper function to assert whether the input is suitable for
-#' scoring.
 #' @param observed Input to be checked. Should be a factor of length n with
 #' exactly two levels, holding the observed values.
 #' The highest factor level is assumed to be the reference level. This means
@@ -110,12 +96,10 @@ check_input_quantile <- function(observed, predicted, quantile) {
 #' length n, holding probabilities. Values represent the probability that
 #' the corresponding value in `observed` will be equal to the highest
 #' available factor level.
-#' @param ... additional arguments passed to other functions
 #' @importFrom checkmate assert assert_factor
-#' @return Returns NULL invisibly if the check was successful and throws an
-#' error otherwise.
+#' @inherit assert_input_sample return description
 #' @keywords check-inputs
-assert_input_binary <- function(observed, predicted, ...) {
+assert_input_binary <- function(observed, predicted) {
   if (length(observed) != length(predicted)) {
     stop("`observed` and `predicted` need to be ",
          "of same length when scoring binary forecasts")
@@ -130,28 +114,21 @@ assert_input_binary <- function(observed, predicted, ...) {
 
 #' @title Check that inputs are correct for binary forecast
 #'
-#' @description Helper function to check whether the input is suitable for
-#' scoring.
 #' @inheritParams assert_input_binary
-#' @return Returns TRUE if the check was successful and a string with the
-#' error message otherwise
+#' @inherit check_input_sample return description
 #' @keywords check-inputs
 check_input_binary <- function(observed, predicted) {
-  result <- check_try(assert_input_binary(observed, predicted, call_levels_up = 8))
+  result <- check_try(assert_input_binary(observed, predicted))
   return(result)
 }
 
 
 #' @title Assert that inputs are correct for point forecast
-#'
-#' @description Helper function to assert whether the input is suitable for
-#' scoring.
 #' @param observed Input to be checked. Should be a numeric vector with the
 #' observed values of size n
 #' @param predicted Input to be checked. Should be a numeric vector with the
 #' predicted values of size n
-#' @return Returns NULL invisibly if the check was successful and throws an
-#' error otherwise.
+#' @inherit assert_input_sample return description
 #' @keywords check-inputs
 assert_input_point <- function(observed, predicted) {
   assert(check_numeric_vector(observed, min.len = 1))
@@ -164,12 +141,8 @@ assert_input_point <- function(observed, predicted) {
 }
 
 #' @title Check that inputs are correct for point forecast
-#'
-#' @description Helper function to check whether the input is suitable for
-#' scoring.
 #' @inheritParams assert_input_point
-#' @return Returns TRUE if the check was successful and a string with the
-#' error message otherwise
+#' @inherit check_input_sample return description
 #' @keywords check-inputs
 check_input_point <- function(observed, predicted) {
   result <- check_try(assert_input_point(observed, predicted))

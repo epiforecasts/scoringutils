@@ -173,8 +173,6 @@ check_attribute_conflict <- function(object, attribute, expected) {
   return(TRUE)
 }
 
-toString
-
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
     message(
