@@ -1,8 +1,23 @@
-# scoringutils 1.2.2
+# scoringutils 1.3
 
-This minor update addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
+This major update introduces a lot of breaking changes and addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
 
 ## Package updates
+- in `score()`, required columns "true_value" and "prediction" were replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguements "observed" and "predicted" everywhere consistently. 
+- scoring functions received a consistent interface and input checks:
+  - metrics for binary forecasts: 
+    - `observed`: factor with exactly 2 levels
+    - `predicted`: numeric, vector with probabilities
+  - metrics for point forecasts: 
+    - `observed`: numeric vector
+    - `predicted`: numeric vector
+  - metrics for sample-based forecasts: 
+    - `observed`: numeric, either a scalar or a vector
+    - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
+  - metrics for quantile-based forecasts: 
+    - `observed`: numeric, either a scalar or a vector
+    - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
+    - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`. 
 - changes to `avail_forecasts()` and `plot_avail_forecasts()`:
   - the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future. 
   - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 

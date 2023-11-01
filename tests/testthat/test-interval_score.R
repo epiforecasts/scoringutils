@@ -15,8 +15,8 @@ test_that("wis works, median only", {
 
 test_that("WIS works within score for median forecast", {
   test_data <- data.frame(
-    true_value = c(1, -15, 22),
-    prediction = 1:3,
+    observed = c(1, -15, 22),
+    predicted = 1:3,
     quantile = rep(c(0.5), each = 3),
     model = "model1",
     date = 1:3
@@ -47,9 +47,9 @@ test_that("wis works, 1 interval only", {
 
 test_that("WIS works within score for one interval", {
   test_data <- data.frame(
-    true_value = rep(c(1, -15, 22), times = 2),
+    observed = rep(c(1, -15, 22), times = 2),
     quantile = rep(c(0.25, 0.75), each = 3),
-    prediction = c(c(0, 1, 0), c(2, 2, 3)),
+    predicted = c(c(0, 1, 0), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 2)
   )
@@ -71,9 +71,9 @@ test_that("WIS works within score for one interval", {
 
 test_that("wis works, 1 interval and median", {
   test_data <- data.frame(
-    true_value = rep(c(1, -15, 22), times = 3),
+    observed = rep(c(1, -15, 22), times = 3),
     quantile = rep(c(0.25, 0.5, 0.75), each = 3),
-    prediction = c(c(0, 1, 0), c(1, 2, 3), c(2, 2, 3)),
+    predicted = c(c(0, 1, 0), c(1, 2, 3), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 3)
   )
@@ -85,14 +85,14 @@ test_that("wis works, 1 interval and median", {
   eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
-  quantiles <- rbind(c(0, 1, 2), c(1, 2, 2), c(0, 3, 3))
+  quantile <- rbind(c(0, 1, 2), c(1, 2, 2), c(0, 3, 3))
   quantile_probs <- c(0.25, 0.5, 0.75)
 
   alpha <- 0.5
 
   expected <- 0.5 * (
-    abs(y - quantiles[, 2]) +
-      (quantiles[, 3] - quantiles[, 1]) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
+    abs(y - quantile[, 2]) +
+      (quantile[, 3] - quantile[, 1]) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
   expect_identical(eval$interval_score, expected)
@@ -100,9 +100,9 @@ test_that("wis works, 1 interval and median", {
 
 test_that("wis works, 2 intervals and median", {
   test_data <- data.frame(
-    true_value = rep(c(1, -15, 22), times = 5),
+    observed = rep(c(1, -15, 22), times = 5),
     quantile = rep(c(0.1, 0.25, 0.5, 0.75, 0.9), each = 3),
-    prediction = c(
+    predicted = c(
       c(-1, -2, -2), c(0, 1, 0), c(1, 2, 3),
       c(2, 2, 3), c(3, 4, 4)
     ),
@@ -117,16 +117,16 @@ test_that("wis works, 2 intervals and median", {
   eval <- summarise_scores(eval, by = c("model", "date"))
 
   y <- c(1, -15, 22)
-  quantiles <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
+  quantile <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
   quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
   alpha1 <- 0.2
   alpha2 <- 0.5
 
   expected <- (1 / 3) * (
-    abs(y - quantiles[, 3]) +
-      (quantiles[, 5] - quantiles[, 1]) * (alpha1 / 2) + c(0, (-2) - (-15), 22 - 4) +
-      (quantiles[, 4] - quantiles[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
+    abs(y - quantile[, 3]) +
+      (quantile[, 5] - quantile[, 1]) * (alpha1 / 2) + c(0, (-2) - (-15), 22 - 4) +
+      (quantile[, 4] - quantile[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
   expect_equal(
@@ -189,10 +189,10 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   # make a version that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
-  data.table::setnames(truth_formatted, old = "value", new = "true_value")
+  data.table::setnames(truth_formatted, old = "value", new = "observed")
 
   forecasts_formated <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(forecasts_formated, old = "value", new = "prediction")
+  data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
@@ -259,10 +259,10 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   # make a version that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
-  data.table::setnames(truth_formatted, old = "value", new = "true_value")
+  data.table::setnames(truth_formatted, old = "value", new = "observed")
 
   forecasts_formated <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(forecasts_formated, old = "value", new = "prediction")
+  data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
@@ -336,10 +336,10 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   # make a version that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
-  data.table::setnames(truth_formatted, old = "value", new = "true_value")
+  data.table::setnames(truth_formatted, old = "value", new = "observed")
 
   forecasts_formated <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(forecasts_formated, old = "value", new = "prediction")
+  data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
@@ -366,7 +366,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
-  true_values <- rnorm(10, mean = 1:10)
+  observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
@@ -375,21 +375,21 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 
     w <- FALSE
     is <- interval_score(
-      true_values = true_values,
+      observed = observed,
       lower = lower,
       upper = upper,
       interval_range = (1 - alpha) * 100,
       weigh = w
     )
 
-    qs_lower <- quantile_score(true_values,
-      predictions = lower,
-      quantiles = alpha / 2,
+    qs_lower <- quantile_score(observed,
+      predicted = lower,
+      quantile = alpha / 2,
       weigh = w
     )
-    qs_upper <- quantile_score(true_values,
-      predictions = upper,
-      quantiles = 1 - alpha / 2,
+    qs_upper <- quantile_score(observed,
+      predicted = upper,
+      quantile = 1 - alpha / 2,
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
@@ -397,7 +397,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = TRUE", {
-  true_values <- rnorm(10, mean = 1:10)
+  observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
   for (alpha in alphas) {
@@ -406,21 +406,21 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
 
     w <- TRUE
     is <- interval_score(
-      true_values = true_values,
+      observed = observed,
       lower = lower,
       upper = upper,
       interval_range = (1 - alpha) * 100,
       weigh = w
     )
 
-    qs_lower <- quantile_score(true_values,
-      predictions = lower,
-      quantiles = alpha / 2,
+    qs_lower <- quantile_score(observed,
+      predicted = lower,
+      quantile = alpha / 2,
       weigh = w
     )
-    qs_upper <- quantile_score(true_values,
-      predictions = upper,
-      quantiles = 1 - alpha / 2,
+    qs_upper <- quantile_score(observed,
+      predicted = upper,
+      quantile = 1 - alpha / 2,
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)

@@ -13,7 +13,7 @@
 #' }
 #'
 #' where \eqn{P_t} is the empirical cumulative distribution function of the
-#' prediction for the true value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
+#' prediction for the observed value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
 #' just calculated as the fraction of predictive samples for \eqn{x_t}
 #' that are smaller than \eqn{x_t}.
 #'
@@ -29,20 +29,20 @@
 #' -1 and 1 and is 0 ideally.
 #'
 #' @return vector of length n with the biases of the predictive samples with
-#' respect to the true values.
+#' respect to the observed values.
 #' @inheritParams ae_median_sample
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' ## integer valued forecasts
-#' true_values <- rpois(30, lambda = 1:30)
-#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' bias_sample(true_values, predictions)
+#' observed <- rpois(30, lambda = 1:30)
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' bias_sample(observed, predicted)
 #'
 #' ## continuous forecasts
-#' true_values <- rnorm(30, mean = 1:30)
-#' predictions <- replicate(200, rnorm(30, mean = 1:30))
-#' bias_sample(true_values, predictions)
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted <- replicate(200, rnorm(30, mean = 1:30))
+#' bias_sample(observed, predicted)
 #' @export
 #' @references
 #' The integer valued Bias function is discussed in
@@ -54,23 +54,21 @@
 #' \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
 
-bias_sample <- function(true_values, predictions) {
+bias_sample <- function(observed, predicted) {
 
-  # check inputs
-  check_true_values(true_values)
-  check_predictions(predictions, true_values, class = "matrix")
-  prediction_type <- get_prediction_type(predictions)
+  check_input_sample(observed, predicted)
+  prediction_type <- get_prediction_type(predicted)
 
   # empirical cdf
-  n_pred <- ncol(predictions)
-  p_x <- rowSums(predictions <= true_values) / n_pred
+  n_pred <- ncol(predicted)
+  p_x <- rowSums(predicted <= observed) / n_pred
 
   if (prediction_type == "continuous") {
     res <- 1 - 2 * p_x
     return(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
-    p_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
+    p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
 
     res <- 1 - (p_x + p_xm1)
     return(res)
@@ -95,78 +93,78 @@ bias_sample <- function(true_values, predictions) {
 #'
 #' where \eqn{Q_t} is the set of quantiles that form the predictive
 #' distribution at time \eqn{t}. They represent our
-#' belief about what the true value $x_t$ will be. For consistency, we define
+#' belief about what the observed value $x_t$ will be. For consistency, we define
 #' \eqn{Q_t} such that it always includes the element
 #' \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 #' \eqn{1()} is the indicator function that is \eqn{1} if the
 #' condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
 #' defined as the maximum percentile rank for which the corresponding quantile
-#' is still below the true value, if the true value is smaller than the
-#' median of the predictive distribution. If the true value is above the
+#' is still below the observed value, if the observed value is smaller than the
+#' median of the predictive distribution. If the observed value is above the
 #' median of the predictive distribution, then $B_t$ is the minimum percentile
 #' rank for which the corresponding quantile is still larger than the true
-#' value. If the true value is exactly the median, both terms cancel out and
+#' value. If the observed value is exactly the median, both terms cancel out and
 #' \eqn{B_t} is zero. For a large enough number of quantiles, the
 #' percentile rank will equal the proportion of predictive samples below the
-#' observed true value, and this metric coincides with the one for
+#' observed value, and this metric coincides with the one for
 #' continuous forecasts.
 #'
 #' Bias can assume values between
 #' -1 and 1 and is 0 ideally (i.e. unbiased).
-#' @param predictions vector of length corresponding to the number of quantiles
+#' @param predicted vector of length corresponding to the number of quantiles
 #' that holds predictions
-#' @param quantiles vector of corresponding size with the quantiles for which
-#' predictions were made. If this does not contain the median (0.5) then the
-#' median is imputed as being the mean of the two innermost quantiles.
+#' @param quantile vector of corresponding size with the quantile levels for
+#' which predictions were made. If this does not contain the median (0.5) then
+#' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_range
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
-#' predictions <- c(
+#' predicted <- c(
 #'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
 #'   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
 #'   6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
 #'   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
 #' )
 #'
-#' quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+#' quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 #'
-#' true_value <- 8062
+#' observed <- 8062
 #'
-#' bias_quantile(predictions, quantiles, true_value = true_value)
+#' bias_quantile(observed, predicted, quantile)
 #' @export
 #' @keywords metric
 
-bias_quantile <- function(predictions, quantiles, true_value) {
-  # check that predictions and quantiles have the same length
-  if (!length(predictions) == length(quantiles)) {
-    stop("predictions and quantiles must have the same length")
+bias_quantile <- function(observed, predicted, quantile) {
+  # check that predictions and quantile have the same length
+  if (!length(predicted) == length(quantile)) {
+    stop("`predicted` and `quantile` must have the same length")
   }
 
-  if (anyNA(predictions)) {
-    quantiles <- quantiles[!is.na(predictions)]
-    predictions <- predictions[!is.na(predictions)]
+  if (anyNA(predicted)) {
+    quantile <- quantile[!is.na(predicted)]
+    predicted <- predicted[!is.na(predicted)]
   }
 
-  if (anyNA(quantiles)) {
-    quantiles <- quantiles[!is.na(quantiles)]
-    predictions <- predictions[!is.na(quantiles)]
+  if (anyNA(quantile)) {
+    quantile <- quantile[!is.na(quantile)]
+    predicted <- predicted[!is.na(quantile)]
   }
 
   # if there is no input, return NA
-  if (length(quantiles) == 0 || length(predictions) == 0) {
+  if (length(quantile) == 0 || length(predicted) == 0) {
     return(NA_real_)
   }
 
-  check_quantiles(quantiles)
+  check_quantiles(quantile)
 
-  if (!all(diff(predictions) >= 0)) {
+  if (!all(diff(predicted) >= 0)) {
     stop("predictions must be increasing with quantiles")
   }
 
-  if (0.5 %in% quantiles) {
-    median_prediction <- predictions[quantiles == 0.5]
+  if (0.5 %in% quantile) {
+    median_prediction <- predicted[quantile == 0.5]
   } else {
     # if median is not available, compute as mean of two innermost quantiles
     message(
@@ -174,25 +172,25 @@ bias_quantile <- function(predictions, quantiles, true_value) {
       " in order to compute bias."
     )
     median_prediction <-
-      0.5 * predictions[quantiles == max(quantiles[quantiles < 0.5])] +
-      0.5 * predictions[quantiles == min(quantiles[quantiles > 0.5])]
+      0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
+      0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
   }
 
-  if (true_value == median_prediction) {
+  if (observed == median_prediction) {
     bias <- 0
     return(bias)
-  } else if (true_value < median_prediction) {
-    if (true_value < min(predictions)) {
+  } else if (observed < median_prediction) {
+    if (observed < min(predicted)) {
       bias <- 1
     } else {
-      q <- max(quantiles[predictions <= true_value])
+      q <- max(quantile[predicted <= observed])
       bias <- 1 - 2 * q
     }
-  } else if (true_value > median_prediction) {
-    if (true_value > max(predictions)) {
+  } else if (observed > median_prediction) {
+    if (observed > max(predicted)) {
       bias <- -1
     } else {
-      q <- min(quantiles[predictions >= true_value])
+      q <- min(quantile[predicted >= observed])
       bias <- 1 - 2 * q
     }
   }
@@ -224,21 +222,21 @@ bias_quantile <- function(predictions, quantiles, true_value) {
 #'
 #' where \eqn{Q_t} is the set of quantiles that form the predictive
 #' distribution at time \eqn{t}. They represent our
-#' belief about what the true value \eqn{x_t} will be. For consistency, we
-#' define
+#' belief about what the later observed value \eqn{x_t} will be. For
+#' consistency, we define
 #' \eqn{Q_t} such that it always includes the element
 #' \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 #' \eqn{\mathbf{1}()}{1()} is the indicator function that is \eqn{1} if the
 #' condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
 #' defined as the maximum percentile rank for which the corresponding quantile
-#' is still below the true value, if the true value is smaller than the
-#' median of the predictive distribution. If the true value is above the
+#' is still below the observed value, if the observed value is smaller than the
+#' median of the predictive distribution. If the observed value is above the
 #' median of the predictive distribution, then $B_t$ is the minimum percentile
 #' rank for which the corresponding quantile is still larger than the true
-#' value. If the true value is exactly the median, both terms cancel out and
+#' value. If the observed value is exactly the median, both terms cancel out and
 #' \eqn{B_t} is zero. For a large enough number of quantiles, the
 #' percentile rank will equal the proportion of predictive samples below the
-#' observed true value, and this metric coincides with the one for
+#' observed value, and this metric coincides with the one for
 #' continuous forecasts.
 #'
 #' Bias can assume values between
@@ -251,7 +249,7 @@ bias_quantile <- function(predictions, quantiles, true_value) {
 #' prediction interval
 #' @param range vector of corresponding size with information about the width
 #' of the central prediction interval
-#' @param true_value a single true value
+#' @param observed a single observed value
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @seealso bias_quantile bias_sample
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -271,16 +269,16 @@ bias_quantile <- function(predictions, quantiles, true_value) {
 #'
 #' range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
 #'
-#' true_value <- 8062
+#' observed <- 8062
 #'
 #' bias_range(
 #'   lower = lower, upper = upper,
-#'   range = range, true_value = true_value
+#'   range = range, observed = observed
 #' )
 #' @export
 #' @keywords metric
 
-bias_range <- function(lower, upper, range, true_value) {
+bias_range <- function(lower, upper, range, observed) {
 
   if (anyNA(range)) {
     if (is.na(range[1]) && !any(range[-1] == 0)) {
@@ -302,17 +300,17 @@ bias_range <- function(lower, upper, range, true_value) {
   check_quantiles(range, name = "range", range = c(0, 100))
 
   # Convert range to quantiles
-  quantiles <- c(
+  quantile <- c(
     rev(abs(100 - range) / (2 * 100)),
     abs(100 + range[range != 0]) / (2 * 100)
   )
 
   # Combine predictions
   upper_without_median <- upper[range != 0]
-  predictions <- c(rev(lower), upper_without_median)
+  predicted <- c(rev(lower), upper_without_median)
 
   # Call bias_quantile
-  bias <- bias_quantile(predictions, quantiles, true_value)
+  bias <- bias_quantile(observed, predicted, quantile)
 
   return(bias)
 }

@@ -28,7 +28,7 @@ library(ggplot2)
 library(knitr)
 ```
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against the true observed values. 
+The `scoringutils` package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against the observed values. 
 
 You can find additional information and examples in the papers [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts on transformed scales](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1) as well as the Vignettes ([Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html), [Details on the metrics implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html) and [Scoring forecasts directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
 
@@ -111,7 +111,7 @@ You may want to score forecasts based on transformations of the original data in
 
 ```{r}
 example_quantile %>%
- .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+ .[, observed := ifelse(observed < 0, 0, observed)] %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%

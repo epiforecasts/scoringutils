@@ -56,24 +56,24 @@
 #' integer predictions.
 #' @inheritParams ae_median_sample
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
-#' correspond to the length of `true_values`. For integer forecasts, a
+#' correspond to the length of `observed`. For integer forecasts, a
 #' randomised PIT will be returned of length
-#' `length(true_values) * n_replicates`
+#' `length(observed) * n_replicates`
 #' @seealso [pit()]
 #' @importFrom stats runif
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
 #' ## continuous predictions
-#' true_values <- rnorm(20, mean = 1:20)
-#' predictions <- replicate(100, rnorm(n = 20, mean = 1:20))
-#' pit <- pit_sample(true_values, predictions)
+#' observed <- rnorm(20, mean = 1:20)
+#' predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
+#' pit <- pit_sample(observed, predicted)
 #' plot_pit(pit)
 #'
 #' ## integer predictions
-#' true_values <- rpois(50, lambda = 1:50)
-#' predictions <- replicate(2000, rpois(n = 50, lambda = 1:50))
-#' pit <- pit_sample(true_values, predictions, n_replicates = 30)
+#' observed <- rpois(50, lambda = 1:50)
+#' predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+#' pit <- pit_sample(observed, predicted, n_replicates = 30)
 #' plot_pit(pit)
 #' @export
 #' @references
@@ -83,20 +83,20 @@
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
 
-pit_sample <- function(true_values,
-                       predictions,
+pit_sample <- function(observed,
+                       predicted,
                        n_replicates = 100) {
 
   # error handling--------------------------------------------------------------
   # check al arguments are provided
   # this could be integrated into check_not_null
-  if (missing("true_values") || missing("predictions")) {
-    stop("`true_values` or `predictions` missing in function 'pit_sample()'")
+  if (missing("observed") || missing("predicted")) {
+    stop("`observed` or `predicted` missing in function 'pit_sample()'")
   }
-  check_not_null(true_values = true_values, predictions = predictions)
+  check_not_null(observed = observed, predicted = predicted)
 
   # check if there is more than one observation
-  n <- length(true_values)
+  n <- length(observed)
   if (n == 1) {
     message(
       "you need more than one observation to assess uniformity of the PIT"
@@ -105,44 +105,44 @@ pit_sample <- function(true_values,
   }
 
   # check and handle format of predictions
-  if (is.data.frame(predictions)) {
-    predictions <- as.matrix(predictions)
+  if (is.data.frame(predicted)) {
+    predicted <- as.matrix(predicted)
   }
-  if (!is.matrix(predictions)) {
+  if (!is.matrix(predicted)) {
     msg <- sprintf(
-      "'predictions' should be a matrix. Instead `%s` was found",
-      class(predictions)[1]
+      "'predicted' should be a matrix. Instead `%s` was found",
+      class(predicted)[1]
     )
     stop(msg)
   }
-  if (nrow(predictions) != n) {
+  if (nrow(predicted) != n) {
     msg <- sprintf(
-      "Mismatch: 'true_values' has length `%s`, but 'predictions' has `%s` rows.",
-      n, nrow(predictions)
+      "Mismatch: 'observed' has length `%s`, but 'predicted' has `%s` rows.",
+      n, nrow(predicted)
     )
     stop(msg)
   }
 
   # check data type ------------------------------------------------------------
   # check whether continuous or integer
-  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
+  if (!isTRUE(all.equal(as.vector(predicted), as.integer(predicted)))) {
     continuous_predictions <- TRUE
   } else {
     continuous_predictions <- FALSE
   }
 
   # calculate PIT-values -------------------------------------------------------
-  n_pred <- ncol(predictions)
+  n_pred <- ncol(predicted)
 
   # calculate emipirical cumulative distribution function as
-  # Portion of (y_true <= y_predicted)
-  p_x <- rowSums(predictions <= true_values) / n_pred
+  # Portion of (y_observed <= y_predicted)
+  p_x <- rowSums(predicted <= observed) / n_pred
 
   # calculate PIT for continuous predictions case
   if (continuous_predictions) {
     pit_values <- p_x
   } else {
-    p_xm1 <- rowSums(predictions <= (true_values - 1)) / n_pred
+    p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     pit_values <- as.vector(
       replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
     )
@@ -157,8 +157,8 @@ pit_sample <- function(true_values,
 #' @details
 #' see [pit()]
 #'
-#' @param data a data.frame with the following columns: `true_value`,
-#' `prediction`, `sample`.
+#' @param data a data.frame with the following columns: `observed`,
+#' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
@@ -213,13 +213,13 @@ pit <- function(data,
 
   # if prediction type is not quantile, calculate PIT values based on samples
   data_wide <- data.table::dcast(data,
-    ... ~ paste0("InternalSampl_", sample),
-    value.var = "prediction"
+    ... ~ paste0("InternalSampl_", sample_id),
+    value.var = "predicted"
   )
 
   pit <- data_wide[, .("pit_value" = pit_sample(
-    true_values = true_value,
-    predictions = as.matrix(.SD)
+    observed = observed,
+    predicted = as.matrix(.SD)
   )),
   by = by,
   .SDcols = grepl("InternalSampl_", names(data_wide), fixed = TRUE)

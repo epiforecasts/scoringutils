@@ -21,7 +21,7 @@ library(ggplot2)
 library(knitr)
 ```
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
 
 The `scoringutils` package offers convenient automated forecast evaluation in a `data.table` format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
 
@@ -39,8 +39,8 @@ requirements <- data.table(
     "quantile-based", "sample-based", "binary", "pairwise-comparisons"
   ),
   `Required columns` = c(
-    "'true_value', 'prediction', 'quantile'",
-    "'true_value', 'prediction', 'sample'", "'true_value', 'prediction'",
+    "'observed', 'predicted', 'quantile'",
+    "'observed', 'predicted', 'sample'", "'observed', 'predicted'",
     "additionally a column 'model'"
   )
 )
@@ -48,7 +48,7 @@ kable(requirements)
 ```
 
 Additional columns may be present to indicate a grouping of forecasts. For example, we could have forecasts made by different models in various locations at different time points, each for several weeks into the future. 
-`scoringutils` automatically tries to determine the *unit of a single forecast*, i.e. the combination of existing columns that are able to uniquely identify a single forecast. It uses all existing columns for this, which can sometimes lead to issues. We therefore recommend using the function `set_forecast_unit()` to determine the forecast unit manually. The function simply drops unneeded columns, while making sure that some necessary, 'protected columns' like "prediction" or "true_value" are retained. 
+`scoringutils` automatically tries to determine the *unit of a single forecast*, i.e. the combination of existing columns that are able to uniquely identify a single forecast. It uses all existing columns for this, which can sometimes lead to issues. We therefore recommend using the function `set_forecast_unit()` to determine the forecast unit manually. The function simply drops unneeded columns, while making sure that some necessary, 'protected columns' like "predicted" or "observed" are retained. 
 
 ```{r}
 colnames(example_quantile)
@@ -278,7 +278,7 @@ score(example_quantile) %>%
 
 ## Calibration
 
-Calibration is a measure statistical consistency between the forecasts and the observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the true observed value. Ideally, pit values should be uniformly distributed after the transformation. 
+Calibration is a measure statistical consistency between the forecasts and the observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the observed value. Ideally, pit values should be uniformly distributed after the transformation. 
 
 We can compute pit values as such: 
 

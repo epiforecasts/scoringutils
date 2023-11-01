@@ -1,15 +1,3 @@
-#' @title Calculate Geometric Mean
-#'
-#' @param x numeric vector of values for which to calculate the geometric mean
-#' @return the geometric mean of the values in `x`
-#'
-#' @keywords internal
-geom_mean_helper <- function(x) {
-  geom_mean <- exp(mean(log(x[!is.na(x)])))
-  return(geom_mean)
-}
-
-
 globalVariables(c(
   "..index",
   "..quantiles",
@@ -59,7 +47,7 @@ globalVariables(c(
   "pit_p_val",
   "pit_value",
   "point",
-  "prediction",
+  "predicted",
   "pval",
   "quantile",
   "ratio",
@@ -69,7 +57,7 @@ globalVariables(c(
   "se_mean",
   "sharpness",
   "theta",
-  "true_value",
+  "observed",
   "type",
   "upper",
   "value",
@@ -91,48 +79,6 @@ globalVariables(c(
 
 available_metrics <- function() {
   return(unique(scoringutils::metrics$Name))
-}
-
-#' @title Simple permutation test
-#'
-#' @description #' The implementation of the permutation test follows the
-#' function
-#' `permutationTest` from the `surveillance` package by Michael Höhle,
-#' Andrea Riebler and Michaela Paul.
-#'
-#' @return p-value of the permutation test
-#' @keywords internal
-permutation_test <- function(scores1,
-                             scores2,
-                             n_permutation = 999,
-                             one_sided = FALSE,
-                             comparison_mode = c("difference", "ratio")) {
-  nTime <- length(scores1)
-  meanscores1 <- mean(scores1)
-  meanscores2 <- mean(scores2)
-  comparison_mode <- match.arg(comparison_mode)
-  if (comparison_mode == "ratio") {
-    # distinguish between on-sided and two-sided:
-    testStat_observed <- ifelse(one_sided,
-      meanscores1 / meanscores2,
-      max(meanscores1 / meanscores2, meanscores2 / meanscores1)
-    )
-  } else {
-    testStat_observed <- ifelse(one_sided, meanscores1 - meanscores2, abs(meanscores1 - meanscores2))
-  }
-  testStat_permuted <- replicate(n_permutation, {
-    sel <- rbinom(nTime, size = 1, prob = 0.5)
-    g1 <- (sum(scores1[sel == 0]) + sum(scores2[sel == 1])) / nTime
-    g2 <- (sum(scores1[sel == 1]) + sum(scores2[sel == 0])) / nTime
-    if (comparison_mode == "ratio") {
-      ifelse(one_sided, g1 / g2, max(g1 / g2, g2 / g1))
-    } else {
-      ifelse(one_sided, g1 - g2, abs(g1 - g2))
-    }
-  })
-  pVal <- (1 + sum(testStat_permuted >= testStat_observed)) / (n_permutation + 1)
-  # plus ones to make sure p-val is never 0?
-  return(pVal)
 }
 
 
@@ -189,7 +135,7 @@ prediction_is_quantile <- function(data) {
 #'
 #' @description Internal helper function to get the prediction type of a
 #' forecast. That is inferred based on the properties of the values in the
-#' `prediction` column.
+#' `predicted` column.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -203,10 +149,10 @@ get_prediction_type <- function(data) {
     if ("quantile" %in% names(data)) {
       return("quantile")
     } else {
-      if ("prediction" %in% names(data)) {
-        data <- data$prediction
+      if ("predicted" %in% names(data)) {
+        data <- data$predicted
       }else {
-        stop("Input does not contain a column named 'prediction'")
+        stop("Input does not contain a column named 'predicted'")
       }
     }
   }
@@ -224,8 +170,8 @@ get_prediction_type <- function(data) {
 #' @title Get type of the target true values of a forecast
 #'
 #' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the which columns
-#' are present in the data.
+#' true values of a forecast. That is inferred based on the type and the
+#' content of the `observed` column.
 #'
 #' @inheritParams check_forecasts
 #'
@@ -235,13 +181,11 @@ get_prediction_type <- function(data) {
 #' @keywords internal
 
 get_target_type <- function(data) {
-  if (isTRUE(all.equal(data$true_value, as.integer(data$true_value)))) {
-    if (all(data$true_value %in% c(0, 1)) &&
-          all(data$prediction >= 0) && all(data$prediction <= 1)) {
-      return("binary")
-    } else {
-      return("integer")
-    }
+  if (is.factor(data$observed)) {
+    return("classification")
+  }
+  if (isTRUE(all.equal(data$observed, as.integer(data$observed)))) {
+    return("integer")
   } else {
     return("continuous")
   }
@@ -265,7 +209,7 @@ get_forecast_unit <- function(data) {
 
   protected_columns <- get_protected_columns(data)
   if (prediction_is_quantile(data)) {
-    protected_columns <- setdiff(protected_columns, "sample")
+    protected_columns <- setdiff(protected_columns, "sample_id")
   }
   forecast_unit <- setdiff(colnames(data), protected_columns)
   return(forecast_unit)
@@ -287,7 +231,7 @@ get_protected_columns <- function(data) {
 
   datacols <- colnames(data)
   protected_columns <- c(
-    "prediction", "true_value", "sample", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
     "pit_value", "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )

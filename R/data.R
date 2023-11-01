@@ -11,11 +11,11 @@
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{Numeric: observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{prediction}{predicted value}
+#'   \item{predicted}{predicted value}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
@@ -37,11 +37,11 @@
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{prediction}{predicted value}
+#'   \item{predicted}{predicted value}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
@@ -62,13 +62,13 @@
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
-#'   \item{prediction}{predicted value}
-#'   \item{sample}{id for the corresponding sample}
+#'   \item{predicted}{predicted value}
+#'   \item{sample_id}{id for the corresponding sample}
 #' }
 #' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/} # nolint
 "example_continuous"
@@ -87,13 +87,13 @@
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
-#'   \item{prediction}{predicted value}
-#'   \item{sample}{id for the corresponding sample}
+#'   \item{predicted}{predicted value}
+#'   \item{sample_id}{id for the corresponding sample}
 #' }
 "example_integer"
 
@@ -119,11 +119,11 @@
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{A factor with the observed values}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
-#'   \item{prediction}{predicted value}
+#'   \item{predicted}{predicted value}
 #' }
 #' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/} # nolint
 "example_binary"
@@ -144,7 +144,7 @@
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
 #'   \item{forecast_date}{the date on which a prediction was made}
 #'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{prediction}{predicted value}
+#'   \item{predicted}{predicted value}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
@@ -165,7 +165,7 @@
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
 #'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{true_value}{true observed values}
+#'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
 #' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/} # nolint

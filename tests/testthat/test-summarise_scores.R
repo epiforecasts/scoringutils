@@ -22,8 +22,8 @@ test_that("summarise_scores() handles wrong by argument well", {
     fixed = TRUE
   )
 
-  expect_error(summarise_scores(scores, by = "sample"),
-    "The following items in `by` are notvalid column names of the data: 'sample'. Check and run `summarise_scores()` again", # nolint
+  expect_error(summarise_scores(scores, by = "sample_id"),
+    "The following items in `by` are notvalid column names of the data: 'sample_id'. Check and run `summarise_scores()` again", # nolint
     fixed = TRUE
   )
 })
@@ -81,12 +81,12 @@ test_that("summarise_scores() metric is deprecated", {
     scores, by = "model", metric = "auto", relative_skill = TRUE
   ))[, relative_skill],
     c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
-  )  
+  )
   expect_snapshot(
     x <- summarise_scores(
       scores, by = "model", metric = "auto", relative_skill = TRUE
     )
-  )  
+  )
 })
 
 test_that("summarise_scores() across argument works as expected", {
@@ -99,7 +99,7 @@ test_that("summarise_scores() across argument works as expected", {
     ),
     regexp = "You cannot specify both"
   )
-  expect_error( 
+  expect_error(
     summarise_scores(
       scores, across = "horizons"
     ),

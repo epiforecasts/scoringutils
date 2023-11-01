@@ -4,14 +4,14 @@
 \alias{se_mean_sample}
 \title{Squared Error of the Mean (Sample-based Version)}
 \usage{
-se_mean_sample(true_values, predictions)
+se_mean_sample(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
 vector with the scoring values
@@ -20,15 +20,15 @@ vector with the scoring values
 Squared error of the mean calculated as
 
 \deqn{
-  \textrm{mean}(\textrm{true\_value} - \textrm{prediction})^2
+  \textrm{mean}(\textrm{observed} - \textrm{prediction})^2
 }{
-  mean(true_value - mean_prediction)^2
+  mean(observed - mean_prediction)^2
 }
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
-se_mean_sample(true_values, predicted_values)
+se_mean_sample(observed, predicted_values)
 }
 \seealso{
 \code{\link[=squared_error]{squared_error()}}

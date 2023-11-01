@@ -10,7 +10,7 @@ A data frame with 140 rows and 5 columns:
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
 \item{target_type}{the target to be predicted (cases or deaths)}
-\item{true_value}{true observed values}
+\item{observed}{observed values}
 \item{location_name}{name of the country for which a prediction was made}
 }
 }

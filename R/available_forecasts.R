@@ -11,7 +11,7 @@
 #' categories over which the number of forecasts should be counted.
 #' By default (`by = NULL`) this will be the unit of a single forecast (i.e.
 #' all available columns (apart from a few "protected" columns such as
-#' 'prediction' and 'true value') plus "quantile" or "sample" where present).
+#' 'predicted' and 'observed') plus "quantile" or "sample_id" where present).
 #'
 #' @param collapse character vector (default is `c("quantile", "sample"`) with
 #' names of categories for which the number of rows should be collapsed to one

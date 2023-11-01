@@ -14,7 +14,7 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://c
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
-forecasts against the true observed values.
+forecasts against the observed values.
 
 You can find additional information and examples in the papers
 [Evaluating Forecasts with scoringutils in
@@ -143,7 +143,7 @@ example_quantile %>%
   ) %>%
   kable()
 #> The following messages were produced when checking inputs:
-#> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
+#> 1.  144 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
 | model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
@@ -171,13 +171,13 @@ applying the natural logarithm.
 
 ``` r
 example_quantile %>%
- .[, true_value := ifelse(true_value < 0, 0, true_value)] %>%
+ .[, observed := ifelse(observed < 0, 0, observed)] %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
 #> The following messages were produced when checking inputs:
-#> 1.  288 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
+#> 1.  288 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 #>                    model target_type   scale interval_score   dispersion
 #> 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146
 #> 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443

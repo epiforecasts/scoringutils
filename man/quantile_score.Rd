@@ -4,16 +4,16 @@
 \alias{quantile_score}
 \title{Quantile Score}
 \usage{
-quantile_score(true_values, predictions, quantiles, weigh = TRUE)
+quantile_score(observed, predicted, quantile, weigh = TRUE)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{quantiles}{vector of size n with the quantile values of the
+\item{quantile}{vector of size n with the quantile levels of the
 corresponding predictions.}
 
 \item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
@@ -34,19 +34,19 @@ the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
 }
 \examples{
-true_values <- rnorm(10, mean = 1:10)
+observed <- rnorm(10, mean = 1:10)
 alpha <- 0.5
 
 lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
 upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 
-qs_lower <- quantile_score(true_values,
-  predictions = lower,
-  quantiles = alpha / 2
+qs_lower <- quantile_score(observed,
+  predicted = lower,
+  quantile = alpha / 2
 )
-qs_upper <- quantile_score(true_values,
-  predictions = upper,
-  quantiles = 1 - alpha / 2
+qs_upper <- quantile_score(observed,
+  predicted = upper,
+  quantile = 1 - alpha / 2
 )
 interval_score <- (qs_lower + qs_upper) / 2
 }

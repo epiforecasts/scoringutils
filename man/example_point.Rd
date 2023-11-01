@@ -10,11 +10,11 @@ A data frame with
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
 \item{target_type}{the target to be predicted (cases or deaths)}
-\item{true_value}{true observed values}
+\item{observed}{observed values}
 \item{location_name}{name of the country for which a prediction was made}
 \item{forecast_date}{the date on which a prediction was made}
 \item{quantile}{quantile of the corresponding prediction}
-\item{prediction}{predicted value}
+\item{predicted}{predicted value}
 \item{model}{name of the model that generated the forecasts}
 \item{horizon}{forecast horizon in weeks}
 }

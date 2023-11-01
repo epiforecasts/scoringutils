@@ -4,12 +4,12 @@
 \alias{squared_error}
 \title{Squared Error}
 \usage{
-squared_error(true_values, predictions)
+squared_error(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{A vector with predicted values of size n}
+\item{predicted}{A vector with predicted values of size n}
 }
 \value{
 vector with the scoring values
@@ -18,14 +18,14 @@ vector with the scoring values
 Squared Error SE calculated as
 
 \deqn{
-  (\textrm{true\_values} - \textrm{predicted\_values})^2
+  (\textrm{observed} - \textrm{predicted})^2
 }{
-  (true_values - predicted_values)^2
+  (observed - predicted)^2
 }
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 predicted_values <- rnorm(30, mean = 1:30)
-squared_error(true_values, predicted_values)
+squared_error(observed, predicted_values)
 }
 \keyword{metric}

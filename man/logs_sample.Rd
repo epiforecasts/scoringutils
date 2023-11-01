@@ -4,14 +4,17 @@
 \alias{logs_sample}
 \title{Logarithmic score}
 \usage{
-logs_sample(true_values, predictions)
+logs_sample(observed, predicted, ...)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
+
+\item{...}{additional arguments passed to
+\link[scoringRules:scores_sample_univ]{logs_sample()} from the scoringRules package.}
 }
 \value{
 vector with the scoring values
@@ -28,9 +31,9 @@ integer valued probability distributions. See the scoringRules package for
 more details.
 }
 \examples{
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-logs_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+logs_sample(observed, predicted)
 }
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic

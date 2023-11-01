@@ -5,7 +5,7 @@
 \title{Interval Score}
 \usage{
 interval_score(
-  true_values,
+  observed,
   lower,
   upper,
   interval_range,
@@ -14,7 +14,7 @@ interval_score(
 )
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
 \item{lower}{vector of size n with the prediction for the lower quantile
 of the given range}
@@ -52,14 +52,14 @@ The score is computed as
 
 \deqn{
 \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
- - \textrm{true\_value}) *
-\mathbf{1}(\textrm{true\_value} < \textrm{lower}) +
-\frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
-\mathbf{1}(\textrm{true\_value} > \textrm{upper})
+ - \textrm{observed}) *
+\mathbf{1}(\textrm{observed} < \textrm{lower}) +
+\frac{2}{\alpha}(\textrm{observed} - \textrm{upper}) *
+\mathbf{1}(\textrm{observed} > \textrm{upper})
 }{
-score = (upper - lower) + 2/alpha * (lower - true_value) *
-1(true_values < lower) + 2/alpha * (true_value - upper) *
-1(true_value > upper)
+score = (upper - lower) + 2/alpha * (lower - observed) *
+1(observed < lower) + 2/alpha * (observed - upper) *
+1(observed > upper)
 }
 where \eqn{\mathbf{1}()}{1()} is the indicator function and
 indicates how much is outside the prediction interval.
@@ -76,25 +76,25 @@ as the lower bound and the 0.7 quantile as the upper).
 Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 }
 \examples{
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 interval_range <- rep(90, 30)
 alpha <- (100 - interval_range) / 100
 lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
 upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 
 interval_score(
-  true_values = true_values,
+  observed = observed,
   lower = lower,
   upper = upper,
   interval_range = interval_range
 )
 
 # gives a warning, as the interval_range should likely be 50 instead of 0.5
-interval_score(true_value = 4, upper = 2, lower = 8, interval_range = 0.5)
+interval_score(observed = 4, upper = 2, lower = 8, interval_range = 0.5)
 
 # example with missing values and separate results
 interval_score(
-  true_values = c(true_values, NA),
+  observed = c(observed, NA),
   lower = c(lower, NA),
   upper = c(NA, upper),
   separate_results = TRUE,

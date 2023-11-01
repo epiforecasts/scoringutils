@@ -5,12 +5,16 @@
 #' It is a data-independent measure, and is purely a feature
 #' of the forecasts themselves.
 #'
-#' Dispersion of predictive samples corresponding to one single true value is
+#' Dispersion of predictive samples corresponding to one single observed value is
 #' measured as the normalised median of the absolute deviation from
 #' the median of the predictive samples. For details, see [mad()][stats::mad()]
 #' and the explanations given in Funk et al. (2019)
 #'
 #' @inheritParams ae_median_sample
+#' @param observed place holder, argument will be ignored and exists only for
+#' consistency with other scoring functions. The output does not depend on
+#' any observed values.
+#' @param ... additional arguments passed to [mad()][stats::mad()].
 #' @importFrom stats mad
 #' @return vector with dispersion values
 #'
@@ -22,13 +26,19 @@
 #'
 #' @export
 #' @examples
-#' predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-#' mad_sample(predictions)
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' mad_sample(predicted = predicted)
 #' @keywords metric
 
-mad_sample <- function(predictions) {
-  check_predictions(predictions, class = "matrix")
+mad_sample <- function(observed = NULL, predicted, ...) {
 
-  sharpness <- apply(predictions, MARGIN = 1, mad)
+  if(!is.null(observed)) {
+    stop("`observed` argument was provided, but should be NULL.",
+         "Please assign the `predicted` argument explicitly.")
+  }
+  observed <- rep(NA_real_, nrow(predicted))
+  check_input_sample(observed, predicted)
+
+  sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)
 }

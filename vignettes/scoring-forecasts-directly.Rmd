@@ -35,7 +35,7 @@ For continuous forecasts, Bias is measured as
 $$B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t))$$
 
 where $P_t$ is the empirical cumulative distribution function of the
-prediction for the true value $x_t$. Computationally, $P_t (x_t)$ is
+prediction for the observed value $x_t$. Computationally, $P_t (x_t)$ is
 just calculated as the fraction of predictive samples for $x_t$
 that are smaller than $x_t$.
 
@@ -48,14 +48,14 @@ assume values between -1 and 1 and is 0 ideally.
 
 ```{r}
 ## integer valued forecasts
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-bias_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+bias_sample(observed, predicted)
 
 ## continuous forecasts
-true_values <- rnorm(30, mean = 1:30)
-predictions <- replicate(200, rnorm(30, mean = 1:30))
-bias_sample(true_values, predictions)
+observed <- rnorm(30, mean = 1:30)
+predicted <- replicate(200, rnorm(30, mean = 1:30))
+bias_sample(observed, predicted)
 ```
 
 
@@ -64,13 +64,13 @@ Sharpness is the ability of the model to generate predictions within a
 narrow range. It is a data-independent measure, and is purely a feature
 of the forecasts themselves.
 
-Sharpness / dispersion of predictive samples corresponding to one single true value is
+Sharpness / dispersion of predictive samples corresponding to one single observed value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see `?stats::mad`
 
 ```{r}
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-mad_sample(predictions)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+mad_sample(predicted = predicted)
 ```
 
 # Calibration
@@ -126,9 +126,9 @@ Wrapper around the `crps_sample()` function from the
 integer valued forecasts. Smaller values are better. 
 
 ```{r}
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-crps_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+crps_sample(observed, predicted)
 ```
 
 
@@ -140,9 +140,9 @@ Wrapper around the `dss_sample()` function from the
 integer valued forecasts. Smaller values are better. 
 
 ```{r}
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-dss_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+dss_sample(observed, predicted)
 ```
 
 # Log Score
@@ -154,27 +154,27 @@ forecasts they require a kernel density estimate which is not well defined
 for discrete values. Smaller values are better. 
 
 ```{r}
-true_values <- rnorm(30, mean = 1:30)
-predictions <- replicate(200, rnorm(n = 30, mean = 1:30))
-logs_sample(true_values, predictions)
+observed <- rnorm(30, mean = 1:30)
+predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
+logs_sample(observed, predicted)
 ```
 
 # Brier Score
 The Brier score is a proper score rule that assesses the accuracy of
 probabilistic binary predictions. The outcomes can be either 0 or 1,
-the predictions must be a probability that the true outcome will be 1.
+the predictions must be a probability that the observed outcome will be 1.
 
 The Brier Score is then computed as the mean squared error between the
-probabilistic prediction and the true outcome.
+probabilistic prediction and the observed outcome.
 
 $$\text{Brier_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\text{prediction}_t - \text{outcome}_t)^2$$
 
 
 ```{r}
-true_values <- sample(c(0, 1), size = 30, replace = TRUE)
-predictions <- runif(n = 30, min = 0, max = 1)
+observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))
+predicted <- runif(n = 30, min = 0, max = 1)
 
-brier_score(true_values, predictions)
+brier_score(observed, predicted)
 ```
 
 ## Interval Score
@@ -184,9 +184,9 @@ following Gneiting and Raftery (2007). Smaller values are better.
 The score is computed as
 
 $$ \text{score} = (\text{upper} - \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{lower} - \text{true_value}) \cdot 1(\text{true_values} < \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{true_value} - \text{upper}) \cdot
-1(\text{true_value} > \text{upper})$$
+\frac{2}{\alpha} \cdot (\text{lower} - \text{observed}) \cdot 1(\text{observed} < \text{lower}) + \\
+\frac{2}{\alpha} \cdot (\text{observed} - \text{upper}) \cdot
+1(\text{observed} > \text{upper})$$
 
 
 where $1()$ is the indicator function and $\alpha$ is the decimal value that
@@ -203,14 +203,14 @@ the Interval Score converges to the CRPS for increasing number of quantiles.
 
 
 ```{r}
-true_values <- rnorm(30, mean = 1:30)
+observed <- rnorm(30, mean = 1:30)
 interval_range <- 90
 alpha <- (100 - interval_range) / 100
 lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
 upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
 
 interval_score(
-  true_values = true_values,
+  observed = observed,
   lower = lower,
   upper = upper,
   interval_range = interval_range

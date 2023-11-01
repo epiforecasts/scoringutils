@@ -43,7 +43,7 @@ score_quantile <- function(data,
   range_data[is.na(range), boundary := "point"]
 
   range_data <- data.table::dcast(range_data, ... ~ boundary,
-    value.var = "prediction"
+    value.var = "predicted"
   )
 
   # if we only score point forecasts, it may be true that there are no columns
@@ -68,7 +68,7 @@ score_quantile <- function(data,
     }
     res <- res[, eval(outcols) := do.call(
       scoringutils::interval_score,
-      list(true_value, lower,
+      list(observed, lower,
         upper, range,
         weigh,
         separate_results = separate_results
@@ -78,7 +78,7 @@ score_quantile <- function(data,
 
   # compute coverage for every single observation
   if ("coverage" %in% metrics) {
-    res[, coverage := ifelse(true_value <= upper & true_value >= lower, 1, 0)] # nolint
+    res[, coverage := ifelse(observed <= upper & observed >= lower, 1, 0)] # nolint
     res[, coverage_deviation := coverage - range / 100]
   }
 
@@ -86,7 +86,7 @@ score_quantile <- function(data,
   if ("bias" %in% metrics) {
     res[, bias := bias_range(
       range = range, lower = lower, upper = upper,
-      true_value = unique(true_value)
+      observed = unique(observed)
     ),
     by = forecast_unit
     ]
@@ -98,8 +98,8 @@ score_quantile <- function(data,
     if ("point" %in% colnames(res)) {
       res[
         is.na(range) & is.numeric(point),
-        `:=`(ae_point = abs_error(predictions = point, true_value),
-             se_point = squared_error(predictions = point, true_value))
+        `:=`(ae_point = abs_error(predicted = point, observed),
+             se_point = squared_error(predicted = point, observed))
       ]
     }
   }
@@ -108,8 +108,8 @@ score_quantile <- function(data,
   # compute absolute error of the median
   if ("ae_median" %in% metrics) {
     quantile_data[, ae_median := ae_median_quantile(
-      true_value,
-      prediction,
+      observed,
+      predicted,
       quantile
     ),
     by = forecast_unit
@@ -118,7 +118,7 @@ score_quantile <- function(data,
 
   # compute quantile coverage based on quantile version
   if ("quantile_coverage" %in% metrics) {
-    quantile_data[, quantile_coverage := (true_value <= prediction)]
+    quantile_data[, quantile_coverage := (observed <= predicted)]
   }
 
   # merge metrics computed on quantile data (i.e. ae_median, quantile_coverage) back
@@ -154,7 +154,7 @@ score_quantile <- function(data,
   }
 
   # delete internal columns before returning result
-  res <- delete_columns(res, c("upper", "lower", "boundary", "point", "true_value"))
+  res <- delete_columns(res, c("upper", "lower", "boundary", "point", "observed"))
 
   return(res[])
 }

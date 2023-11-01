@@ -1,30 +1,30 @@
-test_that("pit_sample() function throws an error when missing true_values", {
-  true_values <- rpois(10, lambda = 1:10)
-  predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
+test_that("pit_sample() function throws an error when missing observed", {
+  observed <- rpois(10, lambda = 1:10)
+  predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    pit_sample(predictions = predictions),
-    "true_values` or `predictions` missing in function 'pit_sample()"
+    pit_sample(predicted = predicted),
+    "observed` or `predicted` missing in function 'pit_sample()"
   )
 })
 
-test_that("pit_sample() function throws an error when missing 'predictions'", {
-  true_values <- rpois(10, lambda = 1:10)
-  predictions <- replicate(50, rpois(n = 10, lambda = 1:10))
+test_that("pit_sample() function throws an error when missing 'predicted'", {
+  observed <- rpois(10, lambda = 1:10)
+  predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    pit_sample(predictions = predictions),
-    "true_values` or `predictions` missing in function 'pit_sample()"
+    pit_sample(predicted = predicted),
+    "observed` or `predicted` missing in function 'pit_sample()"
   )
 })
 
 
-test_that("pit_sample() function works for integer true_values and predictions", {
-  true_values <- rpois(10, lambda = 1:10)
-  predictions <- replicate(10, rpois(10, lambda = 1:10))
+test_that("pit_sample() function works for integer observed and predicted", {
+  observed <- rpois(10, lambda = 1:10)
+  predicted <- replicate(10, rpois(10, lambda = 1:10))
   output <- pit_sample(
-    true_values = true_values,
-    predictions = predictions,
+    observed = observed,
+    predicted = predicted,
     n_replicates = 56
   )
   expect_equal(
@@ -33,12 +33,12 @@ test_that("pit_sample() function works for integer true_values and predictions",
   )
 })
 
-test_that("pit_sample() function works for continuous true_values and predictions", {
-  true_values <- rnorm(10)
-  predictions <- replicate(10, rnorm(10))
+test_that("pit_sample() function works for continuous observed and predicted", {
+  observed <- rnorm(10)
+  predicted <- replicate(10, rnorm(10))
   output <- pit_sample(
-    true_values = true_values,
-    predictions = predictions,
+    observed = observed,
+    predicted = predicted,
     n_replicates = 56
   )
   expect_equal(

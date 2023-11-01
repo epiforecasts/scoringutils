@@ -28,7 +28,7 @@ test_that("pairwise_comparison() works", {
   set.seed(123)
   test_forecasts[, value := sapply(value, function(x) {
       abs(rnorm(n = 1, mean = x, sd = model_sd))
-    }), 
+    }),
     by = .(model, target_end_date, location, target_variable)
   ]
 
@@ -43,9 +43,9 @@ test_that("pairwise_comparison() works", {
   # make a version of that data that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
-  data.table::setnames(truth_formatted, old = "value", new = "true_value")
+  data.table::setnames(truth_formatted, old = "value", new = "observed")
   forecasts_formatted <- data.table::as.data.table(test_forecasts)
-  data.table::setnames(forecasts_formatted, old = "value", new = "prediction")
+  data.table::setnames(forecasts_formatted, old = "value", new = "predicted")
 
   data_formatted <- scoringutils::merge_pred_and_obs(
     forecasts_formatted,

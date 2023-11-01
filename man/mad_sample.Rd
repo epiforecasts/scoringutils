@@ -4,12 +4,18 @@
 \alias{mad_sample}
 \title{Determine dispersion of a probabilistic forecast}
 \usage{
-mad_sample(predictions)
+mad_sample(observed = NULL, predicted, ...)
 }
 \arguments{
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{observed}{place holder, argument will be ignored and exists only for
+consistency with other scoring functions. The output does not depend on
+any observed values.}
+
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
+
+\item{...}{additional arguments passed to \link[stats:mad]{mad()}.}
 }
 \value{
 vector with dispersion values
@@ -23,14 +29,14 @@ narrow range and dispersion is the lack thereof.
 It is a data-independent measure, and is purely a feature
 of the forecasts themselves.
 
-Dispersion of predictive samples corresponding to one single true value is
+Dispersion of predictive samples corresponding to one single observed value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see \link[stats:mad]{mad()}
 and the explanations given in Funk et al. (2019)
 }
 \examples{
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-mad_sample(predictions)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+mad_sample(predicted = predicted)
 }
 \references{
 Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)

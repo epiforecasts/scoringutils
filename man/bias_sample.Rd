@@ -4,18 +4,18 @@
 \alias{bias_sample}
 \title{Determines bias of forecasts}
 \usage{
-bias_sample(true_values, predictions)
+bias_sample(observed, predicted)
 }
 \arguments{
-\item{true_values}{A vector with the true observed values of size n}
+\item{observed}{A vector with the observed values of size n}
 
-\item{predictions}{nxN matrix of predictive samples, n (number of rows) being
+\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, predictions can just be a vector of size n.}
+Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
 vector of length n with the biases of the predictive samples with
-respect to the true values.
+respect to the observed values.
 }
 \description{
 Determines bias from predictive Monte-Carlo samples. The function
@@ -30,7 +30,7 @@ B_t (P_t, x_t) = 1 - 2 * (P_t (x_t))
 }
 
 where \eqn{P_t} is the empirical cumulative distribution function of the
-prediction for the true value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
+prediction for the observed value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
 just calculated as the fraction of predictive samples for \eqn{x_t}
 that are smaller than \eqn{x_t}.
 
@@ -48,14 +48,14 @@ In both cases, Bias can assume values between
 \examples{
 
 ## integer valued forecasts
-true_values <- rpois(30, lambda = 1:30)
-predictions <- replicate(200, rpois(n = 30, lambda = 1:30))
-bias_sample(true_values, predictions)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+bias_sample(observed, predicted)
 
 ## continuous forecasts
-true_values <- rnorm(30, mean = 1:30)
-predictions <- replicate(200, rnorm(30, mean = 1:30))
-bias_sample(true_values, predictions)
+observed <- rnorm(30, mean = 1:30)
+predicted <- replicate(200, rnorm(30, mean = 1:30))
+bias_sample(observed, predicted)
 }
 \references{
 The integer valued Bias function is discussed in
