@@ -22,7 +22,7 @@ test_that("range_long_to_quantile works", {
 
 
 
-test_that("quantile_to_range_long works", {
+test_that("quantile_to_interval works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
@@ -40,7 +40,8 @@ test_that("quantile_to_range_long works", {
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- as.data.frame(scoringutils:::quantile_to_range_long(quantile,
+  long2 <- as.data.frame(quantile_to_interval(
+    quantile,
     keep_quantile_col = FALSE
   ))
 
