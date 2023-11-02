@@ -14,7 +14,8 @@
 assert_input_sample <- function(observed, predicted) {
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
-
+  assert(check_not_all_NA(observed))
+  assert(check_not_all_NA(predicted))
   if (n_obs == 1) {
     assert(
       # allow one of two options
@@ -56,20 +57,22 @@ check_input_sample <- function(observed, predicted) {
 assert_input_quantile <- function(observed, predicted, quantile) {
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
-
   assert_numeric(quantile, min.len = 1, lower = 0, upper = 1)
-  n_quantiles <- length(quantile)
+  N_quantiles <- length(quantile)
+  assert(check_not_all_NA(observed))
+  assert(check_not_all_NA(predicted))
+  assert(check_not_all_NA(quantile))
   if (n_obs == 1) {
     assert(
       # allow one of two options
-      check_numeric_vector(predicted, min.len = 1),
+      check_numeric_vector(predicted, len = N_quantiles),
       check_matrix(predicted, mode = "numeric",
-                   nrows = n_obs, ncols = n_quantiles)
+                   nrows = n_obs, ncols = N_quantiles)
     )
   } else {
     assert(
       check_matrix(predicted, mode = "numeric",
-                   nrows = n_obs, ncols = n_quantiles)
+                   nrows = n_obs, ncols = N_quantiles)
     )
   }
   return(invisible(NULL))
@@ -110,6 +113,8 @@ assert_input_binary <- function(observed, predicted) {
   assert(
     check_numeric_vector(predicted, min.len = 1, lower = 0, upper = 1)
   )
+  assert(check_not_all_NA(observed))
+  assert(check_not_all_NA(predicted))
   return(invisible(NULL))
 }
 

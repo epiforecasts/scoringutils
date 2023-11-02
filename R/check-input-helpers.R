@@ -99,6 +99,16 @@ assert_not_null <- function(...) {
   return(invisible(NULL))
 }
 
+#' Check Whether All Elements Are NA
+#' @param x vector to check
+#' @inherit document_check_functions return
+check_not_all_NA <- function(x) {
+  if (all(is.na(x))) {
+    return("All values are NA")
+  }
+  return(TRUE)
+}
+
 
 #' @title Check Length of Two Vectors is Equal
 #'
