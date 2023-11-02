@@ -176,7 +176,7 @@ range_long_to_quantile <- function(data,
 #' be characterised by one or multiple prediction intervals, e.g. the lower
 #' and upper bounds of the 50% and 90% prediction intervals (corresponding to
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
-#' @param ... Arguments passed down to the method
+#' @param ... method arguments
 quantile_to_interval <- function(...) {
   UseMethod("quantile_to_interval")
 }
@@ -203,7 +203,8 @@ quantile_to_interval <- function(...) {
 quantile_to_interval.data.frame <- function(
     dt,
     format = "long",
-    keep_quantile_col = FALSE
+    keep_quantile_col = FALSE,
+    ...
 ) {
   # make sure dt is a data.table
   assert_data_frame(dt)
@@ -253,9 +254,10 @@ quantile_to_interval.data.frame <- function(
 quantile_to_interval.numeric <- function(
     observed,
     predicted,
-    quantile
+    quantile,
+    ...
 ) {
-  scoringutils:::assert_input_quantile(observed, predicted, quantile)
+  assert_input_quantile(observed, predicted, quantile)
 
   n <- length(observed)
   N <- length(quantile)

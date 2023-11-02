@@ -8,12 +8,12 @@
 \usage{
 quantile_to_interval(...)
 
-\method{quantile_to_interval}{data.frame}(dt, format = "long", keep_quantile_col = FALSE)
+\method{quantile_to_interval}{data.frame}(dt, format = "long", keep_quantile_col = FALSE, ...)
 
-\method{quantile_to_interval}{numeric}(observed, predicted, quantile)
+\method{quantile_to_interval}{numeric}(observed, predicted, quantile, ...)
 }
 \arguments{
-\item{...}{Arguments passed down to the method}
+\item{...}{method arguments}
 
 \item{dt}{a data.table with columns \code{quantile} and \code{predicted}}
 
