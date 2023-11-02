@@ -413,7 +413,7 @@ plot_predictions <- function(data,
   # range data
 
   if (test_forecast_type_is_quantile(data)) {
-    forecasts <- quantile_to_range_long(
+    forecasts <- quantile_to_interval(
       forecasts,
       keep_quantile_col = FALSE
     )

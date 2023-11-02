@@ -197,6 +197,7 @@ quantile_to_interval <- function(...) {
 #' *quantile_to_interval.data.frame*:
 #' a data.frame in an interval format (either "long" or "wide"), with or
 #' without a quantile column. Rows will not be reordered.
+#' @importFrom data.table copy
 #' @export
 #' @rdname quantile_to_interval
 quantile_to_interval.data.frame <- function(
@@ -271,53 +272,6 @@ quantile_to_interval.numeric <- function(
 }
 
 
-#' @title Change Data from a Plain Quantile Format to a Long Range Format
-#'
-#' @description
-#'
-#' Transform data from a format that uses quantiles only to one that uses
-#' interval ranges to denote quantiles.
-#'
-#' @param data a data.frame in quantile format
-#' @param keep_quantile_col keep the quantile column in the final
-#' output after transformation (default is FALSE)
-#' @return a data.frame in a long interval range format
-#' @importFrom data.table copy
-#' @keywords internal
-
-quantile_to_range_long <- function(data,
-                                   keep_quantile_col = TRUE) {
-  data <- data.table::as.data.table(data)
-
-  data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
-  data[, range := ifelse(
-    boundary == "lower",
-    round((1 - 2 * quantile) * 100, 10),
-    round((2 * quantile - 1) * 100, 10)
-  )]
-
-  # add median quantile
-  median <- data[quantile == 0.5, ]
-  median[, boundary := "upper"]
-
-  data <- data.table::rbindlist(list(data, median))
-
-  if (!keep_quantile_col) {
-    data[, "quantile" := NULL]
-  }
-
-  # if only point forecasts are scored, we only have NA values for range and
-  # boundary. In that instance we need to set the type of the columns
-  # explicitly to avoid future collisions.
-  data[, `:=`(
-    boundary = as.character(boundary),
-    range = as.numeric(range)
-  )]
-
-  return(data[])
-}
-
-
 #' @title Change Data from a Sample Based Format to a Long Interval Range Format
 #'
 #' @description
@@ -353,7 +307,7 @@ sample_to_range_long <- function(data,
     type = type
   )
 
-  data <- quantile_to_range_long(data, keep_quantile_col = keep_quantile_col)
+  data <- quantile_to_interval(data, keep_quantile_col = keep_quantile_col)
 
   return(data[])
 }

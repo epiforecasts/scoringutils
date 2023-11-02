@@ -32,7 +32,7 @@ score_quantile <- function(data,
   data <- remove_na_observed_predicted(data)
 
   # make sure to have both quantile as well as range format --------------------
-  range_data <- quantile_to_range_long(data,
+  range_data <- quantile_to_interval( data,
     keep_quantile_col = FALSE
   )
   # adds the range column to the quantile data set
