@@ -114,3 +114,16 @@ test_that("function throws an error for wrong format of predictions", {
     fixed = TRUE
   )
 })
+
+
+test_that("Function throws an error if all values are `NA`", {
+  observed <- factor(sample(c(0, 1), size = 10, replace = TRUE))
+  predicted <- rep(NA, 10)
+  expect_error(
+    brier_score(
+      observed = observed,
+      predicted = predicted
+    ),
+    "Assertion on 'predicted' failed: All values are NA."
+  )
+})
