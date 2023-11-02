@@ -65,10 +65,7 @@ pairwise_comparison <- function(scores,
                                 metric = "auto",
                                 baseline = NULL,
                                 ...) {
-
-  # metric_names <- get_metrics(scores)
   metric <- match.arg(metric, c("auto", available_metrics()))
-
   if (!is.data.table(scores)) {
     scores <- as.data.table(scores)
   } else {

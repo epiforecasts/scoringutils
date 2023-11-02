@@ -23,9 +23,11 @@ get_forecast_type <- function(data) {
   } else if (test_forecast_type_is_point(data)) {
     forecast_type <- "point"
   } else {
-    stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
-       "Are you missing a column `quantile` or `sample_id`?",
-       "Please check the vignette for additional info.")
+    stop(
+      "Checking `data`: input doesn't satisfy criteria for any forecast type.",
+      "Are you missing a column `quantile` or `sample_id`?",
+      "Please check the vignette for additional info."
+    )
   }
   conflict <- check_attribute_conflict(data, "forecast_type", forecast_type)
   if (!is.logical(conflict)) {

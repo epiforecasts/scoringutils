@@ -114,8 +114,8 @@ assert_not_null <- function(...) {
 #'
 #' @keywords internal
 assert_equal_length <- function(...,
-                               one_allowed = TRUE,
-                               call_levels_up = 2) {
+                                one_allowed = TRUE,
+                                call_levels_up = 2) {
   vars <- list(...)
   lengths <- lengths(vars)
 
@@ -281,25 +281,6 @@ check_duplicates <- function(data, forecast_unit = NULL) {
   }
   return(TRUE)
 }
-
-
-# Function to check input for methods
-# there should not be a name clash between a metric and a column name
-#    --> maybe this should be checked by the actual method that computes scores
-# check whether any column name is a scoringutils metric
-# clashing_colnames <- intersect(colnames(data), available_metrics())
-# if (length(clashing_colnames) > 0) {
-#   clashing_colnames <- paste0('"', clashing_colnames, '"')
-#   warnings <- c(
-#     warnings,
-#     paste0(
-#       "At least one column in the data ",
-#       "(", toString(clashing_colnames), ") ",
-#       "corresponds to the name of a metric that will be computed by ",
-#       "scoringutils. Please check `available_metrics()`"
-#     )
-#   )
-# }
 
 
 #' Check column names are present in a data.frame

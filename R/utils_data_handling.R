@@ -200,12 +200,10 @@ quantile_to_interval <- function(...) {
 #' @importFrom data.table copy
 #' @export
 #' @rdname quantile_to_interval
-quantile_to_interval.data.frame <- function(
-    dt,
-    format = "long",
-    keep_quantile_col = FALSE,
-    ...
-) {
+quantile_to_interval.data.frame <- function(dt,
+                                            format = "long",
+                                            keep_quantile_col = FALSE,
+                                            ...) {
   if (!is.data.table(dt)) {
     dt <- data.table::as.data.table(dt)
   } else {
@@ -231,7 +229,7 @@ quantile_to_interval.data.frame <- function(
 
   if (format == "wide") {
     delete_columns(dt, "quantile")
-    dt <- dcast(dt, ... ~ boundary, value.var = c("predicted"))
+    dt <- dcast(dt, ... ~ boundary, value.var = "predicted")
   }
   return(dt[])
 }
@@ -249,12 +247,10 @@ quantile_to_interval.data.frame <- function(
 #' `forecast_id` and `range`.
 #' @export
 #' @rdname quantile_to_interval
-quantile_to_interval.numeric <- function(
-    observed,
-    predicted,
-    quantile,
-    ...
-) {
+quantile_to_interval.numeric <- function(observed,
+                                         predicted,
+                                         quantile,
+                                         ...) {
   assert_input_quantile(observed, predicted, quantile)
 
   n <- length(observed)

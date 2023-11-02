@@ -184,11 +184,14 @@ remove_scoringutils_class <- function(object) {
     return(object)
   }
   # check if "scoringutils_" is in name of any class
-  if (any(grepl("scoringutils_", class(object)))) {
+  if (any(grepl("scoringutils_", class(object), fixed = TRUE))) {
     stored_attributes <- get_scoringutils_attributes(object)
 
     # remove all classes that contain "scoringutils_"
-    class(object) <- class(object)[!grepl("scoringutils_", class(object))]
+    class(object) <- class(object)[!grepl(
+      "scoringutils_", class(object),
+      fixed = TRUE
+    )]
 
     # remove all scoringutils attributes
     object <- strip_attributes(object, names(stored_attributes))
