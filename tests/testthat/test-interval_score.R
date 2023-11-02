@@ -484,3 +484,14 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     expect_equal(wis, is)
   }
 })
+
+test_that("wis works with separate results", {
+  wis <- wis(
+    observed = y,
+    predicted = forecast_quantiles_matrix,
+    quantile = forecast_quantile_probs,
+    separate_results = TRUE
+  )
+  expect_equal(wis$wis, wis$dispersion + wis$overprediction + wis$underprediction)
+})
+

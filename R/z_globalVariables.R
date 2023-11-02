@@ -71,6 +71,7 @@ globalVariables(c(
   "value_scaled",
   "var_of_interest",
   "variable",
+  "weight",
   "wis_component_name",
   "x",
   "y",

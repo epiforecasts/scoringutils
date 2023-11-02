@@ -14,6 +14,28 @@ wis(
   na.rm = TRUE
 )
 }
+\arguments{
+\item{observed}{A vector with observed values of size n}
+
+\item{predicted}{vector of size n with the predicted values}
+
+\item{quantile}{vector with quantile levels of size N}
+
+\item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
+parts of the interval score (dispersion penalty, penalties for over- and
+under-prediction get returned as separate elements of a list). If you want a
+\code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
+
+\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
+into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+decimal value that  represents how much is outside a central prediction
+interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
+Default: \code{TRUE}.}
+
+\item{count_median_twice}{if TRUE, count the median twice in the score}
+
+\item{na.rm}{if TRUE, ignore NA values when computing the score}
+}
 \description{
 Weighted Interval Score
 }

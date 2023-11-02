@@ -1,4 +1,10 @@
 #' Weighted Interval Score
+#' @inheritParams interval_score
+#' @param predicted vector of size n with the predicted values
+#' @param quantile vector with quantile levels of size N
+#' @param count_median_twice if TRUE, count the median twice in the score
+#' @param na.rm if TRUE, ignore NA values when computing the score
+#' @importFrom stats weighted.mean
 #' @export
 wis <- function(observed,
                 predicted,
@@ -11,12 +17,22 @@ wis <- function(observed,
   assert_input_quantile(observed, predicted, quantile)
   reformatted <- quantile_to_interval(observed, predicted, quantile)
 
-  reformatted[, wis := interval_score(observed = observed,
-                                      lower = lower,
-                                      upper = upper,
-                                      interval_range = range,
-                                      weigh = weigh,
-                                      separate_results = separate_results)]
+  if (separate_results) {
+    cols <- c("wis", "dispersion", "underprediction", "overprediction")
+  } else {
+    cols <- "wis"
+  }
+
+  reformatted[, eval(cols) := do.call(
+    interval_score,
+    list(observed = observed,
+         lower = lower,
+         upper = upper,
+         interval_range = range,
+         weigh = weigh,
+         separate_results = separate_results
+    )
+  )]
 
   if (!count_median_twice) {
     reformatted[, weight := ifelse(range == 0, 0.5, 1)]
@@ -25,13 +41,22 @@ wis <- function(observed,
   }
 
   # summarise results by forecast_id
-  if (!separate_results) {
-    reformatted <- reformatted[, .(wis = weighted.mean(
-      x = wis, w = weight)
-    ), by = forecast_id]
-  }
+  reformatted <- reformatted[
+    , lapply(.SD, weighted.mean, na.rm = na.rm, w = weight),
+    by = c("forecast_id"),
+    .SDcols = colnames(reformatted) %like% paste(cols, collapse = "|")
+  ]
 
-  return(reformatted$wis)
+  if (separate_results) {
+    return(list(
+      wis = reformatted$wis,
+      dispersion = reformatted$dispersion,
+      underprediction = reformatted$underprediction,
+      overprediction = reformatted$overprediction
+    ))
+  } else {
+    return(reformatted$wis)
+  }
 }
 
 
