@@ -1,3 +1,41 @@
+#' Weighted Interval Score
+#' @export
+wis <- function(observed,
+                predicted,
+                quantile,
+                separate_results = FALSE,
+                weigh = TRUE,
+                count_median_twice = FALSE,
+                na.rm = TRUE) {
+
+  assert_input_quantile(observed, predicted, quantile)
+  reformatted <- quantile_to_interval(observed, predicted, quantile)
+
+  reformatted[, wis := interval_score(observed = observed,
+                                      lower = lower,
+                                      upper = upper,
+                                      interval_range = range,
+                                      weigh = weigh,
+                                      separate_results = separate_results)]
+
+  if (!count_median_twice) {
+    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
+  } else {
+    reformatted[, weight := 1]
+  }
+
+  # summarise results by forecast_id
+  if (!separate_results) {
+    reformatted <- reformatted[, .(wis = weighted.mean(
+      x = wis, w = weight)
+    ), by = forecast_id]
+  }
+
+  return(reformatted$wis)
+}
+
+
+
 #' @title Quantile Score
 #'
 #' @description
@@ -43,16 +81,10 @@
 #' Evaluating epidemic forecasts in an interval format,
 #' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
-#
-
 quantile_score <- function(observed,
                            predicted,
                            quantile,
                            weigh = TRUE) {
-
-  # get central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantile) * 2
-  alpha <- 1 - central_interval
 
   # compute score - this is the version explained in the SI of Bracher et. al.
   error <- abs(predicted - observed)
@@ -62,8 +94,12 @@ quantile_score <- function(observed,
 
   # adapt score such that mean of unweighted quantile scores corresponds to
   # unweighted interval score of the corresponding prediction interval
+  # --> needs central prediction interval which corresponds to given quantiles
+  central_interval <- abs(0.5 - quantile) * 2
+  alpha <- 1 - central_interval
   score <- 2 * score / alpha
 
+  # if weigh, then reverse last operation
   if (weigh) {
     score <- score * alpha / 2
   }

@@ -1,6 +1,6 @@
 test_that("wis works, median only", {
   y <- c(1, -15, 22)
-  lower <- upper <- c(1, 2, 3)
+  lower <- upper <- predicted_quantile <- c(1, 2, 3)
   quantile_probs <- 0.5
 
   actual <- interval_score(y,
@@ -8,6 +8,13 @@ test_that("wis works, median only", {
     weigh = TRUE,
     interval_range = 0
   )
+
+  actual_wis <- wis(
+    observed = y,
+    predicted = matrix(predicted_quantile),
+    quantile = quantile_probs,
+  )
+
   expected <- abs(y - lower)
 
   expect_identical(actual, expected)
@@ -32,17 +39,26 @@ test_that("wis works, 1 interval only", {
   lower <- c(0, 1, 0)
   upper <- c(2, 2, 3)
   quantile_probs <- c(0.25, 0.75)
+  predicted <- matrix(c(lower, upper), ncol = 2)
 
   alpha <- 0.5
+  expected <- (upper - lower) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
 
-  actual <- scoringutils::interval_score(y,
+  actual <- interval_score(
+    y,
     lower = lower, upper = upper,
     weigh = TRUE,
     interval_range = 50
   )
-  expected <- (upper - lower) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
+
+  actual_wis <- wis(
+    observed = y,
+    predicted = predicted,
+    quantile = quantile_probs,
+  )
 
   expect_identical(actual, expected)
+  expect_identical(actual_wis, expected)
 })
 
 test_that("WIS works within score for one interval", {
@@ -89,14 +105,30 @@ test_that("wis works, 1 interval and median", {
   quantile_probs <- c(0.25, 0.5, 0.75)
 
   alpha <- 0.5
-
   expected <- 0.5 * (
     abs(y - quantile[, 2]) +
       (quantile[, 3] - quantile[, 1]) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
+  actual_wis <- wis(
+    observed = y,
+    predicted = quantile,
+    quantile = quantile_probs,
+    count_median_twice = TRUE
+  )
+
   expect_identical(eval$interval_score, expected)
+  expect_identical(actual_wis, expected)
 })
+
+# covidHubUtils test:
+y <- c(1, -15, 22)
+forecast_quantiles_matrix <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
+)
+forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
 test_that("wis works, 2 intervals and median", {
   test_data <- data.frame(
@@ -116,8 +148,7 @@ test_that("wis works, 2 intervals and median", {
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
-  y <- c(1, -15, 22)
-  quantile <- rbind(c(-1, 0, 1, 2, 3), c(-2, 1, 2, 2, 4), c(-2, 0, 3, 3, 4))
+  quantile <- forecast_quantiles_matrix
   quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
   alpha1 <- 0.2
@@ -129,21 +160,22 @@ test_that("wis works, 2 intervals and median", {
       (quantile[, 4] - quantile[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
+  actual_wis <- wis(
+    observed = y,
+    predicted = quantile,
+    quantile = quantile_probs,
+    count_median_twice = TRUE
+  )
+
   expect_equal(
     as.numeric(eval$interval_score),
     as.numeric(expected)
   )
+  expect_identical(actual_wis, expected)
 })
 
 # additional tests from the covidhubutils repo
 test_that("wis is correct, median only - test corresponds to covidHubUtils", {
-  y <- c(1, -15, 22)
-  forecast_quantiles_matrix <- rbind(
-    c(-1, 0, 1, 2, 3),
-    c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4)
-  )
-  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[3]
 
@@ -202,18 +234,19 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
 
+  actual_wis <- wis(
+    observed = y,
+    predicted = matrix(forecast_quantiles_matrix),
+    quantile = 0.5,
+    count_median_twice = FALSE
+  )
+
   expect_equal(eval$interval_score, expected)
+  expect_equal(actual_wis, expected)
 })
 
 
 test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils", {
-  y <- c(1, -15, 22)
-  forecast_quantiles_matrix <- rbind(
-    c(-1, 0, 1, 2, 3),
-    c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4)
-  )
-  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, c(1, 5), drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[c(1, 5)]
 
@@ -281,19 +314,19 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   expected <- (forecast_quantiles_matrix[, 2] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) +
     c(0, (-2) - (-15), 22 - 4)
 
+  actual_wis <- wis(
+    observed = y,
+    predicted = forecast_quantiles_matrix,
+    quantile = c(0.1, 0.9),
+    count_median_twice = FALSE
+  )
+
   expect_equal(eval$interval_score, expected)
+  expect_equal(actual_wis, expected)
 })
 
 
 test_that("wis is correct, 2 intervals and median - test corresponds to covidHubUtils", {
-  y <- c(1, -15, 22)
-  forecast_quantiles_matrix <- rbind(
-    c(-1, 0, 1, 2, 3),
-    c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4)
-  )
-  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-
   target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
   horizons <- c("1", "2", "1")
   locations <- c("01", "01", "02")
@@ -362,6 +395,13 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
       (forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
   )
 
+  actual_wis <- wis(
+    observed = y,
+    predicted = forecast_quantiles_matrix,
+    quantile = c(0.1, 0.25, 0.5, 0.75, 0.9),
+    count_median_twice = FALSE
+  )
+
   expect_equal(eval$interval_score, expected)
 })
 
@@ -382,6 +422,14 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
       weigh = w
     )
 
+    wis <- wis(
+      observed = observed,
+      predicted = cbind(lower, upper),
+      quantile = c(alpha / 2, 1 - alpha / 2),
+      count_median_twice = FALSE,
+      weigh = w
+    )
+
     qs_lower <- quantile_score(observed,
       predicted = lower,
       quantile = alpha / 2,
@@ -393,6 +441,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
+    expect_equal(wis, is)
   }
 })
 
@@ -413,6 +462,14 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
       weigh = w
     )
 
+    wis <- wis(
+      observed = observed,
+      predicted = cbind(lower, upper),
+      quantile = c(alpha / 2, 1 - alpha / 2),
+      count_median_twice = FALSE,
+      weigh = w
+    )
+
     qs_lower <- quantile_score(observed,
       predicted = lower,
       quantile = alpha / 2,
@@ -424,5 +481,6 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
       weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
+    expect_equal(wis, is)
   }
 })
