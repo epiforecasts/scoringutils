@@ -2,6 +2,8 @@
 
 S3method(plot,scoringutils_available_forecasts)
 S3method(print,scoringutils_check)
+S3method(quantile_to_interval,data.frame)
+S3method(quantile_to_interval,numeric)
 S3method(score,default)
 S3method(score,scoringutils_binary)
 S3method(score,scoringutils_point)
