@@ -206,8 +206,6 @@ quantile_to_interval.data.frame <- function(
     keep_quantile_col = FALSE,
     ...
 ) {
-  # make sure dt is a data.table
-  assert_data_frame(dt)
   if (!is.data.table(dt)) {
     dt <- data.table::as.data.table(dt)
   } else {
