@@ -125,34 +125,27 @@ wis <- function(observed,
 #' @keywords metric
 
 bias_quantile <- function(observed, predicted, quantile) {
-  # check that predictions and quantile have the same length
-  if (!length(predicted) == length(quantile)) {
-    stop("`predicted` and `quantile` must have the same length")
-  }
 
-  if (anyNA(predicted)) {
-    quantile <- quantile[!is.na(predicted)]
-    predicted <- predicted[!is.na(predicted)]
-  }
+  assert_input_quantile(observed, predicted, quantile)
 
-  if (anyNA(quantile)) {
-    quantile <- quantile[!is.na(quantile)]
-    predicted <- predicted[!is.na(quantile)]
-  }
+  dt <- data.table(
+    observed = observed,
+    predicted = predicted,
+    quantile = quantile
+  )
+  dt <- dt[!is.na(quantile) & !is.na(predicted)]
+  dt <- dt[order(quantile)]
 
-  # if there is no input, return NA
-  if (length(quantile) == 0 || length(predicted) == 0) {
+  if (nrow(dt) == 0) {
     return(NA_real_)
   }
 
-  check_quantiles(quantile)
-
-  if (!all(diff(predicted) >= 0)) {
-    stop("predictions must be increasing with quantiles")
+  if (!all(diff(dt$predicted) >= 0)) {
+    stop("Predictions must not be decreasing with increasing quantile level")
   }
 
-  if (0.5 %in% quantile) {
-    median_prediction <- predicted[quantile == 0.5]
+  if (0.5 %in% dt$quantile) {
+    median_prediction <- dt[quantile == 0.5]$predicted
   } else {
     # if median is not available, compute as mean of two innermost quantiles
     message(
@@ -160,25 +153,25 @@ bias_quantile <- function(observed, predicted, quantile) {
       " in order to compute bias."
     )
     median_prediction <-
-      0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
-      0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
+      0.5 * dt[quantile == max(quantile[quantile < 0.5])]$predicted +
+      0.5 * dt[quantile == min(quantile[quantile > 0.5])]$predicted
   }
 
   if (observed == median_prediction) {
     bias <- 0
     return(bias)
   } else if (observed < median_prediction) {
-    if (observed < min(predicted)) {
+    if (observed < min(dt$predicted)) {
       bias <- 1
     } else {
-      q <- max(quantile[predicted <= observed])
+      q <- max(dt[predicted <= observed]$quantile)
       bias <- 1 - 2 * q
     }
   } else if (observed > median_prediction) {
-    if (observed > max(predicted)) {
+    if (observed > max(dt$predicted)) {
       bias <- -1
     } else {
-      q <- min(quantile[predicted >= observed])
+      q <- min(dt[predicted >= observed]$quantile)
       bias <- 1 - 2 * q
     }
   }
