@@ -102,11 +102,14 @@ check_input_quantile <- function(observed, predicted, quantile) {
 #' @keywords internal
 assert_input_interval <- function(observed, lower, upper, range) {
 
-  assert_numeric_vector(observed, min.len = 1)
+  assert(check_numeric_vector(observed, min.len = 1))
   n <- length(observed)
-  assert_numeric_vector(lower, len = n)
-  assert_numeric_vector(upper, len = n)
-  assert_numeric_vector(range, len = n, lower = 0, upper = 100)
+  assert(check_numeric_vector(lower, len = n))
+  assert(check_numeric_vector(upper, len = n))
+  assert(
+    check_numeric_vector(range, len = 1, lower = 0, upper = 100),
+    check_numeric_vector(range, len = n, lower = 0, upper = 100)
+  )
 
   diff <- upper - lower
   if (any(diff < 0)) {

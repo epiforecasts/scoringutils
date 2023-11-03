@@ -411,7 +411,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 
   for (alpha in alphas) {
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-    upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+    upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 11:20))
 
     w <- FALSE
     is <- interval_score(
@@ -451,7 +451,7 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
 
   for (alpha in alphas) {
     lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-    upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+    upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 11:20))
 
     w <- TRUE
     is <- interval_score(
