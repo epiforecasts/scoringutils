@@ -128,13 +128,27 @@ bias_quantile <- function(observed, predicted, quantile) {
 
   assert_input_quantile(observed, predicted, quantile)
 
+  n <- length(observed)
+  N <- length(quantile)
+
   dt <- data.table(
-    observed = observed,
-    predicted = predicted,
+    forecast_id = rep(1:n, each = N),
+    observed = rep(observed, each = N),
+    predicted = as.vector(t(predicted)),
     quantile = quantile
-  )
+  )[order(forecast_id, quantile)]
+
+  dt <- dt[, .(bias = bias_quantile_single(.SD)),   by = forecast_id]
+
+  return(dt$bias)
+}
+
+
+bias_quantile_single <- function(dt) {
+
   dt <- dt[!is.na(quantile) & !is.na(predicted)]
-  dt <- dt[order(quantile)]
+
+  observed <- unique(dt$observed)
 
   if (nrow(dt) == 0) {
     return(NA_real_)
