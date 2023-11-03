@@ -101,31 +101,7 @@ interval_score <- function(observed,
                            weigh = TRUE,
                            separate_results = FALSE) {
 
-  # error handling - not sure how I can make this better
-  present <- c(
-    methods::hasArg("observed"), methods::hasArg("lower"),
-    methods::hasArg("upper"), methods::hasArg("interval_range")
-  )
-  if (!all(present)) {
-    stop(
-      "need all arguments 'observed', 'lower', 'upper' and 'interval_range' in function 'interval_score()'" # nolint
-    )
-  }
-  assert_not_null(
-    observed = observed, lower = lower, upper = upper,
-    interval_range = interval_range
-  )
-  assert_equal_length(observed, lower, interval_range, upper)
-
-  if (any(interval_range < 0, na.rm = TRUE)) {
-    stop("interval ranges must be positive")
-  }
-  if (any(interval_range > 0 & interval_range < 1, na.rm = TRUE)) {
-    msg <- paste("Found interval ranges between 0 and 1. Are you sure that's right?",
-                 "An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval.",
-                 "If you want to score a (25%, 75%) prediction interval, set interval_range = 50.")
-    rlang::warn(message = msg, .frequency = "once", .frequency_id = "small_interval_range")
-  }
+  assert_input_interval(observed, lower, upper, interval_range)
 
   # calculate alpha from the interval range
   alpha <- (100 - interval_range) / 100
