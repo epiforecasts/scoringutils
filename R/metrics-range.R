@@ -1,3 +1,7 @@
+################################################################################
+# Metrics with a one-to-one relationship between input and score
+################################################################################
+
 #' @title Interval Score
 #'
 #' @description
@@ -154,6 +158,9 @@ interval_score <- function(observed,
 }
 
 
+################################################################################
+# Metrics with a many-to-one relationship between input and score
+################################################################################
 
 #' @title Determines Bias of Quantile Forecasts based on the range of the
 #' prediction intervals

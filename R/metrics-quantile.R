@@ -1,3 +1,7 @@
+################################################################################
+# Metrics with a many-to-one relationship between input and score
+################################################################################
+
 #' Weighted Interval Score
 #' @inheritParams interval_score
 #' @param predicted vector of size n with the predicted values
@@ -13,7 +17,6 @@ wis <- function(observed,
                 weigh = TRUE,
                 count_median_twice = FALSE,
                 na.rm = TRUE) {
-
   assert_input_quantile(observed, predicted, quantile)
   reformatted <- quantile_to_interval(observed, predicted, quantile)
 
@@ -58,128 +61,6 @@ wis <- function(observed,
     return(reformatted$wis)
   }
 }
-
-
-
-#' @title Quantile Score
-#'
-#' @description
-#' Proper Scoring Rule to score quantile predictions. Smaller values are better.
-#' The quantile score is
-#' closely related to the Interval score (see [interval_score()]) and is
-#' the quantile equivalent that works with single quantiles instead of
-#' central prediction intervals.
-#'
-#' @param quantile vector of size n with the quantile levels of the
-#' corresponding predictions.
-#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
-#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-#' value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
-#' and will be computed from the quantile. Alpha is the decimal value that
-#' represents how much is outside a central prediction interval (E.g. for a
-#' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
-#' @return vector with the scoring values
-#' @inheritParams interval_score
-#' @inheritParams ae_median_sample
-#' @examples
-#' observed <- rnorm(10, mean = 1:10)
-#' alpha <- 0.5
-#'
-#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
-#'
-#' qs_lower <- quantile_score(observed,
-#'   predicted = lower,
-#'   quantile = alpha / 2
-#' )
-#' qs_upper <- quantile_score(observed,
-#'   predicted = upper,
-#'   quantile = 1 - alpha / 2
-#' )
-#' interval_score <- (qs_lower + qs_upper) / 2
-#' @export
-#' @keywords metric
-#' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
-#' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
-#' Statistical Association, Volume 102, 2007 - Issue 477
-#'
-#' Evaluating epidemic forecasts in an interval format,
-#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
-quantile_score <- function(observed,
-                           predicted,
-                           quantile,
-                           weigh = TRUE) {
-
-  # compute score - this is the version explained in the SI of Bracher et. al.
-  error <- abs(predicted - observed)
-  score <- 2 * ifelse(
-    observed <= predicted, 1 - quantile, quantile
-  ) * error
-
-  # adapt score such that mean of unweighted quantile scores corresponds to
-  # unweighted interval score of the corresponding prediction interval
-  # --> needs central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantile) * 2
-  alpha <- 1 - central_interval
-  score <- 2 * score / alpha
-
-  # if weigh, then reverse last operation
-  if (weigh) {
-    score <- score * alpha / 2
-  }
-
-  return(score)
-}
-
-
-#' @title Absolute Error of the Median (Quantile-based Version)
-#'
-#' @description
-#' Absolute error of the median calculated as
-#'
-#' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{prediction})
-#' }{
-#'   abs(observed - median_prediction)
-#' }
-#'
-#' The function was created for internal use within [score()], but can also
-#' used as a standalone function.
-#'
-#' @param predicted numeric vector with predictions, corresponding to the
-#' quantiles in a second vector, `quantiles`.
-#' @param quantiles numeric vector that denotes the quantile for the values
-#' in `predicted`. Only those predictions where `quantiles == 0.5` will
-#' be kept. If `quantiles` is `NULL`, then all `predicted` and
-#' `observed` will be used (this is then the same as [abs_error()])
-#' @return vector with the scoring values
-#' @seealso [ae_median_sample()], [abs_error()]
-#' @importFrom stats median
-#' @inheritParams ae_median_sample
-#' @examples
-#' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
-#' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
-#' @export
-#' @keywords metric
-
-ae_median_quantile <- function(observed, predicted, quantiles = NULL) {
-  if (!is.null(quantiles)) {
-    if (!any(quantiles == 0.5) && !anyNA(quantiles)) {
-      return(NA_real_)
-      warning(
-        "in order to compute the absolute error of the median, `0.5` must be ",
-        "among the quantiles given. Maybe you want to use `abs_error()`?"
-      )
-    }
-    observed <- observed[quantiles == 0.5]
-    predicted <- predicted[quantiles == 0.5]
-  }
-  abs_error_median <- abs(observed - predicted)
-  return(abs_error_median)
-}
-
 
 
 #' @title Determines Bias of Quantile Forecasts
@@ -302,4 +183,129 @@ bias_quantile <- function(observed, predicted, quantile) {
     }
   }
   return(bias)
+}
+
+
+################################################################################
+# Metrics with a one-to-one relationship between input and score
+################################################################################
+
+
+#' @title Quantile Score
+#'
+#' @description
+#' Proper Scoring Rule to score quantile predictions. Smaller values are better.
+#' The quantile score is
+#' closely related to the Interval score (see [interval_score()]) and is
+#' the quantile equivalent that works with single quantiles instead of
+#' central prediction intervals.
+#'
+#' @param quantile vector of size n with the quantile levels of the
+#' corresponding predictions.
+#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
+#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+#' value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
+#' and will be computed from the quantile. Alpha is the decimal value that
+#' represents how much is outside a central prediction interval (E.g. for a
+#' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
+#' @return vector with the scoring values
+#' @inheritParams interval_score
+#' @inheritParams ae_median_sample
+#' @examples
+#' observed <- rnorm(10, mean = 1:10)
+#' alpha <- 0.5
+#'
+#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
+#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+#'
+#' qs_lower <- quantile_score(observed,
+#'   predicted = lower,
+#'   quantile = alpha / 2
+#' )
+#' qs_upper <- quantile_score(observed,
+#'   predicted = upper,
+#'   quantile = 1 - alpha / 2
+#' )
+#' interval_score <- (qs_lower + qs_upper) / 2
+#' @export
+#' @keywords metric
+#' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
+#' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
+#' Statistical Association, Volume 102, 2007 - Issue 477
+#'
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
+quantile_score <- function(observed,
+                           predicted,
+                           quantile,
+                           weigh = TRUE) {
+
+  # compute score - this is the version explained in the SI of Bracher et. al.
+  error <- abs(predicted - observed)
+  score <- 2 * ifelse(
+    observed <= predicted, 1 - quantile, quantile
+  ) * error
+
+  # adapt score such that mean of unweighted quantile scores corresponds to
+  # unweighted interval score of the corresponding prediction interval
+  # --> needs central prediction interval which corresponds to given quantiles
+  central_interval <- abs(0.5 - quantile) * 2
+  alpha <- 1 - central_interval
+  score <- 2 * score / alpha
+
+  # if weigh, then reverse last operation
+  if (weigh) {
+    score <- score * alpha / 2
+  }
+
+  return(score)
+}
+
+
+#' @title Absolute Error of the Median (Quantile-based Version)
+#'
+#' @description
+#' Absolute error of the median calculated as
+#'
+#' \deqn{
+#'   \textrm{abs}(\textrm{observed} - \textrm{prediction})
+#' }{
+#'   abs(observed - median_prediction)
+#' }
+#'
+#' The function was created for internal use within [score()], but can also
+#' used as a standalone function.
+#'
+#' @param predicted numeric vector with predictions, corresponding to the
+#' quantiles in a second vector, `quantiles`.
+#' @param quantiles numeric vector that denotes the quantile for the values
+#' in `predicted`. Only those predictions where `quantiles == 0.5` will
+#' be kept. If `quantiles` is `NULL`, then all `predicted` and
+#' `observed` will be used (this is then the same as [abs_error()])
+#' @return vector with the scoring values
+#' @seealso [ae_median_sample()], [abs_error()]
+#' @importFrom stats median
+#' @inheritParams ae_median_sample
+#' @examples
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted_values <- rnorm(30, mean = 1:30)
+#' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
+#' @export
+#' @keywords metric
+
+ae_median_quantile <- function(observed, predicted, quantiles = NULL) {
+  if (!is.null(quantiles)) {
+    if (!any(quantiles == 0.5) && !anyNA(quantiles)) {
+      return(NA_real_)
+      warning(
+        "in order to compute the absolute error of the median, `0.5` must be ",
+        "among the quantiles given. Maybe you want to use `abs_error()`?"
+      )
+    }
+    observed <- observed[quantiles == 0.5]
+    predicted <- predicted[quantiles == 0.5]
+  }
+  abs_error_median <- abs(observed - predicted)
+  return(abs_error_median)
 }
