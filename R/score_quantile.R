@@ -32,11 +32,13 @@ score_quantile <- function(data,
   data <- remove_na_observed_predicted(data)
 
   # make sure to have both quantile as well as range format --------------------
-  range_data <- quantile_to_interval( data,
+  range_data <- quantile_to_interval(
+    data,
     keep_quantile_col = FALSE
   )
   # adds the range column to the quantile data set
-  quantile_data <- range_long_to_quantile(range_data,
+  quantile_data <- range_long_to_quantile(
+    range_data,
     keep_range_col = TRUE
   )
 
@@ -96,14 +98,15 @@ score_quantile <- function(data,
 
   # compute absolute and squared error for point forecasts
   # these are marked by an NA in range, and a numeric value for point
-  if (any(c("se_point, se_mean, ae_point", "ae_median", "absolute_error") %in% metrics)) {
-    if ("point" %in% colnames(res)) {
-      res[
-        is.na(range) & is.numeric(point),
-        `:=`(ae_point = abs_error(predicted = point, observed),
-             se_point = squared_error(predicted = point, observed))
-      ]
-    }
+  compute_point <- any(
+    c("se_point, se_mean, ae_point", "ae_median", "absolute_error") %in% metrics
+  )
+  if (compute_point && "point" %in% colnames(res)) {
+    res[
+      is.na(range) & is.numeric(point),
+      `:=`(ae_point = abs_error(predicted = point, observed),
+           se_point = squared_error(predicted = point, observed))
+    ]
   }
 
   # calculate scores on quantile format ----------------------------------------
@@ -156,7 +159,9 @@ score_quantile <- function(data,
   }
 
   # delete internal columns before returning result
-  res <- delete_columns(res, c("upper", "lower", "boundary", "point", "observed"))
+  res <- delete_columns(
+    res, c("upper", "lower", "boundary", "point", "observed")
+  )
 
   return(res[])
 }
