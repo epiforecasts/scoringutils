@@ -263,6 +263,96 @@ quantile_score <- function(observed,
 }
 
 
+# Weighted Interval Score, But With One-to-One Relationship
+wis_one_to_one <- function(observed,
+                           predicted,
+                           quantile,
+                           separate_results = FALSE,
+                           output = c("matrix", "data.frame", "vector"),
+                           weigh = TRUE) {
+
+  # input checks
+  assert_input_quantile(observed, predicted, quantile)
+
+  # store original data
+  n <- length(observed)
+  N <- length(quantile)
+  original_data <- data.table(
+    forecast_id = rep(1:n, each = N),
+    observed = rep(observed, each = N),
+    predicted = as.vector(t(predicted)),
+    quantile = quantile
+  )
+
+  # define output columns
+  if (separate_results) {
+    cols <- c("wis", "dispersion", "underprediction", "overprediction")
+  } else {
+    cols <- "wis"
+  }
+
+  # reformat input to interval format and calculate interval score
+  reformatted <- quantile_to_interval(observed, predicted, quantile)
+  reformatted[, eval(cols) := do.call(
+    interval_score,
+    list(observed = observed,
+         lower = lower,
+         upper = upper,
+         interval_range = range,
+         weigh = weigh,
+         separate_results = separate_results
+    )
+  )]
+
+  # melt data to long format, calclate quantiles, and merge back to original
+  long <- melt(reformatted,
+               measure.vars = c("lower", "upper"),
+               variable.name = "boundary",
+               value.name = "predicted",
+               id.vars = c("forecast_id", "observed", "range", cols))
+  # calculate quantiles
+  long[, quantile := (100 - range) / 200] # lower quantiles
+  long[boundary == "upper", quantile :=  1 - quantile] # upper quantiles
+  # remove boundary, range, take unique value to get rid of duplicated median
+  long[, c("boundary", "range") := NULL]
+  long <- unique(long) # should maybe check for count_median_twice?
+  out <- merge(
+    original_data, long, all.x = TRUE,
+    by = c("forecast_id", "observed", "predicted", "quantile")
+  )[, forecast_id := NULL]
+
+  # handle returns depending on the output format
+  if (output == "data.frame") {
+    return(out)
+  }
+
+  wis <- out$wis
+  if (separate_results) {
+    components <- list(
+      underprediction = out$underprediction,
+      overprediction = out$overprediction,
+      dispersion = out$dispersion
+    )
+  }
+
+  if (output == "vector" && separate_results) {
+    return(c(wis = wis, components))
+  } else if (output == "vector") {
+    return(wis)
+  }
+
+  if (output == "matrix") {
+    wis <- matrix(wis, nrow = n, ncol = N)
+    if (separate_results) {
+      components <- lapply(components, function(x) matrix(x, nrow = n, ncol = N))
+      return(c(wis, components))
+    } else {
+      return(wis)
+    }
+  }
+}
+
+
 #' @title Absolute Error of the Median (Quantile-based Version)
 #'
 #' @description
