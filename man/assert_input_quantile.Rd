@@ -4,7 +4,7 @@
 \alias{assert_input_quantile}
 \title{Assert that inputs are correct for quantile-based forecast}
 \usage{
-assert_input_quantile(observed, predicted, quantile)
+assert_input_quantile(observed, predicted, quantile, unique_quantiles = TRUE)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
@@ -19,6 +19,9 @@ vector of size N.}
 \item{quantile}{Input to be checked. Should be a vector of size N that
 denotes the quantile levels corresponding to the columns of the prediction
 matrix.}
+
+\item{unique_quantiles}{Input to be checked. Should be TRUE (default) or
+FALSE. Whether the quantile levels are required to be unique or not.}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an

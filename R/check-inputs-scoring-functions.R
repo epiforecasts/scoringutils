@@ -50,14 +50,20 @@ check_input_sample <- function(observed, predicted) {
 #' @param quantile Input to be checked. Should be a vector of size N that
 #' denotes the quantile levels corresponding to the columns of the prediction
 #' matrix.
+#' @param unique_quantiles Input to be checked. Should be TRUE (default) or
+#' FALSE. Whether the quantile levels are required to be unique or not.
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @inherit document_assert_functions return
 #' @keywords internal
-assert_input_quantile <- function(observed, predicted, quantile) {
+assert_input_quantile <- function(observed, predicted, quantile,
+                                  unique_quantiles = TRUE) {
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
 
-  assert_numeric(quantile, min.len = 1, lower = 0, upper = 1)
+  assert_numeric(
+    quantile, min.len = 1, lower = 0, upper = 1,
+    unique = unique_quantiles
+  )
   n_quantiles <- length(quantile)
   if (n_obs == 1) {
     assert(
