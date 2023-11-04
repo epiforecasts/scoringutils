@@ -119,6 +119,7 @@ assert_input_interval <- function(observed, lower, upper, range) {
   )
 
   diff <- upper - lower
+  diff <- diff[!is.na(diff)]
   if (any(diff < 0)) {
     stop(
       "All values in `upper` need to be greater than or equal to ",
