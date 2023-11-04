@@ -67,18 +67,75 @@ test_that("bias_sample() works as expected", {
   expect_equal(scoringutils, scoringutils2)
 })
 
-test_that("bias_quantile() handles NA values", {
+
+test_that("bias_quantile() works as expected", {
+  predicted <- c(1, 2, 3)
+  quantiles <- c(0.1, 0.5, 0.9)
+  expect_equal(
+    bias_quantile(observed = 2, predicted, quantiles),
+    0
+  )
+  predicted <- c(0, 1, 2)
+  quantiles <- c(0.1, 0.5, 0.9)
+  expect_equal(
+    bias_quantile(observed = 2, predicted, quantiles),
+    -0.8
+  )
+
+  predicted <- c(
+    705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
+    5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
+    6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
+    7973.000, 8340.500, 8675.750, 11555.000, 11976.500
+  )
+
+  quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+
+  observed <- 8062
+  expect_equal(bias_quantile(observed, predicted, quantile), -0.8)
+})
+
+test_that("bias_quantile handles matrix input", {
+  observed <- seq(10, 0, length.out = 4)
+  predicted <- matrix(1:12, ncol = 3)
+  quantiles <- c(0.1, 0.5, 0.9)
+  expect_equal(
+    bias_quantile(observed, predicted, quantiles),
+    c(-1.0, -0.8,  0.8,  1.0)
+  )
+})
+
+
+test_that("bias_quantile() handles vector that is too long", {
   predicted <- c(NA, 1, 2, 3)
   quantiles <- c(0.1, 0.5, 0.9)
 
   expect_error(
     bias_quantile(observed = 2, predicted, quantiles),
-    "`predicted` and `quantile` must have the same length"
+    "Assertion on 'quantile' failed: Must have length 4, but has length 3."
   )
 })
 
-test_that("bias_quantile() returns NA if no predictions", {
-  expect_true(is.na(bias_quantile(observed = 2, numeric(0), numeric(0))))
+test_that("bias_quantile() handles NA values", {
+  predicted <- c(NA, 1, 2)
+  quantiles <- c(0.1, 0.5, 0.9)
+  expect_equal(
+    bias_quantile(observed = 2, predicted, quantiles),
+    -0.8
+  )
+  predicted <- c(0, 1, 2)
+  quantiles <- c(0.1, 0.5, NA)
+  expect_equal(
+    bias_quantile(observed = 2, predicted, quantiles),
+    -1
+  )
+})
+
+test_that("bias_quantile() errors if no predictions", {
+  expect_error(
+    bias_quantile(observed = 2, numeric(0), numeric(0)),
+  "Assertion on 'quantile' failed: Must have length >= 1, but has length 0"
+  )
 })
 
 test_that("bias_quantile() returns correct bias if value below the median", {
@@ -125,8 +182,10 @@ test_that("bias_quantile(): quantiles must be between 0 and 1", {
 
   # Failing example
   quantiles <- c(-0.1, 0.3, 0.5, 0.8)
-  expect_error(bias_quantile(observed = 3, predicted, quantiles),
-               "quantiles must be between 0 and 1")
+  expect_error(
+    bias_quantile(observed = 3, predicted, quantiles),
+    "Assertion on 'quantile' failed: Element 1 is not >= 0."
+  )
 
   # Passing counter example
   quantiles <- c(0.1, 0.3, 0.5, 0.8)
@@ -138,8 +197,10 @@ test_that("bias_quantile(): quantiles must be increasing", {
 
   # Failing example
   quantiles <- c(0.8, 0.3, 0.5, 0.9)
-  expect_error(bias_quantile(observed = 3, predicted, quantiles),
-               "quantiles must be increasing")
+  expect_error(
+    bias_quantile(observed = 3, predicted, quantiles),
+    "Predictions must not be decreasing with increasing quantile level"
+  )
 
   # Passing counter example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
@@ -152,7 +213,7 @@ test_that("bias_quantile(): predictions must be increasing", {
 
   expect_error(
     bias_quantile(observed = 3, predicted, quantiles),
-    "predictions must be increasing"
+    "Predictions must not be decreasing with increasing quantile level"
   )
   expect_silent(bias_quantile( observed = 3, 1:4, quantiles))
 })
@@ -162,8 +223,10 @@ test_that("bias_quantile(): quantiles must be unique", {
 
   # Failing example
   quantiles <- c(0.3, 0.3, 0.5, 0.8)
-  expect_error(bias_quantile(observed = 3, predicted, quantiles),
-               "quantiles must be increasing")
+  expect_error(
+    bias_quantile(observed = 3, predicted, quantiles),
+    "Assertion on 'quantile' failed: Contains duplicated values, position 2."
+  )
 
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
