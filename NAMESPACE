@@ -2,6 +2,7 @@
 
 S3method(add_coverage_raw_data,default)
 S3method(add_coverage_raw_data,scoringutils_quantile)
+S3method(add_coverage_raw_data,scoringutils_sample)
 S3method(plot,scoringutils_available_forecasts)
 S3method(print,scoringutils_check)
 S3method(quantile_to_interval,data.frame)

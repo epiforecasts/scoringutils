@@ -1,3 +1,40 @@
+#' @title Add Coverage of Central Prediction Intervals to Forecasts
+#'
+#' @description Adds a column with the coverage of central prediction intervals
+#' to a data.table with forecasts either in a quantile or in a sample-based
+#' format (following the input requirements of `score()`).
+#'
+#' Coverage for a given interval range is defined as the proportion of
+#' observations that fall within the corresponding central prediction intervals.
+#' Central prediction intervals are symmetric around the median and and formed
+#' by two quantiles that denote the lower and upper bound. For example, the 50%
+#' central prediction interval is the interval between the 0.25 and 0.75
+#' quantiles of the predictive distribution.
+#'
+#' The coverage values that are added are computed according to the values
+#' specified in `by`. If, for example, `by = "model"`, then there will be one
+#' coverage value for every model. If `by = c("model", "target_type")`, then
+#' there will be one coverage value for every combination of model and target
+#' type.
+#'
+#' @inheritParams score
+#' @param by character vector with column names to add the coverage for.
+#' @param ranges numeric vector of the ranges of the central prediction intervals
+#' for which coverage values shall be added. Ranges should be given as
+#' percentages. For example, `ranges = c(50, 90)`
+#' will add coverage values for the 50% and 90% central prediction intervals (
+#' corresponding to the 0.05, 0.25, 0.75 and 0.95 quantiles of the predictive
+#' distribution).
+#' @return a data.table with with columns added for the
+#' coverage of the central prediction intervals. While the overall data.table
+#' is still unsummarised, note that for the coverage columns some level of
+#' summary is present according to the value specified in `by`.
+#' @examples
+#' library(magrittr) # pipe operator
+#' example_quantile %>%
+#'   add_coverage_raw_data(by = c("model", "target_type"))
+#' @export
+#' @keywords scoring
 #' @export
 add_coverage_raw_data <- function(data,
                                   by = NULL,
@@ -5,6 +42,11 @@ add_coverage_raw_data <- function(data,
   UseMethod("add_coverage_raw_data")
 }
 
+#' @description
+#' `add_coverage_raw_data.default()` validates the input data,
+#' checks the forecast type and calls `add_coverage_raw_data()` again to
+#' dispatch to the appropriate method.
+#' @rdname add_coverage_raw_data
 #' @export
 add_coverage_raw_data.default <- function(data,
                                           by = NULL,
@@ -13,10 +55,11 @@ add_coverage_raw_data.default <- function(data,
   add_coverage_raw_data(data, by = by, ranges = ranges)
 }
 
+#' @rdname add_coverage_raw_data
 #' @export
 add_coverage_raw_data.scoringutils_quantile <- function(data,
-                                                        by,
-                                                        ranges) {
+                                                        by = NULL,
+                                                        ranges = c(50, 90)) {
   stored_attributes <- get_scoringutils_attributes(data)
   data <- remove_na_observed_predicted(data)
 
@@ -57,10 +100,11 @@ add_coverage_raw_data.scoringutils_quantile <- function(data,
   return(data_with_coverage[])
 }
 
+#' @rdname add_coverage_raw_data
 #' @export
 add_coverage_raw_data.scoringutils_sample <- function(data,
-                                                      by,
-                                                      ranges) {
+                                                      by = NULL,
+                                                      ranges = c(50, 90)) {
   stored_attributes <- get_scoringutils_attributes(data)
   data <- remove_na_observed_predicted(data)
   if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
