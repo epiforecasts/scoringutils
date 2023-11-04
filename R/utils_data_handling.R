@@ -101,7 +101,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-  data <- data.table::as.data.table(data)
+  data <- copy(data)
 
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
