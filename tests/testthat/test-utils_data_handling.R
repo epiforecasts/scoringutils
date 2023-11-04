@@ -72,7 +72,7 @@ test_that("sample_to_quantiles works", {
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  quantile2 <- scoringutils::sample_to_quantile(samples, quantiles = c(0.25, 0.75))
+  quantile2 <- sample_to_quantile(samples, quantiles = c(0.25, 0.75))
 
   expect_equal(quantile, as.data.frame(quantile2))
 
