@@ -41,6 +41,9 @@
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
+#' @return a data.table with summarised scores. Scores are summarised according
+#' to the names of the columns of the original data specified in `by` or
+#' `across` using the `fun` passed to `summarise_scores()`.
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' library(magrittr) # pipe operator
