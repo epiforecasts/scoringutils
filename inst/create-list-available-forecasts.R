@@ -22,4 +22,8 @@ metrics_sample <- list(
 )
 usethis::use_data(metrics_sample, overwrite = TRUE)
 
-metrics_quantile <- list()
+metrics_quantile <- list(
+  "wis" = wis,
+  "bias" = bias_quantile
+)
+usethis::use_data(metrics_quantile, overwrite = TRUE)

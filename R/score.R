@@ -257,3 +257,60 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
 
   return(scores[])
 }
+
+
+#' @rdname score
+#' @export
+score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ...) {
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
+  forecast_unit <- attr(data, "forecast_unit")
+  metrics <- validate_metrics(metrics)
+
+  # Extract the arguments passed in ...
+  args <- list(...)
+
+  # transpose the forecasts that belong to the same forecast unit
+  # make sure the quantiles and predictions are ordered in the same way
+  d_transposed <- data[, .(predicted = list(predicted[order(quantile)]),
+                           observed = unique(observed),
+                           quantile = list(quantile[order(quantile)]),
+                           N = length(quantile)), by = forecast_unit]
+
+  # split according to quantile lengths and do calculations for different
+  # quantile lengths separately. The function `wis()` assumes that all
+  # forecasts have the same quantiles
+  d_split <- split(d_transposed, d_transposed$N)
+
+  split_result <- lapply(d_split, function(data) {
+    # create a matrix out of the list of predicted values and quantiles
+    observed <- data$observed
+    predicted <- do.call(rbind, data$predicted)
+    quantile <- unlist(unique(data$quantile))
+    data[, c("observed", "predicted", "quantile", "N") := NULL]
+
+    # for each metric, compute score
+    lapply(seq_along(metrics), function(i, ...) {
+      metric_name <- names(metrics[i])
+      fun <- metrics[[i]]
+      matching_args <- filter_function_args(fun, args)
+
+      if ("separate_results" %in% names(matching_args) &&
+          matching_args$separate_results) {
+        metric_name <- c(metric_name, "dispersion", "underprediction", "overprediction")
+      }
+
+      data[, eval(metric_name) := do.call(
+        fun, c(list(observed), list(predicted), list(quantile), matching_args)
+      )]
+      return()
+    },
+    ...)
+    return(data)
+  })
+
+  data <- rbindlist(split_result)
+  setattr(data, "metric_names", names(metrics))
+
+  return(data[])
+}

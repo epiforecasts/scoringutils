@@ -6,8 +6,12 @@
 \title{Default metrics for sample-based forecasts.}
 \format{
 An object of class \code{list} of length 7.
+
+An object of class \code{list} of length 7.
 }
 \usage{
+metrics_sample
+
 metrics_sample
 }
 \description{
@@ -21,6 +25,12 @@ A named list with functions:
 \item "mad" = \code{\link[=mad_sample]{mad_sample()}}
 \item "ae_median" = \code{\link[=ae_median_sample]{ae_median_sample()}}
 \item "se_mean" = \code{\link[=se_mean_sample]{se_mean_sample()}}
+}
+
+A named list with functions:
+\itemize{
+\item "wis" = \code{\link[=wis]{wis()}}
+\item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 }
 }
 \keyword{info}
