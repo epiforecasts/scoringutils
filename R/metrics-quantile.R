@@ -98,7 +98,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
     return(NA)
   }
   r <- range
-  reformatted <- scoringutils:::quantile_to_interval(observed, predicted, quantile)
+  reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted <- reformatted[range %in% r]
   reformatted[, coverage := ifelse(
     observed >= lower & observed <= upper, TRUE, FALSE
