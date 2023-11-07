@@ -12,7 +12,6 @@ metrics_point <- list(
 usethis::use_data(metrics_point, overwrite = TRUE)
 
 metrics_sample <- list(
-  "mad" = mad_sample,
   "bias" = bias_sample,
   "dss" = dss_sample,
   "crps" = crps_sample,

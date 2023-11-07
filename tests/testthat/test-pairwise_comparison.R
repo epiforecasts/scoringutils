@@ -53,30 +53,24 @@ test_that("pairwise_comparison() works", {
   )
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval_without_baseline <- suppressMessages(score(data_formatted))
+  eval <- suppressMessages(score(data_formatted))
 
+  # check with relative skills
+  eval_without_rel_skill <- summarise_scores(
+    eval,
+    by = c(
+      "model", "location", "target_end_date",
+      "target_variable"
+    )
+  )
   eval_without_baseline <- suppressMessages(
-    summarise_scores(eval_without_baseline,
-      relative_skill = TRUE,
-      by = c(
-        "model", "location", "target_end_date",
-        "target_variable"
-      )
-    )
+    add_pairwise_comparison(eval_without_rel_skill)
   )
-  eval_with_baseline <- suppressMessages(score(data_formatted,
-    count_median_twice = FALSE
-  ))
+
   eval_with_baseline <- suppressMessages(
-    summarise_scores(eval_with_baseline,
-      baseline = "m1",
-      relative_skill = TRUE,
-      by = c(
-        "model", "location", "target_end_date",
-        "target_variable"
-      )
-    )
+    add_pairwise_comparison(eval_without_rel_skill, baseline = "m1")
   )
+
 
   # extract the relative_skill values
   relative_skills_without <- eval_without_baseline[, .(
@@ -206,15 +200,9 @@ test_that("pairwise_comparison() works", {
   ratios_scaled <- geometric_mean_ratios / geometric_mean_ratios["m1"]
   names(ratios_scaled) <- NULL
 
-  eval_with_baseline <- suppressMessages(
-    suppressMessages(score(data_formatted,
-    count_median_twice = FALSE
-  )))
-  eval_with_baseline <- summarise_scores(eval_with_baseline,
-    baseline = "m1",
-    relative_skill = TRUE,
-    by = c("model", "location")
-  )
+  eval <- score(data_formatted)
+  eval_summarised <- summarise_scores(eval, by = c("model", "location"))
+  eval_with_baseline <- add_pairwise_comparison(eval_summarised, baseline = "m1")
 
   relative_skills_with <- eval_with_baseline[
     location == "location_3",
@@ -229,20 +217,16 @@ test_that("pairwise_comparison() works", {
 
 test_that("pairwise_comparison() work in score() with integer data", {
   eval <- suppressMessages(score(data = example_integer))
-  eval <- suppressMessages(
-    summarise_scores(eval, by = "model", relative_skill = TRUE)
-  )
-
+  eval_summarised <- summarise_scores(eval, by = "model")
+  eval <- add_pairwise_comparison(eval_summarised)
   expect_true("relative_skill" %in% colnames(eval))
 })
 
 
 test_that("pairwise_comparison() work in score() with binary data", {
   eval <- suppressMessages(score(data = example_binary))
-  eval <- suppressMessages(
-    summarise_scores(eval, by = "model", relative_skill = TRUE)
-  )
-
+  eval_summarised <- summarise_scores(eval, by = "model")
+  eval <- add_pairwise_comparison(eval_summarised)
   expect_true("relative_skill" %in% colnames(eval))
 })
 
@@ -278,7 +262,8 @@ test_that("pairwise_comparison() works inside and outside of score()", {
   ))
 
   eval2 <- suppressMessages(score(data = example_continuous))
-  eval2 <- summarise_scores(eval2, by = "model", relative_skill = TRUE)
+  eval2_summarised <- summarise_scores(eval2, by = "model")
+  eval2 <- add_pairwise_comparison(eval2_summarised)
 
   expect_equal(
     sort(unique(pairwise$relative_skill)), sort(eval2$relative_skill)
@@ -292,4 +277,15 @@ test_that("pairwise_comparison() realises when there is no baseline model", {
   expect_error(
     pairwise_comparison(scores, baseline = "missing_model"), "missing"
   )
+})
+
+test_that("Order of `add_pairwise_comparison()` and `summarise_scores()` doesn't matter", {
+  pw1 <- suppressMessages(add_pairwise_comparison(scores))
+  pw1_sum <- summarise_scores(pw1, by = "model")
+
+  pw2 <- summarise_scores(scores, by = "model")
+  pw2 <- add_pairwise_comparison(pw2)
+
+  expect_true(all(pw1_sum == pw2, na.rm = TRUE))
+  expect_true(all(names(attributes(pw2)) == names(attributes(pw1_sum))))
 })

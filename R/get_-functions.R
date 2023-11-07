@@ -126,6 +126,31 @@ get_target_type <- function(data) {
 }
 
 
+#' @title Get metrics that were used for scoring
+#'
+#' @description Internal helper function to get the metrics that were used
+#' to score forecasts.
+#' @param score A data.table with an attribute `metric_names`
+#'
+#' @return Character vector with the metrics that were used for scoring.
+#'
+#' @keywords internal
+
+get_metrics <- function(scores) {
+  metric_names <- attr(scores, "metric_names")
+  if (is.null(metric_names)) {
+    stop("The data needs to have an attribute `metric_names` with the names ",
+         " of the metrics that were used for scoring. This should be the case ",
+         "if the data was produced using `score()`. Either run `score()` ",
+         "again, or set the attribute manually using ",
+         "`attr(data, 'metric_names') <- names_of_the_scoring_metrics")
+  }
+  return(metric_names)
+}
+
+
+
+
 
 #' @title Get unit of a single forecast
 #'
@@ -133,7 +158,8 @@ get_target_type <- function(data) {
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
-#' [get_protected_columns()].
+#' [get_protected_columns()] as well as the names of the metrics that were
+#' specified during scoring, if any.
 #'
 #' @inheritParams validate
 #'
@@ -144,7 +170,9 @@ get_target_type <- function(data) {
 
 get_forecast_unit <- function(data) {
   protected_columns <- get_protected_columns(data)
-  forecast_unit <- setdiff(colnames(data), protected_columns)
+  protected_columns <- c(protected_columns, attr(data, "metric_names"))
+
+  forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
 
@@ -166,7 +194,8 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile", "upper", "lower",
-    "pit_value", "range", "boundary", available_metrics(),
+    "pit_value", "range", "boundary", "relative_skill", "scaled_rel_skill",
+    available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
 
@@ -214,4 +243,28 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
   out <- data[scoringutils_InternalDuplicateCheck > 1]
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
+}
+
+
+#' @title Get a list of all attributes of a scoringutils object
+#'
+#' @param object A object of class `scoringutils_`
+#'
+#' @return A named list with the attributes of that object.
+#' @keywords internal
+get_scoringutils_attributes <- function(object) {
+  possible_attributes <- c(
+    "scoringutils_by",
+    "forecast_unit",
+    "forecast_type",
+    "metric_names",
+    "messages",
+    "warnings"
+  )
+
+  attr_list <- list()
+  for (attr_name in possible_attributes) {
+    attr_list[[attr_name]] <- attr(object, attr_name)
+  }
+  return(attr_list)
 }

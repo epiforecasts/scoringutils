@@ -156,13 +156,21 @@ test_that("function produces output for a point case", {
   )
   expect_equal(
     colnames(eval),
-    c(
-      "model", "target_type",
-      "ae_point",
-      "se_point"
-    )
+    c("model", "target_type",names(metrics_point))
   )
 })
+
+test_that("Changing metrics names works", {
+  metrics_test <- metrics_point
+  names(metrics_test)[1] = "just_testing"
+  eval <- suppressMessages(score(example_point, metrics = metrics_test))
+  eval_summarised <- summarise_scores(eval, by = "model")
+  expect_equal(
+    colnames(eval_summarised),
+    c("model", "just_testing", names(metrics_point)[-1])
+  )
+})
+
 
 test_that("score.scoringutils_point() errors with only NA values", {
   only_nas <- copy(example_point)[, predicted := NA_real_]

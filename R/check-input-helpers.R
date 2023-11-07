@@ -324,13 +324,17 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #' @param columns names of columns to be checked
 #' @return Returns string with a message with the first issue encountered if
 #'  any of the column names are not in data, otherwise returns TRUE
-#'
+#' @importFrom checkmate assert_character
 #' @keywords check-inputs
 check_columns_present <- function(data, columns) {
+  if (is.null(columns)) {
+    return(TRUE)
+  }
+  assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   for (x in columns){
     if (!(x %in% colnames)) {
-      msg <- paste0("Data needs to have a column called '", x, "'")
+      msg <- paste0("Column '", x, "' not found in data")
       return(msg)
     }
   }
@@ -385,6 +389,24 @@ check_data_columns <- function(data) {
     )
   }
   return(TRUE)
+}
+
+
+#' Check whether an attribute is present
+#' @description Checks whether an object has an attribute
+#' @param object An object to be checked
+#' @param attribute name of an attribute to be checked
+#' @return Returns TRUE if attribute is there and an error message as
+#' a string otherwise
+#' @keywords check-inputs
+check_has_attribute <- function(object, attribute) {
+  if (is.null(attr(object, attribute))) {
+    return(
+      paste0("Found no attribute `", attribute, "`")
+    )
+  } else {
+    return(TRUE)
+  }
 }
 
 

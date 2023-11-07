@@ -21,23 +21,6 @@
 #' be used or inferred internally if also not specified. Only  one of `across`
 #' and `by`  may be used at a time.
 #' @param fun a function used for summarising scores. Default is `mean`.
-#' @param relative_skill logical, whether or not to compute relative
-#' performance between models based on pairwise comparisons.
-#' If `TRUE` (default is `FALSE`), then a column called
-#' 'model' must be present in the input data. For more information on
-#' the computation of relative skill, see [pairwise_comparison()].
-#' Relative skill will be calculated for the aggregation level specified in
-#' `by`.
-#' @param relative_skill_metric character with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, CRPS or Brier score (depending on which
-#' of these is available in the input data)
-#' @param metric  `r lifecycle::badge("deprecated")` Deprecated in 1.1.0. Use
-#' `relative_skill_metric` instead.
-#' @param baseline character string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
@@ -90,25 +73,21 @@ summarise_scores <- function(scores,
                              by = NULL,
                              across = NULL,
                              fun = mean,
-                             relative_skill = FALSE,
-                             relative_skill_metric = "auto",
-                             metric = deprecated(),
-                             baseline = NULL,
                              ...) {
-  if (lifecycle::is_present(metric)) {
-    lifecycle::deprecate_warn(
-      "1.1.0", "summarise_scores(metric)",
-      "summarise_scores(relative_skill_metric)"
-    )
-  }
-
   if (!is.null(across) && !is.null(by)) {
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
+  }
+
+  metric_names <- attr(scores, "metric_names")
+  if (is.null(metric_names)) {
+    stop("`scores` needs to have an attribute `metric_names` with the names of
+         the metrics that were used for scoring.")
   }
 
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
+  check_attribute_conflict(scores, "forecast_unit", forecast_unit)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
@@ -117,36 +96,121 @@ summarise_scores <- function(scores,
 
   # if across is provided, remove from by
   if (!is.null(across)) {
-    if (!all(across %in% by)) {
+    if (!all(across %in% forecast_unit)) {
       stop(
         "The columns specified in 'across' must be a subset of the columns ",
         "that define the forecast unit (possible options are ",
-        toString(by),
+        toString(forecast_unit),
         "). Please check your input and try again."
       )
     }
-    by <- setdiff(by, across)
+    by <- setdiff(forecast_unit, across)
   }
 
   # check input arguments and check whether relative skill can be computed
-  relative_skill <- check_summary_params(
-    scores = scores,
-    by = by,
-    relative_skill = relative_skill,
-    baseline = baseline,
-    metric = relative_skill_metric
-  )
+  assert(check_columns_present(scores, by))
 
-  # get all available metrics to determine names of columns to summarise over
-  cols_to_summarise <- paste0(available_metrics(), collapse = "|")
+  # store attributes as they may be dropped in data.table operations
+  stored_attributes <- c(
+    get_scoringutils_attributes(scores),
+    list(
+      "scoringutils_by" = by,
+      "unsummarised_scores" =  scores
+    )
+  )
 
   # takes the mean over ranges and quantiles first, if neither range nor
   # quantile are in `by`. Reason to do this is that summaries may be
   # inaccurate if we treat individual quantiles as independent forecasts
   scores <- scores[, lapply(.SD, base::mean, ...),
     by = c(unique(c(forecast_unit, by))),
-    .SDcols = colnames(scores) %like% cols_to_summarise
+    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
   ]
+
+  # summarise scores -----------------------------------------------------------
+  scores <- scores[, lapply(.SD, fun, ...),
+    by = c(by),
+    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
+  ]
+
+  # remove unnecessary columns -------------------------------------------------
+  # if neither quantile nor range are in by, remove coverage and
+  # quantile_coverage because averaging does not make sense
+  if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
+    scores[, "coverage" := NULL]
+  }
+  if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
+    scores[, "quantile_coverage" := NULL]
+  }
+
+  scores <- assign_attributes(scores, stored_attributes)
+  return(scores[])
+}
+
+#' @rdname summarise_scores
+#' @keywords scoring
+#' @export
+summarize_scores <- summarise_scores
+
+
+
+#' @title Add pairwise comparisons
+#' @description Adds a columns with relative skills computed by running
+#' pairwise comparisons on the scores.
+#'
+#' a column called
+#' 'model' must be present in the input data. For more information on
+#' the computation of relative skill, see [pairwise_comparison()].
+#' Relative skill will be calculated for the aggregation level specified in
+#' `by`.
+#' WRITE MORE INFO HERE.
+#'
+#'
+#' @param scores MORE INFO HERE.
+#' @param by character vector with column names to summarise scores by. Default
+#' is `NULL`, meaning that the only summary that takes is place is summarising
+#' over samples or quantiles (in case of quantile-based forecasts), such that
+#' there is one score per forecast as defined by the *unit of a single forecast*
+#' (rather than one score for every sample or quantile).
+#' @param relative_skill_metric character with the name of the metric for which
+#' a relative skill shall be computed. If equal to 'auto' (the default), then
+#' this will be either interval score, CRPS or Brier score (depending on which
+#' of these is available in the input data)
+#' @param baseline character string with the name of a model. If a baseline is
+#' given, then a scaled relative skill with respect to the baseline will be
+#' returned. By default (`NULL`), relative skill will not be scaled with
+#' respect to a baseline model.
+#' @export
+add_pairwise_comparison <- function(scores,
+                                    by = NULL,
+                                    relative_skill_metric = "auto",
+                                    baseline = NULL) {
+
+  stored_attributes <- get_scoringutils_attributes(scores)
+
+  if (is.null(stored_attributes[["metric_names"]])) {
+    stop("`scores` needs to have an attribute `metric_names` with the names of
+         the metrics that were used for scoring.")
+  }
+
+  if (!is.null(attr(scores, "unsummarised_scores"))) {
+    scores <- attr(scores, "unsummarised_scores")
+  }
+
+  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
+    by <- stored_attributes[["scoringutils_by"]]
+  } else if (is.null(by)) {
+    by <- get_forecast_unit(scores)
+  }
+
+  # check input arguments and check whether relative skill can be computed
+  relative_skill <- check_summary_params(
+    scores = scores,
+    by = by,
+    relative_skill = TRUE,
+    baseline = baseline,
+    metric = relative_skill_metric
+  )
 
   # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
@@ -172,29 +236,17 @@ summarise_scores <- function(scores,
     }
   }
 
-  # summarise scores -----------------------------------------------------------
-  scores <- scores[, lapply(.SD, fun, ...),
-    by = c(by),
-    .SDcols = colnames(scores) %like% cols_to_summarise
-  ]
-
-  # remove unnecessary columns -------------------------------------------------
-  # if neither quantile nor range are in by, remove coverage and
-  # quantile_coverage because averaging does not make sense
-  if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
-    scores[, "coverage" := NULL]
-  }
-  if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
-    scores[, "quantile_coverage" := NULL]
-  }
-
-  return(scores[])
+  # add relative skill to list of metric names
+  stored_attributes[["metric_names"]] <- c(
+    stored_attributes[["metric_names"]],
+    "relative_skill", "scaled_rel_skill"
+  )
+  scores <- assign_attributes(scores, stored_attributes)
+  scores <- summarise_scores(scores, by = by)
+  return(scores)
 }
 
-#' @rdname summarise_scores
-#' @keywords scoring
-#' @export
-summarize_scores <- summarise_scores
+
 
 
 #' @title Check input parameters for [summarise_scores()]
@@ -265,7 +317,6 @@ check_summary_params <- function(scores,
 #' @description Adds a column with the coverage of central prediction intervals
 #' to unsummarised scores as produced by [score()]
 #'
-#' @details
 #' The coverage values that are added are computed according to the values
 #' specified in `by`. If, for example, `by = "model"`, then there will be one
 #' coverage value for every model and [add_coverage()] will compute the coverage
@@ -290,8 +341,22 @@ check_summary_params <- function(scores,
 #' @keywords scoring
 
 add_coverage <- function(scores,
-                         by,
+                         by = NULL,
                          ranges = c(50, 90)) {
+
+  stored_attributes <- get_scoringutils_attributes(scores)
+  if (!is.null(attr(scores, "unsummarised_scores"))) {
+    scores <- attr(scores, "unsummarised_scores")
+  }
+
+  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
+    by <- stored_attributes[["scoringutils_by"]]
+  } else if (is.null(by)) {
+    # Need to check this again.
+    # (mentioned in https://github.com/epiforecasts/scoringutils/issues/346)
+    by <- get_forecast_unit(scores)
+  }
+
   summarised_scores <- summarise_scores(
     scores,
     by = c(by, "range")
@@ -313,5 +378,10 @@ add_coverage <- function(scores,
   )
 
   scores_with_coverage <- merge(scores, coverages, by = by)
+  scores_with_coverage <- assign_attributes(
+    scores_with_coverage, stored_attributes
+  )
+
   return(scores_with_coverage[])
 }
+

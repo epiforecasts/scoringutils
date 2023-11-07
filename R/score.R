@@ -49,9 +49,7 @@
 #' [example_integer], [example_point()], and [example_binary]).
 #'
 #' @param metrics the metrics you want to have in the output. If `NULL` (the
-#' default), all available metrics will be computed. For a list of available
-#' metrics see [available_metrics()], or  check the [metrics] data set.
-#'
+#' default), all available metrics will be computed.
 #' @param ... additional parameters passed down to other functions.
 #'
 #' @return A data.table with unsummarised scores. There will be one score per
@@ -129,6 +127,8 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
     return()
   }, ...)
 
+  setattr(data, "metric_names", names(metrics))
+
   return(data[])
 
 }
@@ -155,6 +155,8 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
     ]
     return()
   }, ...)
+
+  setattr(data, "metric_names", names(metrics))
 
   return(data[])
 }
@@ -187,6 +189,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     by = forecast_unit
   ]
 
+  setattr(data, "metric_names", names(metrics))
 
   return(data[])
 }
@@ -205,6 +208,12 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
     metrics = metrics,
     ...
   )
+
+  setattr(scores, "metric_names", metrics[metrics %in% colnames(scores)])
+  # manual hack to make sure that the correct attributes are there.
+  setattr(scores, "forecast_unit", forecast_unit)
+  setattr(scores, "forecast_type", "quantile")
+  scores <- new_scoringutils(scores, "scoringutils_quantile")
 
   return(scores[])
 }
