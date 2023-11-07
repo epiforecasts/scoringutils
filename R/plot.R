@@ -1063,7 +1063,8 @@ plot_avail_forecasts <- function(available_forecasts,
 #' @examples
 #' scores <- score(example_quantile)
 #' correlations <- correlation(
-#'  summarise_scores(scores)
+#'  summarise_scores(scores),
+#'  digits = 2
 #' )
 #' plot_correlation(correlations)
 

@@ -36,6 +36,11 @@ and \code{by}  may be used at a time.}
 provided to \code{fun}. For more information see the documentation of the
 respective function.}
 }
+\value{
+a data.table with summarised scores. Scores are summarised according
+to the names of the columns of the original data specified in \code{by} or
+\code{across} using the \code{fun} passed to \code{summarise_scores()}.
+}
 \description{
 Summarise scores as produced by \code{\link[=score]{score()}}
 }

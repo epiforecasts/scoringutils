@@ -373,7 +373,7 @@ Visualising correlations:
 example_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation() %>%
+  correlation(digits = 2) %>%
   plot_correlation()
 ```
 
