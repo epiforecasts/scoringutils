@@ -2,12 +2,12 @@
 % Please edit documentation in R/check-inputs-scoring-functions.R
 \name{assert_input_quantile}
 \alias{assert_input_quantile}
-\title{Assert that inputs are correct for sample-based forecast}
+\title{Assert that inputs are correct for quantile-based forecast}
 \usage{
 assert_input_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{Input to be checked. Should be a vector with the
+\item{observed}{Input to be checked. Should be a numeric vector with the
 observed values of size n}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
@@ -21,11 +21,11 @@ denotes the quantile levels corresponding to the columns of the prediction
 matrix.}
 }
 \value{
-Returns NULL invisibly if the check was successful and throws an
+Returns NULL invisibly if the assertion was successful and throws an
 error otherwise.
 }
 \description{
-Helper function to assert whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring quantile-based forecasts.
 }
 \keyword{internal}

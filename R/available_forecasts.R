@@ -13,11 +13,13 @@
 #' all available columns (apart from a few "protected" columns such as
 #' 'predicted' and 'observed') plus "quantile" or "sample_id" where present).
 #'
-#' @param collapse character vector (default is `c("quantile", "sample"`) with
-#' names of categories for which the number of rows should be collapsed to one
-#' when counting. For example, a single forecast is usually represented by a
+#' @param collapse character vector (default is `c("quantile", "sample_id"`)
+#' with names of categories for which the number of rows should be collapsed to
+#' one when counting. For example, a single forecast is usually represented by a
 #' set of several quantiles or samples and collapsing these to one makes sure
-#' that a single forecast only gets counted once.
+#' that a single forecast only gets counted once. Setting `collapse = c()`
+#' would mean that all quantiles / samples would be counted as individual
+#' forecasts.
 #'
 #' @return A data.table with columns as specified in `by` and an additional
 #' column "count" with the number of forecasts.
@@ -30,12 +32,11 @@
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
 #' available_forecasts(example_quantile,
-#'   collapse = c("quantile"),
 #'   by = c("model", "target_type")
 #' )
 available_forecasts <- function(data,
                                 by = NULL,
-                                collapse = c("quantile", "sample")) {
+                                collapse = c("quantile", "sample_id")) {
 
   data <- validate(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -48,7 +49,7 @@ available_forecasts <- function(data,
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
   collapse_by <- setdiff(
-    c(forecast_unit, "quantile", "sample"),
+    c(forecast_unit, "quantile", "sample_id"),
     collapse
   )
   # filter out "quantile" or "sample" if present in collapse_by, but not data

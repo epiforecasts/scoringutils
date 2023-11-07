@@ -10,11 +10,13 @@ check_try(expr)
 \item{expr}{an expression to be evaluated}
 }
 \value{
-Returns TRUE if expression was executed successfully, otherwise
-returns a string with the resulting error message
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
 Tries to execute an expression. Internally, this is used to
-see whether assertions fail when checking inputs
+see whether assertions fail when checking inputs (i.e. to convert an
+\verb{assert_*()} statement into a check). If the expression fails, the error
+message is returned. If the expression succeeds, \code{TRUE} is returned.
 }
 \keyword{internal}

@@ -14,11 +14,11 @@ observed values of size n}
 predicted values of size n}
 }
 \value{
-Returns TRUE if the check was successful and a string with the
+Returns TRUE if the check was successful and a string with an
 error message otherwise
 }
 \description{
-Helper function to check whether the input is suitable for
-scoring.
+Function assesses whether the inputs correspond to the
+requirements for scoring point forecasts.
 }
 \keyword{check-inputs}

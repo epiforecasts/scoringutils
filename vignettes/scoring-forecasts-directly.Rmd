@@ -216,4 +216,3 @@ interval_score(
   interval_range = interval_range
 )
 ```
-

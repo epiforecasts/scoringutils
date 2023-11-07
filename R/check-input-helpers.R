@@ -2,10 +2,9 @@
 #'
 #' @description Helper function
 #' @param x input to check
-#' @param x additional arguments to pass to `check_numeric()`
+#' @inheritDotParams checkmate::check_numeric
 #' @importFrom checkmate check_atomic_vector check_numeric
-#' @return Either TRUE if the test is successful or a string with an error
-#' message
+#' @inherit document_check_functions return
 #' @keywords internal
 check_numeric_vector <- function(x, ...) {
   # check functions must return TRUE on success
@@ -20,36 +19,6 @@ check_numeric_vector <- function(x, ...) {
   return(TRUE)
 }
 
-
-#' @title Check whether the desired metrics are available in scoringutils
-#'
-#' @description Helper function to check whether desired metrics are
-#' available. If the input is `NULL`, all metrics will be returned.
-#'
-#' @param metrics character vector with desired metrics
-#'
-#' @return A character vector with metrics that can be used for downstream
-#' computation
-#'
-#' @keywords internal
-
-check_metrics <- function(metrics) {
-  # use all available metrics if none are given
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-
-  # check desired metrics are actually available in scoringutils
-  available_metrics <- available_metrics()
-  if (!all(metrics %in% available_metrics)) {
-    msg <- paste(
-      "The following metrics are not available:",
-      toString(setdiff(metrics, available_metrics))
-    )
-    warning(msg)
-  }
-  return(metrics)
-}
 
 #' Check that quantiles are valid
 #'
@@ -68,7 +37,6 @@ check_metrics <- function(metrics) {
 #' @return None. Function errors if quantiles are invalid.
 #'
 #' @keywords internal
-
 check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
   if (any(quantiles < range[1]) || any(quantiles > range[2])) {
     stop(name, " must be between ", range[1], " and ", range[2])
@@ -83,13 +51,13 @@ check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description Tries to execute an expression. Internally, this is used to
-#' see whether assertions fail when checking inputs
+#' see whether assertions fail when checking inputs (i.e. to convert an
+#' `assert_*()` statement into a check). If the expression fails, the error
+#' message is returned. If the expression succeeds, `TRUE` is returned.
 #' @param expr an expression to be evaluated
 #' @importFrom checkmate assert assert_numeric check_matrix
-#' @return Returns TRUE if expression was executed successfully, otherwise
-#' returns a string with the resulting error message
+#' @inherit document_check_functions return
 #' @keywords internal
-
 check_try <- function(expr) {
   result <- try(expr, silent = TRUE)
   if (is.null(result)) {
@@ -100,9 +68,6 @@ check_try <- function(expr) {
 }
 
 
-
-
-
 #' @title Check Variable is not NULL
 #'
 #' @description
@@ -110,11 +75,12 @@ check_try <- function(expr) {
 #' variable and the function call where the variable is missing. This function
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
+#' @inherit document_assert_functions return
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
 #' @keywords internal
-check_not_null <- function(...) {
+assert_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
 
@@ -134,7 +100,7 @@ check_not_null <- function(...) {
 }
 
 
-#' @title Check Length
+#' @title Check Length of Two Vectors is Equal
 #'
 #' @description
 #' Check whether variables all have the same length
@@ -142,14 +108,12 @@ check_not_null <- function(...) {
 #' @param one_allowed logical, allow arguments of length one that can be
 #' recycled
 #' @param call_levels_up How many levels to go up when including the function
-#' call in the error message. This is useful when calling `check_equal_length()`
+#' call in the error message. This is useful when calling `assert_equal_length()`
 #' within another checking function.
-#'
-#' @return The function returns `NULL`, but throws an error if variable lengths
-#' differ
+#' @inherit document_assert_functions return
 #'
 #' @keywords internal
-check_equal_length <- function(...,
+assert_equal_length <- function(...,
                                one_allowed = TRUE,
                                call_levels_up = 2) {
   vars <- list(...)
@@ -173,7 +137,7 @@ check_equal_length <- function(...,
       one_allowed,
       "' should have the same length (or length one). Actual lengths: ",
       "' should have the same length. Actual lengths: "
-      )
+    )
 
     stop(
       "Arguments to the following function call: '",
@@ -186,14 +150,31 @@ check_equal_length <- function(...,
 }
 
 
+#' @title Check Whether There Is a Conflict Between Data and Attributes
+#' @description
+#' Check whether there is a conflict between a stored attribute and the
+#' same value as inferred from the data. For example, this could be if
+#' an attribute `forecast_unit` is stored, but is different from the
+#' `forecast_unit` inferred from the data. The check is successful if
+#' the stored and the inferred value are the same.
+#' @param object The object to check
+#' @param attribute The name of the attribute to check
+#' @param expected The expected value of the attribute
+#' @inherit document_check_functions return
+#' @keywords internal
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
+  if (is.vector(existing) && is.vector(expected)) {
+    existing <- sort(existing)
+    expected <- sort(expected)
+  }
+
   if (!is.null(existing) && !identical(existing, expected)) {
     msg <- paste0(
       "Object has an attribute `", attribute, "`, but it looks different ",
-      "from what's expected.\n",
-      "Existing: ", paste(existing, collapse = ", "), "\n",
-      "Expected: ", paste(expected, collapse = ", "), "\n",
+      "from what's expected based on the data.\n",
+      "Existing: ", toString(existing), "\n",
+      "Expected: ", toString(expected), "\n",
       "Running `validate()` again might solve the problem"
     )
     return(msg)
@@ -202,7 +183,13 @@ check_attribute_conflict <- function(object, attribute, expected) {
 }
 
 
-
+#' @title Assure that Data Has a `model` Column
+#'
+#' @description
+#' Check whether the data.table has a column called `model`.
+#' If not, a column called `model` is added with the value `Unspecified model`.
+#' @return The data.table with a column called `model`
+#' @keywords internal
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
     message(
@@ -216,11 +203,11 @@ assure_model_column <- function(data) {
 
 
 #' Check that all forecasts have the same number of quantiles or samples
-#' @param data data.frame to check
+#' @description Function checks the number of quantiles or samples per forecast.
+#' If the number of quantiles or samples is the same for all forecasts, it
+#' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
-#' @return Returns an string with a message if any forecasts have differing
-#' numbers of samples or quantiles, otherwise returns TRUE
-#'
+#' @inherit document_check_functions params return
 #' @keywords internal
 check_number_per_forecast <- function(data, forecast_unit) {
   # check whether there are the same number of quantiles, samples --------------
@@ -242,13 +229,11 @@ check_number_per_forecast <- function(data, forecast_unit) {
 }
 
 
-
-
-
 #' Check columns in data.frame don't have NA values
-#' @inheritParams check_columns_present
-#' @return Returns an string with a message if any of the column names
-#' have NA values, otherwise returns TRUE
+#' @description Function checks whether any of the columns in a data.frame,
+#' as specified in `columns`, have NA values. If so, it returns a string with
+#' an error message, otherwise it returns TRUE.
+#' @inherit document_check_functions params return
 #'
 #' @keywords internal
 check_no_NA_present <- function(data, columns) {
@@ -280,9 +265,7 @@ diagnose <- function(data) {
 #' @description
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
 #' @inheritParams get_duplicate_forecasts
-#' @return Returns an string with an error message if an issue is found,
-#' otherwise returns TRUE
-#'
+#' @inherit document_check_functions return
 #' @keywords internal
 check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
@@ -320,10 +303,11 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 
 
 #' Check column names are present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
-#' @return Returns string with a message with the first issue encountered if
-#'  any of the column names are not in data, otherwise returns TRUE
+#' @description
+#' The functions loops over the column names and checks whether they are
+#' present. If an issue is encountered, the function immediately stops
+#' and returns a message with the first issue encountered.
+#' @inherit document_check_functions params return
 #' @importFrom checkmate assert_character
 #' @keywords check-inputs
 check_columns_present <- function(data, columns) {
@@ -342,8 +326,10 @@ check_columns_present <- function(data, columns) {
 }
 
 #' Test whether all column names are present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
+#' @description The function checks whether all column names are present. If
+#' one or more columns are missing, the function returns FALSE. If all columns
+#' are present, the function returns TRUE.
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if all columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_present <- function(data, columns) {
@@ -352,8 +338,10 @@ test_columns_present <- function(data, columns) {
 }
 
 #' Test whether column names are NOT present in a data.frame
-#' @param data A data.frame or similar to be checked
-#' @param columns names of columns to be checked
+#' @description The function checks whether all column names are NOT present.
+#' If none of the columns are present, the function returns TRUE. If one or
+#' more columns are present, the function returns FALSE.
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
 #' @keywords internal
 test_columns_not_present <- function(data, columns) {
@@ -366,12 +354,10 @@ test_columns_not_present <- function(data, columns) {
 
 #' Check whether data is data.frame with correct columns
 #' @description Checks whether data is a data.frame, whether columns
-#' "observed" and "predicted" are presents
-#' and checks that only one of "quantile" and "sample_id" is present.
-#' @param data A data.frame or similar to be checked
+#' "observed" and "predicted" are present, and checks that only one of
+#' "quantile" and "sample_id" is present.
+#' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
-#' @return Returns TRUE if basic requirements are satisfied and a string with
-#' an error message otherwise
 #' @keywords check-inputs
 check_data_columns <- function(data) {
   is_data <- check_data_frame(data, min.rows = 1)
@@ -396,8 +382,7 @@ check_data_columns <- function(data) {
 #' @description Checks whether an object has an attribute
 #' @param object An object to be checked
 #' @param attribute name of an attribute to be checked
-#' @return Returns TRUE if attribute is there and an error message as
-#' a string otherwise
+#' @inherit document_check_functions return
 #' @keywords check-inputs
 check_has_attribute <- function(object, attribute) {
   if (is.null(attr(object, attribute))) {
@@ -408,5 +393,3 @@ check_has_attribute <- function(object, attribute) {
     return(TRUE)
   }
 }
-
-

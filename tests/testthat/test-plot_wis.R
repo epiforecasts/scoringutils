@@ -1,5 +1,5 @@
 sum_scores <- suppressMessages(
-  summarise_scores(scores, by = c("model", "target_type"))
+  summarise_scores(scores_quantile, by = c("model", "target_type"))
 )
 
 test_that("plot_wis() works as expected with relative contributions", {

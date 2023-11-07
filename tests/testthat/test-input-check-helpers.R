@@ -11,9 +11,9 @@ test_that("Check equal length works if all arguments have length 1", {
 })
 
 
-test_that("Check_not_null works", {
+test_that("assert_not_null works", {
   test_function <- function(argument = NULL) {
-    scoringutils:::check_not_null("argument" = argument)
+    scoringutils:::assert_not_null("argument" = argument)
     return(paste("Input:", argument))
   }
   out <- test_function("works")

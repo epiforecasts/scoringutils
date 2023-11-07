@@ -10,12 +10,12 @@ check_data_columns(data)
 \item{data}{A data.frame or similar to be checked}
 }
 \value{
-Returns TRUE if basic requirements are satisfied and a string with
-an error message otherwise
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
 Checks whether data is a data.frame, whether columns
-"observed" and "predicted" are presents
-and checks that only one of "quantile" and "sample_id" is present.
+"observed" and "predicted" are present, and checks that only one of
+"quantile" and "sample_id" is present.
 }
 \keyword{check-inputs}

@@ -89,11 +89,11 @@ pit_sample <- function(observed,
 
   # error handling--------------------------------------------------------------
   # check al arguments are provided
-  # this could be integrated into check_not_null
+  # this could be integrated into assert_not_null
   if (missing("observed") || missing("predicted")) {
     stop("`observed` or `predicted` missing in function 'pit_sample()'")
   }
-  check_not_null(observed = observed, predicted = predicted)
+  assert_not_null(observed = observed, predicted = predicted)
 
   # check if there is more than one observation
   n <- length(observed)
@@ -198,6 +198,8 @@ pit <- function(data,
     coverage <- summarise_scores(coverage,
       by = unique(c(by, "quantile"))
     )
+    # remove all existing attributes and class
+    coverage <- remove_scoringutils_class(coverage)
 
     coverage <- coverage[order(quantile),
       .(

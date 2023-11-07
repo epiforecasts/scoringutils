@@ -30,9 +30,10 @@
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' library(magrittr) # pipe operator
-#'
+#' \dontrun{
 #' scores <- score(example_continuous)
 #' summarise_scores(scores)
+#' }
 #'
 #'
 #' # summarise over samples or quantiles to get one score per forecast
@@ -87,7 +88,6 @@ summarise_scores <- function(scores,
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
   forecast_unit <- get_forecast_unit(scores)
-  check_attribute_conflict(scores, "forecast_unit", forecast_unit)
 
   # if by is not provided, set to the unit of a single forecast
   if (is.null(by)) {
@@ -384,4 +384,3 @@ add_coverage <- function(scores,
 
   return(scores_with_coverage[])
 }
-

@@ -133,7 +133,6 @@ filter_function_args <- function(fun, args) {
 
 
 #' @title Assign attributes to an object from a named list
-#'
 #' @description
 #' Every list item will be made an attribute of the object.
 #' @param object An object to assign attributes to
@@ -152,3 +151,49 @@ assign_attributes <- function(object, attribute_list) {
   return(object)
 }
 
+#' Strip attributes from an object
+#' @description This function removes all attributes from an object that are
+#' specified in the `attributes` argument.
+#' @param object An object to remove attributes from
+#' @param attributes A character vector of attribute names to remove from the
+#' object
+#' @return The object with attributes removed
+#' @keywords internal
+strip_attributes <- function(object, attributes) {
+  if (is.null(object)) {
+    return(NULL)
+  }
+  for (i in seq_along(attributes)) {
+    setattr(object, attributes[i], NULL)
+  }
+  return(object)
+}
+
+#' Remove scoringutils_ Class and Attributes
+#' @description This function removes all classes that start with
+#' "scoringutils_" and all attributes associated with scoringutils.
+#'
+#' @param object An object to remove scoringutils classes and attributes from
+#' @return The object with scoringutils classes and attributes removed
+#' @keywords internal
+remove_scoringutils_class <- function(object) {
+  if (is.null(object)) {
+    return(NULL)
+  }
+  if (is.null(class(object))) {
+    return(object)
+  }
+  # check if "scoringutils_" is in name of any class
+  if (any(grepl("scoringutils_", class(object)))) {
+    stored_attributes <- get_scoringutils_attributes(object)
+
+    # remove all classes that contain "scoringutils_"
+    class(object) <- class(object)[!grepl("scoringutils_", class(object))]
+
+    # remove all scoringutils attributes
+    object <- strip_attributes(object, names(stored_attributes))
+
+    return(object)
+  }
+  return(object)
+}

@@ -13,29 +13,31 @@
 #' "sample" or "point".
 #'
 #' @keywords internal
-
 get_forecast_type <- function(data) {
   if (test_forecast_type_is_binary(data)) {
-    return("binary")
-  }
-  if (test_forecast_type_is_quantile(data)) {
-    return("quantile")
-  }
-  if (test_forecast_type_is_sample(data)) {
-    return("sample")
-  }
-  if (test_forecast_type_is_point(data)) {
-    return("point")
-  }
-  stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
+    forecast_type <- "binary"
+  } else if (test_forecast_type_is_quantile(data)) {
+    forecast_type <- "quantile"
+  } else if (test_forecast_type_is_sample(data)) {
+    forecast_type <- "sample"
+  } else if (test_forecast_type_is_point(data)) {
+    forecast_type <- "point"
+  } else {
+    stop("Checking `data`: input doesn't satisfy the criteria for any forecast type.",
        "Are you missing a column `quantile` or `sample_id`?",
        "Please check the vignette for additional info.")
+  }
+  conflict <- check_attribute_conflict(data, "forecast_type", forecast_type)
+  if (!is.logical(conflict)) {
+    warning(conflict)
+  }
+  return(forecast_type)
 }
 
 
 #' Test whether data could be a binary forecast.
 #' @description Checks type of the necessary columns.
-#' @param data A data.frame or similar to be checked
+#' @inheritParams document_check_functions
 #' @importFrom checkmate test_factor test_numeric
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
@@ -47,7 +49,7 @@ test_forecast_type_is_binary <- function(data) {
 
 #' Test whether data could be a sample-based forecast.
 #' @description Checks type of the necessary columns.
-#' @param data A data.frame or similar to be checked
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_sample <- function(data) {
@@ -59,7 +61,7 @@ test_forecast_type_is_sample <- function(data) {
 
 #' Test whether data could be a point forecast.
 #' @description Checks type of the necessary columns.
-#' @param data A data.frame or similar to be checked
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_point <- function(data) {
@@ -71,7 +73,7 @@ test_forecast_type_is_point <- function(data) {
 
 #' Test whether data could be a quantile forecast.
 #' @description Checks type of the necessary columns.
-#' @param data A data.frame or similar to be checked
+#' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
 #' @keywords internal
 test_forecast_type_is_quantile <- function(data) {
@@ -82,43 +84,33 @@ test_forecast_type_is_quantile <- function(data) {
 }
 
 
-
-
-# need to think about whether we want or keep this function
-get_prediction_type <- function(data) {
-  if (is.data.frame(data)) {
-    data <- data$predicted
-  }
-  if (
-    isTRUE(all.equal(as.vector(data), as.integer(data))) &&
-    !all(is.na(as.integer(data)))
-  ) {
-    return("discrete")
-  } else if (suppressWarnings(!all(is.na(as.numeric(data))))) {
-    return("continuous")
-  } else {
-    stop("Input is not numeric and cannot be coerced to numeric")
-  }
-}
-
-#' @title Get type of the target true values of a forecast
+#' @title Get type of a vector or matrix of observed values or predictions
 #'
-#' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the type and the
-#' content of the `observed` column.
+#' @description Internal helper function to get the type of a vector (usually
+#' of observed or predicted values). The function checks whether the input is
+#' a factor, or else whether it is integer (or can be coerced to integer) or
+#' whether it's continuous.
 #'
-#' @inheritParams validate
+#' @param x Input used to get the type.
 #'
-#' @return Character vector of length one with either "binary", "integer", or
-#' "continuous"
+#' @return Character vector of length one with either "classification",
+#' "integer", or "continuous"
 #'
 #' @keywords internal
-
-get_target_type <- function(data) {
-  if (is.factor(data$observed)) {
+get_type <- function(x) {
+  if (is.factor(x)) {
     return("classification")
   }
-  if (isTRUE(all.equal(data$observed, as.integer(data$observed)))) {
+  assert_numeric(as.vector(x))
+  if (all(is.na(as.vector(x)))) {
+    stop("Can't get type: all values of are NA")
+  }
+  if (is.integer(x)) {
+    return("integer")
+  }
+  if (
+    isTRUE(all.equal(as.vector(x), as.integer(x))) && !all(is.na(as.integer(x)))
+  ) {
     return("integer")
   } else {
     return("continuous")
@@ -149,9 +141,6 @@ get_metrics <- function(scores) {
 }
 
 
-
-
-
 #' @title Get unit of a single forecast
 #'
 #' @description Helper function to get the unit of a single forecast, i.e.
@@ -162,17 +151,25 @@ get_metrics <- function(scores) {
 #' specified during scoring, if any.
 #'
 #' @inheritParams validate
+#' @param check_conflict Whether or not to check whether there is a conflict
+#' between a stored attribute and the inferred forecast unit. Defaults to FALSE.
 #'
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
 #'
 #' @keywords internal
-
-get_forecast_unit <- function(data) {
+get_forecast_unit <- function(data, check_conflict = FALSE) {
+  # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "metric_names"))
 
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
+
+  conflict <- check_attribute_conflict(data,  "forecast_unit", forecast_unit)
+  if (check_conflict && !is.logical(conflict)) {
+    warning(conflict)
+  }
+
   return(forecast_unit)
 }
 
@@ -189,7 +186,6 @@ get_forecast_unit <- function(data) {
 #' protected in scoringutils.
 #'
 #' @keywords internal
-
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(

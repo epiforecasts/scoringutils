@@ -12,8 +12,8 @@ check_has_attribute(object, attribute)
 \item{attribute}{name of an attribute to be checked}
 }
 \value{
-Returns TRUE if attribute is there and an error message as
-a string otherwise
+Returns TRUE if the check was successful and a string with an
+error message otherwise
 }
 \description{
 Checks whether an object has an attribute

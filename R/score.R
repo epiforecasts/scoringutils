@@ -1,60 +1,102 @@
-#' @title Evaluate forecasts
+#' @title Evaluate forecasts in a data.frame format
 #'
-#' @description This function allows automatic scoring of forecasts using a
-#' range of metrics. For most users it will be the workhorse for
-#' scoring forecasts as it wraps the lower level functions package functions.
-#' However, these functions are also available if you wish to make use of them
-#' independently.
+#' @description `score()` applies a selection of scoring metrics to a data.frame
+#' of forecasts. It is the workhorse of the `scoringutils` package.
+#' `score()` is a generic that dispatches to different methods depending on the
+#' class of the input data. The default method is `score.default()`, which
+#' validates the input, assigns as class based on the forecast type, and then
+#' calls `score()` again to dispatch to the appropriate method. See below for
+#' more information on how forecast types are determined.
 #'
-#' A range of forecasts formats are supported, including quantile-based,
-#' sample-based, binary forecasts. Prior to scoring, users may wish to make use
-#' of [validate()] to ensure that the input data is in a supported
-#' format though this will also be run internally by [score()]. Examples for
-#' each format are also provided (see the documentation for `data` below or in
-#' [validate()]).
+#' @details
+#' **Forecast types and input format**
 #'
-#' Each format has a set of required columns (see below). Additional columns may
-#' be present to indicate a grouping of forecasts. For example, we could have
-#' forecasts made by different models in various locations at different time
-#' points, each for several weeks into the future. It is important, that there
-#' are only columns present which are relevant in order to group forecasts.
-#' A combination of different columns should uniquely define the
-#' *unit of a single forecast*, meaning that a single forecast is defined by the
-#' values in the other columns. Adding additional unrelated columns may alter
-#' results.
+#' Various different forecast types / forecast formats are supported. At the
+#' moment, those are
+#' - point forecasts
+#' - binary forecasts ("soft binary classification")
+#' - Probabilistic forecasts in a quantile-based format (a forecast is
+#' represented as a set of predictive quantiles)
+#' - Probabilistic forecasts in a sample-based format (a forecast is represented
+#' as a set of predictive samples)
 #'
-#' To obtain a quick overview of the currently supported evaluation metrics,
-#' have a look at the [metrics] data included in the package. The column
-#' `metrics$Name` gives an overview of all available metric names that can be
-#' computed. If interested in an unsupported metric please open a [feature
-#' request](https://github.com/epiforecasts/scoringutils/issues) or consider
-#' contributing a pull request.
+#' Forecast types are determined based on the columns present in the input data.
 #'
-#' For additional help and examples, check out the [Getting Started
-#' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html)
-#' as well as the paper [Evaluating Forecasts with scoringutils in
-#' R](https://arxiv.org/abs/2205.07090).
+#' *Point forecasts* require a column `observed` of type numeric and a column
+#' `predicted` of type numeric.
 #'
-#' @param data A data.frame or data.table with the following columns:
-#' - `observed` - observed values
-#' - `predicted` - predictions, predictive samples or predictive quantiles
-#' - `model` - name of the model or forecaster who made a prediction
+#' *Binary forecasts* require a column `observed` of type factor with exactly
+#' two levels and a column `predicted` of type numeric with probabilities,
+#' corresponding to the probability that `observed` is equal to the second
+#' factor level. See details [here][brier_score()] for more information.
 #'
-#' Depending on the forecast type, one of the following columns may be required:
-#' - `sample_id` - index for the predictive samples in the 'predicted' column
-#' - `quantile`: quantile-level of the corresponding value in `predicted`
+#' *Quantile-based forecasts* require a column `observed` of type numeric,
+#' a column `predicted` of type numeric, and a column `quantile` of type numeric
+#' with quantile-levels (between 0 and 1).
+#'
+#' *Sample-based forecasts* require a column `observed` of type numeric,
+#' a column `predicted` of type numeric, and a column `sample_id` of type
+#' numeric with sample indices.
 #'
 #' For more information see the vignettes and the example data
-#' ([example_quantile], [example_continuous],
-#' [example_integer], [example_point()], and [example_binary]).
+#' ([example_quantile], [example_continuous], [example_integer],
+#' [example_point()], and [example_binary]).
 #'
-#' @param metrics the metrics you want to have in the output. If `NULL` (the
-#' default), all available metrics will be computed.
-#' @param ... additional parameters passed down to other functions.
+#' **Forecast unit**
 #'
-#' @return A data.table with unsummarised scores. There will be one score per
-#' quantile or sample_id, which is usually not desired, so you should almost
-#' always run [summarise_scores()] on the unsummarised scores.
+#' In order to score forecasts, `scoringutils` needs to know which of the rows
+#' of the data belong together and jointly form a single forecasts. This is
+#' easy e.g. for point forecast, where there is one row per forecast. For
+#' quantile or sample-based forecasts, however, there are multiple rows that
+#' belong to single forecast.
+#'
+#' The *forecast unit* or *unit of a single forecast* is then described by the
+#' combination of columns that uniquely identify a single forecast.
+#' For example, we could have forecasts made by different models in various
+#' locations at different time points, each for several weeks into the future.
+#' The forecast unit could then be described as
+#' `forecast_unit = c("model", "location", "forecast_date", "forecast_horizon")`.
+#' `scoringutils` automatically tries to determine the unit of a single
+#' forecast. It uses all existing columns for this, which means that no columns
+#' must be present that are unrelated to the forecast unit. As a very simplistic
+#' example, if you had an additional row, "even", that is one if the row number
+#' is even and zero otherwise, then this would mess up scoring as `scoringutils`
+#' then thinks that this column was relevant in defining the forecast unit.
+#'
+#' In order to avoid issues, we recommend using the function
+#' [set_forecast_unit()] to determine the forecast unit manually.
+#' The function simply drops unneeded columns, while making sure that all
+#' necessary, 'protected columns' like "predicted" or "observed" are retained.
+#'
+#' **Validating inputs**
+#'
+#' We recommend that users validate their input prior to scoring using the
+#' function [validate()] (though this will also be run internally by [score()]).
+#' The function checks the input data and provides helpful information.
+#'
+#'
+#' **Further help**
+#'
+#' For additional help and examples, check out the [Getting Started
+#' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
+#' well as the paper [Evaluating Forecasts with scoringutils in
+#' R](https://arxiv.org/abs/2205.07090).
+#'
+#' @param data A data.frame or data.table with predicted and observed values.
+#' @param metrics A named list of scoring functions. Names will be used as
+#' column names in the output. See [metrics_point()], [metrics_binary()],
+#' `metrics_quantile()`, and [metrics_sample()] for more information on the
+#' default metrics used.
+#' @param ... additional arguments
+#'
+#' @return A data.table with unsummarised scores. This will generally be
+#' one score per forecast (as defined by the unit of a single forecast).
+#'
+#' For quantile-based forecasts, one score per quantile will be returned
+#' instead. This is done as scores can be computed and may be of interest
+#' for individual quantiles. You can call [summarise_scores()]) on the
+#' unsummarised scores to obtain one score per forecast unit for quantile-based
+#' forecasts.
 #'
 #' @importFrom data.table ':=' as.data.table
 #'
@@ -62,9 +104,8 @@
 #' library(magrittr) # pipe operator
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
-#' validate(example_quantile)
-#' score(example_quantile) %>%
-#'   add_coverage(by = c("model", "target_type")) %>%
+#' validated <- validate(example_quantile)
+#' score(validated) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
@@ -80,19 +121,17 @@
 #' \dontrun{
 #' score(example_binary)
 #' score(example_quantile)
+#' score(example_point)
 #' score(example_integer)
 #' score(example_continuous)
 #' }
 #'
-#' # score point forecasts (marked by 'NA' in the quantile column)
-#' score(example_point) %>%
-#'   summarise_scores(by = "model", na.rm = TRUE)
-#'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
-#' @references Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
-#' (2019) Assessing the performance of real-time epidemic forecasts: A
-#' case study of Ebola in the Western Area region of Sierra Leone, 2014-15.
-#' PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
+#' @references
+#' Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
+#' (2022) Evaluating Forecasts with scoringutils in R.
+#' \doi{10.48550/arXiv.2205.07090}
+#'
 #' @export
 
 score <- function(data, ...) {
@@ -111,7 +150,6 @@ score.default <- function(data, ...) {
 score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
   # Extract the arguments passed in ...
@@ -122,8 +160,8 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args))
-    ]
+      fun, c(list(observed, predicted), matching_args)
+    )]
     return()
   }, ...)
 
@@ -140,7 +178,6 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
 score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
   # Extract the arguments passed in ...
@@ -151,8 +188,8 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args))
-    ]
+      fun, c(list(observed, predicted), matching_args)
+    )]
     return()
   }, ...)
 
@@ -177,11 +214,11 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     matching_args <- filter_function_args(fun, args)
 
     data[, (metric_name) := do.call(
-      fun, c(list(unique(observed), t(predicted)), matching_args)),
-      by = forecast_unit
-    ]
+      fun, c(list(unique(observed), t(predicted)), matching_args)
+    ), by = forecast_unit]
     return()
-  }, ...)
+  },
+  ...)
 
   data <- data[
     , lapply(.SD, unique),
@@ -201,7 +238,10 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
 
-  metrics <- check_metrics(metrics)
+  if (is.null(metrics)) {
+    metrics <- available_metrics()
+  }
+  metrics <- metrics[metrics %in% available_metrics()]
   scores <- score_quantile(
     data = data,
     forecast_unit = forecast_unit,

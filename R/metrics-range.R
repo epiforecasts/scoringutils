@@ -107,11 +107,11 @@ interval_score <- function(observed,
       "need all arguments 'observed', 'lower', 'upper' and 'interval_range' in function 'interval_score()'" # nolint
     )
   }
-  check_not_null(
+  assert_not_null(
     observed = observed, lower = lower, upper = upper,
     interval_range = interval_range
   )
-  check_equal_length(observed, lower, interval_range, upper)
+  assert_equal_length(observed, lower, interval_range, upper)
 
   if (any(interval_range < 0, na.rm = TRUE)) {
     stop("interval ranges must be positive")
@@ -272,5 +272,3 @@ bias_range <- function(lower, upper, range, observed) {
 
   return(bias)
 }
-
-
