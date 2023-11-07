@@ -53,6 +53,7 @@ Imports:
     ggplot2 (>= 3.4.0),
     lifecycle,
     methods,
+    Metrics,
     rlang,
     scoringRules,
     stats

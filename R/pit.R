@@ -185,14 +185,13 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  check_data <- check_forecasts(data)
-
-  data <- check_data$cleaned_data
-  prediction_type <- check_data$prediction_type
+  data <- validate(data)
+  data <- remove_na_observed_predicted(data)
+  forecast_type <- get_forecast_type(data)
 
   # if prediction type is quantile, simply extract coverage values from
   # score and returned a list with named vectors
-  if (prediction_type == "quantile") {
+  if (forecast_type == "quantile") {
     coverage <-
       score(data, metrics = "quantile_coverage")
 

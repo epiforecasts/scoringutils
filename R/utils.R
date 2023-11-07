@@ -1,76 +1,3 @@
-globalVariables(c(
-  "..index",
-  "..quantiles",
-  "..type",
-  ".",
-  ".SD",
-  "adj_pval",
-  "ae_point",
-  "ae_median",
-  "boundary",
-  "bias",
-  "brier_score",
-  "component_value",
-  "..colnames_x",
-  "..colnames_y",
-  "..samplecols",
-  "compare_against",
-  "count",
-  "coverage_deviation",
-  "CRPS",
-  "crps",
-  "DSS",
-  "dss",
-  "fill_col",
-  "identifCol",
-  "Interval_Score",
-  "overprediction",
-  "underprediction",
-  "quantile_coverage",
-  "LogS",
-  "calibration",
-  "coverage",
-  "hist",
-  "InternalDuplicateCheck",
-  "InternalNumCheck",
-  "log_score",
-  "lower",
-  "mad",
-  "mean_scores_ratio",
-  "metric",
-  "metrics_select",
-  "metrics",
-  "model",
-  "n_obs",
-  "n_obs wis_component_name",
-  "Count",
-  "pit_p_val",
-  "pit_value",
-  "point",
-  "predicted",
-  "pval",
-  "quantile",
-  "ratio",
-  "rel_to_baseline",
-  "relative_skill",
-  "rn",
-  "se_mean",
-  "sharpness",
-  "theta",
-  "observed",
-  "type",
-  "upper",
-  "value",
-  "value_scaled",
-  "var_of_interest",
-  "variable",
-  "wis_component_name",
-  "x",
-  "y",
-  "g"
-))
-
-
 #' @title Available metrics in scoringutils
 #'
 #' @return A vector with the name of all available metrics
@@ -82,7 +9,7 @@ available_metrics <- function() {
 }
 
 
-#' Delete Columns From a Data.table
+#' Safely delete Columns From a Data.table
 #'
 #' @description take a vector of column names and delete the columns if they
 #' are present in the data.table
@@ -107,171 +34,100 @@ delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
   return(df)
 }
 
-#' @title Check if predictions are quantile forecasts
-#'
-#' @description Internal helper function to check if a data frame contains
-#' quantile forecast predictions. This is determined by checking if the
-#' "quantile" column is present.
-#'
-#' @param data Data frame containing forecast predictions
-#'
-#' @return Logical indicating whether predictions are quantile forecasts
-#'
-#' @keywords internal
-
-prediction_is_quantile <- function(data) {
-  if (is.data.frame(data)) {
-    if ("quantile" %in% names(data)) {
-      return(TRUE)
-    }
-    return(FALSE)
+remove_na_observed_predicted <- function(data) {
+  # remove rows where predicted or observed value are NA -----------------------
+  data <- data[!is.na(observed) & !is.na(predicted)]
+  if (nrow(data) == 0) {
+    stop("After removing NA values in `observed` and `predicted`, there were no observations left")
   }
-  stop("Input is not a data.frame")
+  return(data[])
 }
 
 
 
-#' @title Get prediction type of a forecast
+
+
+#' @title Collapse several messages to one
 #'
-#' @description Internal helper function to get the prediction type of a
-#' forecast. That is inferred based on the properties of the values in the
-#' `predicted` column.
+#' @description Internal helper function to facilitate generating messages
+#' and warnings.
 #'
-#' @inheritParams check_forecasts
+#' @param type character, should be either "messages", "warnings" or "errors"
+#' @param messages the messages or warnings to collapse
 #'
-#' @return Character vector of length one with either "quantile", "integer", or
-#' "continuous".
-#'
+#' @return string with the message or warning
 #' @keywords internal
-
-get_prediction_type <- function(data) {
-  if (is.data.frame(data)) {
-    if ("quantile" %in% names(data)) {
-      return("quantile")
-    } else {
-      if ("predicted" %in% names(data)) {
-        data <- data$predicted
-      }else {
-        stop("Input does not contain a column named 'predicted'")
-      }
-    }
-  }
-
-  if (isTRUE(all.equal(as.vector(data), as.integer(data))) &&
-        !all(is.na(as.integer(data)))) {
-    return("integer")
-  } else if (suppressWarnings(!all(is.na(as.numeric(data))))) {
-    return("continuous")
-  } else {
-    stop("Input is not numeric and cannot be coerced to numeric")
-  }
-}
-
-#' @title Get type of the target true values of a forecast
-#'
-#' @description Internal helper function to get the type of the target
-#' true values of a forecast. That is inferred based on the type and the
-#' content of the `observed` column.
-#'
-#' @inheritParams check_forecasts
-#'
-#' @return Character vector of length one with either "binary", "integer", or
-#' "continuous"
-#'
-#' @keywords internal
-
-get_target_type <- function(data) {
-  if (is.factor(data$observed)) {
-    return("classification")
-  }
-  if (isTRUE(all.equal(data$observed, as.integer(data$observed)))) {
-    return("integer")
-  } else {
-    return("continuous")
-  }
-}
-
-
-
-#' @title Get unit of a single forecast
-#'
-#' @description Helper function to get the unit of a single forecast, i.e.
-#' the column names that define where a single forecast was made for
-#'
-#' @inheritParams check_forecasts
-#'
-#' @return A character vector with the column names that define the unit of
-#' a single forecast
-#'
-#' @keywords internal
-
-get_forecast_unit <- function(data) {
-
-  protected_columns <- get_protected_columns(data)
-  if (prediction_is_quantile(data)) {
-    protected_columns <- setdiff(protected_columns, "sample_id")
-  }
-  forecast_unit <- setdiff(colnames(data), protected_columns)
-  return(forecast_unit)
-}
-
-
-#' @title Get protected columns from a data frame
-#'
-#' @description Helper function to get the names of all columns in a data frame
-#' that are protected columns.
-#'
-#' @inheritParams check_forecasts
-#'
-#' @return A character vector with the names of protected columns in the data
-#'
-#' @keywords internal
-
-get_protected_columns <- function(data) {
-
-  datacols <- colnames(data)
-  protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
-    "pit_value", "range", "boundary", available_metrics(),
-    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
+collapse_messages <- function(type = "messages", messages) {
+  paste0(
+    "The following ",  type, " were produced when checking inputs:\n",
+    paste(paste0(seq_along(messages), ". "), messages, collapse = "\n")
   )
-
-  # only return protected columns that are present
-  protected_columns <- intersect(
-    datacols,
-    protected_columns
-  )
-
-  return(protected_columns)
 }
 
 
-#' @title Check whether object has been checked with check_forecasts()
-#'
-#' @description Helper function to determine whether an object has been checked
-#' by and passed [check_forecasts()].
-#'
-#' @param data An object of class `scoringutils_check()` as produced by
-#' [check_forecasts()].
-#'
-#' @importFrom methods is
-#'
-#' @return Logical, either TRUE or FALSE
-#'
-#' @keywords internal
 
-is_scoringutils_check <- function(data) {
+#' @title Print output from `check_forecasts()`
+#'
+#' @description Helper function that prints the output generated by
+#' `check_forecasts()`
+#'
+#' @param x An object of class 'scoringutils_check' as produced b y
+#' `check_forecasts()`
+#' @param ... additional arguments (not used here)
+#'
+#' @return NULL
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' check <- validate(example_quantile)
+#' print(check)
+print.scoringutils_check <- function(x, ...) {
+  cat("Your forecasts seem to be for a target of the following type:\n")
+  print(x["target_type"])
+  cat("and in the following format:\n")
+  print(x["prediction_type"])
 
-  result <- is(data, "scoringutils_check")
+  cat("The unit of a single forecast is defined by:\n")
+  print(x["forecast_unit"])
 
-  if (result &&
-        any(is.null(data$cleaned_data), is.null(data$prediction_type),
-            is.null(data$forecast_unit), is.null(data$target_type))) {
-    stop("Input seems to be an output of `scoringutils_check()`, ",
-         "but at least one of the required list items ",
-         "'cleaned_data', 'prediction_type', 'forecast_unit', or
-         'target_type' is missing. Try running check_forecasts() again.")
+  cat("Cleaned data, rows with NA values in predicted or observed removed:\n")
+  print.default(x["cleaned_data"])
+
+  cat("Number of unique values per column per model:\n")
+  print.default(x["unique_values"])
+
+  colnames <- names(x)[names(x) %in% c("messages", "warnings", "errors")]
+  if (length(colnames) > 0) {
+    print.default(x[colnames])
   }
 
-  return(result)
+  return(invisible(x))
 }
+
+#' @title Filter function arguments
+#'
+#' @description This function compares a list of arguments with the arguments
+#' that a function can accept. It only returns those arguments that can be
+#' passed to the function.
+#'
+#' The function is used in [score()] to handle additional arguments passed to
+#' [score()] that get then passed along to the different scoring functions.
+#'
+#' @param fun A function to which arguments shall be passed
+#' @param args A list of arguments that shall be passed to fun
+#'
+#' @return A list of function arguments (a subset of `args`) that `fun` can
+#' accept.
+#' @keywords internal
+filter_function_args <- function(fun, args) {
+  # Check if the function accepts ... as an argument
+  if ("..." %in% names(formals(fun))) {
+    # If it does, return all arguments
+    return(args)
+  } else {
+    # Identify the arguments that fun() accepts and only keep valid ones
+    valid_args <- names(formals(fun))
+    return(args[names(args) %in% valid_args])
+  }
+}
+

@@ -21,7 +21,7 @@ library(ggplot2)
 library(knitr)
 ```
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
 
 The `scoringutils` package offers convenient automated forecast evaluation in a `data.table` format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
 
@@ -63,19 +63,19 @@ set_forecast_unit(
 
 ## Checking the input data
 
-The function `check_forecasts()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
+The function `validate()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
 
 ```{r}
 head(example_quantile)
 ```
 
 ```{r}
-check_forecasts(example_quantile)
+validate(example_quantile)
 ```
 
 If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
 
-The output of `check_forecasts()` can later be directly used as input to `score()` (otherwise, `score()` will just run `check_forecasts()` anyway internally). 
+The output of `validate()` can later be directly used as input to `score()` (otherwise, `score()` will just run `validate()` anyway internally). 
 
 ## Showing available forecasts
 
@@ -121,7 +121,7 @@ example_quantile %>%
 
 Forecasts can easily be scored using the `score()` function. 
 
-For clarity, we suggest setting the forecast unit explicitly and you may also want to call `check_forecasts()` explicitly. 
+For clarity, we suggest setting the forecast unit explicitly and you may also want to call `validate()` explicitly. 
 
 ```{r}
 scores <- example_quantile %>%
@@ -129,7 +129,7 @@ scores <- example_quantile %>%
     c("location", "target_end_date", "target_type", "location_name",
       "forecast_date", "model", "horizon")
   ) %>%
-  check_forecasts() %>%
+  validate() %>%
   score()
 head(scores)
 ```
@@ -142,7 +142,7 @@ example_quantile %>%
     c("location", "target_end_date", "target_type",
       "forecast_date", "model", "horizon")
   ) %>%
-  check_forecasts()
+  validate()
 ```
 
 If we drop essential information, for example, the "target_type" column, we'll get an error informing us that the forecasts aren't uniquely identified any more. 
@@ -153,10 +153,10 @@ example_quantile %>%
     c("location", "target_end_date",
       "forecast_date", "model", "horizon")
   ) %>%
-  check_forecasts()
+  validate()
 ```
 
-The function `find_duplicates()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
+The function `get_duplicate_forecasts()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
 
 ```{r}
 duplicates <- example_quantile %>%
@@ -164,7 +164,7 @@ duplicates <- example_quantile %>%
     c("location", "target_end_date",
       "forecast_date", "model", "horizon")
   ) %>%
-  find_duplicates()
+  get_duplicate_forecasts()
 
 duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
   head()
@@ -187,7 +187,7 @@ scores <- example_quantile %>%
     c("location", "target_end_date", "target_type",
       "forecast_date", "model", "horizon")
   ) %>%
-  check_forecasts() %>%
+  validate() %>%
   score()
 
 head(scores)
@@ -278,7 +278,7 @@ score(example_quantile) %>%
 
 ## Calibration
 
-Calibration is a measure statistical consistency between the forecasts and the observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the observed value. Ideally, pit values should be uniformly distributed after the transformation. 
+Calibration is a measure statistical consistency between the forecasts and observed values. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms. The probability integral transform (PIT) is equal to the cumulative distribution function of a forecast evaluated at the observed value. Ideally, pit values should be uniformly distributed after the transformation. 
 
 We can compute pit values as such: 
 

@@ -29,6 +29,8 @@ score_quantile <- function(data,
                            count_median_twice = FALSE,
                            separate_results = TRUE) {
 
+  data <- remove_na_observed_predicted(data)
+
   # make sure to have both quantile as well as range format --------------------
   range_data <- quantile_to_range_long(data,
     keep_quantile_col = FALSE

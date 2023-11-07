@@ -1,32 +1,35 @@
 # scoringutils 1.3
 
-This major update introduces a lot of breaking changes and addresses comments made by review from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
+This major update and addresses a variety of comments made by reviewers from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
+
+The update introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`. 
 
 ## Package updates
-- in `score()`, required columns "true_value" and "prediction" were replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguements "observed" and "predicted" everywhere consistently. 
-- scoring functions received a consistent interface and input checks:
-  - metrics for binary forecasts: 
+- In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
+- Scoring functions received a consistent interface and input checks:
+  - metrics for binary forecasts:
     - `observed`: factor with exactly 2 levels
     - `predicted`: numeric, vector with probabilities
-  - metrics for point forecasts: 
+  - metrics for point forecasts:
     - `observed`: numeric vector
     - `predicted`: numeric vector
-  - metrics for sample-based forecasts: 
+  - metrics for sample-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
-  - metrics for quantile-based forecasts: 
+  - metrics for quantile-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
-    - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`. 
-- changes to `avail_forecasts()` and `plot_avail_forecasts()`:
-  - the function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future. 
-  - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count". 
-  - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows. 
-  - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future. 
-- remove hard-coded rounding value for `correlation()`. Previously, the function always rounded correlations to two digits. Instead, a new argument, `digits` was introduced and the default set to 0, meaning that no rounding takes place. 
-- the deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
-- files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or readRDS()`. 
-- add documentation for the return value of `summarise_scores()`. 
+    - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
+- `check_forecasts()` was replaced by a new function `validate()`. `validate()` validates the input and in that sense fulfills the purpose of `check_forecasts()`. It has different methods: `validate.default()` assigns the input a class based on their forecast type. Other methods validate the input specifically for the various forecast types.
+- The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
+- Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
+  - The function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future.
+  - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count".
+  - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
+  - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future.
+- The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
+- Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
+- added documentation for the return value of `summarise_scores()`. 
 
 # scoringutils 1.2.1
 

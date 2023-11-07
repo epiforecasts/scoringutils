@@ -13,7 +13,6 @@ A data frame with
 \item{observed}{observed values}
 \item{location_name}{name of the country for which a prediction was made}
 \item{forecast_date}{the date on which a prediction was made}
-\item{quantile}{quantile of the corresponding prediction}
 \item{predicted}{predicted value}
 \item{model}{name of the model that generated the forecasts}
 \item{horizon}{forecast horizon in weeks}

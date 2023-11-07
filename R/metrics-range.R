@@ -153,75 +153,124 @@ interval_score <- function(observed,
   }
 }
 
-#' @title Quantile Score
+
+
+#' @title Determines Bias of Quantile Forecasts based on the range of the
+#' prediction intervals
 #'
 #' @description
-#' Proper Scoring Rule to score quantile predictions. Smaller values are better.
-#' The quantile score is
-#' closely related to the Interval score (see [interval_score()]) and is
-#' the quantile equivalent that works with single quantiles instead of
-#' central prediction intervals.
+#' Determines bias from quantile forecasts based on the range of the
+#' prediction intervals. For an increasing number of quantiles this measure
+#' converges against the sample based bias version for integer and continuous
+#' forecasts.
 #'
-#' @param quantile vector of size n with the quantile levels of the
-#' corresponding predictions.
-#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
-#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-#' value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
-#' and will be computed from the quantile. Alpha is the decimal value that
-#' represents how much is outside a central prediction interval (E.g. for a
-#' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
-#' @return vector with the scoring values
-#' @inheritParams interval_score
-#' @inheritParams ae_median_sample
+#' @details
+#' For quantile forecasts, bias is measured as
+#'
+#' \deqn{
+#' B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
+#' \mathbf{1}( x_t \leq q_{t, 0.5}) \\
+#' + (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\})
+#'  \mathbf{1}( x_t \geq q_{t, 0.5}),
+#' }{
+#' B_t = (1 - 2 * max(i | q_{t,i} in Q_t and q_{t,i} <= x_t\))
+#' 1( x_t <= q_{t, 0.5}) + (1 - 2 * min(i | q_{t,i} in Q_t and q_{t,i} >= x_t))
+#'  1( x_t >= q_{t, 0.5}),
+#' }
+#'
+#' where \eqn{Q_t} is the set of quantiles that form the predictive
+#' distribution at time \eqn{t}. They represent our
+#' belief about what the later observed value \eqn{x_t} will be. For
+#' consistency, we define
+#' \eqn{Q_t} such that it always includes the element
+#' \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
+#' \eqn{\mathbf{1}()}{1()} is the indicator function that is \eqn{1} if the
+#' condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
+#' defined as the maximum percentile rank for which the corresponding quantile
+#' is still below the observed value, if the observed value is smaller than the
+#' median of the predictive distribution. If the observed value is above the
+#' median of the predictive distribution, then $B_t$ is the minimum percentile
+#' rank for which the corresponding quantile is still larger than the true
+#' value. If the observed value is exactly the median, both terms cancel out and
+#' \eqn{B_t} is zero. For a large enough number of quantiles, the
+#' percentile rank will equal the proportion of predictive samples below the
+#' observed value, and this metric coincides with the one for
+#' continuous forecasts.
+#'
+#' Bias can assume values between
+#' -1 and 1 and is 0 ideally.
+#' @param lower vector of length corresponding to the number of central
+#' prediction intervals that holds predictions for the lower bounds of a
+#' prediction interval
+#' @param upper vector of length corresponding to the number of central
+#' prediction intervals that holds predictions for the upper bounds of a
+#' prediction interval
+#' @param range vector of corresponding size with information about the width
+#' of the central prediction interval
+#' @param observed a single observed value
+#' @return scalar with the quantile bias for a single quantile prediction
+#' @seealso bias_quantile bias_sample
+#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
-#' observed <- rnorm(10, mean = 1:10)
-#' alpha <- 0.5
 #'
-#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+#' lower <- c(
+#'   6341.000, 6329.500, 6087.014, 5703.500,
+#'   5451.000, 5340.500, 4821.996, 4709.000,
+#'   4341.500, 4006.250, 1127.000, 705.500
+#' )
 #'
-#' qs_lower <- quantile_score(observed,
-#'   predicted = lower,
-#'   quantile = alpha / 2
+#' upper <- c(
+#'   6341.000, 6352.500, 6594.986, 6978.500,
+#'   7231.000, 7341.500, 7860.004, 7973.000,
+#'   8340.500, 8675.750, 11555.000, 11976.500
 #' )
-#' qs_upper <- quantile_score(observed,
-#'   predicted = upper,
-#'   quantile = 1 - alpha / 2
+#'
+#' range <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98)
+#'
+#' observed <- 8062
+#'
+#' bias_range(
+#'   lower = lower, upper = upper,
+#'   range = range, observed = observed
 #' )
-#' interval_score <- (qs_lower + qs_upper) / 2
 #' @export
 #' @keywords metric
-#' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
-#' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
-#' Statistical Association, Volume 102, 2007 - Issue 477
-#'
-#' Evaluating epidemic forecasts in an interval format,
-#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
-#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
-#
 
-quantile_score <- function(observed,
-                           predicted,
-                           quantile,
-                           weigh = TRUE) {
+bias_range <- function(lower, upper, range, observed) {
 
-  # get central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantile) * 2
-  alpha <- 1 - central_interval
-
-  # compute score - this is the version explained in the SI of Bracher et. al.
-  error <- abs(predicted - observed)
-  score <- 2 * ifelse(
-    observed <= predicted, 1 - quantile, quantile
-  ) * error
-
-  # adapt score such that mean of unweighted quantile scores corresponds to
-  # unweighted interval score of the corresponding prediction interval
-  score <- 2 * score / alpha
-
-  if (weigh) {
-    score <- score * alpha / 2
+  if (anyNA(range)) {
+    if (is.na(range[1]) && !any(range[-1] == 0)) {
+      range[1] <- 0
+    }
+    range <- range[!is.na(range)]
+    lower <- lower[!is.na(range)]
+    upper <- upper[!is.na(range)]
   }
 
-  return(score)
+  if (length(range) > 1 && !all(diff(range) > 0)) {
+    stop("Range must be increasing")
+  }
+
+  if (length(lower) != length(upper) || length(range) != length(lower)) {
+    stop("Inputs must have same length")
+  }
+
+  check_quantiles(range, name = "range", range = c(0, 100))
+
+  # Convert range to quantiles
+  quantile <- c(
+    rev(abs(100 - range) / (2 * 100)),
+    abs(100 + range[range != 0]) / (2 * 100)
+  )
+
+  # Combine predictions
+  upper_without_median <- upper[range != 0]
+  predicted <- c(rev(lower), upper_without_median)
+
+  # Call bias_quantile
+  bias <- bias_quantile(observed, predicted, quantile)
+
+  return(bias)
 }
+
+

@@ -162,15 +162,15 @@ test_that("pairwise_comparison() works", {
   # -----------------------------------------------------------------------------#
 
   # compare results without a baseline specified
-  geom_mean_ratios <- exp(rowMeans(log(results_ratio), na.rm = TRUE))
-  names(geom_mean_ratios) <- NULL
-  expect_equal(relative_skills_without$relative_skill, geom_mean_ratios)
+  geometric_mean_ratios <- exp(rowMeans(log(results_ratio), na.rm = TRUE))
+  names(geometric_mean_ratios) <- NULL
+  expect_equal(relative_skills_without$relative_skill, geometric_mean_ratios)
 
   # comparison with a baseline
   ind_baseline <- which(rownames(results_ratio) == "m1")
-  geom_mean_ratios <- exp(rowMeans(log(results_ratio[, -ind_baseline]), na.rm = TRUE))
+  geometric_mean_ratios <- exp(rowMeans(log(results_ratio[, -ind_baseline]), na.rm = TRUE))
   ratios_baseline <- results_ratio[, "m1"]
-  ratios_scaled <- geom_mean_ratios / geom_mean_ratios["m1"]
+  ratios_scaled <- geometric_mean_ratios / geometric_mean_ratios["m1"]
 
   names(ratios_scaled) <- NULL
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
@@ -201,9 +201,9 @@ test_that("pairwise_comparison() works", {
     }
   }
   ind_baseline <- which(rownames(results_ratio) == "m1")
-  geom_mean_ratios <- exp(rowMeans(log(results_ratio[, -ind_baseline]), na.rm = TRUE))
+  geometric_mean_ratios <- exp(rowMeans(log(results_ratio[, -ind_baseline]), na.rm = TRUE))
   ratios_baseline <- results_ratio[, "m1"]
-  ratios_scaled <- geom_mean_ratios / geom_mean_ratios["m1"]
+  ratios_scaled <- geometric_mean_ratios / geometric_mean_ratios["m1"]
   names(ratios_scaled) <- NULL
 
   eval_with_baseline <- suppressMessages(

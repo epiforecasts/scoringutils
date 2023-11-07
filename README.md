@@ -14,7 +14,7 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://c
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
-forecasts against the observed values.
+forecasts against observed values.
 
 You can find additional information and examples in the papers
 [Evaluating Forecasts with scoringutils in
@@ -116,20 +116,19 @@ column names of the data into account. However, it is recommended to set
 the forecast unit manually using `set_forecast_unit()` as this may help
 to avoid errors, especially when scoringutils is used in automated
 pipelines. The function `set_forecast_unit()` will simply drop unneeded
-columns. To verify everything is in order, the function
-`check_forecasts()` should be used. The result of that check can then
-passed directly into `score()`. `score()` returns unsummarised scores,
-which in most cases is not what the user wants. Here we make use of
-additional functions from `scoringutils` to add empirical
-coverage-levels (`add_coverage()`), and scores relative to a baseline
-model (here chosen to be the EuroCOVIDhub-ensemble model). See the
-getting started vignette for more details. Finally we summarise these
-scores by model and target type.
+columns. To verify everything is in order, the function `validate()`
+should be used. The result of that check can then passed directly into
+`score()`. `score()` returns unsummarised scores, which in most cases is
+not what the user wants. Here we make use of additional functions from
+`scoringutils` to add empirical coverage-levels (`add_coverage()`), and
+scores relative to a baseline model (here chosen to be the
+EuroCOVIDhub-ensemble model). See the getting started vignette for more
+details. Finally we summarise these scores by model and target type.
 
 ``` r
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
-  check_forecasts() %>%
+  validate() %>%
   score() %>%
   add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
@@ -142,8 +141,6 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> The following messages were produced when checking inputs:
-#> 1.  144 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 ```
 
 | model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
@@ -176,8 +173,6 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
-#> The following messages were produced when checking inputs:
-#> 1.  288 values for `predicted` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.
 #>                    model target_type   scale interval_score   dispersion
 #> 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146
 #> 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443
@@ -186,8 +181,8 @@ example_quantile %>%
 #> 5:  epiforecasts-EpiNow2       Cases     log   6.005778e-01    0.1066329
 #> 6:  epiforecasts-EpiNow2       Cases natural   1.443844e+04 5664.3779484
 #>    underprediction overprediction coverage_deviation        bias    ae_median
-#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726562 1.185905e+00
-#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726562 3.208048e+04
+#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726563 1.185905e+00
+#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726563 3.208048e+04
 #> 3:    1.356563e-01      0.3132561        -0.09785326 -0.05640625 7.410484e-01
 #> 4:    4.237177e+03   3650.0047554        -0.09785326 -0.05640625 1.770795e+04
 #> 5:    1.858699e-01      0.3080750        -0.06660326 -0.07890625 7.656591e-01

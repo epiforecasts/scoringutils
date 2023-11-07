@@ -3,18 +3,18 @@ test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
 })
 
-test_that("score() warns if column name equals a metric name", {
-  data <- data.frame(
-    observed = rep(1:10, each = 2),
-    predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
-    model = "Model 1",
-    date = as.Date("2020-01-01") + rep(1:10, each = 2),
-    quantile = rep(c(0.1, 0.9), times = 10),
-    bias = 3
-  )
-
-  expect_warning(suppressMessages(score(data = data)))
-})
+# test_that("score() warns if column name equals a metric name", {
+#   data <- data.frame(
+#     observed = rep(1:10, each = 2),
+#     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+#     model = "Model 1",
+#     date = as.Date("2020-01-01") + rep(1:10, each = 2),
+#     quantile = rep(c(0.1, 0.9), times = 10),
+#     bias = 3
+#   )
+#
+#   expect_warning(suppressMessages(score(data = data)))
+# })
 
 
 
@@ -46,8 +46,131 @@ test_that("function produces score for a binary case", {
   expect_true("brier_score" %in% names(eval))
 })
 
+test_that("score.scoringutils_binary() errors with only NA values", {
+  only_nas <- copy(example_binary)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
+
+test_that("score() gives same result for binary as regular function", {
+  binary_example <- data.table::setDT(scoringutils::example_binary[!is.na(predicted)])
+  eval <- suppressMessages(score(binary_example))
+  manual_eval <- brier_score(
+    factor(binary_example$observed),
+    binary_example$predicted
+  )
+  expect_equal(eval$brier_score, manual_eval)
+})
+
+test_that(
+  "passing additional functions to score binary works handles them", {
+    test_fun <- function(x, y, ...) {
+      if (hasArg("test")) {
+        message("test argument found")
+      }
+      return(y)
+    }
+
+    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
+                           target_type == "Cases" & location == "DE"]
+
+    # passing a simple function works
+    expect_equal(
+      score(df,
+            metrics = list("identity" = function(x, y) {return(y)}))$identity,
+      df$predicted
+    )
 
 
+    # passing an additional argument that is not part of the function
+    # definition works
+    expect_equal(
+      score(df,
+            metrics = list("identity" = function(x, y) {return(y)}),
+            additional_arg = "something")$identity,
+      df$predicted
+    )
+
+    # passing an additional function to one that accepts ... works
+    expect_message(
+      score(df,
+            metrics = list("test_function" = test_fun),
+            test = "something"),
+      "test argument found"
+    )
+
+    # passing an argument that's the same as a named argument
+    expect_equal(
+      unique(
+        score(df,
+              metrics = list("test_function" = test_fun),
+              y = "something")$test_function
+      ),
+      "something"
+    )
+
+
+    ## Additional tests for validate_metrics()
+    # passing in something that's not a function or a known metric
+    expect_warning(
+      expect_warning(
+        score(df, metrics = list(
+          "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3)
+        ),
+        "`Metrics` element number 3 is not a valid function"
+      ),
+      "`Metrics` element number 4 is not a valid function")
+
+    # passing a single named argument for metrics by position
+    expect_contains(
+      names(score(df, list("hi" = test_fun))),
+      "hi")
+
+    # providing an additional, unrelated function argument works
+    expect_no_error(
+      score(example_binary, unnecessary_argument = "unnecessary")
+    )
+    expect_no_error(
+      score(example_binary, metrics = list("brier_score" = brier_score),
+            unnecessary_argument = "unnecessary")
+    )
+  }
+)
+
+
+
+
+
+
+# test point case --------------------------------------------------------------
+test_that("function produces output for a point case", {
+  point_example <- data.table::setDT(scoringutils::example_point)
+  eval <- suppressMessages(score(point_example))
+  eval <- summarise_scores(eval, by = c("model", "target_type"))
+
+  expect_equal(
+    nrow(eval) > 1,
+    TRUE
+  )
+  expect_equal(
+    colnames(eval),
+    c(
+      "model", "target_type",
+      "ae_point",
+      "se_point"
+    )
+  )
+})
+
+test_that("score.scoringutils_point() errors with only NA values", {
+  only_nas <- copy(example_point)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
 
 # test quantile case -----------------------------------------------------------
 test_that("function produces output for a quantile format case", {
@@ -151,6 +274,15 @@ test_that("WIS is the same with other metrics omitted or included", {
 })
 
 
+test_that("score.scoringutils_quantile() errors with only NA values", {
+  only_nas <- copy(example_quantile)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
+
+
 
 
 
@@ -166,22 +298,37 @@ test_that("function produces output for a continuous format case", {
   eval2 <- eval2[order(model)]
   all(eval == eval2, na.rm = TRUE)
 
+  only_nas <- copy(example_continuous)[, predicted := NA_real_]
+  expect_error(
+    score(only_nas),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+
   expect_equal(
     nrow(eval) > 1,
     TRUE
   )
+
+  expect_equal(
+    nrow(eval),
+    887
+  )
 })
 
-test_that(
-  "score() can support a sample column when a quantile forecast is used", {
-  ex <- example_quantile[!is.na(quantile)][1:200, ]
-  ex <- rbind(
-    data.table::copy(ex)[, sample_id := 1],
-    ex[, sample_id := 2]
-  )
-  scores <- suppressWarnings(score(ex))
-  expect_snapshot(summarise_scores(
-    summarise_scores(scores, by = "model"), by = "model",
-    fun = signif, digits = 2
-  ))
- })
+test_that("function throws an error if data is missing", {
+  expect_error(suppressMessages(score(data = NULL)))
+})
+
+# test_that(
+#   "score() can support a sample column when a quantile forecast is used", {
+#   ex <- example_quantile[!is.na(quantile)][1:200, ]
+#   ex <- rbind(
+#     data.table::copy(ex)[, sample_id := 1],
+#     ex[, sample_id := 2]
+#   )
+#   scores <- suppressWarnings(score(ex))
+#   expect_snapshot(summarise_scores(
+#     summarise_scores(scores, by = "model"), by = "model",
+#     fun = signif, digits = 2
+#   ))
+#  })

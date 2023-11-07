@@ -216,7 +216,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' are relevant to determine the forecast unit. This may lead to unexpected
 #' behaviour, so setting the forecast unit explicitly can help make the code
 #' easier to debug and easier to read. When used as part of a workflow,
-#' `set_forecast_unit()` can be directly piped into `check_forecasts()` to
+#' `set_forecast_unit()` can be directly piped into `validate()` to
 #' check everything is in order.
 #'
 #' @inheritParams score
