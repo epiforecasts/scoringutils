@@ -63,6 +63,50 @@ wis <- function(observed,
 }
 
 
+#' @title Interval Coverage (For Quantile-Based Forecasts)
+#' @description Check whether the observed value is within a given central
+#' prediction interval. The prediction interval is defined by a lower and an
+#' upper bound formed by a pair of predictive quantiles. For example, a 50%
+#' prediction interval is formed by the 0.25 and 0.75 quantiles of the
+#' predictive distribution.
+#' @inheritParams wis
+#' @param range A single number with the range of the prediction interval in
+#' percent (e.g. 50 for a 50% prediction interval) for which you want to compute
+#' coverage.
+#' @importFrom checkmate assert_number
+#' @return A vector of length n with TRUE if the observed value is within the
+#' corresponding prediction interval and FALSE otherwise.
+#' @name interval_coverage
+#' @export
+#' @examples
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'    c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage_quantile(observed, predicted, quantile)
+interval_coverage_quantile <- function(observed, predicted, quantile, range = 50) {
+  assert_input_quantile(observed, predicted, quantile)
+  assert_number(range)
+  necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
+  if (!all(necessary_quantiles %in% quantile)) {
+    rlang::warn(
+      "To compute the coverage for a range of ", range, "%, the quantiles ",
+      necessary_quantiles, " are required. Returnting `NA`.")
+    return(NA)
+  }
+  r <- range
+  reformatted <- scoringutils:::quantile_to_interval(observed, predicted, quantile)
+  reformatted <- reformatted[range %in% r]
+  reformatted[, coverage := ifelse(
+    observed >= lower & observed <= upper, TRUE, FALSE
+  )]
+  return(reformatted$coverage)
+}
+
+
 #' @title Determines Bias of Quantile Forecasts
 #'
 #' @description
