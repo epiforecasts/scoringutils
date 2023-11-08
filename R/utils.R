@@ -238,15 +238,16 @@ run_safely <- function(..., fun) {
     valid_args <- args[names(args) == "" | names(args) %in% possible_args]
   }
 
-  result <- try(do.call(fun, valid_args))
+  result <- try(do.call(fun, valid_args), silent = TRUE)
 
   if (inherits(result, "try-error")) {
     msg <- conditionMessage(attr(result, "condition"))
     warning(
-      "Function execution failed, returnin NULL. Error: \n",
+      "Function execution failed, returning NULL. Error: ",
       msg
     )
     return(NULL)
   }
   return(result)
 }
+
