@@ -24,6 +24,8 @@ usethis::use_data(metrics_sample, overwrite = TRUE)
 
 metrics_quantile <- list(
   "wis" = wis,
-  "bias" = bias_quantile
+  "bias" = bias_quantile,
+  "coverage_50" = function(...) {interval_coverage_quantile(..., range = 50)},
+  "coverage_90" = function(...) {interval_coverage_quantile(..., range = 90)},
 )
 usethis::use_data(metrics_quantile, overwrite = TRUE)
