@@ -62,6 +62,27 @@ wis <- function(observed,
   }
 }
 
+#' @export
+#' @rdname wis
+dispersion <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  wis(observed, predicted, quantile, separate_results = TRUE)$dispersion
+}
+
+#' @export
+#' @rdname wis
+overprediction <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  wis(observed, predicted, quantile, separate_results = TRUE)$overprediction
+}
+
+#' @export
+#' @rdname wis
+underprediction <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  wis(observed, predicted, quantile, separate_results = TRUE)$underprediction
+}
+
 
 #' @title Interval Coverage (For Quantile-Based Forecasts)
 #' @description Check whether the observed value is within a given central
