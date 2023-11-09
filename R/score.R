@@ -295,11 +295,6 @@ score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ..
       fun <- metrics[[i]]
       matching_args <- filter_function_args(fun, args)
 
-      if ("separate_results" %in% names(matching_args) &&
-          matching_args$separate_results) {
-        metric_name <- c(metric_name, "dispersion", "underprediction", "overprediction")
-      }
-
       data[, eval(metric_name) := do.call(
         fun, c(list(observed), list(predicted), list(quantile), matching_args)
       )]
