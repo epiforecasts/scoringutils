@@ -129,6 +129,10 @@ test_that("bias_quantile() handles NA values", {
     bias_quantile(observed = 2, predicted, quantiles),
     -1
   )
+  expect_equal(
+    bias_quantile(observed = 2, predicted, quantiles, na.rm = FALSE),
+    NA_real_
+  )
 })
 
 test_that("bias_quantile() errors if no predictions", {
