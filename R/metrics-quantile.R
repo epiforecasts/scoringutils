@@ -218,6 +218,92 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 }
 
 
+#' @title Interval Coverage Deviation (For Quantile-Based Forecasts)
+#' @description Check the agreement between desired and actual interval coverage
+#' of a forecast.
+#'
+#' The function is similar to [interval_coverage_quantile()],
+#' but looks at all provided prediction intervals instead of only one. It
+#' compares nominal coverage (i.e. the desired coverage) with the actual
+#' observed coverage.
+#'
+#' A central symmetric prediction interval is defined by a lower and an
+#' upper bound formed by a pair of predictive quantiles. For example, a 50%
+#' prediction interval is formed by the 0.25 and 0.75 quantiles of the
+#' predictive distribution. Ideally, a forecaster should aim to cover about
+#' 50% of all observed values with their 50% prediction intervals, 90% of all
+#' observed values with their 90% prediction intervals, and so on.
+#'
+#' For every prediction interval, the deviation is computed as the difference
+#' between the observed coverage and the nominal coverage
+#' For a single observed value and a single prediction interval,
+#' coverage is always either 0 or 1. This is not the case for a single observed
+#' value and multiple prediction intervals, but it still doesn't make that much
+#' sense to compare nominal (desired) coverage and actual coverage for a single
+#' observation. In that sense coverage deviation only really starts to make
+#' sense as a metric when averaged across multiple observations).
+#'
+#' Positive values of coverage deviation are an indication for underconfidence,
+#' i.e. the forecaster could likely have issued a narrower forecast. Negative
+#' values are an indication for overconfidence, i.e. the forecasts were too
+#' narrow.
+#'
+#' \deqn{
+#' \textrm{coverage deviation} =
+#' \mathbf{1}(\textrm{observed value falls within interval} -
+#' \textrm{nominal coverage})
+#' }{
+#' coverage deviation =
+#' 1(observed value falls within interval) - nominal coverage
+#' }
+#' The coverage deviation is then averaged across all prediction intervals.
+#' The median is ignored when computing coverage deviation.
+#' @inheritParams wis
+#' @return A numeric vector of length n with the coverage deviation for each
+#' forecast (comprising one or multiple prediction intervals).
+#' @export
+#' @examples
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'    c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage_deviation_quantile(observed, predicted, quantile)
+interval_coverage_deviation_quantile <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+
+  # transform available quantiles into central interval ranges
+  boundary <- ifelse(quantile <= 0.5, "lower", "upper")
+  available_ranges <- ifelse(
+    boundary == "lower",
+    (1 - 2 * quantile) * 100,
+    (2 * quantile - 1) * 100
+  )
+  available_ranges <- unique(available_ranges)
+  necessary_quantiles <- unique(c(
+    (100 - available_ranges) / 2,
+    100 - (100 - available_ranges) / 2) / 100
+  )
+  if (!all(necessary_quantiles %in% quantile)) {
+    warning(
+      "To compute coverage deviation, all quantiles must belong to central ",
+      "symmetric prediction intervals. Returnting `NA`.")
+    return(NA)
+  }
+
+  reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
+  reformatted[, coverage := ifelse(
+    observed >= lower & observed <= upper, TRUE, FALSE
+  )]
+  reformatted[, coverage_deviation := coverage - range / 100]
+  out <- reformatted[, .(coverage_deviation = mean(coverage_deviation)),
+                     by = c("forecast_id")]
+  return(out$coverage_deviation)
+}
+
+
 #' @title Determines Bias of Quantile Forecasts
 #'
 #' @description
