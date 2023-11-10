@@ -20,10 +20,11 @@ vector with the scoring values
 Squared error of the mean calculated as
 
 \deqn{
-  \textrm{mean}(\textrm{observed} - \textrm{prediction})^2
+  \textrm{mean}(\textrm{observed} - \textrm{mean prediction})^2
 }{
-  mean(observed - mean_prediction)^2
+  mean(observed - mean prediction)^2
 }
+The mean prediction is calculated as the mean of the predictive samples.
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
