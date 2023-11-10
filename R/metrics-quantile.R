@@ -275,21 +275,19 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
   assert_input_quantile(observed, predicted, quantile)
 
   # transform available quantiles into central interval ranges
-  boundary <- ifelse(quantile <= 0.5, "lower", "upper")
-  available_ranges <- ifelse(
-    boundary == "lower",
-    (1 - 2 * quantile) * 100,
-    (2 * quantile - 1) * 100
-  )
-  available_ranges <- unique(available_ranges)
+  available_ranges <- unique(get_range_from_quantile(quantile))
+
+  # check if all necessary quantiles are available
   necessary_quantiles <- unique(c(
     (100 - available_ranges) / 2,
     100 - (100 - available_ranges) / 2) / 100
   )
   if (!all(necessary_quantiles %in% quantile)) {
+    missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
     warning(
-      "To compute coverage deviation, all quantiles must belong to central ",
-      "symmetric prediction intervals. Returnting `NA`.")
+      "To compute coverage deviation, all quantiles must form central ",
+      "symmetric prediction intervals. Missing quantiles: ",
+      toString(missing), ". Returning `NA`.")
     return(NA)
   }
 
