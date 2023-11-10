@@ -5,7 +5,7 @@
 \alias{metrics_quantile}
 \title{Default metrics for quantile-based forecasts.}
 \format{
-An object of class \code{list} of length 7.
+An object of class \code{list} of length 8.
 }
 \usage{
 metrics_quantile
