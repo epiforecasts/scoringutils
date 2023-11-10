@@ -7,9 +7,14 @@
 interval_coverage_deviation_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{numeric vector of size n with the observed values}
 
-\item{predicted}{vector of size n with the predicted values}
+\item{predicted}{numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
 \item{quantile}{vector with quantile levels of size N}
 }
