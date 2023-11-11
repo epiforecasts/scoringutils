@@ -644,7 +644,7 @@ wis_one_to_one <- function(observed,
 #' @keywords metric
 ae_median_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
-  if (!any(quantiles == 0.5)) {
+  if (!any(quantile == 0.5)) {
     warning(
       "in order to compute the absolute error of the median, `0.5` must be ",
       "among the quantiles given. Returning `NA`."
