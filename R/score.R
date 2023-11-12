@@ -248,12 +248,13 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   d_transposed <- data[, .(predicted = list(predicted[order(quantile)]),
                            observed = unique(observed),
                            quantile = list(quantile[order(quantile)]),
-                           N = length(quantile)), by = forecast_unit]
+                           scoringutils_quantile = toString(quantile[order(quantile)])),
+                       by = forecast_unit]
 
   # split according to quantile lengths and do calculations for different
   # quantile lengths separately. The function `wis()` assumes that all
   # forecasts have the same quantiles
-  d_split <- split(d_transposed, d_transposed$N)
+  d_split <- split(d_transposed, d_transposed$scoringutils_quantile)
 
   split_result <- lapply(d_split, function(data) {
     # create a matrix out of the list of predicted values and quantiles
@@ -278,6 +279,7 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   })
 
   data <- rbindlist(split_result)
+  data[, "scoringutils_quantile" := NULL]
   setattr(data, "metric_names", names(metrics))
 
   return(data[])
