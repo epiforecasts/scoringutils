@@ -113,7 +113,7 @@ score_quantile <- function(data,
   # compute absolute error of the median
   if ("ae_median" %in% metrics) {
     quantile_data[, ae_median := ae_median_quantile(
-      observed,
+      unique(observed),
       predicted,
       quantile
     ),

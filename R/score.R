@@ -233,7 +233,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
 
 #' @rdname score
 #' @export
-score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
+score.scoringutils_quantile_old <- function(data, metrics = NULL, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -261,7 +261,7 @@ score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
 
 #' @rdname score
 #' @export
-score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ...) {
+score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
