@@ -1,3 +1,6 @@
+metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
+metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
+
 test_that("wis works, median only", {
   y <- c(1, -15, 22)
   lower <- upper <- predicted_quantile <- c(1, 2, 3)
@@ -28,10 +31,11 @@ test_that("WIS works within score for median forecast", {
     model = "model1",
     date = 1:3
   )
-  eval <- scoringutils::score(test_data,
-    count_median_twice = TRUE
+  eval <- score(
+    test_data,
+    count_median_twice = TRUE, metrics = metrics_no_cov
   )
-  expect_equal(eval$ae_median, eval$interval_score)
+  expect_equal(eval$ae_median, eval$wis)
 })
 
 test_that("wis works, 1 interval only", {
@@ -70,8 +74,9 @@ test_that("WIS works within score for one interval", {
     date = rep(1:3, times = 2)
   )
 
-  eval <- suppressMessages(scoringutils::score(test_data,
-    count_median_twice = TRUE
+  eval <- suppressMessages(score(
+    test_data,
+    count_median_twice = TRUE, metrics = metrics_no_cov_no_ae
   ))
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -82,7 +87,7 @@ test_that("WIS works within score for one interval", {
 
   expected <- (upper - lower) * (alpha / 2) + c(0, 1 - (-15), 22 - 3)
 
-  expect_equal(expected, eval$interval_score)
+  expect_equal(expected, eval$wis)
 })
 
 test_that("wis works, 1 interval and median", {
@@ -94,8 +99,9 @@ test_that("wis works, 1 interval and median", {
     date = rep(1:3, times = 3)
   )
 
-  eval <- scoringutils::score(test_data,
-    count_median_twice = TRUE
+  eval <- score(
+    test_data,
+    count_median_twice = TRUE, metrics = metrics_no_cov
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -117,7 +123,7 @@ test_that("wis works, 1 interval and median", {
     count_median_twice = TRUE
   )
 
-  expect_identical(eval$interval_score, expected)
+  expect_identical(eval$wis, expected)
   expect_identical(actual_wis, expected)
 })
 
@@ -142,8 +148,9 @@ test_that("wis works, 2 intervals and median", {
     date = rep(1:3, times = 5)
   )
 
-  eval <- scoringutils::score(test_data,
-    count_median_twice = TRUE
+  eval <- score(
+    test_data,
+    count_median_twice = TRUE, metrics = metrics_no_cov
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -168,7 +175,7 @@ test_that("wis works, 2 intervals and median", {
   )
 
   expect_equal(
-    as.numeric(eval$interval_score),
+    as.numeric(eval$wis),
     as.numeric(expected)
   )
   expect_identical(actual_wis, expected)
@@ -228,8 +235,9 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::score(data_formatted,
-    count_median_twice = FALSE
+  eval <- score(
+    data_formatted,
+    count_median_twice = FALSE, metrics = metrics_no_cov
   )
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
@@ -241,7 +249,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
     count_median_twice = FALSE
   )
 
-  expect_equal(eval$interval_score, expected)
+  expect_equal(eval$wis, expected)
   expect_equal(actual_wis, expected)
 })
 
@@ -299,8 +307,8 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- suppressMessages(scoringutils::score(data_formatted,
-    count_median_twice = FALSE
+  eval <- suppressMessages(score(data_formatted,
+    count_median_twice = FALSE, metrics = metrics_no_cov_no_ae
   ))
 
   eval <- summarise_scores(eval,
@@ -321,7 +329,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
     count_median_twice = FALSE
   )
 
-  expect_equal(eval$interval_score, expected)
+  expect_equal(eval$wis, expected)
   expect_equal(actual_wis, expected)
 })
 
@@ -376,8 +384,8 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  eval <- scoringutils::score(data_formatted,
-    count_median_twice = FALSE
+  eval <- score(data_formatted,
+    count_median_twice = FALSE, metrics = metrics_no_cov
   )
 
   eval <- summarise_scores(eval,
@@ -402,7 +410,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
     count_median_twice = FALSE
   )
 
-  expect_equal(eval$interval_score, expected)
+  expect_equal(eval$wis, expected)
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
