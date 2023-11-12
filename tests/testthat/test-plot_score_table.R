@@ -1,7 +1,6 @@
 test_that("plot_score_table() works as expected", {
   p <- suppressMessages(
     scores_quantile %>%
-      add_coverage(by = c("model")) %>%
       summarise_scores(by = c("model")) %>%
       summarise_scores(by = c("model"), fun = signif, digits = 1) %>%
       plot_score_table()
