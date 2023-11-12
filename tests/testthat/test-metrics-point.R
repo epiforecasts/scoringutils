@@ -1,23 +1,20 @@
-test_that("ae_median_sample works", {
-  observed <- rnorm(30, mean = 1:30)
-  predicted_values <- rnorm(30, mean = 1:30)
-  scoringutils <- ae_median_sample(observed, matrix(predicted_values))
-  ae <- abs(observed - predicted_values)
-  expect_equal(ae, scoringutils)
-})
+# covidHubUtils-tests on absolute error ========================================
+# test are adapted from the package
+# covidHubUtils, https://github.com/reichlab/covidHubUtils/
+y <- c(1, -15, 22)
+forecast_quantiles_matrix <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
+)
+forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
-
-# covidHubUtils-tests
+target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
+horizons <- c("1", "2", "1")
+locations <- c("01", "01", "02")
+target_variables <- rep("inc death", length(y))
 
 test_that("abs error is correct within score, point forecast only", {
-  # test is adapted from the package covidHubUtils, https://github.com/reichlab/covidHubUtils/
-  y <- c(1, -15, 22)
-
-  target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
-  horizons <- c("1", "2", "1")
-  locations <- c("01", "01", "02")
-  target_variables <- rep("inc death", length(y))
-
   forecast_target_end_dates <-
     rep(target_end_dates, times = 1)
   forecast_horizons <- rep(horizons, times = 1)
@@ -71,20 +68,8 @@ test_that("abs error is correct within score, point forecast only", {
 })
 
 test_that("abs error is correct, point and median forecasts different", {
-  y <- c(1, -15, 22)
-  forecast_quantiles_matrix <- rbind(
-    c(-1, 0, 1, 2, 3),
-    c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4)
-  )
-  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[3]
-
-  target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
-  horizons <- c("1", "2", "1")
-  locations <- c("01", "01", "02")
-  target_variables <- rep("inc death", length(y))
 
   forecast_target_end_dates <-
     rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
@@ -143,20 +128,8 @@ test_that("abs error is correct, point and median forecasts different", {
 })
 
 test_that("abs error is correct, point and median forecasts same", {
-  y <- c(1, -15, 22)
-  forecast_quantiles_matrix <- rbind(
-    c(-1, 0, 1, 2, 3),
-    c(-2, 1, 2, 2, 4),
-    c(-2, 0, 3, 3, 4)
-  )
-  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[3]
-
-  target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
-  horizons <- c("1", "2", "1")
-  locations <- c("01", "01", "02")
-  target_variables <- rep("inc death", length(y))
 
   forecast_target_end_dates <-
     rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
@@ -194,7 +167,6 @@ test_that("abs error is correct, point and median forecasts same", {
     stringsAsFactors = FALSE
   )
 
-
   # bring in scoringutils format
   truth_scoringutils <- data.table::as.data.table(test_truth)
   fc_scoringutils <- data.table::as.data.table(test_forecasts)
@@ -219,7 +191,5 @@ test_that("abs error is correct, point and median forecasts same", {
   )
 
   expected <- abs(y - point_forecast)
-
-  # expect_equal(actual$abs_error, expected)
   expect_equal(eval$ae_point, expected)
 })
