@@ -638,8 +638,8 @@ wis_one_to_one <- function(observed,
 #' @importFrom stats median
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
-#' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
+#' ae_median_quantile(observed, predicted_values, quantile = 0.5)
 #' @export
 #' @keywords metric
 ae_median_quantile <- function(observed, predicted, quantile) {

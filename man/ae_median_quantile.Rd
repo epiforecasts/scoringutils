@@ -34,8 +34,8 @@ the function therefore requires 0.5 to be among the quantile levels in
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
-predicted_values <- rnorm(30, mean = 1:30)
-ae_median_quantile(observed, predicted_values, quantiles = 0.5)
+predicted_values <- matrix(rnorm(30, mean = 1:30))
+ae_median_quantile(observed, predicted_values, quantile = 0.5)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=abs_error]{abs_error()}}
