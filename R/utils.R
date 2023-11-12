@@ -5,7 +5,8 @@
 #' @keywords info
 
 available_metrics <- function() {
-  return(unique(scoringutils::metrics$Name))
+  return(unique(c(scoringutils::metrics$Name,
+                  "wis", "coverage_50", "coverage_90")))
 }
 
 
