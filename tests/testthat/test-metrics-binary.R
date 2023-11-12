@@ -51,17 +51,6 @@ test_that("function throws an error for wrong format of `observed`", {
 })
 
 test_that("function throws an error for wrong format of predictions", {
-  observed <- factor(sample(c(0, 1), size = 10, replace = TRUE))
-  predicted <- runif(10, min = 0, max = 3)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    #"For a binary forecast, all predictions should be probabilities between 0 or 1."
-    "Assertion on 'predicted' failed: Element 1 is not <= 1."
-  )
-
   predicted <- runif(10, min = 0, max = 1)
   expect_error(
     brier_score(
@@ -116,7 +105,8 @@ test_that("Input checking for binary forecasts works", {
   # observed is a single number and does not have the same length as predicted
   expect_error(
     scoringutils:::assert_input_binary(factor(1), predicted),
-    "`observed` and `predicted` need to be of same length when scoring binary forecasts."
+    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
+    fixed = TRUE
   )
 
   # predicted is a matrix

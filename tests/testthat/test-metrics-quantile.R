@@ -1,3 +1,6 @@
+metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
+metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
+
 test_that("wis works standalone, median only", {
   y <- c(1, -15, 22)
   lower <- upper <- predicted_quantile <- c(1, 2, 3)
@@ -19,9 +22,6 @@ test_that("wis works standalone, median only", {
 
   expect_identical(actual, expected)
 })
-
-metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
-metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
 
 test_that("`wis()` works within score for median forecast", {
   test_data <- data.frame(
@@ -76,7 +76,7 @@ test_that("wis() works within score for one interval", {
 
   eval <- score(
     test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov_no_ae
+    count_median_twice = TRUE, metrics = list(wis = wis)
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
