@@ -1,9 +1,7 @@
-test_that("absolute error (sample based) works", {
+test_that("ae_median_sample works", {
   observed <- rnorm(30, mean = 1:30)
   predicted_values <- rnorm(30, mean = 1:30)
-
-  scoringutils <- ae_median_sample(observed, predicted_values)
-
+  scoringutils <- ae_median_sample(observed, matrix(predicted_values))
   ae <- abs(observed - predicted_values)
   expect_equal(ae, scoringutils)
 })
