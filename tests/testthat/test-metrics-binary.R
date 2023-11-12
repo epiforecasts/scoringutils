@@ -49,8 +49,6 @@ test_that("Input checking for binary forecasts works", {
     scoringutils:::assert_input_binary(observed, matrix(predicted)),
     "Assertion on 'predicted' failed: Must be of type 'atomic vector', not 'matrix'."
   )
-  # Note: maybe we should allow
-  # 1) observed to be a vector and 2) predicted to be a matrix for consistency
 })
 
 test_that("Binary metrics work within and outside of `score()`", {
