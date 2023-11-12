@@ -6,7 +6,6 @@
 \alias{score.scoringutils_binary}
 \alias{score.scoringutils_point}
 \alias{score.scoringutils_sample}
-\alias{score.scoringutils_quantile_old}
 \alias{score.scoringutils_quantile}
 \title{Evaluate forecasts in a data.frame format}
 \usage{
@@ -19,8 +18,6 @@ score(data, ...)
 \method{score}{scoringutils_point}(data, metrics = metrics_point, ...)
 
 \method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
-
-\method{score}{scoringutils_quantile_old}(data, metrics = NULL, ...)
 
 \method{score}{scoringutils_quantile}(data, metrics = metrics_quantile, ...)
 }

@@ -231,34 +231,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   return(data[])
 }
 
-#' @rdname score
-#' @export
-score.scoringutils_quantile_old <- function(data, metrics = NULL, ...) {
-  data <- validate(data)
-  data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
-
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-  metrics <- metrics[metrics %in% available_metrics()]
-  scores <- score_quantile(
-    data = data,
-    forecast_unit = forecast_unit,
-    metrics = metrics,
-    ...
-  )
-
-  setattr(scores, "metric_names", metrics[metrics %in% colnames(scores)])
-  # manual hack to make sure that the correct attributes are there.
-  setattr(scores, "forecast_unit", forecast_unit)
-  setattr(scores, "forecast_type", "quantile")
-  scores <- new_scoringutils(scores, "scoringutils_quantile")
-
-  return(scores[])
-}
-
-
+#' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
 score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
