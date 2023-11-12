@@ -261,7 +261,7 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
     observed <- data$observed
     predicted <- do.call(rbind, data$predicted)
     quantile <- unlist(unique(data$quantile))
-    data[, c("observed", "predicted", "quantile", "N") := NULL]
+    data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
 
     # for each metric, compute score
     lapply(seq_along(metrics), function(i, ...) {
@@ -279,7 +279,6 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   })
 
   data <- rbindlist(split_result)
-  data[, "scoringutils_quantile" := NULL]
   setattr(data, "metric_names", names(metrics))
 
   return(data[])
