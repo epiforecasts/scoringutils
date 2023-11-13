@@ -48,7 +48,6 @@
 add_coverage <- function(data) {
   stored_attributes <- get_scoringutils_attributes(data)
   data <- validate(data)
-  data <- remove_na_observed_predicted(data)
   forecast_unit <- get_forecast_unit(data)
   data_cols <- colnames(data) # store so we can reset column order later
 
