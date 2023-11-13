@@ -1,5 +1,3 @@
-metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
-metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
 observed <- c(1, -15, 22)
 predicted <- rbind(
   c(-1, 0, 1, 2, 3),

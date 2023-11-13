@@ -91,8 +91,8 @@ Forecasts can be easily and quickly scored using the `score()` function. `score(
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
   validate() %>%
+  add_coverage() %>%
   score() %>%
-  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
     by = c("model", "target_type")
   ) %>%
