@@ -1,3 +1,59 @@
+# Input handling ===============================================================
+observed <- c(1, -15, 22)
+predicted <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+   c(-2, 0, 3, 3, 4)
+)
+quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+
+test_that("Input checking for quantile forecasts works", {
+  # everything correct
+  expect_no_condition(
+    scoringutils:::assert_input_quantile(observed, predicted, quantile)
+  )
+
+  # quantile > 1
+  expect_error(
+    scoringutils:::assert_input_quantile(observed, predicted, quantile + 1),
+    "Assertion on 'quantile' failed: Element 1 is not <= 1."
+  )
+
+  # quantile < 0
+  expect_error(
+    scoringutils:::assert_input_quantile(observed, predicted, quantile - 1),
+    "Assertion on 'quantile' failed: Element 1 is not >= 0."
+  )
+
+  # 10 observations, but only 3 forecasts
+  expect_error(
+    scoringutils:::assert_input_quantile(1:10, predicted, quantile),
+    "Assertion on 'predicted' failed: Must have exactly 10 rows, but has 3 rows."
+  )
+
+  # observed value is a factor
+  expect_error(
+    scoringutils:::assert_input_quantile(factor(1:10), predicted, quantile),
+    "Assertion on 'observed' failed: Must be of type 'numeric', not 'factor'."
+  )
+
+  # observed is a single number and does not have the same length as predicted
+  expect_error(
+    scoringutils:::assert_input_quantile(1, predicted, quantile),
+    "Assertion failed. One of the following must apply:
+ * check_numeric_vector(predicted): Must be of type 'atomic vector', not 'matrix'
+ * check_matrix(predicted): Must have exactly 1 rows, but has 3 rows",
+    fixed = TRUE
+  )
+
+  # predicted is a vector
+  expect_error(
+    scoringutils:::assert_input_quantile(observed, as.vector(predicted), quantile),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
+  )
+})
+
+
 metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
 metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
 
