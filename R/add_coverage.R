@@ -68,10 +68,16 @@ add_coverage <- function(data) {
   data[, quantile_coverage_deviation := quantile_coverage - quantile]
 
   # reset column order
-  setcolorder(data, unique(c(data_cols, "range", "interval_coverage",
-                             "interval_coverage_deviation", "quantile_coverage",
-                             "quantile_coverage_deviation")))
+  new_metrics <- c("interval_coverage", "interval_coverage_deviation",
+                   "quantile_coverage", "quantile_coverage_deviation")
+  setcolorder(data, unique(c(data_cols, "range", new_metrics)))
 
+  # add coverage "metrics" to list of stored metrics
+  # this makes it possible to use `summarise_scores()` later on
+  stored_attributes[["metric_names"]] <- c(
+    stored_attributes[["metric_names"]],
+    new_metrics
+  )
   data <- assign_attributes(data, stored_attributes)
   return(data[])
 }
