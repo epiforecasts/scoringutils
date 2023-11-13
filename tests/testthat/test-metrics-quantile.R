@@ -1,12 +1,26 @@
-# Input handling ===============================================================
+metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
+metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
 observed <- c(1, -15, 22)
 predicted <- rbind(
   c(-1, 0, 1, 2, 3),
   c(-2, 1, 2, 2, 4),
-   c(-2, 0, 3, 3, 4)
+  c(-2, 0, 3, 3, 4)
 )
 quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
+# covidHubUtils test:
+y <- c(1, -15, 22)
+forecast_quantiles_matrix <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
+)
+forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+
+
+# ============================================================================ #
+# Input handling ===============================================================
+# ============================================================================ #
 test_that("Input checking for quantile forecasts works", {
   # everything correct
   expect_no_condition(
@@ -38,11 +52,12 @@ test_that("Input checking for quantile forecasts works", {
   )
 
   # observed is a single number and does not have the same length as predicted
+  # There seems to be an issue with the error message: there is one \n to many
+  # such that the test fails when executed alone, but works when executed
+  # together with others.
   expect_error(
     scoringutils:::assert_input_quantile(1, predicted, quantile),
-    "Assertion failed. One of the following must apply:
- * check_numeric_vector(predicted): Must be of type 'atomic vector', not 'matrix'
- * check_matrix(predicted): Must have exactly 1 rows, but has 3 rows",
+    "Assertion failed. One of the following must apply:\n * check_numeric_vector(predicted): Must be of type 'atomic vector',\n * not 'matrix'\n * check_matrix(predicted): Must have exactly 1 rows, but has 3 rows",
     fixed = TRUE
   )
 
@@ -54,9 +69,9 @@ test_that("Input checking for quantile forecasts works", {
 })
 
 
-metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
-metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
-
+# ============================================================================ #
+# wis ==========================================================================
+# ============================================================================ #a
 test_that("wis works standalone, median only", {
   y <- c(1, -15, 22)
   lower <- upper <- predicted_quantile <- c(1, 2, 3)
@@ -183,15 +198,6 @@ test_that("`wis()` works 1 interval and median", {
   expect_identical(actual_wis, expected)
 })
 
-# covidHubUtils test:
-y <- c(1, -15, 22)
-forecast_quantiles_matrix <- rbind(
-  c(-1, 0, 1, 2, 3),
-  c(-2, 1, 2, 2, 4),
-  c(-2, 0, 3, 3, 4)
-)
-forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-
 test_that("wis works, 2 intervals and median", {
   test_data <- data.frame(
     observed = rep(c(1, -15, 22), times = 5),
@@ -309,7 +315,6 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   expect_equal(actual_wis, expected)
 })
 
-
 test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils", {
   forecast_quantiles_matrix <- forecast_quantiles_matrix[, c(1, 5), drop = FALSE]
   forecast_quantile_probs <- forecast_quantile_probs[c(1, 5)]
@@ -388,7 +393,6 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   expect_equal(eval$wis, expected)
   expect_equal(actual_wis, expected)
 })
-
 
 test_that("wis is correct, 2 intervals and median - test corresponds to covidHubUtils", {
   target_end_dates <- as.Date("2020-01-01") + c(7, 14, 7)
@@ -509,6 +513,10 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
   }
 })
 
+
+# ============================================================================ #
+# Quantile score ============================================================= #
+# ============================================================================ #
 test_that("Quantlie score and interval score yield the same result, weigh = TRUE", {
   observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
@@ -560,7 +568,63 @@ test_that("wis works with separate results", {
 })
 
 
+# ============================================================================ #
+# overprediction, underprediction, dispersion ================================ #
+# ============================================================================ #
+test_that("wis is the sum of overprediction, underprediction, dispersion", {
+  wis <- wis(
+    observed = y,
+    predicted = forecast_quantiles_matrix,
+    quantile = forecast_quantile_probs
+  )
+
+  d <- dispersion(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  o <- overprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  u <- underprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
+
+  expect_equal(wis, d + o + u)
+})
+
+
+# ============================================================================ #
+# `interval_coverage_quantile` =============================================== #
+# ============================================================================ #
+test_that("interval_coverage_quantile works", {
+  expect_equal(
+    interval_coverage_quantile(observed, predicted, quantile, range = 50),
+    c(TRUE, FALSE, FALSE)
+  )
+})
+
+test_that("interval_coverage_quantile rejects wrong inputs", {
+  expect_error(
+    interval_coverage_quantile(observed, predicted, quantile, range = c(50, 0)),
+    "Assertion on 'range' failed: Must have length 1."
+  )
+})
+
+
+# ============================================================================ #
+# `interval_coverage_deviation_quantile` ===================================== #
+# ============================================================================ #
+test_that("interval_coverage_deviation_quantile works", {
+  existing_ranges <- unique(get_range_from_quantile(quantile))
+  expect_equal(existing_ranges, c(80, 50, 0))
+
+  cov_50 <- interval_coverage_quantile(observed, predicted, quantile, range = c(50))
+  cov_80 <- interval_coverage_quantile(observed, predicted, quantile, range = c(80))
+  manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
+
+  expect_equal(
+    interval_coverage_deviation_quantile(observed, predicted, quantile),
+    manual
+  )
+})
+
+
+# ============================================================================ #
 # `bias_quantile` ==============================================================
+# ============================================================================ #
 test_that("bias_quantile() works as expected", {
   predicted <- c(1, 2, 3)
   quantiles <- c(0.1, 0.5, 0.9)
