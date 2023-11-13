@@ -454,6 +454,45 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 }
 
 
+#' @title Absolute Error of the Median (Quantile-based Version)
+#' @description
+#' Compute the absolute error of the median calculated as
+#' \deqn{
+#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
+#' }{
+#'   abs(observed - median_prediction)
+#' }
+#' The median prediction is the predicted value for which quantile == 0.5,
+#' the function therefore requires 0.5 to be among the quantile levels in
+#' `quantile`.
+#' @inheritParams wis
+#' @return numeric vector of length N with the absolute error of the median
+#' @seealso [ae_median_sample()], [abs_error()]
+#' @importFrom stats median
+#' @examples
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
+#' ae_median_quantile(observed, predicted_values, quantile = 0.5)
+#' @export
+#' @keywords metric
+ae_median_quantile <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  if (!any(quantile == 0.5)) {
+    warning(
+      "in order to compute the absolute error of the median, `0.5` must be ",
+      "among the quantiles given. Returning `NA`."
+    )
+    return(NA_real_)
+  }
+  if (is.null(dim(predicted))) {
+    predicted <- matrix(predicted, nrow = 1)
+  }
+  predicted <- predicted[, quantile == 0.5]
+  abs_error_median <- abs(observed - predicted)
+  return(abs_error_median)
+}
+
+
 ################################################################################
 # Metrics with a one-to-one relationship between input and score
 ################################################################################
@@ -618,43 +657,4 @@ wis_one_to_one <- function(observed,
       return(wis)
     }
   }
-}
-
-
-#' @title Absolute Error of the Median (Quantile-based Version)
-#' @description
-#' Compute the absolute error of the median calculated as
-#' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
-#' }{
-#'   abs(observed - median_prediction)
-#' }
-#' The median prediction is the predicted value for which quantile == 0.5,
-#' the function therefore requires 0.5 to be among the quantile levels in
-#' `quantile`.
-#' @inheritParams wis
-#' @return numeric vector of length N with the absolute error of the median
-#' @seealso [ae_median_sample()], [abs_error()]
-#' @importFrom stats median
-#' @examples
-#' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- matrix(rnorm(30, mean = 1:30))
-#' ae_median_quantile(observed, predicted_values, quantile = 0.5)
-#' @export
-#' @keywords metric
-ae_median_quantile <- function(observed, predicted, quantile) {
-  assert_input_quantile(observed, predicted, quantile)
-  if (!any(quantile == 0.5)) {
-    warning(
-      "in order to compute the absolute error of the median, `0.5` must be ",
-      "among the quantiles given. Returning `NA`."
-    )
-    return(NA_real_)
-  }
-  if (is.null(dim(predicted))) {
-    predicted <- matrix(predicted, nrow = 1)
-  }
-  predicted <- predicted[, quantile == 0.5]
-  abs_error_median <- abs(observed - predicted)
-  return(abs_error_median)
 }
