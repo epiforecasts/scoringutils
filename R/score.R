@@ -263,18 +263,21 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
     quantile <- unlist(unique(data$quantile))
     data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
 
-    # for each metric, compute score
-    lapply(seq_along(metrics), function(i, ...) {
-      metric_name <- names(metrics[i])
-      fun <- metrics[[i]]
-      matching_args <- filter_function_args(fun, args)
-
-      data[, eval(metric_name) := do.call(
-        fun, c(list(observed), list(predicted), list(quantile), matching_args)
+    expr <- expression(
+      data[, (metric_name) := do.call(
+        fun, c(list(args$internal_first_arg,
+                    args$internal_second_arg,
+                    args$interal_third_arg),
+               matching_args)
       )]
-      return()
-    },
-    ...)
+    )
+
+    data <- apply_metrics(
+      data, metrics, expr,
+      internal_first_arg = observed,
+      internal_second_arg = predicted,
+      interal_third_arg = quantile,
+      ...)
     return(data)
   })
 
@@ -283,3 +286,20 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
 
   return(data[])
 }
+
+apply_metrics <- function(data, metrics, expr, ...) {
+  args <- list(...)
+  lapply(seq_along(metrics), function(i, data, args) {
+
+    metric_name <- names(metrics[i])
+    fun <- metrics[[i]]
+    matching_args <- filter_function_args(fun, args)
+
+    eval(expr)
+
+  }, data, args)
+  return(data)
+}
+
+
+
