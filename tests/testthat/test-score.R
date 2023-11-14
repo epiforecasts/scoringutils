@@ -168,17 +168,13 @@ test_that("score.scoringutils_point() errors with only NA values", {
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"]
-  eval <- suppressMessages(
-    score(
-      df[!is.na(predicted)],
-      separate_results = FALSE
-    )
-  )
+  eval <- score(df[!is.na(predicted)], separate_results = FALSE)
 
   expect_equal(
     nrow(eval) > 1,
     TRUE
   )
+  expect_true(all(names(metrics_quantile) %in% colnames(eval)))
 })
 
 
