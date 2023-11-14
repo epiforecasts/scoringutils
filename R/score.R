@@ -152,14 +152,9 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  expr <- expression(
-    data[, (metric_name) := do.call(
-      run_safely, list(observed, predicted, ..., fun = fun)
-    )]
-  )
   data <- apply_metrics(
-    data, metrics, expr,
-    ...
+    data, metrics,
+    data$observed, data$predicted, ...
   )
 
   setattr(data, "metric_names", names(metrics))
@@ -177,14 +172,9 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  expr <- expression(
-    data[, (metric_name) := do.call(
-      run_safely, list(observed, predicted, ..., fun = fun)
-    )]
-  )
   data <- apply_metrics(
-    data, metrics, expr,
-    ...
+    data, metrics,
+    data$observed, data$predicted, ...
   )
 
   setattr(data, "metric_names", names(metrics))
@@ -216,16 +206,13 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
     predicted <- do.call(rbind, data$predicted)
     data[, c("observed", "predicted", "scoringutils_N") := NULL]
 
-    expr <- expression(
-      data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
-    )
     data <- apply_metrics(
-      data, metrics, expr,
+      data, metrics,
       observed, predicted, ...
     )
     return(data)
   })
-
+  data <- rbindlist(split_result)
   setattr(data, "metric_names", names(metrics))
 
   return(data[])
@@ -260,11 +247,8 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
     quantile <- unlist(unique(data$quantile))
     data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
 
-    expr <- expression(
-      data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
-    )
     data <- apply_metrics(
-      data, metrics, expr,
+      data, metrics,
       observed, predicted, quantile, ...
     )
     return(data)
@@ -276,7 +260,10 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   return(data[])
 }
 
-apply_metrics <- function(data, metrics, expr, ...) {
+apply_metrics <- function(data, metrics, ...) {
+  expr <- expression(
+    data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
+  )
   lapply(seq_along(metrics), function(i, data, ...) {
     metric_name <- names(metrics[i])
     fun <- metrics[[i]]
