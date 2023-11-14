@@ -101,12 +101,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-  if (!is.data.table(data)) {
-    data <- data.table::as.data.table(data)
-  } else {
-    data <- copy(data)
-  }
-
+  data <- ensure_data.table(data)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
@@ -208,12 +203,7 @@ quantile_to_interval.data.frame <- function(dt,
                                             format = "long",
                                             keep_quantile_col = FALSE,
                                             ...) {
-  if (!is.data.table(dt)) {
-    dt <- data.table::as.data.table(dt)
-  } else {
-    # use copy to avoid
-    dt <- copy(dt)
-  }
+  dt <- ensure_data.table(dt)
 
   dt[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
   dt[, range := get_range_from_quantile(quantile)]
