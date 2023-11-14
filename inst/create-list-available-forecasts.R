@@ -28,8 +28,8 @@ metrics_quantile <- list(
   "underprediction" = underprediction,
   "dispersion" = dispersion,
   "bias" = bias_quantile,
-  "coverage_50" = \(...) {run_safely(..., range = 50, fun = interval_coverage_quantile)},
-  "coverage_90" = \(...) {run_safely(..., range = 90, fun = interval_coverage_quantile)},
+  "coverage_50" = \(...) {do.call(interval_coverage_quantile, c(list(...), range = 50))},
+  "coverage_90" = \(...) {do.call(interval_coverage_quantile, c(list(...), range = 90))},
   "coverage_deviation" = interval_coverage_deviation_quantile,
   "ae_median" = ae_median_quantile
 )

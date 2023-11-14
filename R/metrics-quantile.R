@@ -91,6 +91,7 @@
 #' @param count_median_twice if TRUE, count the median twice in the score
 #' @param na.rm if TRUE, ignore NA values when computing the score
 #' @importFrom stats weighted.mean
+#' @importFrom checkmate assert_logical
 #' @return
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
@@ -104,6 +105,11 @@ wis <- function(observed,
                 na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile)
   reformatted <- quantile_to_interval(observed, predicted, quantile)
+
+  assert_logical(separate_results, len = 1)
+  assert_logical(weigh, len = 1)
+  assert_logical(count_median_twice, len = 1)
+  assert_logical(na.rm, len = 1)
 
   if (separate_results) {
     cols <- c("wis", "dispersion", "underprediction", "overprediction")
