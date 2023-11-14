@@ -152,18 +152,15 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
+  expr <- expression(
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args)
+      run_safely, list(observed, predicted, ..., fun = fun)
     )]
-    return()
-  }, ...)
+  )
+  data <- apply_metrics(
+    data, metrics, expr,
+    ...
+  )
 
   setattr(data, "metric_names", names(metrics))
 
@@ -180,18 +177,15 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
+  expr <- expression(
     data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args)
+      run_safely, list(observed, predicted, ..., fun = fun)
     )]
-    return()
-  }, ...)
+  )
+  data <- apply_metrics(
+    data, metrics, expr,
+    ...
+  )
 
   setattr(data, "metric_names", names(metrics))
 
@@ -206,19 +200,15 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
+  expr <- expression(
     data[, (metric_name) := do.call(
-      fun, c(list(unique(observed), t(predicted)), matching_args)
+      run_safely, list(observed, predicted, ..., fun = fun)
     ), by = forecast_unit]
-    return()
-  },
-  ...)
+  )
+  data <- apply_metrics(
+    data, metrics, expr,
+    ...
+  )
 
   data <- data[
     , lapply(.SD, unique),
@@ -264,20 +254,12 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
     data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
 
     expr <- expression(
-      data[, (metric_name) := do.call(
-        fun, c(list(args$internal_first_arg,
-                    args$internal_second_arg,
-                    args$interal_third_arg),
-               matching_args)
-      )]
+      data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
     )
-
     data <- apply_metrics(
       data, metrics, expr,
-      internal_first_arg = observed,
-      internal_second_arg = predicted,
-      interal_third_arg = quantile,
-      ...)
+      observed, predicted, quantile, ...
+    )
     return(data)
   })
 
@@ -288,16 +270,11 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
 }
 
 apply_metrics <- function(data, metrics, expr, ...) {
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, data, args) {
-
+  lapply(seq_along(metrics), function(i, data, ...) {
     metric_name <- names(metrics[i])
     fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
     eval(expr)
-
-  }, data, args)
+  }, data, ...)
   return(data)
 }
 
