@@ -304,7 +304,7 @@ check_columns_present <- function(data, columns) {
     }
   }
   missing <- unlist(missing)
-  if (length(missing > 1)) {
+  if (length(missing) > 1) {
     msg <- paste0(
       "Columns '", paste(missing, collapse = "', '"), "' not found in data"
     )
