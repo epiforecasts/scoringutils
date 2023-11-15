@@ -1,5 +1,6 @@
 # load common required test packages
 library(ggplot2, quietly = TRUE)
+library(data.table)
 suppressMessages(library(magrittr))
 
 # compute quantile scores
