@@ -1,6 +1,3 @@
-metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
-metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
-
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))

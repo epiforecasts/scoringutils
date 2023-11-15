@@ -613,7 +613,7 @@ plot_interval_coverage <- function(scores,
       colour = "grey",
       linetype = "dashed"
     ) +
-    geom_line(aes(y = coverage * 100)) +
+    geom_line(aes(y = interval_coverage * 100)) +
     theme_scoringutils() +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +

@@ -399,8 +399,7 @@ example_integer %>%
   sample_to_quantile(
     quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
-  score() # %>%
-  # add_coverage(by = c("model", "target_type"))
+  score()
 ```
 
 ## Available metrics
