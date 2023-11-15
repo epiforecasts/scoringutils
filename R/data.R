@@ -217,5 +217,7 @@
 #' A named list with functions:
 #' - "wis" = [wis()]
 #' - "bias" = [bias_quantile()]
+#' - "coverage_50" = \(...) {run_safely(..., range = 50, fun = interval_coverage_quantile)} #nolint
+#' - "coverage_90" = \(...) {run_safely(..., range = 90, fun = interval_coverage_quantile)} #nolint
 #' @keywords info
-"metrics_sample"
+"metrics_quantile"

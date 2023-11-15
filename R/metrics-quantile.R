@@ -149,6 +149,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_range
+#' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
@@ -167,69 +168,84 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' bias_quantile(observed, predicted, quantile)
 #' @export
 #' @keywords metric
-
-bias_quantile <- function(observed, predicted, quantile) {
-
+bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile)
-
   n <- length(observed)
   N <- length(quantile)
-
-  dt <- data.table(
-    forecast_id = rep(1:n, each = N),
-    observed = rep(observed, each = N),
-    predicted = as.vector(t(predicted)),
-    quantile = quantile
-  )[order(forecast_id, quantile)]
-
-  dt <- dt[, .(bias = bias_quantile_single(.SD)),   by = forecast_id]
-
-  return(dt$bias)
+  if (is.null(dim(predicted))) {
+    dim(predicted) <- c(n, N)
+  }
+  bias <- sapply(1:n, function(i) {
+    bias_quantile_single_vector(observed[i], predicted[i,], quantile, na.rm)
+  })
+  return(bias)
 }
 
 
-bias_quantile_single <- function(dt) {
+#' Compute Bias for a Single Vector of Quantile Predictions
+#' @description Internal function to compute bias for a single observed value,
+#' a vector of predicted values and a vector of quantiles.
+#' @param observed scalar with the observed value
+#' @param predicted vector of length N corresponding to the number of quantiles
+#' that holds predictions
+#' @param quantile vector of corresponding size N with the quantile levels for
+#' which predictions were made. If this does not contain the median (0.5) then
+#' the median is imputed as being the mean of the two innermost quantiles.
+#' @inheritParams bias_quantile
+#' @return scalar with the quantile bias for a single quantile prediction
+bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 
-  dt <- dt[!is.na(quantile) & !is.na(predicted)]
+  assert_number(observed)
+  # other checks should have happend before
 
-  observed <- unique(dt$observed)
+  predicted_has_NAs <- anyNA(predicted)
+  quantile_has_NAs <- anyNA(quantile)
 
-  if (nrow(dt) == 0) {
-    return(NA_real_)
+  if(any(predicted_has_NAs, quantile_has_NAs)) {
+    if (!na.rm) {
+      return(NA_real_)
+    } else {
+      quantile <- quantile[!is.na(predicted)]
+      predicted <- predicted[!is.na(predicted)]
+      predicted <- predicted[!is.na(quantile)]
+      quantile <- quantile[!is.na(quantile)]
+    }
   }
 
-  if (!all(diff(dt$predicted) >= 0)) {
+  order <- order(quantile)
+  predicted <- predicted[order]
+  if (!all(diff(predicted) >= 0)) {
     stop("Predictions must not be decreasing with increasing quantile level")
   }
 
-  if (0.5 %in% dt$quantile) {
-    median_prediction <- dt[quantile == 0.5]$predicted
+  if (0.5 %in% quantile) {
+    median_prediction <- predicted[quantile == 0.5]
   } else {
-    # if median is not available, compute as mean of two innermost quantiles
+    # if median is not available, compute as mean of two innermost quantile
     message(
-      "Median not available, computing as mean of two innermost quantiles",
+      "Median not available, computing as mean of two innermost quantile",
       " in order to compute bias."
     )
     median_prediction <-
-      0.5 * dt[quantile == max(quantile[quantile < 0.5])]$predicted +
-      0.5 * dt[quantile == min(quantile[quantile > 0.5])]$predicted
+      0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
+      0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
   }
 
   if (observed == median_prediction) {
     bias <- 0
     return(bias)
   } else if (observed < median_prediction) {
-    if (observed < min(dt$predicted)) {
+    if (observed < min(predicted)) {
       bias <- 1
     } else {
-      q <- max(dt[predicted <= observed]$quantile)
+      q <- max(quantile[predicted <= observed])
       bias <- 1 - 2 * q
     }
   } else if (observed > median_prediction) {
-    if (observed > max(dt$predicted)) {
+    if (observed > max(predicted)) {
       bias <- -1
     } else {
-      q <- min(dt[predicted >= observed]$quantile)
+      q <- min(quantile[predicted >= observed])
       bias <- 1 - 2 * q
     }
   }
