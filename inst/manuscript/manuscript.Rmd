@@ -443,10 +443,8 @@ library("ggplot2")
 
 available_forecasts(data = example_integer, 
                 by = c("model", "target_type", "forecast_date")) |>
-  plot(xvar = "forecast_date", 
-       show_numbers = FALSE) + 
-  plot_avail_forecasts(x = "forecast_date", 
-                       show_numbers = FALSE) + 
+  plot(xvar = "forecast_date",
+       show_numbers = FALSE) +
   facet_wrap(~ target_type) + 
   labs(y = "Model", x = "Forecast date") 
 ```
@@ -486,7 +484,7 @@ Using the `metrics` argument, we can control which metrics to compute. The above
 
 ```{r}
 example_quantile[horizon == 2] |>
-score(metrics = "interval_score") |>
+  score(metrics = list("wis" = wis)) |>
   summarise_scores(by = c("model", "target_type"))
 ```
 
