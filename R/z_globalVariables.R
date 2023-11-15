@@ -62,6 +62,7 @@ globalVariables(c(
   "rel_to_baseline",
   "relative_skill",
   "rn",
+  "sample_id",
   "scoringutils_InternalDuplicateCheck",
   "scoringutils_InternalNumCheck",
   "se_mean",
