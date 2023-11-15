@@ -80,14 +80,21 @@
 #' `overprediction`, `underprediction`, and `dispersion.`
 #'
 #' @inheritParams interval_score
-#' @param predicted vector of size n with the predicted values
+#' @param observed numeric vector of size n with the observed values
+#' @param predicted numeric nxN matrix of predictive
+#' quantiles, n (number of rows) being the number of forecasts (corresponding
+#' to the number of observed values) and N
+#' (number of columns) the number of quantiles per forecast.
+#' If `observed` is just a single number, then predicted can just be a
+#' vector of size N.
 #' @param quantile vector with quantile levels of size N
 #' @param count_median_twice if TRUE, count the median twice in the score
 #' @param na.rm if TRUE, ignore NA values when computing the score
 #' @importFrom stats weighted.mean
+#' @importFrom checkmate assert_logical
 #' @return
-#' `wis()`: a numeric vector with WIS values (one per observation), or a list
-#' with separate entries if `separate_results` is `TRUE`.
+#' `wis()`: a numeric vector with WIS values of size n (one per observation),
+#' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
 wis <- function(observed,
                 predicted,
@@ -98,6 +105,11 @@ wis <- function(observed,
                 na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile)
   reformatted <- quantile_to_interval(observed, predicted, quantile)
+
+  assert_logical(separate_results, len = 1)
+  assert_logical(weigh, len = 1)
+  assert_logical(count_median_twice, len = 1)
+  assert_logical(na.rm, len = 1)
 
   if (separate_results) {
     cols <- c("wis", "dispersion", "underprediction", "overprediction")
@@ -213,7 +225,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   if (!all(necessary_quantiles %in% quantile)) {
     warning(
       "To compute the coverage for a range of ", range, "%, the quantiles ",
-      necessary_quantiles, " are required. Returnting `NA`.")
+      necessary_quantiles, " are required. Returning `NA`.")
     return(NA)
   }
   r <- range
@@ -223,6 +235,90 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
     observed >= lower & observed <= upper, TRUE, FALSE
   )]
   return(reformatted$coverage)
+}
+
+
+#' @title Interval Coverage Deviation (For Quantile-Based Forecasts)
+#' @description Check the agreement between desired and actual interval coverage
+#' of a forecast.
+#'
+#' The function is similar to [interval_coverage_quantile()],
+#' but looks at all provided prediction intervals instead of only one. It
+#' compares nominal coverage (i.e. the desired coverage) with the actual
+#' observed coverage.
+#'
+#' A central symmetric prediction interval is defined by a lower and an
+#' upper bound formed by a pair of predictive quantiles. For example, a 50%
+#' prediction interval is formed by the 0.25 and 0.75 quantiles of the
+#' predictive distribution. Ideally, a forecaster should aim to cover about
+#' 50% of all observed values with their 50% prediction intervals, 90% of all
+#' observed values with their 90% prediction intervals, and so on.
+#'
+#' For every prediction interval, the deviation is computed as the difference
+#' between the observed coverage and the nominal coverage
+#' For a single observed value and a single prediction interval,
+#' coverage is always either 0 or 1. This is not the case for a single observed
+#' value and multiple prediction intervals, but it still doesn't make that much
+#' sense to compare nominal (desired) coverage and actual coverage for a single
+#' observation. In that sense coverage deviation only really starts to make
+#' sense as a metric when averaged across multiple observations).
+#'
+#' Positive values of coverage deviation are an indication for underconfidence,
+#' i.e. the forecaster could likely have issued a narrower forecast. Negative
+#' values are an indication for overconfidence, i.e. the forecasts were too
+#' narrow.
+#'
+#' \deqn{
+#' \textrm{coverage deviation} =
+#' \mathbf{1}(\textrm{observed value falls within interval} -
+#' \textrm{nominal coverage})
+#' }{
+#' coverage deviation =
+#' 1(observed value falls within interval) - nominal coverage
+#' }
+#' The coverage deviation is then averaged across all prediction intervals.
+#' The median is ignored when computing coverage deviation.
+#' @inheritParams wis
+#' @return A numeric vector of length n with the coverage deviation for each
+#' forecast (comprising one or multiple prediction intervals).
+#' @export
+#' @examples
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'    c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage_deviation_quantile(observed, predicted, quantile)
+interval_coverage_deviation_quantile <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+
+  # transform available quantiles into central interval ranges
+  available_ranges <- unique(get_range_from_quantile(quantile))
+
+  # check if all necessary quantiles are available
+  necessary_quantiles <- unique(c(
+    (100 - available_ranges) / 2,
+    100 - (100 - available_ranges) / 2) / 100
+  )
+  if (!all(necessary_quantiles %in% quantile)) {
+    missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
+    warning(
+      "To compute coverage deviation, all quantiles must form central ",
+      "symmetric prediction intervals. Missing quantiles: ",
+      toString(missing), ". Returning `NA`.")
+    return(NA)
+  }
+
+  reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
+  reformatted[, coverage := ifelse(
+    observed >= lower & observed <= upper, TRUE, FALSE
+  )]
+  reformatted[, coverage_deviation := coverage - range / 100]
+  out <- reformatted[, .(coverage_deviation = mean(coverage_deviation)),
+                     by = c("forecast_id")]
+  return(out$coverage_deviation)
 }
 
 
@@ -369,6 +465,45 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
     }
   }
   return(bias)
+}
+
+
+#' @title Absolute Error of the Median (Quantile-based Version)
+#' @description
+#' Compute the absolute error of the median calculated as
+#' \deqn{
+#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
+#' }{
+#'   abs(observed - median_prediction)
+#' }
+#' The median prediction is the predicted value for which quantile == 0.5,
+#' the function therefore requires 0.5 to be among the quantile levels in
+#' `quantile`.
+#' @inheritParams wis
+#' @return numeric vector of length N with the absolute error of the median
+#' @seealso [ae_median_sample()], [abs_error()]
+#' @importFrom stats median
+#' @examples
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
+#' ae_median_quantile(observed, predicted_values, quantile = 0.5)
+#' @export
+#' @keywords metric
+ae_median_quantile <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  if (!any(quantile == 0.5)) {
+    warning(
+      "in order to compute the absolute error of the median, `0.5` must be ",
+      "among the quantiles given. Returning `NA`."
+    )
+    return(NA_real_)
+  }
+  if (is.null(dim(predicted))) {
+    predicted <- matrix(predicted, nrow = 1)
+  }
+  predicted <- predicted[, quantile == 0.5]
+  abs_error_median <- abs(observed - predicted)
+  return(abs_error_median)
 }
 
 
@@ -536,52 +671,4 @@ wis_one_to_one <- function(observed,
       return(wis)
     }
   }
-}
-
-
-#' @title Absolute Error of the Median (Quantile-based Version)
-#'
-#' @description
-#' Absolute error of the median calculated as
-#'
-#' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{prediction})
-#' }{
-#'   abs(observed - median_prediction)
-#' }
-#'
-#' The function was created for internal use within [score()], but can also
-#' used as a standalone function.
-#'
-#' @param predicted numeric vector with predictions, corresponding to the
-#' quantiles in a second vector, `quantiles`.
-#' @param quantiles numeric vector that denotes the quantile for the values
-#' in `predicted`. Only those predictions where `quantiles == 0.5` will
-#' be kept. If `quantiles` is `NULL`, then all `predicted` and
-#' `observed` will be used (this is then the same as [abs_error()])
-#' @return vector with the scoring values
-#' @seealso [ae_median_sample()], [abs_error()]
-#' @importFrom stats median
-#' @inheritParams ae_median_sample
-#' @examples
-#' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
-#' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
-#' @export
-#' @keywords metric
-
-ae_median_quantile <- function(observed, predicted, quantiles = NULL) {
-  if (!is.null(quantiles)) {
-    if (!any(quantiles == 0.5) && !anyNA(quantiles)) {
-      return(NA_real_)
-      warning(
-        "in order to compute the absolute error of the median, `0.5` must be ",
-        "among the quantiles given. Maybe you want to use `abs_error()`?"
-      )
-    }
-    observed <- observed[quantiles == 0.5]
-    predicted <- predicted[quantiles == 0.5]
-  }
-  abs_error_median <- abs(observed - predicted)
-  return(abs_error_median)
 }

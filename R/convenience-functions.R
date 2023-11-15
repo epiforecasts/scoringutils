@@ -235,21 +235,13 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #'   example_quantile,
 #'   c("location", "target_end_date", "target_type", "horizon", "model")
 #' )
-
 set_forecast_unit <- function(data, forecast_unit) {
-
-  datacols <- colnames(data)
-  missing <- forecast_unit[!(forecast_unit %in% datacols)]
-
-  if (length(missing) > 0) {
-    warning(
-      "Column(s) '",
-      missing,
-      "' are not columns of the data and will be ignored."
-    )
-    forecast_unit <- intersect(forecast_unit, datacols)
+  data <- ensure_data.table(data)
+  missing <- check_columns_present(data, forecast_unit)
+  if (!is.logical(missing)) {
+    warning(missing)
+    forecast_unit <- intersect(forecast_unit, colnames(data))
   }
-
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])[]
   return(out)

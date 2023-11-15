@@ -5,7 +5,8 @@
 #' @keywords info
 
 available_metrics <- function() {
-  return(unique(scoringutils::metrics$Name))
+  return(unique(c(scoringutils::metrics$Name,
+                  "wis", "coverage_50", "coverage_90")))
 }
 
 
@@ -249,5 +250,23 @@ run_safely <- function(..., fun) {
     return(NULL)
   }
   return(result)
+}
+
+
+#' Ensure That an Object is a Data Table
+#' @description This function ensures that an object is a data table.
+#' If the object is not a data table, it is converted to one. If the object
+#' is a data table, a copy of the object is returned.
+#' @param data An object to ensure is a data table
+#' @return A data table
+#' @keywords internal
+#' @importFrom data.table copy is.data.table as.data.table
+ensure_data.table <- function(data) {
+  if (!is.data.table(data)) {
+    data <- as.data.table(data)
+  } else {
+    data <- copy(data)
+  }
+  return(data)
 }
 

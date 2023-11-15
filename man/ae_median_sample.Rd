@@ -27,7 +27,7 @@ Absolute error of the median calculated as
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
-predicted_values <- rnorm(30, mean = 1:30)
+predicted_values <- matrix(rnorm(30, mean = 1:30))
 ae_median_sample(observed, predicted_values)
 }
 \seealso{

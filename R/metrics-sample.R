@@ -96,18 +96,17 @@ bias_sample <- function(observed, predicted) {
 #' @importFrom stats median
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' ae_median_sample(observed, predicted_values)
 #' @export
 #' @keywords metric
 
 ae_median_sample <- function(observed, predicted) {
+  assert_input_sample(observed, predicted)
   median_predictions <- apply(
-    as.matrix(predicted), MARGIN = 1, FUN = median # this is rowwise
+    as.matrix(predicted), MARGIN = 1, FUN = median # this is row-wise
   )
-
   ae_median <- abs(observed - median_predictions)
-
   return(ae_median)
 }
 
@@ -118,11 +117,11 @@ ae_median_sample <- function(observed, predicted) {
 #' Squared error of the mean calculated as
 #'
 #' \deqn{
-#'   \textrm{mean}(\textrm{observed} - \textrm{prediction})^2
+#'   \textrm{mean}(\textrm{observed} - \textrm{mean prediction})^2
 #' }{
-#'   mean(observed - mean_prediction)^2
+#'   mean(observed - mean prediction)^2
 #' }
-#'
+#' The mean prediction is calculated as the mean of the predictive samples.
 #' @param observed A vector with observed values of size n
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #' the number of data points and N (number of columns) the number of Monte
@@ -131,12 +130,13 @@ ae_median_sample <- function(observed, predicted) {
 #' @seealso [squared_error()]
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' se_mean_sample(observed, predicted_values)
 #' @export
 #' @keywords metric
 
 se_mean_sample <- function(observed, predicted) {
+  assert_input_sample(observed, predicted)
   mean_predictions <- rowMeans(as.matrix(predicted))
   se_mean <- (observed - mean_predictions)^2
 

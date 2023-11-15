@@ -5,7 +5,7 @@
 \alias{metrics_quantile}
 \title{Default metrics for quantile-based forecasts.}
 \format{
-An object of class \code{list} of length 7.
+An object of class \code{list} of length 9.
 }
 \usage{
 metrics_quantile
@@ -14,9 +14,14 @@ metrics_quantile
 A named list with functions:
 \itemize{
 \item "wis" = \code{\link[=wis]{wis()}}
+\item "overprediction" = \code{\link[=overprediction]{overprediction()}}
+\item "underprediction" = \code{\link[=underprediction]{underprediction()}}
+\item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
-\item "coverage_50" = \(...) {run_safely(..., range = 50, fun = interval_coverage_quantile)} #nolint
-\item "coverage_90" = \(...) {run_safely(..., range = 90, fun = interval_coverage_quantile)} #nolint
+\item "coverage_50" = \(...) {run_safely(..., range = 50, fun = \link[=interval_coverage_quantile]{interval_coverage_quantile})}
+\item "coverage_90" = \(...) {run_safely(..., range = 90, fun = \link[=interval_coverage_quantile]{interval_coverage_quantile})}
+\item "coverage_deviation" = \code{\link[=interval_coverage_deviation_quantile]{interval_coverage_deviation_quantile()}},
+\item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 }
 \keyword{info}

@@ -297,11 +297,21 @@ check_columns_present <- function(data, columns) {
   }
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
+  missing <- list()
   for (x in columns){
     if (!(x %in% colnames)) {
-      msg <- paste0("Column '", x, "' not found in data")
-      return(msg)
+      missing[[x]] <- x
     }
+  }
+  missing <- unlist(missing)
+  if (length(missing) > 1) {
+    msg <- paste0(
+      "Columns '", paste(missing, collapse = "', '"), "' not found in data"
+    )
+    return(msg)
+  } else if (length(missing) == 1) {
+    msg <- paste0("Column '", missing, "' not found in data")
+    return(msg)
   }
   return(TRUE)
 }
