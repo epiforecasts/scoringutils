@@ -80,14 +80,20 @@
 #' `overprediction`, `underprediction`, and `dispersion.`
 #'
 #' @inheritParams interval_score
-#' @param predicted vector of size n with the predicted values
+#' @param observed numeric vector of size n with the observed values
+#' @param predicted numeric nxN matrix of predictive
+#' quantiles, n (number of rows) being the number of forecasts (corresponding
+#' to the number of observed values) and N
+#' (number of columns) the number of quantiles per forecast.
+#' If `observed` is just a single number, then predicted can just be a
+#' vector of size N.
 #' @param quantile vector with quantile levels of size N
 #' @param count_median_twice if TRUE, count the median twice in the score
 #' @param na.rm if TRUE, ignore NA values when computing the score
 #' @importFrom stats weighted.mean
 #' @return
-#' `wis()`: a numeric vector with WIS values (one per observation), or a list
-#' with separate entries if `separate_results` is `TRUE`.
+#' `wis()`: a numeric vector with WIS values of size n (one per observation),
+#' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
 wis <- function(observed,
                 predicted,
@@ -616,48 +622,39 @@ wis_one_to_one <- function(observed,
 
 
 #' @title Absolute Error of the Median (Quantile-based Version)
-#'
 #' @description
-#' Absolute error of the median calculated as
-#'
+#' Compute the absolute error of the median calculated as
 #' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{prediction})
+#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
 #' }{
 #'   abs(observed - median_prediction)
 #' }
-#'
-#' The function was created for internal use within [score()], but can also
-#' used as a standalone function.
-#'
-#' @param predicted numeric vector with predictions, corresponding to the
-#' quantiles in a second vector, `quantiles`.
-#' @param quantiles numeric vector that denotes the quantile for the values
-#' in `predicted`. Only those predictions where `quantiles == 0.5` will
-#' be kept. If `quantiles` is `NULL`, then all `predicted` and
-#' `observed` will be used (this is then the same as [abs_error()])
-#' @return vector with the scoring values
+#' The median prediction is the predicted value for which quantile == 0.5,
+#' the function therefore requires 0.5 to be among the quantile levels in
+#' `quantile`.
+#' @inheritParams wis
+#' @return numeric vector of length N with the absolute error of the median
 #' @seealso [ae_median_sample()], [abs_error()]
 #' @importFrom stats median
-#' @inheritParams ae_median_sample
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- rnorm(30, mean = 1:30)
 #' ae_median_quantile(observed, predicted_values, quantiles = 0.5)
 #' @export
 #' @keywords metric
-
-ae_median_quantile <- function(observed, predicted, quantiles = NULL) {
-  if (!is.null(quantiles)) {
-    if (!any(quantiles == 0.5) && !anyNA(quantiles)) {
-      return(NA_real_)
-      warning(
-        "in order to compute the absolute error of the median, `0.5` must be ",
-        "among the quantiles given. Maybe you want to use `abs_error()`?"
-      )
-    }
-    observed <- observed[quantiles == 0.5]
-    predicted <- predicted[quantiles == 0.5]
+ae_median_quantile <- function(observed, predicted, quantile) {
+  assert_input_quantile(observed, predicted, quantile)
+  if (!any(quantiles == 0.5)) {
+    warning(
+      "in order to compute the absolute error of the median, `0.5` must be ",
+      "among the quantiles given. Returning `NA`."
+    )
+    return(NA_real_)
   }
+  if (is.null(dim(predicted))) {
+    predicted <- matrix(predicted, nrow = 1)
+  }
+  predicted <- predicted[, quantile == 0.5]
   abs_error_median <- abs(observed - predicted)
   return(abs_error_median)
 }

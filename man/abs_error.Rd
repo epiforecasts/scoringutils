@@ -7,10 +7,14 @@
 abs_error(observed, predicted)
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{numeric vector of size n with the observed values}
 
-\item{predicted}{numeric vector with predictions, corresponding to the
-quantiles in a second vector, \code{quantiles}.}
+\item{predicted}{numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 }
 \value{
 vector with the absolute error

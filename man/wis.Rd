@@ -24,9 +24,14 @@ overprediction(observed, predicted, quantile)
 underprediction(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{numeric vector of size n with the observed values}
 
-\item{predicted}{vector of size n with the predicted values}
+\item{predicted}{numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
 \item{quantile}{vector with quantile levels of size N}
 
@@ -46,8 +51,8 @@ Default: \code{TRUE}.}
 \item{na.rm}{if TRUE, ignore NA values when computing the score}
 }
 \value{
-\code{wis()}: a numeric vector with WIS values (one per observation), or a list
-with separate entries if \code{separate_results} is \code{TRUE}.
+\code{wis()}: a numeric vector with WIS values of size n (one per observation),
+or a list with separate entries if \code{separate_results} is \code{TRUE}.
 
 \code{dispersion()}: a numeric vector with dispersion values (one per observation)
 
