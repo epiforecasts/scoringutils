@@ -28,7 +28,7 @@
 #'
 #' @param scores A data.table of scores as produced by [score()].
 #' @param metric A character vector of length one with the metric to do the
-#' comparison on. The default is "auto", meaning that either "interval_score",
+#' comparison on. The default is "auto", meaning that either "wis",
 #' "crps", or "brier_score" will be selected where available.
 #' @param by character vector with names of columns present in the input
 #' data.frame. `by` determines how pairwise comparisons will be computed.
@@ -366,8 +366,8 @@ compare_two_models <- function(scores,
 #' @keywords internal
 
 infer_rel_skill_metric <- function(scores) {
-  if ("interval_score" %in% colnames(scores)) {
-    rel_skill_metric <- "interval_score"
+  if ("wis" %in% colnames(scores)) {
+    rel_skill_metric <- "wis"
   } else if ("crps" %in% colnames(scores)) {
     rel_skill_metric <- "crps"
   } else if ("brier_score" %in% colnames(scores)) {

@@ -96,7 +96,7 @@ bias_sample <- function(observed, predicted) {
 #' @importFrom stats median
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' ae_median_sample(observed, predicted_values)
 #' @export
 #' @keywords metric
@@ -130,7 +130,7 @@ ae_median_sample <- function(observed, predicted) {
 #' @seealso [squared_error()]
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- rnorm(30, mean = 1:30)
+#' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' se_mean_sample(observed, predicted_values)
 #' @export
 #' @keywords metric

@@ -29,7 +29,7 @@ different locations.
 }
 \examples{
 scores <- score(example_quantile)
-scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
+scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 plot_heatmap(scores, x = "target_type", metric = "bias")
 }

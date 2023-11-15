@@ -1,6 +1,4 @@
 test_that("summarise_scores() works without any arguments", {
-  expect_true("quantile" %in% names(scores_quantile))
-
   summarised_scores <- summarise_scores(scores_quantile)
   expect_false("quantile" %in% names(summarised_scores))
 

@@ -25,7 +25,7 @@ splitting) and the pairwise comparisons will be computed separately for the
 split data.frames.}
 
 \item{metric}{A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "interval_score",
+comparison on. The default is "auto", meaning that either "wis",
 "crps", or "brier_score" will be selected where available.}
 
 \item{baseline}{character vector of length one that denotes the baseline

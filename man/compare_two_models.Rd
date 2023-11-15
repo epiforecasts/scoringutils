@@ -22,7 +22,7 @@ compare_two_models(
 \item{name_model2}{character, name of the model to compare against}
 
 \item{metric}{A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "interval_score",
+comparison on. The default is "auto", meaning that either "wis",
 "crps", or "brier_score" will be selected where available.}
 
 \item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided

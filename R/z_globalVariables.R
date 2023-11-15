@@ -72,6 +72,7 @@ globalVariables(c(
   "var_of_interest",
   "variable",
   "weight",
+  "wis",
   "wis_component_name",
   "x",
   "y",

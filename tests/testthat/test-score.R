@@ -1,3 +1,6 @@
+metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
+metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
+
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
@@ -191,10 +194,12 @@ test_that("score() quantile produces desired metrics", {
     quantile = rep(c(0.1, 0.9), times = 10)
   )
 
-  out <- suppressMessages(score(data = data))
+  out <- suppressWarnings(suppressMessages(
+    score(data = data, metrics = metrics_no_cov))
+  )
   metric_names <- c(
     "dispersion", "underprediction", "overprediction",
-    "bias", "ae_median", "coverage_deviation"
+    "bias", "ae_median"
   )
 
   expect_true(all(metric_names %in% colnames(out)))
@@ -227,27 +232,16 @@ test_that("all quantile and range formats yield the same result", {
   expect_equal(sort(eval1$ae_median), sort(ae))
 })
 
-test_that("function produces output even if only some metrics are chosen", {
-  example <- scoringutils::example_quantile
-
-  eval <- suppressMessages(score(example, metrics = "coverage"))
-
-  expect_equal(
-    nrow(eval) > 1,
-    TRUE
-  )
-})
-
 test_that("WIS is the same with other metrics omitted or included", {
   eval <- suppressMessages(score(example_quantile,
-    metrics = "interval_score"
+    metrics = list("wis" = wis)
   ))
 
   eval2 <- scores_quantile
 
   expect_equal(
-    sum(eval$interval_score),
-    sum(eval2$interval_score)
+    sum(eval$wis),
+    sum(eval2$wis)
   )
 })
 

@@ -231,37 +231,10 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   return(data[])
 }
 
+#' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
-score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
-  data <- validate(data)
-  data <- remove_na_observed_predicted(data)
-  forecast_unit <- attr(data, "forecast_unit")
-
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-  metrics <- metrics[metrics %in% available_metrics()]
-  scores <- score_quantile(
-    data = data,
-    forecast_unit = forecast_unit,
-    metrics = metrics,
-    ...
-  )
-
-  setattr(scores, "metric_names", metrics[metrics %in% colnames(scores)])
-  # manual hack to make sure that the correct attributes are there.
-  setattr(scores, "forecast_unit", forecast_unit)
-  setattr(scores, "forecast_type", "quantile")
-  scores <- new_scoringutils(scores, "scoringutils_quantile")
-
-  return(scores[])
-}
-
-
-#' @rdname score
-#' @export
-score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ...) {
+score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -275,12 +248,13 @@ score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ..
   d_transposed <- data[, .(predicted = list(predicted[order(quantile)]),
                            observed = unique(observed),
                            quantile = list(quantile[order(quantile)]),
-                           N = length(quantile)), by = forecast_unit]
+                           scoringutils_quantile = toString(quantile[order(quantile)])),
+                       by = forecast_unit]
 
   # split according to quantile lengths and do calculations for different
   # quantile lengths separately. The function `wis()` assumes that all
   # forecasts have the same quantiles
-  d_split <- split(d_transposed, d_transposed$N)
+  d_split <- split(d_transposed, d_transposed$scoringutils_quantile)
 
   split_result <- lapply(d_split, function(data) {
     # create a matrix out of the list of predicted values and quantiles
@@ -305,6 +279,7 @@ score.scoringutils_quantile_new <- function(data, metrics = metrics_quantile, ..
   })
 
   data <- rbindlist(split_result)
+  data[, "scoringutils_quantile" := NULL]
   setattr(data, "metric_names", names(metrics))
 
   return(data[])

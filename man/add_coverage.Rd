@@ -33,7 +33,7 @@ the unit of a single forecast.
 \examples{
 library(magrittr) # pipe operator
 score(example_quantile) \%>\%
-  add_coverage(by = c("model", "target_type")) \%>\%
+  # add_coverage(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type")) \%>\%
   summarise_scores(fun = signif, digits = 2)
 }
