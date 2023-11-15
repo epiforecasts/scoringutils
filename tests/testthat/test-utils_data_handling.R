@@ -22,7 +22,7 @@ test_that("range_long_to_quantile works", {
 
 
 
-test_that("quantile_to_range_long works", {
+test_that("quantile_to_interval works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
@@ -40,7 +40,8 @@ test_that("quantile_to_range_long works", {
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- as.data.frame(scoringutils:::quantile_to_range_long(quantile,
+  long2 <- as.data.frame(quantile_to_interval(
+    quantile,
     keep_quantile_col = FALSE
   ))
 
@@ -123,3 +124,120 @@ test_that("sample_to_range_long works", {
 
   expect_equal(long, as.data.frame(long2))
 })
+
+test_that("quantile_to_range works - scalar and vector case", {
+  predicted <- 9:1
+  quantile <- rev(seq(0.1, 0.9, 0.1))
+  observed <- 5
+
+  # check output is produced
+  out1 <- quantile_to_interval(observed, predicted, quantile)
+  expect_snapshot(out1)
+
+  # check order of predictions doesn't matter
+  predicted <- 1:9
+  quantile <- seq(0.1, 0.9, 0.1)
+  out2 <- quantile_to_interval(observed, predicted, quantile)
+  expect_equal(out1, out2)
+
+  # check error if observed is a vector and predicted is a vector as well
+  expect_error(quantile_to_interval(
+    observed = c(1, 2), predicted = c(1, 2), quantile = c(0.1, 0.9)),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
+  )
+
+  # check NA values are handled gracefully - there should just be NA in the output
+  predicted <- c(1:8, NA)
+  quantile <- seq(0.1, 0.9, 0.1)
+  observed <- 5
+  out3 <- quantile_to_interval(observed, predicted, quantile)
+  expect_snapshot(out3)
+
+  # check non-symmetrical intervals are handled gracefully
+  # result should be newly introduced ranges where one value is NA
+  predicted <- c(1:9)
+  quantile <- c(seq(0.1, 0.8, 0.1), 0.95)
+  observed <- 5
+  out4 <- quantile_to_interval(observed, predicted, quantile)
+  expect_snapshot(out4)
+
+  # check function works without a median
+  predicted <- c(1:8)
+  quantile <- c(seq(0.1, 0.4, 0.1), seq(0.6, 0.9, 0.1))
+  observed <- 5
+  expect_no_condition(
+    quantile_to_interval(observed, predicted, quantile)
+  )
+
+  # check a one-dimensional matrix works fine
+  predicted <- matrix(1:9, nrow = 1)
+  quantile <- seq(0.1, 0.9, 0.1)
+  expect_no_condition(
+    quantile_to_interval(observed, predicted, quantile)
+  )
+})
+
+test_that("quantile_to_range works - matrix case", {
+  n <- 5
+  N <- 9
+  predicted <- matrix(1:45, nrow = n, ncol = N)
+  quantile <- seq(0.1, 0.9, 0.1)
+  observed <- seq(21, 25, 1)
+
+  # check output is produced
+  out1 <- quantile_to_interval(observed, predicted, quantile)
+  expect_snapshot(out1)
+
+  # check order of predictions doesn't matter
+  predicted <- matrix(
+    c(41:45, 36:40, 31:35, 26:30, 21:25, 16:20, 11:15, 6:10, 1:5),
+    nrow = n,
+    ncol = N
+  )
+  quantile <- rev(seq(0.1, 0.9, 0.1))
+  out2 <- quantile_to_interval(observed, predicted, quantile)
+  expect_equal(out1, out2)
+
+  # check NA values are fine
+  predicted[1, 1] <- NA
+  expect_no_condition(
+    quantile_to_interval(observed, predicted, quantile)
+  )
+})
+
+
+test_that("quantile_to_interval works - data.frame case", {
+  dt <- data.table(
+    observed = 5,
+    predicted = 1:9,
+    quantile = seq(0.1, 0.9, 0.1)
+  )
+
+  expect_no_condition(
+    quantile_to_interval(dt)
+  )
+
+  expect_no_condition(
+    quantile_to_interval(dt, format = "wide")
+  )
+
+  # check that the number of rows after transformation is equal to the number
+  # of rows plus the number of medians added (as upper boundary of a 0%
+  # prediction interval)
+  ex <- example_quantile[!is.na(predicted)]
+  n_preds <- nrow(ex)
+  n_medians <- nrow(ex[quantile == 0.5])
+  ex_interval <- quantile_to_interval(ex, keep_quantile_col = TRUE)
+  expect_equal(
+    nrow(ex_interval),
+    n_preds + n_medians
+  )
+
+  expect_equal(
+    colnames(ex_interval),
+    c(colnames(ex), "boundary", "range")
+  )
+})
+
+
+

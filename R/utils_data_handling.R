@@ -158,50 +158,113 @@ range_long_to_quantile <- function(data,
 }
 
 
-#' @title Change Data from a Plain Quantile Format to a Long Range Format
-#'
+#' Transform From a Quantile Format to an Interval Format
 #' @description
+#' **Quantile format**
+#' In a quantile format, a prediction is characterised by one or multiple
+#' predicted values and the corresponding quantile levels. For example, a
+#' prediction in a quantile format could be represented by the 0.05, 0.25, 0.5,
+#' 0.75 and 0.95 quantiles of the predictive distribution.
 #'
-#' Transform data from a format that uses quantiles only to one that uses
-#' interval ranges to denote quantiles.
-#'
-#' @param data a data.frame in quantile format
+#' **Interval format**
+#' In the interval format, two quantiles are assumed to form a prediction
+#' interval. Prediction intervals need to be symmetric around the median and
+#' are characterised by a lower and an upper bound. The lower bound is defined
+#' by the lower quantile and the upper bound is defined by the upper quantile.
+#' A 90% prediction interval, for example, covers 90% of the probability mass
+#' and is defined by the 5% and 95% quantiles. A forecast could therefore
+#' be characterised by one or multiple prediction intervals, e.g. the lower
+#' and upper bounds of the 50% and 90% prediction intervals (corresponding to
+#' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
+#' @param ... method arguments
+quantile_to_interval <- function(...) {
+  UseMethod("quantile_to_interval")
+}
+
+
+#' @param dt a data.table with columns `quantile` and `predicted`
+#' @param format the format of the output. Either "long" or "wide". If "long"
+#' (the default), there will be a column `boundary` (with values either "upper"
+#' or "lower" and a column `range` that contains the range of the interval.
+#' If "wide", there will be a column `range` and two columns
+#' `lower` and `upper` that contain the lower and upper bounds of the
+#' prediction interval, respectively.
 #' @param keep_quantile_col keep the quantile column in the final
-#' output after transformation (default is FALSE)
-#' @return a data.frame in a long interval range format
+#' output after transformation (default is FALSE). This only works if
+#' `format = "long"`. If `format = "wide"`, the quantile column will always be
+#' dropped.
+#' @return
+#' *quantile_to_interval.data.frame*:
+#' a data.frame in an interval format (either "long" or "wide"), with or
+#' without a quantile column. Rows will not be reordered.
 #' @importFrom data.table copy
-#' @keywords internal
+#' @export
+#' @rdname quantile_to_interval
+quantile_to_interval.data.frame <- function(dt,
+                                            format = "long",
+                                            keep_quantile_col = FALSE,
+                                            ...) {
+  if (!is.data.table(dt)) {
+    dt <- data.table::as.data.table(dt)
+  } else {
+    # use copy to avoid
+    dt <- copy(dt)
+  }
 
-quantile_to_range_long <- function(data,
-                                   keep_quantile_col = TRUE) {
-  data <- data.table::as.data.table(data)
-
-  data[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
-  data[, range := ifelse(
+  dt[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
+  dt[, range := ifelse(
     boundary == "lower",
     round((1 - 2 * quantile) * 100, 10),
     round((2 * quantile - 1) * 100, 10)
   )]
 
   # add median quantile
-  median <- data[quantile == 0.5, ]
+  median <- dt[quantile == 0.5, ]
   median[, boundary := "upper"]
 
-  data <- data.table::rbindlist(list(data, median))
-
+  dt <- data.table::rbindlist(list(dt, median))
   if (!keep_quantile_col) {
-    data[, "quantile" := NULL]
+    dt[, quantile := NULL]
   }
 
-  # if only point forecasts are scored, we only have NA values for range and
-  # boundary. In that instance we need to set the type of the columns
-  # explicitly to avoid future collisions.
-  data[, `:=`(
-    boundary = as.character(boundary),
-    range = as.numeric(range)
-  )]
+  if (format == "wide") {
+    delete_columns(dt, "quantile")
+    dt <- dcast(dt, ... ~ boundary, value.var = "predicted")
+  }
+  return(dt[])
+}
 
-  return(data[])
+
+#' @param observed a numeric vector of observed values of size n
+#' @param predicted a numeric vector of predicted values of size n x N. If
+#' `observed` is a single number, then `predicted` can be a vector of length N
+#' @param quantile a numeric vector of quantile levels of size N
+#' @return
+#' *quantile_to_interval.numeric*:
+#' a data.frame in a wide interval format with columns `forecast_id`,
+#' `observed`, `lower`, `upper`, and `range`. The `forecast_id` column is a
+#' unique identifier for each forecast. Rows will be reordered according to
+#' `forecast_id` and `range`.
+#' @export
+#' @rdname quantile_to_interval
+quantile_to_interval.numeric <- function(observed,
+                                         predicted,
+                                         quantile,
+                                         ...) {
+  assert_input_quantile(observed, predicted, quantile)
+
+  n <- length(observed)
+  N <- length(quantile)
+
+  dt <- data.table(
+    forecast_id = rep(1:n, each = N),
+    observed = rep(observed, each = N),
+    predicted = as.vector(t(predicted)),
+    quantile = quantile
+  )
+  out <- quantile_to_interval(dt, format = "wide")
+  out <- out[order(forecast_id, range)]
+  return(out)
 }
 
 
@@ -240,7 +303,7 @@ sample_to_range_long <- function(data,
     type = type
   )
 
-  data <- quantile_to_range_long(data, keep_quantile_col = keep_quantile_col)
+  data <- quantile_to_interval(data, keep_quantile_col = keep_quantile_col)
 
   return(data[])
 }
