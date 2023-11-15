@@ -278,14 +278,14 @@ crps <- list(
 
 log_score <- list(
   `Metric` = "Log score",
-  `Explanation` = r"(The Log score is a proper scoring rule that is simply compuated as the negative log of the predictive density evaluated at the true observed value. It is given as
-  $$ \text{log score} = -\log f(y), $$
-  where $f$ is the predictive density function and y is the true value. For integer-valued forecasts, the log score can be computed as
-  $$ \text{log score} = -\log p_y, $$
+  `Explanation` = r"(The Log score is a proper scoring rule that is simply computed as the log of the predictive density evaluated at the observed value. It is given as
+  $$ \text{log score} = \log f(y), $$
+  where $f$ is the predictive density function and y is the observed value. For integer-valued forecasts, the log score can be computed as
+  $$ \text{log score} = \log p_y, $$
   where $p_y$ is the probability assigned to outcome p by the forecast F.
 
   **Usage and caveats**:
-  Smaller values are better, but sometimes the sign is reversed. The log score is sensitive to outliers, as individual log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends on the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
+  Larger values are better, but sometimes the sign is reversed. The log score is sensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
 )
 
 wis <- list(
