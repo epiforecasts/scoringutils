@@ -144,11 +144,15 @@ wis <- function(observed,
 
 #' @return
 #' `dispersion()`: a numeric vector with dispersion values (one per observation)
+#' @param ... Additional arguments passed on to `wis()` from functions
+#' `overprediction()`, `underprediction()` and `dispersion()`
 #' @export
 #' @rdname wis
-dispersion <- function(observed, predicted, quantile) {
+dispersion <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$dispersion
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$dispersion
 }
 
 
@@ -157,9 +161,11 @@ dispersion <- function(observed, predicted, quantile) {
 #' observation)
 #' @export
 #' @rdname wis
-overprediction <- function(observed, predicted, quantile) {
+overprediction <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$overprediction
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$overprediction
 }
 
 
@@ -168,9 +174,11 @@ overprediction <- function(observed, predicted, quantile) {
 #' observation)
 #' @export
 #' @rdname wis
-underprediction <- function(observed, predicted, quantile) {
+underprediction <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$underprediction
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$underprediction
 }
 
 
