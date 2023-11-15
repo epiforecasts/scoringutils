@@ -7,6 +7,7 @@
 \alias{score.scoringutils_point}
 \alias{score.scoringutils_sample}
 \alias{score.scoringutils_quantile}
+\alias{score.scoringutils_quantile_new}
 \title{Evaluate forecasts in a data.frame format}
 \usage{
 score(data, ...)
@@ -20,6 +21,8 @@ score(data, ...)
 \method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
 
 \method{score}{scoringutils_quantile}(data, metrics = NULL, ...)
+
+\method{score}{scoringutils_quantile_new}(data, metrics = metrics_quantile, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}

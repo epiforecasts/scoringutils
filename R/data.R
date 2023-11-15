@@ -211,3 +211,11 @@
 #' - "se_mean" = [se_mean_sample()]
 #' @keywords info
 "metrics_sample"
+
+#' Default metrics for quantile-based forecasts.
+#'
+#' A named list with functions:
+#' - "wis" = [wis()]
+#' - "bias" = [bias_quantile()]
+#' @keywords info
+"metrics_sample"

@@ -92,7 +92,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   assert_number(range)
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
   if (!all(necessary_quantiles %in% quantile)) {
-    rlang::warn(
+    warning(
       "To compute the coverage for a range of ", range, "%, the quantiles ",
       necessary_quantiles, " are required. Returnting `NA`.")
     return(NA)
