@@ -49,7 +49,7 @@ log_score <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers",
+  `Properties` = "Proper scoring rule, smaller is better, equals negative log of the predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers",
   `References` = ""
 )
 
