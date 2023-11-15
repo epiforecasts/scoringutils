@@ -2,7 +2,10 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{wis}
 \alias{wis}
-\title{Weighted Interval Score}
+\alias{dispersion}
+\alias{overprediction}
+\alias{underprediction}
+\title{Weighted Interval Score (WIS)}
 \usage{
 wis(
   observed,
@@ -13,6 +16,12 @@ wis(
   count_median_twice = FALSE,
   na.rm = TRUE
 )
+
+dispersion(observed, predicted, quantile, ...)
+
+overprediction(observed, predicted, quantile, ...)
+
+underprediction(observed, predicted, quantile, ...)
 }
 \arguments{
 \item{observed}{A vector with observed values of size n}
@@ -35,7 +44,95 @@ Default: \code{TRUE}.}
 \item{count_median_twice}{if TRUE, count the median twice in the score}
 
 \item{na.rm}{if TRUE, ignore NA values when computing the score}
+
+\item{...}{Additional arguments passed on to \code{wis()} from functions
+\code{overprediction()}, \code{underprediction()} and \code{dispersion()}}
+}
+\value{
+\code{wis()}: a numeric vector with WIS values (one per observation), or a list
+with separate entries if \code{separate_results} is \code{TRUE}.
+
+\code{dispersion()}: a numeric vector with dispersion values (one per observation)
+
+\code{overprediction()}: a numeric vector with overprediction values (one per
+observation)
+
+\code{underprediction()}: a numeric vector with underprediction values (one per
+observation)
 }
 \description{
-Weighted Interval Score
+The WIS is a proper scoring rule used to evaluate forecasts in an interval- /
+quantile-based format. See Bracher et al. (2021). Smaller values are better.
+
+As the name suggest the score assumes that a forecast comes in the form of
+one or multiple central prediction intervals. A prediction interval is
+characterised by a lower and an upper bound formed by a pair of predictive
+quantiles. For example, a 50\% central prediction interval is formed by the
+0.25 and 0.75 quantiles of the predictive distribution.
+
+\strong{Interval score}
+
+The interval score (IS) is the sum of three components:
+overprediction, underprediction and dispersion. For a single prediction
+interval only one of the components is non-zero. If for a single prediction
+interval the observed value is below the lower bound, then the interval
+score is equal to the absolute difference between the lower bound and the
+observed value ("underprediction"). "Overprediction" is defined analogously.
+If the observed value falls within the bounds of the prediction interval,
+then the interval score is equal to the width of the prediction interval,
+i.e. the difference between the upper and lower bound. For a single interval,
+we therefore have:
+
+\deqn{
+\textrm{IS} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
+ - \textrm{observed}) *
+\mathbf{1}(\textrm{observed} < \textrm{lower}) +
+\frac{2}{\alpha}(\textrm{observed} - \textrm{upper}) *
+\mathbf{1}(\textrm{observed} > \textrm{upper})
+}{
+score = (upper - lower) + 2/alpha * (lower - observed) *
+1(observed < lower) + 2/alpha * (observed - upper) *
+1(observed > upper)
+}
+where \eqn{\mathbf{1}()}{1()} is the indicator function and
+indicates how much is outside the prediction interval.
+\eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
+the prediction interval. For a 90\% prediction interval, for example,
+\eqn{\alpha}{alpha} is equal to 0.1. No specific distribution is assumed,
+but the range has to be symmetric (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper).
+Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
+
+Usually the interval score is weighted by a factor that makes sure that the
+average score across an increasing number of equally spaced
+quantiles, converges to the continuous ranked probability score (CRPS). This
+weighted score is called the weihted interval score (WIS).
+The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
+
+\strong{Quantile score}
+
+In addition to the interval score, there also exists a quantile score (QS)
+(see \code{\link[=quantile_score]{quantile_score()}}), which is equal to the so-called pinball loss.
+The quantile score can be computed for a single quantile (whereas the
+interval score requires two quantiles that form an interval). However,
+the intuitive decomposition into overprediction, underprediction and
+dispersion does not exist for the quantile score.
+
+\strong{Two versions of the weighted interval score}
+
+There are two ways to conceptualise the weighted interval score across
+several quantiles / prediction intervals and the median.
+
+In one view, you would treat the WIS as the average of quantile scores (and
+the median as 0.5-quantile) (this is the default for \code{wis()}). In another
+view, you would treat the WIS as the average of several interval scores +
+the difference between observed value and median forecast. The effect of
+that is that in contrast to the first view, the median has twice as much
+weight (because it is weighted like a prediction interval, rather than like
+a single quantile). Both are valid ways to conceptualise the WIS and you
+can control the behvaviour with the \code{count_median_twice}-argument.
+
+\strong{WIS components}:
+WIS components can be computed individually using the functions
+\code{overprediction}, \code{underprediction}, and \code{dispersion.}
 }
