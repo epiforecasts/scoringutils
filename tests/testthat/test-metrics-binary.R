@@ -7,14 +7,36 @@ df <- data.table(
   id = 1:10
 )
 
-# test input handling
-test_that("function throws an error when missing observed or predicted", {
-  observed <- sample(c(0, 1), size = 10, replace = TRUE)
-  predicted <- replicate(
-    20,
-    sample(c(0, 1), size = 10, replace = TRUE)
+
+test_that("correct input works", {
+  expect_no_condition(
+    scoringutils:::assert_input_binary(observed, predicted)
   )
 
+  # observed is a single number and does not have the same length as predicted
+  expect_no_condition(
+    scoringutils:::assert_input_binary(factor(1, levels = c(0, 1)), predicted)
+  )
+
+  # predicted is a single number and does not have the same length as observed
+  expect_no_condition(
+    scoringutils:::assert_input_binary(observed, predicted = 0.2)
+  )
+
+  # predicted is a matrix with one row
+  expect_no_condition(
+    scoringutils:::assert_input_binary(observed, predicted = matrix(0.2))
+  )
+
+  # predicted is a matrix with 1 row - this is will throw a warning in the
+  # actual scoring rule function
+  expect_no_condition(
+    scoringutils:::assert_input_binary(observed, matrix(predicted))
+  )
+})
+
+# test input handling
+test_that("function throws an error when missing observed or predicted", {
   expect_error(
     brier_score(predicted = predicted),
     'argument "observed" is missing, with no default'
@@ -27,67 +49,13 @@ test_that("function throws an error when missing observed or predicted", {
 })
 
 
-
-test_that("function throws an error for wrong format of `observed`", {
-  observed <- factor(rpois(10, lambda = 1:10))
-  predicted <- runif(10, min = 0, max = 1)
-
+test_that("function throws an error for wrong input formats", {
   expect_error(
     brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    "Assertion on 'observed' failed: Must have exactly 2 levels."
-  )
-
-  observed <- rnorm(10)
-  expect_error(
-    brier_score(
-      observed = observed,
+      observed = rnorm(10),
       predicted = predicted
     ),
     "Assertion on 'observed' failed: Must be of type 'factor', not 'double'."
-  )
-})
-
-test_that("function throws an error for wrong format of predictions", {
-  predicted <- runif(10, min = 0, max = 1)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = as.list(predicted)
-    ),
-    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
-  )
-
-  predicted <- runif(15, min = 0, max = 1)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
-    # "Arguments to the following function call: 'brier_score(observed = observed, predicted = predicted)' should have the same length (or length one). Actual lengths: 10, 15",
-    fixed = TRUE
-  )
-})
-
-test_that("Input checking for binary forecasts works", {
-  # everything correct
-  expect_no_condition(
-    scoringutils:::assert_input_binary(observed, predicted)
-  )
-
-  # predicted > 1
-  expect_error(
-    scoringutils:::assert_input_binary(observed, predicted + 1),
-    "Assertion on 'predicted' failed: Element 1 is not <= 1."
-  )
-
-  # predicted < 0
-  expect_error(
-    scoringutils:::assert_input_binary(observed, predicted - 1),
-    "Assertion on 'predicted' failed: Element 1 is not >= 0."
   )
 
   # observed value not factor
@@ -102,19 +70,68 @@ test_that("Input checking for binary forecasts works", {
     "Assertion on 'observed' failed: Must have exactly 2 levels."
   )
 
-  # observed is a single number and does not have the same length as predicted
+  predicted <- runif(10, min = 0, max = 1)
   expect_error(
-    scoringutils:::assert_input_binary(factor(1), predicted),
-    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
+    brier_score(observed = observed, predicted = as.list(predicted)),
+    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
+  )
+
+  # wrong length
+  expect_error(
+    brier_score(observed = observed, predicted = runif(15, min = 0, max = 1)),
+    "Assertion on 'observed' failed: `observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15.",
     fixed = TRUE
   )
 
-  # predicted is a matrix
+  # predicted > 1
   expect_error(
-    scoringutils:::assert_input_binary(observed, matrix(predicted)),
-    "Assertion on 'predicted' failed: Must be of type 'atomic vector', not 'matrix'."
+    scoringutils:::assert_input_binary(observed, predicted + 1),
+    "Assertion on 'predicted' failed: Element 1 is not <= 1."
+  )
+
+  # predicted < 0
+  expect_error(
+    scoringutils:::assert_input_binary(observed, predicted - 1),
+    "Assertion on 'predicted' failed: Element 1 is not >= 0."
+  )
+
+  # predicted is a matrix with 2 rows
+  expect_error(
+    scoringutils:::assert_input_binary(observed, matrix(rep(predicted, 2), ncol = 2)),
+    "Assertion on 'observed' failed: `predicted` must be a vector or a matrix with one column. Found 2 columns."
   )
 })
+
+
+test_that("Brier score works with different inputs", {
+  # observed is a single number and does not have the same length as predicted
+  expect_equal(
+    brier_score(factor(1, levels = c(0, 1)), predicted),
+    (1 - predicted)^2
+  )
+
+  # predicted is a single number and does not have the same length as observed
+  expect_equal(
+    brier_score(observed, predicted = 0.2),
+    ifelse(observed == 1, (1 - 0.2)^2, (0.2)^2)
+  )
+
+  # predicted is a matrix with 1 row
+  expect_warning(
+    brier_score(observed, predicted = matrix(0.2)),
+    "Recycling array of length 1 in vector-array arithmetic is deprecated.
+  Use c() or as.vector() instead.",
+  fixed = TRUE
+  )
+
+  expect_warning(
+    brier_score(observed, predicted = array(0.2)),
+    "Recycling array of length 1 in vector-array arithmetic is deprecated.
+  Use c() or as.vector() instead.",
+  fixed = TRUE
+  )
+})
+
 
 test_that("Binary metrics work within and outside of `score()`", {
   result <- score(df)
@@ -122,6 +139,7 @@ test_that("Binary metrics work within and outside of `score()`", {
     brier_score(observed, predicted),
     result$brier_score
   )
+
   expect_equal(
     logs_binary(observed, predicted),
     result$log_score
