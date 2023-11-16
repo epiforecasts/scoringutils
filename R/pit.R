@@ -189,18 +189,10 @@ pit <- function(data,
   data <- remove_na_observed_predicted(data)
   forecast_type <- get_forecast_type(data)
 
-  # if prediction type is quantile, simply extract coverage values from
-  # score and returned a list with named vectors
   if (forecast_type == "quantile") {
-    coverage <-
-      score(data, metrics = "quantile_coverage")
-
-    coverage <- summarise_scores(coverage,
-      by = unique(c(by, "quantile"))
-    )
-    # remove all existing attributes and class
-    coverage <- remove_scoringutils_class(coverage)
-
+    data[, quantile_coverage := (observed <= predicted)]
+    coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
+                     by = c(unique(c(by, "quantile")))]
     coverage <- coverage[order(quantile),
       .(
         quantile = c(quantile, 1),
@@ -208,7 +200,6 @@ pit <- function(data,
       ),
       by = c(get_forecast_unit(coverage))
     ]
-
     return(coverage[])
   }
 

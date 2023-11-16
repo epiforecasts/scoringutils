@@ -4,7 +4,7 @@
 \alias{bias_quantile}
 \title{Determines Bias of Quantile Forecasts}
 \usage{
-bias_quantile(observed, predicted, quantile)
+bias_quantile(observed, predicted, quantile, na.rm = TRUE)
 }
 \arguments{
 \item{observed}{a single observed value}
@@ -15,6 +15,8 @@ that holds predictions}
 \item{quantile}{vector of corresponding size with the quantile levels for
 which predictions were made. If this does not contain the median (0.5) then
 the median is imputed as being the mean of the two innermost quantiles.}
+
+\item{na.rm}{logical. Should missing values be removed?}
 }
 \value{
 scalar with the quantile bias for a single quantile prediction

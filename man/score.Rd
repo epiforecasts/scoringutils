@@ -19,7 +19,7 @@ score(data, ...)
 
 \method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
 
-\method{score}{scoringutils_quantile}(data, metrics = NULL, ...)
+\method{score}{scoringutils_quantile}(data, metrics = metrics_quantile, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}

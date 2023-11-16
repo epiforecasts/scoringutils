@@ -22,4 +22,15 @@ metrics_sample <- list(
 )
 usethis::use_data(metrics_sample, overwrite = TRUE)
 
-metrics_quantile <- list()
+metrics_quantile <- list(
+  "wis" = wis,
+  "overprediction" = overprediction,
+  "underprediction" = underprediction,
+  "dispersion" = dispersion,
+  "bias" = bias_quantile,
+  "coverage_50" = interval_coverage_quantile,
+  "coverage_90" = \(...) {run_safely(..., range = 90, fun = interval_coverage_quantile)},
+  "coverage_deviation" = interval_coverage_deviation_quantile,
+  "ae_median" = ae_median_quantile
+)
+usethis::use_data(metrics_quantile, overwrite = TRUE)
