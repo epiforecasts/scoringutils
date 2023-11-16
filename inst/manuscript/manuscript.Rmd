@@ -122,8 +122,6 @@ trackdown::update_file("inst/manuscript/manuscript.Rmd", gfile = "scoringutils-p
 
 Good forecasts are of great interest to decision makers in various fields like finance \citep{timmermannForecastingMethodsFinance2018, elliottForecastingEconomicsFinance2016}, weather predictions \citep{gneitingWeatherForecastingEnsemble2005, kukkonenReviewOperationalRegionalscale2012} or infectious disease modelling \citep{reichCollaborativeMultiyearMultimodel2019, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, europeancovid-19forecasthubEuropeanCovid19Forecast2021}. Throughout the COVID-19 pandemic, forecasting has garnered widespread interest from policy makers and the general public, with several collaborative forecasting efforts ("Forecast Hubs") being established \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}. Forecast evaluation is an integral part of assessing and improving the usefulness of forecasts. For decades, researchers, especially in the field of weather forecasting, have therefore developed and refined an arsenal of techniques to evaluate predictions (see for example \cite{goodRationalDecisions1952}, \cite{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976}, \cite{gneitingProbabilisticForecastsCalibration2007}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingStrictlyProperScoring2007}, \cite{bracherEvaluatingEpidemicForecasts2021}). 
 
-There already exist a few \proglang{R} \citep{R} packages which implement a wide variety of scoring metrics. The \pkg{scoringRules} package \citep{jordanEvaluatingProbabilisticForecasts2019} offers a very extensive collection of functions with efficient implementations of different proper scoring rules (some of which are directly reused in \pkg{scoringutils}). \pkg{scoringutils} complements \pkg{scoringRules} in important ways, as the latter focuses on proper scoring rules only and does not implement other evaluation metrics or provide functionality to compare forecast performance visually. \pkg{scoringutils} also adds functionality to score predictive distributions that are represented by a set of quantiles and is able to handle situations with missing data. The \pkg{topmodels} package \citep{topmodels} provides users with various graphical tools to visually evaluate and compare different forecasts. However, visualisations are only available for forecasts based on the model classes `lm`, `glm`, `crch` `disttree`, and the package is as of today not on CRAN. The \pkg{tscount} package \citep{tscount} offers functionality to fit flexible time series models and compare the quality of the generated forecasts using different proper scoring rules. The application of these rules, however, is confined to forecasts of class `tsglm`. Other packages like \pkg{Metrics} \citep{Metrics} and \pkg{MLmetrics} \citep{MLmetrics} provide a collection of metrics geared towards machine learning problems, but also lack plotting functionality as well as support for a variety of metrics and tools commonly used to evaluate and compare probabilistic forecasts. In contrast to the above, \pkg{scoringutils} not only provides metrics to score individual forecasts, but simplifies the process of comparing different forecasts against each other. It accepts arbitrary forecasts regardless of how they were created by leveraging base R classes and automatically returns a variety of suitable metrics, depending on the type and format of the input forecast. It also provides functionality to facilitate comparing forecasters even when individual forecasts are missing and offers a range of plotting functions to visualise different aspects of forecast performance. The \pkg{scoringutils} package is also unique in its extensive support for forecasts in a quantile format as used by various COVID-19 Forecast Hubs \citep{cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}, which also make use of \pkg{scoringutils} for their evaluations.
-
 Various \proglang{R} \citep{R} packages implement a large number of scoring rules, plots and other metrics that are useful in assessing the quality of a forecast. Some notable examples are \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{Metrics}, \pkg{MLmetrics} \citep{MLmetrics}, \pkg{yardstick} \citep{yardstick}, \pkg{scoring} \citep{scoring}, \pkg{verification} \citep{verification}, \pkg{surveillance} \citep{surveillance}, \pkg{predtools} \citep{predtools}, \pkg{probably} \citep{probably}, \pkg{topmodels} \citep{topmodels}, \pkg{SpecsVerification} \ citep{SpecsVerification}, \pkg{tscount} \citep{tscount}, \pkg{GLMMadaptive} \citep{GLMMadaptive},and \pkg{cvGEE} \citep{cvGEE}. These cover a wide range of (in some instances overlapping) functionality. From a user perspective, however, several challenges remain that \pkg{scoringutils} aims to address. 
 
 One potential challenge, particularly to inexperienced users, is the large number of existing packages itself. This is in parts an issue of discoverability (i.e. users not being aware about what functions exist where) and to some extent an issue of usability (i.e. users having to navigate different formats and packages). \pkg{scoringutils} aims to bridge the gap between existing packages and to make it easier to work with different packages in the ecosystem a coherent way. The package provides a clear structure and interface for applying a wide variety of metrics to different types of forecasts. Users can easily apply scoring functions from different packages or supply their own scoring rules and metrics. 
@@ -138,7 +136,53 @@ Lastly, a challenge for inexperienced users is to know which metric to use. \pkg
  
 The remainder of this section will provide an overview of the fundamental ideas behind forecast evaluation. Section \ref{metrics} will give a detailed theoretical explanation of the evaluation metrics in \pkg{scoringutils} and when to use them. Section \ref{evaluation-example} will demonstrate how to conduct an evaluation in \pkg{scoringutils} using forecasts of COVID-19 submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021} as a case study. In the following we will use the words “model” and “forecaster” interchangeably, regardless of how forecasts were actually generated. 
 
-## Forecast types and forecast formats
+
+
+
+# Package overview
+
+The package provides several functions, classes, and generics. 
+
+### score() and validate_forecasts()
+
+\fct{score()} is the workhorse of the package. It takes a data.frame as input as well as a list of scoring functions and applies those scoring functions to the input, returning a data.frame with the scores. 
+
+\fct{score()} is a generic. The default method runs \fct{validate\_forecasts} on the input and calls \fct{score()} again afterwards (see Figure \ref{fig:illustration-score}). `validate_forecasts()` calls a series of check functions to determine the type of the forecast and the input format. Based on those checks, it constructs an object of class `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or `scoringutils_quantile` (see below) and validates that object. Upon calling `score()` again, the function dispatches to the appropriate method based on the class of the input. The dedicated methods then apply the scoring functions to the data. 
+
+Output of `score()`: 
+
+
+```{r illustration-score, echo = FALSE, fig.pos = "!h", out.width="70%", fig.cap= "Illustration of the workflow for \fct{score()}.", fig.show="hold"}
+include_graphics("output/illustration-score.png")
+```
+
+
+### Diagnostic functions
+
+Functions that start with `get_` provide some information on the data and the input. 
+Examples are `get_forecast_counts`, `get_forecast_unit`
+
+### Check functions
+Functions to check inputs. Most of these are internal functions, but some are exposed to the user. The naming convention follows that of the \pkg{checkmate} package \citep{checkmate}. 
+
+Functions that begin with `assert_` return `TRUE` if the condition is met, and throw an error otherwise. 
+
+Functions that begin with `check_` return `TRUE` if the condition is met, and a string with an error message otherwise. 
+
+Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise. 
+
+### Scoring functions
+
+Naming: name of the metric + \_ + name of the expected input format (see below). Return a vector. 
+
+
+
+
+
+
+
+
+## Forecast types and input formats
 
 In its most general sense, a forecast is the forecaster’s stated belief about the future \citep{gneitingStrictlyProperScoring2007} that can come in many different forms. Quantitative forecasts are either point forecasts or probabilistic in nature and can make statements about continuous, discrete or binary outcome variables. Point forecasts only give one single number for the expected or most likely outcome. Probabilistic forecasts, in contrast, by definition provide a full predictive probability distribution. This makes them much more useful in any applied setting, as we learn about the forecaster's uncertainty and their belief about all aspects of the underlying data-generating distribution. 
 
