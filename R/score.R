@@ -152,18 +152,10 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
-    data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args)
-    )]
-    return()
-  }, ...)
+  data <- apply_metrics(
+    data, metrics,
+    data$observed, data$predicted, ...
+  )
 
   setattr(data, "metric_names", names(metrics))
 
@@ -180,18 +172,10 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
-
-    data[, (metric_name) := do.call(
-      fun, c(list(observed, predicted), matching_args)
-    )]
-    return()
-  }, ...)
+  data <- apply_metrics(
+    data, metrics,
+    data$observed, data$predicted, ...
+  )
 
   setattr(data, "metric_names", names(metrics))
 
@@ -206,54 +190,87 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
-  # Extract the arguments passed in ...
-  args <- list(...)
-  lapply(seq_along(metrics), function(i, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
-    matching_args <- filter_function_args(fun, args)
+  # transpose the forecasts that belong to the same forecast unit
+  d_transposed <- data[, .(predicted = list(predicted),
+                           observed = unique(observed),
+                           scoringutils_N = length(list(sample_id))),
+                       by = forecast_unit]
 
-    data[, (metric_name) := do.call(
-      fun, c(list(unique(observed), t(predicted)), matching_args)
-    ), by = forecast_unit]
-    return()
-  },
-  ...)
+  # split according to number of samples and do calculations for different
+  # sample lengths separately
+  d_split <- split(d_transposed, d_transposed$scoringutils_N)
 
-  data <- data[
-    , lapply(.SD, unique),
-    .SDcols = colnames(data) %like% paste(names(metrics), collapse = "|"),
-    by = forecast_unit
-  ]
+  split_result <- lapply(d_split, function(data) {
+    # create a matrix
+    observed <- data$observed
+    predicted <- do.call(rbind, data$predicted)
+    data[, c("observed", "predicted", "scoringutils_N") := NULL]
 
+    data <- apply_metrics(
+      data, metrics,
+      observed, predicted, ...
+    )
+    return(data)
+  })
+  data <- rbindlist(split_result)
   setattr(data, "metric_names", names(metrics))
 
   return(data[])
 }
 
+#' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
-score.scoringutils_quantile <- function(data, metrics = NULL, ...) {
+score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
+  metrics <- validate_metrics(metrics)
 
-  if (is.null(metrics)) {
-    metrics <- available_metrics()
-  }
-  metrics <- metrics[metrics %in% available_metrics()]
-  scores <- score_quantile(
-    data = data,
-    forecast_unit = forecast_unit,
-    metrics = metrics,
-    ...
-  )
+  # transpose the forecasts that belong to the same forecast unit
+  # make sure the quantiles and predictions are ordered in the same way
+  d_transposed <- data[, .(predicted = list(predicted[order(quantile)]),
+                           observed = unique(observed),
+                           quantile = list(quantile[order(quantile)]),
+                           scoringutils_quantile = toString(quantile[order(quantile)])),
+                       by = forecast_unit]
 
-  setattr(scores, "metric_names", metrics[metrics %in% colnames(scores)])
-  # manual hack to make sure that the correct attributes are there.
-  setattr(scores, "forecast_unit", forecast_unit)
-  setattr(scores, "forecast_type", "quantile")
-  scores <- new_scoringutils(scores, "scoringutils_quantile")
+  # split according to quantile lengths and do calculations for different
+  # quantile lengths separately. The function `wis()` assumes that all
+  # forecasts have the same quantiles
+  d_split <- split(d_transposed, d_transposed$scoringutils_quantile)
 
-  return(scores[])
+  split_result <- lapply(d_split, function(data) {
+    # create a matrix out of the list of predicted values and quantiles
+    observed <- data$observed
+    predicted <- do.call(rbind, data$predicted)
+    quantile <- unlist(unique(data$quantile))
+    data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
+
+    data <- apply_metrics(
+      data, metrics,
+      observed, predicted, quantile, ...
+    )
+    return(data)
+  })
+
+  data <- rbindlist(split_result)
+  setattr(data, "metric_names", names(metrics))
+
+  return(data[])
 }
+
+apply_metrics <- function(data, metrics, ...) {
+  expr <- expression(
+    data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
+  )
+  lapply(seq_along(metrics), function(i, data, ...) {
+    metric_name <- names(metrics[i])
+    fun <- metrics[[i]]
+    eval(expr)
+  }, data, ...)
+  return(data)
+}
+
+
+

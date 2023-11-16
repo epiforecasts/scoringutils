@@ -221,7 +221,7 @@ plot_wis <- function(scores,
 #' produced by [score()] or [summarise_scores()]. Note that "range" must be included
 #' in the `by` argument when running [summarise_scores()]
 #' @param y The variable from the scores you want to show on the y-Axis.
-#' This could be something like "interval_score" (the default) or "dispersion"
+#' This could be something like "wis" (the default) or "dispersion"
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
 #' @param colour Character vector of length one used to determine a variable
@@ -233,18 +233,18 @@ plot_wis <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
-#' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
+#' # scores <- score(example_quantile)
+#' # scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 #'
-#' plot_ranges(scores, x = "model") +
-#'   facet_wrap(~target_type, scales = "free")
+#' # plot_ranges(scores, x = "model") +
+#' #  facet_wrap(~target_type, scales = "free")
 #'
 #' # visualise dispersion instead of interval score
-#' plot_ranges(scores, y = "dispersion", x = "model") +
-#'   facet_wrap(~target_type)
+#' # plot_ranges(scores, y = "dispersion", x = "model") +
+#' #  facet_wrap(~target_type)
 
 plot_ranges <- function(scores,
-                        y = "interval_score",
+                        y = "wis",
                         x = "model",
                         colour = "range") {
   plot <- ggplot(
@@ -296,7 +296,7 @@ plot_ranges <- function(scores,
 #' @export
 #' @examples
 #' scores <- score(example_quantile)
-#' scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
+#' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
 
@@ -582,10 +582,10 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
-#' scores <- score(example_quantile)
-#' scores <- summarise_scores(scores, by = c("model", "range"))
-#' plot_interval_coverage(scores)
+#' # data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' # scores <- score(example_quantile)
+#' # scores <- summarise_scores(scores, by = c("model", "range"))
+#' # plot_interval_coverage(scores)
 
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
@@ -613,7 +613,7 @@ plot_interval_coverage <- function(scores,
       colour = "grey",
       linetype = "dashed"
     ) +
-    geom_line(aes(y = coverage * 100)) +
+    geom_line(aes(y = interval_coverage * 100)) +
     theme_scoringutils() +
     ylab("% Obs inside interval") +
     xlab("Nominal interval coverage") +
@@ -638,9 +638,9 @@ plot_interval_coverage <- function(scores,
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
-#' scores <- summarise_scores(scores, by = c("model", "quantile"))
-#' plot_quantile_coverage(scores)
+#' # scores <- score(example_quantile)
+#' # scores <- summarise_scores(scores, by = c("model", "quantile"))
+#' # plot_quantile_coverage(scores)
 
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {

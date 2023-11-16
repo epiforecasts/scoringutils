@@ -4,7 +4,7 @@
 \alias{plot_ranges}
 \title{Plot Metrics by Range of the Prediction Interval}
 \usage{
-plot_ranges(scores, y = "interval_score", x = "model", colour = "range")
+plot_ranges(scores, y = "wis", x = "model", colour = "range")
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
@@ -12,7 +12,7 @@ produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summ
 in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
 
 \item{y}{The variable from the scores you want to show on the y-Axis.
-This could be something like "interval_score" (the default) or "dispersion"}
+This could be something like "wis" (the default) or "dispersion"}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model"}
@@ -31,13 +31,13 @@ sharpness / dispersion changes by range.
 }
 \examples{
 library(ggplot2)
-scores <- score(example_quantile)
-scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
+# scores <- score(example_quantile)
+# scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
 
-plot_ranges(scores, x = "model") +
-  facet_wrap(~target_type, scales = "free")
+# plot_ranges(scores, x = "model") +
+#  facet_wrap(~target_type, scales = "free")
 
 # visualise dispersion instead of interval score
-plot_ranges(scores, y = "dispersion", x = "model") +
-  facet_wrap(~target_type)
+# plot_ranges(scores, y = "dispersion", x = "model") +
+#  facet_wrap(~target_type)
 }

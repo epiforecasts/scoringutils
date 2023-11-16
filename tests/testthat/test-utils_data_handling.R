@@ -22,7 +22,7 @@ test_that("range_long_to_quantile works", {
 
 
 
-test_that("quantile_to_interval works", {
+test_that("quantile_to_interval.data.frame() works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
@@ -30,7 +30,6 @@ test_that("quantile_to_interval works", {
     predicted = c(2:11, 4:13),
     quantile = rep(c(0.25, 0.75), each = 10)
   )
-
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
@@ -39,19 +38,38 @@ test_that("quantile_to_interval works", {
     range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
-
   long2 <- as.data.frame(quantile_to_interval(
     quantile,
     keep_quantile_col = FALSE
   ))
-
   data.table::setcolorder(long2, names(long))
-
   # for some reason this is needed to pass the unit tests on gh actions
   long2$boundary <- as.character(long2$boundary)
   long$boundary <- as.character(long$boundary)
-
   expect_equal(long, as.data.frame(long2))
+
+  # check that it handles NA values
+  setDT(quantile)
+  quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile") := NA]
+  # in this instance, a problem appears because there is an NA value both
+  # for the upper and lower bound.
+  expect_message(
+    quantile_to_interval(
+      quantile,
+      keep_quantile_col = FALSE,
+      format = "wide"
+    ),
+    "Aggregate function missing, defaulting to 'length'"
+  )
+  quantile <- quantile[-c(1, 3), ]
+  wide2 <- scoringutils:::quantile_to_interval(
+    quantile,
+    keep_quantile_col = FALSE,
+    format = "wide"
+  )
+  expect_equal(nrow(wide2), 10)
+  expect_true(!("NA") %in% colnames(wide2))
+  expect_equal(sum(wide2$lower, na.rm = TRUE), 59)
 })
 
 
@@ -72,7 +90,7 @@ test_that("sample_to_quantiles works", {
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  quantile2 <- scoringutils::sample_to_quantile(samples, quantiles = c(0.25, 0.75))
+  quantile2 <- sample_to_quantile(samples, quantiles = c(0.25, 0.75))
 
   expect_equal(quantile, as.data.frame(quantile2))
 

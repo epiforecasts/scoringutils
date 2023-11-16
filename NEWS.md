@@ -22,6 +22,7 @@ The update introduces breaking changes. If you want to keep using the older vers
     - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
 - `check_forecasts()` was replaced by a new function `validate()`. `validate()` validates the input and in that sense fulfills the purpose of `check_forecasts()`. It has different methods: `validate.default()` assigns the input a class based on their forecast type. Other methods validate the input specifically for the various forecast types.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds pairwise comparisons to it. 
+- `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
   - The function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future.

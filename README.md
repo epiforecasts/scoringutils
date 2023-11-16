@@ -129,8 +129,8 @@ details. Finally we summarise these scores by model and target type.
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
   validate() %>%
+  add_coverage() %>%
   score() %>%
-  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(
     by = c("model", "target_type")
   ) %>%
@@ -144,15 +144,15 @@ example_quantile %>%
   kable()
 ```
 
-| model                 | target_type | interval_score | dispersion | underprediction | overprediction | coverage_deviation |    bias | ae_median | coverage_50 | coverage_90 | relative_skill | scaled_rel_skill |
-|:----------------------|:------------|---------------:|-----------:|----------------:|---------------:|-------------------:|--------:|----------:|------------:|------------:|---------------:|-----------------:|
-| EuroCOVIDhub-baseline | Cases       |          28000 |       4100 |         10000.0 |        14000.0 |             -0.110 |  0.0980 |     38000 |        0.33 |        0.82 |           1.30 |              1.6 |
-| EuroCOVIDhub-baseline | Deaths      |            160 |         91 |             2.1 |           66.0 |              0.120 |  0.3400 |       230 |        0.66 |        1.00 |           2.30 |              3.8 |
-| EuroCOVIDhub-ensemble | Cases       |          18000 |       3700 |          4200.0 |        10000.0 |             -0.098 | -0.0560 |     24000 |        0.39 |        0.80 |           0.82 |              1.0 |
-| EuroCOVIDhub-ensemble | Deaths      |             41 |         30 |             4.1 |            7.1 |              0.200 |  0.0730 |        53 |        0.88 |        1.00 |           0.60 |              1.0 |
-| UMass-MechBayes       | Deaths      |             53 |         27 |            17.0 |            9.0 |             -0.023 | -0.0220 |        78 |        0.46 |        0.88 |           0.75 |              1.3 |
-| epiforecasts-EpiNow2  | Cases       |          21000 |       5700 |          3300.0 |        12000.0 |             -0.067 | -0.0790 |     28000 |        0.47 |        0.79 |           0.95 |              1.2 |
-| epiforecasts-EpiNow2  | Deaths      |             67 |         32 |            16.0 |           19.0 |             -0.043 | -0.0051 |       100 |        0.42 |        0.91 |           0.98 |              1.6 |
+| model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | coverage_50 | coverage_90 | coverage_deviation | ae_median | relative_skill | scaled_rel_skill |
+|:----------------------|:------------|------:|---------------:|----------------:|-----------:|--------:|------------:|------------:|-------------------:|----------:|---------------:|-----------------:|
+| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |        0.33 |        0.82 |             -0.120 |     38000 |           1.30 |              1.6 |
+| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |        0.66 |        1.00 |              0.120 |       230 |           2.30 |              3.8 |
+| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |        0.39 |        0.80 |             -0.100 |     24000 |           0.82 |              1.0 |
+| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |        0.88 |        1.00 |              0.200 |        53 |           0.60 |              1.0 |
+| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |        0.46 |        0.88 |             -0.025 |        78 |           0.75 |              1.3 |
+| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |        0.47 |        0.79 |             -0.070 |     28000 |           0.95 |              1.2 |
+| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |        0.42 |        0.91 |             -0.045 |       100 |           0.98 |              1.6 |
 
 `scoringutils` contains additional functionality to transform forecasts,
 to summarise scores at different levels, to visualise them, and to
@@ -174,20 +174,27 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
-#>                    model target_type   scale interval_score   dispersion
-#> 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146
-#> 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443
-#> 3: EuroCOVIDhub-ensemble       Cases     log   5.500974e-01    0.1011850
-#> 4: EuroCOVIDhub-ensemble       Cases natural   1.155071e+04 3663.5245788
-#> 5:  epiforecasts-EpiNow2       Cases     log   6.005778e-01    0.1066329
-#> 6:  epiforecasts-EpiNow2       Cases natural   1.443844e+04 5664.3779484
-#>    underprediction overprediction coverage_deviation        bias    ae_median
-#> 1:    3.521964e-01      0.3804607        -0.10940217  0.09726562 1.185905e+00
-#> 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726562 3.208048e+04
-#> 3:    1.356563e-01      0.3132561        -0.09785326 -0.05640625 7.410484e-01
-#> 4:    4.237177e+03   3650.0047554        -0.09785326 -0.05640625 1.770795e+04
-#> 5:    1.858699e-01      0.3080750        -0.06660326 -0.07890625 7.656591e-01
-#> 6:    3.260356e+03   5513.7058424        -0.06660326 -0.07890625 2.153070e+04
+#>                    model target_type   scale         wis overprediction
+#> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
+#> 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696
+#> 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842
+#> 4: EuroCOVIDhub-ensemble      Deaths natural    41.42249       7.138247
+#> 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117
+#> 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601
+#>    underprediction dispersion        bias coverage_50 coverage_90
+#> 1:     4237.177310 3663.52458 -0.05640625   0.3906250   0.8046875
+#> 2:    10284.972826 4102.50094  0.09726562   0.3281250   0.8203125
+#> 3:     3260.355639 5664.37795 -0.07890625   0.4687500   0.7890625
+#> 4:        4.103261   30.18099  0.07265625   0.8750000   1.0000000
+#> 5:        2.098505   91.40625  0.33906250   0.6640625   1.0000000
+#> 6:       16.800951   26.87239 -0.02234375   0.4609375   0.8750000
+#>    coverage_deviation   ae_median
+#> 1:        -0.10230114 17707.95312
+#> 2:        -0.11437500 32080.48438
+#> 3:        -0.06963068 21530.69531
+#> 4:         0.20380682    53.13281
+#> 5:         0.12142045   233.25781
+#> 6:        -0.02488636    78.47656
 ```
 
 ## Citation

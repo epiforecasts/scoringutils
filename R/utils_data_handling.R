@@ -101,8 +101,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 sample_to_quantile <- function(data,
                                quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-  data <- data.table::as.data.table(data)
-
+  data <- ensure_data.table(data)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
@@ -204,19 +203,10 @@ quantile_to_interval.data.frame <- function(dt,
                                             format = "long",
                                             keep_quantile_col = FALSE,
                                             ...) {
-  if (!is.data.table(dt)) {
-    dt <- data.table::as.data.table(dt)
-  } else {
-    # use copy to avoid
-    dt <- copy(dt)
-  }
+  dt <- ensure_data.table(dt)
 
   dt[, boundary := ifelse(quantile <= 0.5, "lower", "upper")]
-  dt[, range := ifelse(
-    boundary == "lower",
-    round((1 - 2 * quantile) * 100, 10),
-    round((2 * quantile - 1) * 100, 10)
-  )]
+  dt[, range := get_range_from_quantile(quantile)]
 
   # add median quantile
   median <- dt[quantile == 0.5, ]
@@ -230,6 +220,10 @@ quantile_to_interval.data.frame <- function(dt,
   if (format == "wide") {
     delete_columns(dt, "quantile")
     dt <- dcast(dt, ... ~ boundary, value.var = "predicted")
+    # if there are NA values in `predicted`, this introduces a column "NA"
+    if ("NA" %in% colnames(dt) && all(is.na(dt[["NA"]]))) {
+      dt[, "NA" := NULL]
+    }
   }
   return(dt[])
 }
@@ -306,4 +300,26 @@ sample_to_range_long <- function(data,
   data <- quantile_to_interval(data, keep_quantile_col = keep_quantile_col)
 
   return(data[])
+}
+
+#' Get Range Belonging to a Quantile
+#' @description Every quantile can be thought of either as the lower or the
+#' upper bound of a symmetric central prediction interval. This helper function
+#' returns the range of the central prediction interval to which the quantile
+#' belongs.
+#'
+#' Due to numeric instability that sometimes occurred in the past, ranges are
+#' rounded to 10 decimal places. This is not a problem for the vast majority of
+#' use cases, but it is something to be aware of.
+#' @param quantile a numeric vector of quantile levels of size N
+#' @return a numeric vector of interval ranges of size N
+#' @keywords internal
+get_range_from_quantile <- function(quantile) {
+  boundary <- ifelse(quantile <= 0.5, "lower", "upper")
+  range <- ifelse(
+    boundary == "lower",
+    round((1 - 2 * quantile) * 100, digits = 10),
+    round((2 * quantile - 1) * 100, digits = 10)
+  )
+  return(range)
 }

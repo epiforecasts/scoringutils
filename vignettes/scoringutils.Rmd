@@ -223,7 +223,6 @@ For quantile-based forecasts we are often interested in specific coverage-levels
 
 ```{r}
 score(example_quantile) %>%
-  add_coverage(ranges = c(50, 90), by = c("model", "target_type")) %>%
   summarise_scores(by = c("model", "target_type")) %>%
   summarise_scores(fun = signif, digits = 2)
 ```
@@ -304,20 +303,20 @@ example_quantile[quantile %in% seq(0.1, 0.9, 0.1), ] %>%
   facet_grid(model ~ target_type)
 ```
 
-Another way to look at calibration are interval coverage and quantile coverage. Interval coverage is the percentage of true values that fall inside a given central prediction interval. Quantile coverage is the percentage of observed values that fall below a given quantile level. 
+<!-- Another way to look at calibration are interval coverage and quantile coverage. Interval coverage is the percentage of true values that fall inside a given central prediction interval. Quantile coverage is the percentage of observed values that fall below a given quantile level.  -->
 
-In order to plot interval coverage, you need to include "range" in the `by` argument to `summarise_scores()`. The green area on the plot marks conservative behaviour, i.e. your empirical coverage is greater than it nominally need be (e.g. 55% of true values covered by all 50% central prediction intervals.)
+<!-- In order to plot interval coverage, you need to include "range" in the `by` argument to `summarise_scores()`. The green area on the plot marks conservative behaviour, i.e. your empirical coverage is greater than it nominally need be (e.g. 55% of true values covered by all 50% central prediction intervals.) -->
 
-```{r}
+```{r, eval=FALSE, include=FALSE}
 example_quantile %>%
   score() %>%
   summarise_scores(by = c("model", "range")) %>%
   plot_interval_coverage()
 ```
 
-To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed. 
+<!-- To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
 
-```{r}
+```{r, eval=FALSE, include=FALSE}
 example_quantile %>%
   score() %>%
   summarise_scores(by = c("model", "quantile")) %>%
@@ -377,11 +376,11 @@ example_quantile %>%
   plot_correlation()
 ```
 
-### Scores by interval ranges
+<!-- ### Scores by interval ranges -->
 
-If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range: 
+<!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:  -->
 
-```{r}
+```{r, eval = FALSE, include = FALSE}
 example_quantile %>%
   score() %>%
   summarise_scores(by = c("model", "range", "target_type")) %>%
@@ -400,8 +399,7 @@ example_integer %>%
   sample_to_quantile(
     quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
-  score() %>%
-  add_coverage(by = c("model", "target_type"))
+  score()
 ```
 
 ## Available metrics

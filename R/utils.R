@@ -5,7 +5,8 @@
 #' @keywords info
 
 available_metrics <- function() {
-  return(unique(scoringutils::metrics$Name))
+  return(unique(c(scoringutils::metrics$Name,
+                  "wis", "coverage_50", "coverage_90")))
 }
 
 
@@ -200,3 +201,72 @@ remove_scoringutils_class <- function(object) {
   }
   return(object)
 }
+
+#' @title Run a function safely
+#' @description This is a wrapper function designed to run a function safely
+#' when it is not completely clear what arguments coulld be passed to the
+#' function.
+#'
+#' All named arguments in `...` that are not accepted by `fun` are removed.
+#' All unnamed arguments are passed on to the function. In case `fun` errors,
+#' the error will be converted to a warning and `run_safely` returns `NULL`.
+#'
+#' `run_safely` can be useful when constructing functions to be used as
+#' metrics in [score()].
+#'
+#' @param ... Arguments to pass to `fun`
+#' @param fun A function to execute
+#' @return The result of `fun` or `NULL` if `fun` errors
+#' @export
+#' @examples
+#' f <- function(x) {x}
+#' run_safely(2, fun = f)
+#' run_safely(2, y = 3, fun = f)
+#' run_safely(fun = f)
+#' run_safely(y = 3, fun = f)
+run_safely <- function(..., fun) {
+  args <- list(...)
+  # Check if the function accepts ... as an argument
+  if ("..." %in% names(formals(fun))) {
+    valid_args <- args
+  } else if (is.null(names(args))) {
+    # if no arguments are named, just pass all arguments on
+    valid_args <- args
+  } else {
+    # Identify the arguments that fun() accepts
+    possible_args <- names(formals(fun))
+    # keep valid arguments as well as unnamed arguments
+    valid_args <- args[names(args) == "" | names(args) %in% possible_args]
+  }
+
+  result <- try(do.call(fun, valid_args), silent = TRUE)
+
+  if (inherits(result, "try-error")) {
+    msg <- conditionMessage(attr(result, "condition"))
+    warning(
+      "Function execution failed, returning NULL. Error: ",
+      msg
+    )
+    return(NULL)
+  }
+  return(result)
+}
+
+
+#' Ensure That an Object is a Data Table
+#' @description This function ensures that an object is a data table.
+#' If the object is not a data table, it is converted to one. If the object
+#' is a data table, a copy of the object is returned.
+#' @param data An object to ensure is a data table
+#' @return A data table
+#' @keywords internal
+#' @importFrom data.table copy is.data.table as.data.table
+ensure_data.table <- function(data) {
+  if (!is.data.table(data)) {
+    data <- as.data.table(data)
+  } else {
+    data <- copy(data)
+  }
+  return(data)
+}
+

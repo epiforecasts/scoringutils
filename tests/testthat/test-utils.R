@@ -36,6 +36,19 @@ test_that("get_protected_columns() returns the correct result", {
 })
 
 
+test_that("run_safely() works as expected", {
+  f <- function(x) {x}
+  expect_equal(run_safely(2, fun = f), 2)
+  expect_equal(run_safely(2, y = 3, fun = f), 2)
+  expect_warning(
+    run_safely(fun = f),
+    'Function execution failed, returning NULL. Error: argument "x" is missing, with no default',
+    fixed = TRUE
+  )
+  expect_equal(suppressWarnings(run_safely(y = 3, fun = f)), NULL)
+})
+
+
 # test_that("prediction_is_quantile() correctly identifies quantile predictions", {
 #   data <- data.frame(
 #     predicted = 1:3,

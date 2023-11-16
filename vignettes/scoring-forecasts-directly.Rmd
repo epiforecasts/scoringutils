@@ -207,7 +207,7 @@ observed <- rnorm(30, mean = 1:30)
 interval_range <- 90
 alpha <- (100 - interval_range) / 100
 lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
-upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 1:30))
+upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
 
 interval_score(
   observed = observed,

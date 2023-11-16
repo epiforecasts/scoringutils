@@ -53,7 +53,7 @@ test_that("pairwise_comparison() works", {
   )
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
-  eval <- suppressMessages(score(data_formatted))
+  eval <- score(data_formatted)
 
   # check with relative skills
   eval_without_rel_skill <- summarise_scores(
@@ -85,7 +85,7 @@ test_that("pairwise_comparison() works", {
   # prepare scores for the code Johannes Bracher wrote
   scores_johannes <- data.table::copy(eval_without_baseline) # doesn't matter which one
   data.table::setnames(scores_johannes,
-    old = c("location", "target_end_date", "interval_score"),
+    old = c("location", "target_end_date", "wis"),
     new = c("unit", "timezero", "wis")
   )
 
@@ -238,7 +238,7 @@ test_that("pairwise_comparison() works", {
     model = rep(c("model1", "model2", "model3"), each = 10),
     date = as.Date("2020-01-01") + rep(1:5, each = 2),
     location = c(1, 2),
-    interval_score = (abs(rnorm(30))),
+    wis = (abs(rnorm(30))),
     ae_median = (abs(rnorm(30)))
   )
 

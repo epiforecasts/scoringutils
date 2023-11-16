@@ -4,38 +4,38 @@
 \alias{ae_median_quantile}
 \title{Absolute Error of the Median (Quantile-based Version)}
 \usage{
-ae_median_quantile(observed, predicted, quantiles = NULL)
+ae_median_quantile(observed, predicted, quantile)
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{numeric vector of size n with the observed values}
 
-\item{predicted}{numeric vector with predictions, corresponding to the
-quantiles in a second vector, \code{quantiles}.}
+\item{predicted}{numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
-\item{quantiles}{numeric vector that denotes the quantile for the values
-in \code{predicted}. Only those predictions where \code{quantiles == 0.5} will
-be kept. If \code{quantiles} is \code{NULL}, then all \code{predicted} and
-\code{observed} will be used (this is then the same as \code{\link[=abs_error]{abs_error()}})}
+\item{quantile}{vector with quantile levels of size N}
 }
 \value{
-vector with the scoring values
+numeric vector of length N with the absolute error of the median
 }
 \description{
-Absolute error of the median calculated as
-
+Compute the absolute error of the median calculated as
 \deqn{
-  \textrm{abs}(\textrm{observed} - \textrm{prediction})
+  \textrm{abs}(\textrm{observed} - \textrm{median prediction})
 }{
   abs(observed - median_prediction)
 }
-
-The function was created for internal use within \code{\link[=score]{score()}}, but can also
-used as a standalone function.
+The median prediction is the predicted value for which quantile == 0.5,
+the function therefore requires 0.5 to be among the quantile levels in
+\code{quantile}.
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
-predicted_values <- rnorm(30, mean = 1:30)
-ae_median_quantile(observed, predicted_values, quantiles = 0.5)
+predicted_values <- matrix(rnorm(30, mean = 1:30))
+ae_median_quantile(observed, predicted_values, quantile = 0.5)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}, \code{\link[=abs_error]{abs_error()}}

@@ -1,9 +1,7 @@
 library(ggplot2, quietly = TRUE)
 
 test_that("plot_heatmap() works as expected", {
-  scores <- suppressMessages(
-    summarise_scores(scores_quantile, by = c("model", "target_type", "range"))
-  )
+  scores <- summarise_scores(scores_quantile, by = c("model", "target_type"))
   p <- plot_heatmap(scores, x = "target_type", metric = "bias")
   expect_s3_class(p, "ggplot")
   skip_on_cran()
