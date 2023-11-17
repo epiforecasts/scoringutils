@@ -29,12 +29,7 @@ test_that("correct input works", {
   expect_no_condition(assert_input_binary(observed, predicted = 0.2))
   expect_no_condition(assert_input_point(observed_point, predicted = 0.2))
 
-  # predicted is a matrix with one row
-  expect_no_condition(assert_input_binary(observed, predicted = matrix(0.2)))
-  expect_no_condition(assert_input_point(observed_point, matrix(0.2)))
-
-  # predicted is a matrix with 1 row - this is will throw a warning in the
-  # actual scoring rule function
+  # predicted is a matrix with nrow equal to observed
   expect_no_condition(assert_input_binary(observed, matrix(predicted)))
   expect_no_condition(assert_input_point(observed_point, matrix(predicted_point)))
 })
@@ -72,7 +67,7 @@ test_that("function throws an error for wrong input formats", {
   # wrong length
   expect_error(
     assert_input_binary(observed = observed, predicted = runif(15, min = 0, max = 1)),
-    "Assertion on 'observed' failed: `observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15.",
+    "`observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15",
     fixed = TRUE
   )
   expect_error(
@@ -93,10 +88,21 @@ test_that("function throws an error for wrong input formats", {
     "Assertion on 'predicted' failed: Element 1 is not >= 0."
   )
 
+  # predicted is a matrix with one row
+  expect_error(
+    assert_input_binary(observed, predicted = matrix(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
+    fixed = TRUE)
+  expect_error(
+    assert_input_point(observed_point, predicted = matrix(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
+    fixed = TRUE)
+
   # predicted is a matrix with 2 rows
   expect_error(
     assert_input_binary(observed, matrix(rep(predicted, 2), ncol = 2)),
-    "Assertion on 'observed' failed: `predicted` must be a vector or a matrix with one column. Found 2 columns."
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 1 cols, but has 2 cols",
+    fixed = TRUE
   )
 })
 
@@ -131,18 +137,17 @@ test_that("Brier score works with different inputs", {
   )
 
   # predicted is a matrix with 1 row
-  expect_warning(
+  expect_error(
     brier_score(observed, predicted = matrix(0.2)),
-    "Recycling array of length 1 in vector-array arithmetic is deprecated.
-  Use c() or as.vector() instead.",
-  fixed = TRUE
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
+    fixed = TRUE
   )
 
-  expect_warning(
+  # predicted is an array
+  expect_error(
     brier_score(observed, predicted = array(0.2)),
-    "Recycling array of length 1 in vector-array arithmetic is deprecated.
-  Use c() or as.vector() instead.",
-  fixed = TRUE
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'array'\n * check_matrix(predicted): Must be of type 'matrix', not 'array'",
+    fixed = TRUE
   )
 })
 

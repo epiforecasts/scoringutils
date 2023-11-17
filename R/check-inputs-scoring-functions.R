@@ -171,7 +171,7 @@ check_input_interval <- function(observed, lower, upper, range) {
 assert_input_binary <- function(observed, predicted) {
   assert_factor(observed, n.levels = 2, min.len = 1)
   assert_numeric(predicted, lower = 0, upper = 1)
-  assert(check_dims_ok_point(observed, predicted))
+  assert_dims_ok_point(observed, predicted)
   return(invisible(NULL))
 }
 
@@ -229,7 +229,7 @@ assert_dims_ok_point <- function(observed, predicted) {
   assert_vector(observed, min.len = 1)
   n_obs <- length(observed)
   assert(
-    check_vector(predicted, min.len = 1),
+    check_vector(predicted, min.len = 1, strict = TRUE),
     check_matrix(predicted, ncols = 1, nrows = n_obs)
   )
   dim_p <- dim(predicted)
@@ -239,7 +239,7 @@ assert_dims_ok_point <- function(observed, predicted) {
   }
   n_pred <- length(as.vector(predicted))
   # check that both are either of length 1 or of equal length
-  if (n_obs != 1 & n_pred != 1 & n_obs != n_pred) {
+  if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
     stop("`observed` and `predicted` must either be of length 1 or ",
          "of equal length. Found ", n_obs, " and ", n_pred)
   }
