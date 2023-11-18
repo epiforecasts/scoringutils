@@ -1,7 +1,6 @@
 # ==============================================================================
 # `get_forecast_unit()`
 # ==============================================================================
-
 test_that("get_forecast_unit() works as expected", {
   expect_equal(
     get_forecast_unit(example_quantile),
@@ -15,6 +14,7 @@ test_that("get_forecast_unit() works as expected", {
       "forecast_date", "model", "horizon")
   )
 
+  # warning if something changes
   data <- validate(example_quantile)
   ex <- data[, location := NULL]
   expect_warning(
@@ -28,6 +28,33 @@ fixed = TRUE
 })
 
 
+# ==============================================================================
+# `get_complete_forecasts()`
+# ==============================================================================
+test_that("get_complete_forecasts() works as expected", {
+  expect_equal(nrow(get_complete_forecasts(example_quantile)), 20401)
+
+  ex <- data.frame(observed = c(NA, 1:3), predicted = 1:4)
+  expect_equal(nrow(get_complete_forecasts(ex)), 3)
+
+  ex$predicted <- c(1:3, NA)
+  expect_equal(nrow(get_complete_forecasts(ex)), 2)
+
+  expect_error(
+    get_complete_forecasts(data.frame(x = 1:2, y = 1:2)),
+    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data."
+  )
+
+  expect_error(
+    get_complete_forecasts(data.frame(observed = c(NA, NA), predicted = 1:2)),
+    "After removing NA values in `observed` and `predicted`, there were no observations left"
+  )
+})
+
+
+# ==============================================================================
+# `get_type()`
+# ==============================================================================
 test_that("get_type() works as expected with vectors", {
   expect_equal(get_type(1:3), "integer")
   expect_equal(get_type(factor(1:2)), "classification")
