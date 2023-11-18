@@ -277,16 +277,31 @@ test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
 })
 
-# test_that(
-#   "score() can support a sample column when a quantile forecast is used", {
-#   ex <- example_quantile[!is.na(quantile)][1:200, ]
-#   ex <- rbind(
-#     data.table::copy(ex)[, sample_id := 1],
-#     ex[, sample_id := 2]
-#   )
-#   scores <- suppressWarnings(score(ex))
-#   expect_snapshot(summarise_scores(
-#     summarise_scores(scores, by = "model"), by = "model",
-#     fun = signif, digits = 2
-#   ))
-#  })
+# =============================================================================
+# `apply_metrics()`
+# =============================================================================
+
+test_that("apply_metrics() works", {
+
+  dt <- data.table::data.table(x = 1:10)
+  scoringutils:::apply_metrics(
+    data = dt, metrics = list("test" = function(x) x + 1),
+    dt$x
+  )
+  expect_equal(dt$test, 2:11)
+
+  # additional named argument works
+  expect_no_condition(
+    scoringutils:::apply_metrics(
+      data = dt, metrics = list("test" = function(x) x + 1),
+      dt$x, y = dt$test)
+  )
+
+  # additional unnamed argument does not work
+
+  expect_warning(
+    scoringutils:::apply_metrics(
+      data = dt, metrics = list("test" = function(x) x + 1),
+      dt$x, dt$test)
+  )
+})
