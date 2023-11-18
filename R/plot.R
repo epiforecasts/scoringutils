@@ -233,15 +233,16 @@ plot_wis <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
-#'
-#' # plot_ranges(scores, x = "model") +
-#' #  facet_wrap(~target_type, scales = "free")
-#'
-#' # visualise dispersion instead of interval score
-#' # plot_ranges(scores, y = "dispersion", x = "model") +
-#' #  facet_wrap(~target_type)
+#' ex <- example_quantile
+#' ex$interval_range <- get_range_from_quantile(ex$quantile)
+#' scores <- score(ex, metrics = list("wis" = wis))
+#' scores$range <- scores$interval_range
+#' summarised <- summarise_scores(
+#'   scores,
+#'   by = c("model", "target_type", "range")
+#' )
+#' plot_ranges(summarised, x = "model") +
+#'   facet_wrap(~target_type, scales = "free")
 
 plot_ranges <- function(scores,
                         y = "wis",
@@ -582,10 +583,10 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' # data.table::setDTthreads(1) # only needed to avoid issues on CRAN
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "range"))
-#' # plot_interval_coverage(scores)
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' data_coverage <- add_coverage(example_quantile)
+#' summarised <- summarise_scores(data_coverage, by = c("model", "range"))
+#' plot_interval_coverage(summarised)
 
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
@@ -638,9 +639,9 @@ plot_interval_coverage <- function(scores,
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "quantile"))
-#' # plot_quantile_coverage(scores)
+#' data_coverage <- add_coverage(example_quantile)
+#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
+#' plot_quantile_coverage(summarised)
 
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
