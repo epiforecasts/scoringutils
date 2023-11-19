@@ -188,6 +188,7 @@ check_attribute_conflict <- function(object, attribute, expected) {
 #' @description
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
+#' @inheritParams score
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 assure_model_column <- function(data) {

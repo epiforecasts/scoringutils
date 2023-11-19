@@ -120,7 +120,7 @@ get_type <- function(x) {
 #' @title Get metrics that were used for scoring
 #' @description Internal helper function to get the metrics that were used
 #' to score forecasts.
-#' @param score A data.table with an attribute `metric_names`
+#' @param scores A data.table with an attribute `metric_names`
 #' @return Character vector with the metrics that were used for scoring.
 #' @keywords internal_input_check
 get_metrics <- function(scores) {

@@ -6,6 +6,9 @@
 \usage{
 assure_model_column(data)
 }
+\arguments{
+\item{data}{A data.frame or data.table with predicted and observed values.}
+}
 \value{
 The data.table with a column called \code{model}
 }

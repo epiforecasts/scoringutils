@@ -7,7 +7,7 @@
 get_metrics(scores)
 }
 \arguments{
-\item{score}{A data.table with an attribute \code{metric_names}}
+\item{scores}{A data.table with an attribute \code{metric_names}}
 }
 \value{
 Character vector with the metrics that were used for scoring.
