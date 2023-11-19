@@ -24,4 +24,4 @@ the columns that are protected, i.e. those returned by
 \code{\link[=get_protected_columns]{get_protected_columns()}} as well as the names of the metrics that were
 specified during scoring, if any.
 }
-\keyword{internal}
+\keyword{check-forecasts}

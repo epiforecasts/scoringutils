@@ -54,4 +54,4 @@ error message otherwise
 \description{
 Helper function
 }
-\keyword{internal}
+\keyword{internal_input_check}

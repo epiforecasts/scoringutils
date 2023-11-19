@@ -13,4 +13,4 @@ The data.table with a column called \code{model}
 Check whether the data.table has a column called \code{model}.
 If not, a column called \code{model} is added with the value \verb{Unspecified model}.
 }
-\keyword{internal}
+\keyword{internal_input_check}

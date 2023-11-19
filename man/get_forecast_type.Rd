@@ -19,4 +19,4 @@ Options are "sample-based", "quantile-based", "binary" or "point" forecast.
 The function runs additional checks to make sure the data satisfies
 requirements and throws an informative error if any issues are found.
 }
-\keyword{internal}
+\keyword{check-forecasts}

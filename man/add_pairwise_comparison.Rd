@@ -41,3 +41,5 @@ Relative skill will be calculated for the aggregation level specified in
 \code{by}.
 WRITE MORE INFO HERE.
 }
+\keyword{keyword}
+\keyword{scoring}

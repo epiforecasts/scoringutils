@@ -20,4 +20,4 @@ Function checks the number of quantiles or samples per forecast.
 If the number of quantiles or samples is the same for all forecasts, it
 returns TRUE and a string with an error message otherwise.
 }
-\keyword{internal}
+\keyword{internal_input_check}

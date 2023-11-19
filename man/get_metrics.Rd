@@ -16,4 +16,4 @@ Character vector with the metrics that were used for scoring.
 Internal helper function to get the metrics that were used
 to score forecasts.
 }
-\keyword{internal}
+\keyword{internal_input_check}

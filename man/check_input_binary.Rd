@@ -26,4 +26,4 @@ error message otherwise
 Function assesses whether the inputs correspond to the
 requirements for scoring binary forecasts.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

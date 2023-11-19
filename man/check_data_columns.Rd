@@ -18,4 +18,4 @@ Checks whether data is a data.frame, whether columns
 "observed" and "predicted" are present, and checks that only one of
 "quantile" and "sample_id" is present.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}
