@@ -39,14 +39,12 @@ reference:
           contents:
                 - starts_with("plot")
                 - has_keyword("plotting")
-        - title: Internal functions
+        - title: Internal input check functions
           contents:
-                - title: Input check functions
-                  contents:
-                        - has_keyword("internal_input_check")
-                - title: Misc internal functions
-                  contents:
-                        - has_keyword("internal")
+                - has_keyword("internal_input_check")
+        - title: Misc internal functions
+          contents:
+                - has_keyword("internal")
         - title: Example data and information
           contents:
                 - has_keyword("datasets")
