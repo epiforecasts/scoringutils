@@ -21,8 +21,6 @@
 correlation <- function(scores,
                         metrics = NULL,
                         digits = NULL) {
-  metrics <- check_metrics(metrics)
-
   metrics <- get_metrics(scores)
 
   # if quantile column is present, throw a warning
