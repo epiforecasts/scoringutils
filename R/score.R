@@ -194,13 +194,13 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
 }
 
 
-#' Helper Function To Apply a List Of Functions To a Data Table of Forecasts
-#' @description The function applies a list of functions to a data table of
-#' forecasts. The function is used within `score()` to apply all
-#' scoring rules to the data.
-#' Function calls are wrapped in `run_safely()` to catch errors and to make
-#' sure that only arguments are passed to the function that are actually
-#' accepted by the function.
+#' @title Apply A List Of Functions To A Data Table Of Forecasts
+#' @description This helper function applies scoring rules (stored as a list of
+#' functions) to a data table of. `apply_metrics` is used within `score()` to
+#' apply all scoring rules to the data.
+#' Scoring rules are wrapped in [run_safely()] to catch errors and to make
+#' sure that only arguments are passed to the scoring rule that are actually
+#' accepted by it.
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics
 apply_metrics <- function(data, metrics, ...) {
