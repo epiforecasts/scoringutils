@@ -16,7 +16,7 @@ valued forecasts"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,10 +102,10 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">crps_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.493375 0.289675 1.255600 0.650175 0.590175 1.180775 0.634925 0.707700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.771975 1.169275 0.812675 0.900500 3.160875 2.941025 1.229875 0.919850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 2.975750 1.115300 1.921425 2.843275 2.219425 5.387575 1.101775 1.375850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.481175 1.413175 1.464050 4.910000 1.536100 1.311625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.506600 0.599175 0.532050 0.693600 0.898050 0.740175 0.695800 2.560775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.698925 1.744675 2.023825 6.090100 1.026500 0.795300 3.337050 1.323525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 3.239475 1.667400 4.251350 1.313575 9.930200 4.993325 2.040375 2.070175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 2.055775 1.302100 8.186025 1.244550 1.396025 3.978250</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

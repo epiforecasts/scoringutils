@@ -16,7 +16,7 @@ $$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,12 +101,12 @@ Carlo samples. Alternatively, predictions can just be a vector of size n.</p></d
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.860613e-01 1.744323e+00 1.360432e-01 3.302945e-01 3.751945e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 3.798420e-01 3.073065e+00 2.825546e+00 1.037927e+00 1.759771e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 9.024846e-01 2.191300e+00 1.669601e+01 2.655281e-02 2.879499e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 1.966896e+00 8.706269e-04 6.036063e-01 1.630220e+00 2.489198e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 6.122734e-01 1.001614e+01 8.163432e-01 2.706157e-01 2.772148e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 3.985060e-01 2.621120e+00 3.539384e+00 2.818409e-01 1.450891e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.5369388190 0.7926418467 0.0064358942 8.0875579457 0.6223434196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 5.1973894672 0.3780707728 1.8730178893 4.6789601717 0.1668502145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.0270798542 0.5391113037 0.8762152838 0.3347385895 5.3358123896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 2.6739807804 2.2938975472 2.6748938964 7.3483374250 0.2775697450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 3.3677055015 2.1256807972 0.5024278826 0.0082441616 0.9248873844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 0.5373266162 0.0382242675 0.0239365969 0.0003035308 0.0570072019</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
