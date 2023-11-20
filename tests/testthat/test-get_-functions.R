@@ -109,3 +109,39 @@ test_that("get_duplicate_forecasts() works as expected for point", {
     22
   )
 })
+
+
+# ==============================================================================
+# `get_forecast_type`
+# ==============================================================================
+test_that("get_forecast_type() works as expected", {
+  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
+  expect_equal(get_forecast_type(example_continuous), "sample")
+  expect_equal(get_forecast_type(example_integer), "sample")
+  expect_equal(get_forecast_type(example_binary), "binary")
+  expect_equal(get_forecast_type(example_point), "point")
+
+  expect_error(
+    get_forecast_type(data.frame(x = 1:10)),
+    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
+    fixed = TRUE
+  )
+
+  df <- data.frame(observed = 1:10, predicted = factor(1:10))
+  expect_error(
+    get_forecast_type(df),
+    "Checking `data`: input doesn't satisfy criteria for any forecast type. Are you missing a column `quantile` or `sample_id`? Please check the vignette for additional info.",
+    fixed = TRUE
+  )
+
+  data <- validate(example_integer)
+  attr(data, "forecast_type") <- "binary"
+  expect_warning(
+    get_forecast_type(data),
+    "Object has an attribute `forecast_type`, but it looks different from what's expected based on the data.
+Existing: binary
+Expected: sample
+Running `validate()` again might solve the problem",
+    fixed = TRUE
+  )
+})
