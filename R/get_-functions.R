@@ -18,7 +18,7 @@
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
-#' @keywords check-forceasts
+#' @keywords check-forecasts
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))

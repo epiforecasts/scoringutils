@@ -37,4 +37,4 @@ Allowed options are therefore
 }
 }
 }
-\keyword{check-inputs}
+\keyword{internal_check_input}

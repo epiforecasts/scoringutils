@@ -224,7 +224,7 @@ check_input_point <- function(observed, predicted) {
 #' @inherit assert_input_binary
 #' @inherit document_assert_functions return
 #' @importFrom checkmate assert_vector check_matrix check_vector assert
-#' @keywords check-inputs
+#' @keywords internal_check_input
 assert_dims_ok_point <- function(observed, predicted) {
   assert_vector(observed, min.len = 1)
   n_obs <- length(observed)
@@ -250,7 +250,7 @@ assert_dims_ok_point <- function(observed, predicted) {
 #' @title Check Inputs Have Matching Dimensions
 #' @inherit assert_dims_ok_point params description
 #' @inherit document_check_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_dims_ok_point <- function(observed, predicted) {
   result <- check_try(assert_dims_ok_point(observed, predicted))
   return(result)
