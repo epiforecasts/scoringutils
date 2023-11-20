@@ -2,7 +2,7 @@
 % Please edit documentation in R/score.R
 \name{apply_metrics}
 \alias{apply_metrics}
-\title{Helper Function To Apply a List Of Functions To a Data Table of Forecasts}
+\title{Apply A List Of Functions To A Data Table Of Forecasts}
 \usage{
 apply_metrics(data, metrics, ...)
 }
@@ -20,10 +20,10 @@ default metrics used.}
 A data table with the forecasts and the calculated metrics
 }
 \description{
-The function applies a list of functions to a data table of
-forecasts. The function is used within \code{score()} to apply all
-scoring rules to the data.
-Function calls are wrapped in \code{run_safely()} to catch errors and to make
-sure that only arguments are passed to the function that are actually
-accepted by the function.
+This helper function applies scoring rules (stored as a list of
+functions) to a data table of. \code{apply_metrics} is used within \code{score()} to
+apply all scoring rules to the data.
+Scoring rules are wrapped in \code{\link[=run_safely]{run_safely()}} to catch errors and to make
+sure that only arguments are passed to the scoring rule that are actually
+accepted by it.
 }
