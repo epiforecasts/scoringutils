@@ -2,7 +2,7 @@
 % Please edit documentation in R/check-inputs-scoring-functions.R
 \name{check_dims_ok_point}
 \alias{check_dims_ok_point}
-\title{Assert Inputs For Binary And Point Forecasts Have Matching Dimensions}
+\title{Check Inputs Have Matching Dimensions}
 \usage{
 check_dims_ok_point(observed, predicted)
 }

@@ -212,7 +212,7 @@ check_input_point <- function(observed, predicted) {
 }
 
 
-#' Assert Inputs Have Matching Dimensions
+#' @title Assert Inputs Have Matching Dimensions
 #' @description Function assesses whether input dimensions match. In the
 #' following, n is the number of observations / forecasts. Scalar values may
 #' be repeated to match the length of the other input.
@@ -247,7 +247,7 @@ assert_dims_ok_point <- function(observed, predicted) {
 }
 
 
-#' Assert Inputs For Binary And Point Forecasts Have Matching Dimensions
+#' @title Check Inputs Have Matching Dimensions
 #' @inherit assert_dims_ok_point params description
 #' @inherit document_check_functions return
 #' @keywords check-inputs
