@@ -71,5 +71,5 @@ URL: https://doi.org/10.48550/arXiv.2205.07090, https://epiforecasts.io/scoringu
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5)
+    R (>= 3.6)
 Roxygen: list(markdown = TRUE)
