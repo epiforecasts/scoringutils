@@ -6,7 +6,7 @@ library(data.table)
 
 ae <- list(
   `Metric` = "Absolute error",
-  `Name` = "ae_point, ae_median",
+  `Name` = list("ae_point", "ae_median"),
   `Functions` = r"(score(), ae_point()), ae_median_sample()",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
@@ -18,7 +18,7 @@ ae <- list(
 
 se <- list(
   `Metric` = "Squared error",
-  `Name` = "se_point, se_mean",
+  `Name` = list("se_point", "se_mean"),
   `Functions` = r"(score(), se_point(), se_mean_sample())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
@@ -164,7 +164,7 @@ bias <- list(
 
 under_overprediction <- list(
   `Metric` = "Under-, Over-prediction",
-  `Name` = "underprediction, overprediction",
+  `Name` = list("underprediction", "overprediction"),
   `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
   `C` = r"($-$)",
