@@ -224,7 +224,7 @@ check_input_point <- function(observed, predicted) {
 #' @inherit assert_input_binary
 #' @inherit document_assert_functions return
 #' @importFrom checkmate assert_vector check_matrix check_vector assert
-#' @keywords internal_check_input
+#' @keywords internal_input_check
 assert_dims_ok_point <- function(observed, predicted) {
   assert_vector(observed, min.len = 1)
   n_obs <- length(observed)
