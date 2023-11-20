@@ -19,4 +19,4 @@ This PR closes #<issue-number>.
 - [ ] I have updated the package development version by one increment in both `NEWS.md` and the `DESCRIPTION`.
 - [ ] I have reviewed CI checks for this PR and addressed them as far as I am able.
 
-<!-- Thanks again for this PR - @epinowcast dev team -->
+<!-- Thanks again for this PR - @scoringutils dev team -->
