@@ -269,25 +269,3 @@ get_scoringutils_attributes <- function(object) {
   }
   return(attr_list)
 }
-
-
-#' Get Complete Forecasts
-#' @description Helper function to remove rows from a data.frame where the
-#' value in either one of the columns `predicted` or `observed` is `NA`.
-#' @inheritParams score
-#' @return A data.table with the same columns as the input, but
-#' without rows where either `predicted` or `observed` is `NA`.
-#' @export
-#' @keywords check-forecasts
-get_complete_forecasts <- function(data) {
-  data <- ensure_data.table(data)
-  assert(check_columns_present(data, c("observed", "predicted")))
-  data <- data[!is.na(observed) & !is.na(predicted)]
-  if (nrow(data) == 0) {
-    stop(
-      "After removing NA values in `observed` and `predicted`, ",
-      "there were no observations left"
-    )
-  }
-  return(data[])
-}

@@ -146,6 +146,12 @@ validate_general <- function(data) {
     setattr(data, "messages", messages)
   }
 
+  if (nrow(na.omit(data)) == 0) {
+    stop(
+      "After removing rows with NA values in the data, nothing is left."
+    )
+  }
+
   return(data[])
 }
 

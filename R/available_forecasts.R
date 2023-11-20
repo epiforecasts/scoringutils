@@ -40,7 +40,7 @@ available_forecasts <- function(data,
 
   data <- validate(data)
   forecast_unit <- attr(data, "forecast_unit")
-  data <- get_complete_forecasts(data)
+  data <- na.omit(data)
 
   if (is.null(by)) {
     by <- forecast_unit

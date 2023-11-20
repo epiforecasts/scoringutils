@@ -149,7 +149,7 @@ score.default <- function(data, ...) {
 #' @export
 score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate(data)
-  data <- get_complete_forecasts(data)
+  data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
   data <- apply_metrics(
@@ -169,7 +169,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
 #' @export
 score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   data <- validate(data)
-  data <- get_complete_forecasts(data)
+  data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
   data <- apply_metrics(
@@ -186,7 +186,7 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
 #' @export
 score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   data <- validate(data)
-  data <- get_complete_forecasts(data)
+  data <- na.omit(data)
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
@@ -223,7 +223,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
 #' @export
 score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate(data)
-  data <- get_complete_forecasts(data)
+  data <- na.omit(data)
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 

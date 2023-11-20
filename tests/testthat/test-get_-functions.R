@@ -29,25 +29,21 @@ fixed = TRUE
 
 
 # ==============================================================================
-# `get_complete_forecasts()`
+# Test removing `NA` values from the data
 # ==============================================================================
-test_that("get_complete_forecasts() works as expected", {
-  expect_equal(nrow(get_complete_forecasts(example_quantile)), 20401)
+test_that("removing NA rows from data works as expected", {
+  expect_equal(nrow(na.omit(example_quantile)), 20401)
 
   ex <- data.frame(observed = c(NA, 1:3), predicted = 1:4)
-  expect_equal(nrow(get_complete_forecasts(ex)), 3)
+  expect_equal(nrow(na.omit(ex)), 3)
 
   ex$predicted <- c(1:3, NA)
-  expect_equal(nrow(get_complete_forecasts(ex)), 2)
+  expect_equal(nrow(na.omit(ex)), 2)
 
+  ex <- data.table::copy(example_quantile)[, "predicted" := NA_real_]
   expect_error(
-    get_complete_forecasts(data.frame(x = 1:2, y = 1:2)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data."
-  )
-
-  expect_error(
-    get_complete_forecasts(data.frame(observed = c(NA, NA), predicted = 1:2)),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    validate(ex),
+    "After removing rows with NA values in the data, nothing is left."
   )
 })
 
