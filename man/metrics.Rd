@@ -5,7 +5,7 @@
 \alias{metrics}
 \title{Summary information for selected metrics}
 \format{
-An object of class \code{data.table} (inherits from \code{data.frame}) with 22 rows and 8 columns.
+An object of class \code{data.table} (inherits from \code{data.frame}) with 19 rows and 8 columns.
 }
 \usage{
 metrics
