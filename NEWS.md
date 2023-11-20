@@ -1,3 +1,9 @@
+# scoringutils 1.2.2
+
+## Bug fixes
+- fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
+
+
 # scoringutils 1.2.1
 
 ## Package updates
