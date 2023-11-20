@@ -1,19 +1,27 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer the type of a forecast based on a data.frame
+#' @title Infer Forecast Type
+#' @description Helper function to infer the forecast type based on a
+#' data.frame or similar with predictions. Please check the vignettes to
+#' learn more about forecast types.
 #'
-#' @description Internal helper function to get the type of the forecast.
-#' Options are "sample-based", "quantile-based", "binary" or "point" forecast.
-#' The function runs additional checks to make sure the data satisfies
-#' requirements and throws an informative error if any issues are found.
+#' Possible forecast types are
+#' - "sample-based"
+#' - "quantile-based"
+#' - "binary"
+#' - "point" forecast.
 #'
-#' @inheritParams validate
-#'
+#' The function runs additional checks to make sure the data satisfies the
+#' requirements of the respective forecast type and throws an
+#' informative error if any issues are found.
+#' @inheritParams score
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
-#'
-#' @keywords check-forecasts
+#' @export
+#' @keywords check-forceasts
 get_forecast_type <- function(data) {
+  assert_data_frame(data)
+  assert(check_columns_present(data, c("observed", "predicted")))
   if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
@@ -24,8 +32,8 @@ get_forecast_type <- function(data) {
     forecast_type <- "point"
   } else {
     stop(
-      "Checking `data`: input doesn't satisfy criteria for any forecast type.",
-      "Are you missing a column `quantile` or `sample_id`?",
+      "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
+      "Are you missing a column `quantile` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
   }
@@ -145,9 +153,14 @@ get_metrics <- function(scores) {
 #' specified during scoring, if any.
 #' @inheritParams validate
 #' @param check_conflict Whether or not to check whether there is a conflict
-#' between a stored attribute and the inferred forecast unit. Defaults to FALSE.
+#' between a stored attribute and the inferred forecast unit. When you create
+#' a forecast object, the forecast unit is stored as an attribute. If you
+#' later change the columns of the data, the forecast unit as inferred from the
+#' data might change compared to the stored attribute. Should this result in a
+#' warning? Defaults to FALSE.
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
+#' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data, check_conflict = FALSE) {
   # check whether there is a conflict in the forecast_unit and if so warn
