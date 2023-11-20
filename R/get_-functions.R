@@ -1,19 +1,27 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer the type of a forecast based on a data.frame
+#' @title Infer Forecast Type
+#' @description Helper function to infer the forecast type based on a
+#' data.frame or similar with predictions. Please check the vignettes to
+#' learn more about forecast types.
 #'
-#' @description Internal helper function to get the type of the forecast.
-#' Options are "sample-based", "quantile-based", "binary" or "point" forecast.
-#' The function runs additional checks to make sure the data satisfies
-#' requirements and throws an informative error if any issues are found.
+#' Possible forecast types are
+#' - "sample-based"
+#' - "quantile-based"
+#' - "binary"
+#' - "point" forecast.
 #'
-#' @inheritParams validate
-#'
+#' The function runs additional checks to make sure the data satisfies the
+#' requirements of the respective forecast type and throws an
+#' informative error if any issues are found.
+#' @inheritParams score
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
-#'
-#' @keywords internal
+#' @export
+#' @keywords check-forceasts
 get_forecast_type <- function(data) {
+  assert_data_frame(data)
+  assert(check_columns_present(data, c("observed", "predicted")))
   if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
@@ -24,8 +32,8 @@ get_forecast_type <- function(data) {
     forecast_type <- "point"
   } else {
     stop(
-      "Checking `data`: input doesn't satisfy criteria for any forecast type.",
-      "Are you missing a column `quantile` or `sample_id`?",
+      "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
+      "Are you missing a column `quantile` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
   }
