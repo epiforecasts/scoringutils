@@ -1,3 +1,33 @@
+# ==============================================================================
+# `get_forecast_unit()`
+# ==============================================================================
+
+test_that("get_forecast_unit() works as expected", {
+  expect_equal(
+    get_forecast_unit(example_quantile),
+    c("location", "target_end_date", "target_type", "location_name",
+      "forecast_date", "model", "horizon")
+  )
+
+  expect_equal(
+    get_forecast_unit(scores_quantile),
+    c("location", "target_end_date", "target_type", "location_name",
+      "forecast_date", "model", "horizon")
+  )
+
+  data <- validate(example_quantile)
+  ex <- data[, location := NULL]
+  expect_warning(
+    get_forecast_unit(ex, check_conflict = TRUE),
+    "Object has an attribute `forecast_unit`, but it looks different from what's expected based on the data.
+Existing: forecast_date, horizon, location, location_name, model, target_end_date, target_type
+Expected: forecast_date, horizon, location_name, model, target_end_date, target_type
+Running `validate()` again might solve the problem",
+fixed = TRUE
+  )
+})
+
+
 test_that("get_type() works as expected with vectors", {
   expect_equal(get_type(1:3), "integer")
   expect_equal(get_type(factor(1:2)), "classification")

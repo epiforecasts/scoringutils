@@ -152,22 +152,23 @@ get_metrics <- function(scores) {
 
 
 #' @title Get unit of a single forecast
-#'
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#'
 #' @inheritParams validate
 #' @param check_conflict Whether or not to check whether there is a conflict
-#' between a stored attribute and the inferred forecast unit. Defaults to FALSE.
-#'
+#' between a stored attribute and the inferred forecast unit. When you create
+#' a forecast object, the forecast unit is stored as an attribute. If you
+#' later change the columns of the data, the forecast unit as inferred from the
+#' data might change compared to the stored attribute. Should this result in a
+#' warning? Defaults to FALSE.
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
-#'
-#' @keywords internal
+#' @export
+#' @keywords check-forecasts
 get_forecast_unit <- function(data, check_conflict = FALSE) {
   # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
