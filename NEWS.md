@@ -1,3 +1,8 @@
+# scoringutils 1.2.2
+
+## Package updates
+- `scoringutils` now depends on R 3.6. The change was made since packages `testthat` and `lifecycle`, which are used in `scoringutils` now require R 3.6. We also updated the Github action CI check to work with R 3.6 now. 
+
 # scoringutils 1.2.1
 
 ## Package updates
