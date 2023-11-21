@@ -4,7 +4,8 @@
 #' of forecasts. It is the workhorse of the `scoringutils` package.
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data. The default method is `score.default()`, which
-#' validates the input, assigns as class based on the forecast type, and then
+#' validates the input, removes any row that has `NA` values using [na.omit()],
+#' assigns as class based on the forecast type, and then
 #' calls `score()` again to dispatch to the appropriate method. See below for
 #' more information on how forecast types are determined.
 #'
@@ -99,6 +100,7 @@
 #' forecasts.
 #'
 #' @importFrom data.table ':=' as.data.table
+#' @importFrom stats na.omit
 #'
 #' @examples
 #' library(magrittr) # pipe operator
@@ -145,6 +147,7 @@ score.default <- function(data, ...) {
   score(data, ...)
 }
 
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
@@ -165,6 +168,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
 
 
 #' @importFrom Metrics se ae ape
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
@@ -182,6 +186,7 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
   return(data[])
 }
 
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
@@ -218,6 +223,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
   return(data[])
 }
 
+#' @importFrom stats na.omit
 #' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export

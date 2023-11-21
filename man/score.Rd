@@ -46,7 +46,8 @@ forecasts.
 of forecasts. It is the workhorse of the \code{scoringutils} package.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data. The default method is \code{score.default()}, which
-validates the input, assigns as class based on the forecast type, and then
+validates the input, removes any row that has \code{NA} values using \code{\link[=na.omit]{na.omit()}},
+assigns as class based on the forecast type, and then
 calls \code{score()} again to dispatch to the appropriate method. See below for
 more information on how forecast types are determined.
 }
