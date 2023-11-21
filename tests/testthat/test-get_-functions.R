@@ -39,6 +39,19 @@ test_that("removing NA rows from data works as expected", {
 
   ex$predicted <- c(1:3, NA)
   expect_equal(nrow(na.omit(ex)), 2)
+
+  # test that attributes and classes are retained
+  ex <- validate(example_integer)
+  expect_equal(
+    class(na.omit(ex)),
+    c("scoringutils_sample", "data.table", "data.frame")
+  )
+
+  attributes <- get_scoringutils_attributes(ex)
+  expect_equal(
+    get_scoringutils_attributes(na.omit(ex)),
+    attributes
+  )
 })
 
 
