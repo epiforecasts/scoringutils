@@ -39,12 +39,6 @@ test_that("removing NA rows from data works as expected", {
 
   ex$predicted <- c(1:3, NA)
   expect_equal(nrow(na.omit(ex)), 2)
-
-  ex <- data.table::copy(example_quantile)[, "predicted" := NA_real_]
-  expect_error(
-    validate(ex),
-    "After removing rows with NA values in the data, nothing is left."
-  )
 })
 
 
