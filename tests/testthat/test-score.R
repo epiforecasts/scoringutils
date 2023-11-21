@@ -42,7 +42,7 @@ test_that("score.scoringutils_binary() errors with only NA values", {
   only_nas <- copy(example_binary)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -160,7 +160,7 @@ test_that("score.scoringutils_point() errors with only NA values", {
   only_nas <- copy(example_point)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -243,7 +243,7 @@ test_that("score.scoringutils_quantile() errors with only NA values", {
   only_nas <- copy(example_quantile)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -259,7 +259,7 @@ test_that("function produces output for a continuous format case", {
   only_nas <- copy(example_continuous)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, nothing is left"
   )
 
   expect_equal(

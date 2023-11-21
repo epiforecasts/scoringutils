@@ -148,7 +148,7 @@ validate_general <- function(data) {
 
   if (nrow(na.omit(data)) == 0) {
     stop(
-      "After removing rows with NA values in the data, nothing is left."
+      "After removing rows with NA values in the data, no forecasts are left."
     )
   }
 
