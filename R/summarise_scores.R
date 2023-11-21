@@ -35,7 +35,6 @@
 #' summarise_scores(scores)
 #' }
 #'
-#'
 #' # summarise over samples or quantiles to get one score per forecast
 #' scores <- score(example_quantile)
 #' summarise_scores(scores)
@@ -84,6 +83,8 @@ summarise_scores <- function(scores,
     stop("`scores` needs to have an attribute `metric_names` with the names of
          the metrics that were used for scoring.")
   }
+
+  scores <- na.omit(scores)
 
   # preparations ---------------------------------------------------------------
   # get unit of a single forecast
