@@ -31,7 +31,7 @@ The update introduces breaking changes. If you want to keep using the older vers
   - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future.
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
-- `score()` and `summarise_scores()` now call `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast. 
+- `score()` now calls `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast. 
 - added documentation for the return value of `summarise_scores()`.
 
 
