@@ -259,7 +259,7 @@ test_that("function produces output for a continuous format case", {
   only_nas <- copy(example_continuous)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing rows with NA values in the data, nothing is left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 
   expect_equal(
