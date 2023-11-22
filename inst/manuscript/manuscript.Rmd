@@ -148,42 +148,124 @@ The remainder of this section will provide an overview of the fundamental ideas 
 
 # Package overview
 
-## Aim of the package:
-- simplify the process of forecast evaluation
-- serve as a general purpose framework that users can extend and expand on
-- provide helper functions to convert data formats and transform the data. 
+The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data. 
+An overview of all existing functions can be seen in the on \url{https://epiforecasts.io/scoringutils}. 
+
+## Basic workflow
+
+\pkg{scoringutils} supports two basic workflows (see Figure \ref{fig:workflow}). One option is for users to score their forecasts directly using the scoring rules exported by \pkg{scoringutils} in a format based on vectors and matrices. Those functions that can be called directly on a set of vectors and matrices and return a single vector of scores will consistently be called "scoring rules" in the following. Most users, however, will interact with \pkg{scoringutils} through a more convenient framework based on a `data.frame`-like structure (internally, \pkg{data.table} is used). 
+
+```{r workfklow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the workflow for working with scoringutils.", fig.show="hold"}
+include_graphics("output/workflow.png")
+```
+
+## Forecast types
+
+Forecasts differ in the exact prediction task and in how the forecaster chooses to represent their prediction. To distinguish different kinds of forecasts, `scoringutils` uses the term "forecast type" (which is more a convenient classification than a formal definition). At the moment, `scoringutils` distinguishes four different forecast types: "binary", "point", "quantile" and "sample" forecasts (support for more forecast types is planned for the future).
+
+"Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution.
+
+Forecast types (in the `data.frame` framework) are determined based on the names and the type of the columns present in the input. Table \ref{fig:input-score} shows the expected input format for each forecast type. Forecast types that are planned, but not currently supported, are greyed out. 
+Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices. 
+<!-- The only difference is scoring rules for sample-based forecasts, which, in contrast to the `data.frame` framework, do not require a separate `sample_id` input.  -->
+
+```{r input-score, echo = FALSE, fig.pos = "!h", out.width="70%", fig.cap= "Table with different input formats.", fig.show="hold"}
+include_graphics("output/input-score.png")
+```
+
+## Classes
+
+\pkg{scoringutils} uses separate classes that correspond to the different forecast types. Those are currently `forecast_binary`, `forecast_point`, `forecast_quantile`, and `forecast_sample`. These classes are used to allow for dedicated input checks and sensible defaults for the scoring rules to be applied to the forecasts. 
+
+These classes come with a constructor, \fct{new\_forecast()}, a generic validator function \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. All classes also have a `print()` method designed to provide helpful information to the user. 
+
+```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
+include_graphics("output/flowchart-create-object.png")
+```
+
+## Example data
+
+The example data used througout comes from X. It conforms to all inputs and provides a reference point for users. 
+
+Here is the output of validating the example data. 
+
+```{r example-data, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Output of validating the example data.", fig.show="hold"}
+example_quantile |>
+  validate()
+```
 
 
-## Proposed workflow
+## Diagnostic functions that provide additional information about the data
+<!-- Maybe move this up -->
 
+In addition to printing the validated objects, users can call a variety of different functions to obtain more information about the data and to visualise it. 
+Functions that provide this kind of additional information usually start with `get_`. 
 
+\fct{get\_forecast\_type} infers the forecast type from a `data.frame` and returns a single string (one of "binary", "point", "sample" or "quantile"). \fct{get\_forecast\_unit} returns a vector with the names of the columns that uniquely define a single forecast (see Section \ref{sec:forecastunit} below for more information). 
 
-The package provides several functions, classes, and generics. 
+\fct{get\_forecast\_counts} returns forecast counts, which is helpful to obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per model and target_type, we can run
 
-### Generics
+```{r get-forecast-counts, echo = FALSE}
+forecast_counts <- available_forecasts(example_quantile, by = c("model", "target_type"))
+```
 
-- score()
-- `validate_forecast()`
+This returns an object of class `forecast_counts`. We can visualise the results by calling \fct{plot} on the object. 
 
-### Classes
+```{r plot-forecast-counts, echo = FALSE}
+plot(forecast_counts, xvar = "target_type")
+```
 
-- `forecast_binary`
-- `forecast_point`
-- `forecast_quantile`
-- `forecast_sample`
+## Visualising the data
 
-- maybe other classes for plotting
+This is currently still a bit terrible.  
 
-### score() and summarise scores()
+## Scoring forecasts
 
-\fct{score()} is the workhorse of the package. It takes a data.frame as input as well as a list of scoring functions and applies those scoring functions to the input, returning a data.frame with the scores. 
+As mentioned above, users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once. 
+
+### score()
+
+The workhorse of the package is the function `score()`. It takes as input either an object of class `forecast_*` or a `data.frame` (or similar) with forecasts, as well as a list of functions (the scoring rules). The function then applies those scoring rules to the input. Additional arguments can be passed down to the scoring rules via `...`. \fct{score} is a generic function that dispatches to different methods depending on the class of the input.
+
+\fct{score.default()} is the default method that is used if \fct{as\_forecast{}} has not yet been called on the input. \fct{score.default} calls \fct{as\_forecast} and then calls \fct{score} again in order to dispatch to the appropriate method. The method then validates the input again, applies the scoring rules, and returns a `data.table` with the scores. The process is illustrated in Figure \ref{fig:flowchart-score}. 
+<!-- Maybe say something about extending `score()` for others. Could also be a section -->
+
+```{r flowchart-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Flowchart for calling `score()`", fig.show="hold"}
+include_graphics("output/flowchart-score.png")
+```
+
+### Scoring rules
+
+Scoring rules are the functions the various scores and metrics. They are consistently named 
+`name of the metric` + \_ + `forecast type`. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of a scoring rule is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector that denotes the quantile levels of the predictive quantiles. 
+
+Scoring rules differ in the relationship between input and output. Some scoring rules have a one-to-one relationship between prediction and score, returning one value per value in `predicted`. This is the case for all scoring rules for binary and point forecasts. Other scoring rules have a many-to-one relationship, returning one value per multiple values in `predicted`. This is the case for all scoring rules for sample- and quantile-based forecasts. For sample- and quantile-based forecasts, `predicted` is therefore a matrix, with values in each row jointly forming a single forecast.
+
+Input formats and return values are shown in more detail in Figure \ref{fig:input-score}. 
+
+```{r inputs-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Flowchart for calling `score()`", fig.show="hold"}
+include_graphics("output/input-formats-scoring-rules.png")
+```
+
+### Passing scoring rules to score()
+
+The second argument to \fct{score} is a named list of scoring rules. Names of the list item will be used as names of the columns in the output corresponding to the respective scoring rule. The default list for every forecast type can be accessed by calling \fct{metrics_binary}, \fct{metrics_point}, \fct{metrics\_sample} and \fct{metrics\_quantile}. 
+
+Scoring rules need to be compatible with the type of the forecast that is scored and need to have compatible input formats and return values. Within \fct{score}, arguments are passed by position, meaning that users are not tied to the \pkg{scoringutils} naming convention, and can supply functions that take equivalent, but differently called arguments. The default metrics for point forecasts, for example, uses functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` instead of `observed` and `predicted`.
+
+<!-- Maybe something about the wrapper functions that we want to have -->
+
+## The unit of a single forecast {short-title="The unit of a single forecast" #forecastunit}
+
+In order to score forecasts, \pkg{scoringutils} needs to know which of the rows of the data belong together and jointly form a single forecasts. This is easy e.g. for point forecast, where there is one row per forecast. Probabilistic forecasts, however, are usually composed of several values and for quantile or sample-based forecasts, there are therefore multiple rows that belong to a single forecast.
+
+The unit of a single forecast (or "forecast unit") is defined by the other columns of the data (except for a few protected columns). A single forecast should be uniquely defined by the combination of values in those columns. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns "model", "location", "date", and "target", and the forecast unit would be `forecast_unit = c("model", "location", "date", "taret")`. As the forecast unit is internally determined based on the names of the existing columns, it is mandatory that no column is present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, "even", that is one if the row number is even and zero otherwise. The existence of this column would change results, as \fct{score} assumes it was relevant to grouping the forecasts.
+
+In order to avoid issues, we recommend using the function \fct{set\_forecast\_unit} to determine the forecast unit manually. The function simply drops unneeded columns, while making sure that all necessary, 'protected columns' like `predicted` or `observed` are retained. You can get a list of all protected columns by calling \fct{get\_protected\_columns()}. You can get the current forecast unit by calling \fct{get\_forecast\_unit()} on the data or by simply printing the object if it is of class `forecast_*`.
+
+## score() and summarise scores()
 
 \fct{summarise\_scores()} allows users to aggregate scores across different dimensions.
-
-### Diagnostic functions to obtain information about the data
-
-Functions that start with `get_` provide some information on the data and the input. 
-Examples are `get_forecast_counts`, `get_forecast_unit`
 
 ### Data handling and data conversion
 
@@ -193,6 +275,8 @@ Examples are `get_forecast_counts`, `get_forecast_unit`
 
 - `run_safely()`
 
+## Internal functions
+
 ### Check functions
 Functions to check inputs. Most of these are internal functions, but some are exposed to the user. The naming convention follows that of the \pkg{checkmate} package \citep{checkmate}. 
 
@@ -201,11 +285,6 @@ Functions that begin with `assert_` return `TRUE` if the condition is met, and t
 Functions that begin with `check_` return `TRUE` if the condition is met, and a string with an error message otherwise. 
 
 Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise. 
-
-### Scoring rules
-Functions with various metrics and scoring rules. 
-Naming: name of the metric + \_ + name of the expected input format (see below). Return a vector. 
-
 
 ### Plotting functions
 
@@ -223,22 +302,8 @@ include_graphics("output/illustration-score.png")
 # Forecast types and input formats
 
 `scoringutils` offers two ways to score forecasts: users can either use the function `score()` which applies scoring rules to a data.frame (or similar) of forecasts. Or they can call the individual scoring rules directly on a set of vectors and matrices. The format of the expected input depends on the type of the forecast to evaluated. 
-Forecast may come in many different ways, depending on the target and how the forecaster chooses to represent their prediction. To distinguish between different prediction tasks and possible ways of representing forecasts, `scoringutils` uses the term "forecast type". This is more a convenient classification than a formal definition. At the moment, `scoringutils` distinguishes four different forecast types: "binary", "point", "quantile" and "sample" forecasts (support for more forecast types is planned for the future).
-
-"Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. "Quantile" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. "Sample" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution.
-
-## Input formats for score
-
-When evaluating forecasts as a data.frame, `scoringutils` distinguishes between the different forecast types based on the names and the type of the columns present in the input. Table \ref{fig:input-score} shows the expected input format for each forecast type. Forecast types that are planned, but not currently supported, are greyed out. 
-
-```{r input-score, echo = FALSE, fig.pos = "!h", out.width="70%", fig.cap= "Table with different input formats.", fig.show="hold"}
-include_graphics("output/input-score.png")
-```
 
 
-## Input formats for scoring rules
-
-Input formats for the scoring rules that can be called directly follow the convention used for `score()`, with inputs expected to be vectors or matrices.
 
 
 
