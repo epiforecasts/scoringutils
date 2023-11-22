@@ -185,7 +185,7 @@ include_graphics("output/flowchart-create-object.png")
 
 ## Example data
 
-The example data used througout comes from X. It conforms to all inputs and provides a reference point for users. 
+The example data included in the package and used in this paper consists of one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different forecasting models. It represents a small subset of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. One to four week ahead predictions of different COVID-19 related targets were submitted to the Forecast Hub each week in a quantile-based format. The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. The example data was converted to all the different forecast types used in \pkg{scoringutils}, in order to illustrate the workflows and provide users witha reference for the correct input formats. The example data also contains observations without corresponding forecasts, both for the purposes of plotting the data and to make the example data more realistic.
 
 Here is the output of validating the example data. 
 
@@ -287,24 +287,6 @@ Functions that begin with `check_` return `TRUE` if the condition is met, and a 
 Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise. 
 
 ### Plotting functions
-
-
-\fct{score()} is a generic. The default method runs \fct{validate\_forecasts} on the input and calls \fct{score()} again afterwards (see Figure \ref{fig:illustration-score}). `validate_forecasts()` calls a series of check functions to determine the type of the forecast and the input format. Based on those checks, it constructs an object of class `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or `scoringutils_quantile` (see below) and validates that object. Upon calling `score()` again, the function dispatches to the appropriate method based on the class of the input. The dedicated methods then apply the scoring functions to the data. 
-
-Output of `score()`: 
-
-
-```{r illustration-score, echo = FALSE, fig.pos = "!h", out.width="70%", fig.cap= "Illustration of the workflow for \fct{score()}.", fig.show="hold"}
-include_graphics("output/illustration-score.png")
-```
-
-
-# Forecast types and input formats
-
-`scoringutils` offers two ways to score forecasts: users can either use the function `score()` which applies scoring rules to a data.frame (or similar) of forecasts. Or they can call the individual scoring rules directly on a set of vectors and matrices. The format of the expected input depends on the type of the forecast to evaluated. 
-
-
-
 
 
 The \pkg{scoringutils} package focuses on probabilistic forecasts, and specifically on forecasts that are represented through either predictive samples or through quantiles of the predictive distributions, making it possible to evaluate arbitrary forecasts even if a closed form (i.e., parametric) distribution is not available. A variety of parametric distributions can be scored directly using \pkg{scoringRules}, but this is not yet supported in \pkg{scoringutils}. 
@@ -493,11 +475,10 @@ It is in principle possible to compute p-values to determine whether two models 
 
 # Evaluating forecasts using scoringutils {#evaluation-example}
 
-This section details the core features of \pkg{scoringutils}, explains the expected data input formats and illustrates how to evaluate and compare forecasts using the example data provided in the package. \pkg{scoringutils} offers comprehensive functionality to conduct a forecast evaluation and allows users to check inputs, score forecasts and visualise results. Most functions operate on a `data.frame`-based format, but the package also provides a set of functions to score individual forecasts directly which operate on vectors/matrices. These will not be discussed in this paper and we refer to the vignettes and package documentation for further information (\url{https://epiforecasts.io/scoringutils/}). Some helper functions for data-handling, as well as example data sets and tables with additional information about available scoring metrics are also included in the package. 
+This section details the core features of \pkg{scoringutils}, explains the expected data input formats and illustrates how to evaluate and compare forecasts using the example data provided in the package. 
+
 
 ## Example data
-
-The example data included in the package and used in this paper consists of one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different forecasting models. It represents a small subset of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. 
 
 In the following, we will use the \fct{glimpse} function from the package \pkg{tibble} to display outputs more concisely. After loading the \pkg{scoringutils} package we can directly inspect the example data: 
 
