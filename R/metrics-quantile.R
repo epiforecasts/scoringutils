@@ -390,8 +390,16 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   if (is.null(dim(predicted))) {
     dim(predicted) <- c(n, N)
   }
+  if (!(0.5 %in% quantile)) {
+    message(
+      "Median not available, computing bias as mean of the two innermost ",
+      "quantiles in order to compute bias."
+    )
+  }
   bias <- sapply(1:n, function(i) {
-    bias_quantile_single_vector(observed[i], predicted[i,], quantile, na.rm)
+    suppressMessages(
+      bias_quantile_single_vector(observed[i], predicted[i, ], quantile, na.rm)
+    )
   })
   return(bias)
 }
@@ -438,8 +446,8 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   } else {
     # if median is not available, compute as mean of two innermost quantile
     message(
-      "Median not available, computing as mean of two innermost quantile",
-      " in order to compute bias."
+      "Median not available, computing bias as mean of the two innermost ",
+      "quantiles in order to compute bias."
     )
     median_prediction <-
       0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
