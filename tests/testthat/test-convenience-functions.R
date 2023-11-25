@@ -82,3 +82,20 @@ test_that("function get_forecast_unit() and set_forecast_unit() work together", 
   expect_equal(fu_set, fu_get)
 })
 
+
+test_that("set_forecast_unit() works on input that's not a data.table", {
+  df <- data.frame(
+    a = 1:2,
+    b = 2:3,
+    c = 3:4
+  )
+  expect_equal(
+    colnames(set_forecast_unit(df, c("a", "b"))),
+    c("a", "b")
+  )
+  # apparently it also works on a matrix... good to know :)
+  expect_equal(
+    names(set_forecast_unit(as.matrix(df), "a")),
+    "a"
+  )
+})

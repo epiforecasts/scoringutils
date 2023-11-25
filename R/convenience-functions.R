@@ -235,7 +235,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' )
 
 set_forecast_unit <- function(data, forecast_unit) {
-
+  data <- as.data.table(data)
   datacols <- colnames(data)
   missing <- forecast_unit[!(forecast_unit %in% datacols)]
 

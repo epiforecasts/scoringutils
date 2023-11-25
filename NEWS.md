@@ -4,6 +4,7 @@
 - `scoringutils` now depends on R 3.6. The change was made since packages `testthat` and `lifecycle`, which are used in `scoringutils` now require R 3.6. We also updated the Github action CI check to work with R 3.6 now. 
 
 ## Bug fixes
+- Fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
 - The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows. 
 
 # scoringutils 1.2.1
@@ -11,9 +12,9 @@
 ## Package updates
 - This minor update fixes a few issues related to gh actions and the vignettes displayed at epiforecasts.io/scoringutils. It
   - Gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn't work properly
-  - updates the gh pages deploy action to v4 and also cleans up files when triggered
-  - introduces a gh action to automatically render the Readme from Readme.Rmd
-  - removes links to vignettes that have been renamed
+  - Updates the gh pages deploy action to v4 and also cleans up files when triggered
+  - Introduces a gh action to automatically render the Readme from Readme.Rmd
+  - Removes links to vignettes that have been renamed
 
 # scoringutils 1.2.0
 
