@@ -154,46 +154,6 @@ Suitable for scoring the median of a predictive distribution
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Absolute error
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; ">
-Suitable for scoring the median of a predictive distribution
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
-Squared error
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
-Suitable for scoring the mean of a predictive distribution.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; ">
 Squared error
 </td>
 <td style="text-align:center;width: 1.5cm; ">
@@ -251,9 +211,9 @@ y
 n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
-Proper scoring rule, smaller is better, only evaluates predictive
-density at observed value (local), penalises over-confidence severely,
-susceptible to outliers
+Proper scoring rule, smaller is better, equals negative log of the
+predictive density at observed value (local), penalises over-confidence
+severely, susceptible to outliers
 </td>
 </tr>
 <tr>
@@ -447,54 +407,13 @@ Absolute amount of over-or under-prediction (components of WIS)
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Under-, Over-prediction
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.3cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; ">
-Absolute amount of over-or under-prediction (components of WIS)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
 Probability integral transform (PIT)
 </td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+<td style="text-align:center;width: 1.5cm; ">
 y
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
-PIT transform is the CDF of the predictive distribution evaluated at the
-observed values. PIT values should be uniform.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; ">
-Dispersion
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
 n
@@ -503,7 +422,8 @@ n
 y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
-Dispersion component of WIS, measures width of predictive intervals.
+PIT transform is the CDF of the predictive distribution evaluated at the
+observed values. PIT values should be uniform.
 </td>
 </tr>
 <tr>
@@ -619,22 +539,22 @@ to probabilistic forecasts. It measures the ‘distance’ of the predictive
 distribution to the observed data-generating distribution. The CRPS is
 given as <span class="math display">\[\text{CRPS}(F, y) =
 \int_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,\]</span>
-where y is the true observed value and F the CDF of predictive
-distribution. Often An alternative representation is used: <span class="math display">\[ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F}
+where y is the observed value and F the CDF of predictive distribution.
+Often An alternative representation is used: <span class="math display">\[ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F}
 |X - X'| - \mathbb{E}_P |X - y|,\]</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> are independent realisations from
 the predictive distributions <span class="math inline">\(F\)</span> with
 finite first moment and <span class="math inline">\(y\)</span> is the
-true value. In this represenation we can simply replace <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> by samples sum over all possible
-combinations to obtain the CRPS. For integer-valued forecasts, the RPS
-is given as <span class="math display">\[ \text{RPS}(F, y) = \sum_{x =
-0}^\infty (F(x) - 1(x \geq y))^2. \]</span></p>
+observed value. In this representation we can simply replace <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> by samples and sum over all
+possible combinations to obtain the CRPS. For integer-valued forecasts,
+the RPS is given as <span class="math display">\[ \text{RPS}(F, y) =
+\sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. \]</span></p>
 <strong>Usage and caveats</strong>: Smaller values are better. The crps
 is a good choice for most practical purposes that involve decision
 making, as it takes the entire predictive distribution into account. If
-two forecasters assign the same probability to the true event <span class="math inline">\(y\)</span>, then the forecaster who assigned high
+two forecasters assign the same probability to the observed event <span class="math inline">\(y\)</span>, then the forecaster who assigned high
 probability to events far away from <span class="math inline">\(y\)</span> will still get a worse score. The crps
 (in contrast to the log score) can at times be quite lenient towards
-extreme mispredictions. Also, due to it’s similarity to the absolute
+very poor predictions. Also, due to it’s similarity to the absolute
 error, the level of scores depend a lot on the absolute value of what is
 predicted, which makes it hard to compare scores of forecasts for
 quantities that are orders of magnitude apart.
@@ -645,19 +565,18 @@ quantities that are orders of magnitude apart.
 Log score
 </td>
 <td style="text-align:left;width: 15.5cm; ">
-<p>The Log score is a proper scoring rule that is simply compuated as
-the log of the predictive density evaluated at the true observed value.
-It is given as <span class="math display">\[ \text{log score} = \log
+<p>The Log score is a proper scoring rule that is computed as the
+negative log of the predictive density evaluated at the observed value.
+It is given as <span class="math display">\[ \text{log score} = -\log
 f(y), \]</span> where <span class="math inline">\(f\)</span> is the
-predictive density function and y is the true value. For integer-valued
-forecasts, the log score can be computed as <span class="math display">\[ \text{log score} = \log p_y, \]</span> where
+predictive density function and y is the observed value. For
+integer-valued forecasts, the log score can be computed as <span class="math display">\[ \text{log score} = -\log p_y, \]</span> where
 <span class="math inline">\(p_y\)</span> is the probability assigned to
 outcome p by the forecast F.</p>
-<strong>Usage and caveats</strong>: Larger values are better, but
-sometimes the sign is reversed. The log score is ensitive to outliers,
-as individual negative log score contributions quickly can become very
-large if the event falls in the tails of the predictive distribution,
-where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
+<strong>Usage and caveats</strong>: Smaller values are better, but
+sometimes the sign is reversed. The log score is sensitive to outliers,
+as individual log score contributions can become very large if the event
+falls in a range of the predictive distribution where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
 that is desirable depends ont the application. In scoringutils, the log
 score cannot be used for integer-valued forecasts, as the implementation
 requires a predictive density. In contrast to the crps, the log score is
@@ -681,7 +600,7 @@ component and penalties for over- and underprediction. For a single
 interval, the score is computed as <span class="math display">\[IS_\alpha(F,y) = (u-l) + \frac{2}{\alpha} \cdot
 (l-y) \cdot \mathbf{1}(y \leq l) + \frac{2}{\alpha} \cdot (y-u) \cdot
 \mathbf{1}(y \geq u), \]</span> where <span class="math inline">\(\mathbf{1}()\)</span> is the indicator function,
-<span class="math inline">\(y\)</span> is the true value, and <span class="math inline">\(l\)</span> and <span class="math inline">\(u\)</span> are the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1 - \frac{\alpha}{2}\)</span> quantiles of the
+<span class="math inline">\(y\)</span> is the observed value, and <span class="math inline">\(l\)</span> and <span class="math inline">\(u\)</span> are the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1 - \frac{\alpha}{2}\)</span> quantiles of the
 predictive distribution <span class="math inline">\(F\)</span>, i.e. the
 lower and upper bound of a single prediction interval. For a set of
 <span class="math inline">\(K\)</span> prediction intervals and the
@@ -711,7 +630,7 @@ therefore easy to compute. It is given as</p>
 <p><span class="math display">\[\text{dss}(F, y) = \left( \frac{y -
 \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,\]</span> where <span class="math inline">\(F\)</span> is the predictive distribution with
 mean <span class="math inline">\(\mu\)</span> and standard deviation
-<span class="math inline">\(\sigma\)</span> and <span class="math inline">\(y\)</span> is the true observed value.</p>
+<span class="math inline">\(\sigma\)</span> and <span class="math inline">\(y\)</span> is the observed value.</p>
 <strong>Usage and caveats</strong>: The dss is applicable to continuous
 and integer forecasts and easy to compute. Apart from the ease of
 computation we see little advantage in using it over other scores.
@@ -740,7 +659,7 @@ Interval coverage
 fall in a given prediction interval range. Interval coverage for a
 single prediction interval range can be calculated as <span class="math display">\[IC_{\alpha} = \text{nominal coverage} -
 \text{empirical coverage},\]</span> where nominal coverage is <span class="math inline">\(1 - \alpha\)</span> and empirical coverage is the
-proportion of true values actually covered by all <span class="math inline">\(1 - \alpha\)</span> prediction intervals.</p>
+proportion of observed values actually covered by all <span class="math inline">\(1 - \alpha\)</span> prediction intervals.</p>
 <p>To summarise interval coverage over different over multiple interval
 ranges, we can compute coverage deviation defined as the mean interval
 coverage over all <span class="math inline">\(K\)</span> interval ranges
@@ -759,8 +678,8 @@ Quantile coverage
 </td>
 <td style="text-align:left;background-color: Gainsboro !important;width: 15.5cm; ">
 <p>Quantile coverage for a given quantile level is the proportion of
-true values smaller than the predictions corresponding to that quantile
-level.</p>
+observed values smaller than the predictions corresponding to that
+quantile level.</p>
 <strong>Usage</strong>: Quantile coverage is similar to interval
 coverage, but conveys more information. For example, it allows us to
 look at the 5% and 95% quantile separately, instead of jointly at the
@@ -780,9 +699,8 @@ succinct way to visualise deviations between the predictive distribution
 distribution <span class="math inline">\(G\)</span>. The idea is to
 transform the observed values such that agreement between forecasts and
 data can then be examined by observing whether or not the transformed
-values follow a uniform distribution. The PIT is given by <span class="math display">\[u = F (y),\]</span> where <span class="math inline">\(u\)</span> is the transformed variable and <span class="math inline">\(F(y)\)</span> is the predictive distribution <span class="math inline">\(F\)</span> evaluated at the true observed value
-<span class="math inline">\(y\)</span>. If <span class="math inline">\(F
-= G\)</span>, then <span class="math inline">\(u\)</span> follows a
+values follow a uniform distribution. The PIT is given by <span class="math display">\[u = F (y),\]</span> where <span class="math inline">\(u\)</span> is the transformed variable and <span class="math inline">\(F(y)\)</span> is the predictive distribution <span class="math inline">\(F\)</span> evaluated at the observed value <span class="math inline">\(y\)</span>. If <span class="math inline">\(F =
+G\)</span>, then <span class="math inline">\(u\)</span> follows a
 uniform distribution.</p>
 <p>For integer outcomes, the PIT is no longer uniform even when
 forecasts are ideal. Instead, a randomised PIT can be used: <span class="math display">\[u = P(y) + v \cdot (P(y) - P(y - 1) ),\]</span>
@@ -846,15 +764,15 @@ the data point. Bias can be calculated as <span class="math display">\[B(P, y) =
 assigned to all outcomes smaller or equal to <span class="math inline">\(y\)</span>, i.e. the cumulative probability mass
 function corresponding to <span class="math inline">\(p(y)\)</span>.</p>
 <p>For quantile forecasts, Bias can be calculated as the maximum
-percentile rank for which the prediction is smaller than <span class="math inline">\(y\)</span>, if the true value is smaller than the
-median of the predictive distribution. If the true value is above the
-median of the predictive distribution, then bias is the minimum
-percentile rank for which the corresponding quantile is still larger
-than the true value. If the true value is exactly the median, bias is
-zero. For a large enough number of quantiles, the percentile rank will
-equal the proportion of predictive samples below the observed true
-value, and this metric coincides with the one for continuous
-forecasts.</p>
+percentile rank for which the prediction is smaller than <span class="math inline">\(y\)</span>, if the observed value is smaller than
+the median of the predictive distribution. If the observed value is
+above the median of the predictive distribution, then bias is the
+minimum percentile rank for which the corresponding quantile is still
+larger than the observed value. If the observed value is exactly the
+median, bias is zero. For a large enough number of quantiles, the
+percentile rank will equal the proportion of predictive samples below
+the observed value, and this metric coincides with the one for
+continuous forecasts.</p>
 <strong>Usage</strong>: In contrast to the over- and underprediction
 penalties of the interval score it is bound between -1 and 1 and
 represents the tendency of forecasts to be biased rather than the

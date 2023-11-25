@@ -61,13 +61,17 @@
 <ul><li>
 <code>scoringutils</code> now depends on R 3.6. The change was made since packages <code>testthat</code> and <code>lifecycle</code>, which are used in <code>scoringutils</code> now require R 3.6. We also updated the Github action CI check to work with R 3.6 now.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-2-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-2"></a></h3>
+<ul><li>The metrics table in the vignette <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented in <code>scoringutils</code></a> had duplicated entries. This was fixed by removing the duplicated rows.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.1" id="scoringutils-121">scoringutils 1.2.1<a class="anchor" aria-label="anchor" href="#scoringutils-121"></a></h2>
 <div class="section level3">
 <h3 id="package-updates-1-2-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-1"></a></h3>
 <ul><li>This minor update fixes a few issues related to gh actions and the vignettes displayed at epiforecasts.io/scoringutils. It
-<ul><li>gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn’t work properly</li>
+<ul><li>Gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn’t work properly</li>
 <li>updates the gh pages deploy action to v4 and also cleans up files when triggered</li>
 <li>introduces a gh action to automatically render the Readme from Readme.Rmd</li>
 <li>removes links to vignettes that have been renamed</li>
