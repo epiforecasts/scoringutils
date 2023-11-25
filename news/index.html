@@ -63,7 +63,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-2-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-2"></a></h3>
-<ul><li>The metrics table in the vignette <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented in <code>scoringutils</code></a> had duplicated entries. This was fixed by removing the duplicated rows.</li>
+<ul><li>Fixes a bug with <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> where the function only workded with a data.table, but not a data.frame as an input.</li>
+<li>The metrics table in the vignette <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented in <code>scoringutils</code></a> had duplicated entries. This was fixed by removing the duplicated rows.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -72,9 +73,9 @@
 <h3 id="package-updates-1-2-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-1"></a></h3>
 <ul><li>This minor update fixes a few issues related to gh actions and the vignettes displayed at epiforecasts.io/scoringutils. It
 <ul><li>Gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn’t work properly</li>
-<li>updates the gh pages deploy action to v4 and also cleans up files when triggered</li>
-<li>introduces a gh action to automatically render the Readme from Readme.Rmd</li>
-<li>removes links to vignettes that have been renamed</li>
+<li>Updates the gh pages deploy action to v4 and also cleans up files when triggered</li>
+<li>Introduces a gh action to automatically render the Readme from Readme.Rmd</li>
+<li>Removes links to vignettes that have been renamed</li>
 </ul></li>
 </ul></div>
 </div>
