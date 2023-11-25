@@ -41,8 +41,8 @@ Description:
     Scoring metrics can be used either through a convenient data.frame format, 
     or can be applied as individual functions in a vector / matrix format. 
     All functionality has been implemented with a focus on performance and is 
-    robustly tested. Find more information about scoringutils in the 
-    accompanying paper (Bosse et al., 2022) <arXiv:2205.07090v1>. 
+    robustly tested. Find more information about the package in the 
+    accompanying paper (<doi:10.48550/arXiv.2205.07090>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
