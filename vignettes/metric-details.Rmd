@@ -42,7 +42,10 @@ data$C <- replace(data$C)
 data$B <- replace(data$B)
 data$Q <- replace(data$Q)
 
-data[, 1:6] %>%
+data <- data[, 1:6] %>%
+  unique() 
+
+data %>%
   kbl(format = "html",
       escape = FALSE,
       align = c("lccccl"),
