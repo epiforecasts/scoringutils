@@ -219,7 +219,7 @@ check_metrics <- function(metrics) {
 #' Quantiles must be in the range specified, increase monotonically,
 #' and contain no duplicates.
 #'
-#' This is used in [bias_range()]() and [bias_quantile()]() to
+#' This is used in [bias_range()] and [bias_quantile()] to
 #' provide informative errors to users.
 #'
 #' @param quantiles Numeric vector of quantiles to check
