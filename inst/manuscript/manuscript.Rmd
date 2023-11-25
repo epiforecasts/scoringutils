@@ -206,8 +206,10 @@ Here is the output of validating the example data:
 <!-- Add a call to class and attributes -->
 
 ```{r example-data, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Output of validating the example data.", fig.show="hold"}
-example_quantile |>
-  validate()
+
+validated <- validate(example_quantile) 
+class(validated)
+
 ```
 
 ## Diagnostic functions that provide additional information about the data
@@ -256,16 +258,16 @@ example_quantile %>%
 
 - `run_safely()`
 
-## Internal functions
+<!-- ## Internal functions -->
 
-### Check functions
-Functions to check inputs. Most of these are internal functions, but some are exposed to the user. The naming convention follows that of the \pkg{checkmate} package \citep{checkmate}. 
+<!-- ### Check functions -->
+<!-- Functions to check inputs. Most of these are internal functions, but some are exposed to the user. The naming convention follows that of the \pkg{checkmate} package \citep{checkmate}.  -->
 
-Functions that begin with `assert_` return `TRUE` if the condition is met, and throw an error otherwise. 
+<!-- Functions that begin with `assert_` return `TRUE` if the condition is met, and throw an error otherwise.  -->
 
-Functions that begin with `check_` return `TRUE` if the condition is met, and a string with an error message otherwise. 
+<!-- Functions that begin with `check_` return `TRUE` if the condition is met, and a string with an error message otherwise.  -->
 
-Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise. 
+<!-- Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise.  -->
 
 
 # Scoring forecasts
@@ -305,7 +307,8 @@ Scoring rules need to be compatible with the type of the forecast that is scored
 <!-- Maybe something about the wrapper functions that we want to have -->
 
 ```{r}
-score(example_point)
+score(example_point) |>
+  head()
 ```
 
 ## The unit of a single forecast {short-title="The unit of a single forecast" #forecastunit}
@@ -347,7 +350,7 @@ example_quantile[horizon == 2] |>
 ```
 
 Summarised scores can then be visualised using the function \fct{XXXscores\_table}. In order to display scores it is often useful to round the output, for example to two significant digits, which can be achieved through another call of \fct{summarise\_scores}. The output of the following is shown in Figure \ref{fig:score-table}: 
-
+ 
 ```{r score-table, fig.width = 11, fig.cap="Coloured table to visualise the computed scores. Red colours indicate that a value is higher than ideal, blue indicates it is lower than ideal and the opacity indicates the strength of the deviation from the ideal."}
 example_quantile[horizon == 2] |>
   score() |>
@@ -378,9 +381,11 @@ score(example_continuous) |>
 
 ### Weighted interval score decomposition
 
-For quantile-based forecasts, the weighted interval score \citep[WIS, ][]{bracherEvaluatingEpidemicForecasts2021} is a commonly used scoring rule. The score treats the predictive quantiles as a set of symmetric prediction intervals and measures the distance between the observation and the forecast interval. It can be decomposed into three components: dispersion (the width of the prediction interval), overprediction (the distance between the upper bound of the prediction interval and the observation) and underprediction (the distance between the lower bound of the prediction interval and the observation). 
-
-It is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, overprediction and underprediction. This can be achieved using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components} 
+For quantile-based forecasts, the weighted interval score \citep[WIS, ][]{bracherEvaluatingEpidemicForecasts2021} is a commonly used scoring rule. The score treats the predictive quantiles as a set of symmetric prediction intervals and measures the distance between the observation and the forecast interval. The score can be decomposed into a dispersion (uncertainty) component and penalties for over- and underprediction. For a single interval, the score is computed as
+  $$IS_\alpha(F,y) = \underbrace{(u-l)}_\text{dispersion} + \underbrace{\frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l)}_{\text{overprediction}} + \underbrace{\frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u)}_{\text{underprediction}}, $$
+  where $\mathbf{1}()$ is the indicator function, $y$ is the observed value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
+  $$WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)\right),$$
+where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$. It is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, overprediction and underprediction. This can be achieved using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components} 
 
 ```{r wis-components-code, eval = FALSE, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. The WIS components measure over- and underprediction in absolute, rather than relative terms."}
 score(example_quantile) |>
@@ -431,11 +436,56 @@ correlations |>
 
 ## Pairwise comparisons
 
-...
+## Pairwise comparisons {#pairwisetheory}
+
+Raw scores for different forecasting models are not directly comparable in the case of missing forecasts, as forecasting targets usually differ in their characteristics (e.g., the scale of the forecast target, how difficult targets are to forecast etc.). One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. 
+
+Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used (if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score). Two models can of course only be fairly compared if they have overlapping forecasts. One simple rule of thumb one could apply is to only compare models that have forecasts for at least 50\% of the available targets, thereby ensuring that all models have overlapping sets of forecasts. 
+Furthermore, pairwise comparisons between models for a given metric are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. The process of pairwise comparisons is illustrated in Figure \ref{fig:pairwise-comparison}. 
+
+```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3.."}
+include_graphics("output/pairwise-comparisons.png")
+```
+
+Relative skill scores via pairwise comparisons can be calculated in two different ways. 
 
 
-## Visualising scores
-- WIS
+
+It is in principle possible to compute p-values to determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
+
+
+## Pairwise comparisons {#pairwisecode}
+
+Comparisons between score can be misleading if forecasts are missing for some models. One possible way of handling this is by doing pairwise comparisons between models based on the overlapping set of forecasts common to both models.
+
+In addition, one can also compute a scaled relative skill score by providing a baseline model. All individual relative skill scores are then scaled by (i.e., divided by) the relative score of the baseline model. 
+
+
+In order to obtain a model ranking, we recommend looking at the relative skill in terms of an appropriate proper scoring rule instead of the raw score whenever forecasts are missing. 
+
+
+Relative skill scores can either be obtained by specifying \code{relative_skill = TRUE} in the function \fct{summarise\_scores}, or by calling the function \fct{pairiwse\_comparison}. In both cases, pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.frame} with all scores gets split into different \code{data.frame}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated separately for the different forecasting targets. Using the argument \code{baseline}, we can compute relative skill with respect to a baseline model. The metric for which relative skill scores shall be computed can either be specified manually using the argument XXXX `metric` in `pairwise_comparison()` or `relative_skill_metric` in `summarise_scores()`. By default, the relevant metric will be inferred automatically, and defaults to "interval_score", "crps", or "brier_score", depending on which of these exist in the input data. As the data in the following example is in a quantile format, pairwise comparisons will be computed for the weighted interval score. 
+
+```{r}
+score(example_quantile) |>
+  pairwise_comparison(by = c("model", "target_type"), 
+                      baseline = "EuroCOVIDhub-baseline") |>
+  head()
+```
+
+Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values do not account for), it may be sensible to summaries over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
+
+Using the function \fct{plot\_pairwise\_comparison} we can visualise mean score ratios for the WIS between all models. 
+
+The output of the following code is shown in Figure \ref{fig:pairwise-plot}. 
+
+```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
+score(example_quantile) |>
+  pairwise_comparison(by = c("model", "target_type"), 
+                      baseline = "EuroCOVIDhub-baseline") |>
+  plot_pairwise_comparison() + 
+  facet_wrap(~ target_type)
+```
 
 
 
@@ -567,12 +617,6 @@ For forecasts in a quantile format, bias is also reflected in the over- and unde
 
 Sharpness is the ability to produce narrow forecasts. In contrast to calibration it does not depend on the actual observations and is a quality of the forecast only \citep{gneitingProbabilisticForecastsCalibration2007}. Sharpness is therefore only useful subject to calibration, as exemplified in Figure \ref{fig:forecast-paradigm}. For forecasts provided as samples from the predictive distribution, \pkg{scoringutils} calculates dispersion (the inverse of sharpness) as the normalised median absolute deviation (MAD), following \cite{funkAssessingPerformanceRealtime2019} (for details see Table \ref{tab:metrics-summary}). For quantile forecasts, we instead report the dispersion component of the weighted interval score (see details in Section \ref{wis} and \ref{tab:score-table-detailed}) which corresponds to a weighted average of the individual interval widths. 
 
-## Pairwise comparisons {#pairwisetheory}
-
-Raw scores for different forecasting models are not directly comparable in the case of missing forecasts, as forecasting targets usually differ in their characteristics (e.g., the scale of the forecast target, how difficult targets are to forecast etc.). One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used (e.g., for the proper scoring rules presented above, a relative skill score below 1 indicates better performance). As two models can only be fairly compared if they have overlapping forecasts it is advisable to only compare forecasts that are at least 50\% complete (to avoid comparisons of models that have no overlapping forecasts). Furthermore, pairwise comparisons between models for a given metric are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. One can also compute a scaled relative skill score by providing a baseline model. All individual relative skill scores are then scaled by (i.e., divided by) the relative score of the baseline model. 
-
-It is in principle possible to compute p-values to determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
-
 # Evaluating forecasts using scoringutils {#evaluation-example}
 
 This section details the core features of \pkg{scoringutils}, explains the expected data input formats and illustrates how to evaluate and compare forecasts using the example data provided in the package. 
@@ -595,31 +639,9 @@ example_integer |>
 
 The process is designed to require conscious action by the user, because the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large. 
 
-## Pairwise comparisons {#pairwisecode}
 
-In order to obtain a model ranking, we recommend looking at the relative skill in terms of an appropriate proper scoring rule instead of the raw score whenever forecasts are missing. 
-Relative skill scores can either be obtained by specifying \code{relative_skill = TRUE} in the function \fct{summarise\_scores}, or by calling the function \fct{pairiwse\_comparison}. In both cases, pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.frame} with all scores gets split into different \code{data.frame}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated separately for the different forecasting targets. Using the argument \code{baseline}, we can compute relative skill with respect to a baseline model. The metric for which relative skill scores shall be computed can either be specified manually using the argument XXXX `metric` in `pairwise_comparison()` or `relative_skill_metric` in `summarise_scores()`. By default, the relevant metric will be inferred automatically, and defaults to "interval_score", "crps", or "brier_score", depending on which of these exist in the input data. As the data in the following example is in a quantile format, pairwise comparisons will be computed for the weighted interval score. 
 
-```{r}
-score(example_quantile) |>
-  pairwise_comparison(by = c("model", "target_type"), 
-                      baseline = "EuroCOVIDhub-baseline") |>
-  head()
-```
-
-Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values do not account for), it may be sensible to summaries over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
-
-Using the function \fct{plot\_pairwise\_comparison} we can visualise mean score ratios for the WIS between all models. 
-
-The output of the following code is shown in Figure \ref{fig:pairwise-plot}. 
-
-```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
-score(example_quantile) |>
-  pairwise_comparison(by = c("model", "target_type"), 
-                      baseline = "EuroCOVIDhub-baseline") |>
-  plot_pairwise_comparison() + 
-  facet_wrap(~ target_type)
-```
+## PIT and Calibration
 
 Special attention should be given to calibration. The most common way of assessing calibration (more precisely: probabilistic calibration) are PIT histograms, as explained in Section \ref{probabilistic-calibration}. Ideally, PIT values should be uniformly distributed after the transformation.
 
