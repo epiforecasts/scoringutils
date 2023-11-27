@@ -67,7 +67,7 @@ more details."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Logarithmic score</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-sample.R" class="external-link"><code>R/metrics-sample.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/scoringRules_wrappers.R" class="external-link"><code>R/scoringRules_wrappers.R</code></a></small>
       <div class="d-none name"><code>logs_sample.Rd</code></div>
     </div>
 
@@ -85,24 +85,19 @@ more details.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
-<dd><p>A vector with observed values of size n</p></dd>
+    <dl><dt>true_values</dt>
+<dd><p>A vector with the true observed values of size n</p></dd>
 
 
-<dt>predicted</dt>
+<dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, <code>predicted</code> can just be a vector of size n.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>additional arguments passed to
-<a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_univ.html" class="external-link">logs_sample()</a> from the scoringRules package.</p></dd>
+Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -119,14 +114,14 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5520133 1.6300516 1.5266528 1.6218263 1.9532996 2.2773339 2.0743545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.9833487 2.0966954 2.0842686 4.2198259 2.4626785 2.3420158 2.8303594</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 4.6318340 3.0865073 2.5286159 2.8419519 2.6636327 2.7542822 3.3119841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.5294896 2.7328963 2.8448774 4.2331987 3.1638746 2.6334428 2.7171645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.6445356 5.0650232</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">logs_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9191313 1.6281585 1.5917875 2.8134954 2.8784351 1.9369484 1.9963809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.0558881 2.0965510 5.1213115 2.2142567 2.7856763 2.7080095 2.8960512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.8906730 2.4581856 2.7736231 2.4248202 2.6222202 2.6783674 3.5517511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 2.9072924 2.5121301 2.9074573 2.7422429 2.7901944 2.8789539 3.1520606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 3.5246053 3.3941577</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
