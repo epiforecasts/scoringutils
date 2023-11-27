@@ -18,7 +18,7 @@
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
-#' @keywords check-forceasts
+#' @keywords check-forecasts
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))
@@ -50,7 +50,7 @@ get_forecast_type <- function(data) {
 #' @inheritParams document_check_functions
 #' @importFrom checkmate test_factor test_numeric
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_binary <- function(data) {
   observed_correct <- test_factor(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -61,7 +61,7 @@ test_forecast_type_is_binary <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_sample <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -73,7 +73,7 @@ test_forecast_type_is_sample <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_point <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -85,7 +85,7 @@ test_forecast_type_is_point <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_quantile <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -100,13 +100,10 @@ test_forecast_type_is_quantile <- function(data) {
 #' of observed or predicted values). The function checks whether the input is
 #' a factor, or else whether it is integer (or can be coerced to integer) or
 #' whether it's continuous.
-#'
 #' @param x Input used to get the type.
-#'
 #' @return Character vector of length one with either "classification",
 #' "integer", or "continuous"
-#'
-#' @keywords internal
+#' @keywords internal_input_check
 get_type <- function(x) {
   if (is.factor(x)) {
     return("classification")
@@ -129,15 +126,11 @@ get_type <- function(x) {
 
 
 #' @title Get metrics that were used for scoring
-#'
 #' @description Internal helper function to get the metrics that were used
 #' to score forecasts.
-#' @param score A data.table with an attribute `metric_names`
-#'
+#' @param scores A data.table with an attribute `metric_names`
 #' @return Character vector with the metrics that were used for scoring.
-#'
-#' @keywords internal
-
+#' @keywords internal_input_check
 get_metrics <- function(scores) {
   metric_names <- attr(scores, "metric_names")
   if (is.null(metric_names)) {

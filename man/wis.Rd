@@ -141,3 +141,4 @@ can control the behvaviour with the \code{count_median_twice}-argument.
 WIS components can be computed individually using the functions
 \code{overprediction}, \code{underprediction}, and \code{dispersion.}
 }
+\keyword{metric}

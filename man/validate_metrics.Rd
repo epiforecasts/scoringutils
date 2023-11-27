@@ -21,3 +21,4 @@ of valid functions.
 The function is used in \code{\link[=score]{score()}} to make sure that all metrics are valid
 functions
 }
+\keyword{internal_input_check}

@@ -12,3 +12,4 @@ specifications detailed in \code{\link[=score]{score()}}.}
 \description{
 Documentation template for scoring input data
 }
+\keyword{internal}

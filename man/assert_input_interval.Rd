@@ -28,4 +28,4 @@ error otherwise.
 Function assesses whether the inputs correspond to the
 requirements for scoring interval-based forecasts.
 }
-\keyword{internal}
+\keyword{internal_input_check}

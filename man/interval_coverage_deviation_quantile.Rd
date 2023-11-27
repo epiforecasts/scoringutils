@@ -73,3 +73,4 @@ predicted <- rbind(
 quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 interval_coverage_deviation_quantile(observed, predicted, quantile)
 }
+\keyword{metric}

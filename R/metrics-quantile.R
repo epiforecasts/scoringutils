@@ -96,6 +96,7 @@
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
+#' @keywords metric
 wis <- function(observed,
                 predicted,
                 quantile,
@@ -160,6 +161,7 @@ wis <- function(observed,
 #' `overprediction()`, `underprediction()` and `dispersion()`
 #' @export
 #' @rdname wis
+#' @keywords metric
 dispersion <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -173,6 +175,7 @@ dispersion <- function(observed, predicted, quantile, ...) {
 #' observation)
 #' @export
 #' @rdname wis
+#' @keywords metric
 overprediction <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -186,6 +189,7 @@ overprediction <- function(observed, predicted, quantile, ...) {
 #' observation)
 #' @export
 #' @rdname wis
+#' @keywords metric
 underprediction <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -209,6 +213,7 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #' corresponding prediction interval and FALSE otherwise.
 #' @name interval_coverage
 #' @export
+#' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -282,6 +287,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' @return A numeric vector of length n with the coverage deviation for each
 #' forecast (comprising one or multiple prediction intervals).
 #' @export
+#' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -366,9 +372,9 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
 #' @inheritParams bias_range
 #' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @export
+#' @keywords metric
 #' @examples
-#'
 #' predicted <- c(
 #'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
 #'   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
@@ -381,8 +387,6 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
 #' observed <- 8062
 #'
 #' bias_quantile(observed, predicted, quantile)
-#' @export
-#' @keywords metric
 bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile)
   n <- length(observed)
@@ -408,6 +412,7 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_quantile
 #' @return scalar with the quantile bias for a single quantile prediction
+#' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 
   assert_number(observed)

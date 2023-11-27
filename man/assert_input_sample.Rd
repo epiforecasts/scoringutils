@@ -24,4 +24,4 @@ error otherwise.
 Function assesses whether the inputs correspond to the
 requirements for scoring sample-based forecasts.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

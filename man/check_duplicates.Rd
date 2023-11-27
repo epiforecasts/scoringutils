@@ -20,4 +20,4 @@ error message otherwise
 \description{
 Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is encountered
 }
-\keyword{internal}
+\keyword{internal_input_check}
