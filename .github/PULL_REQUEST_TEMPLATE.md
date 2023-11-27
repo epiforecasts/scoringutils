@@ -16,7 +16,6 @@ This PR closes #<issue-number>.
 - [ ] I have built the package locally and run rebuilt docs using roxygen2.
 - [ ] My code follows the established coding standards and I have run `lintr::lint_package()` to check for style issues introduced by my changes. 
 - [ ] I have added a news item linked to this PR.
-- [ ] I have updated the package development version by one increment in both `NEWS.md` and the `DESCRIPTION`.
 - [ ] I have reviewed CI checks for this PR and addressed them as far as I am able.
 
 <!-- Thanks again for this PR - @scoringutils dev team -->
