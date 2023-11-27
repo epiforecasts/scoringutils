@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Provides a collection of metrics and proper scoring rules (Tilmann Gneiting &amp; Adrian E Raftery (2007) &lt;doi:10.1198/016214506000001437&gt;, Jordan, A., Krüger, F., &amp; Lerch, S. (2019) &lt;doi:10.18637/jss.v090.i12&gt;) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) &lt;doi:10.1371/journal.pcbi.1006785&gt;) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about the package in the accompanying paper (&lt;doi:10.48550/arXiv.2205.07090&gt;).">
+<meta name="description" content="Provides a collection of metrics and proper scoring rules (Tilmann Gneiting &amp; Adrian E Raftery (2007) &lt;doi:10.1198/016214506000001437&gt;, Jordan, A., Krüger, F., &amp; Lerch, S. (2019) &lt;doi:10.18637/jss.v090.i12&gt;) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) &lt;doi:10.1371/journal.pcbi.1006785&gt;) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about scoringutils in the accompanying paper (Bosse et al., 2022) &lt;arXiv:2205.07090v1&gt;.">
 <title>Utilities for Scoring and Assessing Predictions • scoringutils</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Utilities for Scoring and Assessing Predictions">
-<meta property="og:description" content="Provides a collection of metrics and proper scoring rules (Tilmann Gneiting &amp; Adrian E Raftery (2007) &lt;doi:10.1198/016214506000001437&gt;, Jordan, A., Krüger, F., &amp; Lerch, S. (2019) &lt;doi:10.18637/jss.v090.i12&gt;) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) &lt;doi:10.1371/journal.pcbi.1006785&gt;) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about the package in the accompanying paper (&lt;doi:10.48550/arXiv.2205.07090&gt;).">
+<meta property="og:description" content="Provides a collection of metrics and proper scoring rules (Tilmann Gneiting &amp; Adrian E Raftery (2007) &lt;doi:10.1198/016214506000001437&gt;, Jordan, A., Krüger, F., &amp; Lerch, S. (2019) &lt;doi:10.18637/jss.v090.i12&gt;) within a consistent framework for evaluation, comparison and visualisation of forecasts. In addition to proper scoring rules, functions are provided to assess bias, sharpness and calibration (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John Edmunds (2019) &lt;doi:10.1371/journal.pcbi.1006785&gt;) of forecasts. Several types of predictions (e.g. binary, discrete, continuous) which may come in different formats (e.g. forecasts represented by predictive samples or by quantiles of the predictive distribution) can be evaluated. Scoring metrics can be used either through a convenient data.frame format, or can be applied as individual functions in a vector / matrix format. All functionality has been implemented with a focus on performance and is robustly tested. Find more information about scoringutils in the accompanying paper (Bosse et al., 2022) &lt;arXiv:2205.07090v1&gt;.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -75,7 +75,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against the true observed values.</p>
+<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against observed values.</p>
 <p>You can find additional information and examples in the papers <a href="https://arxiv.org/abs/2205.07090" class="external-link">Evaluating Forecasts with scoringutils in R</a> <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">Scoring epidemiological forecasts on transformed scales</a> as well as the Vignettes (<a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>).</p>
 <p>The <code>scoringutils</code> package offers convenient automated forecast evaluation through the function <code><a href="reference/score.html">score()</a></code>. The function operates on data.frames (it uses <code>data.table</code> internally for speed and efficiency) and can easily be integrated in a workflow based on <code>dplyr</code> or <code>data.table</code>. It also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.</p>
 <p>Where available <code>scoringutils</code> depends on functionality from <code>scoringRules</code> which provides a comprehensive collection of proper scoring rules for predictive probability distributions represented as sample or parametric distributions. For some forecast types, such as quantile forecasts, <code>scoringutils</code> also implements additional metrics for evaluating forecasts. On top of providing an interface to the proper scoring rules implemented in <code>scoringRules</code> and natively, <code>scoringutils</code> also offers utilities for summarising and visualising forecasts and scores, and to obtain relative scores between models which may be useful for non-overlapping forecasts and forecasts across scales.</p>
@@ -121,53 +121,52 @@
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually using <code><a href="reference/set_forecast_unit.html">set_forecast_unit()</a></code> as this may help to avoid errors, especially when scoringutils is used in automated pipelines. The function <code><a href="reference/set_forecast_unit.html">set_forecast_unit()</a></code> will simply drop unneeded columns. To verify everything is in order, the function <code><a href="reference/check_forecasts.html">check_forecasts()</a></code> should be used. The result of that check can then passed directly into <code><a href="reference/score.html">score()</a></code>. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from <code>scoringutils</code> to add empirical coverage-levels (<code><a href="reference/add_coverage.html">add_coverage()</a></code>), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
+<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually using <code><a href="reference/set_forecast_unit.html">set_forecast_unit()</a></code> as this may help to avoid errors, especially when scoringutils is used in automated pipelines. The function <code><a href="reference/set_forecast_unit.html">set_forecast_unit()</a></code> will simply drop unneeded columns. To verify everything is in order, the function <code><a href="reference/validate.html">validate()</a></code> should be used. The result of that check can then passed directly into <code><a href="reference/score.html">score()</a></code>. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from <code>scoringutils</code> to add empirical coverage-levels (<code><a href="reference/add_coverage.html">add_coverage()</a></code>), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"horizon"</span>, <span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/validate.html">validate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/add_coverage.html">add_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/add_coverage.html">add_coverage</a></span><span class="op">(</span>ranges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
-<span>    relative_skill <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
 <span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
 <span>    fun <span class="op">=</span> <span class="va">signif</span>, </span>
 <span>    digits <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
-<span><span class="co">#&gt; 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span></code></pre></div>
-<table class="table">
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="11%">
+<col width="12%">
 <col width="6%">
+<col width="3%">
 <col width="8%">
+<col width="9%">
 <col width="6%">
-<col width="8%">
-<col width="8%">
-<col width="10%">
 <col width="4%">
+<col width="6%">
+<col width="6%">
+<col width="10%">
 <col width="5%">
-<col width="6%">
-<col width="6%">
 <col width="8%">
 <col width="9%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">model</th>
 <th align="left">target_type</th>
-<th align="right">interval_score</th>
-<th align="right">dispersion</th>
-<th align="right">underprediction</th>
+<th align="right">wis</th>
 <th align="right">overprediction</th>
-<th align="right">coverage_deviation</th>
+<th align="right">underprediction</th>
+<th align="right">dispersion</th>
 <th align="right">bias</th>
-<th align="right">ae_median</th>
 <th align="right">coverage_50</th>
 <th align="right">coverage_90</th>
+<th align="right">coverage_deviation</th>
+<th align="right">ae_median</th>
 <th align="right">relative_skill</th>
 <th align="right">scaled_rel_skill</th>
 </tr></thead>
@@ -176,14 +175,14 @@
 <td align="left">EuroCOVIDhub-baseline</td>
 <td align="left">Cases</td>
 <td align="right">28000</td>
-<td align="right">4100</td>
-<td align="right">10000.0</td>
 <td align="right">14000.0</td>
-<td align="right">-0.110</td>
+<td align="right">10000.0</td>
+<td align="right">4100</td>
 <td align="right">0.0980</td>
-<td align="right">38000</td>
 <td align="right">0.33</td>
 <td align="right">0.82</td>
+<td align="right">-0.120</td>
+<td align="right">38000</td>
 <td align="right">1.30</td>
 <td align="right">1.6</td>
 </tr>
@@ -191,14 +190,14 @@
 <td align="left">EuroCOVIDhub-baseline</td>
 <td align="left">Deaths</td>
 <td align="right">160</td>
-<td align="right">91</td>
-<td align="right">2.1</td>
 <td align="right">66.0</td>
-<td align="right">0.120</td>
+<td align="right">2.1</td>
+<td align="right">91</td>
 <td align="right">0.3400</td>
-<td align="right">230</td>
 <td align="right">0.66</td>
 <td align="right">1.00</td>
+<td align="right">0.120</td>
+<td align="right">230</td>
 <td align="right">2.30</td>
 <td align="right">3.8</td>
 </tr>
@@ -206,14 +205,14 @@
 <td align="left">EuroCOVIDhub-ensemble</td>
 <td align="left">Cases</td>
 <td align="right">18000</td>
-<td align="right">3700</td>
-<td align="right">4200.0</td>
 <td align="right">10000.0</td>
-<td align="right">-0.098</td>
+<td align="right">4200.0</td>
+<td align="right">3700</td>
 <td align="right">-0.0560</td>
-<td align="right">24000</td>
 <td align="right">0.39</td>
 <td align="right">0.80</td>
+<td align="right">-0.100</td>
+<td align="right">24000</td>
 <td align="right">0.82</td>
 <td align="right">1.0</td>
 </tr>
@@ -221,14 +220,14 @@
 <td align="left">EuroCOVIDhub-ensemble</td>
 <td align="left">Deaths</td>
 <td align="right">41</td>
-<td align="right">30</td>
-<td align="right">4.1</td>
 <td align="right">7.1</td>
-<td align="right">0.200</td>
+<td align="right">4.1</td>
+<td align="right">30</td>
 <td align="right">0.0730</td>
-<td align="right">53</td>
 <td align="right">0.88</td>
 <td align="right">1.00</td>
+<td align="right">0.200</td>
+<td align="right">53</td>
 <td align="right">0.60</td>
 <td align="right">1.0</td>
 </tr>
@@ -236,14 +235,14 @@
 <td align="left">UMass-MechBayes</td>
 <td align="left">Deaths</td>
 <td align="right">53</td>
-<td align="right">27</td>
-<td align="right">17.0</td>
 <td align="right">9.0</td>
-<td align="right">-0.023</td>
+<td align="right">17.0</td>
+<td align="right">27</td>
 <td align="right">-0.0220</td>
-<td align="right">78</td>
 <td align="right">0.46</td>
 <td align="right">0.88</td>
+<td align="right">-0.025</td>
+<td align="right">78</td>
 <td align="right">0.75</td>
 <td align="right">1.3</td>
 </tr>
@@ -251,14 +250,14 @@
 <td align="left">epiforecasts-EpiNow2</td>
 <td align="left">Cases</td>
 <td align="right">21000</td>
-<td align="right">5700</td>
-<td align="right">3300.0</td>
 <td align="right">12000.0</td>
-<td align="right">-0.067</td>
+<td align="right">3300.0</td>
+<td align="right">5700</td>
 <td align="right">-0.0790</td>
-<td align="right">28000</td>
 <td align="right">0.47</td>
 <td align="right">0.79</td>
+<td align="right">-0.070</td>
+<td align="right">28000</td>
 <td align="right">0.95</td>
 <td align="right">1.2</td>
 </tr>
@@ -266,14 +265,14 @@
 <td align="left">epiforecasts-EpiNow2</td>
 <td align="left">Deaths</td>
 <td align="right">67</td>
-<td align="right">32</td>
-<td align="right">16.0</td>
 <td align="right">19.0</td>
-<td align="right">-0.043</td>
+<td align="right">16.0</td>
+<td align="right">32</td>
 <td align="right">-0.0051</td>
-<td align="right">100</td>
 <td align="right">0.42</td>
 <td align="right">0.91</td>
+<td align="right">-0.045</td>
+<td align="right">100</td>
 <td align="right">0.98</td>
 <td align="right">1.6</td>
 </tr>
@@ -283,27 +282,32 @@
 <p>You may want to score forecasts based on transformations of the original data in order to obtain a more complete evaluation (see <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">this paper</a> for more information). This can be done using the function <code><a href="reference/transform_forecasts.html">transform_forecasts()</a></code>. In the following example, we truncate values at 0 and use the function <code><a href="reference/log_shift.html">log_shift()</a></code> to add 1 to all values before applying the natural logarithm.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
-<span> <span class="va">.</span><span class="op">[</span>, <span class="va">true_value</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">true_value</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">true_value</span><span class="op">)</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
+<span> <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>append <span class="op">=</span> <span class="cn">TRUE</span>, fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="va">score</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The following messages were produced when checking inputs:</span></span>
-<span><span class="co">#&gt; 1.  288 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span></span>
-<span><span class="co">#&gt;                    model target_type   scale interval_score   dispersion</span></span>
-<span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases     log   1.169972e+00    0.4373146</span></span>
-<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural   2.209046e+04 4102.5009443</span></span>
-<span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       Cases     log   5.500974e-01    0.1011850</span></span>
-<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble       Cases natural   1.155071e+04 3663.5245788</span></span>
-<span><span class="co">#&gt; 5:  epiforecasts-EpiNow2       Cases     log   6.005778e-01    0.1066329</span></span>
-<span><span class="co">#&gt; 6:  epiforecasts-EpiNow2       Cases natural   1.443844e+04 5664.3779484</span></span>
-<span><span class="co">#&gt;    underprediction overprediction coverage_deviation        bias    ae_median</span></span>
-<span><span class="co">#&gt; 1:    3.521964e-01      0.3804607        -0.10940217  0.09726562 1.185905e+00</span></span>
-<span><span class="co">#&gt; 2:    1.028497e+04   7702.9836957        -0.10940217  0.09726562 3.208048e+04</span></span>
-<span><span class="co">#&gt; 3:    1.356563e-01      0.3132561        -0.09785326 -0.05640625 7.410484e-01</span></span>
-<span><span class="co">#&gt; 4:    4.237177e+03   3650.0047554        -0.09785326 -0.05640625 1.770795e+04</span></span>
-<span><span class="co">#&gt; 5:    1.858699e-01      0.3080750        -0.06660326 -0.07890625 7.656591e-01</span></span>
-<span><span class="co">#&gt; 6:    3.260356e+03   5513.7058424        -0.06660326 -0.07890625 2.153070e+04</span></span></code></pre></div>
+<span><span class="co">#&gt;                    model target_type   scale         wis overprediction</span></span>
+<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755</span></span>
+<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696</span></span>
+<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842</span></span>
+<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths natural    41.42249       7.138247</span></span>
+<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117</span></span>
+<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601</span></span>
+<span><span class="co">#&gt;    underprediction dispersion        bias coverage_50 coverage_90</span></span>
+<span><span class="co">#&gt; 1:     4237.177310 3663.52458 -0.05640625   0.3906250   0.8046875</span></span>
+<span><span class="co">#&gt; 2:    10284.972826 4102.50094  0.09726562   0.3281250   0.8203125</span></span>
+<span><span class="co">#&gt; 3:     3260.355639 5664.37795 -0.07890625   0.4687500   0.7890625</span></span>
+<span><span class="co">#&gt; 4:        4.103261   30.18099  0.07265625   0.8750000   1.0000000</span></span>
+<span><span class="co">#&gt; 5:        2.098505   91.40625  0.33906250   0.6640625   1.0000000</span></span>
+<span><span class="co">#&gt; 6:       16.800951   26.87239 -0.02234375   0.4609375   0.8750000</span></span>
+<span><span class="co">#&gt;    coverage_deviation   ae_median</span></span>
+<span><span class="co">#&gt; 1:        -0.10230114 17707.95312</span></span>
+<span><span class="co">#&gt; 2:        -0.11437500 32080.48438</span></span>
+<span><span class="co">#&gt; 3:        -0.06963068 21530.69531</span></span>
+<span><span class="co">#&gt; 4:         0.20380682    53.13281</span></span>
+<span><span class="co">#&gt; 5:         0.12142045   233.25781</span></span>
+<span><span class="co">#&gt; 6:        -0.02488636    78.47656</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

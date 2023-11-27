@@ -4,10 +4,10 @@ and Raftery (2007). Smaller values are better.
 The score is computed as
 $$
 \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
- - \textrm{true\_value}) *
-\mathbf{1}(\textrm{true\_value} &amp;lt; \textrm{lower}) +
-\frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
-\mathbf{1}(\textrm{true\_value} &amp;gt; \textrm{upper})
+ - \textrm{observed}) *
+\mathbf{1}(\textrm{observed} &amp;lt; \textrm{lower}) +
+\frac{2}{\alpha}(\textrm{observed} - \textrm{upper}) *
+\mathbf{1}(\textrm{observed} &amp;gt; \textrm{upper})
 $$
 where \(\mathbf{1}()\) is the indicator function and
 indicates how much is outside the prediction interval.
@@ -25,10 +25,10 @@ and Raftery (2007). Smaller values are better.
 The score is computed as
 $$
 \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
- - \textrm{true\_value}) *
-\mathbf{1}(\textrm{true\_value} &amp;lt; \textrm{lower}) +
-\frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
-\mathbf{1}(\textrm{true\_value} &amp;gt; \textrm{upper})
+ - \textrm{observed}) *
+\mathbf{1}(\textrm{observed} &amp;lt; \textrm{lower}) +
+\frac{2}{\alpha}(\textrm{observed} - \textrm{upper}) *
+\mathbf{1}(\textrm{observed} &amp;gt; \textrm{upper})
 $$
 where \(\mathbf{1}()\) is the indicator function and
 indicates how much is outside the prediction interval.
@@ -93,7 +93,7 @@ Non-symmetric quantiles can be scored using the function quantile_score()."><!--
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Interval Score</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/interval_score.R" class="external-link"><code>R/interval_score.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-range.R" class="external-link"><code>R/metrics-range.R</code></a></small>
       <div class="d-none name"><code>interval_score.Rd</code></div>
     </div>
 
@@ -103,10 +103,10 @@ and Raftery (2007). Smaller values are better.</p>
 <p>The score is computed as</p>
 <p>$$
 \textrm{score} = (\textrm{upper} - \textrm{lower}) + \frac{2}{\alpha}(\textrm{lower}
- - \textrm{true\_value}) *
-\mathbf{1}(\textrm{true\_value} &lt; \textrm{lower}) +
-\frac{2}{\alpha}(\textrm{true\_value} - \textrm{upper}) *
-\mathbf{1}(\textrm{true\_value} &gt; \textrm{upper})
+ - \textrm{observed}) *
+\mathbf{1}(\textrm{observed} &lt; \textrm{lower}) +
+\frac{2}{\alpha}(\textrm{observed} - \textrm{upper}) *
+\mathbf{1}(\textrm{observed} &gt; \textrm{upper})
 $$
 where \(\mathbf{1}()\) is the indicator function and
 indicates how much is outside the prediction interval.
@@ -125,7 +125,7 @@ Non-symmetric quantiles can be scored using the function <code><a href="quantile
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval_score</span><span class="op">(</span></span>
-<span>  <span class="va">true_values</span>,</span>
+<span>  <span class="va">observed</span>,</span>
 <span>  <span class="va">lower</span>,</span>
 <span>  <span class="va">upper</span>,</span>
 <span>  <span class="va">interval_range</span>,</span>
@@ -136,8 +136,8 @@ Non-symmetric quantiles can be scored using the function <code><a href="quantile
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>true_values</dt>
-<dd><p>A vector with the true observed values of size n</p></dd>
+    <dl><dt>observed</dt>
+<dd><p>A vector with observed values of size n</p></dd>
 
 
 <dt>lower</dt>
@@ -193,67 +193,62 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">interval_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">90</span>, <span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">100</span> <span class="op">-</span> <span class="va">interval_range</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="va">lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  true_values <span class="op">=</span> <span class="va">true_values</span>,</span></span>
+<span class="r-in"><span>  observed <span class="op">=</span> <span class="va">observed</span>,</span></span>
 <span class="r-in"><span>  lower <span class="op">=</span> <span class="va">lower</span>,</span></span>
 <span class="r-in"><span>  upper <span class="op">=</span> <span class="va">upper</span>,</span></span>
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="va">interval_range</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.18104400 1.42719501 1.27631562 0.27207092 0.27092032 0.13144740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.53077590 0.16906968 0.77169185 0.09975756 0.47575750 0.22971005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.05183765 0.04307866 0.25504765 0.20409255 0.25089485 0.17292320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.21056393 0.17332822 0.15087255 0.11348471 0.20140051 0.22890610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.05572419 0.12315110 0.06472556 0.26669630 0.07721966 0.21412998</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7688943 0.5754421 0.5960443 0.6283716 0.6072315 0.6192577 0.5875648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.6288736 0.9515470 0.6259137 0.8549702 0.7610633 0.7927637 0.5907855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.9360280 1.6715748 0.7362981 0.6510798 0.6416879 0.6806155 0.8044108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.5920431 0.5878713 0.6613742 0.6330436 0.7557943 0.5724464 0.7104610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6607738 0.9513632</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># gives a warning, as the interval_range should likely be 50 instead of 0.5</span></span></span>
-<span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span>true_value <span class="op">=</span> <span class="fl">4</span>, upper <span class="op">=</span> <span class="fl">2</span>, lower <span class="op">=</span> <span class="fl">8</span>, interval_range <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Found interval ranges between 0 and 1. Are you sure that's right? An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval. If you want to score a (25%, 75%) prediction interval, set interval_range = 50.</span>
+<span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span>observed <span class="op">=</span> <span class="fl">4</span>, upper <span class="op">=</span> <span class="fl">8</span>, lower <span class="op">=</span> <span class="fl">2</span>, interval_range <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Found interval ranges between 0 and 1. Are you sure that's right? An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval. If you want to score a (25%, 75%) prediction interval, set `interval_range = 50`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once per session.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.985</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example with missing values and separate results</span></span></span>
 <span class="r-in"><span><span class="fu">interval_score</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  true_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">true_values</span>, <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">observed</span>, <span class="cn">NA</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lower</span>, <span class="cn">NA</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">upper</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  separate_results <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="fl">90</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 1.42125521 0.24136359 0.76742749 0.26759736 0.14243925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.75531721 0.09667577 1.42028101 0.80934260 0.17695740 0.22560742</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.20464122 0.08720275 1.79648807 0.13052497 0.18847899 0.14291633</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.17781112 0.06774071 0.10780967 0.15123502 0.42339334 1.58523383</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.11715399 1.70179016 0.07715526 1.08495966 0.21482843 1.40808185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5949224 0.5982342 0.5408759 0.5154377 0.5839772 0.5489897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4913697 0.9010007 0.6864646 0.7056148 0.7381486 0.6653555 0.6588036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.8038943 1.7030094 0.6502636 0.6147623 0.5932116 0.6021510 0.7419593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.6318029 0.5192872 0.5605886 0.5891946 0.6291518 0.6487474 0.5848538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6524004 0.8591203        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]          NA  0.06719163  0.24136359  0.05101252  0.26759736  0.14243925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.10571486  0.09667577  0.17289771 -0.01602574  0.17695740  0.08944535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.04122317  0.08720275  0.11342968  0.13052497  0.18847899  0.14291633</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  0.17781112  0.06774071  0.10780967  0.15123502  0.06409937  0.11487533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.05092145  0.02384666  0.07715526  0.04901255  0.21482843  0.04512571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5949224 0.5982342 0.5408759 0.5154377 0.5839772 0.5489897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4913697 0.6197924 0.6864646 0.5651835 0.7381486 0.6653555 0.6588036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.4953532 0.6029959 0.6502636 0.6147623 0.5932116 0.6021510 0.7419593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.6318029 0.5192872 0.5605886 0.5891946 0.6291518 0.6487474 0.5848538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6524004 0.4871491        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA 0.00000000 0.00000000 0.71641497 0.00000000 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.64960236 0.00000000 1.24738331 0.82536833 0.00000000 0.13616207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.16341806 0.00000000 1.68305839 0.00000000 0.00000000 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.00000000 0.00000000 0.00000000 0.00000000 0.35929398 1.47035851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.06623254 1.67794350 0.00000000 1.03594710 0.00000000 1.36295613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0  0  0  0  0 NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.000000 1.354064 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.2812083 0.0000000 0.1404314 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.3085411 1.1000135 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.3719712        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

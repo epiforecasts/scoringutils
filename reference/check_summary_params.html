@@ -85,28 +85,6 @@ indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.</p></dd>
 
-
-<dt>relative_skill</dt>
-<dd><p>logical, whether or not to compute relative
-performance between models based on pairwise comparisons.
-If <code>TRUE</code> (default is <code>FALSE</code>), then a column called
-'model' must be present in the input data. For more information on
-the computation of relative skill, see <code><a href="pairwise_comparison.html">pairwise_comparison()</a></code>.
-Relative skill will be calculated for the aggregation level specified in
-<code>by</code>.</p></dd>
-
-
-<dt>baseline</dt>
-<dd><p>character string with the name of a model. If a baseline is
-given, then a scaled relative skill with respect to the baseline will be
-returned. By default (<code>NULL</code>), relative skill will not be scaled with
-respect to a baseline model.</p></dd>
-
-
-<dt>metric</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Deprecated in 1.1.0. Use
-<code>relative_skill_metric</code> instead.</p></dd>
-
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
