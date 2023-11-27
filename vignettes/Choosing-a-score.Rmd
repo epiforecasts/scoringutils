@@ -21,6 +21,26 @@ library(ggplot2)
 library(knitr)
 ```
 
+
+
+
+
+By convention, scoring rules are usually negatively oriented (such that the score can be thought of as a penalty), meaning that lower scores are better. This is the case for all scoring rules implemented in \pkg{scoringutils}. A scoring rule is proper if the ideal forecaster (i.e., one using the data-generating distribution) receives the lowest score in expectation. The scoring rule is called strictly proper, if its optimum is unique. This ensures that a forecaster evaluated by a strictly proper scoring rule is always incentivised to state their best estimate. 
+
+
+## Assessing sharpness
+
+Sharpness is the ability to produce narrow forecasts. In contrast to calibration it does not depend on the actual observations and is a quality of the forecast only \citep{gneitingProbabilisticForecastsCalibration2007}. Sharpness is therefore only useful subject to calibration, as exemplified in Figure \ref{fig:forecast-paradigm}. For forecasts provided as samples from the predictive distribution, \pkg{scoringutils} calculates dispersion (the inverse of sharpness) as the normalised median absolute deviation (MAD), following \cite{funkAssessingPerformanceRealtime2019} (for details see Table \ref{tab:metrics-summary}). For quantile forecasts, we instead report the dispersion component of the weighted interval score (see details in Section \ref{wis} and \ref{tab:score-table-detailed}) which corresponds to a weighted average of the individual interval widths. 
+
+
+
+### Trade-offs between different forecasting formats
+
+The \pkg{scoringutils} package focuses on probabilistic forecasts, and specifically on forecasts that are represented through either predictive samples or through quantiles of the predictive distributions, making it possible to evaluate arbitrary forecasts even if a closed form (i.e., parametric) distribution is not available. A variety of parametric distributions can be scored directly using \pkg{scoringRules}, but this is not yet supported in \pkg{scoringutils}. 
+
+Predictive samples offer a lot of flexibility. However, the number of samples necessary to store in order to represent the predictive distribution satisfactorily may be high. This loss of precision is usually especially pronounced in the tails of the predictive distribution. For that reason, often quantiles or central prediction intervals are reported instead. One recent example of this are the COVID-19 Forecast Hubs \citep{cramerCOVID19ForecastHub2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, bracherNationalSubnationalShortterm2021, europeancovid-19forecasthubEuropeanCovid19Forecast2021}. 
+
+
 scoringutils has the following forecast types: 
 - ...
 
@@ -80,3 +100,86 @@ include_graphics("illustration-effect-scale.png")
 ### Proper scoring rule for quantile-based forecasts (WIS) {#wis}
 For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness penalty) for the width of a prediction interval and penalties for over- and underprediction (if a value falls outside of a prediction interval). 
 
+
+\newpage 
+
+```{r metrics-summary, echo = FALSE, cache=FALSE, eval=FALSE}
+# use package data and delete unnecessary columns
+data <- metrics |>
+  select(-Name, -Functions) |>
+  unique()
+
+data <- data[, lapply(.SD, FUN = function(x) {
+  x <- gsub("+", '$\\checkmark$', x, fixed = TRUE)
+  x <- gsub("-", '$-$', x, fixed = TRUE)
+  x <- gsub("~", '$\\sim$', x, fixed = TRUE)
+  return(x)
+})]
+setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
+         new = c("D", "C", "B", "Q"))
+
+cap <- "Summary table of scores available in \\pkg{scoringutils}. This table (including corresponding function names) can be accessed by calling \\code{scoringutils::metrics} in \\proglang{R}. Not all metrics are implemented for all types of forecasts and forecasting formats, as indicated by tickmarks, '-', or '$\\sim$' (depends). D (discrete forecasts based on predictive samples), C (continuous, sample-based forecasts), B (binary), and Q (any forecasts in a quantile-based format) refer to different forecast formats. While the distinction is not clear-cut (e.g., binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g., for 'global' and 'local' see Section \\ref{localglobal}). For mathematical definitions of the metrics see Table \\ref{tab:score-table-detailed}."
+
+data[, 1:6] |>
+  kableExtra::kbl(format = "latex", booktabs = TRUE,
+                  escape = FALSE,
+                  longtable = TRUE,
+                  caption = cap,
+                  align = c("lccccl"),
+                  linesep = c('\\addlinespace')) |>
+  kableExtra::column_spec(1, width = "2.9cm") |>
+  kableExtra::column_spec(6, width = "9.3cm") |>
+  kableExtra::kable_styling(latex_options = c("striped",
+                                              "repeat_header, scale_down"),
+                            # full_width = TRUE,
+                            font_size = 7.5)
+```
+
+
+\begin{CodeChunk}
+\begingroup\fontsize{7.5}{9.5}\selectfont
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.9cm}cccc>{\raggedright\arraybackslash}p{9.3cm}}
+\toprule
+Metric & D & C & B & Q & Info\\
+\midrule
+\cellcolor{gray!6}{Absolute error} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Suitable for scoring the median of a predictive distribution}\\
+\addlinespace
+Squared error & $\checkmark$ & $\checkmark$ & $-$ & $\checkmark$ & Suitable for scoring the mean of a predictive distribution.\\
+\addlinespace
+\cellcolor{gray!6}{(Continuous) ranked probability score (CRPS)} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over$-$ and under$-$confidence similarly, stable handling of outliers}\\
+\addlinespace
+Log score & $-$ & $\checkmark$ & $\checkmark$ & $-$ & Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over$-$confidence severely, susceptible to outliers\\
+\addlinespace
+\cellcolor{gray!6}{(Weighted) interval score (WIS)} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals}\\
+\addlinespace
+Dawid$-$Sebastiani score (DSS) & $\checkmark$ & $\checkmark$ & $-$ & $-$ & Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over$-$confidence severely\\
+\addlinespace
+\cellcolor{gray!6}{Brier score (BS)} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over$-$ and under$-$confidence similarly}\\
+\addlinespace
+Interval coverage & $-$ & $-$ & $-$ & $\checkmark$ & Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage'). Used to assess probabilistic calibration.\\
+\addlinespace
+\cellcolor{gray!6}{Coverage deviation} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Average difference between empirical and nominal interval coverage (coverage that should have been realised)}\\
+\addlinespace
+Quantile coverage & $\checkmark$ & $\checkmark$ & $-$ & $-$ & Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.\\
+\addlinespace
+\cellcolor{gray!6}{Dispersion} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Dispersion component of WIS, measures width of predictive intervals.}\\
+\addlinespace
+Median Absolute Deviation (Dispersion) & $\checkmark$ & $\checkmark$ & $-$ & $-$ & Measure for dispersion of a forecast: median of the absolute deviations from the median\\
+\addlinespace
+\cellcolor{gray!6}{Under$-$, Over$-$prediction} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Absolute amount of over$-$or under$-$prediction (components of WIS)}\\
+\addlinespace
+Probability integral transform (PIT) & $\checkmark$ & $\checkmark$ & $-$ & $\checkmark$ & PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform.\\
+\addlinespace
+\cellcolor{gray!6}{Bias} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$-$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{Measure of relative tendency to over$-$ or under$-$predict (aspect of calibration), bounded between $-$1 and 1 (ideally 0)}\\
+\addlinespace
+Mean score ratio & $\sim$ & $\sim$ & $\sim$ & $\sim$ & Compares performance of two models. Properties depend on the metric chosen for the comparison.\\
+\addlinespace
+\cellcolor{gray!6}{(Scaled) Relative skill} & \cellcolor{gray!6}{$\sim$} & \cellcolor{gray!6}{$\sim$} & \cellcolor{gray!6}{$\sim$} & \cellcolor{gray!6}{$\sim$} & \cellcolor{gray!6}{Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.}\\
+\bottomrule
+\caption{\label{tab:metrics-summary}Summary table of scores available in \pkg{scoringutils}. This table (including corresponding function names) can be accessed by calling \code{scoringutils::metrics} in \proglang{R}. Not all metrics are implemented for all types of forecasts and forecasting formats, as indicated by tickmarks, '-', or '$\sim$' (depends). D (discrete forecasts based on predictive samples), C (continuous, sample-based forecasts), B (binary), and Q (any forecasts in a quantile-based format) refer to different forecast formats. While the distinction is not clear-cut (e.g., binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g., for 'global' and 'local' see Section \ref{localglobal}). For mathematical definitions of the metrics see Table \ref{tab:score-table-detailed}.}\\
+\end{longtable}
+\endgroup{}
+\end{CodeChunk}
+
+
+\newpage
