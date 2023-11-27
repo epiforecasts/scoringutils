@@ -2,6 +2,7 @@
 
 ## Package updates
 - `scoringutils` now depends on R 3.6. The change was made since packages `testthat` and `lifecycle`, which are used in `scoringutils` now require R 3.6. We also updated the Github action CI check to work with R 3.6 now. 
+- Added a new PR template with a checklist of things to be included in PRs to facilitate the development and review process
 
 ## Bug fixes
 - Fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
