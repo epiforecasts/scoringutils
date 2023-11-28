@@ -22,7 +22,7 @@ A named list with functions:
 \item "coverage_90" = \(...) \{
 run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 \}
-\item "coverage_deviation" = \code{\link[=interval_coverage_deviation_quantile]{interval_coverage_deviation_quantile()}},
+\item "coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 }

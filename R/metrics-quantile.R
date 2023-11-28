@@ -296,7 +296,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #'    c(-2, 0, 3, 3, 4)
 #' )
 #' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_deviation_quantile(observed, predicted, quantile)
+#' interval_coverage_dev_quantile(observed, predicted, quantile)
 interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
 
