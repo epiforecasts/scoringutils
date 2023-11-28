@@ -74,19 +74,3 @@ available_forecasts <- function(data,
 
   return(out[])
 }
-
-#' @title Count Number of Available Forecasts `r lifecycle::badge("deprecated")`
-#' @details `r lifecycle::badge("deprecated")` Deprecated in 1.2.2. Use
-#' [available_forecasts()] instead.
-#' @inherit available_forecasts
-#' @keywords check-forecasts
-#' @export
-avail_forecasts <- function(data,
-                            by = NULL,
-                            collapse = c("quantile", "sample")) {
-  lifecycle::deprecate_warn(
-    "1.2.2", "avail_forecasts()",
-    "available_forecasts()"
-  )
-  available_forecasts(data, by, collapse)
-}
