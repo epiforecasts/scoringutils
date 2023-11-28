@@ -188,7 +188,7 @@ to a function `summarise_scores()`
 - New function `check_forecasts()` to analyse input data before scoring
 - New function `correlation()` to compute correlations between different metrics
 - New function `add_coverage()` to add coverage for specific central prediction intervals.
-- New function `available_forecasts()` allows to visualise the number of available forecasts.
+- New function `avail_forecasts()` allows to visualise the number of available forecasts.
 - New function `find_duplicates()` to find duplicate forecasts which cause an error.
 - All plotting functions were renamed to begin with `plot_`. Arguments were
 simplified.
