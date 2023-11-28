@@ -19,9 +19,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_quantile"
 
 
@@ -46,9 +46,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_point"
 
 
@@ -73,9 +73,9 @@
 #'   \item{predicted}{predicted value}
 #'   \item{sample_id}{id for the corresponding sample}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_continuous"
 
 
@@ -100,9 +100,9 @@
 #'   \item{predicted}{predicted value}
 #'   \item{sample_id}{id for the corresponding sample}
 #' }
-#' #' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_integer"
 
 
@@ -133,9 +133,9 @@
 #'   \item{horizon}{forecast horizon in weeks}
 #'   \item{predicted}{predicted value}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_binary"
 
 
@@ -158,9 +158,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_quantile_forecasts_only"
 
 
@@ -180,9 +180,9 @@
 #'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/
-#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
-#' }
+# nolint start
+#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
 "example_truth_only"
 
 #' Summary information for selected metrics
