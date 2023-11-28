@@ -942,8 +942,8 @@ plot_pit <- function(pit,
 #' @description
 #' Visualise Where Forecasts Are Available
 #' @inheritParams print.scoringutils_check
-#' @param x an S3 object of class "scoringutils_available_forecasts"
-#' as produced by [available_forecasts()]
+#' @param x an S3 object of class "forecast_counts"
+#' as produced by [get_forecast_counts()]
 #' @param yvar character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
 #' @param xvar character vector of length one that denotes the name of the column
@@ -960,7 +960,7 @@ plot_pit <- function(pit,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' available_forecasts <- available_forecasts(
+#' available_forecasts <- get_forecast_counts(
 #'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
 #' plot(
@@ -968,12 +968,12 @@ plot_pit <- function(pit,
 #' ) +
 #'  facet_wrap("target_type")
 
-plot.scoringutils_available_forecasts <- function(x,
-                                                  yvar = "model",
-                                                  xvar = "forecast_date",
-                                                  make_xvar_factor = TRUE,
-                                                  show_numbers = TRUE,
-                                                  ...) {
+plot.forecast_counts <- function(x,
+                                 yvar = "model",
+                                 xvar = "forecast_date",
+                                 make_xvar_factor = TRUE,
+                                 show_numbers = TRUE,
+                                 ...) {
   x <- as.data.table(x)
 
   if (make_xvar_factor) {

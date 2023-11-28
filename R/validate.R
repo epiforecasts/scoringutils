@@ -111,7 +111,7 @@ validate.scoringutils_sample <- function(data, ...) {
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
-#' @inheritParams available_forecasts
+#' @inheritParams get_forecast_counts
 #' @return returns the input, with a few new attributes that hold additional
 #' information, messages and warnings
 #' @importFrom data.table ':=' is.data.table setattr
@@ -162,7 +162,7 @@ validate_general <- function(data) {
 #' - makes sure that a column called `model` exists and if not creates one
 #' - assigns a class
 #'
-#' @inheritParams available_forecasts
+#' @inheritParams get_forecast_counts
 #' @param classname name of the class to be created
 #' @return An object of the class indicated by `classname`
 #' @export
