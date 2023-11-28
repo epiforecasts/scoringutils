@@ -119,25 +119,26 @@ wis <- function(observed,
 
   reformatted[, eval(cols) := do.call(
     interval_score,
-    list(observed = observed,
-         lower = lower,
-         upper = upper,
-         interval_range = range,
-         weigh = weigh,
-         separate_results = separate_results
+    list(
+      observed = observed,
+      lower = lower,
+      upper = upper,
+      interval_range = range,
+      weigh = weigh,
+      separate_results = separate_results
     )
   )]
 
-  if (!count_median_twice) {
-    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
-  } else {
+  if (count_median_twice) {
     reformatted[, weight := 1]
+  } else {
+    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
   }
 
   # summarise results by forecast_id
   reformatted <- reformatted[
     , lapply(.SD, weighted.mean, na.rm = na.rm, w = weight),
-    by = c("forecast_id"),
+    by = "forecast_id",
     .SDcols = colnames(reformatted) %like% paste(cols, collapse = "|")
   ]
 
@@ -225,15 +226,14 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   if (!all(necessary_quantiles %in% quantile)) {
     warning(
       "To compute the coverage for a range of ", range, "%, the quantiles ",
-      necessary_quantiles, " are required. Returning `NA`.")
+      necessary_quantiles, " are required. Returning `NA`."
+    )
     return(NA)
   }
   r <- range
   reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted <- reformatted[range %in% r]
-  reformatted[, coverage := ifelse(
-    observed >= lower & observed <= upper, TRUE, FALSE
-  )]
+  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
   return(reformatted$coverage)
 }
 
@@ -298,26 +298,24 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
   available_ranges <- unique(get_range_from_quantile(quantile))
 
   # check if all necessary quantiles are available
-  necessary_quantiles <- unique(c(
-    (100 - available_ranges) / 2,
-    100 - (100 - available_ranges) / 2) / 100
+  necessary_quantiles <- unique(
+    c((100 - available_ranges) / 2, 100 - (100 - available_ranges) / 2) / 100
   )
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
     warning(
       "To compute coverage deviation, all quantiles must form central ",
       "symmetric prediction intervals. Missing quantiles: ",
-      toString(missing), ". Returning `NA`.")
+      toString(missing), ". Returning `NA`."
+    )
     return(NA)
   }
 
   reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
-  reformatted[, coverage := ifelse(
-    observed >= lower & observed <= upper, TRUE, FALSE
-  )]
+  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
   reformatted[, coverage_deviation := coverage - range / 100]
   out <- reformatted[, .(coverage_deviation = mean(coverage_deviation)),
-                     by = c("forecast_id")]
+                     by = "forecast_id"]
   return(out$coverage_deviation)
 }
 
@@ -391,7 +389,7 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   bias <- sapply(1:n, function(i) {
-    bias_quantile_single_vector(observed[i], predicted[i,], quantile, na.rm)
+    bias_quantile_single_vector(observed[i], predicted[i, ], quantile, na.rm)
   })
   return(bias)
 }
@@ -416,14 +414,14 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   predicted_has_NAs <- anyNA(predicted)
   quantile_has_NAs <- anyNA(quantile)
 
-  if(any(predicted_has_NAs, quantile_has_NAs)) {
-    if (!na.rm) {
-      return(NA_real_)
-    } else {
+  if (any(predicted_has_NAs, quantile_has_NAs)) {
+    if (na.rm) {
       quantile <- quantile[!is.na(predicted)]
       predicted <- predicted[!is.na(predicted)]
       predicted <- predicted[!is.na(quantile)]
       quantile <- quantile[!is.na(quantile)]
+    } else {
+      return(NA_real_)
     }
   }
 
@@ -616,12 +614,13 @@ wis_one_to_one <- function(observed,
   reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted[, eval(cols) := do.call(
     interval_score,
-    list(observed = observed,
-         lower = lower,
-         upper = upper,
-         interval_range = range,
-         weigh = weigh,
-         separate_results = separate_results
+    list(
+      observed = observed,
+      lower = lower,
+      upper = upper,
+      interval_range = range,
+      weigh = weigh,
+      separate_results = separate_results
     )
   )]
 
@@ -665,7 +664,7 @@ wis_one_to_one <- function(observed,
   if (output == "matrix") {
     wis <- matrix(wis, nrow = n, ncol = N)
     if (separate_results) {
-      components <- lapply(components, function(x) matrix(x, nrow = n, ncol = N))
+      components <- lapply(components, matrix, nrow = n, ncol = N)
       return(c(wis, components))
     } else {
       return(wis)

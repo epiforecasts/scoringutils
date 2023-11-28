@@ -13,13 +13,15 @@ metrics_quantile
 \description{
 A named list with functions:
 \itemize{
-\item "wis" = \code{\link[=wis]{wis()}}
+\item "wis" = \link{wis}
 \item "overprediction" = \code{\link[=overprediction]{overprediction()}}
 \item "underprediction" = \code{\link[=underprediction]{underprediction()}}
 \item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
-\item "coverage_50" = \(...) {run_safely(..., range = 50, fun = \link[=interval_coverage_quantile]{interval_coverage_quantile})}
-\item "coverage_90" = \(...) {run_safely(..., range = 90, fun = \link[=interval_coverage_quantile]{interval_coverage_quantile})}
+\item "coverage_50" = \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}
+\item "coverage_90" = \(...) \{
+run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
+\}
 \item "coverage_deviation" = \code{\link[=interval_coverage_deviation_quantile]{interval_coverage_deviation_quantile()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }

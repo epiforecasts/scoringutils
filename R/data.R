@@ -19,7 +19,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_quantile"
 
 
@@ -44,7 +46,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_point"
 
 
@@ -69,7 +73,9 @@
 #'   \item{predicted}{predicted value}
 #'   \item{sample_id}{id for the corresponding sample}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_continuous"
 
 
@@ -93,6 +99,9 @@
 #'   \item{horizon}{forecast horizon in weeks}
 #'   \item{predicted}{predicted value}
 #'   \item{sample_id}{id for the corresponding sample}
+#' }
+#' #' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
 #' }
 "example_integer"
 
@@ -124,7 +133,9 @@
 #'   \item{horizon}{forecast horizon in weeks}
 #'   \item{predicted}{predicted value}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_binary"
 
 
@@ -147,7 +158,9 @@
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_quantile_forecasts_only"
 
 
@@ -167,7 +180,9 @@
 #'   \item{observed}{observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #' }
-#' @source \url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/covid19-forecast-hub-europe/
+#' covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/
+#' }
 "example_truth_only"
 
 #' Summary information for selected metrics
@@ -215,13 +230,15 @@
 #' Default metrics for quantile-based forecasts.
 #'
 #' A named list with functions:
-#' - "wis" = [wis()]
+#' - "wis" = [wis]
 #' - "overprediction" = [overprediction()]
 #' - "underprediction" = [underprediction()]
 #' - "dispersion" = [dispersion()]
 #' - "bias" = [bias_quantile()]
-#' - "coverage_50" = \(...) {run_safely(..., range = 50, fun = [interval_coverage_quantile][interval_coverage_quantile()])}
-#' - "coverage_90" = \(...) {run_safely(..., range = 90, fun = [interval_coverage_quantile][interval_coverage_quantile()])}
+#' - "coverage_50" = [interval_coverage_quantile()]
+#' - "coverage_90" = \(...) \{
+#'      run_safely(..., range = 90, fun = [interval_coverage_quantile])
+#'   \}
 #' - "coverage_deviation" = [interval_coverage_deviation_quantile()],
 #' - "ae_median" = [ae_median_quantile()]
 #' @keywords info

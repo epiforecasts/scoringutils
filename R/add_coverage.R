@@ -51,13 +51,9 @@ add_coverage <- function(data) {
   forecast_unit <- get_forecast_unit(data)
   data_cols <- colnames(data) # store so we can reset column order later
 
-  # what happens if quantiles are not symmetric around the median?
-  # should things error? Also write tests for that.
   interval_data <- quantile_to_interval(data, format = "wide")
-  interval_data[, interval_coverage := ifelse(
-    observed <= upper & observed >= lower,
-    TRUE,
-    FALSE)
+  interval_data[
+    , interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
 
   data[, range := get_range_from_quantile(quantile)]

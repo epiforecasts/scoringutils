@@ -66,10 +66,10 @@ pairwise_comparison <- function(scores,
                                 baseline = NULL,
                                 ...) {
   metric <- match.arg(metric, c("auto", available_metrics()))
-  if (!is.data.table(scores)) {
-    scores <- as.data.table(scores)
-  } else {
+  if (is.data.table(scores)) {
     scores <- copy(scores)
+  } else {
+    scores <- as.data.table(scores)
   }
 
   # determine metric automatically
@@ -228,8 +228,8 @@ pairwise_comparison_one_group <- function(scores,
 
   # make result character instead of factor
   result[, `:=`(
-    "model" = as.character(model),
-    "compare_against" = as.character(compare_against)
+    model = as.character(model),
+    compare_against = as.character(compare_against)
   )]
 
   # calculate relative skill as geometric mean

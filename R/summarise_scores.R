@@ -114,8 +114,8 @@ summarise_scores <- function(scores,
   stored_attributes <- c(
     get_scoringutils_attributes(scores),
     list(
-      "scoringutils_by" = by,
-      "unsummarised_scores" =  scores
+      scoringutils_by = by,
+      unsummarised_scores =  scores
     )
   )
 
