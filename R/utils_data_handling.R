@@ -65,9 +65,9 @@ merge_pred_and_obs <- function(forecasts, observations,
   basenames_y <- sub(".y$", "", colnames_y)
 
   # see whether the column name as well as the content is the same
-  overlapping <- (
-    as.list(combined[, ..colnames_x]) %in% as.list(combined[, ..colnames_y])
-  ) & (basenames_x == basenames_y)
+  content_x <- as.list(combined[, ..colnames_x])
+  content_y <- as.list(combined[, ..colnames_y])
+  overlapping <- (content_x %in% content_y) & (basenames_x == basenames_y)
   overlap_names <- colnames_x[overlapping]
   basenames_overlap <- sub(".x$", "", overlap_names)
 

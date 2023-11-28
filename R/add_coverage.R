@@ -52,8 +52,8 @@ add_coverage <- function(data) {
   data_cols <- colnames(data) # store so we can reset column order later
 
   interval_data <- quantile_to_interval(data, format = "wide")
-  interval_data[
-    , interval_coverage := (observed <= upper) & (observed >= lower)
+  interval_data[,
+    interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
 
   data[, range := get_range_from_quantile(quantile)]
