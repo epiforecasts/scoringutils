@@ -55,7 +55,7 @@ for integer and continuous forecasts."><!-- mathjax --><script src="https://cdnj
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Determines Bias of Quantile Forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/bias.R" class="external-link"><code>R/bias.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-quantile.R" class="external-link"><code>R/metrics-quantile.R</code></a></small>
       <div class="d-none name"><code>bias_quantile.Rd</code></div>
     </div>
 
@@ -67,24 +67,28 @@ for integer and continuous forecasts.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, <span class="va">true_value</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>predictions</dt>
+    <dl><dt>observed</dt>
+<dd><p>a single observed value</p></dd>
+
+
+<dt>predicted</dt>
 <dd><p>vector of length corresponding to the number of quantiles
 that holds predictions</p></dd>
 
 
-<dt>quantiles</dt>
-<dd><p>vector of corresponding size with the quantiles for which
-predictions were made. If this does not contain the median (0.5) then the
-median is imputed as being the mean of the two innermost quantiles.</p></dd>
+<dt>quantile</dt>
+<dd><p>vector of corresponding size with the quantile levels for
+which predictions were made. If this does not contain the median (0.5) then
+the median is imputed as being the mean of the two innermost quantiles.</p></dd>
 
 
-<dt>true_value</dt>
-<dd><p>a single true value</p></dd>
+<dt>na.rm</dt>
+<dd><p>logical. Should missing values be removed?</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,44 +107,39 @@ B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
  1( x_t \geq q_{t, 0.5}),$$</p>
 <p>where \(Q_t\) is the set of quantiles that form the predictive
 distribution at time \(t\). They represent our
-belief about what the true value $x_t$ will be. For consistency, we define
+belief about what the observed value $x_t$ will be. For consistency, we define
 \(Q_t\) such that it always includes the element
 \(q_{t, 0} = - \infty\) and \(q_{t,1} = \infty\).
 \(1()\) is the indicator function that is \(1\) if the
 condition is satisfied and $0$ otherwise. In clearer terms, \(B_t\) is
 defined as the maximum percentile rank for which the corresponding quantile
-is still below the true value, if the true value is smaller than the
-median of the predictive distribution. If the true value is above the
+is still below the observed value, if the observed value is smaller than the
+median of the predictive distribution. If the observed value is above the
 median of the predictive distribution, then $B_t$ is the minimum percentile
 rank for which the corresponding quantile is still larger than the true
-value. If the true value is exactly the median, both terms cancel out and
+value. If the observed value is exactly the median, both terms cancel out and
 \(B_t\) is zero. For a large enough number of quantiles, the
 percentile rank will equal the proportion of predictive samples below the
-observed true value, and this metric coincides with the one for
+observed value, and this metric coincides with the one for
 continuous forecasts.</p>
 <p>Bias can assume values between
 -1 and 1 and is 0 ideally (i.e. unbiased).</p>
     </div>
-    <div class="section level2">
-    <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a></p>
-    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fl">705.500</span>, <span class="fl">1127.000</span>, <span class="fl">4006.250</span>, <span class="fl">4341.500</span>, <span class="fl">4709.000</span>, <span class="fl">4821.996</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">5340.500</span>, <span class="fl">5451.000</span>, <span class="fl">5703.500</span>, <span class="fl">6087.014</span>, <span class="fl">6329.500</span>, <span class="fl">6341.000</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">6352.500</span>, <span class="fl">6594.986</span>, <span class="fl">6978.500</span>, <span class="fl">7231.000</span>, <span class="fl">7341.500</span>, <span class="fl">7860.004</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">7973.000</span>, <span class="fl">8340.500</span>, <span class="fl">8675.750</span>, <span class="fl">11555.000</span>, <span class="fl">11976.500</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">quantiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">quantile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">true_value</span> <span class="op">&lt;-</span> <span class="fl">8062</span></span></span>
+<span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fl">8062</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">predictions</span>, <span class="va">quantiles</span>, true_value <span class="op">=</span> <span class="va">true_value</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bias_quantile</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.8</span>
 </code></pre></div>
     </div>
