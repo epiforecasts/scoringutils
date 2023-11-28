@@ -57,7 +57,6 @@ Bias can assume values between
 -1 and 1 and is 0 ideally (i.e. unbiased).
 }
 \examples{
-
 predicted <- c(
   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
@@ -70,8 +69,5 @@ quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 observed <- 8062
 
 bias_quantile(observed, predicted, quantile)
-}
-\author{
-Nikos Bosse \email{nikosbosse@gmail.com}
 }
 \keyword{metric}

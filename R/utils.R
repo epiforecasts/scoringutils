@@ -218,6 +218,7 @@ remove_scoringutils_class <- function(object) {
 #' @param fun A function to execute
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
+#' @keywords scoring
 #' @examples
 #' f <- function(x) {x}
 #' run_safely(2, fun = f)

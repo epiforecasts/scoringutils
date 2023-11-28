@@ -10,3 +10,4 @@ error otherwise.
 \description{
 Documentation template for check functions
 }
+\keyword{internal}

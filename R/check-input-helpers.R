@@ -5,7 +5,7 @@
 #' @inheritDotParams checkmate::check_numeric
 #' @importFrom checkmate check_atomic_vector check_numeric
 #' @inherit document_check_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 check_numeric_vector <- function(x, ...) {
   # check functions must return TRUE on success
   # and a custom error message otherwise
@@ -36,7 +36,7 @@ check_numeric_vector <- function(x, ...) {
 #'
 #' @return None. Function errors if quantiles are invalid.
 #'
-#' @keywords internal
+#' @keywords internal_input_check
 check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
   if (any(quantiles < range[1]) || any(quantiles > range[2])) {
     stop(name, " must be between ", range[1], " and ", range[2])
@@ -57,7 +57,7 @@ check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
 #' @param expr an expression to be evaluated
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @inherit document_check_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 check_try <- function(expr) {
   result <- try(expr, silent = TRUE)
   if (is.null(result)) {
@@ -79,7 +79,7 @@ check_try <- function(expr) {
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
-#' @keywords internal
+#' @keywords internal_input_check
 assert_not_null <- function(...) {
   vars <- list(...)
   varnames <- names(vars)
@@ -112,7 +112,7 @@ assert_not_null <- function(...) {
 #' within another checking function.
 #' @inherit document_assert_functions return
 #'
-#' @keywords internal
+#' @keywords internal_input_check
 assert_equal_length <- function(...,
                                 one_allowed = TRUE,
                                 call_levels_up = 2) {
@@ -161,7 +161,7 @@ assert_equal_length <- function(...,
 #' @param attribute The name of the attribute to check
 #' @param expected The expected value of the attribute
 #' @inherit document_check_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
   if (is.vector(existing) && is.vector(expected)) {
@@ -188,8 +188,9 @@ check_attribute_conflict <- function(object, attribute, expected) {
 #' @description
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
+#' @inheritParams score
 #' @return The data.table with a column called `model`
-#' @keywords internal
+#' @keywords internal_input_check
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
     message(
@@ -208,7 +209,7 @@ assure_model_column <- function(data) {
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
 #' @inherit document_check_functions params return
-#' @keywords internal
+#' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
   # check whether there are the same number of quantiles, samples --------------
   data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
@@ -235,7 +236,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' an error message, otherwise it returns TRUE.
 #' @inherit document_check_functions params return
 #'
-#' @keywords internal
+#' @keywords internal_input_check
 check_no_NA_present <- function(data, columns) {
   for (x in columns){
     if (anyNA(data[[x]])) {
@@ -253,20 +254,13 @@ check_no_NA_present <- function(data, columns) {
 }
 
 
-
-
-# print stuff
-diagnose <- function(data) {
-
-}
-
 #' Check that there are no duplicate forecasts
 #'
 #' @description
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
@@ -290,7 +284,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #' and returns a message with the first issue encountered.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate assert_character
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_columns_present <- function(data, columns) {
   if (is.null(columns)) {
     return(TRUE)
@@ -322,7 +316,7 @@ check_columns_present <- function(data, columns) {
 #' are present, the function returns TRUE.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if all columns are present and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_columns_present <- function(data, columns) {
   check <- check_columns_present(data, columns)
   return(is.logical(check))
@@ -334,7 +328,7 @@ test_columns_present <- function(data, columns) {
 #' more columns are present, the function returns FALSE.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_columns_not_present <- function(data, columns) {
   if (any(columns %in% colnames(data))) {
     return(FALSE)
@@ -349,7 +343,7 @@ test_columns_not_present <- function(data, columns) {
 #' "quantile" and "sample_id" is present.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_data_columns <- function(data) {
   is_data <- check_data_frame(data, min.rows = 1)
   if (!is.logical(is_data)) {
@@ -374,7 +368,7 @@ check_data_columns <- function(data) {
 #' @param object An object to be checked
 #' @param attribute name of an attribute to be checked
 #' @inherit document_check_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_has_attribute <- function(object, attribute) {
   if (is.null(attr(object, attribute))) {
     return(

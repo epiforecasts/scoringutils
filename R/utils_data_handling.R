@@ -178,6 +178,8 @@ range_long_to_quantile <- function(data,
 #' and upper bounds of the 50% and 90% prediction intervals (corresponding to
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 #' @param ... method arguments
+#' @keywords data-handling
+#' @export
 quantile_to_interval <- function(...) {
   UseMethod("quantile_to_interval")
 }
@@ -201,6 +203,7 @@ quantile_to_interval <- function(...) {
 #' @importFrom data.table copy
 #' @export
 #' @rdname quantile_to_interval
+#' @keywords data-handling
 quantile_to_interval.data.frame <- function(dt,
                                             format = "long",
                                             keep_quantile_col = FALSE,
@@ -243,6 +246,7 @@ quantile_to_interval.data.frame <- function(dt,
 #' `forecast_id` and `range`.
 #' @export
 #' @rdname quantile_to_interval
+#' @keywords data-handling
 quantile_to_interval.numeric <- function(observed,
                                          predicted,
                                          quantile,

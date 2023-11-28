@@ -30,4 +30,4 @@ The function runs additional checks to make sure the data satisfies the
 requirements of the respective forecast type and throws an
 informative error if any issues are found.
 }
-\keyword{check-forceasts}
+\keyword{check-forecasts}

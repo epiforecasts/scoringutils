@@ -181,6 +181,7 @@ summarize_scores <- summarise_scores
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
+#' @keywords keyword scoring
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
                                     relative_skill_metric = "auto",
