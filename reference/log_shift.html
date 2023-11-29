@@ -115,11 +115,11 @@ medRxiv 2023.01.23.23284722
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 2.0794415 2.1972246 2.3025851</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">example_quantile</span><span class="op">[</span><span class="va">observed</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>  <span class="va">example_quantile</span><span class="op">[</span><span class="va">true_value</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>,</span></span>
 <span class="r-in"><span>  fun <span class="op">=</span> <span class="va">log_shift</span>,</span></span>
 <span class="r-in"><span>  offset <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type     observed location_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type   true_value location_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE      2021-01-02       Cases 1.273000e+05       Germany</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE      2021-01-02      Deaths 4.534000e+03       Germany</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     3:       DE      2021-01-09       Cases 1.549220e+05       Germany</span>
@@ -131,18 +131,18 @@ medRxiv 2023.01.23.23284722
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40674:       IT      2021-07-24      Deaths 4.369448e+00         Italy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40675:       IT      2021-07-24      Deaths 4.369448e+00         Italy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40676:       IT      2021-07-24      Deaths 4.369448e+00         Italy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        forecast_date quantile predicted                model horizon   scale</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     2:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     3:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     5:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40672:    2021-07-12    0.850  5.866468 epiforecasts-EpiNow2       2     log</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40673:    2021-07-12    0.900  5.986452 epiforecasts-EpiNow2       2     log</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40674:    2021-07-12    0.950  6.214608 epiforecasts-EpiNow2       2     log</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40675:    2021-07-12    0.975  6.416732 epiforecasts-EpiNow2       2     log</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40676:    2021-07-12    0.990  6.579251 epiforecasts-EpiNow2       2     log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        forecast_date quantile prediction                model horizon   scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:          &lt;NA&gt;       NA         NA                 &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:          &lt;NA&gt;       NA         NA                 &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:          &lt;NA&gt;       NA         NA                 &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:          &lt;NA&gt;       NA         NA                 &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:          &lt;NA&gt;       NA         NA                 &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40672:    2021-07-12    0.850   5.866468 epiforecasts-EpiNow2       2     log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40673:    2021-07-12    0.900   5.986452 epiforecasts-EpiNow2       2     log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40674:    2021-07-12    0.950   6.214608 epiforecasts-EpiNow2       2     log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40675:    2021-07-12    0.975   6.416732 epiforecasts-EpiNow2       2     log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40676:    2021-07-12    0.990   6.579251 epiforecasts-EpiNow2       2     log</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

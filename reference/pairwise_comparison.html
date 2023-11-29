@@ -152,8 +152,9 @@ split data.frames.</p></dd>
 
 <dt>metric</dt>
 <dd><p>A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "wis",
-"crps", or "brier_score" will be selected where available.</p></dd>
+comparison on. The default is "auto", meaning that either "interval_score",
+"crps", or "brier_score" will be selected where available.
+See <code><a href="available_metrics.html">available_metrics()</a></code> for available metrics.</p></dd>
 
 
 <dt>baseline</dt>
@@ -180,9 +181,13 @@ model against which to compare other models.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># only needed to avoid issues on CRAN</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
+<span class="r-in"><span>  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="co"># restricts number of cores used on CRAN</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
 <span class="r-in"><span><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="fu">pairwise_comparison</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
