@@ -70,7 +70,7 @@ get_forecast_counts <- function(data,
   out <- merge(out, out_empty, by = by, all.y = TRUE)
   out[, count := nafill(count, fill = 0)]
 
-  class(out) <- c("forecast_counts", class(out))
+  class(out) <- c("prediction_counts", class(out))
 
   return(out[])
 }

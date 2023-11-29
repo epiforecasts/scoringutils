@@ -942,7 +942,7 @@ plot_pit <- function(pit,
 #' @description
 #' Visualise Where Forecasts Are Available
 #' @inheritParams print.scoringutils_check
-#' @param x an S3 object of class "forecast_counts"
+#' @param x an S3 object of class "prediction_counts"
 #' as produced by [get_forecast_counts()]
 #' @param yvar character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
@@ -968,12 +968,12 @@ plot_pit <- function(pit,
 #' ) +
 #'  facet_wrap("target_type")
 
-plot.forecast_counts <- function(x,
-                                 yvar = "model",
-                                 xvar = "forecast_date",
-                                 make_xvar_factor = TRUE,
-                                 show_numbers = TRUE,
-                                 ...) {
+plot.prediction_counts <- function(x,
+                                   yvar = "model",
+                                   xvar = "forecast_date",
+                                   make_xvar_factor = TRUE,
+                                   show_numbers = TRUE,
+                                   ...) {
   x <- as.data.table(x)
 
   if (make_xvar_factor) {
