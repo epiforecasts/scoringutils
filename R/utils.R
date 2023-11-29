@@ -263,11 +263,10 @@ run_safely <- function(..., fun) {
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {
-  if (!is.data.table(data)) {
-    data <- as.data.table(data)
-  } else {
+  if (is.data.table(data)) {
     data <- copy(data)
+  } else {
+    data <- as.data.table(data)
   }
   return(data)
 }
-
