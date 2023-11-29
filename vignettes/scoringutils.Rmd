@@ -19,8 +19,8 @@ library(magrittr)
 library(data.table)
 library(ggplot2)
 library(knitr)
-# number of threads used for data.table computation, update as needed
-data.table::setDTthreads(2) 
+# number of threads used for data.table computations, update as needed
+data.table::setDTthreads(2)
 ```
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against the true observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
