@@ -127,10 +127,10 @@ pit_sample <- function(true_values,
 
   # check data type ------------------------------------------------------------
   # check whether continuous or integer
-  if (!isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
-    continuous_predictions <- TRUE
-  } else {
+  if (isTRUE(all.equal(as.vector(predictions), as.integer(predictions)))) {
     continuous_predictions <- FALSE
+  } else {
+    continuous_predictions <- TRUE
   }
 
   # calculate PIT-values -------------------------------------------------------
@@ -219,7 +219,7 @@ pit <- function(data,
     value.var = "prediction"
   )
 
-  pit <- data_wide[, .("pit_value" = pit_sample(
+  pit <- data_wide[, .(pit_value = pit_sample(
     true_values = true_value,
     predictions = as.matrix(.SD)
   )),
