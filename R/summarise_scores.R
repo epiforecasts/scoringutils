@@ -42,7 +42,9 @@
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #' library(magrittr) # pipe operator
 #'
 #' scores <- score(example_continuous)
@@ -279,7 +281,9 @@ check_summary_params <- function(scores,
 #' summary is present according to the value specified in `by`.
 #' @examples
 #' library(magrittr) # pipe operator
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #' score(example_quantile) %>%
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
