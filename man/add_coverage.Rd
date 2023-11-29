@@ -33,6 +33,9 @@ the unit of a single forecast.
 }
 \examples{
 library(magrittr) # pipe operator
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
 score(example_quantile) \%>\%
   add_coverage(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type")) \%>\%

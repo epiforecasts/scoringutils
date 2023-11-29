@@ -76,7 +76,9 @@ In this context it should be noted, though, that uniformity of the
 PIT is a necessary but not sufficient condition of calibration.
 }
 \examples{
-data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
 
 ## continuous predictions
 true_values <- rnorm(20, mean = 1:20)

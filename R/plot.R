@@ -24,7 +24,9 @@
 #' @examples
 #' library(ggplot2)
 #' library(magrittr) # pipe operator
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' scores <- score(example_quantile) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
@@ -470,7 +472,7 @@ plot_predictions <- function(data,
   # it separately here to deal with the case when only the median is provided
   # (in which case ggdist::geom_lineribbon() will fail)
   if (0 %in% range) {
-    select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
+    select_median <- (forecasts$range == 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]
 
     if (nrow(median) > 0) {
@@ -582,7 +584,9 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "range"))
 #' plot_interval_coverage(scores)
@@ -835,7 +839,9 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' # PIT histogram in vector based format
 #' true_values <- rnorm(30, mean = 1:30)

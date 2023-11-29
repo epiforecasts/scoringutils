@@ -75,7 +75,9 @@
 #'
 #' @examples
 #' library(magrittr) # pipe operator
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' check_forecasts(example_quantile)
 #' score(example_quantile) %>%
