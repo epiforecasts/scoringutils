@@ -279,6 +279,7 @@ check_summary_params <- function(scores,
 #' summary is present according to the value specified in `by`.
 #' @examples
 #' library(magrittr) # pipe operator
+#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' score(example_quantile) %>%
 #'   add_coverage(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
