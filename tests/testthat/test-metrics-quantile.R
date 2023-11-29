@@ -791,3 +791,10 @@ test_that("bias_quantile(): quantiles must be unique", {
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(observed = 3, predicted, quantiles))
 })
+
+test_that("bias_quantile only produces one message", {
+  expect_message(
+    bias_quantile(observed, predicted[, -3], quantile[-3]),
+    "Median not available, computing bias as mean of the two innermost quantiles in order to compute bias."
+  )
+})
