@@ -57,7 +57,7 @@ number of forecasts per model and location).
 This is useful to determine whether there are any missing forecasts.
 }
 \examples{
-data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+\dontshow{data.table::setDTthreads(2) # only needed to avoid issues on CRAN}
 
 avail_forecasts(example_quantile,
   collapse = c("quantile"),
