@@ -25,10 +25,10 @@ The update introduces breaking changes. If you want to keep using the older vers
 - `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
-  - The function `avail_forecasts()` was renamed to `get_forecast_counts()`. This represents a change in the naming convention where we aim to name functions that provide the user with addtional useful information about the data with a prefix "get_". See Issue #403 and PR #511 by @nikosbosse and reviewed by @seabbs for details. 
+  - The function `avail_forecasts()` was renamed to `get_forecast_counts()`. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix "get_". Sees Issue #403 and #521 and PR #511 by @nikosbosse and reviewed by @seabbs for details. 
   - For clarity, the output column in `get_forecast_counts()` was renamed from "Number forecasts" to "count".
   - `get_forecast_counts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
-  - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`.
+  - `plot_avail_forecasts()` was renamed `plot_forecast_counts()` in line with the change in the function name. The `x` argument no longer has a default value, as the value will depend on the data provided by the user.
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
 - added documentation for the return value of `summarise_scores()`. 
