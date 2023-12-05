@@ -3,8 +3,8 @@ test_that("plot.forecast_counts() works as expected", {
     example_quantile,
     by = c("model", "target_type", "target_end_date")
   )
-  p <- plot(available_forecasts,
-    xvar = "target_end_date", show_numbers = FALSE
+  p <- plot_forecast_counts(available_forecasts,
+    x = "target_end_date", show_numbers = FALSE
   ) +
     facet_wrap("target_type")
   expect_s3_class(p, "ggplot")

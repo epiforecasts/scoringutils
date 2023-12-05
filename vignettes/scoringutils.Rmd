@@ -92,7 +92,7 @@ This information can also be visualised using `plot()`:
 ```{r, fig.width=11, fig.height=6}
 example_quantile %>%
   get_forecast_counts(by = c("model", "forecast_date", "target_type")) %>%
-  plot() +
+  plot_forecast_counts(x = "forecast_date") +
   facet_wrap(~ target_type)
 ```
 

@@ -942,13 +942,13 @@ plot_pit <- function(pit,
 #' @description
 #' Visualise Where Forecasts Are Available
 #' @inheritParams print.scoringutils_check
-#' @param x an S3 object of class "prediction_counts"
+#' @param forecast_counts a data.table (or similar) with forecast counts
 #' as produced by [get_forecast_counts()]
-#' @param yvar character vector of length one that denotes the name of the column
+#' @param y character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
-#' @param xvar character vector of length one that denotes the name of the column
-#' to appear on the x-axis of the plot. Default is "forecast_date".
-#' @param make_xvar_factor logical (default is TRUE). Whether or not to convert
+#' @param x character vector of length one that denotes the name of the column
+#' to appear on the x-axis of the plot.
+#' @param make_x_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
 #' @param show_numbers logical (default is `TRUE`) that indicates whether
@@ -960,35 +960,34 @@ plot_pit <- function(pit,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' available_forecasts <- get_forecast_counts(
+#' forecast_counts <- get_forecast_counts(
 #'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
-#' plot(
-#'  available_forecasts, xvar = "target_end_date", show_numbers = FALSE
+#' plot_forecast_counts(
+#'  forecast_counts, x = "target_end_date", show_numbers = FALSE
 #' ) +
 #'  facet_wrap("target_type")
 
-plot.prediction_counts <- function(x,
-                                   yvar = "model",
-                                   xvar = "forecast_date",
-                                   make_xvar_factor = TRUE,
-                                   show_numbers = TRUE,
-                                   ...) {
-  x <- as.data.table(x)
+plot_forecast_counts <- function(forecast_counts,
+                                 y = "model",
+                                 x,
+                                 make_x_factor = TRUE,
+                                 show_numbers = TRUE) {
 
-  if (make_xvar_factor) {
-    x[, eval(xvar) := as.factor(get(xvar))]
+  forecast_counts <- ensure_data.table(forecast_counts)
+
+  if (make_x_factor) {
+    forecast_counts[, eval(x) := as.factor(get(x))]
   }
 
-  setnames(x, old = "count", new = "Count")
+  setnames(forecast_counts, old = "count", new = "Count")
 
   plot <- ggplot(
-    x,
-    aes(y = .data[[yvar]], x = .data[[xvar]])
+    forecast_counts,
+    aes(y = .data[[y]], x = .data[[x]])
   ) +
     geom_tile(aes(fill = `Count`),
-      width = 0.97, height = 0.97
-    ) +
+              width = 0.97, height = 0.97) +
     scale_fill_gradient(
       low = "grey95", high = "steelblue",
       na.value = "lightgrey"
@@ -1001,12 +1000,10 @@ plot.prediction_counts <- function(x,
       )
     ) +
     theme(panel.spacing = unit(2, "lines"))
-
   if (show_numbers) {
     plot <- plot +
       geom_text(aes(label = `Count`))
   }
-
   return(plot)
 }
 
