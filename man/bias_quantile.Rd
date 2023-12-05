@@ -7,8 +7,6 @@
 bias_quantile(observed, predicted, quantile, na.rm = TRUE)
 }
 \arguments{
-\item{observed}{a single observed value}
-
 \item{predicted}{vector of length corresponding to the number of quantiles
 that holds predictions}
 
