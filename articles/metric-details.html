@@ -79,7 +79,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2023-11-29</h4>
+            <h4 data-toc-skip class="date">2023-12-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/metric-details.Rmd" class="external-link"><code>vignettes/metric-details.Rmd</code></a></small>
       <div class="d-none name"><code>metric-details.Rmd</code></div>
@@ -154,6 +154,46 @@ Suitable for scoring the median of a predictive distribution
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
+Absolute error
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; ">
+Suitable for scoring the median of a predictive distribution
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
+Squared error
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
+Suitable for scoring the mean of a predictive distribution.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; ">
 Squared error
 </td>
 <td style="text-align:center;width: 1.5cm; ">
@@ -211,9 +251,9 @@ y
 n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
-Proper scoring rule, smaller is better, equals negative log of the
-predictive density at observed value (local), penalises over-confidence
-severely, susceptible to outliers
+Proper scoring rule, smaller is better, only evaluates predictive
+density at observed value (local), penalises over-confidence severely,
+susceptible to outliers
 </td>
 </tr>
 <tr>
@@ -407,13 +447,13 @@ Absolute amount of over-or under-prediction (components of WIS)
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Probability integral transform (PIT)
+Under-, Over-prediction
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-y
+n
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-y
+n
 </td>
 <td style="text-align:center;width: 1.3cm; ">
 n
@@ -422,8 +462,48 @@ n
 y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
+Absolute amount of over-or under-prediction (components of WIS)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
+Probability integral transform (PIT)
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
 PIT transform is the CDF of the predictive distribution evaluated at the
 observed values. PIT values should be uniform.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 3.2cm; ">
+Dispersion
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.3cm; ">
+n
+</td>
+<td style="text-align:center;width: 1.5cm; ">
+y
+</td>
+<td style="text-align:left;width: 6.0cm; ">
+Dispersion component of WIS, measures width of predictive intervals.
 </td>
 </tr>
 <tr>
@@ -544,10 +624,10 @@ Often An alternative representation is used: <span class="math display">\[ \text
 |X - X'| - \mathbb{E}_P |X - y|,\]</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> are independent realisations from
 the predictive distributions <span class="math inline">\(F\)</span> with
 finite first moment and <span class="math inline">\(y\)</span> is the
-observed value. In this representation we can simply replace <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> by samples and sum over all
-possible combinations to obtain the CRPS. For integer-valued forecasts,
-the RPS is given as <span class="math display">\[ \text{RPS}(F, y) =
-\sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. \]</span></p>
+observed value. In this representation we can simply replace <span class="math inline">\(X\)</span> and <span class="math inline">\(X'\)</span> by samples sum over all possible
+combinations to obtain the CRPS. For integer-valued forecasts, the RPS
+is given as <span class="math display">\[ \text{RPS}(F, y) = \sum_{x =
+0}^\infty (F(x) - 1(x \geq y))^2. \]</span></p>
 <strong>Usage and caveats</strong>: Smaller values are better. The crps
 is a good choice for most practical purposes that involve decision
 making, as it takes the entire predictive distribution into account. If
@@ -565,18 +645,19 @@ quantities that are orders of magnitude apart.
 Log score
 </td>
 <td style="text-align:left;width: 15.5cm; ">
-<p>The Log score is a proper scoring rule that is computed as the
-negative log of the predictive density evaluated at the observed value.
-It is given as <span class="math display">\[ \text{log score} = -\log
-f(y), \]</span> where <span class="math inline">\(f\)</span> is the
-predictive density function and y is the observed value. For
-integer-valued forecasts, the log score can be computed as <span class="math display">\[ \text{log score} = -\log p_y, \]</span> where
+<p>The Log score is a proper scoring rule that is simply computed as the
+log of the predictive density evaluated at the observed value. It is
+given as <span class="math display">\[ \text{log score} = \log f(y),
+\]</span> where <span class="math inline">\(f\)</span> is the predictive
+density function and y is the observed value. For integer-valued
+forecasts, the log score can be computed as <span class="math display">\[ \text{log score} = \log p_y, \]</span> where
 <span class="math inline">\(p_y\)</span> is the probability assigned to
 outcome p by the forecast F.</p>
-<strong>Usage and caveats</strong>: Smaller values are better, but
+<strong>Usage and caveats</strong>: Larger values are better, but
 sometimes the sign is reversed. The log score is sensitive to outliers,
-as individual log score contributions can become very large if the event
-falls in a range of the predictive distribution where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
+as individual negative log score contributions quickly can become very
+large if the event falls in the tails of the predictive distribution,
+where <span class="math inline">\(f(y)\)</span> (or <span class="math inline">\(p_y\)</span>) is close to zero. Whether or not
 that is desirable depends ont the application. In scoringutils, the log
 score cannot be used for integer-valued forecasts, as the implementation
 requires a predictive density. In contrast to the crps, the log score is
