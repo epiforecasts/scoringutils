@@ -170,37 +170,6 @@ strip_attributes <- function(object, attributes) {
   return(object)
 }
 
-#' Remove scoringutils_ Class and Attributes
-#' @description This function removes all classes that start with
-#' "scoringutils_" and all attributes associated with scoringutils.
-#'
-#' @param object An object to remove scoringutils classes and attributes from
-#' @return The object with scoringutils classes and attributes removed
-#' @keywords internal
-remove_scoringutils_class <- function(object) {
-  if (is.null(object)) {
-    return(NULL)
-  }
-  if (is.null(class(object))) {
-    return(object)
-  }
-  # check if "scoringutils_" is in name of any class
-  if (any(grepl("scoringutils_", class(object), fixed = TRUE))) {
-    stored_attributes <- get_scoringutils_attributes(object)
-
-    # remove all classes that contain "scoringutils_"
-    class(object) <- class(object)[!grepl(
-      "scoringutils_", class(object),
-      fixed = TRUE
-    )]
-
-    # remove all scoringutils attributes
-    object <- strip_attributes(object, names(stored_attributes))
-
-    return(object)
-  }
-  return(object)
-}
 
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
