@@ -35,6 +35,17 @@ vector of size N.}
 
 \item{quantile}{vector with quantile levels of size N}
 
+\item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
+parts of the interval score (dispersion penalty, penalties for over- and
+under-prediction get returned as separate elements of a list). If you want a
+\code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
+
+\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
+into an interval score that, in the limit, corresponds to CRPS. Alpha is the
+decimal value that  represents how much is outside a central prediction
+interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
+Default: \code{TRUE}.}
+
 \item{count_median_twice}{if TRUE, count the median twice in the score}
 
 \item{na.rm}{if TRUE, ignore NA values when computing the score}
@@ -129,5 +140,15 @@ can control the behvaviour with the \code{count_median_twice}-argument.
 \strong{WIS components}:
 WIS components can be computed individually using the functions
 \code{overprediction}, \code{underprediction}, and \code{dispersion.}
+}
+\examples{
+observed <- c(1, -15, 22)
+predicted <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
+)
+quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+wis(observed, predicted, quantile)
 }
 \keyword{metric}

@@ -97,6 +97,15 @@
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
 #' @keywords metric
+#' @examples
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'   c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' wis(observed, predicted, quantile)
 wis <- function(observed,
                 predicted,
                 quantile,
@@ -522,7 +531,7 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 #' @description
 #' Proper Scoring Rule to score quantile predictions. Smaller values are better.
 #' The quantile score is
-#' closely related to the Interval score (see [interval_score()]) and is
+#' closely related to the Interval score (see [wis()]) and is
 #' the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'
