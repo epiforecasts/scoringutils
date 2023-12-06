@@ -7,6 +7,11 @@
 bias_quantile(observed, predicted, quantile, na.rm = TRUE)
 }
 \arguments{
+<<<<<<< HEAD
+=======
+\item{observed}{a single number representing the observed value}
+
+>>>>>>> 73b9a9c (Delete bias_range() and remove interval_score from exported functions)
 \item{predicted}{vector of length corresponding to the number of quantiles
 that holds predictions}
 

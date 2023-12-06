@@ -798,3 +798,10 @@ test_that("bias_quantile only produces one message", {
     "Median not available, computing bias as mean of the two innermost quantiles in order to compute bias."
   )
 })
+
+test_that("bias_quantile() works with point forecasts", {
+  predicted <- 1
+  observed <- 1
+  quantile <- 0.5
+  expect_equal(bias_quantile(observed, predicted, quantile), 0)
+})

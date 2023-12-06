@@ -362,12 +362,12 @@ interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
 #'
 #' Bias can assume values between
 #' -1 and 1 and is 0 ideally (i.e. unbiased).
+#' @param observed a single number representing the observed value
 #' @param predicted vector of length corresponding to the number of quantiles
 #' that holds predictions
 #' @param quantile vector of corresponding size with the quantile levels for
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
-#' @inheritParams bias_range
 #' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
