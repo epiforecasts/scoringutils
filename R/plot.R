@@ -957,6 +957,7 @@ plot_pit <- function(pit,
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
+#' @importFrom checkmate assert_string assert_logical
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -975,6 +976,10 @@ plot_forecast_counts <- function(forecast_counts,
                                  show_numbers = TRUE) {
 
   forecast_counts <- ensure_data.table(forecast_counts)
+  assert_string(y)
+  assert_string(x)
+  assert_logical(make_x_factor)
+  assert_logical(show_numbers)
 
   if (make_x_factor) {
     forecast_counts[, eval(x) := as.factor(get(x))]
