@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 library(scoringutils)
 library(data.table)
-library(ggplot2)
 ```
 
 A variety of metrics and scoring rules can also be accessed directly through 
