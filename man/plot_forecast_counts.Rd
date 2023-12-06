@@ -6,27 +6,27 @@
 \usage{
 plot_forecast_counts(
   forecast_counts,
-  y = "model",
   x,
-  make_x_factor = TRUE,
-  show_numbers = TRUE
+  y = "model",
+  x_as_factor = TRUE,
+  show_counts = TRUE
 )
 }
 \arguments{
-\item{forecast_counts}{a data.table (or similar) with forecast counts
-as produced by \code{\link[=get_forecast_counts]{get_forecast_counts()}}}
-
-\item{y}{character vector of length one that denotes the name of the column
-to appear on the y-axis of the plot. Default is "model".}
+\item{forecast_counts}{a data.table (or similar) with a column \code{count}
+holding forecast counts, as produced by \code{\link[=get_forecast_counts]{get_forecast_counts()}}}
 
 \item{x}{character vector of length one that denotes the name of the column
 to appear on the x-axis of the plot.}
 
-\item{make_x_factor}{logical (default is TRUE). Whether or not to convert
+\item{y}{character vector of length one that denotes the name of the column
+to appear on the y-axis of the plot. Default is "model".}
+
+\item{x_as_factor}{logical (default is TRUE). Whether or not to convert
 the variable on the x-axis to a factor. This has an effect e.g. if dates
 are shown on the x-axis.}
 
-\item{show_numbers}{logical (default is \code{TRUE}) that indicates whether
+\item{show_counts}{logical (default is \code{TRUE}) that indicates whether
 or not to show the actual count numbers on the plot}
 }
 \value{
@@ -41,7 +41,7 @@ forecast_counts <- get_forecast_counts(
   example_quantile, by = c("model", "target_type", "target_end_date")
 )
 plot_forecast_counts(
- forecast_counts, x = "target_end_date", show_numbers = FALSE
+ forecast_counts, x = "target_end_date", show_counts = FALSE
 ) +
  facet_wrap("target_type")
 }

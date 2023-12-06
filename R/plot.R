@@ -941,23 +941,22 @@ plot_pit <- function(pit,
 #'
 #' @description
 #' Visualise Where Forecasts Are Available
-#' @inheritParams print.scoringutils_check
-#' @param forecast_counts a data.table (or similar) with forecast counts
-#' as produced by [get_forecast_counts()]
-#' @param y character vector of length one that denotes the name of the column
-#' to appear on the y-axis of the plot. Default is "model".
+#' @param forecast_counts a data.table (or similar) with a column `count`
+#' holding forecast counts, as produced by [get_forecast_counts()]
 #' @param x character vector of length one that denotes the name of the column
 #' to appear on the x-axis of the plot.
-#' @param make_x_factor logical (default is TRUE). Whether or not to convert
+#' @param y character vector of length one that denotes the name of the column
+#' to appear on the y-axis of the plot. Default is "model".
+#' @param x_as_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
-#' @param show_numbers logical (default is `TRUE`) that indicates whether
+#' @param show_counts logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
-#' @importFrom checkmate assert_string assert_logical
+#' @importFrom checkmate assert_string assert_logical assert
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -965,23 +964,24 @@ plot_pit <- function(pit,
 #'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
 #' plot_forecast_counts(
-#'  forecast_counts, x = "target_end_date", show_numbers = FALSE
+#'  forecast_counts, x = "target_end_date", show_counts = FALSE
 #' ) +
 #'  facet_wrap("target_type")
 
 plot_forecast_counts <- function(forecast_counts,
-                                 y = "model",
                                  x,
-                                 make_x_factor = TRUE,
-                                 show_numbers = TRUE) {
+                                 y = "model",
+                                 x_as_factor = TRUE,
+                                 show_counts = TRUE) {
 
   forecast_counts <- ensure_data.table(forecast_counts)
   assert_string(y)
   assert_string(x)
-  assert_logical(make_x_factor)
-  assert_logical(show_numbers)
+  assert(check_columns_present(forecast_counts, c(y, x)))
+  assert_logical(x_as_factor)
+  assert_logical(show_counts)
 
-  if (make_x_factor) {
+  if (x_as_factor) {
     forecast_counts[, eval(x) := as.factor(get(x))]
   }
 
@@ -1005,7 +1005,7 @@ plot_forecast_counts <- function(forecast_counts,
       )
     ) +
     theme(panel.spacing = unit(2, "lines"))
-  if (show_numbers) {
+  if (show_counts) {
     plot <- plot +
       geom_text(aes(label = `Count`))
   }

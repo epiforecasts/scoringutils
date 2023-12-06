@@ -4,7 +4,7 @@ test_that("plot.forecast_counts() works as expected", {
     by = c("model", "target_type", "target_end_date")
   )
   p <- plot_forecast_counts(available_forecasts,
-    x = "target_end_date", show_numbers = FALSE
+    x = "target_end_date", show_counts = FALSE
   ) +
     facet_wrap("target_type")
   expect_s3_class(p, "ggplot")
