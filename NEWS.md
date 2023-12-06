@@ -1,3 +1,8 @@
+# scoringutils 1.2.3
+
+## Package updates
+- fixed automatic rendering of the Readme using Github Actions by adding the file `README.html` to .gitignore
+
 # scoringutils 1.2.2
 
 ## Package updates
