@@ -20,7 +20,7 @@ You can find additional information and examples in the papers
 [Evaluating Forecasts with scoringutils in
 R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts
 on transformed
-scales](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1)
+scales](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011393)
 as well as the Vignettes ([Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
 [Details on the metrics
