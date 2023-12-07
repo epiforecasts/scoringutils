@@ -47,10 +47,8 @@ plot_score_table <- function(scores,
   id_vars <- get_forecast_unit(scores)
   metrics <- get_metrics(scores)
 
-  scores <- delete_columns(
-    scores,
-    names(scores)[!(names(scores) %in% c(metrics, id_vars))]
-  )
+  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
 
   # compute scaled values ------------------------------------------------------
   # scaling is done in order to colour the different scores
@@ -403,11 +401,7 @@ plot_predictions <- function(data,
   del_cols <-
     colnames(truth_data)[!(colnames(truth_data) %in% c(by, "observed", x))]
 
-  truth_data <- delete_columns(
-    truth_data,
-    del_cols,
-    make_unique = TRUE
-  )
+  truth_data <- unique(suppressWarnings(truth_data[, eval(del_cols) := NULL]))
 
   # find out what type of predictions we have. convert sample based to
   # range data

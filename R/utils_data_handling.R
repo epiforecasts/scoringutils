@@ -223,7 +223,7 @@ quantile_to_interval.data.frame <- function(dt,
   }
 
   if (format == "wide") {
-    delete_columns(dt, "quantile")
+    suppressWarnings(dt[, "quantile" := NULL])
     dt <- dcast(dt, ... ~ boundary, value.var = "predicted")
     # if there are NA values in `predicted`, this introduces a column "NA"
     if ("NA" %in% colnames(dt) && all(is.na(dt[["NA"]]))) {
