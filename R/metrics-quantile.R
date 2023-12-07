@@ -97,6 +97,15 @@
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
 #' @keywords metric
+#' @examples
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'   c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' wis(observed, predicted, quantile)
 wis <- function(observed,
                 predicted,
                 quantile,
@@ -362,12 +371,12 @@ interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
 #'
 #' Bias can assume values between
 #' -1 and 1 and is 0 ideally (i.e. unbiased).
+#' @param observed a single number representing the observed value
 #' @param predicted vector of length corresponding to the number of quantiles
 #' that holds predictions
 #' @param quantile vector of corresponding size with the quantile levels for
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
-#' @inheritParams bias_range
 #' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
@@ -522,7 +531,7 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 #' @description
 #' Proper Scoring Rule to score quantile predictions. Smaller values are better.
 #' The quantile score is
-#' closely related to the Interval score (see [interval_score()]) and is
+#' closely related to the Interval score (see [wis()]) and is
 #' the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'

@@ -23,6 +23,9 @@ The update introduces breaking changes. If you want to keep using the older vers
 - `check_forecasts()` was replaced by a new function `validate()`. `validate()` validates the input and in that sense fulfills the purpose of `check_forecasts()`. It has different methods: `validate.default()` assigns the input a class based on their forecast type. Other methods validate the input specifically for the various forecast types.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds pairwise comparisons to it. 
 - `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
+- Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
+    - The function `bias_range()` was removed (users should now use `bias_quantile()` instead)
+    - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
   - The function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future.
