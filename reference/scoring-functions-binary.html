@@ -157,19 +157,18 @@ then you could of course make <code>observed</code> a factor with levels swapped
 <span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">brier_score</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.474990e-07 3.687797e-01 2.478217e-02 2.579510e-01 5.187323e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 2.143198e-01 4.106907e-01 6.656746e-02 2.294038e-01 4.553489e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.541308e-01 1.667756e-04 4.417670e-01 1.213582e-01 2.943606e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 5.380618e-04 1.440470e-01 8.131067e-02 4.233020e-02 6.154245e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 2.203567e-01 1.226718e-02 1.597199e-01 1.036562e-01 2.668625e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 4.746555e-01 3.831023e-01 5.299314e-01 8.042989e-01 7.733677e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0134308865 0.9314584100 0.1167666751 0.5007624929 0.3622236223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 0.4213560961 0.5276163319 0.6000066733 0.1789025171 0.5358613025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.1034158153 0.1226047000 0.2742082236 0.0425214728 0.0781697545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 0.7530513776 0.0211060947 0.7667395628 0.4150258199 0.3960275338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 0.2637371617 0.9757876807 0.0310390234 0.0003335607 0.6262156581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 0.3991343265 0.0218004198 0.0041374172 0.7349852053 0.5392347667</span>
 <span class="r-in"><span><span class="fu">logs_binary</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0003841298 0.9346389887 0.1712908617 0.7090505978 0.0230390690</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 0.6216581873 1.0240194047 0.2984150735 0.6519306302 1.1233009184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.7014090054 0.0129982737 1.0925969877 0.4282706915 0.7820879869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 0.0234694246 0.4772864019 0.3356829034 0.2303482475 0.2851220212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 0.6337875752 0.1173850686 0.5102419277 0.3885443842 0.0530408538</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 1.1678095443 0.9648315139 1.3018204357 2.2713491709 2.1153858653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.12317571 3.35586835 0.41811183 1.22978899 0.92092688 1.04730951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.29598588 1.48988301 0.54985876 1.31686338 0.38799357 0.43101300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.74160020 0.23093300 0.32793276 2.02332838 0.15698061 2.08454785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 1.03345670 0.99238155 0.72062828 4.40793210 0.19380195 0.01843248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 1.56703904 0.99904967 0.15975763 0.06648469 1.94710033 1.32548552</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

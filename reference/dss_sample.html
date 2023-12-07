@@ -104,11 +104,11 @@ Forecasts with scoringRules, <a href="https://www.jstatsoft.org/article/view/v09
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">dss_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.1109203  1.2161189  2.8766025  1.4689533  2.2081594  6.1633327</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.0571784  8.3465028  4.1558607  2.4337778  2.3253246  2.4558044</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  4.1002346  2.9333270  2.5281267  2.8377505  2.9933212  4.2162555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  4.3458702  3.1515559  3.9997126  4.2474571  3.3949670  8.2461511</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  6.8698098  3.5484737  3.3865692  3.6704129  4.2721681  3.6155378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.02955888 0.71784134 2.75465142 9.14778782 1.76069411 2.53864962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.08324829 4.98754971 2.21757173 3.17933711 3.86889296 2.48756141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 2.85409545 2.72833636 4.63925263 3.04594124 3.09516003 6.00270974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 3.70641123 3.05342364 3.55695396 5.21893755 4.37095718 3.34997694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 4.48538479 4.56517042 4.75436345 4.65492946 4.11264631 3.67317294</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

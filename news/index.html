@@ -94,6 +94,10 @@
 <li>The functionality for computing pairwise comparisons was now split from <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. Instead of doing pairwise comparisons as part of summarising scores, a new function, <code><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison()</a></code>, was introduced that takes summarised scores as an input and adds pairwise comparisons to it.</li>
 <li>
 <code><a href="../reference/add_coverage.html">add_coverage()</a></code> was reworked completely. It’s new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by <code>score_quantile()</code>)</li>
+<li>Support for the interval format was mostly dropped (see PR <a href="https://github.com/epiforecasts/scoringutils/issues/525" class="external-link">#525</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a>)
+<ul><li>The function <code>bias_range()</code> was removed (users should now use <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> instead)</li>
+<li>The function <code><a href="../reference/interval_score.html">interval_score()</a></code> was made an internal function rather than being exported to users. We recommend using <code><a href="../reference/wis.html">wis()</a></code> instead.</li>
+</ul></li>
 <li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
 </li>
 <li>Changes to <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> and <code><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts()</a></code>:
@@ -168,10 +172,10 @@
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-1-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-1-7"></a></h3>
-<ul><li>Made imputation of the median in <code><a href="../reference/bias_range.html">bias_range()</a></code> and <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> more obvious to the user as this may cause unexpected behaviour.</li>
-<li>Simplified <code><a href="../reference/bias_range.html">bias_range()</a></code> so that it uses <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> internally.</li>
-<li>Added additional input checks to <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code>check_predictions()</code> to make sure that the input is valid.</li>
-<li>Improve the coverage of unit tests for <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/bias_sample.html">bias_sample()</a></code>.</li>
+<ul><li>Made imputation of the median in <code>bias_range()</code> and <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> more obvious to the user as this may cause unexpected behaviour.</li>
+<li>Simplified <code>bias_range()</code> so that it uses <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> internally.</li>
+<li>Added additional input checks to <code>bias_range()</code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code>check_predictions()</code> to make sure that the input is valid.</li>
+<li>Improve the coverage of unit tests for <code>bias_range()</code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/bias_sample.html">bias_sample()</a></code>.</li>
 <li>Updated pairwise comparison unit tests to use more realistic data.</li>
 </ul></div>
 <div class="section level3">
