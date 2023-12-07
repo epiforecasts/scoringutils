@@ -51,7 +51,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Determine dispersion of a probabilistic forecast</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-sample.R" class="external-link"><code>R/metrics-sample.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/sharpness.R" class="external-link"><code>R/sharpness.R</code></a></small>
       <div class="d-none name"><code>mad_sample.Rd</code></div>
     </div>
 
@@ -61,25 +61,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mad_sample</span><span class="op">(</span>observed <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">predicted</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mad_sample</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
-<dd><p>place holder, argument will be ignored and exists only for
-consistency with other scoring functions. The output does not depend on
-any observed values.</p></dd>
-
-
-<dt>predicted</dt>
+    <dl><dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, <code>predicted</code> can just be a vector of size n.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>additional arguments passed to <a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad()</a>.</p></dd>
+Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -94,7 +84,7 @@ Carlo samples. Alternatively, <code>predicted</code> can just be a vector of siz
 narrow range and dispersion is the lack thereof.
 It is a data-independent measure, and is purely a feature
 of the forecasts themselves.</p>
-<p>Dispersion of predictive samples corresponding to one single observed value is
+<p>Dispersion of predictive samples corresponding to one single true value is
 measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see <a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad()</a>
 and the explanations given in Funk et al. (2019)</p>
@@ -109,11 +99,11 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">mad_sample</span><span class="op">(</span>predicted <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652 2.2239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 2.9652 3.7065 2.9652 4.4478 3.7065 4.4478 3.7065 4.4478 4.4478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 4.4478 4.4478 4.4478 5.9304 4.4478 5.1891 4.4478 5.9304 4.4478</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mad_sample</span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 1.4826 2.9652 2.9652 2.9652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 2.9652 2.9652 2.9652 4.4478 4.4478 4.4478 4.4478 5.1891 4.4478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 5.1891 4.4478 4.4478 5.9304 4.4478 5.9304 4.4478 5.1891 4.4478 5.9304</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
