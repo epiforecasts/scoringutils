@@ -10,7 +10,7 @@
 #' vector of size N.
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @inherit document_assert_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 assert_input_sample <- function(observed, predicted) {
   assert_numeric(observed, min.len = 1)
   n_obs <- length(observed)
@@ -30,7 +30,7 @@ assert_input_sample <- function(observed, predicted) {
 #' @title Check that inputs are correct for sample-based forecast
 #' @inherit assert_input_sample params description
 #' @inherit document_check_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_input_sample <- function(observed, predicted) {
   result <- check_try(assert_input_sample(observed, predicted))
   return(result)
@@ -54,7 +54,7 @@ check_input_sample <- function(observed, predicted) {
 #' FALSE. Whether the quantile levels are required to be unique or not.
 #' @importFrom checkmate assert assert_numeric check_matrix check_vector
 #' @inherit document_assert_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 assert_input_quantile <- function(observed, predicted, quantile,
                                   unique_quantiles = TRUE) {
   assert_numeric(observed, min.len = 1)
@@ -85,7 +85,7 @@ assert_input_quantile <- function(observed, predicted, quantile,
 #' @title Check that inputs are correct for quantile-based forecast
 #' @inherit assert_input_quantile params description
 #' @inherit check_input_sample return description
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_input_quantile <- function(observed, predicted, quantile) {
   result <- check_try(assert_input_quantile(observed, predicted, quantile))
   return(result)
@@ -106,7 +106,7 @@ check_input_quantile <- function(observed, predicted, quantile) {
 #' (25%, 75%) prediction interval.
 #' @importFrom rlang warn
 #' @inherit document_assert_functions return
-#' @keywords internal
+#' @keywords internal_input_check
 assert_input_interval <- function(observed, lower, upper, range) {
 
   assert(check_numeric_vector(observed, min.len = 1))
@@ -145,7 +145,7 @@ assert_input_interval <- function(observed, lower, upper, range) {
 #' @title Check that inputs are correct for interval-based forecast
 #' @inherit assert_input_interval params description
 #' @inherit check_input_sample return description
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_input_interval <- function(observed, lower, upper, range) {
   result <- check_try(assert_input_quantile(observed, lower, upper, range))
   return(result)
@@ -161,29 +161,25 @@ check_input_interval <- function(observed, lower, upper, range) {
 #' that `predicted` represents the probability that the observed value is equal
 #' to the highest factor level.
 #' @param predicted Input to be checked. `predicted` should be a vector of
-#' length n, holding probabilities. Values represent the probability that
+#' length n, holding probabilities. Alternatively, `predicted` can be a matrix
+#' of size n x 1. Values represent the probability that
 #' the corresponding value in `observed` will be equal to the highest
 #' available factor level.
 #' @importFrom checkmate assert assert_factor
 #' @inherit document_assert_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 assert_input_binary <- function(observed, predicted) {
-  if (length(observed) != length(predicted)) {
-    stop("`observed` and `predicted` need to be ",
-         "of same length when scoring binary forecasts")
-  }
-  assert_factor(observed, n.levels = 2)
-  levels <- levels(observed)
-  assert(
-    check_numeric_vector(predicted, min.len = 1, lower = 0, upper = 1)
-  )
+  assert_factor(observed, n.levels = 2, min.len = 1)
+  assert_numeric(predicted, lower = 0, upper = 1)
+  assert_dims_ok_point(observed, predicted)
   return(invisible(NULL))
 }
+
 
 #' @title Check that inputs are correct for binary forecast
 #' @inherit assert_input_binary params description
 #' @inherit document_check_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_input_binary <- function(observed, predicted) {
   result <- check_try(assert_input_binary(observed, predicted))
   return(result)
@@ -198,22 +194,64 @@ check_input_binary <- function(observed, predicted) {
 #' @param predicted Input to be checked. Should be a numeric vector with the
 #' predicted values of size n
 #' @inherit document_assert_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 assert_input_point <- function(observed, predicted) {
-  assert(check_numeric_vector(observed, min.len = 1))
-  assert(check_numeric_vector(predicted, min.len = 1))
-  if (length(observed) != length(predicted)) {
-    stop("`observed` and `predicted` need to be ",
-         "of same length when scoring point forecasts")
-  }
+  assert(check_numeric(observed))
+  assert(check_numeric(predicted))
+  assert(check_dims_ok_point(observed, predicted))
   return(invisible(NULL))
 }
 
 #' @title Check that inputs are correct for point forecast
 #' @inherit assert_input_point params description
 #' @inherit document_check_functions return
-#' @keywords check-inputs
+#' @keywords internal_input_check
 check_input_point <- function(observed, predicted) {
   result <- check_try(assert_input_point(observed, predicted))
+  return(result)
+}
+
+
+#' @title Assert Inputs Have Matching Dimensions
+#' @description Function assesses whether input dimensions match. In the
+#' following, n is the number of observations / forecasts. Scalar values may
+#' be repeated to match the length of the other input.
+#' Allowed options are therefore
+#' - `observed` is vector of length 1 or length n
+#' - `predicted` is
+#'     - a vector of of length 1 or length n
+#'     - a matrix with n rows and 1 column
+#' @inherit assert_input_binary
+#' @inherit document_assert_functions return
+#' @importFrom checkmate assert_vector check_matrix check_vector assert
+#' @keywords internal_input_check
+assert_dims_ok_point <- function(observed, predicted) {
+  assert_vector(observed, min.len = 1)
+  n_obs <- length(observed)
+  assert(
+    check_vector(predicted, min.len = 1, strict = TRUE),
+    check_matrix(predicted, ncols = 1, nrows = n_obs)
+  )
+  dim_p <- dim(predicted)
+  if (!is.null(dim_p) && (length(dim_p) > 1) && (dim_p[2] > 1)) {
+    stop("`predicted` must be a vector or a matrix with one column. Found ",
+         dim(predicted)[2], " columns")
+  }
+  n_pred <- length(as.vector(predicted))
+  # check that both are either of length 1 or of equal length
+  if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
+    stop("`observed` and `predicted` must either be of length 1 or ",
+         "of equal length. Found ", n_obs, " and ", n_pred)
+  }
+  return(invisible(NULL))
+}
+
+
+#' @title Check Inputs Have Matching Dimensions
+#' @inherit assert_dims_ok_point params description
+#' @inherit document_check_functions return
+#' @keywords internal_input_check
+check_dims_ok_point <- function(observed, predicted) {
+  result <- check_try(assert_dims_ok_point(observed, predicted))
   return(result)
 }

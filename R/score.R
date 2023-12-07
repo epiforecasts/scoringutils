@@ -229,11 +229,13 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the quantiles and predictions are ordered in the same way
-  d_transposed <- data[, .(predicted = list(predicted[order(quantile)]),
-                           observed = unique(observed),
-                           quantile = list(quantile[order(quantile)]),
-                           scoringutils_quantile = toString(quantile[order(quantile)])),
-                       by = forecast_unit]
+  d_transposed <- data[, .(
+    predicted = list(predicted[order(quantile)]),
+    observed = unique(observed),
+    quantile = list(sort(quantile, na.last = TRUE)),
+    scoringutils_quantile = toString(sort(quantile, na.last = TRUE))
+  ),
+  by = forecast_unit]
 
   # split according to quantile lengths and do calculations for different
   # quantile lengths separately. The function `wis()` assumes that all
@@ -265,12 +267,9 @@ apply_metrics <- function(data, metrics, ...) {
     data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
   )
   lapply(seq_along(metrics), function(i, data, ...) {
-    metric_name <- names(metrics[i])
-    fun <- metrics[[i]]
+    metric_name <- names(metrics[i]) # nolint
+    fun <- metrics[[i]] # nolint
     eval(expr)
   }, data, ...)
   return(data)
 }
-
-
-

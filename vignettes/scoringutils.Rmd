@@ -35,7 +35,7 @@ Most of the time, the `score()` function will be able to do the entire evaluatio
 
 ```{r, echo=FALSE}
 requirements <- data.table(
-  "Format" = c(
+  Format = c(
     "quantile-based", "sample-based", "binary", "pairwise-comparisons"
   ),
   `Required columns` = c(
@@ -372,7 +372,7 @@ Visualising correlations:
 example_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation() %>%
+  correlation(digits = 2) %>%
   plot_correlation()
 ```
 

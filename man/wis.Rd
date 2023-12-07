@@ -17,11 +17,11 @@ wis(
   na.rm = TRUE
 )
 
-dispersion(observed, predicted, quantile)
+dispersion(observed, predicted, quantile, ...)
 
-overprediction(observed, predicted, quantile)
+overprediction(observed, predicted, quantile, ...)
 
-underprediction(observed, predicted, quantile)
+underprediction(observed, predicted, quantile, ...)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -49,6 +49,9 @@ Default: \code{TRUE}.}
 \item{count_median_twice}{if TRUE, count the median twice in the score}
 
 \item{na.rm}{if TRUE, ignore NA values when computing the score}
+
+\item{...}{Additional arguments passed on to \code{wis()} from functions
+\code{overprediction()}, \code{underprediction()} and \code{dispersion()}}
 }
 \value{
 \code{wis()}: a numeric vector with WIS values of size n (one per observation),
@@ -138,3 +141,4 @@ can control the behvaviour with the \code{count_median_twice}-argument.
 WIS components can be computed individually using the functions
 \code{overprediction}, \code{underprediction}, and \code{dispersion.}
 }
+\keyword{metric}

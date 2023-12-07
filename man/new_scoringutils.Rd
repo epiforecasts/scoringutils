@@ -22,4 +22,4 @@ Construct a class based on a data.frame or similar. The constructor
 \item assigns a class
 }
 }
-\keyword{validate}
+\keyword{internal}

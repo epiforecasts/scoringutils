@@ -65,3 +65,4 @@ be characterised by one or multiple prediction intervals, e.g. the lower
 and upper bounds of the 50\% and 90\% prediction intervals (corresponding to
 the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 }
+\keyword{data-handling}

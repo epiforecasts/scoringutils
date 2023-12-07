@@ -10,7 +10,11 @@ get_forecast_unit(data, check_conflict = FALSE)
 \item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{check_conflict}{Whether or not to check whether there is a conflict
-between a stored attribute and the inferred forecast unit. Defaults to FALSE.}
+between a stored attribute and the inferred forecast unit. When you create
+a forecast object, the forecast unit is stored as an attribute. If you
+later change the columns of the data, the forecast unit as inferred from the
+data might change compared to the stored attribute. Should this result in a
+warning? Defaults to FALSE.}
 }
 \value{
 A character vector with the column names that define the unit of
@@ -24,4 +28,4 @@ the columns that are protected, i.e. those returned by
 \code{\link[=get_protected_columns]{get_protected_columns()}} as well as the names of the metrics that were
 specified during scoring, if any.
 }
-\keyword{internal}
+\keyword{check-forecasts}

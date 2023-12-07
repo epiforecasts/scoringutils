@@ -25,3 +25,4 @@ scalar with the quantile bias for a single quantile prediction
 Internal function to compute bias for a single observed value,
 a vector of predicted values and a vector of quantiles.
 }
+\keyword{internal}

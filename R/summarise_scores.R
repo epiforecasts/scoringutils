@@ -24,6 +24,9 @@
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
+#' @return a data.table with summarised scores. Scores are summarised according
+#' to the names of the columns of the original data specified in `by` or
+#' `across` using the `fun` passed to `summarise_scores()`.
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #' library(magrittr) # pipe operator
@@ -111,8 +114,8 @@ summarise_scores <- function(scores,
   stored_attributes <- c(
     get_scoringutils_attributes(scores),
     list(
-      "scoringutils_by" = by,
-      "unsummarised_scores" =  scores
+      scoringutils_by = by,
+      unsummarised_scores =  scores
     )
   )
 
@@ -178,6 +181,7 @@ summarize_scores <- summarise_scores
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
+#' @keywords keyword scoring
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
                                     relative_skill_metric = "auto",

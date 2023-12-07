@@ -27,13 +27,14 @@
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_frame
 #' @export
-#' @keywords validate
+#' @keywords check-forecasts
 validate <- function(data, ...) {
   UseMethod("validate")
 }
 
 #' @rdname validate
 #' @export
+#' @keywords check-forecasts
 validate.default <- function(data, ...) {
   assert(check_data_columns(data))
 
@@ -49,6 +50,7 @@ validate.default <- function(data, ...) {
 
 #' @rdname validate
 #' @export
+#' @keywords check-forecasts
 validate.scoringutils_binary <- function(data, ...) {
   data <- validate_general(data)
 
@@ -69,6 +71,7 @@ validate.scoringutils_binary <- function(data, ...) {
 
 #' @rdname validate
 #' @export
+#' @keywords check-forecasts
 validate.scoringutils_point <- function(data, ...) {
   data <- validate_general(data)
 
@@ -91,6 +94,7 @@ validate.scoringutils_quantile <- function(data, ...) {
 
 #' @rdname validate
 #' @export
+#' @keywords check-forecasts
 validate.scoringutils_sample <- function(data, ...) {
   data <- validate_general(data)
   return(data[])
@@ -113,7 +117,7 @@ validate.scoringutils_sample <- function(data, ...) {
 #' @importFrom data.table ':=' is.data.table setattr
 #' @importFrom checkmate assert_data_table
 #' @export
-#' @keywords validate
+#' @keywords internal_input_check
 validate_general <- function(data) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data)
@@ -162,7 +166,7 @@ validate_general <- function(data) {
 #' @param classname name of the class to be created
 #' @return An object of the class indicated by `classname`
 #' @export
-#' @keywords validate
+#' @keywords internal
 new_scoringutils <- function(data, classname) {
   data <- as.data.table(data)
   data <- assure_model_column(data)
@@ -186,7 +190,7 @@ new_scoringutils <- function(data, classname) {
 #' @return A named list of metrics, with those filtered out that are not
 #' valid functions
 #' @importFrom checkmate assert_list test_list check_function
-
+#' @keywords internal_input_check
 validate_metrics <- function(metrics) {
 
   assert_list(metrics, min.len = 1, names = "named")

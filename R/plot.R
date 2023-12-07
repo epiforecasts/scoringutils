@@ -470,7 +470,7 @@ plot_predictions <- function(data,
   # it separately here to deal with the case when only the median is provided
   # (in which case ggdist::geom_lineribbon() will fail)
   if (0 %in% range) {
-    select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
+    select_median <- (forecasts$range == 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]
 
     if (nrow(median) > 0) {
@@ -1065,7 +1065,8 @@ plot_avail_forecasts <- function(available_forecasts,
 #' @examples
 #' scores <- score(example_quantile)
 #' correlations <- correlation(
-#'  summarise_scores(scores)
+#'  summarise_scores(scores),
+#'  digits = 2
 #' )
 #' plot_correlation(correlations)
 

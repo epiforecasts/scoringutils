@@ -52,4 +52,4 @@ To summarise, the data should come in one of four different formats:
 \item A quantile-based format (see \link{example_quantile})
 }
 }
-\keyword{validate}
+\keyword{check-forecasts}

@@ -7,6 +7,8 @@
 #' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will
 #' be shown
+#' @param digits A number indicating how many decimal places the result should
+#' be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams pairwise_comparison
 #' @return A data.table with correlations for the different metrics
 #' @importFrom data.table setDT
@@ -15,10 +17,10 @@
 #' @keywords scoring
 #' @examples
 #' scores <- score(example_quantile)
-#' correlation(scores)
+#' correlation(scores, digits = 2)
 correlation <- function(scores,
-                        metrics = NULL) {
-
+                        metrics = NULL,
+                        digits = NULL) {
   metrics <- get_metrics(scores)
 
   # if quantile column is present, throw a warning
@@ -41,7 +43,11 @@ correlation <- function(scores,
   df <- df[, .SD, .SDcols = names(df) %in% metrics]
 
   # define correlation matrix
-  cor_mat <- round(cor(as.matrix(df)), 2)
+  cor_mat <- cor(as.matrix(df))
+
+  if (!is.null(digits)) {
+    cor_mat <- round(cor_mat, digits)
+  }
 
   correlations <- setDT(as.data.frame((cor_mat)),
     keep.rownames = TRUE

@@ -313,9 +313,7 @@ interval_coverage_sample <- function(observed, predicted, range = 50) {
   # this could call interval_coverage_quantile instead
   # ==========================================================
   interval_dt <- quantile_to_interval(quantile_dt, format = "wide")
-  interval_dt[, coverage := ifelse(
-    observed >= lower & observed <= upper, TRUE, FALSE
-  )]
+  interval_dt[, coverage := (observed >= lower) & (observed <= upper)]
   # ==========================================================
   return(interval_dt$coverage)
 }

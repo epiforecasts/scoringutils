@@ -96,6 +96,7 @@
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
+#' @keywords metric
 wis <- function(observed,
                 predicted,
                 quantile,
@@ -119,25 +120,26 @@ wis <- function(observed,
 
   reformatted[, eval(cols) := do.call(
     interval_score,
-    list(observed = observed,
-         lower = lower,
-         upper = upper,
-         interval_range = range,
-         weigh = weigh,
-         separate_results = separate_results
+    list(
+      observed = observed,
+      lower = lower,
+      upper = upper,
+      interval_range = range,
+      weigh = weigh,
+      separate_results = separate_results
     )
   )]
 
-  if (!count_median_twice) {
-    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
-  } else {
+  if (count_median_twice) {
     reformatted[, weight := 1]
+  } else {
+    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
   }
 
   # summarise results by forecast_id
   reformatted <- reformatted[
     , lapply(.SD, weighted.mean, na.rm = na.rm, w = weight),
-    by = c("forecast_id"),
+    by = "forecast_id",
     .SDcols = colnames(reformatted) %like% paste(cols, collapse = "|")
   ]
 
@@ -156,11 +158,16 @@ wis <- function(observed,
 
 #' @return
 #' `dispersion()`: a numeric vector with dispersion values (one per observation)
+#' @param ... Additional arguments passed on to `wis()` from functions
+#' `overprediction()`, `underprediction()` and `dispersion()`
 #' @export
 #' @rdname wis
-dispersion <- function(observed, predicted, quantile) {
+#' @keywords metric
+dispersion <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$dispersion
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$dispersion
 }
 
 
@@ -169,9 +176,12 @@ dispersion <- function(observed, predicted, quantile) {
 #' observation)
 #' @export
 #' @rdname wis
-overprediction <- function(observed, predicted, quantile) {
+#' @keywords metric
+overprediction <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$overprediction
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$overprediction
 }
 
 
@@ -180,9 +190,12 @@ overprediction <- function(observed, predicted, quantile) {
 #' observation)
 #' @export
 #' @rdname wis
-underprediction <- function(observed, predicted, quantile) {
+#' @keywords metric
+underprediction <- function(observed, predicted, quantile, ...) {
+  args <- list(...)
+  args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile)
-  wis(observed, predicted, quantile, separate_results = TRUE)$underprediction
+  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$underprediction
 }
 
 
@@ -201,6 +214,7 @@ underprediction <- function(observed, predicted, quantile) {
 #' corresponding prediction interval and FALSE otherwise.
 #' @name interval_coverage
 #' @export
+#' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -217,15 +231,14 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   if (!all(necessary_quantiles %in% quantile)) {
     warning(
       "To compute the coverage for a range of ", range, "%, the quantiles ",
-      necessary_quantiles, " are required. Returning `NA`.")
+      necessary_quantiles, " are required. Returning `NA`."
+    )
     return(NA)
   }
   r <- range
   reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted <- reformatted[range %in% r]
-  reformatted[, coverage := ifelse(
-    observed >= lower & observed <= upper, TRUE, FALSE
-  )]
+  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
   return(reformatted$coverage)
 }
 
@@ -274,6 +287,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' @return A numeric vector of length n with the coverage deviation for each
 #' forecast (comprising one or multiple prediction intervals).
 #' @export
+#' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -282,34 +296,32 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #'    c(-2, 0, 3, 3, 4)
 #' )
 #' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_deviation_quantile(observed, predicted, quantile)
-interval_coverage_deviation_quantile <- function(observed, predicted, quantile) {
+#' interval_coverage_dev_quantile(observed, predicted, quantile)
+interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
 
   # transform available quantiles into central interval ranges
   available_ranges <- unique(get_range_from_quantile(quantile))
 
   # check if all necessary quantiles are available
-  necessary_quantiles <- unique(c(
-    (100 - available_ranges) / 2,
-    100 - (100 - available_ranges) / 2) / 100
+  necessary_quantiles <- unique(
+    c((100 - available_ranges) / 2, 100 - (100 - available_ranges) / 2) / 100
   )
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
     warning(
       "To compute coverage deviation, all quantiles must form central ",
       "symmetric prediction intervals. Missing quantiles: ",
-      toString(missing), ". Returning `NA`.")
+      toString(missing), ". Returning `NA`."
+    )
     return(NA)
   }
 
   reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
-  reformatted[, coverage := ifelse(
-    observed >= lower & observed <= upper, TRUE, FALSE
-  )]
+  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
   reformatted[, coverage_deviation := coverage - range / 100]
   out <- reformatted[, .(coverage_deviation = mean(coverage_deviation)),
-                     by = c("forecast_id")]
+                     by = "forecast_id"]
   return(out$coverage_deviation)
 }
 
@@ -358,9 +370,9 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
 #' @inheritParams bias_range
 #' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
+#' @export
+#' @keywords metric
 #' @examples
-#'
 #' predicted <- c(
 #'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
 #'   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
@@ -373,8 +385,6 @@ interval_coverage_deviation_quantile <- function(observed, predicted, quantile) 
 #' observed <- 8062
 #'
 #' bias_quantile(observed, predicted, quantile)
-#' @export
-#' @keywords metric
 bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile)
   n <- length(observed)
@@ -382,8 +392,14 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   if (is.null(dim(predicted))) {
     dim(predicted) <- c(n, N)
   }
+  if (!(0.5 %in% quantile)) {
+    message(
+      "Median not available, computing bias as mean of the two innermost ",
+      "quantiles in order to compute bias."
+    )
+  }
   bias <- sapply(1:n, function(i) {
-    bias_quantile_single_vector(observed[i], predicted[i,], quantile, na.rm)
+    bias_quantile_single_vector(observed[i], predicted[i, ], quantile, na.rm)
   })
   return(bias)
 }
@@ -400,6 +416,7 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_quantile
 #' @return scalar with the quantile bias for a single quantile prediction
+#' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 
   assert_number(observed)
@@ -408,14 +425,14 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   predicted_has_NAs <- anyNA(predicted)
   quantile_has_NAs <- anyNA(quantile)
 
-  if(any(predicted_has_NAs, quantile_has_NAs)) {
-    if (!na.rm) {
-      return(NA_real_)
-    } else {
+  if (any(predicted_has_NAs, quantile_has_NAs)) {
+    if (na.rm) {
       quantile <- quantile[!is.na(predicted)]
       predicted <- predicted[!is.na(predicted)]
       predicted <- predicted[!is.na(quantile)]
       quantile <- quantile[!is.na(quantile)]
+    } else {
+      return(NA_real_)
     }
   }
 
@@ -429,10 +446,6 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
     median_prediction <- predicted[quantile == 0.5]
   } else {
     # if median is not available, compute as mean of two innermost quantile
-    message(
-      "Median not available, computing as mean of two innermost quantile",
-      " in order to compute bias."
-    )
     median_prediction <-
       0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
       0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
@@ -608,12 +621,13 @@ wis_one_to_one <- function(observed,
   reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted[, eval(cols) := do.call(
     interval_score,
-    list(observed = observed,
-         lower = lower,
-         upper = upper,
-         interval_range = range,
-         weigh = weigh,
-         separate_results = separate_results
+    list(
+      observed = observed,
+      lower = lower,
+      upper = upper,
+      interval_range = range,
+      weigh = weigh,
+      separate_results = separate_results
     )
   )]
 
@@ -657,7 +671,7 @@ wis_one_to_one <- function(observed,
   if (output == "matrix") {
     wis <- matrix(wis, nrow = n, ncol = N)
     if (separate_results) {
-      components <- lapply(components, function(x) matrix(x, nrow = n, ncol = N))
+      components <- lapply(components, matrix, nrow = n, ncol = N)
       return(c(wis, components))
     } else {
       return(wis)

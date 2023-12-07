@@ -21,4 +21,4 @@ error otherwise.
 Function assesses whether the inputs correspond to the
 requirements for scoring point forecasts.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

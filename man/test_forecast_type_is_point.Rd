@@ -15,4 +15,4 @@ Returns TRUE if basic requirements are satisfied and FALSE otherwise
 \description{
 Checks type of the necessary columns.
 }
-\keyword{internal}
+\keyword{internal_input_check}

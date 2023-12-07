@@ -19,6 +19,9 @@ A data frame with 13,429 rows and 10 columns:
 \item{sample_id}{id for the corresponding sample}
 }
 }
+\source{
+\url{https://github.com/covid19-forecast-hub-europe/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+}
 \usage{
 example_integer
 }

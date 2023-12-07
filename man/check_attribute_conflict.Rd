@@ -24,4 +24,4 @@ an attribute \code{forecast_unit} is stored, but is different from the
 \code{forecast_unit} inferred from the data. The check is successful if
 the stored and the inferred value are the same.
 }
-\keyword{internal}
+\keyword{internal_input_check}

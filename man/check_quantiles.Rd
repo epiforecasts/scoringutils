@@ -24,4 +24,4 @@ and contain no duplicates.
 This is used in \url{bias_range()} and \url{bias_quantile()} to
 provide informative errors to users.
 }
-\keyword{internal}
+\keyword{internal_input_check}

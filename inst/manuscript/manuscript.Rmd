@@ -561,8 +561,6 @@ Another specific and very common form of miscalibration is bias, i.e. systematic
 For forecasts in a quantile format, bias is also reflected in the over- and underprediction components of the weighted interval score (a proper scoring rule explained in more detail in Section \ref{wis}). These measure over- and underprediction on an absolute scale (analogous to the absolute error of a point forecast), rather than a relative scale. It is important to note that it is not a priori clear what the decomposition 'should' look like - a forecast can be well calibrated and still have different amounts of over- and underprediction. High overprediction or underprediction values can therefore not immediately be interpreted as systematic bias. 
 
 
-
-
 # Summary and discussion
 
 Future development plans

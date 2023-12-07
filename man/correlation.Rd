@@ -4,7 +4,7 @@
 \alias{correlation}
 \title{Correlation Between Metrics}
 \usage{
-correlation(scores, metrics = NULL)
+correlation(scores, metrics = NULL, digits = NULL)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
@@ -12,6 +12,9 @@ correlation(scores, metrics = NULL)
 \item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will
 be shown}
+
+\item{digits}{A number indicating how many decimal places the result should
+be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
 A data.table with correlations for the different metrics
@@ -22,6 +25,6 @@ scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{
 scores <- score(example_quantile)
-correlation(scores)
+correlation(scores, digits = 2)
 }
 \keyword{scoring}
