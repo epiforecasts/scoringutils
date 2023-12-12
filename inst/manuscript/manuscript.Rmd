@@ -301,7 +301,7 @@ include_graphics("output/flowchart-score.png")
 ## Scoring rules
 
 Scoring rules are the functions that compute scores. They are usually named
-`name of the metric` + \_ + `forecast type`. If only a single forecast type is possible, then `_ + forecast type` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of a scoring rule is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector that denotes the quantile levels of the predictive quantiles. 
+`name of the metric + _ + forecast type`. If only a single forecast type is possible, then `_ + forecast type` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of a scoring rule is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector that denotes the quantile levels of the predictive quantiles. 
 
 Scoring rules differ in the relationship between input and output. Some scoring rules have a one-to-one relationship between predicted values and scores, returning one value per value in `predicted`. This is the case for all scoring rules for binary and point forecasts. Other scoring rules have a many-to-one relationship, returning one value per multiple values in `predicted`. This is the case for all scoring rules for sample- and quantile-based forecasts. For sample- and quantile-based forecasts, `predicted` is therefore a matrix, with values in each row jointly forming a single forecast.
 
@@ -490,7 +490,7 @@ score(example_quantile) |>
   facet_wrap(~ target_type)
 ```
 
-WE MIGHT WANT TO RETHINK THE FOLLOWING PART A BIT: A) MAYBE WE SHOULD SEPARTE COMPUTING P-VALUES FROM THE PAIRWISE COMPARISONS AND B) WE NEED TO THINK A BIT MORE ABOUT HOW WE WANT TO HYPOTHESIS TESTING MORE GENERALLY. 
+<!-- WE MIGHT WANT TO RETHINK THE FOLLOWING PART A BIT: A) MAYBE WE SHOULD SEPARTE COMPUTING P-VALUES FROM THE PAIRWISE COMPARISONS AND B) WE NEED TO THINK A BIT MORE ABOUT HOW WE WANT TO HYPOTHESIS TESTING MORE GENERALLY.  -->
 
 It is in principle possible to compute p-values to determine whether two models perform significantly differently as part of the pairwise comparisons. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 

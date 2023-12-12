@@ -19,3 +19,4 @@ docs
 ..bfg-report/
 .DS_Store
 .vscode
+*.trackdown
