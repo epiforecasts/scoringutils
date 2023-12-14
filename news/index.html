@@ -100,13 +100,13 @@
 </ul></li>
 <li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
 </li>
-<li>Changes to <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> and <code><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts()</a></code>:
-<ul><li>The function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> was renamed to <code><a href="../reference/available_forecasts.html">available_forecasts()</a></code> for consistency with <code><a href="../reference/available_metrics.html">available_metrics()</a></code>. The old function, <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> is still available as an alias, but will be removed in the future.</li>
-<li>For clarity, the output column in <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> was renamed from “Number forecasts” to “count”.</li>
+<li>Changes to <code>avail_forecasts()</code> and <code>plot_avail_forecasts()</code>:
+<ul><li>The function <code>avail_forecasts()</code> was renamed to <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code>. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix “get_”. Sees Issue <a href="https://github.com/epiforecasts/scoringutils/issues/403" class="external-link">#403</a> and <a href="https://github.com/epiforecasts/scoringutils/issues/521" class="external-link">#521</a> and PR <a href="https://github.com/epiforecasts/scoringutils/issues/511" class="external-link">#511</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> for details.</li>
+<li>For clarity, the output column in <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> was renamed from “Number forecasts” to “count”.</li>
 <li>
-<code><a href="../reference/available_forecasts.html">available_forecasts()</a></code> now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.</li>
+<code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.</li>
 <li>
-<code><a href="../reference/plot_avail_forecasts.html">plot_avail_forecasts()</a></code> has been deprecated in favour of an S3 method for <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. An alias is still available, but will be removed in the future.</li>
+<code>plot_avail_forecasts()</code> was renamed <code><a href="../reference/plot_forecast_counts.html">plot_forecast_counts()</a></code> in line with the change in the function name. The <code>x</code> argument no longer has a default value, as the value will depend on the data provided by the user.</li>
 </ul></li>
 <li>The deprecated <code>..density..</code> was replaced with <code>after_stat(density)</code> in ggplot calls.</li>
 <li>Files ending in “.Rda” were renamed to “.rds” where appropriate when used together with <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> or <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>.</li>
@@ -266,7 +266,7 @@
 <li>New function <code>check_forecasts()</code> to analyse input data before scoring</li>
 <li>New function <code><a href="../reference/correlation.html">correlation()</a></code> to compute correlations between different metrics</li>
 <li>New function <code><a href="../reference/add_coverage.html">add_coverage()</a></code> to add coverage for specific central prediction intervals.</li>
-<li>New function <code><a href="../reference/available_forecasts.html">available_forecasts()</a></code> allows to visualise the number of available forecasts.</li>
+<li>New function <code>avail_forecasts()</code> allows to visualise the number of available forecasts.</li>
 <li>New function <code>find_duplicates()</code> to find duplicate forecasts which cause an error.</li>
 <li>All plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified.</li>
 <li>The function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>

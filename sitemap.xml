@@ -82,12 +82,6 @@
     <loc>https://epiforecasts.io/scoringutils/reference/assure_model_column.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/avail_forecasts.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/available_forecasts.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/available_metrics.html</loc>
   </url>
   <url>
@@ -211,6 +205,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/get_duplicate_forecasts.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/get_forecast_counts.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/get_forecast_type.html</loc>
   </url>
   <url>
@@ -295,13 +292,10 @@
     <loc>https://epiforecasts.io/scoringutils/reference/pit_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/plot.scoringutils_available_forecasts.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/plot_avail_forecasts.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/plot_correlation.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/plot_forecast_counts.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/plot_heatmap.html</loc>

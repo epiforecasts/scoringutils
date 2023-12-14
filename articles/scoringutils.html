@@ -241,12 +241,12 @@ run <code><a href="../reference/validate.html">validate()</a></code> anyway inte
 <div class="section level2">
 <h2 id="showing-available-forecasts">Showing available forecasts<a class="anchor" aria-label="anchor" href="#showing-available-forecasts"></a>
 </h2>
-<p>The function <code><a href="../reference/available_forecasts.html">available_forecasts()</a></code> may also be helpful
+<p>The function <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> may also be helpful
 to determine where forecasts are available. Using the <code>by</code>
 argument you can specify the level of summary. For example, to see how
 many forecasts there are per model and target_type, we can run</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/available_forecasts.html">available_forecasts</a></span><span class="op">(</span><span class="va">example_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span><span class="va">example_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    model target_type count</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases   128</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths   128</span></span>
@@ -263,8 +263,8 @@ forecasts.</p>
 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/available_forecasts.html">available_forecasts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/plot_forecast_counts.html">plot_forecast_counts</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"forecast_date"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-6-1.png" width="1056"></p>
 <p>You can also visualise forecasts directly using the
