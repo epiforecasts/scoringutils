@@ -28,10 +28,10 @@ The update introduces breaking changes. If you want to keep using the older vers
     - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
-  - The function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future.
-  - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count".
-  - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
-  - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future.
+  - The function `avail_forecasts()` was renamed to `get_forecast_counts()`. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix "get_". Sees Issue #403 and #521 and PR #511 by @nikosbosse and reviewed by @seabbs for details. 
+  - For clarity, the output column in `get_forecast_counts()` was renamed from "Number forecasts" to "count".
+  - `get_forecast_counts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
+  - `plot_avail_forecasts()` was renamed `plot_forecast_counts()` in line with the change in the function name. The `x` argument no longer has a default value, as the value will depend on the data provided by the user.
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
 - added documentation for the return value of `summarise_scores()`. 
@@ -191,7 +191,7 @@ to a function `summarise_scores()`
 - New function `check_forecasts()` to analyse input data before scoring
 - New function `correlation()` to compute correlations between different metrics
 - New function `add_coverage()` to add coverage for specific central prediction intervals.
-- New function `available_forecasts()` allows to visualise the number of available forecasts.
+- New function `avail_forecasts()` allows to visualise the number of available forecasts.
 - New function `find_duplicates()` to find duplicate forecasts which cause an error.
 - All plotting functions were renamed to begin with `plot_`. Arguments were
 simplified.

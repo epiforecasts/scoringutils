@@ -79,10 +79,10 @@ The output of `validate()` can later be directly used as input to `score()` (oth
 
 ## Showing available forecasts
 
-The function `available_forecasts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
+The function `get_forecast_counts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r}
-available_forecasts(example_quantile, by = c("model", "target_type"))
+get_forecast_counts(example_quantile, by = c("model", "target_type"))
 ```
 
 We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts. 
@@ -91,8 +91,8 @@ This information can also be visualised using `plot()`:
 
 ```{r, fig.width=11, fig.height=6}
 example_quantile %>%
-  available_forecasts(by = c("model", "forecast_date", "target_type")) %>%
-  plot() +
+  get_forecast_counts(by = c("model", "forecast_date", "target_type")) %>%
+  plot_forecast_counts(x = "forecast_date") +
   facet_wrap(~ target_type)
 ```
 
