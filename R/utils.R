@@ -52,7 +52,7 @@ collapse_messages <- function(type = "messages", messages) {
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' check <- validate(example_quantile)
+#' check <- as_forecast(example_quantile)
 #' print(check)
 print.scoringutils_check <- function(x, ...) {
   cat("Your forecasts seem to be for a target of the following type:\n")

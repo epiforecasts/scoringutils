@@ -1,41 +1,21 @@
-#' @title Validate input data
+#' @title Create a `forecast` Object
+#' @description Convert a data.frame or similar of forecasts into an object of
+#' class `forecast_*` and validate it.
 #'
-#' @description
-#'
-#' The default method, [validate.default()] only runs basic input checks.
-#' It's main purpose is to determine the forecast type (binary, point,
-#' sample-based or quantile-based) based on the input data. It then constructs
-#' an appropriate class and calls [validate()] again which dispatches to the
-#' appropriate method.
-#'
-#' Methods for the different classes run [validate_general()], which performs
-#' checks that are the same for all forecast types and then perform specific
-#' checks for the specific forecast type.
-#'
-#' You can find more information about input formats in the vignette.
-#' To summarise, the data should come in one of four different formats:
-#' - A format for binary predictions (see [example_binary])
-#' - A format for point predictions (see [example_point])
-#' - A sample-based format for discrete or continuous predictions
-#' (see [example_continuous] and [example_integer])
-#' - A quantile-based format (see [example_quantile])
-#'
-#' @inheritParams score
+#' `as_forecast()` determines the forecast type (binary, point, sample-based or
+#' quantile-based) from the input data (using the function
+#' [get_forecast_type()]. It then constructs an object of the
+#' appropriate class (`forecast_binary`, `forecast_point`, `forecast_sample`, or
+#' `forecast_quantile`, using the function [new_scoringutils()]).
+#' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
+#' the required input formats.
+#' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
 #' `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or
 #' `scoringutils_quantile`.
-#' @importFrom data.table ':=' is.data.table
-#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
-validate <- function(data, ...) {
-  UseMethod("validate")
-}
-
-#' @rdname validate
-#' @export
-#' @keywords check-forecasts
-validate.default <- function(data, ...) {
+as_forecast <- function(data, ...) {
   assert(check_data_columns(data))
 
   # find forecast type
@@ -47,6 +27,27 @@ validate.default <- function(data, ...) {
   # validate class
   validate(data)
 }
+
+
+#' @title Validate input data
+#'
+#' @description
+#' Methods for the different classes run [validate_general()], which performs
+#' checks that are the same for all forecast types and then perform specific
+#' checks for the specific forecast type.
+#' @inheritParams score
+#' @inheritSection forecast_types Forecast types and input format
+#' @return Depending on the forecast type, an object of class
+#' `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or
+#' `scoringutils_quantile`.
+#' @importFrom data.table ':=' is.data.table
+#' @importFrom checkmate assert_data_frame
+#' @export
+#' @keywords check-forecasts
+validate <- function(data, ...) {
+  UseMethod("validate")
+}
+
 
 #' @rdname validate
 #' @export

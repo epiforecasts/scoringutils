@@ -119,7 +119,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.
 library(magrittr) # pipe operator
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
-validated <- validate(example_quantile)
+validated <- as_forecast(example_quantile)
 score(validated) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
@@ -129,7 +129,7 @@ example_quantile \%>\%
   set_forecast_unit(
     c("location", "target_end_date", "target_type", "horizon", "model")
   ) \%>\%
-  validate() \%>\%
+  as_forecast() \%>\%
   score()
 
 # forecast formats with different metrics

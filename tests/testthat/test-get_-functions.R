@@ -15,7 +15,7 @@ test_that("get_forecast_unit() works as expected", {
       "forecast_date", "model", "horizon")
   )
 
-  data <- validate(example_quantile)
+  data <- as_forecast(example_quantile)
   ex <- data[, location := NULL]
   expect_warning(
     get_forecast_unit(ex, check_conflict = TRUE),
@@ -164,7 +164,7 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  data <- validate(example_integer)
+  data <- as_forecast(example_integer)
   attr(data, "forecast_type") <- "binary"
   expect_warning(
     get_forecast_type(data),

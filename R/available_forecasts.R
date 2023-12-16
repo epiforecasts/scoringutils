@@ -38,7 +38,7 @@ get_forecast_counts <- function(data,
                                 by = NULL,
                                 collapse = c("quantile", "sample_id")) {
 
-  data <- validate(data)
+  data <- as_forecast(data)
   forecast_unit <- attr(data, "forecast_unit")
   data <- remove_na_observed_predicted(data)
 
