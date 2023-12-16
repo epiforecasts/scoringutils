@@ -61,4 +61,8 @@ For more information see the vignettes and the example data
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
 }
 
+\examples{
+as_forecast(example_binary)
+as_forecast(example_quantile)
+}
 \keyword{check-forecasts}
