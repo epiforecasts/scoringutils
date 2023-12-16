@@ -19,7 +19,13 @@
 #' @examples
 #' as_forecast(example_binary)
 #' as_forecast(example_quantile)
-as_forecast <- function(data) {
+as_forecast <- function(data, ...) {
+  UseMethod("as_forecast")
+}
+
+#' @rdname as_forecast
+#' @export
+as_forecast.default <- function(data, ...) {
   assert(check_data_columns(data))
 
   # find forecast type
