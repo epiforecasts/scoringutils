@@ -2,12 +2,17 @@
 % Please edit documentation in R/validate.R
 \name{as_forecast}
 \alias{as_forecast}
+\alias{as_forecast.default}
 \title{Create a \code{forecast} Object}
 \usage{
-as_forecast(data)
+as_forecast(data, ...)
+
+\method{as_forecast}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
+
+\item{...}{additional arguments}
 }
 \value{
 Depending on the forecast type, an object of class
