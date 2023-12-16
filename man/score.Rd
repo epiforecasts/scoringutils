@@ -45,14 +45,16 @@ forecasts.
 \code{score()} applies a selection of scoring metrics to a data.frame
 of forecasts. It is the workhorse of the \code{scoringutils} package.
 \code{score()} is a generic that dispatches to different methods depending on the
-class of the input data. The default method is \code{score.default()}, which
-validates the input, assigns as class based on the forecast type, and then
-calls \code{score()} again to dispatch to the appropriate method. See below for
-more information on how forecast types are determined.
-}
-\details{
-\strong{Forecast types and input format}
+class of the input data.
 
+We recommend that users call \code{\link[=as_forecast]{as_forecast()}} prior to calling \code{score()} to
+validate the input data and convert it to a forecast object (though
+\code{score.default()} will do this if it hasn't happened before).
+See below for more information on forecast types and input formats.
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
+}
+\section{Forecast types and input format}{
 Various different forecast types / forecast formats are supported. At the
 moment, those are
 \itemize{
@@ -85,9 +87,9 @@ numeric with sample indices.
 For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_continuous}, \link{example_integer},
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
+}
 
-\strong{Forecast unit}
-
+\section{Forecast unit}{
 In order to score forecasts, \code{scoringutils} needs to know which of the rows
 of the data belong together and jointly form a single forecasts. This is
 easy e.g. for point forecast, where there is one row per forecast. For
@@ -111,18 +113,8 @@ In order to avoid issues, we recommend using the function
 \code{\link[=set_forecast_unit]{set_forecast_unit()}} to determine the forecast unit manually.
 The function simply drops unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
-
-\strong{Validating inputs}
-
-We recommend that users validate their input prior to scoring using the
-function \code{\link[=validate]{validate()}} (though this will also be run internally by \code{\link[=score]{score()}}).
-The function checks the input data and provides helpful information.
-
-\strong{Further help}
-
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
-well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
+
 \examples{
 library(magrittr) # pipe operator
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
@@ -148,7 +140,6 @@ score(example_point)
 score(example_integer)
 score(example_continuous)
 }
-
 }
 \references{
 Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
