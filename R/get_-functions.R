@@ -151,7 +151,7 @@ get_metrics <- function(scores) {
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#' @inheritParams validate
+#' @inheritParams validate_forecast
 #' @param check_conflict Whether or not to check whether there is a conflict
 #' between a stored attribute and the inferred forecast unit. When you create
 #' a forecast object, the forecast unit is stored as an attribute. If you
@@ -183,7 +183,7 @@ get_forecast_unit <- function(data, check_conflict = FALSE) {
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
-#' @inheritParams validate
+#' @inheritParams validate_forecast
 #'
 #' @return A character vector with the names of protected columns in the data.
 #' If data is `NULL` (default) then it returns a list of all columns that are

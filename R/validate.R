@@ -29,7 +29,7 @@ as_forecast <- function(data) {
   data <- new_scoringutils(data, paste0("scoringutils_", forecast_type))
 
   # validate class
-  validate(data)
+  validate_forecast(data)
 }
 
 
@@ -48,15 +48,18 @@ as_forecast <- function(data) {
 #' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
-validate <- function(data, ...) {
-  UseMethod("validate")
+#' @examples
+#' forecast <- as_forecast(example_binary)
+#' validate_forecast(forecast)
+validate_forecast <- function(data, ...) {
+  UseMethod("validate_forecast")
 }
 
 
 #' @rdname validate
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_binary <- function(data, ...) {
+validate_forecast.scoringutils_binary <- function(data, ...) {
   data <- validate_general(data)
 
   columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
@@ -77,7 +80,7 @@ validate.scoringutils_binary <- function(data, ...) {
 #' @rdname validate
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_point <- function(data, ...) {
+validate_forecast.scoringutils_point <- function(data, ...) {
   data <- validate_general(data)
 
   input_check <- check_input_point(data$observed, data$predicted)
@@ -91,7 +94,7 @@ validate.scoringutils_point <- function(data, ...) {
 
 #' @rdname validate
 #' @export
-validate.scoringutils_quantile <- function(data, ...) {
+validate_forecast.scoringutils_quantile <- function(data, ...) {
   data <- validate_general(data)
   assert_numeric(data$quantile, lower = 0, upper = 1)
   return(data[])
@@ -100,7 +103,7 @@ validate.scoringutils_quantile <- function(data, ...) {
 #' @rdname validate
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_sample <- function(data, ...) {
+validate_forecast.scoringutils_sample <- function(data, ...) {
   data <- validate_general(data)
   return(data[])
 }
