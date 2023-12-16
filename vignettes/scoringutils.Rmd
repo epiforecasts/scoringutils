@@ -61,21 +61,21 @@ set_forecast_unit(
 ```
 
 
-## Checking the input data
+## Constructing a forecast object
 
-The function `validate()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
+The function `as_forecast()` is be used to construct a forecast object and check the input data. It determines the forecast type, creates an object of the appropriate class (`forecast_binary`, `forecast_quantile` or `forecast_sample`), and validates the input data. Objects of class `forecast_*` have a print method that provides additional information. 
 
 ```{r}
 head(example_quantile)
 ```
 
 ```{r}
-validate(example_quantile)
+as_forecast(example_quantile)
 ```
 
 If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
 
-The output of `validate()` can later be directly used as input to `score()` (otherwise, `score()` will just run `validate()` anyway internally). 
+The output of `as_forecast()` can later be directly used as input to `score()`. This is the recommended workflow (however, `score()` will run `as_forecast()` internally if this hasn't happened before). 
 
 ## Showing available forecasts
 
@@ -121,7 +121,7 @@ example_quantile %>%
 
 Forecasts can easily be scored using the `score()` function. 
 
-For clarity, we suggest setting the forecast unit explicitly and you may also want to call `validate()` explicitly. 
+For clarity, we suggest setting the forecast unit explicitly and calling `as_forecast()` explicitly. 
 
 ```{r}
 scores <- example_quantile %>%
@@ -129,7 +129,7 @@ scores <- example_quantile %>%
     c("location", "target_end_date", "target_type", "location_name",
       "forecast_date", "model", "horizon")
   ) %>%
-  validate() %>%
+  as_forecast() %>%
   score()
 head(scores)
 ```
@@ -142,7 +142,7 @@ example_quantile %>%
     c("location", "target_end_date", "target_type",
       "forecast_date", "model", "horizon")
   ) %>%
-  validate()
+  as_forecast()
 ```
 
 If we drop essential information, for example, the "target_type" column, we'll get an error informing us that the forecasts aren't uniquely identified any more. 
@@ -153,7 +153,7 @@ example_quantile %>%
     c("location", "target_end_date",
       "forecast_date", "model", "horizon")
   ) %>%
-  validate()
+  as_forecast()
 ```
 
 The function `get_duplicate_forecasts()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
@@ -187,7 +187,7 @@ scores <- example_quantile %>%
     c("location", "target_end_date", "target_type",
       "forecast_date", "model", "horizon")
   ) %>%
-  validate() %>%
+  as_forecast() %>%
   score()
 
 head(scores)

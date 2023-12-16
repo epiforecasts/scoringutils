@@ -4,7 +4,10 @@
 \alias{as_forecast}
 \title{Create a \code{forecast} Object}
 \usage{
-as_forecast(data, ...)
+as_forecast(data)
+}
+\arguments{
+\item{data}{A data.frame or data.table with predicted and observed values.}
 }
 \value{
 Depending on the forecast type, an object of class

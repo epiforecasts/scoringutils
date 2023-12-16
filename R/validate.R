@@ -9,13 +9,17 @@
 #' `forecast_quantile`, using the function [new_scoringutils()]).
 #' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
 #' the required input formats.
+#' @inheritParams score
 #' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
 #' `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or
 #' `scoringutils_quantile`.
 #' @export
 #' @keywords check-forecasts
-as_forecast <- function(data, ...) {
+#' @examples
+#' as_forecast(example_binary)
+#' as_forecast(example_quantile)
+as_forecast <- function(data) {
   assert(check_data_columns(data))
 
   # find forecast type

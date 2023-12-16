@@ -22,7 +22,7 @@ test_that("get_forecast_unit() works as expected", {
     "Object has an attribute `forecast_unit`, but it looks different from what's expected based on the data.
 Existing: forecast_date, horizon, location, location_name, model, target_end_date, target_type
 Expected: forecast_date, horizon, location_name, model, target_end_date, target_type
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
 fixed = TRUE
   )
 })
@@ -171,7 +171,7 @@ test_that("get_forecast_type() works as expected", {
     "Object has an attribute `forecast_type`, but it looks different from what's expected based on the data.
 Existing: binary
 Expected: sample
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
     fixed = TRUE
   )
 })
