@@ -47,7 +47,7 @@
 #' @export
 add_coverage <- function(data) {
   stored_attributes <- get_scoringutils_attributes(data)
-  data <- validate(data)
+  data <- as_forecast(data)
   forecast_unit <- get_forecast_unit(data)
   data_cols <- colnames(data) # store so we can reset column order later
 

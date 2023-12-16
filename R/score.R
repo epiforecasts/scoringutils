@@ -33,7 +33,7 @@
 #' library(magrittr) # pipe operator
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
-#' validated <- validate(example_quantile)
+#' validated <- as_forecast(example_quantile)
 #' score(validated) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #'
@@ -43,7 +43,7 @@
 #'   set_forecast_unit(
 #'     c("location", "target_end_date", "target_type", "horizon", "model")
 #'   ) %>%
-#'   validate() %>%
+#'   as_forecast() %>%
 #'   score()
 #'
 #' # forecast formats with different metrics
@@ -68,7 +68,7 @@ score <- function(data, ...) {
 #' @rdname score
 #' @export
 score.default <- function(data, ...) {
-  data <- validate(data)
+  data <- as_forecast(data)
   score(data, ...)
 }
 

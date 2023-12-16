@@ -185,7 +185,7 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  data <- validate(data)
+  data <- as_forecast(data)
   data <- remove_na_observed_predicted(data)
   forecast_type <- get_forecast_type(data)
 

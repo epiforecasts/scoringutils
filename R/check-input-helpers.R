@@ -175,7 +175,7 @@ check_attribute_conflict <- function(object, attribute, expected) {
       "from what's expected based on the data.\n",
       "Existing: ", toString(existing), "\n",
       "Expected: ", toString(expected), "\n",
-      "Running `validate()` again might solve the problem"
+      "Running `as_forecast()` again might solve the problem"
     )
     return(msg)
   }
