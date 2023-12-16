@@ -116,18 +116,20 @@ column names of the data into account. However, it is recommended to set
 the forecast unit manually using `set_forecast_unit()` as this may help
 to avoid errors, especially when scoringutils is used in automated
 pipelines. The function `set_forecast_unit()` will simply drop unneeded
-columns. To verify everything is in order, the function `validate_forecast()`
-should be used. The result of that check can then passed directly into
-`score()`. `score()` returns unsummarised scores, which in most cases is
-not what the user wants. Here we make use of additional functions from
-`scoringutils` to add empirical coverage-levels (`add_coverage()`), and
-scores relative to a baseline model (here chosen to be the
-EuroCOVIDhub-ensemble model). See the getting started vignette for more
-details. Finally we summarise these scores by model and target type.
+columns. To verify everything is in order, the function
+`validate_forecast()` should be used. The result of that check can then
+passed directly into `score()`. `score()` returns unsummarised scores,
+which in most cases is not what the user wants. Here we make use of
+additional functions from `scoringutils` to add empirical
+coverage-levels (`add_coverage()`), and scores relative to a baseline
+model (here chosen to be the EuroCOVIDhub-ensemble model). See the
+getting started vignette for more details. Finally we summarise these
+scores by model and target type.
 
 ``` r
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
+  as_forecast() %>%
   validate_forecast() %>%
   add_coverage() %>%
   score() %>%
