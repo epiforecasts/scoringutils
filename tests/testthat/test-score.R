@@ -278,13 +278,13 @@ test_that("function throws an error if data is missing", {
 })
 
 # =============================================================================
-# `apply_metrics()`
+# `apply_rules()`
 # =============================================================================
 
-test_that("apply_metrics() works", {
+test_that("apply_rules() works", {
 
   dt <- data.table::data.table(x = 1:10)
-  scoringutils:::apply_metrics(
+  scoringutils:::apply_rules(
     data = dt, metrics = list("test" = function(x) x + 1),
     dt$x
   )
@@ -292,7 +292,7 @@ test_that("apply_metrics() works", {
 
   # additional named argument works
   expect_no_condition(
-    scoringutils:::apply_metrics(
+    scoringutils:::apply_rules(
       data = dt, metrics = list("test" = function(x) x + 1),
       dt$x, y = dt$test)
   )
@@ -300,7 +300,7 @@ test_that("apply_metrics() works", {
   # additional unnamed argument does not work
 
   expect_warning(
-    scoringutils:::apply_metrics(
+    scoringutils:::apply_rules(
       data = dt, metrics = list("test" = function(x) x + 1),
       dt$x, dt$test)
   )
