@@ -3,23 +3,23 @@
 \name{score}
 \alias{score}
 \alias{score.default}
-\alias{score.scoringutils_binary}
-\alias{score.scoringutils_point}
-\alias{score.scoringutils_sample}
-\alias{score.scoringutils_quantile}
+\alias{score.forecast_binary}
+\alias{score.forecast_point}
+\alias{score.forecast_sample}
+\alias{score.forecast_quantile}
 \title{Evaluate forecasts in a data.frame format}
 \usage{
 score(data, ...)
 
 \method{score}{default}(data, ...)
 
-\method{score}{scoringutils_binary}(data, metrics = metrics_binary, ...)
+\method{score}{forecast_binary}(data, metrics = metrics_binary, ...)
 
-\method{score}{scoringutils_point}(data, metrics = metrics_point, ...)
+\method{score}{forecast_point}(data, metrics = metrics_point, ...)
 
-\method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
+\method{score}{forecast_sample}(data, metrics = metrics_sample, ...)
 
-\method{score}{scoringutils_quantile}(data, metrics = metrics_quantile, ...)
+\method{score}{forecast_quantile}(data, metrics = metrics_quantile, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}

@@ -70,13 +70,13 @@ score <- function(data, ...) {
 score.default <- function(data, ...) {
   assert(check_data_columns(data))
   forecast_type <- get_forecast_type(data)
-  data <- new_scoringutils(data, paste0("scoringutils_", forecast_type))
+  data <- new_scoringutils(data, paste0("forecast_", forecast_type))
   score(data, ...)
 }
 
 #' @rdname score
 #' @export
-score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
+score.forecast_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
@@ -96,7 +96,7 @@ score.scoringutils_binary <- function(data, metrics = metrics_binary, ...) {
 #' @importFrom Metrics se ae ape
 #' @rdname score
 #' @export
-score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
+score.forecast_point <- function(data, metrics = metrics_point, ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
@@ -113,7 +113,7 @@ score.scoringutils_point <- function(data, metrics = metrics_point, ...) {
 
 #' @rdname score
 #' @export
-score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
+score.forecast_sample <- function(data, metrics = metrics_sample, ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -150,7 +150,7 @@ score.scoringutils_sample <- function(data, metrics = metrics_sample, ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
-score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
+score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -176,7 +176,9 @@ score.scoringutils_quantile <- function(data, metrics = metrics_quantile, ...) {
     observed <- data$observed
     predicted <- do.call(rbind, data$predicted)
     quantile <- unlist(unique(data$quantile))
-    data[, c("observed", "predicted", "quantile", "scoringutils_quantile") := NULL]
+    data[, c(
+      "observed", "predicted", "quantile", "scoringutils_quantile"
+    ) := NULL]
 
     data <- apply_metrics(
       data, metrics,

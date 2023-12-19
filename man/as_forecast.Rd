@@ -16,8 +16,8 @@ as_forecast(data, ...)
 }
 \value{
 Depending on the forecast type, an object of class
-\code{scoringutils_binary}, \code{scoringutils_point}, \code{scoringutils_sample} or
-\code{scoringutils_quantile}.
+\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample} or
+\code{forecast_quantile}.
 }
 \description{
 Convert a data.frame or similar of forecasts into an object of

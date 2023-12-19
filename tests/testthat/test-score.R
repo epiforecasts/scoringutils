@@ -38,7 +38,7 @@ test_that("function produces output for a binary case", {
   expect_true("brier_score" %in% names(eval))
 })
 
-test_that("score.scoringutils_binary() errors with only NA values", {
+test_that("score.forecast_binary() errors with only NA values", {
   only_nas <- copy(example_binary)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
@@ -156,7 +156,7 @@ test_that("Changing metrics names works", {
 })
 
 
-test_that("score.scoringutils_point() errors with only NA values", {
+test_that("score.forecast_point() errors with only NA values", {
   only_nas <- copy(example_point)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
@@ -239,7 +239,7 @@ test_that("WIS is the same with other metrics omitted or included", {
 })
 
 
-test_that("score.scoringutils_quantile() errors with only NA values", {
+test_that("score.forecast_quantile() errors with only NA values", {
   only_nas <- copy(example_quantile)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
