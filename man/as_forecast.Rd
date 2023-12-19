@@ -27,7 +27,7 @@ class \verb{forecast_*} and validate it.
 quantile-based) from the input data (using the function
 \code{\link[=get_forecast_type]{get_forecast_type()}}. It then constructs an object of the
 appropriate class (\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample}, or
-\code{forecast_quantile}, using the function \code{\link[=new_scoringutils]{new_scoringutils()}}).
+\code{forecast_quantile}, using the function \code{\link[=new_forecast]{new_forecast()}}).
 Lastly, it calls \code{\link[=as_forecast]{as_forecast()}} on the object to make sure it conforms with
 the required input formats.
 }
