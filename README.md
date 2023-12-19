@@ -130,7 +130,6 @@ scores by model and target type.
 example_quantile %>%
   set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
   as_forecast() %>%
-  validate_forecast() %>%
   add_coverage() %>%
   score() %>%
   summarise_scores(
