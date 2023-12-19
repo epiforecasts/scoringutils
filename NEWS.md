@@ -6,6 +6,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 
 ## Package updates
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
+- The overall scoring workflow was updated. `score()` is now a generic function that dispatches the correct method based on the forecast type. forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile". An object of class `forecast_*` can be created using the function `as_forecast()`, which also replaces the previous function `check_forecasts()` (see more information below). 
 - Scoring functions received a consistent interface and input checks:
   - metrics for binary forecasts:
     - `observed`: factor with exactly 2 levels
