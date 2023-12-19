@@ -250,7 +250,7 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
 
 #' @title Get a list of all attributes of a scoringutils object
 #'
-#' @param object A object of class `scoringutils_`
+#' @param object A object of class `forecast_`
 #'
 #' @return A named list with the attributes of that object.
 #' @keywords internal
