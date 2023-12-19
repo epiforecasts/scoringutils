@@ -1,6 +1,6 @@
 test_that("as_forecast() function works", {
   check <- suppressMessages(as_forecast(example_quantile))
-  expect_s3_class(check, "scoringutils_quantile")
+  expect_s3_class(check, "forecast_quantile")
 })
 
 test_that("as_forecast() function has an error for empty data.frame", {
