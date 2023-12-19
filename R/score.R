@@ -70,7 +70,7 @@ score <- function(data, ...) {
 score.default <- function(data, ...) {
   assert(check_data_columns(data))
   forecast_type <- get_forecast_type(data)
-  data <- new_scoringutils(data, paste0("forecast_", forecast_type))
+  data <- new_scoringutils(data, paste0("forecast_ ", forecast_type))
   score(data, ...)
 }
 

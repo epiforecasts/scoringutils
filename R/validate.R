@@ -6,7 +6,7 @@
 #' quantile-based) from the input data (using the function
 #' [get_forecast_type()]. It then constructs an object of the
 #' appropriate class (`forecast_binary`, `forecast_point`, `forecast_sample`, or
-#' `forecast_quantile`, using the function [new_scoringutils()]).
+#' `forecast_quantile`, using the function [new_forecast()]).
 #' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
 #' the required input formats.
 #' @inheritParams score
@@ -32,7 +32,7 @@ as_forecast.default <- function(data, ...) {
   forecast_type <- get_forecast_type(data)
 
   # construct class
-  data <- new_scoringutils(data, paste0("forecast_", forecast_type))
+  data <- new_forecast(data, paste0("forecast_", forecast_type))
 
   # validate class
   validate_forecast(data)
@@ -62,7 +62,6 @@ validate_forecast <- function(data, ...) {
 }
 
 
-#' @rdname validate
 #' @export
 #' @keywords check-forecasts
 validate_forecast.forecast_binary <- function(data, ...) {
@@ -83,7 +82,7 @@ validate_forecast.forecast_binary <- function(data, ...) {
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
 #' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, ...) {
@@ -106,13 +105,14 @@ validate_forecast.forecast_quantile <- function(data, ...) {
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
 #' @keywords check-forecasts
 validate_forecast.forecast_sample <- function(data, ...) {
   data <- validate_general(data)
   return(data[])
 }
+
 
 #' @title Apply scoringutls input checks that are the same across forecast types
 #'
@@ -181,7 +181,7 @@ validate_general <- function(data) {
 #' @return An object of the class indicated by `classname`
 #' @export
 #' @keywords internal
-new_scoringutils <- function(data, classname) {
+new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   data <- assure_model_column(data)
   class(data) <- c(classname, class(data))
