@@ -97,8 +97,9 @@ validate_forecast.forecast_point <- function(data, ...) {
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
+#' @keywords check-forecasts
 validate_forecast.forecast_quantile <- function(data, ...) {
   data <- validate_general(data)
   assert_numeric(data$quantile, lower = 0, upper = 1)
