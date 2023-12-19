@@ -68,7 +68,9 @@ score <- function(data, ...) {
 #' @rdname score
 #' @export
 score.default <- function(data, ...) {
-  data <- as_forecast(data)
+  assert(check_data_columns(data))
+  forecast_type <- get_forecast_type(data)
+  data <- new_scoringutils(data, paste0("scoringutils_", forecast_type))
   score(data, ...)
 }
 
