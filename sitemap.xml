@@ -52,6 +52,9 @@
     <loc>https://epiforecasts.io/scoringutils/reference/ae_median_sample.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/as_forecast.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/assert_dims_ok_point.html</loc>
   </url>
   <url>
@@ -197,6 +200,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/filter_function_args.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/forecast_types.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/geometric_mean.html</loc>
@@ -394,7 +400,7 @@
     <loc>https://epiforecasts.io/scoringutils/reference/transform_forecasts.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/validate.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/reference/validate_forecast.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/validate_general.html</loc>

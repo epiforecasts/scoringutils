@@ -79,7 +79,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2023-12-14</h4>
+            <h4 data-toc-skip class="date">2023-12-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="d-none name"><code>scoringutils.Rmd</code></div>
@@ -180,14 +180,15 @@ are retained.</p>
 <span><span class="co">#&gt; [5] "target_end_date" "target_type"     "horizon"         "model"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="checking-the-input-data">Checking the input data<a class="anchor" aria-label="anchor" href="#checking-the-input-data"></a>
+<h2 id="constructing-a-forecast-object">Constructing a forecast object<a class="anchor" aria-label="anchor" href="#constructing-a-forecast-object"></a>
 </h2>
-<p>The function <code><a href="../reference/validate.html">validate()</a></code> can be used to check the input
-data. It gives a summary of what <code>scoringutils</code> thinks you
-are trying to achieve. It infers the type of the prediction target, the
-prediction format, and the unit of a single forecasts, gives an overview
-of the number of unique values per column (helpful for spotting missing
-data) and returns warnings or errors.</p>
+<p>The function <code><a href="../reference/as_forecast.html">as_forecast()</a></code> is be used to construct a
+forecast object and check the input data. It determines the forecast
+type, creates an object of the appropriate class
+(<code>forecast_binary</code>, <code>forecast_quantile</code> or
+<code>forecast_sample</code>), and validates the input data. Objects of
+class <code>forecast_*</code> have a print method that provides
+additional information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    location target_end_date target_type observed location_name forecast_date</span></span>
@@ -205,176 +206,64 @@ data) and returns warnings or errors.</p>
 <span><span class="co">#&gt; 5:       NA        NA  &lt;NA&gt;      NA</span></span>
 <span><span class="co">#&gt; 6:       NA        NA  &lt;NA&gt;      NA</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/validate.html">validate</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        location target_end_date target_type observed location_name</span></span>
-<span><span class="co">#&gt;     1:       DE      2021-01-02       Cases   127300       Germany</span></span>
-<span><span class="co">#&gt;     2:       DE      2021-01-02      Deaths     4534       Germany</span></span>
-<span><span class="co">#&gt;     3:       DE      2021-01-09       Cases   154922       Germany</span></span>
-<span><span class="co">#&gt;     4:       DE      2021-01-09      Deaths     6117       Germany</span></span>
-<span><span class="co">#&gt;     5:       DE      2021-01-16       Cases   110183       Germany</span></span>
-<span><span class="co">#&gt;    ---                                                            </span></span>
-<span><span class="co">#&gt; 20541:       IT      2021-07-24      Deaths       78         Italy</span></span>
-<span><span class="co">#&gt; 20542:       IT      2021-07-24      Deaths       78         Italy</span></span>
-<span><span class="co">#&gt; 20543:       IT      2021-07-24      Deaths       78         Italy</span></span>
-<span><span class="co">#&gt; 20544:       IT      2021-07-24      Deaths       78         Italy</span></span>
-<span><span class="co">#&gt; 20545:       IT      2021-07-24      Deaths       78         Italy</span></span>
-<span><span class="co">#&gt;        forecast_date quantile predicted                model horizon</span></span>
-<span><span class="co">#&gt;     1:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     2:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     3:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     4:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     5:          &lt;NA&gt;       NA        NA                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;    ---                                                              </span></span>
-<span><span class="co">#&gt; 20541:    2021-07-12    0.850       352 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20542:    2021-07-12    0.900       397 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20543:    2021-07-12    0.950       499 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20544:    2021-07-12    0.975       611 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20545:    2021-07-12    0.990       719 epiforecasts-EpiNow2       2</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"forecast_date"</span>,</span>
+<span>      <span class="st">"target_type"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">forecast_quantile</span></span>
+<span><span class="co">#&gt;        observed quantile predicted                model location</span></span>
+<span><span class="co">#&gt;     1:   127300       NA        NA                 &lt;NA&gt;       DE</span></span>
+<span><span class="co">#&gt;     2:     4534       NA        NA                 &lt;NA&gt;       DE</span></span>
+<span><span class="co">#&gt;     3:   154922       NA        NA                 &lt;NA&gt;       DE</span></span>
+<span><span class="co">#&gt;     4:     6117       NA        NA                 &lt;NA&gt;       DE</span></span>
+<span><span class="co">#&gt;     5:   110183       NA        NA                 &lt;NA&gt;       DE</span></span>
+<span><span class="co">#&gt;    ---                                                          </span></span>
+<span><span class="co">#&gt; 20541:       78    0.850       352 epiforecasts-EpiNow2       IT</span></span>
+<span><span class="co">#&gt; 20542:       78    0.900       397 epiforecasts-EpiNow2       IT</span></span>
+<span><span class="co">#&gt; 20543:       78    0.950       499 epiforecasts-EpiNow2       IT</span></span>
+<span><span class="co">#&gt; 20544:       78    0.975       611 epiforecasts-EpiNow2       IT</span></span>
+<span><span class="co">#&gt; 20545:       78    0.990       719 epiforecasts-EpiNow2       IT</span></span>
+<span><span class="co">#&gt;        target_end_date forecast_date target_type horizon</span></span>
+<span><span class="co">#&gt;     1:      2021-01-02          &lt;NA&gt;       Cases      NA</span></span>
+<span><span class="co">#&gt;     2:      2021-01-02          &lt;NA&gt;      Deaths      NA</span></span>
+<span><span class="co">#&gt;     3:      2021-01-09          &lt;NA&gt;       Cases      NA</span></span>
+<span><span class="co">#&gt;     4:      2021-01-09          &lt;NA&gt;      Deaths      NA</span></span>
+<span><span class="co">#&gt;     5:      2021-01-16          &lt;NA&gt;       Cases      NA</span></span>
+<span><span class="co">#&gt;    ---                                                  </span></span>
+<span><span class="co">#&gt; 20541:      2021-07-24    2021-07-12      Deaths       2</span></span>
+<span><span class="co">#&gt; 20542:      2021-07-24    2021-07-12      Deaths       2</span></span>
+<span><span class="co">#&gt; 20543:      2021-07-24    2021-07-12      Deaths       2</span></span>
+<span><span class="co">#&gt; 20544:      2021-07-24    2021-07-12      Deaths       2</span></span>
+<span><span class="co">#&gt; 20545:      2021-07-24    2021-07-12      Deaths       2</span></span></code></pre></div>
 <p>If you are unsure what your input data should look like, have a look
 at the <code>example_quantile</code>, <code>example_integer</code>,
 <code>example_continuous</code> and <code>example_binary</code> data
 sets provided in the package.</p>
-<p>The output of <code><a href="../reference/validate.html">validate()</a></code> can later be directly used as
-input to <code><a href="../reference/score.html">score()</a></code> (otherwise, <code><a href="../reference/score.html">score()</a></code> will just
-run <code><a href="../reference/validate.html">validate()</a></code> anyway internally).</p>
-</div>
-<div class="section level2">
-<h2 id="showing-available-forecasts">Showing available forecasts<a class="anchor" aria-label="anchor" href="#showing-available-forecasts"></a>
-</h2>
-<p>The function <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> may also be helpful
-to determine where forecasts are available. Using the <code>by</code>
-argument you can specify the level of summary. For example, to see how
-many forecasts there are per model and target_type, we can run</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span><span class="va">example_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                    model target_type count</span></span>
-<span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases   128</span></span>
-<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths   128</span></span>
-<span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       Cases   128</span></span>
-<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths   128</span></span>
-<span><span class="co">#&gt; 5:       UMass-MechBayes       Cases     0</span></span>
-<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths   128</span></span>
-<span><span class="co">#&gt; 7:  epiforecasts-EpiNow2       Cases   128</span></span>
-<span><span class="co">#&gt; 8:  epiforecasts-EpiNow2      Deaths   119</span></span></code></pre></div>
-<p>We see that ‘epiforecasts-EpiNow2’ has some missing forecasts for the
-deaths forecast target and that UMass-MechBayes has no case
-forecasts.</p>
-<p>This information can also be visualised using
-<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/plot_forecast_counts.html">plot_forecast_counts</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"forecast_date"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-6-1.png" width="1056"></p>
-<p>You can also visualise forecasts directly using the
-<code><a href="../reference/plot_predictions.html">plot_predictions()</a></code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/make_NA.html">make_NA</a></span><span class="op">(</span></span>
-<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span>    <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>,</span>
-<span>    <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/make_NA.html">make_NA</a></span><span class="op">(</span></span>
-<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>    <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
-<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/plot_predictions.html">plot_predictions</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"location"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-7-1.png" width="864"></p>
-</div>
-<div class="section level2">
-<h2 id="scoring-and-summarising-forecasts">Scoring and summarising forecasts<a class="anchor" aria-label="anchor" href="#scoring-and-summarising-forecasts"></a>
-</h2>
-<p>Forecasts can easily be scored using the <code><a href="../reference/score.html">score()</a></code>
-function.</p>
-<p>For clarity, we suggest setting the forecast unit explicitly and you
-may also want to call <code><a href="../reference/validate.html">validate()</a></code> explicitly.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"location_name"</span>,</span>
-<span>      <span class="st">"forecast_date"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/validate.html">validate</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    location target_end_date target_type location_name forecast_date</span></span>
-<span><span class="co">#&gt; 1:       DE      2021-05-08       Cases       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt; 2:       DE      2021-05-08       Cases       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt; 3:       DE      2021-05-08       Cases       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt; 4:       DE      2021-05-08      Deaths       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt; 5:       DE      2021-05-08      Deaths       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt; 6:       DE      2021-05-08      Deaths       Germany    2021-05-03</span></span>
-<span><span class="co">#&gt;                    model horizon         wis overprediction underprediction</span></span>
-<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       1  7990.85478    2549.869565       0.0000000</span></span>
-<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       1 16925.04696   15275.826087       0.0000000</span></span>
-<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       1 25395.96087   17222.260870       0.0000000</span></span>
-<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble       1    53.88000       0.000000       0.6086957</span></span>
-<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline       1    46.79304       2.130435       0.0000000</span></span>
-<span><span class="co">#&gt; 6:       UMass-MechBayes       1   116.12174       0.000000      39.0434783</span></span>
-<span><span class="co">#&gt;    dispersion  bias coverage_50 coverage_90 coverage_deviation ae_median</span></span>
-<span><span class="co">#&gt; 1: 5440.98522  0.50        TRUE        TRUE         0.05181818     12271</span></span>
-<span><span class="co">#&gt; 2: 1649.22087  0.95       FALSE       FALSE        -0.40272727     25620</span></span>
-<span><span class="co">#&gt; 3: 8173.70000  0.90       FALSE        TRUE        -0.31181818     44192</span></span>
-<span><span class="co">#&gt; 4:   53.27130 -0.10        TRUE        TRUE         0.41545455        14</span></span>
-<span><span class="co">#&gt; 5:   44.66261  0.30        TRUE        TRUE         0.23363636        15</span></span>
-<span><span class="co">#&gt; 6:   77.07826 -0.50        TRUE        TRUE         0.05181818       208</span></span></code></pre></div>
+<p>The output of <code><a href="../reference/as_forecast.html">as_forecast()</a></code> can later be directly used
+as input to <code><a href="../reference/score.html">score()</a></code>. This is the recommended workflow
+(however, <code><a href="../reference/score.html">score()</a></code> will run <code><a href="../reference/as_forecast.html">as_forecast()</a></code>
+internally if this hasn’t happened before).</p>
 <p>Note that in the above example some columns contain duplicated
 information with regards to the forecast unit, e.g. “location” and
-“location_name”, and could be dropped.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>,</span>
-<span>      <span class="st">"forecast_date"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/validate.html">validate</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        observed quantile predicted location target_end_date target_type</span></span>
-<span><span class="co">#&gt;     1:   127300       NA        NA       DE      2021-01-02       Cases</span></span>
-<span><span class="co">#&gt;     2:     4534       NA        NA       DE      2021-01-02      Deaths</span></span>
-<span><span class="co">#&gt;     3:   154922       NA        NA       DE      2021-01-09       Cases</span></span>
-<span><span class="co">#&gt;     4:     6117       NA        NA       DE      2021-01-09      Deaths</span></span>
-<span><span class="co">#&gt;     5:   110183       NA        NA       DE      2021-01-16       Cases</span></span>
-<span><span class="co">#&gt;    ---                                                                 </span></span>
-<span><span class="co">#&gt; 20541:       78    0.850       352       IT      2021-07-24      Deaths</span></span>
-<span><span class="co">#&gt; 20542:       78    0.900       397       IT      2021-07-24      Deaths</span></span>
-<span><span class="co">#&gt; 20543:       78    0.950       499       IT      2021-07-24      Deaths</span></span>
-<span><span class="co">#&gt; 20544:       78    0.975       611       IT      2021-07-24      Deaths</span></span>
-<span><span class="co">#&gt; 20545:       78    0.990       719       IT      2021-07-24      Deaths</span></span>
-<span><span class="co">#&gt;        forecast_date                model horizon</span></span>
-<span><span class="co">#&gt;     1:          &lt;NA&gt;                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     2:          &lt;NA&gt;                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     3:          &lt;NA&gt;                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     4:          &lt;NA&gt;                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;     5:          &lt;NA&gt;                 &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt;    ---                                           </span></span>
-<span><span class="co">#&gt; 20541:    2021-07-12 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20542:    2021-07-12 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20543:    2021-07-12 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20544:    2021-07-12 epiforecasts-EpiNow2       2</span></span>
-<span><span class="co">#&gt; 20545:    2021-07-12 epiforecasts-EpiNow2       2</span></span></code></pre></div>
-<p>If we drop essential information, for example, the “target_type”
-column, we’ll get an error informing us that the forecasts aren’t
-uniquely identified any more.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+“location_name”, and can be dropped. If we drop essential information,
+for example, the “target_type” column, we’ll get an error informing us
+that the forecasts aren’t uniquely identified any more.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>,</span>
 <span>      <span class="st">"forecast_date"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/validate.html">validate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error: Assertion on 'data' failed: There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows.</span></span></code></pre></div>
 <p>The function <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code> may help to
-investigate the issue. When filtering for only median forecasts of the
+investigate the issue. When filtering for only a single quantile of the
 EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts
 for every date, location and horizon.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">duplicates</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>,</span>
@@ -398,206 +287,209 @@ for every date, location and horizon.</p>
 <span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble       1</span></span>
 <span><span class="co">#&gt; 5: EuroCOVIDhub-ensemble       2</span></span>
 <span><span class="co">#&gt; 6: EuroCOVIDhub-ensemble       1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="showing-available-forecasts">Showing available forecasts<a class="anchor" aria-label="anchor" href="#showing-available-forecasts"></a>
+</h2>
+<p>The function <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> may also be helpful
+to determine where forecasts are available. Using the <code>by</code>
+argument you can specify the level of summary. For example, to see how
+many forecasts there are per model and target_type, we can run</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span><span class="va">forecast_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                    model target_type count</span></span>
+<span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases   128</span></span>
+<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths   128</span></span>
+<span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       Cases   128</span></span>
+<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths   128</span></span>
+<span><span class="co">#&gt; 5:       UMass-MechBayes       Cases     0</span></span>
+<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths   128</span></span>
+<span><span class="co">#&gt; 7:  epiforecasts-EpiNow2       Cases   128</span></span>
+<span><span class="co">#&gt; 8:  epiforecasts-EpiNow2      Deaths   119</span></span></code></pre></div>
+<p>We see that ‘epiforecasts-EpiNow2’ has some missing forecasts for the
+deaths forecast target and that UMass-MechBayes has no case
+forecasts.</p>
+<p>This information can also be visualised using
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/plot_forecast_counts.html">plot_forecast_counts</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"forecast_date"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-8-1.png" width="1056"></p>
+<p>You can also visualise forecasts directly using the
+<code><a href="../reference/plot_predictions.html">plot_predictions()</a></code> function:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/make_NA.html">make_NA</a></span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/make_NA.html">make_NA</a></span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
+<span>    <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
+<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/plot_predictions.html">plot_predictions</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"location"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-9-1.png" width="864"></p>
+</div>
+<div class="section level2">
+<h2 id="scoring-and-summarising-forecasts">Scoring and summarising forecasts<a class="anchor" aria-label="anchor" href="#scoring-and-summarising-forecasts"></a>
+</h2>
+<p>Forecasts can easily be scored using the <code><a href="../reference/score.html">score()</a></code>
+function.</p>
+<p>For clarity, we suggest setting the forecast unit explicitly and
+calling <code><a href="../reference/as_forecast.html">as_forecast()</a></code> explicitly.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">scores</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                      model location target_end_date forecast_date target_type</span></span>
+<span><span class="co">#&gt;   1: EuroCOVIDhub-ensemble       DE      2021-05-08    2021-05-03       Cases</span></span>
+<span><span class="co">#&gt;   2: EuroCOVIDhub-baseline       DE      2021-05-08    2021-05-03       Cases</span></span>
+<span><span class="co">#&gt;  ---                                                                         </span></span>
+<span><span class="co">#&gt; 886:  epiforecasts-EpiNow2       IT      2021-07-24    2021-07-05      Deaths</span></span>
+<span><span class="co">#&gt; 887:  epiforecasts-EpiNow2       IT      2021-07-24    2021-07-12      Deaths</span></span>
+<span><span class="co">#&gt;      horizon         wis overprediction underprediction dispersion bias</span></span>
+<span><span class="co">#&gt;   1:       1  7990.85478    2549.869565               0 5440.98522 0.50</span></span>
+<span><span class="co">#&gt;   2:       1 16925.04696   15275.826087               0 1649.22087 0.95</span></span>
+<span><span class="co">#&gt;  ---                                                                   </span></span>
+<span><span class="co">#&gt; 886:       3    19.76261       5.478261               0   14.28435 0.50</span></span>
+<span><span class="co">#&gt; 887:       2    66.16174      40.608696               0   25.55304 0.90</span></span>
+<span><span class="co">#&gt;      coverage_50 coverage_90 coverage_deviation ae_median</span></span>
+<span><span class="co">#&gt;   1:        TRUE        TRUE         0.05181818     12271</span></span>
+<span><span class="co">#&gt;   2:       FALSE       FALSE        -0.40272727     25620</span></span>
+<span><span class="co">#&gt;  ---                                                     </span></span>
+<span><span class="co">#&gt; 886:        TRUE        TRUE         0.05181818        26</span></span>
+<span><span class="co">#&gt; 887:       FALSE        TRUE        -0.31181818       108</span></span></code></pre></div>
 <p>The function <code><a href="../reference/score.html">score()</a></code> returns unsumarised scores, which
 in most cases is not what the user wants. It returns a single score per
-forecast (as determined by the forecast unit). For forecasts in a
-quantile format, it returns one score per quantile.</p>
+forecast (as determined by the forecast unit).</p>
 <p>A second function, <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> takes care of
 summarising these scores to the level specified by the user. The
 <code>by</code> argument can be used to define the level of summary. By
 default, <code>by = NULL</code> and the summary unit is assumed to be
-the same as the unit of a single forecast. For continuous forecasts,
-this means that nothing happens if <code>by</code> isn’t specified.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+the same as the unit of a single forecast (meaning that nothing happens
+if <code>by</code> isn’t specified).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">scores</span> <span class="op">==</span> <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-<p>For quantile based forecasts, if <code>by = NULL</code>, then scores
-are summarised across quantiles and instead of one score per
-forecast_unit and quantile we only get one score per forecast unit.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>,</span>
-<span>      <span class="st">"forecast_date"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/validate.html">validate</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    location target_end_date target_type forecast_date                 model</span></span>
-<span><span class="co">#&gt; 1:       DE      2021-05-08       Cases    2021-05-03 EuroCOVIDhub-ensemble</span></span>
-<span><span class="co">#&gt; 2:       DE      2021-05-08       Cases    2021-05-03 EuroCOVIDhub-baseline</span></span>
-<span><span class="co">#&gt; 3:       DE      2021-05-08       Cases    2021-05-03  epiforecasts-EpiNow2</span></span>
-<span><span class="co">#&gt; 4:       DE      2021-05-08      Deaths    2021-05-03 EuroCOVIDhub-ensemble</span></span>
-<span><span class="co">#&gt; 5:       DE      2021-05-08      Deaths    2021-05-03 EuroCOVIDhub-baseline</span></span>
-<span><span class="co">#&gt; 6:       DE      2021-05-08      Deaths    2021-05-03       UMass-MechBayes</span></span>
-<span><span class="co">#&gt;    horizon         wis overprediction underprediction dispersion  bias</span></span>
-<span><span class="co">#&gt; 1:       1  7990.85478    2549.869565       0.0000000 5440.98522  0.50</span></span>
-<span><span class="co">#&gt; 2:       1 16925.04696   15275.826087       0.0000000 1649.22087  0.95</span></span>
-<span><span class="co">#&gt; 3:       1 25395.96087   17222.260870       0.0000000 8173.70000  0.90</span></span>
-<span><span class="co">#&gt; 4:       1    53.88000       0.000000       0.6086957   53.27130 -0.10</span></span>
-<span><span class="co">#&gt; 5:       1    46.79304       2.130435       0.0000000   44.66261  0.30</span></span>
-<span><span class="co">#&gt; 6:       1   116.12174       0.000000      39.0434783   77.07826 -0.50</span></span>
-<span><span class="co">#&gt;    coverage_50 coverage_90 coverage_deviation ae_median</span></span>
-<span><span class="co">#&gt; 1:        TRUE        TRUE         0.05181818     12271</span></span>
-<span><span class="co">#&gt; 2:       FALSE       FALSE        -0.40272727     25620</span></span>
-<span><span class="co">#&gt; 3:       FALSE        TRUE        -0.31181818     44192</span></span>
-<span><span class="co">#&gt; 4:        TRUE        TRUE         0.41545455        14</span></span>
-<span><span class="co">#&gt; 5:        TRUE        TRUE         0.23363636        15</span></span>
-<span><span class="co">#&gt; 6:        TRUE        TRUE         0.05181818       208</span></span>
-<span></span>
-<span><span class="va">scores</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    location target_end_date target_type forecast_date                 model</span></span>
-<span><span class="co">#&gt; 1:       DE      2021-05-08       Cases    2021-05-03 EuroCOVIDhub-ensemble</span></span>
-<span><span class="co">#&gt; 2:       DE      2021-05-08       Cases    2021-05-03 EuroCOVIDhub-baseline</span></span>
-<span><span class="co">#&gt; 3:       DE      2021-05-08       Cases    2021-05-03  epiforecasts-EpiNow2</span></span>
-<span><span class="co">#&gt; 4:       DE      2021-05-08      Deaths    2021-05-03 EuroCOVIDhub-ensemble</span></span>
-<span><span class="co">#&gt; 5:       DE      2021-05-08      Deaths    2021-05-03 EuroCOVIDhub-baseline</span></span>
-<span><span class="co">#&gt; 6:       DE      2021-05-08      Deaths    2021-05-03       UMass-MechBayes</span></span>
-<span><span class="co">#&gt;    horizon         wis overprediction underprediction dispersion  bias</span></span>
-<span><span class="co">#&gt; 1:       1  7990.85478    2549.869565       0.0000000 5440.98522  0.50</span></span>
-<span><span class="co">#&gt; 2:       1 16925.04696   15275.826087       0.0000000 1649.22087  0.95</span></span>
-<span><span class="co">#&gt; 3:       1 25395.96087   17222.260870       0.0000000 8173.70000  0.90</span></span>
-<span><span class="co">#&gt; 4:       1    53.88000       0.000000       0.6086957   53.27130 -0.10</span></span>
-<span><span class="co">#&gt; 5:       1    46.79304       2.130435       0.0000000   44.66261  0.30</span></span>
-<span><span class="co">#&gt; 6:       1   116.12174       0.000000      39.0434783   77.07826 -0.50</span></span>
-<span><span class="co">#&gt;    coverage_50 coverage_90 coverage_deviation ae_median</span></span>
-<span><span class="co">#&gt; 1:           1           1         0.05181818     12271</span></span>
-<span><span class="co">#&gt; 2:           0           0        -0.40272727     25620</span></span>
-<span><span class="co">#&gt; 3:           0           1        -0.31181818     44192</span></span>
-<span><span class="co">#&gt; 4:           1           1         0.41545455        14</span></span>
-<span><span class="co">#&gt; 5:           1           1         0.23363636        15</span></span>
-<span><span class="co">#&gt; 6:           1           1         0.05181818       208</span></span></code></pre></div>
 <p>Through the <code>by</code> argument we can specify what unit of
 summary we want. We can also call <code>sumarise_scores()</code>
 multiple tines, e.g to round your outputs by specifying
 e.g. <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> as a summary function.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scores</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
-<col width="15%">
-<col width="8%">
-<col width="4%">
-<col width="10%">
-<col width="11%">
-<col width="7%">
-<col width="5%">
-<col width="8%">
-<col width="8%">
+<col width="25%">
 <col width="13%">
+<col width="8%">
+<col width="5%">
 <col width="6%">
+<col width="11%">
+<col width="6%">
+<col width="11%">
+<col width="9%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">model</th>
 <th align="left">target_type</th>
-<th align="right">wis</th>
-<th align="right">overprediction</th>
-<th align="right">underprediction</th>
-<th align="right">dispersion</th>
 <th align="right">bias</th>
-<th align="right">coverage_50</th>
-<th align="right">coverage_90</th>
-<th align="right">coverage_deviation</th>
+<th align="right">dss</th>
+<th align="right">crps</th>
+<th align="right">log_score</th>
+<th align="right">mad</th>
 <th align="right">ae_median</th>
+<th align="right">se_mean</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">EuroCOVIDhub-ensemble</td>
 <td align="left">Cases</td>
-<td align="right">18000</td>
-<td align="right">10000.0</td>
-<td align="right">4200.0</td>
-<td align="right">3700</td>
-<td align="right">-0.0560</td>
-<td align="right">0.39</td>
-<td align="right">0.80</td>
-<td align="right">-0.100</td>
-<td align="right">24000</td>
+<td align="right">-0.046</td>
+<td align="right">23.0</td>
+<td align="right">20000</td>
+<td align="right">16.0</td>
+<td align="right">17000</td>
+<td align="right">25000</td>
+<td align="right">4.2e+09</td>
 </tr>
 <tr class="even">
 <td align="left">EuroCOVIDhub-baseline</td>
 <td align="left">Cases</td>
-<td align="right">28000</td>
-<td align="right">14000.0</td>
-<td align="right">10000.0</td>
-<td align="right">4100</td>
-<td align="right">0.0980</td>
-<td align="right">0.33</td>
-<td align="right">0.82</td>
-<td align="right">-0.120</td>
+<td align="right">0.037</td>
+<td align="right">NaN</td>
+<td align="right">30000</td>
+<td align="right">Inf</td>
+<td align="right">19000</td>
 <td align="right">38000</td>
+<td align="right">5.8e+09</td>
 </tr>
 <tr class="odd">
 <td align="left">epiforecasts-EpiNow2</td>
 <td align="left">Cases</td>
-<td align="right">21000</td>
-<td align="right">12000.0</td>
-<td align="right">3300.0</td>
-<td align="right">5700</td>
-<td align="right">-0.0790</td>
-<td align="right">0.47</td>
-<td align="right">0.79</td>
-<td align="right">-0.070</td>
+<td align="right">-0.039</td>
+<td align="right">41.0</td>
+<td align="right">23000</td>
+<td align="right">Inf</td>
+<td align="right">25000</td>
 <td align="right">28000</td>
+<td align="right">6.1e+09</td>
 </tr>
 <tr class="even">
 <td align="left">EuroCOVIDhub-ensemble</td>
 <td align="left">Deaths</td>
-<td align="right">41</td>
-<td align="right">7.1</td>
-<td align="right">4.1</td>
-<td align="right">30</td>
-<td align="right">0.0730</td>
-<td align="right">0.88</td>
-<td align="right">1.00</td>
-<td align="right">0.200</td>
-<td align="right">53</td>
+<td align="right">0.066</td>
+<td align="right">9.9</td>
+<td align="right">51</td>
+<td align="right">5.9</td>
+<td align="right">140</td>
+<td align="right">63</td>
+<td align="right">1.1e+04</td>
 </tr>
 <tr class="odd">
 <td align="left">EuroCOVIDhub-baseline</td>
 <td align="left">Deaths</td>
-<td align="right">160</td>
-<td align="right">66.0</td>
-<td align="right">2.1</td>
-<td align="right">91</td>
-<td align="right">0.3400</td>
-<td align="right">0.66</td>
-<td align="right">1.00</td>
-<td align="right">0.120</td>
-<td align="right">230</td>
+<td align="right">0.320</td>
+<td align="right">13.0</td>
+<td align="right">170</td>
+<td align="right">7.0</td>
+<td align="right">380</td>
+<td align="right">220</td>
+<td align="right">1.6e+05</td>
 </tr>
 <tr class="even">
 <td align="left">UMass-MechBayes</td>
 <td align="left">Deaths</td>
-<td align="right">53</td>
-<td align="right">9.0</td>
-<td align="right">17.0</td>
-<td align="right">27</td>
-<td align="right">-0.0220</td>
-<td align="right">0.46</td>
-<td align="right">0.88</td>
-<td align="right">-0.025</td>
-<td align="right">78</td>
+<td align="right">-0.027</td>
+<td align="right">10.0</td>
+<td align="right">60</td>
+<td align="right">5.9</td>
+<td align="right">120</td>
+<td align="right">80</td>
+<td align="right">1.4e+04</td>
 </tr>
 <tr class="odd">
 <td align="left">epiforecasts-EpiNow2</td>
 <td align="left">Deaths</td>
-<td align="right">67</td>
-<td align="right">19.0</td>
-<td align="right">16.0</td>
-<td align="right">32</td>
-<td align="right">-0.0051</td>
-<td align="right">0.42</td>
-<td align="right">0.91</td>
-<td align="right">-0.045</td>
+<td align="right">-0.010</td>
+<td align="right">10.0</td>
+<td align="right">75</td>
+<td align="right">6.0</td>
+<td align="right">170</td>
 <td align="right">100</td>
+<td align="right">3.2e+04</td>
 </tr>
 </tbody>
 </table>
@@ -610,7 +502,7 @@ the quantile column. Point forecasts can be scored alongside other
 quantile-based forecasts. As point forecasts will have values of
 <code>NA</code> for metrics designed for probabilistic forecasts, it is
 important to use <code>na.rm = TRUE</code> when summarising.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    model    ae_point     se_point       ape</span></span>
@@ -629,7 +521,7 @@ information using the function <code><a href="../reference/add_coverage.html">ad
 function also requires a <code>by</code> argument which defines the
 level of grouping for which the percentage of true values covered by
 certain prediction intervals is computed.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -666,7 +558,7 @@ allows us to specify a baseline that can be used to scale relative
 scores (all scores are divided by the baseline relative score). For
 example, to obtain relative scores separately for different forecast
 targets, we can run</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span><span class="op">)</span></span>
@@ -703,25 +595,25 @@ targets, we can run</p>
 <h3 id="coloured-table">Coloured table<a class="anchor" aria-label="anchor" href="#coloured-table"></a>
 </h3>
 <p>A simple coloured table can be produced based on the scores:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_score_table.html">plot_score_table</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="score-heatmap">Score heatmap<a class="anchor" aria-label="anchor" href="#score-heatmap"></a>
 </h3>
 <p>We can also summarise one particular metric across different
 categories using a simple heatmap:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"location"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-19-1.png" width="1056"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-17-1.png" width="1056"></p>
 </div>
 <div class="section level3">
 <h3 id="weighted-interval-score-components">Weighted interval score components<a class="anchor" aria-label="anchor" href="#weighted-interval-score-components"></a>
@@ -729,12 +621,12 @@ categories using a simple heatmap:</p>
 <p>The weighted interval score can be split up into three components:
 Over-prediction, under-prediction and dispersion. These can be
 visualised separately in the following way:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_wis.html">plot_wis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -748,7 +640,7 @@ cumulative distribution function of a forecast evaluated at the observed
 value. Ideally, pit values should be uniformly distributed after the
 transformation.</p>
 <p>We can compute pit values as such:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      model pit_value</span></span>
@@ -764,19 +656,19 @@ transformation.</p>
 <span><span class="co">#&gt; 886:       UMass-MechBayes     0.450</span></span>
 <span><span class="co">#&gt; 887:       UMass-MechBayes     0.100</span></span></code></pre></div>
 <p>And visualise the results as such:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">model</span> <span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Similarly for quantile-based forecasts:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span><span class="op">[</span><span class="va">quantile</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">model</span> <span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
 <!-- Another way to look at calibration are interval coverage and quantile coverage. Interval coverage is the percentage of true values that fall inside a given central prediction interval. Quantile coverage is the percentage of observed values that fall below a given quantile level.  -->
 <!-- In order to plot interval coverage, you need to include "range" in the `by` argument to `summarise_scores()`. The green area on the plot marks conservative behaviour, i.e. your empirical coverage is greater than it nominally need be (e.g. 55% of true values covered by all 50% central prediction intervals.) -->
 <!-- To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
@@ -799,8 +691,8 @@ baseline model.</p>
 ways: Through the standalone function <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code>
 or from within <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> which simply adds
 relative scores to an existing set of scores.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     model       compare_against mean_scores_ratio         pval</span></span>
@@ -837,8 +729,8 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 14: 1.881520e-02      1.0332277        0.6444541</span></span>
 <span><span class="co">#&gt; 15: 3.665957e-17      1.0332277        0.6444541</span></span>
 <span><span class="co">#&gt; 16: 1.000000e+00      1.0332277        0.6444541</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
@@ -867,13 +759,13 @@ while the EuroCOVIDhub-baseline performs worst (and only has values
 larger than 1). For cases, the UMass-MechBayes model is of course
 excluded as there are no case forecasts available and therefore the set
 of overlapping forecasts is empty.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-28-1.png" width="864"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-26-1.png" width="864"></p>
 </div>
 <div class="section level2">
 <h2 id="additional-analyses-and-visualisations">Additional analyses and visualisations<a class="anchor" aria-label="anchor" href="#additional-analyses-and-visualisations"></a>
@@ -887,8 +779,8 @@ with each other. We can examine this using the function
 it is important to call <code>summarise_scorees()</code> before
 <code><a href="../reference/correlation.html">correlation()</a></code> to summarise over quantiles before computing
 correlations.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -913,13 +805,13 @@ correlations.</p>
 <span><span class="co">#&gt; 8:  0.84683642  0.63647831         1.00000000 -0.37689441 coverage_deviation</span></span>
 <span><span class="co">#&gt; 9: -0.24559356 -0.41079097        -0.37689441  1.00000000          ae_median</span></span></code></pre></div>
 <p>Visualising correlations:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_correlation.html">plot_correlation</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scoringutils_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
+<p><img src="scoringutils_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 <!-- ### Scores by interval ranges -->
 <!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:  -->
 </div>
@@ -938,7 +830,7 @@ format using the function <code><a href="../reference/sample_to_quantile.html">s
 however, one caveat: Quantiles will be calculated based on the
 predictive samples, which may introduce a bias if the number of
 available samples is small.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_integer</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/sample_to_quantile.html">sample_to_quantile</a></span><span class="op">(</span></span>
 <span>    quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span>
@@ -992,7 +884,7 @@ available samples is small.</p>
 </h2>
 <p>An overview of available metrics can be found in the
 <code>metrics</code> data set that is included in the package.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metrics</span></span>
 <span><span class="co">#&gt;                                           Metric               Name</span></span>
 <span><span class="co">#&gt;  1:                               Absolute error           ae_point</span></span>
