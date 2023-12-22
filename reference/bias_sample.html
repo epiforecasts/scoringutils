@@ -55,7 +55,7 @@ integer valued and adapts the Bias function accordingly."><!-- mathjax --><scrip
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Determines bias of forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-sample.R" class="external-link"><code>R/metrics-sample.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/bias.R" class="external-link"><code>R/bias.R</code></a></small>
       <div class="d-none name"><code>bias_sample.Rd</code></div>
     </div>
 
@@ -67,19 +67,19 @@ integer valued and adapts the Bias function accordingly.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
-<dd><p>A vector with observed values of size n</p></dd>
+    <dl><dt>true_values</dt>
+<dd><p>A vector with the true observed values of size n</p></dd>
 
 
-<dt>predicted</dt>
+<dt>predictions</dt>
 <dd><p>nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, <code>predicted</code> can just be a vector of size n.</p></dd>
+Carlo samples. Alternatively, predictions can just be a vector of size n.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,7 +87,7 @@ Carlo samples. Alternatively, <code>predicted</code> can just be a vector of siz
     
 
 <p>vector of length n with the biases of the predictive samples with
-respect to the observed values.</p>
+respect to the true values.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -96,7 +96,7 @@ respect to the observed values.</p>
 B_t (P_t, x_t) = 1 - 2 * (P_t (x_t))
 $$</p>
 <p>where \(P_t\) is the empirical cumulative distribution function of the
-prediction for the observed value \(x_t\). Computationally, \(P_t (x_t)\) is
+prediction for the true value \(x_t\). Computationally, \(P_t (x_t)\) is
 just calculated as the fraction of predictive samples for \(x_t\)
 that are smaller than \(x_t\).</p>
 <p>For integer valued forecasts, Bias is measured as</p>
@@ -126,20 +126,20 @@ region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## integer valued forecasts</span></span></span>
-<span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.155  0.520  0.425 -0.595 -0.630 -0.750 -0.600 -0.610 -0.530  0.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] -0.905 -0.370  0.920 -0.610  0.320 -0.750 -0.820 -0.585  0.690 -0.970</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.320 -0.295  0.155 -0.625  0.725 -0.510 -0.145 -0.190 -0.010 -0.990</span>
+<span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.050  0.030 -0.075  0.675 -0.645 -0.935  0.245  0.280  0.210 -0.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] -0.280 -0.125 -0.590 -0.070 -0.445  0.905  0.115  0.520  0.460 -0.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] -0.865  0.450 -0.120 -0.800 -0.830  0.370 -0.295 -0.680  0.605  0.865</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## continuous forecasts</span></span></span>
-<span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.72 -0.13  0.23 -0.42 -0.48 -0.38 -0.25  0.61 -0.88 -0.18  0.35 -0.46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.41  0.80  0.23 -0.02 -0.55 -0.91  0.24 -0.57  0.24  0.12 -0.71 -0.68</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  0.06 -0.87  0.96 -0.05  0.80 -0.19</span>
+<span class="r-in"><span><span class="va">true_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bias_sample</span><span class="op">(</span><span class="va">true_values</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.82  0.99 -0.94 -0.83  0.02 -0.73 -0.41  0.92  0.32  0.85  0.67 -0.65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.83  0.11  0.01 -0.25 -0.05  0.29 -0.53  0.72  0.94  0.57 -0.11  0.91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.02 -0.17 -0.21 -0.97  0.33  0.17</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
