@@ -8,7 +8,7 @@
 #' If `select != "all"`, this argument is ignored.
 #' @return A list of scoring rules.
 #' @keywords internal
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_list
 #' @examples
 #' scoringutils:::select_rules(
 #'   possibilities = rules_binary(),
@@ -16,6 +16,7 @@
 #' )
 select_rules <- function(possibilities, select, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
+  assert_list(possibilities)
   allowed <- names(possibilities)
 
   if (select == "all" && is.null(exclude)) {
