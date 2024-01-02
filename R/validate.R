@@ -155,20 +155,18 @@ validate_general <- function(data) {
     setattr(data, "warnings", number_quantiles_samples)
   }
 
-  # check whether there are any NA values in the predicted or observed values
-  messages <- c(
-    check_no_NA_present(data, "predicted"),
-    check_no_NA_present(data, "observed")
-  )
-  if (!is.logical(messages)) {
-    messages <- messages[messages != "TRUE"]
-    setattr(data, "messages", messages)
-  }
-
-  if (nrow(na.omit(data)) == 0) {
-    stop(
-      "After removing rows with NA values in the data, no forecasts are left."
+  # check whether there are any NA values
+  if (anyNA(data)) {
+    message(
+      "Some rows contain NA values and will be removed in subsequent ",
+      "operations such as scoring. This is fine if not unexpected."
     )
+
+    if (nrow(na.omit(data)) == 0) {
+      stop(
+        "After removing rows with NA values in the data, no forecasts are left."
+      )
+    }
   }
 
   return(data[])
