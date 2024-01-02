@@ -1,7 +1,10 @@
 ex_coverage <- example_quantile[model == "EuroCOVIDhub-ensemble"]
 
 test_that("add_coverage() works as expected", {
-  expect_no_condition(cov <- add_coverage(example_quantile))
+  expect_message(
+    cov <- add_coverage(example_quantile),
+    "Some rows contain NA values and will be removed in subsequent operations"
+  )
 
   required_names <- c(
     "range", "interval_coverage", "interval_coverage_deviation",

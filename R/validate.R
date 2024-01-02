@@ -157,16 +157,15 @@ validate_general <- function(data) {
 
   # check whether there are any NA values
   if (anyNA(data)) {
-    message(
-      "Some rows contain NA values and will be removed in subsequent ",
-      "operations such as scoring. This is fine if not unexpected."
-    )
-
     if (nrow(na.omit(data)) == 0) {
       stop(
         "After removing rows with NA values in the data, no forecasts are left."
       )
     }
+    message(
+      "Some rows containing NA values may be removed. ",
+      "This is fine if not unexpected."
+    )
   }
 
   return(data[])
