@@ -16,8 +16,8 @@
 #' @inheritSection forecast_types Forecast unit
 #' @param data A data.frame or data.table with predicted and observed values.
 #' @param metrics A named list of scoring functions. Names will be used as
-#' column names in the output. See [metrics_point()], [metrics_binary()],
-#' `metrics_quantile()`, and [metrics_sample()] for more information on the
+#' column names in the output. See [rules_point()], [rules_binary()],
+#' [rules_quantile()], and [rules_sample()] for more information on the
 #' default metrics used.
 #' @param ... additional arguments
 #' @return A data.table with unsummarised scores. This will generally be
@@ -76,7 +76,7 @@ score.default <- function(data, ...) {
 
 #' @rdname score
 #' @export
-score.forecast_binary <- function(data, metrics = metrics_binary, ...) {
+score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
@@ -96,7 +96,7 @@ score.forecast_binary <- function(data, metrics = metrics_binary, ...) {
 #' @importFrom Metrics se ae ape
 #' @rdname score
 #' @export
-score.forecast_point <- function(data, metrics = metrics_point, ...) {
+score.forecast_point <- function(data, metrics = rules_point(), ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   metrics <- validate_metrics(metrics)
@@ -113,7 +113,7 @@ score.forecast_point <- function(data, metrics = metrics_point, ...) {
 
 #' @rdname score
 #' @export
-score.forecast_sample <- function(data, metrics = metrics_sample, ...) {
+score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
@@ -150,7 +150,7 @@ score.forecast_sample <- function(data, metrics = metrics_sample, ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
+score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   data <- validate_forecast(data)
   data <- remove_na_observed_predicted(data)
   forecast_unit <- attr(data, "forecast_unit")
