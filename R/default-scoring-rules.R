@@ -1,7 +1,7 @@
-#' @title Select Scoring Rules From A List of Possibilities
+#' @title Select Scoring Rules From A List of Possible Scoring Rules
 #' @description Helper function to return only the scoring rules selected by
 #' the user from a list of possible scoring rules.
-#' @param possibilities A list of scoring rules.
+#' @param rules A list of scoring rules.
 #' @param select A character vector of scoring rules to select from the list.
 #' If `select = all` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
@@ -11,23 +11,23 @@
 #' @importFrom checkmate assert_subset assert_list
 #' @examples
 #' scoringutils:::select_rules(
-#'   possibilities = rules_binary(),
+#'   rules = rules_binary(),
 #'   select = "brier_score"
 #' )
-select_rules <- function(possibilities, select, exclude = NULL) {
+select_rules <- function(rules, select = "all", exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
-  assert_list(possibilities)
-  allowed <- names(possibilities)
+  assert_list(rules, names = TRUE)
+  allowed <- names(rules)
 
   if (select == "all" && is.null(exclude)) {
-    return(possibilities)
+    return(rules)
   } else if (select == "all") {
     assert_subset(exclude, allowed)
     select <- allowed[!allowed %in% exclude]
-    return(possibilities[select])
+    return(rules[select])
   } else {
     assert_subset(select, allowed)
-    return(possibilities[select])
+    return(rules[select])
   }
 }
 

@@ -2,12 +2,12 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{select_rules}
 \alias{select_rules}
-\title{Select Scoring Rules From A List of Possibilities}
+\title{Select Scoring Rules From A List of Possible Scoring Rules}
 \usage{
-select_rules(possibilities, select, exclude = NULL)
+select_rules(rules, select = "all", exclude = NULL)
 }
 \arguments{
-\item{possibilities}{A list of scoring rules.}
+\item{rules}{A list of scoring rules.}
 
 \item{select}{A character vector of scoring rules to select from the list.
 If \code{select = all} (the default), all possible scoring rules are returned.}
@@ -24,7 +24,7 @@ the user from a list of possible scoring rules.
 }
 \examples{
 scoringutils:::select_rules(
-  possibilities = rules_binary(),
+  rules = rules_binary(),
   select = "brier_score"
 )
 }
