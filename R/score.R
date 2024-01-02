@@ -168,8 +168,7 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
     observed = unique(observed),
     quantile = list(sort(quantile, na.last = TRUE)),
     scoringutils_quantile = toString(sort(quantile, na.last = TRUE))
-  ),
-  by = forecast_unit]
+  ), by = forecast_unit]
 
   # split according to quantile lengths and do calculations for different
   # quantile lengths separately. The function `wis()` assumes that all
