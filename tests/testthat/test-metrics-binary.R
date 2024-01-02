@@ -164,3 +164,24 @@ test_that("Binary metrics work within and outside of `score()`", {
     result$log_score
   )
 })
+
+test_that("`logs_binary()` works as expected", {
+  # check against the function Metrics::ll
+  obs2 <- as.numeric(as.character(observed))
+  expect_equal(
+    logs_binary(observed, predicted),
+    Metrics::ll(obs2, predicted)
+  )
+
+  # check this works for a single observed value
+  expect_equal(
+    logs_binary(observed[1], predicted),
+    Metrics::ll(obs2[1], predicted)
+  )
+
+  # check this works for a single predicted value
+  expect_equal(
+    logs_binary(observed, predicted[1]),
+    Metrics::ll(obs2, predicted[1])
+  )
+})

@@ -20,4 +20,4 @@ Function checks whether any of the columns in a data.frame,
 as specified in \code{columns}, have NA values. If so, it returns a string with
 an error message, otherwise it returns TRUE.
 }
-\keyword{internal}
+\keyword{internal_input_check}

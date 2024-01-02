@@ -14,15 +14,14 @@ test_that("get_forecast_unit() works as expected", {
       "forecast_date", "model", "horizon")
   )
 
-  # warning if something changes
-  data <- validate(example_quantile)
+  data <- as_forecast(example_quantile)
   ex <- data[, location := NULL]
   expect_warning(
     get_forecast_unit(ex, check_conflict = TRUE),
     "Object has an attribute `forecast_unit`, but it looks different from what's expected based on the data.
 Existing: forecast_date, horizon, location, location_name, model, target_end_date, target_type
 Expected: forecast_date, horizon, location_name, model, target_end_date, target_type
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
 fixed = TRUE
   )
 })
@@ -194,14 +193,14 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  data <- validate(example_integer)
+  data <- as_forecast(example_integer)
   attr(data, "forecast_type") <- "binary"
   expect_warning(
     get_forecast_type(data),
     "Object has an attribute `forecast_type`, but it looks different from what's expected based on the data.
 Existing: binary
 Expected: sample
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
     fixed = TRUE
   )
 })

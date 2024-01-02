@@ -47,10 +47,8 @@ plot_score_table <- function(scores,
   id_vars <- get_forecast_unit(scores)
   metrics <- get_metrics(scores)
 
-  scores <- delete_columns(
-    scores,
-    names(scores)[!(names(scores) %in% c(metrics, id_vars))]
-  )
+  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
 
   # compute scaled values ------------------------------------------------------
   # scaling is done in order to colour the different scores
@@ -403,11 +401,7 @@ plot_predictions <- function(data,
   del_cols <-
     colnames(truth_data)[!(colnames(truth_data) %in% c(by, "observed", x))]
 
-  truth_data <- delete_columns(
-    truth_data,
-    del_cols,
-    make_unique = TRUE
-  )
+  truth_data <- unique(suppressWarnings(truth_data[, eval(del_cols) := NULL]))
 
   # find out what type of predictions we have. convert sample based to
   # range data
@@ -470,7 +464,7 @@ plot_predictions <- function(data,
   # it separately here to deal with the case when only the median is provided
   # (in which case ggdist::geom_lineribbon() will fail)
   if (0 %in% range) {
-    select_median <- (forecasts$range %in% 0 & forecasts$boundary == "lower")
+    select_median <- (forecasts$range == 0 & forecasts$boundary == "lower")
     median <- forecasts[select_median]
 
     if (nrow(median) > 0) {
@@ -941,54 +935,58 @@ plot_pit <- function(pit,
 #'
 #' @description
 #' Visualise Where Forecasts Are Available
-#' @inheritParams print.scoringutils_check
-#' @param x an S3 object of class "scoringutils_available_forecasts"
-#' as produced by [available_forecasts()]
-#' @param yvar character vector of length one that denotes the name of the column
+#' @param forecast_counts a data.table (or similar) with a column `count`
+#' holding forecast counts, as produced by [get_forecast_counts()]
+#' @param x character vector of length one that denotes the name of the column
+#' to appear on the x-axis of the plot.
+#' @param y character vector of length one that denotes the name of the column
 #' to appear on the y-axis of the plot. Default is "model".
-#' @param xvar character vector of length one that denotes the name of the column
-#' to appear on the x-axis of the plot. Default is "forecast_date".
-#' @param make_xvar_factor logical (default is TRUE). Whether or not to convert
+#' @param x_as_factor logical (default is TRUE). Whether or not to convert
 #' the variable on the x-axis to a factor. This has an effect e.g. if dates
 #' are shown on the x-axis.
-#' @param show_numbers logical (default is `TRUE`) that indicates whether
+#' @param show_counts logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
+#' @importFrom checkmate assert_string assert_logical assert
 #' @export
 #' @examples
 #' library(ggplot2)
-#' available_forecasts <- available_forecasts(
+#' forecast_counts <- get_forecast_counts(
 #'   example_quantile, by = c("model", "target_type", "target_end_date")
 #' )
-#' plot(
-#'  available_forecasts, xvar = "target_end_date", show_numbers = FALSE
+#' plot_forecast_counts(
+#'  forecast_counts, x = "target_end_date", show_counts = FALSE
 #' ) +
 #'  facet_wrap("target_type")
 
-plot.scoringutils_available_forecasts <- function(x,
-                                                  yvar = "model",
-                                                  xvar = "forecast_date",
-                                                  make_xvar_factor = TRUE,
-                                                  show_numbers = TRUE,
-                                                  ...) {
-  x <- as.data.table(x)
+plot_forecast_counts <- function(forecast_counts,
+                                 x,
+                                 y = "model",
+                                 x_as_factor = TRUE,
+                                 show_counts = TRUE) {
 
-  if (make_xvar_factor) {
-    x[, eval(xvar) := as.factor(get(xvar))]
+  forecast_counts <- ensure_data.table(forecast_counts)
+  assert_string(y)
+  assert_string(x)
+  assert(check_columns_present(forecast_counts, c(y, x)))
+  assert_logical(x_as_factor)
+  assert_logical(show_counts)
+
+  if (x_as_factor) {
+    forecast_counts[, eval(x) := as.factor(get(x))]
   }
 
-  setnames(x, old = "count", new = "Count")
+  setnames(forecast_counts, old = "count", new = "Count")
 
   plot <- ggplot(
-    x,
-    aes(y = .data[[yvar]], x = .data[[xvar]])
+    forecast_counts,
+    aes(y = .data[[y]], x = .data[[x]])
   ) +
     geom_tile(aes(fill = `Count`),
-      width = 0.97, height = 0.97
-    ) +
+              width = 0.97, height = 0.97) +
     scale_fill_gradient(
       low = "grey95", high = "steelblue",
       na.value = "lightgrey"
@@ -1001,52 +999,12 @@ plot.scoringutils_available_forecasts <- function(x,
       )
     ) +
     theme(panel.spacing = unit(2, "lines"))
-
-  if (show_numbers) {
+  if (show_counts) {
     plot <- plot +
       geom_text(aes(label = `Count`))
   }
-
   return(plot)
 }
-
-
-#' @title Visualise Where Forecasts Are Available `r lifecycle::badge("deprecated")`
-#'
-#' @description
-#' Old version of [plot.scoringutils_available_forecasts()] for compatibility.
-#' @inheritParams plot.scoringutils_available_forecasts
-#' @param available_forecasts an S3 object of class "scoringutils_available_forecasts"
-#' as produced by [available_forecasts()]
-#' @param y character vector of length one that denotes the name of the column
-#' to appear on the y-axis of the plot. Default is "model".
-#' @param x character vector of length one that denotes the name of the column
-#' to appear on the x-axis of the plot. Default is "forecast_date".
-#' @param make_x_factor logical (default is TRUE). Whether or not to convert
-#' the variable on the x-axis to a factor. This has an effect e.g. if dates
-#' are shown on the x-axis.
-#' @export
-plot_avail_forecasts <- function(available_forecasts,
-                                 y = "model",
-                                 x = "forecast_date",
-                                 make_x_factor = TRUE,
-                                 show_numbers = TRUE) {
-
-  lifecycle::deprecate_warn(
-    "1.2.2", "plot_avail_forecasts()",
-    "plot()"
-  )
-
-  plot.scoringutils_available_forecasts(
-    x = available_forecasts,
-    yvar = y,
-    xvar = x,
-    make_xvar_factor = make_x_factor,
-    show_numbers = show_numbers
-  )
-}
-
-
 
 
 #' @title Plot Correlation Between Metrics

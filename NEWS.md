@@ -6,6 +6,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 
 ## Package updates
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
+- The overall scoring workflow was updated. `score()` is now a generic function that dispatches the correct method based on the forecast type. forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile". An object of class `forecast_*` can be created using the function `as_forecast()`, which also replaces the previous function `check_forecasts()` (see more information below). 
 - Scoring functions received a consistent interface and input checks:
   - metrics for binary forecasts:
     - `observed`: factor with exactly 2 levels
@@ -20,15 +21,18 @@ The update introduces breaking changes. If you want to keep using the older vers
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
-- `check_forecasts()` was replaced by a new function `validate()`. `validate()` validates the input and in that sense fulfills the purpose of `check_forecasts()`. It has different methods: `validate.default()` assigns the input a class based on their forecast type. Other methods validate the input specifically for the various forecast types.
+- `check_forecasts()` was replaced by a different workflow. There now is a function, `as_forecast()`, that determines forecast type of the data, constructs a forecasting object and validates it using the function `validate_forecast()` (a generic that dispatches the correct method based on the forecast type). Objects of class `forecast_binary`, `forecast_point`, `forecast_sample` and `forecast_quantile` have print methods that fulfill the functionality of `check_forecasts()`.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds pairwise comparisons to it. 
 - `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
+- Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
+    - The function `bias_range()` was removed (users should now use `bias_quantile()` instead)
+    - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
 - Changes to `avail_forecasts()` and `plot_avail_forecasts()`:
-  - The function `avail_forecasts()` was renamed to `available_forecasts()` for consistency with `available_metrics()`. The old function, `avail_forecasts()` is still available as an alias, but will be removed in the future.
-  - For clarity, the output column in `avail_forecasts()` was renamed from "Number forecasts" to "count".
-  - `available_forecasts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
-  - `plot_avail_forecasts()` has been deprecated in favour of an S3 method for `plot()`. An alias is still available, but will be removed in the future.
+  - The function `avail_forecasts()` was renamed to `get_forecast_counts()`. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix "get_". Sees Issue #403 and #521 and PR #511 by @nikosbosse and reviewed by @seabbs for details. 
+  - For clarity, the output column in `get_forecast_counts()` was renamed from "Number forecasts" to "count".
+  - `get_forecast_counts()` now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.
+  - `plot_avail_forecasts()` was renamed `plot_forecast_counts()` in line with the change in the function name. The `x` argument no longer has a default value, as the value will depend on the data provided by the user.
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
 - `score()` now calls `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast. 
@@ -190,7 +194,7 @@ to a function `summarise_scores()`
 - New function `check_forecasts()` to analyse input data before scoring
 - New function `correlation()` to compute correlations between different metrics
 - New function `add_coverage()` to add coverage for specific central prediction intervals.
-- New function `available_forecasts()` allows to visualise the number of available forecasts.
+- New function `avail_forecasts()` allows to visualise the number of available forecasts.
 - New function `find_duplicates()` to find duplicate forecasts which cause an error.
 - All plotting functions were renamed to begin with `plot_`. Arguments were
 simplified.

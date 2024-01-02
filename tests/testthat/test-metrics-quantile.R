@@ -603,9 +603,9 @@ test_that("interval_coverage_quantile rejects wrong inputs", {
 
 
 # ============================================================================ #
-# `interval_coverage_deviation_quantile` ===================================== #
+# `interval_coverage_dev_quantile` ===================================== #
 # ============================================================================ #
-test_that("interval_coverage_deviation_quantile works", {
+test_that("interval_coverage_dev_quantile works", {
   existing_ranges <- unique(get_range_from_quantile(quantile))
   expect_equal(existing_ranges, c(80, 50, 0))
 
@@ -614,7 +614,7 @@ test_that("interval_coverage_deviation_quantile works", {
   manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
 
   expect_equal(
-    interval_coverage_deviation_quantile(observed, predicted, quantile),
+    interval_coverage_dev_quantile(observed, predicted, quantile),
     manual
   )
 })
@@ -790,4 +790,18 @@ test_that("bias_quantile(): quantiles must be unique", {
   # Passing example
   quantiles <- c(0.3, 0.5, 0.8, 0.9)
   expect_silent(bias_quantile(observed = 3, predicted, quantiles))
+})
+
+test_that("bias_quantile only produces one message", {
+  expect_message(
+    bias_quantile(observed, predicted[, -3], quantile[-3]),
+    "Median not available, computing bias as mean of the two innermost quantiles in order to compute bias."
+  )
+})
+
+test_that("bias_quantile() works with point forecasts", {
+  predicted <- 1
+  observed <- 1
+  quantile <- 0.5
+  expect_equal(bias_quantile(observed, predicted, quantile), 0)
 })

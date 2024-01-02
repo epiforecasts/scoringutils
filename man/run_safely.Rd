@@ -33,3 +33,4 @@ run_safely(2, y = 3, fun = f)
 run_safely(fun = f)
 run_safely(y = 3, fun = f)
 }
+\keyword{scoring}

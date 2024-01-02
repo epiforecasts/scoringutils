@@ -20,4 +20,4 @@ The functions loops over the column names and checks whether they are
 present. If an issue is encountered, the function immediately stops
 and returns a message with the first issue encountered.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

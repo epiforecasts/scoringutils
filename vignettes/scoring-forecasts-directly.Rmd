@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 library(scoringutils)
 library(data.table)
-library(ggplot2)
 ```
 
 A variety of metrics and scoring rules can also be accessed directly through 
@@ -203,16 +202,13 @@ the Interval Score converges to the CRPS for increasing number of quantiles.
 
 
 ```{r}
-observed <- rnorm(30, mean = 1:30)
-interval_range <- 90
-alpha <- (100 - interval_range) / 100
-lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
-upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
-
-interval_score(
-  observed = observed,
-  lower = lower,
-  upper = upper,
-  interval_range = interval_range
+observed <- c(1, -15, 22)
+predicted <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
 )
+quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+
+wis(observed, predicted, quantile)
 ```

@@ -9,3 +9,4 @@ Returns TRUE if the check was successful and FALSE otherwise
 \description{
 Documentation template for test functions
 }
+\keyword{internal}

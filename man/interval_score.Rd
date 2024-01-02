@@ -82,7 +82,7 @@ alpha <- (100 - interval_range) / 100
 lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
 upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
 
-interval_score(
+scoringutils:::interval_score(
   observed = observed,
   lower = lower,
   upper = upper,
@@ -90,10 +90,12 @@ interval_score(
 )
 
 # gives a warning, as the interval_range should likely be 50 instead of 0.5
-interval_score(observed = 4, upper = 8, lower = 2, interval_range = 0.5)
+scoringutils:::interval_score(
+  observed = 4, upper = 8, lower = 2, interval_range = 0.5
+)
 
 # example with missing values and separate results
-interval_score(
+scoringutils:::interval_score(
   observed = c(observed, NA),
   lower = c(lower, NA),
   upper = c(NA, upper),

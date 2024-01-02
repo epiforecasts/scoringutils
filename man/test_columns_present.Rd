@@ -19,4 +19,4 @@ The function checks whether all column names are present. If
 one or more columns are missing, the function returns FALSE. If all columns
 are present, the function returns TRUE.
 }
-\keyword{internal}
+\keyword{internal_input_check}

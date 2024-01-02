@@ -113,8 +113,8 @@ summarise_scores <- function(scores,
   stored_attributes <- c(
     get_scoringutils_attributes(scores),
     list(
-      "scoringutils_by" = by,
-      "unsummarised_scores" =  scores
+      scoringutils_by = by,
+      unsummarised_scores =  scores
     )
   )
 
@@ -180,6 +180,7 @@ summarize_scores <- summarise_scores
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
+#' @keywords keyword scoring
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
                                     relative_skill_metric = "auto",

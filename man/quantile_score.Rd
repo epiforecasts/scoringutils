@@ -29,7 +29,7 @@ vector with the scoring values
 \description{
 Proper Scoring Rule to score quantile predictions. Smaller values are better.
 The quantile score is
-closely related to the Interval score (see \code{\link[=interval_score]{interval_score()}}) and is
+closely related to the Interval score (see \code{\link[=wis]{wis()}}) and is
 the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
 }

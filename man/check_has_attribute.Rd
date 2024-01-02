@@ -18,4 +18,4 @@ error message otherwise
 \description{
 Checks whether an object has an attribute
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

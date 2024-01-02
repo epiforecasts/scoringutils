@@ -21,14 +21,14 @@ reference:
         - title: Package documentation
           contents:
                 - scoringutils
-        - title: Functions to check and analyse inputs
+        - title: Functions to analyse inputs and obtain useful information
           contents:
                 - has_keyword("check-forecasts")
         - title: Functions for convenient forecast evaluation
           contents:
                 - score
                 - has_keyword("scoring")
-                - starts_with("score_")
+                - starts_with("score")
         - title: Lower-level scoring functions
           contents:
                 - has_keyword("metric")
@@ -37,9 +37,12 @@ reference:
                 - has_keyword("data-handling")
         - title: Functions for plotting and data visualisation
           contents:
-                - starts_with("plot_")
+                - starts_with("plot")
                 - has_keyword("plotting")
-        - title: Internal functions
+        - title: Internal input check functions
+          contents:
+                - has_keyword("internal_input_check")
+        - title: Misc internal functions
           contents:
                 - has_keyword("internal")
         - title: Example data and information
