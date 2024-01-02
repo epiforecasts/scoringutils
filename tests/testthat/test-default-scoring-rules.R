@@ -29,7 +29,7 @@ test_that("`select_rules` works as expected", {
   # expect error if possibilities is not a list
   expect_error(
     scoringutils:::select_rules(rules_point, select = "all"),
-    "Assertion on 'possibilities' failed: Must be of type 'list', not 'closure'."
+    "Assertion on 'rules' failed: Must be of type 'list', not 'closure'."
   )
 })
 
