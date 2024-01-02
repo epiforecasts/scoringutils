@@ -16,7 +16,7 @@
 #' )
 select_rules <- function(rules, select = "all", exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
-  assert_list(rules, names = TRUE)
+  assert_list(rules, names = "named")
   allowed <- names(rules)
 
   if (select == "all" && is.null(exclude)) {

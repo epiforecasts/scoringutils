@@ -6,6 +6,11 @@ test_that("`select_rules` works as expected", {
   )
 
   expect_equal(
+    scoringutils:::select_rules(rules_point(), select = "all"),
+    scoringutils:::select_rules(rules_point())
+  )
+
+  expect_equal(
     names(scoringutils:::select_rules(rules_point(), select = "ape")),
     "ape"
   )
