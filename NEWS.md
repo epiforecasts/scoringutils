@@ -1,4 +1,4 @@
-# scoringutils 1.3
+# scoringutils 2.0.0
 
 This major update and addresses a variety of comments made by reviewers from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
 
@@ -7,20 +7,21 @@ The update introduces breaking changes. If you want to keep using the older vers
 ## Package updates
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
 - The overall scoring workflow was updated. `score()` is now a generic function that dispatches the correct method based on the forecast type. forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile". An object of class `forecast_*` can be created using the function `as_forecast()`, which also replaces the previous function `check_forecasts()` (see more information below). 
-- Scoring functions received a consistent interface and input checks:
-  - metrics for binary forecasts:
+- Scoring rules (functions used for scoring) received a consistent interface and input checks:
+  - Scoring rules for binary forecasts:
     - `observed`: factor with exactly 2 levels
     - `predicted`: numeric, vector with probabilities
-  - metrics for point forecasts:
+  - Scoring rules for point forecasts:
     - `observed`: numeric vector
     - `predicted`: numeric vector
-  - metrics for sample-based forecasts:
+  - Scoring rules for sample-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
-  - metrics for quantile-based forecasts:
+  - Scoring rules for quantile-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
+- Users can now supply their own scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `rules_point()`, `rules_sample()`, `rules_quantile()` and `rules_binary()`, which return a list of scoring rules suitable for the respective forecast type.
 - `check_forecasts()` was replaced by a different workflow. There now is a function, `as_forecast()`, that determines forecast type of the data, constructs a forecasting object and validates it using the function `validate_forecast()` (a generic that dispatches the correct method based on the forecast type). Objects of class `forecast_binary`, `forecast_point`, `forecast_sample` and `forecast_quantile` have print methods that fulfill the functionality of `check_forecasts()`.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds pairwise comparisons to it. 
 - `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
