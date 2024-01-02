@@ -47,8 +47,8 @@ select_rules <- function(possibilities, select, exclude = NULL) {
 #' rules_binary(exclude = "log_score")
 rules_binary <- function(select = "all", exclude = NULL) {
   all <- list(
-    "brier_score" = brier_score,
-    "log_score" = logs_binary
+    brier_score = brier_score,
+    log_score = logs_binary
   )
   selected <- select_rules(all, select, exclude)
   return(selected)
@@ -71,9 +71,9 @@ rules_binary <- function(select = "all", exclude = NULL) {
 #' rules_point(select = "ape")
 rules_point <- function(select = "all", exclude = NULL) {
   all <- list(
-    "ae_point" = Metrics::ae,
-    "se_point" = Metrics::se,
-    "ape" = Metrics::ape
+    ae_point = Metrics::ae,
+    se_point = Metrics::se,
+    ape = Metrics::ape
   )
   selected <- select_rules(all, select, exclude)
   return(selected)
@@ -101,13 +101,13 @@ rules_point <- function(select = "all", exclude = NULL) {
 #' rules_sample(select = "mad")
 rules_sample <- function(select = "all", exclude = NULL) {
   all <- list(
-    "bias" = bias_sample,
-    "dss" = dss_sample,
-    "crps" = crps_sample,
-    "log_score" = logs_sample,
-    "mad" = mad_sample,
-    "ae_median" = ae_median_sample,
-    "se_mean" = se_mean_sample
+    bias = bias_sample,
+    dss = dss_sample,
+    crps = crps_sample,
+    log_score = logs_sample,
+    mad = mad_sample,
+    ae_median = ae_median_sample,
+    se_mean = se_mean_sample
   )
   selected <- select_rules(all, select, exclude)
   return(selected)
@@ -138,15 +138,17 @@ rules_sample <- function(select = "all", exclude = NULL) {
 #' rules_quantile(select = "wis")
 rules_quantile <- function(select = "all", exclude = NULL) {
   all <- list(
-    "wis" = wis,
-    "overprediction" = overprediction,
-    "underprediction" = underprediction,
-    "dispersion" = dispersion,
-    "bias" = bias_quantile,
-    "coverage_50" = interval_coverage_quantile,
-    "coverage_90" = \(...) {run_safely(..., range = 90, fun = interval_coverage_quantile)},
-    "coverage_deviation" = interval_coverage_dev_quantile,
-    "ae_median" = ae_median_quantile
+    wis = wis,
+    overprediction = overprediction,
+    underprediction = underprediction,
+    dispersion = dispersion,
+    bias = bias_quantile,
+    coverage_50 = interval_coverage_quantile,
+    coverage_90 = \(...) {
+      run_safely(..., range = 90, fun = interval_coverage_quantile)
+    },
+    coverage_deviation = interval_coverage_dev_quantile,
+    ae_median = ae_median_quantile
   )
   selected <- select_rules(all, select, exclude)
   return(selected)
