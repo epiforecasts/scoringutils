@@ -64,7 +64,7 @@ data[, 1:6] %>%
 ```{r, echo = FALSE, results = "asis"}
 data <- readRDS(
   system.file(
-    "metrics-overview", "metrics-detailed.rds", 
+    "metrics-overview", "metrics-detailed.rds",
     package = "scoringutils"
   )
 )

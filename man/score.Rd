@@ -3,23 +3,23 @@
 \name{score}
 \alias{score}
 \alias{score.default}
-\alias{score.scoringutils_binary}
-\alias{score.scoringutils_point}
-\alias{score.scoringutils_sample}
-\alias{score.scoringutils_quantile}
+\alias{score.forecast_binary}
+\alias{score.forecast_point}
+\alias{score.forecast_sample}
+\alias{score.forecast_quantile}
 \title{Evaluate forecasts in a data.frame format}
 \usage{
 score(data, ...)
 
 \method{score}{default}(data, ...)
 
-\method{score}{scoringutils_binary}(data, metrics = metrics_binary, ...)
+\method{score}{forecast_binary}(data, metrics = metrics_binary, ...)
 
-\method{score}{scoringutils_point}(data, metrics = metrics_point, ...)
+\method{score}{forecast_point}(data, metrics = metrics_point, ...)
 
-\method{score}{scoringutils_sample}(data, metrics = metrics_sample, ...)
+\method{score}{forecast_sample}(data, metrics = metrics_sample, ...)
 
-\method{score}{scoringutils_quantile}(data, metrics = metrics_quantile, ...)
+\method{score}{forecast_quantile}(data, metrics = metrics_quantile, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
@@ -45,14 +45,16 @@ forecasts.
 \code{score()} applies a selection of scoring metrics to a data.frame
 of forecasts. It is the workhorse of the \code{scoringutils} package.
 \code{score()} is a generic that dispatches to different methods depending on the
-class of the input data. The default method is \code{score.default()}, which
-validates the input, assigns as class based on the forecast type, and then
-calls \code{score()} again to dispatch to the appropriate method. See below for
-more information on how forecast types are determined.
-}
-\details{
-\strong{Forecast types and input format}
+class of the input data.
 
+We recommend that users call \code{\link[=as_forecast]{as_forecast()}} prior to calling \code{score()} to
+validate the input data and convert it to a forecast object (though
+\code{score.default()} will do this if it hasn't happened before).
+See below for more information on forecast types and input formats.
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
+}
+\section{Forecast types and input format}{
 Various different forecast types / forecast formats are supported. At the
 moment, those are
 \itemize{
@@ -85,9 +87,9 @@ numeric with sample indices.
 For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_continuous}, \link{example_integer},
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
+}
 
-\strong{Forecast unit}
-
+\section{Forecast unit}{
 In order to score forecasts, \code{scoringutils} needs to know which of the rows
 of the data belong together and jointly form a single forecasts. This is
 easy e.g. for point forecast, where there is one row per forecast. For
@@ -111,23 +113,13 @@ In order to avoid issues, we recommend using the function
 \code{\link[=set_forecast_unit]{set_forecast_unit()}} to determine the forecast unit manually.
 The function simply drops unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
-
-\strong{Validating inputs}
-
-We recommend that users validate their input prior to scoring using the
-function \code{\link[=validate]{validate()}} (though this will also be run internally by \code{\link[=score]{score()}}).
-The function checks the input data and provides helpful information.
-
-\strong{Further help}
-
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
-well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
+
 \examples{
 library(magrittr) # pipe operator
 data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 
-validated <- validate(example_quantile)
+validated <- as_forecast(example_quantile)
 score(validated) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
@@ -137,7 +129,7 @@ example_quantile \%>\%
   set_forecast_unit(
     c("location", "target_end_date", "target_type", "horizon", "model")
   ) \%>\%
-  validate() \%>\%
+  as_forecast() \%>\%
   score()
 
 # forecast formats with different metrics
@@ -148,7 +140,6 @@ score(example_point)
 score(example_integer)
 score(example_continuous)
 }
-
 }
 \references{
 Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S

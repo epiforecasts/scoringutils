@@ -12,6 +12,7 @@
 ^Meta$
 ^_pkgdown\.yml$
 ^inst/manuscript/manuscript_cache$
+^inst/manuscript/.trackdown$
 ^\.lintr$
 ^docs$
 ^\.devcontainer$

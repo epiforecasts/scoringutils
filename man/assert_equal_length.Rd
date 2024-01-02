@@ -23,4 +23,4 @@ error otherwise.
 \description{
 Check whether variables all have the same length
 }
-\keyword{internal}
+\keyword{internal_input_check}

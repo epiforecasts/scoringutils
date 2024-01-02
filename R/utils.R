@@ -10,31 +10,6 @@ available_metrics <- function() {
 }
 
 
-#' Safely delete Columns From a Data.table
-#'
-#' @description take a vector of column names and delete the columns if they
-#' are present in the data.table
-#' @param df A data.table or data.frame from which columns shall be deleted
-#' @param cols_to_delete character vector with names of columns to be deleted
-#' @param make_unique whether to make the data set unique after removing columns
-#' @importFrom data.table as.data.table
-#' @return A data.table
-#'
-#' @keywords internal
-#'
-delete_columns <- function(df, cols_to_delete, make_unique = FALSE) {
-  df <- data.table::as.data.table(df)
-  delete_columns <- names(df)[names(df) %in% cols_to_delete]
-  if (length(delete_columns) > 0) {
-    if (make_unique) {
-      df <- unique(df[, eval(delete_columns) := NULL])
-    } else {
-      df <- df[, eval(delete_columns) := NULL]
-    }
-  }
-  return(df)
-}
-
 remove_na_observed_predicted <- function(data) {
   # remove rows where predicted or observed value are NA -----------------------
   data <- data[!is.na(observed) & !is.na(predicted)]
@@ -43,9 +18,6 @@ remove_na_observed_predicted <- function(data) {
   }
   return(data[])
 }
-
-
-
 
 
 #' @title Collapse several messages to one
@@ -80,7 +52,7 @@ collapse_messages <- function(type = "messages", messages) {
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' check <- validate(example_quantile)
+#' check <- as_forecast(example_quantile)
 #' print(check)
 print.scoringutils_check <- function(x, ...) {
   cat("Your forecasts seem to be for a target of the following type:\n")
@@ -170,37 +142,6 @@ strip_attributes <- function(object, attributes) {
   return(object)
 }
 
-#' Remove scoringutils_ Class and Attributes
-#' @description This function removes all classes that start with
-#' "scoringutils_" and all attributes associated with scoringutils.
-#'
-#' @param object An object to remove scoringutils classes and attributes from
-#' @return The object with scoringutils classes and attributes removed
-#' @keywords internal
-remove_scoringutils_class <- function(object) {
-  if (is.null(object)) {
-    return(NULL)
-  }
-  if (is.null(class(object))) {
-    return(object)
-  }
-  # check if "scoringutils_" is in name of any class
-  if (any(grepl("scoringutils_", class(object), fixed = TRUE))) {
-    stored_attributes <- get_scoringutils_attributes(object)
-
-    # remove all classes that contain "scoringutils_"
-    class(object) <- class(object)[!grepl(
-      "scoringutils_", class(object),
-      fixed = TRUE
-    )]
-
-    # remove all scoringutils attributes
-    object <- strip_attributes(object, names(stored_attributes))
-
-    return(object)
-  }
-  return(object)
-}
 
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
@@ -218,6 +159,7 @@ remove_scoringutils_class <- function(object) {
 #' @param fun A function to execute
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
+#' @keywords scoring
 #' @examples
 #' f <- function(x) {x}
 #' run_safely(2, fun = f)
@@ -262,11 +204,10 @@ run_safely <- function(..., fun) {
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {
-  if (!is.data.table(data)) {
-    data <- as.data.table(data)
-  } else {
+  if (is.data.table(data)) {
     data <- copy(data)
+  } else {
+    data <- as.data.table(data)
   }
   return(data)
 }
-

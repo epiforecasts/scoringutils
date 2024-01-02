@@ -19,4 +19,4 @@ of observed or predicted values). The function checks whether the input is
 a factor, or else whether it is integer (or can be coerced to integer) or
 whether it's continuous.
 }
-\keyword{internal}
+\keyword{internal_input_check}

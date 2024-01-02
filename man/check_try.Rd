@@ -19,4 +19,4 @@ see whether assertions fail when checking inputs (i.e. to convert an
 \verb{assert_*()} statement into a check). If the expression fails, the error
 message is returned. If the expression succeeds, \code{TRUE} is returned.
 }
-\keyword{internal}
+\keyword{internal_input_check}

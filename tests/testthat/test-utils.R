@@ -104,7 +104,7 @@ test_that("run_safely() works as expected", {
 # })
 
 # test_that("is_scoringutils_check() is working", {
-#   checked <- suppressMessages(validate(example_binary))
+#   checked <- suppressMessages(validate_forecast(example_binary))
 #   expect_true(is_scoringutils_check(checked))
 #
 #   checked$cleaned_data <- NULL

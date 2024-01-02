@@ -14,7 +14,8 @@ that \code{predicted} represents the probability that the observed value is equa
 to the highest factor level.}
 
 \item{predicted}{Input to be checked. \code{predicted} should be a vector of
-length n, holding probabilities. Values represent the probability that
+length n, holding probabilities. Alternatively, \code{predicted} can be a matrix
+of size n x 1. Values represent the probability that
 the corresponding value in \code{observed} will be equal to the highest
 available factor level.}
 }
@@ -26,4 +27,4 @@ error otherwise.
 Function assesses whether the inputs correspond to the
 requirements for scoring binary forecasts.
 }
-\keyword{check-inputs}
+\keyword{internal_input_check}

@@ -1,19 +1,27 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer the type of a forecast based on a data.frame
+#' @title Infer Forecast Type
+#' @description Helper function to infer the forecast type based on a
+#' data.frame or similar with predictions. Please check the vignettes to
+#' learn more about forecast types.
 #'
-#' @description Internal helper function to get the type of the forecast.
-#' Options are "sample-based", "quantile-based", "binary" or "point" forecast.
-#' The function runs additional checks to make sure the data satisfies
-#' requirements and throws an informative error if any issues are found.
+#' Possible forecast types are
+#' - "sample-based"
+#' - "quantile-based"
+#' - "binary"
+#' - "point" forecast.
 #'
-#' @inheritParams validate
-#'
+#' The function runs additional checks to make sure the data satisfies the
+#' requirements of the respective forecast type and throws an
+#' informative error if any issues are found.
+#' @inheritParams score
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
-#'
-#' @keywords internal
+#' @export
+#' @keywords check-forecasts
 get_forecast_type <- function(data) {
+  assert_data_frame(data)
+  assert(check_columns_present(data, c("observed", "predicted")))
   if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
@@ -24,8 +32,8 @@ get_forecast_type <- function(data) {
     forecast_type <- "point"
   } else {
     stop(
-      "Checking `data`: input doesn't satisfy criteria for any forecast type.",
-      "Are you missing a column `quantile` or `sample_id`?",
+      "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
+      "Are you missing a column `quantile` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
   }
@@ -42,7 +50,7 @@ get_forecast_type <- function(data) {
 #' @inheritParams document_check_functions
 #' @importFrom checkmate test_factor test_numeric
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_binary <- function(data) {
   observed_correct <- test_factor(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -53,7 +61,7 @@ test_forecast_type_is_binary <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_sample <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -65,7 +73,7 @@ test_forecast_type_is_sample <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_point <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -77,7 +85,7 @@ test_forecast_type_is_point <- function(data) {
 #' @description Checks type of the necessary columns.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal
+#' @keywords internal_input_check
 test_forecast_type_is_quantile <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
@@ -92,13 +100,10 @@ test_forecast_type_is_quantile <- function(data) {
 #' of observed or predicted values). The function checks whether the input is
 #' a factor, or else whether it is integer (or can be coerced to integer) or
 #' whether it's continuous.
-#'
 #' @param x Input used to get the type.
-#'
 #' @return Character vector of length one with either "classification",
 #' "integer", or "continuous"
-#'
-#' @keywords internal
+#' @keywords internal_input_check
 get_type <- function(x) {
   if (is.factor(x)) {
     return("classification")
@@ -121,15 +126,11 @@ get_type <- function(x) {
 
 
 #' @title Get metrics that were used for scoring
-#'
 #' @description Internal helper function to get the metrics that were used
 #' to score forecasts.
-#' @param score A data.table with an attribute `metric_names`
-#'
+#' @param scores A data.table with an attribute `metric_names`
 #' @return Character vector with the metrics that were used for scoring.
-#'
-#' @keywords internal
-
+#' @keywords internal_input_check
 get_metrics <- function(scores) {
   metric_names <- attr(scores, "metric_names")
   if (is.null(metric_names)) {
@@ -144,22 +145,23 @@ get_metrics <- function(scores) {
 
 
 #' @title Get unit of a single forecast
-#'
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#'
-#' @inheritParams validate
+#' @inheritParams validate_forecast
 #' @param check_conflict Whether or not to check whether there is a conflict
-#' between a stored attribute and the inferred forecast unit. Defaults to FALSE.
-#'
+#' between a stored attribute and the inferred forecast unit. When you create
+#' a forecast object, the forecast unit is stored as an attribute. If you
+#' later change the columns of the data, the forecast unit as inferred from the
+#' data might change compared to the stored attribute. Should this result in a
+#' warning? Defaults to FALSE.
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
-#'
-#' @keywords internal
+#' @export
+#' @keywords check-forecasts
 get_forecast_unit <- function(data, check_conflict = FALSE) {
   # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
@@ -181,7 +183,7 @@ get_forecast_unit <- function(data, check_conflict = FALSE) {
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
-#' @inheritParams validate
+#' @inheritParams validate_forecast
 #'
 #' @return A character vector with the names of protected columns in the data.
 #' If data is `NULL` (default) then it returns a list of all columns that are
@@ -248,7 +250,7 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
 
 #' @title Get a list of all attributes of a scoringutils object
 #'
-#' @param object A object of class `scoringutils_`
+#' @param object A object of class `forecast_`
 #'
 #' @return A named list with the attributes of that object.
 #' @keywords internal

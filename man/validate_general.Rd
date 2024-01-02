@@ -25,4 +25,4 @@ forecast type. The function
 for all forecasts
 }
 }
-\keyword{validate}
+\keyword{internal_input_check}

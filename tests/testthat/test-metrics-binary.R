@@ -7,14 +7,111 @@ df <- data.table(
   id = 1:10
 )
 
-# test input handling
-test_that("function throws an error when missing observed or predicted", {
-  observed <- sample(c(0, 1), size = 10, replace = TRUE)
-  predicted <- replicate(
-    20,
-    sample(c(0, 1), size = 10, replace = TRUE)
+observed_point <- rnorm(10)
+predicted_point <- rnorm(10)
+
+# ==============================================================================
+# Test Input Checks - this also checks point inputs where functions are similar
+# ==============================================================================
+test_that("correct input works", {
+  expect_no_condition(assert_input_binary(observed, predicted))
+  expect_no_condition(assert_input_point(observed_point, predicted_point))
+
+  # observed is a single number and does not have the same length as predicted
+  expect_no_condition(
+    assert_input_binary(factor(1, levels = c(0, 1)), predicted)
+  )
+  expect_no_condition(
+    assert_input_point(1, predicted_point)
   )
 
+  # predicted is a single number and does not have the same length as observed
+  expect_no_condition(assert_input_binary(observed, predicted = 0.2))
+  expect_no_condition(assert_input_point(observed_point, predicted = 0.2))
+
+  # predicted is a matrix with nrow equal to observed
+  expect_no_condition(assert_input_binary(observed, matrix(predicted)))
+  expect_no_condition(assert_input_point(observed_point, matrix(predicted_point)))
+})
+
+# test input handling
+test_that("function throws an error for wrong input formats", {
+  # observed value not as expected
+  expect_error(
+    assert_input_binary(observed = rnorm(10), predicted = predicted),
+    "Assertion on 'observed' failed: Must be of type 'factor', not 'double'."
+  )
+  expect_error(
+    assert_input_binary(1:10, predicted),
+    "Assertion on 'observed' failed: Must be of type 'factor', not 'integer'."
+  )
+  expect_error(
+    assert_input_binary(observed = observed, predicted = as.list(predicted)),
+    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
+  )
+  expect_error(
+    assert_input_point(observed = factor(rnorm(10)), predicted = predicted),
+    "Assertion on 'observed' failed: Must be of type 'numeric', not 'factor'."
+  )
+  expect_error(
+    assert_input_point(observed = observed_point, list(predicted_point)),
+    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
+  )
+
+  # observed value has not 2 levels
+  expect_error(
+    assert_input_binary(factor(1:10), predicted),
+    "Assertion on 'observed' failed: Must have exactly 2 levels."
+  )
+
+  # wrong length
+  expect_error(
+    assert_input_binary(observed = observed, predicted = runif(15, min = 0, max = 1)),
+    "`observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15",
+    fixed = TRUE
+  )
+  expect_error(
+    assert_input_point(observed_point, runif(15, min = 0, max = 1)),
+    "Assertion on 'observed' failed: `observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15.",
+    fixed = TRUE
+  )
+
+  # predicted > 1
+  expect_error(
+    assert_input_binary(observed, predicted + 1),
+    "Assertion on 'predicted' failed: Element 1 is not <= 1."
+  )
+
+  # predicted < 0
+  expect_error(
+    assert_input_binary(observed, predicted - 1),
+    "Assertion on 'predicted' failed: Element 1 is not >= 0."
+  )
+
+  # predicted is a matrix with one row
+  expect_error(
+    assert_input_binary(observed, predicted = matrix(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
+    fixed = TRUE)
+  expect_error(
+    assert_input_point(observed_point, predicted = matrix(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
+    fixed = TRUE)
+
+  # predicted is a matrix with 2 rows
+  expect_error(
+    assert_input_binary(observed, matrix(rep(predicted, 2), ncol = 2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 1 cols, but has 2 cols",
+    fixed = TRUE
+  )
+})
+
+
+# ==============================================================================
+# Test Binary Metrics
+# ==============================================================================
+
+test_that("function throws an error when missing observed or predicted", {
   expect_error(
     brier_score(predicted = predicted),
     'argument "observed" is missing, with no default'
@@ -26,95 +123,34 @@ test_that("function throws an error when missing observed or predicted", {
   )
 })
 
-
-
-test_that("function throws an error for wrong format of `observed`", {
-  observed <- factor(rpois(10, lambda = 1:10))
-  predicted <- runif(10, min = 0, max = 1)
-
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    "Assertion on 'observed' failed: Must have exactly 2 levels."
-  )
-
-  observed <- rnorm(10)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    "Assertion on 'observed' failed: Must be of type 'factor', not 'double'."
-  )
-})
-
-test_that("function throws an error for wrong format of predictions", {
-  predicted <- runif(10, min = 0, max = 1)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = as.list(predicted)
-    ),
-    "Assertion on 'predicted' failed: Must be of type 'numeric', not 'list'."
-  )
-
-  predicted <- runif(15, min = 0, max = 1)
-  expect_error(
-    brier_score(
-      observed = observed,
-      predicted = predicted
-    ),
-    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
-    # "Arguments to the following function call: 'brier_score(observed = observed, predicted = predicted)' should have the same length (or length one). Actual lengths: 10, 15",
-    fixed = TRUE
-  )
-})
-
-test_that("Input checking for binary forecasts works", {
-  # everything correct
-  expect_no_condition(
-    scoringutils:::assert_input_binary(observed, predicted)
-  )
-
-  # predicted > 1
-  expect_error(
-    scoringutils:::assert_input_binary(observed, predicted + 1),
-    "Assertion on 'predicted' failed: Element 1 is not <= 1."
-  )
-
-  # predicted < 0
-  expect_error(
-    scoringutils:::assert_input_binary(observed, predicted - 1),
-    "Assertion on 'predicted' failed: Element 1 is not >= 0."
-  )
-
-  # observed value not factor
-  expect_error(
-    scoringutils:::assert_input_binary(1:10, predicted),
-    "Assertion on 'observed' failed: Must be of type 'factor', not 'integer'."
-  )
-
-  # observed value has not 2 levels
-  expect_error(
-    scoringutils:::assert_input_binary(factor(1:10), predicted),
-    "Assertion on 'observed' failed: Must have exactly 2 levels."
-  )
-
+test_that("Brier score works with different inputs", {
   # observed is a single number and does not have the same length as predicted
+  expect_equal(
+    brier_score(factor(1, levels = c(0, 1)), predicted),
+    (1 - predicted)^2
+  )
+
+  # predicted is a single number and does not have the same length as observed
+  expect_equal(
+    brier_score(observed, predicted = 0.2),
+    ifelse(observed == 1, (1 - 0.2)^2, (0.2)^2)
+  )
+
+  # predicted is a matrix with 1 row
   expect_error(
-    scoringutils:::assert_input_binary(factor(1), predicted),
-    "`observed` and `predicted` need to be of same length when scoring binary forecasts",
+    brier_score(observed, predicted = matrix(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
     fixed = TRUE
   )
 
-  # predicted is a matrix
+  # predicted is an array
   expect_error(
-    scoringutils:::assert_input_binary(observed, matrix(predicted)),
-    "Assertion on 'predicted' failed: Must be of type 'atomic vector', not 'matrix'."
+    brier_score(observed, predicted = array(0.2)),
+    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'array'\n * check_matrix(predicted): Must be of type 'matrix', not 'array'",
+    fixed = TRUE
   )
 })
+
 
 test_that("Binary metrics work within and outside of `score()`", {
   result <- score(df)
@@ -122,8 +158,30 @@ test_that("Binary metrics work within and outside of `score()`", {
     brier_score(observed, predicted),
     result$brier_score
   )
+
   expect_equal(
     logs_binary(observed, predicted),
     result$log_score
+  )
+})
+
+test_that("`logs_binary()` works as expected", {
+  # check against the function Metrics::ll
+  obs2 <- as.numeric(as.character(observed))
+  expect_equal(
+    logs_binary(observed, predicted),
+    Metrics::ll(obs2, predicted)
+  )
+
+  # check this works for a single observed value
+  expect_equal(
+    logs_binary(observed[1], predicted),
+    Metrics::ll(obs2[1], predicted)
+  )
+
+  # check this works for a single predicted value
+  expect_equal(
+    logs_binary(observed, predicted[1]),
+    Metrics::ll(obs2, predicted[1])
   )
 })

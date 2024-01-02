@@ -7,7 +7,7 @@
 get_scoringutils_attributes(object)
 }
 \arguments{
-\item{object}{A object of class \code{scoringutils_}}
+\item{object}{A object of class \code{forecast_}}
 }
 \value{
 A named list with the attributes of that object.

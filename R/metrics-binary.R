@@ -83,6 +83,6 @@ brier_score <- function(observed, predicted) {
 logs_binary <- function(observed, predicted) {
   assert_input_binary(observed, predicted)
   observed <- as.numeric(observed) - 1
-  logs <- -log(ifelse(observed == 1, predicted, 1 - predicted))
+  logs <- -log(1 - abs(observed - predicted))
   return(logs)
 }
