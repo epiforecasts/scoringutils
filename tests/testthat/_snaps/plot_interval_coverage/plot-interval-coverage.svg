@@ -57,17 +57,15 @@
 <text x='714.52' y='516.90' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='14.68px' lengthAdjust='spacingAndGlyphs'>100</text>
 <text x='376.10' y='529.04' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='127.19px' lengthAdjust='spacingAndGlyphs'>Nominal interval coverage</text>
 <text transform='translate(13.05,264.35) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='103.34px' lengthAdjust='spacingAndGlyphs'>% Obs inside interval</text>
-<text x='103.89' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='29.96px' lengthAdjust='spacingAndGlyphs'>model</text>
-<line x1='141.06' y1='556.40' x2='154.89' y2='556.40' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
-<line x1='266.17' y1='556.40' x2='279.99' y2='556.40' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
-<line x1='396.65' y1='556.40' x2='410.48' y2='556.40' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
-<line x1='501.21' y1='556.40' x2='515.03' y2='556.40' style='stroke-width: 1.07; stroke: #C77CFF; stroke-linecap: butt;' />
-<line x1='615.06' y1='556.40' x2='628.88' y2='556.40' style='stroke-width: 1.07; stroke: #7F7F7F; stroke-linecap: butt;' />
-<text x='162.09' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='96.87px' lengthAdjust='spacingAndGlyphs'>EuroCOVIDhub-baseline</text>
-<text x='287.20' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='102.25px' lengthAdjust='spacingAndGlyphs'>EuroCOVIDhub-ensemble</text>
-<text x='417.69' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='76.32px' lengthAdjust='spacingAndGlyphs'>UMass-MechBayes</text>
-<text x='522.24' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='85.61px' lengthAdjust='spacingAndGlyphs'>epiforecasts-EpiNow2</text>
-<text x='636.09' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>NA</text>
+<text x='124.12' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='29.96px' lengthAdjust='spacingAndGlyphs'>model</text>
+<line x1='161.30' y1='556.40' x2='175.12' y2='556.40' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
+<line x1='286.40' y1='556.40' x2='300.23' y2='556.40' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
+<line x1='416.89' y1='556.40' x2='430.71' y2='556.40' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
+<line x1='521.44' y1='556.40' x2='535.27' y2='556.40' style='stroke-width: 1.07; stroke: #C77CFF; stroke-linecap: butt;' />
+<text x='182.33' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='96.87px' lengthAdjust='spacingAndGlyphs'>EuroCOVIDhub-baseline</text>
+<text x='307.43' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='102.25px' lengthAdjust='spacingAndGlyphs'>EuroCOVIDhub-ensemble</text>
+<text x='437.92' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='76.32px' lengthAdjust='spacingAndGlyphs'>UMass-MechBayes</text>
+<text x='542.47' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='85.61px' lengthAdjust='spacingAndGlyphs'>epiforecasts-EpiNow2</text>
 <text x='37.69' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='132.83px' lengthAdjust='spacingAndGlyphs'>plot_interval_coverage</text>
 </g>
 </svg>

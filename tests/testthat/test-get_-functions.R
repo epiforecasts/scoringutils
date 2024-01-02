@@ -14,7 +14,7 @@ test_that("get_forecast_unit() works as expected", {
       "forecast_date", "model", "horizon")
   )
 
-  data <- as_forecast(example_quantile)
+  data <- as_forecast(na.omit(example_quantile))
   ex <- data[, location := NULL]
   expect_warning(
     get_forecast_unit(ex, check_conflict = TRUE),
@@ -40,7 +40,7 @@ test_that("removing NA rows from data works as expected", {
   expect_equal(nrow(na.omit(ex)), 2)
 
   # test that attributes and classes are retained
-  ex <- as_forecast(example_integer)
+  ex <- as_forecast(na.omit(example_integer))
   expect_equal(
     class(na.omit(ex)),
     c("forecast_sample", "data.table", "data.frame")
@@ -193,7 +193,7 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  data <- as_forecast(example_integer)
+  data <- as_forecast(na.omit(example_integer))
   attr(data, "forecast_type") <- "binary"
   expect_warning(
     get_forecast_type(data),
