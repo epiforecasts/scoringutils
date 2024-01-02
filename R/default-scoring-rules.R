@@ -144,7 +144,7 @@ rules_quantile <- function(select = "all", exclude = NULL) {
     dispersion = dispersion,
     bias = bias_quantile,
     coverage_50 = interval_coverage_quantile,
-    coverage_90 = \(...) {
+    coverage_90 = function(...) {
       run_safely(..., range = 90, fun = interval_coverage_quantile)
     },
     coverage_deviation = interval_coverage_dev_quantile,
