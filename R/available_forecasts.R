@@ -39,7 +39,7 @@ get_forecast_counts <- function(data,
                                 collapse = c("quantile", "sample_id")) {
 
   data <- as_forecast(data)
-  forecast_unit <- attr(data, "forecast_unit")
+  forecast_unit <- get_forecast_unit(data)
   data <- na.omit(data)
 
   if (is.null(by)) {

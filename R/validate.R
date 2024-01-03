@@ -129,7 +129,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' @inheritParams get_forecast_counts
 #' @return returns the input, with a few new attributes that hold additional
 #' information, messages and warnings
-#' @importFrom data.table ':=' is.data.table setattr
+#' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @export
 #' @keywords internal_input_check
@@ -139,20 +139,14 @@ validate_general <- function(data) {
   assert(check_data_columns(data))
   data <- assure_model_column(data)
 
-  # assign forecast type and unit as an attribute and make sure there is no clash
-  forecast_type <- get_forecast_type(data)
-  setattr(data, "forecast_type", forecast_type)
-
-  forecast_unit <- get_forecast_unit(data, check_conflict = TRUE)
-  setattr(data, "forecast_unit", forecast_unit)
-
   # check that there aren't any duplicated forecasts
+  forecast_unit <- get_forecast_unit(data, check_conflict = TRUE)
   assert(check_duplicates(data, forecast_unit = forecast_unit))
 
   # check that the number of forecasts per sample / quantile is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
   if (!is.logical(number_quantiles_samples)) {
-    setattr(data, "warnings", number_quantiles_samples)
+    warning(number_quantiles_samples)
   }
 
   # check whether there are any NA values
