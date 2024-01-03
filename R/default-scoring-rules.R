@@ -136,6 +136,14 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #'   \}
 #' - "coverage_deviation" = [interval_coverage_dev_quantile()],
 #' - "ae_median" = [ae_median_quantile()]
+#'
+#' Note: The `coverage_90` scoring rule is created as a wrapper around
+#' [interval_coverage_quantile()], making use of the function [run_safely()].
+#' This construct allows the function to deal with arbitrary arguments in `...`,
+#' while making sure that only those that [interval_coverage_quantile()] can
+#' accept get passed on to it. `range = 90` is set in the function definition,
+#' as passing an argument `range = 90` to [score()] would mean it would also
+#' get passed to `coverage_50`.
 #' @inherit select_rules params return
 #' @export
 #' @keywords metric

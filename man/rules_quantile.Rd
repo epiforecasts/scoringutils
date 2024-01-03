@@ -34,6 +34,14 @@ run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 \item "coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
+
+Note: The \code{coverage_90} scoring rule is created as a wrapper around
+\code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}, making use of the function \code{\link[=run_safely]{run_safely()}}.
+This construct allows the function to deal with arbitrary arguments in \code{...},
+while making sure that only those that \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}} can
+accept get passed on to it. \code{range = 90} is set in the function definition,
+as passing an argument \code{range = 90} to \code{\link[=score]{score()}} would mean it would also
+get passed to \code{coverage_50}.
 }
 \examples{
 rules_quantile()
