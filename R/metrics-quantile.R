@@ -217,10 +217,11 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #' @inheritParams wis
 #' @param range A single number with the range of the prediction interval in
 #' percent (e.g. 50 for a 50% prediction interval) for which you want to compute
-#' coverage.
+#' interval coverage.
 #' @importFrom checkmate assert_number
-#' @return A vector of length n with TRUE if the observed value is within the
-#' corresponding prediction interval and FALSE otherwise.
+#' @return A vector of length n with elements either TRUE,
+#' if the observed value is within the corresponding prediction interval, and
+#' FALSE otherwise.
 #' @name interval_coverage
 #' @export
 #' @keywords metric
@@ -239,16 +240,16 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
   if (!all(necessary_quantiles %in% quantile)) {
     warning(
-      "To compute the coverage for a range of ", range, "%, the quantiles ",
-      necessary_quantiles, " are required. Returning `NA`."
+      "To compute the interval coverage for a range of ", range,
+      "%, the quantiles ", necessary_quantiles, " are required. Returning `NA`."
     )
     return(NA)
   }
   r <- range
   reformatted <- quantile_to_interval(observed, predicted, quantile)
   reformatted <- reformatted[range %in% r]
-  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
-  return(reformatted$coverage)
+  reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
+  return(reformatted$interval_coverage)
 }
 
 
@@ -257,9 +258,9 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' of a forecast.
 #'
 #' The function is similar to [interval_coverage_quantile()],
-#' but looks at all provided prediction intervals instead of only one. It
-#' compares nominal coverage (i.e. the desired coverage) with the actual
-#' observed coverage.
+#' but takes all provided prediction intervals into account and
+#' compares nominal interval coverage (i.e. the desired interval coverage) with
+#' the actual observed interval coverage.
 #'
 #' A central symmetric prediction interval is defined by a lower and an
 #' upper bound formed by a pair of predictive quantiles. For example, a 50%
@@ -269,43 +270,44 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' observed values with their 90% prediction intervals, and so on.
 #'
 #' For every prediction interval, the deviation is computed as the difference
-#' between the observed coverage and the nominal coverage
-#' For a single observed value and a single prediction interval,
-#' coverage is always either 0 or 1. This is not the case for a single observed
-#' value and multiple prediction intervals, but it still doesn't make that much
+#' between the observed interval coverage and the nominal interval coverage
+#' For a single observed value and a single prediction interval, coverage is
+#' always either 0 or 1 (`FALSE` or `TRUE`). This is not the case for a single
+#' observed value and multiple prediction intervals,
+#' but it still doesn't make that much
 #' sense to compare nominal (desired) coverage and actual coverage for a single
 #' observation. In that sense coverage deviation only really starts to make
 #' sense as a metric when averaged across multiple observations).
 #'
-#' Positive values of coverage deviation are an indication for underconfidence,
-#' i.e. the forecaster could likely have issued a narrower forecast. Negative
-#' values are an indication for overconfidence, i.e. the forecasts were too
-#' narrow.
+#' Positive values of interval coverage deviation are an indication for
+#' underconfidence, i.e. the forecaster could likely have issued a narrower
+#' forecast. Negative values are an indication for overconfidence, i.e. the
+#' forecasts were too narrow.
 #'
 #' \deqn{
-#' \textrm{coverage deviation} =
-#' \mathbf{1}(\textrm{observed value falls within interval} -
-#' \textrm{nominal coverage})
+#' \textrm{interval coverage deviation} =
+#' \mathbf{1}(\textrm{observed value falls within interval}) -
+#' \textrm{nominal interval coverage}
 #' }{
-#' coverage deviation =
-#' 1(observed value falls within interval) - nominal coverage
+#' interval coverage deviation =
+#' 1(observed value falls within interval) - nominal interval coverage
 #' }
-#' The coverage deviation is then averaged across all prediction intervals.
-#' The median is ignored when computing coverage deviation.
+#' The interval coverage deviation is then averaged across all prediction
+#' intervals. The median is ignored when computing coverage deviation.
 #' @inheritParams wis
-#' @return A numeric vector of length n with the coverage deviation for each
-#' forecast (comprising one or multiple prediction intervals).
+#' @return A numeric vector of length n with the interval coverage deviation
+#' for each forecast (comprising one or multiple prediction intervals).
 #' @export
 #' @keywords metric
 #' @examples
-#' observed <- c(1, -15, 22)
-#' predicted <- rbind(
-#'   c(-1, 0, 1, 2, 3),
-#'   c(-2, 1, 2, 2, 4),
-#'    c(-2, 0, 3, 3, 4)
-#' )
-#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_dev_quantile(observed, predicted, quantile)
+# observed <- c(1, -15, 22)
+# predicted <- rbind(
+#   c(-1, 0, 1, 2, 3),
+#   c(-2, 1, 2, 2, 4),
+#    c(-2, 0, 3, 3, 4)
+# )
+# quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+# interval_coverage_dev_quantile(observed, predicted, quantile)
 interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
 
@@ -319,7 +321,7 @@ interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
     warning(
-      "To compute coverage deviation, all quantiles must form central ",
+      "To compute inteval coverage deviation, all quantiles must form central ",
       "symmetric prediction intervals. Missing quantiles: ",
       toString(missing), ". Returning `NA`."
     )
@@ -327,11 +329,11 @@ interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   }
 
   reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
-  reformatted[, coverage := (observed >= lower) & (observed <= upper)]
-  reformatted[, coverage_deviation := coverage - range / 100]
-  out <- reformatted[, .(coverage_deviation = mean(coverage_deviation)),
+  reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
+  reformatted[, interval_coverage_dev := interval_coverage - range / 100]
+  out <- reformatted[, .(interval_coverage_dev = mean(interval_coverage_dev)),
                      by = "forecast_id"]
-  return(out$coverage_deviation)
+  return(out$interval_coverage_dev)
 }
 
 

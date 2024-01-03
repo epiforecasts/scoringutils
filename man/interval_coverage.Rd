@@ -24,11 +24,12 @@ vector of size N.}
 
 \item{range}{A single number with the range of the prediction interval in
 percent (e.g. 50 for a 50\% prediction interval) for which you want to compute
-coverage.}
+interval coverage.}
 }
 \value{
-A vector of length n with TRUE if the observed value is within the
-corresponding prediction interval and FALSE otherwise.
+A vector of length n with elements either TRUE,
+if the observed value is within the corresponding prediction interval, and
+FALSE otherwise.
 }
 \description{
 Check whether the observed value is within a given central
@@ -37,7 +38,7 @@ upper bound formed by a pair of predictive quantiles. For example, a 50\%
 prediction interval is formed by the 0.25 and 0.75 quantiles of the
 predictive distribution.
 
-To compute coverage for sample-based forecasts,
+To compute interval coverage for sample-based forecasts,
 predictive samples are converted first into predictive quantiles using the
 sample quantiles.
 }
@@ -50,6 +51,8 @@ predicted <- rbind(
 )
 quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 interval_coverage_quantile(observed, predicted, quantile)
+observed <- rpois(30, lambda = 1:30)
+predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
 interval_coverage_sample(observed, predicted)
 }
 \keyword{metric}
