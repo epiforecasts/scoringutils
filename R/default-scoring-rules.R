@@ -130,11 +130,11 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #' - "underprediction" = [underprediction()]
 #' - "dispersion" = [dispersion()]
 #' - "bias" = [bias_quantile()]
-#' - "coverage_50" = [interval_coverage_quantile()]
-#' - "coverage_90" = function(...) \{
+#' - "interval_coverage_50" = [interval_coverage_quantile()]
+#' - "interval_coverage_90" = function(...) \{
 #'      run_safely(..., range = 90, fun = [interval_coverage_quantile])
 #'   \}
-#' - "coverage_deviation" = [interval_coverage_dev_quantile()],
+#' - "interval_coverage_deviation" = [interval_coverage_dev_quantile()],
 #' - "ae_median" = [ae_median_quantile()]
 #'
 #' Note: The `coverage_90` scoring rule is created as a wrapper around
@@ -157,11 +157,11 @@ rules_quantile <- function(select = NULL, exclude = NULL) {
     underprediction = underprediction,
     dispersion = dispersion,
     bias = bias_quantile,
-    coverage_50 = interval_coverage_quantile,
-    coverage_90 = function(...) {
+    interval_coverage_50 = interval_coverage_quantile,
+    interval_coverage_90 = function(...) {
       run_safely(..., range = 90, fun = interval_coverage_quantile)
     },
-    coverage_deviation = interval_coverage_dev_quantile,
+    interval_coverage_deviation = interval_coverage_dev_quantile,
     ae_median = ae_median_quantile
   )
   selected <- select_rules(all, select, exclude)

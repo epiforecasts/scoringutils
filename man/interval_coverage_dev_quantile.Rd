@@ -64,4 +64,14 @@ interval coverage deviation =
 The interval coverage deviation is then averaged across all prediction
 intervals. The median is ignored when computing coverage deviation.
 }
+\examples{
+observed <- c(1, -15, 22)
+predicted <- rbind(
+  c(-1, 0, 1, 2, 3),
+  c(-2, 1, 2, 2, 4),
+  c(-2, 0, 3, 3, 4)
+)
+quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+interval_coverage_dev_quantile(observed, predicted, quantile)
+}
 \keyword{metric}
