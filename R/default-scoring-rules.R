@@ -3,9 +3,9 @@
 #' the user from a list of possible scoring rules.
 #' @param rules A list of scoring rules.
 #' @param select A character vector of scoring rules to select from the list.
-#' If `select = all` (the default), all possible scoring rules are returned.
+#' If `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
-#' If `select != "all"`, this argument is ignored.
+#' If `select` is not `NULL`, this argument is ignored.
 #' @return A list of scoring rules.
 #' @keywords metric
 #' @importFrom checkmate assert_subset assert_list
@@ -15,14 +15,18 @@
 #'   rules = rules_binary(),
 #'   select = "brier_score"
 #' )
-select_rules <- function(rules, select = "all", exclude = NULL) {
+#' select_rules(
+#'   rules = rules_binary(),
+#'   exclude = "log_score"
+#' )
+select_rules <- function(rules, select = NULL, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
   assert_list(rules, names = "named")
   allowed <- names(rules)
 
-  if (select == "all" && is.null(exclude)) {
+  if (is.null(select) && is.null(exclude)) {
     return(rules)
-  } else if (select == "all") {
+  } else if (is.null(select)) {
     assert_subset(exclude, allowed)
     select <- allowed[!allowed %in% exclude]
     return(rules[select])
@@ -31,6 +35,7 @@ select_rules <- function(rules, select = "all", exclude = NULL) {
     return(rules[select])
   }
 }
+
 
 #' @title Scoring Rules for Binary Forecasts
 #' @description Helper function that returns a named list of default
@@ -70,7 +75,7 @@ rules_binary <- function(select = "all", exclude = NULL) {
 #' @examples
 #' rules_point()
 #' rules_point(select = "ape")
-rules_point <- function(select = "all", exclude = NULL) {
+rules_point <- function(select = NULL, exclude = NULL) {
   all <- list(
     ae_point = Metrics::ae,
     se_point = Metrics::se,
@@ -126,7 +131,7 @@ rules_sample <- function(select = "all", exclude = NULL) {
 #' - "dispersion" = [dispersion()]
 #' - "bias" = [bias_quantile()]
 #' - "coverage_50" = [interval_coverage_quantile()]
-#' - "coverage_90" = \(...) \{
+#' - "coverage_90" = (...) \{
 #'      run_safely(..., range = 90, fun = [interval_coverage_quantile])
 #'   \}
 #' - "coverage_deviation" = [interval_coverage_dev_quantile()],

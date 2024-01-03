@@ -4,16 +4,16 @@
 \alias{select_rules}
 \title{Select Scoring Rules From A List of Possible Scoring Rules}
 \usage{
-select_rules(rules, select = "all", exclude = NULL)
+select_rules(rules, select = NULL, exclude = NULL)
 }
 \arguments{
 \item{rules}{A list of scoring rules.}
 
 \item{select}{A character vector of scoring rules to select from the list.
-If \code{select = all} (the default), all possible scoring rules are returned.}
+If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
-If \code{select != "all"}, this argument is ignored.}
+If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
 A list of scoring rules.
@@ -26,6 +26,10 @@ the user from a list of possible scoring rules.
 select_rules(
   rules = rules_binary(),
   select = "brier_score"
+)
+select_rules(
+  rules = rules_binary(),
+  exclude = "log_score"
 )
 }
 \keyword{metric}

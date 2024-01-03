@@ -8,10 +8,10 @@ rules_quantile(select = "all", exclude = NULL)
 }
 \arguments{
 \item{select}{A character vector of scoring rules to select from the list.
-If \code{select = all} (the default), all possible scoring rules are returned.}
+If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
-If \code{select != "all"}, this argument is ignored.}
+If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
 A list of scoring rules.
@@ -28,7 +28,7 @@ The default scoring rules are:
 \item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "coverage_50" = \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}
-\item "coverage_90" = \(...) \{
+\item "coverage_90" = (...) \{
 run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 \}
 \item "coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},

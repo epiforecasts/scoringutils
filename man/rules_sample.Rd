@@ -8,10 +8,10 @@ rules_sample(select = "all", exclude = NULL)
 }
 \arguments{
 \item{select}{A character vector of scoring rules to select from the list.
-If \code{select = all} (the default), all possible scoring rules are returned.}
+If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
-If \code{select != "all"}, this argument is ignored.}
+If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
 A list of scoring rules.
