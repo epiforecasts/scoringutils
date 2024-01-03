@@ -133,7 +133,7 @@ strip_attributes <- function(object, attributes) {
 
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
-#' when it is not completely clear what arguments coulld be passed to the
+#' when it is not completely clear what arguments could be passed to the
 #' function.
 #'
 #' All named arguments in `...` that are not accepted by `fun` are removed.

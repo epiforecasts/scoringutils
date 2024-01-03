@@ -3,8 +3,12 @@ library(ggplot2, quietly = TRUE)
 library(data.table)
 suppressMessages(library(magrittr))
 
-metrics_no_cov <- metrics_quantile[!grepl("coverage", names(metrics_quantile))]
-metrics_no_cov_no_ae <- metrics_no_cov[!grepl("ae", names(metrics_no_cov))]
+metrics_no_cov <- rules_quantile(
+  exclude = c("coverage_50", "coverage_90", "coverage_deviation")
+)
+metrics_no_cov_no_ae <- rules_quantile(
+  exclude = c("coverage_50", "coverage_90", "coverage_deviation", "ae_median")
+)
 
 
 # compute scores

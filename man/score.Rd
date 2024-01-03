@@ -13,13 +13,13 @@ score(data, ...)
 
 \method{score}{default}(data, ...)
 
-\method{score}{forecast_binary}(data, metrics = metrics_binary, ...)
+\method{score}{forecast_binary}(data, metrics = rules_binary(), ...)
 
-\method{score}{forecast_point}(data, metrics = metrics_point, ...)
+\method{score}{forecast_point}(data, metrics = rules_point(), ...)
 
-\method{score}{forecast_sample}(data, metrics = metrics_sample, ...)
+\method{score}{forecast_sample}(data, metrics = rules_sample(), ...)
 
-\method{score}{forecast_quantile}(data, metrics = metrics_quantile, ...)
+\method{score}{forecast_quantile}(data, metrics = rules_quantile(), ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
@@ -27,8 +27,8 @@ score(data, ...)
 \item{...}{additional arguments}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
-column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
-\code{metrics_quantile()}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
+\code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
 default metrics used.}
 }
 \value{
