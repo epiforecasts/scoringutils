@@ -120,7 +120,7 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
 score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
-  forecast_unit <- attr(data, "forecast_unit")
+  forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)
 
   # transpose the forecasts that belong to the same forecast unit
@@ -158,7 +158,7 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
 score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
-  forecast_unit <- attr(data, "forecast_unit")
+  forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)
 
   # transpose the forecasts that belong to the same forecast unit
