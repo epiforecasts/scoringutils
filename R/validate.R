@@ -140,7 +140,7 @@ validate_general <- function(data) {
   data <- assure_model_column(data)
 
   # check that there aren't any duplicated forecasts
-  forecast_unit <- get_forecast_unit(data, check_conflict = TRUE)
+  forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data, forecast_unit = forecast_unit))
 
   # check that the number of forecasts per sample / quantile is the same
