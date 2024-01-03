@@ -55,17 +55,65 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.2" id="scoringutils-122">scoringutils 1.2.2<a class="anchor" aria-label="anchor" href="#scoringutils-122"></a></h2><p class="text-muted">CRAN release: 2023-11-29</p>
+<h2 class="pkg-version" data-toc-text="1.3" id="scoringutils-13">scoringutils 1.3<a class="anchor" aria-label="anchor" href="#scoringutils-13"></a></h2>
+<p>This major update and addresses a variety of comments made by reviewers from the Journal of Statistical Software (see preprint of the manuscript <a href="https://arxiv.org/abs/2205.07090" class="external-link">here</a>).</p>
+<p>The update introduces breaking changes. If you want to keep using the older version, you can download it using <code>remotes::install_github("epiforecasts/scoringutils@v1.2")</code>.</p>
 <div class="section level3">
-<h3 id="package-updates-1-2-2">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-2"></a></h3>
+<h3 id="package-updates-1-3">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-3"></a></h3>
+<ul><li>In <code><a href="../reference/score.html">score()</a></code>, required columns “true_value” and “prediction” were renamed and replaced by required columns “observed” and “predicted”. Scoring functions now also use the function arguments “observed” and “predicted” everywhere consistently.</li>
+<li>The overall scoring workflow was updated. <code><a href="../reference/score.html">score()</a></code> is now a generic function that dispatches the correct method based on the forecast type. forecast types currently supported are “binary”, “point”, “sample” and “quantile” with corresponding classes “forecast_binary”, “forecast_point”, “forecast_sample” and “forecast_quantile”. An object of class <code>forecast_*</code> can be created using the function <code><a href="../reference/as_forecast.html">as_forecast()</a></code>, which also replaces the previous function <code>check_forecasts()</code> (see more information below).</li>
+<li>Scoring functions received a consistent interface and input checks:
+<ul><li>metrics for binary forecasts:
 <ul><li>
-<code>scoringutils</code> now depends on R 3.6. The change was made since packages <code>testthat</code> and <code>lifecycle</code>, which are used in <code>scoringutils</code> now require R 3.6. We also updated the Github action CI check to work with R 3.6 now.</li>
-<li>Added a new PR template with a checklist of things to be included in PRs to facilitate the development and review process</li>
-</ul></div>
-<div class="section level3">
-<h3 id="bug-fixes-1-2-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-2"></a></h3>
-<ul><li>Fixes a bug with <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> where the function only workded with a data.table, but not a data.frame as an input.</li>
-<li>The metrics table in the vignette <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented in <code>scoringutils</code></a> had duplicated entries. This was fixed by removing the duplicated rows.</li>
+<code>observed</code>: factor with exactly 2 levels</li>
+<li>
+<code>predicted</code>: numeric, vector with probabilities</li>
+</ul></li>
+<li>metrics for point forecasts:
+<ul><li>
+<code>observed</code>: numeric vector</li>
+<li>
+<code>predicted</code>: numeric vector</li>
+</ul></li>
+<li>metrics for sample-based forecasts:
+<ul><li>
+<code>observed</code>: numeric, either a scalar or a vector</li>
+<li>
+<code>predicted</code>: numeric, a vector (if <code>observed</code> is a scalar) or a matrix (if <code>observed</code> is a vector)</li>
+</ul></li>
+<li>metrics for quantile-based forecasts:
+<ul><li>
+<code>observed</code>: numeric, either a scalar or a vector</li>
+<li>
+<code>predicted</code>: numeric, a vector (if <code>observed</code> is a scalar) or a matrix (if <code>observed</code> is a vector)</li>
+<li>
+<code>quantile</code>: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as <code>predicted</code>.</li>
+</ul></li>
+</ul></li>
+<li>
+<code>check_forecasts()</code> was replaced by a different workflow. There now is a function, <code><a href="../reference/as_forecast.html">as_forecast()</a></code>, that determines forecast type of the data, constructs a forecasting object and validates it using the function <code><a href="../reference/validate_forecast.html">validate_forecast()</a></code> (a generic that dispatches the correct method based on the forecast type). Objects of class <code>forecast_binary</code>, <code>forecast_point</code>, <code>forecast_sample</code> and <code>forecast_quantile</code> have print methods that fulfill the functionality of <code>check_forecasts()</code>.</li>
+<li>The functionality for computing pairwise comparisons was now split from <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. Instead of doing pairwise comparisons as part of summarising scores, a new function, <code><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison()</a></code>, was introduced that takes summarised scores as an input and adds pairwise comparisons to it.</li>
+<li>
+<code><a href="../reference/add_coverage.html">add_coverage()</a></code> was reworked completely. It’s new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by <code>score_quantile()</code>)</li>
+<li>Support for the interval format was mostly dropped (see PR <a href="https://github.com/epiforecasts/scoringutils/issues/525" class="external-link">#525</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a>)
+<ul><li>The function <code>bias_range()</code> was removed (users should now use <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> instead)</li>
+<li>The function <code><a href="../reference/interval_score.html">interval_score()</a></code> was made an internal function rather than being exported to users. We recommend using <code><a href="../reference/wis.html">wis()</a></code> instead.</li>
+</ul></li>
+<li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
+</li>
+<li>Changes to <code>avail_forecasts()</code> and <code>plot_avail_forecasts()</code>:
+<ul><li>The function <code>avail_forecasts()</code> was renamed to <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code>. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix “get_”. Sees Issue <a href="https://github.com/epiforecasts/scoringutils/issues/403" class="external-link">#403</a> and <a href="https://github.com/epiforecasts/scoringutils/issues/521" class="external-link">#521</a> and PR <a href="https://github.com/epiforecasts/scoringutils/issues/511" class="external-link">#511</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> for details.</li>
+<li>For clarity, the output column in <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> was renamed from “Number forecasts” to “count”.</li>
+<li>
+<code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> now also displays combinations where there are 0 forecasts, instead of silently dropping corresponding rows.</li>
+<li>
+<code>plot_avail_forecasts()</code> was renamed <code><a href="../reference/plot_forecast_counts.html">plot_forecast_counts()</a></code> in line with the change in the function name. The <code>x</code> argument no longer has a default value, as the value will depend on the data provided by the user.</li>
+</ul></li>
+<li>The deprecated <code>..density..</code> was replaced with <code>after_stat(density)</code> in ggplot calls.</li>
+<li>Files ending in “.Rda” were renamed to “.rds” where appropriate when used together with <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> or <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>.</li>
+<li>
+<code><a href="../reference/score.html">score()</a></code> now calls <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit()</a></code> on the data, instead of only removing rows with missing values in the columns <code>observed</code> and <code>predicted</code>. This is because <code>NA</code> values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast.</li>
+<li>added documentation for the return value of <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -73,10 +121,10 @@
 <div class="section level3">
 <h3 id="package-updates-1-2-1">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-1"></a></h3>
 <ul><li>This minor update fixes a few issues related to gh actions and the vignettes displayed at epiforecasts.io/scoringutils. It
-<ul><li>Gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn’t work properly</li>
-<li>Updates the gh pages deploy action to v4 and also cleans up files when triggered</li>
-<li>Introduces a gh action to automatically render the Readme from Readme.Rmd</li>
-<li>Removes links to vignettes that have been renamed</li>
+<ul><li>gets rid of the preferably package in _pkgdown.yml. The theme had a toggle between light and dark theme that didn’t work properly</li>
+<li>updates the gh pages deploy action to v4 and also cleans up files when triggered</li>
+<li>introduces a gh action to automatically render the Readme from Readme.Rmd</li>
+<li>removes links to vignettes that have been renamed</li>
 </ul></li>
 </ul></div>
 </div>
@@ -89,19 +137,19 @@
 <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> gains new <code>across</code> argument for summarizing across variables.</li>
 <li>New <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> and <code><a href="../reference/log_shift.html">log_shift()</a></code> functions allow forecast transformations. See the documentation for <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> for more details and an example use case.</li>
 <li>Input checks and test coverage improved for bias functions.</li>
-<li>Bug fix in <code><a href="../reference/get_prediction_type.html">get_prediction_type()</a></code> for integer matrix input.</li>
+<li>Bug fix in <code>get_prediction_type()</code> for integer matrix input.</li>
 <li>Links to scoringutils paper and citation updates.</li>
 <li>Warning added in <code><a href="../reference/interval_score.html">interval_score()</a></code> for small interval ranges.</li>
 <li>Linting updates and improvements.</li>
 </ul><p>Thanks to <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a>, <a href="https://github.com/seabbs" class="external-link">@seabbs</a>, and <a href="https://github.com/sbfnk" class="external-link">@sbfnk</a> for code and review contributions. Thanks to <a href="https://github.com/bisaloo" class="external-link">@bisaloo</a> for the suggestion to use a linting GitHub Action that only triggers on changes, and <a href="https://github.com/adrian-lison" class="external-link">@adrian-lison</a> for the suggestion to add a warning to <code><a href="../reference/interval_score.html">interval_score()</a></code> if the interval range is between 0 and 1.</p>
 <div class="section level3">
 <h3 id="package-updates-1-2-0">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-0"></a></h3>
-<ul><li>The documentation was updated to reflect the recent changes since <code>scoringutils 1.1.0</code>. In particular, usage of the functions <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code>, <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> and <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following:</li>
+<ul><li>The documentation was updated to reflect the recent changes since <code>scoringutils 1.1.0</code>. In particular, usage of the functions <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code>, <code>check_forecasts()</code> and <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following:</li>
 </ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">example_quantile</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"horizon"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/check_forecasts.html">check_forecasts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">check_forecasts</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Documentation for the <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> has also been extended. This functions allows the user to easily add transformations of forecasts, as suggested in the paper <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">“Scoring epidemiological forecasts on transformed scales”</a>. In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. Users can now do something like the following to score a transformed version of the data in addition to the original one:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -115,7 +163,7 @@
 </div>
 <div class="section level3">
 <h3 id="feature-updates-1-2-0">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-2-0"></a></h3>
-<ul><li>Made <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> and <code><a href="../reference/score.html">score()</a></code> pipeable (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/290" class="external-link">#290</a>). This means that users can now directly use the output of <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> as input for <code><a href="../reference/score.html">score()</a></code>. As <code><a href="../reference/score.html">score()</a></code> otherwise runs <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> internally anyway this simply makes the step explicit and helps writing clearer code.</li>
+<ul><li>Made <code>check_forecasts()</code> and <code><a href="../reference/score.html">score()</a></code> pipeable (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/290" class="external-link">#290</a>). This means that users can now directly use the output of <code>check_forecasts()</code> as input for <code><a href="../reference/score.html">score()</a></code>. As <code><a href="../reference/score.html">score()</a></code> otherwise runs <code>check_forecasts()</code> internally anyway this simply makes the step explicit and helps writing clearer code.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -123,19 +171,19 @@
 <p>Release by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> in <a href="https://github.com/epiforecasts/scoringutils/issues/305" class="external-link">#305</a>. Reviewed by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and <a href="https://github.com/sbfnk" class="external-link">@sbfnk</a>.</p>
 <div class="section level3">
 <h3 id="breaking-changes-1-1-7">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-7"></a></h3>
-<ul><li>The <code>prediction_type</code> argument of <code><a href="../reference/get_forecast_unit.html">get_forecast_unit()</a></code> has been changed dropped. Instead a new internal function <code><a href="../reference/prediction_is_quantile.html">prediction_is_quantile()</a></code> is used to detect if a quantile variable is present. Whilst this is an internal function it may impact some users as it is accessible via `find_duplicates().</li>
+<ul><li>The <code>prediction_type</code> argument of <code><a href="../reference/get_forecast_unit.html">get_forecast_unit()</a></code> has been changed dropped. Instead a new internal function <code>prediction_is_quantile()</code> is used to detect if a quantile variable is present. Whilst this is an internal function it may impact some users as it is accessible via `find_duplicates().</li>
 </ul></div>
 <div class="section level3">
 <h3 id="package-updates-1-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-1-7"></a></h3>
-<ul><li>Made imputation of the median in <code><a href="../reference/bias_range.html">bias_range()</a></code> and <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> more obvious to the user as this may cause unexpected behaviour.</li>
-<li>Simplified <code><a href="../reference/bias_range.html">bias_range()</a></code> so that it uses <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> internally.</li>
-<li>Added additional input checks to <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> to make sure that the input is valid.</li>
-<li>Improve the coverage of unit tests for <code><a href="../reference/bias_range.html">bias_range()</a></code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/bias_sample.html">bias_sample()</a></code>.</li>
+<ul><li>Made imputation of the median in <code>bias_range()</code> and <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> more obvious to the user as this may cause unexpected behaviour.</li>
+<li>Simplified <code>bias_range()</code> so that it uses <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> internally.</li>
+<li>Added additional input checks to <code>bias_range()</code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code>check_predictions()</code> to make sure that the input is valid.</li>
+<li>Improve the coverage of unit tests for <code>bias_range()</code>, <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code>, and <code><a href="../reference/bias_sample.html">bias_sample()</a></code>.</li>
 <li>Updated pairwise comparison unit tests to use more realistic data.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-1-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-7"></a></h3>
-<ul><li>Fixed a bug in <code><a href="../reference/get_prediction_type.html">get_prediction_type()</a></code> which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted <code><a href="../reference/bias_sample.html">bias_sample()</a></code> and also <code><a href="../reference/score.html">score()</a></code> when used with integer forecasts resulting in lower bias scores than expected.</li>
+<ul><li>Fixed a bug in <code>get_prediction_type()</code> which led to it being unable to correctly detect integer (instead categorising them as continuous) forecasts when the input was a matrix. This issue impacted <code><a href="../reference/bias_sample.html">bias_sample()</a></code> and also <code><a href="../reference/score.html">score()</a></code> when used with integer forecasts resulting in lower bias scores than expected.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -149,7 +197,7 @@
 <h2 class="pkg-version" data-toc-text="1.1.5" id="scoringutils-115">scoringutils 1.1.5<a class="anchor" aria-label="anchor" href="#scoringutils-115"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-1-1-5">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-5"></a></h3>
-<ul><li>Added a new function, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, <code>scoringutils</code> attempts to determine the unit of a single automatically by simply assuming that all column names are relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/268" class="external-link">#268</a>). When used as part of a workflow, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> can be directly piped into <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to check everything is in order.</li>
+<ul><li>Added a new function, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> that allows the user to set the forecast unit manually. The function removes all columns that are not relevant for uniquely identifying a single forecast. If not done manually, <code>scoringutils</code> attempts to determine the unit of a single automatically by simply assuming that all column names are relevant to determine the forecast unit. This can lead to unexpected behaviour, so setting the forecast unit explicitly can help make the code easier to debug and easier to read (see issue <a href="https://github.com/epiforecasts/scoringutils/issues/268" class="external-link">#268</a>). When used as part of a workflow, <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> can be directly piped into <code>check_forecasts()</code> to check everything is in order.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -218,17 +266,17 @@
 <ul><li>The function <code>eval_forecasts()</code> was replaced by a function <code><a href="../reference/score.html">score()</a></code> with a much reduced set of function arguments.</li>
 <li>Functionality to summarise scores and to add relative skill scores was moved to a function <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>
 </li>
-<li>New function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> to analyse input data before scoring</li>
+<li>New function <code>check_forecasts()</code> to analyse input data before scoring</li>
 <li>New function <code><a href="../reference/correlation.html">correlation()</a></code> to compute correlations between different metrics</li>
 <li>New function <code><a href="../reference/add_coverage.html">add_coverage()</a></code> to add coverage for specific central prediction intervals.</li>
-<li>New function <code><a href="../reference/avail_forecasts.html">avail_forecasts()</a></code> allows to visualise the number of available forecasts.</li>
-<li>New function <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> to find duplicate forecasts which cause an error.</li>
+<li>New function <code>avail_forecasts()</code> allows to visualise the number of available forecasts.</li>
+<li>New function <code>find_duplicates()</code> to find duplicate forecasts which cause an error.</li>
 <li>All plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified.</li>
 <li>The function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
 <li>The function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code><a href="../reference/pit.html">pit()</a></code>
 </li>
 <li>Many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
-<li>The function <code><a href="../reference/brier_score.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
+<li>The function <code><a href="../reference/scoring-functions-binary.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
 <li>
 <code>crps()</code>, <code>dss()</code> and <code>logs()</code> were renamed to <code><a href="../reference/crps_sample.html">crps_sample()</a></code>, <code><a href="../reference/dss_sample.html">dss_sample()</a></code>, and <code><a href="../reference/logs_sample.html">logs_sample()</a></code>
 </li>
@@ -254,7 +302,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.8" id="scoringutils-018">scoringutils 0.1.8<a class="anchor" aria-label="anchor" href="#scoringutils-018"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-0-1-8">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-8"></a></h3>
-<ul><li>Added a function <code><a href="../reference/check_forecasts.html">check_forecasts()</a></code> that runs some basic checks on the input data and provides feedback.</li>
+<ul><li>Added a function <code>check_forecasts()</code> that runs some basic checks on the input data and provides feedback.</li>
 </ul></div>
 </div>
     <div class="section level2">

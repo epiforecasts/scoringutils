@@ -64,7 +64,7 @@ scores as produced by <code><a href="score.html">score()</a></code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correlation</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correlation</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,6 +78,11 @@ scores as produced by <code><a href="score.html">score()</a></code>.</p>
 <code>NULL</code> (default), all metrics present in <code>scores</code> will
 be shown</p></dd>
 
+
+<dt>digits</dt>
+<dd><p>A number indicating how many decimal places the result should
+be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -89,28 +94,24 @@ be shown</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following messages were produced when checking inputs:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.  144 values for `prediction` are NA in the data provided and the corresponding rows were removed. This may indicate a problem if unexpected.</span>
-<span class="r-in"><span><span class="fu">correlation</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There is a column called 'quantile' in the scores. Usually, you should call 'summarise_scores()' to summarise over quantiles and obtain one score per forecast before calculating correlations. You can ignore this warning if you know what you're doing.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_score dispersion underprediction overprediction coverage</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1.00       0.41            0.31           0.93    -0.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:           0.41       1.00            0.10           0.27    -0.05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           0.31       0.10            1.00          -0.03    -0.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:           0.93       0.27           -0.03           1.00    -0.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:          -0.23      -0.05           -0.23          -0.16     1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:          -0.23      -0.08           -0.20          -0.17     0.78</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:           0.10       0.10           -0.32           0.21     0.03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:           0.97       0.47            0.30           0.89    -0.21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    coverage_deviation  bias ae_median             metric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:              -0.23  0.10      0.97     interval_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:              -0.08  0.10      0.47         dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:              -0.20 -0.32      0.30    underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:              -0.17  0.21      0.89     overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:               0.78  0.03     -0.21           coverage</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:               1.00  0.04     -0.26 coverage_deviation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:               0.04  1.00      0.10               bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:              -0.26  0.10      1.00          ae_median</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
+<span class="r-in"><span><span class="fu">correlation</span><span class="op">(</span><span class="va">scores</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      wis overprediction underprediction dispersion  bias coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.00           0.94            0.28       0.46  0.11              -0.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.94           1.00           -0.03       0.32  0.22              -0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.28          -0.03            1.00       0.15 -0.35              -0.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.46           0.32            0.15       1.00  0.11              -0.12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.11           0.22           -0.35       0.11  1.00               0.06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.34          -0.25           -0.33      -0.12  0.06               1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  0.99           0.90            0.34       0.54  0.10              -0.38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ae_median             metric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      0.99                wis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      0.90     overprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      0.34    underprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      0.54         dispersion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      0.10               bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     -0.38 coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:      1.00          ae_median</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
