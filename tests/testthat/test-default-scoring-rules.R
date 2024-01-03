@@ -1,12 +1,12 @@
 test_that("`select_rules` works as expected", {
 
   expect_equal(
-    scoringutils:::select_rules(rules_point(), select = "all"),
+    scoringutils:::select_rules(rules_point(), select = NULL),
     rules_point()
   )
 
   expect_equal(
-    scoringutils:::select_rules(rules_point(), select = "all"),
+    scoringutils:::select_rules(rules_point(), select = NULL),
     scoringutils:::select_rules(rules_point())
   )
 
@@ -16,7 +16,7 @@ test_that("`select_rules` works as expected", {
   )
 
   expect_equal(
-    length(scoringutils:::select_rules(rules_point(), select = "all", exclude = "ape")),
+    length(scoringutils:::select_rules(rules_point(), select = NULL, exclude = "ape")),
     length(rules_point()) - 1
   )
 
@@ -28,7 +28,7 @@ test_that("`select_rules` works as expected", {
 
   # expect error if possibilities is not a list
   expect_error(
-    scoringutils:::select_rules(rules_point, select = "all"),
+    scoringutils:::select_rules(rules_point, select = NULL),
     "Assertion on 'rules' failed: Must be of type 'list', not 'closure'."
   )
 })
