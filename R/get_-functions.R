@@ -162,18 +162,11 @@ get_metrics <- function(scores) {
 #' a single forecast
 #' @export
 #' @keywords check-forecasts
-get_forecast_unit <- function(data, check_conflict = FALSE) {
+get_forecast_unit <- function(data) {
   # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "metric_names"))
-
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
-
-  conflict <- check_attribute_conflict(data,  "forecast_unit", forecast_unit)
-  if (check_conflict && !is.logical(conflict)) {
-    warning(conflict)
-  }
-
   return(forecast_unit)
 }
 
