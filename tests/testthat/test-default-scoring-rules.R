@@ -51,7 +51,7 @@ test_that("default rules work as expected", {
   )
 
   expect_equal(
-    length(rules_binary(select = "all", exclude = "brier_score")),
+    length(rules_binary(select = NULL, exclude = "brier_score")),
     length(rules_binary()) - 1
   )
 
