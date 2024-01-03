@@ -7,10 +7,11 @@
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #' If `select != "all"`, this argument is ignored.
 #' @return A list of scoring rules.
-#' @keywords internal
+#' @keywords metric
 #' @importFrom checkmate assert_subset assert_list
+#' @export
 #' @examples
-#' scoringutils:::select_rules(
+#' select_rules(
 #'   rules = rules_binary(),
 #'   select = "brier_score"
 #' )

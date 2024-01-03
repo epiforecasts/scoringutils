@@ -23,9 +23,9 @@ Helper function to return only the scoring rules selected by
 the user from a list of possible scoring rules.
 }
 \examples{
-scoringutils:::select_rules(
+select_rules(
   rules = rules_binary(),
   select = "brier_score"
 )
 }
-\keyword{internal}
+\keyword{metric}
