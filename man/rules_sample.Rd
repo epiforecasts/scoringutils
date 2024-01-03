@@ -4,7 +4,7 @@
 \alias{rules_sample}
 \title{Scoring Rules for Sample-Based Forecasts}
 \usage{
-rules_sample(select = "all", exclude = NULL)
+rules_sample(select = NULL, exclude = NULL)
 }
 \arguments{
 \item{select}{A character vector of scoring rules to select from the list.

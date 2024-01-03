@@ -4,7 +4,7 @@
 \alias{rules_quantile}
 \title{Scoring Rules for Quantile-Based Forecasts}
 \usage{
-rules_quantile(select = "all", exclude = NULL)
+rules_quantile(select = NULL, exclude = NULL)
 }
 \arguments{
 \item{select}{A character vector of scoring rules to select from the list.

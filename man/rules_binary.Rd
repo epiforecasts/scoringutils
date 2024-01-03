@@ -4,7 +4,7 @@
 \alias{rules_binary}
 \title{Scoring Rules for Binary Forecasts}
 \usage{
-rules_binary(select = "all", exclude = NULL)
+rules_binary(select = NULL, exclude = NULL)
 }
 \arguments{
 \item{select}{A character vector of scoring rules to select from the list.

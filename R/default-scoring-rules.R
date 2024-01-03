@@ -51,7 +51,7 @@ select_rules <- function(rules, select = NULL, exclude = NULL) {
 #' rules_binary()
 #' rules_binary(select = "brier_score")
 #' rules_binary(exclude = "log_score")
-rules_binary <- function(select = "all", exclude = NULL) {
+rules_binary <- function(select = NULL, exclude = NULL) {
   all <- list(
     brier_score = brier_score,
     log_score = logs_binary
@@ -105,7 +105,7 @@ rules_point <- function(select = NULL, exclude = NULL) {
 #' @examples
 #' rules_sample()
 #' rules_sample(select = "mad")
-rules_sample <- function(select = "all", exclude = NULL) {
+rules_sample <- function(select = NULL, exclude = NULL) {
   all <- list(
     bias = bias_sample,
     dss = dss_sample,
@@ -142,7 +142,7 @@ rules_sample <- function(select = "all", exclude = NULL) {
 #' @examples
 #' rules_quantile()
 #' rules_quantile(select = "wis")
-rules_quantile <- function(select = "all", exclude = NULL) {
+rules_quantile <- function(select = NULL, exclude = NULL) {
   all <- list(
     wis = wis,
     overprediction = overprediction,
