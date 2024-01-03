@@ -27,11 +27,11 @@ The default scoring rules are:
 \item "underprediction" = \code{\link[=underprediction]{underprediction()}}
 \item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
-\item "coverage_50" = \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}
-\item "coverage_90" = function(...) \{
+\item "interval_coverage_50" = \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}
+\item "interval_coverage_90" = function(...) \{
 run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 \}
-\item "coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
+\item "interval_coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 

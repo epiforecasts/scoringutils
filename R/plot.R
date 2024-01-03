@@ -57,7 +57,7 @@ plot_score_table <- function(scores,
 
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
-  metrics_zero_good <- c("bias", "coverage_deviation")
+  metrics_zero_good <- c("bias", "interval_coverage_deviation")
   metrics_no_color <- "coverage"
 
   metrics_min_good <- setdiff(metrics, c(
