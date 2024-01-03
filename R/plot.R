@@ -232,7 +232,7 @@ plot_wis <- function(scores,
 #' @examples
 #' library(ggplot2)
 #' ex <- example_quantile
-#' ex$interval_range <- get_range_from_quantile(ex$quantile)
+#' ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
 #' scores <- score(ex, metrics = list("wis" = wis))
 #' scores$range <- scores$interval_range
 #' summarised <- summarise_scores(
