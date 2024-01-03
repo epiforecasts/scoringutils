@@ -275,7 +275,6 @@ crps_sample <- function(observed, predicted, ...) {
 #' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' mad_sample(predicted = predicted)
 #' @keywords metric
-
 mad_sample <- function(observed = NULL, predicted, ...) {
 
   assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
@@ -286,13 +285,15 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 
 
 #' @title Interval Coverage
-#' @description To compute coverage for sample-based forecasts,
+#' @description To compute interval coverage for sample-based forecasts,
 #' predictive samples are converted first into predictive quantiles using the
 #' sample quantiles.
 #' @importFrom checkmate assert_number
 #' @rdname interval_coverage
 #' @export
 #' @examples
+#' observed <- rpois(30, lambda = 1:30)
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' interval_coverage_sample(observed, predicted)
 interval_coverage_sample <- function(observed, predicted, range = 50) {
   assert_input_sample(observed, predicted)
@@ -313,7 +314,7 @@ interval_coverage_sample <- function(observed, predicted, range = 50) {
   # this could call interval_coverage_quantile instead
   # ==========================================================
   interval_dt <- quantile_to_interval(quantile_dt, format = "wide")
-  interval_dt[, coverage := (observed >= lower) & (observed <= upper)]
+  interval_dt[, interval_coverage := (observed >= lower) & (observed <= upper)]
   # ==========================================================
-  return(interval_dt$coverage)
+  return(interval_dt$interval_coverage)
 }
