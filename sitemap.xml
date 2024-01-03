@@ -271,18 +271,6 @@
     <loc>https://epiforecasts.io/scoringutils/reference/metrics.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/metrics_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/metrics_point.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/metrics_quantile.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/metrics_sample.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/new_forecast.html</loc>
   </url>
   <url>
@@ -346,6 +334,18 @@
     <loc>https://epiforecasts.io/scoringutils/reference/range_long_to_quantile.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/rules_binary.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/rules_point.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/rules_quantile.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/rules_sample.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/run_safely.html</loc>
   </url>
   <url>
@@ -365,6 +365,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/se_mean_sample.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/reference/select_rules.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/set_forecast_unit.html</loc>
