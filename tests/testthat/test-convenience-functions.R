@@ -51,7 +51,7 @@ test_that("function set_forecast_unit() works", {
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
   )
-  scores2 <- score(ex2)
+  scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 
   expect_equal(scores1$interval_score, scores2$interval_score)
