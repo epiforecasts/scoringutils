@@ -140,18 +140,18 @@ test_that("function produces output for a point case", {
   )
   expect_equal(
     colnames(eval),
-    c("model", "target_type",names(metrics_point))
+    c("model", "target_type", names(rules_point()))
   )
 })
 
 test_that("Changing metrics names works", {
-  metrics_test <- metrics_point
+  metrics_test <- rules_point()
   names(metrics_test)[1] = "just_testing"
   eval <- suppressMessages(score(example_point, metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
-    c("model", "just_testing", names(metrics_point)[-1])
+    c("model", "just_testing", names(rules_point())[-1])
   )
 })
 
@@ -174,7 +174,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
     nrow(eval) > 1,
     TRUE
   )
-  expect_true(all(names(metrics_quantile) %in% colnames(eval)))
+  expect_true(all(names(rules_quantile()) %in% colnames(eval)))
 })
 
 
