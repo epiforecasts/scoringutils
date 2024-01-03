@@ -46,7 +46,7 @@ select_rules <- function(rules, select = NULL, exclude = NULL) {
 #' - "log_score" = [logs_binary()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords info
+#' @keywords metric
 #' @examples
 #' rules_binary()
 #' rules_binary(select = "brier_score")
@@ -71,7 +71,7 @@ rules_binary <- function(select = NULL, exclude = NULL) {
 #' - "ape" = [ape()][Metrics::ape()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords info
+#' @keywords metric
 #' @examples
 #' rules_point()
 #' rules_point(select = "ape")
@@ -101,7 +101,7 @@ rules_point <- function(select = NULL, exclude = NULL) {
 #' - "se_mean" = [se_mean_sample()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords info
+#' @keywords metric
 #' @examples
 #' rules_sample()
 #' rules_sample(select = "mad")
@@ -131,14 +131,14 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #' - "dispersion" = [dispersion()]
 #' - "bias" = [bias_quantile()]
 #' - "coverage_50" = [interval_coverage_quantile()]
-#' - "coverage_90" = (...) \{
+#' - "coverage_90" = function(...) \{
 #'      run_safely(..., range = 90, fun = [interval_coverage_quantile])
 #'   \}
 #' - "coverage_deviation" = [interval_coverage_dev_quantile()],
 #' - "ae_median" = [ae_median_quantile()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords info
+#' @keywords metric
 #' @examples
 #' rules_quantile()
 #' rules_quantile(select = "wis")

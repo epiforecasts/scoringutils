@@ -28,7 +28,7 @@ The default scoring rules are:
 \item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "coverage_50" = \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}}
-\item "coverage_90" = (...) \{
+\item "coverage_90" = function(...) \{
 run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 \}
 \item "coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
@@ -39,4 +39,4 @@ run_safely(..., range = 90, fun = \link{interval_coverage_quantile})
 rules_quantile()
 rules_quantile(select = "wis")
 }
-\keyword{info}
+\keyword{metric}
