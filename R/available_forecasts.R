@@ -40,7 +40,7 @@ get_forecast_counts <- function(data,
 
   data <- as_forecast(data)
   forecast_unit <- attr(data, "forecast_unit")
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
 
   if (is.null(by)) {
     by <- forecast_unit

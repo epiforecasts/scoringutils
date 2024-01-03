@@ -29,6 +29,7 @@
 #' unsummarised scores to obtain one score per forecast unit for quantile-based
 #' forecasts.
 #' @importFrom data.table ':=' as.data.table
+#' @importFrom stats na.omit
 #' @examples
 #' library(magrittr) # pipe operator
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
@@ -74,11 +75,12 @@ score.default <- function(data, ...) {
   score(data, ...)
 }
 
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.forecast_binary <- function(data, metrics = metrics_binary, ...) {
   data <- validate_forecast(data)
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
   data <- apply_rules(
@@ -94,11 +96,12 @@ score.forecast_binary <- function(data, metrics = metrics_binary, ...) {
 
 
 #' @importFrom Metrics se ae ape
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.forecast_point <- function(data, metrics = metrics_point, ...) {
   data <- validate_forecast(data)
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
   data <- apply_rules(
@@ -111,11 +114,12 @@ score.forecast_point <- function(data, metrics = metrics_point, ...) {
   return(data[])
 }
 
+#' @importFrom stats na.omit
 #' @rdname score
 #' @export
 score.forecast_sample <- function(data, metrics = metrics_sample, ...) {
   data <- validate_forecast(data)
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
@@ -147,12 +151,13 @@ score.forecast_sample <- function(data, metrics = metrics_sample, ...) {
   return(data[])
 }
 
+#' @importFrom stats na.omit
 #' @importFrom data.table `:=` as.data.table rbindlist %like%
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
   data <- validate_forecast(data)
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
   forecast_unit <- attr(data, "forecast_unit")
   metrics <- validate_metrics(metrics)
 
@@ -163,8 +168,7 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile, ...) {
     observed = unique(observed),
     quantile = list(sort(quantile, na.last = TRUE)),
     scoringutils_quantile = toString(sort(quantile, na.last = TRUE))
-  ),
-  by = forecast_unit]
+  ), by = forecast_unit]
 
   # split according to quantile lengths and do calculations for different
   # quantile lengths separately. The function `wis()` assumes that all

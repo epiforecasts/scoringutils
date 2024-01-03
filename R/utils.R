@@ -3,20 +3,9 @@
 #' @return A vector with the name of all available metrics
 #' @export
 #' @keywords info
-
 available_metrics <- function() {
   return(unique(c(scoringutils::metrics$Name,
                   "wis", "coverage_50", "coverage_90")))
-}
-
-
-remove_na_observed_predicted <- function(data) {
-  # remove rows where predicted or observed value are NA -----------------------
-  data <- data[!is.na(observed) & !is.na(predicted)]
-  if (nrow(data) == 0) {
-    stop("After removing NA values in `observed` and `predicted`, there were no observations left")
-  }
-  return(data[])
 }
 
 
@@ -36,7 +25,6 @@ collapse_messages <- function(type = "messages", messages) {
     paste(paste0(seq_along(messages), ". "), messages, collapse = "\n")
   )
 }
-
 
 
 #' @title Print output from `check_forecasts()`
