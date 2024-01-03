@@ -192,7 +192,7 @@ pit <- function(data,
   if (forecast_type == "quantile") {
     data[, quantile_coverage := (observed <= predicted)]
     quantile_coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
-                     by = c(unique(c(by, "quantile")))]
+                              by = c(unique(c(by, "quantile")))]
     quantile_coverage <- quantile_coverage[order(quantile),
       .(
         quantile = c(quantile, 1),

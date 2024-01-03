@@ -300,14 +300,14 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' @export
 #' @keywords metric
 #' @examples
-# observed <- c(1, -15, 22)
-# predicted <- rbind(
-#   c(-1, 0, 1, 2, 3),
-#   c(-2, 1, 2, 2, 4),
-#    c(-2, 0, 3, 3, 4)
-# )
-# quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-# interval_coverage_dev_quantile(observed, predicted, quantile)
+#' observed <- c(1, -15, 22)
+#' predicted <- rbind(
+#'   c(-1, 0, 1, 2, 3),
+#'   c(-2, 1, 2, 2, 4),
+#'   c(-2, 0, 3, 3, 4)
+#' )
+#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage_dev_quantile(observed, predicted, quantile)
 interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
 
@@ -330,9 +330,10 @@ interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
 
   reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
   reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
-  reformatted[, interval_coverage_dev := interval_coverage - range / 100]
-  out <- reformatted[, .(interval_coverage_dev = mean(interval_coverage_dev)),
-                     by = "forecast_id"]
+  reformatted[, interval_coverage_deviation := interval_coverage - range / 100]
+  out <- reformatted[, .(
+    interval_coverage_deviation = mean(interval_coverage_deviation)
+  ), by = "forecast_id"]
   return(out$interval_coverage_dev)
 }
 
