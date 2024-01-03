@@ -76,7 +76,7 @@ score.default <- function(data, ...) {
 }
 
 #' @importFrom stats na.omit
-#' @importFrom data.table na.omit setattr
+#' @importFrom data.table setattr
 #' @rdname score
 #' @export
 score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
@@ -97,7 +97,8 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
 
 
 #' @importFrom Metrics se ae ape
-#' @importFrom data.table na.omit setattr
+#' @importFrom stats na.omit
+#' @importFrom data.table setattr
 #' @rdname score
 #' @export
 score.forecast_point <- function(data, metrics = rules_point(), ...) {
@@ -115,7 +116,8 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
   return(data[])
 }
 
-#' @importFrom data.table na.omit setattr
+#' @importFrom stats na.omit
+#' @importFrom data.table setattr
 #' @rdname score
 #' @export
 score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
@@ -152,8 +154,9 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
   return(data[])
 }
 
-#' @importFrom data.table na.omit setattr
-#' @importFrom data.table `:=` as.data.table rbindlist %like%
+
+#' @importFrom stats na.omit
+#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {

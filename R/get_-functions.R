@@ -152,12 +152,6 @@ get_metrics <- function(scores) {
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
 #' @inheritParams validate_forecast
-#' @param check_conflict Whether or not to check whether there is a conflict
-#' between a stored attribute and the inferred forecast unit. When you create
-#' a forecast object, the forecast unit is stored as an attribute. If you
-#' later change the columns of the data, the forecast unit as inferred from the
-#' data might change compared to the stored attribute. Should this result in a
-#' warning? Defaults to FALSE.
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
 #' @export
