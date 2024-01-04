@@ -14,11 +14,6 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 7,
                       collapse = TRUE,
                       comment = "#>")
-library(scoringutils)
-library(magrittr)
-library(data.table)
-library(ggplot2)
-library(knitr)
 ```
 
 
@@ -110,28 +105,28 @@ data <- metrics |>
   unique()
 
 data <- data[, lapply(.SD, FUN = function(x) {
-  x <- gsub("+", '$\\checkmark$', x, fixed = TRUE)
-  x <- gsub("-", '$-$', x, fixed = TRUE)
-  x <- gsub("~", '$\\sim$', x, fixed = TRUE)
+  x <- gsub("+", "$\\checkmark$", x, fixed = TRUE) # nolint
+  x <- gsub("-", "$-$", x, fixed = TRUE)
+  x <- gsub("~", "$\\sim$", x, fixed = TRUE) # nolint
   return(x)
 })]
 setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
          new = c("D", "C", "B", "Q"))
 
-cap <- "Summary table of scores available in \\pkg{scoringutils}. This table (including corresponding function names) can be accessed by calling \\code{scoringutils::metrics} in \\proglang{R}. Not all metrics are implemented for all types of forecasts and forecasting formats, as indicated by tickmarks, '-', or '$\\sim$' (depends). D (discrete forecasts based on predictive samples), C (continuous, sample-based forecasts), B (binary), and Q (any forecasts in a quantile-based format) refer to different forecast formats. While the distinction is not clear-cut (e.g., binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g., for 'global' and 'local' see Section \\ref{localglobal}). For mathematical definitions of the metrics see Table \\ref{tab:score-table-detailed}."
+cap <- "Summary table of scores available in \\pkg{scoringutils}. This table (including corresponding function names) can be accessed by calling \\code{scoringutils::metrics} in \\proglang{R}. Not all metrics are implemented for all types of forecasts and forecasting formats, as indicated by tickmarks, '-', or '$\\sim$' (depends). D (discrete forecasts based on predictive samples), C (continuous, sample-based forecasts), B (binary), and Q (any forecasts in a quantile-based format) refer to different forecast formats. While the distinction is not clear-cut (e.g., binary is a special case of discrete), it is useful in the context of the package as available functions and functionality may differ. For a more detailed description of the terms used in this table see the corresponding paper sections (e.g., for 'global' and 'local' see Section \\ref{localglobal}). For mathematical definitions of the metrics see Table \\ref{tab:score-table-detailed}." # nolint
 
 data[, 1:6] |>
   kableExtra::kbl(format = "latex", booktabs = TRUE,
                   escape = FALSE,
                   longtable = TRUE,
                   caption = cap,
-                  align = c("lccccl"),
-                  linesep = c('\\addlinespace')) |>
+                  align = "lccccl",
+                  linesep = "\\addlinespace") |>
   kableExtra::column_spec(1, width = "2.9cm") |>
   kableExtra::column_spec(6, width = "9.3cm") |>
   kableExtra::kable_styling(latex_options = c("striped",
                                               "repeat_header, scale_down"),
-                            # full_width = TRUE,
+                            # could add: full_width = TRUE,
                             font_size = 7.5)
 ```
 
