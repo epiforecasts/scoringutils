@@ -7,11 +7,11 @@ The default scoring rules are:
 "underprediction" = underprediction()
 "dispersion" = dispersion()
 "bias" = bias_quantile()
-"coverage_50" = interval_coverage_quantile()
-"coverage_90" = function(...) {
+"interval_coverage_50" = interval_coverage_quantile()
+"interval_coverage_90" = function(...) {
 run_safely(..., range = 90, fun = interval_coverage_quantile)
 }
-"coverage_deviation" = interval_coverage_dev_quantile(),
+"interval_coverage_deviation" = interval_coverage_dev_quantile(),
 "ae_median" = ae_median_quantile()
 
 
@@ -29,11 +29,11 @@ The default scoring rules are:
 "underprediction" = underprediction()
 "dispersion" = dispersion()
 "bias" = bias_quantile()
-"coverage_50" = interval_coverage_quantile()
-"coverage_90" = function(...) {
+"interval_coverage_50" = interval_coverage_quantile()
+"interval_coverage_90" = function(...) {
 run_safely(..., range = 90, fun = interval_coverage_quantile)
 }
-"coverage_deviation" = interval_coverage_dev_quantile(),
+"interval_coverage_deviation" = interval_coverage_dev_quantile(),
 "ae_median" = ae_median_quantile()
 
 
@@ -107,11 +107,11 @@ scoring rules suitable for forecasts in a quantile-based format</p>
 <li><p>"underprediction" = <code><a href="wis.html">underprediction()</a></code></p></li>
 <li><p>"dispersion" = <code><a href="wis.html">dispersion()</a></code></p></li>
 <li><p>"bias" = <code><a href="bias_quantile.html">bias_quantile()</a></code></p></li>
-<li><p>"coverage_50" = <code><a href="interval_coverage.html">interval_coverage_quantile()</a></code></p></li>
-<li><p>"coverage_90" = function(...) {
+<li><p>"interval_coverage_50" = <code><a href="interval_coverage.html">interval_coverage_quantile()</a></code></p></li>
+<li><p>"interval_coverage_90" = function(...) {
 run_safely(..., range = 90, fun = <a href="interval_coverage.html">interval_coverage_quantile</a>)
 }</p></li>
-<li><p>"coverage_deviation" = <code><a href="interval_coverage_dev_quantile.html">interval_coverage_dev_quantile()</a></code>,</p></li>
+<li><p>"interval_coverage_deviation" = <code><a href="interval_coverage_dev_quantile.html">interval_coverage_dev_quantile()</a></code>,</p></li>
 <li><p>"ae_median" = <code><a href="ae_median_quantile.html">ae_median_quantile()</a></code></p></li>
 </ul><p>Note: The <code>coverage_90</code> scoring rule is created as a wrapper around
 <code><a href="interval_coverage.html">interval_coverage_quantile()</a></code>, making use of the function <code><a href="run_safely.html">run_safely()</a></code>.
@@ -186,7 +186,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d9359b28&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c96877598&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -198,7 +198,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     do.call(wis, c(list(observed), list(predicted), list(quantile), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))$overprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d935c1c8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c96877d18&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -210,7 +210,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     do.call(wis, c(list(observed), list(predicted), list(quantile), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))$underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d935ee08&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c9687a958&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -222,7 +222,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     do.call(wis, c(list(observed), list(predicted), list(quantile), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))$dispersion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d9361850&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c9687d368&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bias</span>
@@ -244,40 +244,41 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(bias)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636da6c2de8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c97cfe300&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $coverage_50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted, quantile, range = 50) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_quantile(observed, predicted, quantile)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_number(range)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     necessary_quantiles &lt;- c((100 - range)/2, 100 - (100 - range)/2)/100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (!all(necessary_quantiles %in% quantile)) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         warning("To compute the coverage for a range of ", range, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             "%, the quantiles ", necessary_quantiles, " are required. Returning `NA`.")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         warning("To compute the interval coverage for a range of ", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             range, "%, the quantiles ", necessary_quantiles, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             " are required. Returning `NA`.")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(NA)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     r &lt;- range</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted &lt;- quantile_to_interval(observed, predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         quantile)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted &lt;- reformatted[range %in% r]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(coverage, (observed &gt;= lower) &amp; (observed &lt;= </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         upper))]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     return(reformatted$coverage)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(interval_coverage, (observed &gt;= lower) &amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         (observed &lt;= upper))]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     return(reformatted$interval_coverage)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d93605b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c9687c0d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_90</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (...) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     run_safely(..., range = 90, fun = interval_coverage_quantile)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d9354938&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5636d7b61ee0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c968723a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560c978a92c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_deviation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted, quantile) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_quantile(observed, predicted, quantile)</span>
@@ -287,21 +288,22 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (!all(necessary_quantiles %in% quantile)) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         missing &lt;- necessary_quantiles[!necessary_quantiles %in% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             quantile]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         warning("To compute coverage deviation, all quantiles must form central ", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         warning("To compute inteval coverage deviation, all quantiles must form central ", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             "symmetric prediction intervals. Missing quantiles: ", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             toString(missing), ". Returning `NA`.")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(NA)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted &lt;- quantile_to_interval(observed, predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         quantile)[range != 0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(coverage, (observed &gt;= lower) &amp; (observed &lt;= </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         upper))]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(coverage_deviation, coverage - range/100)]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     out &lt;- reformatted[, .(coverage_deviation = mean(coverage_deviation)), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(interval_coverage, (observed &gt;= lower) &amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         (observed &lt;= upper))]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted[, `:=`(interval_coverage_deviation, interval_coverage - </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         range/100)]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     out &lt;- reformatted[, .(interval_coverage_deviation = mean(interval_coverage_deviation)), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         by = "forecast_id"]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$coverage_deviation)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$interval_coverage_dev)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d9369888&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c96887330&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
@@ -320,7 +322,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     abs_error_median &lt;- abs(observed - predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(abs_error_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d58f2c40&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c92cd4b88&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">rules_quantile</span><span class="op">(</span>select <span class="op">=</span> <span class="st">"wis"</span><span class="op">)</span></span></span>
@@ -361,7 +363,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5636d9359b28&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c96877598&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

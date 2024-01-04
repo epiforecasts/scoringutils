@@ -216,22 +216,22 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5: EuroCOVIDhub-baseline      Deaths   159.40387      65.899117        2.098505</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       UMass-MechBayes      Deaths    52.65195       8.978601       16.800951</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  epiforecasts-EpiNow2      Deaths    66.64282      18.892583       15.893314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    dispersion        bias coverage_50 coverage_90 coverage_deviation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 3663.52458 -0.05640625   0.3906250   0.8046875        -0.10230114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 4102.50094  0.09796875   0.3281250   0.8203125        -0.11721591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 5664.37795 -0.07890625   0.4687500   0.7890625        -0.06963068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   30.18099  0.07265625   0.8750000   1.0000000         0.20380682</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   91.40625  0.33906250   0.6640625   1.0000000         0.12142045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   26.87239 -0.02234375   0.4609375   0.8750000        -0.02488636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   31.85692 -0.00512605   0.4201681   0.9075630        -0.04520244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      ae_median</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 24101.07031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 38473.60156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 27923.81250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    53.13281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   233.25781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:    78.47656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   104.74790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    dispersion        bias interval_coverage_50 interval_coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 3663.52458 -0.05640625            0.3906250            0.8046875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 4102.50094  0.09796875            0.3281250            0.8203125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 5664.37795 -0.07890625            0.4687500            0.7890625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   30.18099  0.07265625            0.8750000            1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   91.40625  0.33906250            0.6640625            1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   26.87239 -0.02234375            0.4609375            0.8750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   31.85692 -0.00512605            0.4201681            0.9075630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_deviation   ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                 -0.10230114 24101.07031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                 -0.11721591 38473.60156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                 -0.06963068 27923.81250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                  0.20380682    53.13281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                  0.12142045   233.25781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:                 -0.02488636    78.47656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:                 -0.04520244   104.74790</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># set forecast unit manually (to avoid issues with scoringutils trying to</span></span></span>
 <span class="r-in"><span><span class="co"># determine the forecast unit automatically), check forecasts before scoring</span></span></span>
@@ -255,30 +255,42 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 885:       IT      2021-07-24      Deaths       2       UMass-MechBayes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:       IT      2021-07-24      Deaths       2  epiforecasts-EpiNow2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               wis overprediction underprediction  dispersion  bias coverage_50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  7990.854783   2.549870e+03       0.0000000 5440.985217  0.50        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 16925.046957   1.527583e+04       0.0000000 1649.220870  0.95       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 25395.960870   1.722226e+04       0.0000000 8173.700000  0.90       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    53.880000   0.000000e+00       0.6086957   53.271304 -0.10        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    46.793043   2.130435e+00       0.0000000   44.662609  0.30        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 883:    80.336957   3.608696e+00       0.0000000   76.728261  0.20        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 884:     4.881739   4.347826e-02       0.0000000    4.838261  0.10        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 885:    25.581739   1.782609e+01       0.0000000    7.755652  0.80       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 886:    19.762609   5.478261e+00       0.0000000   14.284348  0.50        TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 887:    66.161739   4.060870e+01       0.0000000   25.553043  0.90       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      coverage_90 coverage_deviation ae_median</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:        TRUE         0.05181818     12271</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       FALSE        -0.40272727     25620</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:        TRUE        -0.31181818     44192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:        TRUE         0.41545455        14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:        TRUE         0.23363636        15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 883:        TRUE         0.32454545        53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 884:        TRUE         0.41545455         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 885:        TRUE        -0.22090909        46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 886:        TRUE         0.05181818        26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 887:        TRUE        -0.31181818       108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               wis overprediction underprediction  dispersion  bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  7990.854783   2.549870e+03       0.0000000 5440.985217  0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 16925.046957   1.527583e+04       0.0000000 1649.220870  0.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 25395.960870   1.722226e+04       0.0000000 8173.700000  0.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    53.880000   0.000000e+00       0.6086957   53.271304 -0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    46.793043   2.130435e+00       0.0000000   44.662609  0.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:    80.336957   3.608696e+00       0.0000000   76.728261  0.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:     4.881739   4.347826e-02       0.0000000    4.838261  0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:    25.581739   1.782609e+01       0.0000000    7.755652  0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:    19.762609   5.478261e+00       0.0000000   14.284348  0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:    66.161739   4.060870e+01       0.0000000   25.553043  0.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      interval_coverage_50 interval_coverage_90 interval_coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                 TRUE                 TRUE                  0.05181818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                FALSE                FALSE                 -0.40272727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                FALSE                 TRUE                 -0.31181818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                 TRUE                 TRUE                  0.41545455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                 TRUE                 TRUE                  0.23363636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:                 TRUE                 TRUE                  0.32454545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:                 TRUE                 TRUE                  0.41545455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:                FALSE                 TRUE                 -0.22090909</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:                 TRUE                 TRUE                  0.05181818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:                FALSE                 TRUE                 -0.31181818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:     12271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:     25620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:     44192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:        14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:        15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:        53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:        46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:        26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:       108</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># forecast formats with different metrics</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
