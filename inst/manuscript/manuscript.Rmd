@@ -201,19 +201,16 @@ include_graphics("output/flowchart-create-object.png")
 
 The example data included in the package and used in this paper consists of one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different forecasting models. It represents a small subset of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. One to four weeks ahead predictions of different COVID-19 related targets were submitted to the Forecast Hub each week in a quantile-based format. The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. The example data was converted to all the different forecast types used in \pkg{scoringutils}, to illustrate the workflows and provide users with a reference for the correct input formats. The example data also contains observations without corresponding forecasts, both for the purposes of plotting the data and to make the example data more realistic. The stored data sets are called `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.
 
-Here is the output of validating the example data: 
+Here is the output after turning the quantile example into an object of class `forecast_quantile`: 
 <!-- Add version of it where we print it in a pipe?  -->
 <!-- Add a call to class and attributes -->
 
 ```{r example-data, fig.pos = "!h", out.width="100%", fig.cap= "Output of validating the example data.", fig.show="hold"}
-
-# NEEDS REWORKING ONCE THE NEW WORKFLOW IS IMPLEMENTED
 library(scoringutils)
 print(example_quantile, 2)
 
-validated <- validate(example_quantile) 
-class(validated)
-
+quantile_forecast <- as_forecast(example_quantile) 
+class(quantile_forecast)
 ```
 
 ## Diagnostic functions that provide additional information about the data
@@ -227,17 +224,16 @@ Functions that provide this kind of additional information usually are named sta
 \fct{get\_forecast\_counts} returns forecast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r get-forecast-counts}
-forecast_counts <- available_forecasts(
-  example_quantile, by = c("model", "target_type", "forecast_date")
+forecast_counts <- get_forecast_counts(
+  quantile_forecast, by = c("model", "target_type", "forecast_date")
 )
 ```
 
-This returns an object of class `forecast_counts`. We can visualise the results by calling \fct{plot\_forecast\_counts} on the object (Figure \ref{fig:plot-forecast-counts}). 
+We can visualise the results by calling \fct{plot\_forecast\_counts} on the output (Figure \ref{fig:plot-forecast-counts}). 
 
 ```{r plot-forecast-counts, fig.pos = "!h", fig.width = 7, out.width="100%", fig.cap = "Forecast counts for the example data."}
-# REWORK ONCE FUNCTION NAME HAS CHANGED
 library(ggplot2)
-plot(forecast_counts, xvar = "forecast_date") + 
+plot_forecast_counts(forecast_counts, x = "forecast_date") + 
   facet_wrap(~ target_type) + 
   labs (y = "Model", x = "Forecast date")
 ```
