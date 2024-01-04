@@ -143,6 +143,9 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
+#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> Some rows containing NA values may be removed. This is fine if not unexpected.
 ```
 
 | model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | coverage_50 | coverage_90 | coverage_deviation | ae_median | relative_skill | scaled_rel_skill |
@@ -175,6 +178,7 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
+#> Some rows containing NA values may be removed. This is fine if not unexpected.
 #>                    model target_type   scale         wis overprediction
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
 #> 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696
@@ -184,7 +188,7 @@ example_quantile %>%
 #> 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601
 #>    underprediction dispersion        bias coverage_50 coverage_90
 #> 1:     4237.177310 3663.52458 -0.05640625   0.3906250   0.8046875
-#> 2:    10284.972826 4102.50094  0.09726563   0.3281250   0.8203125
+#> 2:    10284.972826 4102.50094  0.09726562   0.3281250   0.8203125
 #> 3:     3260.355639 5664.37795 -0.07890625   0.4687500   0.7890625
 #> 4:        4.103261   30.18099  0.07265625   0.8750000   1.0000000
 #> 5:        2.098505   91.40625  0.33906250   0.6640625   1.0000000
