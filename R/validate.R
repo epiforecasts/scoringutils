@@ -1,57 +1,70 @@
-#' @title Validate input data
+#' @title Create a `forecast` Object
+#' @description Convert a data.frame or similar of forecasts into an object of
+#' class `forecast_*` and validate it.
 #'
-#' @description
-#'
-#' The default method, [validate.default()] only runs basic input checks.
-#' It's main purpose is to determine the forecast type (binary, point,
-#' sample-based or quantile-based) based on the input data. It then constructs
-#' an appropriate class and calls [validate()] again which dispatches to the
-#' appropriate method.
-#'
-#' Methods for the different classes run [validate_general()], which performs
-#' checks that are the same for all forecast types and then perform specific
-#' checks for the specific forecast type.
-#'
-#' You can find more information about input formats in the vignette.
-#' To summarise, the data should come in one of four different formats:
-#' - A format for binary predictions (see [example_binary])
-#' - A format for point predictions (see [example_point])
-#' - A sample-based format for discrete or continuous predictions
-#' (see [example_continuous] and [example_integer])
-#' - A quantile-based format (see [example_quantile])
-#'
+#' `as_forecast()` determines the forecast type (binary, point, sample-based or
+#' quantile-based) from the input data (using the function
+#' [get_forecast_type()]. It then constructs an object of the
+#' appropriate class (`forecast_binary`, `forecast_point`, `forecast_sample`, or
+#' `forecast_quantile`, using the function [new_forecast()]).
+#' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
+#' the required input formats.
 #' @inheritParams score
+#' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
-#' `scoringutils_binary`, `scoringutils_point`, `scoringutils_sample` or
-#' `scoringutils_quantile`.
-#' @importFrom data.table ':=' is.data.table
-#' @importFrom checkmate assert_data_frame
+#' `forecast_binary`, `forecast_point`, `forecast_sample` or
+#' `forecast_quantile`.
 #' @export
 #' @keywords check-forecasts
-validate <- function(data, ...) {
-  UseMethod("validate")
+#' @examples
+#' as_forecast(example_binary)
+#' as_forecast(example_quantile)
+as_forecast <- function(data, ...) {
+  UseMethod("as_forecast")
 }
 
-#' @rdname validate
+#' @rdname as_forecast
 #' @export
-#' @keywords check-forecasts
-validate.default <- function(data, ...) {
+as_forecast.default <- function(data, ...) {
   assert(check_data_columns(data))
 
   # find forecast type
   forecast_type <- get_forecast_type(data)
 
   # construct class
-  data <- new_scoringutils(data, paste0("scoringutils_", forecast_type))
+  data <- new_forecast(data, paste0("forecast_", forecast_type))
 
   # validate class
-  validate(data)
+  validate_forecast(data)
 }
 
-#' @rdname validate
+
+#' @title Validate input data
+#'
+#' @description
+#' Methods for the different classes run [validate_general()], which performs
+#' checks that are the same for all forecast types and then perform specific
+#' checks for the specific forecast type.
+#' @inheritParams score
+#' @inheritSection forecast_types Forecast types and input format
+#' @return Depending on the forecast type, an object of class
+#' `forecast_binary`, `forecast_point`, `forecast_sample` or
+#' `forecast_quantile`.
+#' @importFrom data.table ':=' is.data.table
+#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_binary <- function(data, ...) {
+#' @examples
+#' forecast <- as_forecast(example_binary)
+#' validate_forecast(forecast)
+validate_forecast <- function(data, ...) {
+  UseMethod("validate_forecast")
+}
+
+
+#' @export
+#' @keywords check-forecasts
+validate_forecast.forecast_binary <- function(data, ...) {
   data <- validate_general(data)
 
   columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
@@ -69,10 +82,10 @@ validate.scoringutils_binary <- function(data, ...) {
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_point <- function(data, ...) {
+validate_forecast.forecast_point <- function(data, ...) {
   data <- validate_general(data)
 
   input_check <- check_input_point(data$observed, data$predicted)
@@ -84,21 +97,23 @@ validate.scoringutils_point <- function(data, ...) {
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
-validate.scoringutils_quantile <- function(data, ...) {
+#' @keywords check-forecasts
+validate_forecast.forecast_quantile <- function(data, ...) {
   data <- validate_general(data)
   assert_numeric(data$quantile, lower = 0, upper = 1)
   return(data[])
 }
 
-#' @rdname validate
+
 #' @export
 #' @keywords check-forecasts
-validate.scoringutils_sample <- function(data, ...) {
+validate_forecast.forecast_sample <- function(data, ...) {
   data <- validate_general(data)
   return(data[])
 }
+
 
 #' @title Apply scoringutls input checks that are the same across forecast types
 #'
@@ -111,7 +126,7 @@ validate.scoringutils_sample <- function(data, ...) {
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
-#' @inheritParams available_forecasts
+#' @inheritParams get_forecast_counts
 #' @return returns the input, with a few new attributes that hold additional
 #' information, messages and warnings
 #' @importFrom data.table ':=' is.data.table setattr
@@ -140,14 +155,17 @@ validate_general <- function(data) {
     setattr(data, "warnings", number_quantiles_samples)
   }
 
-  # check whether there are any NA values in the predicted or observed values
-  messages <- c(
-    check_no_NA_present(data, "predicted"),
-    check_no_NA_present(data, "observed")
-  )
-  if (!is.logical(messages)) {
-    messages <- messages[messages != "TRUE"]
-    setattr(data, "messages", messages)
+  # check whether there are any NA values
+  if (anyNA(data)) {
+    if (nrow(na.omit(data)) == 0) {
+      stop(
+        "After removing rows with NA values in the data, no forecasts are left."
+      )
+    }
+    message(
+      "Some rows containing NA values may be removed. ",
+      "This is fine if not unexpected."
+    )
   }
 
   return(data[])
@@ -162,12 +180,12 @@ validate_general <- function(data) {
 #' - makes sure that a column called `model` exists and if not creates one
 #' - assigns a class
 #'
-#' @inheritParams available_forecasts
+#' @inheritParams get_forecast_counts
 #' @param classname name of the class to be created
 #' @return An object of the class indicated by `classname`
 #' @export
 #' @keywords internal
-new_scoringutils <- function(data, classname) {
+new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   data <- assure_model_column(data)
   class(data) <- c(classname, class(data))

@@ -1,11 +1,10 @@
-test_that("plot_available_forecasts() works as expected", {
-  available_forecasts <- suppressMessages(
-    available_forecasts(example_quantile,
-      by = c("model", "target_type", "target_end_date")
-    )
+test_that("plot.forecast_counts() works as expected", {
+  available_forecasts <- get_forecast_counts(
+    na.omit(example_quantile),
+    by = c("model", "target_type", "target_end_date")
   )
-  p <- plot(available_forecasts,
-    xvar = "target_end_date", show_numbers = FALSE
+  p <- plot_forecast_counts(available_forecasts,
+    x = "target_end_date", show_counts = FALSE
   ) +
     facet_wrap("target_type")
   expect_s3_class(p, "ggplot")

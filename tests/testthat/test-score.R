@@ -38,11 +38,11 @@ test_that("function produces output for a binary case", {
   expect_true("brier_score" %in% names(eval))
 })
 
-test_that("score.scoringutils_binary() errors with only NA values", {
+test_that("score.forecast_binary() errors with only NA values", {
   only_nas <- copy(example_binary)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -140,27 +140,27 @@ test_that("function produces output for a point case", {
   )
   expect_equal(
     colnames(eval),
-    c("model", "target_type",names(metrics_point))
+    c("model", "target_type", names(rules_point()))
   )
 })
 
 test_that("Changing metrics names works", {
-  metrics_test <- metrics_point
+  metrics_test <- rules_point()
   names(metrics_test)[1] = "just_testing"
   eval <- suppressMessages(score(example_point, metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
-    c("model", "just_testing", names(metrics_point)[-1])
+    c("model", "just_testing", names(rules_point())[-1])
   )
 })
 
 
-test_that("score.scoringutils_point() errors with only NA values", {
+test_that("score.forecast_point() errors with only NA values", {
   only_nas <- copy(example_point)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -174,7 +174,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
     nrow(eval) > 1,
     TRUE
   )
-  expect_true(all(names(metrics_quantile) %in% colnames(eval)))
+  expect_true(all(names(rules_quantile()) %in% colnames(eval)))
 })
 
 
@@ -239,11 +239,11 @@ test_that("WIS is the same with other metrics omitted or included", {
 })
 
 
-test_that("score.scoringutils_quantile() errors with only NA values", {
+test_that("score.forecast_quantile() errors with only NA values", {
   only_nas <- copy(example_quantile)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 })
 
@@ -259,7 +259,7 @@ test_that("function produces output for a continuous format case", {
   only_nas <- copy(example_continuous)[, predicted := NA_real_]
   expect_error(
     score(only_nas),
-    "After removing NA values in `observed` and `predicted`, there were no observations left"
+    "After removing rows with NA values in the data, no forecasts are left."
   )
 
   expect_equal(
@@ -277,16 +277,31 @@ test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
 })
 
-# test_that(
-#   "score() can support a sample column when a quantile forecast is used", {
-#   ex <- example_quantile[!is.na(quantile)][1:200, ]
-#   ex <- rbind(
-#     data.table::copy(ex)[, sample_id := 1],
-#     ex[, sample_id := 2]
-#   )
-#   scores <- suppressWarnings(score(ex))
-#   expect_snapshot(summarise_scores(
-#     summarise_scores(scores, by = "model"), by = "model",
-#     fun = signif, digits = 2
-#   ))
-#  })
+# =============================================================================
+# `apply_rules()`
+# =============================================================================
+
+test_that("apply_rules() works", {
+
+  dt <- data.table::data.table(x = 1:10)
+  scoringutils:::apply_rules(
+    data = dt, metrics = list("test" = function(x) x + 1),
+    dt$x
+  )
+  expect_equal(dt$test, 2:11)
+
+  # additional named argument works
+  expect_no_condition(
+    scoringutils:::apply_rules(
+      data = dt, metrics = list("test" = function(x) x + 1),
+      dt$x, y = dt$test)
+  )
+
+  # additional unnamed argument does not work
+
+  expect_warning(
+    scoringutils:::apply_rules(
+      data = dt, metrics = list("test" = function(x) x + 1),
+      dt$x, dt$test)
+  )
+})

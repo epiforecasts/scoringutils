@@ -52,7 +52,6 @@ scores <- score(example_continuous)
 summarise_scores(scores)
 }
 
-
 # summarise over samples or quantiles to get one score per forecast
 scores <- score(example_quantile)
 summarise_scores(scores)

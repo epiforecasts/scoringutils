@@ -537,7 +537,7 @@ p2 + p1 + p_true +
 available_forecasts(data = example_integer,
                 by = c("model", "target_type", "forecast_date")) |>
   plot_available_forecasts(x = "forecast_date",
-                       show_numbers = FALSE) +
+                       show_counts = FALSE) +
   facet_wrap(~ target_type) +
   labs(y = "Model", x = "Forecast date")
 

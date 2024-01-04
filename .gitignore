@@ -15,6 +15,7 @@ inst/manuscript/manuscript.tex
 inst/manuscript/manuscript.out
 inst/manuscript/manuscript.bbl
 inst/manuscript/manuscript_files/
+inst/manuscript/.trackdown
 docs
 ..bfg-report/
 .DS_Store

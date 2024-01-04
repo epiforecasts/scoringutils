@@ -175,7 +175,7 @@ check_attribute_conflict <- function(object, attribute, expected) {
       "from what's expected based on the data.\n",
       "Existing: ", toString(existing), "\n",
       "Expected: ", toString(expected), "\n",
-      "Running `validate()` again might solve the problem"
+      "Running `as_forecast()` again might solve the problem"
     )
     return(msg)
   }
@@ -211,6 +211,7 @@ assure_model_column <- function(data) {
 #' @inherit document_check_functions params return
 #' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
+  data <- na.omit(data)
   # check whether there are the same number of quantiles, samples --------------
   data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
   n <- unique(data$scoringutils_InternalNumCheck)

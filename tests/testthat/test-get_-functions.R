@@ -1,7 +1,6 @@
 # ==============================================================================
 # `get_forecast_unit()`
 # ==============================================================================
-
 test_that("get_forecast_unit() works as expected", {
   expect_equal(
     get_forecast_unit(example_quantile),
@@ -15,19 +14,49 @@ test_that("get_forecast_unit() works as expected", {
       "forecast_date", "model", "horizon")
   )
 
-  data <- validate(example_quantile)
+  data <- as_forecast(na.omit(example_quantile))
   ex <- data[, location := NULL]
   expect_warning(
     get_forecast_unit(ex, check_conflict = TRUE),
     "Object has an attribute `forecast_unit`, but it looks different from what's expected based on the data.
 Existing: forecast_date, horizon, location, location_name, model, target_end_date, target_type
 Expected: forecast_date, horizon, location_name, model, target_end_date, target_type
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
 fixed = TRUE
   )
 })
 
 
+# ==============================================================================
+# Test removing `NA` values from the data
+# ==============================================================================
+test_that("removing NA rows from data works as expected", {
+  expect_equal(nrow(na.omit(example_quantile)), 20401)
+
+  ex <- data.frame(observed = c(NA, 1:3), predicted = 1:4)
+  expect_equal(nrow(na.omit(ex)), 3)
+
+  ex$predicted <- c(1:3, NA)
+  expect_equal(nrow(na.omit(ex)), 2)
+
+  # test that attributes and classes are retained
+  ex <- as_forecast(na.omit(example_integer))
+  expect_equal(
+    class(na.omit(ex)),
+    c("forecast_sample", "data.table", "data.frame")
+  )
+
+  attributes <- get_scoringutils_attributes(ex)
+  expect_equal(
+    get_scoringutils_attributes(na.omit(ex)),
+    attributes
+  )
+})
+
+
+# ==============================================================================
+# `get_type()`
+# ==============================================================================
 test_that("get_type() works as expected with vectors", {
   expect_equal(get_type(1:3), "integer")
   expect_equal(get_type(factor(1:2)), "classification")
@@ -164,14 +193,14 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  data <- validate(example_integer)
+  data <- as_forecast(na.omit(example_integer))
   attr(data, "forecast_type") <- "binary"
   expect_warning(
     get_forecast_type(data),
     "Object has an attribute `forecast_type`, but it looks different from what's expected based on the data.
 Existing: binary
 Expected: sample
-Running `validate()` again might solve the problem",
+Running `as_forecast()` again might solve the problem",
     fixed = TRUE
   )
 })

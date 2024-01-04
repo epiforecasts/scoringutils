@@ -27,7 +27,7 @@ of a single forecast automatically by simply assuming that all column names
 are relevant to determine the forecast unit. This may lead to unexpected
 behaviour, so setting the forecast unit explicitly can help make the code
 easier to debug and easier to read. When used as part of a workflow,
-\code{set_forecast_unit()} can be directly piped into \code{validate()} to
+\code{set_forecast_unit()} can be directly piped into \code{as_forecast()} to
 check everything is in order.
 }
 \examples{

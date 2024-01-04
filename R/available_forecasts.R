@@ -31,16 +31,16 @@
 #' @examples
 #' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
 #'
-#' available_forecasts(example_quantile,
+#' get_forecast_counts(example_quantile,
 #'   by = c("model", "target_type")
 #' )
-available_forecasts <- function(data,
+get_forecast_counts <- function(data,
                                 by = NULL,
                                 collapse = c("quantile", "sample_id")) {
 
-  data <- validate(data)
+  data <- as_forecast(data)
   forecast_unit <- attr(data, "forecast_unit")
-  data <- remove_na_observed_predicted(data)
+  data <- na.omit(data)
 
   if (is.null(by)) {
     by <- forecast_unit
@@ -70,23 +70,5 @@ available_forecasts <- function(data,
   out <- merge(out, out_empty, by = by, all.y = TRUE)
   out[, count := nafill(count, fill = 0)]
 
-  class(out) <- c("scoringutils_available_forecasts", class(out))
-
   return(out[])
-}
-
-#' @title Count Number of Available Forecasts `r lifecycle::badge("deprecated")`
-#' @details `r lifecycle::badge("deprecated")` Deprecated in 1.2.2. Use
-#' [available_forecasts()] instead.
-#' @inherit available_forecasts
-#' @keywords check-forecasts
-#' @export
-avail_forecasts <- function(data,
-                            by = NULL,
-                            collapse = c("quantile", "sample")) {
-  lifecycle::deprecate_warn(
-    "1.2.2", "avail_forecasts()",
-    "available_forecasts()"
-  )
-  available_forecasts(data, by, collapse)
 }

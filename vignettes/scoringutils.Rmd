@@ -60,29 +60,61 @@ set_forecast_unit(
   colnames()
 ```
 
+## Constructing a forecast object
 
-## Checking the input data
-
-The function `validate()` can be used to check the input data. It gives a summary of what `scoringutils` thinks you are trying to achieve. It infers the type of the prediction target, the prediction format, and the unit of a single forecasts, gives an overview of the number of unique values per column (helpful for spotting missing data) and returns warnings or errors.
+The function `as_forecast()` is be used to construct a forecast object and check the input data. It determines the forecast type, creates an object of the appropriate class (`forecast_binary`, `forecast_quantile` or `forecast_sample`), and validates the input data. Objects of class `forecast_*` have a print method that provides additional information. 
 
 ```{r}
 head(example_quantile)
 ```
 
 ```{r}
-validate(example_quantile)
+forecast_quantile <- example_quantile %>%
+  set_forecast_unit(
+    c("model", "location", "target_end_date", "forecast_date",
+      "target_type", "horizon")
+  ) %>%
+  as_forecast()
+
+forecast_quantile
 ```
 
 If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
 
-The output of `validate()` can later be directly used as input to `score()` (otherwise, `score()` will just run `validate()` anyway internally). 
+The output of `as_forecast()` can later be directly used as input to `score()`. This is the recommended workflow (however, `score()` will run `as_forecast()` internally if this hasn't happened before). 
+
+Note that in the above example some columns contain duplicated information with regards to the forecast unit, e.g. "location" and "location_name", and can be dropped. If we drop essential information, for example, the "target_type" column, we'll get an error informing us that the forecasts aren't uniquely identified any more. 
+
+```{r, error=TRUE}
+example_quantile %>%
+  set_forecast_unit(
+    c("location", "target_end_date",
+      "forecast_date", "model", "horizon")
+  ) %>%
+  as_forecast()
+```
+
+The function `get_duplicate_forecasts()` may help to investigate the issue. When filtering for only a single quantile of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
+
+```{r}
+duplicates <- example_quantile %>%
+  set_forecast_unit(
+    c("location", "target_end_date",
+      "forecast_date", "model", "horizon")
+  ) %>%
+  get_duplicate_forecasts()
+
+duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
+  head()
+```
+
 
 ## Showing available forecasts
 
-The function `available_forecasts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
+The function `get_forecast_counts()` may also be helpful to determine where forecasts are available. Using the `by` argument you can specify the level of summary. For example, to see how many forecasts there are per model and target_type, we can run
 
 ```{r}
-available_forecasts(example_quantile, by = c("model", "target_type"))
+get_forecast_counts(forecast_quantile, by = c("model", "target_type"))
 ```
 
 We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths forecast target and that UMass-MechBayes has no case forecasts. 
@@ -90,16 +122,16 @@ We see that 'epiforecasts-EpiNow2' has some missing forecasts for the deaths for
 This information can also be visualised using `plot()`: 
 
 ```{r, fig.width=11, fig.height=6}
-example_quantile %>%
-  available_forecasts(by = c("model", "forecast_date", "target_type")) %>%
-  plot() +
+forecast_quantile %>%
+  get_forecast_counts(by = c("model", "forecast_date", "target_type")) %>%
+  plot_forecast_counts(x = "forecast_date") +
   facet_wrap(~ target_type)
 ```
 
 You can also visualise forecasts directly using the `plot_predictions()` function: 
 
 ```{r, fig.width = 9, fig.height = 6}
-example_quantile %>%
+forecast_quantile %>%
   make_NA(
     what = "truth",
     target_end_date >= "2021-07-15",
@@ -121,80 +153,22 @@ example_quantile %>%
 
 Forecasts can easily be scored using the `score()` function. 
 
-For clarity, we suggest setting the forecast unit explicitly and you may also want to call `validate()` explicitly. 
+For clarity, we suggest setting the forecast unit explicitly and calling `as_forecast()` explicitly. 
 
 ```{r}
-scores <- example_quantile %>%
-  set_forecast_unit(
-    c("location", "target_end_date", "target_type", "location_name",
-      "forecast_date", "model", "horizon")
-  ) %>%
-  validate() %>%
+scores <- forecast_quantile %>%
   score()
-head(scores)
+
+print(scores, 2)
 ```
 
-Note that in the above example some columns contain duplicated information with regards to the forecast unit, e.g. "location" and "location_name", and could be dropped. 
+The function `score()` returns unsumarised scores, which in most cases is not what the user wants. It returns a single score per forecast (as determined by the forecast unit). 
 
-```{r}
-example_quantile %>%
-  set_forecast_unit(
-    c("location", "target_end_date", "target_type",
-      "forecast_date", "model", "horizon")
-  ) %>%
-  validate()
-```
-
-If we drop essential information, for example, the "target_type" column, we'll get an error informing us that the forecasts aren't uniquely identified any more. 
-
-```{r, error=TRUE}
-example_quantile %>%
-  set_forecast_unit(
-    c("location", "target_end_date",
-      "forecast_date", "model", "horizon")
-  ) %>%
-  validate()
-```
-
-The function `get_duplicate_forecasts()` may help to investigate the issue. When filtering for only median forecasts of the EuroCOVIDhub-ensemble, we can see that there are indeed two forecasts for every date, location and horizon. 
-
-```{r}
-duplicates <- example_quantile %>%
-  set_forecast_unit(
-    c("location", "target_end_date",
-      "forecast_date", "model", "horizon")
-  ) %>%
-  get_duplicate_forecasts()
-
-duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
-  head()
-```
-
-The function `score()` returns unsumarised scores, which in most cases is not what the user wants. It returns a single score per forecast (as determined by the forecast unit). For forecasts in a quantile format, it returns one score per quantile. 
-
-A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = NULL` and the summary unit is assumed to be the same as the unit of a single forecast. For continuous forecasts, this means that nothing happens if `by` isn't specified. 
+A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = NULL` and the summary unit is assumed to be the same as the unit of a single forecast (meaning that nothing happens if `by` isn't specified).
 
 ```{r}
 scores <- score(example_continuous)
 all(scores == summarise_scores(scores), na.rm = TRUE)
-```
-
-For quantile based forecasts, if `by = NULL`, then scores are summarised across quantiles and instead of one score per forecast_unit and quantile we only get one score per forecast unit. 
-
-```{r}
-scores <- example_quantile %>%
-  set_forecast_unit(
-    c("location", "target_end_date", "target_type",
-      "forecast_date", "model", "horizon")
-  ) %>%
-  validate() %>%
-  score()
-
-head(scores)
-
-scores %>%
-  summarise_scores() %>%
-  head()
 ```
 
 Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
@@ -330,13 +304,13 @@ Relative scores for different models can be computed using pairwise comparisons,
 In `scoringutils`, pairwise comparisons can be made in two ways: Through the standalone function `pairwise_comparison()` or from within `summarise_scores()` which simply adds relative scores to an existing set of scores. 
 
 ```{r}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   pairwise_comparison(by = "model", baseline = "EuroCOVIDhub-baseline")
 ```
 
 ```{r}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   summarise_scores(by = "model") %>%
   add_pairwise_comparison(baseline = "EuroCOVIDhub-baseline")
@@ -345,7 +319,7 @@ example_quantile %>%
 If using the `pairwise_comparison()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 
 
 ```{r, fig.width=9, fig.height=7}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   pairwise_comparison(by = c("model", "target_type")) %>%
   plot_pairwise_comparison() +
@@ -360,7 +334,7 @@ example_quantile %>%
 It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `correlation()` to summarise over quantiles before computing correlations.
 
 ```{r}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
   correlation()
@@ -369,7 +343,7 @@ example_quantile %>%
 Visualising correlations: 
 
 ```{r}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
   correlation(digits = 2) %>%
@@ -381,7 +355,7 @@ example_quantile %>%
 <!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:  -->
 
 ```{r, eval = FALSE, include = FALSE}
-example_quantile %>%
+forecast_quantile %>%
   score() %>%
   summarise_scores(by = c("model", "range", "target_type")) %>%
   plot_ranges() +

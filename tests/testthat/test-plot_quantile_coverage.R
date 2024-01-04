@@ -1,5 +1,5 @@
 test_that("plot_quantile_coverage() works as expected", {
-  coverage <- add_coverage(example_quantile) %>%
+  coverage <- add_coverage(na.omit(example_quantile)) %>%
     summarise_scores(by = c("model", "quantile"))
 
   p <- plot_quantile_coverage(coverage)

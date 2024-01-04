@@ -185,8 +185,8 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  data <- validate(data)
-  data <- remove_na_observed_predicted(data)
+  data <- as_forecast(data)
+  data <- na.omit(data)
   forecast_type <- get_forecast_type(data)
 
   if (forecast_type == "quantile") {
