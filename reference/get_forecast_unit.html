@@ -76,22 +76,13 @@ specified during scoring, if any.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_forecast_unit</span><span class="op">(</span><span class="va">data</span>, check_conflict <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_forecast_unit</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data.frame or data.table with predicted and observed values.</p></dd>
-
-
-<dt>check_conflict</dt>
-<dd><p>Whether or not to check whether there is a conflict
-between a stored attribute and the inferred forecast unit. When you create
-a forecast object, the forecast unit is stored as an attribute. If you
-later change the columns of the data, the forecast unit as inferred from the
-data might change compared to the stored attribute. Should this result in a
-warning? Defaults to FALSE.</p></dd>
 
 </dl></div>
     <div class="section level2">
