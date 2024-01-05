@@ -111,9 +111,9 @@ PLoS Comput Biol 15(2): e1006785. <a href="https://doi.org/10.1371/journal.pcbi.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mad_sample</span><span class="op">(</span>predicted <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 4.4478 2.9652 4.4478 3.7065 4.4478 3.7065 4.4478 4.4478 4.4478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 2.9652 4.4478 4.4478 4.4478 4.4478 5.9304 5.9304 5.9304 5.9304 5.9304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.2239 2.9652 2.9652 2.9652 2.9652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 2.9652 2.9652 4.4478 4.4478 4.4478 3.7065 4.4478 4.4478 4.4478 4.4478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 4.4478 4.4478 4.4478 5.9304 4.4478 4.4478 5.1891 5.9304 5.9304 5.1891</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
