@@ -612,16 +612,16 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
   )
 })
 
-
-# ============================================================================ #
-# `interval_coverage_dev_quantile` ===================================== #
-# ============================================================================ #
-test_that("interval_coverage_dev_quantile works", {
+test_that("interval_coverage_quantile works", {
   existing_ranges <- unique(get_range_from_quantile(quantile))
   expect_equal(existing_ranges, c(80, 50, 0))
 
-  cov_50 <- interval_coverage_quantile(observed, predicted, quantile, range = c(50))
-  cov_80 <- interval_coverage_quantile(observed, predicted, quantile, range = c(80))
+  cov_50 <- interval_coverage_quantile(
+    observed, predicted, quantile, range = 50
+  )
+  cov_80 <- interval_coverage_quantile(
+    observed, predicted, quantile, range = 80
+  )
   manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
 
   expect_equal(
