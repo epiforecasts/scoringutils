@@ -100,12 +100,11 @@ Carlo samples. Alternatively, <code>predicted</code> can just be a vector of siz
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">se_mean_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.999227e+00 3.188660e+00 2.728490e+00 1.894291e-01 1.180659e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 3.401510e-02 1.645200e-01 6.978511e-01 8.189752e-01 1.302938e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 6.330911e-02 8.117871e-02 9.186035e-01 1.540598e+00 3.179106e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 1.440710e-02 3.152842e-02 7.277393e-01 4.061246e-01 7.340247e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 2.210381e-04 9.290643e-01 3.171251e+00 1.343572e-01 8.067135e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 3.782408e+00 1.559614e-01 7.898562e-02 1.907783e+00 4.115432e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.50889645  0.28831132  0.56565419  2.83239005 17.40278150  0.95405473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.57022436  0.47040601  2.93827435  0.78233204  4.19969187  1.23081385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  1.07230958  0.31226197  0.81546321  1.65115461  2.86247283  2.05707829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  0.70751842  1.21020000  2.55170048  3.24784264  3.09911093  0.99358348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25]  2.79633603  4.91528551  0.07125191  0.72426455  2.72977256  4.84712676</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
