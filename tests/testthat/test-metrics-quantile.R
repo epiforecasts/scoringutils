@@ -628,6 +628,12 @@ test_that("interval_coverage_dev_quantile works", {
     interval_coverage_dev_quantile(observed, predicted, quantile),
     manual
   )
+  expect_warning(
+    interval_coverage_dev_quantile(
+      observed, predicted, c(quantile[-4], 0.76)
+    ),
+    "To compute inteval coverage deviation, all quantiles must form central symmetric prediction intervals. Missing quantiles: 0.24, 0.75. Returning `NA`."
+  )
 })
 
 
