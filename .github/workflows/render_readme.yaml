@@ -11,6 +11,7 @@ on:
   push:
     paths:
       - 'README.Rmd'
+      - DESCRIPTION
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
