@@ -608,7 +608,7 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
     interval_coverage_quantile(
       observed, dropped_quantile_pred, dropped_quantiles, range = 50
     ),
-    "Median not available, computing coverage as mean of the two innermost quantiles in order to compute coverage."
+    "To compute the interval coverage for a range of 50%, the quantiles `0.25, 0.75` are required. Returning `NA`"
   )
 })
 
