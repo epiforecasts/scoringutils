@@ -92,7 +92,7 @@ bias_sample <- function(observed, predicted) {
 #' the number of data points and N (number of columns) the number of Monte
 #' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @return vector with the scoring values
-#' @seealso [ae_median_quantile()], [abs_error()]
+#' @seealso [ae_median_quantile()]
 #' @importFrom stats median
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
@@ -127,7 +127,6 @@ ae_median_sample <- function(observed, predicted) {
 #' the number of data points and N (number of columns) the number of Monte
 #' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @return vector with the scoring values
-#' @seealso [squared_error()]
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
