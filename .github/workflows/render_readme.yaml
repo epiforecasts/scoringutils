@@ -47,6 +47,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md 
+          git add README.md man/figures
           git diff-index --quiet HEAD || git commit -m "Automatic readme update"
           git status -sb | grep -q ahead && git push origin
