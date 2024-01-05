@@ -115,6 +115,7 @@
 <li>
 <code><a href="../reference/score.html">score()</a></code> now calls <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit()</a></code> on the data, instead of only removing rows with missing values in the columns <code>observed</code> and <code>predicted</code>. This is because <code>NA</code> values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast.</li>
 <li>added documentation for the return value of <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>.</li>
+<li>Removed abs_error and squared_error from the package in favour of <code><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">Metrics::ae</a></code> and <code><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">Metrics::se</a></code>.</li>
 <li>Added unit tests for <code><a href="../reference/interval_coverage.html">interval_coverage_quantile()</a></code> and <code><a href="../reference/interval_coverage_dev_quantile.html">interval_coverage_dev_quantile()</a></code> in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.</li>
 </ul></div>
 </div>

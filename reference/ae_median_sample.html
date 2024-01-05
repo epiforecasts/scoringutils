@@ -93,7 +93,7 @@ Carlo samples. Alternatively, <code>predicted</code> can just be a vector of siz
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="ae_median_quantile.html">ae_median_quantile()</a></code>, <code><a href="abs_error.html">abs_error()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="ae_median_quantile.html">ae_median_quantile()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -101,11 +101,11 @@ Carlo samples. Alternatively, <code>predicted</code> can just be a vector of siz
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ae_median_sample</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_values</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6439179 2.0144864 0.2905542 0.1965380 0.4604560 0.1126443 0.6578474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.5277976 0.2849219 1.0648924 0.2196338 1.1477357 0.2123058 0.2495546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 1.7396674 0.8238894 1.1392956 1.2829482 1.1224036 1.5248895 1.0480153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 1.5334419 0.7250704 1.3214193 2.1704310 0.3791592 0.7419842 2.5809667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.4282429 2.1909461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9425397 0.7922918 1.5531933 1.1405598 1.3324894 0.4615397 1.4649264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4848893 0.1122858 0.6145103 2.9669565 1.3576263 2.0974031 1.3325077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 2.4174733 1.3383635 0.7226199 0.2530694 2.6188025 0.3127391 0.6741225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.9111170 0.6840680 1.4113484 0.7414774 3.8187178 0.8371279 0.4698151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 2.5912463 1.9456139</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -40,9 +40,6 @@
     <loc>https://epiforecasts.io/scoringutils/news/index.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/abs_error.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/reference/add_coverage.html</loc>
   </url>
   <url>
@@ -374,9 +371,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/set_forecast_unit.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/reference/squared_error.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/reference/strip_attributes.html</loc>
