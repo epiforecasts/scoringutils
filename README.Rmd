@@ -36,7 +36,7 @@ devel <- length(unclass(package_version(version))[[1]]) > 3
 if (devel) {
   cat(
     "**Note**: ",
-    "This documentation refers to the development version of `scoringutils`. ",
+    "[This documentation](https://epiforecasts.io/scoringutils/dev) refers to the development version of `scoringutils`. ",
     "You can also view the [documentation of the stable version]",
     "(https://epiforecasts.io/scoringutils).",
     sep = ""
@@ -44,7 +44,7 @@ if (devel) {
 } else {
   cat(
     "**Note**: ",
-    "This documentation refers to the stable version of `scoringutils`. ",
+    "[This documentation](https://epiforecasts.io/scoringutils) refers to the stable version of `scoringutils`. ",
     "You can also view the [documentation of the development version]",
     "(https://epiforecasts.io/scoringutils/dev).",
     sep = ""
