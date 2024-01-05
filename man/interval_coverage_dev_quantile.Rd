@@ -26,7 +26,7 @@ for each forecast (comprising one or multiple prediction intervals).
 Check the agreement between desired and actual interval coverage
 of a forecast.
 
-The function is similar to \code{\link[=interval_coverage_quantile]{interval_coverage_quantile()}},
+The function is similar to \code{\link[=interval_coverage]{interval_coverage()}},
 but takes all provided prediction intervals into account and
 compares nominal interval coverage (i.e. the desired interval coverage) with
 the actual observed interval coverage.

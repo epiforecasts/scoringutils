@@ -2,10 +2,10 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{interval_coverage}
 \alias{interval_coverage}
-\alias{interval_coverage_quantile}
+\alias{interval_coverage}
 \title{Interval Coverage (For Quantile-Based Forecasts)}
 \usage{
-interval_coverage_quantile(observed, predicted, quantile, range = 50)
+interval_coverage(observed, predicted, quantile, range = 50)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -43,6 +43,6 @@ predicted <- rbind(
    c(-2, 0, 3, 3, 4)
 )
 quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-interval_coverage_quantile(observed, predicted, quantile)
+interval_coverage(observed, predicted, quantile)
 }
 \keyword{metric}

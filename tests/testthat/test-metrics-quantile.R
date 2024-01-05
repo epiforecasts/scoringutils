@@ -585,18 +585,18 @@ test_that("wis is the sum of overprediction, underprediction, dispersion", {
 
 
 # ============================================================================ #
-# `interval_coverage_quantile` =============================================== #
+# `interval_coverage` =============================================== #
 # ============================================================================ #
-test_that("interval_coverage_quantile works", {
+test_that("interval_coverage works", {
   expect_equal(
-    interval_coverage_quantile(observed, predicted, quantile, range = 50),
+    interval_coverage(observed, predicted, quantile, range = 50),
     c(TRUE, FALSE, FALSE)
   )
 })
 
-test_that("interval_coverage_quantile rejects wrong inputs", {
+test_that("interval_coverage rejects wrong inputs", {
   expect_error(
-    interval_coverage_quantile(observed, predicted, quantile, range = c(50, 0)),
+    interval_coverage(observed, predicted, quantile, range = c(50, 0)),
     "Assertion on 'range' failed: Must have length 1."
   )
 })
@@ -620,8 +620,8 @@ test_that("interval_coverage_dev_quantile works", {
   existing_ranges <- unique(get_range_from_quantile(quantile))
   expect_equal(existing_ranges, c(80, 50, 0))
 
-  cov_50 <- interval_coverage_quantile(observed, predicted, quantile, range = c(50))
-  cov_80 <- interval_coverage_quantile(observed, predicted, quantile, range = c(80))
+  cov_50 <- interval_coverage(observed, predicted, quantile, range = c(50))
+  cov_80 <- interval_coverage(observed, predicted, quantile, range = c(80))
   manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
 
   expect_equal(
