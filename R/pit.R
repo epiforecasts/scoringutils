@@ -62,7 +62,9 @@
 #' @seealso [pit()]
 #' @importFrom stats runif
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' ## continuous predictions
 #' observed <- rnorm(20, mean = 1:20)
