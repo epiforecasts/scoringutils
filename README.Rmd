@@ -30,7 +30,12 @@ library(knitr)
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against observed values. 
 
-You can find additional information and examples in the papers [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts on transformed scales](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011393) as well as the Vignettes ([Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html), [Details on the metrics implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html) and [Scoring forecasts directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+A good starting point for those wishing to use `scoringutils` are the vignettes on ([Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html), [Details on the metrics implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html) and [Scoring forecasts directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+
+For a detailed description of the package, its rationale and design, usage examples and how it relates to other packages in the R ecosystem, please see the corresponding paper:
+> Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090>
+
+## Package overview
 
 The `scoringutils` package offers convenient automated forecast evaluation through the function `score()`. The function operates on data.frames (it uses `data.table` internally for speed and efficiency) and can easily be integrated in a workflow based on `dplyr` or `data.table`. It also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.
 
