@@ -614,9 +614,9 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
 
 
 # ============================================================================ #
-# `interval_coverage_dev_quantile` ===================================== #
+# `interval_coverage_deviation` ===================================== #
 # ============================================================================ #
-test_that("interval_coverage_dev_quantile works", {
+test_that("interval_coverage_deviation works", {
   existing_ranges <- unique(get_range_from_quantile(quantile))
   expect_equal(existing_ranges, c(80, 50, 0))
 
@@ -625,7 +625,7 @@ test_that("interval_coverage_dev_quantile works", {
   manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
 
   expect_equal(
-    interval_coverage_dev_quantile(observed, predicted, quantile),
+    interval_coverage_deviation(observed, predicted, quantile),
     manual
   )
   expect_warning(

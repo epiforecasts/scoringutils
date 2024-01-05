@@ -31,7 +31,7 @@ The default scoring rules are:
 \item "interval_coverage_90" = function(...) \{
 run_safely(..., range = 90, fun = \link{interval_coverage})
 \}
-\item "interval_coverage_deviation" = \code{\link[=interval_coverage_dev_quantile]{interval_coverage_dev_quantile()}},
+\item "interval_coverage_deviation" = \code{\link[=interval_coverage_deviation]{interval_coverage_deviation()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 
