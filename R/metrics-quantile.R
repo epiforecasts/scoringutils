@@ -499,7 +499,7 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 #' `quantile`.
 #' @inheritParams wis
 #' @return numeric vector of length N with the absolute error of the median
-#' @seealso [ae_median_sample()], [abs_error()]
+#' @seealso [ae_median_sample()]
 #' @importFrom stats median
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
