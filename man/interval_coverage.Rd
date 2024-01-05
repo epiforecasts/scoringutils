@@ -2,7 +2,6 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{interval_coverage}
 \alias{interval_coverage}
-\alias{interval_coverage}
 \title{Interval Coverage (For Quantile-Based Forecasts)}
 \usage{
 interval_coverage(observed, predicted, quantile, range = 50)
