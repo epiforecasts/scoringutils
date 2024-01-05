@@ -879,13 +879,6 @@ available samples is small.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Warning in (function (observed, predicted, quantile, range = 50) : To compute</span></span>
-<span><span class="co">#&gt; the interval coverage for a range of 50%, the quantiles `0.25, 0.75` are</span></span>
-<span><span class="co">#&gt; required. Returning `NA`.</span></span>
-<span><span class="co">#&gt; Warning in (function (observed, predicted, quantile) : To compute inteval</span></span>
-<span><span class="co">#&gt; coverage deviation, all quantiles must form central symmetric prediction</span></span>
-<span><span class="co">#&gt; intervals. Missing quantiles: 0.15, 0.35, 0.9, 0.85, 0.75, 0.7, 0.65, 0.6.</span></span>
-<span><span class="co">#&gt; Returning `NA`.</span></span>
 <span><span class="co">#&gt;      location location_name target_end_date target_type forecast_date</span></span>
 <span><span class="co">#&gt;   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>
 <span><span class="co">#&gt;   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>
@@ -911,29 +904,29 @@ available samples is small.</p>
 <span><span class="co">#&gt; 886:  epiforecasts-EpiNow2       3    25.13032   3.478261e-01        0.000000</span></span>
 <span><span class="co">#&gt; 887:  epiforecasts-EpiNow2       2    44.07931   2.410435e+01        0.000000</span></span>
 <span><span class="co">#&gt;       dispersion  bias interval_coverage_50 interval_coverage_90</span></span>
-<span><span class="co">#&gt;   1: 4561.638591  0.60                   NA                 TRUE</span></span>
-<span><span class="co">#&gt;   2: 3976.145828  0.98                   NA                FALSE</span></span>
-<span><span class="co">#&gt;   3: 6562.060048  0.90                   NA                 TRUE</span></span>
-<span><span class="co">#&gt;   4:   49.777674  0.30                   NA                 TRUE</span></span>
-<span><span class="co">#&gt;   5:   74.736502 -0.10                   NA                 TRUE</span></span>
+<span><span class="co">#&gt;   1: 4561.638591  0.60                FALSE                 TRUE</span></span>
+<span><span class="co">#&gt;   2: 3976.145828  0.98                FALSE                FALSE</span></span>
+<span><span class="co">#&gt;   3: 6562.060048  0.90                FALSE                 TRUE</span></span>
+<span><span class="co">#&gt;   4:   49.777674  0.30                 TRUE                 TRUE</span></span>
+<span><span class="co">#&gt;   5:   74.736502 -0.10                 TRUE                 TRUE</span></span>
 <span><span class="co">#&gt;  ---                                                            </span></span>
-<span><span class="co">#&gt; 883:   47.479491  0.50                   NA                 TRUE</span></span>
-<span><span class="co">#&gt; 884:    5.426935  0.20                   NA                 TRUE</span></span>
-<span><span class="co">#&gt; 885:    7.268076  0.90                   NA                 TRUE</span></span>
-<span><span class="co">#&gt; 886:   24.782489  0.10                   NA                 TRUE</span></span>
-<span><span class="co">#&gt; 887:   19.974959  0.70                   NA                 TRUE</span></span>
+<span><span class="co">#&gt; 883:   47.479491  0.50                 TRUE                 TRUE</span></span>
+<span><span class="co">#&gt; 884:    5.426935  0.20                 TRUE                 TRUE</span></span>
+<span><span class="co">#&gt; 885:    7.268076  0.90                FALSE                 TRUE</span></span>
+<span><span class="co">#&gt; 886:   24.782489  0.10                 TRUE                 TRUE</span></span>
+<span><span class="co">#&gt; 887:   19.974959  0.70                FALSE                 TRUE</span></span>
 <span><span class="co">#&gt;      interval_coverage_deviation ae_median</span></span>
-<span><span class="co">#&gt;   1:                          NA    9414.0</span></span>
-<span><span class="co">#&gt;   2:                          NA   29379.0</span></span>
-<span><span class="co">#&gt;   3:                          NA   36513.0</span></span>
-<span><span class="co">#&gt;   4:                          NA      77.0</span></span>
-<span><span class="co">#&gt;   5:                          NA      27.5</span></span>
+<span><span class="co">#&gt;   1:                 -0.03909091    9414.0</span></span>
+<span><span class="co">#&gt;   2:                 -0.49363636   29379.0</span></span>
+<span><span class="co">#&gt;   3:                 -0.31181818   36513.0</span></span>
+<span><span class="co">#&gt;   4:                  0.23363636      77.0</span></span>
+<span><span class="co">#&gt;   5:                  0.41545455      27.5</span></span>
 <span><span class="co">#&gt;  ---                                      </span></span>
-<span><span class="co">#&gt; 883:                          NA      58.5</span></span>
-<span><span class="co">#&gt; 884:                          NA       5.0</span></span>
-<span><span class="co">#&gt; 885:                          NA      42.5</span></span>
-<span><span class="co">#&gt; 886:                          NA       8.0</span></span>
-<span><span class="co">#&gt; 887:                          NA      73.5</span></span></code></pre></div>
+<span><span class="co">#&gt; 883:                  0.05181818      58.5</span></span>
+<span><span class="co">#&gt; 884:                  0.32454545       5.0</span></span>
+<span><span class="co">#&gt; 885:                 -0.31181818      42.5</span></span>
+<span><span class="co">#&gt; 886:                  0.41545455       8.0</span></span>
+<span><span class="co">#&gt; 887:                 -0.13000000      73.5</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="available-metrics">Available metrics<a class="anchor" aria-label="anchor" href="#available-metrics"></a>
