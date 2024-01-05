@@ -154,46 +154,6 @@ Suitable for scoring the median of a predictive distribution
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Absolute error
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; ">
-Suitable for scoring the median of a predictive distribution
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
-Squared error
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
-Suitable for scoring the mean of a predictive distribution.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; ">
 Squared error
 </td>
 <td style="text-align:center;width: 1.5cm; ">
@@ -251,9 +211,9 @@ y
 n
 </td>
 <td style="text-align:left;width: 6.0cm; ">
-Proper scoring rule, smaller is better, only evaluates predictive
-density at observed value (local), penalises over-confidence severely,
-susceptible to outliers
+Proper scoring rule, smaller is better, equals negative log of the
+predictive density at observed value (local), penalises over-confidence
+severely, susceptible to outliers
 </td>
 </tr>
 <tr>
@@ -447,54 +407,13 @@ Absolute amount of over-or under-prediction (components of WIS)
 </tr>
 <tr>
 <td style="text-align:left;width: 3.2cm; ">
-Under-, Over-prediction
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.3cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; ">
-Absolute amount of over-or under-prediction (components of WIS)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; background-color: Gainsboro !important;">
 Probability integral transform (PIT)
 </td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
+<td style="text-align:center;width: 1.5cm; ">
 y
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:center;width: 1.3cm; background-color: Gainsboro !important;">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; background-color: Gainsboro !important;">
-y
-</td>
-<td style="text-align:left;width: 6.0cm; background-color: Gainsboro !important;">
-PIT transform is the CDF of the predictive distribution evaluated at the
-observed values. PIT values should be uniform.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 3.2cm; ">
-Dispersion
 </td>
 <td style="text-align:center;width: 1.5cm; ">
-n
-</td>
-<td style="text-align:center;width: 1.5cm; ">
-n
+y
 </td>
 <td style="text-align:center;width: 1.3cm; ">
 n
@@ -503,7 +422,8 @@ n
 y
 </td>
 <td style="text-align:left;width: 6.0cm; ">
-Dispersion component of WIS, measures width of predictive intervals.
+PIT transform is the CDF of the predictive distribution evaluated at the
+observed values. PIT values should be uniform.
 </td>
 </tr>
 <tr>
