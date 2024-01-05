@@ -109,6 +109,16 @@ test_that("sample_to_quantiles works", {
 
 })
 
+test_that("sample_to_quantiles issue 557 fix", {
+
+  out <- example_integer %>%
+    sample_to_quantile(
+      quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+    ) %>%
+    score()
+
+  expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
+})
 
 
 test_that("sample_to_range_long works", {
