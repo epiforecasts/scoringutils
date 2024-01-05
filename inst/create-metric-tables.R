@@ -49,7 +49,7 @@ log_score <- list(
   `C` = r"($\checkmark$)",
   `B` = r"($\checkmark$)",
   `Q` = r"($-$)",
-  `Properties` = "Proper scoring rule, smaller is better, only evaluates predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers",
+  `Properties` = "Proper scoring rule, smaller is better, equals negative log of the predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers",
   `References` = ""
 )
 
@@ -212,7 +212,7 @@ relative_skill <- list(
 
 scaled_relative_skill <- list(
   `Metric` = "Scaled relative skill",
-  `Name` = list("scaled_rel_skill"),
+  `Name` = "scaled_rel_skill",
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
@@ -267,7 +267,7 @@ crps <- list(
   `Explanation` = r"(The crps is a proper scoring rule that generalises the absolute error to probabilistic forecasts. It measures the 'distance' of the predictive distribution to the observed data-generating distribution. The CRPS is given as
   $$\text{CRPS}(F, y) = \int_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,$$
   where y is the observed value and F the CDF of predictive distribution. Often An alternative representation is used:
-  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the observed value. In this representation we can simply replace $X$ and $X'$ by samples sum over all possible combinations to obtain the CRPS.
+  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the observed value. In this representation we can simply replace $X$ and $X'$ by samples and sum over all possible combinations to obtain the CRPS.
   For integer-valued forecasts, the RPS is given as
   $$ \text{RPS}(F, y) = \sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. $$
 
@@ -278,14 +278,14 @@ crps <- list(
 
 log_score <- list(
   `Metric` = "Log score",
-  `Explanation` = r"(The Log score is a proper scoring rule that is simply computed as the log of the predictive density evaluated at the observed value. It is given as
-  $$ \text{log score} = \log f(y), $$
+  `Explanation` = r"(The Log score is a proper scoring rule that is computed as the negative log of the predictive density evaluated at the observed value. It is given as
+  $$ \text{log score} = -\log f(y), $$
   where $f$ is the predictive density function and y is the observed value. For integer-valued forecasts, the log score can be computed as
-  $$ \text{log score} = \log p_y, $$
+  $$ \text{log score} = -\log p_y, $$
   where $p_y$ is the probability assigned to outcome p by the forecast F.
 
   **Usage and caveats**:
-  Larger values are better, but sometimes the sign is reversed. The log score is sensitive to outliers, as individual negative log score contributions quickly can become very large if the event falls in the tails of the predictive distribution, where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
+  Smaller values are better, but sometimes the sign is reversed. The log score is sensitive to outliers, as individual log score contributions can become very large if the event falls in a range of the predictive distribution where $f(y)$ (or $p_y$) is close to zero. Whether or not that is desirable depends ont the application. In scoringutils, the log score cannot be used for integer-valued forecasts, as the implementation requires a predictive density. In contrast to the crps, the log score is a local scoring rule: it's value only depends only on the probability that was assigned to the actual outcome. This property may be desirable for inferential purposes, for example in a Bayesian context (Winkler et al., 1996). In settings where forecasts inform decision making, it may be more appropriate to score forecasts based on the entire predictive distribution.)"
 )
 
 wis <- list(

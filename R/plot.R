@@ -24,7 +24,9 @@
 #' @examples
 #' library(ggplot2)
 #' library(magrittr) # pipe operator
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' scores <- score(example_quantile) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
@@ -577,11 +579,12 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #' data_coverage <- add_coverage(example_quantile)
 #' summarised <- summarise_scores(data_coverage, by = c("model", "range"))
 #' plot_interval_coverage(summarised)
-
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
@@ -830,7 +833,9 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' # PIT histogram in vector based format
 #' observed <- rnorm(30, mean = 1:30)
