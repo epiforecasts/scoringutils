@@ -45,7 +45,9 @@ to the names of the columns of the original data specified in \code{by} or
 Summarise scores as produced by \code{\link[=score]{score()}}
 }
 \examples{
-data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
 library(magrittr) # pipe operator
 \dontrun{
 scores <- score(example_continuous)

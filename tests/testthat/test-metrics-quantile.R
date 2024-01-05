@@ -601,6 +601,17 @@ test_that("interval_coverage_quantile rejects wrong inputs", {
   )
 })
 
+test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
+  dropped_quantile_pred <- predicted[, -4]
+  dropped_quantiles <- quantile[-4]
+  expect_warning(
+    interval_coverage_quantile(
+      observed, dropped_quantile_pred, dropped_quantiles, range = 50
+    ),
+    "To compute the interval coverage for a range of 50%, the quantiles `0.25, 0.75` are required. Returning `NA`"
+  )
+})
+
 
 # ============================================================================ #
 # `interval_coverage_dev_quantile` ===================================== #
@@ -616,6 +627,12 @@ test_that("interval_coverage_dev_quantile works", {
   expect_equal(
     interval_coverage_dev_quantile(observed, predicted, quantile),
     manual
+  )
+  expect_warning(
+    interval_coverage_dev_quantile(
+      observed, predicted, c(quantile[-4], 0.76)
+    ),
+    "To compute inteval coverage deviation, all quantiles must form central symmetric prediction intervals. Missing quantiles: 0.24, 0.75. Returning `NA`."
   )
 })
 

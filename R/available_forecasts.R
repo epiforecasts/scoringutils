@@ -29,7 +29,9 @@
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' get_forecast_counts(example_quantile,
 #'   by = c("model", "target_type")
