@@ -601,6 +601,17 @@ test_that("interval_coverage_quantile rejects wrong inputs", {
   )
 })
 
+test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
+  dropped_quantile_pred <- predicted[, -4]
+  dropped_quantiles <- quantile[-4]
+  expect_warning(
+    interval_coverage_quantile(
+      observed, dropped_quantile_pred, dropped_quantiles, range = 50
+    ),
+    "Median not available, computing coverage as mean of the two innermost quantiles in order to compute coverage."
+  )
+})
+
 
 # ============================================================================ #
 # `interval_coverage_dev_quantile` ===================================== #
