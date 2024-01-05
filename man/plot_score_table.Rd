@@ -31,7 +31,9 @@ Plots a coloured table of summarised scores obtained using
 \examples{
 library(ggplot2)
 library(magrittr) # pipe operator
-data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
 
 scores <- score(example_quantile) \%>\%
   summarise_scores(by = c("model", "target_type")) \%>\%

@@ -28,7 +28,9 @@
 #' to the names of the columns of the original data specified in `by` or
 #' `across` using the `fun` passed to `summarise_scores()`.
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #' library(magrittr) # pipe operator
 #' \dontrun{
 #' scores <- score(example_continuous)
