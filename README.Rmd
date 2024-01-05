@@ -36,6 +36,10 @@ For a detailed description of the package, its rationale and design, usage examp
 
 > Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090>
 
+For further details on the specific issue of transforming forecasts for scoring see:
+
+> Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher\* and Sebastian Funk\* (\*: equal contribution) (2023). _`Scoring epidemiological forecasts on transformed scales`_, PLoS Comput Biol 19(8): e1011393 <https://doi.org/10.1371/journal.pcbi.1011393>
+
 ## Package overview
 
 The `scoringutils` package offers convenient automated forecast evaluation through the function `score()`. The function operates on data.frames (it uses `data.table` internally for speed and efficiency) and can easily be integrated in a workflow based on `dplyr` or `data.table`. It also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.
