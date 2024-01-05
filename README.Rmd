@@ -37,17 +37,15 @@ if (devel) {
   cat(
     "**Note**: ",
     "This documentation refers to the development version of `scoringutils`. ",
-    "For the latest CRAN release please refer to the ",
-    "[documentation of the stable version]",
+    "You can also view the [documentation of the stable version]",
     "(https://epiforecasts.io/scoringutils).",
     sep = ""
   )
 } else {
   cat(
     "**Note**: ",
-    "This documentation refers to the CRAN version of `scoringutils`. ",
-    "For the version on GitHub please refer to the ",
-    "[documentation of the development version]",
+    "This documentation refers to the stable version of `scoringutils`. ",
+    "You can also view the [documentation of the development version]",
     "(https://epiforecasts.io/scoringutils/dev).",
     sep = ""
   )
