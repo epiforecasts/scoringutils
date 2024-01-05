@@ -78,10 +78,22 @@
 
 <p><strong>Note</strong>: This documentation refers to the development version of <code>scoringutils</code>. You can also view the <a href="https://epiforecasts.io/scoringutils">documentation of the stable version</a>.</p>
 <p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against observed values.</p>
-<p>You can find additional information and examples in the papers <a href="https://arxiv.org/abs/2205.07090" class="external-link">Evaluating Forecasts with scoringutils in R</a> <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011393" class="external-link">Scoring epidemiological forecasts on transformed scales</a> as well as the Vignettes (<a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>).</p>
+<p>A good starting point for those wishing to use <code>scoringutils</code> are the vignettes on (<a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>).</p>
+<p>For a detailed description of the package, its rationale and design, usage examples and how it relates to other packages in the R ecosystem, please see the corresponding paper:</p>
+<blockquote>
+<p>Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). <em><code>Evaluating Forecasts with scoringutils in R</code></em>. arXiv:2205.07090 <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link uri">https://doi.org/10.48550/arXiv.2205.07090</a></p>
+</blockquote>
+<p>For further details on the specific issue of transforming forecasts for scoring see:</p>
+<blockquote>
+<p>Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher* and Sebastian Funk* (*: equal contribution) (2023). <em><code>Scoring epidemiological forecasts on transformed scales</code></em>, PLoS Comput Biol 19(8): e1011393 <a href="https://doi.org/10.1371/journal.pcbi.1011393" class="external-link uri">https://doi.org/10.1371/journal.pcbi.1011393</a></p>
+</blockquote>
+<div class="section level2">
+<h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
+</h2>
 <p>The <code>scoringutils</code> package offers convenient automated forecast evaluation through the function <code><a href="reference/score.html">score()</a></code>. The function operates on data.frames (it uses <code>data.table</code> internally for speed and efficiency) and can easily be integrated in a workflow based on <code>dplyr</code> or <code>data.table</code>. It also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.</p>
 <p>Where available <code>scoringutils</code> depends on functionality from <code>scoringRules</code> which provides a comprehensive collection of proper scoring rules for predictive probability distributions represented as sample or parametric distributions. For some forecast types, such as quantile forecasts, <code>scoringutils</code> also implements additional metrics for evaluating forecasts. On top of providing an interface to the proper scoring rules implemented in <code>scoringRules</code> and natively, <code>scoringutils</code> also offers utilities for summarising and visualising forecasts and scores, and to obtain relative scores between models which may be useful for non-overlapping forecasts and forecasts across scales.</p>
 <p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary, and appropriate scores for each of these value types are selected automatically.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
