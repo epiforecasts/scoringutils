@@ -40,6 +40,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - added documentation for the return value of `summarise_scores()`.
 - Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`. 
 - Added unit tests for `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.
+- Documentation pkgdown pages are now created both for the stable and dev versions.
 
 # scoringutils 1.2.2
 
