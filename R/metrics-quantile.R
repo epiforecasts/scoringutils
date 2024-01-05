@@ -219,6 +219,8 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #' percent (e.g. 50 for a 50% prediction interval) for which you want to compute
 #' interval coverage.
 #' @importFrom checkmate assert_number
+#' @importFrom cli cli_warn
+#' @importFrom rlang caller_env
 #' @return A vector of length n with elements either TRUE,
 #' if the observed value is within the corresponding prediction interval, and
 #' FALSE otherwise.
@@ -239,10 +241,12 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
   assert_number(range)
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
   if (!all(necessary_quantiles %in% quantile)) {
-    warning(
-      "To compute the interval coverage for a range of ", range,
-      "%, the quantiles `", toString(necessary_quantiles),
-      "` are required. Returning `NA`."
+    cli::cli_warn(
+        "
+        To compute the interval coverage for a range of {range}%,
+        the quantiles {necessary_quantiles} are required. Returning `NA`.
+        ",
+      call = rlang::caller_env()
     )
     return(NA)
   }
@@ -296,6 +300,8 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
 #' The interval coverage deviation is then averaged across all prediction
 #' intervals. The median is ignored when computing coverage deviation.
 #' @inheritParams wis
+#' @importFrom rlang caller_env
+#' @importFrom cli cli_warn
 #' @return A numeric vector of length n with the interval coverage deviation
 #' for each forecast (comprising one or multiple prediction intervals).
 #' @export
@@ -321,10 +327,12 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
   )
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
-    warning(
-      "To compute inteval coverage deviation, all quantiles must form central ",
-      "symmetric prediction intervals. Missing quantiles: ",
-      toString(missing), ". Returning `NA`."
+    cli::cli_warning(
+      "To compute interval coverage deviation, all quantiles must form central
+      symmetric prediction intervals. Missing quantiles: {missing}.
+      Returning `NA`.
+      ",
+      call = rlang::caller_env()
     )
     return(NA)
   }
@@ -382,6 +390,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @param na.rm logical. Should missing values be removed?
+#' @importFrom cli cli_inform
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
@@ -406,9 +415,11 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   if (!(0.5 %in% quantile)) {
-    message(
-      "Median not available, computing bias as mean of the two innermost ",
-      "quantiles in order to compute bias."
+    cli::cli_inform(
+      "
+      Median not available, computing bias as mean of the two innermost
+      quantiles in order to compute bias.
+      "
     )
   }
   bias <- sapply(1:n, function(i) {
@@ -428,6 +439,7 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_quantile
+#' @importFrom cli cli_abort
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
@@ -452,7 +464,9 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   order <- order(quantile)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
-    stop("Predictions must not be decreasing with increasing quantile level")
+    cli::cli_abort(
+      "Predictions must not be decreasing with increasing quantile level"
+    )
   }
 
   if (0.5 %in% quantile) {
@@ -501,6 +515,8 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 #' @return numeric vector of length N with the absolute error of the median
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
+#' @importFrom cli cli_warn
+#' @importFrom rlang caller_env
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
@@ -510,9 +526,12 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 ae_median_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
   if (!any(quantile == 0.5)) {
-    warning(
-      "in order to compute the absolute error of the median, `0.5` must be ",
-      "among the quantiles given. Returning `NA`."
+    cli::cli_warn(
+      "
+      In order to compute the absolute error of the median, {.val 0.5} must be
+      among the quantiles given. Returning `NA`.
+      ",
+      call = rlang::current_fn()
     )
     return(NA_real_)
   }
