@@ -21,12 +21,12 @@ scoring rules and aims to make it simple to score probabilistic
 forecasts against observed values.
 
 A good starting point for those wishing to use `scoringutils` are the
-vignettes on ([Getting
+vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
-directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
 
 For a detailed description of the package, its rationale and design,
 usage examples and how it relates to other packages in the R ecosystem,
