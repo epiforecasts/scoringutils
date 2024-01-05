@@ -1,4 +1,4 @@
-# scoringutils 2.0.0
+# scoringutils 1.2.2.9000
 
 This major update and addresses a variety of comments made by reviewers from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)).
 
