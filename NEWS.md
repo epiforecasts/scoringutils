@@ -41,6 +41,8 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`. 
 - Added unit tests for `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.
 - Documentation pkgdown pages are now created both for the stable and dev versions.
+- Renamed `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` to `interval_coverage()` and `interval_coverage_deviation()`, respectively. Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
+
 
 # scoringutils 1.2.2
 
@@ -50,7 +52,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 
 ## Bug fixes
 - Fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
-- The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows. 
+- The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows.
 
 # scoringutils 1.2.1
 
