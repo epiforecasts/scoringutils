@@ -241,7 +241,8 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
   if (!all(necessary_quantiles %in% quantile)) {
     warning(
       "To compute the interval coverage for a range of ", range,
-      "%, the quantiles ", necessary_quantiles, " are required. Returning `NA`."
+      "%, the quantiles `", toString(necessary_quantiles),
+      "` are required. Returning `NA`."
     )
     return(NA)
   }
