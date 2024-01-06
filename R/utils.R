@@ -202,59 +202,61 @@ ensure_data.table <- function(data) {
 }
 
 #' @title Print information about a `forecast` object.
-#' @description This function prints information about a forecast object, 
+#' @description This function prints information about a forecast object,
 #' including "Forecast type", "Protected columns", "Metric columns",
 #' "Forecast unit".
 #' @importFrom stringr str_pad
 #' @export
 #' @keywords print-forecasts
-#' @examples 
+#' @examples
 #' print(example_quantile %>% as_forecast)
-print_forecast_info <- function(data){
-  # Wrap text and create four spaces in the beginning.  
-  width = 40
-  wrap_text <- function(str){
-    str <- strwrap(str, width = width -4, simplify = FALSE)
-    str <- sapply(str, function(line) paste("  ", line, sep = "")) %>% 
-            paste(collapse="\n    ")
+print_forecast_info <- function(data) {
+  # Wrap text and create four spaces in the beginning.
+  width <- 40
+  wrap_text <- function(str) {
+    str <- strwrap(str, width = width - 4, simplify = FALSE)
+    str <- sapply(str, function(line) paste("  ", line, sep = "")) %>%
+      paste(collapse = "\n    ")
     return(str)
   }
-    
-  eq_str <-  rep("=", width) %>% paste(collapse="") %>% paste("\n") 
-  s_ <- str_pad("Forecast data information", width=width, side="both") %>% paste("\n")
+
+  eq_str <-  rep("=", width) %>% paste(collapse = "") %>% paste("\n")
+  s_ <- str_pad("Forecast data information", width = width, side = "both") %>%
+    paste("\n")
   s_ <- paste("", eq_str, s_, eq_str)
-    
+
   type <- get_forecast_type(data)
   col <- "Forecast type:"
-  s_ <- paste(col, str_pad(type, width=width - nchar(col) - 1), "\n\n") %>%  
-          paste(s_, .)
-    
-    # Exclude protected columns. 
+  s_ <- paste(col, str_pad(type, width = width - nchar(col) - 1), "\n\n") %>%
+    paste(s_, .)
+
+  # Exclude protected columns.
   protect_cols <- get_protected_columns(data)
-  if (is.null(attr(data, "metric_names"))){
+  if (is.null(attr(data, "metric_names"))) {
     met_cols <- c()
     mets <- "NA"
   } else {
     met_cols <- get_metrics(data)
-    mets <- met_cols %>% paste(collapse=", ")
+    mets <- met_cols %>% paste(collapse = ", ")
   }
 
   # Protected columns
-  protect_pri <- protect_cols[!(protect_cols %in% met_cols)] %>% paste(collapse=", ")
-  s_ <- paste0("Protected columns:\n    ",  wrap_text(protect_pri),  "\n\n") %>% 
-          paste(s_, .)
-    
-  # Print metrics columns if exist. 
-  if (length(met_cols)!=0){
-    s_ <- paste0("Metric columns (protected):\n    ", wrap_text(mets), "\n\n") %>% 
-            paste(s_, .)
+  protect_pri <- protect_cols[!(protect_cols %in% met_cols)] %>%
+    paste(collapse = ", ")
+  s_ <- paste0("Protected columns:\n    ", wrap_text(protect_pri), "\n\n") %>%
+    paste(s_, .)
+
+  # Print metrics columns if exist.
+  if (length(met_cols) != 0) {
+    s_ <- paste0("Metric columns (protected):\n    ", wrap_text(mets), "\n\n") %>%
+      paste(s_, .)
   }
-    
+
   # Forecast unit
-  unit <- get_forecast_unit(data) %>% paste(collapse=", ")
-  s_ <- paste0("Forecast unit:\n    ",  wrap_text(unit),  "\n") %>% 
-          paste(s_, .)
-  s_tab1 <- str_pad("data.table print", width=width, side="both")  
+  unit <- get_forecast_unit(data) %>% paste(collapse = ", ")
+  s_ <- paste0("Forecast unit:\n    ",  wrap_text(unit),  "\n") %>%
+    paste(s_, .)
+  s_tab1 <- str_pad("data.table print", width = width, side = "both")
   s_ <- paste(s_, "\n", eq_str, s_tab1, "\n", eq_str)
   cat(s_)
   print(data.table(data))
