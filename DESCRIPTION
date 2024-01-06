@@ -56,7 +56,8 @@ Imports:
     Metrics,
     rlang,
     scoringRules,
-    stats
+    stats,
+    stringr
 Suggests: 
     kableExtra,
     knitr,
