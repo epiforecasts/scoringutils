@@ -37,6 +37,12 @@ test_that("function transform_forecasts works", {
   expect_equal(four$predicted, compare)
 })
 
+test_that("transform_forecasts() outputs an object of class forecast_*", {
+  ex <- as_forecast(na.omit(example_binary))
+  transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
+  expect_s3_class(transformed, "forecast_binary")
+})
+
 
 # ============================================================================ #
 # `set_forecast_unit()`
