@@ -62,7 +62,7 @@ add_coverage <- function(data) {
 
   data[, range := get_range_from_quantile(quantile)]
 
-  data <- merge(interval_data, data, by = unique(c(forecast_unit, "range")))
+  data <- merge(data, interval_data, by = unique(c(forecast_unit, "range")))
   data[, interval_coverage_deviation := interval_coverage - range / 100]
   data[, quantile_coverage := observed <= predicted]
   data[, quantile_coverage_deviation := quantile_coverage - quantile]
