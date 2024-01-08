@@ -215,9 +215,9 @@ new_forecast <- function(data, classname) {
 #' is_forecast(forecast_binary, class = c("forecast_binary", "forecast_point"))
 is_forecast <- function(data,
                         class = c("forecast_binary", "forecast_point",
-                                  "forecast_sample","forecast_quantile")) {
+                                  "forecast_sample", "forecast_quantile")) {
   allowed <- c("forecast_binary", "forecast_point",
-               "forecast_sample","forecast_quantile")
+               "forecast_sample", "forecast_quantile")
   classes <- match.arg(class, allowed, several.ok = TRUE)
   return(inherits(data, classes))
 }
