@@ -125,23 +125,49 @@ get_type <- function(x) {
 }
 
 
-#' @title Get metrics that were used for scoring
-#' @description Internal helper function to get the metrics that were used
-#' to score forecasts.
+#' @title Get Names Of The Scoring Rules That Were Used For Scoring
+#' @description
+#' When applying a scoring rule, (for example through [score()] or
+#' [add_coverage()], the names of the scoring rules become column names of the
+#' resulting data.table. In addition, an attribute `score_names` will be
+#' added to the output, holding the names of the scores as a vector.
+#' This is done so that a function like [get_forecast_unit()] can still
+#' identify which columns are part of the forecast unit and which hold a score.
+#'
+#' `get_score_names()` access and returns this attribute. If there is no
+#' attribute, the function will return NULL. Users can control whether the
+#' function should error instead via the `error` argument.
+#'
+#' `get_socre_names()` also checks whether the names of the scores stored in
+#' the attribute are column names of the data and will throw a warning if not.
+#' This can happen if you rename columns after scoring. You can either run
+#' [score()] again, specifying names for the scoring rules manually, or you
+#' can update the attribute manually using
+#' `attr(scores, "score_names") <- c("names", "of", "your", "scores")` (the
+#' order does not matter).
+#'
 #' @param scores A data.table with an attribute `score_names`
 #' @param error Throw an error if there is no attribute called `score_names`?
 #' Default is FALSE.
-#' @return Character vector with the metrics that were used for scoring.
+#' @return Character vector with the names of the scoring rules that were used
+#' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
 #' @export
 get_score_names <- function(scores, error = FALSE) {
   score_names <- attr(scores, "score_names")
   if (error && is.null(score_names)) {
     stop("Object needs an attribute `score_names` with the names of the ",
-         "scoring rules that were used for scoring. Either run `score()` ",
-         "again, or set the attribute manually using ",
-         "`attr(data, 'score_names') <- c(<names of the scoring rules>)")
+         "scoring rules that were used for scoring. ",
+         "See `?get_score_names` for further information.")
   }
+
+  if (!all(score_names %in% names(scores))) {
+    missing <- setdiff(score_names, names(scores))
+    warning("The following scores have been previously computed, but are no ",
+            "longer column names of the data: `", toString(missing), "`. ",
+            "See `?get_score_names` for further information.")
+  }
+
   return(score_names)
 }
 
