@@ -74,8 +74,8 @@ add_coverage <- function(data) {
 
   # add coverage "metrics" to list of stored metrics
   # this makes it possible to use `summarise_scores()` later on
-  stored_attributes[["metric_names"]] <- c(
-    stored_attributes[["metric_names"]],
+  stored_attributes[["score_names"]] <- c(
+    stored_attributes[["score_names"]],
     new_metrics
   )
   data <- assign_attributes(data, stored_attributes)

@@ -128,19 +128,21 @@ get_type <- function(x) {
 #' @title Get metrics that were used for scoring
 #' @description Internal helper function to get the metrics that were used
 #' to score forecasts.
-#' @param scores A data.table with an attribute `metric_names`
+#' @param scores A data.table with an attribute `score_names`
+#' @param error Throw an error if there is no attribute called `score_names`?
+#' Default is FALSE.
 #' @return Character vector with the metrics that were used for scoring.
-#' @keywords internal_input_check
-get_metrics <- function(scores) {
-  metric_names <- attr(scores, "metric_names")
-  if (is.null(metric_names)) {
-    stop("The data needs to have an attribute `metric_names` with the names ",
-         " of the metrics that were used for scoring. This should be the case ",
-         "if the data was produced using `score()`. Either run `score()` ",
+#' @keywords check-forecasts
+#' @export
+get_score_names <- function(scores, error = FALSE) {
+  score_names <- attr(scores, "score_names")
+  if (error && is.null(score_names)) {
+    stop("Object needs an attribute `score_names` with the names of the ",
+         "scoring rules that were used for scoring. Either run `score()` ",
          "again, or set the attribute manually using ",
-         "`attr(data, 'metric_names') <- names_of_the_scoring_metrics")
+         "`attr(data, 'score_names') <- c(<names of the scoring rules>)")
   }
-  return(metric_names)
+  return(score_names)
 }
 
 
@@ -159,7 +161,7 @@ get_metrics <- function(scores) {
 get_forecast_unit <- function(data) {
   # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
-  protected_columns <- c(protected_columns, attr(data, "metric_names"))
+  protected_columns <- c(protected_columns, attr(data, "score_names"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
@@ -246,7 +248,7 @@ get_scoringutils_attributes <- function(object) {
     "scoringutils_by",
     "forecast_unit",
     "forecast_type",
-    "metric_names",
+    "score_names",
     "messages",
     "warnings"
   )

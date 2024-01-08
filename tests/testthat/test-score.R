@@ -190,12 +190,12 @@ test_that("score() quantile produces desired metrics", {
   out <- suppressWarnings(suppressMessages(
     score(data = data, metrics = metrics_no_cov))
   )
-  metric_names <- c(
+  score_names <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
   )
 
-  expect_true(all(metric_names %in% colnames(out)))
+  expect_true(all(score_names %in% colnames(out)))
 })
 
 

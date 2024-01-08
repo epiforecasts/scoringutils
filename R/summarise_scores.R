@@ -80,9 +80,9 @@ summarise_scores <- function(scores,
     stop("You cannot specify both 'across' and 'by'. Please choose one.")
   }
 
-  metric_names <- attr(scores, "metric_names")
-  if (is.null(metric_names)) {
-    stop("`scores` needs to have an attribute `metric_names` with the names of
+  score_names <- attr(scores, "score_names")
+  if (is.null(score_names)) {
+    stop("`scores` needs to have an attribute `score_names` with the names of
          the metrics that were used for scoring.")
   }
 
@@ -125,13 +125,13 @@ summarise_scores <- function(scores,
   # inaccurate if we treat individual quantiles as independent forecasts
   scores <- scores[, lapply(.SD, base::mean, ...),
     by = c(unique(c(forecast_unit, by))),
-    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
+    .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
-    .SDcols = colnames(scores) %like% paste(metric_names, collapse = "|")
+    .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
 
   # remove unnecessary columns -------------------------------------------------
@@ -190,8 +190,8 @@ add_pairwise_comparison <- function(scores,
 
   stored_attributes <- get_scoringutils_attributes(scores)
 
-  if (is.null(stored_attributes[["metric_names"]])) {
-    stop("`scores` needs to have an attribute `metric_names` with the names of
+  if (is.null(stored_attributes[["score_names"]])) {
+    stop("`scores` needs to have an attribute `score_names` with the names of
          the metrics that were used for scoring.")
   }
 
@@ -239,8 +239,8 @@ add_pairwise_comparison <- function(scores,
   }
 
   # add relative skill to list of metric names
-  stored_attributes[["metric_names"]] <- c(
-    stored_attributes[["metric_names"]],
+  stored_attributes[["score_names"]] <- c(
+    stored_attributes[["score_names"]],
     "relative_skill", "scaled_rel_skill"
   )
   scores <- assign_attributes(scores, stored_attributes)
