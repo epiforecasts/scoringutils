@@ -188,6 +188,41 @@ new_forecast <- function(data, classname) {
 }
 
 
+#' @title Test Whether An Object Is Of Class `forecast_*`
+#'
+#' @description
+#' Convenience function to test whether an object is of class `forecast_*`.
+#' Specifically, the function tests whether the object matches at least one of
+#' the classes in the `class` argument. By default, it tests whether the object
+#' is of any of the following classes:
+#' - `forecast_binary`
+#' - `forecast_point`
+#' - `forecast_sample`
+#' - `forecast_quantile`
+#'
+#' @inheritParams get_forecast_counts
+#' @param class A character vector indicating the classes to be tested for.
+#' The test passes if the object has at least one of the classes specificed
+#' in the `class` vector.
+#' @return `TRUE` if the object matches one of the specified classes,
+#' `FALSE` otherwise.
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' forecast_binary <- as_forecast(example_binary)
+#' is_forecast(forecast_binary)
+#' is_forecast(forecast_binary, class = "forecast_binary")
+#' is_forecast(forecast_binary, class = c("forecast_binary", "forecast_point"))
+is_forecast <- function(data,
+                        class = c("forecast_binary", "forecast_point",
+                                  "forecast_sample","forecast_quantile")) {
+  allowed <- c("forecast_binary", "forecast_point",
+               "forecast_sample","forecast_quantile")
+  classes <- match.arg(class, allowed, several.ok = TRUE)
+  return(inherits(data, classes))
+}
+
+
 #' @title Validate metrics
 #'
 #' @description This function validates whether the list of metrics is a list
