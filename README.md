@@ -12,8 +12,9 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: This documentation refers to the development version of
-`scoringutils`. You can also view the [documentation of the stable
+**Note**: [This documentation](https://epiforecasts.io/scoringutils/dev)
+refers to the development version of `scoringutils`. You can also view
+the [documentation of the stable
 version](https://epiforecasts.io/scoringutils).
 
 The `scoringutils` package provides a collection of metrics and proper
