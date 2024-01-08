@@ -91,7 +91,7 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "metric_names", names(metrics))
+  setattr(data, "score_names", names(metrics))
 
   return(data[])
 
@@ -113,7 +113,7 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "metric_names", names(metrics))
+  setattr(data, "score_names", names(metrics))
 
   return(data[])
 }
@@ -151,7 +151,7 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     return(data)
   })
   data <- rbindlist(split_result)
-  setattr(data, "metric_names", names(metrics))
+  setattr(data, "score_names", names(metrics))
 
   return(data[])
 }
@@ -198,7 +198,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   })
 
   data <- rbindlist(split_result)
-  setattr(data, "metric_names", names(metrics))
+  setattr(data, "score_names", names(metrics))
 
   return(data[])
 }
