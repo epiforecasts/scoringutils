@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate.R
 \name{is_forecast}
 \alias{is_forecast}
-\title{Validate That An Object Is Of Class \verb{forecast_*}}
+\title{Test Whether An Object Is Of Class \verb{forecast_*}}
 \usage{
 is_forecast(
   data,
