@@ -49,6 +49,36 @@ test_that("run_safely() works as expected", {
 })
 
 
+# ==============================================================================
+# get score_names
+# ==============================================================================
+
+test_that("get_score_names() works as expected", {
+  expect_true(
+    "brier_score" %in% get_score_names(scores_binary)
+  )
+
+  expect_equal(get_score_names(scores_continuous),
+               attr(scores_continuous, "score_names"))
+
+  #check that function errors if `error = TRUE` and not otherwise
+  expect_error(
+    get_score_names(example_quantile, error = TRUE),
+    "Object needs an attribute"
+  )
+  expect_no_condition(
+    get_score_names(scores_continuous)
+  )
+
+  # expect warning if some column changed
+  ex <- data.table::copy(scores_continuous)
+  data.table::setnames(ex, old = "crps", new = "changed")
+  expect_warning(
+    get_score_names(ex),
+    "but are no longer column names of the data: `crps`"
+  )
+})
+
 # test_that("prediction_is_quantile() correctly identifies quantile predictions", {
 #   data <- data.frame(
 #     predicted = 1:3,
