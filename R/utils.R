@@ -200,3 +200,61 @@ ensure_data.table <- function(data) {
   }
   return(data)
 }
+
+#' @title Print information about a `forecast` object.
+#' @description This function prints information about a forecast object,
+#' including "Forecast type", "Protected columns", "Score columns",
+#' "Forecast unit".
+#' @export
+#' @keywords print-forecasts
+#' @examples
+#' print(example_quantile %>% as_forecast)
+print_forecast_info <- function(dat, ...) {
+  # Obtain forecast object information for printing
+  forecast_type <- get_forecast_type(dat)
+  protected_cols <- get_protected_columns(dat)
+  score_cols <- get_score_names(dat)
+  forecast_units <- get_forecast_unit(dat)
+
+  # Exclude score columns from protected columns
+  protected_cols <- protected_cols[!(protected_cols %in% score_cols)]
+
+  # Print forecast object information 
+  cat("Forecast type:\n")
+  print(forecast_type)
+
+  cat("\nProtected columns:\n")
+  print(protected_cols)
+
+  if (!is.null(score_cols)) {
+    cat("\nScore columns (Protected):\n")
+    print(score_cols)
+  }
+
+  cat("\nForecast units:\n")
+  print(forecast_units)
+
+  cat("\n")
+  print(as.data.table(dat), ...)
+  return(invisible(dat))
+}
+
+#' @title Print information about a `forecast_binary` object.
+#' @export
+print.forecast_binary <- function(x, ...) print_forecast_info(x, ...)
+
+#' @title Print information about a `forecast_quantile` object.
+#' @export
+print.forecast_quantile <- function(x, ...) print_forecast_info(x, ...)
+
+#' @title Print information about a `forecast_point` object.
+#' @export
+print.forecast_point <- function(x, ...) print_forecast_info(x, ...)
+
+#' @title Print information about a `forecast_sample` object.
+#' @export
+print.forecast_sample <- function(x, ...) print_forecast_info(x, ...)
+
+#' @title Print information about a `forecast_integer` object.
+#' @export
+print.forecast_integer <- function(x, ...) print_forecast_info(x, ...)
