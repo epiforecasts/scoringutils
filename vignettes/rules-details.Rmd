@@ -26,7 +26,7 @@ library(data.table)
 This table gives an overview for when which scoring rules can be applied and gives a very brief description. Note that this table on shows the scoring rules as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
 
 ```{r, echo = FALSE, results = "asis"}
-data <- copy(scoring_rules)
+data <- copy(rules)
 setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
          new = c("D", "C", "B", "Q"))
 data[, c("Name", "Functions") := NULL]

@@ -380,10 +380,10 @@ example_integer %>%
 
 ## Available scoring rules
 
-An overview of available scoring rules can be found in the `scoring_rules` data set that is included in the package.
+An overview of available scoring rules can be found in the `rules` data set that is included in the package.
 
 ```{r}
-scoring_rules
+rules
 ```
 
 ## Lower level functions
