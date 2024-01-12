@@ -31,7 +31,7 @@ reference:
                 - starts_with("score")
         - title: Lower-level scoring functions
           contents:
-                - has_keyword("metric")
+                - has_keyword("rule")
         - title: Data wrangling helpers
           contents:
                 - has_keyword("data-handling")

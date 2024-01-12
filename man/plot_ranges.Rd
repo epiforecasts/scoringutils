@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_ranges}
 \alias{plot_ranges}
-\title{Plot Metrics by Range of the Prediction Interval}
+\title{Plot Rules by Range of the Prediction Interval}
 \usage{
 plot_ranges(scores, y = "wis", x = "model", colour = "range")
 }
@@ -25,7 +25,7 @@ A ggplot2 object showing a contributions from the three components of
 the weighted interval score
 }
 \description{
-Visualise the metrics by range, e.g. if you are interested how different
+Visualise the rules by range, e.g. if you are interested how different
 interval ranges contribute to the overall interval score, or how
 sharpness / dispersion changes by range.
 }
@@ -33,7 +33,7 @@ sharpness / dispersion changes by range.
 library(ggplot2)
 ex <- example_quantile
 ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
-scores <- score(ex, metrics = list("wis" = wis))
+scores <- score(ex, rules = list("wis" = wis))
 scores$range <- scores$interval_range
 summarised <- summarise_scores(
   scores,

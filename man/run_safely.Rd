@@ -24,7 +24,7 @@ All unnamed arguments are passed on to the function. In case \code{fun} errors,
 the error will be converted to a warning and \code{run_safely} returns \code{NULL}.
 
 \code{run_safely} can be useful when constructing functions to be used as
-metrics in \code{\link[=score]{score()}}.
+rules in \code{\link[=score]{score()}}.
 }
 \examples{
 f <- function(x) {x}

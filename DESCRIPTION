@@ -25,7 +25,7 @@ Authors@R: c(
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("aut")))
 Description: 
-    Provides a collection of metrics and proper scoring rules 
+    Provides a collection of scoring rules
     (Tilmann Gneiting & Adrian E Raftery (2007) 
     <doi:10.1198/016214506000001437>, Jordan, A., Krüger, F., & Lerch, S. (2019)
     <doi:10.18637/jss.v090.i12>) within a consistent framework for 
@@ -38,7 +38,7 @@ Description:
     Several types of predictions (e.g. binary, discrete, continuous) which may 
     come in different formats (e.g. forecasts represented by predictive samples 
     or by quantiles of the predictive distribution) can be evaluated. 
-    Scoring metrics can be used either through a convenient data.frame format, 
+    Scoring rules can be used either through a convenient data.frame format,
     or can be applied as individual functions in a vector / matrix format. 
     All functionality has been implemented with a focus on performance and is 
     robustly tested. Find more information about the package in the 

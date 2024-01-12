@@ -1,5 +1,5 @@
 ################################################################################
-# Metrics with a many-to-one relationship between input and score
+# Scoring rules with a many-to-one relationship between input and score
 ################################################################################
 
 #' Weighted Interval Score (WIS)
@@ -96,7 +96,7 @@
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -171,7 +171,7 @@ wis <- function(observed,
 #' `overprediction()`, `underprediction()` and `dispersion()`
 #' @export
 #' @rdname wis
-#' @keywords metric
+#' @keywords rule
 dispersion <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -185,7 +185,7 @@ dispersion <- function(observed, predicted, quantile, ...) {
 #' observation)
 #' @export
 #' @rdname wis
-#' @keywords metric
+#' @keywords rule
 overprediction <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -199,7 +199,7 @@ overprediction <- function(observed, predicted, quantile, ...) {
 #' observation)
 #' @export
 #' @rdname wis
-#' @keywords metric
+#' @keywords rule
 underprediction <- function(observed, predicted, quantile, ...) {
   args <- list(...)
   args$separate_results <- TRUE
@@ -224,7 +224,7 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #' FALSE otherwise.
 #' @name interval_coverage
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -278,7 +278,7 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
 #' but it still doesn't make that much
 #' sense to compare nominal (desired) coverage and actual coverage for a single
 #' observation. In that sense coverage deviation only really starts to make
-#' sense as a metric when averaged across multiple observations).
+#' sense as a rule when averaged across multiple observations).
 #'
 #' Positive values of interval coverage deviation are an indication for
 #' underconfidence, i.e. the forecaster could likely have issued a narrower
@@ -299,7 +299,7 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
 #' @return A numeric vector of length n with the interval coverage deviation
 #' for each forecast (comprising one or multiple prediction intervals).
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' observed <- c(1, -15, 22)
 #' predicted <- rbind(
@@ -370,7 +370,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
 #' value. If the observed value is exactly the median, both terms cancel out and
 #' \eqn{B_t} is zero. For a large enough number of quantiles, the
 #' percentile rank will equal the proportion of predictive samples below the
-#' observed value, and this metric coincides with the one for
+#' observed value, and this scoring rule coincides with the one for
 #' continuous forecasts.
 #'
 #' Bias can assume values between
@@ -384,7 +384,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
 #' @param na.rm logical. Should missing values be removed?
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' predicted <- c(
 #'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
@@ -506,7 +506,7 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' ae_median_quantile(observed, predicted_values, quantile = 0.5)
 #' @export
-#' @keywords metric
+#' @keywords rule
 ae_median_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
   if (!any(quantile == 0.5)) {
@@ -526,7 +526,7 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 
 
 ################################################################################
-# Metrics with a one-to-one relationship between input and score
+# Scoring rules with a one-to-one relationship between input and score
 ################################################################################
 
 
@@ -567,7 +567,7 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
 #' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
 #' Statistical Association, Volume 102, 2007 - Issue 477

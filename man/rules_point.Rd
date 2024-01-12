@@ -31,4 +31,4 @@ The default scoring rules are:
 rules_point()
 rules_point(select = "ape")
 }
-\keyword{metric}
+\keyword{rule}

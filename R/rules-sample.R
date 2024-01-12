@@ -52,7 +52,7 @@
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
 #' \doi{10.1371/journal.pcbi.1006785}
-#' @keywords metric
+#' @keywords rule
 
 bias_sample <- function(observed, predicted) {
 
@@ -99,7 +99,7 @@ bias_sample <- function(observed, predicted) {
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' ae_median_sample(observed, predicted_values)
 #' @export
-#' @keywords metric
+#' @keywords rule
 
 ae_median_sample <- function(observed, predicted) {
   assert_input_sample(observed, predicted)
@@ -132,7 +132,7 @@ ae_median_sample <- function(observed, predicted) {
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' se_mean_sample(observed, predicted_values)
 #' @export
-#' @keywords metric
+#' @keywords rule
 
 se_mean_sample <- function(observed, predicted) {
   assert_input_sample(observed, predicted)
@@ -168,7 +168,7 @@ se_mean_sample <- function(observed, predicted) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
-#' @keywords metric
+#' @keywords rule
 
 logs_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
@@ -198,7 +198,7 @@ logs_sample <- function(observed, predicted, ...) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
-#' @keywords metric
+#' @keywords rule
 
 dss_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
@@ -230,7 +230,7 @@ dss_sample <- function(observed, predicted, ...) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
-#' @keywords metric
+#' @keywords rule
 
 crps_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
@@ -273,7 +273,7 @@ crps_sample <- function(observed, predicted, ...) {
 #' @examples
 #' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
 #' mad_sample(predicted = predicted)
-#' @keywords metric
+#' @keywords rule
 mad_sample <- function(observed = NULL, predicted, ...) {
 
   assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)

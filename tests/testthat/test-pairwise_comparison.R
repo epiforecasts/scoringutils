@@ -258,7 +258,7 @@ test_that("pairwise_comparison() works inside and outside of score()", {
 
   pairwise <- suppressMessages(pairwise_comparison(eval,
     by = "model",
-    metric = "crps"
+    rule = "crps"
   ))
 
   eval2_summarised <- summarise_scores(scores_continuous, by = "model")

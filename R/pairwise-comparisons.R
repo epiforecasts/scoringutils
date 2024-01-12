@@ -16,7 +16,7 @@
 #' Usually, the function input should be unsummarised scores as
 #' produced by [score()].
 #' Note that the function internally infers the *unit of a single forecast* by
-#' determining all columns in the input that do not correspond to metrics
+#' determining all columns in the input that do not correspond to scoring rules
 #' computed by [score()]. Adding unrelated columns will change results in an
 #' unpredictable way.
 #'
@@ -27,7 +27,7 @@
 #' Andrea Riebler and Michaela Paul.
 #'
 #' @param scores A data.table of scores as produced by [score()].
-#' @param metric A character vector of length one with the metric to do the
+#' @param rule A character vector of length one with the scoring rule to do the
 #' comparison on. The default is "auto", meaning that either "wis",
 #' "crps", or "brier_score" will be selected where available.
 #' @param by character vector with names of columns present in the input
@@ -64,41 +64,41 @@
 
 pairwise_comparison <- function(scores,
                                 by = "model",
-                                metric = "auto",
+                                rule = "auto",
                                 baseline = NULL,
                                 ...) {
-  metric <- match.arg(metric, c("auto", available_metrics()))
+  rule <- match.arg(rule, c("auto", available_rules()))
   if (is.data.table(scores)) {
     scores <- copy(scores)
   } else {
     scores <- as.data.table(scores)
   }
 
-  # determine metric automatically
-  if (metric == "auto") {
-    metric <- infer_rel_skill_metric(scores)
+  # determine rule automatically
+  if (rule == "auto") {
+    rule <- infer_rel_skill_rule(scores)
   }
 
-  # check that values of the chosen metric are not NA
-  if (anyNA(scores[[metric]])) {
-    msg <- paste0("Some values for the metric '", metric,
+  # check that values of the chosen rule are not NA
+  if (anyNA(scores[[rule]])) {
+    msg <- paste0("Some values for the rule '", rule,
                   "' are NA. These have been removed. ",
-                  "Maybe choose a different metric?")
+                  "Maybe choose a different rule?")
     warning(msg)
 
-    scores <- scores[!is.na(scores[[metric]])]
+    scores <- scores[!is.na(scores[[rule]])]
     if (nrow(scores) == 0) {
-      msg <- paste0("After removing NA values for '", metric,
+      msg <- paste0("After removing NA values for '", rule,
                     "', no values were left.")
       warning(msg)
       return(NULL)
     }
   }
 
-  # check that all values of the chosen metric are positive
-  if (any(sign(scores[[metric]]) < 0) && any(sign(scores) > 0)) {
+  # check that all values of the chosen rule are positive
+  if (any(sign(scores[[rule]]) < 0) && any(sign(scores) > 0)) {
     msg <- paste(
-      "To compute pairwise comparisons, all values of", metric,
+      "To compute pairwise comparisons, all values of", rule,
       "must have the same sign."
     )
     stop(msg)
@@ -118,10 +118,10 @@ pairwise_comparison <- function(scores,
 
   # summarise scores over everything (e.g. quantiles, ranges or samples) in
   # order to not to include those in the calculation of relative scores. Also
-  # gets rid of all unnecessary columns and keep only metric and forecast unit
+  # gets rid of all unnecessary columns and keep only rule and forecast unit
   scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
     by = forecast_unit,
-    .SDcols = metric
+    .SDcols = rule
   ]
 
   # split data set into groups determined by 'by'
@@ -132,7 +132,7 @@ pairwise_comparison <- function(scores,
     FUN = function(scores) {
       pairwise_comparison_one_group(
         scores = scores,
-        metric = metric,
+        rule = rule,
         baseline = baseline,
         by = by,
         ...
@@ -161,7 +161,7 @@ pairwise_comparison <- function(scores,
 #' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
-                                          metric,
+                                          rule,
                                           baseline,
                                           by,
                                           ...) {
@@ -194,7 +194,7 @@ pairwise_comparison_one_group <- function(scores,
     scores = scores,
     name_model1 = model,
     name_model2 = compare_against,
-    metric = metric,
+    rule = rule,
     ...
   ),
   by = seq_len(NROW(combinations))
@@ -263,13 +263,13 @@ pairwise_comparison_one_group <- function(scores,
     old = c("ratio", "theta"),
     new = c(
       "mean_scores_ratio",
-      paste(metric, "relative_skill", sep = "_")
+      paste(rule, "relative_skill", sep = "_")
     )
   )
   if (!is.null(baseline)) {
     data.table::setnames(out,
       old = "rel_to_baseline",
-      new = paste(metric, "scaled_relative_skill", sep = "_")
+      new = paste(rule, "scaled_relative_skill", sep = "_")
     )
   }
 
@@ -307,7 +307,7 @@ pairwise_comparison_one_group <- function(scores,
 compare_two_models <- function(scores,
                                name_model1,
                                name_model2,
-                               metric,
+                               rule,
                                one_sided = FALSE,
                                test_type = c("non_parametric", "permutation"),
                                n_permutations = 999) {
@@ -333,8 +333,8 @@ compare_two_models <- function(scores,
     return(list(ratio = NA_real_, pval = NA_real_))
   }
 
-  values_x <- overlap[[paste0(metric, ".x")]]
-  values_y <- overlap[[paste0(metric, ".y")]]
+  values_x <- overlap[[paste0(rule, ".x")]]
+  values_y <- overlap[[paste0(rule, ".y")]]
 
   # calculate ratio to of average scores achieved by both models.
   # this should be equivalent to theta_ij in Johannes Bracher's document.
@@ -364,32 +364,32 @@ compare_two_models <- function(scores,
   ))
 }
 
-#' @title Infer metric for pairwise comparisons
+#' @title Infer rule for pairwise comparisons
 #'
 #' @description
-#' Helper function to infer the metric for which pairwise comparisons shall
+#' Helper function to infer the rule for which pairwise comparisons shall
 #' be made. The function simply checks the names of the available columns and
-#' chooses the most widely used metric.
+#' chooses the most widely used rule.
 #' Used in [pairwise_comparison()].
 #'
 #' @inheritParams pairwise_comparison
 #' @keywords internal
 
-infer_rel_skill_metric <- function(scores) {
+infer_rel_skill_rule <- function(scores) {
   if ("wis" %in% colnames(scores)) {
-    rel_skill_metric <- "wis"
+    rel_skill_rule <- "wis"
   } else if ("crps" %in% colnames(scores)) {
-    rel_skill_metric <- "crps"
+    rel_skill_rule <- "crps"
   } else if ("brier_score" %in% colnames(scores)) {
-    rel_skill_metric <- "brier_score"
+    rel_skill_rule <- "brier_score"
   } else {
     stop(
-      "automatically assigning a metric to compute relative skills on failed. ",
-      "Please provide a metric."
+      "automatically assigning a rule to compute relative skills on failed. ",
+      "Please provide a rule."
     )
   }
 
-  return(rel_skill_metric)
+  return(rel_skill_rule)
 }
 
 

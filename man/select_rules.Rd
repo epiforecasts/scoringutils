@@ -32,4 +32,4 @@ select_rules(
   exclude = "log_score"
 )
 }
-\keyword{metric}
+\keyword{rule}

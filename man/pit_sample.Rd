@@ -101,4 +101,4 @@ region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 \seealso{
 \code{\link[=pit]{pit()}}
 }
-\keyword{metric}
+\keyword{rule}

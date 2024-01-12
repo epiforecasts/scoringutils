@@ -1,10 +1,10 @@
-#' @title Available metrics in scoringutils
+#' @title Available scoring rules in scoringutils
 #'
-#' @return A vector with the name of all available metrics
+#' @return A vector with the name of all available scoring rules
 #' @export
 #' @keywords info
-available_metrics <- function() {
-  return(unique(c(scoringutils::metrics$Name,
+available_rules <- function() {
+  return(unique(c(scoringutils::rules$Name,
                   "wis", "interval_coverage_50", "interval_coverage_90",
                   "interval_coverage_deviation")))
 }
@@ -142,7 +142,7 @@ strip_attributes <- function(object, attributes) {
 #' the error will be converted to a warning and `run_safely` returns `NULL`.
 #'
 #' `run_safely` can be useful when constructing functions to be used as
-#' metrics in [score()].
+#' rules in [score()].
 #'
 #' @param ... Arguments to pass to `fun`
 #' @param fun A function to execute

@@ -185,13 +185,13 @@
 # nolint end
 "example_truth_only"
 
-#' Summary information for selected metrics
+#' Summary information for selected scoring rules
 #'
-#' A data set with summary information on selected metrics implemented in
+#' A data set with summary information on selected scoring rules implemented in
 #' \pkg{scoringutils}
 #'
-#' The data was created using the script create-metric-tables.R in the inst/
+#' The data was created using the script create-rule-tables.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
 #' @keywords info
-"metrics"
+"rules"

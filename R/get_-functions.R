@@ -177,7 +177,7 @@ get_score_names <- function(scores, error = FALSE) {
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
-#' [get_protected_columns()] as well as the names of the metrics that were
+#' [get_protected_columns()] as well as the names of the scoring rules that were
 #' specified during scoring, if any.
 #' @inheritParams validate_forecast
 #' @return A character vector with the column names that define the unit of
@@ -212,7 +212,7 @@ get_protected_columns <- function(data = NULL) {
     "pit_value", "range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
-    available_metrics(),
+    available_rules(),
     grep("_relative_skill$", names(data), value = TRUE),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )

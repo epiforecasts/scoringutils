@@ -18,7 +18,7 @@ over samples or quantiles (in case of quantile-based forecasts), such that
 there is one score per forecast as defined by the \emph{unit of a single forecast}
 (rather than one score for every sample or quantile).
 The \emph{unit of a single forecast} is determined by the columns present in the
-input data that do not correspond to a metric produced by \code{\link[=score]{score()}}, which
+input data that do not correspond to a rule produced by \code{\link[=score]{score()}}, which
 indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.}

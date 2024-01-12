@@ -2,25 +2,25 @@
 % Please edit documentation in R/correlations.R
 \name{correlation}
 \alias{correlation}
-\title{Correlation Between Metrics}
+\title{Correlation Between Scoring rules}
 \usage{
-correlation(scores, metrics = NULL, digits = NULL)
+correlation(scores, rules = NULL, digits = NULL)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
-\item{metrics}{A character vector with the metrics to show. If set to
-\code{NULL} (default), all metrics present in \code{scores} will
+\item{rules}{A character vector with the rules to show. If set to
+\code{NULL} (default), all rules present in \code{scores} will
 be shown}
 
 \item{digits}{A number indicating how many decimal places the result should
 be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
-A data.table with correlations for the different metrics
+A data.table with correlations for the different rules
 }
 \description{
-Calculate the correlation between different metrics for a data.frame of
+Calculate the correlation between different rules for a data.frame of
 scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{

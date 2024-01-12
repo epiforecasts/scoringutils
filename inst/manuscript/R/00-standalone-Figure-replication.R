@@ -210,7 +210,7 @@ if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
                     value.name = "prediction")
     samples[, true_value := true_value]
     results[[paste(i)]] <- score(
-      samples, metrics = c("crps", "log_score", "dss")
+      samples, rules = c("crps", "log_score", "dss")
     )[, n_samples := i]
   }
   saveRDS(results, "inst/manuscript/output/sample-convergence.rds")
@@ -587,7 +587,7 @@ score(example_quantile) |>
 # =============================================================================#
 score(example_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
-  plot_heatmap(x = "location", metric = "bias") +
+  plot_heatmap(x = "location", rule = "bias") +
   facet_wrap(~ target_type)
 
 

@@ -1,4 +1,4 @@
-#' Metrics for Binary Outcomes
+#' Scoring rules for Binary Outcomes
 #'
 #' @details
 #' The functions require users to provide observed values as a factor in order
@@ -54,7 +54,7 @@ NULL
 #' \eqn{\textrm{prediction}_t \in [0, 1]}{prediction_t in [0, 1]} represents
 #' the probability that the outcome is equal to 1.
 #' @return A numeric vector of size n with the Brier scores
-#' @keywords metric
+#' @keywords rule
 #' @export
 #' @rdname scoring-functions-binary
 brier_score <- function(observed, predicted) {
@@ -78,7 +78,7 @@ brier_score <- function(observed, predicted) {
 #' @return A numeric vector of size n with log scores
 #' @importFrom methods hasArg
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @rdname scoring-functions-binary
 logs_binary <- function(observed, predicted) {
   assert_input_binary(observed, predicted)

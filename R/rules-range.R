@@ -1,5 +1,5 @@
 ################################################################################
-# Metrics with a one-to-one relationship between input and score
+# Scoring rules with a one-to-one relationship between input and score
 ################################################################################
 
 #' @title Interval Score
@@ -85,7 +85,7 @@
 #'   separate_results = TRUE,
 #'   interval_range = 90
 #' )
-#' @keywords metric
+#' @keywords rule
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
 #' Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
 #' Statistical Association, Volume 102, 2007 - Issue 477

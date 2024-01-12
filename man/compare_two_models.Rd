@@ -8,7 +8,7 @@ compare_two_models(
   scores,
   name_model1,
   name_model2,
-  metric,
+  rule,
   one_sided = FALSE,
   test_type = c("non_parametric", "permutation"),
   n_permutations = 999
@@ -21,7 +21,7 @@ compare_two_models(
 
 \item{name_model2}{character, name of the model to compare against}
 
-\item{metric}{A character vector of length one with the metric to do the
+\item{rule}{A character vector of length one with the scoring rule to do the
 comparison on. The default is "auto", meaning that either "wis",
 "crps", or "brier_score" will be selected where available.}
 

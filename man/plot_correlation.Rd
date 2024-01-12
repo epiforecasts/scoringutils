@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_correlation}
 \alias{plot_correlation}
-\title{Plot Correlation Between Metrics}
+\title{Plot Correlation Between Scoring Rules}
 \usage{
 plot_correlation(correlations)
 }
@@ -12,10 +12,10 @@ by \code{\link[=correlation]{correlation()}}.}
 }
 \value{
 A ggplot2 object showing a coloured matrix of correlations
-between metrics
+between scoring rules
 }
 \description{
-Plots a heatmap of correlations between different metrics
+Plots a heatmap of correlations between different scoring rules
 }
 \examples{
 scores <- score(example_quantile)

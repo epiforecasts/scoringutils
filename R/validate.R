@@ -188,35 +188,35 @@ new_forecast <- function(data, classname) {
 }
 
 
-#' @title Validate metrics
+#' @title Validate scoring rules
 #'
-#' @description This function validates whether the list of metrics is a list
-#' of valid functions.
+#' @description This function validates whether the list of scoring rules is a
+#'   list of valid functions.
 #'
-#' The function is used in [score()] to make sure that all metrics are valid
-#' functions
+#' The function is used in [score()] to make sure that all scoring rules are
+#'   valid functions
 #'
-#' @param metrics A named list with metrics. Every element should be a scoring
-#' function to be applied to the data.
+#' @param rules A named list with scoring rules. Every element should be a
+#'   scoring function to be applied to the data.
 #'
-#' @return A named list of metrics, with those filtered out that are not
+#' @return A named list of rules, with those filtered out that are not
 #' valid functions
 #' @importFrom checkmate assert_list test_list check_function
 #' @keywords internal_input_check
-validate_metrics <- function(metrics) {
+validate_rules <- function(rules) {
 
-  assert_list(metrics, min.len = 1, names = "named")
+  assert_list(rules, min.len = 1, names = "named")
 
-  for (i in seq_along(metrics)) {
-    check_fun <- check_function(metrics[[i]])
+  for (i in seq_along(rules)) {
+    check_fun <- check_function(rules[[i]])
     if (!is.logical(check_fun)) {
-      warning("`Metrics` element number ", i, " is not a valid function")
-      names(metrics)[i] <- "scoringutils_delete"
+      warning("`Rules` element number ", i, " is not a valid function")
+      names(rules)[i] <- "scoringutils_delete"
     }
   }
-  metrics[names(metrics) == "scoringutils_delete"] <- NULL
+  rules[names(rules) == "scoringutils_delete"] <- NULL
 
-  assert_list(metrics, min.len = 1, .var.name = "valid metrics")
+  assert_list(rules, min.len = 1, .var.name = "valid rules")
 
-  return(metrics)
+  return(rules)
 }

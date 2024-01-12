@@ -1,11 +1,11 @@
 library(data.table)
 
 #------------------------------------------------------------------------------#
-#---------------------- Metrics Summary and Overview --------------------------#
+#---------------------- Rules Summary and Overview --------------------------#
 #------------------------------------------------------------------------------#
 
 ae <- list(
-  `Metric` = "Absolute error",
+  `Rule` = "Absolute error",
   `Name` = list("ae_point", "ae_median"),
   `Functions` = r"(score(), ae_point()), ae_median_sample()",
   `D` = r"($\checkmark$)",
@@ -17,7 +17,7 @@ ae <- list(
 )
 
 se <- list(
-  `Metric` = "Squared error",
+  `Rule` = "Squared error",
   `Name` = list("se_point", "se_mean"),
   `Functions` = r"(score(), se_point(), se_mean_sample())",
   `D` = r"($\checkmark$)",
@@ -30,7 +30,7 @@ se <- list(
 
 
 crps <- list(
-  `Metric` = "(Continuous) ranked probability score (CRPS)",
+  `Rule` = "(Continuous) ranked probability score (CRPS)",
   `Name` = r"(crps)",
   `Functions` = r"(score(), ae_point)",
   `D` = r"($\checkmark$)",
@@ -42,7 +42,7 @@ crps <- list(
 )
 
 log_score <- list(
-  `Metric` = "Log score",
+  `Rule` = "Log score",
   `Name` = r"(log_score)",
   `Functions` = r"(score(), logs_sample(), logs_binary())",
   `D` = r"($-$)",
@@ -54,7 +54,7 @@ log_score <- list(
 )
 
 wis <- list(
-  Metric = "(Weighted) interval score (WIS)",
+  Rule = "(Weighted) interval score (WIS)",
   `Name` = r"(interval_score)",
   `Functions` = r"(score(), interval_score())",
   `D` = r"($\checkmark$)",
@@ -66,7 +66,7 @@ wis <- list(
 )
 
 dss <- list(
-  `Metric` = "Dawid-Sebastiani score (DSS)",
+  `Rule` = "Dawid-Sebastiani score (DSS)",
   `Name` = r"(dss)",
   `Functions` = r"(score(), dss_sample())",
   `D` = r"($\checkmark$)",
@@ -78,7 +78,7 @@ dss <- list(
 )
 
 brier_score <- list(
-  `Metric` = "Brier score (BS)",
+  `Rule` = "Brier score (BS)",
   `Name` = r"(brier_score)",
   `Functions` = r"(score(), brier_score())",
   `D` = r"($-$)",
@@ -90,7 +90,7 @@ brier_score <- list(
 )
 
 interval_coverage <- list(
-  `Metric` = "Interval coverage",
+  `Rule` = "Interval coverage",
   `Name` = r"(coverage)",
   `Functions` = r"(score())",
   `D` = r"($-$)",
@@ -102,7 +102,7 @@ interval_coverage <- list(
 )
 
 coverage_deviation <- list(
-  `Metric` = "Coverage deviation",
+  `Rule` = "Coverage deviation",
   `Name` = r"(coverage_deviation)",
   `Functions` = r"(score())",
   `D` = r"($-$)",
@@ -114,7 +114,7 @@ coverage_deviation <- list(
 )
 
 quantile_coverage <- list(
-  `Metric` = "Quantile coverage",
+  `Rule` = "Quantile coverage",
   `Name` = r"(quantile_coverage)",
   `Functions` = r"(score())",
   `D` = r"($\checkmark$)",
@@ -127,7 +127,7 @@ quantile_coverage <- list(
 
 
 dispersion <- list(
-  `Metric` = "Dispersion",
+  `Rule` = "Dispersion",
   `Name` = r"(dispersion)",
   `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
@@ -139,7 +139,7 @@ dispersion <- list(
 )
 
 mad <- list(
-  `Metric` = "Median Absolute Deviation (Dispersion)",
+  `Rule` = "Median Absolute Deviation (Dispersion)",
   `Name` = r"(mad)",
   `Functions` = r"(score(), mad_sample())",
   `D` = r"($\checkmark$)",
@@ -151,7 +151,7 @@ mad <- list(
 )
 
 bias <- list(
-  `Metric` = "Bias",
+  `Rule` = "Bias",
   `Name` = r"(bias)",
   `Functions` = r"(score(), bias_sample(), bias_quantile())",
   `D` = r"($\checkmark$)",
@@ -163,7 +163,7 @@ bias <- list(
 )
 
 under_overprediction <- list(
-  `Metric` = "Under-, Over-prediction",
+  `Rule` = "Under-, Over-prediction",
   `Name` = list("underprediction", "overprediction"),
   `Functions` = r"(score(), interval_score())",
   `D` = r"($-$)",
@@ -175,7 +175,7 @@ under_overprediction <- list(
 )
 
 pit <- list(
-  `Metric` = "Probability integral transform (PIT)",
+  `Rule` = "Probability integral transform (PIT)",
   `Name` = r"(crps)",
   `Functions` = r"(score(), pit())",
   `D` = r"($\checkmark$)",
@@ -187,38 +187,38 @@ pit <- list(
 )
 
 mean_score_ratio <- list(
-  `Metric` = "Mean score ratio",
+  `Rule` = "Mean score ratio",
   `Name` = r"(mean_scores_ratio)",
   `Functions` = r"(pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
-  `Properties` = "Compares performance of two models. Properties depend on the metric chosen for the comparison.",
+  `Properties` = "Compares performance of two models. Properties depend on the rule chosen for the comparison.",
   `References` = ""
 )
 
 relative_skill <- list(
-  `Metric` = "Relative skill",
+  `Rule` = "Relative skill",
   `Name` = list("relative_skill"),
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
-  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.",
+  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the rule chosen for the comparison.",
   `References` = ""
 )
 
 scaled_relative_skill <- list(
-  `Metric` = "Scaled relative skill",
+  `Rule` = "Scaled relative skill",
   `Name` = "scaled_rel_skill",
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
   `Q` = r"($\sim$)",
-  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Scaled (i.e. divided) by the score of a baseline model. Properties depend on the metric chosen for the comparison.",
+  `Properties` = "Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Scaled (i.e. divided) by the score of a baseline model. Properties depend on the rule chosen for the comparison.",
   `References` = ""
 )
 
@@ -246,24 +246,24 @@ data[, References := NULL]
 setnames(data, old = c("Properties"),
          new = c("Info"))
 
-metrics <- data[, lapply(.SD, FUN = function(x) {
+rules <- data[, lapply(.SD, FUN = function(x) {
   x <- gsub("$\\checkmark$", '+', x, fixed = TRUE)
   x <- gsub("$-$", '-', x, fixed = TRUE)
   x <- gsub("$\\sim$", '~', x, fixed = TRUE)
   return(x)
 })]
-setnames(metrics, old = c("D", "C", "B", "Q"),
+setnames(rules, old = c("D", "C", "B", "Q"),
          new = c("Discrete", "Continuous", "Binary", "Quantile"))
 
-usethis::use_data(metrics, overwrite = TRUE)
+usethis::use_data(rules, overwrite = TRUE)
 
 
 #------------------------------------------------------------------------------#
-#------------------ Detailed explanation of all the metrics -------------------#
+#------------------ Detailed explanation of all the rules -------------------#
 #------------------------------------------------------------------------------#
 
 crps <- list(
-  `Metric` = "CRPS (Continuous) ranked probability score",
+  `Rule` = "CRPS (Continuous) ranked probability score",
   `Explanation` = r"(The crps is a proper scoring rule that generalises the absolute error to probabilistic forecasts. It measures the 'distance' of the predictive distribution to the observed data-generating distribution. The CRPS is given as
   $$\text{CRPS}(F, y) = \int_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,$$
   where y is the observed value and F the CDF of predictive distribution. Often An alternative representation is used:
@@ -277,7 +277,7 @@ crps <- list(
 
 
 log_score <- list(
-  `Metric` = "Log score",
+  `Rule` = "Log score",
   `Explanation` = r"(The Log score is a proper scoring rule that is computed as the negative log of the predictive density evaluated at the observed value. It is given as
   $$ \text{log score} = -\log f(y), $$
   where $f$ is the predictive density function and y is the observed value. For integer-valued forecasts, the log score can be computed as
@@ -289,7 +289,7 @@ log_score <- list(
 )
 
 wis <- list(
-  Metric = "WIS (Weighted) interval score",
+  Rule = "WIS (Weighted) interval score",
   `Explanation` = r"(The (weighted) interval score is a proper scoring rule for quantile forecasts that converges to the crps for an increasing number of intervals. The score can be decomposed into a sharpness (uncertainty) component and penalties for over- and underprediction. For a single interval, the score is computed as
   $$IS_\alpha(F,y) = (u-l) + \frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l) + \frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u), $$
   where $\mathbf{1}()$ is the indicator function, $y$ is the observed value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
@@ -304,7 +304,7 @@ quantile_score <- "yet to come"
 
 
 dss <- list(
-  `Metric` = "DSS Dawid-Sebastiani score",
+  `Rule` = "DSS Dawid-Sebastiani score",
   `Explanation` = r"(The Dawid-Sebastiani-Score is a proper scoring rule proposed that only relies on the first moments of the predictive distribution and is therefore easy to compute. It is given as
 
   $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,$$
@@ -315,7 +315,7 @@ dss <- list(
 )
 
 brier_score <- list(
-  `Metric` = "Brier score",
+  `Rule` = "Brier score",
   `Explanation` = r"(Proper scoring rule for binary forecasts. The Brier score is computed as
   $$\text{Brier Score} = \frac{1}{N} \sum_{n = 1}^{N} (f_n - y_n),$$
   where $f_n$, with $n = 1, \dots, N$ are the predicted probablities that the corresponding events, $y_n \in (0, 1)$ will be equal to one.
@@ -325,7 +325,7 @@ brier_score <- list(
 )
 
 interval_coverage <- list(
-  `Metric` = "Interval coverage",
+  `Rule` = "Interval coverage",
   `Explanation` = r"(Interval coverage measures the proportion of observed values that fall in a given prediction interval range. Interval coverage for a single prediction interval range can be calculated as $$IC_{\alpha} = \text{nominal coverage} - \text{empirical coverage},$$
   where nominal coverage is $1 - \alpha$ and empirical coverage is the proportion of observed values actually covered by all $1 - \alpha$ prediction intervals.
 
@@ -337,7 +337,7 @@ interval_coverage <- list(
 )
 
 quantile_coverage <- list(
-  `Metric` = "Quantile coverage",
+  `Rule` = "Quantile coverage",
   `Explanation` = r"(Quantile coverage for a given quantile level is the proportion of observed values smaller than the predictions corresponding to that quantile level.
 
   **Usage**:
@@ -345,7 +345,7 @@ quantile_coverage <- list(
 )
 
 sharpness <- list(
-  `Metric` = "Sharpness",
+  `Rule` = "Sharpness",
   `Explanation` = r"(Sharpness is the ability to produce narrow forecasts and is a feature of the forecasts only and does not depend on the observations. Sharpness is therefore only of interest conditional on calibration: a very precise forecast is not useful if it is clearly wrong.
 
   As suggested by Funk et al. (2019), we measure sharpness for continuous and integer forecasts represented by predictive samples as the normalised median absolute deviation about the median (MADN) ), i.e.
@@ -356,7 +356,7 @@ sharpness <- list(
 )
 
 bias <- list(
-  `Metric` = "Bias",
+  `Rule` = "Bias",
   `Explanation` = r"(Bias is a measure of the tendency of a forecaster to over- or underpredict. For continuous forecasts, bias is given as
   $$B(F, y) = 1 - 2 \cdot (F (y)), $$
   where $F$ is the CDF of the predictive distribution and $y$ is the observed value.
@@ -365,14 +365,14 @@ bias <- list(
   $$B(P, y) = 1 - (P(y) + P(y + 1)), $$
   where $P(y)$ is the cumulative probability assigned to all outcomes smaller or equal to $y$, i.e. the cumulative probability mass function corresponding to $p(y)$.
 
-  For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the observed value is smaller than the median of the predictive distribution. If the observed value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the observed value. If the observed value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and this metric coincides with the one for continuous forecasts.
+  For quantile forecasts, Bias can be calculated as the maximum percentile rank for which the prediction is smaller than $y$, if the observed value is smaller than the median of the predictive distribution. If the observed value is above the median of the predictive distribution, then bias is the minimum percentile rank for which the corresponding quantile is still larger than the observed value. If the observed value is exactly the median, bias is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and this rule coincides with the one for continuous forecasts.
 
   **Usage**:
   In contrast to the over- and underprediction penalties of the interval score it is bound between -1 and 1 and represents the tendency of forecasts to be biased rather than the absolute amount of over- and underprediction. It is therefore a more robust measurement, but harder to interpet. It largely depends on the application whether one is more interested in the tendency to be biased or in the absolute value of over- and underpredictions.)"
 )
 
 pit <- list(
-  `Metric` = "Probability integral transform (PIT)",
+  `Rule` = "Probability integral transform (PIT)",
   `Explanation` = r"(The probability integral transform (PIT, Dawid 1984) represents a succinct way to visualise deviations between the predictive distribution $F$ and the true data-generating distribution $G$. The idea is to transform the observed values such that agreement between forecasts and data can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by
   $$u = F (y),$$
   where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the observed value $y$. If $F = G$, then $u$ follows a uniform distribution.
@@ -386,7 +386,7 @@ pit <- list(
 )
 
 mean_score_ratio <- list(
-  `Metric` = "Mean score ratio",
+  `Rule` = "Mean score ratio",
   `Explanation` = r"(The mean score ratio is used to compare two models on the overlapping set of forecast targets for which both models have made a prediction. The mean score ratio is calculated as the mean score achieved by the first model over the mean score achieved by the second model. More precisely, for two models $i, j$, we determine the set of overlapping forecasts, denoted by $\mathcal{A}_{ij}$ and compute the mean score ratio $\theta_{ij}$ as
   $$\theta_{ij} =\frac{\text{mean score model } i \text{ on } \mathcal{A}_{ij}}{\text{mean score model } j \text{ on } \mathcal{A}_{ij}}.$$
   The mean score ratio can in principle be computed for any arbitrary score.
@@ -396,8 +396,8 @@ mean_score_ratio <- list(
 )
 
 relative_skill <- list(
-  `Metric` = "Relative skill",
-  `Explanation` = r"(Relative skill scores can be used to obtain a ranking of models based on pairwise comparisons between all models. To compute the relative skill $\theta_i$ of model $i$, we take the geometric mean of all mean score ratios that involve model $i$, i.e.
+  `Rule` = "Relative skill",
+  `Explanation` = r"(Relative skill scores can be used to obtain a ranking of models based on pairwise comparisons between all models. To compute the relative skill $\theta_i$ of model $i$, we take the georule mean of all mean score ratios that involve model $i$, i.e.
   $$ \theta_{i} = \left(\prod_{m = 1}^M \theta_{im}\right)^{1/M}, $$
   where M is the number of models.
 
@@ -419,4 +419,4 @@ data <- rbind(as.data.frame(crps),
               as.data.frame(mean_score_ratio),
               as.data.frame(relative_skill))
 
-saveRDS(data, "inst/metrics-overview/metrics-detailed.rds")
+saveRDS(data, "inst/rules-overview/rules-detailed.rds")

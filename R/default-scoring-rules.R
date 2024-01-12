@@ -7,7 +7,7 @@
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #' If `select` is not `NULL`, this argument is ignored.
 #' @return A list of scoring rules.
-#' @keywords metric
+#' @keywords rule
 #' @importFrom checkmate assert_subset assert_list
 #' @export
 #' @examples
@@ -46,7 +46,7 @@ select_rules <- function(rules, select = NULL, exclude = NULL) {
 #' - "log_score" = [logs_binary()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' rules_binary()
 #' rules_binary(select = "brier_score")
@@ -71,7 +71,7 @@ rules_binary <- function(select = NULL, exclude = NULL) {
 #' - "ape" = [ape()][Metrics::ape()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' rules_point()
 #' rules_point(select = "ape")
@@ -101,7 +101,7 @@ rules_point <- function(select = NULL, exclude = NULL) {
 #' - "se_mean" = [se_mean_sample()]
 #' @inherit select_rules params return
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' rules_sample()
 #' rules_sample(select = "mad")
@@ -146,7 +146,7 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #' get passed to `coverage_50`.
 #' @inherit select_rules params return
 #' @export
-#' @keywords metric
+#' @keywords rule
 #' @examples
 #' rules_quantile()
 #' rules_quantile(select = "wis")

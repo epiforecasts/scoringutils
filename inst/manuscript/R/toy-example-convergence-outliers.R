@@ -33,7 +33,7 @@ if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
                     value.name = "prediction")
     samples[, true_value := true_value]
     results[[paste(i)]] <- score(
-      samples, metrics = c("crps", "log_score", "dss")
+      samples, rules = c("crps", "log_score", "dss")
     )[, n_samples := i]
   }
   saveRDS(results, "inst/manuscript/output/sample-convergence.rds")

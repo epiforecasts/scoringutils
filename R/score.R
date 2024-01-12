@@ -1,5 +1,5 @@
 #' @title Evaluate forecasts in a data.frame format
-#' @description `score()` applies a selection of scoring metrics to a data.frame
+#' @description `score()` applies a selection of scoring rules to a data.frame
 #' of forecasts. It is the workhorse of the `scoringutils` package.
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
@@ -15,10 +15,10 @@
 #' @inheritSection forecast_types Forecast types and input format
 #' @inheritSection forecast_types Forecast unit
 #' @param data A data.frame or data.table with predicted and observed values.
-#' @param metrics A named list of scoring functions. Names will be used as
+#' @param rules A named list of scoring functions. Names will be used as
 #' column names in the output. See [rules_point()], [rules_binary()],
 #' [rules_quantile()], and [rules_sample()] for more information on the
-#' default metrics used.
+#' default rules used.
 #' @param ... additional arguments
 #' @return A data.table with unsummarised scores. This will generally be
 #' one score per forecast (as defined by the unit of a single forecast).
@@ -49,7 +49,7 @@
 #'   as_forecast() %>%
 #'   score()
 #'
-#' # forecast formats with different metrics
+#' # forecast formats with different rules
 #' \dontrun{
 #' score(example_binary)
 #' score(example_quantile)
@@ -81,17 +81,17 @@ score.default <- function(data, ...) {
 #' @importFrom data.table setattr
 #' @rdname score
 #' @export
-score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
+score.forecast_binary <- function(data, rules = rules_binary(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
-  metrics <- validate_metrics(metrics)
+  rules <- validate_rules(rules)
 
   data <- apply_rules(
-    data, metrics,
+    data, rules,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "score_names", names(metrics))
+  setattr(data, "score_names", names(rules))
 
   return(data[])
 
@@ -103,17 +103,17 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
 #' @importFrom data.table setattr
 #' @rdname score
 #' @export
-score.forecast_point <- function(data, metrics = rules_point(), ...) {
+score.forecast_point <- function(data, rules = rules_point(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
-  metrics <- validate_metrics(metrics)
+  rules <- validate_rules(rules)
 
   data <- apply_rules(
-    data, metrics,
+    data, rules,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "score_names", names(metrics))
+  setattr(data, "score_names", names(rules))
 
   return(data[])
 }
@@ -122,11 +122,11 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
 #' @importFrom data.table setattr
 #' @rdname score
 #' @export
-score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
+score.forecast_sample <- function(data, rules = rules_sample(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
   forecast_unit <- get_forecast_unit(data)
-  metrics <- validate_metrics(metrics)
+  rules <- validate_rules(rules)
 
   # transpose the forecasts that belong to the same forecast unit
   d_transposed <- data[, .(predicted = list(predicted),
@@ -145,13 +145,13 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     data[, c("observed", "predicted", "scoringutils_N") := NULL]
 
     data <- apply_rules(
-      data, metrics,
+      data, rules,
       observed, predicted, ...
     )
     return(data)
   })
   data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
+  setattr(data, "score_names", names(rules))
 
   return(data[])
 }
@@ -161,11 +161,11 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
+score.forecast_quantile <- function(data, rules = rules_quantile(), ...) {
   data <- validate_forecast(data)
   data <- na.omit(data)
   forecast_unit <- get_forecast_unit(data)
-  metrics <- validate_metrics(metrics)
+  rules <- validate_rules(rules)
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the quantiles and predictions are ordered in the same way
@@ -191,14 +191,14 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
     ) := NULL]
 
     data <- apply_rules(
-      data, metrics,
+      data, rules,
       observed, predicted, quantile, ...
     )
     return(data)
   })
 
   data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
+  setattr(data, "score_names", names(rules))
 
   return(data[])
 }
@@ -212,15 +212,15 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
 #' sure that only arguments are passed to the scoring rule that are actually
 #' accepted by it.
 #' @inheritParams score
-#' @return A data table with the forecasts and the calculated metrics
+#' @return A data table with the forecasts and the calculated rules
 #' @keywords internal
-apply_rules <- function(data, metrics, ...) {
+apply_rules <- function(data, rules, ...) {
   expr <- expression(
-    data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
+    data[, (rule_name) := do.call(run_safely, list(..., fun = fun))]
   )
-  lapply(seq_along(metrics), function(i, data, ...) {
-    metric_name <- names(metrics[i]) # nolint
-    fun <- metrics[[i]] # nolint
+  lapply(seq_along(rules), function(i, data, ...) {
+    rule_name <- names(rules[i]) # nolint
+    fun <- rules[[i]] # nolint
     eval(expr)
   }, data, ...)
   return(data)

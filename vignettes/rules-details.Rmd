@@ -1,10 +1,10 @@
 ---
-title: "Details on the metrics implemented in `scoringutils`"
+title: "Details on the scoring rules implemented in `scoringutils`"
 author: "Nikos Bosse"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Details on the metrics implemented in `scoringutils`}
+  %\VignetteIndexEntry{Details on the scoring rules implemented in `scoringutils`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,12 +21,12 @@ library(knitr)
 library(data.table)
 ```
 
-## Applicability of different metrics for different types of forecasts and formats
+## Applicability of different scoring rules for different types of forecasts and formats
 
-This table gives an overview for when which metric can be applied and gives a very brief description. Note that this table on shows the metrics as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
+This table gives an overview for when which scoring rules can be applied and gives a very brief description. Note that this table on shows the scoring rules as implemented in `scoringutils`. For example, only scoring of sample-based discrete and continuous distributions is implemented in `scoringutils`, but closed-form solutions often exist (e.g. in the `scoringRules` package). 
 
 ```{r, echo = FALSE, results = "asis"}
-data <- copy(metrics)
+data <- copy(scoring_rules)
 setnames(data, old = c("Discrete", "Continuous", "Binary", "Quantile"),
          new = c("D", "C", "B", "Q"))
 data[, c("Name", "Functions") := NULL]
@@ -62,12 +62,12 @@ data %>%
 ```
 
 
-## Detailed explanation of the metrics implemented in `scoringutils`
+## Detailed explanation of the scoring rules implemented in `scoringutils`
 
 ```{r, echo = FALSE, results = "asis"}
 data <- readRDS(
   system.file(
-    "metrics-overview", "metrics-detailed.rds",
+    "rules-overview", "rules-detailed.rds",
     package = "scoringutils"
   )
 )

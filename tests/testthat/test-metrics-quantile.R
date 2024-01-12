@@ -102,7 +102,7 @@ test_that("`wis()` works within score for median forecast", {
   )
   eval <- score(
     test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
+    count_median_twice = TRUE, rules = rules_no_cov
   )
   expect_equal(eval$ae_median, eval$wis)
 })
@@ -145,7 +145,7 @@ test_that("wis() works within score for one interval", {
 
   eval <- score(
     test_data,
-    count_median_twice = TRUE, metrics = list(wis = wis)
+    count_median_twice = TRUE, rules = list(wis = wis)
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -170,7 +170,7 @@ test_that("`wis()` works 1 interval and median", {
 
   eval <- score(
     test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
+    count_median_twice = TRUE, rules = rules_no_cov
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -210,7 +210,7 @@ test_that("wis works, 2 intervals and median", {
 
   eval <- score(
     test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
+    count_median_twice = TRUE, rules = rules_no_cov
   )
 
   eval <- summarise_scores(eval, by = c("model", "date"))
@@ -297,7 +297,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   eval <- score(
     data_formatted,
-    count_median_twice = FALSE, metrics = metrics_no_cov
+    count_median_twice = FALSE, rules = rules_no_cov
   )
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
@@ -367,7 +367,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- suppressMessages(score(data_formatted,
-                                 count_median_twice = FALSE, metrics = metrics_no_cov_no_ae
+                                 count_median_twice = FALSE, rules = rules_no_cov_no_ae
   ))
 
   eval <- summarise_scores(eval,
@@ -443,7 +443,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- score(data_formatted,
-                count_median_twice = FALSE, metrics = metrics_no_cov
+                count_median_twice = FALSE, rules = rules_no_cov
   )
 
   eval <- summarise_scores(eval,

@@ -19,10 +19,10 @@ library(scoringutils)
 library(data.table)
 ```
 
-A variety of metrics and scoring rules can also be accessed directly through 
+A variety of scoring rules can also be accessed directly through
 the `scoringutils` package. 
 
-The following gives an overview of (most of) the implemented metrics. 
+The following gives an overview of (most of) the implemented scoring rules.
 
 # Bias
 

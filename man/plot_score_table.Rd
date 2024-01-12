@@ -4,7 +4,7 @@
 \alias{plot_score_table}
 \title{Plot Coloured Score Table}
 \usage{
-plot_score_table(scores, y = "model", by = NULL, metrics = NULL)
+plot_score_table(scores, y = "model", by = NULL, rules = NULL)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
@@ -16,10 +16,10 @@ to create a unique row identifier (e.g. "model1_location1").}
 
 \item{by}{A character vector that determines how the colour shading for the
 plot gets computed. By default (\code{NULL}), shading will be determined per
-metric, but you can provide additional column names (see examples).}
+rule, but you can provide additional column names (see examples).}
 
-\item{metrics}{A character vector with the metrics to show. If set to
-\code{NULL} (default), all metrics present in \code{scores} will be shown.}
+\item{rules}{A character vector with the rules to show. If set to
+\code{NULL} (default), all rules present in \code{scores} will be shown.}
 }
 \value{
 A ggplot2 object with a coloured table of summarised scores

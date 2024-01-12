@@ -31,4 +31,4 @@ rules_binary()
 rules_binary(select = "brier_score")
 rules_binary(exclude = "log_score")
 }
-\keyword{metric}
+\keyword{rule}

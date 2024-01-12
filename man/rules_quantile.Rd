@@ -47,4 +47,4 @@ get passed to \code{coverage_50}.
 rules_quantile()
 rules_quantile(select = "wis")
 }
-\keyword{metric}
+\keyword{rule}

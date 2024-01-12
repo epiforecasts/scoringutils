@@ -36,4 +36,4 @@ The default scoring rules are:
 rules_sample()
 rules_sample(select = "mad")
 }
-\keyword{metric}
+\keyword{rule}

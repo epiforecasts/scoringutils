@@ -13,23 +13,23 @@ score(data, ...)
 
 \method{score}{default}(data, ...)
 
-\method{score}{forecast_binary}(data, metrics = rules_binary(), ...)
+\method{score}{forecast_binary}(data, rules = rules_binary(), ...)
 
-\method{score}{forecast_point}(data, metrics = rules_point(), ...)
+\method{score}{forecast_point}(data, rules = rules_point(), ...)
 
-\method{score}{forecast_sample}(data, metrics = rules_sample(), ...)
+\method{score}{forecast_sample}(data, rules = rules_sample(), ...)
 
-\method{score}{forecast_quantile}(data, metrics = rules_quantile(), ...)
+\method{score}{forecast_quantile}(data, rules = rules_quantile(), ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{...}{additional arguments}
 
-\item{metrics}{A named list of scoring functions. Names will be used as
+\item{rules}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
 \code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
-default metrics used.}
+default rules used.}
 }
 \value{
 A data.table with unsummarised scores. This will generally be
@@ -42,7 +42,7 @@ unsummarised scores to obtain one score per forecast unit for quantile-based
 forecasts.
 }
 \description{
-\code{score()} applies a selection of scoring metrics to a data.frame
+\code{score()} applies a selection of scoring rules to a data.frame
 of forecasts. It is the workhorse of the \code{scoringutils} package.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
@@ -134,7 +134,7 @@ example_quantile \%>\%
   as_forecast() \%>\%
   score()
 
-# forecast formats with different metrics
+# forecast formats with different rules
 \dontrun{
 score(example_binary)
 score(example_quantile)

@@ -3,7 +3,7 @@ test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
 })
 
-# test_that("score() warns if column name equals a metric name", {
+# test_that("score() warns if column name equals a rule name", {
 #   data <- data.frame(
 #     observed = rep(1:10, each = 2),
 #     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
@@ -69,7 +69,7 @@ test_that(
     # passing a simple function works
     expect_equal(
       score(df,
-            metrics = list("identity" = function(x, y) {return(y)}))$identity,
+            rules = list("identity" = function(x, y) {return(y)}))$identity,
       df$predicted
     )
 
@@ -78,7 +78,7 @@ test_that(
     # definition works
     expect_equal(
       score(df,
-            metrics = list("identity" = function(x, y) {return(y)}),
+            rules = list("identity" = function(x, y) {return(y)}),
             additional_arg = "something")$identity,
       df$predicted
     )
@@ -86,7 +86,7 @@ test_that(
     # passing an additional function to one that accepts ... works
     expect_message(
       score(df,
-            metrics = list("test_function" = test_fun),
+            rules = list("test_function" = test_fun),
             test = "something"),
       "test argument found"
     )
@@ -95,25 +95,25 @@ test_that(
     expect_equal(
       unique(
         score(df,
-              metrics = list("test_function" = test_fun),
+              rules = list("test_function" = test_fun),
               y = "something")$test_function
       ),
       "something"
     )
 
 
-    ## Additional tests for validate_metrics()
-    # passing in something that's not a function or a known metric
+    ## Additional tests for validate_rules()
+    # passing in something that's not a function or a known rule
     expect_warning(
       expect_warning(
-        score(df, metrics = list(
+        score(df, rules = list(
           "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3)
         ),
-        "`Metrics` element number 3 is not a valid function"
+        "`Rules` element number 3 is not a valid function"
       ),
-      "`Metrics` element number 4 is not a valid function")
+      "`Rules` element number 4 is not a valid function")
 
-    # passing a single named argument for metrics by position
+    # passing a single named argument for rules by position
     expect_contains(
       names(score(df, list("hi" = test_fun))),
       "hi")
@@ -123,7 +123,7 @@ test_that(
       score(df, unnecessary_argument = "unnecessary")
     )
     expect_no_error(
-      score(df, metrics = list("brier_score" = brier_score),
+      score(df, rules = list("brier_score" = brier_score),
             unnecessary_argument = "unnecessary")
     )
   }
@@ -144,10 +144,10 @@ test_that("function produces output for a point case", {
   )
 })
 
-test_that("Changing metrics names works", {
-  metrics_test <- rules_point()
-  names(metrics_test)[1] = "just_testing"
-  eval <- suppressMessages(score(example_point, metrics = metrics_test))
+test_that("Changing rules names works", {
+  rules_test <- rules_point()
+  names(rules_test)[1] = "just_testing"
+  eval <- suppressMessages(score(example_point, rules = rules_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
@@ -178,7 +178,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
 })
 
 
-test_that("score() quantile produces desired metrics", {
+test_that("score() quantile produces desired rules", {
   data <- data.frame(
     observed = rep(1:10, each = 2),
     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
@@ -188,7 +188,7 @@ test_that("score() quantile produces desired metrics", {
   )
 
   out <- suppressWarnings(suppressMessages(
-    score(data = data, metrics = metrics_no_cov))
+    score(data = data, rules = rules_no_cov))
   )
   score_names <- c(
     "dispersion", "underprediction", "overprediction",
@@ -225,9 +225,9 @@ test_that("all quantile and range formats yield the same result", {
   expect_equal(sort(eval1$ae_median), sort(ae))
 })
 
-test_that("WIS is the same with other metrics omitted or included", {
+test_that("WIS is the same with other rules omitted or included", {
   eval <- suppressMessages(score(example_quantile,
-    metrics = list("wis" = wis)
+    rules = list("wis" = wis)
   ))
 
   eval2 <- scores_quantile
@@ -285,7 +285,7 @@ test_that("apply_rules() works", {
 
   dt <- data.table::data.table(x = 1:10)
   scoringutils:::apply_rules(
-    data = dt, metrics = list("test" = function(x) x + 1),
+    data = dt, rules = list("test" = function(x) x + 1),
     dt$x
   )
   expect_equal(dt$test, 2:11)
@@ -293,7 +293,7 @@ test_that("apply_rules() works", {
   # additional named argument works
   expect_no_condition(
     scoringutils:::apply_rules(
-      data = dt, metrics = list("test" = function(x) x + 1),
+      data = dt, rules = list("test" = function(x) x + 1),
       dt$x, y = dt$test)
   )
 
@@ -301,7 +301,7 @@ test_that("apply_rules() works", {
 
   expect_warning(
     scoringutils:::apply_rules(
-      data = dt, metrics = list("test" = function(x) x + 1),
+      data = dt, rules = list("test" = function(x) x + 1),
       dt$x, dt$test)
   )
 })

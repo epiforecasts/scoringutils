@@ -10,9 +10,9 @@
 #' to create a unique row identifier (e.g. "model1_location1").
 #' @param by A character vector that determines how the colour shading for the
 #' plot gets computed. By default (`NULL`), shading will be determined per
-#' metric, but you can provide additional column names (see examples).
-#' @param metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will be shown.
+#' rule, but you can provide additional column names (see examples).
+#' @param rules A character vector with the rules to show. If set to
+#' `NULL` (default), all rules present in `scores` will be shown.
 #'
 #' @return A ggplot2 object with a coloured table of summarised scores
 #' @inheritParams pairwise_comparison
@@ -43,27 +43,27 @@
 plot_score_table <- function(scores,
                              y = "model",
                              by = NULL,
-                             metrics = NULL) {
+                             rules = NULL) {
 
-  # identify metrics -----------------------------------------------------------
+  # identify rules -----------------------------------------------------------
   id_vars <- get_forecast_unit(scores)
-  metrics <- get_score_names(scores)
+  rules <- get_score_names(scores)
 
-  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  cols_to_delete <- names(scores)[!(names(scores) %in% c(rules, id_vars))]
   suppressWarnings(scores[, eval(cols_to_delete) := NULL])
 
   # compute scaled values ------------------------------------------------------
   # scaling is done in order to colour the different scores
-  # for most metrics larger is worse, but others like bias are better if they
+  # for most rules larger is worse, but others like bias are better if they
   # are close to zero and deviations in both directions are bad
 
-  # define which metrics are scaled using min (larger is worse) and
-  # which not (metrics like bias where deviations in both directions are bad)
-  metrics_zero_good <- c("bias", "interval_coverage_deviation")
-  metrics_no_color <- "coverage"
+  # define which rules are scaled using min (larger is worse) and
+  # which not (rules like bias where deviations in both directions are bad)
+  rules_zero_good <- c("bias", "interval_coverage_deviation")
+  rules_no_color <- "coverage"
 
-  metrics_min_good <- setdiff(metrics, c(
-    metrics_zero_good, metrics_no_color
+  rules_min_good <- setdiff(rules, c(
+    rules_zero_good, rules_no_color
   ))
 
   # write scale functions that can be used in data.table
@@ -78,19 +78,19 @@ plot_score_table <- function(scores,
 
   # pivot longer and add scaled values
   df <- data.table::melt(scores,
-    value.vars = metrics,
+    value.vars = rules,
     id.vars = id_vars,
-    variable.name = "metric"
+    variable.name = "rule"
   )
 
-  df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-    by = c("metric", by)
+  df[rule %in% rules_min_good, value_scaled := scale_min_good(value),
+    by = c("rule", by)
   ]
-  df[metric %in% metrics_zero_good, value_scaled := scale(value),
-    by = c("metric", by)
+  df[rule %in% rules_zero_good, value_scaled := scale(value),
+    by = c("rule", by)
   ]
-  df[metric %in% metrics_no_color, value_scaled := 0,
-    by = c("metric", by)
+  df[rule %in% rules_no_color, value_scaled := 0,
+    by = c("rule", by)
   ]
 
   # create identifier column for plot ------------------------------------------
@@ -104,10 +104,10 @@ plot_score_table <- function(scores,
   }
 
   # plot -----------------------------------------------------------------------
-  # make plot with all metrics that are not NA
+  # make plot with all rules that are not NA
   plot <- ggplot(
     df[!is.na(value), ],
-    aes(y = identifCol, x = metric)
+    aes(y = identifCol, x = rule)
   ) +
     geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
     geom_text(aes(y = identifCol, label = value)) +
@@ -210,10 +210,10 @@ plot_wis <- function(scores,
   return(plot)
 }
 
-#' @title Plot Metrics by Range of the Prediction Interval
+#' @title Plot Rules by Range of the Prediction Interval
 #'
 #' @description
-#' Visualise the metrics by range, e.g. if you are interested how different
+#' Visualise the rules by range, e.g. if you are interested how different
 #' interval ranges contribute to the overall interval score, or how
 #' sharpness / dispersion changes by range.
 #'
@@ -235,7 +235,7 @@ plot_wis <- function(scores,
 #' library(ggplot2)
 #' ex <- example_quantile
 #' ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
-#' scores <- score(ex, metrics = list("wis" = wis))
+#' scores <- score(ex, rules = list("wis" = wis))
 #' scores$range <- scores$interval_range
 #' summarised <- summarise_scores(
 #'   scores,
@@ -275,12 +275,12 @@ plot_ranges <- function(scores,
   return(plot)
 }
 
-#' @title Create a Heatmap of a Scoring Metric
+#' @title Create a Heatmap of a Scoring Rule
 #'
 #' @description
-#' This function can be used to create a heatmap of one metric across different
-#' groups, e.g. the interval score obtained by several forecasting models in
-#' different locations.
+#' This function can be used to create a heatmap of one scoring rule across
+#' different groups, e.g. the interval score obtained by several forecasting
+#' models in different locations.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()].
@@ -288,9 +288,9 @@ plot_ranges <- function(scores,
 #' default for this is "model"
 #' @param x The variable from the scores you want to show on the x-Axis. This
 #' could be something like "horizon", or "location"
-#' @param metric the metric that determines the value and colour shown in the
+#' @param rule the rule that determines the value and colour shown in the
 #' tiles of the heatmap
-#' @return A ggplot2 object showing a heatmap of the desired metric
+#' @return A ggplot2 object showing a heatmap of the desired rule
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
@@ -299,26 +299,26 @@ plot_ranges <- function(scores,
 #' scores <- score(example_quantile)
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
-#' plot_heatmap(scores, x = "target_type", metric = "bias")
+#' plot_heatmap(scores, x = "target_type", rule = "bias")
 
 plot_heatmap <- function(scores,
                          y = "model",
                          x,
-                         metric) {
+                         rule) {
   data.table::setDT(scores)
 
-  scores[, eval(metric) := round(get(metric), 2)]
+  scores[, eval(rule) := round(get(rule), 2)]
 
   plot <- ggplot(
     scores,
     aes(
       y = .data[[y]],
       x = .data[[x]],
-      fill = .data[[metric]]
+      fill = .data[[rule]]
     )
   ) +
     geom_tile() +
-    geom_text(aes(label = .data[[metric]])) +
+    geom_text(aes(label = .data[[rule]])) +
     scale_fill_gradient2(low = "steelblue", high = "salmon") +
     theme_scoringutils() +
     theme(axis.text.x = element_text(
@@ -715,10 +715,10 @@ plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
-  relative_skill_metric <- grep(
+  relative_skill_rule <- grep(
     "_relative_skill$", colnames(comparison_result), value = TRUE
   )
-  comparison_result[, model := reorder(model, -get(relative_skill_metric))]
+  comparison_result[, model := reorder(model, -get(relative_skill_rule))]
   levels <- levels(comparison_result$model)
 
   get_fill_scale <- function(values, breaks, plot_scales) {
@@ -1016,15 +1016,15 @@ plot_forecast_counts <- function(forecast_counts,
 }
 
 
-#' @title Plot Correlation Between Metrics
+#' @title Plot Correlation Between Scoring Rules
 #'
 #' @description
-#' Plots a heatmap of correlations between different metrics
+#' Plots a heatmap of correlations between different scoring rules
 #'
 #' @param correlations A data.table of correlations between scores as produced
 #' by [correlation()].
 #' @return A ggplot2 object showing a coloured matrix of correlations
-#' between metrics
+#' between scoring rules
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
@@ -1039,28 +1039,28 @@ plot_forecast_counts <- function(forecast_counts,
 
 plot_correlation <- function(correlations) {
 
-  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+  rules <- names(correlations)[names(correlations) %in% available_rules()]
 
-  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = rules])
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
-  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
-  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
+  plot_df <- data.table::as.data.table(lower_triangle)[, rule := rules]
+  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "rule"))
 
-  # refactor levels according to the metrics
-  plot_df[, metric := factor(metric, levels = metrics)]
-  plot_df[, variable := factor(variable, rev(metrics))]
+  # refactor levels according to the scoring rules
+  plot_df[, rule := factor(rule, levels = rules)]
+  plot_df[, variable := factor(variable, rev(rules))]
 
   plot <- ggplot(plot_df, aes(
-    x = variable, y = metric,
+    x = variable, y = rule,
     fill = value
   )) +
     geom_tile(
       color = "white",
       width = 0.97, height = 0.97
     ) +
-    geom_text(aes(y = metric, label = value)) +
+    geom_text(aes(y = rule, label = value)) +
     scale_fill_gradient2(
       low = "steelblue", mid = "white",
       high = "salmon",

@@ -4,13 +4,7 @@
 \alias{pairwise_comparison}
 \title{Do Pairwise Comparisons of Scores}
 \usage{
-pairwise_comparison(
-  scores,
-  by = "model",
-  metric = "auto",
-  baseline = NULL,
-  ...
-)
+pairwise_comparison(scores, by = "model", rule = "auto", baseline = NULL, ...)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
@@ -24,7 +18,7 @@ the data.frame will be split according \code{by} (but removing "model" before
 splitting) and the pairwise comparisons will be computed separately for the
 split data.frames.}
 
-\item{metric}{A character vector of length one with the metric to do the
+\item{rule}{A character vector of length one with the scoring rule to do the
 comparison on. The default is "auto", meaning that either "wis",
 "crps", or "brier_score" will be selected where available.}
 
@@ -52,7 +46,7 @@ the baseline model.
 Usually, the function input should be unsummarised scores as
 produced by \code{\link[=score]{score()}}.
 Note that the function internally infers the \emph{unit of a single forecast} by
-determining all columns in the input that do not correspond to metrics
+determining all columns in the input that do not correspond to scoring rules
 computed by \code{\link[=score]{score()}}. Adding unrelated columns will change results in an
 unpredictable way.
 

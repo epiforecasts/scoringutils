@@ -10,7 +10,7 @@
 #' there is one score per forecast as defined by the *unit of a single forecast*
 #' (rather than one score for every sample or quantile).
 #' The *unit of a single forecast* is determined by the columns present in the
-#' input data that do not correspond to a metric produced by [score()], which
+#' input data that do not correspond to a rule produced by [score()], which
 #' indicate indicate a grouping of forecasts (for example there may be one
 #' forecast per day, location and model). Adding additional, unrelated, columns
 #' may alter results in an unpredictable way.
@@ -83,7 +83,7 @@ summarise_scores <- function(scores,
   score_names <- attr(scores, "score_names")
   if (is.null(score_names)) {
     stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
+         the rules that were used for scoring.")
   }
 
   # preparations ---------------------------------------------------------------
@@ -159,7 +159,7 @@ summarize_scores <- summarise_scores
 #' @description Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
 #'
-#' a column called
+#' A column called
 #' 'model' must be present in the input data. For more information on
 #' the computation of relative skill, see [pairwise_comparison()].
 #' Relative skill will be calculated for the aggregation level specified in
@@ -173,7 +173,7 @@ summarize_scores <- summarise_scores
 #' over samples or quantiles (in case of quantile-based forecasts), such that
 #' there is one score per forecast as defined by the *unit of a single forecast*
 #' (rather than one score for every sample or quantile).
-#' @param relative_skill_metric character with the name of the metric for which
+#' @param rule character with the name of the scoring rule for which
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
 #' this will be either interval score, CRPS or Brier score (depending on which
 #' of these is available in the input data)
@@ -185,14 +185,14 @@ summarize_scores <- summarise_scores
 #' @keywords keyword scoring
 add_pairwise_comparison <- function(scores,
                                     by = NULL,
-                                    relative_skill_metric = "auto",
+                                    rule = "auto",
                                     baseline = NULL) {
 
   stored_attributes <- get_scoringutils_attributes(scores)
 
   if (is.null(stored_attributes[["score_names"]])) {
     stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
+         the rules that were used for scoring.")
   }
 
   if (!is.null(attr(scores, "unsummarised_scores"))) {
@@ -211,14 +211,14 @@ add_pairwise_comparison <- function(scores,
     by = by,
     relative_skill = TRUE,
     baseline = baseline,
-    metric = relative_skill_metric
+    rule = rule
   )
 
   # do pairwise comparisons ----------------------------------------------------
   if (relative_skill) {
     pairwise <- pairwise_comparison(
       scores = scores,
-      metric = relative_skill_metric,
+      rule = rule,
       baseline = baseline,
       by = by
     )
@@ -238,7 +238,7 @@ add_pairwise_comparison <- function(scores,
     }
   }
 
-  # add relative skill to list of metric names
+  # add relative skill to list of rule names
   stored_attributes[["score_names"]] <- c(
     stored_attributes[["score_names"]],
     "relative_skill", "scaled_rel_skill"
@@ -263,7 +263,7 @@ check_summary_params <- function(scores,
                                  by,
                                  relative_skill,
                                  baseline,
-                                 metric) {
+                                 rule) {
 
   # check that columns in 'by' are actually present ----------------------------
   if (!all(by %in% c(colnames(scores), "range", "quantile"))) {
@@ -301,9 +301,9 @@ check_summary_params <- function(scores,
       )
       relative_skill <- FALSE
     }
-    if (metric != "auto" && !(metric %in% available_metrics())) {
+    if (rule != "auto" && !(rule %in% available_rules())) {
       warning(
-        "argument 'metric' must either be 'auto' or one of the metrics that ",
+        "argument 'rule' must either be 'auto' or one of the rules that ",
         "can be computed. Relative skill will not be computed"
       )
       relative_skill <- FALSE

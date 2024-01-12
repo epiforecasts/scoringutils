@@ -249,7 +249,7 @@ Mean score ratio & $\sim$ & $\sim$ & $\sim$ & $\sim$ & Compares performance of t
 
 ## Assessing calibration
 
-There are many ways in which a forecast can be miscalibrated, i.e., systematically deviate from the observations. We also discuss metrics measuring bias, as this is an especially common form of miscalibration. 
+There are many ways in which a forecast can be miscalibrated, i.e., systematically deviate from the observations. We also discuss metrics measuring bias, as this is an especially common form of miscalibration.
 
 ### Probabilistic calibration {#probabilistic-calibration}
 
@@ -459,7 +459,7 @@ example_quantile %>%
 
 ## Scoring forecasts with \fct{score} {short-title="Scoring forecasts with score()" #scoring}
 
-The function \fct{score} evaluates predictions against observed values and automatically applies the appropriate scoring metrics depending on the input data. 
+The function \fct{score} evaluates predictions against observed values and automatically applies the appropriate scoring metrics depending on the input data.
 
 We can simply call: 
 
@@ -534,12 +534,12 @@ score(example_quantile) |>
 ## Model diagnostics
 
 The \pkg{scoringutils} package offers a variety of functions to aid the user in diagnosing issues with models.
-For example, to detect systematic patterns it may be useful to visualise a single metric across several dimensions. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}). 
+For example, to detect systematic patterns it may be useful to visualise a single metric across several dimensions. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}).
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (under-predicction)"}
 score(example_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
-  plot_heatmap(x = "location", metric = "bias") + 
+  plot_heatmap(x = "location", metric = "bias") +
     facet_wrap(~ target_type) 
 
 ```
@@ -686,7 +686,7 @@ We thank Community Jameel for Institute and research funding
 
 \appendix
 
-# (APPENDIX) Detailed Information on Metrics {-} 
+# (APPENDIX) Detailed Information on Metrics {-}
 
 ```{r score-table-detailed, echo=FALSE, cache = FALSE, eval = FALSE}
 

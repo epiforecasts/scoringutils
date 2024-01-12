@@ -4,20 +4,20 @@
 \alias{apply_rules}
 \title{Apply A List Of Functions To A Data Table Of Forecasts}
 \usage{
-apply_rules(data, metrics, ...)
+apply_rules(data, rules, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
 
-\item{metrics}{A named list of scoring functions. Names will be used as
+\item{rules}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
 \code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
-default metrics used.}
+default rules used.}
 
 \item{...}{additional arguments}
 }
 \value{
-A data table with the forecasts and the calculated metrics
+A data table with the forecasts and the calculated rules
 }
 \description{
 This helper function applies scoring rules (stored as a list of

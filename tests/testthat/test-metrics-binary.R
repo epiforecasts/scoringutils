@@ -108,7 +108,7 @@ test_that("function throws an error for wrong input formats", {
 
 
 # ==============================================================================
-# Test Binary Metrics
+# Test Binary Scoring rules
 # ==============================================================================
 
 test_that("function throws an error when missing observed or predicted", {
@@ -152,7 +152,7 @@ test_that("Brier score works with different inputs", {
 })
 
 
-test_that("Binary metrics work within and outside of `score()`", {
+test_that("Binary rules work within and outside of `score()`", {
   result <- score(df)
   expect_equal(
     brier_score(observed, predicted),

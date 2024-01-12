@@ -1,16 +1,16 @@
-#' @title Correlation Between Metrics
+#' @title Correlation Between Scoring rules
 #'
 #' @description
-#' Calculate the correlation between different metrics for a data.frame of
+#' Calculate the correlation between different rules for a data.frame of
 #' scores as produced by [score()].
 #'
-#' @param metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will
+#' @param rules A character vector with the rules to show. If set to
+#' `NULL` (default), all rules present in `scores` will
 #' be shown
 #' @param digits A number indicating how many decimal places the result should
 #' be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams pairwise_comparison
-#' @return A data.table with correlations for the different metrics
+#' @return A data.table with correlations for the different rules
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @export
@@ -19,9 +19,9 @@
 #' scores <- score(example_quantile)
 #' correlation(scores, digits = 2)
 correlation <- function(scores,
-                        metrics = NULL,
+                        rules = NULL,
                         digits = NULL) {
-  metrics <- get_score_names(scores)
+  rules <- get_score_names(scores)
 
   # if quantile column is present, throw a warning
   if ("quantile" %in% names(scores)) {
@@ -33,14 +33,14 @@ correlation <- function(scores,
     )
   }
 
-  # remove all non metrics and non-numeric columns
+  # remove all non rules and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(
     scores,
     function(x) {
       (all(is.numeric(x))) && all(is.finite(x))
     }
   )]
-  df <- df[, .SD, .SDcols = names(df) %in% metrics]
+  df <- df[, .SD, .SDcols = names(df) %in% rules]
 
   # define correlation matrix
   cor_mat <- cor(as.matrix(df))
@@ -51,7 +51,7 @@ correlation <- function(scores,
 
   correlations <- setDT(as.data.frame((cor_mat)),
     keep.rownames = TRUE
-  )[, metric := rn][, rn := NULL]
+  )[, rule := rn][, rn := NULL]
 
   return(correlations[])
 }

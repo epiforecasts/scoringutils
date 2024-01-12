@@ -23,11 +23,11 @@ library(knitr)
 data.table::setDTthreads(2)
 ```
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score probabilistic forecasts against observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Metrics-Vignette](https://epiforecasts.io/scoringutils/articles/metric-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+The `scoringutils` package provides a collection of scoring rules that make it simple to score probabilistic forecasts against observed values. You can find more information in the paper [Evaluating Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090) as well as the [Scoring Rules Vignette](https://epiforecasts.io/scoringutils/articles/rule-details.html) and the [Scoring forecasts directly Vignette](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
 
-The `scoringutils` package offers convenient automated forecast evaluation in a `data.table` format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
+The `scoringutils` package offers convenient automated forecast evaluation in a `data.table` format (using the function `score()`), but also provides experienced users with a set of reliable lower-level scoring rules operating on vectors/matriced they can build upon in other applications. In addition it implements a wide range of flexible plots that are able to cover many use cases. 
 
-The goal of this package is to provide a tested and reliable collection of metrics that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the `scoringRules` package, which provides a comprehensive collection of proper scoring rules (also used in `scoringutils`). In contrast to other packages, `scoringutils` offers functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models. 
+The goal of this package is to provide a tested and reliable collection of scoring rules that can be used for scoring probabilistic forecasts (forecasts with a full predictive distribution, rather than point forecasts). It has a much stronger focus on convenience than e.g. the `scoringRules` package, which provides a comprehensive collection of proper scoring rules (also used in `scoringutils`). In contrast to other packages, `scoringutils` offers functionality to automatically evaluate forecasts, to visualise scores and to obtain relative scores between models. 
 
 Predictions can be handled in various formats: `scoringutils` can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary. 
 
@@ -184,7 +184,7 @@ scores %>%
 
 ### Scoring point forecasts
 
-Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
+Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for scoring rules designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
 
 ```{r}
 suppressMessages(score(example_point)) %>%
@@ -230,12 +230,12 @@ score(example_integer) %>%
 
 ### Score heatmap
 
-We can also summarise one particular metric across different categories using a simple heatmap: 
+We can also summarise one particular scoring rule across different categories using a simple heatmap:
 
 ```{r, fig.width=11, fig.height=6}
 score(example_continuous) %>%
   summarise_scores(by = c("model", "location", "target_type")) %>%
-  plot_heatmap(x = "location", metric = "bias") +
+  plot_heatmap(x = "location", rule = "bias") +
   facet_wrap(~ target_type)
 ```
 
@@ -366,7 +366,7 @@ forecast_quantile %>%
 
 ## Converting to quantile-based forecasts
 
-Different metrics are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values.
+Different scoring rules are available for different forecasting formats. In some cases, you may for example have forecasts in a sample-based format, but wish to make use of some of the functionality only available to quantile-based forecasts. For example, you may want to use the decomposition of the weighted interval score, or may like to compute interval coverage values.
 
 You can convert your sample-based forecasts into a quantile-based format using the function `sample_to_quantile()`. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small.
 
@@ -378,14 +378,14 @@ example_integer %>%
   score()
 ```
 
-## Available metrics
+## Available scoring rules
 
-An overview of available metrics can be found in the `metrics` data set that is included in the package. 
+An overview of available scoring rules can be found in the `scoring_rules` data set that is included in the package.
 
 ```{r}
-metrics
+scoring_rules
 ```
 
 ## Lower level functions
 
-Most of these metrics are available as lower level functions and extensively documented. Have a look at the help files to understand these better. 
+Most of these scoring rules are available as lower level functions and extensively documented. Have a look at the help files to understand these better.

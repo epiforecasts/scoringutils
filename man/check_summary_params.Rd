@@ -4,7 +4,7 @@
 \alias{check_summary_params}
 \title{Check input parameters for \code{\link[=summarise_scores]{summarise_scores()}}}
 \usage{
-check_summary_params(scores, by, relative_skill, baseline, metric)
+check_summary_params(scores, by, relative_skill, baseline, rule)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
@@ -15,7 +15,7 @@ over samples or quantiles (in case of quantile-based forecasts), such that
 there is one score per forecast as defined by the \emph{unit of a single forecast}
 (rather than one score for every sample or quantile).
 The \emph{unit of a single forecast} is determined by the columns present in the
-input data that do not correspond to a metric produced by \code{\link[=score]{score()}}, which
+input data that do not correspond to a rule produced by \code{\link[=score]{score()}}, which
 indicate indicate a grouping of forecasts (for example there may be one
 forecast per day, location and model). Adding additional, unrelated, columns
 may alter results in an unpredictable way.}

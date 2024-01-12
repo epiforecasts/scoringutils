@@ -4,12 +4,12 @@
 \alias{pairwise_comparison_one_group}
 \title{Do Pairwise Comparison for one Set of Forecasts}
 \usage{
-pairwise_comparison_one_group(scores, metric, baseline, by, ...)
+pairwise_comparison_one_group(scores, rule, baseline, by, ...)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
-\item{metric}{A character vector of length one with the metric to do the
+\item{rule}{A character vector of length one with the scoring rule to do the
 comparison on. The default is "auto", meaning that either "wis",
 "crps", or "brier_score" will be selected where available.}
 
