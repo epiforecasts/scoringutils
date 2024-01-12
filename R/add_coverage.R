@@ -69,7 +69,7 @@ add_coverage <- function(data) {
 
   # reset column order
   new_rules <- c("interval_coverage", "interval_coverage_deviation",
-                   "quantile_coverage", "quantile_coverage_deviation")
+                 "quantile_coverage", "quantile_coverage_deviation")
   setcolorder(data, unique(c(data_cols, "range", new_rules)))
 
   # add coverage "rules" to list of stored scoring rules
