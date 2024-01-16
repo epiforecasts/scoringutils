@@ -241,12 +241,12 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
   assert_number(range)
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
   if (!all(necessary_quantiles %in% quantile)) {
-    cli::cli_warn(
-        "
-        To compute the interval coverage for a range of {range}%,
-        the quantiles {necessary_quantiles} are required. Returning `NA`.
-        ",
-      call = rlang::caller_env()
+    cli_warn(
+      "
+      To compute the interval coverage for a range of {range}%,
+      the quantiles {necessary_quantiles} are required. Returning `NA`.
+      ",
+      call = caller_env()
     )
     return(NA)
   }
@@ -327,12 +327,12 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
   )
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
-    cli::cli_warning(
+    cli_warn(
       "To compute interval coverage deviation, all quantiles must form central
       symmetric prediction intervals. Missing quantiles: {missing}.
       Returning `NA`.
       ",
-      call = rlang::caller_env()
+      call = caller_env()
     )
     return(NA)
   }
@@ -415,7 +415,7 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   if (!(0.5 %in% quantile)) {
-    cli::cli_inform(
+    cli_inform(
       "
       Median not available, computing bias as mean of the two innermost
       quantiles in order to compute bias.
@@ -464,7 +464,7 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   order <- order(quantile)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
-    cli::cli_abort(
+    cli_abort(
       "Predictions must not be decreasing with increasing quantile level"
     )
   }
@@ -526,12 +526,12 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 ae_median_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
   if (!any(quantile == 0.5)) {
-    cli::cli_warn(
+    cli_warn(
       "
       In order to compute the absolute error of the median, {.val 0.5} must be
       among the quantiles given. Returning `NA`.
       ",
-      call = rlang::current_fn()
+      call = caller_env()
     )
     return(NA_real_)
   }
