@@ -177,8 +177,8 @@ get_score_names <- function(scores, error = FALSE) {
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
-#' [get_protected_columns()] as well as the names of the metrics that were
-#' specified during scoring, if any.
+#' [get_protected_columns()] as well as the names of the scoring rules that were
+#' used during scoring, if any.
 #' @inheritParams validate_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
@@ -187,7 +187,8 @@ get_score_names <- function(scores, error = FALSE) {
 get_forecast_unit <- function(data) {
   # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
-  protected_columns <- c(protected_columns, attr(data, "score_names"))
+  existing_scores <- get_score_names(data)
+  protected_columns <- c(protected_columns, existing_scores)
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
@@ -208,12 +209,7 @@ get_forecast_unit <- function(data) {
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
-    "pit_value", "range", "boundary", "relative_skill", "scaled_rel_skill",
-    "interval_coverage", "interval_coverage_deviation",
-    "quantile_coverage", "quantile_coverage_deviation",
-    available_metrics(),
-    grep("coverage_", names(data), fixed = TRUE, value = TRUE)
+    "predicted", "observed", "sample_id", "quantile", "upper", "lower"
   )
 
   if (is.null(data)) {

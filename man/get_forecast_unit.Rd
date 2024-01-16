@@ -18,7 +18,7 @@ Helper function to get the unit of a single forecast, i.e.
 the column names that define where a single forecast was made for.
 This just takes all columns that are available in the data and subtracts
 the columns that are protected, i.e. those returned by
-\code{\link[=get_protected_columns]{get_protected_columns()}} as well as the names of the metrics that were
-specified during scoring, if any.
+\code{\link[=get_protected_columns]{get_protected_columns()}} as well as the names of the scoring rules that were
+used during scoring, if any.
 }
 \keyword{check-forecasts}

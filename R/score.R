@@ -94,7 +94,6 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
   setattr(data, "score_names", names(metrics))
 
   return(data[])
-
 }
 
 
@@ -199,6 +198,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
 
   data <- rbindlist(split_result)
   setattr(data, "score_names", names(metrics))
+  data <- as_score(data)
 
   return(data[])
 }
@@ -225,3 +225,36 @@ apply_rules <- function(data, metrics, ...) {
   }, data, ...)
   return(data)
 }
+
+#' Create An Object Of Class `score`
+#' @description This function creates an object of class `score` based on a
+#' data.table or similar.
+#' @export
+new_score <- function(scores, score_names) {
+  scores <- as.data.table(scores)
+  class(scores) <- c("score", class(scores))
+  setattr(scores, "score_names", score_names)
+  return(scores[])
+}
+
+#' @export
+as_score <- function(scores) {
+  assert_data_frame(scores)
+  forecast_unit <- get_forecast_unit(scores)
+  protected_columns <- get_protected_columns(scores)
+  score_names <- setdiff(
+    names(scores),
+    c(forecast_unit, protected_columns)
+  )
+  scores <- new_score(scores, score_names)
+  return(scores[])
+}
+
+
+# I have a data.table
+# need to add new score names
+# there may be existing ones
+
+
+
+

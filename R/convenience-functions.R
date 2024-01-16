@@ -241,7 +241,9 @@ set_forecast_unit <- function(data, forecast_unit) {
     warning(missing)
     forecast_unit <- intersect(forecast_unit, colnames(data))
   }
-  keep_cols <- c(get_protected_columns(data), forecast_unit)
+  protected_columns <- get_protected_columns(data)
+  existing_scores <- get_score_names(data)
+  keep_cols <- c(protected_columns, existing_scores, forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])[]
   return(out)
 }
