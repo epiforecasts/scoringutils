@@ -528,8 +528,8 @@ ae_median_quantile <- function(observed, predicted, quantile) {
   if (!any(quantile == 0.5)) {
     cli_warn(
       "
-      In order to compute the absolute error of the median, {.val 0.5} must be
-      among the quantiles given. Returning `NA`.
+      In order to compute the absolute error of the median,
+      {.var 0.5} must be among the quantiles given. Returning `NA`.
       ",
       call = caller_env()
     )
