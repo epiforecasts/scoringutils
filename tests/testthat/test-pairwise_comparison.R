@@ -75,11 +75,11 @@ test_that("pairwise_comparison() works", {
   # extract the relative_skill values
   relative_skills_without <- eval_without_baseline[, .(
     model = unique(model),
-    relative_skill = unique(relative_skill)
+    relative_skill = unique(wis_relative_skill)
   )]
   relative_skills_with <- eval_with_baseline[, .(
     model = unique(model),
-    relative_skill = unique(scaled_rel_skill)
+    relative_skill = unique(wis_scaled_relative_skill)
   )]
 
   # prepare scores for the code Johannes Bracher wrote
@@ -208,7 +208,7 @@ test_that("pairwise_comparison() works", {
     location == "location_3",
     .(
       model = unique(model),
-      relative_skill = unique(scaled_rel_skill)
+      relative_skill = unique(wis_scaled_relative_skill)
     )
   ]
 
@@ -219,7 +219,7 @@ test_that("pairwise_comparison() work in score() with integer data", {
   eval <- suppressMessages(score(data = example_integer))
   eval_summarised <- summarise_scores(eval, by = "model")
   eval <- add_pairwise_comparison(eval_summarised)
-  expect_true("relative_skill" %in% colnames(eval))
+  expect_true("crps_relative_skill" %in% colnames(eval))
 })
 
 
@@ -227,7 +227,7 @@ test_that("pairwise_comparison() work in score() with binary data", {
   eval <- suppressMessages(score(data = example_binary))
   eval_summarised <- summarise_scores(eval, by = "model")
   eval <- add_pairwise_comparison(eval_summarised)
-  expect_true("relative_skill" %in% colnames(eval))
+  expect_true("brier_score_relative_skill" %in% colnames(eval))
 })
 
 
@@ -246,7 +246,7 @@ test_that("pairwise_comparison() works", {
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
-    "pval", "adj_pval", "relative_skill", "scaled_rel_skill"
+    "pval", "adj_pval", "wis_relative_skill", "wis_scaled_relative_skill"
   )
 
   expect_true(all(colnames %in% colnames(res)))

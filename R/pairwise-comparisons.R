@@ -237,8 +237,7 @@ pairwise_comparison_one_group <- function(scores,
   # calculate relative skill as geometric mean
   # small theta is again better (assuming that the score is negatively oriented)
   result[, `:=`(
-    theta = geometric_mean(ratio),
-    rel_to_baseline = NA_real_
+    theta = geometric_mean(ratio)
   ),
   by = "model"
   ]
@@ -261,9 +260,18 @@ pairwise_comparison_one_group <- function(scores,
 
   # rename ratio to mean_scores_ratio
   data.table::setnames(out,
-    old = c("ratio", "theta", "rel_to_baseline"),
-    new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill")
+    old = c("ratio", "theta"),
+    new = c(
+      "mean_scores_ratio",
+      paste(metric, "relative_skill", sep = "_")
+    )
   )
+  if (!is.null(baseline)) {
+    data.table::setnames(out,
+      old = "rel_to_baseline",
+      new = paste(metric, "scaled_relative_skill", sep = "_")
+    )
+  }
 
   return(out[])
 }

@@ -54,7 +54,7 @@ test_that("summarise_scores() can compute relative measures", {
   )
 
   expect_equal(
-    scores_with[, relative_skill],
+    scores_with[, wis_relative_skill],
     c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
   )
 
@@ -64,7 +64,7 @@ test_that("summarise_scores() can compute relative measures", {
   )
 
   expect_equal(
-    scores_with[, relative_skill],
+    scores_with[, ae_median_relative_skill],
     c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
   )
 })
