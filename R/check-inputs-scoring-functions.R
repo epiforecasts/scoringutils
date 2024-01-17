@@ -186,6 +186,27 @@ check_input_binary <- function(observed, predicted) {
 }
 
 
+#' @title Assert That Inputs Are Correct For Categorical Forecasts
+#' @description Function assesses whether the inputs correspond to the
+#' requirements for scoring categorical forecasts.
+#' @param observed XX
+#' @param predicted XX
+#' @importFrom checkmate assert assert_factor
+#' @inherit document_assert_functions return
+#' @keywords internal_input_check
+assert_input_categorical <- function(observed, predicted) {
+  return(invisible(NULL))
+}
+
+
+#' @title Check That Inputs Are Correct For Categorical Forecasts
+#' @inherit assert_input_categorical params description
+#' @inherit document_check_functions return
+#' @keywords internal_input_check
+check_input_categorical <- function(observed, predicted) {
+}
+
+
 #' @title Assert that inputs are correct for point forecast
 #' @description Function assesses whether the inputs correspond to the
 #' requirements for scoring point forecasts.
