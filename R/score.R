@@ -98,6 +98,28 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
 }
 
 
+#' @importFrom stats na.omit
+#' @importFrom data.table setattr
+#' @rdname score
+#' @export
+score.forecast_categorical <- function(data, metrics = rules_categorical(), ...) {
+  data <- validate_forecast(data)
+  data <- na.omit(data)
+  metrics <- validate_metrics(metrics)
+
+  data <- apply_rules(
+    data, metrics,
+    data$observed, data$predicted, ...
+    # need to add another column, "predicted_class"
+  )
+
+  setattr(data, "score_names", names(metrics))
+
+  return(data[])
+
+}
+
+
 #' @importFrom Metrics se ae ape
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr
