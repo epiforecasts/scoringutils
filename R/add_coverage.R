@@ -62,7 +62,7 @@ add_coverage <- function(data) {
 
   data[, range := get_range_from_quantile(quantile)]
 
-  data <- merge(interval_data, data, by = unique(c(forecast_unit, "range")))
+  data <- merge(data, interval_data, by = unique(c(forecast_unit, "range")))
   data[, interval_coverage_deviation := interval_coverage - range / 100]
   data[, quantile_coverage := observed <= predicted]
   data[, quantile_coverage_deviation := quantile_coverage - quantile]
@@ -74,8 +74,8 @@ add_coverage <- function(data) {
 
   # add coverage "metrics" to list of stored metrics
   # this makes it possible to use `summarise_scores()` later on
-  stored_attributes[["metric_names"]] <- c(
-    stored_attributes[["metric_names"]],
+  stored_attributes[["score_names"]] <- c(
+    stored_attributes[["score_names"]],
     new_metrics
   )
   data <- assign_attributes(data, stored_attributes)

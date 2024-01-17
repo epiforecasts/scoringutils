@@ -107,6 +107,8 @@ sample_to_quantile <- function(data,
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
+  quantiles <- unique(round(c(quantiles, 1 - quantiles), digits = 10))
+
   data <- data[, .(quantile = quantiles,
                    predicted = quantile(x = predicted, prob = ..quantiles,
                                         type = ..type, na.rm = TRUE)),

@@ -12,25 +12,42 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: This documentation refers to the development version of
-`scoringutils`. You can also view the [documentation of the stable
+**Note**: [This documentation](https://epiforecasts.io/scoringutils/dev)
+refers to the development version of `scoringutils`. You can also view
+the [documentation of the stable
 version](https://epiforecasts.io/scoringutils).
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
 forecasts against observed values.
 
-You can find additional information and examples in the papers
-[Evaluating Forecasts with scoringutils in
-R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts
-on transformed
-scales](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011393)
-as well as the Vignettes ([Getting
+A good starting point for those wishing to use `scoringutils` are the
+vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
-directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+
+For a detailed description of the package, its rationale and design,
+usage examples and how it relates to other packages in the R ecosystem,
+please see the corresponding paper:
+
+> Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian
+> Funk and Sam Abbott (2022).
+> *`Evaluating Forecasts with scoringutils in R`*. arXiv:2205.07090
+> <https://doi.org/10.48550/arXiv.2205.07090>
+
+For further details on the specific issue of transforming forecasts for
+scoring see:
+
+> Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes
+> Bracher\* and Sebastian Funk\* (\*: equal contribution) (2023).
+> *`Scoring epidemiological forecasts on transformed scales`*, PLoS
+> Comput Biol 19(8): e1011393
+> <https://doi.org/10.1371/journal.pcbi.1011393>
+
+## Package overview
 
 The `scoringutils` package offers convenient automated forecast
 evaluation through the function `score()`. The function operates on

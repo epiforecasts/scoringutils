@@ -47,7 +47,7 @@ plot_score_table <- function(scores,
 
   # identify metrics -----------------------------------------------------------
   id_vars <- get_forecast_unit(scores)
-  metrics <- get_metrics(scores)
+  metrics <- get_score_names(scores)
 
   cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
   suppressWarnings(scores[, eval(cols_to_delete) := NULL])
@@ -715,7 +715,10 @@ plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
-  comparison_result[, model := reorder(model, -relative_skill)]
+  relative_skill_metric <- grep(
+    "_relative_skill$", colnames(comparison_result), value = TRUE
+  )
+  comparison_result[, model := reorder(model, -get(relative_skill_metric))]
   levels <- levels(comparison_result$model)
 
   get_fill_scale <- function(values, breaks, plot_scales) {

@@ -233,8 +233,8 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #'    c(-2, 0, 3, 3, 4)
 #' )
 #' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_quantile(observed, predicted, quantile)
-interval_coverage_quantile <- function(observed, predicted, quantile, range = 50) {
+#' interval_coverage(observed, predicted, quantile)
+interval_coverage <- function(observed, predicted, quantile, range = 50) {
   assert_input_quantile(observed, predicted, quantile)
   assert_number(range)
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
@@ -258,7 +258,7 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #' @description Check the agreement between desired and actual interval coverage
 #' of a forecast.
 #'
-#' The function is similar to [interval_coverage_quantile()],
+#' The function is similar to [interval_coverage()],
 #' but takes all provided prediction intervals into account and
 #' compares nominal interval coverage (i.e. the desired interval coverage) with
 #' the actual observed interval coverage.
@@ -308,8 +308,8 @@ interval_coverage_quantile <- function(observed, predicted, quantile, range = 50
 #'   c(-2, 0, 3, 3, 4)
 #' )
 #' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_dev_quantile(observed, predicted, quantile)
-interval_coverage_dev_quantile <- function(observed, predicted, quantile) {
+#' interval_coverage_deviation(observed, predicted, quantile)
+interval_coverage_deviation <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
 
   # transform available quantiles into central interval ranges

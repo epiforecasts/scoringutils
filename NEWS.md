@@ -21,7 +21,7 @@ The update introduces breaking changes. If you want to keep using the older vers
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
-- Users can now supply their own scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `rules_point()`, `rules_sample()`, `rules_quantile()` and `rules_binary()`, which return a list of scoring rules suitable for the respective forecast type.
+- Users can now supply their own scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `rules_point()`, `rules_sample()`, `rules_quantile()` and `rules_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules). Users can call `get_score_names()` on the output of `score()` to get the names of the scores used. 
 - `check_forecasts()` was replaced by a different workflow. There now is a function, `as_forecast()`, that determines forecast type of the data, constructs a forecasting object and validates it using the function `validate_forecast()` (a generic that dispatches the correct method based on the forecast type). Objects of class `forecast_binary`, `forecast_point`, `forecast_sample` and `forecast_quantile` have print methods that fulfill the functionality of `check_forecasts()`.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds pairwise comparisons to it. 
 - `add_coverage()` was reworked completely. It's new purpose is now to add coverage information to the raw forecast data (essentially fulfilling some of the functionality that was previously covered by `score_quantile()`)
@@ -38,9 +38,11 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
 - `score()` now calls `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast.
 - added documentation for the return value of `summarise_scores()`.
-- Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`. 
+- Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`.
+- Renamed `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` to `interval_coverage()` and `interval_coverage_deviation()`, respectively. Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
 - Added unit tests for `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.
 - Documentation pkgdown pages are now created both for the stable and dev versions.
+- Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.
 
 # scoringutils 1.2.2
 
@@ -50,7 +52,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 
 ## Bug fixes
 - Fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
-- The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows. 
+- The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows.
 
 # scoringutils 1.2.1
 
