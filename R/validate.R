@@ -85,6 +85,32 @@ validate_forecast.forecast_binary <- function(data, ...) {
 
 #' @export
 #' @keywords check-forecasts
+validate_forecast.forecast_categorical <- function(data, ...) {
+  data <- validate_general(data)
+
+  # must have no sample_id or quantile column
+  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  if (!columns_correct) {
+    stop("Checking `data`: Input looks like a categorical forecast, but an",
+         "additional column called `sample_id` or `quantile` was found.",
+         "Please remove the column.")
+  }
+
+  # must have a categorical outcome with more than 2 levels
+  # probabilities must sum to one
+
+  input_check <- check_input_categorical(data$observed, data$predicted)
+  if (!is.logical(input_check)) {
+    stop("Checking `data`:",
+         "Input looks like a categorical forecast, but found the following issue: ",
+         input_check)
+  }
+  return(data[])
+}
+
+
+#' @export
+#' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, ...) {
   data <- validate_general(data)
 
