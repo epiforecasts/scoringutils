@@ -86,14 +86,13 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
+  scores <- apply_rules(
     data, metrics,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 
@@ -107,14 +106,13 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
+  scores <- apply_rules(
     data, metrics,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 #' @importFrom stats na.omit
@@ -149,10 +147,9 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     )
     return(data)
   })
-  data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
+  scores <- rbindlist(split_result)
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 
@@ -197,6 +194,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   })
   scores <- rbindlist(split_result)
 
+  # this can have existing scores, e.g. from `add_coverage()`
   existing_scores <- get_score_names(data)
   scores <- as_scores(scores, score_names = c(existing_scores, names(metrics)))
 
