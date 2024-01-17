@@ -61,6 +61,30 @@ rules_binary <- function(select = NULL, exclude = NULL) {
 }
 
 
+#' @title Scoring Rules for Categorical Forecasts
+#' @description Helper function that returns a named list of default
+#' scoring rules suitable for categorical forecasts.
+#'
+#' The default scoring rules are:
+#' - "brier_score" = [brier_score()]
+#' - "log_score" = [logs_binary()]
+#' @inherit select_rules params return
+#' @export
+#' @keywords metric
+#' @examples
+#' rules_categorical()
+#' rules_categorical(select = "brier_score")
+#' rules_categorical(exclude = "log_score")
+rules_categorical <- function(select = NULL, exclude = NULL) {
+  all <- list(
+    # brier_score = brier_score,
+    # log_score = logs_binary
+  )
+  selected <- select_rules(all, select, exclude)
+  return(selected)
+}
+
+
 #' @title Scoring Rules for Point Forecasts
 #' @description Helper function that returns a named list of default
 #' scoring rules suitable for point forecasts.
