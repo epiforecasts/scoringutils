@@ -94,7 +94,6 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
   setattr(data, "score_names", names(metrics))
 
   return(data[])
-
 }
 
 
@@ -196,11 +195,12 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
     )
     return(data)
   })
+  scores <- rbindlist(split_result)
 
-  data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
+  existing_scores <- get_score_names(data)
+  scores <- as_scores(scores, score_names = c(existing_scores, names(metrics)))
 
-  return(data[])
+  return(scores[])
 }
 
 
@@ -224,4 +224,59 @@ apply_rules <- function(data, metrics, ...) {
     eval(expr)
   }, data, ...)
   return(data)
+}
+
+
+#' Construct An Object Of Class `scores`
+#' @description This function creates an object of class `scores` based on a
+#' data.table or similar.
+#' @param scores A data.table or similar with scores as produced by [score()]
+#' @param score_names A character vector with the names of the scores
+#' (i.e. the names of the scoring rules used for scoring)
+#' @keywords internal
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   model = "A",
+#'   wis = "0.1"
+#' )
+#' new_scores(df, "wis")
+#' }
+new_scores <- function(scores, score_names) {
+  scores <- as.data.table(scores)
+  class(scores) <- c("scores", class(scores))
+  setattr(scores, "score_names", score_names)
+  return(scores[])
+}
+
+
+#' Create An Object Of Class `scores` From Data
+#' @description This convenience function wraps [new_scores()] and validates
+#' the `scores` object.
+#' @inheritParams new_scores
+#' @returns Returns an object of class 1scores`
+#' @importFrom checkmate assert_data_frame
+#' @keywords internal
+as_scores <- function(scores, score_names) {
+  assert_data_frame(scores)
+  scores <- new_scores(scores, score_names)
+  validate_scores(scores)
+  return(scores[])
+}
+
+
+#' Validate An Object Of Class `scores`
+#' @description This function validates an object of class `scores`, checking
+#' that it has the correct class and that it has a `score_names` attribute.
+#' @inheritParams new_scores
+#' @returns Returns `NULL` invisibly
+#' @importFrom checkmate assert_class assert_data_frame
+#' @keywords internal
+validate_scores <- function(scores) {
+  assert_data_frame(scores)
+  assert_class(scores, "scores")
+  # error if no score_names exists +
+  # throw warning if any of the score_names is not in the data
+  get_score_names(scores, error = TRUE)
+  return(invisible(NULL))
 }
