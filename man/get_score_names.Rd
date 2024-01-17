@@ -28,7 +28,7 @@ identify which columns are part of the forecast unit and which hold a score.
 attribute, the function will return NULL. Users can control whether the
 function should error instead via the \code{error} argument.
 
-\code{get_socre_names()} also checks whether the names of the scores stored in
+\code{get_score_names()} also checks whether the names of the scores stored in
 the attribute are column names of the data and will throw a warning if not.
 This can happen if you rename columns after scoring. You can either run
 \code{\link[=score]{score()}} again, specifying names for the scoring rules manually, or you
