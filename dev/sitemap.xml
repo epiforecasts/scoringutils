@@ -55,6 +55,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/as_scores.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_dims_ok_point.html</loc>
   </url>
   <url>
@@ -271,6 +274,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/new_forecast.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/new_scores.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison.html</loc>
   </url>
   <url>
@@ -407,6 +413,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/validate_scores.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/wis.html</loc>
