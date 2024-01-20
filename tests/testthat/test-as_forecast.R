@@ -18,13 +18,6 @@ test_that("is_forecast() works as expected", {
   expect_true(is_forecast(ex_quantile))
   expect_true(is_forecast(ex_continuous))
 
-  expect_true(is_forecast(ex_binary, class = "forecast_binary"))
-  expect_false(is_forecast(ex_binary, class = "forecast_quantile"))
-
-  expect_true(is_forecast(
-    ex_binary, class = c("forecast_quantile", "forecast_binary")
-  ))
-  expect_false(is_forecast(
-    ex_binary, class = c("forecast_quantile", "forecast_point")
-  ))
+  expect_false(is_forecast.forecast_sample(ex_quantile))
+  expect_false(is_forecast.forecast_quantile(ex_binary))
 })
