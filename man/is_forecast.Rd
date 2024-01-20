@@ -2,9 +2,24 @@
 % Please edit documentation in R/validate.R
 \name{is_forecast}
 \alias{is_forecast}
+\alias{is_forecast.default}
+\alias{is_forecast.forecast_sample}
+\alias{is_forecast.forecast_binary}
+\alias{is_forecast.forecast_point}
+\alias{is_forecast.forecast_quantile}
 \title{Test Whether An Object Is Of Class \verb{forecast_*}}
 \usage{
 is_forecast(x, ...)
+
+\method{is_forecast}{default}(x, ...)
+
+\method{is_forecast}{forecast_sample}(x, ...)
+
+\method{is_forecast}{forecast_binary}(x, ...)
+
+\method{is_forecast}{forecast_point}(x, ...)
+
+\method{is_forecast}{forecast_quantile}(x, ...)
 }
 \arguments{
 \item{x}{An R object.}

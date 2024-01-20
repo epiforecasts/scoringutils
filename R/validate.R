@@ -63,6 +63,7 @@ validate_forecast <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_binary <- function(data, ...) {
   data <- validate_general(data)
@@ -84,6 +85,7 @@ validate_forecast.forecast_binary <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, ...) {
   data <- validate_general(data)
@@ -99,6 +101,7 @@ validate_forecast.forecast_point <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_quantile <- function(data, ...) {
   data <- validate_general(data)
@@ -108,6 +111,7 @@ validate_forecast.forecast_quantile <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_sample <- function(data, ...) {
   data <- validate_general(data)
@@ -206,31 +210,35 @@ is_forecast <- function(x, ...) {
 }
 
 #' @export
+#' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.default <- function(x, ...) {
   return(FALSE)
 }
 
 #' @export
+#' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_sample <- function(x, ...) {
   inherits(x, "forecast_sample")
 }
 
 #' @export
+#' @rdname is_forecast
 #' @keywords check-forecasts
-#' @inheritParams is_forecast
 is_forecast.forecast_binary <- function(x, ...) {
   inherits(x, "forecast_binary")
 }
 
 #' @export
+#' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_point <- function(x, ...) {
   inherits(x, "forecast_point")
 }
 
 #' @export
+#' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_quantile <- function(x, ...) {
   inherits(x, "forecast_quantile")
