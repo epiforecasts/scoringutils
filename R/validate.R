@@ -194,6 +194,7 @@ new_forecast <- function(data, classname) {
 #' Generic function to test whether an object is of class `forecast_*`.
 #'
 #' @param x An R object.
+#' @param ... additional arguments
 #' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts

@@ -8,6 +8,8 @@ is_forecast(x, ...)
 }
 \arguments{
 \item{x}{An R object.}
+
+\item{...}{additional arguments}
 }
 \value{
 \code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
