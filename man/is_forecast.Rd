@@ -4,38 +4,19 @@
 \alias{is_forecast}
 \title{Test Whether An Object Is Of Class \verb{forecast_*}}
 \usage{
-is_forecast(
-  data,
-  class = c("forecast_binary", "forecast_point", "forecast_sample", "forecast_quantile")
-)
+is_forecast(x, ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
-
-\item{class}{A character vector indicating the classes to be tested for.
-The test passes if the object has at least one of the classes specificed
-in the \code{class} vector.}
+\item{x}{An R object.}
 }
 \value{
-\code{TRUE} if the object matches one of the specified classes,
-\code{FALSE} otherwise.
+\code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
 }
 \description{
-Convenience function to test whether an object is of class \verb{forecast_*}.
-Specifically, the function tests whether the object matches at least one of
-the classes in the \code{class} argument. By default, it tests whether the object
-is of any of the following classes:
-\itemize{
-\item \code{forecast_binary}
-\item \code{forecast_point}
-\item \code{forecast_sample}
-\item \code{forecast_quantile}
-}
+Generic function to test whether an object is of class \verb{forecast_*}.
 }
 \examples{
 forecast_binary <- as_forecast(example_binary)
 is_forecast(forecast_binary)
-is_forecast(forecast_binary, class = "forecast_binary")
-is_forecast(forecast_binary, class = c("forecast_binary", "forecast_point"))
 }
 \keyword{check-forecasts}
