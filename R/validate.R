@@ -191,35 +191,48 @@ new_forecast <- function(data, classname) {
 #' @title Test Whether An Object Is Of Class `forecast_*`
 #'
 #' @description
-#' Convenience function to test whether an object is of class `forecast_*`.
-#' Specifically, the function tests whether the object matches at least one of
-#' the classes in the `class` argument. By default, it tests whether the object
-#' is of any of the following classes:
-#' - `forecast_binary`
-#' - `forecast_point`
-#' - `forecast_sample`
-#' - `forecast_quantile`
+#' Generic function to test whether an object is of class `forecast_*`.
 #'
-#' @inheritParams get_forecast_counts
-#' @param class A character vector indicating the classes to be tested for.
-#' The test passes if the object has at least one of the classes specificed
-#' in the `class` vector.
-#' @return `TRUE` if the object matches one of the specified classes,
-#' `FALSE` otherwise.
+#' @inheritParams x An R object.
+#' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts
 #' @examples
 #' forecast_binary <- as_forecast(example_binary)
 #' is_forecast(forecast_binary)
-#' is_forecast(forecast_binary, class = "forecast_binary")
-#' is_forecast(forecast_binary, class = c("forecast_binary", "forecast_point"))
-is_forecast <- function(data,
-                        class = c("forecast_binary", "forecast_point",
-                                  "forecast_sample", "forecast_quantile")) {
-  allowed <- c("forecast_binary", "forecast_point",
-               "forecast_sample", "forecast_quantile")
-  classes <- match.arg(class, allowed, several.ok = TRUE)
-  return(inherits(data, classes))
+is_forecast <- function(x, ...) {
+  UseMethod("is_forecast")
+}
+
+#' @export
+#' @keywords check-forecasts
+is_forecast.default <- function(x, ...) {
+  return(FALSE)
+}
+
+#' @export
+#' @keywords check-forecasts
+is_forecast.forecast_sample <- function(x, ...) {
+  inherits(x, "forecast_sample")
+}
+
+#' @export
+#' @keywords check-forecasts
+#' @inheritParams is_forecast
+is_forecast.forecast_binary <- function(x, ...) {
+  inherits(x, "forecast_binary")
+}
+
+#' @export
+#' @keywords check-forecasts
+is_forecast.forecast_point <- function(x, ...) {
+  inherits(x, "forecast_point")
+}
+
+#' @export
+#' @keywords check-forecasts
+is_forecast.forecast_quantile <- function(x, ...) {
+  inherits(x, "forecast_quantile")
 }
 
 
