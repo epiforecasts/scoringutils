@@ -30,7 +30,11 @@ is_forecast(x, ...)
 \code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
 }
 \description{
-Generic function to test whether an object is of class \verb{forecast_*}.
+Generic function to test whether an object is of class \verb{forecast_*}. You
+can also test for a specific \verb{forecast_*} class using the appropriate
+\verb{is_forecast.forecast_*} method. For example, to check whether an object is
+of class \code{forecast_quantile}, you would use
+\code{scoringutils:::is_forecast.forecast_quantile()}.
 }
 \examples{
 forecast_binary <- as_forecast(example_binary)

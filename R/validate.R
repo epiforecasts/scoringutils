@@ -195,7 +195,11 @@ new_forecast <- function(data, classname) {
 #' @title Test Whether An Object Is Of Class `forecast_*`
 #'
 #' @description
-#' Generic function to test whether an object is of class `forecast_*`.
+#' Generic function to test whether an object is of class `forecast_*`. You
+#' can also test for a specific `forecast_*` class using the appropriate
+#' `is_forecast.forecast_*` method. For example, to check whether an object is
+#' of class `forecast_quantile`, you would use
+#' `scoringutils:::is_forecast.forecast_quantile()`.
 #'
 #' @param x An R object.
 #' @param ... additional arguments
