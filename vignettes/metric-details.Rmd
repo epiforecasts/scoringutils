@@ -43,7 +43,7 @@ data$B <- replace(data$B)
 data$Q <- replace(data$Q)
 
 data <- data[, 1:6] %>%
-  unique() 
+  unique()
 
 data %>%
   kbl(format = "html",
