@@ -37,6 +37,12 @@ test_that("function transform_forecasts works", {
   expect_equal(four$predicted, compare)
 })
 
+test_that("transform_forecasts() outputs an object of class forecast_*", {
+  ex <- as_forecast(na.omit(example_binary))
+  transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
+  expect_s3_class(transformed, "forecast_binary")
+})
+
 
 # ============================================================================ #
 # `set_forecast_unit()`
@@ -91,3 +97,20 @@ test_that("function get_forecast_unit() and set_forecast_unit() work together", 
   expect_equal(fu_set, fu_get)
 })
 
+
+test_that("set_forecast_unit() works on input that's not a data.table", {
+  df <- data.frame(
+    a = 1:2,
+    b = 2:3,
+    c = 3:4
+  )
+  expect_equal(
+    colnames(set_forecast_unit(df, c("a", "b"))),
+    c("a", "b")
+  )
+  # apparently it also works on a matrix... good to know :)
+  expect_equal(
+    names(set_forecast_unit(as.matrix(df), "a")),
+    "a"
+  )
+})

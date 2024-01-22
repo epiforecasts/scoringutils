@@ -13,17 +13,6 @@ test_that("get_forecast_unit() works as expected", {
     c("location", "target_end_date", "target_type", "location_name",
       "forecast_date", "model", "horizon")
   )
-
-  data <- as_forecast(na.omit(example_quantile))
-  ex <- data[, location := NULL]
-  expect_warning(
-    get_forecast_unit(ex, check_conflict = TRUE),
-    "Object has an attribute `forecast_unit`, but it looks different from what's expected based on the data.
-Existing: forecast_date, horizon, location, location_name, model, target_end_date, target_type
-Expected: forecast_date, horizon, location_name, model, target_end_date, target_type
-Running `as_forecast()` again might solve the problem",
-fixed = TRUE
-  )
 })
 
 

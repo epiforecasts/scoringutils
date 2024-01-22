@@ -7,7 +7,7 @@
 #'
 #' **Interval coverage**
 #'
-#' Coverage for a given interval range is defined as the proportion of
+#' Interval coverage for a given interval range is defined as the proportion of
 #' observations that fall within the corresponding central prediction intervals.
 #' Central prediction intervals are symmetric around the median and and formed
 #' by two quantiles that denote the lower and upper bound. For example, the 50%
@@ -15,10 +15,11 @@
 #' quantiles of the predictive distribution.
 #'
 #' The function `add_coverage()` computes the coverage per central prediction
-#' interval, so the coverage will always be either `TRUE` (observed value falls
-#' within the interval) or `FALSE` (observed value falls outside the interval).
-#' You can summarise the coverage values to get the proportion of observations
-#' that fall within the central prediction intervals.
+#' interval, so the interval coverage will always be either `TRUE`
+#' (observed value falls within the interval) or `FALSE`  (observed value falls
+#' outside the interval). You can summarise the interval coverage values to get
+#' the proportion of observations that fall within the central prediction
+#' intervals.
 #'
 #' **Quantile coverage**
 #'
@@ -26,10 +27,13 @@
 #' observed values that are smaller than the corresponding predictive quantile.
 #' For example, the 0.5 quantile coverage is the proportion of observed values
 #' that are smaller than the 0.5 quantile of the predictive distribution.
+#' Just as above, for a single observation and the quantile of a single
+#' predictive distribution, the value will either be `TRUE` or `FALSE`.
 #'
 #' **Coverage deviation**
 #'
-#' The coverage deviation is the difference between the desired coverage and the
+#' The coverage deviation is the difference between the desired coverage
+#' (can be either interval or quantile coverage) and the
 #' actual coverage. For example, if the desired coverage is 90% and the actual
 #' coverage is 80%, the coverage deviation is -0.1.
 #'
@@ -58,7 +62,7 @@ add_coverage <- function(data) {
 
   data[, range := get_range_from_quantile(quantile)]
 
-  data <- merge(interval_data, data, by = unique(c(forecast_unit, "range")))
+  data <- merge(data, interval_data, by = unique(c(forecast_unit, "range")))
   data[, interval_coverage_deviation := interval_coverage - range / 100]
   data[, quantile_coverage := observed <= predicted]
   data[, quantile_coverage_deviation := quantile_coverage - quantile]
@@ -70,8 +74,8 @@ add_coverage <- function(data) {
 
   # add coverage "metrics" to list of stored metrics
   # this makes it possible to use `summarise_scores()` later on
-  stored_attributes[["metric_names"]] <- c(
-    stored_attributes[["metric_names"]],
+  stored_attributes[["score_names"]] <- c(
+    stored_attributes[["score_names"]],
     new_metrics
   )
   data <- assign_attributes(data, stored_attributes)

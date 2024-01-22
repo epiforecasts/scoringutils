@@ -1,3 +1,48 @@
+# =============================================================================
+# Check creation of objects of class `scores`
+# =============================================================================
+
+test_that("new_scores() works", {
+  expect_equal(
+    class(new_scores(data.frame(), score_names = "")),
+    c("scores", "data.table", "data.frame")
+  )
+
+  expect_error(
+    new_scores(data.frame()),
+    "missing, with no default"
+  )
+})
+
+test_that("as_scores() works", {
+  expect_equal(
+    class(scoringutils:::as_scores(data.frame(wis = 1), score_names = "wis")),
+    c("scores", "data.table", "data.frame")
+  )
+  expect_warning(
+    scoringutils:::as_scores(data.frame(), score_names = "wis"),
+    "The following scores have been previously computed"
+  )
+})
+
+test_that("validate_scores() works", {
+  expect_error(
+    validate_scores(data.frame()),
+    "Must inherit from class 'scores'"
+  )
+})
+
+test_that("Output of `score()` has the class `scores()`", {
+  expect_no_condition(validate_scores(scores_point))
+  expect_no_condition(validate_scores(scores_binary))
+  expect_no_condition(validate_scores(scores_continuous))
+  expect_no_condition(validate_scores(scores_quantile))
+})
+
+# =============================================================================
+# `score()`
+# =============================================================================
+
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
@@ -190,12 +235,12 @@ test_that("score() quantile produces desired metrics", {
   out <- suppressWarnings(suppressMessages(
     score(data = data, metrics = metrics_no_cov))
   )
-  metric_names <- c(
+  score_names <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
   )
 
-  expect_true(all(metric_names %in% colnames(out)))
+  expect_true(all(score_names %in% colnames(out)))
 })
 
 

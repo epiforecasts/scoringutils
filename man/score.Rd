@@ -117,7 +117,9 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.
 
 \examples{
 library(magrittr) # pipe operator
-data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
 
 validated <- as_forecast(example_quantile)
 score(validated) \%>\%

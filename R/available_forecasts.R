@@ -29,7 +29,9 @@
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' get_forecast_counts(example_quantile,
 #'   by = c("model", "target_type")
@@ -39,7 +41,7 @@ get_forecast_counts <- function(data,
                                 collapse = c("quantile", "sample_id")) {
 
   data <- as_forecast(data)
-  forecast_unit <- attr(data, "forecast_unit")
+  forecast_unit <- get_forecast_unit(data)
   data <- na.omit(data)
 
   if (is.null(by)) {

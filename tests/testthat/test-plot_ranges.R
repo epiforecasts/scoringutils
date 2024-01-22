@@ -1,9 +1,10 @@
 m <- modifyList(metrics_no_cov_no_ae, list("bias" = NULL))
 
-sum_scores <- copy(example_quantile) %>%
+range_example <- copy(example_quantile) %>%
   na.omit() %>%
-  .[, interval_range := scoringutils:::get_range_from_quantile(quantile)] %>%
-  score(metrics = m) %>%
+  .[, interval_range := scoringutils:::get_range_from_quantile(quantile)]
+
+sum_scores <- suppressWarnings(score(range_example, metrics = m)) %>%
   summarise_scores(by = c("model", "target_type", "interval_range"))
 
 sum_scores[, range := interval_range]

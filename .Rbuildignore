@@ -18,3 +18,4 @@
 ^\.devcontainer$
 ^CODE_OF_CONDUCT\.md$
 ^inst/manuscript/output$
+^CRAN-SUBMISSION$

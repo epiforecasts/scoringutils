@@ -212,7 +212,7 @@ relative_skill <- list(
 
 scaled_relative_skill <- list(
   `Metric` = "Scaled relative skill",
-  `Name` = list("scaled_rel_skill"),
+  `Name` = "scaled_rel_skill",
   `Functions` = r"(score(), pairwise_comparison())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
@@ -267,7 +267,7 @@ crps <- list(
   `Explanation` = r"(The crps is a proper scoring rule that generalises the absolute error to probabilistic forecasts. It measures the 'distance' of the predictive distribution to the observed data-generating distribution. The CRPS is given as
   $$\text{CRPS}(F, y) = \int_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,$$
   where y is the observed value and F the CDF of predictive distribution. Often An alternative representation is used:
-  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the observed value. In this representation we can simply replace $X$ and $X'$ by samples sum over all possible combinations to obtain the CRPS.
+  $$ \text{CRPS}(F, y) = \frac{1}{2} \mathbb{E}_{F} |X - X'| - \mathbb{E}_P |X - y|,$$ where $X$ and $X'$ are independent realisations from the predictive distributions $F$ with finite first moment and $y$ is the observed value. In this representation we can simply replace $X$ and $X'$ by samples and sum over all possible combinations to obtain the CRPS.
   For integer-valued forecasts, the RPS is given as
   $$ \text{RPS}(F, y) = \sum_{x = 0}^\infty (F(x) - 1(x \geq y))^2. $$
 

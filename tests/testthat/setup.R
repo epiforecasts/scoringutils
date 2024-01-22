@@ -2,12 +2,15 @@
 library(ggplot2, quietly = TRUE)
 library(data.table)
 suppressMessages(library(magrittr))
+data.table::setDTthreads(2) # restricts number of cores used on CRAN
 
 metrics_no_cov <- rules_quantile(
-  exclude = c("coverage_50", "coverage_90", "coverage_deviation")
+  exclude = c("interval_coverage_50", "interval_coverage_90",
+              "interval_coverage_deviation")
 )
 metrics_no_cov_no_ae <- rules_quantile(
-  exclude = c("coverage_50", "coverage_90", "coverage_deviation", "ae_median")
+  exclude = c("interval_coverage_50", "interval_coverage_90",
+              "interval_coverage_deviation", "ae_median")
 )
 
 

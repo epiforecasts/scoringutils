@@ -31,7 +31,4 @@ observed <- rnorm(30, mean = 1:30)
 predicted_values <- matrix(rnorm(30, mean = 1:30))
 se_mean_sample(observed, predicted_values)
 }
-\seealso{
-\code{\link[=squared_error]{squared_error()}}
-}
 \keyword{metric}

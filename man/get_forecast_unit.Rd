@@ -4,17 +4,10 @@
 \alias{get_forecast_unit}
 \title{Get unit of a single forecast}
 \usage{
-get_forecast_unit(data, check_conflict = FALSE)
+get_forecast_unit(data)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
-
-\item{check_conflict}{Whether or not to check whether there is a conflict
-between a stored attribute and the inferred forecast unit. When you create
-a forecast object, the forecast unit is stored as an attribute. If you
-later change the columns of the data, the forecast unit as inferred from the
-data might change compared to the stored attribute. Should this result in a
-warning? Defaults to FALSE.}
 }
 \value{
 A character vector with the column names that define the unit of

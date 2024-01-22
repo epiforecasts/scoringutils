@@ -31,13 +31,14 @@ sharpness / dispersion changes by range.
 }
 \examples{
 library(ggplot2)
-# scores <- score(example_quantile)
-# scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
-
-# plot_ranges(scores, x = "model") +
-#  facet_wrap(~target_type, scales = "free")
-
-# visualise dispersion instead of interval score
-# plot_ranges(scores, y = "dispersion", x = "model") +
-#  facet_wrap(~target_type)
+ex <- example_quantile
+ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
+scores <- score(ex, metrics = list("wis" = wis))
+scores$range <- scores$interval_range
+summarised <- summarise_scores(
+  scores,
+  by = c("model", "target_type", "range")
+)
+plot_ranges(summarised, x = "model") +
+  facet_wrap(~target_type, scales = "free")
 }

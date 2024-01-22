@@ -31,6 +31,6 @@ predicted_values <- matrix(rnorm(30, mean = 1:30))
 ae_median_sample(observed, predicted_values)
 }
 \seealso{
-\code{\link[=ae_median_quantile]{ae_median_quantile()}}, \code{\link[=abs_error]{abs_error()}}
+\code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 \keyword{metric}

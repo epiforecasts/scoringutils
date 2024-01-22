@@ -24,7 +24,9 @@
 #' @examples
 #' library(ggplot2)
 #' library(magrittr) # pipe operator
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' scores <- score(example_quantile) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
@@ -45,7 +47,7 @@ plot_score_table <- function(scores,
 
   # identify metrics -----------------------------------------------------------
   id_vars <- get_forecast_unit(scores)
-  metrics <- get_metrics(scores)
+  metrics <- get_score_names(scores)
 
   cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
   suppressWarnings(scores[, eval(cols_to_delete) := NULL])
@@ -57,7 +59,7 @@ plot_score_table <- function(scores,
 
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
-  metrics_zero_good <- c("bias", "coverage_deviation")
+  metrics_zero_good <- c("bias", "interval_coverage_deviation")
   metrics_no_color <- "coverage"
 
   metrics_min_good <- setdiff(metrics, c(
@@ -231,15 +233,16 @@ plot_wis <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "target_type", "range"))
-#'
-#' # plot_ranges(scores, x = "model") +
-#' #  facet_wrap(~target_type, scales = "free")
-#'
-#' # visualise dispersion instead of interval score
-#' # plot_ranges(scores, y = "dispersion", x = "model") +
-#' #  facet_wrap(~target_type)
+#' ex <- example_quantile
+#' ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
+#' scores <- score(ex, metrics = list("wis" = wis))
+#' scores$range <- scores$interval_range
+#' summarised <- summarise_scores(
+#'   scores,
+#'   by = c("model", "target_type", "range")
+#' )
+#' plot_ranges(summarised, x = "model") +
+#'   facet_wrap(~target_type, scales = "free")
 
 plot_ranges <- function(scores,
                         y = "wis",
@@ -576,11 +579,12 @@ make_na <- make_NA
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' # data.table::setDTthreads(1) # only needed to avoid issues on CRAN
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "range"))
-#' # plot_interval_coverage(scores)
-
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
+#' data_coverage <- add_coverage(example_quantile)
+#' summarised <- summarise_scores(data_coverage, by = c("model", "range"))
+#' plot_interval_coverage(summarised)
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
@@ -632,9 +636,9 @@ plot_interval_coverage <- function(scores,
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' # scores <- score(example_quantile)
-#' # scores <- summarise_scores(scores, by = c("model", "quantile"))
-#' # plot_quantile_coverage(scores)
+#' data_coverage <- add_coverage(example_quantile)
+#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
+#' plot_quantile_coverage(summarised)
 
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
@@ -711,7 +715,10 @@ plot_pairwise_comparison <- function(comparison_result,
                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
-  comparison_result[, model := reorder(model, -relative_skill)]
+  relative_skill_metric <- grep(
+    "_relative_skill$", colnames(comparison_result), value = TRUE
+  )
+  comparison_result[, model := reorder(model, -get(relative_skill_metric))]
   levels <- levels(comparison_result$model)
 
   get_fill_scale <- function(values, breaks, plot_scales) {
@@ -829,7 +836,9 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats density
 #' @return vector with the scoring values
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' # PIT histogram in vector based format
 #' observed <- rnorm(30, mean = 1:30)

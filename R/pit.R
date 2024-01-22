@@ -62,7 +62,9 @@
 #' @seealso [pit()]
 #' @importFrom stats runif
 #' @examples
-#' data.table::setDTthreads(1) # only needed to avoid issues on CRAN
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
 #'
 #' ## continuous predictions
 #' observed <- rnorm(20, mean = 1:20)
@@ -191,16 +193,16 @@ pit <- function(data,
 
   if (forecast_type == "quantile") {
     data[, quantile_coverage := (observed <= predicted)]
-    coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
-                     by = c(unique(c(by, "quantile")))]
-    coverage <- coverage[order(quantile),
+    quantile_coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
+                              by = c(unique(c(by, "quantile")))]
+    quantile_coverage <- quantile_coverage[order(quantile),
       .(
         quantile = c(quantile, 1),
         pit_value = diff(c(0, quantile_coverage, 1))
       ),
-      by = c(get_forecast_unit(coverage))
+      by = c(get_forecast_unit(quantile_coverage))
     ]
-    return(coverage[])
+    return(quantile_coverage[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
