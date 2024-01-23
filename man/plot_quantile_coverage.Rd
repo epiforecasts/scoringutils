@@ -22,6 +22,6 @@ Plot quantile coverage
 }
 \examples{
 data_coverage <- add_coverage(example_quantile)
-summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
+summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
 plot_quantile_coverage(summarised)
 }
