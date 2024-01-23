@@ -20,7 +20,7 @@ sample_to_range_long(
 \item{type}{type argument passed down to the quantile function. For more
 information, see \code{\link[=quantile]{quantile()}}}
 
-\item{keep_quantile_col}{keep quantile column, default is TRUE}
+\item{keep_quantile_col}{keep quantile_level column, default is TRUE}
 }
 \value{
 a data.frame in a long interval range format
