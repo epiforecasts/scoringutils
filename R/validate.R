@@ -68,10 +68,12 @@ validate_forecast <- function(data, ...) {
 validate_forecast.forecast_binary <- function(data, ...) {
   data <- validate_general(data)
 
-  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  columns_correct <- test_columns_not_present(
+    data, c("sample_id", "quantile_level")
+  )
   if (!columns_correct) {
     stop("Checking `data`: Input looks like a binary forecast, but an",
-         "additional column called `sample_id` or `quantile` was found.",
+         "additional column called `sample_id` or `quantile_level` was found.",
          "Please remove the column.")
   }
   input_check <- check_input_binary(data$observed, data$predicted)
@@ -105,7 +107,7 @@ validate_forecast.forecast_point <- function(data, ...) {
 #' @keywords check-forecasts
 validate_forecast.forecast_quantile <- function(data, ...) {
   data <- validate_general(data)
-  assert_numeric(data$quantile, lower = 0, upper = 1)
+  assert_numeric(data$quantile_level, lower = 0, upper = 1)
   return(data[])
 }
 
@@ -147,7 +149,7 @@ validate_general <- function(data) {
   forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data, forecast_unit = forecast_unit))
 
-  # check that the number of forecasts per sample / quantile is the same
+  # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
   if (!is.logical(number_quantiles_samples)) {
     warning(number_quantiles_samples)
