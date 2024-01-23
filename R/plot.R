@@ -428,8 +428,8 @@ plot_predictions <- function(data,
 
   # delete quantile column in intervals if present. This is important for
   # pivoting
-  if ("quantile" %in% names(intervals)) {
-    intervals[, quantile := NULL]
+  if ("quantile_level" %in% names(intervals)) {
+    intervals[, quantile_level := NULL]
   }
 
   plot <- ggplot(data = data, aes(x = .data[[x]])) +
@@ -637,14 +637,14 @@ plot_interval_coverage <- function(scores,
 #' @export
 #' @examples
 #' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
+#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
 #' plot_quantile_coverage(summarised)
 
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
   p2 <- ggplot(
     data = scores,
-    aes(x = quantile, colour = .data[[colour]])
+    aes(x = quantile_level, colour = .data[[colour]])
   ) +
     geom_polygon(
       data = data.frame(
@@ -667,14 +667,14 @@ plot_quantile_coverage <- function(scores,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = quantile),
+    geom_line(aes(y = quantile_level),
       colour = "grey",
       linetype = "dashed"
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +
-    xlab("Quantile") +
-    ylab("% Obs below quantile") +
+    xlab("Quantile level") +
+    ylab("% Obs below quantile level") +
     scale_y_continuous(
       labels = function(x) {
         paste(100 * x)
@@ -859,7 +859,7 @@ plot_pairwise_comparison <- function(comparison_result,
 plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
-  if ("quantile" %in% names(pit)) {
+  if ("quantile_level" %in% names(pit)) {
     type <- "quantile-based"
   } else {
     type <- "sample-based"
@@ -876,7 +876,7 @@ plot_pit <- function(pit,
       plot_quantiles <- seq(width, 1, width)
     }
     if (type == "quantile-based") {
-      plot_quantiles <- unique(pit$quantile)
+      plot_quantiles <- unique(pit$quantile_level)
     }
   } else {
     # if num_bins is explicitly given
@@ -902,8 +902,8 @@ plot_pit <- function(pit,
       }
 
       hist <- ggplot(
-        data = pit[quantile %in% plot_quantiles],
-        aes(x = quantile, y = pit_value)
+        data = pit[quantile_level %in% plot_quantiles],
+        aes(x = quantile_level, y = pit_value)
       ) +
         geom_col(position = "dodge") +
         facet_wrap(formula)
