@@ -106,7 +106,7 @@ duplicates <- example_quantile %>%
   ) %>%
   get_duplicate_forecasts()
 
-duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
+duplicates[quantile_level == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
   head()
 ```
 
