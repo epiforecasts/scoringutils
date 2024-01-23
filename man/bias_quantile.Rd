@@ -4,7 +4,7 @@
 \alias{bias_quantile}
 \title{Determines Bias of Quantile Forecasts}
 \usage{
-bias_quantile(observed, predicted, quantile, na.rm = TRUE)
+bias_quantile(observed, predicted, quantile_level, na.rm = TRUE)
 }
 \arguments{
 \item{observed}{a single number representing the observed value}
@@ -12,7 +12,7 @@ bias_quantile(observed, predicted, quantile, na.rm = TRUE)
 \item{predicted}{vector of length corresponding to the number of quantiles
 that holds predictions}
 
-\item{quantile}{vector of corresponding size with the quantile levels for
+\item{quantile_level}{vector of corresponding size with the quantile levels for
 which predictions were made. If this does not contain the median (0.5) then
 the median is imputed as being the mean of the two innermost quantiles.}
 
@@ -64,10 +64,10 @@ predicted <- c(
   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
 )
 
-quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+quantile_level <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 
 observed <- 8062
 
-bias_quantile(observed, predicted, quantile)
+bias_quantile(observed, predicted, quantile_level)
 }
 \keyword{metric}

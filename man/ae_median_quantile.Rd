@@ -4,7 +4,7 @@
 \alias{ae_median_quantile}
 \title{Absolute Error of the Median (Quantile-based Version)}
 \usage{
-ae_median_quantile(observed, predicted, quantile)
+ae_median_quantile(observed, predicted, quantile_level)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -16,7 +16,7 @@ to the number of observed values) and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{vector with quantile levels of size N}
+\item{quantile_level}{vector with quantile levels of size N}
 }
 \value{
 numeric vector of length N with the absolute error of the median
@@ -28,14 +28,14 @@ Compute the absolute error of the median calculated as
 }{
   abs(observed - median_prediction)
 }
-The median prediction is the predicted value for which quantile == 0.5,
+The median prediction is the predicted value for which quantile_level == 0.5,
 the function therefore requires 0.5 to be among the quantile levels in
 \code{quantile}.
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
 predicted_values <- matrix(rnorm(30, mean = 1:30))
-ae_median_quantile(observed, predicted_values, quantile = 0.5)
+ae_median_quantile(observed, predicted_values, quantile_level = 0.5)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}
