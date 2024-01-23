@@ -208,7 +208,7 @@ get_forecast_unit <- function(data) {
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value", "range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
@@ -252,12 +252,13 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
-  type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
+  forecast_type <- get_forecast_type(data)
+  col <- ifelse(forecast_type == "quantile", "quantile_level", "sample_id")
   if (is.null(forecast_unit)) {
     forecast_unit <- get_forecast_unit(data)
   }
   data <- as.data.table(data)
-  data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
+  data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, col)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
