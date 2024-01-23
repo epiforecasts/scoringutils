@@ -89,7 +89,8 @@ merge_pred_and_obs <- function(forecasts, observations,
 #'
 #'
 #' @param data a data.frame with samples
-#' @param quantiles a numeric vector of quantiles to extract
+#' @param quantile_level a numeric vector of quantile levels for which
+#' quantiles will be computed
 #' @param type type argument passed down to the quantile function. For more
 #' information, see [quantile()]
 #' @return a data.frame in a long interval range format
@@ -101,16 +102,18 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @examples
 #' sample_to_quantile(example_integer)
 sample_to_quantile <- function(data,
-                               quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95),
+                               quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
   data <- ensure_data.table(data)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
-  quantiles <- unique(round(c(quantiles, 1 - quantiles), digits = 10))
+  quantile_level <- unique(
+    round(c(quantile_level, 1 - quantile_level), digits = 10)
+  )
 
-  data <- data[, .(quantile = quantiles,
-                   predicted = quantile(x = predicted, prob = ..quantiles,
+  data <- data[, .(quantile_level = quantile_level,
+                   predicted = quantile(x = predicted, prob = ..quantile_level,
                                         type = ..type, na.rm = TRUE)),
                by = by]
 
