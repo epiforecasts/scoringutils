@@ -4,10 +4,10 @@
 \alias{get_range_from_quantile}
 \title{Get Range Belonging to a Quantile}
 \usage{
-get_range_from_quantile(quantile)
+get_range_from_quantile(quantile_level)
 }
 \arguments{
-\item{quantile}{a numeric vector of quantile levels of size N}
+\item{quantile_level}{a numeric vector of quantile levels of size N}
 }
 \value{
 a numeric vector of interval ranges of size N
