@@ -89,7 +89,7 @@ test_forecast_type_is_point <- function(data) {
 test_forecast_type_is_quantile <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "quantile")
+  columns_correct <- test_columns_present(data, "quantile_level")
   return(observed_correct && predicted_correct && columns_correct)
 }
 
