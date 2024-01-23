@@ -120,56 +120,56 @@ trackdown::update_file("inst/manuscript/manuscript.Rmd", gfile = "scoringutils-p
 
 # Introduction
 
-Good forecasts are of great interest to decision makers in various fields like finance \citep{timmermannForecastingMethodsFinance2018, elliottForecastingEconomicsFinance2016}, weather predictions \citep{gneitingWeatherForecastingEnsemble2005, kukkonenReviewOperationalRegionalscale2012} or infectious disease modeling \citep{reichCollaborativeMultiyearMultimodel2019, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherNationalSubnationalShortterm2022, europeancovid-19forecasthubEuropeanCovid19Forecast2021}. Throughout the COVID-19 pandemic, forecasting has garnered widespread interest from policy makers and the general public, with several collaborative forecasting efforts ("Forecast Hubs") being established \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}. Forecast evaluation is an integral part of assessing and improving the usefulness of forecasts. For decades, researchers, especially in the field of weather forecasting, have therefore developed and refined an arsenal of techniques to evaluate predictions (see for example \cite{goodRationalDecisions1952}, \cite{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976}, \cite{gneitingProbabilisticForecastsCalibration2007}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingStrictlyProperScoring2007}, \cite{bracherEvaluatingEpidemicForecasts2021}). 
+Good forecasts are of great interest to decision makers in various fields like finance \citep{timmermannForecastingMethodsFinance2018, elliottForecastingEconomicsFinance2016}, weather predictions \citep{gneitingWeatherForecastingEnsemble2005, kukkonenReviewOperationalRegionalscale2012} or infectious disease modeling \citep{reichCollaborativeMultiyearMultimodel2019, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherNationalSubnationalShortterm2022, europeancovid-19forecasthubEuropeanCovid19Forecast2021}. 
+<!-- Throughout the COVID-19 pandemic, forecasting has garnered widespread interest from policy makers and the general public, with several collaborative forecasting efforts ("Forecast Hubs") being established \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}. Forecast evaluation is an integral part of assessing and improving the usefulness of forecasts.  -->
+For decades, researchers, especially in the field of weather forecasting, have therefore developed and refined an arsenal of techniques to evaluate predictions (see for example \cite{goodRationalDecisions1952}, \cite{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976}, \cite{gneitingProbabilisticForecastsCalibration2007}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingStrictlyProperScoring2007}, \cite{bracherEvaluatingEpidemicForecasts2021}). 
 
 Various \proglang{R} \citep{R} packages cover a wide variety of scoring rules, plots and other metrics that are useful in assessing the quality of a forecast. Existing packages offer functionality that is well suited to evaluate the quality of a single forecast or to compare the performance of several forecasters on a single target variable. However, they also come with important limitations and have limited uptake in some fields. 
 
 <!-- \pkg{scoringutils} extends the existing landscape by providing a comprehensive framework that allows users to integrate a variety of tasks related to forecast evaluation, as well as functionality from other packages, into a single workflow.  -->
 
-Packages such as \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{Metrics}, \pkg{MLmetrics} \citep{MLmetrics}, \pkg{verification} \citep{verification}, or \pkg{SpecsVerification} \citep{SpecsVerification}, which provide an extensive collection of scoring rules and metrics, usually operate on vectors and matrices. Applying them to multiple forecasts across several dimensions, such as time, space, and different types of targets, can therefore be cumbersome. Some packages like \pkg{scoring} \citep{scoring} operate on a data.frame and use a formula interface, making this task easier. However, \pkg{scoring} only exports a few scoring rules and does not provide a general interface or framework that would allow users to supply their own scoring rules.
+Some packages such as \pkg{tscount} \citep{tscount}, \pkg{topmodels} \citep{topmodels}, \pkg{GLMMadaptive} \citep{GLMMadaptive}, \pkg{cvGEE} \citep{cvGEE} or \pkg{fabletools} \citep{fabletools} expect that forecasts were generated in a certain way and require users to supply an object of a specific class in order to compute and scores. These packages provide excellent tools for users operating within the specific package framework, but are by their nature not generally applicable to many use cases practitioners might encounter. 
 
-Some packages such as \pkg{tscount} \citep{tscount}, \pkg{topmodels} \citep{topmodels}, \pkg{GLMMadaptive} \citep{GLMMadaptive} or \pkg{cvGEE} \citep{cvGEE} provide useful scoring metrics and plots, but those are only accessible if the forecasts were generated in a particular way. \pkg{tscount}, for example, requires an object of class `tsglm`, \pkg{topmodels} requires an object of class `lm`, `glm`, `crch` or `disttree`, \pkg{GLMMadaptive} requires an object of class `MixMod` and \pkg{cvGEE} requires an object of class `geeglm`. These tools are by their nature not generally applicable to all use cases practitioners might encounter. 
+Packages such as \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{Metrics}, \pkg{MLmetrics} \citep{MLmetrics}, \pkg{verification} \citep{verification}, \pkg{SpecsVerification} \citep{SpecsVerification}, \pkg{surveillance} \citep{surveillance}, \pkg{predtools} \citep{predtools}, or \pkg{probably} \citep{probably} provide an extensive collection of tools, scoring rules and visualisations for various use cases. However, most scoring functions operate on vectors and matrices. This can make it difficult to evaluate, for example, multiple forecasts across several dimensions, such as time, space, and different types of targets. 
 
-\pkg{yardstick} \citep{yardstick}, which builds on the \pkg{tidymodels} \citep{tidymodels} framework, is the most general widely used forecast evaluation package. It allows users to apply arbitrary scoring rules to a data.frame of forecasts, independently of how they were created. The framework is flexible and easily extendable and also addresses the issue of scoring forecasts across various dimensions. However, \pkg{yardstick} is primarily focused on point forecasts and classification tasks. It currently lacks general support for probabilistic forecasts (forecasts in the form of a full predictive distribution, represented e.g. by a set of quantiles or samples from the forecast distribution). Probabilistic forecasts are desirable, as they allow decision makers to take into account the uncertainty of a forecast \citep{gneitingProbabilisticForecastsCalibration2007}, and are widely used, e.g. in Meteorology or Epidemiology. \pkg{fabletools} \citep{fabletools} offers some functionality to evaluate probabilistic forecasts but is not fully general as scoring is again tied to specific object classes and users cannot easily supply their own scoring rules. 
+\pkg{scoring} \citep{scoring} operates on a data.frame and uses a formula interface, making this task easier. However, \pkg{scoring} only exports a few scoring rules and does not allow users to supply their own. \pkg{yardstick} \citep{yardstick}, which builds on the \pkg{tidymodels} \citep{tidymodels} framework, is the most general and flexible widely used forecast evaluation package. It allows users to apply arbitrary scoring rules to a data.frame of forecasts, independently of how they were created. However, \pkg{yardstick} is primarily focused on point forecasts and classification tasks. It currently lacks general support for probabilistic forecasts (forecasts in the form of a full predictive distribution, represented e.g. by a set of quantiles or samples from the forecast distribution). Probabilistic forecasts are desirable, as they allow decision makers to take into account the uncertainty of a forecast \citep{gneitingProbabilisticForecastsCalibration2007}, and are widely used, e.g. in Meteorology or Epidemiology. 
 
 \pkg{scoringutils} aims to fill this gap in the ecosystem by providing a general-purpose tool as well as a framework for the evaluation of (probabilistic) forecasts across multiple dimensions using a wide variety of user-provided scoring rules. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}.
-The package provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring \citep{bosseScoringEpidemiologicalForecasts2023}, to apply scoring rules to data, to handle missing forecasts, to aggregate scores and to visualise the results of the evaluation. \pkg{scoringutils} makes extensive use of \pkg{data.table} \citep{data.table} to ensure fast and memory-efficient computations. The package aims to be flexible and extendable, providing multiple generics and methods that users can expand on. 
+The package provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring \citep{bosseScoringEpidemiologicalForecasts2023}, to apply scoring rules to data, to handle missing forecasts, to aggregate scores and to visualise the results of the evaluation. \pkg{scoringutils} makes extensive use of \pkg{data.table} \citep{data.table} to ensure fast and memory-efficient computations. The core functionality is designed around S3 classes, allowing users to expand on the generics and methods implemented in the package. 
+\pkg{scoringutils} provides extensive documentation and case studies, as well as sensible defaults for scoring forecasts. 
 
-Many practitioners who develop models are not experts in forecast evaluation and do not have a deep understanding of the various scoring rules or know which one to apply. \pkg{scoringutils} aims to make the task of evaluating forecasts more accessible to inexperienced users by providing sensible defaults in addition to extensive function documentation. Explanations of the default metrics, as well as vignettes and case studies, help users to understand how to use the package and interpret results. 
+<!-- TODO: WE WANT TO PROVIDE HELPER FUNCTIONS.  -->
 
-Currently, there exists a large number of packages with partly overlapping functionality. In addition to the already mentioned packages, \pkg{surveillance} \citep{surveillance}, \pkg{predtools} \citep{predtools}, \pkg{probably} \citep{probably} are notable for the scoring rules, plots, and tools they provide to verify and handle forecasts. For inexperienced practitioners, the large number of packages and functions can be overwhelming. \pkg{scoringutils} aims to bridge the gap between existing packages and to make it easier to work with different packages in the ecosystem in a coherent way. It does this by providing helper functions to convert to and from the formats used in different packages, where those are not immediately compatible, as well as by providing vignettes and case studies that illustrate the use of \pkg{scoringutils} in conjunction with other packages. 
-
-<!-- While the package also exports some scoring rules, its main focus is on making it easy to apply any kind of scoring rule the user wants to a set of forecasts.  -->
-<!-- the functionality that facilitates the evaluation process.  -->
-<!-- a framework that practitioners can use to score and compare forecasts across multiple dimensions using arbitrary scoring rules.  -->
- 
-<!-- The remainder of this section will provide an overview of the fundamental ideas behind forecast evaluation. Section \ref{metrics} will give a detailed theoretical explanation of the evaluation metrics in \pkg{scoringutils} and when to use them. Section \ref{evaluation-example} will demonstrate how to conduct an evaluation in \pkg{scoringutils} using forecasts of COVID-19 submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021} as a case study. In the following, we will use the words “model” and “forecaster” interchangeably, regardless of how forecasts were generated.  -->
-
-<!-- # Introduction to forecast evaluation -->
-
-<!-- Any forecaster should aim to provide a predictive distribution $F$ that is equal to the unknown true data-generating distribution $G$ \citep{gneitingProbabilisticForecastsCalibration2007}. For an ideal forecast, we therefore have  -->
-
-<!-- $$ F = G, $$ -->
-
-<!-- where $F$ and $G$ are both cumulative distribution functions. As we don't know the true data-generating distribution $G$, we cannot assess the similarity between the two distributions directly. \cite{gneitingProbabilisticForecastsCalibration2007} instead suggest focusing on two central aspects of the predictive distribution: calibration and sharpness (illustrated in Figure \ref{fig:forecast-paradigm}). Calibration refers to the statistical consistency (i.e., absence of systematic deviations) between the predictive distribution and the observations. One can distinguish several forms of calibration which are discussed in detail by \cite{gneitingProbabilisticForecastsCalibration2007}. Sharpness is a feature of the forecast only and describes how concentrated the predictive distribution is, i.e., how informative the forecasts are. The general forecasting paradigm states that a forecaster should maximise sharpness of the predictive distribution subject to calibration \citep{gneitingProbabilisticForecastsCalibration2007}.  -->
-
-```{r forecast-paradigm, echo = FALSE, eval = FALSE, fig.cap= "Schematic illustration of sharpness (A, B) and calibration (C, D, E). Sharpness is a property of the forecast (black distributions) only, while calibration is the consistency between the forecasts and the observations drawn from the true data-generating distribution (grey histograms). For illustrative purposes, the probability density function (PDF) rather than the cumulative density function (CDF) is shown.", fig.show="hold"}
-
-include_graphics("output/calibration-sharpness-illustration.png")
-```
+The remainder of this paper is structured as follows. 
+- overview of the workflow
+    - validating forecasts
+    - scoring them
 
 # Package overview
 
-The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data shipped with the package. 
+The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data shipped with the package, which contains a subset of forecasts submitted to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}.
 An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
 
-## Basic workflow
+## Basic workflows
 
-\pkg{scoringutils} supports two basic workflows (see Figure \ref{fig:workflow-scoringutils}). One option is for users to score their forecasts directly using the scoring rules exported by \pkg{scoringutils}, using a common interface, in a format based on vectors and matrices. Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score". While it is possible to call the scoring rules directly, most users will likely interact with \pkg{scoringutils} through a more convenient framework based on a `data.frame`-like structure, allowing for the completion of a variety of different tasks such as validating and diagnosing inputs, transforming inputs, scoring, aggregating scores, and visualisation. Internally, \pkg{data.table} \citep{data.table} is used for efficiency. 
+\pkg{scoringutils} supports two basic workflows. Most users will likely interact with \pkg{scoringutils} through a framework based on a `data.frame`-like structure (see Figure \ref{fig:workflow-scoringutils}A). Within this framework they can complete a variety of different tasks such as validating and diagnosing inputs, transforming inputs, scoring, aggregating scores, and visualisation. 
+Users can, however, also apply scoring rules directly to a set of vectors or matrices (see Figure \ref{fig:workflow-scoringutils}B). 
+<!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
 
-```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the workflow for working with scoringutils.", fig.show="hold"}
+```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of potential workflows for evaluation forecasts with scoringutils. A: Workflow for working with forecasts in a data.frame-based format. B: Using scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
 include_graphics("output/workflow.png")
 ```
+
+## Validating forecasts
+
+An evaluation workflow with \pkg{scoringutils} usually starts in the following way: 
+
+```{r, eval=FALSE, echo=TRUE}
+example_quantile |>
+  as_forecast() 
+```
+
+\pkg{scoringutils} expects the input data to be in a specific format, depending on the type of forecast to be scored (see Figure \ref{fig:input-score}). The function \fct{as\_foreecast} validates the input and returns an object of class `forecast_*` (where `*` depends on the forecast type). Any object of class `forecast_*` is a `data.table` and behaves as such, but has dedicated methods for scoring and printing. 
 
 ## Forecast types
 
@@ -177,8 +177,19 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 
 "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
-Forecast types (in the `data.frame` framework) are determined based on the names and the type of the columns present in the input data. Table \ref{fig:input-score} shows the expected input format for each forecast type. Forecast types that are planned, but not currently supported, are greyed out. 
+Forecast types (in the `data.frame` framework) are determined based on the names and the type of the columns present in the input data. Table \ref{fig:input-score} shows the expected input format for each forecast type. 
 Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices. 
+
+
+
+
+<!-- set_forecast_unit( -->
+<!--     c("location", "target_end_date", "target_type",  -->
+<!--       "model", "horizon", "forecast_date") -->
+<!--   ) |> -->
+
+
+
 <!-- The only difference is scoring rules for sample-based forecasts, which, in contrast to the `data.frame` framework, do not require a separate `sample_id` input.  -->
 
 ```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with different input formats.", fig.show="hold"}
