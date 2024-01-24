@@ -33,7 +33,7 @@ get_forecast_type <- function(data) {
   } else {
     stop(
       "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
-      "Are you missing a column `quantile` or `sample_id`? ",
+      "Are you missing a column `quantile_level` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
   }
@@ -77,7 +77,9 @@ test_forecast_type_is_sample <- function(data) {
 test_forecast_type_is_point <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  columns_correct <- test_columns_not_present(
+    data, c("sample_id", "quantile_level")
+  )
   return(observed_correct && predicted_correct && columns_correct)
 }
 

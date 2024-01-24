@@ -30,7 +30,7 @@ Compute the absolute error of the median calculated as
 }
 The median prediction is the predicted value for which quantile_level == 0.5,
 the function therefore requires 0.5 to be among the quantile levels in
-\code{quantile}.
+\code{quantile_level}.
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)

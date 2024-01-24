@@ -1,6 +1,6 @@
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
-  d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
+  d <- d[d$quantile_level == 0.5 | is.na(d$quantile_level), ]
 
   p <-
     d %>%
@@ -69,7 +69,7 @@ test_that("plot_predictions() works without median", {
 
   example3 <- subset(
     scoringutils::example_quantile,
-    is.na(quantile) | quantile != 0.5
+    is.na(quantile_level) | quantile_level != 0.5
   )
 
   p <- example3 %>%
