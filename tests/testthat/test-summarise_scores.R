@@ -29,14 +29,13 @@ test_that("summarise_scores() handles wrong by argument well", {
 })
 
 test_that("summarise_scores() works with point forecasts", {
-  summarised_scores <- summarise_scores(scores_point, by = "model")
-
   expect_no_condition(
     pw_point <- add_pairwise_comparison(
-      summarised_scores,
+      scores_point,
       relative_skill_metric = "se_point"
     )
   )
+  pw_point <- summarise_scores(pw_point, by = "model")
 
   pw_manual <- pairwise_comparison(
     scores_point, by = "model", metric = "se_point"
@@ -50,8 +49,9 @@ test_that("summarise_scores() works with point forecasts", {
 
 test_that("summarise_scores() can compute relative measures", {
   scores_with <- add_pairwise_comparison(
-    summarise_scores(scores_quantile, by = "model")
+    scores_quantile,
   )
+  scores_with <- summarise_scores(scores_with, by = "model")
 
   expect_equal(
     scores_with[, wis_relative_skill],
@@ -59,9 +59,10 @@ test_that("summarise_scores() can compute relative measures", {
   )
 
   scores_with <- add_pairwise_comparison(
-    summarise_scores(scores_quantile, by = "model"),
+    scores_quantile, by = "model",
     relative_skill_metric = "ae_median"
   )
+  scores_with <- summarise_scores(scores_with, by = "model")
 
   expect_equal(
     scores_with[, ae_median_relative_skill],

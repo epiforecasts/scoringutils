@@ -202,7 +202,8 @@ test_that("pairwise_comparison() works", {
 
   eval <- score(data_formatted)
   eval_summarised <- summarise_scores(eval, by = c("model", "location"))
-  eval_with_baseline <- add_pairwise_comparison(eval_summarised, baseline = "m1")
+  eval_with_baseline <- add_pairwise_comparison(eval, by = c("model", "location"), baseline = "m1")
+  eval_with_baseline <- summarise_scores(eval_with_baseline, by = c("model", "location"))
 
   relative_skills_with <- eval_with_baseline[
     location == "location_3",
@@ -273,15 +274,4 @@ test_that("pairwise_comparison() realises when there is no baseline model", {
   expect_error(
     pairwise_comparison(scores_quantile, baseline = "missing_model"), "missing"
   )
-})
-
-test_that("Order of `add_pairwise_comparison()` and `summarise_scores()` doesn't matter", {
-  pw1 <- suppressMessages(add_pairwise_comparison(scores_quantile))
-  pw1_sum <- summarise_scores(pw1, by = "model")
-
-  pw2 <- summarise_scores(scores_quantile, by = "model")
-  pw2 <- add_pairwise_comparison(pw2)
-
-  expect_true(all(pw1_sum == pw2, na.rm = TRUE))
-  expect_true(all(names(attributes(pw2)) == names(attributes(pw1_sum))))
 })
