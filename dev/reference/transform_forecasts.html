@@ -161,7 +161,6 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span><span class="co"># offset before applying the logarithm.</span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
@@ -185,7 +184,6 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span>   fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="log_shift.html">log_shift</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">}</span>, append <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span> <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
@@ -209,7 +207,6 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span>  <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>offset <span class="op">=</span> <span class="fl">1</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases 11.754310       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths  8.419580       Germany          &lt;NA&gt;</span>
@@ -231,7 +228,6 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">sqrt</span>, label <span class="op">=</span> <span class="st">"sqrt"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model   scale          wis overprediction underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-ensemble natural  5796.064569   1828.5715014    2120.6402853</span>
@@ -267,8 +263,6 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">sqrt</span>, label <span class="op">=</span> <span class="st">"sqrt"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type observed location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases   127300       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths     4534       Germany          &lt;NA&gt;</span>

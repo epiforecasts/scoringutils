@@ -600,22 +600,14 @@ targets, we can run</p>
 <span><span class="co">#&gt; 5:   26.87239 -0.02234375            0.4609375            0.8750000</span></span>
 <span><span class="co">#&gt; 6: 5664.37795 -0.07890625            0.4687500            0.7890625</span></span>
 <span><span class="co">#&gt; 7:   31.85692 -0.00512605            0.4201681            0.9075630</span></span>
-<span><span class="co">#&gt;    interval_coverage_deviation   ae_median wis_relative_skill</span></span>
-<span><span class="co">#&gt; 1:                 -0.11721591 38473.60156          1.2947445</span></span>
-<span><span class="co">#&gt; 2:                  0.12142045   233.25781          2.2958723</span></span>
-<span><span class="co">#&gt; 3:                 -0.10230114 24101.07031          0.8156514</span></span>
-<span><span class="co">#&gt; 4:                  0.20380682    53.13281          0.5966310</span></span>
-<span><span class="co">#&gt; 5:                 -0.02488636    78.47656          0.7475873</span></span>
-<span><span class="co">#&gt; 6:                 -0.06963068 27923.81250          0.9469157</span></span>
-<span><span class="co">#&gt; 7:                 -0.04520244   104.74790          0.9765276</span></span>
-<span><span class="co">#&gt;    wis_scaled_relative_skill</span></span>
-<span><span class="co">#&gt; 1:                  1.587375</span></span>
-<span><span class="co">#&gt; 2:                  3.848060</span></span>
-<span><span class="co">#&gt; 3:                  1.000000</span></span>
-<span><span class="co">#&gt; 4:                  1.000000</span></span>
-<span><span class="co">#&gt; 5:                  1.253014</span></span>
-<span><span class="co">#&gt; 6:                  1.160932</span></span>
-<span><span class="co">#&gt; 7:                  1.636736</span></span></code></pre></div>
+<span><span class="co">#&gt;    interval_coverage_deviation   ae_median relative_skill scaled_rel_skill</span></span>
+<span><span class="co">#&gt; 1:                 -0.11721591 38473.60156      1.2947445         1.587375</span></span>
+<span><span class="co">#&gt; 2:                  0.12142045   233.25781      2.2958723         3.848060</span></span>
+<span><span class="co">#&gt; 3:                 -0.10230114 24101.07031      0.8156514         1.000000</span></span>
+<span><span class="co">#&gt; 4:                  0.20380682    53.13281      0.5966310         1.000000</span></span>
+<span><span class="co">#&gt; 5:                 -0.02488636    78.47656      0.7475873         1.253014</span></span>
+<span><span class="co">#&gt; 6:                 -0.06963068 27923.81250      0.9469157         1.160932</span></span>
+<span><span class="co">#&gt; 7:                 -0.04520244   104.74790      0.9765276         1.636736</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -748,23 +740,23 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 14:  epiforecasts-EpiNow2 EuroCOVIDhub-ensemble         1.1618981 1.881520e-02</span></span>
 <span><span class="co">#&gt; 15:  epiforecasts-EpiNow2 EuroCOVIDhub-baseline         0.7297431 9.164893e-18</span></span>
 <span><span class="co">#&gt; 16:  epiforecasts-EpiNow2  epiforecasts-EpiNow2         1.0000000 1.000000e+00</span></span>
-<span><span class="co">#&gt;         adj_pval wis_relative_skill wis_scaled_relative_skill</span></span>
-<span><span class="co">#&gt;  1: 3.665957e-17          1.6032604                 1.0000000</span></span>
-<span><span class="co">#&gt;  2: 1.313732e-19          1.6032604                 1.0000000</span></span>
-<span><span class="co">#&gt;  3: 1.565200e-31          1.6032604                 1.0000000</span></span>
-<span><span class="co">#&gt;  4: 1.000000e+00          1.6032604                 1.0000000</span></span>
-<span><span class="co">#&gt;  5: 1.565200e-31          0.8074916                 0.5036559</span></span>
-<span><span class="co">#&gt;  6: 3.734192e-04          0.8074916                 0.5036559</span></span>
-<span><span class="co">#&gt;  7: 1.881520e-02          0.8074916                 0.5036559</span></span>
-<span><span class="co">#&gt;  8: 1.000000e+00          0.8074916                 0.5036559</span></span>
-<span><span class="co">#&gt;  9: 3.734192e-04          0.7475873                 0.4662919</span></span>
-<span><span class="co">#&gt; 10: 1.450776e-02          0.7475873                 0.4662919</span></span>
-<span><span class="co">#&gt; 11: 1.313732e-19          0.7475873                 0.4662919</span></span>
-<span><span class="co">#&gt; 12: 1.000000e+00          0.7475873                 0.4662919</span></span>
-<span><span class="co">#&gt; 13: 1.450776e-02          1.0332277                 0.6444541</span></span>
-<span><span class="co">#&gt; 14: 1.881520e-02          1.0332277                 0.6444541</span></span>
-<span><span class="co">#&gt; 15: 3.665957e-17          1.0332277                 0.6444541</span></span>
-<span><span class="co">#&gt; 16: 1.000000e+00          1.0332277                 0.6444541</span></span></code></pre></div>
+<span><span class="co">#&gt;         adj_pval relative_skill scaled_rel_skill</span></span>
+<span><span class="co">#&gt;  1: 3.665957e-17      1.6032604        1.0000000</span></span>
+<span><span class="co">#&gt;  2: 1.313732e-19      1.6032604        1.0000000</span></span>
+<span><span class="co">#&gt;  3: 1.565200e-31      1.6032604        1.0000000</span></span>
+<span><span class="co">#&gt;  4: 1.000000e+00      1.6032604        1.0000000</span></span>
+<span><span class="co">#&gt;  5: 1.565200e-31      0.8074916        0.5036559</span></span>
+<span><span class="co">#&gt;  6: 3.734192e-04      0.8074916        0.5036559</span></span>
+<span><span class="co">#&gt;  7: 1.881520e-02      0.8074916        0.5036559</span></span>
+<span><span class="co">#&gt;  8: 1.000000e+00      0.8074916        0.5036559</span></span>
+<span><span class="co">#&gt;  9: 3.734192e-04      0.7475873        0.4662919</span></span>
+<span><span class="co">#&gt; 10: 1.450776e-02      0.7475873        0.4662919</span></span>
+<span><span class="co">#&gt; 11: 1.313732e-19      0.7475873        0.4662919</span></span>
+<span><span class="co">#&gt; 12: 1.000000e+00      0.7475873        0.4662919</span></span>
+<span><span class="co">#&gt; 13: 1.450776e-02      1.0332277        0.6444541</span></span>
+<span><span class="co">#&gt; 14: 1.881520e-02      1.0332277        0.6444541</span></span>
+<span><span class="co">#&gt; 15: 3.665957e-17      1.0332277        0.6444541</span></span>
+<span><span class="co">#&gt; 16: 1.000000e+00      1.0332277        0.6444541</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -781,16 +773,11 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 2:  0.00812500            0.6328125            0.9023438</span></span>
 <span><span class="co">#&gt; 3: -0.02234375            0.4609375            0.8750000</span></span>
 <span><span class="co">#&gt; 4: -0.04336032            0.4453441            0.8461538</span></span>
-<span><span class="co">#&gt;    interval_coverage_deviation   ae_median wis_relative_skill</span></span>
-<span><span class="co">#&gt; 1:                 0.002102273 19353.42969          1.6032604</span></span>
-<span><span class="co">#&gt; 2:                 0.050752841 12077.10156          0.8074916</span></span>
-<span><span class="co">#&gt; 3:                -0.024886364    78.47656          0.7475873</span></span>
-<span><span class="co">#&gt; 4:                -0.057861612 14521.10526          1.0332277</span></span>
-<span><span class="co">#&gt;    wis_scaled_relative_skill</span></span>
-<span><span class="co">#&gt; 1:                 1.0000000</span></span>
-<span><span class="co">#&gt; 2:                 0.5036559</span></span>
-<span><span class="co">#&gt; 3:                 0.4662919</span></span>
-<span><span class="co">#&gt; 4:                 0.6444541</span></span></code></pre></div>
+<span><span class="co">#&gt;    interval_coverage_deviation   ae_median relative_skill scaled_rel_skill</span></span>
+<span><span class="co">#&gt; 1:                 0.002102273 19353.42969      1.6032604        1.0000000</span></span>
+<span><span class="co">#&gt; 2:                 0.050752841 12077.10156      0.8074916        0.5036559</span></span>
+<span><span class="co">#&gt; 3:                -0.024886364    78.47656      0.7475873        0.4662919</span></span>
+<span><span class="co">#&gt; 4:                -0.057861612 14521.10526      1.0332277        0.6444541</span></span></code></pre></div>
 <p>If using the <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> function, we can also
 visualise pairwise comparisons by showing the mean score ratios between
 models. By default, smaller values are better and the model we care
