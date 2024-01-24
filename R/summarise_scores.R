@@ -169,10 +169,7 @@ summarize_scores <- summarise_scores
 #'
 #' @param scores MORE INFO HERE.
 #' @param by character vector with column names to summarise scores by. Default
-#' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over samples or quantiles (in case of quantile-based forecasts), such that
-#' there is one score per forecast as defined by the *unit of a single forecast*
-#' (rather than one score for every sample or quantile).
+#' is "model", meaning that there will be one relative skill score per model.
 #' @param relative_skill_metric character with the name of the metric for which
 #' a relative skill shall be computed. If equal to 'auto' (the default), then
 #' this will be either interval score, CRPS or Brier score (depending on which
@@ -184,25 +181,14 @@ summarize_scores <- summarise_scores
 #' @export
 #' @keywords keyword scoring
 add_pairwise_comparison <- function(scores,
-                                    by = NULL,
+                                    by = "model",
                                     relative_skill_metric = "auto",
                                     baseline = NULL) {
 
-  stored_attributes <- get_scoringutils_attributes(scores)
-
-  if (is.null(stored_attributes[["score_names"]])) {
+  score_names <- get_score_names(scores)
+  if (is.null(score_names)) {
     stop("`scores` needs to have an attribute `score_names` with the names of
          the metrics that were used for scoring.")
-  }
-
-  if (!is.null(attr(scores, "unsummarised_scores"))) {
-    scores <- attr(scores, "unsummarised_scores")
-  }
-
-  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
-    by <- stored_attributes[["scoringutils_by"]]
-  } else if (is.null(by)) {
-    by <- get_forecast_unit(scores)
   }
 
   # check input arguments and check whether relative skill can be computed
@@ -238,13 +224,14 @@ add_pairwise_comparison <- function(scores,
     }
   }
 
-  # add relative skill to list of metric names
-  stored_attributes[["score_names"]] <- c(
-    stored_attributes[["score_names"]],
-    "relative_skill", "scaled_rel_skill"
-  )
-  scores <- assign_attributes(scores, stored_attributes)
-  scores <- summarise_scores(scores, by = by)
+  new_score_names <- paste(relative_skill_metric, "relative_skill", sep = "_")
+  if (!is.null(baseline)) {
+    new_score_names <- c(
+      new_score_names,
+      paste(relative_skill_metric, "scaled_relative_skill", sep = "_")
+    )
+  }
+  scores <- new_scores(scores, score_names = c(score_names, new_score_names))
   return(scores)
 }
 
