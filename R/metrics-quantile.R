@@ -512,7 +512,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' }
 #' The median prediction is the predicted value for which quantile_level == 0.5,
 #' the function therefore requires 0.5 to be among the quantile levels in
-#' `quantile`.
+#' `quantile_level`.
 #' @inheritParams wis
 #' @return numeric vector of length N with the absolute error of the median
 #' @seealso [ae_median_sample()]

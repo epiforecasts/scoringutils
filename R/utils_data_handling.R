@@ -149,7 +149,7 @@ range_long_to_quantile <- function(data,
   # a point forecast. This should probably be dealt with in the future
   data <- data[!(range == 0 & boundary == "upper"), ]
 
-  data[, quantile := ifelse(
+  data[, quantile_level := ifelse(
     boundary == "lower",
     round((100 - range) / 200, 10),
     round((1 - (100 - range) / 200), 10)

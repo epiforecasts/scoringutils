@@ -13,7 +13,7 @@ test_that("range_long_to_quantile works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    quantile = rep(c(0.25, 0.75), each = 10)
+    quantile_level = rep(c(0.25, 0.75), each = 10)
   )
 
   quantile2 <- as.data.frame(scoringutils:::range_long_to_quantile(long))
@@ -28,7 +28,7 @@ test_that("quantile_to_interval.data.frame() works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    quantile = rep(c(0.25, 0.75), each = 10)
+    quantile_level = rep(c(0.25, 0.75), each = 10)
   )
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
@@ -50,7 +50,7 @@ test_that("quantile_to_interval.data.frame() works", {
 
   # check that it handles NA values
   setDT(quantile)
-  quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile") := NA]
+  quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile_level") := NA]
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
   expect_message(
@@ -86,11 +86,11 @@ test_that("sample_to_quantiles works", {
     date = rep(as.Date("2020-01-01") + 1:10, each = 2),
     model = "model1",
     observed = rep(1:10, each = 2),
-    quantile = c(0.25, 0.75),
+    quantile_level = c(0.25, 0.75),
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  quantile2 <- sample_to_quantile(samples, quantiles = c(0.25, 0.75))
+  quantile2 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
 
   expect_equal(quantile, as.data.frame(quantile2))
 
@@ -99,7 +99,7 @@ test_that("sample_to_quantiles works", {
   # If it's not scoped well, the call to `sample_to_quantile()` will fail.
   samples$type <- "test"
 
-  quantile3 <- sample_to_quantile(samples, quantiles = c(0.25, 0.75))
+  quantile3 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
   quantile3$type <- NULL
 
   expect_identical(
@@ -113,7 +113,7 @@ test_that("sample_to_quantiles issue 557 fix", {
 
   out <- example_integer %>%
     sample_to_quantile(
-      quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+      quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
     score()
 
@@ -238,7 +238,7 @@ test_that("quantile_to_interval works - data.frame case", {
   dt <- data.table(
     observed = 5,
     predicted = 1:9,
-    quantile = seq(0.1, 0.9, 0.1)
+    quantile_level = seq(0.1, 0.9, 0.1)
   )
 
   expect_no_condition(
@@ -254,7 +254,7 @@ test_that("quantile_to_interval works - data.frame case", {
   # prediction interval)
   ex <- example_quantile[!is.na(predicted)]
   n_preds <- nrow(ex)
-  n_medians <- nrow(ex[quantile == 0.5])
+  n_medians <- nrow(ex[quantile_level == 0.5])
   ex_interval <- quantile_to_interval(ex, keep_quantile_col = TRUE)
   expect_equal(
     nrow(ex_interval),

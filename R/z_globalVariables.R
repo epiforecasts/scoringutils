@@ -57,7 +57,7 @@ globalVariables(c(
   "point",
   "predicted",
   "pval",
-  "quantile",
+  "quantile_level",
   "ratio",
   "rel_to_baseline",
   "relative_skill",
