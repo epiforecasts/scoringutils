@@ -64,7 +64,7 @@ a vector of predicted values and a vector of quantiles.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_quantile_single_vector</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, <span class="va">na.rm</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bias_quantile_single_vector</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">na.rm</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,10 +78,10 @@ a vector of predicted values and a vector of quantiles.</p>
 that holds predictions</p></dd>
 
 
-<dt>quantile</dt>
-<dd><p>vector of corresponding size N with the quantile levels for
-which predictions were made. If this does not contain the median (0.5) then
-the median is imputed as being the mean of the two innermost quantiles.</p></dd>
+<dt>quantile_level</dt>
+<dd><p>vector of corresponding size N with the quantile levels
+for which predictions were made. If this does not contain the median (0.5)
+then the median is imputed as being the mean of the two innermost quantiles.</p></dd>
 
 
 <dt>na.rm</dt>

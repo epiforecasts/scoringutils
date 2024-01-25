@@ -109,7 +109,7 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 <span><span class="fu">quantile_to_interval</span><span class="op">(</span><span class="va">dt</span>, format <span class="op">=</span> <span class="st">"long"</span>, keep_quantile_col <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for numeric</span></span>
-<span><span class="fu">quantile_to_interval</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">quantile_to_interval</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -119,7 +119,7 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 
 
 <dt>dt</dt>
-<dd><p>a data.table with columns <code>quantile</code> and <code>predicted</code></p></dd>
+<dd><p>a data.table with columns <code>quantile_level</code> and <code>predicted</code></p></dd>
 
 
 <dt>format</dt>
@@ -132,10 +132,10 @@ prediction interval, respectively.</p></dd>
 
 
 <dt>keep_quantile_col</dt>
-<dd><p>keep the quantile column in the final
+<dd><p>keep the <code>quantile_level</code> column in the final
 output after transformation (default is FALSE). This only works if
-<code>format = "long"</code>. If <code>format = "wide"</code>, the quantile column will always be
-dropped.</p></dd>
+<code>format = "long"</code>. If <code>format = "wide"</code>, the <code>quantile_level</code> column will
+always be dropped.</p></dd>
 
 
 <dt>observed</dt>
@@ -147,7 +147,7 @@ dropped.</p></dd>
 <code>observed</code> is a single number, then <code>predicted</code> can be a vector of length N</p></dd>
 
 
-<dt>quantile</dt>
+<dt>quantile_level</dt>
 <dd><p>a numeric vector of quantile levels of size N</p></dd>
 
 </dl></div>
@@ -157,7 +157,7 @@ dropped.</p></dd>
 
 <p><em>quantile_to_interval.data.frame</em>:
 a data.frame in an interval format (either "long" or "wide"), with or
-without a quantile column. Rows will not be reordered.</p>
+without a <code>quantile_level</code> column. Rows will not be reordered.</p>
 
 
 <p><em>quantile_to_interval.numeric</em>:

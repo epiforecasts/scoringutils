@@ -64,7 +64,11 @@ based on plain quantiles.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_to_quantile</span><span class="op">(</span><span class="va">data</span>, quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_to_quantile</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  quantile_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">7</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,8 +77,9 @@ based on plain quantiles.</p>
 <dd><p>a data.frame with samples</p></dd>
 
 
-<dt>quantiles</dt>
-<dd><p>a numeric vector of quantiles to extract</p></dd>
+<dt>quantile_level</dt>
+<dd><p>a numeric vector of quantile levels for which
+quantiles will be computed</p></dd>
 
 
 <dt>type</dt>
@@ -104,18 +109,18 @@ information, see <code><a href="https://rdrr.io/r/stats/quantile.html" class="ex
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5153:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5154:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5155:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      model horizon observed quantile predicted</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:                 &lt;NA&gt;      NA   127300     0.05        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:                 &lt;NA&gt;      NA   127300     0.25        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:                 &lt;NA&gt;      NA   127300     0.50        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:                 &lt;NA&gt;      NA   127300     0.75        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:                 &lt;NA&gt;      NA   127300     0.95        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5151: epiforecasts-EpiNow2       2       78     0.05     44.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5152: epiforecasts-EpiNow2       2       78     0.25     89.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5153: epiforecasts-EpiNow2       2       78     0.50    151.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5154: epiforecasts-EpiNow2       2       78     0.75    208.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5155: epiforecasts-EpiNow2       2       78     0.95    469.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      model horizon observed quantile_level predicted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:                 &lt;NA&gt;      NA   127300           0.05        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:                 &lt;NA&gt;      NA   127300           0.25        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:                 &lt;NA&gt;      NA   127300           0.50        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:                 &lt;NA&gt;      NA   127300           0.75        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:                 &lt;NA&gt;      NA   127300           0.95        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5151: epiforecasts-EpiNow2       2       78           0.05     44.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5152: epiforecasts-EpiNow2       2       78           0.25     89.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5153: epiforecasts-EpiNow2       2       78           0.50    151.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5154: epiforecasts-EpiNow2       2       78           0.75    208.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5155: epiforecasts-EpiNow2       2       78           0.95    469.10</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

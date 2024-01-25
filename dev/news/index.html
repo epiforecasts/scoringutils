@@ -87,7 +87,7 @@
 <li>
 <code>predicted</code>: numeric, a vector (if <code>observed</code> is a scalar) or a matrix (if <code>observed</code> is a vector)</li>
 <li>
-<code>quantile</code>: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as <code>predicted</code>.</li>
+<code>quantile_level</code>: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as <code>predicted</code>.</li>
 </ul></li>
 </ul></li>
 <li>Users can now supply their own scoring rules to <code><a href="../reference/score.html">score()</a></code> as a list of functions. Default scoring rules can be accessed using the functions <code><a href="../reference/rules_point.html">rules_point()</a></code>, <code><a href="../reference/rules_sample.html">rules_sample()</a></code>, <code><a href="../reference/rules_quantile.html">rules_quantile()</a></code> and <code><a href="../reference/rules_binary.html">rules_binary()</a></code>, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of <code><a href="../reference/score.html">score()</a></code> correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules).</li>

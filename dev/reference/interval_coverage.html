@@ -73,7 +73,7 @@ predictive distribution.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, range <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, range <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -91,7 +91,7 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile</dt>
+<dt>quantile_level</dt>
 <dd><p>vector with quantile levels of size N</p></dd>
 
 
@@ -118,8 +118,8 @@ FALSE otherwise.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">quantile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">quantile_level</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  TRUE FALSE FALSE</span>
 </code></pre></div>
     </div>

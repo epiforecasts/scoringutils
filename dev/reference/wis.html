@@ -238,18 +238,18 @@ WIS components can be computed individually using the functions
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">wis</span><span class="op">(</span></span>
 <span>  <span class="va">observed</span>,</span>
 <span>  <span class="va">predicted</span>,</span>
-<span>  <span class="va">quantile</span>,</span>
+<span>  <span class="va">quantile_level</span>,</span>
 <span>  separate_results <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  weigh <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  count_median_twice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dispersion</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">dispersion</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">overprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">overprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">underprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">underprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -267,7 +267,7 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile</dt>
+<dt>quantile_level</dt>
 <dd><p>vector with quantile levels of size N</p></dd>
 
 
@@ -326,8 +326,8 @@ observation)</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">quantile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">wis</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">quantile_level</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">wis</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.36 15.34 19.14</span>
 </code></pre></div>
     </div>
