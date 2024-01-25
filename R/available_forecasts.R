@@ -49,7 +49,7 @@ get_forecast_counts <- function(data,
     by <- forecast_unit
   }
 
-  # collapse several rows to 1, e.g. treat a set of 10 s as one,
+  # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
   collapse_by <- setdiff(
     c(forecast_unit, "quantile_level", "sample_id"),
