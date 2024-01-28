@@ -2,10 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{print.forecast_binary}
 \alias{print.forecast_binary}
-\title{Print information about a \code{forecast_binary} object.}
+\alias{print.forecast_quantile}
+\alias{print.forecast_point}
+\alias{print.forecast_sample}
+\alias{print.forecast_integer}
+\title{Print information about a \code{forecast} object.}
 \usage{
-\method{print}{forecast_binary}(x, ...)
+\method{print}{forecast_binary}(dat, ...)
+
+\method{print}{forecast_quantile}(dat, ...)
+
+\method{print}{forecast_point}(dat, ...)
+
+\method{print}{forecast_sample}(dat, ...)
+
+\method{print}{forecast_integer}(dat, ...)
 }
 \description{
-Print information about a \code{forecast_binary} object.
+This function prints information about a forecast object,
+including "Forecast type", "Score columns",
+"Forecast unit".
 }
+\examples{
+print(example_quantile \%>\% as_forecast)
+}
+\keyword{print-forecast}
