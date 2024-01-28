@@ -8,7 +8,7 @@ print_forecast_info(dat, ...)
 }
 \description{
 This function prints information about a forecast object,
-including "Forecast type", "Protected columns", "score columns",
+including "Forecast type", "Protected columns", "Score columns",
 "Forecast unit".
 }
 \examples{

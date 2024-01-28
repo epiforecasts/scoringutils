@@ -60,7 +60,7 @@ get_forecast_counts <- function(data,
   data <- data[data[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- data[, .(count = .N), by = by]
+  out <- as.data.table(data)[, .(count = .N), by = by]
 
   # make sure that all combinations in "by" are included in the output (with
   # count = 0). To achieve that, take the unique values in data and expand grid
