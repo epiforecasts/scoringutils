@@ -78,3 +78,23 @@ test_that("get_score_names() works as expected", {
     "but are no longer column names of the data: `crps`"
   )
 })
+
+test_that("print() works on forecast_* objects", {
+  # Check print works on each forecast object
+  test_dat <- list(example_binary, example_quantile,
+    example_point, example_continuous, example_integer)
+  for (dat in test_dat){
+    dat <- suppressMessages(as_forecast(dat))
+    expect_output(print(dat), "Forecast type")
+    expect_output(print(dat), "Forecast units")
+  }
+
+  # Check score columns are printed
+  dat <- example_quantile %>%
+    set_forecast_unit(c("location", "target_end_date", 
+      "target_type", "horizon", "model")) %>%
+    as_forecast() %>%
+    add_coverage() %>% 
+    suppressMessages
+  expect_output(print(dat), "Score columns")
+})
