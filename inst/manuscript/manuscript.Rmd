@@ -152,7 +152,7 @@ An overview of all existing functions can be seen on \url{https://epiforecasts.i
 
 ## Basic workflows
 
-\pkg{scoringutils} supports two basic workflows. Most users will likely interact with \pkg{scoringutils} through a framework based on a `data.frame`-like structure (see Figure \ref{fig:workflow-scoringutils}A). Within this framework they can complete a variety of different tasks such as validating and diagnosing inputs, transforming inputs, scoring, aggregating scores, and visualisation. 
+\pkg{scoringutils} supports two basic workflows. Most users will interact with \pkg{scoringutils} through a framework based on a `data.frame`-like structure (see Figure \ref{fig:workflow-scoringutils}A). Within this framework they can complete a variety of different tasks such as validating and diagnosing inputs, transforming inputs, scoring, aggregating scores, and visualisation. 
 Users can, however, also apply scoring rules directly to a set of vectors or matrices (see Figure \ref{fig:workflow-scoringutils}B). 
 <!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
 
@@ -160,51 +160,71 @@ Users can, however, also apply scoring rules directly to a set of vectors or mat
 include_graphics("output/workflow.png")
 ```
 
-## Validating forecasts
+## Input validation and types of forecasts
 
-An evaluation workflow with \pkg{scoringutils} usually starts in the following way: 
+An evaluation workflow with \pkg{scoringutils} usually starts with a data.frame (or similar) containing both the predictions and the observed values. The input data can be processed and validated in the following way: 
 
 ```{r, eval=FALSE, echo=TRUE}
 example_quantile |>
   as_forecast() 
 ```
 
-\pkg{scoringutils} expects the input data to be in a specific format, depending on the type of forecast to be scored (see Figure \ref{fig:input-score}). The function \fct{as\_foreecast} validates the input and returns an object of class `forecast_*` (where `*` depends on the forecast type). Any object of class `forecast_*` is a `data.table` and behaves as such, but has dedicated methods for scoring and printing. 
-
-## Forecast types
-
-Forecasts differ in the exact prediction task and in how the forecaster chooses to represent their prediction. To distinguish different kinds of forecasts, `scoringutils` uses the term "forecast type" (which is more a convenient classification than a formal definition). Currently, `scoringutils` distinguishes four different forecast types: "binary", "point", "quantile" and "sample" forecasts.
+The function \fct{as\_forecast} transforms the input into a forecast object. A forecast object is a `data.table` that has passed some input validations and can have additional attributes. It behaves like a `data.table`, but has additional dedicated methods e.g. for input validation, scoring and printing. There are currently four different kinds of forecast objects with classes `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. These classes correspond to different forecast types: "binary", "point", "quantile" and "sample". 
 
 "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
-Forecast types (in the `data.frame` framework) are determined based on the names and the type of the columns present in the input data. Table \ref{fig:input-score} shows the expected input format for each forecast type. 
-Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices. 
+Each forecast type comes with a specific input format. All forecasts require columns `observed` and `predicted`, but depending on the forecast type, additional requirements may be in place. Table \ref{fig:input-score} shows the expected input format for each forecast type. When converting a `data.frame` (or similar) into a forecast object, the type of the forecast will be determined based on the names and the type of the columns present in the input data. \fct{as\_forecast} will then construct an object of the appropriate `forecast_*` class and validate it using the function \fct{validate\_forecast} (see Figure \ref{fig:flowchart-validation}). Users can call the function \fct{validate\_forecast} directly to validate a forecast object again.
 
-
-
-
-<!-- set_forecast_unit( -->
-<!--     c("location", "target_end_date", "target_type",  -->
-<!--       "model", "horizon", "forecast_date") -->
-<!--   ) |> -->
-
-
-
-<!-- The only difference is scoring rules for sample-based forecasts, which, in contrast to the `data.frame` framework, do not require a separate `sample_id` input.  -->
+<!-- Input formats for the scoring rules that can be called directly usually follow the same convention, with inputs expected to be vectors or matrices.  -->
 
 ```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with different input formats.", fig.show="hold"}
 include_graphics("output/input-score.png")
 ```
 
-## Classes for forecasts
-
-\pkg{scoringutils} uses separate classes that correspond to the different forecast types. Those are currently `forecast_binary`, `forecast_point`, `forecast_quantile`, and `forecast_sample`. These classes are used to allow for dedicated input checks and sensible defaults for the scoring rules to be applied to the forecasts. 
-
-They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. All classes also have a `print()` method designed to provide helpful information to the user. 
-
 ```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
 include_graphics("output/flowchart-create-object.png")
 ```
+
+## The unit of a single forecast {short-title="The unit of a single forecast" #sec:forecastunit}
+
+Probabilistic forecasts are usually composed of several values. A quantile-based forecast, for example, is composed of several quantiles, and a sample-based forecast of multiple samples. Therefore, several rows in the input data can belong together and jointly form a single forecast. For example, a single forecast in a quantile-based format (and the corresponding observation) could be represented by five rows in a data.frame with values `c(0.05, 0.25, 0.5, 0.75, 0.95)` in the column `quantile_level`, `c(1, 4, 5, 6, 9)` in the column `predicted` and the value `7` in the column `observed`. 
+
+Rows are automatically grouped together based on the values in all other columns present in the data (excluding required columns and values computed by \pkg{scoringutils}). The combination of values in those columns form the unit of a single forecast (or "forecast unit") and should uniquely identify a single forecast. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns `model`, `location`, `date`, and `target`, and the forecast unit would be `forecast_unit = c("model", "location", "date", "target")`. 
+As the forecast unit is internally determined based on all existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, "even", that is one if the row number is even and zero otherwise. The existence of this column would change results, as \pkg{scoringutils} assumes it was relevant to grouping the forecasts. You can get the current forecast unit by calling \fct{get\_forecast\_unit} on the data or by simply printing the object if it is of class `forecast_*`.
+
+To avoid issues, we recommend using the function \fct{set\_forecast\_unit} to determine the forecast unit manually. The function simply drops unneeded columns, while retaining required columns and those added by \pkg{scoringutils}. Usually, \fct{set\_forecast\_unit} would be called before \fct{as\_forecast}, but the order can also be swapped. If the input has been validated before (i.e. if an object of class `forecast_*` is passed to \fct{set\_forecast\_unit}), validations will be rerun again to ensure dropping columns has not caused issues.
+
+<!-- MAYBE REWRITE THE FOLLIWNG: "drops unneeded columns, while retaining required columns and those added by \pkg{scoringutils}" to "while retaining so-called 'protected columns'." -->
+<!-- Protected columns are for example those columns that define the forecast and observations, as well as the names of all scores computed throughout the evaluation process. Protected columns will be ignored e.g. by \fct{get\_forecast\_unit} and \fct{set\_forecast\_unit}. You can call \fct{get\_protected\_columns} either on the data to obtain the protected columns currently present or without any arguments to obtain all protected columns.  -->
+
+```{r, eval = FALSE}
+forecast_quantile <- example_quantile |>
+  set_forecast_unit(
+    c("location", "target_end_date", "target_type",
+      "model", "horizon", "forecast_date")
+  ) |>
+  as_forecast()
+```
+
+```{r}
+scoringutils:::get_protected_columns()
+```
+
+<!-- Next to paragraphs could be more concise -->
+\pkg{scoringutils} requires that there be no duplications in the data, either with respect to whole forecasts or to parts of a forecast. Only one forecast per forecast unit is allowed. For instance, continuing the example above, there must not be two forecasts for the same `model`, `location`, `date`, and `target`. 
+For quantile- or sample-based forecasts, there must not be two values with the same `quantile_level` or `sample_id` for a single forecast unit. Predicted values with the same forecast unit, but different quantile levels or sample id will simply interpreted as components of the same forecast. 
+
+The function \fct{get\_duplicate\_forecasts} may be helpful in case \fct{validate\_forecast} returns an error message about duplicate forecasts. Duplicate forecasts can be a sign of an ill-defined forecast unit. For example, if we dropped the column `target_type` in the example data, we would obtain an error about duplicate forecasts. Even though the predicted values differ, there are now two different forecasts for the same forecast unit, since \pkg{scoringutils} cannot distinguish between cases and deaths any more. \fct{get\_duplicate\_forecasts} finds duplicates and returns them for the user to inspect. To remedy the issue, users need to add additional columns that uniquely identify a single forecast.
+
+```{r}
+rbind(example_quantile, example_quantile[1001:1002]) |>
+  get_duplicate_forecasts() 
+```
+
+
+<!-- The only difference is scoring rules for sample-based forecasts, which, in contrast to the `data.frame` framework, do not require a separate `sample_id` input.  -->
+
+<!-- They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. All classes also have a `print()` method designed to provide helpful information to the user.  -->
 
 <!-- COULD MAYBE MENTION THE CLASSES FOR SCORE HERE? -->
 
@@ -330,24 +350,8 @@ score(example_point) |>
   print(2)
 ```
 
-## The unit of a single forecast {short-title="The unit of a single forecast" #sec:forecastunit}
 
-To score forecasts, \pkg{scoringutils} needs to know which of the rows of the data belong together and jointly form a single forecast. This is easy e.g. for point forecast, where there is one row per forecast. Probabilistic forecasts, however, are usually composed of several values. For quantile or sample-based forecasts, there are therefore multiple rows that belong to a single forecast.
 
-The unit of a single forecast (or "forecast unit") is defined by the other columns of the data (except for a few protected columns). A single forecast should be uniquely defined by the combination of values in those columns. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns "model", "location", "date", and "target", and the forecast unit would be `forecast_unit = c("model", "location", "date", "target")`. As the forecast unit is internally determined based on the names of the existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, "even", that is one if the row number is even and zero otherwise. The existence of this column would change results, as \fct{score} assumes it was relevant to grouping the forecasts. You can get the current forecast unit by calling \fct{get\_forecast\_unit} on the data or by simply printing the object if it is of class `forecast_*`.
-
-To avoid issues, we recommend using the function \fct{set\_forecast\_unit} to determine the forecast unit manually. The function simply drops unneeded columns, while making sure that all necessary, 'protected columns' like `predicted` or `observed` are retained. Protected columns are for example those columns that define the forecast and observations, as well as the names of all scores computed throughout the evaluation process. Protected columns will be ignored e.g. by \fct{get\_forecast\_unit} and \fct{set\_forecast\_unit}. You can call \fct{get\_protected\_columns} either on the data to obtain the protected columns currently present or without any arguments to obtain all protected columns. 
-
-```{r}
-scoringutils:::get_protected_columns()
-```
-
-The function \fct{get\_duplicate\_forecasts} may be helpful in case \fct{validate\_forecast} returns an error message about duplicate forecasts. This can occur if there is more than one forecast per forecast unit, e.g. if there are two different forecasts for a single location, date and target. In the case of quantile- and sample-based forecasts, several predicted values make up a single forecast. For these, predicted values will therefore only be considered duplicates if they also have the same quantile level or sample id. Duplicate forecasts can be a sign of an ill-defined forecast unit. For example, if we dropped the column `target_type` in the example data, we would obtain an error about duplicate forecasts. Even though the predicted values differ, there are now two different forecasts for the same forecast unit, as far as \pkg{scoringutils} can tell. \fct{get\_duplicate\_forecasts} finds duplicates and returns them for the user to inspect.
-
-```{r}
-rbind(example_quantile, example_quantile[1001:1002]) |>
-  get_duplicate_forecasts() 
-```
 
 ## Transforming forecasts
 
