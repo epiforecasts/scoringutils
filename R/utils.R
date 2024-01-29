@@ -244,7 +244,3 @@ print.forecast_point <- print.forecast_binary
 #' @rdname print.forecast_binary
 #' @export
 print.forecast_sample <- print.forecast_binary
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_integer <- print.forecast_binary

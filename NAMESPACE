@@ -2,7 +2,6 @@
 
 S3method(as_forecast,default)
 S3method(print,forecast_binary)
-S3method(print,forecast_integer)
 S3method(print,forecast_point)
 S3method(print,forecast_quantile)
 S3method(print,forecast_sample)

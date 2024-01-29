@@ -5,7 +5,6 @@
 \alias{print.forecast_quantile}
 \alias{print.forecast_point}
 \alias{print.forecast_sample}
-\alias{print.forecast_integer}
 \title{Print information about a \code{forecast} object.}
 \usage{
 \method{print}{forecast_binary}(dat, ...)
@@ -15,8 +14,6 @@
 \method{print}{forecast_point}(dat, ...)
 
 \method{print}{forecast_sample}(dat, ...)
-
-\method{print}{forecast_integer}(dat, ...)
 }
 \description{
 This function prints information about a forecast object,
