@@ -206,7 +206,7 @@ ensure_data.table <- function(data) {
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
 #' @export
-#' @keywords print-forecast
+#' @keywords check-forecasts
 #' @examples
 #' print(example_quantile %>% as_forecast)
 print.forecast_binary <- function(dat, ...) {
