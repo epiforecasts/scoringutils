@@ -106,7 +106,7 @@ duplicates <- example_quantile %>%
   ) %>%
   get_duplicate_forecasts()
 
-duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
+duplicates[quantile_level == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
   head()
 ```
 
@@ -184,7 +184,7 @@ scores %>%
 
 ### Scoring point forecasts
 
-Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
+Point forecasts can be scored in a separate format. 
 
 ```{r}
 suppressMessages(score(example_point)) %>%
@@ -273,7 +273,7 @@ example_continuous %>%
 Similarly for quantile-based forecasts: 
 
 ```{r}
-example_quantile[quantile %in% seq(0.1, 0.9, 0.1), ] %>%
+example_quantile[quantile_level %in% seq(0.1, 0.9, 0.1), ] %>%
   pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
@@ -290,12 +290,12 @@ example_quantile %>%
   plot_interval_coverage()
 ```
 
-<!-- To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
+<!-- To visualise quantile coverage, you need to include "quantile_level" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
 
 ```{r, eval=FALSE, include=FALSE}
 example_quantile %>%
   score() %>%
-  summarise_scores(by = c("model", "quantile")) %>%
+  summarise_scores(by = c("model", "quantile_level")) %>%
   plot_quantile_coverage()
 ```
 
@@ -373,7 +373,7 @@ You can convert your sample-based forecasts into a quantile-based format using t
 ```{r}
 example_integer %>%
   sample_to_quantile(
-    quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+    quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
   score()
 ```

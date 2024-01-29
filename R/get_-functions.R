@@ -33,7 +33,7 @@ get_forecast_type <- function(data) {
   } else {
     stop(
       "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
-      "Are you missing a column `quantile` or `sample_id`? ",
+      "Are you missing a column `quantile_level` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
   }
@@ -77,7 +77,9 @@ test_forecast_type_is_sample <- function(data) {
 test_forecast_type_is_point <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  columns_correct <- test_columns_not_present(
+    data, c("sample_id", "quantile_level")
+  )
   return(observed_correct && predicted_correct && columns_correct)
 }
 
@@ -89,7 +91,7 @@ test_forecast_type_is_point <- function(data) {
 test_forecast_type_is_quantile <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "quantile")
+  columns_correct <- test_columns_present(data, "quantile_level")
   return(observed_correct && predicted_correct && columns_correct)
 }
 
@@ -208,7 +210,7 @@ get_forecast_unit <- function(data) {
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value", "range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
@@ -252,7 +254,8 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
-  type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
+  available_type <- c("sample_id", "quantile_level") %in% colnames(data)
+  type <- c("sample_id", "quantile_level")[available_type]
   if (is.null(forecast_unit)) {
     forecast_unit <- get_forecast_unit(data)
   }

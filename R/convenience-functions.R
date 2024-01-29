@@ -242,6 +242,10 @@ set_forecast_unit <- function(data, forecast_unit) {
     forecast_unit <- intersect(forecast_unit, colnames(data))
   }
   keep_cols <- c(get_protected_columns(data), forecast_unit)
-  out <- unique(data[, .SD, .SDcols = keep_cols])[]
+  out <- unique(data[, .SD, .SDcols = keep_cols])
+  # validate that output remains a valid forecast object if input was one before
+  if (is_forecast(out)) {
+    validate_forecast(out)
+  }
   return(out)
 }

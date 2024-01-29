@@ -2,7 +2,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_quantile
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
@@ -14,7 +14,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_binary
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
@@ -25,7 +25,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_continuous
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)

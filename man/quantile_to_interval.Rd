@@ -10,12 +10,12 @@ quantile_to_interval(...)
 
 \method{quantile_to_interval}{data.frame}(dt, format = "long", keep_quantile_col = FALSE, ...)
 
-\method{quantile_to_interval}{numeric}(observed, predicted, quantile, ...)
+\method{quantile_to_interval}{numeric}(observed, predicted, quantile_level, ...)
 }
 \arguments{
 \item{...}{method arguments}
 
-\item{dt}{a data.table with columns \code{quantile} and \code{predicted}}
+\item{dt}{a data.table with columns \code{quantile_level} and \code{predicted}}
 
 \item{format}{the format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column \code{boundary} (with values either "upper"
@@ -24,22 +24,22 @@ If "wide", there will be a column \code{range} and two columns
 \code{lower} and \code{upper} that contain the lower and upper bounds of the
 prediction interval, respectively.}
 
-\item{keep_quantile_col}{keep the quantile column in the final
+\item{keep_quantile_col}{keep the \code{quantile_level} column in the final
 output after transformation (default is FALSE). This only works if
-\code{format = "long"}. If \code{format = "wide"}, the quantile column will always be
-dropped.}
+\code{format = "long"}. If \code{format = "wide"}, the \code{quantile_level} column will
+always be dropped.}
 
 \item{observed}{a numeric vector of observed values of size n}
 
 \item{predicted}{a numeric vector of predicted values of size n x N. If
 \code{observed} is a single number, then \code{predicted} can be a vector of length N}
 
-\item{quantile}{a numeric vector of quantile levels of size N}
+\item{quantile_level}{a numeric vector of quantile levels of size N}
 }
 \value{
 \emph{quantile_to_interval.data.frame}:
 a data.frame in an interval format (either "long" or "wide"), with or
-without a quantile column. Rows will not be reordered.
+without a \code{quantile_level} column. Rows will not be reordered.
 
 \emph{quantile_to_interval.numeric}:
 a data.frame in a wide interval format with columns \code{forecast_id},

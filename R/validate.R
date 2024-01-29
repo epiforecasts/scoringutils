@@ -63,14 +63,17 @@ validate_forecast <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_binary <- function(data, ...) {
   data <- validate_general(data)
 
-  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  columns_correct <- test_columns_not_present(
+    data, c("sample_id", "quantile_level")
+  )
   if (!columns_correct) {
     stop("Checking `data`: Input looks like a binary forecast, but an",
-         "additional column called `sample_id` or `quantile` was found.",
+         "additional column called `sample_id` or `quantile_level` was found.",
          "Please remove the column.")
   }
   input_check <- check_input_binary(data$observed, data$predicted)
@@ -84,6 +87,7 @@ validate_forecast.forecast_binary <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, ...) {
   data <- validate_general(data)
@@ -99,15 +103,17 @@ validate_forecast.forecast_point <- function(data, ...) {
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_quantile <- function(data, ...) {
   data <- validate_general(data)
-  assert_numeric(data$quantile, lower = 0, upper = 1)
+  assert_numeric(data$quantile_level, lower = 0, upper = 1)
   return(data[])
 }
 
 
 #' @export
+#' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_sample <- function(data, ...) {
   data <- validate_general(data)
@@ -143,7 +149,7 @@ validate_general <- function(data) {
   forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data, forecast_unit = forecast_unit))
 
-  # check that the number of forecasts per sample / quantile is the same
+  # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
   if (!is.logical(number_quantiles_samples)) {
     warning(number_quantiles_samples)
@@ -185,6 +191,63 @@ new_forecast <- function(data, classname) {
   class(data) <- c(classname, class(data))
   data <- copy(data)
   return(data[])
+}
+
+
+#' @title Test Whether An Object Is Of Class `forecast_*`
+#'
+#' @description
+#' Generic function to test whether an object is of class `forecast_*`. You
+#' can also test for a specific `forecast_*` class using the appropriate
+#' `is_forecast.forecast_*` method. For example, to check whether an object is
+#' of class `forecast_quantile`, you would use
+#' `scoringutils:::is_forecast.forecast_quantile()`.
+#'
+#' @param x An R object.
+#' @param ... additional arguments
+#' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' forecast_binary <- as_forecast(example_binary)
+#' is_forecast(forecast_binary)
+is_forecast <- function(x, ...) {
+  UseMethod("is_forecast")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast.default <- function(x, ...) {
+  return(FALSE)
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast.forecast_sample <- function(x, ...) {
+  inherits(x, "forecast_sample")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast.forecast_binary <- function(x, ...) {
+  inherits(x, "forecast_binary")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast.forecast_point <- function(x, ...) {
+  inherits(x, "forecast_point")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast.forecast_quantile <- function(x, ...) {
+  inherits(x, "forecast_quantile")
 }
 
 

@@ -80,6 +80,17 @@ test_that("set_forecast_unit() works on input that's not a data.table", {
   )
 })
 
+test_that("set_forecast_unit() revalidates a forecast object", {
+  obj <- as_forecast(na.omit(example_quantile))
+  expect_no_condition(
+    set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
+  )
+  expect_error(
+    set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model")),
+    "There are instances with more than one forecast for the same target."
+  )
+})
+
 
 test_that("function set_forecast_unit() gives warning when column is not there", {
   expect_warning(

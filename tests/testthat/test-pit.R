@@ -56,7 +56,7 @@ test_that("pit function works for continuous integer and quantile data", {
     by = c("model", "location")
   ))
 
-  expect_equal(names(pit1), c("model", "quantile", "pit_value"))
+  expect_equal(names(pit1), c("model", "quantile_level", "pit_value"))
   expect_equal(names(pit2), c("model", "target_type", "pit_value"))
   expect_equal(names(pit3), c("model", "location", "pit_value"))
 })
