@@ -86,7 +86,7 @@ test_that("print() works on forecast_* objects", {
   for (dat in test_dat){
     dat <- suppressMessages(as_forecast(dat))
     expect_output(print(dat), "Forecast type")
-    expect_output(print(dat), "Forecast units")
+    expect_output(print(dat), "Forecast unit")
   }
 
   # Check score columns are printed

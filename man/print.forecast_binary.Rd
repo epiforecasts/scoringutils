@@ -5,15 +5,21 @@
 \alias{print.forecast_quantile}
 \alias{print.forecast_point}
 \alias{print.forecast_sample}
-\title{Print information about a \code{forecast} object.}
+\title{Print Information About A Forecast Object}
 \usage{
-\method{print}{forecast_binary}(dat, ...)
+\method{print}{forecast_binary}(x, ...)
 
-\method{print}{forecast_quantile}(dat, ...)
+\method{print}{forecast_quantile}(x, ...)
 
-\method{print}{forecast_point}(dat, ...)
+\method{print}{forecast_point}(x, ...)
 
-\method{print}{forecast_sample}(dat, ...)
+\method{print}{forecast_sample}(x, ...)
+}
+\arguments{
+\item{x}{An object of class 'forecast_*' object as produced by
+\code{as_forecast()}}
+
+\item{...}{additional arguments for \code{\link[=print]{print()}}}
 }
 \description{
 This function prints information about a forecast object,
@@ -21,6 +27,7 @@ including "Forecast type", "Score columns",
 "Forecast unit".
 }
 \examples{
-print(example_quantile \%>\% as_forecast)
+dat <- as_forecast(example_quantile)
+print(dat)
 }
-\keyword{print-forecast}
+\keyword{check-forecasts}

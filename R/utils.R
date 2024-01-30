@@ -205,15 +205,22 @@ ensure_data.table <- function(data) {
 #' @description This function prints information about a forecast object,
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
+#'
+#' @param x An object of class 'forecast_*' object as produced by
+#' `as_forecast()`
+#' @param ... additional arguments for [print()]
+#' 
+#' @return NULL
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' print(example_quantile %>% as_forecast)
-print.forecast_binary <- function(dat, ...) {
+#' dat <- as_forecast(example_quantile)
+#' print(dat)
+print.forecast_binary <- function(x, ...) {
   # Obtain forecast object information for printing
-  forecast_type <- get_forecast_type(dat)
-  score_cols <- get_score_names(dat)
-  forecast_units <- get_forecast_unit(dat)
+  forecast_type <- get_forecast_type(x)
+  score_cols <- get_score_names(x)
+  forecast_units <- get_forecast_unit(x)
 
   # Print forecast object information
   cat("Forecast type:\n")
@@ -228,9 +235,9 @@ print.forecast_binary <- function(dat, ...) {
   print(forecast_units)
 
   cat("\n")
-  NextMethod(dat, ...)
+  NextMethod(x, ...)
 
-  return(invisible(dat))
+  return(invisible(x))
 }
 
 #' @rdname print.forecast_binary
