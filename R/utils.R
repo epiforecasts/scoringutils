@@ -220,7 +220,7 @@ print.forecast_binary <- function(x, ...) {
   # Obtain forecast object information for printing
   forecast_type <- get_forecast_type(x)
   score_cols <- get_score_names(x)
-  forecast_units <- get_forecast_unit(x)
+  forecast_unit <- get_forecast_unit(x)
 
   # Print forecast object information
   cat("Forecast type:\n")
@@ -232,7 +232,7 @@ print.forecast_binary <- function(x, ...) {
   }
 
   cat("\nForecast unit:\n")
-  print(forecast_units)
+  print(forecast_unit)
 
   cat("\n")
   NextMethod(x, ...)
