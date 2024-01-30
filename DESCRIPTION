@@ -21,6 +21,10 @@ Authors@R: c(
            role = c("ctb"),
            email = "johannes.bracher@kit.edu",
            comment = c(ORCID = "0000-0002-3777-1410")), 
+    person(given = "Toshiaki Asakura",
+           role = c("ctb"),
+           email = "toshiaki.asa9ra@gmail.com",
+           comment = c(ORCID = "0000-0001-8838-785X")), 
     person("Sebastian", "Funk", 
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("aut")))
