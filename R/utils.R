@@ -201,7 +201,7 @@ ensure_data.table <- function(data) {
   return(data)
 }
 
-#' @title Print information about a `forecast` object.
+#' @title Print Information About A Forecast Object
 #' @description This function prints information about a forecast object,
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
