@@ -224,7 +224,7 @@ print.forecast_binary <- function(dat, ...) {
     print(score_cols)
   }
 
-  cat("\nForecast units:\n")
+  cat("\nForecast unit:\n")
   print(forecast_units)
 
   cat("\n")
