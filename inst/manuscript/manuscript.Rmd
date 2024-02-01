@@ -147,8 +147,9 @@ The remainder of this paper is structured as follows.
 
 # Package overview
 
-The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data shipped with the package, which contains a subset of forecasts submitted to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}.
-An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
+The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data shipped with the package, which is based on a subset of case and death forecasts submitted every week between May and September 2021 to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
+
+<!-- Forecasts were originally submitted in a quantile-based format (see below), but were converted to different formats and are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.  -->
 
 ## Basic workflows
 
@@ -156,7 +157,7 @@ An overview of all existing functions can be seen on \url{https://epiforecasts.i
 Users can, however, also apply scoring rules directly to a set of vectors or matrices (see Figure \ref{fig:workflow-scoringutils}B). 
 <!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
 
-```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of potential workflows for evaluation forecasts with scoringutils. A: Workflow for working with forecasts in a data.frame-based format. B: Using scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
+```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of potential workflows for evaluating forecasts with scoringutils. A: Workflow for working with forecasts in a data.frame-based format. B: Using scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
 include_graphics("output/workflow.png")
 ```
 
@@ -171,9 +172,15 @@ example_quantile |>
 
 The function \fct{as\_forecast} transforms the input into a forecast object. A forecast object is a `data.table` that has passed some input validations and can have additional attributes. It behaves like a `data.table`, but has additional dedicated methods e.g. for input validation, scoring and printing. There are currently four different kinds of forecast objects with classes `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. These classes correspond to different forecast types: "binary", "point", "quantile" and "sample". 
 
-"Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
+- "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". 
+- "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number. 
+- "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. 
+- "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
-Each forecast type comes with a specific input format. All forecasts require columns `observed` and `predicted`, but depending on the forecast type, additional requirements may be in place. Table \ref{fig:input-score} shows the expected input format for each forecast type. When converting a `data.frame` (or similar) into a forecast object, the type of the forecast will be determined based on the names and the type of the columns present in the input data. \fct{as\_forecast} will then construct an object of the appropriate `forecast_*` class and validate it using the function \fct{validate\_forecast} (see Figure \ref{fig:flowchart-validation}). Users can call the function \fct{validate\_forecast} directly to validate a forecast object again.
+Each forecast type comes with a specific input format. All forecasts require columns `observed` and `predicted`, but depending on the forecast type, there may be additional requirements. Table \ref{fig:input-score} shows the expected input format for each forecast type. When converting a `data.frame` (or similar) into a forecast object, the type of the forecast will be determined based on the names and the type of the columns present in the input data. \fct{as\_forecast} will then construct an object of the appropriate `forecast_*` class and validate it using the function \fct{validate\_forecast} (see Figure \ref{fig:flowchart-validation}). Users can call the function \fct{validate\_forecast} directly to validate a forecast object again. 
+The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions.
+
+
 
 <!-- Input formats for the scoring rules that can be called directly usually follow the same convention, with inputs expected to be vectors or matrices.  -->
 
@@ -227,22 +234,6 @@ rbind(example_quantile, example_quantile[1001:1002]) |>
 <!-- They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. All classes also have a `print()` method designed to provide helpful information to the user.  -->
 
 <!-- COULD MAYBE MENTION THE CLASSES FOR SCORE HERE? -->
-
-## Example data
-
-The example data included in the package and used in this paper consists of one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different forecasting models. It represents a small subset of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. One to four weeks ahead predictions of different COVID-19 related targets were submitted to the Forecast Hub each week in a quantile-based format. The full official hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. The example data was converted to all the different forecast types used in \pkg{scoringutils}, to illustrate the workflows and provide users with a reference for the correct input formats. The example data also contains observations without corresponding forecasts, both for the purposes of plotting the data and to make the example data more realistic. The stored data sets are called `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.
-
-Here is the output after turning the quantile example into an object of class `forecast_quantile`: 
-<!-- Add version of it where we print it in a pipe?  -->
-<!-- Add a call to class and attributes -->
-
-```{r example-data, fig.pos = "!h", out.width="100%", fig.cap= "Output of validating the example data.", fig.show="hold"}
-library(scoringutils)
-print(example_quantile, 2)
-
-quantile_forecast <- as_forecast(example_quantile) 
-class(quantile_forecast)
-```
 
 ## Diagnostic functions that provide additional information about the data
 <!-- Maybe move this up -->
