@@ -60,17 +60,19 @@ add_coverage <- function(data) {
     interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
 
-  data[, range := get_range_from_quantile(quantile_level)]
+  data[, interval_range := get_range_from_quantile(quantile_level)]
 
-  data <- merge(data, interval_data, by = unique(c(forecast_unit, "range")))
-  data[, interval_coverage_deviation := interval_coverage - range / 100]
+  data <- merge(data, interval_data,
+                by = unique(c(forecast_unit, "interval_range")))
+  data[, interval_coverage_deviation :=
+         interval_coverage - interval_range / 100]
   data[, quantile_coverage := observed <= predicted]
   data[, quantile_coverage_deviation := quantile_coverage - quantile_level]
 
   # reset column order
   new_metrics <- c("interval_coverage", "interval_coverage_deviation",
                    "quantile_coverage", "quantile_coverage_deviation")
-  setcolorder(data, unique(c(data_cols, "range", new_metrics)))
+  setcolorder(data, unique(c(data_cols, "interval_range", new_metrics)))
 
   # add coverage "metrics" to list of stored metrics
   # this makes it possible to use `summarise_scores()` later on

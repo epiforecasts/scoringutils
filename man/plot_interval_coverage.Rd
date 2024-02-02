@@ -8,8 +8,8 @@ plot_interval_coverage(scores, colour = "model")
 }
 \arguments{
 \item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
-in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
+produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "interval_range"
+must be included in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
@@ -25,6 +25,6 @@ Plot interval coverage
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 data_coverage <- add_coverage(example_quantile)
-summarised <- summarise_scores(data_coverage, by = c("model", "range"))
+summarised <- summarise_scores(data_coverage, by = c("model", "interval_range"))
 plot_interval_coverage(summarised)
 }

@@ -116,7 +116,7 @@ pairwise_comparison <- function(scores,
     )
   }
 
-  # summarise scores over everything (e.g. quantiles, ranges or samples) in
+  # summarise scores over everything (e.g. quantiles, interval ranges or samples) in
   # order to not to include those in the calculation of relative scores. Also
   # gets rid of all unnecessary columns and keep only metric and forecast unit
   scores <- scores[, lapply(.SD, mean, na.rm = TRUE),

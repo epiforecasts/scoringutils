@@ -211,7 +211,7 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
-    "pit_value", "range", "boundary",
+    "pit_value", "interval_range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
     available_metrics(),

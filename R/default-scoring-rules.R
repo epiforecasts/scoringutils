@@ -132,18 +132,18 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #' - "bias" = [bias_quantile()]
 #' - "interval_coverage_50" = [interval_coverage()]
 #' - "interval_coverage_90" = function(...) \{
-#'      run_safely(..., range = 90, fun = [interval_coverage])
+#'      run_safely(..., interval_range = 90, fun = [interval_coverage])
 #'   \}
 #' - "interval_coverage_deviation" = [interval_coverage_deviation()],
 #' - "ae_median" = [ae_median_quantile()]
 #'
-#' Note: The `coverage_90` scoring rule is created as a wrapper around
+#' Note: The `interval_coverage_90` scoring rule is created as a wrapper around
 #' [interval_coverage()], making use of the function [run_safely()].
 #' This construct allows the function to deal with arbitrary arguments in `...`,
 #' while making sure that only those that [interval_coverage()] can
-#' accept get passed on to it. `range = 90` is set in the function definition,
-#' as passing an argument `range = 90` to [score()] would mean it would also
-#' get passed to `coverage_50`.
+#' accept get passed on to it. `interval_range = 90` is set in the function definition,
+#' as passing an argument `interval_range = 90` to [score()] would mean it would also
+#' get passed to `interval_coverage_50`.
 #' @inherit select_rules params return
 #' @export
 #' @keywords metric
@@ -159,7 +159,7 @@ rules_quantile <- function(select = NULL, exclude = NULL) {
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
     interval_coverage_90 = function(...) {
-      run_safely(..., range = 90, fun = interval_coverage)
+      run_safely(..., interval_range = 90, fun = interval_coverage)
     },
     interval_coverage_deviation = interval_coverage_deviation,
     ae_median = ae_median_quantile

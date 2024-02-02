@@ -433,16 +433,16 @@
 <polyline points='44.74,400.08 47.48,400.08 ' style='stroke-width: 1.07; stroke: #CCCCCC; stroke-linecap: butt;' />
 <text x='381.00' y='529.04' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='80.13px' lengthAdjust='spacingAndGlyphs'>target_end_date</text>
 <text transform='translate(13.05,281.00) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='127.20px' lengthAdjust='spacingAndGlyphs'>True and predicted values</text>
-<text x='309.89' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='28.14px' lengthAdjust='spacingAndGlyphs'>range</text>
-<rect x='343.50' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #F1F1F1;' />
-<line x1='345.23' y1='556.40' x2='359.06' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
-<rect x='381.53' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #D6D6D6;' />
-<line x1='383.26' y1='556.40' x2='397.08' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
-<rect x='419.56' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #BCBCBC;' />
-<line x1='421.29' y1='556.40' x2='435.11' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
-<text x='366.26' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>95</text>
-<text x='404.29' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>90</text>
-<text x='442.32' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>50</text>
+<text x='289.10' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='69.72px' lengthAdjust='spacingAndGlyphs'>interval_range</text>
+<rect x='364.29' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #F1F1F1;' />
+<line x1='366.02' y1='556.40' x2='379.85' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
+<rect x='402.32' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #D6D6D6;' />
+<line x1='404.05' y1='556.40' x2='417.87' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
+<rect x='440.35' y='547.76' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #BCBCBC;' />
+<line x1='442.08' y1='556.40' x2='455.90' y2='556.40' style='stroke-width: 0.85; stroke-linecap: butt;' />
+<text x='387.05' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>95</text>
+<text x='425.08' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>90</text>
+<text x='463.11' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>50</text>
 <text x='47.48' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='176.12px' lengthAdjust='spacingAndGlyphs'>many_quantiles_from_sample</text>
 </g>
 </svg>

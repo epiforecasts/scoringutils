@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{get_range_from_quantile}
 \alias{get_range_from_quantile}
-\title{Get Range Belonging to a Quantile}
+\title{Get Interval Range Belonging to a Quantile}
 \usage{
 get_range_from_quantile(quantile_level)
 }

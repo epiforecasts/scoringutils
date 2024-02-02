@@ -589,15 +589,15 @@ test_that("wis is the sum of overprediction, underprediction, dispersion", {
 # ============================================================================ #
 test_that("interval_coverage works", {
   expect_equal(
-    interval_coverage(observed, predicted, quantile_level, range = 50),
+    interval_coverage(observed, predicted, quantile_level, interval_range = 50),
     c(TRUE, FALSE, FALSE)
   )
 })
 
 test_that("interval_coverage rejects wrong inputs", {
   expect_error(
-    interval_coverage(observed, predicted, quantile_level, range = c(50, 0)),
-    "Assertion on 'range' failed: Must have length 1."
+    interval_coverage(observed, predicted, quantile_level, interval_range = c(50, 0)),
+    "Assertion on 'interval_range' failed: Must have length 1."
   )
 })
 
@@ -606,9 +606,9 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
   dropped_quantiles <- quantile_level[-4]
   expect_warning(
     interval_coverage(
-      observed, dropped_quantile_pred, dropped_quantiles, range = 50
+      observed, dropped_quantile_pred, dropped_quantiles, interval_range = 50
     ),
-    "To compute the interval coverage for a range of 50%, the `0.25, 0.75` quantiles are required. Returning `NA`"
+    "To compute the interval coverage for an interval range of 50%, the `0.25, 0.75` quantiles are required. Returning `NA`"
   )
 })
 
@@ -620,8 +620,8 @@ test_that("interval_coverage_deviation works", {
   existing_ranges <- unique(get_range_from_quantile(quantile_level))
   expect_equal(existing_ranges, c(80, 50, 0))
 
-  cov_50 <- interval_coverage(observed, predicted, quantile_level, range = c(50))
-  cov_80 <- interval_coverage(observed, predicted, quantile_level, range = c(80))
+  cov_50 <- interval_coverage(observed, predicted, quantile_level, interval_range = c(50))
+  cov_80 <- interval_coverage(observed, predicted, quantile_level, interval_range = c(80))
   manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
 
   expect_equal(

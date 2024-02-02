@@ -45,6 +45,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Added unit tests for `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.
 - Documentation pkgdown pages are now created both for the stable and dev versions.
 - Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.
+- "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 
 # scoringutils 1.2.2
 

@@ -42,8 +42,9 @@
 #' \eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
 #' the prediction interval. For a 90% prediction interval, for example,
 #' \eqn{\alpha}{alpha} is equal to 0.1. No specific distribution is assumed,
-#' but the range has to be symmetric (i.e you can't use the 0.1 quantile
-#' as the lower bound and the 0.7 quantile as the upper).
+#' but the interval formed by the quantiles has to be symmetric around the
+#' median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
+#' quantile as the upper bound).
 #' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
 #' Usually the interval score is weighted by a factor that makes sure that the
@@ -133,7 +134,7 @@ wis <- function(observed,
       observed = observed,
       lower = lower,
       upper = upper,
-      interval_range = range,
+      interval_range = interval_range,
       weigh = weigh,
       separate_results = separate_results
     )
@@ -142,7 +143,7 @@ wis <- function(observed,
   if (count_median_twice) {
     reformatted[, weight := 1]
   } else {
-    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
+    reformatted[, weight := ifelse(interval_range == 0, 0.5, 1)]
   }
 
   # summarise results by forecast_id
@@ -224,9 +225,9 @@ underprediction <- function(observed, predicted, quantile_level, ...) {
 #' prediction interval is formed by the 0.25 and 0.75 quantiles of the
 #' predictive distribution.
 #' @inheritParams wis
-#' @param range A single number with the range of the prediction interval in
-#' percent (e.g. 50 for a 50% prediction interval) for which you want to compute
-#' interval coverage.
+#' @param interval_range A single number with the range of the prediction
+#' interval in percent (e.g. 50 for a 50% prediction interval) for which you
+#' want to compute interval coverage.
 #' @importFrom checkmate assert_number
 #' @return A vector of length n with elements either TRUE,
 #' if the observed value is within the corresponding prediction interval, and
@@ -243,21 +244,25 @@ underprediction <- function(observed, predicted, quantile_level, ...) {
 #' )
 #' quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 #' interval_coverage(observed, predicted, quantile_level)
-interval_coverage <- function(observed, predicted, quantile_level, range = 50) {
+interval_coverage <- function(observed, predicted,
+                              quantile_level, interval_range = 50) {
   assert_input_quantile(observed, predicted, quantile_level)
-  assert_number(range)
-  necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
+  assert_number(interval_range)
+  necessary_quantiles <- c(
+    (100 - interval_range) / 2,
+    100 - (100 - interval_range) / 2
+  ) / 100
   if (!all(necessary_quantiles %in% quantile_level)) {
     warning(
-      "To compute the interval coverage for a range of ", range,
-      "%, the `", toString(necessary_quantiles),
+      "To compute the interval coverage for an interval range of ",
+      interval_range, "%, the `", toString(necessary_quantiles),
       "` quantiles are required. Returning `NA`."
     )
     return(NA)
   }
-  r <- range
+  r <- interval_range
   reformatted <- quantile_to_interval(observed, predicted, quantile_level)
-  reformatted <- reformatted[range %in% r]
+  reformatted <- reformatted[interval_range %in% r]
   reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
   return(reformatted$interval_coverage)
 }
@@ -340,9 +345,10 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 
   reformatted <- quantile_to_interval(
     observed, predicted, quantile_level
-  )[range != 0]
+  )[interval_range != 0]
   reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
-  reformatted[, interval_coverage_deviation := interval_coverage - range / 100]
+  reformatted[, interval_coverage_deviation :=
+                interval_coverage - interval_range / 100]
   out <- reformatted[, .(
     interval_coverage_deviation = mean(interval_coverage_deviation)
   ), by = "forecast_id"]
@@ -654,7 +660,7 @@ wis_one_to_one <- function(observed,
       observed = observed,
       lower = lower,
       upper = upper,
-      interval_range = range,
+      interval_range = interval_range,
       weigh = weigh,
       separate_results = separate_results
     )
@@ -665,12 +671,12 @@ wis_one_to_one <- function(observed,
                measure.vars = c("lower", "upper"),
                variable.name = "boundary",
                value.name = "predicted",
-               id.vars = c("forecast_id", "observed", "range", cols))
+               id.vars = c("forecast_id", "observed", "interval_range", cols))
   # calculate quantile levels
-  long[, quantile_level := (100 - range) / 200] # lower quantile_levels
+  long[, quantile_level := (100 - interval_range) / 200] # lower quantile_levels
   long[boundary == "upper", quantile_level :=  1 - quantile_level] # upper quantile_levels
-  # remove boundary, range, take unique value to get rid of duplicated median
-  long[, c("boundary", "range") := NULL]
+  # remove boundary, interval_range, take unique value to get rid of duplicated median
+  long[, c("boundary", "interval_range") := NULL]
   long <- unique(long) # should maybe check for count_median_twice?
   out <- merge(
     original_data, long, all.x = TRUE,
