@@ -209,7 +209,6 @@ ensure_data.table <- function(data) {
 #' @param x An object of class 'forecast_*' object as produced by
 #' `as_forecast()`
 #' @param ... additional arguments for [print()]
-#' 
 #' @return NULL
 #' @export
 #' @keywords check-forecasts
