@@ -12,6 +12,9 @@ test_that("get_forecast_counts() works as expected", {
   expect_equal(nrow(af), 4)
   expect_equal(af$`count`, c(256, 256, 128, 247))
 
+  # Ensure the returning object class is exactly same as a data.table.
+  expect_s3_class(af, c("data.table", "data.frame"), exact = TRUE)
+
   # Setting `collapse = c()` means that all quantiles and samples are counted
   af <- get_forecast_counts(
     na.omit(example_quantile),
