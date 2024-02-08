@@ -20,7 +20,7 @@ authors:
 reference:
         - title: Package documentation
           contents:
-                - scoringutils
+                - scoringutils-package
         - title: Functions to analyse inputs and obtain useful information
           contents:
                 - has_keyword("check-forecasts")
