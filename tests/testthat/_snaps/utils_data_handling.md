@@ -3,7 +3,9 @@
     Code
       out1
     Output
+      Key: <forecast_id, observed, range>
          forecast_id observed range lower upper
+               <int>    <num> <num> <int> <int>
       1:           1        5     0     5     5
       2:           1        5    20     4     6
       3:           1        5    40     3     7
@@ -15,7 +17,9 @@
     Code
       out3
     Output
+      Key: <forecast_id, observed, range>
          forecast_id observed range lower upper
+               <int>    <num> <num> <int> <int>
       1:           1        5     0     5     5
       2:           1        5    20     4     6
       3:           1        5    40     3     7
@@ -27,7 +31,9 @@
     Code
       out4
     Output
+      Key: <forecast_id, observed, range>
          forecast_id observed range lower upper
+               <int>    <num> <num> <int> <int>
       1:           1        5     0     5     5
       2:           1        5    20     4     6
       3:           1        5    40     3     7
@@ -40,7 +46,9 @@
     Code
       out1
     Output
+      Key: <forecast_id, observed, range>
           forecast_id observed range lower upper
+                <int>    <num> <num> <int> <int>
        1:           1       21     0    21    21
        2:           1       21    20    16    26
        3:           1       21    40    11    31
