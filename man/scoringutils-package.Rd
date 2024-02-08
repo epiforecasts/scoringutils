@@ -2,7 +2,6 @@
 % Please edit documentation in R/scoringutils-package.R, R/scoringutils.R
 \docType{package}
 \name{scoringutils-package}
-\alias{scoringutils}
 \alias{scoringutils-package}
 \title{scoringutils: Utilities for Scoring and Assessing Predictions}
 \description{

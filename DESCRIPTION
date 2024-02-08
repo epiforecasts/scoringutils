@@ -72,7 +72,7 @@ Config/Needs/website:
     r-lib/pkgdown,
     amirmasoudabdol/preferably
 Config/testthat/edition: 3
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://doi.org/10.48550/arXiv.2205.07090, https://epiforecasts.io/scoringutils/, https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
