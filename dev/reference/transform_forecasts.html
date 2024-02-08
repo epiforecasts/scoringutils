@@ -8,7 +8,7 @@ scoring."><meta name="robots" content="noindex"><!-- mathjax --><script src="htt
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
@@ -164,20 +164,23 @@ medRxiv 2023.01.23.23284722
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;     &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases 11.754302       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths  8.419360       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       DE      2021-01-09       Cases 11.950677       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       DE      2021-01-09      Deaths  8.718827       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       DE      2021-01-16       Cases 11.609898       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       DE      2021-01-16      Deaths  8.677099       Germany          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted model horizon</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA  &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted  model horizon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;     &lt;num&gt; &lt;char&gt;   &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA   &lt;NA&gt;      NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># alternatively, integrating the truncation in the transformation function:</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -188,20 +191,23 @@ medRxiv 2023.01.23.23284722
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detected zeros in input values.Try specifying offset = 1 (or any other offset).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;     &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases 11.754302       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths  8.419360       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       DE      2021-01-09       Cases 11.950677       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       DE      2021-01-09      Deaths  8.718827       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       DE      2021-01-16       Cases 11.609898       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       DE      2021-01-16      Deaths  8.677099       Germany          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted model horizon</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA  &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted  model horizon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;     &lt;num&gt; &lt;char&gt;   &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA   &lt;NA&gt;      NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specifying an offset for the log transformation removes the</span></span></span>
 <span class="r-in"><span><span class="co"># warning caused by zeros in the data</span></span></span>
@@ -210,20 +216,23 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>offset <span class="op">=</span> <span class="fl">1</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type  observed location_name forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;     &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases 11.754310       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths  8.419580       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       DE      2021-01-09       Cases 11.950683       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       DE      2021-01-09      Deaths  8.718991       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       DE      2021-01-16       Cases 11.609907       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       DE      2021-01-16      Deaths  8.677269       Germany          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted model horizon</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA  &lt;NA&gt;      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA  &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted  model horizon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;     &lt;num&gt; &lt;char&gt;   &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA   &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA   &lt;NA&gt;      NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># adding square root transformed forecasts to the original ones</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -234,6 +243,7 @@ medRxiv 2023.01.23.23284722
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model   scale          wis overprediction underprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;  &lt;char&gt;        &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-ensemble natural  5796.064569   1828.5715014    2120.6402853</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-baseline natural 11124.930667   3884.4414062    5143.5356658</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  epiforecasts-EpiNow2 natural  7514.375476   2866.4071466    1697.2341137</span>
@@ -243,6 +253,7 @@ medRxiv 2023.01.23.23284722
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  epiforecasts-EpiNow2    sqrt    17.704899      6.5700431       5.7235785</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:       UMass-MechBayes    sqrt     1.328653      0.3273746       0.4019195</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      dispersion        bias interval_coverage_50 interval_coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;       &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 1846.8527819  0.00812500            0.6328125            0.9023438</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: 2096.9535954  0.21816406            0.4960938            0.9101562</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: 2950.7342158 -0.04336032            0.4453441            0.8461538</span>
@@ -252,6 +263,7 @@ medRxiv 2023.01.23.23284722
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:    5.4112770 -0.04336032            0.4453441            0.8461538</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:    0.5993586 -0.02234375            0.4609375            0.8750000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_deviation    ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;        &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:                 0.050752841  8880.542969</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:                 0.003522727 16156.871094</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:                -0.057861612 11208.072874</span>
@@ -270,19 +282,21 @@ medRxiv 2023.01.23.23284722
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type observed location_name forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases   127300       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       DE      2021-01-02      Deaths     4534       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       DE      2021-01-09       Cases   154922       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       DE      2021-01-09      Deaths     6117       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       DE      2021-01-16       Cases   110183       Germany          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       DE      2021-01-16      Deaths     5867       Germany          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted model horizon   scale</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA  &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA  &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA  &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA  &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA  &lt;NA&gt;      NA natural</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA  &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    quantile_level predicted  model horizon   scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;     &lt;num&gt; &lt;char&gt;   &lt;num&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             NA        NA   &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             NA        NA   &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             NA        NA   &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             NA        NA   &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             NA        NA   &lt;NA&gt;      NA natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             NA        NA   &lt;NA&gt;      NA natural</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

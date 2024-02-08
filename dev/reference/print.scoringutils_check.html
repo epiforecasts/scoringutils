@@ -8,7 +8,7 @@ check_forecasts()"><meta name="robots" content="noindex"><!-- mathjax --><script
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
@@ -85,7 +85,9 @@ check_forecasts()"><meta name="robots" content="noindex"><!-- mathjax --><script
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">check</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">check</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type observed location_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE      2021-01-02       Cases   127300       Germany</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE      2021-01-02      Deaths     4534       Germany</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     3:       DE      2021-01-09       Cases   154922       Germany</span>
@@ -98,6 +100,7 @@ check_forecasts()"><meta name="robots" content="noindex"><!-- mathjax --><script
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20544:       IT      2021-07-24      Deaths       78         Italy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20545:       IT      2021-07-24      Deaths       78         Italy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        forecast_date quantile_level predicted                model horizon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;Date&gt;          &lt;num&gt;     &lt;int&gt;               &lt;char&gt;   &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     2:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     3:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>

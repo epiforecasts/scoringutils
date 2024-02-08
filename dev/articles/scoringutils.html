@@ -23,7 +23,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
@@ -80,7 +80,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-01-25</h4>
+            <h4 data-toc-skip class="date">2024-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="d-none name"><code>scoringutils.Rmd</code></div>
@@ -192,20 +192,23 @@ class <code>forecast_*</code> have a print method that provides
 additional information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Key: &lt;location, target_end_date, target_type&gt;</span></span>
 <span><span class="co">#&gt;    location target_end_date target_type observed location_name forecast_date</span></span>
+<span><span class="co">#&gt;      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span></span>
 <span><span class="co">#&gt; 1:       DE      2021-01-02       Cases   127300       Germany          &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 2:       DE      2021-01-02      Deaths     4534       Germany          &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 3:       DE      2021-01-09       Cases   154922       Germany          &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 4:       DE      2021-01-09      Deaths     6117       Germany          &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 5:       DE      2021-01-16       Cases   110183       Germany          &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 6:       DE      2021-01-16      Deaths     5867       Germany          &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;    quantile_level predicted model horizon</span></span>
-<span><span class="co">#&gt; 1:             NA        NA  &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt; 2:             NA        NA  &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt; 3:             NA        NA  &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt; 4:             NA        NA  &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt; 5:             NA        NA  &lt;NA&gt;      NA</span></span>
-<span><span class="co">#&gt; 6:             NA        NA  &lt;NA&gt;      NA</span></span></code></pre></div>
+<span><span class="co">#&gt;    quantile_level predicted  model horizon</span></span>
+<span><span class="co">#&gt;             &lt;num&gt;     &lt;int&gt; &lt;char&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:             NA        NA   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 2:             NA        NA   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 3:             NA        NA   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 4:             NA        NA   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 5:             NA        NA   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 6:             NA        NA   &lt;NA&gt;      NA</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span></span>
@@ -216,7 +219,9 @@ additional information.</p>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span></span>
 <span><span class="va">forecast_quantile</span></span>
+<span><span class="co">#&gt; Key: &lt;location, target_end_date, target_type&gt;</span></span>
 <span><span class="co">#&gt;        observed quantile_level predicted                model location</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;          &lt;num&gt;     &lt;int&gt;               &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">#&gt;     1:   127300             NA        NA                 &lt;NA&gt;       DE</span></span>
 <span><span class="co">#&gt;     2:     4534             NA        NA                 &lt;NA&gt;       DE</span></span>
 <span><span class="co">#&gt;     3:   154922             NA        NA                 &lt;NA&gt;       DE</span></span>
@@ -229,6 +234,7 @@ additional information.</p>
 <span><span class="co">#&gt; 20544:       78          0.975       611 epiforecasts-EpiNow2       IT</span></span>
 <span><span class="co">#&gt; 20545:       78          0.990       719 epiforecasts-EpiNow2       IT</span></span>
 <span><span class="co">#&gt;        target_end_date forecast_date target_type horizon</span></span>
+<span><span class="co">#&gt;                 &lt;Date&gt;        &lt;Date&gt;      &lt;char&gt;   &lt;num&gt;</span></span>
 <span><span class="co">#&gt;     1:      2021-01-02          &lt;NA&gt;       Cases      NA</span></span>
 <span><span class="co">#&gt;     2:      2021-01-02          &lt;NA&gt;      Deaths      NA</span></span>
 <span><span class="co">#&gt;     3:      2021-01-09          &lt;NA&gt;       Cases      NA</span></span>
@@ -275,7 +281,9 @@ for every date, location and horizon.</p>
 <span></span>
 <span><span class="va">duplicates</span><span class="op">[</span><span class="va">quantile_level</span> <span class="op">==</span> <span class="fl">0.5</span> <span class="op">&amp;</span> <span class="va">model</span> <span class="op">==</span> <span class="st">"EuroCOVIDhub-ensemble"</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Key: &lt;location, target_end_date&gt;</span></span>
 <span><span class="co">#&gt;    observed quantile_level predicted location target_end_date forecast_date</span></span>
+<span><span class="co">#&gt;       &lt;num&gt;          &lt;num&gt;     &lt;int&gt;   &lt;char&gt;          &lt;Date&gt;        &lt;Date&gt;</span></span>
 <span><span class="co">#&gt; 1:   106987            0.5    119258       DE      2021-05-08    2021-05-03</span></span>
 <span><span class="co">#&gt; 2:     1582            0.5      1568       DE      2021-05-08    2021-05-03</span></span>
 <span><span class="co">#&gt; 3:    64985            0.5    110716       DE      2021-05-15    2021-05-03</span></span>
@@ -283,6 +291,7 @@ for every date, location and horizon.</p>
 <span><span class="co">#&gt; 5:     1311            0.5      1521       DE      2021-05-15    2021-05-03</span></span>
 <span><span class="co">#&gt; 6:     1311            0.5      1422       DE      2021-05-15    2021-05-10</span></span>
 <span><span class="co">#&gt;                    model horizon</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;   &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       1</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-ensemble       1</span></span>
 <span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       2</span></span>
@@ -300,7 +309,9 @@ many forecasts there are per model and target_type, we can run</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span><span class="va">forecast_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; Key: &lt;model, target_type&gt;</span></span>
 <span><span class="co">#&gt;                    model target_type count</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt; &lt;int&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases   128</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths   128</span></span>
 <span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       Cases   128</span></span>
@@ -356,24 +367,28 @@ calling <code><a href="../reference/as_forecast.html">as_forecast()</a></code> e
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">scores</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      model location target_end_date forecast_date target_type</span></span>
+<span><span class="co">#&gt;                     &lt;char&gt;   &lt;char&gt;          &lt;Date&gt;        &lt;Date&gt;      &lt;char&gt;</span></span>
 <span><span class="co">#&gt;   1: EuroCOVIDhub-ensemble       DE      2021-05-08    2021-05-03       Cases</span></span>
 <span><span class="co">#&gt;   2: EuroCOVIDhub-baseline       DE      2021-05-08    2021-05-03       Cases</span></span>
 <span><span class="co">#&gt;  ---                                                                         </span></span>
 <span><span class="co">#&gt; 886:  epiforecasts-EpiNow2       IT      2021-07-24    2021-07-05      Deaths</span></span>
 <span><span class="co">#&gt; 887:  epiforecasts-EpiNow2       IT      2021-07-24    2021-07-12      Deaths</span></span>
-<span><span class="co">#&gt;      horizon         wis overprediction underprediction dispersion bias</span></span>
-<span><span class="co">#&gt;   1:       1  7990.85478    2549.869565               0 5440.98522 0.50</span></span>
-<span><span class="co">#&gt;   2:       1 16925.04696   15275.826087               0 1649.22087 0.95</span></span>
-<span><span class="co">#&gt;  ---                                                                   </span></span>
-<span><span class="co">#&gt; 886:       3    19.76261       5.478261               0   14.28435 0.50</span></span>
-<span><span class="co">#&gt; 887:       2    66.16174      40.608696               0   25.55304 0.90</span></span>
+<span><span class="co">#&gt;      horizon         wis overprediction underprediction dispersion  bias</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1:       1  7990.85478    2549.869565               0 5440.98522  0.50</span></span>
+<span><span class="co">#&gt;   2:       1 16925.04696   15275.826087               0 1649.22087  0.95</span></span>
+<span><span class="co">#&gt;  ---                                                                    </span></span>
+<span><span class="co">#&gt; 886:       3    19.76261       5.478261               0   14.28435  0.50</span></span>
+<span><span class="co">#&gt; 887:       2    66.16174      40.608696               0   25.55304  0.90</span></span>
 <span><span class="co">#&gt;      interval_coverage_50 interval_coverage_90 interval_coverage_deviation</span></span>
+<span><span class="co">#&gt;                    &lt;lgcl&gt;               &lt;lgcl&gt;                       &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1:                 TRUE                 TRUE                  0.05181818</span></span>
 <span><span class="co">#&gt;   2:                FALSE                FALSE                 -0.40272727</span></span>
 <span><span class="co">#&gt;  ---                                                                      </span></span>
 <span><span class="co">#&gt; 886:                 TRUE                 TRUE                  0.05181818</span></span>
 <span><span class="co">#&gt; 887:                FALSE                 TRUE                 -0.31181818</span></span>
 <span><span class="co">#&gt;      ae_median</span></span>
+<span><span class="co">#&gt;          &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1:     12271</span></span>
 <span><span class="co">#&gt;   2:     25620</span></span>
 <span><span class="co">#&gt;  ---          </span></span>
@@ -513,6 +528,7 @@ e.g. <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">si
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_point</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    model    ae_point     se_point       ape</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;       &lt;num&gt;        &lt;num&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble 12077.10156 1.945118e+09 0.2996696</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline 19353.42969 2.883446e+09 0.7383936</span></span>
 <span><span class="co">#&gt; 3:  epiforecasts-EpiNow2 14521.10526 2.680928e+09 0.3715552</span></span>
@@ -534,6 +550,7 @@ certain prediction intervals is computed.</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                    model target_type   wis overprediction underprediction</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt; &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases 18000        10000.0          4200.0</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases 28000        14000.0         10000.0</span></span>
 <span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases 21000        12000.0          3300.0</span></span>
@@ -542,6 +559,7 @@ certain prediction intervals is computed.</p>
 <span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths    53            9.0            17.0</span></span>
 <span><span class="co">#&gt; 7:  epiforecasts-EpiNow2      Deaths    67           19.0            16.0</span></span>
 <span><span class="co">#&gt;    dispersion    bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;   &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:       3700 -0.0560                 0.39                 0.80</span></span>
 <span><span class="co">#&gt; 2:       4100  0.0980                 0.33                 0.82</span></span>
 <span><span class="co">#&gt; 3:       5700 -0.0790                 0.47                 0.79</span></span>
@@ -550,6 +568,7 @@ certain prediction intervals is computed.</p>
 <span><span class="co">#&gt; 6:         27 -0.0220                 0.46                 0.88</span></span>
 <span><span class="co">#&gt; 7:         32 -0.0051                 0.42                 0.91</span></span>
 <span><span class="co">#&gt;    interval_coverage_deviation ae_median</span></span>
+<span><span class="co">#&gt;                          &lt;num&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:                      -0.100     24000</span></span>
 <span><span class="co">#&gt; 2:                      -0.120     38000</span></span>
 <span><span class="co">#&gt; 3:                      -0.070     28000</span></span>
@@ -580,6 +599,7 @@ targets, we can run</p>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                    model target_type         wis overprediction underprediction</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline       Cases 28483.57465   14096.100883    10284.972826</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline      Deaths   159.40387      65.899117        2.098505</span></span>
 <span><span class="co">#&gt; 3: EuroCOVIDhub-ensemble       Cases 17943.82383   10043.121943     4237.177310</span></span>
@@ -588,6 +608,7 @@ targets, we can run</p>
 <span><span class="co">#&gt; 6:  epiforecasts-EpiNow2       Cases 20831.55662   11906.823030     3260.355639</span></span>
 <span><span class="co">#&gt; 7:  epiforecasts-EpiNow2      Deaths    66.64282      18.892583       15.893314</span></span>
 <span><span class="co">#&gt;    dispersion        bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;       &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: 4102.50094  0.09796875            0.3281250            0.8203125</span></span>
 <span><span class="co">#&gt; 2:   91.40625  0.33906250            0.6640625            1.0000000</span></span>
 <span><span class="co">#&gt; 3: 3663.52458 -0.05640625            0.3906250            0.8046875</span></span>
@@ -596,6 +617,7 @@ targets, we can run</p>
 <span><span class="co">#&gt; 6: 5664.37795 -0.07890625            0.4687500            0.7890625</span></span>
 <span><span class="co">#&gt; 7:   31.85692 -0.00512605            0.4201681            0.9075630</span></span>
 <span><span class="co">#&gt;    interval_coverage_deviation   ae_median wis_relative_skill</span></span>
+<span><span class="co">#&gt;                          &lt;num&gt;       &lt;num&gt;              &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:                 -0.11721591 38473.60156          1.2947445</span></span>
 <span><span class="co">#&gt; 2:                  0.12142045   233.25781          2.2958723</span></span>
 <span><span class="co">#&gt; 3:                 -0.10230114 24101.07031          0.8156514</span></span>
@@ -604,6 +626,7 @@ targets, we can run</p>
 <span><span class="co">#&gt; 6:                 -0.06963068 27923.81250          0.9469157</span></span>
 <span><span class="co">#&gt; 7:                 -0.04520244   104.74790          0.9765276</span></span>
 <span><span class="co">#&gt;    wis_scaled_relative_skill</span></span>
+<span><span class="co">#&gt;                        &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:                  1.587375</span></span>
 <span><span class="co">#&gt; 2:                  3.848060</span></span>
 <span><span class="co">#&gt; 3:                  1.000000</span></span>
@@ -673,6 +696,7 @@ transformation.</p>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                      model pit_value</span></span>
+<span><span class="co">#&gt;                     &lt;char&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1: EuroCOVIDhub-baseline     0.025</span></span>
 <span><span class="co">#&gt;   2: EuroCOVIDhub-baseline     0.525</span></span>
 <span><span class="co">#&gt;   3: EuroCOVIDhub-baseline     0.000</span></span>
@@ -727,6 +751,7 @@ relative scores to an existing set of scores.</p>
 <span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                     model       compare_against mean_scores_ratio         pval</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt;                &lt;char&gt;             &lt;num&gt;        &lt;num&gt;</span></span>
 <span><span class="co">#&gt;  1: EuroCOVIDhub-baseline  epiforecasts-EpiNow2         1.3703452 9.164893e-18</span></span>
 <span><span class="co">#&gt;  2: EuroCOVIDhub-baseline       UMass-MechBayes         3.0275019 2.627464e-20</span></span>
 <span><span class="co">#&gt;  3: EuroCOVIDhub-baseline EuroCOVIDhub-ensemble         1.5925819 2.608666e-32</span></span>
@@ -744,6 +769,7 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 15:  epiforecasts-EpiNow2 EuroCOVIDhub-baseline         0.7297431 9.164893e-18</span></span>
 <span><span class="co">#&gt; 16:  epiforecasts-EpiNow2  epiforecasts-EpiNow2         1.0000000 1.000000e+00</span></span>
 <span><span class="co">#&gt;         adj_pval wis_relative_skill wis_scaled_relative_skill</span></span>
+<span><span class="co">#&gt;            &lt;num&gt;              &lt;num&gt;                     &lt;num&gt;</span></span>
 <span><span class="co">#&gt;  1: 3.665957e-17          1.6032604                 1.0000000</span></span>
 <span><span class="co">#&gt;  2: 1.313732e-19          1.6032604                 1.0000000</span></span>
 <span><span class="co">#&gt;  3: 1.565200e-31          1.6032604                 1.0000000</span></span>
@@ -767,21 +793,25 @@ relative scores to an existing set of scores.</p>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                    model         wis overprediction underprediction dispersion</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline 14321.48926    7081.000000      5143.53567 2096.95360</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-ensemble  8992.62316    5025.130095      2120.64029 1846.85278</span></span>
 <span><span class="co">#&gt; 3:       UMass-MechBayes    52.65195       8.978601        16.80095   26.87239</span></span>
 <span><span class="co">#&gt; 4:  epiforecasts-EpiNow2 10827.40786    6179.439535      1697.23411 2950.73422</span></span>
 <span><span class="co">#&gt;           bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;          &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:  0.21851562            0.4960938            0.9101562</span></span>
 <span><span class="co">#&gt; 2:  0.00812500            0.6328125            0.9023438</span></span>
 <span><span class="co">#&gt; 3: -0.02234375            0.4609375            0.8750000</span></span>
 <span><span class="co">#&gt; 4: -0.04336032            0.4453441            0.8461538</span></span>
 <span><span class="co">#&gt;    interval_coverage_deviation   ae_median wis_relative_skill</span></span>
+<span><span class="co">#&gt;                          &lt;num&gt;       &lt;num&gt;              &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:                 0.002102273 19353.42969          1.6032604</span></span>
 <span><span class="co">#&gt; 2:                 0.050752841 12077.10156          0.8074916</span></span>
 <span><span class="co">#&gt; 3:                -0.024886364    78.47656          0.7475873</span></span>
 <span><span class="co">#&gt; 4:                -0.057861612 14521.10526          1.0332277</span></span>
 <span><span class="co">#&gt;    wis_scaled_relative_skill</span></span>
+<span><span class="co">#&gt;                        &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:                 1.0000000</span></span>
 <span><span class="co">#&gt; 2:                 0.5036559</span></span>
 <span><span class="co">#&gt; 3:                 0.4662919</span></span>
@@ -824,6 +854,7 @@ correlations.</p>
 <span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;           wis overprediction underprediction  dispersion        bias</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;          &lt;num&gt;           &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:  1.0000000     0.94297565      0.28377361  0.45566303  0.10545891</span></span>
 <span><span class="co">#&gt; 2:  0.9429757     1.00000000     -0.03310356  0.32493799  0.21532161</span></span>
 <span><span class="co">#&gt; 3:  0.2837736    -0.03310356      1.00000000  0.14580143 -0.35123801</span></span>
@@ -834,6 +865,7 @@ correlations.</p>
 <span><span class="co">#&gt; 8: -0.3425972    -0.25332123     -0.32605710 -0.11957701  0.06001718</span></span>
 <span><span class="co">#&gt; 9:  0.9886108     0.90326672      0.33589892  0.53809741  0.09578751</span></span>
 <span><span class="co">#&gt;    interval_coverage_50 interval_coverage_90 interval_coverage_deviation</span></span>
+<span><span class="co">#&gt;                   &lt;num&gt;                &lt;num&gt;                       &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:          -0.20766492          -0.40756133                 -0.34259724</span></span>
 <span><span class="co">#&gt; 2:          -0.14556039          -0.31824017                 -0.25332123</span></span>
 <span><span class="co">#&gt; 3:          -0.21392764          -0.35756699                 -0.32605710</span></span>
@@ -844,6 +876,7 @@ correlations.</p>
 <span><span class="co">#&gt; 8:           0.84683642           0.63647831                  1.00000000</span></span>
 <span><span class="co">#&gt; 9:          -0.24559356          -0.41079097                 -0.37689441</span></span>
 <span><span class="co">#&gt;      ae_median                      metric</span></span>
+<span><span class="co">#&gt;          &lt;num&gt;                      &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:  0.98861080                         wis</span></span>
 <span><span class="co">#&gt; 2:  0.90326672              overprediction</span></span>
 <span><span class="co">#&gt; 3:  0.33589892             underprediction</span></span>
@@ -888,6 +921,7 @@ available samples is small.</p>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;      location location_name target_end_date target_type forecast_date</span></span>
+<span><span class="co">#&gt;        &lt;char&gt;        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;</span></span>
 <span><span class="co">#&gt;   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>
 <span><span class="co">#&gt;   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>
 <span><span class="co">#&gt;   3:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>
@@ -900,6 +934,7 @@ available samples is small.</p>
 <span><span class="co">#&gt; 886:       IT         Italy      2021-07-24      Deaths    2021-07-05</span></span>
 <span><span class="co">#&gt; 887:       IT         Italy      2021-07-24      Deaths    2021-07-12</span></span>
 <span><span class="co">#&gt;                      model horizon         wis overprediction underprediction</span></span>
+<span><span class="co">#&gt;                     &lt;char&gt;   &lt;num&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1: EuroCOVIDhub-ensemble       1  6671.68207   2.110043e+03        0.000000</span></span>
 <span><span class="co">#&gt;   2: EuroCOVIDhub-baseline       1 18441.13061   1.446498e+04        0.000000</span></span>
 <span><span class="co">#&gt;   3:  epiforecasts-EpiNow2       1 22042.77309   1.548071e+04        0.000000</span></span>
@@ -912,6 +947,7 @@ available samples is small.</p>
 <span><span class="co">#&gt; 886:  epiforecasts-EpiNow2       3    25.13032   3.478261e-01        0.000000</span></span>
 <span><span class="co">#&gt; 887:  epiforecasts-EpiNow2       2    44.07931   2.410435e+01        0.000000</span></span>
 <span><span class="co">#&gt;       dispersion  bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;            &lt;num&gt; &lt;num&gt;               &lt;lgcl&gt;               &lt;lgcl&gt;</span></span>
 <span><span class="co">#&gt;   1: 4561.638591  0.60                FALSE                 TRUE</span></span>
 <span><span class="co">#&gt;   2: 3976.145828  0.98                FALSE                FALSE</span></span>
 <span><span class="co">#&gt;   3: 6562.060048  0.90                FALSE                 TRUE</span></span>
@@ -924,6 +960,7 @@ available samples is small.</p>
 <span><span class="co">#&gt; 886:   24.782489  0.10                 TRUE                 TRUE</span></span>
 <span><span class="co">#&gt; 887:   19.974959  0.70                FALSE                 TRUE</span></span>
 <span><span class="co">#&gt;      interval_coverage_deviation ae_median</span></span>
+<span><span class="co">#&gt;                            &lt;num&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1:                 -0.03909091    9414.0</span></span>
 <span><span class="co">#&gt;   2:                 -0.49363636   29379.0</span></span>
 <span><span class="co">#&gt;   3:                 -0.31181818   36513.0</span></span>
@@ -944,6 +981,7 @@ available samples is small.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metrics</span></span>
 <span><span class="co">#&gt;                                           Metric               Name</span></span>
+<span><span class="co">#&gt;                                           &lt;char&gt;             &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1:                               Absolute error           ae_point</span></span>
 <span><span class="co">#&gt;  2:                               Absolute error          ae_median</span></span>
 <span><span class="co">#&gt;  3:                                Squared error           se_point</span></span>
@@ -968,6 +1006,7 @@ available samples is small.</p>
 <span><span class="co">#&gt; 22:                        Scaled relative skill   scaled_rel_skill</span></span>
 <span><span class="co">#&gt;                                           Metric               Name</span></span>
 <span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
+<span><span class="co">#&gt;                                      &lt;char&gt;   &lt;char&gt;     &lt;char&gt; &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1: score(), ae_point()), ae_median_sample(        +          +      -        +</span></span>
 <span><span class="co">#&gt;  2: score(), ae_point()), ae_median_sample(        +          +      -        +</span></span>
 <span><span class="co">#&gt;  3:   score(), se_point(), se_mean_sample()        +          +      -        +</span></span>
@@ -992,6 +1031,7 @@ available samples is small.</p>
 <span><span class="co">#&gt; 22:          score(), pairwise_comparison()        ~          ~      ~        ~</span></span>
 <span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
 <span><span class="co">#&gt;                                                                                                                                                                                                           Info</span></span>
+<span><span class="co">#&gt;                                                                                                                                                                                                         &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
 <span><span class="co">#&gt;  2:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
 <span><span class="co">#&gt;  3:                                                                                                                                                Suitable for scoring the mean of a predictive distribution.</span></span>

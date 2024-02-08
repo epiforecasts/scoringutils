@@ -24,7 +24,7 @@ well as the paper Evaluating Forecasts with scoringutils in R."><meta name="robo
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
@@ -211,6 +211,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model target_type         wis overprediction underprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;      &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-ensemble       Cases 17943.82383   10043.121943     4237.177310</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: EuroCOVIDhub-baseline       Cases 28483.57465   14096.100883    10284.972826</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  epiforecasts-EpiNow2       Cases 20831.55662   11906.823030     3260.355639</span>
@@ -219,6 +220,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:       UMass-MechBayes      Deaths    52.65195       8.978601       16.800951</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  epiforecasts-EpiNow2      Deaths    66.64282      18.892583       15.893314</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    dispersion        bias interval_coverage_50 interval_coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;       &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 3663.52458 -0.05640625            0.3906250            0.8046875</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: 4102.50094  0.09796875            0.3281250            0.8203125</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: 5664.37795 -0.07890625            0.4687500            0.7890625</span>
@@ -227,6 +229,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:   26.87239 -0.02234375            0.4609375            0.8750000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:   31.85692 -0.00512605            0.4201681            0.9075630</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_deviation   ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:                 -0.10230114 24101.07031</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:                 -0.11721591 38473.60156</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:                 -0.06963068 27923.81250</span>
@@ -246,6 +249,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      location target_end_date target_type horizon                 model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;   &lt;num&gt;                &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE      2021-05-08       Cases       1 EuroCOVIDhub-ensemble</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE      2021-05-08       Cases       1 EuroCOVIDhub-baseline</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:       DE      2021-05-08       Cases       1  epiforecasts-EpiNow2</span>
@@ -258,6 +262,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:       IT      2021-07-24      Deaths       3  epiforecasts-EpiNow2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:       IT      2021-07-24      Deaths       2  epiforecasts-EpiNow2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               wis overprediction underprediction  dispersion  bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;          &lt;num&gt;           &lt;num&gt;       &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:  7990.854783   2.549870e+03       0.0000000 5440.985217  0.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2: 16925.046957   1.527583e+04       0.0000000 1649.220870  0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3: 25395.960870   1.722226e+04       0.0000000 8173.700000  0.90</span>
@@ -270,6 +275,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:    19.762609   5.478261e+00       0.0000000   14.284348  0.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:    66.161739   4.060870e+01       0.0000000   25.553043  0.90</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      interval_coverage_50 interval_coverage_90 interval_coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;lgcl&gt;               &lt;lgcl&gt;                       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:                 TRUE                 TRUE                  0.05181818</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:                FALSE                FALSE                 -0.40272727</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:                FALSE                 TRUE                 -0.31181818</span>
@@ -282,6 +288,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 886:                 TRUE                 TRUE                  0.05181818</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 887:                FALSE                 TRUE                 -0.31181818</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:     12271</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:     25620</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:     44192</span>

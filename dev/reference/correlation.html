@@ -8,7 +8,7 @@ scores as produced by score()."><meta name="robots" content="noindex"><!-- mathj
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
@@ -97,6 +97,7 @@ be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.<
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-in"><span><span class="fu">correlation</span><span class="op">(</span><span class="va">scores</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      wis overprediction underprediction dispersion  bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.00           0.94            0.28       0.46  0.11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.94           1.00           -0.03       0.32  0.22</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.28          -0.03            1.00       0.15 -0.35</span>
@@ -105,6 +106,7 @@ be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.<
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.34          -0.25           -0.33      -0.12  0.06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  0.99           0.90            0.34       0.54  0.10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_deviation ae_median                      metric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;     &lt;num&gt;                      &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:                       -0.34      0.99                         wis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:                       -0.25      0.90              overprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:                       -0.33      0.34             underprediction</span>
