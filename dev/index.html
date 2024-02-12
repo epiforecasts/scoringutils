@@ -155,22 +155,26 @@
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; Warning in get_score_names(scores, error = TRUE): The following scores have</span></span>
+<span><span class="co">#&gt; been previously computed, but are no longer column names of the data:</span></span>
+<span><span class="co">#&gt; `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See</span></span>
+<span><span class="co">#&gt; `?get_score_names` for further information.</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
-<col width="6%">
+<col width="5%">
 <col width="3%">
 <col width="7%">
 <col width="7%">
 <col width="5%">
+<col width="3%">
+<col width="9%">
+<col width="9%">
+<col width="12%">
 <col width="4%">
-<col width="10%">
-<col width="10%">
-<col width="13%">
-<col width="5%">
-<col width="7%">
 <col width="8%">
+<col width="11%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">model</th>
@@ -184,8 +188,8 @@
 <th align="right">interval_coverage_90</th>
 <th align="right">interval_coverage_deviation</th>
 <th align="right">ae_median</th>
-<th align="right">relative_skill</th>
-<th align="right">scaled_rel_skill</th>
+<th align="right">wis_relative_skill</th>
+<th align="right">wis_scaled_relative_skill</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -305,7 +309,9 @@
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                    model target_type   scale         wis overprediction</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;  &lt;char&gt;       &lt;num&gt;          &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755</span></span>
 <span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696</span></span>
 <span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842</span></span>
@@ -313,6 +319,7 @@
 <span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117</span></span>
 <span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601</span></span>
 <span><span class="co">#&gt;    underprediction dispersion        bias interval_coverage_50</span></span>
+<span><span class="co">#&gt;              &lt;num&gt;      &lt;num&gt;       &lt;num&gt;                &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:     4237.177310 3663.52458 -0.05640625            0.3906250</span></span>
 <span><span class="co">#&gt; 2:    10284.972826 4102.50094  0.09726562            0.3281250</span></span>
 <span><span class="co">#&gt; 3:     3260.355639 5664.37795 -0.07890625            0.4687500</span></span>
@@ -320,6 +327,7 @@
 <span><span class="co">#&gt; 5:        2.098505   91.40625  0.33906250            0.6640625</span></span>
 <span><span class="co">#&gt; 6:       16.800951   26.87239 -0.02234375            0.4609375</span></span>
 <span><span class="co">#&gt;    interval_coverage_90 interval_coverage_deviation   ae_median</span></span>
+<span><span class="co">#&gt;                   &lt;num&gt;                       &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:            0.8046875                 -0.10230114 17707.95312</span></span>
 <span><span class="co">#&gt; 2:            0.8203125                 -0.11437500 32080.48438</span></span>
 <span><span class="co">#&gt; 3:            0.7890625                 -0.06963068 21530.69531</span></span>
