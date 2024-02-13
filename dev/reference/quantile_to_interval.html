@@ -125,8 +125,8 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 <dt>format</dt>
 <dd><p>the format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column <code>boundary</code> (with values either "upper"
-or "lower" and a column <code>range</code> that contains the range of the interval.
-If "wide", there will be a column <code>range</code> and two columns
+or "lower" and a column <code>interval_range</code> that contains the range of the
+interval. If "wide", there will be a column <code>interval_range</code> and two columns
 <code>lower</code> and <code>upper</code> that contain the lower and upper bounds of the
 prediction interval, respectively.</p></dd>
 
@@ -162,9 +162,9 @@ without a <code>quantile_level</code> column. Rows will not be reordered.</p>
 
 <p><em>quantile_to_interval.numeric</em>:
 a data.frame in a wide interval format with columns <code>forecast_id</code>,
-<code>observed</code>, <code>lower</code>, <code>upper</code>, and <code>range</code>. The <code>forecast_id</code> column is a
-unique identifier for each forecast. Rows will be reordered according to
-<code>forecast_id</code> and <code>range</code>.</p>
+<code>observed</code>, <code>lower</code>, <code>upper</code>, and <code>interval_range</code>. The <code>forecast_id</code> column
+is a unique identifier for each forecast. Rows will be reordered according to
+<code>forecast_id</code> and <code>interval_range</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

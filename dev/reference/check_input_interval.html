@@ -64,7 +64,7 @@ requirements for scoring interval-based forecasts.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_input_interval</span><span class="op">(</span><span class="va">observed</span>, <span class="va">lower</span>, <span class="va">upper</span>, <span class="va">range</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_input_interval</span><span class="op">(</span><span class="va">observed</span>, <span class="va">lower</span>, <span class="va">upper</span>, <span class="va">interval_range</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,7 +84,7 @@ holds the predicted value for the lower bounds of the prediction intervals.</p><
 holds the predicted value for the upper bounds of the prediction intervals.</p></dd>
 
 
-<dt>range</dt>
+<dt>interval_range</dt>
 <dd><p>Input to be checked. Should be a vector of size n that
 denotes the interval range in percent. E.g. a value of 50 denotes a
 (25%, 75%) prediction interval.</p></dd>

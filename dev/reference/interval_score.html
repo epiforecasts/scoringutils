@@ -17,9 +17,9 @@ To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
 5% and 95% quantiles (the corresponding alpha would then be 0.1).
-No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+No specific distribution is assumed, but the interval has to be symmetric
+around the median (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function quantile_score()."><title>Interval Score — interval_score • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interval Score — interval_score"><meta property="og:description" content="Proper Scoring Rule to score quantile predictions, following Gneiting
 and Raftery (2007). Smaller values are better.
 The score is computed as
@@ -38,9 +38,9 @@ To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
 5% and 95% quantiles (the corresponding alpha would then be 0.1).
-No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+No specific distribution is assumed, but the interval has to be symmetric
+around the median (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function quantile_score()."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -116,9 +116,9 @@ the prediction interval.</p>
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
 5% and 95% quantiles (the corresponding alpha would then be 0.1).
-No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+No specific distribution is assumed, but the interval has to be symmetric
+around the median (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function <code><a href="quantile_score.html">quantile_score()</a></code>.</p>
     </div>
 
@@ -142,21 +142,21 @@ Non-symmetric quantiles can be scored using the function <code><a href="quantile
 
 <dt>lower</dt>
 <dd><p>vector of size n with the prediction for the lower quantile
-of the given range</p></dd>
+of the given interval range</p></dd>
 
 
 <dt>upper</dt>
 <dd><p>vector of size n with the prediction for the upper quantile
-of the given range</p></dd>
+of the given interval range</p></dd>
 
 
 <dt>interval_range</dt>
 <dd><p>the range of the prediction intervals. i.e. if you're
 forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
-Can be either a single number or a vector of size n, if the range changes
-for different forecasts to be scored. This corresponds to (100-alpha)/100
-in Gneiting and Raftery (2007). Internally, the range will be transformed
-to alpha.</p></dd>
+Can be either a single number or a vector of size n, if the interval range
+changes for different forecasts to be scored. This corresponds to
+(100-alpha)/100 in Gneiting and Raftery (2007). Internally, the interval
+range will be transformed to alpha.</p></dd>
 
 
 <dt>weigh</dt>

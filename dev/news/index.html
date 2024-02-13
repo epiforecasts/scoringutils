@@ -123,6 +123,7 @@
 <li>Added unit tests for <code>interval_coverage_quantile()</code> and <code>interval_coverage_dev_quantile()</code> in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.</li>
 <li>Documentation pkgdown pages are now created both for the stable and dev versions.</li>
 <li>Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.</li>
+<li>“range” was consistently renamed to “interval_range” in the code. The “range”-format (which was mostly used internally) was renamed to “interval”-format</li>
 <li>Added a method for <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> that prints out additional information for <code>forecast</code> objects.</li>
 </ul></div>
 </div>
@@ -382,7 +383,7 @@
 <li>
 <code>correlation_plot()</code> shows correlation between metrics.</li>
 <li>
-<code><a href="../reference/plot_ranges.html">plot_ranges()</a></code> shows contribution of different prediction intervals to some chosen metric.</li>
+<code>plot_ranges()</code> shows contribution of different prediction intervals to some chosen metric.</li>
 <li>
 <code><a href="../reference/plot_heatmap.html">plot_heatmap()</a></code> visualises scores as heatmap.</li>
 <li>

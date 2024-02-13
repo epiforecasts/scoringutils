@@ -73,7 +73,7 @@ predictive distribution.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, range <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval_coverage</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, interval_range <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -95,10 +95,10 @@ vector of size N.</p></dd>
 <dd><p>vector with quantile levels of size N</p></dd>
 
 
-<dt>range</dt>
-<dd><p>A single number with the range of the prediction interval in
-percent (e.g. 50 for a 50% prediction interval) for which you want to compute
-interval coverage.</p></dd>
+<dt>interval_range</dt>
+<dd><p>A single number with the range of the prediction
+interval in percent (e.g. 50 for a 50% prediction interval) for which you
+want to compute interval coverage.</p></dd>
 
 </dl></div>
     <div class="section level2">

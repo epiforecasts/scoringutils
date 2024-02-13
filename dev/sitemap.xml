@@ -250,6 +250,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/interval_coverage_deviation.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/interval_long_to_quantile.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/interval_score.html</loc>
   </url>
   <url>
@@ -307,6 +310,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_interval_coverage.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_interval_ranges.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pairwise_comparison.html</loc>
   </url>
   <url>
@@ -317,9 +323,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_quantile_coverage.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_ranges.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_score_table.html</loc>
@@ -340,9 +343,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/range_long_to_quantile.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/rules_binary.html</loc>
   </url>
   <url>
@@ -358,10 +358,10 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/run_safely.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/sample_to_quantile.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/sample_to_interval_long.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/sample_to_range_long.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/sample_to_quantile.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/score.html</loc>
