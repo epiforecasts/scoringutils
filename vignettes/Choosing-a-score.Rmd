@@ -10,6 +10,7 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 7,
                       collapse = TRUE,
