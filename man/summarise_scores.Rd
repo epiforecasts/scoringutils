@@ -77,7 +77,7 @@ summarise_scores(scores,by = "model") \%>\%
   summarise_scores(fun = signif, digits = 2)
 
 # get quantiles of scores
-# make sure to aggregate over ranges first
+# make sure to aggregate over interval ranges first
 summarise_scores(scores,
   by = "model", fun = quantile,
   probs = c(0.25, 0.5, 0.75)

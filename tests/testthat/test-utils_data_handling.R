@@ -4,7 +4,7 @@ test_that("range_long_to_quantile works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    range = 50,
+    interval_range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
@@ -16,7 +16,7 @@ test_that("range_long_to_quantile works", {
     quantile_level = rep(c(0.25, 0.75), each = 10)
   )
 
-  quantile2 <- as.data.frame(scoringutils:::range_long_to_quantile(long))
+  quantile2 <- as.data.frame(scoringutils:::interval_long_to_quantile(long))
   expect_equal(quantile, quantile2)
 })
 
@@ -35,7 +35,7 @@ test_that("quantile_to_interval.data.frame() works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    range = 50,
+    interval_range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
   long2 <- as.data.frame(quantile_to_interval(
@@ -135,14 +135,13 @@ test_that("sample_to_range_long works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    range = 50,
+    interval_range = 50,
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- scoringutils:::sample_to_range_long(samples,
-    range = 50,
-    keep_quantile_col = FALSE
-  )
+  long2 <- scoringutils:::sample_to_interval_long(samples,
+                                                  interval_range = 50,
+                                                  keep_quantile_col = FALSE)
   long2 <- long2[order(model, boundary, date)]
   data.table::setcolorder(long2, names(long))
 
@@ -263,7 +262,7 @@ test_that("quantile_to_interval works - data.frame case", {
 
   expect_equal(
     colnames(ex_interval),
-    c(colnames(ex), "boundary", "range")
+    c(colnames(ex), "boundary", "interval_range")
   )
 })
 

@@ -73,11 +73,11 @@ pit_plots <- plot_pit(stored$pit) +
 # create coverage plots by transforming to quantile format first
 quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 df_quantile <- sample_to_quantile(df,
-                                  quantiles = quantiles)
+                                  quantile_level = quantiles)
 
 res_quantile <- score(df_quantile)
 res_quantile <- summarise_scores(res_quantile,
-                                 by = c("model", "range", "quantile"))
+                                 by = c("model", "interval_range", "quantile"))
 
 res_quantile[, model := factor(model,
                                levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",

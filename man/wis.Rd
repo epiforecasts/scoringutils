@@ -104,8 +104,9 @@ indicates how much is outside the prediction interval.
 \eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
 the prediction interval. For a 90\% prediction interval, for example,
 \eqn{\alpha}{alpha} is equal to 0.1. No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+but the interval formed by the quantiles has to be symmetric around the
+median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
+quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 
 Usually the interval score is weighted by a factor that makes sure that the

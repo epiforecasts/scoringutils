@@ -21,7 +21,7 @@ Helper function to check that input quantiles are valid.
 Quantiles must be in the range specified, increase monotonically,
 and contain no duplicates.
 
-This is used in \url{bias_range()} and \url{bias_quantile()} to
+This is used in \url{bias_interval()} and \url{bias_quantile()} to
 provide informative errors to users.
 }
 \keyword{internal_input_check}

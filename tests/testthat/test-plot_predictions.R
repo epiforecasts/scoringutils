@@ -35,7 +35,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
-      range = c(0, 10, 20, 30, 40, 50, 60)
+      interval_range = c(0, 10, 20, 30, 40, 50, 60)
     ) +
     facet_wrap(location ~ target_type, scales = "free_y")
 
@@ -56,7 +56,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
-      range = c(0, 50, 90, 95)
+      interval_range = c(0, 50, 90, 95)
     ) +
     facet_wrap(location ~ target_type, scales = "free_y")
   expect_s3_class(p2, "ggplot")

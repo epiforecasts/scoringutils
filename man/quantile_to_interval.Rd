@@ -19,8 +19,8 @@ quantile_to_interval(...)
 
 \item{format}{the format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column \code{boundary} (with values either "upper"
-or "lower" and a column \code{range} that contains the range of the interval.
-If "wide", there will be a column \code{range} and two columns
+or "lower" and a column \code{interval_range} that contains the range of the
+interval. If "wide", there will be a column \code{interval_range} and two columns
 \code{lower} and \code{upper} that contain the lower and upper bounds of the
 prediction interval, respectively.}
 
@@ -43,9 +43,9 @@ without a \code{quantile_level} column. Rows will not be reordered.
 
 \emph{quantile_to_interval.numeric}:
 a data.frame in a wide interval format with columns \code{forecast_id},
-\code{observed}, \code{lower}, \code{upper}, and \code{range}. The \code{forecast_id} column is a
-unique identifier for each forecast. Rows will be reordered according to
-\code{forecast_id} and \code{range}.
+\code{observed}, \code{lower}, \code{upper}, and \code{interval_range}. The \code{forecast_id} column
+is a unique identifier for each forecast. Rows will be reordered according to
+\code{forecast_id} and \code{interval_range}.
 }
 \description{
 \strong{Quantile format}
