@@ -48,16 +48,25 @@ test_that("pit_sample() function works for continuous observed and predicted", {
 })
 
 test_that("pit function works for continuous integer and quantile data", {
-  pit1 <- suppressMessages(pit(example_quantile, by = "model"))
-  pit2 <- suppressMessages(pit(example_continuous,
+  pit_quantile <- suppressMessages(pit(example_quantile, by = "model"))
+  pit_continuous <- suppressMessages(pit(example_continuous,
     by = c("model", "target_type")
   ))
-  pit3 <- suppressMessages(pit(example_integer,
+  pit_integer <- suppressMessages(pit(example_integer,
     by = c("model", "location")
   ))
 
-  expect_equal(names(pit1), c("model", "quantile_level", "pit_value"))
-  expect_equal(names(pit2), c("model", "target_type", "pit_value"))
-  expect_equal(names(pit3), c("model", "location", "pit_value"))
-})
+  expect_equal(names(pit_quantile), c("model", "quantile_level", "pit_value"))
+  expect_equal(names(pit_continuous), c("model", "target_type", "pit_value"))
+  expect_equal(names(pit_integer), c("model", "location", "pit_value"))
 
+  # check printing works
+  testthat::expect_output(print(pit_quantile))
+  testthat::expect_output(print(pit_continuous))
+  testthat::expect_output(print(pit_integer))
+
+  # check class is correct
+  expect_s3_class(pit_quantile, c("data.table", "data.frame"), exact = TRUE)
+  expect_s3_class(pit_continuous, c("data.table", "data.frame"), exact = TRUE)
+  expect_s3_class(pit_integer, c("data.table", "data.frame"), exact = TRUE)
+})
