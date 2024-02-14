@@ -60,7 +60,7 @@
 #'   summarise_scores(fun = signif, digits = 2)
 #'
 #' # get quantiles of scores
-#' # make sure to aggregate over ranges first
+#' # make sure to aggregate over interval ranges first
 #' summarise_scores(scores,
 #'   by = "model", fun = quantile,
 #'   probs = c(0.25, 0.5, 0.75)
@@ -137,10 +137,10 @@ summarise_scores <- function(scores,
   # remove unnecessary columns -------------------------------------------------
   # if neither quantile nor range are in by, remove coverage and
   # quantile_coverage because averaging does not make sense
-  if (!("range" %in% by) && ("coverage" %in% colnames(scores))) {
+  if (!("interval_range" %in% by) && ("coverage" %in% colnames(scores))) {
     scores[, "coverage" := NULL]
   }
-  if (!("quantile" %in% by) && "quantile_coverage" %in% names(scores)) {
+  if (!("quantile_level" %in% by) && "quantile_coverage" %in% names(scores)) {
     scores[, "quantile_coverage" := NULL]
   }
 
@@ -266,8 +266,8 @@ check_summary_params <- function(scores,
                                  metric) {
 
   # check that columns in 'by' are actually present ----------------------------
-  if (!all(by %in% c(colnames(scores), "range", "quantile"))) {
-    not_present <- setdiff(by, c(colnames(scores), "range", "quantile"))
+  if (!all(by %in% c(colnames(scores), "interval_range", "quantile_level"))) {
+    not_present <- setdiff(by, c(colnames(scores), "interval_range", "quantile_level"))
     msg <- paste0(
       "The following items in `by` are not",
       "valid column names of the data: '",

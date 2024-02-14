@@ -4,7 +4,7 @@
 \alias{interval_coverage_deviation}
 \title{Interval Coverage Deviation (For Quantile-Based Forecasts)}
 \usage{
-interval_coverage_deviation(observed, predicted, quantile)
+interval_coverage_deviation(observed, predicted, quantile_level)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -16,7 +16,7 @@ to the number of observed values) and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{vector with quantile levels of size N}
+\item{quantile_level}{vector with quantile levels of size N}
 }
 \value{
 A numeric vector of length n with the interval coverage deviation
@@ -71,7 +71,7 @@ predicted <- rbind(
   c(-2, 1, 2, 2, 4),
   c(-2, 0, 3, 3, 4)
 )
-quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-interval_coverage_deviation(observed, predicted, quantile)
+quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+interval_coverage_deviation(observed, predicted, quantile_level)
 }
 \keyword{metric}

@@ -229,7 +229,7 @@ test_that("score() quantile produces desired metrics", {
     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
     model = "Model 1",
     date = as.Date("2020-01-01") + rep(1:10, each = 2),
-    quantile = rep(c(0.1, 0.9), times = 10)
+    quantile_level = rep(c(0.1, 0.9), times = 10)
   )
 
   out <- suppressWarnings(suppressMessages(
@@ -248,7 +248,7 @@ test_that("calculation of ae_median is correct for a quantile format case", {
   eval <- summarise_scores(scores_quantile,by = "model")
 
   example <- scoringutils::example_quantile
-  ae <- example[quantile == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- example[quantile_level == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -262,7 +262,7 @@ test_that("all quantile and range formats yield the same result", {
   df <- data.table::copy(example_quantile)
 
   ae <- df[
-    quantile == 0.5, ae := abs(observed - predicted)][
+    quantile_level == 0.5, ae := abs(observed - predicted)][
     !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean

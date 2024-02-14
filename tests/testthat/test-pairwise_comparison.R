@@ -34,7 +34,7 @@ test_that("pairwise_comparison() works", {
 
   quantiles <- c(0.05, 0.25, 0.5, 0.75, 0.95)
   test_forecasts <- test_forecasts[,
-    .(quantile = quantiles, value = quantile(value, quantiles)),
+    .(quantile_level = quantiles, value = quantile(value, quantiles)),
     by = .(
       model, location, target_end_date, target_variable
     )

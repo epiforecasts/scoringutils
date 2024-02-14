@@ -93,7 +93,8 @@ hub_data <- hub_data |>
     # quantile %in% c(seq(0.05, 0.45, 0.1), 0.5, seq(0.55, 0.95, 0.1)),
     location %in% c("DE", "GB", "FR", "IT")
   ) |>
-  select(-target)
+  select(-target) |>
+  rename(quantile_level = quantile)
 
 truth <- truth |>
   filter(
@@ -105,7 +106,7 @@ truth <- truth |>
 
 # save example data with forecasts only
 example_quantile_forecasts_only <- hub_data
-example_quantile_forecasts_only[, quantile := round(quantile, 3)]
+example_quantile_forecasts_only[, quantile_level := round(quantile_level, 3)]
 
 usethis::use_data(example_quantile_forecasts_only, overwrite = TRUE)
 
@@ -115,13 +116,12 @@ usethis::use_data(example_truth_only, overwrite = TRUE)
 # merge forecast data and truth data and save
 example_quantile <- merge_pred_and_obs(hub_data, truth)
 data.table::setDT(example_quantile)
-# make model a character instead of a factor
 usethis::use_data(example_quantile, overwrite = TRUE)
 
 
 # create data with point forecasts ---------------------------------------------
 example_point <- data.table::copy(example_quantile)
-example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile := NULL]
+example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile_level := NULL]
 usethis::use_data(example_point, overwrite = TRUE)
 
 

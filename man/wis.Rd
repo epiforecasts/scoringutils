@@ -10,18 +10,18 @@
 wis(
   observed,
   predicted,
-  quantile,
+  quantile_level,
   separate_results = FALSE,
   weigh = TRUE,
   count_median_twice = FALSE,
   na.rm = TRUE
 )
 
-dispersion(observed, predicted, quantile, ...)
+dispersion(observed, predicted, quantile_level, ...)
 
-overprediction(observed, predicted, quantile, ...)
+overprediction(observed, predicted, quantile_level, ...)
 
-underprediction(observed, predicted, quantile, ...)
+underprediction(observed, predicted, quantile_level, ...)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -33,7 +33,7 @@ to the number of observed values) and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{vector with quantile levels of size N}
+\item{quantile_level}{vector with quantile levels of size N}
 
 \item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
 parts of the interval score (dispersion penalty, penalties for over- and
@@ -104,8 +104,9 @@ indicates how much is outside the prediction interval.
 \eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
 the prediction interval. For a 90\% prediction interval, for example,
 \eqn{\alpha}{alpha} is equal to 0.1. No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+but the interval formed by the quantiles has to be symmetric around the
+median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
+quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 
 Usually the interval score is weighted by a factor that makes sure that the
@@ -148,7 +149,7 @@ predicted <- rbind(
   c(-2, 1, 2, 2, 4),
   c(-2, 0, 3, 3, 4)
 )
-quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-wis(observed, predicted, quantile)
+quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+wis(observed, predicted, quantile_level)
 }
 \keyword{metric}

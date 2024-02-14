@@ -22,8 +22,8 @@
 #' factor level. See details [here][brier_score()] for more information.
 #'
 #' *Quantile-based forecasts* require a column `observed` of type numeric,
-#' a column `predicted` of type numeric, and a column `quantile` of type numeric
-#' with quantile-levels (between 0 and 1).
+#' a column `predicted` of type numeric, and a column `quantile_level` of type
+#' numeric with quantile-levels (between 0 and 1).
 #'
 #' *Sample-based forecasts* require a column `observed` of type numeric,
 #' a column `predicted` of type numeric, and a column `sample_id` of type

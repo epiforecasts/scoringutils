@@ -214,18 +214,18 @@ plot_wis <- function(scores,
 #'
 #' @description
 #' Visualise the metrics by range, e.g. if you are interested how different
-#' interval ranges contribute to the overall interval score, or how
-#' sharpness / dispersion changes by range.
+#' interval interval ranges contribute to the overall interval score, or how
+#' sharpness / dispersion changes by interval range.
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
+#' produced by [score()] or [summarise_scores()]. Note that "interval_range"
+#' must be included in the `by` argument when running [summarise_scores()]
 #' @param y The variable from the scores you want to show on the y-Axis.
 #' This could be something like "wis" (the default) or "dispersion"
 #' @param x The variable from the scores you want to show on the x-Axis.
 #' Usually this will be "model"
 #' @param colour Character vector of length one used to determine a variable
-#' for colouring dots. The Default is "range".
+#' for colouring dots. The Default is "interval_range".
 #' @return A ggplot2 object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes aes geom_point geom_line
@@ -234,20 +234,20 @@ plot_wis <- function(scores,
 #' @examples
 #' library(ggplot2)
 #' ex <- example_quantile
-#' ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
+#' ex$range <- scoringutils:::get_range_from_quantile(ex$quantile)
 #' scores <- score(ex, metrics = list("wis" = wis))
-#' scores$range <- scores$interval_range
+#' scores$interval_range <- scores$range
 #' summarised <- summarise_scores(
 #'   scores,
-#'   by = c("model", "target_type", "range")
+#'   by = c("model", "target_type", "interval_range")
 #' )
-#' plot_ranges(summarised, x = "model") +
+#' plot_interval_ranges(summarised, x = "model") +
 #'   facet_wrap(~target_type, scales = "free")
 
-plot_ranges <- function(scores,
-                        y = "wis",
-                        x = "model",
-                        colour = "range") {
+plot_interval_ranges <- function(scores,
+                                 y = "wis",
+                                 x = "model",
+                                 colour = "interval_range") {
   plot <- ggplot(
     scores,
     aes(
@@ -257,7 +257,7 @@ plot_ranges <- function(scores,
     )
   ) +
     geom_point(size = 2) +
-    geom_line(aes(group = range),
+    geom_line(aes(group = interval_range),
       colour = "black",
       linewidth = 0.01
     ) +
@@ -343,8 +343,8 @@ plot_heatmap <- function(scores,
 #' plot, this should be a character vector with the columns used in facetting
 #' (note that the facetting still needs to be done outside of the function call)
 #' @param x character vector of length one that denotes the name of the variable
-#' @param range numeric vector indicating the interval ranges to plot. If 0 is
-#' included in range, the median prediction will be shown.
+#' @param interval_range numeric vector indicating the interval ranges to plot.
+#' If 0 is included in `interval_range`, the median prediction will be shown.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
 #' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
@@ -369,7 +369,7 @@ plot_heatmap <- function(scores,
 #'   plot_predictions (
 #'     x = "target_end_date",
 #'     by = c("target_type", "location"),
-#'     range = c(0, 50, 90, 95)
+#'     interval_range = c(0, 50, 90, 95)
 #'   ) +
 #'   facet_wrap(~ location + target_type, scales = "free_y") +
 #'   aes(fill = model, color = model)
@@ -387,7 +387,7 @@ plot_heatmap <- function(scores,
 #'   plot_predictions (
 #'     x = "target_end_date",
 #'     by = c("target_type", "location"),
-#'     range = c(0)
+#'     interval_range = 0
 #'   ) +
 #'   facet_wrap(~ location + target_type, scales = "free_y") +
 #'   aes(fill = model, color = model)
@@ -395,7 +395,7 @@ plot_heatmap <- function(scores,
 plot_predictions <- function(data,
                              by = NULL,
                              x = "date",
-                             range = c(0, 50, 90)) {
+                             interval_range = c(0, 50, 90)) {
 
   # split truth data and forecasts in order to apply different filtering
   truth_data <- data.table::as.data.table(data)[!is.na(observed)]
@@ -407,7 +407,7 @@ plot_predictions <- function(data,
   truth_data <- unique(suppressWarnings(truth_data[, eval(del_cols) := NULL]))
 
   # find out what type of predictions we have. convert sample based to
-  # range data
+  # interval range data
 
   if (test_forecast_type_is_quantile(data)) {
     forecasts <- quantile_to_interval(
@@ -415,21 +415,21 @@ plot_predictions <- function(data,
       keep_quantile_col = FALSE
     )
   } else if (test_forecast_type_is_sample(data)) {
-    forecasts <- sample_to_range_long(
+    forecasts <- sample_to_interval_long(
       forecasts,
-      range = range,
+      interval_range = interval_range,
       keep_quantile_col = FALSE
     )
   }
 
   # select appropriate boundaries and pivot wider
-  select <- forecasts$range %in% setdiff(range, 0)
+  select <- forecasts$interval_range %in% setdiff(interval_range, 0)
   intervals <- forecasts[select, ]
 
   # delete quantile column in intervals if present. This is important for
   # pivoting
-  if ("quantile" %in% names(intervals)) {
-    intervals[, quantile := NULL]
+  if ("quantile_level" %in% names(intervals)) {
+    intervals[, quantile_level := NULL]
   }
 
   plot <- ggplot(data = data, aes(x = .data[[x]])) +
@@ -441,7 +441,7 @@ plot_predictions <- function(data,
     intervals <- data.table::dcast(intervals, ... ~ boundary,
                                    value.var = "predicted")
 
-    # only plot ranges if there are ranges to plot
+    # only plot interval ranges if there are interval ranges to plot
     plot <- plot +
       ggdist::geom_lineribbon(
         data = intervals,
@@ -450,13 +450,16 @@ plot_predictions <- function(data,
           # We use the fill_ramp aesthetic for this instead of the default fill
           # because we want to keep fill to be able to use it for other
           # variables
-          fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
+          fill_ramp = factor(
+            interval_range,
+            levels = sort(unique(interval_range), decreasing = TRUE)
+          )
         ),
         lwd = 0.4
       ) +
       ggdist::scale_fill_ramp_discrete(
-        name = "range",
-        # range arguemnt was added to make sure that the line for the median
+        name = "interval_range",
+        # range argument was added to make sure that the line for the median
         # and the ribbon don't have the same opacity, making the line
         # invisible
         range = c(0.15, 0.75)
@@ -466,8 +469,9 @@ plot_predictions <- function(data,
   # We could treat this step as part of ggdist::geom_lineribbon() but we treat
   # it separately here to deal with the case when only the median is provided
   # (in which case ggdist::geom_lineribbon() will fail)
-  if (0 %in% range) {
-    select_median <- (forecasts$range == 0 & forecasts$boundary == "lower")
+  if (0 %in% interval_range) {
+    select_median <-
+      forecasts$interval_range == 0 & forecasts$boundary == "lower"
     median <- forecasts[select_median]
 
     if (nrow(median) > 0) {
@@ -569,8 +573,8 @@ make_na <- make_NA
 #' Plot interval coverage
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
+#' produced by [score()] or [summarise_scores()]. Note that "interval_range"
+#' must be included in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -583,13 +587,13 @@ make_na <- make_NA
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "range"))
+#' summarised <- summarise_scores(data_coverage, by = c("model", "interval_range"))
 #' plot_interval_coverage(summarised)
 plot_interval_coverage <- function(scores,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot(scores, aes(
-    x = range,
+    x = interval_range,
     colour = .data[[colour]]
   )) +
     geom_polygon(
@@ -607,7 +611,7 @@ plot_interval_coverage <- function(scores,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = range),
+    geom_line(aes(y = interval_range),
       colour = "grey",
       linetype = "dashed"
     ) +
@@ -626,8 +630,8 @@ plot_interval_coverage <- function(scores,
 #' Plot quantile coverage
 #'
 #' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
+#' produced by [score()] or [summarise_scores()]. Note that "quantile_level"
+#' must be included in the `by` argument when running [summarise_scores()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -637,14 +641,14 @@ plot_interval_coverage <- function(scores,
 #' @export
 #' @examples
 #' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
+#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
 #' plot_quantile_coverage(summarised)
 
 plot_quantile_coverage <- function(scores,
                                    colour = "model") {
   p2 <- ggplot(
     data = scores,
-    aes(x = quantile, colour = .data[[colour]])
+    aes(x = quantile_level, colour = .data[[colour]])
   ) +
     geom_polygon(
       data = data.frame(
@@ -667,14 +671,14 @@ plot_quantile_coverage <- function(scores,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = quantile),
+    geom_line(aes(y = quantile_level),
       colour = "grey",
       linetype = "dashed"
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +
-    xlab("Quantile") +
-    ylab("% Obs below quantile") +
+    xlab("Quantile level") +
+    ylab("% Obs below quantile level") +
     scale_y_continuous(
       labels = function(x) {
         paste(100 * x)
@@ -859,7 +863,7 @@ plot_pairwise_comparison <- function(comparison_result,
 plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
-  if ("quantile" %in% names(pit)) {
+  if ("quantile_level" %in% names(pit)) {
     type <- "quantile-based"
   } else {
     type <- "sample-based"
@@ -876,7 +880,7 @@ plot_pit <- function(pit,
       plot_quantiles <- seq(width, 1, width)
     }
     if (type == "quantile-based") {
-      plot_quantiles <- unique(pit$quantile)
+      plot_quantiles <- unique(pit$quantile_level)
     }
   } else {
     # if num_bins is explicitly given
@@ -902,8 +906,8 @@ plot_pit <- function(pit,
       }
 
       hist <- ggplot(
-        data = pit[quantile %in% plot_quantiles],
-        aes(x = quantile, y = pit_value)
+        data = pit[quantile_level %in% plot_quantiles],
+        aes(x = quantile_level, y = pit_value)
       ) +
         geom_col(position = "dodge") +
         facet_wrap(formula)

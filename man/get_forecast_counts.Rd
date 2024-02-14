@@ -4,7 +4,11 @@
 \alias{get_forecast_counts}
 \title{Count Number of Available Forecasts}
 \usage{
-get_forecast_counts(data, by = NULL, collapse = c("quantile", "sample_id"))
+get_forecast_counts(
+  data,
+  by = NULL,
+  collapse = c("quantile_level", "sample_id")
+)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
@@ -13,9 +17,10 @@ get_forecast_counts(data, by = NULL, collapse = c("quantile", "sample_id"))
 categories over which the number of forecasts should be counted.
 By default (\code{by = NULL}) this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
-'predicted' and 'observed') plus "quantile" or "sample_id" where present).}
+'predicted' and 'observed') plus "quantile_level" or "sample_id" where
+present).}
 
-\item{collapse}{character vector (default is \verb{c("quantile", "sample_id"})
+\item{collapse}{character vector (default: \verb{c("quantile_level", "sample_id"})
 with names of categories for which the number of rows should be collapsed to
 one when counting. For example, a single forecast is usually represented by a
 set of several quantiles or samples and collapsing these to one makes sure

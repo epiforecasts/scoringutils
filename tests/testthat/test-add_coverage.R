@@ -7,7 +7,7 @@ test_that("add_coverage() works as expected", {
   )
 
   required_names <- c(
-    "range", "interval_coverage", "interval_coverage_deviation",
+    "interval_range", "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation"
   )
   expect_equal(colnames(cov), c(colnames(example_quantile), required_names))

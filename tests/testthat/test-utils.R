@@ -2,7 +2,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_quantile
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
@@ -14,7 +14,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_binary
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
@@ -25,7 +25,7 @@ test_that("get_protected_columns() returns the correct result", {
 
   data <- example_continuous
   manual <- protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary", available_metrics(),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
@@ -77,4 +77,39 @@ test_that("get_score_names() works as expected", {
     get_score_names(ex),
     "but are no longer column names of the data: `crps`"
   )
+})
+
+test_that("print() works on forecast_* objects", {
+  # Check print works on each forecast object
+  test_dat <- list(example_binary, example_quantile,
+    example_point, example_continuous, example_integer)
+  for (dat in test_dat){
+    dat <- suppressMessages(as_forecast(dat))
+    forecast_type <- get_forecast_type(dat)
+    forecast_unit <- get_forecast_unit(dat)
+
+    # Check Forecast type
+    expect_output(print(dat), "Forecast type")
+    expect_output(print(dat), forecast_type)
+    # Check Forecast unit
+    expect_output(print(dat), "Forecast unit")
+    expect_output(print(dat), pattern = paste(forecast_unit, collapse = " "))
+
+    # Check print.data.table works.
+    output_original <- capture.output(print(dat))
+    output_test <- capture.output(print(data.table(dat)))
+    expect_contains(output_original, output_test)
+  }
+
+  # Check Score columns are printed
+  dat <- example_quantile %>%
+    set_forecast_unit(c("location", "target_end_date",
+      "target_type", "horizon", "model")) %>%
+    as_forecast() %>%
+    add_coverage() %>%
+    suppressMessages
+
+  expect_output(print(dat), "Score columns")
+  score_cols <- get_score_names(dat)
+  expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
 })

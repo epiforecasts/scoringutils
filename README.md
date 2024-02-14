@@ -206,6 +206,7 @@ example_quantile %>%
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #>                    model target_type   scale         wis overprediction
+#>                   <char>      <char>  <char>       <num>          <num>
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
 #> 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696
 #> 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842
@@ -213,6 +214,7 @@ example_quantile %>%
 #> 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117
 #> 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601
 #>    underprediction dispersion        bias interval_coverage_50
+#>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
 #> 2:    10284.972826 4102.50094  0.09726562            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
@@ -220,6 +222,7 @@ example_quantile %>%
 #> 5:        2.098505   91.40625  0.33906250            0.6640625
 #> 6:       16.800951   26.87239 -0.02234375            0.4609375
 #>    interval_coverage_90 interval_coverage_deviation   ae_median
+#>                   <num>                       <num>       <num>
 #> 1:            0.8046875                 -0.10230114 17707.95312
 #> 2:            0.8203125                 -0.11437500 32080.48438
 #> 3:            0.7890625                 -0.06963068 21530.69531

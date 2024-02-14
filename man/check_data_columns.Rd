@@ -16,6 +16,6 @@ error message otherwise
 \description{
 Checks whether data is a data.frame, whether columns
 "observed" and "predicted" are present, and checks that only one of
-"quantile" and "sample_id" is present.
+"quantile_level" and "sample_id" is present.
 }
 \keyword{internal_input_check}

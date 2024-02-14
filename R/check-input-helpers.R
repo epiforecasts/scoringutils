@@ -27,7 +27,7 @@ check_numeric_vector <- function(x, ...) {
 #' Quantiles must be in the range specified, increase monotonically,
 #' and contain no duplicates.
 #'
-#' This is used in [bias_range()]() and [bias_quantile()]() to
+#' This is used in [bias_interval()]() and [bias_quantile()]() to
 #' provide informative errors to users.
 #'
 #' @param quantiles Numeric vector of quantiles to check
@@ -341,7 +341,7 @@ test_columns_not_present <- function(data, columns) {
 #' Check whether data is data.frame with correct columns
 #' @description Checks whether data is a data.frame, whether columns
 #' "observed" and "predicted" are present, and checks that only one of
-#' "quantile" and "sample_id" is present.
+#' "quantile_level" and "sample_id" is present.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
 #' @keywords internal_input_check
@@ -354,10 +354,10 @@ check_data_columns <- function(data) {
   if (!needed) {
     return("Both columns `observed` and predicted` are needed")
   }
-  problem <- test_columns_present(data, c("sample_id", "quantile"))
+  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(
-      "Found columns `quantile` and `sample_id`. Only one of these is allowed"
+      "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
     )
   }
   return(TRUE)

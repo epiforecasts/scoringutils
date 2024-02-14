@@ -148,7 +148,7 @@ df_quantile <- sample_to_quantile(df,
 
 res_quantile <- score(df_quantile)
 res_quantile <- summarise_scores(res_quantile,
-                                 by = c("model", "range", "quantile"))
+                                 by = c("model", "interval_range", "quantile"))
 
 res_quantile[, model := factor(model,
                                levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
@@ -633,7 +633,7 @@ example_continuous |>
 # Figure 13
 # =============================================================================#
 cov_scores <- score(example_quantile) |>
-  summarise_scores(by = c("model", "target_type", "range", "quantile"))
+  summarise_scores(by = c("model", "target_type", "interval_range", "quantile"))
 
 p1 <- plot_interval_coverage(cov_scores) +
   facet_wrap(~ target_type) +

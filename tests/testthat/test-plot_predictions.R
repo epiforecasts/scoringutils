@@ -1,6 +1,6 @@
 test_that("plot_predictions() works with point forecasts", {
   d <- scoringutils::example_quantile
-  d <- d[d$quantile == 0.5 | is.na(d$quantile), ]
+  d <- d[d$quantile_level == 0.5 | is.na(d$quantile_level), ]
 
   p <-
     d %>%
@@ -35,7 +35,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
-      range = c(0, 10, 20, 30, 40, 50, 60)
+      interval_range = c(0, 10, 20, 30, 40, 50, 60)
     ) +
     facet_wrap(location ~ target_type, scales = "free_y")
 
@@ -56,7 +56,7 @@ test_that("plot_predictions() can handle an arbitrary number of quantiles", {
     plot_predictions(
       by = c("location", "target_type"),
       x = "target_end_date",
-      range = c(0, 50, 90, 95)
+      interval_range = c(0, 50, 90, 95)
     ) +
     facet_wrap(location ~ target_type, scales = "free_y")
   expect_s3_class(p2, "ggplot")
@@ -69,7 +69,7 @@ test_that("plot_predictions() works without median", {
 
   example3 <- subset(
     scoringutils::example_quantile,
-    is.na(quantile) | quantile != 0.5
+    is.na(quantile_level) | quantile_level != 0.5
   )
 
   p <- example3 %>%
