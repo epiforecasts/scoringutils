@@ -343,26 +343,42 @@ It is also important to note that uniformity of the PIT histogram (or a diagonal
 
 
 # Scoring forecasts
-
-\pkg{scoringutils} offers two ways of scoring forecasts: Users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once. 
+<!-- \pkg{scoringutils} offers two ways of scoring forecasts: Users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once.  -->
 
 ## score()
 
-The \fct{score} is the workhorse of the package. It takes as input either an object of class `forecast_*` or a `data.frame` (or similar) with forecasts, as well as a list of functions (the scoring rules). The function then applies those scoring rules to the input. Additional arguments can be passed down to the scoring rules via `...`. \fct{score} is a generic function that dispatches to different methods depending on the class of the input.
+The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The input data can either be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. 
 
-Explain the work flow when as_forecast has been used (i.e. default metrics and validation for that class).
+```{r}
+score(example_point) |>
+  print(2)
+```
 
-\fct{score.default} is the default method that is used if \fct{as\_forecast} has not yet been called on the input. \fct{score.default} calls \fct{as\_forecast} and then calls \fct{score} again in order to dispatch to the appropriate method. The method then validates the input again, applies the scoring rules, and returns an object of class `score`, which is essentially a `data.table` with an additional attribute `scoring_rules` (containing a vector with the names of the scoring rules used). The process is illustrated in Figure \ref{fig:flowchart-score}. 
+The second input to \fct{score} is a list of functions (the scoring rules) to apply to the data. There exists a default list of scoring rules for each forecast type which is automatically applied when the appropriate \fct{score} method is called. The default scoring rules can be accessed by calling the functions \fct{rules\_point}, \fct{rules\_binary}, \fct{rules\_sample} and \fct{rules\_quantile}. These functions take additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_rules} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of scoring rules. 
+
+```{r}
+rules <- rules_quantile() |>
+  select_rules(select = c("wis", "overprediction"))
+
+score(forecast_quantile, rules = rules) |>
+  print(2)
+```
+
+All scoring rules passed to \fct{score} need to adhere to the same input formats (it is therefore not possible to score different forecast types together, but instead they have to be scored separately). However, it is not necessary that all function arguments have the same name. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. While the columns of the input data passed to \fct{score} need to be called `observed` and `predicted`, the aruments of the actual scoring rules can have any name, as long as the input formats are compatible with the given forecast type. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`.
+
+Additional arguments can be passed down to the scoring rules via the `...` arguments in \fct{score}. The output of \fct{score}() is an object of class `scores`, which is essentially a data.table with an additional attribute `score_names` (containing a vector with the names of the scoring rules used). 
+<!-- The process is illustrated in Figure \ref{fig:flowchart-score}.  -->
 <!-- Maybe say something about extending `score()` for others. Could also be a section -->
 
-```{r flowchart-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Flowchart for calling `score()`", fig.show="hold"}
+```{r flowchart-score, echo = FALSE, eval = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Flowchart for calling `score()`", fig.show="hold"}
 include_graphics("output/flowchart-score.png")
 ```
 
 ## Scoring rules
 
-Scoring rules are the functions that compute scores. They are usually named
-`name of the metric + _ + forecast type`. If only a single forecast type is possible, then `_ + forecast type` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of a scoring rule is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector that denotes the quantile levels of the predictive quantiles. 
+Scoring rules are the functions that compute scores. They can either be called directly on a set of vectors and matrices, or applied to a data set of observed and predicted values using \fct{score}. 
+
+Scoring rules are named `name of the metric + _ + forecast type`. If only a single forecast type is possible, then `_ + forecast type` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of the scoring rule exported by \pkg{scoringutils} is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector, `quantile_level` that denotes the quantile levels of the predictive quantiles. 
 
 Scoring rules differ in the relationship between input and output. Some scoring rules have a one-to-one relationship between predicted values and scores, returning one value per value in `predicted`. This is the case for all scoring rules for binary and point forecasts. Other scoring rules have a many-to-one relationship, returning one value per multiple values in `predicted`. This is the case for all scoring rules for sample- and quantile-based forecasts. For sample- and quantile-based forecasts, `predicted` is therefore a matrix, with values in each row jointly forming a single forecast.
 
@@ -372,21 +388,9 @@ Input formats and return values are shown in more detail in Figure \ref{fig:inpu
 include_graphics("output/input-formats-scoring-rules.png")
 ```
 
-## Passing scoring rules to score()
-
-The second argument to \fct{score} is a named list of scoring rules. Names of the list items will be used as column names for the scores. The default list for every forecast type can be accessed by calling \fct{rules\_binary}, \fct{rules\_point}, \fct{rules\_sample} and \fct{rules\_quantile}. 
-
-Within \fct{score}, arguments are passed by position, meaning that users are not tied to the \pkg{scoringutils} naming convention. As long as scoring rule is compatible with the forecast type, one can supply functions that take equivalent, but differently called arguments. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` instead of `observed` and `predicted`.
-
 <!-- Maybe something about the wrapper functions that we want to have -->
 
-```{r}
-score(example_point) |>
-  print(2)
-```
-
-
-## Summarising scores
+# Summarising results
 
 Usually, one will not be interested in the scores for each forecast, but rather in summarised scores. \pkg{scoringutils} provides methods for the generic function \fct{aggregate} that allow users to aggregate scores across dimensions using an arbitrary function (for most users most of the time this will be the default mean). 
 
