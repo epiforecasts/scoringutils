@@ -322,7 +322,7 @@ example_quantile %>%
 
 <!-- Functions that begin with `test_` return `TRUE` if the condition is met, and `FALSE` otherwise.  -->
 
-### PIT histograms and probabilistic calibration
+### Probabilistic calibration and PIT histograms
 
 One important quality of good forecasts is calibration. The term describes a statistical consistency between the forecasts and the observations, i.e. an absence of systematic deviations between the two. It is possible to distinguish several forms of calibration which are discussed in detail by \cite{gneitingProbabilisticForecastsCalibration2007}. The form of calibration most commonly focused on is called probabilistic calibration. Probabilistic calibration means that the forecast distributions are consistent with the true data-generating distributions in the sense that on average, $\tau$\% of true observations will be below the corresponding $\tau$-\%-quantiles of the cumulative forecast distributions. 
 
@@ -341,6 +341,61 @@ It is, in theory, possible to formally test probabilistic calibration, for examp
 <!-- I once did a simulation study for this for my master thesis. Could include here -->
 It is also important to note that uniformity of the PIT histogram (or a diagonal on quantile and interval coverage plots) indicates probabilistic calibration, but does not guarantee that forecasts are indeed calibrated in every relevant sense. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are mis-calibrated, but have uniform PIT histograms. 
 
+### Probabilistic calibration and coverage plots
+
+For forecasts in a quantile-based format, there exists a second way to assess probabilistic calibration: we can easily compare the proportion of observations that fall below the $\tau$-quantiles of all forecasts ("empirical quantile coverage") to the nominal quantile coverage $\tau$. Similarly, we can compare the empirical coverage of the central prediction intervals formed by the predictive quantiles to the nominal interval coverage. For example, the central 50\% prediction intervals of all forecasts should contain around 50\% of the observed values, the 90\% central intervals should contain around 90\% of observations etc. Forecasts that are too narrow and do not cover the required proportion of observations are called overconfident or underdispersed, while predictive distributions that are too wide are often called underconfident, overdispersed or conservative. In addition to those coverage values, we can also define coverage deviation as the difference between nominal and empirical coverage.
+
+Interval and quantile coverage can easily be computed by the function \fct{get_coverage}. The function takes data in a quantile format as input and computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
+
+```{r}
+example_quantile |>
+  get_coverage(by = "model") |>
+  data.table:::print.data.table(2)
+```
+
+Results can then be visualised using the functions `plot_interval_coverage()` (see row 3 in Figure \ref{fig:calibration-plots}) and `plot_quantile_coverage()` (row 4 in Figure \ref{fig:calibration-plots}). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. For interval coverage plots, a shift to the left means a forecaster is too conservative and issues a predictive distribution that is too wide and covers more of the observed values than needed. A shift to the right means a forecaster is overconfident and the forecast distribution is too narrow. For *quantile coverage plots*, the interpretation depends on whether the quantile is above or below the median. For quantiles below the median, a line to the right of the diagonal (predictive quantiles lower than the quantiles of the data-generating distribution) means a forecaster is too conservative, while for quantiles above the median, a line to the left of the diagonal line (predictive quantiles higher than the quantiles of the data-generating distribution) implies conservative predictions. Areas that imply a conservative forecaster are shaded in green. 
+
+Note that users can also compute individual coverage values as scores using \fct{score}. This, however, serves the purpose of producing a summary measure alongside other scores, rather than providing a way to visually assess calibration. 
+
+<!-- It is in principle possible to convert sample-based forecasts to quantile-based forecasts using the function \fct{sample\_to\_quantile} to make use of `add_coverage()`. This should be done with caution, as the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large.  -->
+
+```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
+include_graphics("output/calibration-diagnostic-examples.png")
+```
+
+```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
+cov_scores <- score(example_quantile) |>
+  summarise_scores(by = c("model", "target_type", "range", "quantile"))
+
+plot_interval_coverage(cov_scores) + 
+  facet_wrap(~ target_type)
+
+plot_quantile_coverage(cov_scores) + 
+  facet_wrap(~ target_type)
+```
+
+```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
+cov_scores <- score(example_quantile) |>
+  summarise_scores(by = c("model", "target_type", "range", "quantile"))
+
+p1 <- plot_interval_coverage(cov_scores) + 
+  facet_wrap(~ target_type) + 
+  theme(panel.spacing = unit(2, "lines"))
+
+p2 <- plot_quantile_coverage(cov_scores) + 
+  facet_wrap(~ target_type) + 
+  theme(panel.spacing = unit(2, "lines"))
+
+p1 / p2 +
+  plot_annotation(tag_levels = "A") + 
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom") 
+
+```
+
+
+
+
 
 # Scoring forecasts
 <!-- \pkg{scoringutils} offers two ways of scoring forecasts: Users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once.  -->
@@ -356,12 +411,11 @@ score(example_point) |>
 
 The second input to \fct{score} is a list of functions (the scoring rules) to apply to the data. There exists a default list of scoring rules for each forecast type which is automatically applied when the appropriate \fct{score} method is called. The default scoring rules can be accessed by calling the functions \fct{rules\_point}, \fct{rules\_binary}, \fct{rules\_sample} and \fct{rules\_quantile}. These functions take additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_rules} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of scoring rules. 
 
-```{r}
+```{r eval=FALSE}
 rules <- rules_quantile() |>
   select_rules(select = c("wis", "overprediction"))
 
-score(forecast_quantile, rules = rules) |>
-  print(2)
+score(forecast_quantile, rules = rules)
 ```
 
 All scoring rules passed to \fct{score} need to adhere to the same input formats (it is therefore not possible to score different forecast types together, but instead they have to be scored separately). However, it is not necessary that all function arguments have the same name. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. While the columns of the input data passed to \fct{score} need to be called `observed` and `predicted`, the aruments of the actual scoring rules can have any name, as long as the input formats are compatible with the given forecast type. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`.
@@ -389,6 +443,14 @@ include_graphics("output/input-formats-scoring-rules.png")
 ```
 
 <!-- Maybe something about the wrapper functions that we want to have -->
+
+## Adding pairwise comparisons
+
+## Additional things to do with the output of scores
+
+### correlations
+
+### pairwise comparisons
 
 # Summarising results
 
@@ -527,57 +589,6 @@ It is in principle possible to compute p-values to determine whether two models 
 
 Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values does not account for), it may be sensible to summarise over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
 
-# Calibration
-
-Calibration refers to a statistical consistency (i.e., absence of systematic deviations) between the forecasts and the observations. It is possible to distinguish several forms of calibration which are discussed in detail by \cite{gneitingProbabilisticForecastsCalibration2007}. The form of calibration most commonly focused on is called probabilistic calibration (for other forms of calibration, see \cite{gneitingProbabilisticForecastsCalibration2007}). Probabilistic calibration means that the forecast distributions are consistent with the true data-generating distributions in the sense that on average, $\tau$\% of true observations will be below the corresponding $\tau$-\%-quantiles of the cumulative forecast distributions. 
-
-## Interval coverage and quantile coverage
-
-This, of course, can be most easily verified for predictive distributions in a quantile-based format. For such forecasts, one can easily compare the proportion of observations that fall below the $\tau$-quantiles of all forecasts ("empirical quantile coverage") to the nominal quantile coverage $\tau$. 
-
-The above definition of probabilistic calibration also implies that the empirical coverage of the central prediction intervals formed by the predictive quantiles should be equal to the nominal interval coverage. For example, the central 50\% prediction intervals of all forecasts should contain around 50\% of the observed values, the 90\% central intervals should contain around 90\% of observations etc. Forecasts that are too narrow and do not cover the required proportion of observations are called overconfident or underdispersed, while predictive distributions that are too wide are often called underconfident, overdispersed or conservative. 
-
-Users can obtain coverage values for quantile-based predictions in two different ways. The first is to call the functions \fct{interval_coverage_quantile} and \fct{quantile_coverage_quantile} directly as scoring rules within `score()` to obtain coverage values for specific quantile-levels or central prediction intervals. A more comprehensive way is by using the function \fct{add\_coverage} directly on the raw forecasts. It adds additional columns with the width of the central prediction interval corresponding to a given quantile level, quantile coverage, interval coverage, quantile coverage deviation and interval coverage deviation. Deviation here means the difference between nominal and empirical coverage. Coverage for a single quantile or interval is only ever `TRUE` or `FALSE`. Coverage values are therefore only meaningful when summarised over many forecasts. This can be done by calling `aggregate()`, as \pkg{scoringutils} provides a method for class `forecast_quantile` (which behaves the same as the \fct{aggregate} method for class `score` discussed above). 
-
-Results can then be visualised using the functions `plot_interval_coverage()` (see row 3 in Figure \ref{fig:calibration-plots}) and `plot_quantile_coverage()` (row 4 in Figure \ref{fig:calibration-plots}). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. For interval coverage plots, a shift to the left means a forecaster is too conservative and issues a predictive distribution that is too wide and covers more of the observed values than needed. A shift to the right means a forecaster is overconfident and the forecast distribution is too narrow. For *quantile coverage plots*, the interpretation depends on whether the quantile is above or below the median. For quantiles below the median, a line to the right of the diagonal (predictive quantiles lower than the quantiles of the data-generating distribution) means a forecaster is too conservative, while for quantiles above the median, a line to the left of the diagonal line (predictive quantiles higher than the quantiles of the data-generating distribution) implies conservative predictions. Areas that imply a conservative forecaster are shaded in green. 
-
-It is in principle possible to convert sample-based forecasts to quantile-based forecasts using the function \fct{sample\_to\_quantile} to make use of `add_coverage()`. This should be done with caution, as the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large. 
-
-
-
-```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
-include_graphics("output/calibration-diagnostic-examples.png")
-```
-
-```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
-cov_scores <- score(example_quantile) |>
-  summarise_scores(by = c("model", "target_type", "range", "quantile"))
-
-plot_interval_coverage(cov_scores) + 
-  facet_wrap(~ target_type)
-
-plot_quantile_coverage(cov_scores) + 
-  facet_wrap(~ target_type)
-```
-
-```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
-cov_scores <- score(example_quantile) |>
-  summarise_scores(by = c("model", "target_type", "range", "quantile"))
-
-p1 <- plot_interval_coverage(cov_scores) + 
-  facet_wrap(~ target_type) + 
-  theme(panel.spacing = unit(2, "lines"))
-
-p2 <- plot_quantile_coverage(cov_scores) + 
-  facet_wrap(~ target_type) + 
-  theme(panel.spacing = unit(2, "lines"))
-
-p1 / p2 +
-  plot_annotation(tag_levels = "A") + 
-  plot_layout(guides = "collect") &
-  theme(legend.position = "bottom") 
-
-```
 
 ## Bias
 
