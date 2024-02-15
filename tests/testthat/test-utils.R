@@ -79,6 +79,11 @@ test_that("get_score_names() works as expected", {
   )
 })
 
+
+# ==============================================================================
+# print
+# ==============================================================================
+
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
   test_dat <- list(example_binary, example_quantile,
@@ -113,7 +118,6 @@ test_that("print() works on forecast_* objects", {
   score_cols <- get_score_names(dat)
   expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
 })
-
 
 test_that("print methods fail gracefully", {
   test <- as_forecast(na.omit(example_quantile))
