@@ -250,3 +250,11 @@ print.forecast_point <- print.forecast_binary
 #' @rdname print.forecast_binary
 #' @export
 print.forecast_sample <- print.forecast_binary
+
+##' @method `[` scores
+##' @export
+`[.scores` <- function(x, ...) {
+  ret <- NextMethod()
+  attributes(ret) <- attributes(x)
+  return(ret)
+}
