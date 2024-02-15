@@ -171,17 +171,21 @@ example_quantile %>%
 #> been previously computed, but are no longer column names of the data:
 #> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
 #> `?get_score_names` for further information.
+#> Warning in get_score_names(scores): The following scores have been previously
+#> computed, but are no longer column names of the data: `interval_coverage,
+#> quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for
+#> further information.
 ```
 
 | model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
 |:----------------------|:------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|-------------------:|--------------------------:|
-| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.30 |                       1.6 |
-| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               2.30 |                       3.8 |
-| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.82 |                       1.0 |
-| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.60 |                       1.0 |
-| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.75 |                       1.3 |
-| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               0.95 |                       1.2 |
-| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               0.98 |                       1.6 |
+| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.60 |                      2.00 |
+| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               1.60 |                      2.00 |
+| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.81 |                      1.00 |
+| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.81 |                      1.00 |
+| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.76 |                      0.94 |
+| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               1.00 |                      1.30 |
+| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               1.00 |                      1.30 |
 
 `scoringutils` contains additional functionality to transform forecasts,
 to summarise scores at different levels, to visualise them, and to
