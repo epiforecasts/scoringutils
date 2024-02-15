@@ -113,3 +113,11 @@ test_that("print() works on forecast_* objects", {
   score_cols <- get_score_names(dat)
   expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
 })
+
+
+test_that("print methods fail gracefully", {
+  test <- as_forecast(na.omit(example_quantile))
+  test$observed <- NULL
+
+  expect_output(print(test), pattern = "The object currently does not pass validation.")
+})
