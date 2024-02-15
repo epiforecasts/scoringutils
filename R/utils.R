@@ -255,6 +255,8 @@ print.forecast_sample <- print.forecast_binary
 ##' @export
 `[.scores` <- function(x, ...) {
   ret <- NextMethod()
-  attr(ret, "score_names") <- attr(x, "score_names")
+  if (is.data.frame(ret)) {
+    attr(ret, "score_names") <- intersect(attr(x, "score_names"), colnames(ret))
+  }
   return(ret)
 }
