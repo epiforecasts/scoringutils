@@ -255,6 +255,6 @@ print.forecast_sample <- print.forecast_binary
 ##' @export
 `[.scores` <- function(x, ...) {
   ret <- NextMethod()
-  attributes(ret) <- attributes(x)
+  attr(ret, "score_names") <- attr(x, "score_names")
   return(ret)
 }
