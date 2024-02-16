@@ -185,43 +185,72 @@ add_pairwise_comparison <- function(scores,
                                     relative_skill_metric = "auto",
                                     baseline = NULL) {
 
+  # check inputs ---------------------------------------------------------------
+  # we need the score names attribute to make sure we can determine the
+  # forecast unit correctly
   score_names <- get_score_names(scores)
   if (is.null(score_names)) {
     stop("`scores` needs to have an attribute `score_names` with the names of
          the metrics that were used for scoring.")
   }
 
-  # check input arguments and check whether relative skill can be computed
-  relative_skill <- check_summary_params(
-    scores = scores,
-    by = by,
-    relative_skill = TRUE,
-    baseline = baseline,
-    metric = relative_skill_metric
-  )
-
-  # do pairwise comparisons ----------------------------------------------------
-  if (relative_skill) {
-    pairwise <- pairwise_comparison(
-      scores = scores,
-      metric = relative_skill_metric,
-      baseline = baseline,
-      by = by
+  # check that model column + columns in 'by' + baseline model are present
+  by_cols <- check_columns_present(scores, by)
+  if(!is.logical(by_cols)) {
+    stop("Not all columns specified in `by` are present: ", by_cols)
+  }
+  model_col <- check_columns_present(scores, "model")
+  if(!is.logical(model_col)) {
+    stop(
+      "To compute relative skill, a column called 'model' ",
+      "must be present in the input data."
     )
+  }
+  models <- unique(scores$model)
+  if (!is.null(baseline) && !(baseline %in% models)) {
+    stop(
+      "The baseline provided was not found among the models in the data."
+    )
+  }
+  # check there are enough models
+  if (length(setdiff(models, baseline)) < 2) {
+    stop(
+      "More than one non-baseline model is needed to compute ",
+      "pairwise compairisons."
+    )
+  }
 
-    if (!is.null(pairwise)) {
-      # delete unnecessary columns
-      pairwise[, c(
-        "compare_against", "mean_scores_ratio",
-        "pval", "adj_pval"
-      ) := NULL]
-      pairwise <- unique(pairwise)
-
-      # merge back
-      scores <- merge(
-        scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+  if (relative_skill_metric == "auto") {
+    defaults <- c("wis", "crps", "brier_score")
+    relative_skill_metric <- defaults[defaults %in% names(scores)]
+    if (length(relative_skill_metric) == 0) {
+      stop(
+        "No metric for relative skill was specified and none of the ",
+        "default metrics (wis, crps, brier_score) were found in the data."
       )
     }
+  }
+
+  # do pairwise comparisons ----------------------------------------------------
+  pairwise <- pairwise_comparison(
+    scores = scores,
+    metric = relative_skill_metric,
+    baseline = baseline,
+    by = by
+  )
+
+  if (!is.null(pairwise)) {
+    # delete unnecessary columns
+    pairwise[, c(
+      "compare_against", "mean_scores_ratio",
+      "pval", "adj_pval"
+    ) := NULL]
+    pairwise <- unique(pairwise)
+
+    # merge back
+    scores <- merge(
+      scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+    )
   }
 
   new_score_names <- paste(relative_skill_metric, "relative_skill", sep = "_")
@@ -233,68 +262,4 @@ add_pairwise_comparison <- function(scores,
   }
   scores <- new_scores(scores, score_names = c(score_names, new_score_names))
   return(scores)
-}
-
-
-
-
-#' @title Check input parameters for [summarise_scores()]
-#'
-#' @description A helper function to check the input parameters for
-#' [score()].
-#'
-#' @inheritParams summarise_scores
-#'
-#' @keywords internal
-check_summary_params <- function(scores,
-                                 by,
-                                 relative_skill,
-                                 baseline,
-                                 metric) {
-
-  # check that columns in 'by' are actually present ----------------------------
-  if (!all(by %in% c(colnames(scores), "interval_range", "quantile_level"))) {
-    not_present <- setdiff(by, c(colnames(scores), "interval_range", "quantile_level"))
-    msg <- paste0(
-      "The following items in `by` are not",
-      "valid column names of the data: '",
-      toString(not_present),
-      "'. Check and run `summarise_scores()` again"
-    )
-    stop(msg)
-  }
-
-  # error handling for relative skill computation ------------------------------
-  if (relative_skill) {
-    if (!("model" %in% colnames(scores))) {
-      warning(
-        "to compute relative skills, there must column present ",
-        "called model'. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    models <- unique(scores$model)
-    if (length(models) < 2 + (!is.null(baseline))) {
-      warning(
-        "you need more than one model non-baseline model to make model ",
-        "comparisons. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    if (!is.null(baseline) && !(baseline %in% models)) {
-      warning(
-        "The baseline you provided for the relative skill is not one of ",
-        "the models in the data. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    if (metric != "auto" && !(metric %in% available_metrics())) {
-      warning(
-        "argument 'metric' must either be 'auto' or one of the metrics that ",
-        "can be computed. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-  }
-  return(relative_skill)
 }
