@@ -278,3 +278,13 @@ validate_scores <- function(scores) {
   get_score_names(scores, error = TRUE)
   return(invisible(NULL))
 }
+
+##' @method `[` scores
+##' @export
+`[.scores` <- function(x, ...) {
+  ret <- NextMethod()
+  if (is.data.frame(ret)) {
+    attr(ret, "score_names") <- attr(x, "score_names")
+  }
+  return(ret)
+}

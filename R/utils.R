@@ -250,13 +250,3 @@ print.forecast_point <- print.forecast_binary
 #' @rdname print.forecast_binary
 #' @export
 print.forecast_sample <- print.forecast_binary
-
-##' @method `[` scores
-##' @export
-`[.scores` <- function(x, ...) {
-  ret <- NextMethod()
-  if (is.data.frame(ret)) {
-    attr(ret, "score_names") <- attr(x, "score_names")
-  }
-  return(ret)
-}
