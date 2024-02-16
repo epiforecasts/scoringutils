@@ -47,6 +47,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Added a method for `print()` that prints out additional information for `forecast` objects. 
+- Added a subsetting `[` operator for scores, so that the score name attribute gets preserved when subsetting.
 
 # scoringutils 1.2.2
 
