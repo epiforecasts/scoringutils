@@ -218,7 +218,7 @@ test_that("pairwise_comparison() works", {
 
 test_that("pairwise_comparison() work in score() with integer data", {
   eval <- suppressMessages(score(data = example_integer))
-  eval_summarised <- summarise_scores(eval, by = "model")
+  eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
 })
@@ -226,7 +226,7 @@ test_that("pairwise_comparison() work in score() with integer data", {
 
 test_that("pairwise_comparison() work in score() with binary data", {
   eval <- suppressMessages(score(data = example_binary))
-  eval_summarised <- summarise_scores(eval, by = "model")
+  eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("brier_score_relative_skill" %in% colnames(eval))
 })
@@ -242,6 +242,7 @@ test_that("pairwise_comparison() works", {
     wis = (abs(rnorm(30))),
     ae_median = (abs(rnorm(30)))
   )
+  attr(df, "score_names") <- c("wis", "ae_median")
 
   res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
 
@@ -254,25 +255,26 @@ test_that("pairwise_comparison() works", {
 })
 
 
-test_that("pairwise_comparison() works inside and outside of score()", {
+test_that("pairwise_comparison() and `add_pairwise_comparison()` give same result", {
   eval <- scores_continuous
 
-  pairwise <- suppressMessages(pairwise_comparison(eval,
+  pairwise <- pairwise_comparison(eval,
     by = "model",
     metric = "crps"
-  ))
+  )
 
-  eval2_summarised <- summarise_scores(scores_continuous, by = "model")
-  eval2 <- add_pairwise_comparison(eval2_summarised)
+  eval2 <- add_pairwise_comparison(scores_continuous, by = "model")
+  eval2 <- summarise_scores(eval2, by = "model")
 
   expect_equal(
-    sort(unique(pairwise$relative_skill)), sort(eval2$relative_skill)
+    sort(unique(pairwise$crps_relative_skill)), sort(eval2$crps_relative_skill)
   )
 })
 
 test_that("pairwise_comparison() realises when there is no baseline model", {
   expect_error(
-    pairwise_comparison(scores_quantile, baseline = "missing_model"), "missing"
+    pairwise_comparison(scores_quantile, baseline = "missing_model"),
+    "The baseline provided was not found among the models in the data."
   )
 })
 
@@ -338,12 +340,6 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   attr(eval, "score_names") <- NULL
   expect_error(
     add_pairwise_comparison(eval, by = "model", relative_skill_metric = "crps"),
-    "needs to have an attribute"
+    "needs an attribute `score_names`"
   )
-
-
-
-
-
-
 })
