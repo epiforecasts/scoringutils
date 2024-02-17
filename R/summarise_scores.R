@@ -196,11 +196,11 @@ add_pairwise_comparison <- function(scores,
 
   # check that model column + columns in 'by' + baseline model are present
   by_cols <- check_columns_present(scores, by)
-  if(!is.logical(by_cols)) {
+  if (!is.logical(by_cols)) {
     stop("Not all columns specified in `by` are present: ", by_cols)
   }
   model_col <- check_columns_present(scores, "model")
-  if(!is.logical(model_col)) {
+  if (!is.logical(model_col)) {
     stop(
       "To compute relative skill, a column called 'model' ",
       "must be present in the input data."
