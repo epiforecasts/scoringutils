@@ -275,3 +275,75 @@ test_that("pairwise_comparison() realises when there is no baseline model", {
     pairwise_comparison(scores_quantile, baseline = "missing_model"), "missing"
   )
 })
+
+test_that("Basic input checks for `add_pairwise_comparison() work", {
+  eval <- data.table::copy(scores_continuous)
+
+  # check that model column + columns in 'by' + baseline model are present
+  expect_error(
+    add_pairwise_comparison(
+      eval, by = c("model", "missing"), relative_skill_metric = "crps"
+    ),
+    "Not all columns specified in `by` are present:"
+  )
+
+  # error if baseline is not present
+  expect_error(
+    add_pairwise_comparison(
+      eval, by = "model", baseline = "missing", relative_skill_metric = "crps"
+    ),
+    "The baseline provided was not found among the models in the data."
+  )
+
+  # error if not enough models are present
+  eval <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
+  expect_no_error(
+    add_pairwise_comparison(
+      eval, by = "model", relative_skill_metric = "crps"
+    )
+  )
+  expect_error(
+    add_pairwise_comparison(
+      eval, by = "model", baseline = "EuroCOVIDhub-baseline",
+      relative_skill_metric = "crps"
+    ),
+    "More than one non-baseline model is needed to compute pairwise compairisons."
+  )
+
+  # error if no relative skill metric is found
+  expect_error(
+    add_pairwise_comparison(
+      eval, by = "model",
+      relative_skill_metric = "missing"
+    )
+  )
+  eval2 <- data.table::copy(eval)[, "crps" := NULL]
+  expect_error(
+    suppressWarnings(add_pairwise_comparison(
+      eval2, by = "model"
+    )),
+    "No metric for relative skill was specified and none of the default metrics"
+  )
+
+  # error if no model column is found
+  eval[, "model" := NULL]
+  expect_error(
+    add_pairwise_comparison(
+      eval, by = "target_type", relative_skill_metric = "crps"
+    ),
+    "To compute relative skill, a column called 'model' must be present"
+  )
+
+  # error if there isn't a score_names attribute
+  attr(eval, "score_names") <- NULL
+  expect_error(
+    add_pairwise_comparison(eval, by = "model", relative_skill_metric = "crps"),
+    "needs to have an attribute"
+  )
+
+
+
+
+
+
+})
