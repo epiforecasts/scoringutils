@@ -67,16 +67,49 @@ pairwise_comparison <- function(scores,
                                 metric = "auto",
                                 baseline = NULL,
                                 ...) {
-  metric <- match.arg(metric, c("auto", available_metrics()))
-  if (is.data.table(scores)) {
-    scores <- copy(scores)
-  } else {
-    scores <- as.data.table(scores)
+
+  # input checks ---------------------------------------------------------------
+  scores <- ensure_data.table(scores)
+
+  # we need the score names attribute to make sure we can determine the
+  # forecast unit correctly
+  score_names <- get_score_names(scores, error = TRUE)
+
+  # check that model column + columns in 'by' + baseline model are present
+  by_cols <- check_columns_present(scores, by)
+  if (!is.logical(by_cols)) {
+    stop("Not all columns specified in `by` are present: ", by_cols)
+  }
+  model_col <- check_columns_present(scores, "model")
+  if (!is.logical(model_col)) {
+    stop(
+      "To compute relative skill, a column called 'model' ",
+      "must be present in the input data."
+    )
+  }
+  models <- unique(scores$model)
+  if (!is.null(baseline) && !(baseline %in% models)) {
+    stop(
+      "The baseline provided was not found among the models in the data."
+    )
+  }
+  # check there are enough models
+  if (length(setdiff(models, baseline)) < 2) {
+    stop(
+      "More than one non-baseline model is needed to compute ",
+      "pairwise compairisons."
+    )
   }
 
-  # determine metric automatically
   if (metric == "auto") {
-    metric <- infer_rel_skill_metric(scores)
+    defaults <- c("wis", "crps", "brier_score")
+    metric <- defaults[defaults %in% names(scores)]
+    if (length(metric) == 0) {
+      stop(
+        "No metric for relative skill was specified and none of the ",
+        "default metrics (wis, crps, brier_score) were found in the data."
+      )
+    }
   }
 
   # check that values of the chosen metric are not NA
@@ -96,7 +129,7 @@ pairwise_comparison <- function(scores,
   }
 
   # check that all values of the chosen metric are positive
-  if (any(sign(scores[[metric]]) < 0) && any(sign(scores) > 0)) {
+  if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
     msg <- paste(
       "To compute pairwise comparisons, all values of", metric,
       "must have the same sign."
@@ -108,7 +141,7 @@ pairwise_comparison <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
-  if (setequal(by, forecast_unit)) {
+  if (setequal(by, forecast_unit) && by != "model") {
     by <- "model"
     message(
       "relative skill can only be computed if `by` is different from the ",

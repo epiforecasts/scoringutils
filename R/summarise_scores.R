@@ -185,52 +185,7 @@ add_pairwise_comparison <- function(scores,
                                     relative_skill_metric = "auto",
                                     baseline = NULL) {
 
-  # check inputs ---------------------------------------------------------------
-  # we need the score names attribute to make sure we can determine the
-  # forecast unit correctly
-  score_names <- get_score_names(scores)
-  if (is.null(score_names)) {
-    stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
-  }
-
-  # check that model column + columns in 'by' + baseline model are present
-  by_cols <- check_columns_present(scores, by)
-  if (!is.logical(by_cols)) {
-    stop("Not all columns specified in `by` are present: ", by_cols)
-  }
-  model_col <- check_columns_present(scores, "model")
-  if (!is.logical(model_col)) {
-    stop(
-      "To compute relative skill, a column called 'model' ",
-      "must be present in the input data."
-    )
-  }
-  models <- unique(scores$model)
-  if (!is.null(baseline) && !(baseline %in% models)) {
-    stop(
-      "The baseline provided was not found among the models in the data."
-    )
-  }
-  # check there are enough models
-  if (length(setdiff(models, baseline)) < 2) {
-    stop(
-      "More than one non-baseline model is needed to compute ",
-      "pairwise compairisons."
-    )
-  }
-
-  if (relative_skill_metric == "auto") {
-    defaults <- c("wis", "crps", "brier_score")
-    relative_skill_metric <- defaults[defaults %in% names(scores)]
-    if (length(relative_skill_metric) == 0) {
-      stop(
-        "No metric for relative skill was specified and none of the ",
-        "default metrics (wis, crps, brier_score) were found in the data."
-      )
-    }
-  }
-
+  # input checks are done in `pairwise_comparison()`
   # do pairwise comparisons ----------------------------------------------------
   pairwise <- pairwise_comparison(
     scores = scores,
@@ -238,6 +193,9 @@ add_pairwise_comparison <- function(scores,
     baseline = baseline,
     by = by
   )
+
+  # store original score_names
+  score_names <- get_score_names(scores)
 
   if (!is.null(pairwise)) {
     # delete unnecessary columns
@@ -253,13 +211,13 @@ add_pairwise_comparison <- function(scores,
     )
   }
 
-  new_score_names <- paste(relative_skill_metric, "relative_skill", sep = "_")
-  if (!is.null(baseline)) {
-    new_score_names <- c(
-      new_score_names,
-      paste(relative_skill_metric, "scaled_relative_skill", sep = "_")
-    )
-  }
+  # Update score names
+  new_score_names <- paste(
+    relative_skill_metric, c("relative_skill", "scaled_relative_skill"),
+    sep = "_"
+  )
+  new_score_names <- new_score_names[new_score_names %in% names(scores)]
   scores <- new_scores(scores, score_names = c(score_names, new_score_names))
+
   return(scores)
 }
