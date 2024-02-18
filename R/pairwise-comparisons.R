@@ -72,8 +72,8 @@ pairwise_comparison <- function(scores,
   scores <- ensure_data.table(scores)
 
   # we need the score names attribute to make sure we can determine the
-  # forecast unit correctly
-  score_names <- get_score_names(scores, error = TRUE)
+  # forecast unit correctly, so here we check it exists
+  get_score_names(scores, error = TRUE)
 
   # check that model column + columns in 'by' + baseline model are present
   by_cols <- check_columns_present(scores, by)
@@ -114,27 +114,26 @@ pairwise_comparison <- function(scores,
 
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
-    msg <- paste0("Some values for the metric '", metric,
-                  "' are NA. These have been removed. ",
-                  "Maybe choose a different metric?")
-    warning(msg)
-
+    warning(
+      "Some values for the metric '", metric,
+      "' are NA. These have been removed. Maybe choose a different metric?"
+    )
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
-      msg <- paste0("After removing NA values for '", metric,
-                    "', no values were left.")
-      warning(msg)
+      warning(
+        "After removing NA values for '", metric,
+        "', no values were left."
+      )
       return(NULL)
     }
   }
 
   # check that all values of the chosen metric are positive
   if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
-    msg <- paste(
-      "To compute pairwise comparisons, all values of", metric,
-      "must have the same sign."
+    stop(
+      "To compute pairwise comparisons, all values of ", metric,
+      " must have the same sign."
     )
-    stop(msg)
   }
 
   # identify unit of single observation.
