@@ -148,14 +148,6 @@ pairwise_comparison <- function(scores,
     )
   }
 
-  # summarise scores over everything (e.g. quantiles, interval ranges or samples) in
-  # order to not to include those in the calculation of relative scores. Also
-  # gets rid of all unnecessary columns and keep only metric and forecast unit
-  scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
-    by = forecast_unit,
-    .SDcols = metric
-  ]
-
   # split data set into groups determined by 'by'
   split_by <- setdiff(by, "model")
   split_scores <- split(scores, by = split_by)
