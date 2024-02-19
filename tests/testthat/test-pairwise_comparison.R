@@ -298,15 +298,15 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   )
 
   # error if not enough models are present
-  eval <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
+  eval_few <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
   expect_no_error(
     add_pairwise_comparison(
-      eval, by = "model", relative_skill_metric = "crps"
+      eval_few, by = "model", relative_skill_metric = "crps"
     )
   )
   expect_error(
     add_pairwise_comparison(
-      eval, by = "model", baseline = "EuroCOVIDhub-baseline",
+      eval_few, by = "model", baseline = "EuroCOVIDhub-baseline",
       relative_skill_metric = "crps"
     ),
     "More than one non-baseline model is needed to compute pairwise compairisons."
@@ -319,27 +319,76 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
       relative_skill_metric = "missing"
     )
   )
-  eval2 <- data.table::copy(eval)[, "crps" := NULL]
+  eval_nometric <- data.table::copy(eval)[, "crps" := NULL]
   expect_error(
     suppressWarnings(add_pairwise_comparison(
-      eval2, by = "model"
+      eval_nometric, by = "model"
     )),
     "No metric for relative skill was specified and none of the default metrics"
   )
 
   # error if no model column is found
-  eval[, "model" := NULL]
+  eval_nomodel <- data.table::copy(eval)[, "model" := NULL]
   expect_error(
     add_pairwise_comparison(
-      eval, by = "target_type", relative_skill_metric = "crps"
+      eval_nomodel, by = "target_type", relative_skill_metric = "crps"
     ),
     "To compute relative skill, a column called 'model' must be present"
   )
 
   # error if there isn't a score_names attribute
-  attr(eval, "score_names") <- NULL
+  eval_noattribute <- data.table::copy(eval)
+  attr(eval_noattribute, "score_names") <- NULL
   expect_error(
-    add_pairwise_comparison(eval, by = "model", relative_skill_metric = "crps"),
+    add_pairwise_comparison(
+      eval_noattribute, by = "model", relative_skill_metric = "crps"
+    ),
     "needs an attribute `score_names`"
+  )
+
+  # warning if there are NAs in the column for which a relative metric is computed
+  eval_nas <- data.table::copy(eval)
+  eval_nas[1:10, "crps" := NA]
+  expect_warning(
+    add_pairwise_comparison(
+      eval_nas, by = "model", relative_skill_metric = "crps"
+    ),
+    "Some values for the metric 'crps' are NA. These have been removed."
+  )
+
+  # warning if there are no values left after removing NAs
+  eval_nas[, "crps" := NA]
+  expect_warning(
+    add_pairwise_comparison(
+      eval_nas, by = "model", relative_skill_metric = "crps"
+    ),
+    "After removing NA values for 'crps', no values were left."
+  )
+
+  # error if not all values for the relative skill metric have the same sign
+  eval_diffsign <- data.table::copy(eval)
+  eval_diffsign[1:10, "crps" := -eval_diffsign[1:10, "crps"]]
+  expect_error(
+    add_pairwise_comparison(
+      eval_diffsign, by = "model", relative_skill_metric = "crps"
+    ),
+    "To compute pairwise comparisons, all values of crps must have the same sign."
+  )
+
+  # message if by is equal to the forecast unit
+  fu <- get_forecast_unit(eval)
+  expect_message(
+    add_pairwise_comparison(
+      eval, by = fu, relative_skill_metric = "crps"),
+    "relative skill can only be computed if `by` is different from the unit of a single forecast."
+  )
+
+  # warning if by is equal to the forecast unit and also by is "model"
+  eval_summ <- summarise_scores(eval, by = "model")
+  expect_warning(
+    add_pairwise_comparison(
+      eval_summ, by = "model", relative_skill_metric = "crps"
+    ),
+    "`by` is set to 'model', which is also the unit of a single forecast."
   )
 })

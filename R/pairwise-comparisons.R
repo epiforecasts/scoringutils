@@ -114,10 +114,6 @@ pairwise_comparison <- function(scores,
 
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
-    warning(
-      "Some values for the metric '", metric,
-      "' are NA. These have been removed. Maybe choose a different metric?"
-    )
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
       warning(
@@ -126,6 +122,10 @@ pairwise_comparison <- function(scores,
       )
       return(NULL)
     }
+    warning(
+      "Some values for the metric '", metric,
+      "' are NA. These have been removed. Maybe choose a different metric?"
+    )
   }
 
   # check that all values of the chosen metric are positive
@@ -140,14 +140,24 @@ pairwise_comparison <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
-  if (setequal(by, forecast_unit) && by != "model") {
-    by <- "model"
-    message(
-      "relative skill can only be computed if `by` is different from the ",
-      "unit of a single forecast. `by` was set to 'model'"
-    )
+  # if by == forecast_unit == "model" then this will pass and all relative skill
+  # scores will simply be 1.
+  if (setequal(by, forecast_unit)) {
+    if (setequal(by, "model")) {
+      warning(
+        "`by` is set to 'model', which is also the unit of a single forecast. ",
+        "This doesn't look right. All relative skill scores will be equal to 1."
+      )
+    } else {
+      by <- "model"
+      message(
+        "relative skill can only be computed if `by` is different from the ",
+        "unit of a single forecast. `by` was set to 'model'"
+      )
+    }
   }
 
+  # do the pairwise comparison -------------------------------------------------
   # split data set into groups determined by 'by'
   split_by <- setdiff(by, "model")
   split_scores <- split(scores, by = split_by)
