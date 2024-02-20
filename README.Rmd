@@ -128,11 +128,11 @@ example_quantile %>%
   as_forecast() %>%
   add_coverage() %>%
   score() %>%
-  summarise_scores(
-    by = c("model", "target_type")
-  ) %>%
   add_pairwise_comparison(
     baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
+  summarise_scores(
+    by = c("model", "target_type")
   ) %>%
   summarise_scores(
     fun = signif, 
