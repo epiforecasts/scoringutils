@@ -401,7 +401,7 @@ p1 / p2 +
 
 ## score()
 
-The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The input data can either be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. 
+The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `score_names` that holds the names of the scoring rules used for scoring. The input data can either be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. 
 
 ```{r}
 score(example_point) |>
@@ -443,15 +443,13 @@ include_graphics("output/input-formats-scoring-rules.png")
 
 <!-- Maybe something about the wrapper functions that we want to have -->
 
-## Adding pairwise comparisons
+## Adding relative skill scores based on pairwise comparisons {#pairwisetheory}
 
-## Pairwise comparisons {#pairwisetheory}
+Raw scores for different forecasting models are usually not directly comparable in the case of missing forecasts. One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. 
 
-Raw scores for different forecasting models are usually not directly comparable in the case of missing forecasts. This is because forecasting targets usually differ in their characteristics (e.g., the scale of the forecast target, how difficult targets are to forecast etc.). One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. 
+Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model (see Figure \ref{fig:pairwise-comparison}. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score. 
 
-Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score. 
-
-Two models can of course only be fairly compared if they have overlapping forecasts. One possible way of ensuring this is the case is to only compare models that have forecasts for at least 50\% of the available targets. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. The process of pairwise comparisons is illustrated in Figure \ref{fig:pairwise-comparison}. 
+Two models can of course only be fairly compared if they have overlapping forecasts. One possible way of ensuring this is the case is to only compare models that have forecasts for at least 50\% of the available targets. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. 
 
 ```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3.."}
 include_graphics("output/pairwise-comparisons.png")
@@ -465,19 +463,18 @@ score(example_quantile[horizon == 2]) |>
                           baseline = "EuroCOVIDhub-baseline")
 ```
 
+Pairwise comparisons should usually be made based on raw, unsummarised scores (i.e. `add_pairwise_comparison()` should be called before `summarise_scores()` (see Section XXX)). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
 
+## Additional functionality related to scores objects
 
+### Displaying mean score ratios from pairwise comparisons
 
+\pkg{scoringutils} offers a second alternative workflow to conduct pairwise comparisons between models through the function `get_pairwise_comparisons()`. The purpose of this workflow is to obtain and visualise information on the direct comparisons between every possible pair of models, rather than just computing relative skill scores for every model. `get_pairwise_comparisons()` accepts the same inputs as \fct{add_pairwise_comparison}, and returns a \code{data.table} with the results of the pairwise tournament. These include the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative and scaled relative skill score for every model (depending on whether a baseline was provided or not). 
 
+MORE INFORMATION ON HOW THE P_VALUES ARE COMPUTED
+One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values does not account for), it may be sensible to summarise over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
 
-
-
-Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values does not account for), it may be sensible to summarise over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
-
-
-
-
-Users can obtain relative skill scores via pairwise comparisons in two different ways. The first one is by calling the function \fct{pairiwse\_comparison}. It takes a \code{data.table} (or similar) of scores as input, and returns a \code{data.table} with the results of the pairwise tournament. It displays the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative skill score for every model. Users can also specify a baseline model, in which case a scaled relative skill score is computed by dividing the relative skill score of every model by the relative skill score of the baseline model. 
+It is in principle possible to compute p-values to determine whether two models perform significantly differently as part of the pairwise comparisons. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
 The output of \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
 
@@ -491,51 +488,57 @@ score(example_quantile) |>
 
 <!-- WE MIGHT WANT TO RETHINK THE FOLLOWING PART A BIT: A) MAYBE WE SHOULD SEPARATE COMPUTING P-VALUES FROM THE PAIRWISE COMPARISONS AND B) WE NEED TO THINK A BIT MORE ABOUT HOW WE WANT TO HYPOTHESIS TESTING MORE GENERALLY.  -->
 
-It is in principle possible to compute p-values to determine whether two models perform significantly differently as part of the pairwise comparisons. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
+### Correlations between scores
 
-Pairwise comparisons should usually be made based on unsummarised scores (the function \fct{pairwise\_comparison} internally summarises over samples and quantiles automatically, but nothing else), as summarising can change the set of overlapping forecasts between two models and distort relative skill scores. When using \fct{pairwise\_comparison}, the function \fct{summarise\_scores} should therefore usually not be called beforehand. One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values does not account for), it may be sensible to summarise over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
+Users can examine correlations between scores using the function \fct{correlation} and plot the result using \fct{plot\_correlation}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
+
+```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=4, fig.cap = "Correlation between different scores"}
+correlations <- example_quantile |>
+  score() |>
+  summarise_scores() |>
+  correlation(digits = 2)
+
+correlations |>
+  plot_correlation()
+```
 
 
 
-
-
-## Additional things to do with the output of scores
-
-### correlations
-
-### pairwise comparisons
 
 # Summarising results
 
-Usually, one will not be interested in the scores for each forecast, but rather in summarised scores. \pkg{scoringutils} provides methods for the generic function \fct{aggregate} that allow users to aggregate scores across dimensions using an arbitrary function (for most users most of the time this will be the default mean). 
+## summarise scores
+<!-- \pkg{scoringutils} provides methods for the generic function \fct{aggregate} that allow users to aggregate scores across dimensions using an arbitrary function (for most users most of the time this will be the default mean).  -->
 
-There are two different, but essentially equivalent ways of specifying the summary level. Users can either specify the columns that should be retained (using the argument `by`), or they can specify the columns that should be aggregated over (using the argument \code{across}). 
+Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `score_names`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g. `by = c("model", "target_type")` will return one summarised score per model and target type). Equivalently, users can specify the columns that should be aggregated over (using the argument \code{across}). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
 
-```{r, eval = FALSE}
-# NEED TO UPDATE AFTER RENAMING TO AGGREGATE
+```{r, eval = TRUE}
 example_quantile[horizon == 2] |>
   score(metrics = list("wis" = wis)) |>
-  summarise_scores(by = c("model", "target_type"))
-```
-
-Summarised scores can then be visualised using a \fct{plot} method for class `score`. To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{aggregate}. The output of the following is shown in Figure \ref{fig:score-table}:
- 
-```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores. Red colours indicate that a value is higher than ideal, blue indicates it is lower than ideal and the opacity indicates the strength of the deviation from the ideal."}
-# NEED TO UPDATE AFTER RENAMING TO AGGREGATE
-example_quantile[horizon == 2] |>
-  score() |>
   summarise_scores(by = c("model", "target_type")) |>
-  summarise_scores(fun = signif, digits = 2) |>
-  plot_score_table(y = "model", by = "target_type") + 
-  facet_wrap(~ target_type)
+  summarise_scores(fun = signif, digits = 2)
 ```
 
-While \fct{aggregate} accepts arbitrary summary functions, care has to be taken when using something else than \fct{mean}. Many scoring rules for probabilistic forecasts are so-called 'strictly proper scoring rules' \citep{gneitingStrictlyProperScoring2007}. Strictly proper scoring rules are constructed such that they cannot always incentivise the forecaster to report her honest belief about the future and cannot be cheated. Let's assume that a forecaster's true belief about the future corresponds to a predictive distribution $F$. Then, if $F$ was the true data-generating process, a scoring rule would be proper if it ensures that no other forecast distribution $G$ would yield a better expected score. If the scoring rule ensures that under $F$ no other possible predictive distribution can achieve the same expected score as $F$, then it is called strictly proper. From the forecaster's perspective, any deviation from her true belief $F$ leads to a worsening of expected scores. 
+While \fct{summarise\_scores} accepts arbitrary summary functions, care has to be taken when using something else than \fct{mean}. Many scoring rules for probabilistic forecasts are 'strictly proper scoring rules' \citep{gneitingStrictlyProperScoring2007}. Strictly proper scoring rules are constructed such that they cannot always incentivise the forecaster to report her honest belief about the future and cannot be cheated. Let's assume that a forecaster's true belief about the future corresponds to a predictive distribution $F$. Then, if $F$ was the true data-generating process, a scoring rule would be proper if it ensures that no other forecast distribution $G$ would yield a better expected score. If the scoring rule ensures that under $F$ no other possible predictive distribution can achieve the same expected score as $F$, then it is called strictly proper. From the forecaster's perspective, any deviation from her true belief $F$ leads to a worsening of expected scores. 
 When using summary functions other than the mean, however, scores may lose their propriety (the property of incentivising honest reporting) and become cheatable. For example, the median of several individual scores (individually based on a strictly proper scoring rule) is usually not proper. A forecaster judged by the median of several scores may be incentivised to misrepresent their true belief in a way that is not true for the mean score.
 
-The user must exercise additional caution and should usually avoid aggregating scores across categories which differ much in the magnitude of the quantity to forecast, as (depending on the scoring rule used) forecast errors usually increase with the order of magnitude of the forecast target. In the given example, looking at one score per model (i.e., specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. In the previous function calls, we therefore decided to only analyse forecasts with a forecast horizon of two weeks. 
+The user must exercise additional caution and should usually avoid aggregating scores across categories which differ much in the magnitude of the quantity to forecast, as (depending on the scoring rule used) forecast errors usually increase with the order of magnitude of the forecast target. In the given example, looking at one score per model (i.e., specifying \code{by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. In the previous function calls, we therefore decided to only analyse forecasts with a forecast horizon of two weeks. 
 
-## Additional visualisations of scores
+## Additional functinality for summarised scores
+
+<!-- ### Visualising summarised scores -->
+
+<!-- Summarised scores can be displayed more visually using the function \fct{plot\_score\_table}. To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}. The output of the following is shown in Figure \ref{fig:score-table}: -->
+
+<!-- ```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores. Red colours indicate that a value is higher than ideal, blue indicates it is lower than ideal and the opacity indicates the strength of the deviation from the ideal."} -->
+<!-- example_quantile[horizon == 2] |> -->
+<!--   score() |> -->
+<!--   summarise_scores(by = c("model", "target_type")) |> -->
+<!--   summarise_scores(fun = signif, digits = 2) |> -->
+<!--   plot_score_table(y = "model", by = "target_type") +  -->
+<!--   facet_wrap(~ target_type) -->
+<!-- ``` -->
+
 
 ### Heatmaps
 
@@ -589,29 +592,13 @@ p1 + p2 +
   
 ```
 
-## Correlations
 
-Users can examine correlations between scores using the function \fct{correlation} and plot the result using \fct{plot\_correlation}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
-
-```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=4, fig.cap = "Correlation between different scores"}
-correlations <- example_quantile |>
-  score() |>
-  summarise_scores() |>
-  correlation(digits = 2)
-
-correlations |>
-  plot_correlation()
-```
-
-
-
-
-## Bias
+<!-- ## Bias -->
 
 <!-- should this part be included? We're not discussing other metrics -->
-Another specific and very common form of miscalibration is bias, i.e. systematically over- or underpredicting the observed values. \pkg{scoringutils} exports a bias metric \fct{bias_quantile} and \fct{bias_sample}. The implementation follows \cite{funkAssessingPerformanceRealtime2019} and captures how much probability mass of the forecast was above or below the true value (mapped to values between -1 and 1, with 0 being ideal). Values represent a general tendency to over- or under-predict in relative terms. A value of -1 implies that the entire probability mass of the predictive distribution was below the observed value (and analogously above it for a value of 1). 
+<!-- Another specific and very common form of miscalibration is bias, i.e. systematically over- or underpredicting the observed values. \pkg{scoringutils} exports a bias metric \fct{bias_quantile} and \fct{bias_sample}. The implementation follows \cite{funkAssessingPerformanceRealtime2019} and captures how much probability mass of the forecast was above or below the true value (mapped to values between -1 and 1, with 0 being ideal). Values represent a general tendency to over- or under-predict in relative terms. A value of -1 implies that the entire probability mass of the predictive distribution was below the observed value (and analogously above it for a value of 1).  -->
 
-For forecasts in a quantile format, bias is also reflected in the over- and underprediction components of the weighted interval score. These measure over- and underprediction on an absolute scale (analogous to the absolute error of a point forecast), rather than a relative scale. It is important to note that it is not a priori clear what the decomposition 'should' look like - a forecast can be well calibrated and still have different amounts of over- and underprediction. High overprediction or underprediction values can therefore not immediately be interpreted as systematic bias. 
+<!-- For forecasts in a quantile format, bias is also reflected in the over- and underprediction components of the weighted interval score. These measure over- and underprediction on an absolute scale (analogous to the absolute error of a point forecast), rather than a relative scale. It is important to note that it is not a priori clear what the decomposition 'should' look like - a forecast can be well calibrated and still have different amounts of over- and underprediction. High overprediction or underprediction values can therefore not immediately be interpreted as systematic bias.  -->
 
 # Conclusion
 
