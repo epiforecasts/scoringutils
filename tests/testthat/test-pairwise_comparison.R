@@ -375,7 +375,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     "To compute pairwise comparisons, all values of crps must have the same sign."
   )
 
-  # message if by is equal to the forecast unit
+  # message if `by` is equal to the forecast unit
   fu <- get_forecast_unit(eval)
   expect_message(
     add_pairwise_comparison(
