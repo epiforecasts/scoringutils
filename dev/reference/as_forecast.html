@@ -88,16 +88,7 @@ the required input formats.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">as_forecast</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  quantile_level <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,40 +99,6 @@ the required input formats.</p>
 
 <dt>...</dt>
 <dd><p>additional arguments</p></dd>
-
-
-<dt>observed</dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the
-observed values. This column will be renamed to "observed".</p></dd>
-
-
-<dt>predicted</dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the
-predicted values. This column will be renamed to "predicted".</p></dd>
-
-
-<dt>model</dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the names
-of the models/forecasters that generated the predicted values.
-This column will be renamed to "model".</p></dd>
-
-
-<dt>forecast_unit</dt>
-<dd><p>(optional) Name of the columns in <code>data</code> (after
-renaming) that denote the unit of a single forecast.
-See <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> for details.</p></dd>
-
-
-<dt>quantile_level</dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains
-the quantile level of the predicted values. This column will be renamed to
-"quantile_level". Only applicable to quantile-based forecasts.</p></dd>
-
-
-<dt>sample_id</dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the
-sample id. This column will be renamed to "sample_id". Only applicable to
-sample-based forecasts.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -216,46 +173,42 @@ numeric with sample indices.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1029:       UMass-MechBayes       2     0.450        0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1030:  epiforecasts-EpiNow2       3     0.375        0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1031:  epiforecasts-EpiNow2       2     0.300        0</span>
-<span class="r-in"><span><span class="fu">as_forecast</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">example_quantile</span>,</span></span>
-<span class="r-in"><span>  forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"target_end_date"</span>,</span></span>
-<span class="r-in"><span>                    <span class="st">"horizon"</span>, <span class="st">"location"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Forecast type:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "quantile"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Forecast unit:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "model"           "target_type"     "target_end_date" "horizon"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "location"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "location"        "target_end_date" "target_type"     "location_name"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "forecast_date"   "model"           "horizon"        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        observed quantile_level predicted                model target_type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;          &lt;num&gt;     &lt;int&gt;               &lt;char&gt;      &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1:   127300             NA        NA                 &lt;NA&gt;       Cases</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     2:     4534             NA        NA                 &lt;NA&gt;      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     3:   154922             NA        NA                 &lt;NA&gt;       Cases</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4:     6117             NA        NA                 &lt;NA&gt;      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     5:   110183             NA        NA                 &lt;NA&gt;       Cases</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20541:       78          0.850       352 epiforecasts-EpiNow2      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20542:       78          0.900       397 epiforecasts-EpiNow2      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20543:       78          0.950       499 epiforecasts-EpiNow2      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20544:       78          0.975       611 epiforecasts-EpiNow2      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20545:       78          0.990       719 epiforecasts-EpiNow2      Deaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        target_end_date horizon location</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 &lt;Date&gt;   &lt;num&gt;   &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1:      2021-01-02      NA       DE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     2:      2021-01-02      NA       DE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     3:      2021-01-09      NA       DE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4:      2021-01-09      NA       DE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     5:      2021-01-16      NA       DE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20541:      2021-07-24       2       IT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20542:      2021-07-24       2       IT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20543:      2021-07-24       2       IT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20544:      2021-07-24       2       IT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20545:      2021-07-24       2       IT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type observed location_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:       DE      2021-01-02       Cases   127300       Germany</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:       DE      2021-01-02      Deaths     4534       Germany</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:       DE      2021-01-09       Cases   154922       Germany</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:       DE      2021-01-09      Deaths     6117       Germany</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:       DE      2021-01-16       Cases   110183       Germany</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20541:       IT      2021-07-24      Deaths       78         Italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20542:       IT      2021-07-24      Deaths       78         Italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20543:       IT      2021-07-24      Deaths       78         Italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20544:       IT      2021-07-24      Deaths       78         Italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20545:       IT      2021-07-24      Deaths       78         Italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        forecast_date quantile_level predicted                model horizon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;Date&gt;          &lt;num&gt;     &lt;int&gt;               &lt;char&gt;   &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     4:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5:          &lt;NA&gt;             NA        NA                 &lt;NA&gt;      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20541:    2021-07-12          0.850       352 epiforecasts-EpiNow2       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20542:    2021-07-12          0.900       397 epiforecasts-EpiNow2       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20543:    2021-07-12          0.950       499 epiforecasts-EpiNow2       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20544:    2021-07-12          0.975       611 epiforecasts-EpiNow2       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20545:    2021-07-12          0.990       719 epiforecasts-EpiNow2       2</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
