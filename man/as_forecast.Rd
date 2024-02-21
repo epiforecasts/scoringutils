@@ -7,12 +7,43 @@
 \usage{
 as_forecast(data, ...)
 
-\method{as_forecast}{default}(data, ...)
+\method{as_forecast}{default}(
+  data,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL,
+  forecast_unit = NULL,
+  quantile_level = NULL,
+  sample_id = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{...}{additional arguments}
+
+\item{observed}{(optional) Name of the column in \code{data} that contains the
+observed values. This column will be renamed to "observed".}
+
+\item{predicted}{(optional) Name of the column in \code{data} that contains the
+predicted values. This column will be renamed to "predicted".}
+
+\item{model}{(optional) Name of the column in \code{data} that contains the names
+of the models/forecasters that generated the predicted values.
+This column will be renamed to "model".}
+
+\item{forecast_unit}{(optional) Name of the columns in \code{data} (after
+renaming) that denote the unit of a single forecast.
+See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.}
+
+\item{quantile_level}{(optional) Name of the column in \code{data} that contains
+the quantile level of the predicted values. This column will be renamed to
+"quantile_level". Only applicable to quantile-based forecasts.}
+
+\item{sample_id}{(optional) Name of the column in \code{data} that contains the
+sample id. This column will be renamed to "sample_id". Only applicable to
+sample-based forecasts.}
 }
 \value{
 Depending on the forecast type, an object of class
@@ -68,6 +99,10 @@ For more information see the vignettes and the example data
 
 \examples{
 as_forecast(example_binary)
-as_forecast(example_quantile)
+as_forecast(
+  example_quantile,
+  forecast_unit = c("model", "target_type", "target_end_date",
+                    "horizon", "location")
+)
 }
 \keyword{check-forecasts}
