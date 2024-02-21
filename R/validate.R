@@ -88,7 +88,7 @@ as_forecast.default <- function(data,
     setnames(data, old = sample_id, new = "sample_id")
   }
 
-  # assert that everything worked out
+  # assert that the correct column names are present after renaming
   assert(check_data_columns(data))
 
   # set forecast unit (error handling is done in `set_forecast_unit()`)
