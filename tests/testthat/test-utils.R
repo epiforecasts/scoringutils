@@ -86,10 +86,10 @@ test_that("get_score_names() works as expected", {
 
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
-  test_dat <- list(example_binary, example_quantile,
-    example_point, example_continuous, example_integer)
+  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
+    na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
   for (dat in test_dat){
-    dat <- suppressMessages(as_forecast(dat))
+    dat <- as_forecast(dat)
     forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
 
@@ -108,11 +108,11 @@ test_that("print() works on forecast_* objects", {
 
   # Check Score columns are printed
   dat <- example_quantile %>%
+    na.omit %>%
     set_forecast_unit(c("location", "target_end_date",
       "target_type", "horizon", "model")) %>%
     as_forecast() %>%
-    add_coverage() %>%
-    suppressMessages
+    add_coverage()
 
   expect_output(print(dat), "Score columns")
   score_cols <- get_score_names(dat)
@@ -123,5 +123,14 @@ test_that("print methods fail gracefully", {
   test <- as_forecast(na.omit(example_quantile))
   test$observed <- NULL
 
-  expect_output(print(test), pattern = "The object currently does not pass validation.")
+  expect_warning(
+    expect_message(
+      expect_output(
+        print(test),
+        pattern = "Forecast unit:"
+      ),
+      "Could not determine forecast type due to error in validation."
+    ),
+    "Error in validating forecast object:"
+  )
 })

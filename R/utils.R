@@ -221,11 +221,10 @@ print.forecast_binary <- function(x, ...) {
   validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
   if (inherits(validation, "try-error")) {
     validation_msg <- conditionMessage(attr(validation, "condition"))
-    cat(
-      "The object currently does not pass validation.",
-      "The following error was found:\n"
+    warning(
+      "Error in validating forecast object:\n",
+      validation_msg
     )
-    print(validation_msg)
   }
 
   # get forecast type, forecast unit and score columns
@@ -243,11 +242,15 @@ print.forecast_binary <- function(x, ...) {
   if (!inherits(forecast_type, "try-error")) {
     cat("Forecast type:\n")
     print(forecast_type)
+  } else {
+    message("Could not determine forecast type due to error in validation.")
   }
 
   if (!inherits(forecast_unit, "try-error")) {
     cat("\nForecast unit:\n")
     print(forecast_unit)
+  } else {
+    message("Could not determine forecast unit due to error in validation.")
   }
 
   if (!is.null(score_cols)) {
