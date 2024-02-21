@@ -134,14 +134,13 @@ Forecasts can be easily and quickly scored using the `score()` function.
 `score()` automatically tries to determine the `forecast_unit`, i.e. the
 set of columns that uniquely defines a single forecast, by taking all
 column names of the data into account. However, it is recommended to set
-the forecast unit manually using `set_forecast_unit()` as this may help
-to avoid errors, especially when scoringutils is used in automated
-pipelines. The function `set_forecast_unit()` will simply drop unneeded
-columns. To verify everything is in order, the function
-`validate_forecast()` should be used. The result of that check can then
-passed directly into `score()`. `score()` returns unsummarised scores,
-which in most cases is not what the user wants. Here we make use of
-additional functions from `scoringutils` to add empirical
+the forecast unit manually by specifying the “forecast_unit” argument in
+`as_forecast()` as this may help to avoid errors. This will drop all
+columns that are neither part of the forecast unit nor part of the
+columns internally used by `scoringutils`. The function `as_forecast()`
+processes and validates the inputs. `score()` returns unsummarised
+scores, which in most cases is not what the user wants. Here we make use
+of additional functions from `scoringutils` to add empirical
 coverage-levels (`add_coverage()`), and scores relative to a baseline
 model (here chosen to be the EuroCOVIDhub-ensemble model). See the
 getting started vignette for more details. Finally we summarise these
@@ -149,8 +148,9 @@ scores by model and target type.
 
 ``` r
 example_quantile %>%
-  set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
-  as_forecast() %>%
+  as_forecast(forecast_unit = c(
+    "location", "target_end_date", "target_type", "horizon", "model"
+  )) %>%
   add_coverage() %>%
   score() %>%
   add_pairwise_comparison(
@@ -226,7 +226,7 @@ example_quantile %>%
 #>    underprediction dispersion        bias interval_coverage_50
 #>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
-#> 2:    10284.972826 4102.50094  0.09726562            0.3281250
+#> 2:    10284.972826 4102.50094  0.09726563            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
 #> 4:        4.103261   30.18099  0.07265625            0.8750000
 #> 5:        2.098505   91.40625  0.33906250            0.6640625
