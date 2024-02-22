@@ -72,12 +72,6 @@ preamble: >
   \newcommand{\class}[1]{`\code{#1}'}
   \newcommand{\fct}[1]{\code{#1()}}
   
-bibliography:
-  - references.bib
-  - scoringutils-paper.bib
-# doesn't work... 
-# csl: apa.csl
-biblio-style: "apalike"
 output: 
   rticles::jss_article:
     citation_package: natbib
@@ -124,42 +118,43 @@ Good forecasts are of great interest to decision makers in various fields like f
 <!-- Throughout the COVID-19 pandemic, forecasting has garnered widespread interest from policy makers and the general public, with several collaborative forecasting efforts ("Forecast Hubs") being established \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}. Forecast evaluation is an integral part of assessing and improving the usefulness of forecasts.  -->
 For decades, researchers, especially in the field of weather forecasting, have therefore developed and refined an arsenal of techniques to evaluate predictions (see for example \cite{goodRationalDecisions1952}, \cite{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976}, \cite{gneitingProbabilisticForecastsCalibration2007}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingStrictlyProperScoring2007}, \cite{bracherEvaluatingEpidemicForecasts2021}). 
 
-Various \proglang{R} \citep{R} packages cover a wide variety of scoring rules, plots and other metrics that are useful in assessing the quality of a forecast. Existing packages offer functionality that is well suited to evaluate the quality of a single forecast or to compare the performance of several forecasters on a single target variable. However, they also come with important limitations and have limited uptake in some fields. 
+Various \proglang{R} \citep{R} packages cover a wide variety of scoring rules, plots and metrics that are useful in assessing the quality of a forecast. Existing packages offer functionality that is well suited to evaluate a variety of predictive tasks, but also come with important limitations. 
 
 <!-- \pkg{scoringutils} extends the existing landscape by providing a comprehensive framework that allows users to integrate a variety of tasks related to forecast evaluation, as well as functionality from other packages, into a single workflow.  -->
 
 Some packages such as \pkg{tscount} \citep{tscount}, \pkg{topmodels} \citep{topmodels}, \pkg{GLMMadaptive} \citep{GLMMadaptive}, \pkg{cvGEE} \citep{cvGEE} or \pkg{fabletools} \citep{fabletools} expect that forecasts were generated in a certain way and require users to supply an object of a specific class in order to compute and scores. These packages provide excellent tools for users operating within the specific package framework, but are by their nature not generally applicable to many use cases practitioners might encounter. 
 
-Packages such as \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{Metrics}, \pkg{MLmetrics} \citep{MLmetrics}, \pkg{verification} \citep{verification}, \pkg{SpecsVerification} \citep{SpecsVerification}, \pkg{surveillance} \citep{surveillance}, \pkg{predtools} \citep{predtools}, or \pkg{probably} \citep{probably} provide an extensive collection of tools, scoring rules and visualisations for various use cases. However, most scoring functions operate on vectors and matrices. This can make it difficult to evaluate, for example, multiple forecasts across several dimensions, such as time, space, and different types of targets. 
+Packages such as \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{Metrics}, \pkg{MLmetrics} \citep{MLmetrics}, \pkg{verification} \citep{verification}, \pkg{SpecsVerification} \citep{SpecsVerification}, \pkg{surveillance} \citep{surveillance}, \pkg{predtools} \citep{predtools}, or \pkg{probably} \citep{probably} provide an extensive collection of tools, scoring rules and visualisations for various use cases. However, most scoring functions operate on vectors and matrices. This is desirable in many applications, but can make it difficult to simultaneously evaluate multiple forecasts across several dimensions, such as time, space, and different types of targets. 
 
-\pkg{scoring} \citep{scoring} operates on a data.frame and uses a formula interface, making this task easier. However, \pkg{scoring} only exports a few scoring rules and does not allow users to supply their own. \pkg{yardstick} \citep{yardstick}, which builds on the \pkg{tidymodels} \citep{tidymodels} framework, is the most general and flexible widely used forecast evaluation package. It allows users to apply arbitrary scoring rules to a data.frame of forecasts, independently of how they were created. However, \pkg{yardstick} is primarily focused on point forecasts and classification tasks. It currently lacks general support for probabilistic forecasts (forecasts in the form of a full predictive distribution, represented e.g. by a set of quantiles or samples from the forecast distribution). Probabilistic forecasts are desirable, as they allow decision makers to take into account the uncertainty of a forecast \citep{gneitingProbabilisticForecastsCalibration2007}, and are widely used, e.g. in Meteorology or Epidemiology. 
+\pkg{scoring} \citep{scoring} operates on a data.frame and uses a formula interface, making this task easier. However, \pkg{scoring} only exports a few scoring rules and does not allow users to supply their own. \pkg{yardstick} \citep{yardstick}, which builds on the \pkg{tidymodels} \citep{tidymodels} framework, is the most general and flexible other forecast evaluation package. It allows users to apply arbitrary scoring rules to a data.frame of forecasts, independently of how they were created. However, \pkg{yardstick} is primarily focused on point forecasts and classification tasks. It currently lacks general support for probabilistic forecasts (forecasts in the form of a full predictive distribution, represented e.g. by a set of quantiles or samples from the forecast distribution). Probabilistic forecasts are desirable, as they allow decision makers to take into account the uncertainty of a forecast \citep{gneitingProbabilisticForecastsCalibration2007}, and are widely used, e.g. in Meteorology or Epidemiology. 
 
-\pkg{scoringutils} aims to fill this gap in the ecosystem by providing a general-purpose tool as well as a framework for the evaluation of (probabilistic) forecasts across multiple dimensions using a wide variety of user-provided scoring rules. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2021}.
-The package provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring \citep{bosseScoringEpidemiologicalForecasts2023}, to apply scoring rules to data, to handle missing forecasts, to aggregate scores and to visualise the results of the evaluation. \pkg{scoringutils} makes extensive use of \pkg{data.table} \citep{data.table} to ensure fast and memory-efficient computations. The core functionality is designed around S3 classes, allowing users to expand on the generics and methods implemented in the package. 
+\pkg{scoringutils} aims to fill the existing gap in the ecosystem by providing a flexible general-purpose tool for the evaluation of probabilistic forecasts. It offers a coherent \code{data.table}-based framework and workflow that allows users to evaluate and compare forecasts across multiple dimensions using a wide variety of default and user-provided scoring rules. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}.
+The package provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring \citep[see][]{bosseScoringEpidemiologicalForecasts2023}, to apply various metrics and scoring rules to data, to handle missing forecasts, to aggregate scores and to visualise the results of the evaluation. \pkg{scoringutils} makes extensive use of \pkg{data.table} \citep{data.table} to ensure fast and memory-efficient computations. The core functionality is designed around S3 classes, allowing users to expand on the generics and methods implemented in the package. 
 \pkg{scoringutils} provides extensive documentation and case studies, as well as sensible defaults for scoring forecasts. 
 
-<!-- TODO: WE WANT TO PROVIDE HELPER FUNCTIONS.  -->
 
-The remainder of this paper is structured as follows. 
-- overview of the workflow
-    - validating forecasts
-    - scoring them
-
-# Package overview
-
-The following section gives an overview of the main functionality of \pkg{scoringutils}. Everything will be illustrated using the example data shipped with the package, which is based on a subset of case and death forecasts submitted every week between May and September 2021 to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
-
-<!-- Forecasts were originally submitted in a quantile-based format (see below), but were converted to different formats and are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.  -->
-
-## Basic workflows
-
-\pkg{scoringutils} supports two basic workflows. Most users will interact with \pkg{scoringutils} through a framework based on a `data.frame`-like structure. Within this framework they can complete a variety of different tasks such as validating and diagnosing inputs, transforming inputs, scoring, aggregating scores, and visualisation (see Figure \ref{fig:workflow-scoringutils}A).
-Users can, however, also apply scoring rules directly to a set of vectors or matrices (see Figure \ref{fig:workflow-scoringutils}B). 
-<!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
-
-```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of potential workflows for evaluating forecasts with scoringutils. A: Workflow for working with forecasts in a data.frame-based format. B: Using scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
+```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the suggested workflow for evaluating forecasts with \\pkg{scoringutils}. A: Workflow for working with forecasts in a \\code{data.table}-based format. The left side shows the core worfklow of the package: 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. The right side shows additional functionality that is avaiable at the different stages of the evaluation process. The part in blue is covered by Section \\ref{sec:inputs} and includes all functions related to processing and validating inputs as well as obtaining additional information about the forecasts. The part in green is covered by Section \\ref{sec:scoring} and includes all functions related to scoring forecasts and obtaining additional information about the scores. The part in red is covered by Section \\ref{sec:summarising} and includes all functions related to summarising scores and additional visualisations based on summarised scores. B: An alternative workflow, allowing users to call scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
 include_graphics("output/workflow.png")
 ```
+
+### Paper outline and package workflow
+
+The structure of this paper follows the suggested package workflow which consists of 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. This workflow is illustrated in Figure \ref{fig:workflow-scoringutils}, which displays the core workflow (left side) as well as additional functionality that is available at different stages of the evaluation process (right side).
+
+Section \ref{sec:inputs} is centred around \code{forecast} objects and the associated functionality. It explains the expected input formats and how to validate inputs and diagnose issues. It provides an overview of the types of forecasts supported by \pkg{scoringutils} and the different S3 classes used to represent these forecast types. It also provides information on a variety of functions that can be used to visualise forecasts, transform inputs or obtain additional information and visualisations.
+
+Section \ref{sec:scoring} is centred around scoring forecasts and the additional functionality that is available to manipulate and analyse scores further. It explains how to score forecasts, either in a \code{data.table}-format or in a format based on matrices and vectors. It also provides information on additional information that can be computed from scores, such as correlations between scores or relative skill scores based on pairwise comparisons. These can be useful to mitigate the effects of missing forecasts.
+
+Section \ref{sec:summarising} is centred around summarised scores. It explains how to summarise scores and gives information on additional visualisations that can be created based on summarised scores.
+
+Section \ref{sec:discussion} discusses merits and limitations of the package in its current version as explores avenues for future work.
+
+All functionality will be illustrated using the example data shipped with the package, which is based on a subset of case and death forecasts submitted every week between May and September 2021 to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
+<!-- Forecasts were originally submitted in a quantile-based format (see below), but were converted to different formats and are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.  -->
+
+\section{Inputs, forecast types and input validation} \label{sec:inputs}
+
+<!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
 
 ## Input formats and types of forecasts
 
@@ -170,15 +165,17 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 - "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. 
 - "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
-```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with different input formats.", fig.show="hold"}
+```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with expected input formats for \\fct{score}. Regardless of the forecast type, the \\code{data.frame} (or similar) must have columns called \\code{observed} and \\code{predicted} and should have a column called \\code{model}. For binary forecasts, the column \\code{observed} must be of type factor with two levels and the column \\code{predicted} must be a numeric betwen 0 and 1. For all other forecast types, both \\code{observed} and \\code{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \\code{sample\\_id} and forecasts in a quantile-based format require an additional numeric column \\code{quantile\\_level} with values between 0 and 1.", fig.show="hold"}
 include_graphics("output/input-score.png")
 ```
 
-The input will usually be a data.frame (or similar) containing both the predictions and the observed values. At the minimum, the data.frame must have columns called `observed` and `predicted` and should usually have a column called `model` denoting the name of the model that generated the forecast. Additional requirements depend on the forecast type. Table \ref{fig:input-score} shows the expected input format for each forecast type. The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
+The expected input is a data.frame (or similar) containing both the predictions and the observed values. At the minimum, the data.frame must have columns called `observed` and `predicted` and should also have a column called `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{fig:input-score} shows the expected input format for each forecast type. 
 
-### The unit of a single forecast {short-title="The unit of a single forecast" #sec:forecastunit}
+The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
-Apart from the columns `observed`, `predicted`, `model`, and the extra columns required for each forecast type, the input will usually require contain additional columns. This is because probabilistic forecasts (apart from binary predictions) are composed of several values. A quantile-based forecast, for example, is composed of several quantiles, and a sample-based forecast of multiple samples. However, every row only holds a single sample/quantile. Several rows in the input data therefore jointly form a single forecast. Additional columns in the input provide the information necessary to group together rows that belong to the same forecast. The combination of values in those columns form the unit of a single forecast (or "forecast unit") and should uniquely identify a single forecast. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns `model`, `location`, `date`, and `target`, and the forecast unit would be `forecast_unit = c("model", "location", "date", "target")`. 
+### The unit of a single forecast
+
+Apart from the columns `observed`, `predicted`, `model`, and the extra columns required for each forecast type, it is usually necessary that the input data contains additional columns. This is because a single probabilistic forecast (apart from binary predictions) is composed of multiple values. A quantile-based forecast, for example, is composed of several quantiles, and a sample-based forecast of multiple samples. However, every row only holds a single sample/quantile. Several rows in the input data therefore jointly form a single forecast. Additional columns in the input provide the information necessary to group together rows that belong to the same forecast. The combination of values in those columns form the unit of a single forecast (or "forecast unit") and should uniquely identify a single forecast. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns `model`, `location`, `date`, and `target`, and the forecast unit would be `forecast_unit = c("model", "location", "date", "target")`. 
 
 Rows are automatically grouped together based on the values in all other columns present in the data (excluding required columns like `sample_id` or `quantile_level` and values computed by \pkg{scoringutils}). As the forecast unit is determined based on all existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, "even", that is one if the row number is even and zero otherwise. The existence of this column would change results, as \pkg{scoringutils} assumes it was relevant to grouping the forecasts. 
 
@@ -191,7 +188,7 @@ forecast_quantile <- example_quantile |>
   as_forecast() 
 ```
 
-The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure XX for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has dedicated methods e.g. for input validation, scoring and printing. The classes corresponding to the forecast types are `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. 
+The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has dedicated methods e.g. for input validation, scoring and printing. The classes corresponding to the forecast types are `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. 
 
 \fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object. For example, we could call 
 ```{r, eval=FALSE, echo=TRUE}
@@ -211,10 +208,6 @@ forecast_quantile <- example_quantile |>
 The argument `forecast_unit` allows the user to manually set the unit of a single forecast. \fct{as\_forecast} will then simply drop all columns that are not either a) specified in the `forecast_unit` or b) are required columns (such as `observed`, `predicted`, `quantile_level`, or `sample_id`) or have otherwise been added by `scoringutils`.  
 <!-- Question: should it drop / keep `model`? Is there any plausible case in which you'd call `as_forecast` after scoringutils has already computed any columns? -->
 The other arguments can be used to specify the column names of the input data that correspond to the required columns. \fct{as\_forecast} will then rename these columns into the corresponding required columns. 
-
-```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
-include_graphics("output/flowchart-create-object.png")
-```
 
 ## Diagnostic helper functions
 
@@ -396,7 +389,7 @@ p1 / p2 +
 
 
 
-# Scoring forecasts
+\section{Scoring forecasts} \label{sec:scoring}
 <!-- \pkg{scoringutils} offers two ways of scoring forecasts: Users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once.  -->
 
 ## score()
@@ -505,7 +498,7 @@ correlations |>
 
 
 
-# Summarising results
+\section{Summarising results} \label{sec:summarising}
 
 ## summarise scores
 <!-- \pkg{scoringutils} provides methods for the generic function \fct{aggregate} that allow users to aggregate scores across dimensions using an arbitrary function (for most users most of the time this will be the default mean).  -->
@@ -524,7 +517,7 @@ When using summary functions other than the mean, however, scores may lose their
 
 The user must exercise additional caution and should usually avoid aggregating scores across categories which differ much in the magnitude of the quantity to forecast, as (depending on the scoring rule used) forecast errors usually increase with the order of magnitude of the forecast target. In the given example, looking at one score per model (i.e., specifying \code{by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while performance on deaths would have little influence. Similarly, aggregating over different forecast horizons is often ill-advised as the mean will be dominated by further ahead forecast horizons. In the previous function calls, we therefore decided to only analyse forecasts with a forecast horizon of two weeks. 
 
-## Additional functinality for summarised scores
+## Additional functionality for summarised scores
 
 <!-- ### Visualising summarised scores -->
 
@@ -600,11 +593,13 @@ p1 + p2 +
 
 <!-- For forecasts in a quantile format, bias is also reflected in the over- and underprediction components of the weighted interval score. These measure over- and underprediction on an absolute scale (analogous to the absolute error of a point forecast), rather than a relative scale. It is important to note that it is not a priori clear what the decomposition 'should' look like - a forecast can be well calibrated and still have different amounts of over- and underprediction. High overprediction or underprediction values can therefore not immediately be interpreted as systematic bias.  -->
 
-# Conclusion
+# \section{Discussion} \label{sec:discussion}
 
 \pkg{scoringutils} aims to provide a framework that makes it easy for practitioners to evaluate and compare forecasts across multiple dimensions. It offers a flexible and extensible set of general-purpose tools to validate, diagnose, visualise, transform and score forecasts. It allows users to supply their own scoring rules and work with forecasts (in particular probabilistic forecasts) in a variety of different formats. The package is designed to help users bridge the gap between existing packages in the forecast evaluation ecosystem by making it easy to use functionality from different packages in a single workflow. In particular, the package aims to be accessible to more inexperienced users, providing sensible defaults and a simple interface, as well as extensive documentation and examples.
 
 Further extensions to the package are planned and we welcome feedback and suggestions for improvement. As of now, \pkg{scoringutils} currently does not handle all possible kinds of prediction formats supported by other packages. For example, it does not support multiclass predictions (like \pkg{yardstick} does), or scoring forecasts that are specified as a closed-form distribution (as is possible with \pkg{scoringRules}). We plan to support for these in the near future. We also plan to add support for scoring multivariate forecasts that specify a joint distribution across targets.
+
+<!-- TODO: WE WANT TO PROVIDE HELPER FUNCTIONS.  -->
 
 Another area of future development is the integration of \pkg{scoringutils} with other packages in the forecast evaluation ecosystem. We aim to add more helper functions that allow users to easily convert between different formats and use functionality from other packages. We also aim to provide interfaces to common modelling packages such as \pkg{odin} in order to allow for a closer integration of modelling and evaluation.
 
@@ -638,10 +633,15 @@ We thank Community Jameel for Institute and research funding
 <!-- %% -- Appendix (if any) -------------------------------------------------------- -->
 <!-- %% - With proper section titles and _not_ just "Appendix". -->
 
+\bibliography{references.bib, scoringutils-paper.bib}
 
+\appendix
+\renewcommand\thefigure{\thesection.\arabic{figure}}
+\section{Validating forecast objects}
 
-
-
+```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
+include_graphics("output/flowchart-create-object.png")
+```
 
 
 <!-- ## Code formatting -->
