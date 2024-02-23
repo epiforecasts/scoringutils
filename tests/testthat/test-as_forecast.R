@@ -35,6 +35,13 @@ test_that("as_forecast() works as expected", {
                                   "target_end_date", "horizon"),
                 sample_id = "sample")
   )
+
+  # test if desired forecast type does not correspond to inferred one
+  test <- na.omit(data.table::copy(example_continuous))
+  expect_error(
+    as_forecast(test, forecast_type = "quantile"),
+    "Forecast type determined by scoringutils based on input"
+  )
 })
 
 

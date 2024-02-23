@@ -45,6 +45,10 @@ as_forecast <- function(data,
 #' If `NULL` (the default), all columns that are not required columns are
 #' assumed to form the unit of a single forecast. If specified, all columns
 #' that are not part of the forecast unit (or required columns) will be removed.
+#' @param forecast_type (optional) The forecast type you expect the forecasts
+#' to have. If the forecast type as determined by `scoringutils` based on the
+#' input does not match this, an error will be thrown. If `NULL` (the default),
+#' the forecast type will be inferred from the data.
 #' @param observed (optional) Name of the column in `data` that contains the
 #' observed values. This column will be renamed to "observed".
 #' @param predicted (optional) Name of the column in `data` that contains the
@@ -61,6 +65,7 @@ as_forecast <- function(data,
 #' @export
 as_forecast.default <- function(data,
                                 forecast_unit = NULL,
+                                forecast_type = NULL,
                                 observed = NULL,
                                 predicted = NULL,
                                 model = NULL,
@@ -110,7 +115,18 @@ as_forecast.default <- function(data,
   }
 
   # find forecast type
+  desired_forecast_type <- forecast_type
   forecast_type <- get_forecast_type(data)
+
+  if (!is.null(desired_forecast_type)) {
+    if (forecast_type != desired_forecast_type) {
+      stop(
+        "Forecast type determined by scoringutils based on input: `",
+        forecast_type,
+        "`. Desired forecast type: `", desired_forecast_type, "`."
+      )
+    }
+  }
 
   # construct class
   data <- new_forecast(data, paste0("forecast_", forecast_type))
