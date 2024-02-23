@@ -7,7 +7,7 @@
 add_pairwise_comparison(
   scores,
   by = "model",
-  relative_skill_metric = "auto",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL
 )
 }
@@ -17,10 +17,8 @@ add_pairwise_comparison(
 \item{by}{character vector with column names to summarise scores by. Default
 is "model", meaning that there will be one relative skill score per model.}
 
-\item{relative_skill_metric}{character with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-this will be either interval score, CRPS or Brier score (depending on which
-of these is available in the input data)}
+\item{metric}{character with the name of the metric for which
+a relative skill shall be computed.}
 
 \item{baseline}{character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
