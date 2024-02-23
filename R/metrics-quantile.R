@@ -466,7 +466,7 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   if (!all(diff(predicted) >= 0)) {
     cli_abort(
       c(
-      "x" = "Predictions must not be decreasing with increasing quantile level"
+        "x" = "Predictions must not be decreasing with increasing quantile level."
       )
     )
   }
