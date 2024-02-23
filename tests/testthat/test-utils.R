@@ -140,22 +140,15 @@ test_that("print methods fail gracefully", {
   class(test) <- "forecast_point"
   expect_warning(
     expect_message(
-      expect_output(
-        print(test),
-        pattern = "Forecast unit:"
+      expect_message(
+        expect_output(
+          print(test),
+          pattern = "Forecast unit:"
+        ),
+        "Could not determine forecast unit."
       ),
-      "Could not determine forecast unit."
+      "Could not determine forecast type"
     ),
     "Error in validating forecast object:"
   )
-
-
-
-  if (length(forecast_unit) == 0) {
-    message("Could not determine forecast unit")
-  } else {
-    cat("\nForecast unit:\n")
-    print(forecast_unit)
-  }
-
 })
