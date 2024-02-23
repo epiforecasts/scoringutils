@@ -243,9 +243,9 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
   if (!all(necessary_quantiles %in% quantile)) {
     cli_warn(
       c(
-        "x" = "To compute the interval coverage for a range of {range}%,
-        the quantiles {necessary_quantiles} are required.",
-        "i" = "Returning `NA`."
+        "x" = "To compute the interval coverage for a range of {.val {range}%},
+        the quantiles {.val {necessary_quantiles}} are required.",
+        "i" = "Returning {.val {NA}}."
       )
     )
     return(NA)
@@ -331,7 +331,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
       c(
         "x" = "To compute interval coverage deviation, all quantiles must form
         central symmetric prediction intervals.",
-        "i" = "Missing quantiles: {missing}. Returning `NA`."
+        "i" = "Missing quantiles: {.val {missing}}. Returning {.val {NA}}."
       )
     )
     return(NA)
