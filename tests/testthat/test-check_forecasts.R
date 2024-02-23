@@ -10,7 +10,7 @@ test_that("as_forecast() function has an error for empty data.frame", {
 test_that("check_columns_present() works", {
   expect_equal(
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),
-    "Column 'nop' not found in data"
+    "Column \"nop\" not found in data"
   )
   expect_true(
     check_columns_present(example_quantile, c("observed", "predicted"))
