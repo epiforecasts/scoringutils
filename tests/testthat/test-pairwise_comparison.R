@@ -274,7 +274,7 @@ test_that("pairwise_comparison() and `add_pairwise_comparison()` give same resul
 test_that("pairwise_comparison() realises when there is no baseline model", {
   expect_error(
     pairwise_comparison(scores_quantile, baseline = "missing_model"),
-    "The baseline provided was not found among the models in the data."
+    "Assertion on 'baseline' failed: Must be a subset of"
   )
 })
 
@@ -284,7 +284,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   # check that model column + columns in 'by' + baseline model are present
   expect_error(
     add_pairwise_comparison(
-      eval, by = c("model", "missing"), relative_skill_metric = "crps"
+      eval, by = c("model", "missing"), metric = "crps"
     ),
     "Not all columns specified in `by` are present:"
   )
@@ -292,22 +292,22 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   # error if baseline is not present
   expect_error(
     add_pairwise_comparison(
-      eval, by = "model", baseline = "missing", relative_skill_metric = "crps"
+      eval, by = "model", baseline = "missing", metric = "crps"
     ),
-    "The baseline provided was not found among the models in the data."
+    "Assertion on 'baseline' failed: Must be a subset of"
   )
 
   # error if not enough models are present
   eval_few <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
   expect_no_error(
     add_pairwise_comparison(
-      eval_few, by = "model", relative_skill_metric = "crps"
+      eval_few, by = "model", metric = "crps"
     )
   )
   expect_error(
     add_pairwise_comparison(
       eval_few, by = "model", baseline = "EuroCOVIDhub-baseline",
-      relative_skill_metric = "crps"
+      metric = "crps"
     ),
     "More than one non-baseline model is needed to compute pairwise compairisons."
   )
@@ -316,7 +316,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   expect_error(
     add_pairwise_comparison(
       eval, by = "model",
-      relative_skill_metric = "missing"
+      metric = "missing"
     )
   )
   eval_nometric <- data.table::copy(eval)[, "crps" := NULL]
@@ -324,16 +324,16 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     suppressWarnings(add_pairwise_comparison(
       eval_nometric, by = "model"
     )),
-    "No metric for relative skill was specified and none of the default metrics"
+    "Assertion on 'metric' failed: Must be a subset of "
   )
 
   # error if no model column is found
   eval_nomodel <- data.table::copy(eval)[, "model" := NULL]
   expect_error(
     add_pairwise_comparison(
-      eval_nomodel, by = "target_type", relative_skill_metric = "crps"
+      eval_nomodel, by = "target_type", metric = "crps"
     ),
-    "To compute relative skill, a column called 'model' must be present"
+    "Assertion on 'scores' failed: Column 'model' not found in data."
   )
 
   # error if there isn't a score_names attribute
@@ -341,7 +341,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   attr(eval_noattribute, "score_names") <- NULL
   expect_error(
     add_pairwise_comparison(
-      eval_noattribute, by = "model", relative_skill_metric = "crps"
+      eval_noattribute, by = "model", metric = "crps"
     ),
     "needs an attribute `score_names`"
   )
@@ -351,7 +351,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   eval_nas[1:10, "crps" := NA]
   expect_warning(
     add_pairwise_comparison(
-      eval_nas, by = "model", relative_skill_metric = "crps"
+      eval_nas, by = "model", metric = "crps"
     ),
     "Some values for the metric 'crps' are NA. These have been removed."
   )
@@ -360,7 +360,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   eval_nas[, "crps" := NA]
   expect_warning(
     add_pairwise_comparison(
-      eval_nas, by = "model", relative_skill_metric = "crps"
+      eval_nas, by = "model", metric = "crps"
     ),
     "After removing NA values for 'crps', no values were left."
   )
@@ -370,7 +370,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   eval_diffsign[1:10, "crps" := -eval_diffsign[1:10, "crps"]]
   expect_error(
     add_pairwise_comparison(
-      eval_diffsign, by = "model", relative_skill_metric = "crps"
+      eval_diffsign, by = "model", metric = "crps"
     ),
     "To compute pairwise comparisons, all values of crps must have the same sign."
   )
@@ -379,7 +379,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   fu <- get_forecast_unit(eval)
   expect_message(
     add_pairwise_comparison(
-      eval, by = fu, relative_skill_metric = "crps"),
+      eval, by = fu, metric = "crps"),
     "relative skill can only be computed if `by` is different from the unit of a single forecast."
   )
 
@@ -387,7 +387,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
   eval_summ <- summarise_scores(eval, by = "model")
   expect_warning(
     add_pairwise_comparison(
-      eval_summ, by = "model", relative_skill_metric = "crps"
+      eval_summ, by = "model", metric = "crps"
     ),
     "`by` is set to 'model', which is also the unit of a single forecast."
   )
