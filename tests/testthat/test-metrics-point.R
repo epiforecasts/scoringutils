@@ -64,7 +64,7 @@ test_that("abs error is correct within score, point forecast only", {
   eval <- scoringutils::score(data_scoringutils)
 
   expected <- abs(y - point_forecast)
-  expect_equal(eval$ae, expected)
+  expect_equal(eval$ae_point, expected)
 })
 
 test_that("abs error is correct, point and median forecasts different", {
