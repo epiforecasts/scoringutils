@@ -352,7 +352,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
   out <- reformatted[, .(
     interval_coverage_deviation = mean(interval_coverage_deviation)
   ), by = "forecast_id"]
-  return(out$interval_coverage_dev)
+  return(out$interval_coverage_deviation)
 }
 
 
