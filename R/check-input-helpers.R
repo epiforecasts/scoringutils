@@ -87,6 +87,12 @@ assert_not_null <- function(...) {
   varnames <- names(vars)
 
   calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
+  # Get the function name
+  calling_function <- as.list(
+    strsplit(
+      calling_function, "\\(", fixed = TRUE
+    )
+  )[[1]][1]
 
   for (i in seq_along(vars)) {
     varname <- varnames[i]
@@ -134,8 +140,13 @@ assert_equal_length <- function(...,
 
   if (length(unique(lengths)) != 1) {
     calling_function <- deparse(sys.calls()[[sys.nframe() - call_levels_up]])
+    # Get the function name
+    calling_function <- as.list(
+      strsplit(
+        calling_function, "\\(", fixed = TRUE
+      )
+    )[[1]][1]
 
-    lengths_message <- ifelse(
       one_allowed,
       "' should have the same length (or length one). Actual lengths: ",
       "' should have the same length. Actual lengths: "
