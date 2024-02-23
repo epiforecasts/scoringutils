@@ -2,13 +2,23 @@
 #' @description Convert a data.frame or similar of forecasts into an object of
 #' class `forecast_*` and validate it.
 #'
-#' `as_forecast()` determines the forecast type (binary, point, sample-based or
+#' `as_forecast()`
+#' - allows users to specify the current names of the columns that correspond
+#' to the columns required by `scoringutils` (`observed`, `predicted`,
+#' `model`, as well `quantile_level` for quantile-based forecasts and
+#' `sample_id` for sample-based forecasts). `as_forecast()` renames the
+#' existing columns.
+#' - allows users to specify the unit of a single forecast. It removes all
+#' columns that are neither part of the forecast unit nor a required column
+#' (see [set_forecast_unit()] for details)
+#' - Determines the forecast type (binary, point, sample-based or
 #' quantile-based) from the input data (using the function
-#' [get_forecast_type()]. It then constructs an object of the
-#' appropriate class (`forecast_binary`, `forecast_point`, `forecast_sample`, or
+#' [get_forecast_type()].
+#' - Constructs a forecast object of the appropriate class
+#' (`forecast_binary`, `forecast_point`, `forecast_sample`, or
 #' `forecast_quantile`, using the function [new_forecast()]).
-#' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
-#' the required input formats.
+#' - Calls [validate_forecast()] on the newly created forecast object to
+#' validate it
 #' @inheritParams score
 #' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
@@ -29,6 +39,12 @@ as_forecast <- function(data,
 }
 
 #' @rdname as_forecast
+#' @param forecast_unit (optional) Name of the columns in `data` (after
+#' any renaming of columns done by `as_forecast()`) that denote the unit of a
+#' single forecast. See [get_forecast_unit()] for details.
+#' If `NULL` (the default), all columns that are not required columns are
+#' assumed to form the unit of a single forecast. If specified, all columns
+#' that are not part of the forecast unit (or required columns) will be removed.
 #' @param observed (optional) Name of the column in `data` that contains the
 #' observed values. This column will be renamed to "observed".
 #' @param predicted (optional) Name of the column in `data` that contains the
@@ -36,9 +52,6 @@ as_forecast <- function(data,
 #' @param model (optional) Name of the column in `data` that contains the names
 #' of the models/forecasters that generated the predicted values.
 #' This column will be renamed to "model".
-#' @param forecast_unit (optional) Name of the columns in `data` (after
-#' renaming) that denote the unit of a single forecast.
-#' See [get_forecast_unit()] for details.
 #' @param quantile_level (optional) Name of the column in `data` that contains
 #' the quantile level of the predicted values. This column will be renamed to
 #' "quantile_level". Only applicable to quantile-based forecasts.
@@ -47,10 +60,10 @@ as_forecast <- function(data,
 #' sample-based forecasts.
 #' @export
 as_forecast.default <- function(data,
+                                forecast_unit = NULL,
                                 observed = NULL,
                                 predicted = NULL,
                                 model = NULL,
-                                forecast_unit = NULL,
                                 quantile_level = NULL,
                                 sample_id = NULL,
                                 ...) {
