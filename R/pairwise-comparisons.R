@@ -28,8 +28,7 @@
 #'
 #' @param scores A data.table of scores as produced by [score()].
 #' @param metric A character vector of length one with the metric to do the
-#' comparison on. The default is "auto", meaning that either "wis",
-#' "crps", or "brier_score" will be selected where available.
+#' comparison on.
 #' @param by character vector with names of columns present in the input
 #' data.frame. `by` determines how pairwise comparisons will be computed.
 #' You will get a relative skill score for every grouping level determined in
@@ -46,6 +45,7 @@
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
+#' @importFrom checkmate assert_subset assert_character
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -62,54 +62,42 @@
 #' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-pairwise_comparison <- function(scores,
-                                by = "model",
-                                metric = "auto",
-                                baseline = NULL,
-                                ...) {
+pairwise_comparison <- function(
+    scores,
+    by = "model",
+    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+    baseline = NULL,
+    ...
+) {
 
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
-  get_score_names(scores, error = TRUE)
+  score_names <- get_score_names(scores, error = TRUE)
 
-  # check that model column + columns in 'by' + baseline model are present
+  # check that metric is a subset of the scores and is of length 1
+  assert_subset(metric, score_names, empty.ok = FALSE)
+  assert_character(metric, len = 1)
+
+  # check that model column + columns in 'by' are present
   by_cols <- check_columns_present(scores, by)
   if (!is.logical(by_cols)) {
     stop("Not all columns specified in `by` are present: ", by_cols)
   }
-  model_col <- check_columns_present(scores, "model")
-  if (!is.logical(model_col)) {
-    stop(
-      "To compute relative skill, a column called 'model' ",
-      "must be present in the input data."
-    )
-  }
+  assert(check_columns_present(scores, "model"))
+
+  # check that baseline is one of the existing models
   models <- unique(scores$model)
-  if (!is.null(baseline) && !(baseline %in% models)) {
-    stop(
-      "The baseline provided was not found among the models in the data."
-    )
-  }
+  assert_subset(baseline, models)
+
   # check there are enough models
   if (length(setdiff(models, baseline)) < 2) {
     stop(
       "More than one non-baseline model is needed to compute ",
       "pairwise compairisons."
     )
-  }
-
-  if (metric == "auto") {
-    defaults <- c("wis", "crps", "brier_score")
-    metric <- defaults[defaults %in% names(scores)]
-    if (length(metric) == 0) {
-      stop(
-        "No metric for relative skill was specified and none of the ",
-        "default metrics (wis, crps, brier_score) were found in the data."
-      )
-    }
   }
 
   # check that values of the chosen metric are not NA
