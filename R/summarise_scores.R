@@ -179,10 +179,10 @@ summarize_scores <- summarise_scores
 #' @export
 #' @keywords keyword scoring
 add_pairwise_comparison <- function(
-    scores,
-    by = "model",
-    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-    baseline = NULL
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL
 ) {
 
   # input checks are done in `pairwise_comparison()`
