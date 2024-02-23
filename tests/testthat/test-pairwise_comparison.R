@@ -244,7 +244,7 @@ test_that("pairwise_comparison() works", {
   )
   attr(df, "score_names") <- c("wis", "ae_median")
 
-  res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
+  res <- suppressMessages(pairwise_comparison(df, baseline = as.character("model1")))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
