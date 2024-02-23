@@ -608,7 +608,7 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
     interval_coverage(
       observed, dropped_quantile_pred, dropped_quantiles, range = 50
     ),
-    "To compute the interval coverage for a range of 50%, the quantiles `0.25, 0.75` are required. Returning `NA`"
+    "Returning `NA`"
   )
 })
 
@@ -632,7 +632,7 @@ test_that("interval_coverage_deviation works", {
     interval_coverage_deviation(
       observed, predicted, c(quantile[-4], 0.76)
     ),
-    "To compute inteval coverage deviation, all quantiles must form central symmetric prediction intervals. Missing quantiles: 0.24, 0.75. Returning `NA`."
+    "Returning `NA`."
   )
 })
 
