@@ -170,26 +170,26 @@ summarize_scores <- summarise_scores
 #' @param scores MORE INFO HERE.
 #' @param by character vector with column names to summarise scores by. Default
 #' is "model", meaning that there will be one relative skill score per model.
-#' @param relative_skill_metric character with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, CRPS or Brier score (depending on which
-#' of these is available in the input data)
+#' @param metric character with the name of the metric for which
+#' a relative skill shall be computed.
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
 #' @keywords keyword scoring
-add_pairwise_comparison <- function(scores,
-                                    by = "model",
-                                    relative_skill_metric = "auto",
-                                    baseline = NULL) {
+add_pairwise_comparison <- function(
+    scores,
+    by = "model",
+    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+    baseline = NULL
+) {
 
   # input checks are done in `pairwise_comparison()`
   # do pairwise comparisons ----------------------------------------------------
   pairwise <- pairwise_comparison(
     scores = scores,
-    metric = relative_skill_metric,
+    metric = metric,
     baseline = baseline,
     by = by
   )
@@ -213,7 +213,7 @@ add_pairwise_comparison <- function(scores,
 
   # Update score names
   new_score_names <- paste(
-    relative_skill_metric, c("relative_skill", "scaled_relative_skill"),
+    metric, c("relative_skill", "scaled_relative_skill"),
     sep = "_"
   )
   new_score_names <- new_score_names[new_score_names %in% names(scores)]
