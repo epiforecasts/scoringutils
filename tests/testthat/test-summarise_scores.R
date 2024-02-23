@@ -32,7 +32,7 @@ test_that("summarise_scores() works with point forecasts", {
   expect_no_condition(
     pw_point <- add_pairwise_comparison(
       scores_point,
-      relative_skill_metric = "se_point"
+      metric = "se_point"
     )
   )
   pw_point <- summarise_scores(pw_point, by = "model")
@@ -60,7 +60,7 @@ test_that("summarise_scores() can compute relative measures", {
 
   scores_with <- add_pairwise_comparison(
     scores_quantile, by = "model",
-    relative_skill_metric = "ae_median"
+    metric = "ae_median"
   )
   scores_with <- summarise_scores(scores_with, by = "model")
 
