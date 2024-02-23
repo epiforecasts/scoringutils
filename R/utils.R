@@ -216,22 +216,44 @@ ensure_data.table <- function(data) {
 #' dat <- as_forecast(example_quantile)
 #' print(dat)
 print.forecast_binary <- function(x, ...) {
-  # Obtain forecast object information for printing
-  forecast_type <- get_forecast_type(x)
-  score_cols <- get_score_names(x)
+
+  # check whether object passes validation
+  validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
+  if (inherits(validation, "try-error")) {
+    validation_msg <- conditionMessage(attr(validation, "condition"))
+    warning(
+      "Error in validating forecast object:\n",
+      validation_msg
+    )
+  }
+
+  # get forecast type, forecast unit and score columns
+  forecast_type <- try(
+    do.call(get_forecast_type, list(data = x)),
+    silent = TRUE
+  )
   forecast_unit <- get_forecast_unit(x)
+  score_cols <- get_score_names(x)
 
   # Print forecast object information
-  cat("Forecast type:\n")
-  print(forecast_type)
+  if (inherits(forecast_type, "try-error")) {
+    message("Could not determine forecast type due to error in validation.")
+  } else {
+    cat("Forecast type:\n")
+    print(forecast_type)
+  }
+
+  if (length(forecast_unit) == 0) {
+    message("Could not determine forecast unit")
+  } else {
+    cat("\nForecast unit:\n")
+    print(forecast_unit)
+  }
 
   if (!is.null(score_cols)) {
     cat("\nScore columns:\n")
     print(score_cols)
   }
-
-  cat("\nForecast unit:\n")
-  print(forecast_unit)
 
   cat("\n")
   NextMethod(x, ...)
