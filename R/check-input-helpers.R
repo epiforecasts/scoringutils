@@ -33,17 +33,19 @@ check_numeric_vector <- function(x, ...) {
 #' @param quantiles Numeric vector of quantiles to check
 #' @param name Character name to use in error messages
 #' @param range Numeric vector giving allowed range
+#' @importFrom cli cli_abort
 #'
 #' @return None. Function errors if quantiles are invalid.
 #'
 #' @keywords internal_input_check
 check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
   if (any(quantiles < range[1]) || any(quantiles > range[2])) {
-    stop(name, " must be between ", range[1], " and ", range[2])
+    cli_abort("{.strong {name}} must be between {.val {range[1]}} and
+    {.val {range[2]}}.")
   }
 
   if (!all(diff(quantiles) > 0)) {
-    stop(name, " must be increasing")
+    cli_abort("{.strong {name}} must be increasing.")
   }
 }
 
