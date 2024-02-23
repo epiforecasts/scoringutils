@@ -232,10 +232,7 @@ print.forecast_binary <- function(x, ...) {
     do.call(get_forecast_type, list(data = x)),
     silent = TRUE
   )
-  forecast_unit <- try(
-    do.call(get_forecast_unit, list(data = x)),
-    silent = TRUE
-  )
+  forecast_unit <- get_forecast_unit(x)
   score_cols <- get_score_names(x)
 
   # Print forecast object information
@@ -246,8 +243,8 @@ print.forecast_binary <- function(x, ...) {
     print(forecast_type)
   }
 
-  if (inherits(forecast_unit, "try-error")) {
-    message("Could not determine forecast unit due to error in validation.")
+  if (length(forecast_unit) == 0) {
+    message("Could not determine forecast unit")
   } else {
     cat("\nForecast unit:\n")
     print(forecast_unit)

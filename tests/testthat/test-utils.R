@@ -123,6 +123,7 @@ test_that("print methods fail gracefully", {
   test <- as_forecast(na.omit(example_quantile))
   test$observed <- NULL
 
+  # message if forecast type can't be computed
   expect_warning(
     expect_message(
       expect_output(
@@ -133,4 +134,28 @@ test_that("print methods fail gracefully", {
     ),
     "Error in validating forecast object:"
   )
+
+  # message if forecast unit can't be computed
+  test <- 1:10
+  class(test) <- "forecast_point"
+  expect_warning(
+    expect_message(
+      expect_output(
+        print(test),
+        pattern = "Forecast unit:"
+      ),
+      "Could not determine forecast unit."
+    ),
+    "Error in validating forecast object:"
+  )
+
+
+
+  if (length(forecast_unit) == 0) {
+    message("Could not determine forecast unit")
+  } else {
+    cat("\nForecast unit:\n")
+    print(forecast_unit)
+  }
+
 })
