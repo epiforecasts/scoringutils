@@ -177,6 +177,7 @@ assert_equal_length <- function(...,
 #' @param attribute The name of the attribute to check
 #' @param expected The expected value of the attribute
 #' @inherit document_check_functions return
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_attribute_conflict <- function(object, attribute, expected) {
   existing <- attr(object, attribute)
@@ -186,14 +187,17 @@ check_attribute_conflict <- function(object, attribute, expected) {
   }
 
   if (!is.null(existing) && !identical(existing, expected)) {
-    msg <- paste0(
-      "Object has an attribute `", attribute, "`, but it looks different ",
-      "from what's expected based on the data.\n",
-      "Existing: ", toString(existing), "\n",
-      "Expected: ", toString(expected), "\n",
-      "Running `as_forecast()` again might solve the problem"
+    return(
+      cli_inform(
+        c(
+          "!" = "Object has an attribute {.val {attribute}} but it looks
+          different from what's expected based on the data.\n",
+          "i" = "Existing: {.val {existing}}, \n",
+          "i" = "Expected: {.val {expected}}, \n",
+          "i" = "Running {.fn as_forecast} again might solve the problem."
+        )
+      )
     )
-    return(msg)
   }
   return(TRUE)
 }
@@ -205,13 +209,16 @@ check_attribute_conflict <- function(object, attribute, expected) {
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams score
+#' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    message(
-      "There is no column called `model` in the data.",
-      "scoringutils assumes that all forecasts come from the same model" # nolint
+    cli_inform(
+      c(
+        "i" = "There is no column called {.emph model} in the data\n.
+        scoringutils assumes that all forecasts come from the same model"
+      )
     )
     data[, model := "Unspecified model"]
   }
@@ -225,6 +232,7 @@ assure_model_column <- function(data) {
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
 #' @inherit document_check_functions params return
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
   data <- na.omit(data)
@@ -233,15 +241,17 @@ check_number_per_forecast <- function(data, forecast_unit) {
   n <- unique(data$scoringutils_InternalNumCheck)
   data[, scoringutils_InternalNumCheck := NULL]
   if (length(n) > 1) {
-    msg <- paste0(
-      "Some forecasts have different numbers of rows ",
-      "(e.g. quantiles or samples). ",
-      "scoringutils found: ", toString(n),
-      ". This may be a problem (it can potentially distort scores, ",
-      "making it more difficult to compare them), ",
-      "so make sure this is intended."
+    return(
+      cli_inform(
+        c(
+          "!" = "Some forecasts have different numbers of rows
+        (e.g. quantiles or samples). scoringutils found: {.val {n}}.",
+        "i" = "\n This may be a problem (it can potentially distort scores,
+        making it more difficult to compare them), so make sure this
+        is intended."
+        )
+      )
     )
-    return(msg)
   }
   return(TRUE)
 }
@@ -252,19 +262,23 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' as specified in `columns`, have NA values. If so, it returns a string with
 #' an error message, otherwise it returns TRUE.
 #' @inherit document_check_functions params return
+#' @importFrom cli cli_inform
 #'
 #' @keywords internal_input_check
 check_no_NA_present <- function(data, columns) {
-  for (x in columns){
+  for (x in columns) {
     if (anyNA(data[[x]])) {
-      msg <- paste0(
-        "Checking `data`: ",
-        sum(is.na(data[[x]])),
-        " values in column `",
-        x,
-        "`` are NA and corresponding rows will be removed. This is fine if not unexpected." # nolint
+      na_count <- sum(is.na(data[[x]]))
+      return(
+        cli_inform(
+          c(
+            "Checking `data`:",
+            "i" = "{.val {na_count}} values in column {.val {x}} are
+          {.val {NA}} and corresponding rows will be removed.
+          This is fine if not unexpected."
+          )
+        )
       )
-      return(msg)
     }
   }
   return(TRUE)
@@ -277,18 +291,22 @@ check_no_NA_present <- function(data, columns) {
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {
-    msg <- paste0(
-      "There are instances with more than one forecast for the same target. ",
-      "This can't be right and needs to be resolved. Maybe you need to ",
-      "check the unit of a single forecast and add missing columns? Use ",
-      "the function get_duplicate_forecasts() to identify duplicate rows"
+    cli_inform(
+      c(
+        "!" = "There are instances with more than one forecast for the same
+        target. This can't be right and needs to be resolved.",
+        "i" = "Maybe you need to check the unit of a single forecast and
+        add missing columns?",
+        "i" = "Use the function {.fn get_duplicate_forecasts} to
+        identify duplicate rows."
+      )
     )
-    return(msg)
   }
   return(TRUE)
 }
@@ -301,6 +319,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
 #' and returns a message with the first issue encountered.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate assert_character
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_columns_present <- function(data, columns) {
   if (is.null(columns)) {
@@ -309,20 +328,20 @@ check_columns_present <- function(data, columns) {
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   missing <- list()
-  for (x in columns){
+  for (x in columns) {
     if (!(x %in% colnames)) {
       missing[[x]] <- x
     }
   }
   missing <- unlist(missing)
-  if (length(missing) > 1) {
-    msg <- paste0(
-      "Columns '", paste(missing, collapse = "', '"), "' not found in data"
+  if (length(missing) >= 1) {
+    return(
+      cli_inform(
+        c(
+          "!" = "Column{?s} {.val {missing}} not found in data."
+        )
+      )
     )
-    return(msg)
-  } else if (length(missing) == 1) {
-    msg <- paste0("Column '", missing, "' not found in data")
-    return(msg)
   }
   return(TRUE)
 }
@@ -360,6 +379,7 @@ test_columns_not_present <- function(data, columns) {
 #' "quantile" and "sample_id" is present.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_data_columns <- function(data) {
   is_data <- check_data_frame(data, min.rows = 1)
@@ -368,12 +388,23 @@ check_data_columns <- function(data) {
   }
   needed <- test_columns_present(data, c("observed", "predicted"))
   if (!needed) {
-    return("Both columns `observed` and predicted` are needed")
+    return(
+      cli_inform(
+        c(
+          "i" = "Both columns `observed` and predicted` are needed"
+        )
+      )
+    )
   }
   problem <- test_columns_present(data, c("sample_id", "quantile"))
   if (problem) {
     return(
-      "Found columns `quantile` and `sample_id`. Only one of these is allowed"
+      cli_inform(
+        c(
+          "i" = "Found columns `quantile` and `sample_id`.
+          Only one of these is allowed"
+        )
+      )
     )
   }
   return(TRUE)
@@ -385,11 +416,16 @@ check_data_columns <- function(data) {
 #' @param object An object to be checked
 #' @param attribute name of an attribute to be checked
 #' @inherit document_check_functions return
+#' @importFrom cli cli_inform
 #' @keywords internal_input_check
 check_has_attribute <- function(object, attribute) {
   if (is.null(attr(object, attribute))) {
     return(
-      paste0("Found no attribute `", attribute, "`")
+      cli_inform(
+        c(
+          "!" = "Found no attribute {.val {attribute}}."
+        )
+      )
     )
   } else {
     return(TRUE)
