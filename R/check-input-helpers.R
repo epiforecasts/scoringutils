@@ -78,6 +78,7 @@ check_try <- function(expr) {
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
 #' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
@@ -97,10 +98,9 @@ assert_not_null <- function(...) {
   for (i in seq_along(vars)) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      stop(
-        "variable '", varname,
-        "' is `NULL` in the following function call: '",
-        calling_function, "'"
+      cli_abort(
+        "variable {varname} is {.val {NULL}} in the following function call:
+        {.fn {calling_function}}."
       )
     }
   }
@@ -118,6 +118,7 @@ assert_not_null <- function(...) {
 #' @param call_levels_up How many levels to go up when including the function
 #' call in the error message. This is useful when calling `assert_equal_length()`
 #' within another checking function.
+#' @importFrom cli cli_abort
 #' @inherit document_assert_functions return
 #'
 #' @keywords internal_input_check
@@ -152,11 +153,12 @@ assert_equal_length <- function(...,
       "' should have the same length. Actual lengths: "
     )
 
-    stop(
-      "Arguments to the following function call: '",
-      calling_function,
-      lengths_message,
-      toString(lengths)
+    cli_abort(
+      c(
+        "x" = "Arguments to the following function call:
+        {.fn {calling_function}} should have the same length {extra_message}",
+        "i" = " Actual lengths: {.val {lengths}}."
+      )
     )
   }
   return(invisible(NULL))
