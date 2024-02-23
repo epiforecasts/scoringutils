@@ -236,7 +236,7 @@ test_that("pairwise_comparison() work in score() with binary data", {
 
 test_that("pairwise_comparison() works", {
   df <- data.frame(
-    model = as.character(rep(c("model1", "model2", "model3"), each = 10)),
+    model = rep(c("model1", "model2", "model3"), each = 10),
     date = as.Date("2020-01-01") + rep(1:5, each = 2),
     location = c(1, 2),
     wis = (abs(rnorm(30))),
@@ -244,7 +244,7 @@ test_that("pairwise_comparison() works", {
   )
   attr(df, "score_names") <- c("wis", "ae_median")
 
-  res <- suppressMessages(pairwise_comparison(df, baseline = as.character("model1")))
+  res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",

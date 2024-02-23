@@ -89,7 +89,7 @@ pairwise_comparison <- function(
   assert(check_columns_present(scores, "model"))
 
   # check that baseline is one of the existing models
-  models <- unique(scores$model)
+  models <- as.vector(unique(scores$model))
   assert_subset(baseline, models)
 
   # check there are enough models
