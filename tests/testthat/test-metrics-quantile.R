@@ -632,7 +632,7 @@ test_that("interval_coverage_deviation works", {
     interval_coverage_deviation(
       observed, predicted, c(quantile[-4], 0.76)
     ),
-    "Returning `NA`."
+    "all quantiles must form central symmetric prediction intervals"
   )
 })
 
