@@ -242,10 +242,10 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
   necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
   if (!all(necessary_quantiles %in% quantile)) {
     cli_warn(
-      "
-      To compute the interval coverage for a range of {range}%,
-      the quantiles {necessary_quantiles} are required. Returning `NA`.
-      ",
+      c(
+        "x" = "To compute the interval coverage for a range of {range}%,
+        the quantiles {necessary_quantiles} are required.",
+        "i" = "Returning `NA`."
       )
     )
     return(NA)
@@ -328,10 +328,10 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
   if (!all(necessary_quantiles %in% quantile)) {
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
     cli_warn(
-      "To compute interval coverage deviation, all quantiles must form central
-      symmetric prediction intervals. Missing quantiles: {missing}.
-      Returning `NA`.
-      ",
+      c(
+        "x" = "To compute interval coverage deviation, all quantiles must form
+        central symmetric prediction intervals.",
+        "i" = "Missing quantiles: {missing}. Returning `NA`."
       )
     )
     return(NA)
@@ -416,10 +416,10 @@ bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
   }
   if (!(0.5 %in% quantile)) {
     cli_inform(
-      "
-      Median not available, computing bias as mean of the two innermost
-      quantiles in order to compute bias.
-      "
+      c(
+        "i" = "Median not available, computing bias as mean of the two
+        innermost quantiles in order to compute bias."
+      )
     )
   }
   bias <- sapply(1:n, function(i) {
@@ -465,7 +465,9 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
     cli_abort(
-      "Predictions must not be decreasing with increasing quantile level"
+      c(
+      "x" = "Predictions must not be decreasing with increasing quantile level"
+      )
     )
   }
 
@@ -527,10 +529,10 @@ ae_median_quantile <- function(observed, predicted, quantile) {
   assert_input_quantile(observed, predicted, quantile)
   if (!any(quantile == 0.5)) {
     cli_warn(
-      "
-      In order to compute the absolute error of the median,
-      {.var 0.5} must be among the quantiles given. Returning `NA`.
-      ",
+      c(
+        "x" = "In order to compute the absolute error of the median,
+        {.var 0.5} must be among the quantiles given.",
+        "i" = "Returning `NA`."
       )
     )
     return(NA_real_)
