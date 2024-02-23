@@ -246,7 +246,7 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
       To compute the interval coverage for a range of {range}%,
       the quantiles {necessary_quantiles} are required. Returning `NA`.
       ",
-      call = caller_env()
+      )
     )
     return(NA)
   }
@@ -332,7 +332,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
       symmetric prediction intervals. Missing quantiles: {missing}.
       Returning `NA`.
       ",
-      call = caller_env()
+      )
     )
     return(NA)
   }
@@ -531,7 +531,7 @@ ae_median_quantile <- function(observed, predicted, quantile) {
       In order to compute the absolute error of the median,
       {.var 0.5} must be among the quantiles given. Returning `NA`.
       ",
-      call = caller_env()
+      )
     )
     return(NA_real_)
   }
