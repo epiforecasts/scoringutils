@@ -148,9 +148,10 @@ assert_equal_length <- function(...,
       )
     )[[1]][1]
 
+    extra_message <- ifelse(
       one_allowed,
-      "' should have the same length (or length one). Actual lengths: ",
-      "' should have the same length. Actual lengths: "
+      "(or length one)",
+      ""
     )
 
     cli_abort(
