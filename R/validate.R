@@ -115,17 +115,15 @@ as_forecast.default <- function(data,
   }
 
   # find forecast type
-  desired_forecast_type <- forecast_type
+  desired <- forecast_type
   forecast_type <- get_forecast_type(data)
 
-  if (!is.null(desired_forecast_type)) {
-    if (forecast_type != desired_forecast_type) {
-      stop(
-        "Forecast type determined by scoringutils based on input: `",
-        forecast_type,
-        "`. Desired forecast type: `", desired_forecast_type, "`."
-      )
-    }
+  if (!is.null(desired) && desired != forecast_type) {
+    stop(
+      "Forecast type determined by scoringutils based on input: `",
+      forecast_type,
+      "`. Desired forecast type: `", desired, "`."
+    )
   }
 
   # construct class
