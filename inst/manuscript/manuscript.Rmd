@@ -434,7 +434,9 @@ Input formats and return values are shown in more detail in Figure \ref{fig:inpu
 include_graphics("output/input-formats-scoring-rules.png")
 ```
 
-<!-- Maybe something about the wrapper functions that we want to have -->
+
+<!-- MISSING: SECTION ON HOW TO COMPOSE YOUR OWN SCORING RULES -->
+
 
 ## Adding relative skill scores based on pairwise comparisons {#pairwisetheory}
 
@@ -442,13 +444,13 @@ Raw scores for different forecasting models are usually not directly comparable 
 
 Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model (see Figure \ref{fig:pairwise-comparison}. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score. 
 
-Two models can of course only be fairly compared if they have overlapping forecasts. One possible way of ensuring this is the case is to only compare models that have forecasts for at least 50\% of the available targets. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. 
+Two models can of course only be fairly compared if they have overlapping forecasts. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. 
 
 ```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3.."}
 include_graphics("output/pairwise-comparisons.png")
 ```
 
-To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument XX`relative_skill_metric`XX and adds them as an additional column to the input data. Optionally, users can specify a baseline model to additionally compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model (computed excluding the baseline) by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
+To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument `metric` and adds them as an additional column to the input data. Optionally, users can specify a baseline model to additionally compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model (computed excluding the baseline) by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
 
 ```{r pairwise-comparison-code, eval = FALSE}
 score(example_quantile[horizon == 2]) |>
@@ -456,7 +458,7 @@ score(example_quantile[horizon == 2]) |>
                           baseline = "EuroCOVIDhub-baseline")
 ```
 
-Pairwise comparisons should usually be made based on raw, unsummarised scores (i.e. `add_pairwise_comparison()` should be called before `summarise_scores()` (see Section XXX)). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
+Pairwise comparisons should usually be made based on raw, unsummarised scores (meaning that `add_pairwise_comparison()` should be called before `summarise_scores()` (see Section \ref{sec:summarising})). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
 
 ## Additional functionality related to scores objects
 
@@ -546,11 +548,7 @@ score(example_continuous) |>
 
 ### Weighted interval score decomposition
 
-For quantile-based forecasts, the weighted interval score \citep[WIS, ][]{bracherEvaluatingEpidemicForecasts2021} is commonly used and is a strictly proper scoring rule. The WIS treats the predictive quantiles as a set of symmetric prediction intervals and measures the distance between the observation and the forecast interval. It can be decomposed into a dispersion (uncertainty) component and penalties for over- and underprediction. For a single interval, the interval score is computed as
-  $$IS_\alpha(F,y) = \underbrace{(u-l)}_\text{dispersion} + \underbrace{\frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l)}_{\text{overprediction}} + \underbrace{\frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u)}_{\text{underprediction}}, $$
-  where $\mathbf{1}()$ is the indicator function, $y$ is the observed value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
-  $$WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)\right),$$
-where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$. It is helpful to visualise the decomposition of the weighted interval score into its components: dispersion, overprediction and underprediction. This can be achieved using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components}. 
+For quantile-based forecasts, the weighted interval score \citep[WIS, ][see Section \ref{sec:wis} in the Appendix]{bracherEvaluatingEpidemicForecasts2021} is a commonly used strictly proper scoring rule for forecasts in a quantile-based format. The score is the sum of three components: overprediction, underprediction and dispersion (width of the forecast). These can be visualised using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components}. 
 
 ```{r wis-components-code, eval = FALSE, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. The WIS components measure over- and underprediction in absolute, rather than relative terms."}
 score(example_quantile) |>
@@ -582,7 +580,6 @@ p1 + p2 +
   plot_annotation(tag_levels = "A") + 
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom") 
-  
 ```
 
 
@@ -593,15 +590,21 @@ p1 + p2 +
 
 <!-- For forecasts in a quantile format, bias is also reflected in the over- and underprediction components of the weighted interval score. These measure over- and underprediction on an absolute scale (analogous to the absolute error of a point forecast), rather than a relative scale. It is important to note that it is not a priori clear what the decomposition 'should' look like - a forecast can be well calibrated and still have different amounts of over- and underprediction. High overprediction or underprediction values can therefore not immediately be interpreted as systematic bias.  -->
 
-# \section{Discussion} \label{sec:discussion}
+\section{Discussion} \label{sec:discussion}
 
-\pkg{scoringutils} aims to provide a framework that makes it easy for practitioners to evaluate and compare forecasts across multiple dimensions. It offers a flexible and extensible set of general-purpose tools to validate, diagnose, visualise, transform and score forecasts. It allows users to supply their own scoring rules and work with forecasts (in particular probabilistic forecasts) in a variety of different formats. The package is designed to help users bridge the gap between existing packages in the forecast evaluation ecosystem by making it easy to use functionality from different packages in a single workflow. In particular, the package aims to be accessible to more inexperienced users, providing sensible defaults and a simple interface, as well as extensive documentation and examples.
+### Summary
 
-Further extensions to the package are planned and we welcome feedback and suggestions for improvement. As of now, \pkg{scoringutils} currently does not handle all possible kinds of prediction formats supported by other packages. For example, it does not support multiclass predictions (like \pkg{yardstick} does), or scoring forecasts that are specified as a closed-form distribution (as is possible with \pkg{scoringRules}). We plan to support for these in the near future. We also plan to add support for scoring multivariate forecasts that specify a joint distribution across targets.
+This paper presented \pkg{scoringutils} an R package for forecast evaluation. It explained the core workflow, consisting of 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores, as well as additional functionality such as visualisation and diagnostic tools. 
 
-<!-- TODO: WE WANT TO PROVIDE HELPER FUNCTIONS.  -->
+The package specialises in the evaluation of probabilistic forecasts (the forecast is a full predictive distribution). It provides a comprehensive framework based on \pkg{data.table} and allows users to validate, diagnose, visualise, transform and score forecasts using a wide range of default and custom scoring rules. The package is designed to be flexible and extensible, and to make it easy to use functionality from different packages in a single workflow. \pkg{scoringutils} addresses a gap in the existing ecosystem of forecast evaluation by creating a `data.table`-based forecast evaluation framework for probabilistic forecasts (similarly to what \pkg{yardstick} provides for point forecasts and classification tasks). Notably, \pkg{scoringutils} is the first package to provide extensive support for forecasts in a quantile-based forecasts, which is commonly used for example in Epidemiology. In addition to providing a coherent forecast evaluation workflow it offers a wide range of additional functions that practitioners may find useful when assessing or comparing the quality of their forecasts.
 
-Another area of future development is the integration of \pkg{scoringutils} with other packages in the forecast evaluation ecosystem. We aim to add more helper functions that allow users to easily convert between different formats and use functionality from other packages. We also aim to provide interfaces to common modelling packages such as \pkg{odin} in order to allow for a closer integration of modelling and evaluation.
+A limitation of the package is that it currently only supports a small set of possible types of forecasts. For example, forecasts in a bin-format or forecasts represented in a closed-form distribution (as can be scored for example using \pkg{scoringRules} are not supported. While it is in principle possible to extend the current classes and generic functions, this may not be very feasible in practice for most users. Some functionality in \pkg{scoringutils} is necessarily redundant with other packages that provide functionality to aid with the evaluation of forecasts. The overall idea of providing a `data.frame`-based evaluation framework, for example, is similar to what \pkg{yardstick} offers (albeit with a focus on point forecasts and classification tasks, rather than probabilistic forecasts). Having a single package that encompasses all possible use cases might be preferable. As of now, the scope of the functionality in \pkg{scoringutils} is limited and many visualisations that are available in other packages, particularly with respect to model calibration, are missing. At the moment, \pkg{scoringutils} falls somewhat short of its aspiration to become a bridge between different packages in the forecast evaluation ecosystem. It does not yet offer a wide range of helper functions that allow users to easily convert between different formats and use functionality from other packages.
+
+A variety of extensions are planned for \pkg{scoringutils}. The first is the expansion of the forecast types that are supported. We plan to add support for evaluating categorical forecasts, as well as multivariate forecasts that specify a joint distribution across targets. Adding the possibility to score closed-form distributions might be another useful extension. A second area of expansion is the integration with other forecast evaluation and modelling packages. We aim to provide a variety of helper functions to convert to and from different formats, such as the one used by \pkg{yardstick} or formats used by modelling packages such as \pkg{odin}. These functions would make it easy to integrate \pkg{scoringutils} into existing workflows or use functionality from other packages that is not available in \pkg{scoringutils}. A third area of improvement is the addition of case studies and vignettes that make working with and extending functionality from the package easier. 
+
+\pkg{scoringutils} is already used by a variety of public health institutions such as for example the US Centers for Disease Control, the European Centre for Disease Prevention and Control, as well as various academic institutions. The package is actively maintained and developed and we hope it will continue to be a valuable resource for researcheres and practitioners working on forecast evaluation.
+
+
 
 # Acknowledgments
 
@@ -642,6 +645,15 @@ We thank Community Jameel for Institute and research funding
 ```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
 include_graphics("output/flowchart-create-object.png")
 ```
+
+\section{The weighted interval score (WIS)} \label{sec:wis}
+
+The WIS treats the predictive quantiles as a set of symmetric prediction intervals and measures the distance between the observation and the forecast interval. It can be decomposed into a dispersion (uncertainty) component and penalties for over- and underprediction. For a single interval, the interval score is computed as
+  $$IS_\alpha(F,y) = \underbrace{(u-l)}_\text{dispersion} + \underbrace{\frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l)}_{\text{overprediction}} + \underbrace{\frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u)}_{\text{underprediction}}, $$
+  where $\mathbf{1}()$ is the indicator function, $y$ is the observed value, and $l$ and $u$ are the $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$ quantiles of the predictive distribution $F$, i.e. the lower and upper bound of a single prediction interval. For a set of $K$ prediction intervals and the median $m$, the score is computed as a weighted sum,
+  $$WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)\right),$$
+where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$. 
+
 
 
 <!-- ## Code formatting -->
