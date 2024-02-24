@@ -96,6 +96,7 @@ assert_not_null <- function(...) {
   )[[1]][1]
 
   for (i in seq_along(vars)) {
+    #nolint start: object_usage_linter
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       cli_abort(
@@ -103,6 +104,7 @@ assert_not_null <- function(...) {
         {.fn {calling_function}}."
       )
     }
+    #nolint end
   }
   return(invisible(NULL))
 }
@@ -119,12 +121,14 @@ assert_not_null <- function(...) {
 #' @keywords internal_input_check
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
+    #nolint start: keyword_quote_linter
     cli_inform(
       c(
         "i" = "There is no column called {.emph model} in the data\n.
         scoringutils assumes that all forecasts come from the same model"
       )
     )
+    #nolint end
     data[, model := "Unspecified model"]
   }
   return(data[])
@@ -147,6 +151,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
   data[, scoringutils_InternalNumCheck := NULL]
   if (length(n) > 1) {
     return(
+      #nolint start: keyword_quote_linter
       cli_inform(
         c(
           "!" = "Some forecasts have different numbers of rows
@@ -156,6 +161,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
         is intended."
         )
       )
+      #nolint end
     )
   }
   return(TRUE)
@@ -173,6 +179,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
 check_no_NA_present <- function(data, columns) {
   for (x in columns) {
     if (anyNA(data[[x]])) {
+      #nolint start: keyword_quote_linter object_usage_linter
       na_count <- sum(is.na(data[[x]]))
       return(
         cli_inform(
@@ -183,6 +190,7 @@ check_no_NA_present <- function(data, columns) {
           This is fine if not unexpected."
           )
         )
+        #nolint end
       )
     }
   }
@@ -202,6 +210,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {
+    #nolint start: keyword_quote_linter duplicate_argument_linter
     cli_inform(
       c(
         "!" = "There are instances with more than one forecast for the same
@@ -212,6 +221,7 @@ check_duplicates <- function(data, forecast_unit = NULL) {
         identify duplicate rows."
       )
     )
+    #nolint end
   }
   return(TRUE)
 }
@@ -294,22 +304,26 @@ check_data_columns <- function(data) {
   needed <- test_columns_present(data, c("observed", "predicted"))
   if (!needed) {
     return(
+      #nolint start: keyword_quote_linter
       cli_inform(
         c(
           "i" = "Both columns `observed` and predicted` are needed"
         )
       )
+      #nolint end
     )
   }
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(
+      #nolint start: keyword_quote_linter
       cli_inform(
         c(
           "i" = "Found columns `quantile` and `sample_id`.
           Only one of these is allowed"
         )
       )
+      #nolint end
     )
   }
   return(TRUE)

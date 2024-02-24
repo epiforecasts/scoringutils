@@ -262,6 +262,7 @@ interval_coverage <- function(observed, predicted,
         "i" = "Returning {.val {NA}}."
       )
     )
+    #nolint end
     return(NA)
   }
   r <- interval_range
@@ -348,6 +349,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
         "i" = "Missing quantiles: {.val {missing}}. Returning {.val {NA}}."
       )
     )
+    #nolint end
     return(NA)
   }
 
@@ -438,6 +440,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
         innermost quantiles in order to compute bias."
       )
     )
+    #nolint end
   }
   bias <- sapply(1:n, function(i) {
     bias_quantile_single_vector(
@@ -484,11 +487,13 @@ bias_quantile_single_vector <- function(observed, predicted,
   order <- order(quantile_level)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
+    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "x" = "Predictions must not be decreasing with increasing quantile level."
+        "!" = "Predictions must not be decreasing with increasing quantile level."
       )
     )
+    #nolint end
   }
 
   if (0.5 %in% quantile_level) {
@@ -557,6 +562,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
         "i" = "Returning `NA`."
       )
     )
+    #nolint end
     return(NA_real_)
   }
   if (is.null(dim(predicted))) {
