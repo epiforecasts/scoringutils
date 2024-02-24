@@ -124,8 +124,9 @@ assure_model_column <- function(data) {
     #nolint start: keyword_quote_linter
     cli_inform(
       c(
-        "i" = "There is no column called {.emph model} in the data\n.
-        scoringutils assumes that all forecasts come from the same model"
+        "!" = "There is no column called {.emph model} in the data.",
+        "i" = "scoringutils will assume that all forecasts come from the
+        same model."
       )
     )
     #nolint end
