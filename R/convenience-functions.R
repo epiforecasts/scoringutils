@@ -51,6 +51,7 @@
 #' untransformed forecasts.
 #'
 #' @importFrom data.table ':=' is.data.table copy
+#' @importFrom cli cli_abort cli_warn
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export
 #' @references Transformation of forecasts for evaluating predictive
@@ -114,18 +115,22 @@ transform_forecasts <- function(data,
   # Error handling
   if (scale_col_present) {
     if (!("natural" %in% original_data$scale)) {
-      stop(
-        "If a column 'scale' is present, entries with scale =='natural' ",
-        "are required for the transformation"
+      #nolint start: keyword_quote_linter
+      cli_abort(
+        c(
+          "!" = "If a column 'scale' is present, entries with scale =='natural'
+          are required for the transformation."
+        )
       )
     }
     if (append && (label %in% original_data$scale)) {
-      w <- paste0(
-        "Appending new transformations with label '",
-        label,
-        "', even though that entry is already present in column 'scale'."
+      cli_warn(
+        c(
+          "i" = "Appending new transformations with label {label}
+        even though that entry is already present in column 'scale'."
+        )
       )
-      warning(w)
+      #nolint end
     }
   }
 
@@ -169,6 +174,7 @@ transform_forecasts <- function(data,
 #' logarithm
 #' @param base a positive or complex number: the base with respect to which
 #' logarithms are computed. Defaults to e = exp(1).
+#' @importFrom cli cli_abort cli_warn
 #' @return A numeric vector with transformed values
 #' @export
 #' @references Transformation of forecasts for evaluating predictive
@@ -192,14 +198,21 @@ transform_forecasts <- function(data,
 log_shift <- function(x, offset = 0, base = exp(1)) {
 
   if (any(x < 0, na.rm = TRUE)) {
-    w <- paste("Detected input values < 0.")
-    stop(w)
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Detected input values < 0."
+      )
+    )
   }
-
   if (any(x == 0, na.rm = TRUE) && offset == 0) {
-    w <- paste0("Detected zeros in input values.",
-                "Try specifying offset = 1 (or any other offset).")
-    warning(w)
+    cli_warn(
+      c(
+        "!" = "Detected zeros in input values.",
+        "i" = "Try specifying offset = 1 (or any other offset)."
+      )
+    )
+    #nolint end
   }
   log(x + offset, base = base)
 }
@@ -223,6 +236,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' @inheritParams score
 #' @param forecast_unit Character vector with the names of the columns that
 #' uniquely identify a single forecast.
+#' @importFrom cli cli_warn
 #' @return A data.table with only those columns kept that are relevant to
 #' scoring or denote the unit of a single forecast as specified by the user.
 #'
@@ -236,11 +250,17 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' )
 set_forecast_unit <- function(data, forecast_unit) {
   data <- ensure_data.table(data)
+  #nolint start: keyword_quote_linter object_usage_linter
   missing <- check_columns_present(data, forecast_unit)
   if (!is.logical(missing)) {
-    warning(missing)
+    cli_warn(
+      c(
+        "!" = "{missing}"
+      )
+    )
     forecast_unit <- intersect(forecast_unit, colnames(data))
   }
+  #nolint end
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])
   # validate that output remains a valid forecast object if input was one before
