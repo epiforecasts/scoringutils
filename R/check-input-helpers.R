@@ -155,10 +155,10 @@ check_number_per_forecast <- function(data, forecast_unit) {
       cli_inform(
         c(
           "!" = "Some forecasts have different numbers of rows
-        (e.g. quantiles or samples). scoringutils found: {.val {n}}.",
-        "i" = "\n This may be a problem (it can potentially distort scores,
-        making it more difficult to compare them), so make sure this
-        is intended."
+          (e.g. quantiles or samples). scoringutils found: {.val {n}}.",
+          "i" = "\n This may be a problem (it can potentially distort scores,
+          making it more difficult to compare them), so make sure this
+          is intended."
         )
       )
       #nolint end
