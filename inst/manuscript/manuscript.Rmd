@@ -71,6 +71,10 @@ preamble: >
   \captionsetup[table]{skip=10pt}
   \newcommand{\class}[1]{`\code{#1}'}
   \newcommand{\fct}[1]{\code{#1()}}
+  \usepackage{booktabs}
+  \usepackage{multirow}
+  \usepackage{makecell}
+  \usepackage{graphicx}
   
 output: 
   rticles::jss_article:
@@ -164,6 +168,48 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 - "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number.
 - "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. 
 - "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
+
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{@{}lllll@{}} % Define the table with five columns
+\toprule
+\textbf{Forecast type} & & & \textbf{column} & \textbf{type} \\
+\midrule
+
+% All forecast types
+\multirow{3}{*}{All forecast types} & & & \texttt{observed}  & \\
+                                    & & & \texttt{predicted} & \\
+                                    & & & \texttt{model}    & \\
+\midrule
+
+% Classification
+\multirow{2}{*}{Classification} & \multirow{2}{*}{Binary} & Soft classification & \texttt{observed} & factor with 2 levels \\ 
+                                &        & (prediction is probability)  & \texttt{predicted} & numeric [0,1]       \\
+\midrule
+
+% Point forecasts
+\multirow{2}{*}{Point forecasts} & \multicolumn{2}{l}{\multirow{2}{*}{\makecell[cl]{Discrete, \\Continuous}}} & \texttt{observed}  & numeric                \\
+                                 & & & \texttt{predicted} & numeric                \\
+\midrule
+
+% Probabilistic forecast
+\multirow{6}{*}{\makecell[cl]{Probabilistic\\forecast}} & \multirow{6}{*}{\makecell[cl]{Discrete, \\Continuous}} & \multirow{3}{*}{Sample format} & \texttt{observed} & numeric                \\
+                                                         &                      &               & \texttt{predicted} & numeric                \\
+                                                         &                      &               & \texttt{sample\_id} & numeric              \\
+\cmidrule(l){3-5} 
+                                                         &                      & \multirow{3}{*}{Quantile format}  & \texttt{observed} & numeric                \\
+                                                         &                      &               & \texttt{predicted} & numeric                \\
+                                                         &                      &               & \texttt{quantile\_level} & numeric [0,1]  \\
+\bottomrule
+\end{tabular}
+}
+\caption{Table with expected input formats for \texttt{score}. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed} and \texttt{predicted} and should have a column called \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\end{table}
+
+
+
+
 
 ```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with expected input formats for \\fct{score}. Regardless of the forecast type, the \\code{data.frame} (or similar) must have columns called \\code{observed} and \\code{predicted} and should have a column called \\code{model}. For binary forecasts, the column \\code{observed} must be of type factor with two levels and the column \\code{predicted} must be a numeric betwen 0 and 1. For all other forecast types, both \\code{observed} and \\code{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \\code{sample\\_id} and forecasts in a quantile-based format require an additional numeric column \\code{quantile\\_level} with values between 0 and 1.", fig.show="hold"}
 include_graphics("output/input-score.png")
