@@ -169,145 +169,55 @@ summarize_scores <- summarise_scores
 #'
 #' @param scores MORE INFO HERE.
 #' @param by character vector with column names to summarise scores by. Default
-#' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over samples or quantiles (in case of quantile-based forecasts), such that
-#' there is one score per forecast as defined by the *unit of a single forecast*
-#' (rather than one score for every sample or quantile).
-#' @param relative_skill_metric character with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, CRPS or Brier score (depending on which
-#' of these is available in the input data)
+#' is "model", meaning that there will be one relative skill score per model.
+#' @param metric character with the name of the metric for which
+#' a relative skill shall be computed.
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
 #' @keywords keyword scoring
-add_pairwise_comparison <- function(scores,
-                                    by = NULL,
-                                    relative_skill_metric = "auto",
-                                    baseline = NULL) {
+add_pairwise_comparison <- function(
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL
+) {
 
-  stored_attributes <- get_scoringutils_attributes(scores)
-
-  if (is.null(stored_attributes[["score_names"]])) {
-    stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
-  }
-
-  if (!is.null(attr(scores, "unsummarised_scores"))) {
-    scores <- attr(scores, "unsummarised_scores")
-  }
-
-  if (is.null(by) && !is.null(stored_attributes[["scoringutils_by"]])) {
-    by <- stored_attributes[["scoringutils_by"]]
-  } else if (is.null(by)) {
-    by <- get_forecast_unit(scores)
-  }
-
-  # check input arguments and check whether relative skill can be computed
-  relative_skill <- check_summary_params(
-    scores = scores,
-    by = by,
-    relative_skill = TRUE,
-    baseline = baseline,
-    metric = relative_skill_metric
-  )
-
+  # input checks are done in `pairwise_comparison()`
   # do pairwise comparisons ----------------------------------------------------
-  if (relative_skill) {
-    pairwise <- pairwise_comparison(
-      scores = scores,
-      metric = relative_skill_metric,
-      baseline = baseline,
-      by = by
-    )
-
-    if (!is.null(pairwise)) {
-      # delete unnecessary columns
-      pairwise[, c(
-        "compare_against", "mean_scores_ratio",
-        "pval", "adj_pval"
-      ) := NULL]
-      pairwise <- unique(pairwise)
-
-      # merge back
-      scores <- merge(
-        scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
-      )
-    }
-  }
-
-  # add relative skill to list of metric names
-  stored_attributes[["score_names"]] <- c(
-    stored_attributes[["score_names"]],
-    "relative_skill", "scaled_rel_skill"
+  pairwise <- pairwise_comparison(
+    scores = scores,
+    metric = metric,
+    baseline = baseline,
+    by = by
   )
-  scores <- assign_attributes(scores, stored_attributes)
-  scores <- summarise_scores(scores, by = by)
-  return(scores)
-}
 
+  # store original score_names
+  score_names <- get_score_names(scores)
 
+  if (!is.null(pairwise)) {
+    # delete unnecessary columns
+    pairwise[, c(
+      "compare_against", "mean_scores_ratio",
+      "pval", "adj_pval"
+    ) := NULL]
+    pairwise <- unique(pairwise)
 
-
-#' @title Check input parameters for [summarise_scores()]
-#'
-#' @description A helper function to check the input parameters for
-#' [score()].
-#'
-#' @inheritParams summarise_scores
-#'
-#' @keywords internal
-check_summary_params <- function(scores,
-                                 by,
-                                 relative_skill,
-                                 baseline,
-                                 metric) {
-
-  # check that columns in 'by' are actually present ----------------------------
-  if (!all(by %in% c(colnames(scores), "interval_range", "quantile_level"))) {
-    not_present <- setdiff(by, c(colnames(scores), "interval_range", "quantile_level"))
-    msg <- paste0(
-      "The following items in `by` are not",
-      "valid column names of the data: '",
-      toString(not_present),
-      "'. Check and run `summarise_scores()` again"
+    # merge back
+    scores <- merge(
+      scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
     )
-    stop(msg)
   }
 
-  # error handling for relative skill computation ------------------------------
-  if (relative_skill) {
-    if (!("model" %in% colnames(scores))) {
-      warning(
-        "to compute relative skills, there must column present ",
-        "called model'. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    models <- unique(scores$model)
-    if (length(models) < 2 + (!is.null(baseline))) {
-      warning(
-        "you need more than one model non-baseline model to make model ",
-        "comparisons. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    if (!is.null(baseline) && !(baseline %in% models)) {
-      warning(
-        "The baseline you provided for the relative skill is not one of ",
-        "the models in the data. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-    if (metric != "auto" && !(metric %in% available_metrics())) {
-      warning(
-        "argument 'metric' must either be 'auto' or one of the metrics that ",
-        "can be computed. Relative skill will not be computed"
-      )
-      relative_skill <- FALSE
-    }
-  }
-  return(relative_skill)
+  # Update score names
+  new_score_names <- paste(
+    metric, c("relative_skill", "scaled_relative_skill"),
+    sep = "_"
+  )
+  new_score_names <- new_score_names[new_score_names %in% names(scores)]
+  scores <- new_scores(scores, score_names = c(score_names, new_score_names))
+
+  return(scores)
 }

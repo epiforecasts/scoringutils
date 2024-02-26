@@ -6,8 +6,8 @@
 \usage{
 add_pairwise_comparison(
   scores,
-  by = NULL,
-  relative_skill_metric = "auto",
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL
 )
 }
@@ -15,15 +15,10 @@ add_pairwise_comparison(
 \item{scores}{MORE INFO HERE.}
 
 \item{by}{character vector with column names to summarise scores by. Default
-is \code{NULL}, meaning that the only summary that takes is place is summarising
-over samples or quantiles (in case of quantile-based forecasts), such that
-there is one score per forecast as defined by the \emph{unit of a single forecast}
-(rather than one score for every sample or quantile).}
+is "model", meaning that there will be one relative skill score per model.}
 
-\item{relative_skill_metric}{character with the name of the metric for which
-a relative skill shall be computed. If equal to 'auto' (the default), then
-this will be either interval score, CRPS or Brier score (depending on which
-of these is available in the input data)}
+\item{metric}{character with the name of the metric for which
+a relative skill shall be computed.}
 
 \item{baseline}{character string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be

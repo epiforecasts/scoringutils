@@ -153,11 +153,12 @@ example_quantile %>%
   as_forecast() %>%
   add_coverage() %>%
   score() %>%
+  add_pairwise_comparison(
+    by = c("model", "target_type"), 
+    baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
   summarise_scores(
     by = c("model", "target_type")
-  ) %>%
-  add_pairwise_comparison(
-    baseline = "EuroCOVIDhub-ensemble"
   ) %>%
   summarise_scores(
     fun = signif, 
@@ -171,6 +172,15 @@ example_quantile %>%
 #> been previously computed, but are no longer column names of the data:
 #> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
 #> `?get_score_names` for further information.
+
+#> Warning in get_score_names(scores, error = TRUE): The following scores have
+#> been previously computed, but are no longer column names of the data:
+#> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
+#> `?get_score_names` for further information.
+#> Warning in get_score_names(scores): The following scores have been previously
+#> computed, but are no longer column names of the data: `interval_coverage,
+#> quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for
+#> further information.
 ```
 
 | model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |

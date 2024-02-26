@@ -209,8 +209,11 @@ In order to better compare models against each other we can use relative scores 
 
 ```{r}
 score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type")) %>%
-  add_pairwise_comparison(baseline = "EuroCOVIDhub-ensemble")
+  add_pairwise_comparison(
+    by = c("model", "target_type"),
+    baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
+  summarise_scores(by = c("model", "target_type"))
 ```
 
 
