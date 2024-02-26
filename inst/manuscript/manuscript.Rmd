@@ -172,29 +172,30 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \begin{table}[h]
 \centering
 \resizebox{\textwidth}{!}{
+\setlength\tabcolsep{10pt}
 \begin{tabular}{@{}lllll@{}} % Define the table with five columns
 \toprule
 \textbf{Forecast type} & & & \textbf{column} & \textbf{type} \\
 \midrule
 
 % All forecast types
-\multirow{3}{*}{All forecast types} & & & \texttt{observed}  & \\
-                                    & & & \texttt{predicted} & \\
-                                    & & & \texttt{model}    & \\
+\multirow{3}{*}{\makecell[cl]{All forecast\\types}} & & & \texttt{observed}  & \\
+                                                    & & & \texttt{predicted} & \\
+                                                    & & & \texttt{model}    & \\
 \midrule
 
 % Classification
 \multirow{2}{*}{Classification} & \multirow{2}{*}{Binary} & Soft classification & \texttt{observed} & factor with 2 levels \\ 
-                                &        & (prediction is probability)  & \texttt{predicted} & numeric [0,1]       \\
+                                &        & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1]       \\
 \midrule
 
 % Point forecasts
-\multirow{2}{*}{Point forecasts} & \multicolumn{2}{l}{\multirow{2}{*}{\makecell[cl]{Discrete, \\Continuous}}} & \texttt{observed}  & numeric                \\
+\multirow{2}{*}{Point forecast} & & & \texttt{observed}  & numeric                \\
                                  & & & \texttt{predicted} & numeric                \\
 \midrule
 
 % Probabilistic forecast
-\multirow{6}{*}{\makecell[cl]{Probabilistic\\forecast}} & \multirow{6}{*}{\makecell[cl]{Discrete, \\Continuous}} & \multirow{3}{*}{Sample format} & \texttt{observed} & numeric                \\
+\multirow{6}{*}{\makecell[cl]{Probabilistic\\forecast}} & & \multirow{3}{*}{Sample format} & \texttt{observed} & numeric                \\
                                                          &                      &               & \texttt{predicted} & numeric                \\
                                                          &                      &               & \texttt{sample\_id} & numeric              \\
 \cmidrule(l){3-5} 
@@ -204,18 +205,11 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \bottomrule
 \end{tabular}
 }
-\caption{Table with expected input formats for \texttt{score}. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed} and \texttt{predicted} and should have a column called \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\caption{Expected input formats for \texttt{score}. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed} and \texttt{predicted} and should have a column called \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\label{tab:input-score}
 \end{table}
 
-
-
-
-
-```{r input-score, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Table with expected input formats for \\fct{score}. Regardless of the forecast type, the \\code{data.frame} (or similar) must have columns called \\code{observed} and \\code{predicted} and should have a column called \\code{model}. For binary forecasts, the column \\code{observed} must be of type factor with two levels and the column \\code{predicted} must be a numeric betwen 0 and 1. For all other forecast types, both \\code{observed} and \\code{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \\code{sample\\_id} and forecasts in a quantile-based format require an additional numeric column \\code{quantile\\_level} with values between 0 and 1.", fig.show="hold"}
-include_graphics("output/input-score.png")
-```
-
-The expected input is a data.frame (or similar) containing both the predictions and the observed values. At the minimum, the data.frame must have columns called `observed` and `predicted` and should also have a column called `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{fig:input-score} shows the expected input format for each forecast type. 
+The expected input is a \code{data.frame} (or similar) containing both the predictions and the observed values. At the minimum, the data.frame must have columns called `observed` and `predicted` and should also have a column called `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
 
 The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
@@ -236,53 +230,50 @@ forecast_quantile <- example_quantile |>
 
 The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has dedicated methods e.g. for input validation, scoring and printing. The classes corresponding to the forecast types are `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. 
 
-\fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object. For example, we could call 
+\fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
 forecast_quantile <- example_quantile |>
   as_forecast(
-    observed = "observed", 
-    predicted = "predicted",
-    model = "model",
     forecast_unit = c(
       "model", "location", "target_end_date", 
       "forecast_date", "horizon", "location"
     ),
+    forecast_type = "quantile",
+    observed = "observed", 
+    predicted = "predicted",
+    model = "model",
     quantile_level = "quantile_level",
   ) 
 ```
 
-The argument `forecast_unit` allows the user to manually set the unit of a single forecast. \fct{as\_forecast} will then simply drop all columns that are not either a) specified in the `forecast_unit` or b) are required columns (such as `observed`, `predicted`, `quantile_level`, or `sample_id`) or have otherwise been added by `scoringutils`.  
+The argument `forecast_unit` allows the user to manually set the unit of a single forecast. This is done by dropping all columns that are not either specified in the `forecast_unit` or are required columns (such as `observed`, `predicted`, `model`, `quantile_level`, or `sample_id`). 
 <!-- Question: should it drop / keep `model`? Is there any plausible case in which you'd call `as_forecast` after scoringutils has already computed any columns? -->
-The other arguments can be used to specify the column names of the input data that correspond to the required columns. \fct{as\_forecast} will then rename these columns into the corresponding required columns. 
+The argument `forecast_type` allows users to manually specify the forecast type they expect. If the forecast type inferred from the input does not match the specified forecast type, an error is thrown.
+The other arguments can be used to specify the column names of the input data that correspond to the required columns. \fct{as\_forecast} will rename the specified columns to the corresponding required columns. 
 
 ## Diagnostic helper functions
 
-Various helper functions are available to diagnose and fix issues with the input data. One common issue are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile_level or sample_id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we'd now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
+Various helper functions are available to diagnose and fix issues with the input data. Once a forecast object has successfully been created, diagnostic information will automatically be added to the output when printing a forecast object. This information includes the forecast type, the forecast unit, and additional information in case the object would fail validations. 
+
+```{r}
+print(forecast_quantile, 2)
+```
+
+Internally, the print method calls the functions \fct{get\_forecast\_type}, \fct{get\_forecast\_unit} and \fct{validate\_forecast}. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{validate\_forecast} re-validates an existing forecast object an can be used programmatically without printing an object (users could in principle also call \fct{as\_forecast} again).
+
+One common issue that causes \fct{as\_forecast} to fail are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile level or sample id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we'd now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
 
 ```{r}
 rbind(example_quantile, example_quantile[1001:1002]) |>
   get_duplicate_forecasts() 
 ```
 
-Users can obtain information about the forecast type by calling \fct{get\_forecast\_type} on the data. They can obtain the forecast unit by calling \fct{get\_forecast\_unit} on the data. They can manually set the forecast unit using \fct{set\_forecast\_unit} which acts like the `forecast_unit` argument in \fct{as\_forecast} and drops unneeded columns, while retaining required columns and those added by \pkg{scoringutils}. These functions work on either an unvalidated data.frame or on an already validated object. 
-
-Once a forecast object has successfully been created, diagnostic information will automatically be added to the output when printing a forecast object. This information includes the forecast type, the forecast unit, and additional information in case the object would fail validations. The print method runs \fct{get\_forecast\_type}, \fct{get\_forecast\_unit} and \fct{validate\_forecast}. \fct{validate\_forecast} can be used to validate an existing forecast object and can also be called directly, e.g. to re-validate forecast objects programmatically.
-
-```{r}
-print(forecast_quantile, 2)
-```
-
-<!-- MAYBE REWRITE THE FOLLIWNG: "drops unneeded columns, while retaining required columns and those added by \pkg{scoringutils}" to "while retaining so-called 'protected columns'." -->
 <!-- Protected columns are for example those columns that define the forecast and observations, as well as the names of all scores computed throughout the evaluation process. Protected columns will be ignored e.g. by \fct{get\_forecast\_unit} and \fct{set\_forecast\_unit}. You can call \fct{get\_protected\_columns} either on the data to obtain the protected columns currently present or without any arguments to obtain all protected columns.  -->
-DO SOMETHING ABOUT GET PROTECTED COLUMNS. 
-```{r}
+<!-- DO SOMETHING ABOUT GET PROTECTED COLUMNS.  -->
+
+```{r eval=FALSE}
 scoringutils:::get_protected_columns()
 ```
-
-<!-- They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
-
-## Diagnostic functions that provide additional information about the data
-<!-- Maybe move this up -->
 
 ## Transforming forecasts
 
@@ -290,10 +281,10 @@ As suggested in \citep{bosseScoringEpidemiologicalForecasts2023}, users may want
 
 The function \fct{transform\_forecasts} allows users to apply arbitrary transformations to forecasts and observations. Users can specify a function via the argument \code{fun} (as well as supply additional function parameters). The default function is \fct{log_shift}, which is simply a wrapper around \fct{log} with an additional argument that allows adding an offset (i.e. \code{log(x + offset)}) to deal with zeroes in the data. Users can specify to either append the transformed forecasts to the existing data by setting \code{append = TRUE} (the default behaviour, resulting in an additional column `scale`) or to replace the existing forecasts in place.
 
-The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts() twice to replace them with zeroes first before appending transformed counts. 
+The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts()} twice to replace them with zeroes first before appending transformed counts. 
 
 ```{r}
-example_quantile |> 
+forecast_quantile |> 
   transform_forecasts(fun = \(x) {pmax(x, 0)}, append = FALSE) |>
   transform_forecasts(fun = log_shift, offset = 1) |>
   print(2)
@@ -333,7 +324,7 @@ The forecasts and observed values themselves can be visualised using the functio
 ```{r forecast-visualisation, eval = FALSE, fig.pos = "!h", fig.width = 10, fig.height = 5, fig.cap = "Short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021."}
 
 # NEEDS TO BE UPDATED ONCE FUNCTION HAS BEEN REWORKED. 
-example_quantile %>%
+forecast_quantile %>%
   make_na(what = "truth", 
           target_end_date > "2021-07-15",
           target_end_date <= "2021-05-22") %>%
@@ -387,7 +378,7 @@ For forecasts in a quantile-based format, there exists a second way to assess pr
 Interval and quantile coverage can easily be computed by calling \fct{get_coverage}. The function takes data in a quantile format as input and computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
 
 ```{r eval=FALSE}
-example_quantile |>
+forecast_quantile |>
   get_coverage(by = "model") |>
   data.table:::print.data.table(2)
 ```
@@ -395,7 +386,7 @@ example_quantile |>
 Results can then be visualised using the functions `plot_interval_coverage()` (see row 3 in Figure \ref{fig:calibration-plots}) and `plot_quantile_coverage()` (row 4 in Figure \ref{fig:calibration-plots}). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green shaded area, the forecaster is too conservative, i.e. the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average. 
 
 ```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
-coverage <- get_coverage(example_quantile, by = c("model", "target_type")) 
+coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
 
 plot_interval_coverage(coverage) + 
   facet_wrap(~ target_type)
@@ -499,7 +490,7 @@ include_graphics("output/pairwise-comparisons.png")
 To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument `metric` and adds them as an additional column to the input data. Optionally, users can specify a baseline model to additionally compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model (computed excluding the baseline) by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
 
 ```{r pairwise-comparison-code, eval = FALSE}
-score(example_quantile[horizon == 2]) |>
+score(forecast_quantile[horizon == 2]) |>
   add_pairwise_comparison(by = c("model", "target_type"), 
                           baseline = "EuroCOVIDhub-baseline")
 ```
@@ -520,7 +511,7 @@ It is in principle possible to compute p-values to determine whether two models 
 The output of \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
 
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e. that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
-score(example_quantile) |>
+score(forecast_quantile) |>
   pairwise_comparison(by = c("model", "target_type"), 
                       baseline = "EuroCOVIDhub-baseline") |>
   plot_pairwise_comparison() + 
@@ -534,7 +525,7 @@ score(example_quantile) |>
 Users can examine correlations between scores using the function \fct{correlation} and plot the result using \fct{plot\_correlation}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
 
 ```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=4, fig.cap = "Correlation between different scores"}
-correlations <- example_quantile |>
+correlations <- forecast_quantile |>
   score() |>
   summarise_scores() |>
   correlation(digits = 2)
@@ -554,7 +545,7 @@ correlations |>
 Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `score_names`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g. `by = c("model", "target_type")` will return one summarised score per model and target type). Equivalently, users can specify the columns that should be aggregated over (using the argument \code{across}). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
 
 ```{r, eval = TRUE}
-example_quantile[horizon == 2] |>
+forecast_quantile[horizon == 2] |>
   score(metrics = list("wis" = wis)) |>
   summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(fun = signif, digits = 2)
@@ -597,7 +588,7 @@ score(example_continuous) |>
 For quantile-based forecasts, the weighted interval score \citep[WIS, ][see Section \ref{sec:wis} in the Appendix]{bracherEvaluatingEpidemicForecasts2021} is a commonly used strictly proper scoring rule for forecasts in a quantile-based format. The score is the sum of three components: overprediction, underprediction and dispersion (width of the forecast). These can be visualised using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components}. 
 
 ```{r wis-components-code, eval = FALSE, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. The WIS components measure over- and underprediction in absolute, rather than relative terms."}
-score(example_quantile) |>
+score(forecast_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
@@ -605,14 +596,14 @@ score(example_quantile) |>
 ```
 
 ```{r wis-components, echo = FALSE, fig.pos = "!h", fig.width = 9.5, fig.show = "hold", fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. A: absolute contributions, B: contributions normalised to 1."}
-p1 <- score(example_quantile) |>
+p1 <- score(forecast_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
              scales = "free_x") + 
   theme(panel.spacing = unit(1.5, "lines"))
 
-p2 <- score(example_quantile) |>
+p2 <- score(forecast_quantile) |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = TRUE) + 
   facet_wrap(~ target_type, 
@@ -683,10 +674,15 @@ We thank Community Jameel for Institute and research funding
 <!-- %% - With proper section titles and _not_ just "Appendix". -->
 
 \bibliography{references.bib, scoringutils-paper.bib}
-
 \appendix
 \renewcommand\thefigure{\thesection.\arabic{figure}}
+
+
 \section{Validating forecast objects}
+
+
+They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
+
 
 ```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
 include_graphics("output/flowchart-create-object.png")
