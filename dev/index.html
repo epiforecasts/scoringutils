@@ -142,11 +142,12 @@
 <span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/add_coverage.html">add_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, </span>
+<span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
-<span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
 <span>    fun <span class="op">=</span> <span class="va">signif</span>, </span>
@@ -159,7 +160,16 @@
 <span><span class="co">#&gt; Warning in get_score_names(scores, error = TRUE): The following scores have</span></span>
 <span><span class="co">#&gt; been previously computed, but are no longer column names of the data:</span></span>
 <span><span class="co">#&gt; `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See</span></span>
-<span><span class="co">#&gt; `?get_score_names` for further information.</span></span></code></pre></div>
+<span><span class="co">#&gt; `?get_score_names` for further information.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in get_score_names(scores, error = TRUE): The following scores have</span></span>
+<span><span class="co">#&gt; been previously computed, but are no longer column names of the data:</span></span>
+<span><span class="co">#&gt; `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See</span></span>
+<span><span class="co">#&gt; `?get_score_names` for further information.</span></span>
+<span><span class="co">#&gt; Warning in get_score_names(scores): The following scores have been previously</span></span>
+<span><span class="co">#&gt; computed, but are no longer column names of the data: `interval_coverage,</span></span>
+<span><span class="co">#&gt; quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for</span></span>
+<span><span class="co">#&gt; further information.</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">

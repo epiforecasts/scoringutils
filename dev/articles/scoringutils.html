@@ -80,7 +80,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-02-23</h4>
+            <h4 data-toc-skip class="date">2024-02-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="d-none name"><code>scoringutils.Rmd</code></div>
@@ -603,8 +603,11 @@ example, to obtain relative scores separately for different forecast
 targets, we can run</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
+<span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
 <span><span class="co">#&gt;                    model target_type         wis overprediction underprediction</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
@@ -800,6 +803,11 @@ relative scores to an existing set of scores.</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; Warning in pairwise_comparison(scores = scores, metric = metric, baseline =</span></span>
+<span><span class="co">#&gt; baseline, : `by` is set to 'model', which is also the unit of a single</span></span>
+<span><span class="co">#&gt; forecast. This doesn't look right. All relative skill scores will be equal to</span></span>
+<span><span class="co">#&gt; 1.</span></span>
+<span><span class="co">#&gt; Key: &lt;model&gt;</span></span>
 <span><span class="co">#&gt;                    model         wis overprediction underprediction dispersion</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-baseline 14321.48926    7081.000000      5143.53567 2096.95360</span></span>
@@ -814,16 +822,16 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 4: -0.04336032            0.4453441            0.8461538</span></span>
 <span><span class="co">#&gt;    interval_coverage_deviation   ae_median wis_relative_skill</span></span>
 <span><span class="co">#&gt;                          &lt;num&gt;       &lt;num&gt;              &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:                 0.002102273 19353.42969          1.6032604</span></span>
-<span><span class="co">#&gt; 2:                 0.050752841 12077.10156          0.8074916</span></span>
-<span><span class="co">#&gt; 3:                -0.024886364    78.47656          0.7475873</span></span>
-<span><span class="co">#&gt; 4:                -0.057861612 14521.10526          1.0332277</span></span>
+<span><span class="co">#&gt; 1:                 0.002102273 19353.42969                  1</span></span>
+<span><span class="co">#&gt; 2:                 0.050752841 12077.10156                  1</span></span>
+<span><span class="co">#&gt; 3:                -0.024886364    78.47656                  1</span></span>
+<span><span class="co">#&gt; 4:                -0.057861612 14521.10526                  1</span></span>
 <span><span class="co">#&gt;    wis_scaled_relative_skill</span></span>
 <span><span class="co">#&gt;                        &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:                 1.0000000</span></span>
-<span><span class="co">#&gt; 2:                 0.5036559</span></span>
-<span><span class="co">#&gt; 3:                 0.4662919</span></span>
-<span><span class="co">#&gt; 4:                 0.6444541</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:                         1</span></span>
+<span><span class="co">#&gt; 2:                         1</span></span>
+<span><span class="co">#&gt; 3:                         1</span></span>
+<span><span class="co">#&gt; 4:                         1</span></span></code></pre></div>
 <p>If using the <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> function, we can also
 visualise pairwise comparisons by showing the mean score ratios between
 models. By default, smaller values are better and the model we care

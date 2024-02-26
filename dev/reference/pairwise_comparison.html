@@ -127,7 +127,7 @@ Andrea Riebler and Michaela Paul.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pairwise_comparison</span><span class="op">(</span></span>
 <span>  <span class="va">scores</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"model"</span>,</span>
-<span>  metric <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wis"</span>, <span class="st">"crps"</span>, <span class="st">"brier_score"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -152,8 +152,7 @@ split data.frames.</p></dd>
 
 <dt>metric</dt>
 <dd><p>A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "wis",
-"crps", or "brier_score" will be selected where available.</p></dd>
+comparison on.</p></dd>
 
 
 <dt>baseline</dt>
