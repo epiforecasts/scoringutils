@@ -202,7 +202,7 @@ pit <- function(data,
       ),
       by = c(get_forecast_unit(quantile_coverage))
     ]
-    return(quantile_coverage[])
+    return(as.data.table(quantile_coverage)[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples

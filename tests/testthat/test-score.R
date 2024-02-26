@@ -350,3 +350,11 @@ test_that("apply_rules() works", {
       dt$x, dt$test)
   )
 })
+
+# attributes
+test_that("`[` preserves attributes", {
+  test <- data.table::copy(scores_binary)
+  class(test) <- c("scores", "data.frame")
+  expect_true("score_names" %in% names(attributes(test)))
+  expect_true("score_names" %in% names(attributes(test[1:10])))
+})

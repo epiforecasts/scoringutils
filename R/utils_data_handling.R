@@ -113,7 +113,7 @@ sample_to_quantile <- function(data,
   )
 
   data <- data[, .(quantile_level = quantile_level,
-                   predicted = quantile(x = predicted, prob = ..quantile_level,
+                   predicted = quantile(x = predicted, probs = ..quantile_level,
                                         type = ..type, na.rm = TRUE)),
                by = by]
 

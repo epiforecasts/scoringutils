@@ -79,12 +79,17 @@ test_that("get_score_names() works as expected", {
   )
 })
 
+
+# ==============================================================================
+# print
+# ==============================================================================
+
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
-  test_dat <- list(example_binary, example_quantile,
-    example_point, example_continuous, example_integer)
+  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
+    na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
   for (dat in test_dat){
-    dat <- suppressMessages(as_forecast(dat))
+    dat <- as_forecast(dat)
     forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
 
@@ -103,13 +108,47 @@ test_that("print() works on forecast_* objects", {
 
   # Check Score columns are printed
   dat <- example_quantile %>%
+    na.omit %>%
     set_forecast_unit(c("location", "target_end_date",
       "target_type", "horizon", "model")) %>%
     as_forecast() %>%
-    add_coverage() %>%
-    suppressMessages
+    add_coverage()
 
   expect_output(print(dat), "Score columns")
   score_cols <- get_score_names(dat)
   expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
+})
+
+test_that("print methods fail gracefully", {
+  test <- as_forecast(na.omit(example_quantile))
+  test$observed <- NULL
+
+  # message if forecast type can't be computed
+  expect_warning(
+    expect_message(
+      expect_output(
+        print(test),
+        pattern = "Forecast unit:"
+      ),
+      "Could not determine forecast type due to error in validation."
+    ),
+    "Error in validating forecast object:"
+  )
+
+  # message if forecast unit can't be computed
+  test <- 1:10
+  class(test) <- "forecast_point"
+  expect_warning(
+    expect_message(
+      expect_message(
+        expect_output(
+          print(test),
+          pattern = "Forecast unit:"
+        ),
+        "Could not determine forecast unit."
+      ),
+      "Could not determine forecast type"
+    ),
+    "Error in validating forecast object:"
+  )
 })
