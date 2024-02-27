@@ -56,7 +56,7 @@
 #' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
-#' @importFrom checkmate assert_subset assert_function check_subset
+#' @importFrom checkmate assert_subset assert_function test_subset
 #' @keywords scoring
 
 summarise_scores <- function(scores,
@@ -70,13 +70,13 @@ summarise_scores <- function(scores,
   if (is.null(score_names)) {
     stop("`scores` needs to have an attribute `score_names` with ",
          "the names of the metrics that were used for scoring.")
+  }
 
-    if (!check_subset(score_names, names(scores))) {
-      warning(
-        "The names of the scores previously computed do not match the names ",
-        "of the columns in `scores`. This may lead to unexpected results."
-      )
-    }
+  if (!test_subset(score_names, names(scores))) {
+    warning(
+      "The names of the scores previously computed do not match the names ",
+      "of the columns in `scores`. This may lead to unexpected results."
+    )
   }
 
   # get the forecast unit (which relies on the presence of a scores attribute)
