@@ -2,13 +2,23 @@
 #' @description Convert a data.frame or similar of forecasts into an object of
 #' class `forecast_*` and validate it.
 #'
-#' `as_forecast()` determines the forecast type (binary, point, sample-based or
+#' `as_forecast()`
+#' - allows users to specify the current names of the columns that correspond
+#' to the columns required by `scoringutils` (`observed`, `predicted`,
+#' `model`, as well `quantile_level` for quantile-based forecasts and
+#' `sample_id` for sample-based forecasts). `as_forecast()` renames the
+#' existing columns.
+#' - allows users to specify the unit of a single forecast. It removes all
+#' columns that are neither part of the forecast unit nor a required column
+#' (see [set_forecast_unit()] for details)
+#' - Determines the forecast type (binary, point, sample-based or
 #' quantile-based) from the input data (using the function
-#' [get_forecast_type()]. It then constructs an object of the
-#' appropriate class (`forecast_binary`, `forecast_point`, `forecast_sample`, or
+#' [get_forecast_type()].
+#' - Constructs a forecast object of the appropriate class
+#' (`forecast_binary`, `forecast_point`, `forecast_sample`, or
 #' `forecast_quantile`, using the function [new_forecast()]).
-#' Lastly, it calls [as_forecast()] on the object to make sure it conforms with
-#' the required input formats.
+#' - Calls [validate_forecast()] on the newly created forecast object to
+#' validate it
 #' @inheritParams score
 #' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
@@ -18,18 +28,103 @@
 #' @keywords check-forecasts
 #' @examples
 #' as_forecast(example_binary)
-#' as_forecast(example_quantile)
-as_forecast <- function(data, ...) {
+#' as_forecast(
+#'   example_quantile,
+#'   forecast_unit = c("model", "target_type", "target_end_date",
+#'                     "horizon", "location")
+#' )
+as_forecast <- function(data,
+                        ...) {
   UseMethod("as_forecast")
 }
 
 #' @rdname as_forecast
+#' @param forecast_unit (optional) Name of the columns in `data` (after
+#' any renaming of columns done by `as_forecast()`) that denote the unit of a
+#' single forecast. See [get_forecast_unit()] for details.
+#' If `NULL` (the default), all columns that are not required columns are
+#' assumed to form the unit of a single forecast. If specified, all columns
+#' that are not part of the forecast unit (or required columns) will be removed.
+#' @param forecast_type (optional) The forecast type you expect the forecasts
+#' to have. If the forecast type as determined by `scoringutils` based on the
+#' input does not match this, an error will be thrown. If `NULL` (the default),
+#' the forecast type will be inferred from the data.
+#' @param observed (optional) Name of the column in `data` that contains the
+#' observed values. This column will be renamed to "observed".
+#' @param predicted (optional) Name of the column in `data` that contains the
+#' predicted values. This column will be renamed to "predicted".
+#' @param model (optional) Name of the column in `data` that contains the names
+#' of the models/forecasters that generated the predicted values.
+#' This column will be renamed to "model".
+#' @param quantile_level (optional) Name of the column in `data` that contains
+#' the quantile level of the predicted values. This column will be renamed to
+#' "quantile_level". Only applicable to quantile-based forecasts.
+#' @param sample_id (optional) Name of the column in `data` that contains the
+#' sample id. This column will be renamed to "sample_id". Only applicable to
+#' sample-based forecasts.
 #' @export
-as_forecast.default <- function(data, ...) {
+as_forecast.default <- function(data,
+                                forecast_unit = NULL,
+                                forecast_type = NULL,
+                                observed = NULL,
+                                predicted = NULL,
+                                model = NULL,
+                                quantile_level = NULL,
+                                sample_id = NULL,
+                                ...) {
+  # check inputs
+  data <- ensure_data.table(data)
+  assert_character(observed, len = 1, null.ok = TRUE)
+  assert_subset(observed, names(data), empty.ok = TRUE)
+
+  assert_character(predicted, len = 1, null.ok = TRUE)
+  assert_subset(predicted, names(data), empty.ok = TRUE)
+
+  assert_character(model, len = 1, null.ok = TRUE)
+  assert_subset(model, names(data), empty.ok = TRUE)
+
+  assert_character(quantile_level, len = 1, null.ok = TRUE)
+  assert_subset(quantile_level, names(data), empty.ok = TRUE)
+
+  assert_character(sample_id, len = 1, null.ok = TRUE)
+  assert_subset(sample_id, names(data), empty.ok = TRUE)
+
+  # rename columns
+  if (!is.null(observed)) {
+    setnames(data, old = observed, new = "observed")
+  }
+  if (!is.null(predicted)) {
+    setnames(data, old = predicted, new = "predicted")
+  }
+  if (!is.null(model)) {
+    setnames(data, old = model, new = "model")
+  }
+  if (!is.null(quantile_level)) {
+    setnames(data, old = quantile_level, new = "quantile_level")
+  }
+  if (!is.null(sample_id)) {
+    setnames(data, old = sample_id, new = "sample_id")
+  }
+
+  # assert that the correct column names are present after renaming
   assert(check_data_columns(data))
 
+  # set forecast unit (error handling is done in `set_forecast_unit()`)
+  if (!is.null(forecast_unit)) {
+    data <- set_forecast_unit(data, forecast_unit)
+  }
+
   # find forecast type
+  desired <- forecast_type
   forecast_type <- get_forecast_type(data)
+
+  if (!is.null(desired) && desired != forecast_type) {
+    stop(
+      "Forecast type determined by scoringutils based on input: `",
+      forecast_type,
+      "`. Desired forecast type: `", desired, "`."
+    )
+  }
 
   # construct class
   data <- new_forecast(data, paste0("forecast_", forecast_type))

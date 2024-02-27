@@ -7,6 +7,44 @@ test_that("Running `as_forecast()` twice returns the same object", {
   )
 })
 
+test_that("as_forecast() works as expected", {
+  test <- na.omit(data.table::copy(example_quantile))
+  expect_s3_class(as_forecast(test), "forecast_quantile")
+
+  # expect error when arguments are not correct
+  expect_error(as_forecast(test, observed = 3), "Must be of type 'character'")
+  expect_error(as_forecast(test, quantile_level = c("1", "2")), "Must have length 1")
+  expect_error(as_forecast(test, observed = "missing"), "Must be a subset of")
+
+  # expect no condition with columns already present
+  expect_no_condition(
+    as_forecast(test, observed = "observed", predicted = "predicted",
+                forecast_unit = c("location", "model", "target_type",
+                                  "target_end_date", "horizon"),
+                quantile_level = "quantile_level")
+  )
+
+  # additional test with renaming the model column
+  test <- na.omit(data.table::copy(example_continuous))
+  setnames(test, old = c("observed", "predicted", "sample_id", "model"),
+           new = c("obs", "pred", "sample", "mod"))
+  expect_no_condition(
+    as_forecast(test,
+                observed = "obs", predicted = "pred", model = "mod",
+                forecast_unit = c("location", "model", "target_type",
+                                  "target_end_date", "horizon"),
+                sample_id = "sample")
+  )
+
+  # test if desired forecast type does not correspond to inferred one
+  test <- na.omit(data.table::copy(example_continuous))
+  expect_error(
+    as_forecast(test, forecast_type = "quantile"),
+    "Forecast type determined by scoringutils based on input"
+  )
+})
+
+
 test_that("is_forecast() works as expected", {
   ex_binary <- suppressMessages(as_forecast(example_binary))
   ex_point <- suppressMessages(as_forecast(example_point))
