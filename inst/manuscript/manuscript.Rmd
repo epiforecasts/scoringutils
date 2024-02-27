@@ -65,7 +65,7 @@ keywords:
   plain:     [forecasting, forecast evaluation, proper scoring rules, scoring, R]
 preamble: >
   \usepackage{amsmath}
-  \shortcites{reichCollaborativeMultiyearMultimodel2019, kukkonenReviewOperationalRegionalscale2012, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022, cramerCOVID19ForecastHub2020}
+  \shortcites{reichCollaborativeMultiyearMultimodel2019, kukkonenReviewOperationalRegionalscale2012, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherShorttermForecastingCOVID192021, sherrattPredictivePerformanceMultimodel2022, bracherNationalSubnationalShortterm2022, cramerCOVID19ForecastHub2020}
   \usepackage{amssymb}
   \usepackage{caption}
   \captionsetup[table]{skip=10pt}
@@ -118,13 +118,10 @@ trackdown::update_file("inst/manuscript/manuscript.Rmd", gfile = "scoringutils-p
 
 # Introduction
 
-Good forecasts are of great interest to decision makers in various fields like finance \citep{timmermannForecastingMethodsFinance2018, elliottForecastingEconomicsFinance2016}, weather predictions \citep{gneitingWeatherForecastingEnsemble2005, kukkonenReviewOperationalRegionalscale2012} or infectious disease modeling \citep{reichCollaborativeMultiyearMultimodel2019, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherNationalSubnationalShortterm2022, europeancovid-19forecasthubEuropeanCovid19Forecast2021}. 
-<!-- Throughout the COVID-19 pandemic, forecasting has garnered widespread interest from policy makers and the general public, with several collaborative forecasting efforts ("Forecast Hubs") being established \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}. Forecast evaluation is an integral part of assessing and improving the usefulness of forecasts.  -->
+Good forecasts are of great interest to decision makers in various fields like finance \citep{timmermannForecastingMethodsFinance2018, elliottForecastingEconomicsFinance2016}, weather predictions \citep{gneitingWeatherForecastingEnsemble2005, kukkonenReviewOperationalRegionalscale2012} or infectious disease modeling \citep{reichCollaborativeMultiyearMultimodel2019, funkShorttermForecastsInform2020, cramerEvaluationIndividualEnsemble2021, bracherNationalSubnationalShortterm2022, sherrattPredictivePerformanceMultimodel2022}. 
 For decades, researchers, especially in the field of weather forecasting, have therefore developed and refined an arsenal of techniques to evaluate predictions (see for example \cite{goodRationalDecisions1952}, \cite{epsteinScoringSystemProbability1969, murphyNoteRankedProbability1971a, mathesonScoringRulesContinuous1976}, \cite{gneitingProbabilisticForecastsCalibration2007}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingStrictlyProperScoring2007}, \cite{bracherEvaluatingEpidemicForecasts2021}). 
 
 Various \proglang{R} \citep{R} packages cover a wide variety of scoring rules, plots and metrics that are useful in assessing the quality of a forecast. Existing packages offer functionality that is well suited to evaluate a variety of predictive tasks, but also come with important limitations. 
-
-<!-- \pkg{scoringutils} extends the existing landscape by providing a comprehensive framework that allows users to integrate a variety of tasks related to forecast evaluation, as well as functionality from other packages, into a single workflow.  -->
 
 Some packages such as \pkg{tscount} \citep{tscount}, \pkg{topmodels} \citep{topmodels}, \pkg{GLMMadaptive} \citep{GLMMadaptive}, \pkg{cvGEE} \citep{cvGEE} or \pkg{fabletools} \citep{fabletools} expect that forecasts were generated in a certain way and require users to supply an object of a specific class in order to compute and scores. These packages provide excellent tools for users operating within the specific package framework, but are by their nature not generally applicable to many use cases practitioners might encounter. 
 
@@ -132,7 +129,7 @@ Packages such as \pkg{scoringRules} \citep{scoringRules}, \pkg{Metrics} \citep{M
 
 \pkg{scoring} \citep{scoring} operates on a data.frame and uses a formula interface, making this task easier. However, \pkg{scoring} only exports a few scoring rules and does not allow users to supply their own. \pkg{yardstick} \citep{yardstick}, which builds on the \pkg{tidymodels} \citep{tidymodels} framework, is the most general and flexible other forecast evaluation package. It allows users to apply arbitrary scoring rules to a data.frame of forecasts, independently of how they were created. However, \pkg{yardstick} is primarily focused on point forecasts and classification tasks. It currently lacks general support for probabilistic forecasts (forecasts in the form of a full predictive distribution, represented e.g. by a set of quantiles or samples from the forecast distribution). Probabilistic forecasts are desirable, as they allow decision makers to take into account the uncertainty of a forecast \citep{gneitingProbabilisticForecastsCalibration2007}, and are widely used, e.g. in Meteorology or Epidemiology. 
 
-\pkg{scoringutils} aims to fill the existing gap in the ecosystem by providing a flexible general-purpose tool for the evaluation of probabilistic forecasts. It offers a coherent \code{data.table}-based framework and workflow that allows users to evaluate and compare forecasts across multiple dimensions using a wide variety of default and user-provided scoring rules. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, europeancovid-19forecasthubEuropeanCovid19Forecast2021, bracherNationalSubnationalShortterm2022}.
+\pkg{scoringutils} aims to fill the existing gap in the ecosystem by providing a flexible general-purpose tool for the evaluation of probabilistic forecasts. It offers a coherent \code{data.table}-based framework and workflow that allows users to evaluate and compare forecasts across multiple dimensions using a wide variety of default and user-provided scoring rules. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs \citep{reichCollaborativeMultiyearMultimodel2019, cramerCOVID19ForecastHub2020, sherrattPredictivePerformanceMultimodel2022, bracherNationalSubnationalShortterm2022}.
 The package provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring \citep[see][]{bosseScoringEpidemiologicalForecasts2023}, to apply various metrics and scoring rules to data, to handle missing forecasts, to aggregate scores and to visualise the results of the evaluation. \pkg{scoringutils} makes extensive use of \pkg{data.table} \citep{data.table} to ensure fast and memory-efficient computations. The core functionality is designed around S3 classes, allowing users to expand on the generics and methods implemented in the package. 
 \pkg{scoringutils} provides extensive documentation and case studies, as well as sensible defaults for scoring forecasts. 
 
@@ -145,7 +142,7 @@ include_graphics("output/workflow.png")
 
 The structure of this paper follows the suggested package workflow which consists of 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. This workflow is illustrated in Figure \ref{fig:workflow-scoringutils}, which displays the core workflow (left side) as well as additional functionality that is available at different stages of the evaluation process (right side).
 
-Section \ref{sec:inputs} is centred around \code{forecast} objects and the associated functionality. It explains the expected input formats and how to validate inputs and diagnose issues. It provides an overview of the types of forecasts supported by \pkg{scoringutils} and the different S3 classes used to represent these forecast types. It also provides information on a variety of functions that can be used to visualise forecasts, transform inputs or obtain additional information and visualisations.
+Section \ref{sec:inputs} is centred around validating inputs, \code{forecast} objects, and the associated functionality. It explains the expected input formats and how to validate inputs and diagnose issues. It provides an overview of the types of forecasts supported by \pkg{scoringutils} and the different S3 classes used to represent these forecast types. It also provides information on a variety of functions that can be used to visualise forecasts, transform inputs or obtain additional information and visualisations.
 
 Section \ref{sec:scoring} is centred around scoring forecasts and the additional functionality that is available to manipulate and analyse scores further. It explains how to score forecasts, either in a \code{data.table}-format or in a format based on matrices and vectors. It also provides information on additional information that can be computed from scores, such as correlations between scores or relative skill scores based on pairwise comparisons. These can be useful to mitigate the effects of missing forecasts.
 
@@ -153,12 +150,11 @@ Section \ref{sec:summarising} is centred around summarised scores. It explains h
 
 Section \ref{sec:discussion} discusses merits and limitations of the package in its current version as explores avenues for future work.
 
-All functionality will be illustrated using the example data shipped with the package, which is based on a subset of case and death forecasts submitted every week between May and September 2021 to the European COVID-19 Forecast Hub \citep{europeancovid-19forecasthubEuropeanCovid19Forecast2021}. An overview of all existing functions can be seen on \url{https://epiforecasts.io/scoringutils}. 
-<!-- Forecasts were originally submitted in a quantile-based format (see below), but were converted to different formats and are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`.  -->
+All functionality will be illustrated using the example data shipped with the package, which is based on a subset of case and death forecasts submitted every week between May and September 2021 to the European COVID-19 Forecast Hub \citep{sherrattPredictivePerformanceMultimodel2022}. Following the convention of the different COVID-19 Forecast Hubs, we will restrict examples to two-week-ahead forecasts. 
+
+The code for this package and paper can be found on \url{https:github.com/epiforecasts/scoringutils}. The full package documentation as well as an overview of all existing functions can also be seen on \url{https://epiforecasts.io/scoringutils}. 
 
 \section{Inputs, forecast types and input validation} \label{sec:inputs}
-
-<!-- Functions that compute a quantity of interest based on the forecasts and observed values are consistently called "scoring rules" in the following. The output of a scoring rule will be called "score".  -->
 
 ## Input formats and types of forecasts
 
@@ -225,7 +221,7 @@ Inputs can easily be processed and validated using the function `as_forecast()`:
 
 ```{r, eval=TRUE, echo=TRUE}
 library(scoringutils)
-forecast_quantile <- example_quantile |>
+forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast() 
 ```
 
@@ -233,7 +229,7 @@ The function \fct{as\_forecast} recognises the type of the forecast based on the
 
 \fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
-forecast_quantile <- example_quantile |>
+forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast(
     forecast_unit = c(
       "model", "location", "target_end_date", 
@@ -272,7 +268,7 @@ rbind(example_quantile, example_quantile[1001:1002]) |>
 <!-- Protected columns are for example those columns that define the forecast and observations, as well as the names of all scores computed throughout the evaluation process. Protected columns will be ignored e.g. by \fct{get\_forecast\_unit} and \fct{set\_forecast\_unit}. You can call \fct{get\_protected\_columns} either on the data to obtain the protected columns currently present or without any arguments to obtain all protected columns.  -->
 <!-- DO SOMETHING ABOUT GET PROTECTED COLUMNS.  -->
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=FALSE}
 scoringutils:::get_protected_columns()
 ```
 
@@ -282,7 +278,7 @@ As suggested in \citep{bosseScoringEpidemiologicalForecasts2023}, users may want
 
 The function \fct{transform\_forecasts} allows users to apply arbitrary transformations to forecasts and observations. Users can specify a function via the argument \code{fun} (as well as supply additional function parameters). The default function is \fct{log_shift}, which is simply a wrapper around \fct{log} with an additional argument that allows adding an offset (i.e. \code{log(x + offset)}) to deal with zeroes in the data. Users can specify to either append the transformed forecasts to the existing data by setting \code{append = TRUE} (the default behaviour, resulting in an additional column `scale`) or to replace the existing forecasts in place.
 
-The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts()} twice to replace them with zeroes first before appending transformed counts. 
+The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts} twice to replace them with zeroes first before appending transformed counts. 
 
 ```{r}
 forecast_quantile |> 
@@ -370,7 +366,7 @@ example_continuous |>
   facet_grid(target_type ~ model)
 ```
 
-It is, in theory, possible to formally test probabilistic calibration, for example by employing an Anderson-Darling test on the uniformity of PIT values. In practice, this can be difficult as forecasts, and therefore PIT values as well, are often correlated. Personal experience suggests that the Anderson-Darling test is often too quick to reject the null hypothesis of uniformity.
+It is, in theory, possible to conduct formal test for probabilistic calibration, for example by employing an Anderson-Darling test on the uniformity of PIT values. In practice, this can be difficult as forecasts, and therefore PIT values as well, are often correlated. Personal experience suggests that the Anderson-Darling test is often too quick to reject the null hypothesis of uniformity.
 <!-- I once did a simulation study for this for my master thesis. Could include here -->
 It is also important to note that uniformity of the PIT histogram does not guarantee that forecasts are indeed calibrated. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are mis-calibrated, but have uniform PIT histograms. 
 
@@ -427,10 +423,12 @@ Metrics and scoring rules can be applied to data in two different ways: They can
 
 ## score() and working with scoring rules
 
-The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` that holds the names of the scoring rules used for scoring. The input data can a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. The output of \fct{score}() is an object of class `scores`, which is essentially a data.table with an additional attribute `metrics` (containing a vector with the names of the metrics used for scoring).
+The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). The input data can a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again.
 
 ```{r}
-score(example_point) |>
+example_point[horizon == 2] |>
+  as_forecast() |>
+  score() |>
   print(2)
 ```
 
@@ -447,7 +445,7 @@ For every forecast type, there exists a default list of scoring rules that are a
 custom_metrics <- metrics_quantile() |>
   select_metrics(select = c("wis", "overprediction"))
 
-score(forecast_quantile, metrics = custom_metrics)
+score(metrics = custom_metrics)
 ```
 
 <!-- The process is illustrated in Figure \ref{fig:flowchart-score}.  -->
@@ -480,7 +478,8 @@ include_graphics("output/pairwise-comparisons.png")
 To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument `metric` and adds them as an additional column to the input data. Optionally, users can specify a baseline model to additionally compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model (computed excluding the baseline) by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
 
 ```{r pairwise-comparison-code, eval = FALSE}
-score(forecast_quantile[horizon == 2]) |>
+forecast_quantile |>
+  score() |>
   add_pairwise_comparison(by = c("model", "target_type"), 
                           baseline = "EuroCOVIDhub-baseline")
 ```
@@ -491,17 +490,17 @@ Pairwise comparisons should usually be made based on raw, unsummarised scores (m
 
 ### Displaying mean score ratios from pairwise comparisons
 
-\pkg{scoringutils} offers a second alternative workflow to conduct pairwise comparisons between models through the function `get_pairwise_comparisons()`. The purpose of this workflow is to obtain and visualise information on the direct comparisons between every possible pair of models, rather than just computing relative skill scores for every model. `get_pairwise_comparisons()` accepts the same inputs as \fct{add_pairwise_comparison}, and returns a \code{data.table} with the results of the pairwise tournament. These include the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative and scaled relative skill score for every model (depending on whether a baseline was provided or not). 
+\pkg{scoringutils} offers a second alternative workflow to conduct pairwise comparisons between models through the function `get_pairwise_comparisons()`. The purpose of this workflow is to obtain and visualise information on the direct comparisons between every possible pair of models, rather than just computing relative skill scores for every model. The function `get_pairwise_comparisons()` accepts the same inputs as \fct{add_pairwise_comparison}, and returns a \code{data.table} with the results of the pairwise tournament. These include the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative and scaled relative skill score for every model (depending on whether a baseline was provided or not). 
 
-MORE INFORMATION ON HOW THE P_VALUES ARE COMPUTED
-One potential exception to this is when one is interested in the p-values obtained from pairwise comparisons. As forecasts are usually highly correlated (which the calculation of p-values does not account for), it may be sensible to summarise over a few categories (provided there are no missing values within the categories summarised over) to reduce correlation and obtain more conservative p-values. 
+`get_pairwise_comparisons()` computes p-values using either the Wilcoxon rank sum test (the default, the test is also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. P-values are then adjusted using `p.adjust`. In practice, computation of p-values is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or space (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. We previously suggested to compute relative skill scores based on pairwise comparisons before summarising scores. One exception is the case where one is interested in p-values specifically: One possible way to mitigate issues from correlated forecasts, is to aggregate observations over a category where one suspects correlation (provided there are no missing values within the categories summarised over) to reduce correlation before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
-It is in principle possible to compute p-values to determine whether two models perform significantly differently as part of the pairwise comparisons. \pkg{scoringutils} allows to compute these using either the Wilcoxon rank sum test (also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. In practice, this is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation (for example averaging across all forecasts made on a given date) before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
+<!-- MISSING: HOW CAN YOU SPECIFY WHAT KIND OF TEST YOU WANT? -->
 
-The output of \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
+The mean score ratios resulting from \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
 
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e. that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
-score(forecast_quantile) |>
+forecast_quantile |>
+  score() |>
   pairwise_comparison(by = c("model", "target_type")) |>
   plot_pairwise_comparison() + 
   facet_wrap(~ target_type)
@@ -513,7 +512,7 @@ score(forecast_quantile) |>
 
 Users can examine correlations between scores using the function \fct{correlation} and plot the result using \fct{plot\_correlation}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
 
-```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=4, fig.cap = "Correlation between different scores"}
+```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=5, fig.cap = "Plot of correlations between different scores. Numbers, as well as the shade of the cells, indicate the correlation between two scores."}
 correlations <- forecast_quantile |>
   score() |>
   summarise_scores() |>
@@ -534,7 +533,7 @@ correlations |>
 Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `score_names`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g. `by = c("model", "target_type")` will return one summarised score per model and target type). Equivalently, users can specify the columns that should be aggregated over (using the argument \code{across}). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
 
 ```{r, eval = TRUE}
-forecast_quantile[horizon == 2] |>
+forecast_quantile |>
   score(metrics = list("wis" = wis)) |>
   summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(fun = signif, digits = 2)
@@ -566,7 +565,9 @@ The user must exercise additional caution and should usually avoid aggregating s
 To detect systematic patterns it may be useful to visualise a single score across several dimensions. The function \fct{plot\_heatmap} can be used to create a heatmap that achieves this. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}). 
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (under-predicction)"}
-score(example_continuous) |>
+example_continuous[horizon == 2] |>
+  as_forecast() |>
+  score() |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   plot_heatmap(x = "location", metric = "bias") + 
     facet_wrap(~ target_type) 
@@ -577,7 +578,8 @@ score(example_continuous) |>
 For quantile-based forecasts, the weighted interval score \citep[WIS, ][see Section \ref{sec:wis} in the Appendix]{bracherEvaluatingEpidemicForecasts2021} is a commonly used strictly proper scoring rule for forecasts in a quantile-based format. The score is the sum of three components: overprediction, underprediction and dispersion (width of the forecast). These can be visualised using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components}. 
 
 ```{r wis-components-code, eval = FALSE, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. The WIS components measure over- and underprediction in absolute, rather than relative terms."}
-score(forecast_quantile) |>
+forecast_quantile |>
+  score() |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
@@ -585,14 +587,16 @@ score(forecast_quantile) |>
 ```
 
 ```{r wis-components, echo = FALSE, fig.pos = "!h", fig.width = 9.5, fig.show = "hold", fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. A: absolute contributions, B: contributions normalised to 1."}
-p1 <- score(forecast_quantile) |>
+p1 <- forecast_quantile |>
+  score() |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) + 
   facet_wrap(~ target_type, 
              scales = "free_x") + 
   theme(panel.spacing = unit(1.5, "lines"))
 
-p2 <- score(forecast_quantile) |>
+p2 <- forecast_quantile |>
+  score() |>
   summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = TRUE) + 
   facet_wrap(~ target_type, 
