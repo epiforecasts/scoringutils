@@ -36,9 +36,7 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #' library(magrittr) # pipe operator
-#' \dontrun{
 #' scores <- score(example_continuous)
-#' }
 #'
 #' # get scores by model
 #' summarise_scores(scores,by = "model")
@@ -58,7 +56,7 @@
 #' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
-#' @importFrom checkmate assert_subset assert_function
+#' @importFrom checkmate assert_subset assert_function check_subset
 #' @keywords scoring
 
 summarise_scores <- function(scores,
@@ -67,17 +65,25 @@ summarise_scores <- function(scores,
                              fun = mean,
                              ...) {
   # input checking ------------------------------------------------------------
+  # Check the score names attribute exists
   score_names <- attr(scores, "score_names")
-
-  # get the forecast unit (which relies on the presence of a scores attribute)
   if (is.null(score_names)) {
     stop("`scores` needs to have an attribute `score_names` with ",
          "the names of the metrics that were used for scoring.")
+
+    if (!check_subset(score_names, names(scores))) {
+      warning(
+        "The names of the scores previously computed do not match the names ",
+        "of the columns in `scores`. This may lead to unexpected results."
+      )
+    }
   }
+
+  # get the forecast unit (which relies on the presence of a scores attribute)
   forecast_unit <- get_forecast_unit(scores)
 
-  assert_subset(by, names(scores), empty = TRUE)
-  assert_subset(across, names(scores), empty = TRUE)
+  assert_subset(by, names(scores), empty.ok = TRUE)
+  assert_subset(across, names(scores), empty.ok = TRUE)
   assert_function(fun)
 
   # if across is provided, calculate new `by`

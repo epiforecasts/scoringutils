@@ -30,7 +30,7 @@
 #'
 #' scores <- score(example_quantile) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
-#'   summarise_scores(fun = signif, digits = 2)
+#'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 #'
 #' plot_score_table(scores, y = "model", by = "target_type") +
 #'   facet_wrap(~target_type, ncol = 1)
