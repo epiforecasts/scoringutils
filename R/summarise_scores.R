@@ -76,13 +76,13 @@ summarise_scores <- function(scores,
   }
   forecast_unit <- get_forecast_unit(scores)
 
-  assert_subset(by, forecast_unit, empty = TRUE)
-  assert_subset(across, forecast_unit, empty = TRUE)
+  assert_subset(by, names(scores), empty = TRUE)
+  assert_subset(across, names(scores), empty = TRUE)
   assert_function(fun)
 
   # if across is provided, calculate new `by`
   if (!is.null(across)) {
-    if (by != "model") {
+    if (!setequal(by, "model")) {
       warning("You specified `across` and `by` at the same time.",
               "`by` will be ignored.")
     }
