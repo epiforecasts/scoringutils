@@ -134,7 +134,7 @@ The package provides broad functionality to check the data and diagnose issues, 
 \pkg{scoringutils} provides extensive documentation and case studies, as well as sensible defaults for scoring forecasts. 
 
 
-```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the suggested workflow for evaluating forecasts with \\pkg{scoringutils}. A: Workflow for working with forecasts in a \\code{data.table}-based format. The left side shows the core worfklow of the package: 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. The right side shows additional functionality that is avaiable at the different stages of the evaluation process. The part in blue is covered by Section \\ref{sec:inputs} and includes all functions related to processing and validating inputs as well as obtaining additional information about the forecasts. The part in green is covered by Section \\ref{sec:scoring} and includes all functions related to scoring forecasts and obtaining additional information about the scores. The part in red is covered by Section \\ref{sec:summarising} and includes all functions related to summarising scores and additional visualisations based on summarised scores. B: An alternative workflow, allowing users to call scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
+```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the suggested workflow for evaluating forecasts with \\pkg{scoringutils}. A: Workflow for working with forecasts in a \\code{data.table}-based format. The left side shows the core worfklow of the package: 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. The right side shows additional functionality that is available at the different stages of the evaluation process. The part in blue is covered by Section \\ref{sec:inputs} and includes all functions related to processing and validating inputs as well as obtaining additional information about the forecasts. The part in green is covered by Section \\ref{sec:scoring} and includes all functions related to scoring forecasts and obtaining additional information about the scores. The part in red is covered by Section \\ref{sec:summarising} and includes all functions related to summarising scores and additional visualisations based on summarised scores. B: An alternative workflow, allowing users to call scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
 include_graphics("output/workflow.png")
 ```
 
@@ -292,7 +292,7 @@ forecast_quantile |>
 
 \pkg{scoringutils} offers a variety of different functions that allows users to obtain and visualise additional information about their forecast. The package also has an extensive Vignette with examples for further visualisations that are not implemented as functions. 
 
-### Displaying the number of forecasts avaiable
+### Displaying the number of forecasts available
 
 Users can get an overview of how many forecasts there are using \fct{get\_forecast\_counts}. The function returns a data.table of foreast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per `model`, `target_type` and `forecast_date`, we can run
 
