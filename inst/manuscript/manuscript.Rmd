@@ -313,29 +313,6 @@ forecast_counts |>
   labs(y = "Model", x = "Forecast date")
 ```
 
-### Visualising the forecasts and observed values
-
-The forecasts and observed values themselves can be visualised using the function \fct{plot\_predictions}. The function works on a validated object of class `forecast_*`.
-
-<!-- and its \fct{make\_na} helper function. \fct{make\_na} represents a form of filtering, but instead of filtering entire rows, the relevant entries in the columns "prediction" or "true\_value" are made `NA`. This allows the user to filter observations and forecasts independently. To be able to facet the plot correctly, \fct{plot\_predictions} has an additional `by` argument in which the user needs to specify all columns relevant for facetting.  -->
-<!-- To display, for example, short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021 as well as 5 weeks of prior data, we can call the following. The resulting plot is shown in Figure \ref{fig:forecast-visualisation}.  -->
-
-```{r forecast-visualisation, eval = FALSE, fig.pos = "!h", fig.width = 10, fig.height = 5, fig.cap = "Short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021."}
-
-# NEEDS TO BE UPDATED ONCE FUNCTION HAS BEEN REWORKED. 
-forecast_quantile %>%
-  make_na(what = "truth", 
-          target_end_date > "2021-07-15",
-          target_end_date <= "2021-05-22") %>%
-  make_na(what = "forecast", 
-          model != "EuroCOVIDhub-ensemble",
-          forecast_date != "2021-06-28") %>%
-  plot_predictions(x = "target_end_date", by = c("target_type", "location")) +
-  aes(colour = model, fill = model) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free_y") +
-  labs(x = "Target end date")
-```
-
 <!-- ### Helper functions -->
 
 <!-- - `run_safely()` -->
