@@ -1,5 +1,8 @@
 test_that("summarise_scores() works without any arguments", {
-  summarised_scores <- summarise_scores(scores_quantile)
+  summarised_scores <- summarise_scores(
+    scores_quantile,
+    by = get_forecast_unit(scores_quantile)
+  )
   expect_false("quantile" %in% names(summarised_scores))
 
   s2 <- summarise_scores(scores_quantile,
@@ -17,13 +20,13 @@ test_that("summarise_scores() handles wrong by argument well", {
 
   expect_error(
     summarise_scores(scores_quantile, by = "not_present"),
-    "Column 'not_present' not found in data.", # nolint
+    "Assertion on 'by' failed: Must be a subset of",
     fixed = TRUE
   )
 
   expect_error(
     summarise_scores(scores_quantile, by = "sample_id"),
-    "Column 'sample_id' not found in data.",
+    "Assertion on 'by' failed: Must be a subset of",
     fixed = TRUE
   )
 })
@@ -74,23 +77,17 @@ test_that("summarise_scores() across argument works as expected", {
   ex <- data.table::copy(example_quantile)
   scores <- suppressMessages(score(ex))[, location_name := NULL]
 
-  expect_error(
+  expect_warning(
     summarise_scores(
-      scores, by = "model", across = "horizon"
+      scores, by = c("model", "target_type"), across = "horizon"
     ),
-    regexp = "You cannot specify both"
+    regexp = "You specified `across` and `by` at the same time."
   )
   expect_error(
     summarise_scores(
       scores, across = "horizons"
     ),
-    regexp = "The columns specified in 'across' must be a subset "
-  )
-  expect_error(
-    summarise_scores(
-      scores, across = c("horizon", "horizons"),
-    ),
-    regexp = "The columns specified in 'across' must be a subset"
+    regexp = "Assertion on 'across' failed: Must be a subset of "
   )
   expect_equal(
     summarise_scores(
