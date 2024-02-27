@@ -58,7 +58,7 @@ title:
   # For running headers, if needed
   short: "Evaluating Forecasts with \\pkg{scoringutils} in \\proglang{R}"
 abstract: >
-  Evaluating forecasts is essential in order to understand and improve forecasting and make forecasts useful to decision-makers. There exists extensive theoretical work on forecast evaluations as well as number of \proglang{R} packages that provide a broad variety of scoring rules, visualisations and diagnostic tools. One particular challenge, which \pkg{scoringutils} aims to address, is handling the complexity of evaluating and comparing forecasts from several forecasters across multiple dimensions such as time, space, and different types of targets. The package provides general-purpose tools as well as a framework for the evaluation of (probabilistic) forecasts. Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts. \pkg{scoringutils} provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The paper presents the package and its core functionality and illustrates common workflows using example data of forecasts for COVID-19 cases and deaths submitted to the European COVID-19 Forecast Hub. 
+  Evaluating forecasts is essential in order to understand and improve forecasting and make forecasts useful to decision-makers. A variety of \proglang{R} packages provide a broad variety of scoring rules, visualisations and diagnostic tools. One particular challenge, which \pkg{scoringutils} aims to address, is handling the complexity of evaluating and comparing forecasts from several forecasters across multiple dimensions such as time, space, and different types of targets. \pkg{scoringutils} extends the existing landscape by offering a convenient and flexible \pkg{data.table}-based framework for evaluating and comparing probabilistic forecasts (forecasts represented by a full predictive distribution). Notably, \pkg{scoringutils} is the first package to offer extensive support for probabilistic forecasts in the form of predictive quantiles, a format that is currently used by several infectious disease Forecast Hubs. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts. \pkg{scoringutils} provides broad functionality to check the data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The paper presents the package and its core functionality and illustrates common workflows using example data of forecasts for COVID-19 cases and deaths submitted to the European COVID-19 Forecast Hub. 
 keywords:
   # at least one keyword must be supplied
   formatted: [forecasting, forecast evaluation, proper scoring rules, scoring, "\\proglang{R}"]
@@ -290,7 +290,7 @@ forecast_quantile |>
 
 ## Additional functionality related to forecast objects
 
-\pkg{scoringutils} offers a variety of different functions that allows users to obtain and visualise additional information about their forecast. 
+\pkg{scoringutils} offers a variety of different functions that allows users to obtain and visualise additional information about their forecast. The package also has an extensive Vignette with examples for further visualisations that are not implemented as functions. 
 
 ### Displaying the number of forecasts avaiable
 
@@ -356,10 +356,10 @@ Interval and quantile coverage can easily be computed by calling \fct{get_covera
 ```{r eval=FALSE}
 forecast_quantile |>
   get_coverage(by = "model") |>
-  data.table:::print.data.table(2)
+  print(2)
 ```
 
-Results can then be visualised using the functions `plot_interval_coverage()` (see Figure \ref{fig:coverage}A and `plot_quantile_coverage()` (see \ref{fig:coverage}B). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green shaded area, the forecaster is too conservative, i.e. the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average (see Figure \ref{fig:calibration-plots}) for more details).
+Results can then be visualised using the functions `plot_interval_coverage()` (see Figure \ref{fig:coverage}A) and `plot_quantile_coverage()` (see \ref{fig:coverage}B). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green shaded area, the forecaster is too conservative, i.e. the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average (see Figure \ref{fig:calibration-plots}) for more details).
 
 ```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
 coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
@@ -371,7 +371,7 @@ plot_quantile_coverage(coverage) +
   facet_wrap(~ target_type)
 ```
 
-Note that users can also compute individual coverage values as scores using \fct{score}. This separate workflow treats coverage values more like a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
+Note that users can also compute individual coverage values as scores using \fct{score}. This represents a separate workflow that allows users to obtain coverage values as a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
 
 <!-- It is in principle possible to convert sample-based forecasts to quantile-based forecasts using the function \fct{sample\_to\_quantile} to make use of `add_coverage()`. This should be done with caution, as the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large.  -->
 
@@ -400,7 +400,7 @@ Metrics and scoring rules can be applied to data in two different ways: They can
 
 ## score() and working with scoring rules
 
-The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). The input data can a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again.
+The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). The input data can be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again.
 
 ```{r}
 example_point[horizon == 2] |>
@@ -411,7 +411,7 @@ example_point[horizon == 2] |>
 
 All \fct{score} methods take an argument `metrics` with a named list of functions to apply to the data. These can be metrics exported by \pkg{scoringutils} or any other custom scoring function. All scoring rules passed to \fct{score} need to adhere to the same input format (see Figure \ref{fig:input-scoring-rules}), corresponding to the type of forecast to be scored. Scoring functions must accept a vector of observed values as their first argument, a matrix/vector of predicted values as their second argument and, for quantile-based forecasts, a vector of quantile levels as their third argument). However, functions may have arbitrary argument names. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`. Additional arguments can be passed down to the scoring functions via the `...` arguments in \fct{score}. 
 
-```{r input-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Overview of the inputs and outputs of the metrics and scoring rules exported by \\pkg{scoringutils}. All scoring functions used within \\fct{score} must accept the same input formats as the functions here. However, functions used within \\fct{score} don't necessarily have to have the same argument names (see Section \\ref{sec:scoring}). Input formats directly correspond to the required columns for the different forecast types (see Table \\ref{tab:input-score}). The only exceptions is the forecast type 'sample': Inputs require a column \\code{sample\\_id} in \\fct{score}, but no corresponding argument is necessary when calling scoring rules directly on vectors or matrices.", fig.show="hold"}
+```{r input-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Overview of the inputs and outputs of the metrics and scoring rules exported by \\pkg{scoringutils}. Dots indicate scalar values, while bars indicate vectors (comprised of values that belong together). Several bars (vectors) can be grouped together into a matrix with rows representing the individual forecasts. All scoring functions used within \\fct{score} must accept the same input formats as the functions here. However, functions used within \\fct{score} don't necessarily have to have the same argument names (see Section \\ref{sec:scoring}). Input formats directly correspond to the required columns for the different forecast types (see Table \\ref{tab:input-score}). The only exceptions is the forecast type 'sample': Inputs require a column \\code{sample\\_id} in \\fct{score}, but no corresponding argument is necessary when calling scoring rules directly on vectors or matrices.", fig.show="hold"}
 include_graphics("output/input-formats-scoring-rules.png")
 ```
 
@@ -448,7 +448,7 @@ Models enter a 'pairwise tournament', where all possible pairs of models are com
 
 Two models can of course only be fairly compared if they have overlapping forecasts. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e. all score values need to be either positive or negative. 
 
-```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3.."}
+```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3. Score ratios are computed based on the overlapping set of forecasts common to all pairs of two models. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. The orientation of the relative skill score depends on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score.", fig.show="hold"}
 include_graphics("output/pairwise-comparisons.png")
 ```
 
@@ -507,7 +507,7 @@ correlations |>
 ## summarise scores
 <!-- \pkg{scoringutils} provides methods for the generic function \fct{aggregate} that allow users to aggregate scores across dimensions using an arbitrary function (for most users most of the time this will be the default mean).  -->
 
-Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `score_names`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g. `by = c("model", "target_type")` will return one summarised score per model and target type). Equivalently, users can specify the columns that should be aggregated over (using the argument \code{across}). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
+Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `metrics`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g. `by = c("model", "target_type")` will return one summarised score per model and target type). Equivalently, users can specify the columns that should be aggregated over (using the argument \code{across}). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
 
 ```{r, eval = TRUE}
 forecast_quantile |>
