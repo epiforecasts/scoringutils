@@ -95,18 +95,13 @@ summarise_scores <- function(scores,
     by <- setdiff(forecast_unit, across)
   }
 
-  # store attributes as they may be dropped in data.table operations
-  stored_attributes <- c(
-    get_scoringutils_attributes(scores)
-  )
-
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
     .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
 
-  scores <- assign_attributes(scores, stored_attributes)
+  scores <- attr(scores, "score_names") <- score_names
   return(scores[])
 }
 
