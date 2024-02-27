@@ -23,9 +23,8 @@ may alter results in an unpredictable way.}
 \item{across}{character vector with column names from the vector of variables
 that define the \emph{unit of a single forecast} (see above) to summarise scores
 across (meaning that the specified columns will be dropped). This is an
-alternative to specifying \code{by} directly. If \code{NULL} (default), then \code{by} will
-be used or inferred internally if also not specified. Only  one of \code{across}
-and \code{by}  may be used at a time.}
+alternative to specifying \code{by} directly. If \code{across} is set, \code{by} will be
+ignored. If \code{across} is \code{NULL} (default), then \code{by} will be used.}
 
 \item{fun}{a function used for summarising scores. Default is \code{mean}.}
 
@@ -39,7 +38,15 @@ to the names of the columns of the original data specified in \code{by} or
 \code{across} using the \code{fun} passed to \code{summarise_scores()}.
 }
 \description{
-Summarise scores as produced by \code{\link[=score]{score()}}
+Summarise scores as produced by \code{\link[=score]{score()}}.
+
+\code{summarise_scores} relies on a way to identify the names of the scores and
+distinguish them from columns that denote the unit of a single forecast.
+Internally, this is done via a stored attribute, \code{score_names} that stores
+the names of the scores. This means, however, that you need to be careful
+with renaming scores after they have been produced by \code{\link[=score]{score()}}. If you
+do, you also have to manually update the attribute by calling
+\code{attr(scores, "score_names") <- new_names}.
 }
 \examples{
 \dontshow{
