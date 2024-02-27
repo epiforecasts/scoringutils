@@ -283,7 +283,7 @@ plot_heatmap <- function(scores,
 #' If 0 is included in `interval_range`, the median prediction will be shown.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
+#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data geom_point
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export
