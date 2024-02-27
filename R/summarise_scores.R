@@ -101,7 +101,7 @@ summarise_scores <- function(scores,
     .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
 
-  scores <- attr(scores, "score_names") <- score_names
+  attr(scores, "score_names") <- score_names
   return(scores[])
 }
 
