@@ -224,6 +224,7 @@ Rows are automatically grouped together based on the values in all other columns
 Inputs can easily be processed and validated using the function `as_forecast()`: 
 
 ```{r, eval=TRUE, echo=TRUE}
+library(scoringutils)
 forecast_quantile <- example_quantile |>
   as_forecast() 
 ```
@@ -300,18 +301,20 @@ forecast_quantile |>
 Users can get an overview of how many forecasts there are using \fct{get\_forecast\_counts}. The function returns a data.table of foreast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per `model`, `target_type` and `forecast_date`, we can run
 
 ```{r get-forecast-counts}
-forecast_counts <- get_forecast_counts(
-  quantile_forecast, by = c("model", "target_type", "forecast_date")
-)
+forecast_counts <- forecast_quantile |>
+  get_forecast_counts(
+    by = c("model", "target_type", "forecast_date")
+  )
 ```
 
 We can visualise the results by calling \fct{plot\_forecast\_counts} on the output (Figure \ref{fig:plot-forecast-counts}). 
 
-```{r plot-forecast-counts, fig.pos = "!h", fig.width = 7, out.width="100%", fig.cap = "Forecast counts for the example data."}
+```{r plot-forecast-counts, fig.pos = "!h", fig.width = 8, out.width="100%", fig.cap = "Visualistion of forecast counts for the example data. Numbers (and colour shade) indicate the number of forecasts available for a given model, target type and forecast date."}
 library(ggplot2)
-plot_forecast_counts(forecast_counts, x = "forecast_date") + 
-  facet_wrap(~ target_type) + 
-  labs (y = "Model", x = "Forecast date")
+forecast_counts |>
+  plot_forecast_counts(x = "forecast_date") + 
+  facet_wrap(~ target_type) +
+  labs(y = "Model", x = "Forecast date")
 ```
 
 ### Visualising the forecasts and observed values
@@ -369,7 +372,7 @@ example_continuous |>
 
 It is, in theory, possible to formally test probabilistic calibration, for example by employing an Anderson-Darling test on the uniformity of PIT values. In practice, this can be difficult as forecasts, and therefore PIT values as well, are often correlated. Personal experience suggests that the Anderson-Darling test is often too quick to reject the null hypothesis of uniformity.
 <!-- I once did a simulation study for this for my master thesis. Could include here -->
-It is also important to note that uniformity of the PIT histogram (or a diagonal on quantile and interval coverage plots) indicates probabilistic calibration, but does not guarantee that forecasts are indeed calibrated in every relevant sense. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are mis-calibrated, but have uniform PIT histograms. 
+It is also important to note that uniformity of the PIT histogram does not guarantee that forecasts are indeed calibrated. \cite{gneitingProbabilisticForecastsCalibration2007, hamillInterpretationRankHistograms2001a} provide examples with different forecasters who are mis-calibrated, but have uniform PIT histograms. 
 
 ### Probabilistic calibration and coverage plots
 
@@ -383,7 +386,7 @@ forecast_quantile |>
   data.table:::print.data.table(2)
 ```
 
-Results can then be visualised using the functions `plot_interval_coverage()` (see row 3 in Figure \ref{fig:calibration-plots}) and `plot_quantile_coverage()` (row 4 in Figure \ref{fig:calibration-plots}). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green shaded area, the forecaster is too conservative, i.e. the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average. 
+Results can then be visualised using the functions `plot_interval_coverage()` (see Figure \ref{fig:coverage}A and `plot_quantile_coverage()` (see \ref{fig:coverage}B). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green shaded area, the forecaster is too conservative, i.e. the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average (see Figure \ref{fig:calibration-plots}) for more details).
 
 ```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
 coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
@@ -398,10 +401,6 @@ plot_quantile_coverage(coverage) +
 Note that users can also compute individual coverage values as scores using \fct{score}. This separate workflow treats coverage values more like a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
 
 <!-- It is in principle possible to convert sample-based forecasts to quantile-based forecasts using the function \fct{sample\_to\_quantile} to make use of `add_coverage()`. This should be done with caution, as the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large.  -->
-
-```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
-include_graphics("output/calibration-diagnostic-examples.png")
-```
 
 ```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
 cov_scores <- score(example_quantile) |>
@@ -423,33 +422,34 @@ p1 / p2 +
 ```
 
 
-
-
-
 \section{Scoring forecasts} \label{sec:scoring}
-<!-- \pkg{scoringutils} offers two ways of scoring forecasts: Users can either call different scoring rules directly on vectors and matrices or use the function `score()` on a data.frame (or similar) to apply multiple scoring rules at once.  -->
+Metrics and scoring rules can be applied to data in two different ways: They can be conveniently applied to a data set of observed and predicted values using \fct{score}, or they be called directly on a set of vectors and matrices. This section will mostly focus on \fct{score}. 
 
-## score()
+## score() and working with scoring rules
 
-The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `score_names` that holds the names of the scoring rules used for scoring. The input data can either be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. 
+The function \fct{score} is the workhorse of the package and applies a set of scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` that holds the names of the scoring rules used for scoring. The input data can a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again. The output of \fct{score}() is an object of class `scores`, which is essentially a data.table with an additional attribute `metrics` (containing a vector with the names of the metrics used for scoring).
 
 ```{r}
 score(example_point) |>
   print(2)
 ```
 
-The second input to \fct{score} is a list of functions (the scoring rules) to apply to the data. There exists a default list of scoring rules for each forecast type which is automatically applied when the appropriate \fct{score} method is called. The default scoring rules can be accessed by calling the functions \fct{rules\_point}, \fct{rules\_binary}, \fct{rules\_sample} and \fct{rules\_quantile}. These functions take additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_rules} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of scoring rules. 
+All \fct{score} methods take an argument `metrics` with a named list of functions to apply to the data. These can be metrics exported by \pkg{scoringutils} or any other custom scoring function. All scoring rules passed to \fct{score} need to adhere to the same input format (see Figure \ref{fig:input-scoring-rules}), corresponding to the type of forecast to be scored. Scoring functions must accept a vector of observed values as their first argument, a matrix/vector of predicted values as their second argument and, for quantile-based forecasts, a vector of quantile levels as their third argument). However, functions may have arbitrary argument names. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`. Additional arguments can be passed down to the scoring functions via the `...` arguments in \fct{score}. 
 
-```{r eval=FALSE}
-rules <- rules_quantile() |>
-  select_rules(select = c("wis", "overprediction"))
-
-score(forecast_quantile, rules = rules)
+```{r input-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Overview of the inputs and outputs of the metrics and scoring rules exported by \\pkg{scoringutils}. All scoring functions used within \\fct{score} must accept the same input formats as the functions here. However, functions used within \\fct{score} don't necessarily have to have the same argument names (see Section \\ref{sec:scoring}). Input formats directly correspond to the required columns for the different forecast types (see Table \\ref{tab:input-score}). The only exceptions is the forecast type 'sample': Inputs require a column \\code{sample\\_id} in \\fct{score}, but no corresponding argument is necessary when calling scoring rules directly on vectors or matrices.", fig.show="hold"}
+include_graphics("output/input-formats-scoring-rules.png")
 ```
 
-All scoring rules passed to \fct{score} need to adhere to the same input formats (it is therefore not possible to score different forecast types together, but instead they have to be scored separately). However, it is not necessary that all function arguments have the same name. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. While the columns of the input data passed to \fct{score} need to be called `observed` and `predicted`, the aruments of the actual scoring rules can have any name, as long as the input formats are compatible with the given forecast type. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`.
+### Composing a custom list of metrics and scoring rules
+For every forecast type, there exists a default list of scoring rules that are applied to the data when calling \fct{score}. The default lists can be accessed by calling the functions \fct{metrics\_point}, \fct{metrics\_binary}, \fct{metrics\_sample} and \fct{metrics\_quantile}. These functions take additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_rules} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of scoring rules. 
 
-Additional arguments can be passed down to the scoring rules via the `...` arguments in \fct{score}. The output of \fct{score}() is an object of class `scores`, which is essentially a data.table with an additional attribute `score_names` (containing a vector with the names of the scoring rules used). 
+```{r eval=FALSE}
+custom_metrics <- metrics_quantile() |>
+  select_metrics(select = c("wis", "overprediction"))
+
+score(forecast_quantile, metrics = custom_metrics)
+```
+
 <!-- The process is illustrated in Figure \ref{fig:flowchart-score}.  -->
 <!-- Maybe say something about extending `score()` for others. Could also be a section -->
 
@@ -457,27 +457,17 @@ Additional arguments can be passed down to the scoring rules via the `...` argum
 include_graphics("output/flowchart-score.png")
 ```
 
-## Scoring rules
+### Details on scoring rules
 
-Scoring rules are the functions that compute scores. They can either be called directly on a set of vectors and matrices, or applied to a data set of observed and predicted values using \fct{score}. 
+All metrics are named according to the following schema: `{metric name}_{forecast type}`. If only a single forecast type is possible, then `_{forecast type}` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of all metrics exported by \pkg{scoringutils} is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based forecasts have an additional argument, `quantile_level`, to denote the quantile levels of the predictive quantiles. 
 
-Scoring rules are named `name of the metric + _ + forecast type`. If only a single forecast type is possible, then `_ + forecast type` is omitted. The return value is a vector with scores (only in the case of \fct{wis} is there an optional argument that causes the function to return a list of vectors). The first argument of the scoring rule exported by \pkg{scoringutils} is always `observed`, and the second one is `predicted`. Scoring rules for quantile-based arguments require an additional vector, `quantile_level` that denotes the quantile levels of the predictive quantiles. 
-
-Scoring rules differ in the relationship between input and output. Some scoring rules have a one-to-one relationship between predicted values and scores, returning one value per value in `predicted`. This is the case for all scoring rules for binary and point forecasts. Other scoring rules have a many-to-one relationship, returning one value per multiple values in `predicted`. This is the case for all scoring rules for sample- and quantile-based forecasts. For sample- and quantile-based forecasts, `predicted` is therefore a matrix, with values in each row jointly forming a single forecast.
+Metrics exported by \pkg{scoringutils} rules differ in the relationship between input and output. Some scoring rules have a one-to-one relationship between predicted values and scores, returning one value per value in `predicted`. This is the case for all scoring rules for binary and point forecasts. Other scoring rules have a many-to-one relationship, returning one value per multiple values in `predicted`. This is the case for all scoring rules for sample- and quantile-based forecasts. For sample- and quantile-based forecasts, `predicted` is therefore a matrix, with values in each row jointly forming a single forecast.
 
 Input formats and return values are shown in more detail in Figure \ref{fig:input-scoring-rules}. The package vignettes provide extensive documentation for the scoring rules exported by \pkg{scoringutils} and offer guidance on which scoring rule to use and how to interpret the scores.
 
-```{r input-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Overview of the inputs and outputs of the scoring rules (scoring functions that produce a score and can be called directly on a set of vectors / matrices)", fig.show="hold"}
-include_graphics("output/input-formats-scoring-rules.png")
-```
-
-
-<!-- MISSING: SECTION ON HOW TO COMPOSE YOUR OWN SCORING RULES -->
-
-
 ## Adding relative skill scores based on pairwise comparisons {#pairwisetheory}
 
-Raw scores for different forecasting models are usually not directly comparable in the case of missing forecasts. One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. 
+Raw scores for different forecasting models are usually not directly comparable when there are missing forecasts in the data set, as missingness is often correlated with predictive performance. One way to mitigate this are relative skill scores based on pairwise comparisons \citep{cramerEvaluationIndividualEnsemble2021}. 
 
 Models enter a 'pairwise tournament', where all possible pairs of models are compared based on the overlapping set of available forecasts common to both models (omitting comparisons where there is no overlapping set of forecasts). For every pair, the ratio of the mean scores of both models is computed. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model (see Figure \ref{fig:pairwise-comparison}. This gives us an indicator of performance relative to all other models, with the orientation depending on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score. 
 
@@ -512,8 +502,7 @@ The output of \fct{pairwise\_comparison} can then be visualised using the functi
 
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e. that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
 score(forecast_quantile) |>
-  pairwise_comparison(by = c("model", "target_type"), 
-                      baseline = "EuroCOVIDhub-baseline") |>
+  pairwise_comparison(by = c("model", "target_type")) |>
   plot_pairwise_comparison() + 
   facet_wrap(~ target_type)
 ```
@@ -687,6 +676,15 @@ They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{val
 ```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
 include_graphics("output/flowchart-create-object.png")
 ```
+
+
+\section{Comparing different calibration plots}
+
+```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
+include_graphics("output/calibration-diagnostic-examples.png")
+```
+
+
 
 \section{The weighted interval score (WIS)} \label{sec:wis}
 
