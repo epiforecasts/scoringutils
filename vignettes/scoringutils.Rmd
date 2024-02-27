@@ -166,14 +166,7 @@ print(scores, 2)
 
 The function `score()` returns unsumarised scores, which in most cases is not what the user wants. It returns a single score per forecast (as determined by the forecast unit). 
 
-A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = NULL` and the summary unit is assumed to be the same as the unit of a single forecast (meaning that nothing happens if `by` isn't specified).
-
-```{r}
-scores <- score(example_continuous)
-all(scores == summarise_scores(scores), na.rm = TRUE)
-```
-
-Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
+A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = model` and one score per model is returned. Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
 
 ```{r}
 scores %>%
@@ -226,7 +219,7 @@ A simple coloured table can be produced based on the scores:
 ```{r}
 score(example_integer) %>%
   summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
-  summarise_scores(fun = signif, digits = 2) %>%
+  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2) %>%
   plot_score_table(by = "target_type") +
   facet_wrap(~ target_type, nrow = 1)
 ```
