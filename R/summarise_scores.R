@@ -1,6 +1,14 @@
 #' @title Summarise scores as produced by [score()]
 #'
-#' @description Summarise scores as produced by [score()]
+#' @description Summarise scores as produced by [score()].
+#'
+#' `summarise_scores` relies on a way to identify the names of the scores and
+#' distinguish them from columns that denote the unit of a single forecast.
+#' Internally, this is done via a stored attribute, `score_names` that stores
+#' the names of the scores. This means, however, that you need to be careful
+#' with renaming scores after they have been produced by [score()]. If you
+#' do, you also have to manually update the attribute by calling
+#' `attr(scores, "score_names") <- new_names`.
 #'
 #' @inheritParams pairwise_comparison
 #' @inheritParams score
@@ -14,9 +22,8 @@
 #' @param across character vector with column names from the vector of variables
 #' that define the *unit of a single forecast* (see above) to summarise scores
 #' across (meaning that the specified columns will be dropped). This is an
-#' alternative to specifying `by` directly. If `NULL` (default), then `by` will
-#' be used or inferred internally if also not specified. Only  one of `across`
-#' and `by`  may be used at a time.
+#' alternative to specifying `by` directly. If `across` is set, `by` will be
+#' ignored. If `across` is `NULL` (default), then `by` will be used.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
@@ -51,6 +58,7 @@
 #' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
+#' @importFrom checkmate assert_subset assert_function
 #' @keywords scoring
 
 summarise_scores <- function(scores,
@@ -58,48 +66,32 @@ summarise_scores <- function(scores,
                              across = NULL,
                              fun = mean,
                              ...) {
-  if (!is.null(across) && !is.null(by)) {
-    stop("You cannot specify both 'across' and 'by'. Please choose one.")
-  }
-
+  # input checking ------------------------------------------------------------
   score_names <- attr(scores, "score_names")
-  if (is.null(score_names)) {
-    stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
-  }
 
-  # preparations ---------------------------------------------------------------
-  # get unit of a single forecast
+  # get the forecast unit (which relies on the presence of a scores attribute)
+  if (is.null(score_names)) {
+    stop("`scores` needs to have an attribute `score_names` with ",
+         "the names of the metrics that were used for scoring.")
+  }
   forecast_unit <- get_forecast_unit(scores)
 
-  # if by is not provided, set to the unit of a single forecast
-  if (is.null(by)) {
-    by <- forecast_unit
-  }
+  assert_subset(by, forecast_unit, empty = TRUE)
+  assert_subset(across, forecast_unit, empty = TRUE)
+  assert_function(fun)
 
-  # if across is provided, remove from by
+  # if across is provided, calculate new `by`
   if (!is.null(across)) {
-    if (!all(across %in% forecast_unit)) {
-      stop(
-        "The columns specified in 'across' must be a subset of the columns ",
-        "that define the forecast unit (possible options are ",
-        toString(forecast_unit),
-        "). Please check your input and try again."
-      )
+    if (by != "model") {
+      warning("You specified `across` and `by` at the same time.",
+              "`by` will be ignored.")
     }
     by <- setdiff(forecast_unit, across)
   }
 
-  # check input arguments and check whether relative skill can be computed
-  assert(check_columns_present(scores, by))
-
   # store attributes as they may be dropped in data.table operations
   stored_attributes <- c(
-    get_scoringutils_attributes(scores),
-    list(
-      scoringutils_by = by,
-      unsummarised_scores =  scores
-    )
+    get_scoringutils_attributes(scores)
   )
 
   # summarise scores -----------------------------------------------------------
@@ -107,16 +99,6 @@ summarise_scores <- function(scores,
     by = c(by),
     .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
-
-  # remove unnecessary columns -------------------------------------------------
-  # if neither quantile nor range are in by, remove coverage and
-  # quantile_coverage because averaging does not make sense
-  if (!("interval_range" %in% by) && ("coverage" %in% colnames(scores))) {
-    scores[, "coverage" := NULL]
-  }
-  if (!("quantile_level" %in% by) && "quantile_coverage" %in% names(scores)) {
-    scores[, "quantile_coverage" := NULL]
-  }
 
   scores <- assign_attributes(scores, stored_attributes)
   return(scores[])
