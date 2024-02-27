@@ -50,6 +50,24 @@ test_that("summarise_scores() works with point forecasts", {
   )
 })
 
+test_that("summarise_scores() handles the `score_names` attribute correctly", {
+  test <- data.table::copy(scores_quantile)
+  attr(test, "score_names") <- NULL
+
+  expect_error(
+    summarise_scores(test, by = "model"),
+    "`scores` needs to have an attribute `score_names` with the names"
+  )
+
+  # expect warning if a score name changed
+  test <- data.table::copy(scores_continuous)
+  data.table::setnames(test, old = "crps", new = "crp2")
+  expect_warning(
+    summarise_scores(test, by = "model"),
+    "The names of the scores previously computed do not match the names"
+  )
+})
+
 test_that("summarise_scores() can compute relative measures", {
   scores_with <- add_pairwise_comparison(
     scores_quantile,
