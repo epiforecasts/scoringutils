@@ -150,39 +150,6 @@ assert_equal_length <- function(...,
 }
 
 
-#' @title Check Whether There Is a Conflict Between Data and Attributes
-#' @description
-#' Check whether there is a conflict between a stored attribute and the
-#' same value as inferred from the data. For example, this could be if
-#' an attribute `forecast_unit` is stored, but is different from the
-#' `forecast_unit` inferred from the data. The check is successful if
-#' the stored and the inferred value are the same.
-#' @param object The object to check
-#' @param attribute The name of the attribute to check
-#' @param expected The expected value of the attribute
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_attribute_conflict <- function(object, attribute, expected) {
-  existing <- attr(object, attribute)
-  if (is.vector(existing) && is.vector(expected)) {
-    existing <- sort(existing)
-    expected <- sort(expected)
-  }
-
-  if (!is.null(existing) && !identical(existing, expected)) {
-    msg <- paste0(
-      "Object has an attribute `", attribute, "`, but it looks different ",
-      "from what's expected based on the data.\n",
-      "Existing: ", toString(existing), "\n",
-      "Expected: ", toString(expected), "\n",
-      "Running `as_forecast()` again might solve the problem"
-    )
-    return(msg)
-  }
-  return(TRUE)
-}
-
-
 #' @title Assure that Data Has a `model` Column
 #'
 #' @description
