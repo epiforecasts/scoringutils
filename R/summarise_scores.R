@@ -5,10 +5,7 @@
 #' @inheritParams pairwise_comparison
 #' @inheritParams score
 #' @param by character vector with column names to summarise scores by. Default
-#' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over samples or quantiles (in case of quantile-based forecasts), such that
-#' there is one score per forecast as defined by the *unit of a single forecast*
-#' (rather than one score for every sample or quantile).
+#' is `model`, meaning that there will be one score per model in the output.
 #' The *unit of a single forecast* is determined by the columns present in the
 #' input data that do not correspond to a metric produced by [score()], which
 #' indicate indicate a grouping of forecasts (for example there may be one
@@ -57,7 +54,7 @@
 #' @keywords scoring
 
 summarise_scores <- function(scores,
-                             by = NULL,
+                             by = "model",
                              across = NULL,
                              fun = mean,
                              ...) {

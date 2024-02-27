@@ -5,18 +5,15 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by = NULL, across = NULL, fun = mean, ...)
+summarise_scores(scores, by = "model", across = NULL, fun = mean, ...)
 
-summarize_scores(scores, by = NULL, across = NULL, fun = mean, ...)
+summarize_scores(scores, by = "model", across = NULL, fun = mean, ...)
 }
 \arguments{
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{by}{character vector with column names to summarise scores by. Default
-is \code{NULL}, meaning that the only summary that takes is place is summarising
-over samples or quantiles (in case of quantile-based forecasts), such that
-there is one score per forecast as defined by the \emph{unit of a single forecast}
-(rather than one score for every sample or quantile).
+is \code{model}, meaning that there will be one score per model in the output.
 The \emph{unit of a single forecast} is determined by the columns present in the
 input data that do not correspond to a metric produced by \code{\link[=score]{score()}}, which
 indicate indicate a grouping of forecasts (for example there may be one
