@@ -178,7 +178,7 @@ test_that("get_forecast_type() works as expected", {
   df <- data.frame(observed = 1:10, predicted = factor(1:10))
   expect_error(
     get_forecast_type(df),
-    "Checking `data`: input doesn't satisfy criteria for any forecast type. Are you missing a column `quantile_level` or `sample_id`? Please check the vignette for additional info.",
+    "input doesn't satisfy criteria for any forecast type",
     fixed = TRUE
   )
 })
