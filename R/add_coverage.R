@@ -1,6 +1,6 @@
-#' @title Add Coverage Values to Quantile-Based Forecasts
+#' @title Get Quantile And Interval Coverage Values For Quantile-Based Forecasts
 #'
-#' @description Adds interval coverage of central prediction intervals,
+#' @description Compute interval coverage of central prediction intervals,
 #' quantile coverage for predictive quantiles, as well as the deviation between
 #' desired and actual coverage to a data.table. Forecasts should be in a
 #' quantile format (following the input requirements of `score()`).
@@ -42,44 +42,53 @@
 #' "interval_coverage_deviation", "quantile_coverage",
 #' "quantile_coverage_deviation" added.
 #' @importFrom data.table setcolorder
+#' @importFrom checkmate assert_subset
 #' @examples
 #' library(magrittr) # pipe operator
 #' example_quantile %>%
-#'   add_coverage()
+#'   as_forecast() %>%
+#'   get_coverage(by = "model")
 #' @export
 #' @keywords scoring
 #' @export
-add_coverage <- function(data) {
-  stored_attributes <- get_scoringutils_attributes(data)
-  data <- as_forecast(data)
-  forecast_unit <- get_forecast_unit(data)
-  data_cols <- colnames(data) # store so we can reset column order later
+get_coverage <- function(data, by = get_forecast_unit(data)) {
+  # input checks ---------------------------------------------------------------
+  data <- as_forecast(na.omit(data), forecast_type = "quantile")
+  assert_subset(by, names(data))
 
+  # convert to wide interval format and compute interval coverage --------------
   interval_data <- quantile_to_interval(data, format = "wide")
   interval_data[,
-    interval_coverage := (observed <= upper) & (observed >= lower)
+                interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
+  interval_data[, interval_coverage_deviation :=
+                  interval_coverage - interval_range / 100]
 
+  # merge interval range data with original data -------------------------------
+  # preparations
   data[, interval_range := get_range_from_quantile(quantile_level)]
+  data_cols <- colnames(data) # store so we can reset column order later
+  forecast_unit <- get_forecast_unit(data)
 
   data <- merge(data, interval_data,
                 by = unique(c(forecast_unit, "interval_range")))
-  data[, interval_coverage_deviation :=
-         interval_coverage - interval_range / 100]
+
+  # compute quantile coverage and deviation ------------------------------------
   data[, quantile_coverage := observed <= predicted]
   data[, quantile_coverage_deviation := quantile_coverage - quantile_level]
 
+  # summarise coverage values according to `by` and cleanup --------------------
   # reset column order
   new_metrics <- c("interval_coverage", "interval_coverage_deviation",
                    "quantile_coverage", "quantile_coverage_deviation")
   setcolorder(data, unique(c(data_cols, "interval_range", new_metrics)))
-
-  # add coverage "metrics" to list of stored metrics
-  # this makes it possible to use `summarise_scores()` later on
-  stored_attributes[["score_names"]] <- c(
-    stored_attributes[["score_names"]],
-    new_metrics
-  )
-  data <- assign_attributes(data, stored_attributes)
+  # remove forecast class and convert to regular data.table
+  data <- as.data.table(data)
+  by <- unique(c(by, "quantile_level", "interval_range"))
+  # summarise
+  data <- data[, lapply(.SD, mean),
+                   by = by,
+                   .SDcols = new_metrics
+  ]
   return(data[])
 }
