@@ -255,6 +255,7 @@ interval_coverage <- function(observed, predicted,
     100 - (100 - interval_range) / 2
   ) / 100
   if (!all(necessary_quantiles %in% quantile_level)) {
+    #nolint start: keyword_quote_linter object_usage_linter
     cli_warn(
       c(
         "!" = "To compute the interval coverage for an interval range of
@@ -342,6 +343,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
     c((100 - available_ranges) / 2, 100 - (100 - available_ranges) / 2) / 100
   )
   if (!all(necessary_quantiles %in% quantile_level)) {
+    #nolint start: keyword_quote_linter object_usage_linter
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile_level]
     cli_warn(
       c(
@@ -435,6 +437,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   if (!(0.5 %in% quantile_level)) {
+    #nolint start: keyword_quote_linter
     cli_inform(
       c(
         "i" = "Median not available, computing bias as mean of the two
@@ -557,6 +560,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {
+    #nolint start: keyword_quote_linter
     cli_warn(
       c(
         "x" = "In order to compute the absolute error of the median,
