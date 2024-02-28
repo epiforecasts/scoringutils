@@ -181,7 +181,8 @@ check_no_NA_present <- function(data, columns) {
         sum(is.na(data[[x]])),
         " values in column `",
         x,
-        "`` are NA and corresponding rows will be removed. This is fine if not unexpected." # nolint
+        "`` are NA and corresponding rows will be removed. ",
+        "This is fine if not unexpected."
       )
       return(msg)
     }
