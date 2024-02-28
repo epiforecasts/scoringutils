@@ -549,7 +549,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' @keywords metric
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
-  if (!any(quantile == 0.5)) {
+  if (!any(quantile_level == 0.5)) {
     cli_warn(
       c(
         "x" = "In order to compute the absolute error of the median,
