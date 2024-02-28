@@ -15,6 +15,7 @@
 #' requirements of the respective forecast type and throws an
 #' informative error if any issues are found.
 #' @inheritParams score
+#' @importFrom cli cli_abort
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
@@ -31,11 +32,16 @@ get_forecast_type <- function(data) {
   } else if (test_forecast_type_is_point(data)) {
     forecast_type <- "point"
   } else {
-    stop(
-      "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
-      "Are you missing a column `quantile_level` or `sample_id`? ",
-      "Please check the vignette for additional info."
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Checking `data`: input doesn't satisfy criteria for any
+        forecast type. ",
+        "i" = "Are you missing a column `quantile_level` or `sample_id`?
+        Please check the vignette for additional info."
+      )
     )
+    #nolint end
   }
   return(forecast_type)
 }
@@ -99,6 +105,7 @@ test_forecast_type_is_quantile <- function(data) {
 #' a factor, or else whether it is integer (or can be coerced to integer) or
 #' whether it's continuous.
 #' @param x Input used to get the type.
+#' @importFrom cli cli_abort
 #' @return Character vector of length one with either "classification",
 #' "integer", or "continuous"
 #' @keywords internal_input_check
@@ -108,7 +115,7 @@ get_type <- function(x) {
   }
   assert_numeric(as.vector(x))
   if (all(is.na(as.vector(x)))) {
-    stop("Can't get type: all values of are NA")
+    cli_abort("Can't get type: all values of are NA")
   }
   if (is.integer(x)) {
     return("integer")
@@ -147,6 +154,7 @@ get_type <- function(x) {
 #' @param scores A data.table with an attribute `score_names`
 #' @param error Throw an error if there is no attribute called `score_names`?
 #' Default is FALSE.
+#' @importFrom cli cli_abort cli_warn
 #' @return Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
@@ -154,16 +162,28 @@ get_type <- function(x) {
 get_score_names <- function(scores, error = FALSE) {
   score_names <- attr(scores, "score_names")
   if (error && is.null(score_names)) {
-    stop("Object needs an attribute `score_names` with the names of the ",
-         "scoring rules that were used for scoring. ",
-         "See `?get_score_names` for further information.")
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Object needs an attribute `score_names` with the names of the
+         scoring rules that were used for scoring.",
+        "i" = "See `?get_score_names` for further information."
+      )
+    )
+    #nolint end
   }
 
   if (!all(score_names %in% names(scores))) {
+    #nolint start: keyword_quote_linter object_usage_linter
     missing <- setdiff(score_names, names(scores))
-    warning("The following scores have been previously computed, but are no ",
-            "longer column names of the data: `", toString(missing), "`. ",
-            "See `?get_score_names` for further information.")
+    cli_warn(
+      c(
+        "!" = "The following scores have been previously computed, but are no
+            longer column names of the data: {.val {missing}}",
+        "i" = "See {.code ?get_score_names} for further information."
+      )
+    )
+    #nolint end
   }
 
   return(score_names)

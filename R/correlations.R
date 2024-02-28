@@ -13,6 +13,7 @@
 #' @return A data.table with correlations for the different metrics
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
+#' @importFrom cli cli_warn
 #' @export
 #' @keywords scoring
 #' @examples
@@ -25,12 +26,17 @@ correlation <- function(scores,
 
   # if quantile column is present, throw a warning
   if ("quantile_level" %in% names(scores)) {
-    warning(
-      "There is a column called 'quantile_level' in the scores. Usually, you ",
-      "should call 'summarise_scores()' to summarise over quantiles and ",
-      "obtain one score per forecast before calculating correlations. You ",
-      "can ignore this warning if you know what you're doing."
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "!" = "There is a column called 'quantile_level' in the scores.",
+        "i" = "Usually you should call {.fn summarise_scores} to summarise
+        over quantiles and obtain one score per forecast before calculating
+        correlations. You can ignore this warning if you know what
+        you're doing."
+      )
     )
+    #nolint end
   }
 
   # remove all non metrics and non-numeric columns

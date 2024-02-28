@@ -123,9 +123,11 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
   diff <- upper - lower
   diff <- diff[!is.na(diff)]
   if (any(diff < 0)) {
-    stop(
-      "All values in `upper` need to be greater than or equal to ",
-      "the corresponding values in `lower`"
+    cli_abort(
+      c(
+        "!" = "All values in `upper` need to be greater than or equal to
+        the corresponding values in `lower`"
+      )
     )
   }
   if (any(interval_range > 0 & interval_range < 1, na.rm = TRUE)) {
@@ -231,6 +233,7 @@ check_input_point <- function(observed, predicted) {
 #' @inherit assert_input_binary
 #' @inherit document_assert_functions return
 #' @importFrom checkmate assert_vector check_matrix check_vector assert
+#' @importFrom cli cli_abort
 #' @keywords internal_input_check
 assert_dims_ok_point <- function(observed, predicted) {
   assert_vector(observed, min.len = 1)
@@ -241,14 +244,27 @@ assert_dims_ok_point <- function(observed, predicted) {
   )
   dim_p <- dim(predicted)
   if (!is.null(dim_p) && (length(dim_p) > 1) && (dim_p[2] > 1)) {
-    stop("`predicted` must be a vector or a matrix with one column. Found ",
-         dim(predicted)[2], " columns")
+    #nolint start: keyword_quote_linter object_usage_linter
+    cli_abort(
+      c(
+        "!" = "`predicted` must be a vector or a matrix with one column.",
+        "i" = "Found {dim(predicted)[2]} columns."
+      )
+    )
+    #nolint end
   }
   n_pred <- length(as.vector(predicted))
   # check that both are either of length 1 or of equal length
   if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
-    stop("`observed` and `predicted` must either be of length 1 or ",
-         "of equal length. Found ", n_obs, " and ", n_pred)
+    #nolint start: keyword_quote_linter object_usage_linter
+    cli_abort(
+      c(
+        "!" = "`observed` and `predicted` must either be of length 1 or
+         of equal length.",
+        "i" = "Found {n_obs} and {n_pred}."
+      )
+    )
+    #nolint end
   }
   return(invisible(NULL))
 }
