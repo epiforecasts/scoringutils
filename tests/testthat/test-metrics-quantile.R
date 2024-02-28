@@ -608,7 +608,10 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
     interval_coverage(
       observed, dropped_quantile_pred, dropped_quantiles, interval_range = 50
     ),
-    "Returning `NA`"
+    paste(
+      "To compute the interval coverage for an interval range of 50,",
+      "the 0.25 and 0.75 quantiles are required"
+    )
   )
 })
 
