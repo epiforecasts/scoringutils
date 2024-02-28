@@ -108,7 +108,7 @@ test_that(
       return(y)
     }
 
-    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
+    df <- copy(example_binary)[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"]
 
     # passing a simple function works
