@@ -2,9 +2,21 @@
 % Please edit documentation in R/validate.R
 \name{validate_forecast}
 \alias{validate_forecast}
+\alias{validate_forecast.forecast_binary}
+\alias{validate_forecast.forecast_point}
+\alias{validate_forecast.forecast_quantile}
+\alias{validate_forecast.forecast_sample}
 \title{Validate input data}
 \usage{
 validate_forecast(data, ...)
+
+\method{validate_forecast}{forecast_binary}(data, ...)
+
+\method{validate_forecast}{forecast_point}(data, ...)
+
+\method{validate_forecast}{forecast_quantile}(data, ...)
+
+\method{validate_forecast}{forecast_sample}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
@@ -44,8 +56,8 @@ corresponding to the probability that \code{observed} is equal to the second
 factor level. See details \link[=brier_score]{here} for more information.
 
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
-a column \code{predicted} of type numeric, and a column \code{quantile} of type numeric
-with quantile-levels (between 0 and 1).
+a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
+numeric with quantile-levels (between 0 and 1).
 
 \emph{Sample-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{sample_id} of type

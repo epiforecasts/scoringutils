@@ -86,15 +86,13 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
+  scores <- apply_rules(
     data, metrics,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "metric_names", names(metrics))
-
-  return(data[])
-
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 
@@ -108,14 +106,13 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
+  scores <- apply_rules(
     data, metrics,
     data$observed, data$predicted, ...
   )
 
-  setattr(data, "metric_names", names(metrics))
-
-  return(data[])
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 #' @importFrom stats na.omit
@@ -150,10 +147,9 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     )
     return(data)
   })
-  data <- rbindlist(split_result)
-  setattr(data, "metric_names", names(metrics))
-
-  return(data[])
+  scores <- rbindlist(split_result)
+  scores <- as_scores(scores, score_names = names(metrics))
+  return(scores[])
 }
 
 
@@ -170,37 +166,39 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   # transpose the forecasts that belong to the same forecast unit
   # make sure the quantiles and predictions are ordered in the same way
   d_transposed <- data[, .(
-    predicted = list(predicted[order(quantile)]),
+    predicted = list(predicted[order(quantile_level)]),
     observed = unique(observed),
-    quantile = list(sort(quantile, na.last = TRUE)),
-    scoringutils_quantile = toString(sort(quantile, na.last = TRUE))
+    quantile_level = list(sort(quantile_level, na.last = TRUE)),
+    scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
   ), by = forecast_unit]
 
-  # split according to quantile lengths and do calculations for different
-  # quantile lengths separately. The function `wis()` assumes that all
-  # forecasts have the same quantiles
-  d_split <- split(d_transposed, d_transposed$scoringutils_quantile)
+  # split according to quantile_level lengths and do calculations for different
+  # quantile_level lengths separately. The function `wis()` assumes that all
+  # forecasts have the same quantile_levels
+  d_split <- split(d_transposed, d_transposed$scoringutils_quantile_level)
 
   split_result <- lapply(d_split, function(data) {
-    # create a matrix out of the list of predicted values and quantiles
+    # create a matrix out of the list of predicted values and quantile_levels
     observed <- data$observed
     predicted <- do.call(rbind, data$predicted)
-    quantile <- unlist(unique(data$quantile))
+    quantile_level <- unlist(unique(data$quantile_level))
     data[, c(
-      "observed", "predicted", "quantile", "scoringutils_quantile"
+      "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
     ) := NULL]
 
     data <- apply_rules(
       data, metrics,
-      observed, predicted, quantile, ...
+      observed, predicted, quantile_level, ...
     )
     return(data)
   })
+  scores <- rbindlist(split_result)
 
-  data <- rbindlist(split_result)
-  setattr(data, "metric_names", names(metrics))
+  # this can have existing scores, e.g. from `add_coverage()`
+  existing_scores <- get_score_names(data)
+  scores <- as_scores(scores, score_names = c(existing_scores, names(metrics)))
 
-  return(data[])
+  return(scores[])
 }
 
 
@@ -224,4 +222,69 @@ apply_rules <- function(data, metrics, ...) {
     eval(expr)
   }, data, ...)
   return(data)
+}
+
+
+#' Construct An Object Of Class `scores`
+#' @description This function creates an object of class `scores` based on a
+#' data.table or similar.
+#' @param scores A data.table or similar with scores as produced by [score()]
+#' @param score_names A character vector with the names of the scores
+#' (i.e. the names of the scoring rules used for scoring)
+#' @keywords internal
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   model = "A",
+#'   wis = "0.1"
+#' )
+#' new_scores(df, "wis")
+#' }
+new_scores <- function(scores, score_names) {
+  scores <- as.data.table(scores)
+  class(scores) <- c("scores", class(scores))
+  setattr(scores, "score_names", score_names)
+  return(scores[])
+}
+
+
+#' Create An Object Of Class `scores` From Data
+#' @description This convenience function wraps [new_scores()] and validates
+#' the `scores` object.
+#' @inheritParams new_scores
+#' @returns Returns an object of class 1scores`
+#' @importFrom checkmate assert_data_frame
+#' @keywords internal
+as_scores <- function(scores, score_names) {
+  assert_data_frame(scores)
+  scores <- new_scores(scores, score_names)
+  validate_scores(scores)
+  return(scores[])
+}
+
+
+#' Validate An Object Of Class `scores`
+#' @description This function validates an object of class `scores`, checking
+#' that it has the correct class and that it has a `score_names` attribute.
+#' @inheritParams new_scores
+#' @returns Returns `NULL` invisibly
+#' @importFrom checkmate assert_class assert_data_frame
+#' @keywords internal
+validate_scores <- function(scores) {
+  assert_data_frame(scores)
+  assert_class(scores, "scores")
+  # error if no score_names exists +
+  # throw warning if any of the score_names is not in the data
+  get_score_names(scores, error = TRUE)
+  return(invisible(NULL))
+}
+
+##' @method `[` scores
+##' @export
+`[.scores` <- function(x, ...) {
+  ret <- NextMethod()
+  if (is.data.frame(ret)) {
+    attr(ret, "score_names") <- attr(x, "score_names")
+  }
+  return(ret)
 }

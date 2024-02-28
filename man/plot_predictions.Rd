@@ -4,7 +4,7 @@
 \alias{plot_predictions}
 \title{Plot Predictions vs True Values}
 \usage{
-plot_predictions(data, by = NULL, x = "date", range = c(0, 50, 90))
+plot_predictions(data, by = NULL, x = "date", interval_range = c(0, 50, 90))
 }
 \arguments{
 \item{data}{a data.frame that follows the same specifications outlined in
@@ -18,8 +18,8 @@ plot, this should be a character vector with the columns used in facetting
 
 \item{x}{character vector of length one that denotes the name of the variable}
 
-\item{range}{numeric vector indicating the interval ranges to plot. If 0 is
-included in range, the median prediction will be shown.}
+\item{interval_range}{numeric vector indicating the interval ranges to plot.
+If 0 is included in \code{interval_range}, the median prediction will be shown.}
 }
 \value{
 ggplot object with a plot of true vs predicted values
@@ -45,7 +45,7 @@ example_continuous \%>\%
   plot_predictions (
     x = "target_end_date",
     by = c("target_type", "location"),
-    range = c(0, 50, 90, 95)
+    interval_range = c(0, 50, 90, 95)
   ) +
   facet_wrap(~ location + target_type, scales = "free_y") +
   aes(fill = model, color = model)
@@ -63,7 +63,7 @@ example_continuous \%>\%
   plot_predictions (
     x = "target_end_date",
     by = c("target_type", "location"),
-    range = c(0)
+    interval_range = 0
   ) +
   facet_wrap(~ location + target_type, scales = "free_y") +
   aes(fill = model, color = model)

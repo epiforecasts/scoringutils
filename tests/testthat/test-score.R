@@ -1,3 +1,48 @@
+# =============================================================================
+# Check creation of objects of class `scores`
+# =============================================================================
+
+test_that("new_scores() works", {
+  expect_equal(
+    class(new_scores(data.frame(), score_names = "")),
+    c("scores", "data.table", "data.frame")
+  )
+
+  expect_error(
+    new_scores(data.frame()),
+    "missing, with no default"
+  )
+})
+
+test_that("as_scores() works", {
+  expect_equal(
+    class(scoringutils:::as_scores(data.frame(wis = 1), score_names = "wis")),
+    c("scores", "data.table", "data.frame")
+  )
+  expect_warning(
+    scoringutils:::as_scores(data.frame(), score_names = "wis"),
+    "The following scores have been previously computed"
+  )
+})
+
+test_that("validate_scores() works", {
+  expect_error(
+    validate_scores(data.frame()),
+    "Must inherit from class 'scores'"
+  )
+})
+
+test_that("Output of `score()` has the class `scores()`", {
+  expect_no_condition(validate_scores(scores_point))
+  expect_no_condition(validate_scores(scores_binary))
+  expect_no_condition(validate_scores(scores_continuous))
+  expect_no_condition(validate_scores(scores_quantile))
+})
+
+# =============================================================================
+# `score()`
+# =============================================================================
+
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(data = NULL)))
@@ -184,18 +229,18 @@ test_that("score() quantile produces desired metrics", {
     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
     model = "Model 1",
     date = as.Date("2020-01-01") + rep(1:10, each = 2),
-    quantile = rep(c(0.1, 0.9), times = 10)
+    quantile_level = rep(c(0.1, 0.9), times = 10)
   )
 
   out <- suppressWarnings(suppressMessages(
     score(data = data, metrics = metrics_no_cov))
   )
-  metric_names <- c(
+  score_names <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
   )
 
-  expect_true(all(metric_names %in% colnames(out)))
+  expect_true(all(score_names %in% colnames(out)))
 })
 
 
@@ -203,7 +248,7 @@ test_that("calculation of ae_median is correct for a quantile format case", {
   eval <- summarise_scores(scores_quantile,by = "model")
 
   example <- scoringutils::example_quantile
-  ae <- example[quantile == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+  ae <- example[quantile_level == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
 
@@ -217,7 +262,7 @@ test_that("all quantile and range formats yield the same result", {
   df <- data.table::copy(example_quantile)
 
   ae <- df[
-    quantile == 0.5, ae := abs(observed - predicted)][
+    quantile_level == 0.5, ae := abs(observed - predicted)][
     !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
@@ -304,4 +349,12 @@ test_that("apply_rules() works", {
       data = dt, metrics = list("test" = function(x) x + 1),
       dt$x, dt$test)
   )
+})
+
+# attributes
+test_that("`[` preserves attributes", {
+  test <- data.table::copy(scores_binary)
+  class(test) <- c("scores", "data.frame")
+  expect_true("score_names" %in% names(attributes(test)))
+  expect_true("score_names" %in% names(attributes(test[1:10])))
 })

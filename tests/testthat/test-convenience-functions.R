@@ -37,6 +37,12 @@ test_that("function transform_forecasts works", {
   expect_equal(four$predicted, compare)
 })
 
+test_that("transform_forecasts() outputs an object of class forecast_*", {
+  ex <- as_forecast(na.omit(example_binary))
+  transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
+  expect_s3_class(transformed, "forecast_binary")
+})
+
 
 # ============================================================================ #
 # `set_forecast_unit()`
@@ -71,6 +77,17 @@ test_that("set_forecast_unit() works on input that's not a data.table", {
   expect_equal(
     names(set_forecast_unit(as.matrix(df), "a")),
     "a"
+  )
+})
+
+test_that("set_forecast_unit() revalidates a forecast object", {
+  obj <- as_forecast(na.omit(example_quantile))
+  expect_no_condition(
+    set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
+  )
+  expect_error(
+    set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model")),
+    "There are instances with more than one forecast for the same target."
   )
 })
 

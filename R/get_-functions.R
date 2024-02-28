@@ -33,13 +33,9 @@ get_forecast_type <- function(data) {
   } else {
     stop(
       "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
-      "Are you missing a column `quantile` or `sample_id`? ",
+      "Are you missing a column `quantile_level` or `sample_id`? ",
       "Please check the vignette for additional info."
     )
-  }
-  conflict <- check_attribute_conflict(data, "forecast_type", forecast_type)
-  if (!is.logical(conflict)) {
-    warning(conflict)
   }
   return(forecast_type)
 }
@@ -77,7 +73,9 @@ test_forecast_type_is_sample <- function(data) {
 test_forecast_type_is_point <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_not_present(data, c("sample_id", "quantile"))
+  columns_correct <- test_columns_not_present(
+    data, c("sample_id", "quantile_level")
+  )
   return(observed_correct && predicted_correct && columns_correct)
 }
 
@@ -89,7 +87,7 @@ test_forecast_type_is_point <- function(data) {
 test_forecast_type_is_quantile <- function(data) {
   observed_correct <- test_numeric(x = data$observed)
   predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "quantile")
+  columns_correct <- test_columns_present(data, "quantile_level")
   return(observed_correct && predicted_correct && columns_correct)
 }
 
@@ -125,22 +123,50 @@ get_type <- function(x) {
 }
 
 
-#' @title Get metrics that were used for scoring
-#' @description Internal helper function to get the metrics that were used
-#' to score forecasts.
-#' @param scores A data.table with an attribute `metric_names`
-#' @return Character vector with the metrics that were used for scoring.
-#' @keywords internal_input_check
-get_metrics <- function(scores) {
-  metric_names <- attr(scores, "metric_names")
-  if (is.null(metric_names)) {
-    stop("The data needs to have an attribute `metric_names` with the names ",
-         " of the metrics that were used for scoring. This should be the case ",
-         "if the data was produced using `score()`. Either run `score()` ",
-         "again, or set the attribute manually using ",
-         "`attr(data, 'metric_names') <- names_of_the_scoring_metrics")
+#' @title Get Names Of The Scoring Rules That Were Used For Scoring
+#' @description
+#' When applying a scoring rule, (for example through [score()] or
+#' [add_coverage()], the names of the scoring rules become column names of the
+#' resulting data.table. In addition, an attribute `score_names` will be
+#' added to the output, holding the names of the scores as a vector.
+#' This is done so that a function like [get_forecast_unit()] can still
+#' identify which columns are part of the forecast unit and which hold a score.
+#'
+#' `get_score_names()` access and returns this attribute. If there is no
+#' attribute, the function will return NULL. Users can control whether the
+#' function should error instead via the `error` argument.
+#'
+#' `get_score_names()` also checks whether the names of the scores stored in
+#' the attribute are column names of the data and will throw a warning if not.
+#' This can happen if you rename columns after scoring. You can either run
+#' [score()] again, specifying names for the scoring rules manually, or you
+#' can update the attribute manually using
+#' `attr(scores, "score_names") <- c("names", "of", "your", "scores")` (the
+#' order does not matter).
+#'
+#' @param scores A data.table with an attribute `score_names`
+#' @param error Throw an error if there is no attribute called `score_names`?
+#' Default is FALSE.
+#' @return Character vector with the names of the scoring rules that were used
+#' for scoring or `NULL` if no scores were computed previously.
+#' @keywords check-forecasts
+#' @export
+get_score_names <- function(scores, error = FALSE) {
+  score_names <- attr(scores, "score_names")
+  if (error && is.null(score_names)) {
+    stop("Object needs an attribute `score_names` with the names of the ",
+         "scoring rules that were used for scoring. ",
+         "See `?get_score_names` for further information.")
   }
-  return(metric_names)
+
+  if (!all(score_names %in% names(scores))) {
+    missing <- setdiff(score_names, names(scores))
+    warning("The following scores have been previously computed, but are no ",
+            "longer column names of the data: `", toString(missing), "`. ",
+            "See `?get_score_names` for further information.")
+  }
+
+  return(score_names)
 }
 
 
@@ -157,9 +183,8 @@ get_metrics <- function(scores) {
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
-  # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
-  protected_columns <- c(protected_columns, attr(data, "metric_names"))
+  protected_columns <- c(protected_columns, attr(data, "score_names"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
@@ -180,11 +205,12 @@ get_forecast_unit <- function(data) {
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
-    "predicted", "observed", "sample_id", "quantile", "upper", "lower",
-    "pit_value", "range", "boundary", "relative_skill", "scaled_rel_skill",
+    "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
+    "pit_value", "interval_range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
     available_metrics(),
+    grep("_relative_skill$", names(data), value = TRUE),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
 
@@ -223,7 +249,8 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
-  type <- c("sample_id", "quantile")[c("sample_id", "quantile") %in% colnames(data)]
+  available_type <- c("sample_id", "quantile_level") %in% colnames(data)
+  type <- c("sample_id", "quantile_level")[available_type]
   if (is.null(forecast_unit)) {
     forecast_unit <- get_forecast_unit(data)
   }
@@ -246,7 +273,7 @@ get_scoringutils_attributes <- function(object) {
     "scoringutils_by",
     "forecast_unit",
     "forecast_type",
-    "metric_names",
+    "score_names",
     "messages",
     "warnings"
   )

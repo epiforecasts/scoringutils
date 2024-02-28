@@ -21,12 +21,12 @@
 correlation <- function(scores,
                         metrics = NULL,
                         digits = NULL) {
-  metrics <- get_metrics(scores)
+  metrics <- get_score_names(scores)
 
   # if quantile column is present, throw a warning
-  if ("quantile" %in% names(scores)) {
+  if ("quantile_level" %in% names(scores)) {
     warning(
-      "There is a column called 'quantile' in the scores. Usually, you ",
+      "There is a column called 'quantile_level' in the scores. Usually, you ",
       "should call 'summarise_scores()' to summarise over quantiles and ",
       "obtain one score per forecast before calculating correlations. You ",
       "can ignore this warning if you know what you're doing."

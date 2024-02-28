@@ -194,15 +194,15 @@ pit <- function(data,
   if (forecast_type == "quantile") {
     data[, quantile_coverage := (observed <= predicted)]
     quantile_coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
-                              by = c(unique(c(by, "quantile")))]
-    quantile_coverage <- quantile_coverage[order(quantile),
+                              by = c(unique(c(by, "quantile_level")))]
+    quantile_coverage <- quantile_coverage[order(quantile_level),
       .(
-        quantile = c(quantile, 1),
+        quantile_level = c(quantile_level, 1),
         pit_value = diff(c(0, quantile_coverage, 1))
       ),
       by = c(get_forecast_unit(quantile_coverage))
     ]
-    return(quantile_coverage[])
+    return(as.data.table(quantile_coverage)[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples

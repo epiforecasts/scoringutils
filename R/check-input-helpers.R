@@ -27,7 +27,7 @@ check_numeric_vector <- function(x, ...) {
 #' Quantiles must be in the range specified, increase monotonically,
 #' and contain no duplicates.
 #'
-#' This is used in [bias_range()]() and [bias_quantile()]() to
+#' This is used in [bias_interval()]() and [bias_quantile()]() to
 #' provide informative errors to users.
 #'
 #' @param quantiles Numeric vector of quantiles to check
@@ -105,101 +105,6 @@ assert_not_null <- function(...) {
     }
   }
   return(invisible(NULL))
-}
-
-
-#' @title Check Length of Two Vectors is Equal
-#'
-#' @description
-#' Check whether variables all have the same length
-#' @param ... The variables to check
-#' @param one_allowed logical, allow arguments of length one that can be
-#' recycled
-#' @param call_levels_up How many levels to go up when including the function
-#' call in the error message. This is useful when calling `assert_equal_length()`
-#' within another checking function.
-#' @importFrom cli cli_abort
-#' @inherit document_assert_functions return
-#'
-#' @keywords internal_input_check
-assert_equal_length <- function(...,
-                                one_allowed = TRUE,
-                                call_levels_up = 2) {
-  vars <- list(...)
-  lengths <- lengths(vars)
-
-  lengths <- unique(lengths)
-
-  if (one_allowed) {
-    # check passes if all have length 1
-    if (all(lengths == 1)) {
-      return(invisible(NULL))
-    }
-    # ignore those where length is one for later checks, as we allow length 1
-    lengths <- lengths[lengths != 1]
-  }
-
-  if (length(unique(lengths)) != 1) {
-    calling_function <- deparse(sys.calls()[[sys.nframe() - call_levels_up]])
-    # Get the function name
-    calling_function <- as.list(
-      strsplit(
-        calling_function, "\\(", fixed = TRUE
-      )
-    )[[1]][1]
-
-    extra_message <- ifelse(
-      one_allowed,
-      "(or length one)",
-      ""
-    )
-
-    cli_abort(
-      c(
-        "x" = "Arguments to the following function call:
-        {.fn {calling_function}} should have the same length {extra_message}",
-        "i" = " Actual lengths: {.val {lengths}}."
-      )
-    )
-  }
-  return(invisible(NULL))
-}
-
-
-#' @title Check Whether There Is a Conflict Between Data and Attributes
-#' @description
-#' Check whether there is a conflict between a stored attribute and the
-#' same value as inferred from the data. For example, this could be if
-#' an attribute `forecast_unit` is stored, but is different from the
-#' `forecast_unit` inferred from the data. The check is successful if
-#' the stored and the inferred value are the same.
-#' @param object The object to check
-#' @param attribute The name of the attribute to check
-#' @param expected The expected value of the attribute
-#' @inherit document_check_functions return
-#' @importFrom cli cli_inform
-#' @keywords internal_input_check
-check_attribute_conflict <- function(object, attribute, expected) {
-  existing <- attr(object, attribute)
-  if (is.vector(existing) && is.vector(expected)) {
-    existing <- sort(existing)
-    expected <- sort(expected)
-  }
-
-  if (!is.null(existing) && !identical(existing, expected)) {
-    return(
-      cli_inform(
-        c(
-          "!" = "Object has an attribute {.val {attribute}} but it looks
-          different from what's expected based on the data.\n",
-          "i" = "Existing: {.val {existing}}, \n",
-          "i" = "Expected: {.val {expected}}, \n",
-          "i" = "Running {.fn as_forecast} again might solve the problem."
-        )
-      )
-    )
-  }
-  return(TRUE)
 }
 
 
@@ -376,7 +281,7 @@ test_columns_not_present <- function(data, columns) {
 #' Check whether data is data.frame with correct columns
 #' @description Checks whether data is a data.frame, whether columns
 #' "observed" and "predicted" are present, and checks that only one of
-#' "quantile" and "sample_id" is present.
+#' "quantile_level" and "sample_id" is present.
 #' @inherit document_check_functions params return
 #' @importFrom checkmate check_data_frame
 #' @importFrom cli cli_inform
@@ -396,7 +301,7 @@ check_data_columns <- function(data) {
       )
     )
   }
-  problem <- test_columns_present(data, c("sample_id", "quantile"))
+  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(
       cli_inform(

@@ -108,7 +108,7 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  original_data <- as.data.table(data)
+  original_data <- as_forecast(data)
   scale_col_present <- ("scale" %in% colnames(original_data))
 
   # Error handling
@@ -131,10 +131,9 @@ transform_forecasts <- function(data,
 
   if (append) {
     if (scale_col_present) {
-      transformed_data <-
-        data.table::copy(original_data)[scale == "natural"]
+      transformed_data <- copy(original_data)[scale == "natural"]
     } else {
-      transformed_data <- data.table::copy(original_data)
+      transformed_data <- copy(original_data)
       original_data[, scale := "natural"]
     }
     transformed_data[, predicted := fun(predicted, ...)]
@@ -243,6 +242,10 @@ set_forecast_unit <- function(data, forecast_unit) {
     forecast_unit <- intersect(forecast_unit, colnames(data))
   }
   keep_cols <- c(get_protected_columns(data), forecast_unit)
-  out <- unique(data[, .SD, .SDcols = keep_cols])[]
+  out <- unique(data[, .SD, .SDcols = keep_cols])
+  # validate that output remains a valid forecast object if input was one before
+  if (is_forecast(out)) {
+    validate_forecast(out)
+  }
   return(out)
 }

@@ -12,25 +12,42 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: This documentation refers to the development version of
-`scoringutils`. You can also view the [documentation of the stable
+**Note**: [This documentation](https://epiforecasts.io/scoringutils/dev)
+refers to the development version of `scoringutils`. You can also view
+the [documentation of the stable
 version](https://epiforecasts.io/scoringutils).
 
 The `scoringutils` package provides a collection of metrics and proper
 scoring rules and aims to make it simple to score probabilistic
 forecasts against observed values.
 
-You can find additional information and examples in the papers
-[Evaluating Forecasts with scoringutils in
-R](https://arxiv.org/abs/2205.07090) [Scoring epidemiological forecasts
-on transformed
-scales](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011393)
-as well as the Vignettes ([Getting
+A good starting point for those wishing to use `scoringutils` are the
+vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
-directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html)).
+directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+
+For a detailed description of the package, its rationale and design,
+usage examples and how it relates to other packages in the R ecosystem,
+please see the corresponding paper:
+
+> Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian
+> Funk and Sam Abbott (2022).
+> *`Evaluating Forecasts with scoringutils in R`*. arXiv:2205.07090
+> <https://doi.org/10.48550/arXiv.2205.07090>
+
+For further details on the specific issue of transforming forecasts for
+scoring see:
+
+> Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes
+> Bracher\* and Sebastian Funk\* (\*: equal contribution) (2023).
+> *`Scoring epidemiological forecasts on transformed scales`*, PLoS
+> Comput Biol 19(8): e1011393
+> <https://doi.org/10.1371/journal.pcbi.1011393>
+
+## Package overview
 
 The `scoringutils` package offers convenient automated forecast
 evaluation through the function `score()`. The function operates on
@@ -117,14 +134,13 @@ Forecasts can be easily and quickly scored using the `score()` function.
 `score()` automatically tries to determine the `forecast_unit`, i.e. the
 set of columns that uniquely defines a single forecast, by taking all
 column names of the data into account. However, it is recommended to set
-the forecast unit manually using `set_forecast_unit()` as this may help
-to avoid errors, especially when scoringutils is used in automated
-pipelines. The function `set_forecast_unit()` will simply drop unneeded
-columns. To verify everything is in order, the function
-`validate_forecast()` should be used. The result of that check can then
-passed directly into `score()`. `score()` returns unsummarised scores,
-which in most cases is not what the user wants. Here we make use of
-additional functions from `scoringutils` to add empirical
+the forecast unit manually by specifying the “forecast_unit” argument in
+`as_forecast()` as this may help to avoid errors. This will drop all
+columns that are neither part of the forecast unit nor part of the
+columns internally used by `scoringutils`. The function `as_forecast()`
+processes and validates the inputs. `score()` returns unsummarised
+scores, which in most cases is not what the user wants. Here we make use
+of additional functions from `scoringutils` to add empirical
 coverage-levels (`add_coverage()`), and scores relative to a baseline
 model (here chosen to be the EuroCOVIDhub-ensemble model). See the
 getting started vignette for more details. Finally we summarise these
@@ -132,15 +148,17 @@ scores by model and target type.
 
 ``` r
 example_quantile %>%
-  set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
-  as_forecast() %>%
+  as_forecast(forecast_unit = c(
+    "location", "target_end_date", "target_type", "horizon", "model"
+  )) %>%
   add_coverage() %>%
   score() %>%
+  add_pairwise_comparison(
+    by = c("model", "target_type"), 
+    baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
   summarise_scores(
     by = c("model", "target_type")
-  ) %>%
-  add_pairwise_comparison(
-    baseline = "EuroCOVIDhub-ensemble"
   ) %>%
   summarise_scores(
     fun = signif, 
@@ -150,17 +168,30 @@ example_quantile %>%
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> Warning in get_score_names(scores, error = TRUE): The following scores have
+#> been previously computed, but are no longer column names of the data:
+#> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
+#> `?get_score_names` for further information.
+
+#> Warning in get_score_names(scores, error = TRUE): The following scores have
+#> been previously computed, but are no longer column names of the data:
+#> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
+#> `?get_score_names` for further information.
+#> Warning in get_score_names(scores): The following scores have been previously
+#> computed, but are no longer column names of the data: `interval_coverage,
+#> quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for
+#> further information.
 ```
 
-| model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | relative_skill | scaled_rel_skill |
-|:----------------------|:------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|---------------:|-----------------:|
-| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |           1.30 |              1.6 |
-| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |           2.30 |              3.8 |
-| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |           0.82 |              1.0 |
-| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |           0.60 |              1.0 |
-| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |           0.75 |              1.3 |
-| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |           0.95 |              1.2 |
-| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |           0.98 |              1.6 |
+| model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
+|:----------------------|:------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|-------------------:|--------------------------:|
+| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.30 |                       1.6 |
+| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               2.30 |                       3.8 |
+| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.82 |                       1.0 |
+| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.60 |                       1.0 |
+| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.75 |                       1.3 |
+| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               0.95 |                       1.2 |
+| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               0.98 |                       1.6 |
 
 `scoringutils` contains additional functionality to transform forecasts,
 to summarise scores at different levels, to visualise them, and to
@@ -183,7 +214,9 @@ example_quantile %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> Some rows containing NA values may be removed. This is fine if not unexpected.
 #>                    model target_type   scale         wis overprediction
+#>                   <char>      <char>  <char>       <num>          <num>
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
 #> 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696
 #> 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842
@@ -191,6 +224,7 @@ example_quantile %>%
 #> 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117
 #> 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601
 #>    underprediction dispersion        bias interval_coverage_50
+#>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
 #> 2:    10284.972826 4102.50094  0.09726562            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
@@ -198,6 +232,7 @@ example_quantile %>%
 #> 5:        2.098505   91.40625  0.33906250            0.6640625
 #> 6:       16.800951   26.87239 -0.02234375            0.4609375
 #>    interval_coverage_90 interval_coverage_deviation   ae_median
+#>                   <num>                       <num>       <num>
 #> 1:            0.8046875                 -0.10230114 17707.95312
 #> 2:            0.8203125                 -0.11437500 32080.48438
 #> 3:            0.7890625                 -0.06963068 21530.69531

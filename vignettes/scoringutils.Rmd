@@ -106,7 +106,7 @@ duplicates <- example_quantile %>%
   ) %>%
   get_duplicate_forecasts()
 
-duplicates[quantile == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
+duplicates[quantile_level == 0.5 & model == "EuroCOVIDhub-ensemble", ] %>%
   head()
 ```
 
@@ -166,14 +166,7 @@ print(scores, 2)
 
 The function `score()` returns unsumarised scores, which in most cases is not what the user wants. It returns a single score per forecast (as determined by the forecast unit). 
 
-A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = NULL` and the summary unit is assumed to be the same as the unit of a single forecast (meaning that nothing happens if `by` isn't specified).
-
-```{r}
-scores <- score(example_continuous)
-all(scores == summarise_scores(scores), na.rm = TRUE)
-```
-
-Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
+A second function, `summarise_scores()` takes care of summarising these scores to the level specified by the user. The `by` argument can be used to define the level of summary. By default, `by = model` and one score per model is returned. Through the `by` argument we can specify what unit of summary we want. We can also call `sumarise_scores()` multiple tines, e.g to round your outputs by specifying e.g. `signif()` as a summary function. 
 
 ```{r}
 scores %>%
@@ -184,7 +177,7 @@ scores %>%
 
 ### Scoring point forecasts
 
-Point forecasts can be scored by making use of the quantile-based format, but with a value of `NA` or `"point"` in the quantile column. Point forecasts can be scored alongside other quantile-based forecasts. As point forecasts will have values of `NA` for metrics designed for probabilistic forecasts, it is important to use `na.rm = TRUE` when summarising. 
+Point forecasts can be scored in a separate format. 
 
 ```{r}
 suppressMessages(score(example_point)) %>%
@@ -209,8 +202,11 @@ In order to better compare models against each other we can use relative scores 
 
 ```{r}
 score(example_quantile) %>%
-  summarise_scores(by = c("model", "target_type")) %>%
-  add_pairwise_comparison(baseline = "EuroCOVIDhub-ensemble")
+  add_pairwise_comparison(
+    by = c("model", "target_type"),
+    baseline = "EuroCOVIDhub-ensemble"
+  ) %>%
+  summarise_scores(by = c("model", "target_type"))
 ```
 
 
@@ -223,7 +219,7 @@ A simple coloured table can be produced based on the scores:
 ```{r}
 score(example_integer) %>%
   summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
-  summarise_scores(fun = signif, digits = 2) %>%
+  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2) %>%
   plot_score_table(by = "target_type") +
   facet_wrap(~ target_type, nrow = 1)
 ```
@@ -273,7 +269,7 @@ example_continuous %>%
 Similarly for quantile-based forecasts: 
 
 ```{r}
-example_quantile[quantile %in% seq(0.1, 0.9, 0.1), ] %>%
+example_quantile[quantile_level %in% seq(0.1, 0.9, 0.1), ] %>%
   pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
@@ -286,16 +282,16 @@ example_quantile[quantile %in% seq(0.1, 0.9, 0.1), ] %>%
 ```{r, eval=FALSE, include=FALSE}
 example_quantile %>%
   score() %>%
-  summarise_scores(by = c("model", "range")) %>%
+  summarise_scores(by = c("model", "interval_range")) %>%
   plot_interval_coverage()
 ```
 
-<!-- To visualise quantile coverage, you need to include "quantile" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
+<!-- To visualise quantile coverage, you need to include "quantile_level" in `by`. Again, the green area corresponds to conservative forecasts, where central prediction intervals would cover more than needed.  -->
 
 ```{r, eval=FALSE, include=FALSE}
 example_quantile %>%
   score() %>%
-  summarise_scores(by = c("model", "quantile")) %>%
+  summarise_scores(by = c("model", "quantile_level")) %>%
   plot_quantile_coverage()
 ```
 
@@ -352,17 +348,6 @@ forecast_quantile %>%
   plot_correlation()
 ```
 
-<!-- ### Scores by interval ranges -->
-
-<!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:  -->
-
-```{r, eval = FALSE, include = FALSE}
-forecast_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "range", "target_type")) %>%
-  plot_ranges() +
-  facet_wrap(~ target_type, scales = "free")
-```
 
 ## Converting to quantile-based forecasts
 
@@ -373,7 +358,7 @@ You can convert your sample-based forecasts into a quantile-based format using t
 ```{r}
 example_integer %>%
   sample_to_quantile(
-    quantiles = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+    quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
   score()
 ```

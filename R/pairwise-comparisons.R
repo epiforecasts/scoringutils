@@ -28,8 +28,7 @@
 #'
 #' @param scores A data.table of scores as produced by [score()].
 #' @param metric A character vector of length one with the metric to do the
-#' comparison on. The default is "auto", meaning that either "wis",
-#' "crps", or "brier_score" will be selected where available.
+#' comparison on.
 #' @param by character vector with names of columns present in the input
 #' data.frame. `by` determines how pairwise comparisons will be computed.
 #' You will get a relative skill score for every grouping level determined in
@@ -46,6 +45,7 @@
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
+#' @importFrom checkmate assert_subset assert_character
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -62,68 +62,90 @@
 #' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-pairwise_comparison <- function(scores,
-                                by = "model",
-                                metric = "auto",
-                                baseline = NULL,
-                                ...) {
-  metric <- match.arg(metric, c("auto", available_metrics()))
-  if (is.data.table(scores)) {
-    scores <- copy(scores)
-  } else {
-    scores <- as.data.table(scores)
-  }
+pairwise_comparison <- function(
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL,
+  ...
+) {
 
-  # determine metric automatically
-  if (metric == "auto") {
-    metric <- infer_rel_skill_metric(scores)
+  # input checks ---------------------------------------------------------------
+  scores <- ensure_data.table(scores)
+
+  # we need the score names attribute to make sure we can determine the
+  # forecast unit correctly, so here we check it exists
+  score_names <- get_score_names(scores, error = TRUE)
+
+  # check that metric is a subset of the scores and is of length 1
+  assert_subset(metric, score_names, empty.ok = FALSE)
+  assert_character(metric, len = 1)
+
+  # check that model column + columns in 'by' are present
+  by_cols <- check_columns_present(scores, by)
+  if (!is.logical(by_cols)) {
+    stop("Not all columns specified in `by` are present: ", by_cols)
+  }
+  assert(check_columns_present(scores, "model"))
+
+  # check that baseline is one of the existing models
+  models <- as.vector(unique(scores$model))
+  assert_subset(baseline, models)
+
+  # check there are enough models
+  if (length(setdiff(models, baseline)) < 2) {
+    stop(
+      "More than one non-baseline model is needed to compute ",
+      "pairwise compairisons."
+    )
   }
 
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
-    msg <- paste0("Some values for the metric '", metric,
-                  "' are NA. These have been removed. ",
-                  "Maybe choose a different metric?")
-    warning(msg)
-
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
-      msg <- paste0("After removing NA values for '", metric,
-                    "', no values were left.")
-      warning(msg)
+      warning(
+        "After removing NA values for '", metric,
+        "', no values were left."
+      )
       return(NULL)
     }
+    warning(
+      "Some values for the metric '", metric,
+      "' are NA. These have been removed. Maybe choose a different metric?"
+    )
   }
 
   # check that all values of the chosen metric are positive
-  if (any(sign(scores[[metric]]) < 0) && any(sign(scores) > 0)) {
-    msg <- paste(
-      "To compute pairwise comparisons, all values of", metric,
-      "must have the same sign."
+  if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
+    stop(
+      "To compute pairwise comparisons, all values of ", metric,
+      " must have the same sign."
     )
-    stop(msg)
   }
 
   # identify unit of single observation.
   forecast_unit <- get_forecast_unit(scores)
 
   # if by is equal to forecast_unit, then pairwise comparisons don't make sense
+  # if by == forecast_unit == "model" then this will pass and all relative skill
+  # scores will simply be 1.
   if (setequal(by, forecast_unit)) {
-    by <- "model"
-    message(
-      "relative skill can only be computed if `by` is different from the ",
-      "unit of a single forecast. `by` was set to 'model'"
-    )
+    if (setequal(by, "model")) {
+      warning(
+        "`by` is set to 'model', which is also the unit of a single forecast. ",
+        "This doesn't look right. All relative skill scores will be equal to 1."
+      )
+    } else {
+      by <- "model"
+      message(
+        "relative skill can only be computed if `by` is different from the ",
+        "unit of a single forecast. `by` was set to 'model'"
+      )
+    }
   }
 
-  # summarise scores over everything (e.g. quantiles, ranges or samples) in
-  # order to not to include those in the calculation of relative scores. Also
-  # gets rid of all unnecessary columns and keep only metric and forecast unit
-  scores <- scores[, lapply(.SD, mean, na.rm = TRUE),
-    by = forecast_unit,
-    .SDcols = metric
-  ]
-
+  # do the pairwise comparison -------------------------------------------------
   # split data set into groups determined by 'by'
   split_by <- setdiff(by, "model")
   split_scores <- split(scores, by = split_by)
@@ -237,8 +259,7 @@ pairwise_comparison_one_group <- function(scores,
   # calculate relative skill as geometric mean
   # small theta is again better (assuming that the score is negatively oriented)
   result[, `:=`(
-    theta = geometric_mean(ratio),
-    rel_to_baseline = NA_real_
+    theta = geometric_mean(ratio)
   ),
   by = "model"
   ]
@@ -261,9 +282,18 @@ pairwise_comparison_one_group <- function(scores,
 
   # rename ratio to mean_scores_ratio
   data.table::setnames(out,
-    old = c("ratio", "theta", "rel_to_baseline"),
-    new = c("mean_scores_ratio", "relative_skill", "scaled_rel_skill")
+    old = c("ratio", "theta"),
+    new = c(
+      "mean_scores_ratio",
+      paste(metric, "relative_skill", sep = "_")
+    )
   )
+  if (!is.null(baseline)) {
+    data.table::setnames(out,
+      old = "rel_to_baseline",
+      new = paste(metric, "scaled_relative_skill", sep = "_")
+    )
+  }
 
   return(out[])
 }

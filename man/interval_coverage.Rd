@@ -4,7 +4,7 @@
 \alias{interval_coverage}
 \title{Interval Coverage (For Quantile-Based Forecasts)}
 \usage{
-interval_coverage(observed, predicted, quantile, range = 50)
+interval_coverage(observed, predicted, quantile_level, interval_range = 50)
 }
 \arguments{
 \item{observed}{numeric vector of size n with the observed values}
@@ -16,11 +16,11 @@ to the number of observed values) and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{vector with quantile levels of size N}
+\item{quantile_level}{vector with quantile levels of size N}
 
-\item{range}{A single number with the range of the prediction interval in
-percent (e.g. 50 for a 50\% prediction interval) for which you want to compute
-interval coverage.}
+\item{interval_range}{A single number with the range of the prediction
+interval in percent (e.g. 50 for a 50\% prediction interval) for which you
+want to compute interval coverage.}
 }
 \value{
 A vector of length n with elements either TRUE,
@@ -41,7 +41,7 @@ predicted <- rbind(
   c(-2, 1, 2, 2, 4),
    c(-2, 0, 3, 3, 4)
 )
-quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-interval_coverage(observed, predicted, quantile)
+quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+interval_coverage(observed, predicted, quantile_level)
 }
 \keyword{metric}

@@ -7,12 +7,52 @@
 \usage{
 as_forecast(data, ...)
 
-\method{as_forecast}{default}(data, ...)
+\method{as_forecast}{default}(
+  data,
+  forecast_unit = NULL,
+  forecast_type = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL,
+  quantile_level = NULL,
+  sample_id = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
 
 \item{...}{additional arguments}
+
+\item{forecast_unit}{(optional) Name of the columns in \code{data} (after
+any renaming of columns done by \code{as_forecast()}) that denote the unit of a
+single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+If \code{NULL} (the default), all columns that are not required columns are
+assumed to form the unit of a single forecast. If specified, all columns
+that are not part of the forecast unit (or required columns) will be removed.}
+
+\item{forecast_type}{(optional) The forecast type you expect the forecasts
+to have. If the forecast type as determined by \code{scoringutils} based on the
+input does not match this, an error will be thrown. If \code{NULL} (the default),
+the forecast type will be inferred from the data.}
+
+\item{observed}{(optional) Name of the column in \code{data} that contains the
+observed values. This column will be renamed to "observed".}
+
+\item{predicted}{(optional) Name of the column in \code{data} that contains the
+predicted values. This column will be renamed to "predicted".}
+
+\item{model}{(optional) Name of the column in \code{data} that contains the names
+of the models/forecasters that generated the predicted values.
+This column will be renamed to "model".}
+
+\item{quantile_level}{(optional) Name of the column in \code{data} that contains
+the quantile level of the predicted values. This column will be renamed to
+"quantile_level". Only applicable to quantile-based forecasts.}
+
+\item{sample_id}{(optional) Name of the column in \code{data} that contains the
+sample id. This column will be renamed to "sample_id". Only applicable to
+sample-based forecasts.}
 }
 \value{
 Depending on the forecast type, an object of class
@@ -23,13 +63,25 @@ Depending on the forecast type, an object of class
 Convert a data.frame or similar of forecasts into an object of
 class \verb{forecast_*} and validate it.
 
-\code{as_forecast()} determines the forecast type (binary, point, sample-based or
+\code{as_forecast()}
+\itemize{
+\item allows users to specify the current names of the columns that correspond
+to the columns required by \code{scoringutils} (\code{observed}, \code{predicted},
+\code{model}, as well \code{quantile_level} for quantile-based forecasts and
+\code{sample_id} for sample-based forecasts). \code{as_forecast()} renames the
+existing columns.
+\item allows users to specify the unit of a single forecast. It removes all
+columns that are neither part of the forecast unit nor a required column
+(see \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details)
+\item Determines the forecast type (binary, point, sample-based or
 quantile-based) from the input data (using the function
-\code{\link[=get_forecast_type]{get_forecast_type()}}. It then constructs an object of the
-appropriate class (\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample}, or
+\code{\link[=get_forecast_type]{get_forecast_type()}}.
+\item Constructs a forecast object of the appropriate class
+(\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample}, or
 \code{forecast_quantile}, using the function \code{\link[=new_forecast]{new_forecast()}}).
-Lastly, it calls \code{\link[=as_forecast]{as_forecast()}} on the object to make sure it conforms with
-the required input formats.
+\item Calls \code{\link[=validate_forecast]{validate_forecast()}} on the newly created forecast object to
+validate it
+}
 }
 \section{Forecast types and input format}{
 Various different forecast types / forecast formats are supported. At the
@@ -54,8 +106,8 @@ corresponding to the probability that \code{observed} is equal to the second
 factor level. See details \link[=brier_score]{here} for more information.
 
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
-a column \code{predicted} of type numeric, and a column \code{quantile} of type numeric
-with quantile-levels (between 0 and 1).
+a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
+numeric with quantile-levels (between 0 and 1).
 
 \emph{Sample-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{sample_id} of type
@@ -68,6 +120,10 @@ For more information see the vignettes and the example data
 
 \examples{
 as_forecast(example_binary)
-as_forecast(example_quantile)
+as_forecast(
+  example_quantile,
+  forecast_unit = c("model", "target_type", "target_end_date",
+                    "horizon", "location")
+)
 }
 \keyword{check-forecasts}
