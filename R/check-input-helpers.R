@@ -118,13 +118,18 @@ assert_not_null <- function(...) {
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams score
+#' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    message(
-      "There is no column called `model` in the data.",
-      "scoringutils assumes that all forecasts come from the same model" # nolint
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "!" = "There is no column called `model` in the data.",
+        "i" = "scoringutils assumes that all forecasts come from the
+        same model"
+      )
     )
     #nolint end
     data[, model := "Unspecified model"]
