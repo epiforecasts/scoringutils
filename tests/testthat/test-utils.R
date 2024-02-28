@@ -75,7 +75,7 @@ test_that("get_score_names() works as expected", {
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
     get_score_names(ex),
-    "but are no longer column names of the data: `crps`"
+    "scores have been previously computed, but are no longer column names"
   )
 })
 

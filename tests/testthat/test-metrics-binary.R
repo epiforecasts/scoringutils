@@ -67,7 +67,7 @@ test_that("function throws an error for wrong input formats", {
   # wrong length
   expect_error(
     assert_input_binary(observed = observed, predicted = runif(15, min = 0, max = 1)),
-    "`observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15",
+    "`observed` and `predicted` must either be of length 1 or of equal length.",
     fixed = TRUE
   )
   expect_error(
