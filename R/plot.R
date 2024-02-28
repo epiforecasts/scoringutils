@@ -508,9 +508,8 @@ make_na <- make_NA
 #' @description
 #' Plot interval coverage
 #'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "interval_range"
-#' must be included in the `by` argument when running [summarise_scores()]
+#' @param data A data frame of coverage values as produced by
+#' `get_coverage()`
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -525,10 +524,10 @@ make_na <- make_NA
 #' data_coverage <- add_coverage(example_quantile)
 #' summarised <- summarise_scores(data_coverage, by = c("model", "interval_range"))
 #' plot_interval_coverage(summarised)
-plot_interval_coverage <- function(scores,
+plot_interval_coverage <- function(data,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(scores, aes(
+  p1 <- ggplot(data, aes(
     x = interval_range,
     colour = .data[[colour]]
   )) +
@@ -565,9 +564,7 @@ plot_interval_coverage <- function(scores,
 #' @description
 #' Plot quantile coverage
 #'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "quantile_level"
-#' must be included in the `by` argument when running [summarise_scores()]
+#' @inheritParams plot_interval_coverage
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -580,10 +577,10 @@ plot_interval_coverage <- function(scores,
 #' summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
 #' plot_quantile_coverage(summarised)
 
-plot_quantile_coverage <- function(scores,
+plot_quantile_coverage <- function(data,
                                    colour = "model") {
   p2 <- ggplot(
-    data = scores,
+    data = data,
     aes(x = quantile_level, colour = .data[[colour]])
   ) +
     geom_polygon(
