@@ -37,10 +37,6 @@ get_forecast_type <- function(data) {
       "Please check the vignette for additional info."
     )
   }
-  conflict <- check_attribute_conflict(data, "forecast_type", forecast_type)
-  if (!is.logical(conflict)) {
-    warning(conflict)
-  }
   return(forecast_type)
 }
 
@@ -187,7 +183,6 @@ get_score_names <- function(scores, error = FALSE) {
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
-  # check whether there is a conflict in the forecast_unit and if so warn
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "score_names"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
