@@ -174,7 +174,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #'
 #' @keywords internal_input_check
 check_no_NA_present <- function(data, columns) {
-  for (x in columns){
+  for (x in columns) {
     if (anyNA(data[[x]])) {
       msg <- paste0(
         "Checking `data`: ",
