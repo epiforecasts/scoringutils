@@ -4,10 +4,10 @@
 \alias{plot_quantile_coverage}
 \title{Plot Quantile Coverage}
 \usage{
-plot_quantile_coverage(data, colour = "model")
+plot_quantile_coverage(coverage, colour = "model")
 }
 \arguments{
-\item{data}{A data frame of coverage values as produced by
+\item{coverage}{A data frame of coverage values as produced by
 \code{get_coverage()}}
 
 \item{colour}{According to which variable shall the graphs be coloured?

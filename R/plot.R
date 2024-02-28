@@ -508,7 +508,7 @@ make_na <- make_NA
 #' @description
 #' Plot interval coverage
 #'
-#' @param data A data frame of coverage values as produced by
+#' @param coverage A data frame of coverage values as produced by
 #' `get_coverage()`
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
@@ -524,10 +524,10 @@ make_na <- make_NA
 #' data_coverage <- add_coverage(example_quantile)
 #' summarised <- summarise_scores(data_coverage, by = c("model", "interval_range"))
 #' plot_interval_coverage(summarised)
-plot_interval_coverage <- function(data,
+plot_interval_coverage <- function(coverage,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(data, aes(
+  p1 <- ggplot(coverage, aes(
     x = interval_range,
     colour = .data[[colour]]
   )) +
@@ -577,10 +577,10 @@ plot_interval_coverage <- function(data,
 #' summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
 #' plot_quantile_coverage(summarised)
 
-plot_quantile_coverage <- function(data,
+plot_quantile_coverage <- function(coverage,
                                    colour = "model") {
   p2 <- ggplot(
-    data = data,
+    data = coverage,
     aes(x = quantile_level, colour = .data[[colour]])
   ) +
     geom_polygon(

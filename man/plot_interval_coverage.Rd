@@ -4,10 +4,10 @@
 \alias{plot_interval_coverage}
 \title{Plot Interval Coverage}
 \usage{
-plot_interval_coverage(data, colour = "model")
+plot_interval_coverage(coverage, colour = "model")
 }
 \arguments{
-\item{data}{A data frame of coverage values as produced by
+\item{coverage}{A data frame of coverage values as produced by
 \code{get_coverage()}}
 
 \item{colour}{According to which variable shall the graphs be coloured?
