@@ -100,56 +100,6 @@ assert_not_null <- function(...) {
 }
 
 
-#' @title Check Length of Two Vectors is Equal
-#'
-#' @description
-#' Check whether variables all have the same length
-#' @param ... The variables to check
-#' @param one_allowed logical, allow arguments of length one that can be
-#' recycled
-#' @param call_levels_up How many levels to go up when including the function
-#' call in the error message. This is useful when calling `assert_equal_length()`
-#' within another checking function.
-#' @inherit document_assert_functions return
-#'
-#' @keywords internal_input_check
-assert_equal_length <- function(...,
-                                one_allowed = TRUE,
-                                call_levels_up = 2) {
-  vars <- list(...)
-  lengths <- lengths(vars)
-
-  lengths <- unique(lengths)
-
-  if (one_allowed) {
-    # check passes if all have length 1
-    if (all(lengths == 1)) {
-      return(invisible(NULL))
-    }
-    # ignore those where length is one for later checks, as we allow length 1
-    lengths <- lengths[lengths != 1]
-  }
-
-  if (length(unique(lengths)) != 1) {
-    calling_function <- deparse(sys.calls()[[sys.nframe() - call_levels_up]])
-
-    lengths_message <- ifelse(
-      one_allowed,
-      "' should have the same length (or length one). Actual lengths: ",
-      "' should have the same length. Actual lengths: "
-    )
-
-    stop(
-      "Arguments to the following function call: '",
-      calling_function,
-      lengths_message,
-      toString(lengths)
-    )
-  }
-  return(invisible(NULL))
-}
-
-
 #' @title Check Whether There Is a Conflict Between Data and Attributes
 #' @description
 #' Check whether there is a conflict between a stored attribute and the

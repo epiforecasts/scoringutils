@@ -210,70 +210,6 @@ plot_wis <- function(scores,
   return(plot)
 }
 
-#' @title Plot Metrics by Range of the Prediction Interval
-#'
-#' @description
-#' Visualise the metrics by range, e.g. if you are interested how different
-#' interval interval ranges contribute to the overall interval score, or how
-#' sharpness / dispersion changes by interval range.
-#'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "interval_range"
-#' must be included in the `by` argument when running [summarise_scores()]
-#' @param y The variable from the scores you want to show on the y-Axis.
-#' This could be something like "wis" (the default) or "dispersion"
-#' @param x The variable from the scores you want to show on the x-Axis.
-#' Usually this will be "model"
-#' @param colour Character vector of length one used to determine a variable
-#' for colouring dots. The Default is "interval_range".
-#' @return A ggplot2 object showing a contributions from the three components of
-#' the weighted interval score
-#' @importFrom ggplot2 ggplot aes aes geom_point geom_line
-#' expand_limits theme theme_light element_text scale_color_continuous labs
-#' @export
-#' @examples
-#' library(ggplot2)
-#' ex <- example_quantile
-#' ex$range <- scoringutils:::get_range_from_quantile(ex$quantile)
-#' scores <- score(ex, metrics = list("wis" = wis))
-#' scores$interval_range <- scores$range
-#' summarised <- summarise_scores(
-#'   scores,
-#'   by = c("model", "target_type", "interval_range")
-#' )
-#' plot_interval_ranges(summarised, x = "model") +
-#'   facet_wrap(~target_type, scales = "free")
-
-plot_interval_ranges <- function(scores,
-                                 y = "wis",
-                                 x = "model",
-                                 colour = "interval_range") {
-  plot <- ggplot(
-    scores,
-    aes(
-      x = .data[[x]],
-      y = .data[[y]],
-      colour = .data[[colour]]
-    )
-  ) +
-    geom_point(size = 2) +
-    geom_line(aes(group = interval_range),
-      colour = "black",
-      linewidth = 0.01
-    ) +
-    scale_color_continuous(low = "steelblue", high = "salmon") +
-    theme_scoringutils() +
-    expand_limits(y = 0) +
-    theme(
-      legend.position = "right",
-      axis.text.x = element_text(
-        angle = 90, vjust = 1,
-        hjust = 1
-      )
-    )
-
-  return(plot)
-}
 
 #' @title Create a Heatmap of a Scoring Metric
 #'
@@ -347,7 +283,7 @@ plot_heatmap <- function(scores,
 #' If 0 is included in `interval_range`, the median prediction will be shown.
 #' @return ggplot object with a plot of true vs predicted values
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
+#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data geom_point
 #' @importFrom data.table dcast
 #' @importFrom ggdist geom_lineribbon
 #' @export

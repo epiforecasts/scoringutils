@@ -48,6 +48,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Added a method for `print()` that prints out additional information for `forecast` objects. 
 - Added a subsetting `[` operator for scores, so that the score name attribute gets preserved when subsetting.
+- Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462).
 
 # scoringutils 1.2.2
 

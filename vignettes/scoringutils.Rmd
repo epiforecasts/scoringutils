@@ -355,17 +355,6 @@ forecast_quantile %>%
   plot_correlation()
 ```
 
-<!-- ### Scores by interval ranges -->
-
-<!-- If you would like to see how different forecast interval ranges contribute to average scores, you can visualise scores by interval range:  -->
-
-```{r, eval = FALSE, include = FALSE}
-forecast_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "interval_range", "target_type")) %>%
-  plot_ranges() +
-  facet_wrap(~ target_type, scales = "free")
-```
 
 ## Converting to quantile-based forecasts
 
