@@ -100,8 +100,10 @@ assert_not_null <- function(...) {
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
       cli_abort(
-        "variable {varname} is {.val {NULL}} in the following function call:
-        {.fn {calling_function}}."
+        c(
+          "!" = "variable {varname} is {.val {NULL}} in the following
+          function call: {.fn {calling_function}}."
+        )
       )
     }
     #nolint end
