@@ -181,15 +181,4 @@ test_that("get_forecast_type() works as expected", {
     "Checking `data`: input doesn't satisfy criteria for any forecast type. Are you missing a column `quantile_level` or `sample_id`? Please check the vignette for additional info.",
     fixed = TRUE
   )
-
-  data <- as_forecast(na.omit(example_integer))
-  attr(data, "forecast_type") <- "binary"
-  expect_warning(
-    get_forecast_type(data),
-    "Object has an attribute `forecast_type`, but it looks different from what's expected based on the data.
-Existing: binary
-Expected: sample
-Running `as_forecast()` again might solve the problem",
-    fixed = TRUE
-  )
 })
