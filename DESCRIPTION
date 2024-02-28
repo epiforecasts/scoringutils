@@ -52,6 +52,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     checkmate, 
+    cli,
     data.table,
     ggdist (>= 3.2.0),
     ggplot2 (>= 3.4.0),
