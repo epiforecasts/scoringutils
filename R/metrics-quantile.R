@@ -491,7 +491,8 @@ bias_quantile_single_vector <- function(observed, predicted,
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Predictions must not be decreasing with increasing quantile level."
+        "!" = "Predictions must not be decreasing with increasing
+        quantile level."
       )
     )
     #nolint end

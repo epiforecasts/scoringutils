@@ -127,7 +127,7 @@ transform_forecasts <- function(data,
       cli_warn(
         c(
           "i" = "Appending new transformations with label {label}
-        even though that entry is already present in column 'scale'."
+          even though that entry is already present in column 'scale'."
         )
       )
       #nolint end
