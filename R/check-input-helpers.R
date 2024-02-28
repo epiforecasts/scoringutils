@@ -229,7 +229,7 @@ check_columns_present <- function(data, columns) {
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   missing <- list()
-  for (x in columns){
+  for (x in columns) {
     if (!(x %in% colnames)) {
       missing[[x]] <- x
     }
