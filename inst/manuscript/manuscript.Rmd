@@ -213,7 +213,7 @@ The package contains example data for each forecast type, which can serve as an 
 
 Apart from the columns `observed`, `predicted`, `model`, and the extra columns required for each forecast type, it is usually necessary that the input data contains additional columns. This is because a single probabilistic forecast (apart from binary predictions) is composed of multiple values. A quantile-based forecast, for example, is composed of several quantiles, and a sample-based forecast of multiple samples. However, every row only holds a single sample/quantile. Several rows in the input data therefore jointly form a single forecast. Additional columns in the input provide the information necessary to group together rows that belong to the same forecast. The combination of values in those columns form the unit of a single forecast (or "forecast unit") and should uniquely identify a single forecast. For example, consider forecasts made by different models in various locations at different time points and for different targets. A single forecast could then be uniquely described by the values in the columns `model`, `location`, `date`, and `target`, and the forecast unit would be `forecast_unit = c("model", "location", "date", "target")`. 
 
-Rows are automatically grouped together based on the values in all other columns present in the data (excluding required columns like `sample_id` or `quantile_level` and values computed by \pkg{scoringutils}). As the forecast unit is determined based on all existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, "even", that is one if the row number is even and zero otherwise. The existence of this column would change results, as \pkg{scoringutils} assumes it was relevant to grouping the forecasts. 
+Rows are automatically grouped together based on the values in all other columns present in the data (excluding required columns like `sample_id` or `quantile_level` and values computed by \pkg{scoringutils}). As the forecast unit is determined based on all existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, `"even"`, that is one if the row number is even and zero otherwise. The existence of this column would change results, as \pkg{scoringutils} assumes it was relevant to grouping the forecasts. 
 
 ## Forecast objects and input validation
 
@@ -457,17 +457,17 @@ To compute relative skill scores, users can call \fct{add\_pairwise\_comparison}
 ```{r pairwise-comparison-code, eval = FALSE}
 forecast_quantile |>
   score() |>
-  add_pairwise_comparison(by = c("model", "target_type"), 
-                          baseline = "EuroCOVIDhub-baseline")
+  add_relative_skill(by = c("model", "target_type"), 
+                     baseline = "EuroCOVIDhub-baseline")
 ```
 
-Pairwise comparisons should usually be made based on raw, unsummarised scores (meaning that `add_pairwise_comparison()` should be called before `summarise_scores()` (see Section \ref{sec:summarising})). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
+Pairwise comparisons should usually be made based on raw, unsummarised scores (meaning that `add_relative_skill()` should be called before `summarise_scores()` (see Section \ref{sec:summarising})). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
 
 ## Additional functionality related to scores objects
 
 ### Displaying mean score ratios from pairwise comparisons
 
-\pkg{scoringutils} offers a second alternative workflow to conduct pairwise comparisons between models through the function `get_pairwise_comparisons()`. The purpose of this workflow is to obtain and visualise information on the direct comparisons between every possible pair of models, rather than just computing relative skill scores for every model. The function `get_pairwise_comparisons()` accepts the same inputs as \fct{add_pairwise_comparison}, and returns a \code{data.table} with the results of the pairwise tournament. These include the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative and scaled relative skill score for every model (depending on whether a baseline was provided or not). 
+\pkg{scoringutils} offers a second alternative workflow to conduct pairwise comparisons between models through the function `get_pairwise_comparisons()`. The purpose of this workflow is to obtain and visualise information on the direct comparisons between every possible pair of models, rather than just computing relative skill scores for every model. The function `get_pairwise_comparisons()` accepts the same inputs as \fct{add\_relative\_skill}, and returns a \code{data.table} with the results of the pairwise tournament. These include the mean scores ratio for every pair of models, a p-value for whether scores for one model are significantly different from scores for another model, and the relative and scaled relative skill score for every model (depending on whether a baseline was provided or not). 
 
 `get_pairwise_comparisons()` computes p-values using either the Wilcoxon rank sum test (the default, the test is also known as Mann-Whitney-U test) \citep{mannTestWhetherOne1947} or a permutation test. P-values are then adjusted using `p.adjust`. In practice, computation of p-values is complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or space (e.g., if a forecaster has a bad day, they might perform badly across different targets for a given forecast date). P-values may therefore be too liberal in suggesting significant differences where there aren't any. We previously suggested to compute relative skill scores based on pairwise comparisons before summarising scores. One exception is the case where one is interested in p-values specifically: One possible way to mitigate issues from correlated forecasts, is to aggregate observations over a category where one suspects correlation (provided there are no missing values within the categories summarised over) to reduce correlation before making pairwise comparisons. A test that is performed on aggregate scores will likely be more conservative. 
 
@@ -475,11 +475,21 @@ Pairwise comparisons should usually be made based on raw, unsummarised scores (m
 
 The mean score ratios resulting from \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
 
+```{r temp, echo = FALSE, show = FALSE}
+# while functions aren't renamed yet, use a hack. 
+get_pairwise_comparisons <- pairwise_comparison
+plot_pairwise_comparisons <- plot_pairwise_comparison
+
+get_correlations <- correlation
+plot_correlations <- plot_correlation
+```
+
+
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e. that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
 forecast_quantile |>
   score() |>
-  pairwise_comparison(by = c("model", "target_type")) |>
-  plot_pairwise_comparison() + 
+  get_pairwise_comparisons(by = c("model", "target_type")) |>
+  plot_pairwise_comparisons() + 
   facet_wrap(~ target_type)
 ```
 
@@ -487,16 +497,16 @@ forecast_quantile |>
 
 ### Correlations between scores
 
-Users can examine correlations between scores using the function \fct{correlation} and plot the result using \fct{plot\_correlation}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
+Users can examine correlations between scores using the function \fct{correlations} and plot the result using \fct{plot\_correlations}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
 
 ```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=5, fig.cap = "Plot of correlations between different scores. Numbers, as well as the shade of the cells, indicate the correlation between two scores."}
 correlations <- forecast_quantile |>
   score() |>
   summarise_scores() |>
-  correlation(digits = 2)
+  get_correlations(digits = 2)
 
 correlations |>
-  plot_correlation()
+  plot_correlations()
 ```
 
 
@@ -644,30 +654,40 @@ We thank Community Jameel for Institute and research funding
 <!-- %% - With proper section titles and _not_ just "Appendix". -->
 
 \bibliography{references.bib, scoringutils-paper.bib}
+
+\clearpage
+
 \appendix
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 
 
-\section{Validating forecast objects}
+\section{Constructing and validating forecast objects}
 
+The following section gives an overview of how \pkg{scoringutils} constructs forecast objects. The `forecast` class comes with a constructor, \fct{new\_forecast}, a generic validation function, \fct{validate\_forecast}, and a convenient wrapper function \fct{as\_forecast}. 
 
-They come with a constructor, \fct{new\_forecast}, a generic validator, \fct{validate\_forecast} (which dispatches to a specialised validator method depending on the class of the input), and a convenient wrapper function \fct{as\_forecast}. \fct{as\_forecast} determines the forecast type of the input, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
+\fct{new\_forecast} constructs a `forecast` object based on a `data.frame` or similar. It makes a deep copy of the inptut and converts it into a `data.table`, adds a `model` column with value "Unspecified model" if there isn't one and adds a class `forecast_*`, where `*` depends on the forecast type to the object. 
 
+\fct{validate\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
+
+\fct{as\_forecast} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, determines the forecast type of the input (and optionally checks for consistency with what the user expects), constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
 
 ```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
 include_graphics("output/flowchart-create-object.png")
 ```
 
+\clearpage
 
 \section{Comparing different calibration plots}
+
+The following Figure gives a more detailed overview of how to interpret different calibration plots (showing the actual forecasts and observations that produced the corresponding visualisations). 
 
 ```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
 include_graphics("output/calibration-diagnostic-examples.png")
 ```
 
+\clearpage
 
-
-\section{The weighted interval score (WIS)} \label{sec:wis}
+\section{Details on the weighted interval score (WIS)} \label{sec:wis}
 
 The WIS treats the predictive quantiles as a set of symmetric prediction intervals and measures the distance between the observation and the forecast interval. It can be decomposed into a dispersion (uncertainty) component and penalties for over- and underprediction. For a single interval, the interval score is computed as
   $$IS_\alpha(F,y) = \underbrace{(u-l)}_\text{dispersion} + \underbrace{\frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq l)}_{\text{overprediction}} + \underbrace{\frac{2}{\alpha} \cdot (y-u) \cdot \mathbf{1}(y \geq u)}_{\text{underprediction}}, $$
@@ -675,6 +695,7 @@ The WIS treats the predictive quantiles as a set of symmetric prediction interva
   $$WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot |y - m| + \sum_{k = 1}^{K} w_k \cdot IS_{\alpha}(F, y)\right),$$
 where $w_k$ is a weight for every interval. Usually, $w_k = \frac{\alpha_k}{2}$ and $w_0 = 0.5$. 
 
+\clearpage
 
 
 <!-- ## Code formatting -->
