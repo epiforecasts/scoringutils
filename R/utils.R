@@ -108,6 +108,7 @@ strip_attributes <- function(object, attributes) {
 #'
 #' @param ... Arguments to pass to `fun`
 #' @param fun A function to execute
+#' @importFrom cli cli_warn
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
 #' @keywords scoring
@@ -135,11 +136,13 @@ run_safely <- function(..., fun) {
   result <- try(do.call(fun, valid_args), silent = TRUE)
 
   if (inherits(result, "try-error")) {
+    #nolint start: object_usage_linter
     msg <- conditionMessage(attr(result, "condition"))
-    warning(
-      "Function execution failed, returning NULL. Error: ",
-      msg
+    cli_warn(
+      "Function execution failed, returning NULL.
+      Error: {msg}."
     )
+    #nolint end
     return(NULL)
   }
   return(result)
@@ -171,6 +174,7 @@ ensure_data.table <- function(data) {
 #' @param x An object of class 'forecast_*' object as produced by
 #' `as_forecast()`
 #' @param ... additional arguments for [print()]
+#' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @return NULL
 #' @export
 #' @keywords check-forecasts
@@ -182,10 +186,8 @@ print.forecast_binary <- function(x, ...) {
   # check whether object passes validation
   validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
   if (inherits(validation, "try-error")) {
-    validation_msg <- conditionMessage(attr(validation, "condition"))
-    warning(
-      "Error in validating forecast object:\n",
-      validation_msg
+    cli_warn(
+      "Error in validating forecast object: {validation}."
     )
   }
 
@@ -199,22 +201,44 @@ print.forecast_binary <- function(x, ...) {
 
   # Print forecast object information
   if (inherits(forecast_type, "try-error")) {
-    message("Could not determine forecast type due to error in validation.")
+    cli_inform(
+      "Could not determine forecast type due to error in validation."
+    )
   } else {
-    cat("Forecast type:\n")
-    print(forecast_type)
+    cli_text(
+      col_blue(
+        "Forecast type:"
+      )
+    )
+    cli_text(
+      "{forecast_type}"
+    )
   }
 
   if (length(forecast_unit) == 0) {
-    message("Could not determine forecast unit")
+    cli_inform(
+      "Could not determine forecast unit."
+    )
   } else {
-    cat("\nForecast unit:\n")
-    print(forecast_unit)
+    cli_text(
+      col_blue(
+        "Forecast unit:"
+      )
+    )
+    cli_text(
+      "{forecast_unit}"
+    )
   }
 
   if (!is.null(score_cols)) {
-    cat("\nScore columns:\n")
-    print(score_cols)
+    cli_text(
+      col_blue(
+        "Score columns:"
+      )
+    )
+    cli_text(
+      "{score_cols}"
+    )
   }
 
   cat("\n")
