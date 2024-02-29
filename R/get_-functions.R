@@ -132,8 +132,8 @@ get_type <- function(x) {
 
 #' @title Get Names Of The Scoring Rules That Were Used For Scoring
 #' @description
-#' When applying a scoring rule, (for example through [score()] or
-#' [add_coverage()], the names of the scoring rules become column names of the
+#' When applying a scoring rule via [score()], the names of the scoring rules
+#' become column names of the
 #' resulting data.table. In addition, an attribute `score_names` will be
 #' added to the output, holding the names of the scores as a vector.
 #' This is done so that a function like [get_forecast_unit()] can still

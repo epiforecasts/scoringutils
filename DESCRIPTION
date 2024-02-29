@@ -54,7 +54,6 @@ Imports:
     checkmate, 
     cli,
     data.table,
-    ggdist (>= 3.2.0),
     ggplot2 (>= 3.4.0),
     lifecycle,
     methods,

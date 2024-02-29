@@ -20,7 +20,6 @@ ggplot object with a plot of interval coverage
 Plot quantile coverage
 }
 \examples{
-data_coverage <- add_coverage(example_quantile)
-summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
-plot_quantile_coverage(summarised)
+coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+plot_quantile_coverage(coverage)
 }

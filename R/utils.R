@@ -56,44 +56,6 @@ filter_function_args <- function(fun, args) {
 }
 
 
-#' @title Assign attributes to an object from a named list
-#' @description
-#' Every list item will be made an attribute of the object.
-#' @param object An object to assign attributes to
-#' @param attribute_list A named list of attributes to assign to the object.
-#'
-#' @return The object with new attributes according to the contents of
-#' `attribute_list`
-#' @keywords internal
-assign_attributes <- function(object, attribute_list) {
-  if (is.null(object)) {
-    return(NULL)
-  }
-  for (i in seq_along(attribute_list)) {
-    setattr(object, names(attribute_list)[i], attribute_list[[i]])
-  }
-  return(object)
-}
-
-#' Strip attributes from an object
-#' @description This function removes all attributes from an object that are
-#' specified in the `attributes` argument.
-#' @param object An object to remove attributes from
-#' @param attributes A character vector of attribute names to remove from the
-#' object
-#' @return The object with attributes removed
-#' @keywords internal
-strip_attributes <- function(object, attributes) {
-  if (is.null(object)) {
-    return(NULL)
-  }
-  for (i in seq_along(attributes)) {
-    setattr(object, attributes[i], NULL)
-  }
-  return(object)
-}
-
-
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the

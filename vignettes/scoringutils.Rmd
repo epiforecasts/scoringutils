@@ -130,27 +130,6 @@ forecast_quantile %>%
   facet_wrap(~ target_type)
 ```
 
-You can also visualise forecasts directly using the `plot_predictions()` function: 
-
-```{r, fig.width = 9, fig.height = 6}
-forecast_quantile %>%
-  make_NA(
-    what = "truth",
-    target_end_date >= "2021-07-15",
-    target_end_date < "2021-05-22"
-  ) %>%
-  make_NA(
-    what = "forecast",
-    model != "EuroCOVIDhub-ensemble",
-    forecast_date != "2021-06-28"
-  ) %>%
-  plot_predictions(
-    x = "target_end_date",
-    by = c("target_type", "location")
-  ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free")
-```
-
 ## Scoring and summarising forecasts
 
 Forecasts can easily be scored using the `score()` function. 
@@ -188,7 +167,7 @@ suppressMessages(score(example_point)) %>%
 
 ### Adding empirical coverage
 
-For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function `add_coverage()`. This function also requires a `by` argument which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed. 
+For quantile-based forecasts we are often interested in specific coverage-levels, for example, what percentage of true values fell between all 50% or the 90% prediction intervals. We can add this information using the function `get_coverage()`. This function also requires a `by` argument which defines the level of grouping for which the percentage of true values covered by certain prediction intervals is computed. 
 
 ```{r}
 score(example_quantile) %>%
