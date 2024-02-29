@@ -49,6 +49,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Added a method for `print()` that prints out additional information for `forecast` objects. 
 - Added a subsetting `[` operator for scores, so that the score name attribute gets preserved when subsetting.
 - Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462).
+- Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659).
 
 # scoringutils 1.2.2
 

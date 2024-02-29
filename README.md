@@ -103,31 +103,6 @@ forecasting hub](https://covid19forecasthub.eu/) as an example. For more
 detailed documentation please see the package vignettes, and individual
 function documentation.
 
-### Plotting forecasts
-
-As a first step to evaluating the forecasts we visualise them. For the
-purposes of this example here we make use of `plot_predictions()` to
-filter the available forecasts for a single model, and forecast date.
-
-``` r
-example_quantile %>%
-  make_NA(what = "truth", 
-          target_end_date >= "2021-07-15", 
-          target_end_date < "2021-05-22"
-  ) %>%
-  make_NA(what = "forecast",
-          model != "EuroCOVIDhub-ensemble", 
-          forecast_date != "2021-06-28"
-  ) %>%
-  plot_predictions(
-    x = "target_end_date",
-    by = c("target_type", "location")
-  ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free") 
-```
-
-![](man/figures/unnamed-chunk-4-1.png)<!-- -->
-
 ### Scoring forecasts
 
 Forecasts can be easily and quickly scored using the `score()` function.
