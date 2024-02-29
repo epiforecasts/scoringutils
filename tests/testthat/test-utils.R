@@ -94,11 +94,11 @@ test_that("print() works on forecast_* objects", {
     forecast_unit <- get_forecast_unit(dat)
 
     # Check Forecast type
-    expect_output(print(dat), "Forecast type")
-    expect_output(print(dat), forecast_type)
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
     # Check Forecast unit
-    expect_output(print(dat), "Forecast unit")
-    expect_output(print(dat), pattern = paste(forecast_unit, collapse = " "))
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
 
     # Check print.data.table works.
     output_original <- capture.output(print(dat))
@@ -114,7 +114,7 @@ test_that("print() works on forecast_* objects", {
     as_forecast() %>%
     add_coverage()
 
-  expect_output(print(dat), "Score columns")
+  expect_snapshot(print(dat))
   score_cols <- get_score_names(dat)
   expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
 })
