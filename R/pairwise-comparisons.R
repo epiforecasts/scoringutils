@@ -219,7 +219,9 @@ pairwise_comparison_one_group <- function(scores,
                                           by,
                                           ...) {
   if (!("model" %in% names(scores))) {
-    cli_abort("pairwise compairons require a column called 'model'")
+    cli_abort(
+      "pairwise compairons require a column called 'model'"
+    )
   }
 
   if (nrow(scores) == 0) {
@@ -298,7 +300,9 @@ pairwise_comparison_one_group <- function(scores,
   if (!is.null(baseline)) {
     baseline_theta <- unique(result[model == baseline, ]$theta)
     if (length(baseline_theta) == 0) {
-      cli_abort("Baseline model {.var {baseline}} missing.")
+      cli_abort(
+        "Baseline model {.var {baseline}} missing."
+      )
     }
     result[, rel_to_baseline := theta / baseline_theta]
   }
@@ -370,7 +374,9 @@ compare_two_models <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   if (!("model" %in% names(scores))) {
-    cli_abort("pairwise comparisons require a column called 'model'")
+    cli_abort(
+      "pairwise comparisons require a column called 'model'"
+    )
   }
 
   # select only columns in c(by, var)
