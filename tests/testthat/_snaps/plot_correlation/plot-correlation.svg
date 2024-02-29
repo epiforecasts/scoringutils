@@ -155,17 +155,17 @@
 <text transform='translate(559.37,395.77) rotate(-90)' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='60.67px' lengthAdjust='spacingAndGlyphs'>underprediction</text>
 <text transform='translate(624.24,395.77) rotate(-90)' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='55.28px' lengthAdjust='spacingAndGlyphs'>overprediction</text>
 <text transform='translate(689.11,395.77) rotate(-90)' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='12.71px' lengthAdjust='spacingAndGlyphs'>wis</text>
+<text x='350.72' y='553.50' style='font-size: 11.00px; font-family: sans;' textLength='53.80px' lengthAdjust='spacingAndGlyphs'>Correlation</text>
 <image width='86.40' height='17.28' x='410.00' y='534.40' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAABCAYAAABkOJMpAAAAi0lEQVQ4jc2Q0Q0CMQxDn/cfiB2Ygk3MR9pcK3pXgkDiq5GTPDvV7f6wAElIAPGOWshqWtNbnfMC5W4szVpjjOzOyHr2YOG3Z895WNyyZvf7qzle/4UhB3ZAbcDxmqPuvdXcaa8wl55XjHHuLNu7uQv+pf8o7H503z95/Zh3yT407/wM3uRx+n2n/wR2mBP8oZBbpQAAAABJRU5ErkJggg=='/>
+<polyline points='435.19,548.22 435.19,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='465.72,548.22 465.72,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='496.26,548.22 496.26,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='435.19,537.85 435.19,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='465.72,537.85 465.72,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='496.26,537.85 496.26,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <text x='435.19' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.0</text>
 <text x='465.72' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.5</text>
 <text x='496.26' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>1.0</text>
-<text x='350.72' y='553.50' style='font-size: 11.00px; font-family: sans;' textLength='53.80px' lengthAdjust='spacingAndGlyphs'>Correlation</text>
-<line x1='435.19' y1='551.68' x2='435.19' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='465.72' y1='551.68' x2='465.72' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='496.26' y1='551.68' x2='496.26' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='435.19' y1='537.85' x2='435.19' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='465.72' y1='537.85' x2='465.72' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='496.26' y1='537.85' x2='496.26' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <text x='132.60' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='97.60px' lengthAdjust='spacingAndGlyphs'>plot__correlation</text>
 </g>
 </svg>
