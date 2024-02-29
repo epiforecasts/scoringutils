@@ -68,7 +68,7 @@ get_coverage <- function(data, by = "model") {
   # convert to wide interval format and compute interval coverage --------------
   interval_data <- quantile_to_interval(data, format = "wide")
   interval_data[,
-                interval_coverage := (observed <= upper) & (observed >= lower)
+    interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
   interval_data[, interval_coverage_deviation :=
                   interval_coverage - interval_range / 100]
@@ -95,9 +95,6 @@ get_coverage <- function(data, by = "model") {
   data <- as.data.table(data)
   by <- unique(c(by, "quantile_level", "interval_range"))
   # summarise
-  data <- data[, lapply(.SD, mean),
-                   by = by,
-                   .SDcols = new_metrics
-  ]
+  data <- data[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
   return(data[])
 }
