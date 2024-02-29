@@ -135,13 +135,12 @@
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the “forecast_unit” argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by <code>scoringutils</code>. The function <code><a href="reference/as_forecast.html">as_forecast()</a></code> processes and validates the inputs. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from <code>scoringutils</code> to add empirical coverage-levels (<code><a href="reference/add_coverage.html">add_coverage()</a></code>), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
+<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the “forecast_unit” argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by <code>scoringutils</code>. The function <code><a href="reference/as_forecast.html">as_forecast()</a></code> processes and validates the inputs. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of an additional function from <code>scoringutils</code> to add scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span>forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"horizon"</span>, <span class="st">"model"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/add_coverage.html">add_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, </span>
@@ -156,40 +155,24 @@
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Warning in get_score_names(scores, error = TRUE): The following scores have</span></span>
-<span><span class="co">#&gt; been previously computed, but are no longer column names of the data:</span></span>
-<span><span class="co">#&gt; `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See</span></span>
-<span><span class="co">#&gt; `?get_score_names` for further information.</span></span>
-<span></span>
-<span><span class="co">#&gt; Warning in get_score_names(scores, error = TRUE): The following scores have</span></span>
-<span><span class="co">#&gt; been previously computed, but are no longer column names of the data:</span></span>
-<span><span class="co">#&gt; `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See</span></span>
-<span><span class="co">#&gt; `?get_score_names` for further information.</span></span>
-<span><span class="co">#&gt; Warning in get_score_names(scores): The following scores have been previously</span></span>
-<span><span class="co">#&gt; computed, but are no longer column names of the data: `interval_coverage,</span></span>
-<span><span class="co">#&gt; quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for</span></span>
-<span><span class="co">#&gt; further information.</span></span></code></pre></div>
+<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
-<col width="5%">
 <col width="3%">
 <col width="7%">
 <col width="7%">
 <col width="5%">
-<col width="3%">
-<col width="9%">
+<col width="4%">
+<col width="10%">
+<col width="10%">
+<col width="13%">
+<col width="5%">
 <col width="9%">
 <col width="12%">
-<col width="4%">
-<col width="8%">
-<col width="11%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">model</th>
-<th align="left">target_type</th>
 <th align="right">wis</th>
 <th align="right">overprediction</th>
 <th align="right">underprediction</th>
@@ -205,7 +188,6 @@
 <tbody>
 <tr class="odd">
 <td align="left">EuroCOVIDhub-baseline</td>
-<td align="left">Cases</td>
 <td align="right">28000</td>
 <td align="right">14000.0</td>
 <td align="right">10000.0</td>
@@ -220,7 +202,6 @@
 </tr>
 <tr class="even">
 <td align="left">EuroCOVIDhub-baseline</td>
-<td align="left">Deaths</td>
 <td align="right">160</td>
 <td align="right">66.0</td>
 <td align="right">2.1</td>
@@ -235,7 +216,6 @@
 </tr>
 <tr class="odd">
 <td align="left">EuroCOVIDhub-ensemble</td>
-<td align="left">Cases</td>
 <td align="right">18000</td>
 <td align="right">10000.0</td>
 <td align="right">4200.0</td>
@@ -250,7 +230,6 @@
 </tr>
 <tr class="even">
 <td align="left">EuroCOVIDhub-ensemble</td>
-<td align="left">Deaths</td>
 <td align="right">41</td>
 <td align="right">7.1</td>
 <td align="right">4.1</td>
@@ -265,7 +244,6 @@
 </tr>
 <tr class="odd">
 <td align="left">UMass-MechBayes</td>
-<td align="left">Deaths</td>
 <td align="right">53</td>
 <td align="right">9.0</td>
 <td align="right">17.0</td>
@@ -280,7 +258,6 @@
 </tr>
 <tr class="even">
 <td align="left">epiforecasts-EpiNow2</td>
-<td align="left">Cases</td>
 <td align="right">21000</td>
 <td align="right">12000.0</td>
 <td align="right">3300.0</td>
@@ -295,7 +272,6 @@
 </tr>
 <tr class="odd">
 <td align="left">epiforecasts-EpiNow2</td>
-<td align="left">Deaths</td>
 <td align="right">67</td>
 <td align="right">19.0</td>
 <td align="right">16.0</td>
@@ -332,7 +308,7 @@
 <span><span class="co">#&gt;    underprediction dispersion        bias interval_coverage_50</span></span>
 <span><span class="co">#&gt;              &lt;num&gt;      &lt;num&gt;       &lt;num&gt;                &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:     4237.177310 3663.52458 -0.05640625            0.3906250</span></span>
-<span><span class="co">#&gt; 2:    10284.972826 4102.50094  0.09726562            0.3281250</span></span>
+<span><span class="co">#&gt; 2:    10284.972826 4102.50094  0.09726563            0.3281250</span></span>
 <span><span class="co">#&gt; 3:     3260.355639 5664.37795 -0.07890625            0.4687500</span></span>
 <span><span class="co">#&gt; 4:        4.103261   30.18099  0.07265625            0.8750000</span></span>
 <span><span class="co">#&gt; 5:        2.098505   91.40625  0.33906250            0.6640625</span></span>

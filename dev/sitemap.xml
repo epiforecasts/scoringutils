@@ -37,9 +37,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/add_coverage.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/add_pairwise_comparison.html</loc>
   </url>
   <url>
@@ -77,9 +74,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_not_null.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/assign_attributes.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assure_model_column.html</loc>
@@ -200,6 +194,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/geometric_mean.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/get_coverage.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_duplicate_forecasts.html</loc>
@@ -365,9 +362,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/set_forecast_unit.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/strip_attributes.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.html</loc>
