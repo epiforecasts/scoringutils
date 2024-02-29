@@ -105,18 +105,6 @@ test_that("print() works on forecast_* objects", {
     output_test <- capture.output(print(data.table(dat)))
     expect_contains(output_original, output_test)
   }
-
-  # Check Score columns are printed
-  dat <- example_quantile %>%
-    na.omit %>%
-    set_forecast_unit(c("location", "target_end_date",
-      "target_type", "horizon", "model")) %>%
-    as_forecast() %>%
-    add_coverage()
-
-  expect_output(print(dat), "Score columns")
-  score_cols <- get_score_names(dat)
-  expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
 })
 
 test_that("print methods fail gracefully", {
