@@ -4,15 +4,19 @@
 \alias{get_coverage}
 \title{Get Quantile And Interval Coverage Values For Quantile-Based Forecasts}
 \usage{
-get_coverage(data, by = get_forecast_unit(data))
+get_coverage(data, by = "model")
 }
 \arguments{
 \item{data}{A data.frame or data.table with predicted and observed values.}
+
+\item{by}{character vector that denotes the level of grouping for which the
+coverage values should be computed. By default (\code{"model"}), one coverage
+value per model will be returned.}
 }
 \value{
-a data.table with the input and columns "interval_coverage",
+a data.table with columns "interval_coverage",
 "interval_coverage_deviation", "quantile_coverage",
-"quantile_coverage_deviation" added.
+"quantile_coverage_deviation" and the columns specified in \code{by}.
 }
 \description{
 Compute interval coverage of central prediction intervals,
@@ -24,7 +28,7 @@ quantile format (following the input requirements of \code{score()}).
 
 Interval coverage for a given interval range is defined as the proportion of
 observations that fall within the corresponding central prediction intervals.
-Central prediction intervals are symmetric around the median and and formed
+Central prediction intervals are symmetric around the median and formed
 by two quantiles that denote the lower and upper bound. For example, the 50\%
 central prediction interval is the interval between the 0.25 and 0.75
 quantiles of the predictive distribution.

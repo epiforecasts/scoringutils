@@ -9,7 +9,7 @@
 #'
 #' Interval coverage for a given interval range is defined as the proportion of
 #' observations that fall within the corresponding central prediction intervals.
-#' Central prediction intervals are symmetric around the median and and formed
+#' Central prediction intervals are symmetric around the median and formed
 #' by two quantiles that denote the lower and upper bound. For example, the 50%
 #' central prediction interval is the interval between the 0.25 and 0.75
 #' quantiles of the predictive distribution.
@@ -40,9 +40,12 @@
 #' coverage is 80%, the coverage deviation is -0.1.
 #'
 #' @inheritParams score
-#' @return a data.table with the input and columns "interval_coverage",
+#' @param by character vector that denotes the level of grouping for which the
+#' coverage values should be computed. By default (`"model"`), one coverage
+#' value per model will be returned.
+#' @return a data.table with columns "interval_coverage",
 #' "interval_coverage_deviation", "quantile_coverage",
-#' "quantile_coverage_deviation" added.
+#' "quantile_coverage_deviation" and the columns specified in `by`.
 #' @importFrom data.table setcolorder
 #' @importFrom checkmate assert_subset
 #' @examples
@@ -53,9 +56,13 @@
 #' @export
 #' @keywords scoring
 #' @export
-get_coverage <- function(data, by = get_forecast_unit(data)) {
+get_coverage <- function(data, by = "model") {
   # input checks ---------------------------------------------------------------
   data <- as_forecast(na.omit(data), forecast_type = "quantile")
+
+  # remove "quantile_level" and "interval_range" from `by` if present, as these
+  # are included anyway
+  by <- setdiff(by, c("quantile_level", "interval_range"))
   assert_subset(by, names(data))
 
   # convert to wide interval format and compute interval coverage --------------
