@@ -72,7 +72,7 @@ test_that("function throws an error for wrong input formats", {
   )
   expect_error(
     assert_input_point(observed_point, runif(15, min = 0, max = 1)),
-    "Assertion on 'observed' failed: `observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15.",
+    "`observed` and `predicted` must either be of length 1 or of equal length",
     fixed = TRUE
   )
 
