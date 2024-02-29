@@ -46,6 +46,7 @@
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
 #' @importFrom checkmate assert_subset assert_character
+#' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -82,9 +83,15 @@ pairwise_comparison <- function(
   assert_character(metric, len = 1)
 
   # check that model column + columns in 'by' are present
+  #nolint start: keyword_quote_linter object_usage_linter
   by_cols <- check_columns_present(scores, by)
   if (!is.logical(by_cols)) {
-    stop("Not all columns specified in `by` are present: ", by_cols)
+    cli_abort(
+      c(
+        "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"
+      )
+    )
+    #nolint end
   }
   assert(check_columns_present(scores, "model"))
 
@@ -94,34 +101,49 @@ pairwise_comparison <- function(
 
   # check there are enough models
   if (length(setdiff(models, baseline)) < 2) {
-    stop(
-      "More than one non-baseline model is needed to compute ",
-      "pairwise compairisons."
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "More than one non-baseline model is needed to compute
+        pairwise compairisons."
+      )
     )
+    #nolint end
   }
 
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
-      warning(
-        "After removing NA values for '", metric,
-        "', no values were left."
+      #nolint start: keyword_quote_linter object_usage_linter
+      cli_warn(
+        c(
+          "!" = "After removing NA values for {.var {metric}},
+         no values were left."
+        )
       )
       return(NULL)
     }
-    warning(
-      "Some values for the metric '", metric,
-      "' are NA. These have been removed. Maybe choose a different metric?"
+    cli_warn(
+      c(
+        "!" = "Some values for the metric {.var {metric}}
+         are NA. These have been removed.",
+        "i" = "Maybe choose a different metric?"
+      )
     )
+    #nolint end
   }
 
   # check that all values of the chosen metric are positive
   if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
-    stop(
-      "To compute pairwise comparisons, all values of ", metric,
-      " must have the same sign."
+    #nolint start: keyword_quote_linter object_usage_linter
+    cli_abort(
+      c(
+        "!" = "To compute pairwise comparisons, all values of {.var {metric}}
+       must have the same sign."
+      )
     )
+    #nolint end
   }
 
   # identify unit of single observation.
@@ -132,16 +154,24 @@ pairwise_comparison <- function(
   # scores will simply be 1.
   if (setequal(by, forecast_unit)) {
     if (setequal(by, "model")) {
-      warning(
-        "`by` is set to 'model', which is also the unit of a single forecast. ",
-        "This doesn't look right. All relative skill scores will be equal to 1."
+      #nolint start: keyword_quote_linter
+      cli_warn(
+        c(
+          "!" = "`by` is set to 'model', which is also the unit of a single
+         forecast. This doesn't look right.",
+        "i" = "All relative skill scores will be equal to 1."
+        )
       )
     } else {
       by <- "model"
-      message(
-        "relative skill can only be computed if `by` is different from the ",
-        "unit of a single forecast. `by` was set to 'model'"
+      cli_inform(
+        c(
+          "!" = "relative skill can only be computed if `by` is different from the
+        unit of a single forecast.",
+        "i" = "`by` was set to 'model'"
+        )
       )
+      #nolint end
     }
   }
 
@@ -180,6 +210,7 @@ pairwise_comparison <- function(
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
 #' @inheritParams pairwise_comparison
+#' @importFrom cli cli_abort
 #' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
@@ -188,7 +219,7 @@ pairwise_comparison_one_group <- function(scores,
                                           by,
                                           ...) {
   if (!("model" %in% names(scores))) {
-    stop("pairwise compairons require a column called 'model'")
+    cli_abort("pairwise compairons require a column called 'model'")
   }
 
   if (nrow(scores) == 0) {
@@ -267,7 +298,7 @@ pairwise_comparison_one_group <- function(scores,
   if (!is.null(baseline)) {
     baseline_theta <- unique(result[model == baseline, ]$theta)
     if (length(baseline_theta) == 0) {
-      stop("Baseline model ", baseline, " missing.")
+      cli_abort("Baseline model {.var {baseline}} missing.")
     }
     result[, rel_to_baseline := theta / baseline_theta]
   }
@@ -322,6 +353,7 @@ pairwise_comparison_one_group <- function(scores,
 #' determine p-values.
 #' @param n_permutations numeric, the number of permutations for a
 #' permutation test. Default is 999.
+#' @importFrom cli cli_abort
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @keywords internal
@@ -338,7 +370,7 @@ compare_two_models <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
 
   if (!("model" %in% names(scores))) {
-    stop("pairwise comparisons require a column called 'model'")
+    cli_abort("pairwise comparisons require a column called 'model'")
   }
 
   # select only columns in c(by, var)
@@ -405,10 +437,15 @@ infer_rel_skill_metric <- function(scores) {
   } else if ("brier_score" %in% colnames(scores)) {
     rel_skill_metric <- "brier_score"
   } else {
-    stop(
-      "automatically assigning a metric to compute relative skills on failed. ",
-      "Please provide a metric."
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "Automatically assigning a metric to compute relative skills
+        on failed.",
+        "i" = "Please provide a metric."
+      )
     )
+    #nolint end
   }
 
   return(rel_skill_metric)
