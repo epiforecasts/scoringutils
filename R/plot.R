@@ -525,6 +525,13 @@ make_na <- make_NA
 #' plot_interval_coverage(coverage)
 plot_interval_coverage <- function(coverage,
                                    colour = "model") {
+  # in case quantile columns are present, remove them and then take unique
+  # values. This doesn't visually affect the plot, but prevents lines from being
+  # drawn twice.
+  del <- c("quantile_level", "quantile_coverage", "quantile_coverage_deviation")
+  suppressWarnings(coverage[, eval(del) := NULL])
+  coverage <- unique(coverage)
+
   ## overall model calibration - empirical interval coverage
   p1 <- ggplot(coverage, aes(
     x = interval_range,
