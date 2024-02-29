@@ -353,7 +353,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_nas, by = "model", metric = "crps"
     ),
-    "Some values for the metric 'crps' are NA. These have been removed."
+    "Some values for the metric `crps` are NA. These have been removed."
   )
 
   # warning if there are no values left after removing NAs
@@ -362,7 +362,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_nas, by = "model", metric = "crps"
     ),
-    "After removing NA values for 'crps', no values were left."
+    "After removing NA values for `crps`, no values were left."
   )
 
   # error if not all values for the relative skill metric have the same sign
@@ -372,7 +372,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_diffsign, by = "model", metric = "crps"
     ),
-    "To compute pairwise comparisons, all values of crps must have the same sign."
+    "To compute pairwise comparisons, all values of `crps` must have the same sign."
   )
 
   # message if `by` is equal to the forecast unit
