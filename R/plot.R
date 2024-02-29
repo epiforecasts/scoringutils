@@ -278,7 +278,7 @@ plot_heatmap <- function(scores,
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
-#' facet_wrap facet_grid geom_polygon
+#' facet_wrap facet_grid geom_polygon geom_line
 #' @importFrom data.table dcast
 #' @export
 #' @examples
@@ -339,7 +339,7 @@ plot_interval_coverage <- function(coverage,
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
-#' scale_y_continuous
+#' scale_y_continuous geom_line
 #' @importFrom data.table dcast
 #' @export
 #' @examples
