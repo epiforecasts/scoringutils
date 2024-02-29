@@ -35,8 +35,9 @@ test_that("check_quantiles works", {
 })
 
 test_that("assure_model_column works", {
+  test <- data.table::copy(example_binary)
   expect_message(
-    assure_model_column(example_binary[, model := NULL]),
+    assure_model_column(test[, model := NULL]),
     "There is no column called `model` in the data."
   )
 })
