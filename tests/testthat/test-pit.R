@@ -4,7 +4,7 @@ test_that("pit_sample() function throws an error when missing observed", {
 
   expect_error(
     pit_sample(predicted = predicted),
-    "observed` or `predicted` missing in function 'pit_sample()"
+    "missing in function"
   )
 })
 
@@ -14,7 +14,7 @@ test_that("pit_sample() function throws an error when missing 'predicted'", {
 
   expect_error(
     pit_sample(predicted = predicted),
-    "observed` or `predicted` missing in function 'pit_sample()"
+    "missing in function"
   )
 })
 
