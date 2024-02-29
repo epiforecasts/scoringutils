@@ -112,31 +112,10 @@
 </h2>
 <p>In this quick start guide we explore some of the functionality of the <code>scoringutils</code> package using quantile forecasts from the <a href="https://covid19forecasthub.eu/" class="external-link">ECDC forecasting hub</a> as an example. For more detailed documentation please see the package vignettes, and individual function documentation.</p>
 <div class="section level3">
-<h3 id="plotting-forecasts">Plotting forecasts<a class="anchor" aria-label="anchor" href="#plotting-forecasts"></a>
-</h3>
-<p>As a first step to evaluating the forecasts we visualise them. For the purposes of this example here we make use of <code><a href="reference/plot_predictions.html">plot_predictions()</a></code> to filter the available forecasts for a single model, and forecast date.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/make_NA.html">make_NA</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>, </span>
-<span>          <span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2021-07-15"</span>, </span>
-<span>          <span class="va">target_end_date</span> <span class="op">&lt;</span> <span class="st">"2021-05-22"</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/make_NA.html">make_NA</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>          <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>, </span>
-<span>          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/plot_predictions.html">plot_predictions</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"location"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-4-1.png"><!-- --></p>
-</div>
-<div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
 <p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the “forecast_unit” argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by <code>scoringutils</code>. The function <code><a href="reference/as_forecast.html">as_forecast()</a></code> processes and validates the inputs. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of an additional function from <code>scoringutils</code> to add scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span>forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"horizon"</span>, <span class="st">"model"</span></span>
@@ -288,7 +267,7 @@
 </table>
 <p><code>scoringutils</code> contains additional functionality to transform forecasts, to summarise scores at different levels, to visualise them, and to explore the forecasts themselves. See the package vignettes and function documentation for more information.</p>
 <p>You may want to score forecasts based on transformations of the original data in order to obtain a more complete evaluation (see <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">this paper</a> for more information). This can be done using the function <code><a href="reference/transform_forecasts.html">transform_forecasts()</a></code>. In the following example, we truncate values at 0 and use the function <code><a href="reference/log_shift.html">log_shift()</a></code> to add 1 to all values before applying the natural logarithm.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
 <span> <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>append <span class="op">=</span> <span class="cn">TRUE</span>, fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -327,22 +306,22 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If using <code>scoringutils</code> in your work please consider citing it using the output of <code>citation("scoringutils")</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   scoringutils in R, arXiv. DOI: 10.48550/ARXIV.2205.07090</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;   Probabilistic Forecasts with scoringRules. Journal of Statistical</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;   Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   scoringutils in R, arXiv. DOI: 10.48550/ARXIV.2205.07090</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;   Probabilistic Forecasts with scoringRules. Journal of Statistical</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="how-to-make-a-bug-report-or-feature-request">How to make a bug report or feature request<a class="anchor" aria-label="anchor" href="#how-to-make-a-bug-report-or-feature-request"></a>

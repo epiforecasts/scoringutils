@@ -256,9 +256,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/mad_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/make_NA.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/merge_pred_and_obs.html</loc>
   </url>
   <url>
@@ -302,9 +299,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pit.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_predictions.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_quantile_coverage.html</loc>
