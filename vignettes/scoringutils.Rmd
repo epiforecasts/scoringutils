@@ -130,27 +130,6 @@ forecast_quantile %>%
   facet_wrap(~ target_type)
 ```
 
-You can also visualise forecasts directly using the `plot_predictions()` function: 
-
-```{r, fig.width = 9, fig.height = 6}
-forecast_quantile %>%
-  make_NA(
-    what = "truth",
-    target_end_date >= "2021-07-15",
-    target_end_date < "2021-05-22"
-  ) %>%
-  make_NA(
-    what = "forecast",
-    model != "EuroCOVIDhub-ensemble",
-    forecast_date != "2021-06-28"
-  ) %>%
-  plot_predictions(
-    x = "target_end_date",
-    by = c("target_type", "location")
-  ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free")
-```
-
 ## Scoring and summarising forecasts
 
 Forecasts can easily be scored using the `score()` function. 
