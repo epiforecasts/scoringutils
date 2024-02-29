@@ -138,14 +138,10 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> ! Column "sample_id" not found in data.
-#> ! Column "sample_id" not found in data.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> 
-#> ! Column "sample_id" not found in data.
-#> ! Column "sample_id" not found in data.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 ```
 
 | model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
@@ -178,23 +174,10 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
-#> ! Column "sample_id" not found in data.
-#> ! Column "sample_id" not found in data.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> 
-#> ! Column "sample_id" not found in data.
-#> ! Column "sample_id" not found in data.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Warning in (function (..., fun) : Function execution failed, returning NULL.
-#> Error: comparison (==) is possible only for atomic and list types
-#> Warning in `[.data.table`(data, , `:=`((metric_name), do.call(run_safely, :
-#> Column 'ae_median' does not exist to remove
-#> Warning in get_score_names(scores, error = TRUE): The following scores have
-#> been previously computed, but are no longer column names of the data:
-#> `ae_median`. See `?get_score_names` for further information.
-#> Warning in summarise_scores(., by = c("model", "target_type", "scale")): The
-#> names of the scores previously computed do not match the names of the columns
-#> in `scores`. This may lead to unexpected results.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 #>                    model target_type   scale         wis overprediction
 #>                   <char>      <char>  <char>       <num>          <num>
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
@@ -206,19 +189,19 @@ example_quantile %>%
 #>    underprediction dispersion        bias interval_coverage_50
 #>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
-#> 2:    10284.972826 4102.50094  0.09726563            0.3281250
+#> 2:    10284.972826 4102.50094  0.09726562            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
 #> 4:        4.103261   30.18099  0.07265625            0.8750000
 #> 5:        2.098505   91.40625  0.33906250            0.6640625
 #> 6:       16.800951   26.87239 -0.02234375            0.4609375
-#>    interval_coverage_90 interval_coverage_deviation
-#>                   <num>                       <num>
-#> 1:            0.8046875                 -0.10230114
-#> 2:            0.8203125                 -0.11437500
-#> 3:            0.7890625                 -0.06963068
-#> 4:            1.0000000                  0.20380682
-#> 5:            1.0000000                  0.12142045
-#> 6:            0.8750000                 -0.02488636
+#>    interval_coverage_90 interval_coverage_deviation   ae_median
+#>                   <num>                       <num>       <num>
+#> 1:            0.8046875                 -0.10230114 17707.95312
+#> 2:            0.8203125                 -0.11437500 32080.48438
+#> 3:            0.7890625                 -0.06963068 21530.69531
+#> 4:            1.0000000                  0.20380682    53.13281
+#> 5:            1.0000000                  0.12142045   233.25781
+#> 6:            0.8750000                 -0.02488636    78.47656
 ```
 
 ## Citation
