@@ -23,6 +23,6 @@ Plot interval coverage
 \dontshow{
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
-coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+coverage <- get_coverage(example_quantile, by = c("model"))
 plot_interval_coverage(coverage)
 }
