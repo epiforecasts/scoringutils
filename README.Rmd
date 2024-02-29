@@ -121,14 +121,13 @@ example_quantile %>%
 ### Scoring forecasts
 
 Forecasts can be easily and quickly scored using the `score()` function. `score()` automatically tries to determine the `forecast_unit`, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the "forecast_unit" argument in `as_forecast()` as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by `scoringutils`. The function `as_forecast()` processes and validates the inputs. 
-`score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from `scoringutils` to add empirical coverage-levels (`add_coverage()`), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
+`score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of an additional function from `scoringutils` to add scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
 
 ```{r score-example}
 example_quantile %>%
   as_forecast(forecast_unit = c(
     "location", "target_end_date", "target_type", "horizon", "model"
   )) %>%
-  add_coverage() %>%
   score() %>%
   add_pairwise_comparison(
     by = c("model", "target_type"), 

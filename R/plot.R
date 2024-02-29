@@ -521,9 +521,8 @@ make_na <- make_NA
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
-#' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "interval_range"))
-#' plot_interval_coverage(summarised)
+#' coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+#' plot_interval_coverage(coverage)
 plot_interval_coverage <- function(coverage,
                                    colour = "model") {
   ## overall model calibration - empirical interval coverage
@@ -573,9 +572,8 @@ plot_interval_coverage <- function(coverage,
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile_level"))
-#' plot_quantile_coverage(summarised)
+#' coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+#' plot_quantile_coverage(coverage)
 
 plot_quantile_coverage <- function(coverage,
                                    colour = "model") {

@@ -14,12 +14,14 @@
 #' central prediction interval is the interval between the 0.25 and 0.75
 #' quantiles of the predictive distribution.
 #'
-#' The function `add_coverage()` computes the coverage per central prediction
-#' interval, so the interval coverage will always be either `TRUE`
-#' (observed value falls within the interval) or `FALSE`  (observed value falls
-#' outside the interval). You can summarise the interval coverage values to get
-#' the proportion of observations that fall within the central prediction
-#' intervals.
+#' The function `get_coverage()` computes the coverage per central prediction
+#' interval. This means that if you set `by` to the unit of a single forecast,
+#' interval coverage will always be either `TRUE`
+#' (observed value falls within the interval) or `FALSE` (observed value falls
+#' outside the interval) and analogously for quantile coverage.
+#' Coverage values become meaningful by summarising them across different
+#' dimensions, as specified in the `by` argument (thereby returning the
+#' proportion of values covered by all prediction intervals/quantiles).
 #'
 #' **Quantile coverage**
 #'

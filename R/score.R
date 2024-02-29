@@ -194,9 +194,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   })
   scores <- rbindlist(split_result)
 
-  # this can have existing scores, e.g. from `add_coverage()`
-  existing_scores <- get_score_names(data)
-  scores <- as_scores(scores, score_names = c(existing_scores, names(metrics)))
+  scores <- as_scores(scores, score_names = names(metrics))
 
   return(scores[])
 }
