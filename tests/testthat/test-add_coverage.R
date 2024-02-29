@@ -1,24 +1,21 @@
 ex_coverage <- example_quantile[model == "EuroCOVIDhub-ensemble"]
 
-test_that("add_coverage() works as expected", {
-  expect_message(
-    cov <- add_coverage(example_quantile),
-    "Some rows containing NA values may be removed."
+test_that("get_coverage() works as expected", {
+  cov <- get_coverage(example_quantile, by = get_forecast_unit(example_quantile))
+
+  expect_equal(
+    sort(colnames(cov)),
+    sort(c(get_forecast_unit(example_quantile), c(
+      "interval_range", "quantile_level", "interval_coverage", "interval_coverage_deviation",
+      "quantile_coverage", "quantile_coverage_deviation"
+    )))
   )
 
-  required_names <- c(
-    "interval_range", "interval_coverage", "interval_coverage_deviation",
-    "quantile_coverage", "quantile_coverage_deviation"
-  )
-  expect_equal(colnames(cov), c(colnames(example_quantile), required_names))
-
-  expect_equal(nrow(cov), nrow(example_quantile))
-
-  # check that
+  expect_equal(nrow(cov), nrow(na.omit(example_quantile)))
 })
 
-test_that("add_coverage() outputs an object of class forecast_*", {
+test_that("get_coverage() outputs an object of class c('data.table', 'data.frame'", {
   ex <- as_forecast(na.omit(example_quantile))
-  cov <- add_coverage(ex)
-  expect_s3_class(cov, "forecast_quantile")
+  cov <- get_coverage(ex)
+  expect_s3_class(cov, c("data.table", "data.frame"), exact = TRUE)
 })
