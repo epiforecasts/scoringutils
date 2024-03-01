@@ -258,7 +258,7 @@ interval_coverage <- function(observed, predicted,
     cli_warn(
       c(
         "!" = "To compute the interval coverage for an interval range of
-        {interval_range}%, the {.val {necessary_quantiles}} quantiles
+        {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
         are required.",
         "i" = "Returning {.val {NA}}."
       )
