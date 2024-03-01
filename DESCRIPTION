@@ -58,7 +58,6 @@ Imports:
     lifecycle,
     methods,
     Metrics,
-    rlang,
     scoringRules,
     stats
 Suggests: 
