@@ -116,7 +116,7 @@ test_that("new `get_type()` is equal to old `prediction_type()", {
 test_that("get_type() handles `NA` values", {
   expect_equal(get_type(c(1, NA, 3)), "integer")
   expect_equal(get_type(c(1, NA, 3.2)), "continuous")
-  expect_error(get_type(NA), "Can't get type: all values of are NA")
+  expect_error(get_type(NA), "Can't get type: all values of are \"NA\"")
 })
 
 
