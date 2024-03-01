@@ -230,7 +230,6 @@ underprediction <- function(observed, predicted, quantile_level, ...) {
 #' want to compute interval coverage.
 #' @importFrom checkmate assert_number
 #' @importFrom cli cli_warn
-#' @importFrom rlang caller_env
 #' @return A vector of length n with elements either TRUE,
 #' if the observed value is within the corresponding prediction interval, and
 #' FALSE otherwise.
@@ -549,7 +548,6 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
 #' @importFrom cli cli_warn
-#' @importFrom rlang caller_env
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
