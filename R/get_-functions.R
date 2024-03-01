@@ -115,7 +115,7 @@ get_type <- function(x) {
   }
   assert_numeric(as.vector(x))
   if (all(is.na(as.vector(x)))) {
-    cli_abort("Can't get type: all values of are NA")
+    cli_abort("Can't get type: all values of are {.val NA}.")
   }
   if (is.integer(x)) {
     return("integer")

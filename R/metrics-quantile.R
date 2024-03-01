@@ -258,7 +258,7 @@ interval_coverage <- function(observed, predicted,
     cli_warn(
       c(
         "!" = "To compute the interval coverage for an interval range of
-        {interval_range}, the {.val {necessary_quantiles}} quantiles
+        {interval_range}%, the {.val {necessary_quantiles}} quantiles
         are required.",
         "i" = "Returning {.val {NA}}."
       )
@@ -561,8 +561,8 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
     cli_warn(
       c(
         "x" = "In order to compute the absolute error of the median,
-        {.var 0.5} must be among the quantiles given.",
-        "i" = "Returning `NA`."
+        {.val 0.5} must be among the quantiles given.",
+        "i" = "Returning {.val NA}."
       )
     )
     #nolint end

@@ -61,7 +61,7 @@
 #' `length(observed) * n_replicates`
 #' @seealso [pit()]
 #' @importFrom stats runif
-#' @importFrom cli cli_inform
+#' @importFrom cli cli_abort cli_inform
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN

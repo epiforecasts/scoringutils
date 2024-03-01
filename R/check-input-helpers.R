@@ -293,7 +293,7 @@ check_data_columns <- function(data) {
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(
-      "Found columns `quantile` and `sample_id`. Only one of these is allowed"
+      "Found columns `quantile_level` and `sample_id`. Only one of these is allowed."
     )
   }
   return(TRUE)
