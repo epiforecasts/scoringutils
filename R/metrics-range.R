@@ -56,7 +56,6 @@
 #' `data.frame` instead, simply call [as.data.frame()] on the output.
 #' @return vector with the scoring values, or a list with separate entries if
 #' `separate_results` is `TRUE`.
-#' @importFrom rlang warn
 #' @inheritParams ae_median_sample
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
