@@ -317,7 +317,6 @@ interval_coverage <- function(observed, predicted,
 #' The interval coverage deviation is then averaged across all prediction
 #' intervals. The median is ignored when computing coverage deviation.
 #' @inheritParams wis
-#' @importFrom rlang caller_env
 #' @importFrom cli cli_warn
 #' @return A numeric vector of length n with the interval coverage deviation
 #' for each forecast (comprising one or multiple prediction intervals).
