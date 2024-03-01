@@ -103,12 +103,14 @@ pit_sample <- function(observed,
   # check if there is more than one observation
   n <- length(observed)
   if (n == 1) {
+    #nolint start: keyword_quote_linter
     cli_inform(
       c(
         "i" = "You need more than one observation to assess uniformity
         of the PIT."
       )
     )
+    #nolint end
     return(NA)
   }
 
