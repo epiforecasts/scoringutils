@@ -101,7 +101,7 @@ run_safely <- function(..., fun) {
     #nolint start: object_usage_linter
     msg <- conditionMessage(attr(result, "condition"))
     cli_warn(
-      "Function execution failed, returning NULL.
+      "!" = "Function execution failed, returning NULL.
       Error: {msg}."
     )
     #nolint end
@@ -149,7 +149,7 @@ print.forecast_binary <- function(x, ...) {
   validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
   if (inherits(validation, "try-error")) {
     cli_warn(
-      "Error in validating forecast object: {validation}."
+      "!" = "Error in validating forecast object: {validation}."
     )
   }
 
@@ -179,7 +179,7 @@ print.forecast_binary <- function(x, ...) {
 
   if (length(forecast_unit) == 0) {
     cli_inform(
-      "Could not determine forecast unit."
+      "!" = "Could not determine forecast unit."
     )
   } else {
     cli_text(

@@ -118,7 +118,7 @@ pairwise_comparison <- function(
       #nolint start: keyword_quote_linter object_usage_linter
       cli_warn(
         c(
-          "!" = "After removing NA values for {.var {metric}},
+          "!" = "After removing {.val NA} values for {.var {metric}},
          no values were left."
         )
       )
@@ -446,7 +446,7 @@ infer_rel_skill_metric <- function(scores) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "Automatically assigning a metric to compute relative skills
+        "!" = "Automatically assigning a metric to compute relative skills
         on failed.",
         "i" = "Please provide a metric."
       )

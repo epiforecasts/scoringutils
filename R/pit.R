@@ -104,7 +104,7 @@ pit_sample <- function(observed,
   n <- length(observed)
   if (n == 1) {
     cli_inform(
-      "You need more than one observation to assess uniformity of the PIT."
+      "i" = "You need more than one observation to assess uniformity of the PIT."
     )
     return(NA)
   }
