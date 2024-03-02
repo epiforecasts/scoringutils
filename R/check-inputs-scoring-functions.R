@@ -242,17 +242,6 @@ assert_dims_ok_point <- function(observed, predicted) {
     check_vector(predicted, min.len = 1, strict = TRUE),
     check_matrix(predicted, ncols = 1, nrows = n_obs)
   )
-  dim_p <- dim(predicted)
-  if (!is.null(dim_p) && (length(dim_p) > 1) && (dim_p[2] > 1)) {
-    #nolint start: keyword_quote_linter object_usage_linter
-    cli_abort(
-      c(
-        "!" = "`predicted` must be a vector or a matrix with one column.",
-        "i" = "Found {dim(predicted)[2]} columns."
-      )
-    )
-    #nolint end
-  }
   n_pred <- length(as.vector(predicted))
   # check that both are either of length 1 or of equal length
   if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
