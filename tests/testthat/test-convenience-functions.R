@@ -1,5 +1,4 @@
 test_that("function transform_forecasts works", {
-
   predictions_original <- example_quantile$predicted
   predictions <- transform_forecasts(
     example_quantile,
@@ -10,12 +9,16 @@ test_that("function transform_forecasts works", {
   expect_equal(predictions$predicted, pmax(0, predictions_original))
 
   one <- transform_forecasts(predictions, offset = 1)
-  expect_equal(one$predicted,
-               c(predictions$predicted, log(predictions$predicted + 1)))
+  expect_equal(
+    one$predicted,
+    c(predictions$predicted, log(predictions$predicted + 1))
+  )
 
   two <- transform_forecasts(predictions, fun = sqrt, label = "sqrt")
-  expect_equal(two$predicted,
-               c(predictions$predicted, sqrt(predictions$predicted)))
+  expect_equal(
+    two$predicted,
+    c(predictions$predicted, sqrt(predictions$predicted))
+  )
 
 
   # expect a warning if existing transformation is overwritten
@@ -26,6 +29,13 @@ test_that("function transform_forecasts works", {
   # multiple transformations
   three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
   expect_equal(unique(three$scale), c("natural", "log", "sqrt"))
+
+  # expect_error if there is a scale column, but no value "natural"
+  no_natural <- three[three$scale != "natural", ]
+  expect_error(
+    transform_forecasts(no_natural, fun = identity),
+    "If a column 'scale' is present, entries with scale =='natural' are required for the transformation."
+  )
 
   # multiple transformations without append
   four <- transform_forecasts(two, fun = log_shift, offset = 1, append = FALSE)
@@ -41,6 +51,22 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
   ex <- as_forecast(na.omit(example_binary))
   transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
   expect_s3_class(transformed, "forecast_binary")
+})
+
+test_that("log_shift() works as expected", {
+  expect_equal(log_shift(1:10, 1), log(1:10 + 1))
+
+  # expect errors if there are values < 0
+  expect_error(
+    log_shift(c(1, 0, -1), 1),
+    "Detected input values < 0."
+  )
+
+  # expect errors if there are zeros
+  expect_warning(
+    log_shift(c(1, 0, 1), offset = 0),
+    "Detected zeros in input values."
+  )
 })
 
 
