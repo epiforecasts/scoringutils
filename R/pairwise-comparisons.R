@@ -424,39 +424,6 @@ compare_two_models <- function(scores,
   ))
 }
 
-#' @title Infer metric for pairwise comparisons
-#'
-#' @description
-#' Helper function to infer the metric for which pairwise comparisons shall
-#' be made. The function simply checks the names of the available columns and
-#' chooses the most widely used metric.
-#' Used in [pairwise_comparison()].
-#'
-#' @inheritParams pairwise_comparison
-#' @keywords internal
-
-infer_rel_skill_metric <- function(scores) {
-  if ("wis" %in% colnames(scores)) {
-    rel_skill_metric <- "wis"
-  } else if ("crps" %in% colnames(scores)) {
-    rel_skill_metric <- "crps"
-  } else if ("brier_score" %in% colnames(scores)) {
-    rel_skill_metric <- "brier_score"
-  } else {
-    #nolint start: keyword_quote_linter
-    cli_abort(
-      c(
-        "!" = "Automatically assigning a metric to compute relative skills
-        on failed.",
-        "i" = "Please provide a metric."
-      )
-    )
-    #nolint end
-  }
-
-  return(rel_skill_metric)
-}
-
 
 #' @title Calculate Geometric Mean
 #'
