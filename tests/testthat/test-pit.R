@@ -72,8 +72,8 @@ test_that("pit function works for continuous integer and quantile data", {
 })
 
 test_that("pit_sample() throws an error if inputs are wrong", {
-  observed <- 1:20
-  predicted <- replicate(100, 1:20)
+  observed <- 1.5:20.5
+  predicted <- replicate(100, 1.5:20.5)
 
   # message if there is only one observation
   expect_message(
@@ -101,3 +101,4 @@ test_that("pit_sample() throws an error if inputs are wrong", {
     "Mismatch: 'observed' has length `20`, but `predicted` has `10` rows."
   )
 })
+
