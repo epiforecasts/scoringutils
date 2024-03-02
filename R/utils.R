@@ -180,17 +180,6 @@ print.forecast_binary <- function(x, ...) {
     )
   }
 
-  if (!is.null(score_cols)) {
-    cli_text(
-      col_blue(
-        "Score columns:"
-      )
-    )
-    cli_text(
-      "{score_cols}"
-    )
-  }
-
   cat("\n")
   NextMethod(x, ...)
 
