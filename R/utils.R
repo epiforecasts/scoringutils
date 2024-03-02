@@ -145,7 +145,6 @@ print.forecast_binary <- function(x, ...) {
     silent = TRUE
   )
   forecast_unit <- get_forecast_unit(x)
-  score_cols <- get_score_names(x)
 
   # Print forecast object information
   if (inherits(forecast_type, "try-error")) {
