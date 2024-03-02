@@ -51,3 +51,34 @@ test_that("assert_dims_ok_point() works as expected", {
     "`observed` and `predicted` must either be of length 1 or of equal length."
   )
 })
+
+
+test_that("check_input_sample() works as expected", {
+  # expect no error if dimensions are ok
+  expect_true(check_input_sample(1:10, matrix(1:20, nrow = 10)))
+
+  # expect error if dimensions are not ok
+  expect_match(
+    check_input_sample(1:10, 1:11),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'integer'."
+  )
+})
+
+test_that("check_input_quantile() works as expected", {
+  # expect no error if dimensions are ok
+  expect_true(
+    check_input_quantile(
+      1:10, matrix(1:20, nrow = 10),
+      quantile_level = c(0.1, 0.9)
+    )
+  )
+
+  # expect error if dimensions are not ok
+  expect_match(
+    check_input_quantile(
+      1:10, matrix(1:20, nrow = 10),
+      quantile_level = seq(0.1, 0.9, length.out = 8)
+    ),
+    "Assertion on 'predicted' failed: Must have exactly 8 cols, but has 2 cols."
+  )
+})
