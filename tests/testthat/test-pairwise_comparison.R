@@ -392,3 +392,46 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     "`by` is set to 'model', which is also the unit of a single forecast."
   )
 })
+
+test_that("pairwise_comparison() throws errors with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    pairwise_comparison(test, by = "location", metric = "crps"),
+    "Assertion on 'scores' failed: Column 'model' not found in data."
+  )
+})
+
+test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    pairwise_comparison_one_group(test, by = "location", metric = "crps"),
+    "pairwise compairons require a column called 'model'"
+  )
+
+  # expect `NULL` as a result if scores has zero rows
+  test <- data.table::copy(scores_continuous)[model == "impossible"]
+  expect_equal(
+    pairwise_comparison_one_group(test, by = "model", metric = "crps"),
+    NULL
+  )
+
+  # expect NULL if there aren't enough models
+  test <- data.table::copy(scores_continuous)[model == "EuroCOVIDhub-ensemble"]
+  expect_equal(
+    pairwise_comparison_one_group(test, by = "model", metric = "crps"),
+    NULL
+  )
+
+  # expect error if baseline model is missing
+  test <- data.table::copy(scores_continuous)
+  expect_error(
+    pairwise_comparison_one_group(test, by = "model", baseline = "missing", metric = "crps"),
+    "Baseline model `missing` missing"
+  )
+})
