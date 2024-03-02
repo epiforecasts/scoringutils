@@ -10,24 +10,6 @@ available_metrics <- function() {
 }
 
 
-#' @title Collapse several messages to one
-#'
-#' @description Internal helper function to facilitate generating messages
-#' and warnings.
-#'
-#' @param type character, should be either "messages", "warnings" or "errors"
-#' @param messages the messages or warnings to collapse
-#'
-#' @return string with the message or warning
-#' @keywords internal
-collapse_messages <- function(type = "messages", messages) {
-  paste0(
-    "The following ",  type, " were produced when checking inputs:\n",
-    paste(paste0(seq_along(messages), ". "), messages, collapse = "\n")
-  )
-}
-
-
 #' @title Filter function arguments
 #'
 #' @description This function compares a list of arguments with the arguments
