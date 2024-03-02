@@ -24,21 +24,6 @@ correlation <- function(scores,
                         digits = NULL) {
   metrics <- get_score_names(scores)
 
-  # if quantile column is present, throw a warning
-  if ("quantile_level" %in% names(scores)) {
-    #nolint start: keyword_quote_linter
-    cli_warn(
-      c(
-        "!" = "There is a column called 'quantile_level' in the scores.",
-        "i" = "Usually you should call {.fn summarise_scores} to summarise
-        over quantiles and obtain one score per forecast before calculating
-        correlations. You can ignore this warning if you know what
-        you're doing."
-      )
-    )
-    #nolint end
-  }
-
   # remove all non metrics and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(
     scores,
