@@ -220,7 +220,7 @@ pairwise_comparison_one_group <- function(scores,
                                           ...) {
   if (!("model" %in% names(scores))) {
     cli_abort(
-      "pairwise compairons require a column called 'model'"
+      "pairwise comparisons require a column called 'model'"
     )
   }
 

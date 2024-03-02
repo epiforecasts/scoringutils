@@ -411,7 +411,7 @@ test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
   # expect error if no model column is found
   expect_error(
     pairwise_comparison_one_group(test, by = "location", metric = "crps"),
-    "pairwise compairons require a column called 'model'"
+    "pairwise comparisons require a column called 'model'"
   )
 
   # expect `NULL` as a result if scores has zero rows
@@ -435,3 +435,15 @@ test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
     "Baseline model `missing` missing"
   )
 })
+
+test_that("compare_two_models() throws error with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    compare_two_models(test, metric = "crps"),
+    "pairwise comparisons require a column called 'model'"
+  )
+})
+
