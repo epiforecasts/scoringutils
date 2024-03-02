@@ -72,8 +72,8 @@ test_that("pit function works for continuous integer and quantile data", {
 })
 
 test_that("pit_sample() throws an error if inputs are wrong", {
-  observed <- rnorm(20, mean = 1:20)
-  predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
+  observed <- 1:20
+  predicted <- replicate(100, 1:20)
 
   # message if there is only one observation
   expect_message(
