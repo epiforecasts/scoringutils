@@ -157,6 +157,19 @@ validate_forecast <- function(data, ...) {
 }
 
 
+#' @importFrom cli cli_abort
+#' @export
+#' @keywords check-forecasts
+validate_forecast.default <- function(data, ...) {
+  cli_abort(
+    c(
+      "!" = "The input needs to be a forecast object.",
+      "i" = "Please run `as_forecast()` first." # nolint
+    )
+  )
+}
+
+
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
