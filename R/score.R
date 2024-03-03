@@ -60,13 +60,13 @@
 #' \doi{10.48550/arXiv.2205.07090}
 #' @export
 
-score <- function(data, ...) {
+score <- function(data, metrics, ...) {
   UseMethod("score")
 }
 
 #' @importFrom cli cli_abort
 #' @export
-score.default <- function(data, ...) {
+score.default <- function(data, metrics, ...) {
   cli_abort(
     c(
       "!" = "The input needs to be a forecast object.",

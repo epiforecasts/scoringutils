@@ -2,16 +2,13 @@
 % Please edit documentation in R/score.R
 \name{score}
 \alias{score}
-\alias{score.default}
 \alias{score.forecast_binary}
 \alias{score.forecast_point}
 \alias{score.forecast_sample}
 \alias{score.forecast_quantile}
 \title{Evaluate forecasts in a data.frame format}
 \usage{
-score(data, ...)
-
-\method{score}{default}(data, ...)
+score(data, metrics, ...)
 
 \method{score}{forecast_binary}(data, metrics = rules_binary(), ...)
 
@@ -25,12 +22,12 @@ score(data, ...)
 \item{data}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
-\item{...}{additional arguments}
-
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
 \code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
 default metrics used.}
+
+\item{...}{additional arguments}
 }
 \value{
 An object of class \code{scores}. This object is a data.table with
