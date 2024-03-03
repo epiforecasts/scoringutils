@@ -16,7 +16,7 @@
 #' @export
 #' @keywords scoring
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' correlation(scores, digits = 2)
 correlation <- function(scores,
                         metrics = NULL,

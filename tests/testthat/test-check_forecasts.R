@@ -98,6 +98,6 @@ test_that("output of check_forecasts() is accepted as input to score()", {
   expect_no_error(
     score_check <- score(na.omit(check))
   )
-  expect_equal(score_check, suppressMessages(score(example_binary)))
+  expect_equal(score_check, suppressMessages(score(as_forecast(example_binary))))
 })
 

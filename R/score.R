@@ -76,11 +76,12 @@ score.default <- function(data, metrics, ...) {
 }
 
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
 score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
-  data <- validate_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
@@ -96,11 +97,12 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
 
 #' @importFrom Metrics se ae ape
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
 score.forecast_point <- function(data, metrics = rules_point(), ...) {
-  data <- validate_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
@@ -114,11 +116,12 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
 }
 
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
 score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
-  data <- validate_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)
@@ -152,11 +155,12 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
 
 
 #' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr
+#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
-  data <- validate_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)

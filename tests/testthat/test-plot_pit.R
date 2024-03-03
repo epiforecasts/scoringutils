@@ -9,9 +9,8 @@ test_that("plot_pit() works as expected with quantile forecasts", {
 })
 
 test_that("plot_pit() works as expected with integer forecasts", {
-  pit <- suppressMessages(
-    pit(example_integer,by = "model")
-  )
+  ex <- suppressMessages(as_forecast(example_integer))
+  pit <- pit(example_integer, by = "model")
   p <- plot_pit(pit)
   expect_s3_class(p, "ggplot")
   skip_on_cran()

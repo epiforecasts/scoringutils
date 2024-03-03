@@ -99,7 +99,9 @@ test_that("`wis()` works within score for median forecast", {
     quantile_level = rep(c(0.5), each = 3),
     model = "model1",
     date = 1:3
-  )
+  ) %>%
+    as_forecast()
+
   eval <- score(
     test_data,
     count_median_twice = TRUE, metrics = metrics_no_cov
@@ -141,7 +143,8 @@ test_that("wis() works within score for one interval", {
     predicted = c(c(0, 1, 0), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 2)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -166,7 +169,8 @@ test_that("`wis()` works 1 interval and median", {
     predicted = c(c(0, 1, 0), c(1, 2, 3), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 3)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -206,7 +210,8 @@ test_that("wis works, 2 intervals and median", {
     ),
     model = c("model1"),
     date = rep(1:3, times = 5)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -284,7 +289,6 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
     value = forecast_quantiles,
     stringsAsFactors = FALSE
   )
-
   # make a version that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
@@ -296,7 +300,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- score(
-    data_formatted,
+    as_forecast(data_formatted),
     count_median_twice = FALSE, metrics = metrics_no_cov
   )
 
@@ -364,7 +368,8 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   forecasts_formated <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
-  data_formatted <- merge(forecasts_formated, truth_formatted)
+  data_formatted <- merge(forecasts_formated, truth_formatted) %>%
+    as_forecast()
 
   eval <- suppressMessages(score(data_formatted,
                                  count_median_twice = FALSE, metrics = metrics_no_cov_no_ae
@@ -440,7 +445,8 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   forecasts_formated <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
-  data_formatted <- merge(forecasts_formated, truth_formatted)
+  data_formatted <- merge(forecasts_formated, truth_formatted) %>%
+    as_forecast()
 
   eval <- score(data_formatted,
                 count_median_twice = FALSE, metrics = metrics_no_cov

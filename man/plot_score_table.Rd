@@ -35,7 +35,7 @@ library(magrittr) # pipe operator
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 
-scores <- score(example_quantile) \%>\%
+scores <- score(as_forecast(example_quantile)) \%>\%
   summarise_scores(by = c("model", "target_type")) \%>\%
   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 

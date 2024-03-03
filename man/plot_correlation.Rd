@@ -18,7 +18,7 @@ between metrics
 Plots a heatmap of correlations between different metrics
 }
 \examples{
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 correlations <- correlation(
  summarise_scores(scores),
  digits = 2

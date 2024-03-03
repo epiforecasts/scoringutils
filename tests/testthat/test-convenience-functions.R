@@ -56,7 +56,8 @@ test_that("function set_forecast_unit() works", {
   ex2 <- set_forecast_unit(
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
-  )
+  ) %>%
+    as_forecast()
   scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 

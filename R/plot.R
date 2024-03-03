@@ -28,7 +28,7 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(example_quantile) %>%
+#' scores <- score(as_forecast(example_quantile)) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 #'
@@ -148,7 +148,7 @@ plot_score_table <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_wis(scores,
@@ -232,7 +232,7 @@ plot_wis <- function(scores,
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
@@ -412,7 +412,7 @@ plot_quantile_coverage <- function(coverage,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
@@ -736,7 +736,7 @@ plot_forecast_counts <- function(forecast_counts,
 #' @importFrom data.table setDT melt
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' correlations <- correlation(
 #'  summarise_scores(scores),
 #'  digits = 2
