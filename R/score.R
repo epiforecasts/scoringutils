@@ -64,13 +64,15 @@ score <- function(data, ...) {
   UseMethod("score")
 }
 
-#' @rdname score
+#' @importFrom cli cli_abort
 #' @export
 score.default <- function(data, ...) {
-  assert(check_data_columns(data))
-  forecast_type <- get_forecast_type(data)
-  data <- new_forecast(data, paste0("forecast_", forecast_type))
-  score(data, ...)
+  cli_abort(
+    c(
+      "!" = "The input needs to be a forecast object.",
+      "i" = "Please run `as_forecast()` first." # nolint
+    )
+  )
 }
 
 #' @importFrom stats na.omit
