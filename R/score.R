@@ -1,12 +1,11 @@
 #' @title Evaluate forecasts in a data.frame format
-#' @description `score()` applies a selection of scoring metrics to a data.frame
-#' of forecasts. It is the workhorse of the `scoringutils` package.
+#' @description `score()` applies a selection of scoring metrics to a forecast
+#' object (a data.table with forecasts and observations).
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
-#' We recommend that users call [as_forecast()] prior to calling `score()` to
-#' validate the input data and convert it to a forecast object (though
-#' `score.default()` will do this if it hasn't happened before).
+#' The expected input is a forecast object, meaning that users have to call
+#' [as_forecast()] prior to calling `score()`.
 #' See below for more information on forecast types and input formats.
 #' For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
@@ -14,20 +13,16 @@
 #' R](https://arxiv.org/abs/2205.07090).
 #' @inheritSection forecast_types Forecast types and input format
 #' @inheritSection forecast_types Forecast unit
-#' @param data A data.frame or data.table with predicted and observed values.
+#' @param data A forecast object (a validated data.table with predicted and
+#' observed values, see [as_forecast()])
 #' @param metrics A named list of scoring functions. Names will be used as
 #' column names in the output. See [rules_point()], [rules_binary()],
 #' [rules_quantile()], and [rules_sample()] for more information on the
 #' default metrics used.
 #' @param ... additional arguments
-#' @return A data.table with unsummarised scores. This will generally be
-#' one score per forecast (as defined by the unit of a single forecast).
-#'
-#' For quantile-based forecasts, one score per quantile will be returned
-#' instead. This is done as scores can be computed and may be of interest
-#' for individual quantiles. You can call [summarise_scores()]) on the
-#' unsummarised scores to obtain one score per forecast unit for quantile-based
-#' forecasts.
+#' @return An object of class `scores`. This object is a data.table with
+#' unsummarised scores (one score per forecast) and has an additional attribute
+#' `score_names` with the names of the metrics used for scoring.
 #' @importFrom data.table ':=' as.data.table
 #' @importFrom stats na.omit
 #' @examples
@@ -41,21 +36,22 @@
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
-#' # determine the forecast unit automatically), check forecasts before scoring
+#' # determine the forecast unit automatically)
 #' example_quantile %>%
-#'   set_forecast_unit(
-#'     c("location", "target_end_date", "target_type", "horizon", "model")
+#'   as_forecast(
+#'     forecast_unit = c(
+#'       "location", "target_end_date", "target_type", "horizon", "model"
+#'     )
 #'   ) %>%
-#'   as_forecast() %>%
 #'   score()
 #'
 #' # forecast formats with different metrics
 #' \dontrun{
-#' score(example_binary)
-#' score(example_quantile)
-#' score(example_point)
-#' score(example_integer)
-#' score(example_continuous)
+#' score(as_forecast(example_binary))
+#' score(as_forecast(example_quantile))
+#' score(as_forecast(example_point))
+#' score(as_forecast(example_integer))
+#' score(as_forecast(example_continuous))
 #' }
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
