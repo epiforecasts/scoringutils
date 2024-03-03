@@ -108,7 +108,8 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  original_data <- as_forecast(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+  original_data <- copy(data)
   scale_col_present <- ("scale" %in% colnames(original_data))
 
   # Error handling

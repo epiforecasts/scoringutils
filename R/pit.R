@@ -187,7 +187,8 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  data <- as_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   forecast_type <- get_forecast_type(data)
 

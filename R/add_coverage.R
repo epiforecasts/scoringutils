@@ -58,7 +58,9 @@
 #' @export
 get_coverage <- function(data, by = "model") {
   # input checks ---------------------------------------------------------------
-  data <- as_forecast(na.omit(data), forecast_type = "quantile")
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+  assert_subset(get_forecast_type(data), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway

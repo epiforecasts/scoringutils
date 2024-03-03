@@ -40,8 +40,8 @@
 get_forecast_counts <- function(data,
                                 by = NULL,
                                 collapse = c("quantile_level", "sample_id")) {
-
-  data <- as_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   forecast_unit <- get_forecast_unit(data)
   data <- na.omit(data)
 
