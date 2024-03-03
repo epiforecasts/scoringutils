@@ -11,7 +11,8 @@ get_forecast_counts(
 )
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{by}{character vector or \code{NULL} (the default) that denotes the
 categories over which the number of forecasts should be counted.

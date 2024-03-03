@@ -220,7 +220,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' `set_forecast_unit()` can be directly piped into `as_forecast()` to
 #' check everything is in order.
 #'
-#' @inheritParams score
+#' @inheritParams as_forecast
 #' @param forecast_unit Character vector with the names of the columns that
 #' uniquely identify a single forecast.
 #' @return A data.table with only those columns kept that are relevant to

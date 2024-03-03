@@ -7,8 +7,8 @@
 validate_general(data)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
 }
 \value{
 returns the input, with a few new attributes that hold additional

@@ -19,7 +19,9 @@
 #' `forecast_quantile`, using the function [new_forecast()]).
 #' - Calls [validate_forecast()] on the newly created forecast object to
 #' validate it
-#' @inheritParams score
+#' @param data A data.frame (or similar) with predicted and observed values.
+#' See [as_forecast()] for additional information on input formats.
+#' @param ... additional arguments
 #' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
@@ -140,7 +142,7 @@ as_forecast.default <- function(data,
 #' Methods for the different classes run [validate_general()], which performs
 #' checks that are the same for all forecast types and then perform specific
 #' checks for the specific forecast type.
-#' @inheritParams score
+#' @inheritParams as_forecast
 #' @inheritSection forecast_types Forecast types and input format
 #' @return Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
@@ -240,7 +242,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
-#' @inheritParams get_forecast_counts
+#' @inheritParams as_forecast
 #' @return returns the input, with a few new attributes that hold additional
 #' information, messages and warnings
 #' @importFrom data.table ':=' is.data.table
@@ -288,7 +290,7 @@ validate_general <- function(data) {
 #' - makes sure that a column called `model` exists and if not creates one
 #' - assigns a class
 #'
-#' @inheritParams get_forecast_counts
+#' @inheritParams as_forecast
 #' @param classname name of the class to be created
 #' @return An object of the class indicated by `classname`
 #' @export

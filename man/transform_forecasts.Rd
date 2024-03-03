@@ -7,7 +7,8 @@
 transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{fun}{A function used to transform both observed values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
