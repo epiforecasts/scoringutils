@@ -12,6 +12,14 @@ test_that("as_forecast() function has an error for empty data.frame", {
     )
 })
 
+test_that("as_forecast() errors if there is both a sample_id and a quantile_level column", {
+  example <- data.table::copy(example_quantile)[, sample_id := 1]
+  expect_error(
+    as_forecast(example),
+    "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
+  )
+})
+
 test_that("check_columns_present() works", {
   expect_equal(
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),

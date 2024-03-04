@@ -232,6 +232,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' information, messages and warnings
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
+#' @importFrom cli cli_abort
 #' @export
 #' @keywords internal_input_check
 validate_general <- function(data) {
@@ -240,9 +241,11 @@ validate_general <- function(data) {
   assert(check_columns_present(data, c("observed", "predicted", "model")))
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
-    stop(
-      "Found columns `quantile_level` and `sample_id`. ",
-      "Only one of these is allowed"
+    cli_abort(
+      c(
+        "!" = "Found columns `quantile_level` and `sample_id`.
+      Only one of these is allowed"
+      )
     )
   }
 
