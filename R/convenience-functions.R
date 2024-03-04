@@ -191,7 +191,7 @@ transform_forecasts <- function(data,
 #' log_shift(0:9, offset = 1)
 #'
 #' transform_forecasts(
-#'   example_quantile[observed > 0, ],
+#'   as_forecast(example_quantile)[observed > 0, ],
 #'   fun = log_shift,
 #'   offset = 1
 #'  )
