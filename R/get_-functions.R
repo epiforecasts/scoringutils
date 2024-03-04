@@ -21,7 +21,7 @@
 #' @keywords check-forecasts
 get_forecast_type <- function(data) {
   assert_data_frame(data)
-  assert(check_columns_present(data, c("observed", "predicted", "model")))
+  assert(check_columns_present(data, c("observed", "predicted")))
   if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
