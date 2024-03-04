@@ -80,9 +80,9 @@ assert_not_null <- function(...) {
 #' @inheritParams score
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
-assure_model_column <- function(data) {
+ensure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    message(
+    warning(
       "There is no column called `model` in the data.",
       "scoringutils assumes that all forecasts come from the same model" # nolint
     )
@@ -235,14 +235,11 @@ test_columns_not_present <- function(data, columns) {
 #' @importFrom checkmate check_data_frame
 #' @keywords internal_input_check
 check_data_columns <- function(data) {
-  is_data <- check_data_frame(data, min.rows = 1)
-  if (!is.logical(is_data)) {
-    return(is_data)
-  }
-  needed <- test_columns_present(data, c("observed", "predicted"))
-  if (!needed) {
-    return("Both columns `observed` and predicted` are needed")
-  }
+  # check that input is a data.frame with the required columns
+  assert_data_frame(data, min.rows = 1)
+  assert(check_columns_present(data, c("observed", "predicted", "model")))
+
+  # check that only one of sample_id and quantile_level are present
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(

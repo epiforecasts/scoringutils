@@ -238,7 +238,6 @@ validate_general <- function(data) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data)
   assert(check_data_columns(data))
-  data <- assure_model_column(data)
 
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
@@ -282,7 +281,7 @@ validate_general <- function(data) {
 #' @keywords internal
 new_forecast <- function(data, classname) {
   data <- as.data.table(data)
-  data <- assure_model_column(data)
+  data <- ensure_model_column(data)
   class(data) <- c(classname, class(data))
   data <- copy(data)
   return(data[])
