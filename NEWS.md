@@ -5,7 +5,7 @@ This major update and addresses a variety of comments made by reviewers from the
 The update introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`. 
 
 ## Package updates
-- In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
+- In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted" and "model" (which now is a required column). Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
 - The overall scoring workflow was updated. `score()` is now a generic function that dispatches the correct method based on the forecast type. forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile". An object of class `forecast_*` can be created using the function `as_forecast()`, which also replaces the previous function `check_forecasts()` (see more information below). The function also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases.
 - `set_forecast_unit()` now errors if any of the values in `forecast_unit` are not columns of the data. 
 - Scoring rules (functions used for scoring) received a consistent interface and input checks:
