@@ -171,11 +171,11 @@ test_that("get_forecast_type() works as expected", {
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
+    "Assertion on 'data' failed: Columns 'observed', 'predicted', 'model' not found in data.",
     fixed = TRUE
   )
 
-  df <- data.frame(observed = 1:10, predicted = factor(1:10))
+  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
   expect_error(
     get_forecast_type(df),
     "Checking `data`: input doesn't satisfy criteria for any forecast type. Are you missing a column `quantile_level` or `sample_id`? Please check the vignette for additional info.",

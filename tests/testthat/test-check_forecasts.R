@@ -4,7 +4,12 @@ test_that("as_forecast() function works", {
 })
 
 test_that("as_forecast() function has an error for empty data.frame", {
-  expect_error(suppressMessages(as_forecast(data.frame())))
+  d <- data.frame(observed = numeric(), predicted = numeric(), model = character())
+
+  expect_error(
+    as_forecast(d),
+    "Assertion on 'data' failed: Must have at least 1 rows, but has 0 rows."
+    )
 })
 
 test_that("check_columns_present() works", {
@@ -58,24 +63,30 @@ test_that("as_forecast() function throws an error with duplicate forecasts", {
   )
 })
 
-test_that("as_forecast() function creates a message when no model column is
+test_that("as_forecast() function warns when no model column is
            present", {
   no_model <- data.table::copy(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
-  expect_message(
-    suppressWarnings(as_forecast(no_model)),
-    "There is no column called `model` in the data.scoringutils assumes that all forecasts come from the same model")
+  expect_warning(
+    as_forecast(na.omit(no_model)),
+    "There is no column called `model` in the data.scoringutils assumes that all forecasts come from the same model"
+  )
 })
 
 test_that("as_forecast() function throws an error when no predictions or observed values are present", {
   expect_error(suppressMessages(suppressWarnings(as_forecast(
     data.table::copy(example_quantile)[, predicted := NULL]
   ))),
-  "Assertion on 'data' failed: Both columns `observed` and predicted` are needed.")
+  "Assertion on 'data' failed: Column 'predicted' not found in data.")
 
   expect_error(suppressMessages(suppressWarnings(as_forecast(
     data.table::copy(example_quantile)[, observed := NULL]
   ))),
-  "Assertion on 'data' failed: Both columns `observed` and predicted` are needed.")
+  "Assertion on 'data' failed: Column 'observed' not found in data.")
+
+  expect_error(suppressMessages(suppressWarnings(as_forecast(
+    data.table::copy(example_quantile)[, c("observed", "predicted") := NULL]
+  ))),
+  "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.")
 })
 
 # test_that("as_forecast() function throws an error when no predictions or observed values are present", {
