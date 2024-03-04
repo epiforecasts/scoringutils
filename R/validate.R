@@ -106,6 +106,9 @@ as_forecast.default <- function(data,
     setnames(data, old = sample_id, new = "sample_id")
   }
 
+  # ensure that a model column is present after renaming
+  ensure_model_column(data)
+
   # set forecast unit (error handling is done in `set_forecast_unit()`)
   if (!is.null(forecast_unit)) {
     data <- set_forecast_unit(data, forecast_unit)
