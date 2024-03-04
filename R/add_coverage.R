@@ -59,6 +59,7 @@
 get_coverage <- function(data, by = "model") {
   # input checks ---------------------------------------------------------------
   data <- copy(data)
+  data <- na.omit(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   assert_subset(get_forecast_type(data), "quantile")
 
