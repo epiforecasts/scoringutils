@@ -141,6 +141,7 @@ transform_forecasts <- function(data,
     transformed_data[, observed := fun(observed, ...)]
     transformed_data[, scale := label]
     out <- rbind(original_data, transformed_data)
+    out <- suppressWarnings(suppressMessages(as_forecast(out)))
     return(out[])
   }
 
