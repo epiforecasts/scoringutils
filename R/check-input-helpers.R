@@ -227,28 +227,6 @@ test_columns_not_present <- function(data, columns) {
   }
 }
 
-#' Check whether data is data.frame with correct columns
-#' @description Checks whether data is a data.frame, whether columns
-#' "observed" and "predicted" are present, and checks that only one of
-#' "quantile_level" and "sample_id" is present.
-#' @inherit document_check_functions params return
-#' @importFrom checkmate check_data_frame
-#' @keywords internal_input_check
-check_data_columns <- function(data) {
-  # check that input is a data.frame with the required columns
-  assert_data_frame(data, min.rows = 1)
-  assert(check_columns_present(data, c("observed", "predicted", "model")))
-
-  # check that only one of sample_id and quantile_level are present
-  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
-  if (problem) {
-    return(
-      "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
-    )
-  }
-  return(TRUE)
-}
-
 
 #' Check whether an attribute is present
 #' @description Checks whether an object has an attribute

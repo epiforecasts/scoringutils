@@ -71,7 +71,6 @@ score <- function(data, ...) {
 #' @rdname score
 #' @export
 score.default <- function(data, ...) {
-  assert(check_data_columns(data))
   forecast_type <- get_forecast_type(data)
   data <- new_forecast(data, paste0("forecast_", forecast_type))
   score(data, ...)
