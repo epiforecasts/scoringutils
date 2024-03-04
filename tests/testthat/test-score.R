@@ -44,8 +44,11 @@ test_that("Output of `score()` has the class `scores()`", {
 # =============================================================================
 
 # common error handling --------------------------------------------------------
-test_that("function throws an error if data is missing", {
-  expect_error(suppressMessages(score(data = NULL)))
+test_that("function throws an error if data is not a forecast object", {
+  expect_error(
+    score(data = NULL),
+    "The input needs to be a forecast object."
+  )
 })
 
 # test_that("score() warns if column name equals a metric name", {

@@ -61,3 +61,11 @@ test_that("is_forecast() works as expected", {
   expect_false(is_forecast.forecast_sample(ex_quantile))
   expect_false(is_forecast.forecast_quantile(ex_binary))
 })
+
+# add an additional test for validate_forecast - the rest should be covered
+# by the tests for as_forecast
+test_that("validate_forecast() works as expected", {
+  # test that by default, `as_forecast()` errors
+  expect_error(validate_forecast(data.frame(x = 1:10)),
+               "The input needs to be a forecast object.")
+})
