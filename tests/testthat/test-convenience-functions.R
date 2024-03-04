@@ -1,8 +1,9 @@
 test_that("function transform_forecasts works", {
 
   predictions_original <- example_quantile$predicted
-  predictions <- transform_forecasts(
-    example_quantile,
+  predictions <- example_quantile %>%
+    as_forecast() %>%
+    transform_forecasts(
     fun = function(x) pmax(0, x),
     append = FALSE
   )
@@ -18,10 +19,15 @@ test_that("function transform_forecasts works", {
                c(predictions$predicted, sqrt(predictions$predicted)))
 
 
-  # expect a warning if existing transformation is overwritten
-  expect_warning(
-    transform_forecasts(one, fun = sqrt)
+  # expect a warning + error if you add a second transformation with the same label
+  expect_error(
+    expect_warning(
+      transform_forecasts(one, fun = sqrt),
+      "Appending new transformations with label 'log', even though that entry is already present in column 'scale'."
+    ),
+    "There are instances with more than one forecast for the same target. "
   )
+
 
   # multiple transformations
   three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
