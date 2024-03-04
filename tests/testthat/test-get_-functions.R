@@ -171,7 +171,7 @@ test_that("get_forecast_type() works as expected", {
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted', 'model' not found in data.",
+    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
     fixed = TRUE
   )
 
