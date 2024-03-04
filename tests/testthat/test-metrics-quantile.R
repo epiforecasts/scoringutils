@@ -620,7 +620,7 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
 
 
 # ============================================================================ #
-# `interval_coverage_deviation` ===================================== #
+# `interval_coverage_deviation` ============================================== #
 # ============================================================================ #
 test_that("interval_coverage_deviation works", {
   existing_ranges <- unique(get_range_from_quantile(quantile_level))
@@ -644,7 +644,7 @@ test_that("interval_coverage_deviation works", {
 
 
 # ============================================================================ #
-# `bias_quantile` ==============================================================
+# `bias_quantile` ============================================================ #
 # ============================================================================ #
 test_that("bias_quantile() works as expected", {
   predicted <- c(1, 2, 3)
@@ -827,4 +827,46 @@ test_that("bias_quantile() works with point forecasts", {
   observed <- 1
   quantile_level <- 0.5
   expect_equal(bias_quantile(observed, predicted, quantile_level), 0)
+})
+
+
+# ============================================================================ #
+# `ae_median_quantile` ======================================================= #
+# ============================================================================ #
+
+test_that("ae_median_quantile() works as_expected", {
+  observed <- 1:30
+  predicted_values <- matrix(2:31)
+  expect_equal(
+    ae_median_quantile(observed, predicted_values, quantile_level = 0.5),
+    as.numeric(predicted_values - observed)
+  )
+
+  # using a vector as input for predicted does not work if there are several
+  # observed values
+  expect_error(
+    ae_median_quantile(observed, as.numeric(predicted_values), quantile_level = 0.5),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
+  )
+
+  # it does work if there is only a single observed value - in this case
+  # the vector gets treated as one forecast - which means that we need to
+  # supply multiple quantile levels now, because it assumes that single forecast
+  # is represented by several quantiles
+  expect_equal(
+    ae_median_quantile(observed[1], as.numeric(predicted_values)[1:3], quantile_level = c(0.1, 0.5, 0.7)),
+    2
+  )
+
+  # test that we get a warning if there are inputs without a 0.5 quantile
+  expect_warning(
+    expect_equal(
+      ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
+      NA_real_
+    ),
+    "in order to compute the absolute error of the median, `0.5` must be among the quantile levels given. Returning `NA`."
+  )
+
+
+  dim(1:10)
 })
