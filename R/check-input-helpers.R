@@ -20,34 +20,6 @@ check_numeric_vector <- function(x, ...) {
 }
 
 
-#' Check that quantiles are valid
-#'
-#' @description
-#' Helper function to check that input quantiles are valid.
-#' Quantiles must be in the range specified, increase monotonically,
-#' and contain no duplicates.
-#'
-#' This is used in [bias_interval()]() and [bias_quantile()]() to
-#' provide informative errors to users.
-#'
-#' @param quantiles Numeric vector of quantiles to check
-#' @param name Character name to use in error messages
-#' @param range Numeric vector giving allowed range
-#'
-#' @return None. Function errors if quantiles are invalid.
-#'
-#' @keywords internal_input_check
-check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
-  if (any(quantiles < range[1]) || any(quantiles > range[2])) {
-    stop(name, " must be between ", range[1], " and ", range[2])
-  }
-
-  if (!all(diff(quantiles) > 0)) {
-    stop(name, " must be increasing")
-  }
-}
-
-
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description Tries to execute an expression. Internally, this is used to
