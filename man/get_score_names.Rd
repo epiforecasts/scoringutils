@@ -17,8 +17,8 @@ Character vector with the names of the scoring rules that were used
 for scoring or \code{NULL} if no scores were computed previously.
 }
 \description{
-When applying a scoring rule, (for example through \code{\link[=score]{score()}} or
-\code{\link[=add_coverage]{add_coverage()}}, the names of the scoring rules become column names of the
+When applying a scoring rule via \code{\link[=score]{score()}}, the names of the scoring rules
+become column names of the
 resulting data.table. In addition, an attribute \code{score_names} will be
 added to the output, holding the names of the scores as a vector.
 This is done so that a function like \code{\link[=get_forecast_unit]{get_forecast_unit()}} can still

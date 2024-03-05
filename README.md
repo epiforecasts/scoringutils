@@ -103,31 +103,6 @@ forecasting hub](https://covid19forecasthub.eu/) as an example. For more
 detailed documentation please see the package vignettes, and individual
 function documentation.
 
-### Plotting forecasts
-
-As a first step to evaluating the forecasts we visualise them. For the
-purposes of this example here we make use of `plot_predictions()` to
-filter the available forecasts for a single model, and forecast date.
-
-``` r
-example_quantile %>%
-  make_NA(what = "truth", 
-          target_end_date >= "2021-07-15", 
-          target_end_date < "2021-05-22"
-  ) %>%
-  make_NA(what = "forecast",
-          model != "EuroCOVIDhub-ensemble", 
-          forecast_date != "2021-06-28"
-  ) %>%
-  plot_predictions(
-    x = "target_end_date",
-    by = c("target_type", "location")
-  ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free") 
-```
-
-![](man/figures/unnamed-chunk-4-1.png)<!-- -->
-
 ### Scoring forecasts
 
 Forecasts can be easily and quickly scored using the `score()` function.
@@ -140,18 +115,16 @@ columns that are neither part of the forecast unit nor part of the
 columns internally used by `scoringutils`. The function `as_forecast()`
 processes and validates the inputs. `score()` returns unsummarised
 scores, which in most cases is not what the user wants. Here we make use
-of additional functions from `scoringutils` to add empirical
-coverage-levels (`add_coverage()`), and scores relative to a baseline
-model (here chosen to be the EuroCOVIDhub-ensemble model). See the
-getting started vignette for more details. Finally we summarise these
-scores by model and target type.
+of an additional function from `scoringutils` to add scores relative to
+a baseline model (here chosen to be the EuroCOVIDhub-ensemble model).
+See the getting started vignette for more details. Finally we summarise
+these scores by model and target type.
 
 ``` r
 example_quantile %>%
   as_forecast(forecast_unit = c(
     "location", "target_end_date", "target_type", "horizon", "model"
   )) %>%
-  add_coverage() %>%
   score() %>%
   add_pairwise_comparison(
     by = c("model", "target_type"), 
@@ -167,31 +140,17 @@ example_quantile %>%
   kable()
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Warning in get_score_names(scores, error = TRUE): The following scores have
-#> been previously computed, but are no longer column names of the data:
-#> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
-#> `?get_score_names` for further information.
-
-#> Warning in get_score_names(scores, error = TRUE): The following scores have
-#> been previously computed, but are no longer column names of the data:
-#> `interval_coverage, quantile_coverage, quantile_coverage_deviation`. See
-#> `?get_score_names` for further information.
-#> Warning in get_score_names(scores): The following scores have been previously
-#> computed, but are no longer column names of the data: `interval_coverage,
-#> quantile_coverage, quantile_coverage_deviation`. See `?get_score_names` for
-#> further information.
 ```
 
-| model                 | target_type |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
-|:----------------------|:------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|-------------------:|--------------------------:|
-| EuroCOVIDhub-baseline | Cases       | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.30 |                       1.6 |
-| EuroCOVIDhub-baseline | Deaths      |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               2.30 |                       3.8 |
-| EuroCOVIDhub-ensemble | Cases       | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.82 |                       1.0 |
-| EuroCOVIDhub-ensemble | Deaths      |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.60 |                       1.0 |
-| UMass-MechBayes       | Deaths      |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.75 |                       1.3 |
-| epiforecasts-EpiNow2  | Cases       | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               0.95 |                       1.2 |
-| epiforecasts-EpiNow2  | Deaths      |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               0.98 |                       1.6 |
+| model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
+|:----------------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|-------------------:|--------------------------:|
+| EuroCOVIDhub-baseline | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.30 |                       1.6 |
+| EuroCOVIDhub-baseline |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               2.30 |                       3.8 |
+| EuroCOVIDhub-ensemble | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.82 |                       1.0 |
+| EuroCOVIDhub-ensemble |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.60 |                       1.0 |
+| UMass-MechBayes       |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.75 |                       1.3 |
+| epiforecasts-EpiNow2  | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               0.95 |                       1.2 |
+| epiforecasts-EpiNow2  |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               0.98 |                       1.6 |
 
 `scoringutils` contains additional functionality to transform forecasts,
 to summarise scores at different levels, to visualise them, and to
@@ -226,7 +185,7 @@ example_quantile %>%
 #>    underprediction dispersion        bias interval_coverage_50
 #>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
-#> 2:    10284.972826 4102.50094  0.09726562            0.3281250
+#> 2:    10284.972826 4102.50094  0.09726563            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
 #> 4:        4.103261   30.18099  0.07265625            0.8750000
 #> 5:        2.098505   91.40625  0.33906250            0.6640625
