@@ -92,12 +92,13 @@ test_that("set_forecast_unit() revalidates a forecast object", {
 })
 
 
-test_that("function set_forecast_unit() gives warning when column is not there", {
-  expect_warning(
+test_that("function set_forecast_unit() errors when column is not there", {
+  expect_error(
     set_forecast_unit(
       example_quantile,
       c("location", "target_end_date", "target_type", "horizon", "model", "test1", "test2")
-    )
+    ),
+    "Assertion on 'forecast_unit' failed: Must be a subset of "
   )
 })
 
