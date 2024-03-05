@@ -219,7 +219,7 @@ Rows are automatically grouped together based on the values in all other columns
 
 The raw input data needs to be processed and validated using the function `as_forecast()`: 
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, cache=FALSE}
 library(scoringutils)
 forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast() 
@@ -377,11 +377,12 @@ plot_quantile_coverage(coverage) +
 Note that users can also compute individual coverage values as scores using \fct{score}. This represents a separate workflow that allows users to obtain coverage values as a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
 
 ```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
+coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
 p1 <- plot_interval_coverage(coverage) + 
   facet_wrap(~ target_type) + 
   theme(panel.spacing = unit(2, "lines"))
 
-p2 <- plot_quantile_coverage(coverage) + 
+p2 <- plot_quantile_coverage(coverage) +
   facet_wrap(~ target_type) + 
   theme(panel.spacing = unit(2, "lines"))
 
