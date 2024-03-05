@@ -28,34 +28,6 @@ collapse_messages <- function(type = "messages", messages) {
 }
 
 
-#' @title Filter function arguments
-#'
-#' @description This function compares a list of arguments with the arguments
-#' that a function can accept. It only returns those arguments that can be
-#' passed to the function.
-#'
-#' The function is used in [score()] to handle additional arguments passed to
-#' [score()] that get then passed along to the different scoring functions.
-#'
-#' @param fun A function to which arguments shall be passed
-#' @param args A list of arguments that shall be passed to fun
-#'
-#' @return A list of function arguments (a subset of `args`) that `fun` can
-#' accept.
-#' @keywords internal
-filter_function_args <- function(fun, args) {
-  # Check if the function accepts ... as an argument
-  if ("..." %in% names(formals(fun))) {
-    # If it does, return all arguments
-    return(args)
-  } else {
-    # Identify the arguments that fun() accepts and only keep valid ones
-    valid_args <- names(formals(fun))
-    return(args[names(args) %in% valid_args])
-  }
-}
-
-
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the
