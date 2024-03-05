@@ -132,6 +132,7 @@ example_quantile %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
+  summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
   head()
 ```
 
