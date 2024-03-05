@@ -236,7 +236,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' )
 set_forecast_unit <- function(data, forecast_unit) {
   data <- ensure_data.table(data)
-  assert_character(forecast_unit, min_len = 1)
+  assert_character(forecast_unit, min.len = 1)
   assert_subset(forecast_unit, names(data))
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])
