@@ -201,11 +201,11 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \bottomrule
 \end{tabular}
 }
-\caption{Expected input formats for \texttt{score}. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed} and \texttt{predicted} and should have a column called \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\caption{Formatting requirements for data inputs. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed}, \texttt{predicted}, and \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
 \label{tab:input-score}
 \end{table}
 
-The expected input is a \code{data.frame} (or similar) containing both the predictions and the observed values. At the minimum, the data.frame must have columns called `observed` and `predicted` and should also have a column called `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
+The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object". The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values, and a column `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
 
 The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
@@ -215,9 +215,9 @@ Apart from the columns `observed`, `predicted`, `model`, and the extra columns r
 
 Rows are automatically grouped together based on the values in all other columns present in the data (excluding required columns like `sample_id` or `quantile_level` and values computed by \pkg{scoringutils}). As the forecast unit is determined based on all existing columns, no column must be present that is unrelated to the forecast unit. As a very simplistic example, consider an additional row, `"even"`, that is one if the row number is even and zero otherwise. The existence of this column would change results, as \pkg{scoringutils} assumes it was relevant to grouping the forecasts. 
 
-## Forecast objects and input validation
+\subsection{Forecast objects and input validation} \label{sec:validation}
 
-Inputs can easily be processed and validated using the function `as_forecast()`: 
+The raw input data needs to be processed and validated using the function `as_forecast()`: 
 
 ```{r, eval=TRUE, echo=TRUE}
 library(scoringutils)
@@ -243,14 +243,13 @@ forecast_quantile <- example_quantile[horizon == 2] |>
   ) 
 ```
 
-The argument `forecast_unit` allows the user to manually set the unit of a single forecast. This is done by dropping all columns that are not either specified in the `forecast_unit` or are required columns (such as `observed`, `predicted`, `model`, `quantile_level`, or `sample_id`). 
-<!-- Question: should it drop / keep `model`? Is there any plausible case in which you'd call `as_forecast` after scoringutils has already computed any columns? -->
+The argument `forecast_unit` allows the user to manually set the unit of a single forecast. This is done by dropping all columns that are not either specified in the `forecast_unit` or are "protected" columns (such as `observed`, `predicted`, `model`, `quantile_level`, or `sample_id`). 
 The argument `forecast_type` allows users to manually specify the forecast type they expect. If the forecast type inferred from the input does not match the specified forecast type, an error is thrown.
 The other arguments can be used to specify the column names of the input data that correspond to the required columns. \fct{as\_forecast} will rename the specified columns to the corresponding required columns. 
 
 ## Diagnostic helper functions
 
-Various helper functions are available to diagnose and fix issues with the input data. Once a forecast object has successfully been created, diagnostic information will automatically be added to the output when printing a forecast object. This information includes the forecast type, the forecast unit, and additional information in case the object would fail validations. 
+Various helper functions are available to diagnose and fix issues with the input data. The most important one is `print()`. Once a forecast object has successfully been created, diagnostic information will automatically be added to the output when printing a forecast object. This information includes the forecast type, the forecast unit, and additional information in case the object would fail validations. 
 
 ```{r}
 print(forecast_quantile, 2)
@@ -276,7 +275,7 @@ scoringutils:::get_protected_columns()
 
 As suggested in \citep{bosseScoringEpidemiologicalForecasts2023}, users may want to transform forecasts before scoring them. Two commonly used scoring rules are the continuous ranked probability score (CRPS) and the weighted interval score (WIS). Both measure the absolute distance between the forecast and the observation. This may not be desirable, for example in the context of epidemiological forecasts, where infectious disease processes are usually modelled to occur on a multiplicative scale. Taking the logarithm of the forecasts and observations before scoring them makes it possible to evaluate forecasters based on how well they predicted the exponential growth rate.
 
-The function \fct{transform\_forecasts} allows users to apply arbitrary transformations to forecasts and observations. Users can specify a function via the argument \code{fun} (as well as supply additional function parameters). The default function is \fct{log_shift}, which is simply a wrapper around \fct{log} with an additional argument that allows adding an offset (i.e. \code{log(x + offset)}) to deal with zeroes in the data. Users can specify to either append the transformed forecasts to the existing data by setting \code{append = TRUE} (the default behaviour, resulting in an additional column `scale`) or to replace the existing forecasts in place.
+The function \fct{transform\_forecasts} takes a validated forecast object as input and allows users to apply arbitrary transformations to forecasts and observations. Users can specify a function via the argument \code{fun} (as well as supply additional function parameters). The default function is \fct{log_shift}, which is simply a wrapper around \fct{log} with an additional argument that allows adding an offset (i.e. \code{log(x + offset)}) to deal with zeroes in the data. Users can specify to either append the transformed forecasts to the existing data by setting \code{append = TRUE} (the default behaviour, resulting in an additional column `scale`) or to replace the existing forecasts in place.
 
 The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts} twice to replace them with zeroes first before appending transformed counts. 
 
@@ -294,7 +293,7 @@ forecast_quantile |>
 
 ### Displaying the number of forecasts available
 
-Users can get an overview of how many forecasts there are using \fct{get\_forecast\_counts}. The function returns a data.table of foreast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per `model`, `target_type` and `forecast_date`, we can run
+Users can get an overview of how many forecasts there are using \fct{get\_forecast\_counts}. The function takes a validated forecast object as input and returns a data.table of forecast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per `model`, `target_type` and `forecast_date`, we can run
 
 ```{r get-forecast-counts}
 forecast_counts <- forecast_quantile |>
@@ -334,11 +333,15 @@ One important quality of good forecasts is calibration. The term describes a sta
 
 A common way to visualise probabilistic calibration is the probability integral transform (PIT) histogram \citep{dawidPresentPositionPotential1984}. Observed values, $y$, are transformed using the CDF of the predictive distribution, $F$, to create a new variable $u$ with $u = F(y)$. $u$ is therefore simply the CDF of the predictive distribution evaluated at the observed value. If forecasts are probabilistically calibrated, then the transformed values will be uniformly distributed (for a proof see for example @angusProbabilityIntegralTransform1994). When plotting a histogram of PIT values (see Figure \ref{fig:pit-plots}), a systematic bias usually leads to a triangular shape, a U-shaped histogram corresponds to forecasts that are underdispersed (too sharp) and a hump shape appears when forecasts are overdispersed (too wide). There exist different variations of the PIT to deal with discrete instead of continuous data (see e.g. \cite{czadoPredictiveModelAssessment2009} and \cite{funkAssessingPerformanceRealtime2019}). The PIT version implemented in `scoringutils` for discrete variables follows \cite{funkAssessingPerformanceRealtime2019}. 
 
-Users can plot the PIT histograms using the function \fct{plot\_pit}. The output of the following is shown in Figure \ref{fig:pit-plots}: 
+Users can obtain PIT histograms based for validated forecast objects using the function \fct{get\_pit} and can visualise results using \fct{plot\_pit}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
+
+```{r echo=FALSE, include=FALSE}
+get_pit <- pit
+```
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_continuous |>
-  pit(by = c("model", "target_type")) |>
+  get_pit(by = c("model", "target_type")) |>
   plot_pit() + 
   facet_grid(target_type ~ model)
 ```
@@ -351,7 +354,7 @@ It is also important to note that uniformity of the PIT histogram does not guara
 
 For forecasts in a quantile-based format, there exists a second way to assess probabilistic calibration: we can easily compare the proportion of observations that fall below the $\tau$-quantiles of all forecasts ("empirical quantile coverage") to the nominal quantile coverage $\tau$. Similarly, we can compare the empirical coverage of the central prediction intervals formed by the predictive quantiles to the nominal interval coverage. For example, the central 50\% prediction intervals of all forecasts should contain around 50\% of the observed values, the 90\% central intervals should contain around 90\% of observations etc. In addition, we can define coverage deviation as the difference between nominal and empirical coverage.
 
-Interval and quantile coverage can easily be computed by calling \fct{get_coverage}. The function takes data in a quantile format as input and computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
+Interval and quantile coverage can easily be computed by calling \fct{get_coverage} on a validated forecast object (in a quantile-based format). The function computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation and returns a `data.table` with corresponding columns. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
 
 ```{r eval=FALSE}
 forecast_quantile |>
@@ -373,17 +376,12 @@ plot_quantile_coverage(coverage) +
 
 Note that users can also compute individual coverage values as scores using \fct{score}. This represents a separate workflow that allows users to obtain coverage values as a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
 
-<!-- It is in principle possible to convert sample-based forecasts to quantile-based forecasts using the function \fct{sample\_to\_quantile} to make use of `add_coverage()`. This should be done with caution, as the estimation of quantiles from predictive samples may be biased if the number of available samples is not sufficiently large.  -->
-
 ```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow predictions intervals."}
-cov_scores <- score(example_quantile) |>
-  summarise_scores(by = c("model", "target_type", "range", "quantile"))
-
-p1 <- plot_interval_coverage(cov_scores) + 
+p1 <- plot_interval_coverage(coverage) + 
   facet_wrap(~ target_type) + 
   theme(panel.spacing = unit(2, "lines"))
 
-p2 <- plot_quantile_coverage(cov_scores) + 
+p2 <- plot_quantile_coverage(coverage) + 
   facet_wrap(~ target_type) + 
   theme(panel.spacing = unit(2, "lines"))
 
@@ -391,7 +389,6 @@ p1 / p2 +
   plot_annotation(tag_levels = "A") + 
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom") 
-
 ```
 
 
@@ -400,7 +397,7 @@ Metrics and scoring rules can be applied to data in two different ways: They can
 
 ## score() and working with scoring rules
 
-The function \fct{score} is the workhorse of the package and applies a set of metrics and scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The output of \fct{score} is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). The input data can be a forecast object, in which case \fct{score} dispatches to a dedicated method with appropriate defaults depending on the forecast type. Or it can be a data.frame (or similar), in which case \fct{score.default} turns the input data into a forecast object and calls \fct{score} again.
+The function \fct{score} is the workhorse of the package and applies a set of metrics and scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The input of \fct{score} is a validated forecast object and its output is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). 
 
 ```{r}
 example_point[horizon == 2] |>
