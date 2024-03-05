@@ -119,11 +119,15 @@ as_forecast.default <- function(data,
   forecast_type <- get_forecast_type(data)
 
   if (!is.null(desired) && desired != forecast_type) {
-    stop(
-      "Forecast type determined by scoringutils based on input: `",
-      forecast_type,
-      "`. Desired forecast type: `", desired, "`."
+    #nolint start: object_usage_linter keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Forecast type determined by scoringutils based on input:
+        {.val {forecast_type}}.",
+        "i" = "Desired forecast type: {.val {desired}}."
+      )
     )
+    #nolint end
   }
 
   # construct class
