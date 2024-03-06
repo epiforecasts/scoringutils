@@ -7,7 +7,8 @@
 set_forecast_unit(data, forecast_unit)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
 
 \item{forecast_unit}{Character vector with the names of the columns that
 uniquely identify a single forecast.}

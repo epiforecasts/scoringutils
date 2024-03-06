@@ -14,7 +14,7 @@
 #' The function runs additional checks to make sure the data satisfies the
 #' requirements of the respective forecast type and throws an
 #' informative error if any issues are found.
-#' @inheritParams score
+#' @inheritParams as_forecast
 #' @importFrom cli cli_abort
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
@@ -197,7 +197,7 @@ get_score_names <- function(scores, error = FALSE) {
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#' @inheritParams validate_forecast
+#' @inheritParams as_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
 #' @export
@@ -215,7 +215,7 @@ get_forecast_unit <- function(data) {
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
-#' @inheritParams validate_forecast
+#' @inheritParams as_forecast
 #'
 #' @return A character vector with the names of protected columns in the data.
 #' If data is `NULL` (default) then it returns a list of all columns that are

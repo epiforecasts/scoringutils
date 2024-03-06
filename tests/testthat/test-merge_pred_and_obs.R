@@ -1,5 +1,5 @@
 test_that("merge pred and obs works", {
-  data <- example_quantile
+  data <- as_forecast(example_quantile)
   forecasts <- example_quantile_forecasts_only
   truth_data <- example_truth_only
 
@@ -8,7 +8,8 @@ test_that("merge pred and obs works", {
   data2 <- merge_pred_and_obs(
     forecasts = forecasts,
     observations = truth_data
-  )
+  ) %>%
+    as_forecast()
 
   eval2 <- suppressMessages(score(data = data2))
 

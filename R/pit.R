@@ -175,11 +175,11 @@ pit_sample <- function(observed,
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
-#' result <- pit(example_continuous, by = "model")
+#' result <- pit(as_forecast(example_continuous), by = "model")
 #' plot_pit(result)
 #'
 #' # example with quantile data
-#' result <- pit(example_quantile, by = "model")
+#' result <- pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(result)
 #' @export
 #' @references
@@ -193,7 +193,8 @@ pit <- function(data,
                 by,
                 n_replicates = 100) {
 
-  data <- as_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   forecast_type <- get_forecast_type(data)
 

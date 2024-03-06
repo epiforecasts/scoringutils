@@ -71,6 +71,13 @@ test_that("is_forecast() works as expected", {
   expect_false(is_forecast.forecast_quantile(ex_binary))
 })
 
+
+test_that("validate_forecast() works as expected", {
+  # test that by default, `as_forecast()` errors
+  expect_error(validate_forecast(data.frame(x = 1:10)),
+               "The input needs to be a forecast object.")
+})
+
 test_that("validate_forecast.forecast_binary works as expected", {
   test <- na.omit(data.table::copy(example_binary))
   test[, "sample_id" := 1:nrow(test)]
