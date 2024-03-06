@@ -52,12 +52,12 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     checkmate, 
+    cli,
     data.table,
     ggplot2 (>= 3.4.0),
     lifecycle,
     methods,
     Metrics,
-    rlang,
     scoringRules,
     stats
 Suggests: 

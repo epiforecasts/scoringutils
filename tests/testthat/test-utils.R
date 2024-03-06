@@ -75,7 +75,7 @@ test_that("get_score_names() works as expected", {
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
     get_score_names(ex),
-    "but are no longer column names of the data: `crps`"
+    "scores have been previously computed, but are no longer column names"
   )
 })
 
@@ -94,11 +94,11 @@ test_that("print() works on forecast_* objects", {
     forecast_unit <- get_forecast_unit(dat)
 
     # Check Forecast type
-    expect_output(print(dat), "Forecast type")
-    expect_output(print(dat), forecast_type)
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
     # Check Forecast unit
-    expect_output(print(dat), "Forecast unit")
-    expect_output(print(dat), pattern = paste(forecast_unit, collapse = " "))
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
 
     # Check print.data.table works.
     output_original <- capture.output(print(dat))
