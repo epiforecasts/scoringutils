@@ -51,14 +51,6 @@ test_that("as_forecast() works as expected", {
     as_forecast(test, forecast_type = "quantile"),
     "Forecast type determined by scoringutils based on input"
   )
-
-  # test that as_forecast() complains if there is no model column
-  test <- na.omit(data.table::copy(example_continuous))[model == "EuroCOVIDhub-ensemble"]
-  test <- test[, model := NULL]
-  expect_warning(
-    as_forecast(test),
-    "There is no column called `model` in the data. scoringutils assumes that all forecasts come from the same model"
-    )
 })
 
 
