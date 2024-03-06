@@ -70,7 +70,8 @@ scoring.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>A data.frame or data.table with predicted and observed values.</p></dd>
+<dd><p>A forecast object (a validated data.table with predicted and
+observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
 
 <dt>fun</dt>
@@ -156,13 +157,12 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span><span class="co"># negative values need to be handled (here by replacing them with 0)</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="co"># Here we use the default function log_shift() which is essentially the same</span></span></span>
 <span class="r-in"><span><span class="co"># as log(), but has an additional arguments (offset) that allows you add an</span></span></span>
 <span class="r-in"><span><span class="co"># offset before applying the logarithm.</span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Detected zeros in input values.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Detected zeros in input values.</span>
@@ -195,12 +195,11 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># alternatively, integrating the truncation in the transformation function:</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span> <span class="fu">transform_forecasts</span><span class="op">(</span></span></span>
 <span class="r-in"><span>   fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="log_shift.html">log_shift</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">}</span>, append <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span> <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Detected zeros in input values.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Try specifying offset = 1 (or any other offset).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Detected zeros in input values.</span>
@@ -234,11 +233,10 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span><span class="co"># specifying an offset for the log transformation removes the</span></span></span>
 <span class="r-in"><span><span class="co"># warning caused by zeros in the data</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>offset <span class="op">=</span> <span class="fl">1</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Error in validating forecast object: Error in validate_general(data) : <span style="color: #BBBB00;">!</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   After removing rows with NA values in the data, no forecasts are left. .</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast type:</span></span>
@@ -268,13 +266,10 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span><span class="co"># adding square root transformed forecasts to the original ones</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">sqrt</span>, label <span class="op">=</span> <span class="st">"sqrt"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model   scale          wis overprediction underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;  &lt;char&gt;        &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: EuroCOVIDhub-ensemble natural  5796.064569   1828.5715014    2120.6402853</span>
@@ -308,14 +303,19 @@ medRxiv 2023.01.23.23284722
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># adding multiple transformations</span></span></span>
 <span class="r-in"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">transform_forecasts</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">sqrt</span>, label <span class="op">=</span> <span class="st">"sqrt"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Error in validating forecast object: Error in validate_general(data) : <span style="color: #BBBB00;">!</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   After removing rows with NA values in the data, no forecasts are left. .</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast type:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> quantile</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast unit:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> location, target_end_date, target_type, location_name, forecast_date, model,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizon, and scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target_type observed location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       DE      2021-01-02       Cases   127300       Germany          &lt;NA&gt;</span>

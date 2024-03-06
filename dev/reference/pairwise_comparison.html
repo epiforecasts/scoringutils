@@ -183,7 +183,7 @@ model against which to compare other models.</p></dd>
 <span class="r-in"><span>  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="co"># restricts number of cores used on CRAN</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="fu">pairwise_comparison</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></span>
