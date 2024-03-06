@@ -70,6 +70,7 @@
 #' # negative values need to be handled (here by replacing them with 0)
 #' example_quantile %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
+#'   as_forecast() %>%
 #' # Here we use the default function log_shift() which is essentially the same
 #' # as log(), but has an additional arguments (offset) that allows you add an
 #' # offset before applying the logarithm.
@@ -78,6 +79,7 @@
 #'
 #' # alternatively, integrating the truncation in the transformation function:
 #' example_quantile %>%
+#'   as_forecast() %>%
 #'  transform_forecasts(
 #'    fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
 #'  ) %>%
@@ -86,6 +88,7 @@
 #' # specifying an offset for the log transformation removes the
 #' # warning caused by zeros in the data
 #' example_quantile %>%
+#'   as_forecast() %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(offset = 1, append = FALSE) %>%
 #'   head()
@@ -93,12 +96,14 @@
 #' # adding square root transformed forecasts to the original ones
 #' example_quantile %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
+#'   as_forecast() %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
 #'
 #' # adding multiple transformations
 #' example_quantile %>%
+#'   as_forecast() %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(fun = log_shift, offset = 1) %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
@@ -109,7 +114,8 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  original_data <- as_forecast(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+  original_data <- copy(data)
   scale_col_present <- ("scale" %in% colnames(original_data))
 
   # Error handling
@@ -126,7 +132,7 @@ transform_forecasts <- function(data,
     if (append && (label %in% original_data$scale)) {
       cli_warn(
         c(
-          "i" = "Appending new transformations with label {label}
+          "i" = "Appending new transformations with label '{label}'
           even though that entry is already present in column 'scale'."
         )
       )
@@ -145,6 +151,7 @@ transform_forecasts <- function(data,
     transformed_data[, observed := fun(observed, ...)]
     transformed_data[, scale := label]
     out <- rbind(original_data, transformed_data)
+    out <- suppressWarnings(suppressMessages(as_forecast(out)))
     return(out[])
   }
 
@@ -190,7 +197,7 @@ transform_forecasts <- function(data,
 #' log_shift(0:9, offset = 1)
 #'
 #' transform_forecasts(
-#'   example_quantile[observed > 0, ],
+#'   as_forecast(example_quantile)[observed > 0, ],
 #'   fun = log_shift,
 #'   offset = 1
 #'  )
@@ -233,7 +240,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' `set_forecast_unit()` can be directly piped into `as_forecast()` to
 #' check everything is in order.
 #'
-#' @inheritParams score
+#' @inheritParams as_forecast
 #' @param forecast_unit Character vector with the names of the columns that
 #' uniquely identify a single forecast.
 #' @importFrom cli cli_warn

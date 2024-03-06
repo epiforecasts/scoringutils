@@ -44,8 +44,11 @@ test_that("Output of `score()` has the class `scores()`", {
 # =============================================================================
 
 # common error handling --------------------------------------------------------
-test_that("function throws an error if data is missing", {
-  expect_error(suppressMessages(score(data = NULL)))
+test_that("function throws an error if data is not a forecast object", {
+  expect_error(
+    score(data = NULL),
+    "The input needs to be a forecast object."
+  )
 })
 
 # test_that("score() warns if column name equals a metric name", {
@@ -84,7 +87,7 @@ test_that("function produces output for a binary case", {
 })
 
 test_that("score.forecast_binary() errors with only NA values", {
-  only_nas <- copy(example_binary)[, predicted := NA_real_]
+  only_nas <- copy(as_forecast(example_binary))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -108,8 +111,9 @@ test_that(
       return(y)
     }
 
-    df <- data.table::copy(example_binary)[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"]
+    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
+                           target_type == "Cases" & location == "DE"] %>%
+      as_forecast()
 
     # passing a simple function works
     expect_equal(
@@ -192,7 +196,8 @@ test_that("function produces output for a point case", {
 test_that("Changing metrics names works", {
   metrics_test <- rules_point()
   names(metrics_test)[1] = "just_testing"
-  eval <- suppressMessages(score(example_point, metrics = metrics_test))
+  eval <- suppressMessages(score(as_forecast(example_point),
+                                 metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
@@ -202,7 +207,7 @@ test_that("Changing metrics names works", {
 
 
 test_that("score.forecast_point() errors with only NA values", {
-  only_nas <- copy(example_point)[, predicted := NA_real_]
+  only_nas <- copy(as_forecast(example_point))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -212,7 +217,8 @@ test_that("score.forecast_point() errors with only NA values", {
 # test quantile case -----------------------------------------------------------
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"]
+                           target_type == "Cases" & location == "DE"] %>%
+    as_forecast()
   eval <- score(df[!is.na(predicted)], separate_results = FALSE)
 
   expect_equal(
@@ -225,16 +231,16 @@ test_that("score_quantile correctly handles separate results = FALSE", {
 
 test_that("score() quantile produces desired metrics", {
   data <- data.frame(
-    observed = rep(1:10, each = 2),
-    predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
+    observed = rep(1:10, each = 3),
+    predicted = rep(c(-0.3, 0, 0.3), 10) + rep(1:10, each = 3),
     model = "Model 1",
-    date = as.Date("2020-01-01") + rep(1:10, each = 2),
-    quantile_level = rep(c(0.1, 0.9), times = 10)
+    date = as.Date("2020-01-01") + rep(1:10, each = 3),
+    quantile_level = rep(c(0.1, 0.5, 0.9), times = 10)
   )
 
-  out <- suppressWarnings(suppressMessages(
-    score(data = data, metrics = metrics_no_cov))
-  )
+  data <-suppressWarnings(suppressMessages(as_forecast(data)))
+
+  out <- score(data = data, metrics = metrics_no_cov)
   score_names <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
@@ -271,7 +277,7 @@ test_that("all quantile and range formats yield the same result", {
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
-  eval <- suppressMessages(score(example_quantile,
+  eval <- suppressMessages(score(as_forecast(example_quantile),
     metrics = list("wis" = wis)
   ))
 
@@ -285,7 +291,7 @@ test_that("WIS is the same with other metrics omitted or included", {
 
 
 test_that("score.forecast_quantile() errors with only NA values", {
-  only_nas <- copy(example_quantile)[, predicted := NA_real_]
+  only_nas <- copy(as_forecast(example_quantile))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -301,9 +307,9 @@ test_that("function produces output for a continuous format case", {
 
   eval <- scores_continuous
 
-  only_nas <- copy(example_continuous)[, predicted := NA_real_]
+  only_nas <- copy(as_forecast(example_continuous))[, predicted := NA_real_]
   expect_error(
-    score(only_nas),
+    score(as_forecast(only_nas)),
     "After removing rows with NA values in the data, no forecasts are left."
   )
 

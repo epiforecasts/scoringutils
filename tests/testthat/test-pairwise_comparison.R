@@ -50,7 +50,8 @@ test_that("pairwise_comparison() works", {
   data_formatted <- scoringutils::merge_pred_and_obs(
     forecasts_formatted,
     truth_formatted
-  )
+  ) %>%
+    as_forecast()
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
   eval <- score(data_formatted)
@@ -217,7 +218,7 @@ test_that("pairwise_comparison() works", {
 })
 
 test_that("pairwise_comparison() work in score() with integer data", {
-  eval <- suppressMessages(score(data = example_integer))
+  eval <- suppressMessages(score(data = as_forecast(example_integer)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
@@ -225,7 +226,7 @@ test_that("pairwise_comparison() work in score() with integer data", {
 
 
 test_that("pairwise_comparison() work in score() with binary data", {
-  eval <- suppressMessages(score(data = example_binary))
+  eval <- suppressMessages(score(data = as_forecast(example_binary)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("brier_score_relative_skill" %in% colnames(eval))

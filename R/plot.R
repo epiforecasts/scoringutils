@@ -28,7 +28,7 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(example_quantile) %>%
+#' scores <- score(as_forecast(example_quantile)) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 #'
@@ -148,7 +148,7 @@ plot_score_table <- function(scores,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_wis(scores,
@@ -232,7 +232,7 @@ plot_wis <- function(scores,
 #' scale_fill_gradient2 labs element_text coord_cartesian
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
@@ -273,7 +273,7 @@ plot_heatmap <- function(scores,
 #' Plot interval coverage
 #'
 #' @param coverage A data frame of coverage values as produced by
-#' `get_coverage()`
+#' [get_coverage()]
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -285,7 +285,7 @@ plot_heatmap <- function(scores,
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
-#' coverage <- get_coverage(example_quantile, by = c("model"))
+#' coverage <- get_coverage(as_forecast(example_quantile), by = "model")
 #' plot_interval_coverage(coverage)
 plot_interval_coverage <- function(coverage,
                                    colour = "model") {
@@ -344,7 +344,7 @@ plot_interval_coverage <- function(coverage,
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+#' coverage <- get_coverage(as_forecast(example_quantile), by = "model")
 #' plot_quantile_coverage(coverage)
 
 plot_quantile_coverage <- function(coverage,
@@ -413,7 +413,7 @@ plot_quantile_coverage <- function(coverage,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' pairwise <- pairwise_comparison(scores, by = "target_type")
 #' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
@@ -554,11 +554,11 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit(example_quantile,by = "model")
+#' pit <- pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit(example_integer,by = "model")
+#' pit <- pit(as_forecast(example_integer), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
@@ -671,7 +671,8 @@ plot_pit <- function(pit,
 #' @examples
 #' library(ggplot2)
 #' forecast_counts <- get_forecast_counts(
-#'   example_quantile, by = c("model", "target_type", "target_end_date")
+#'   as_forecast(example_quantile),
+#'   by = c("model", "target_type", "target_end_date")
 #' )
 #' plot_forecast_counts(
 #'  forecast_counts, x = "target_end_date", show_counts = FALSE
@@ -737,7 +738,7 @@ plot_forecast_counts <- function(forecast_counts,
 #' @importFrom data.table setDT melt
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' correlations <- correlation(
 #'  summarise_scores(scores),
 #'  digits = 2

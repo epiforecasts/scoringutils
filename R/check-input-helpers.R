@@ -87,7 +87,7 @@ assert_not_null <- function(...) {
 #' @description
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
-#' @inheritParams score
+#' @inheritParams as_forecast
 #' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
