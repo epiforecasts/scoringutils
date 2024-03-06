@@ -20,20 +20,6 @@ test_that("assert_not_null works", {
   expect_error(test_function())
 })
 
-test_that("check_quantiles works", {
-  expect_null(
-    check_quantiles(range = c(0.4, 0.5), quantiles = c(0.4, 0.5))
-  )
-  expect_error(
-    check_quantiles(range = c(0.4, 0.5), quantiles = c(0.3, 0.6)),
-    "must be between"
-  )
-  expect_error(
-    check_quantiles(range = c(0.4, 0.5), quantiles = c(0.41, 0.4)),
-    "must be increasing."
-  )
-})
-
 test_that("assure_model_column works", {
   test <- data.table::copy(example_binary)
   expect_message(
