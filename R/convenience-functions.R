@@ -239,8 +239,8 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' @importFrom cli cli_warn
 #' @return A data.table with only those columns kept that are relevant to
 #' scoring or denote the unit of a single forecast as specified by the user.
-#'
 #' @importFrom data.table ':=' is.data.table copy
+#' @importFrom checkmate assert_character assert_subset
 #' @export
 #' @keywords data-handling
 #' @examples
@@ -250,17 +250,8 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' )
 set_forecast_unit <- function(data, forecast_unit) {
   data <- ensure_data.table(data)
-  #nolint start: keyword_quote_linter object_usage_linter
-  missing <- check_columns_present(data, forecast_unit)
-  if (!is.logical(missing)) {
-    cli_warn(
-      c(
-        "!" = "{missing}"
-      )
-    )
-    forecast_unit <- intersect(forecast_unit, colnames(data))
-  }
-  #nolint end
+  assert_character(forecast_unit, min.len = 1)
+  assert_subset(forecast_unit, names(data))
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])
   # validate that output remains a valid forecast object if input was one before
