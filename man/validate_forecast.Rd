@@ -2,17 +2,11 @@
 % Please edit documentation in R/validate.R
 \name{validate_forecast}
 \alias{validate_forecast}
-\alias{validate_forecast.forecast_binary}
-\alias{validate_forecast.forecast_point}
 \alias{validate_forecast.forecast_quantile}
 \alias{validate_forecast.forecast_sample}
 \title{Validate input data}
 \usage{
 validate_forecast(data, ...)
-
-\method{validate_forecast}{forecast_binary}(data, ...)
-
-\method{validate_forecast}{forecast_point}(data, ...)
 
 \method{validate_forecast}{forecast_quantile}(data, ...)
 

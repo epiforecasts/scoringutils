@@ -121,11 +121,15 @@ as_forecast.default <- function(data,
   forecast_type <- get_forecast_type(data)
 
   if (!is.null(desired) && desired != forecast_type) {
-    stop(
-      "Forecast type determined by scoringutils based on input: `",
-      forecast_type,
-      "`. Desired forecast type: `", desired, "`."
+    #nolint start: object_usage_linter keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Forecast type determined by scoringutils based on input:
+        {.val {forecast_type}}.",
+        "i" = "Desired forecast type: {.val {desired}}."
+      )
     )
+    #nolint end
   }
 
   # construct class
@@ -173,7 +177,7 @@ validate_forecast.default <- function(data, ...) {
 
 
 #' @export
-#' @rdname validate_forecast
+#' @importFrom cli cli_abort
 #' @keywords check-forecasts
 validate_forecast.forecast_binary <- function(data, ...) {
   data <- validate_general(data)
@@ -182,31 +186,44 @@ validate_forecast.forecast_binary <- function(data, ...) {
     data, c("sample_id", "quantile_level")
   )
   if (!columns_correct) {
-    stop("Checking `data`: Input looks like a binary forecast, but an",
-         "additional column called `sample_id` or `quantile_level` was found.",
-         "Please remove the column.")
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Checking `data`: Input looks like a binary forecast, but an
+         additional column called `sample_id` or `quantile` was found.",
+        "i" = "Please remove the column."
+      )
+    )
   }
   input_check <- check_input_binary(data$observed, data$predicted)
   if (!is.logical(input_check)) {
-    stop("Checking `data`:",
-         "Input looks like a binary forecast, but found the following issue: ",
-         input_check)
+    cli_abort(
+      c(
+        "!" = "Checking `data`: Input looks like a binary forecast, but found
+             the following issue: {input_check}"
+      )
+    )
+    #nolint end
   }
   return(data[])
 }
 
 
 #' @export
-#' @rdname validate_forecast
+#' @importFrom cli cli_abort
 #' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, ...) {
   data <- validate_general(data)
-
+  #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(data$observed, data$predicted)
   if (!is.logical(input_check)) {
-    stop("Checking `data`:",
-         "Input looks like a point forecast, but found the following issue: ",
-         input_check)
+    cli_abort(
+      c(
+        "!" = "Checking `data`: Input looks like a point forecast, but found
+        the following issue: {input_check}"
+      )
+    )
+    #nolint end
   }
   return(data[])
 }
@@ -247,6 +264,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' information, messages and warnings
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
+#' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords internal_input_check
 validate_general <- function(data) {
@@ -268,14 +286,21 @@ validate_general <- function(data) {
   # check whether there are any NA values
   if (anyNA(data)) {
     if (nrow(na.omit(data)) == 0) {
-      stop(
-        "After removing rows with NA values in the data, no forecasts are left."
+      #nolint start: keyword_quote_linter
+      cli_abort(
+        c(
+          "!" = "After removing rows with NA values in the data, no forecasts
+          are left."
+        )
       )
     }
-    message(
-      "Some rows containing NA values may be removed. ",
-      "This is fine if not unexpected."
+    cli_inform(
+      c(
+        "i" = "Some rows containing NA values may be removed.
+        This is fine if not unexpected."
+      )
     )
+    #nolint end
   }
 
   return(data[])
@@ -371,6 +396,7 @@ is_forecast.forecast_quantile <- function(x, ...) {
 #'
 #' @param metrics A named list with metrics. Every element should be a scoring
 #' function to be applied to the data.
+#' @importFrom cli cli_warn
 #'
 #' @return A named list of metrics, with those filtered out that are not
 #' valid functions
@@ -383,7 +409,13 @@ validate_metrics <- function(metrics) {
   for (i in seq_along(metrics)) {
     check_fun <- check_function(metrics[[i]])
     if (!is.logical(check_fun)) {
-      warning("`Metrics` element number ", i, " is not a valid function")
+      #nolint start: keyword_quote_linter
+      cli_warn(
+        c(
+          "!" = "`Metrics` element number {i} is not a valid function."
+        )
+      )
+      #nolint end
       names(metrics)[i] <- "scoringutils_delete"
     }
   }

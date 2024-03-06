@@ -138,8 +138,10 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 ```
 
 | model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
@@ -172,8 +174,10 @@ example_quantile %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   head()
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 #>                    model target_type   scale         wis overprediction
 #>                   <char>      <char>  <char>       <num>          <num>
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
@@ -185,7 +189,7 @@ example_quantile %>%
 #>    underprediction dispersion        bias interval_coverage_50
 #>              <num>      <num>       <num>                <num>
 #> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
-#> 2:    10284.972826 4102.50094  0.09726563            0.3281250
+#> 2:    10284.972826 4102.50094  0.09726562            0.3281250
 #> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
 #> 4:        4.103261   30.18099  0.07265625            0.8750000
 #> 5:        2.098505   91.40625  0.33906250            0.6640625

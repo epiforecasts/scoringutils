@@ -7,6 +7,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 ## Package updates
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted". Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
 - The overall scoring workflow was updated. Most functions now operate on forecast objects, which can be created using the function `as_forecast()`. This function replaces the previous `check_forecast()` function and validates the inputs. `as_forecast()` also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. `score()` is now a generic function that dispatches the correct method based on the forecast type. Forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile".
+- `set_forecast_unit()` now errors if any of the values in `forecast_unit` are not columns of the data. 
 - Scoring rules (functions used for scoring) received a consistent interface and input checks:
   - Scoring rules for binary forecasts:
     - `observed`: factor with exactly 2 levels
@@ -44,6 +45,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Renamed `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` to `interval_coverage()` and `interval_coverage_deviation()`, respectively. Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
 - Added unit tests for `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` in order to make sure that the functions provide the correct warnings when insufficient quantiles are provided.
 - Documentation pkgdown pages are now created both for the stable and dev versions.
+- Switched to using `cli` for condition handling and signalling, and added tests for all the `check_*()` and `test_*()` functions. See #583 by @jamesmbaazam and reviewed by @nikosbosse and @seabbs.
 - Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Added a method for `print()` that prints out additional information for `forecast` objects. 

@@ -20,34 +20,6 @@ check_numeric_vector <- function(x, ...) {
 }
 
 
-#' Check that quantiles are valid
-#'
-#' @description
-#' Helper function to check that input quantiles are valid.
-#' Quantiles must be in the range specified, increase monotonically,
-#' and contain no duplicates.
-#'
-#' This is used in [bias_interval()]() and [bias_quantile()]() to
-#' provide informative errors to users.
-#'
-#' @param quantiles Numeric vector of quantiles to check
-#' @param name Character name to use in error messages
-#' @param range Numeric vector giving allowed range
-#'
-#' @return None. Function errors if quantiles are invalid.
-#'
-#' @keywords internal_input_check
-check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
-  if (any(quantiles < range[1]) || any(quantiles > range[2])) {
-    stop(name, " must be between ", range[1], " and ", range[2])
-  }
-
-  if (!all(diff(quantiles) > 0)) {
-    stop(name, " must be increasing")
-  }
-}
-
-
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description Tries to execute an expression. Internally, this is used to
@@ -76,6 +48,7 @@ check_try <- function(expr) {
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
 #' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
@@ -85,16 +58,25 @@ assert_not_null <- function(...) {
   varnames <- names(vars)
 
   calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
+  # Get the function name
+  calling_function <- as.list(
+    strsplit(
+      calling_function, "\\(", fixed = TRUE
+    )
+  )[[1]][1]
 
   for (i in seq_along(vars)) {
+    #nolint start: object_usage_linter
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      stop(
-        "variable '", varname,
-        "' is `NULL` in the following function call: '",
-        calling_function, "'"
+      cli_abort(
+        c(
+          "!" = "variable {varname} is {.val {NULL}} in the following
+          function call: {.fn {calling_function}}."
+        )
       )
     }
+    #nolint end
   }
   return(invisible(NULL))
 }
@@ -106,14 +88,20 @@ assert_not_null <- function(...) {
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams as_forecast
+#' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 assure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    message(
-      "There is no column called `model` in the data.",
-      "scoringutils assumes that all forecasts come from the same model" # nolint
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "!" = "There is no column called `model` in the data.",
+        "i" = "scoringutils assumes that all forecasts come from the
+        same model"
+      )
     )
+    #nolint end
     data[, model := "Unspecified model"]
   }
   return(data[])
@@ -156,14 +144,15 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #'
 #' @keywords internal_input_check
 check_no_NA_present <- function(data, columns) {
-  for (x in columns){
+  for (x in columns) {
     if (anyNA(data[[x]])) {
       msg <- paste0(
         "Checking `data`: ",
         sum(is.na(data[[x]])),
         " values in column `",
         x,
-        "`` are NA and corresponding rows will be removed. This is fine if not unexpected." # nolint
+        "`` are NA and corresponding rows will be removed. ",
+        "This is fine if not unexpected."
       )
       return(msg)
     }
@@ -210,7 +199,7 @@ check_columns_present <- function(data, columns) {
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   missing <- list()
-  for (x in columns){
+  for (x in columns) {
     if (!(x %in% colnames)) {
       missing[[x]] <- x
     }
@@ -274,7 +263,10 @@ check_data_columns <- function(data) {
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
     return(
-      "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
+      paste(
+        "Found columns `quantile_level` and `sample_id`.",
+        "Only one of these is allowed."
+      )
     )
   }
   return(TRUE)
