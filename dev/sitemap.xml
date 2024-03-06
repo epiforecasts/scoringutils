@@ -130,9 +130,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_numeric_vector.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/check_quantiles.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_try.html</loc>
   </url>
   <url>
@@ -185,9 +182,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_truth_only.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/filter_function_args.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/forecast_types.html</loc>
