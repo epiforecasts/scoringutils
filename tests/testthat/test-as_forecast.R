@@ -18,22 +18,31 @@ test_that("as_forecast() works as expected", {
 
   # expect no condition with columns already present
   expect_no_condition(
-    as_forecast(test, observed = "observed", predicted = "predicted",
-                forecast_unit = c("location", "model", "target_type",
-                                  "target_end_date", "horizon"),
-                quantile_level = "quantile_level")
+    as_forecast(test,
+      observed = "observed", predicted = "predicted",
+      forecast_unit = c(
+        "location", "model", "target_type",
+        "target_end_date", "horizon"
+      ),
+      quantile_level = "quantile_level"
+    )
   )
 
   # additional test with renaming the model column
   test <- na.omit(data.table::copy(example_continuous))
-  setnames(test, old = c("observed", "predicted", "sample_id", "model"),
-           new = c("obs", "pred", "sample", "mod"))
+  data.table::setnames(test,
+    old = c("observed", "predicted", "sample_id", "model"),
+    new = c("obs", "pred", "sample", "mod")
+  )
   expect_no_condition(
     as_forecast(test,
-                observed = "obs", predicted = "pred", model = "mod",
-                forecast_unit = c("location", "model", "target_type",
-                                  "target_end_date", "horizon"),
-                sample_id = "sample")
+      observed = "obs", predicted = "pred", model = "mod",
+      forecast_unit = c(
+        "location", "model", "target_type",
+        "target_end_date", "horizon"
+      ),
+      sample_id = "sample"
+    )
   )
 
   # test if desired forecast type does not correspond to inferred one
@@ -68,4 +77,35 @@ test_that("is_forecast() works as expected", {
   expect_false(is_forecast(data.table::as.data.table(example_point)))
   expect_false(is_forecast.forecast_sample(ex_quantile))
   expect_false(is_forecast.forecast_quantile(ex_binary))
+})
+
+test_that("validate_forecast.forecast_binary works as expected", {
+  test <- na.omit(data.table::copy(example_binary))
+  test[, "sample_id" := 1:nrow(test)]
+
+  # error if there is a superficial sample_id column
+  expect_error(
+    as_forecast(test),
+    "Input looks like a binary forecast, but an additional column called `sample_id` or `quantile` was found."
+  )
+
+  # expect error if probabilties are not in [0, 1]
+  test <- na.omit(data.table::copy(example_binary))
+  test[, "predicted" := predicted + 1]
+  expect_error(
+    as_forecast(test),
+    "Input looks like a binary forecast, but found the following issue"
+  )
+})
+
+test_that("validate_forecast.forecast_point() works as expected", {
+  test <- na.omit(data.table::copy(example_point))
+  test <- as_forecast(test)
+
+  # expect an error if column is changed to character after initial validation.
+  test <- test[, "predicted" := as.character(predicted)]
+  expect_error(
+    validate_forecast(test),
+    "Input looks like a point forecast, but found the following issue"
+  )
 })

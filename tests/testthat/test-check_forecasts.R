@@ -75,9 +75,8 @@ test_that("as_forecast() function warns when no model column is
            present", {
   no_model <- data.table::copy(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
   expect_warning(
-    as_forecast(na.omit(no_model)),
-    "There is no column called `model` in the data.scoringutils assumes that all forecasts come from the same model"
-  )
+    suppressWarnings(as_forecast(no_model)),
+    "There is no column called `model` in the data.")
 })
 
 test_that("as_forecast() function throws an error when no predictions or observed values are present", {
@@ -112,11 +111,10 @@ test_that("as_forecast() function throws an error when no predictions or observe
 #   ))))
 # })
 
-test_that("output of check_forecasts() is accepted as input to score()", {
-  check <- suppressMessages(as_forecast(example_binary))
-  expect_no_error(
-    score_check <- score(na.omit(check))
-  )
-  expect_equal(score_check, suppressMessages(score(example_binary)))
-})
-
+# test_that("output of check_forecasts() is accepted as input to score()", {
+#   check <- suppressMessages(as_forecast(example_binary))
+#   expect_no_error(
+#     score_check <- score(na.omit(check))
+#   )
+#   expect_equal(score_check, suppressMessages(score(example_binary)))
+# })

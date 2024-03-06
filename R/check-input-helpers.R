@@ -48,6 +48,7 @@ check_try <- function(expr) {
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
 #' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
@@ -57,16 +58,25 @@ assert_not_null <- function(...) {
   varnames <- names(vars)
 
   calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
+  # Get the function name
+  calling_function <- as.list(
+    strsplit(
+      calling_function, "\\(", fixed = TRUE
+    )
+  )[[1]][1]
 
   for (i in seq_along(vars)) {
+    #nolint start: object_usage_linter
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      stop(
-        "variable '", varname,
-        "' is `NULL` in the following function call: '",
-        calling_function, "'"
+      cli_abort(
+        c(
+          "!" = "variable {varname} is {.val {NULL}} in the following
+          function call: {.fn {calling_function}}."
+        )
       )
     }
+    #nolint end
   }
   return(invisible(NULL))
 }
@@ -78,14 +88,20 @@ assert_not_null <- function(...) {
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams score
+#' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 ensure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    warning(
-      "There is no column called `model` in the data.",
-      "scoringutils assumes that all forecasts come from the same model" # nolint
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "!" = "There is no column called `model` in the data.",
+        "i" = "scoringutils assumes that all forecasts come from the
+        same model"
+      )
     )
+    #nolint end
     data[, model := "Unspecified model"]
   }
   return(data[])
@@ -128,14 +144,15 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #'
 #' @keywords internal_input_check
 check_no_NA_present <- function(data, columns) {
-  for (x in columns){
+  for (x in columns) {
     if (anyNA(data[[x]])) {
       msg <- paste0(
         "Checking `data`: ",
         sum(is.na(data[[x]])),
         " values in column `",
         x,
-        "`` are NA and corresponding rows will be removed. This is fine if not unexpected." # nolint
+        "`` are NA and corresponding rows will be removed. ",
+        "This is fine if not unexpected."
       )
       return(msg)
     }
@@ -182,7 +199,7 @@ check_columns_present <- function(data, columns) {
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   missing <- list()
-  for (x in columns){
+  for (x in columns) {
     if (!(x %in% colnames)) {
       missing[[x]] <- x
     }

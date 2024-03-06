@@ -138,8 +138,10 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 ```
 
 | model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |

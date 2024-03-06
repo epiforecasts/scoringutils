@@ -61,6 +61,7 @@
 #' `length(observed) * n_replicates`
 #' @seealso [pit()]
 #' @importFrom stats runif
+#' @importFrom cli cli_abort cli_inform
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -93,16 +94,23 @@ pit_sample <- function(observed,
   # check al arguments are provided
   # this could be integrated into assert_not_null
   if (missing("observed") || missing("predicted")) {
-    stop("`observed` or `predicted` missing in function 'pit_sample()'")
+    cli_abort(
+      "`observed` or `predicted` missing in function {.fn pit_sample}."
+    )
   }
   assert_not_null(observed = observed, predicted = predicted)
 
   # check if there is more than one observation
   n <- length(observed)
   if (n == 1) {
-    message(
-      "you need more than one observation to assess uniformity of the PIT"
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "i" = "You need more than one observation to assess uniformity
+        of the PIT."
+      )
     )
+    #nolint end
     return(NA)
   }
 
@@ -111,18 +119,16 @@ pit_sample <- function(observed,
     predicted <- as.matrix(predicted)
   }
   if (!is.matrix(predicted)) {
-    msg <- sprintf(
-      "'predicted' should be a matrix. Instead `%s` was found",
-      class(predicted)[1]
+    cli_abort(
+      "`predicted` should be a {.cls matrix},
+      but it is of class {.cls {class(predicted)[1]}}."
     )
-    stop(msg)
   }
   if (nrow(predicted) != n) {
-    msg <- sprintf(
-      "Mismatch: 'observed' has length `%s`, but 'predicted' has `%s` rows.",
-      n, nrow(predicted)
+    cli_abort(
+      "Mismatch: 'observed' has length {.var {n}},
+      but `predicted` has {.var {nrow(predicted)}} rows."
     )
-    stop(msg)
   }
 
   # check data type ------------------------------------------------------------
