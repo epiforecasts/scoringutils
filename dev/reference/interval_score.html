@@ -215,7 +215,10 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span><span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu">interval_score</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  observed <span class="op">=</span> <span class="fl">4</span>, upper <span class="op">=</span> <span class="fl">8</span>, lower <span class="op">=</span> <span class="fl">2</span>, interval_range <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Found interval ranges between 0 and 1. Are you sure that's right? An interval range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval. If you want to score a (25%, 75%) prediction interval, set `interval_range = 50`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> Found interval ranges between 0 and 1. Are you sure that's right? An interval</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   range of 0.5 e.g. implies a (49.75%, 50.25%) prediction interval.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If you want to score a (25%, 75%) prediction interval, set `interval_range =</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   50`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once per session.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.985</span>
 <span class="r-in"><span></span></span>

@@ -216,16 +216,19 @@ additional information.</p>
 <span>      <span class="st">"target_type"</span>, <span class="st">"horizon"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span></span>
 <span><span class="va">forecast_quantile</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Forecast type:</span></span>
-<span><span class="co">#&gt; [1] "quantile"</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Forecast type:</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Forecast unit:</span></span>
-<span><span class="co">#&gt; [1] "model"           "location"        "target_end_date" "forecast_date"  </span></span>
-<span><span class="co">#&gt; [5] "target_type"     "horizon"        </span></span>
+<span><span class="co">#&gt; quantile</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Forecast unit:</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; model, location, target_end_date, forecast_date, target_type, and horizon</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Key: &lt;location, target_end_date, target_type&gt;</span></span>
 <span><span class="co">#&gt;        observed quantile_level predicted                model location</span></span>
@@ -316,7 +319,8 @@ argument you can specify the level of summary. For example, to see how
 many forecasts there are per model and target_type, we can run</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span><span class="va">forecast_quantile</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt; Key: &lt;model, target_type&gt;</span></span>
 <span><span class="co">#&gt;                    model target_type count</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt; &lt;int&gt;</span></span>
@@ -338,7 +342,8 @@ forecasts.</p>
 <span>  <span class="fu"><a href="../reference/get_forecast_counts.html">get_forecast_counts</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_forecast_counts.html">plot_forecast_counts</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"forecast_date"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-8-1.png" width="1056"></p>
 </div>
 <div class="section level2">
@@ -351,7 +356,8 @@ calling <code><a href="../reference/as_forecast.html">as_forecast()</a></code> e
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">scores</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      model location target_end_date forecast_date target_type</span></span>
@@ -538,7 +544,8 @@ certain prediction intervals is computed.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt;                    model   wis overprediction underprediction dispersion</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt; &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble 18000        10000.0          4200.0       3700</span></span>
@@ -590,7 +597,8 @@ targets, we can run</p>
 <span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt; Key: &lt;model, target_type&gt;</span></span>
 <span><span class="co">#&gt;                    model target_type         wis overprediction underprediction</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
@@ -643,7 +651,8 @@ targets, we can run</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_score_table.html">plot_score_table</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 </div>
 <div class="section level3">
@@ -656,7 +665,8 @@ categories using a simple heatmap:</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"location"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-15-1.png" width="1056"></p>
 </div>
 <div class="section level3">
@@ -670,7 +680,8 @@ visualised separately in the following way:</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"model"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_wis.html">plot_wis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
 </div>
 </div>
@@ -688,7 +699,8 @@ transformation.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt;                      model pit_value</span></span>
 <span><span class="co">#&gt;                     &lt;char&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1: EuroCOVIDhub-baseline     0.025</span></span>
@@ -708,7 +720,8 @@ transformation.</p>
 <span>  <span class="fu"><a href="../reference/pit.html">pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">model</span> <span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
 <p>Similarly for quantile-based forecasts:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -743,7 +756,8 @@ relative scores to an existing set of scores.</p>
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt;                     model       compare_against mean_scores_ratio         pval</span></span>
 <span><span class="co">#&gt;                    &lt;char&gt;                &lt;char&gt;             &lt;num&gt;        &lt;num&gt;</span></span>
 <span><span class="co">#&gt;  1: EuroCOVIDhub-baseline  epiforecasts-EpiNow2         1.3703452 9.164893e-18</span></span>
@@ -785,11 +799,11 @@ relative scores to an existing set of scores.</p>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
-<span><span class="co">#&gt; Warning in pairwise_comparison(scores = scores, metric = metric, baseline =</span></span>
-<span><span class="co">#&gt; baseline, : `by` is set to 'model', which is also the unit of a single</span></span>
-<span><span class="co">#&gt; forecast. This doesn't look right. All relative skill scores will be equal to</span></span>
-<span><span class="co">#&gt; 1.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
+<span><span class="co">#&gt; Warning: <span style="color: #BBBB00;">!</span> `by` is set to 'model', which is also the unit of a single forecast. This</span></span>
+<span><span class="co">#&gt;   doesn't look right.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> All relative skill scores will be equal to 1.</span></span>
 <span><span class="co">#&gt; Key: &lt;model&gt;</span></span>
 <span><span class="co">#&gt;                    model         wis overprediction underprediction dispersion</span></span>
 <span><span class="co">#&gt;                   &lt;char&gt;       &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt;</span></span>
@@ -831,7 +845,8 @@ of overlapping forecasts is empty.</p>
 <span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-24-1.png" width="864"></p>
 </div>
 <div class="section level2">
@@ -851,7 +866,8 @@ correlations.</p>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt;          wis overprediction underprediction  dispersion       bias</span></span>
 <span><span class="co">#&gt;        &lt;num&gt;          &lt;num&gt;           &lt;num&gt;       &lt;num&gt;      &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: 1.0000000      0.9917884       0.8821058  0.86564717 0.61587946</span></span>
@@ -892,7 +908,8 @@ correlations.</p>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_correlation.html">plot_correlation</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 </div>
 </div>
@@ -916,7 +933,8 @@ available samples is small.</p>
 <span>    quantile_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
 <span><span class="co">#&gt;      location location_name target_end_date target_type forecast_date</span></span>
 <span><span class="co">#&gt;        &lt;char&gt;        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;</span></span>
 <span><span class="co">#&gt;   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span></span>

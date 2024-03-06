@@ -133,9 +133,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_try.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/collapse_messages.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/compare_two_models.html</loc>
   </url>
   <url>
@@ -221,9 +218,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/infer_rel_skill_metric.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/interval_coverage.html</loc>

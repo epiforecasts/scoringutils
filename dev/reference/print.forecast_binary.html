@@ -95,15 +95,16 @@ including "Forecast type", "Score columns",
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Some rows containing NA values may be removed. This is fine if not unexpected.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Forecast type:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "quantile"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Forecast unit:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "location"        "target_end_date" "target_type"     "location_name"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "forecast_date"   "model"           "horizon"        </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast type:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> quantile</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast unit:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> location, target_end_date, target_type, location_name, forecast_date, model,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and horizon</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;location, target_end_date, target_type&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        location target_end_date target_type observed location_name</span>
