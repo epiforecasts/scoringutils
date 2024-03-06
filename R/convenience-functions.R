@@ -132,7 +132,7 @@ transform_forecasts <- function(data,
     if (append && (label %in% original_data$scale)) {
       cli_warn(
         c(
-          "i" = "Appending new transformations with label {label}
+          "i" = "Appending new transformations with label '{label}'
           even though that entry is already present in column 'scale'."
         )
       )

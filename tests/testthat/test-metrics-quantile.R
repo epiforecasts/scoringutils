@@ -867,7 +867,7 @@ test_that("ae_median_quantile() works as_expected", {
       ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
       NA_real_
     ),
-    "in order to compute the absolute error of the median, `0.5` must be among the quantile levels given. Returning `NA`."
+    'In order to compute the absolute error of the median, "0.5" must be among the quantiles given.'
   )
 
 

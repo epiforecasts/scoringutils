@@ -26,7 +26,7 @@ test_that("function transform_forecasts works", {
   expect_error(
     expect_warning(
       transform_forecasts(one, fun = sqrt),
-      "Appending new transformations with label 'log', even though that entry is already present in column 'scale'."
+      "Appending new transformations with label 'log' even though that entry is already present in column 'scale'"
     ),
     "There are instances with more than one forecast for the same target. "
   )
