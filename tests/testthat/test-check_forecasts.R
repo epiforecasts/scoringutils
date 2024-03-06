@@ -71,11 +71,10 @@ test_that("as_forecast() function throws an error with duplicate forecasts", {
   )
 })
 
-test_that("as_forecast() function warns when no model column is
-           present", {
+test_that("as_forecast() function warns when no model column is present", {
   no_model <- data.table::copy(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
   expect_warning(
-    suppressWarnings(as_forecast(no_model)),
+    as_forecast(no_model),
     "There is no column called `model` in the data.")
 })
 
