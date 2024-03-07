@@ -42,6 +42,7 @@ Other contributors:
 \itemize{
   \item Johannes Bracher \email{johannes.bracher@kit.edu} (\href{https://orcid.org/0000-0002-3777-1410}{ORCID}) [contributor]
   \item Toshiaki Asakura \email{toshiaki.asa9ra@gmail.com} (\href{https://orcid.org/0000-0001-8838-785X}{ORCID}) [contributor]
+  \item James Mba Azam \email{james.azam@lshtm.ac.uk} (\href{https://orcid.org/0000-0001-5782-7330}{ORCID}) [contributor]
 }
 
 }
