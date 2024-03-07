@@ -73,6 +73,9 @@ test_that("log_shift() works as expected", {
     log_shift(c(1, 0, 1), offset = 0),
     "Detected zeros in input values."
   )
+
+  # test that it does not accept a complex number
+  expect_error(log_shift(1:10, offset = 1, base = 1i))
 })
 
 
