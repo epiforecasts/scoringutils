@@ -180,11 +180,9 @@ get_score_names <- function(scores, error = FALSE) {
 #' @inheritParams validate_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
-#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
-  assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "score_names"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
