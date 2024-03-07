@@ -33,11 +33,11 @@ newly transformed values. Only relevant if \code{append = TRUE}.}
 the default option of \code{\link[=log_shift]{log_shift()}} this could be the \code{offset} argument.}
 }
 \value{
-A \code{data.table} with either a transformed version of the data, or one
-with both the untransformed and the transformed data. includes the original
-data as well as a transformation of the original data. There will be one
-additional column, `scale', present which will be set to "natural" for the
-untransformed forecasts.
+A forecast object with either a transformed version of the data, or
+one with both the untransformed and the transformed data. includes the
+original data as well as a transformation of the original data. There will
+be one additional column, `scale', present which will be set to "natural"
+for the untransformed forecasts.
 }
 \description{
 Function to transform forecasts and observed values before
