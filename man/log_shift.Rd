@@ -12,7 +12,7 @@ log_shift(x, offset = 0, base = exp(1))
 \item{offset}{number to add to the input value before taking the natural
 logarithm}
 
-\item{base}{a positive or complex number: the base with respect to which
+\item{base}{a positive number: the base with respect to which
 logarithms are computed. Defaults to e = exp(1).}
 }
 \value{
