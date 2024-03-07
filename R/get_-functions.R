@@ -170,7 +170,7 @@ get_score_names <- function(scores, error = FALSE) {
 }
 
 
-#' @title Get unit of a single forecast
+#' @title Get Unit Of A Single Forecast
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
@@ -180,9 +180,11 @@ get_score_names <- function(scores, error = FALSE) {
 #' @inheritParams validate_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
+#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
+  assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "score_names"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
@@ -190,7 +192,7 @@ get_forecast_unit <- function(data) {
 }
 
 
-#' @title Get protected columns from a data frame
+#' @title Get Protected Columns From Data
 #'
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
@@ -229,7 +231,7 @@ get_protected_columns <- function(data = NULL) {
 }
 
 
-#' @title Find duplicate forecasts
+#' @title Find Duplicate Forecasts
 #'
 #' @description Helper function to identify duplicate forecasts, i.e.
 #' instances where there is more than one forecast for the same prediction
@@ -238,17 +240,23 @@ get_protected_columns <- function(data = NULL) {
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. If `NULL` (the default) the function tries
-#' to infer the unit of a single forecast.
+#' the unit of a single forecast. By default the forecast unit will be
+#' automatically inferred from the data (see [get_forecast_unit()])
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
+#' @importFrom checkmate assert_data_frame assert_subset
 #' @keywords check-forecasts
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 
-get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
+get_duplicate_forecasts <- function(
+    data,
+    forecast_unit = get_forecast_unit(data)
+) {
+  assert_data_frame(data)
+  assert_subset(forecast_unit, colnames(data))
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   if (is.null(forecast_unit)) {
@@ -259,28 +267,4 @@ get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
   out <- data[scoringutils_InternalDuplicateCheck > 1]
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
-}
-
-
-#' @title Get a list of all attributes of a scoringutils object
-#'
-#' @param object A object of class `forecast_`
-#'
-#' @return A named list with the attributes of that object.
-#' @keywords internal
-get_scoringutils_attributes <- function(object) {
-  possible_attributes <- c(
-    "scoringutils_by",
-    "forecast_unit",
-    "forecast_type",
-    "score_names",
-    "messages",
-    "warnings"
-  )
-
-  attr_list <- list()
-  for (attr_name in possible_attributes) {
-    attr_list[[attr_name]] <- attr(object, attr_name)
-  }
-  return(attr_list)
 }
