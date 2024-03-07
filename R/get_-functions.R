@@ -258,8 +258,8 @@ get_protected_columns <- function(data = NULL) {
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. If `NULL` (the default) the function tries
-#' to infer the unit of a single forecast.
+#' the unit of a single forecast. By default the forecast unit will be
+#' automatically inferred from the data (see [get_forecast_unit()])
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
@@ -268,7 +268,12 @@ get_protected_columns <- function(data = NULL) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 
-get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
+get_duplicate_forecasts <- function(
+    data,
+    forecast_unit = get_forecast_unit(data)
+) {
+  assert_data_frame(data)
+  assert_subset(forecast_unit, colnames(data))
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   if (is.null(forecast_unit)) {

@@ -143,7 +143,7 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_duplicates <- function(data, forecast_unit = NULL) {
+check_duplicates <- function(data, forecast_unit = get_forecast_unit(data)) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {

@@ -10,8 +10,8 @@ check_duplicates(data, forecast_unit = NULL)
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
 
 \item{forecast_unit}{A character vector with the column names that define
-the unit of a single forecast. If \code{NULL} (the default) the function tries
-to infer the unit of a single forecast.}
+the unit of a single forecast. By default the forecast unit will be
+automatically inferred from the data (see \code{\link[=get_forecast_unit]{get_forecast_unit()}})}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
