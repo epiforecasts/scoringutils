@@ -116,7 +116,7 @@ test_that("new `get_type()` is equal to old `prediction_type()", {
 test_that("get_type() handles `NA` values", {
   expect_equal(get_type(c(1, NA, 3)), "integer")
   expect_equal(get_type(c(1, NA, 3.2)), "continuous")
-  expect_error(get_type(NA), "Can't get type: all values of are NA")
+  expect_error(get_type(NA), "Can't get type: all values of are \"NA\"")
 })
 
 
@@ -175,10 +175,10 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  df <- data.frame(observed = 1:10, predicted = factor(1:10))
+  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
   expect_error(
     get_forecast_type(df),
-    "Checking `data`: input doesn't satisfy criteria for any forecast type. Are you missing a column `quantile_level` or `sample_id`? Please check the vignette for additional info.",
+    "input doesn't satisfy criteria for any forecast type",
     fixed = TRUE
   )
 })

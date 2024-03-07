@@ -24,7 +24,13 @@ Authors@R: c(
     person(given = "Toshiaki Asakura",
            role = c("ctb"),
            email = "toshiaki.asa9ra@gmail.com",
-           comment = c(ORCID = "0000-0001-8838-785X")), 
+           comment = c(ORCID = "0000-0001-8838-785X")),
+    person(given = "James",
+           middle = "Mba",
+           family = "Azam",
+           role = c("ctb"),
+           email = "james.azam@lshtm.ac.uk",
+           comment = c(ORCID = "0000-0001-5782-7330")),
     person("Sebastian", "Funk", 
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("aut")))
@@ -42,13 +48,13 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    checkmate, 
+    checkmate,
+    cli,
     data.table,
     ggplot2 (>= 3.4.0),
     lifecycle,
     methods,
     Metrics,
-    rlang,
     scoringRules,
     stats
 Suggests: 

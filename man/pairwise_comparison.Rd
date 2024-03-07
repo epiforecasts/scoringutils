@@ -70,7 +70,7 @@ Andrea Riebler and Michaela Paul.
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 pairwise <- pairwise_comparison(scores, by = "target_type")
 
 library(ggplot2)

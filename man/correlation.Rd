@@ -25,7 +25,7 @@ Calculate the correlation between different metrics for a data.frame of
 scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 correlation(scores, digits = 2)
 }
 \keyword{scoring}

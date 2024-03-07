@@ -7,7 +7,8 @@
 apply_rules(data, metrics, ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},

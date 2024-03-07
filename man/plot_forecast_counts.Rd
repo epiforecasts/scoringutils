@@ -38,7 +38,8 @@ Visualise Where Forecasts Are Available
 \examples{
 library(ggplot2)
 forecast_counts <- get_forecast_counts(
-  example_quantile, by = c("model", "target_type", "target_end_date")
+  as_forecast(example_quantile),
+  by = c("model", "target_type", "target_end_date")
 )
 plot_forecast_counts(
  forecast_counts, x = "target_end_date", show_counts = FALSE

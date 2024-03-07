@@ -67,12 +67,12 @@ test_that("function throws an error for wrong input formats", {
   # wrong length
   expect_error(
     assert_input_binary(observed = observed, predicted = runif(15, min = 0, max = 1)),
-    "`observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15",
+    "`observed` and `predicted` must either be of length 1 or of equal length.",
     fixed = TRUE
   )
   expect_error(
     assert_input_point(observed_point, runif(15, min = 0, max = 1)),
-    "Assertion on 'observed' failed: `observed` and `predicted` must either be of length 1 or of equal length. Found 10 and 15.",
+    "`observed` and `predicted` must either be of length 1 or of equal length",
     fixed = TRUE
   )
 
@@ -153,7 +153,7 @@ test_that("Brier score works with different inputs", {
 
 
 test_that("Binary metrics work within and outside of `score()`", {
-  result <- score(df)
+  result <- score(as_forecast(df))
   expect_equal(
     brier_score(observed, predicted),
     result$brier_score

@@ -30,7 +30,7 @@ over-prediction, under-prediction and for high dispersion (lack of sharpness)
 }
 \examples{
 library(ggplot2)
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 plot_wis(scores,

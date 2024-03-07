@@ -10,52 +10,6 @@ available_metrics <- function() {
 }
 
 
-#' @title Collapse several messages to one
-#'
-#' @description Internal helper function to facilitate generating messages
-#' and warnings.
-#'
-#' @param type character, should be either "messages", "warnings" or "errors"
-#' @param messages the messages or warnings to collapse
-#'
-#' @return string with the message or warning
-#' @keywords internal
-collapse_messages <- function(type = "messages", messages) {
-  paste0(
-    "The following ",  type, " were produced when checking inputs:\n",
-    paste(paste0(seq_along(messages), ". "), messages, collapse = "\n")
-  )
-}
-
-
-#' @title Filter function arguments
-#'
-#' @description This function compares a list of arguments with the arguments
-#' that a function can accept. It only returns those arguments that can be
-#' passed to the function.
-#'
-#' The function is used in [score()] to handle additional arguments passed to
-#' [score()] that get then passed along to the different scoring functions.
-#'
-#' @param fun A function to which arguments shall be passed
-#' @param args A list of arguments that shall be passed to fun
-#'
-#' @return A list of function arguments (a subset of `args`) that `fun` can
-#' accept.
-#' @keywords internal
-filter_function_args <- function(fun, args) {
-  # Check if the function accepts ... as an argument
-  if ("..." %in% names(formals(fun))) {
-    # If it does, return all arguments
-    return(args)
-  } else {
-    # Identify the arguments that fun() accepts and only keep valid ones
-    valid_args <- names(formals(fun))
-    return(args[names(args) %in% valid_args])
-  }
-}
-
-
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the
@@ -70,6 +24,7 @@ filter_function_args <- function(fun, args) {
 #'
 #' @param ... Arguments to pass to `fun`
 #' @param fun A function to execute
+#' @importFrom cli cli_warn
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
 #' @keywords scoring
@@ -97,11 +52,15 @@ run_safely <- function(..., fun) {
   result <- try(do.call(fun, valid_args), silent = TRUE)
 
   if (inherits(result, "try-error")) {
+    #nolint start: object_usage_linter
     msg <- conditionMessage(attr(result, "condition"))
-    warning(
-      "Function execution failed, returning NULL. Error: ",
-      msg
+    cli_warn(
+      c(
+        "!" = "Function execution failed, returning NULL.
+        Error: {msg}."
+      )
     )
+    #nolint end
     return(NULL)
   }
   return(result)
@@ -134,6 +93,7 @@ ensure_data.table <- function(data) {
 #' `as_forecast()`
 #' @param ... additional arguments for [print()]
 #' @return returns x invisibly
+#' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export
 #' @keywords check-forecasts
 #' @examples
@@ -144,10 +104,10 @@ print.forecast_binary <- function(x, ...) {
   # check whether object passes validation
   validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
   if (inherits(validation, "try-error")) {
-    validation_msg <- conditionMessage(attr(validation, "condition"))
-    warning(
-      "Error in validating forecast object:\n",
-      validation_msg
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}."
+      )
     )
   }
 
@@ -157,26 +117,38 @@ print.forecast_binary <- function(x, ...) {
     silent = TRUE
   )
   forecast_unit <- get_forecast_unit(x)
-  score_cols <- get_score_names(x)
 
   # Print forecast object information
   if (inherits(forecast_type, "try-error")) {
-    message("Could not determine forecast type due to error in validation.")
+    cli_inform(
+      "Could not determine forecast type due to error in validation."
+    )
   } else {
-    cat("Forecast type:\n")
-    print(forecast_type)
+    cli_text(
+      col_blue(
+        "Forecast type:"
+      )
+    )
+    cli_text(
+      "{forecast_type}"
+    )
   }
 
   if (length(forecast_unit) == 0) {
-    message("Could not determine forecast unit")
+    cli_inform(
+      c(
+        "!" = "Could not determine forecast unit."
+      )
+    )
   } else {
-    cat("\nForecast unit:\n")
-    print(forecast_unit)
-  }
-
-  if (!is.null(score_cols)) {
-    cat("\nScore columns:\n")
-    print(score_cols)
+    cli_text(
+      col_blue(
+        "Forecast unit:"
+      )
+    )
+    cli_text(
+      "{forecast_unit}"
+    )
   }
 
   cat("\n")

@@ -93,7 +93,8 @@ test_that("summarise_scores() can compute relative measures", {
 
 test_that("summarise_scores() across argument works as expected", {
   ex <- data.table::copy(example_quantile)
-  scores <- suppressMessages(score(ex))[, location_name := NULL]
+  ex <- suppressMessages(as_forecast(ex))
+  scores <- score(ex)[, location_name := NULL]
 
   expect_warning(
     summarise_scores(

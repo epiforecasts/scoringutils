@@ -7,7 +7,8 @@
 get_forecast_unit(data)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
 }
 \value{
 A character vector with the column names that define the unit of

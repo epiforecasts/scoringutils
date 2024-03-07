@@ -7,7 +7,8 @@
 get_coverage(data, by = "model")
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{by}{character vector that denotes the level of grouping for which the
 coverage values should be computed. By default (\code{"model"}), one coverage

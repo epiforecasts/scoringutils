@@ -34,14 +34,15 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' get_forecast_counts(example_quantile,
+#' get_forecast_counts(
+#'   as_forecast(example_quantile),
 #'   by = c("model", "target_type")
 #' )
 get_forecast_counts <- function(data,
                                 by = NULL,
                                 collapse = c("quantile_level", "sample_id")) {
-
-  data <- as_forecast(data)
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   forecast_unit <- get_forecast_unit(data)
   data <- na.omit(data)
 

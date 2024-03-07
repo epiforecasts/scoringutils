@@ -48,7 +48,7 @@ do, you also have to manually update the attribute by calling
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 library(magrittr) # pipe operator
-scores <- score(example_continuous)
+scores <- score(as_forecast(example_continuous))
 
 # get scores by model
 summarise_scores(scores,by = "model")

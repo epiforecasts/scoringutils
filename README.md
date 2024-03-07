@@ -138,8 +138,10 @@ example_quantile %>%
     digits = 2
   ) %>%
   kable()
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 ```
 
 | model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
@@ -171,33 +173,34 @@ example_quantile %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
+  summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
   head()
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
 #> Some rows containing NA values may be removed. This is fine if not unexpected.
-#>                    model target_type   scale         wis overprediction
-#>                   <char>      <char>  <char>       <num>          <num>
-#> 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755
-#> 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696
-#> 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842
-#> 4: EuroCOVIDhub-ensemble      Deaths natural    41.42249       7.138247
-#> 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117
-#> 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601
-#>    underprediction dispersion        bias interval_coverage_50
-#>              <num>      <num>       <num>                <num>
-#> 1:     4237.177310 3663.52458 -0.05640625            0.3906250
-#> 2:    10284.972826 4102.50094  0.09726562            0.3281250
-#> 3:     3260.355639 5664.37795 -0.07890625            0.4687500
-#> 4:        4.103261   30.18099  0.07265625            0.8750000
-#> 5:        2.098505   91.40625  0.33906250            0.6640625
-#> 6:       16.800951   26.87239 -0.02234375            0.4609375
-#>    interval_coverage_90 interval_coverage_deviation   ae_median
-#>                   <num>                       <num>       <num>
-#> 1:            0.8046875                 -0.10230114 17707.95312
-#> 2:            0.8203125                 -0.11437500 32080.48438
-#> 3:            0.7890625                 -0.06963068 21530.69531
-#> 4:            1.0000000                  0.20380682    53.13281
-#> 5:            1.0000000                  0.12142045   233.25781
-#> 6:            0.8750000                 -0.02488636    78.47656
+#>                    model target_type   scale     wis overprediction
+#>                   <char>      <char>  <char>   <num>          <num>
+#> 1: EuroCOVIDhub-ensemble       Cases natural 11600.0        3650.00
+#> 2: EuroCOVIDhub-baseline       Cases natural 22100.0        7700.00
+#> 3:  epiforecasts-EpiNow2       Cases natural 14400.0        5510.00
+#> 4: EuroCOVIDhub-ensemble      Deaths natural    41.4           7.14
+#> 5: EuroCOVIDhub-baseline      Deaths natural   159.0          65.90
+#> 6:       UMass-MechBayes      Deaths natural    52.7           8.98
+#>    underprediction dispersion    bias interval_coverage_50 interval_coverage_90
+#>              <num>      <num>   <num>                <num>                <num>
+#> 1:          4240.0     3660.0 -0.0564                0.391                0.805
+#> 2:         10300.0     4100.0  0.0973                0.328                0.820
+#> 3:          3260.0     5660.0 -0.0789                0.469                0.789
+#> 4:             4.1       30.2  0.0727                0.875                1.000
+#> 5:             2.1       91.4  0.3390                0.664                1.000
+#> 6:            16.8       26.9 -0.0223                0.461                0.875
+#>    interval_coverage_deviation ae_median
+#>                          <num>     <num>
+#> 1:                     -0.1020   17700.0
+#> 2:                     -0.1140   32100.0
+#> 3:                     -0.0696   21500.0
+#> 4:                      0.2040      53.1
+#> 5:                      0.1210     233.0
+#> 6:                     -0.0249      78.5
 ```
 
 ## Citation
