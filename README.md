@@ -140,8 +140,6 @@ example_quantile %>%
   kable()
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
-#> ℹ Some rows containing NA values may be removed. This is fine if not
-#>   unexpected.
 ```
 
 | model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
@@ -170,13 +168,12 @@ applying the natural logarithm.
 ``` r
 example_quantile %>%
  .[, observed := ifelse(observed < 0, 0, observed)] %>%
+  as_forecast() %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
   summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
   head()
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
-#> Some rows containing NA values may be removed. This is fine if not unexpected.
 #>                    model target_type   scale     wis overprediction
 #>                   <char>      <char>  <char>   <num>          <num>
 #> 1: EuroCOVIDhub-ensemble       Cases natural 11600.0        3650.00
