@@ -84,11 +84,3 @@ NULL
 #' @name document_test_functions
 #' @keywords internal
 NULL
-
-#' Documentation template for scoring input data
-#' @param data A data frame (or similar) of forecasts following the
-#' specifications detailed in [score()].
-#' @param scores A data.table of scores as produced by [score()].
-#' @name document_score_data
-#' @keywords internal
-NULL
