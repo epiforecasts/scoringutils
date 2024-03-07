@@ -34,7 +34,7 @@ model against which to compare other models.}
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A ggplot2 object with a coloured table of summarised scores
+A data.table with pairwise comparisons
 }
 \description{
 Compute relative scores between different models making pairwise

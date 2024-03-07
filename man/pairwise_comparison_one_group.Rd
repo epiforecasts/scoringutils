@@ -27,6 +27,9 @@ split data.frames.}
 \item{...}{additional arguments for the comparison between two models. See
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
+\value{
+A data.table with pairwise comparisons
+}
 \description{
 This function does the pairwise comparison for one set of forecasts, but
 multiple models involved. It gets called from \code{\link[=pairwise_comparison]{pairwise_comparison()}}.

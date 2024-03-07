@@ -35,6 +35,10 @@ determine p-values.}
 \item{n_permutations}{numeric, the number of permutations for a
 permutation test. Default is 999.}
 }
+\value{
+A list with mean score ratios and p-values for the comparison
+between two models
+}
 \description{
 This function compares two models based on the subset of forecasts for which
 both models have made a prediction. It gets called

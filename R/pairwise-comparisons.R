@@ -41,7 +41,7 @@
 #' model against which to compare other models.
 #' @param ... additional arguments for the comparison between two models. See
 #' [compare_two_models()] for more information.
-#' @return A ggplot2 object with a coloured table of summarised scores
+#' @return A data.table with pairwise comparisons
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -179,7 +179,7 @@ pairwise_comparison <- function(
 #' subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
-#' @inheritParams pairwise_comparison
+#' @inherit pairwise_comparison params return
 #' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
@@ -322,6 +322,8 @@ pairwise_comparison_one_group <- function(scores,
 #' determine p-values.
 #' @param n_permutations numeric, the number of permutations for a
 #' permutation test. Default is 999.
+#' @return A list with mean score ratios and p-values for the comparison
+#' between two models
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @keywords internal
