@@ -76,9 +76,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_not_null.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/assure_model_column.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/available_metrics.html</loc>
   </url>
   <url>
@@ -92,9 +89,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_columns_present.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/check_data_columns.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_point.html</loc>
@@ -158,6 +152,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/ensure_data.table.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/ensure_model_column.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_binary.html</loc>

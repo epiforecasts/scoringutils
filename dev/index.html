@@ -275,35 +275,34 @@
 <span>  <span class="fu"><a href="reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>append <span class="op">=</span> <span class="cn">TRUE</span>, fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="va">score</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
-<span><span class="co">#&gt;   unexpected.</span></span>
-<span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
-<span><span class="co">#&gt;   unexpected.</span></span>
-<span><span class="co">#&gt;                    model target_type   scale         wis overprediction</span></span>
-<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;  &lt;char&gt;       &lt;num&gt;          &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases natural 11550.70664    3650.004755</span></span>
-<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural 22090.45747    7702.983696</span></span>
-<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases natural 14438.43943    5513.705842</span></span>
-<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths natural    41.42249       7.138247</span></span>
-<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths natural   159.40387      65.899117</span></span>
-<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths natural    52.65195       8.978601</span></span>
-<span><span class="co">#&gt;    underprediction dispersion        bias interval_coverage_50</span></span>
-<span><span class="co">#&gt;              &lt;num&gt;      &lt;num&gt;       &lt;num&gt;                &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:     4237.177310 3663.52458 -0.05640625            0.3906250</span></span>
-<span><span class="co">#&gt; 2:    10284.972826 4102.50094  0.09726562            0.3281250</span></span>
-<span><span class="co">#&gt; 3:     3260.355639 5664.37795 -0.07890625            0.4687500</span></span>
-<span><span class="co">#&gt; 4:        4.103261   30.18099  0.07265625            0.8750000</span></span>
-<span><span class="co">#&gt; 5:        2.098505   91.40625  0.33906250            0.6640625</span></span>
-<span><span class="co">#&gt; 6:       16.800951   26.87239 -0.02234375            0.4609375</span></span>
-<span><span class="co">#&gt;    interval_coverage_90 interval_coverage_deviation   ae_median</span></span>
-<span><span class="co">#&gt;                   &lt;num&gt;                       &lt;num&gt;       &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:            0.8046875                 -0.10230114 17707.95312</span></span>
-<span><span class="co">#&gt; 2:            0.8203125                 -0.11437500 32080.48438</span></span>
-<span><span class="co">#&gt; 3:            0.7890625                 -0.06963068 21530.69531</span></span>
-<span><span class="co">#&gt; 4:            1.0000000                  0.20380682    53.13281</span></span>
-<span><span class="co">#&gt; 5:            1.0000000                  0.12142045   233.25781</span></span>
-<span><span class="co">#&gt; 6:            0.8750000                 -0.02488636    78.47656</span></span></code></pre></div>
+<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt; Some rows containing NA values may be removed. This is fine if not unexpected.</span></span>
+<span><span class="co">#&gt;                    model target_type   scale     wis overprediction</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;  &lt;char&gt;   &lt;num&gt;          &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases natural 11600.0        3650.00</span></span>
+<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural 22100.0        7700.00</span></span>
+<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases natural 14400.0        5510.00</span></span>
+<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths natural    41.4           7.14</span></span>
+<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths natural   159.0          65.90</span></span>
+<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths natural    52.7           8.98</span></span>
+<span><span class="co">#&gt;    underprediction dispersion    bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;              &lt;num&gt;      &lt;num&gt;   &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:          4240.0     3660.0 -0.0564                0.391                0.805</span></span>
+<span><span class="co">#&gt; 2:         10300.0     4100.0  0.0973                0.328                0.820</span></span>
+<span><span class="co">#&gt; 3:          3260.0     5660.0 -0.0789                0.469                0.789</span></span>
+<span><span class="co">#&gt; 4:             4.1       30.2  0.0727                0.875                1.000</span></span>
+<span><span class="co">#&gt; 5:             2.1       91.4  0.3390                0.664                1.000</span></span>
+<span><span class="co">#&gt; 6:            16.8       26.9 -0.0223                0.461                0.875</span></span>
+<span><span class="co">#&gt;    interval_coverage_deviation ae_median</span></span>
+<span><span class="co">#&gt;                          &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:                     -0.1020   17700.0</span></span>
+<span><span class="co">#&gt; 2:                     -0.1140   32100.0</span></span>
+<span><span class="co">#&gt; 3:                     -0.0696   21500.0</span></span>
+<span><span class="co">#&gt; 4:                      0.2040      53.1</span></span>
+<span><span class="co">#&gt; 5:                      0.1210     233.0</span></span>
+<span><span class="co">#&gt; 6:                     -0.0249      78.5</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
