@@ -12,6 +12,9 @@ new_scores(scores, score_names)
 \item{score_names}{A character vector with the names of the scores
 (i.e. the names of the scoring rules used for scoring)}
 }
+\value{
+An object of class \code{scores}
+}
 \description{
 This function creates an object of class \code{scores} based on a
 data.table or similar.

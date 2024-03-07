@@ -32,14 +32,9 @@ column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code
 default metrics used.}
 }
 \value{
-A data.table with unsummarised scores. This will generally be
-one score per forecast (as defined by the unit of a single forecast).
-
-For quantile-based forecasts, one score per quantile will be returned
-instead. This is done as scores can be computed and may be of interest
-for individual quantiles. You can call \code{\link[=summarise_scores]{summarise_scores()}}) on the
-unsummarised scores to obtain one score per forecast unit for quantile-based
-forecasts.
+A data.table with unsummarised scores, i.e. with one score per
+forecast. See \code{\link[=summarise_scores]{summarise_scores()}}) for information on how to summarise
+scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a data.frame
