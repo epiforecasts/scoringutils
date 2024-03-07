@@ -113,7 +113,7 @@ run_safely <- function(..., fun) {
 #' If the object is not a data table, it is converted to one. If the object
 #' is a data table, a copy of the object is returned.
 #' @param data An object to ensure is a data table
-#' @return A data table
+#' @return A data.table/a copy of an exising data.table
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {
@@ -133,7 +133,7 @@ ensure_data.table <- function(data) {
 #' @param x An object of class 'forecast_*' object as produced by
 #' `as_forecast()`
 #' @param ... additional arguments for [print()]
-#' @return NULL
+#' @return returns x invisibly
 #' @export
 #' @keywords check-forecasts
 #' @examples
