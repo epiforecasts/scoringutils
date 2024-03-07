@@ -35,9 +35,9 @@ test_that("removing NA rows from data works as expected", {
     c("forecast_sample", "data.table", "data.frame")
   )
 
-  attributes <- get_scoringutils_attributes(ex)
+  attributes <- attributes(ex)
   expect_equal(
-    get_scoringutils_attributes(na.omit(ex)),
+    attributes(na.omit(ex)),
     attributes
   )
 })
