@@ -101,18 +101,6 @@ test_that("check_columns_present works", {
   )
 })
 
-test_that("check_has_attribute works", {
-  expect_identical(
-    capture.output(
-      check_has_attribute(example_binary, "forecast")
-    ),
-    "[1] \"Found no attribute `forecast`\""
-  )
-  expect_true(
-    check_has_attribute(example_binary, "names")
-  )
-})
-
 test_that("test_columns_not_present works", {
   expect_true(
     test_columns_not_present(example_binary, "sample_id")
