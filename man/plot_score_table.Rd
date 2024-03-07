@@ -22,7 +22,7 @@ metric, but you can provide additional column names (see examples).}
 \code{NULL} (default), all metrics present in \code{scores} will be shown.}
 }
 \value{
-A ggplot2 object with a coloured table of summarised scores
+A ggplot object with a coloured table of summarised scores
 }
 \description{
 Plots a coloured table of summarised scores obtained using

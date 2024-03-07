@@ -19,8 +19,10 @@ contributions. Default is FALSE and this functionality is not available yet.}
 \item{flip}{boolean (default is \code{FALSE}), whether or not to flip the axes.}
 }
 \value{
-A ggplot2 object showing a contributions from the three components of
+A ggplot object showing a contributions from the three components of
 the weighted interval score
+
+A ggplot object with a visualisation of the WIS decomposition
 }
 \description{
 Visualise the components of the weighted interval score: penalties for

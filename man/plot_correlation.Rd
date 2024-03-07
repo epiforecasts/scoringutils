@@ -11,8 +11,10 @@ plot_correlation(correlations)
 by \code{\link[=correlation]{correlation()}}.}
 }
 \value{
-A ggplot2 object showing a coloured matrix of correlations
+A ggplot object showing a coloured matrix of correlations
 between metrics
+
+A ggplot object with a visualisation of correlations between metrics
 }
 \description{
 Plots a heatmap of correlations between different metrics
