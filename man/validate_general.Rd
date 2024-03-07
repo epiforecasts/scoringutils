@@ -10,8 +10,7 @@ validate_general(data)
 \item{data}{A data.frame or data.table with predicted and observed values.}
 }
 \value{
-returns the input, with a few new attributes that hold additional
-information, messages and warnings
+returns the input
 }
 \description{
 The function runs input checks that apply to all input data, regardless of

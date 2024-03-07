@@ -228,8 +228,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
 #' @inheritParams get_forecast_counts
-#' @return returns the input, with a few new attributes that hold additional
-#' information, messages and warnings
+#' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @export
