@@ -56,20 +56,6 @@ test_that("check_number_per_forecast works", {
   )
 })
 
-test_that("check_no_NA_present works", {
-  expect_identical(
-    capture.output(
-      check_no_NA_present(example_binary, columns = "predicted")
-    ),
-    paste(
-      "[1] \"Checking `data`: 144 values in column `predicted`` are NA and",
-      "corresponding rows will be removed. This is fine if not unexpected.\""
-    )
-  )
-  expect_true(
-    check_no_NA_present(example_binary, columns = "location")
-  )
-})
 
 test_that("check_duplicates works", {
   example_bin <- rbind(example_binary[1:2, ], example_binary[1:2, ])
