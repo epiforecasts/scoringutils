@@ -75,7 +75,7 @@ test_that("log_shift() works as expected", {
   )
 
   # test that it accepts a complex number
-  expect_no_condition(log_shift(1:10, offset = 1i))
+  expect_no_condition(log_shift(1:10, offset = 1, base = 1i))
 })
 
 
