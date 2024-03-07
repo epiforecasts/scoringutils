@@ -13,25 +13,16 @@
 #' @return A data.table with correlations for the different metrics
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
+#' @importFrom cli cli_warn
 #' @export
 #' @keywords scoring
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' correlation(scores, digits = 2)
 correlation <- function(scores,
                         metrics = NULL,
                         digits = NULL) {
   metrics <- get_score_names(scores)
-
-  # if quantile column is present, throw a warning
-  if ("quantile_level" %in% names(scores)) {
-    warning(
-      "There is a column called 'quantile_level' in the scores. Usually, you ",
-      "should call 'summarise_scores()' to summarise over quantiles and ",
-      "obtain one score per forecast before calculating correlations. You ",
-      "can ignore this warning if you know what you're doing."
-    )
-  }
 
   # remove all non metrics and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(

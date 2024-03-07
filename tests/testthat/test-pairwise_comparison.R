@@ -50,7 +50,8 @@ test_that("pairwise_comparison() works", {
   data_formatted <- scoringutils::merge_pred_and_obs(
     forecasts_formatted,
     truth_formatted
-  )
+  ) %>%
+    as_forecast()
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
   eval <- score(data_formatted)
@@ -217,7 +218,7 @@ test_that("pairwise_comparison() works", {
 })
 
 test_that("pairwise_comparison() work in score() with integer data", {
-  eval <- suppressMessages(score(data = example_integer))
+  eval <- suppressMessages(score(data = as_forecast(example_integer)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
@@ -225,7 +226,7 @@ test_that("pairwise_comparison() work in score() with integer data", {
 
 
 test_that("pairwise_comparison() work in score() with binary data", {
-  eval <- suppressMessages(score(data = example_binary))
+  eval <- suppressMessages(score(data = as_forecast(example_binary)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_pairwise_comparison(eval_summarised)
   expect_true("brier_score_relative_skill" %in% colnames(eval))
@@ -353,7 +354,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_nas, by = "model", metric = "crps"
     ),
-    "Some values for the metric 'crps' are NA. These have been removed."
+    "Some values for the metric `crps` are NA. These have been removed."
   )
 
   # warning if there are no values left after removing NAs
@@ -362,7 +363,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_nas, by = "model", metric = "crps"
     ),
-    "After removing NA values for 'crps', no values were left."
+    "After removing \"NA\" values for `crps`, no values were left."
   )
 
   # error if not all values for the relative skill metric have the same sign
@@ -372,7 +373,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     add_pairwise_comparison(
       eval_diffsign, by = "model", metric = "crps"
     ),
-    "To compute pairwise comparisons, all values of crps must have the same sign."
+    "To compute pairwise comparisons, all values of `crps` must have the same sign."
   )
 
   # message if `by` is equal to the forecast unit
@@ -392,3 +393,58 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     "`by` is set to 'model', which is also the unit of a single forecast."
   )
 })
+
+test_that("pairwise_comparison() throws errors with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    pairwise_comparison(test, by = "location", metric = "crps"),
+    "Assertion on 'scores' failed: Column 'model' not found in data."
+  )
+})
+
+test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    pairwise_comparison_one_group(test, by = "location", metric = "crps"),
+    "pairwise comparisons require a column called 'model'"
+  )
+
+  # expect `NULL` as a result if scores has zero rows
+  test <- data.table::copy(scores_continuous)[model == "impossible"]
+  expect_equal(
+    pairwise_comparison_one_group(test, by = "model", metric = "crps"),
+    NULL
+  )
+
+  # expect NULL if there aren't enough models
+  test <- data.table::copy(scores_continuous)[model == "EuroCOVIDhub-ensemble"]
+  expect_equal(
+    pairwise_comparison_one_group(test, by = "model", metric = "crps"),
+    NULL
+  )
+
+  # expect error if baseline model is missing
+  test <- data.table::copy(scores_continuous)
+  expect_error(
+    pairwise_comparison_one_group(test, by = "model", baseline = "missing", metric = "crps"),
+    "Baseline model `missing` missing"
+  )
+})
+
+test_that("compare_two_models() throws error with wrong inputs", {
+  test <- data.table::copy(scores_continuous)
+  test <- test[, "model" := NULL]
+
+  # expect error if no model column is found
+  expect_error(
+    compare_two_models(test, metric = "crps"),
+    "pairwise comparisons require a column called 'model'"
+  )
+})
+

@@ -7,7 +7,8 @@
 get_protected_columns(data = NULL)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
 }
 \value{
 A character vector with the names of protected columns in the data.

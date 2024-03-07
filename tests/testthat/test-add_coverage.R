@@ -1,7 +1,10 @@
 ex_coverage <- example_quantile[model == "EuroCOVIDhub-ensemble"]
 
 test_that("get_coverage() works as expected", {
-  cov <- get_coverage(example_quantile, by = get_forecast_unit(example_quantile))
+  cov <- example_quantile %>%
+    na.omit() %>%
+    as_forecast() %>%
+    get_coverage(by = get_forecast_unit(example_quantile))
 
   expect_equal(
     sort(colnames(cov)),
@@ -23,7 +26,9 @@ test_that("get_coverage() outputs an object of class c('data.table', 'data.frame
 test_that("get_coverage() can deal with non-symmetric prediction intervals", {
   # the expected result is that `get_coverage()` just works. However,
   # all interval coverages with missing values should just be `NA`
-  test <- data.table::copy(example_quantile)
+  test <- data.table::copy(example_quantile) %>%
+    na.omit() %>%
+    as_forecast()
   test <- test[!quantile_level %in% c(0.2, 0.3, 0.5)]
 
   expect_no_condition(cov <- get_coverage(test))
@@ -38,7 +43,10 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
 
   # test for a version where values are not missing, but just `NA`
   # since `get_coverage()` calls `na.omit`, the result should be the same.
-  test <- data.table::copy(example_quantile)
+  test <- data.table::copy(example_quantile) %>%
+    na.omit() %>%
+    as_forecast() %>%
+    suppressMessages()
   test <- test[quantile_level %in% c(0.2, 0.3, 0.5), predicted := NA]
   cov2 <- get_coverage(test)
   expect_equal(cov, cov2)

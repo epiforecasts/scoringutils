@@ -129,9 +129,11 @@ You may want to score forecasts based on transformations of the original data in
 ```{r}
 example_quantile %>%
  .[, observed := ifelse(observed < 0, 0, observed)] %>%
+  as_forecast() %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
+  summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
   head()
 ```
 

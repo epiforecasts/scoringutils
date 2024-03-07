@@ -115,6 +115,7 @@ test_that("sample_to_quantiles issue 557 fix", {
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
+    as_forecast() %>%
     score()
 
   expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)

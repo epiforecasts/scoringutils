@@ -14,7 +14,8 @@
 #' The function runs additional checks to make sure the data satisfies the
 #' requirements of the respective forecast type and throws an
 #' informative error if any issues are found.
-#' @inheritParams score
+#' @inheritParams as_forecast
+#' @importFrom cli cli_abort
 #' @return Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
@@ -31,11 +32,16 @@ get_forecast_type <- function(data) {
   } else if (test_forecast_type_is_point(data)) {
     forecast_type <- "point"
   } else {
-    stop(
-      "Checking `data`: input doesn't satisfy criteria for any forecast type. ",
-      "Are you missing a column `quantile_level` or `sample_id`? ",
-      "Please check the vignette for additional info."
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Checking `data`: input doesn't satisfy criteria for any
+        forecast type. ",
+        "i" = "Are you missing a column `quantile_level` or `sample_id`?
+        Please check the vignette for additional info."
+      )
     )
+    #nolint end
   }
   return(forecast_type)
 }
@@ -99,6 +105,7 @@ test_forecast_type_is_quantile <- function(data) {
 #' a factor, or else whether it is integer (or can be coerced to integer) or
 #' whether it's continuous.
 #' @param x Input used to get the type.
+#' @importFrom cli cli_abort
 #' @return Character vector of length one with either "classification",
 #' "integer", or "continuous"
 #' @keywords internal_input_check
@@ -108,7 +115,7 @@ get_type <- function(x) {
   }
   assert_numeric(as.vector(x))
   if (all(is.na(as.vector(x)))) {
-    stop("Can't get type: all values of are NA")
+    cli_abort("Can't get type: all values of are {.val NA}.")
   }
   if (is.integer(x)) {
     return("integer")
@@ -147,6 +154,7 @@ get_type <- function(x) {
 #' @param scores A data.table with an attribute `score_names`
 #' @param error Throw an error if there is no attribute called `score_names`?
 #' Default is FALSE.
+#' @importFrom cli cli_abort cli_warn
 #' @return Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
@@ -154,16 +162,28 @@ get_type <- function(x) {
 get_score_names <- function(scores, error = FALSE) {
   score_names <- attr(scores, "score_names")
   if (error && is.null(score_names)) {
-    stop("Object needs an attribute `score_names` with the names of the ",
-         "scoring rules that were used for scoring. ",
-         "See `?get_score_names` for further information.")
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Object needs an attribute `score_names` with the names of the
+         scoring rules that were used for scoring.",
+        "i" = "See `?get_score_names` for further information."
+      )
+    )
+    #nolint end
   }
 
   if (!all(score_names %in% names(scores))) {
+    #nolint start: keyword_quote_linter object_usage_linter
     missing <- setdiff(score_names, names(scores))
-    warning("The following scores have been previously computed, but are no ",
-            "longer column names of the data: `", toString(missing), "`. ",
-            "See `?get_score_names` for further information.")
+    cli_warn(
+      c(
+        "!" = "The following scores have been previously computed, but are no
+            longer column names of the data: {.val {missing}}",
+        "i" = "See {.code ?get_score_names} for further information."
+      )
+    )
+    #nolint end
   }
 
   return(score_names)
@@ -177,7 +197,7 @@ get_score_names <- function(scores, error = FALSE) {
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#' @inheritParams validate_forecast
+#' @inheritParams as_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
 #' @export
@@ -195,7 +215,7 @@ get_forecast_unit <- function(data) {
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
-#' @inheritParams validate_forecast
+#' @inheritParams as_forecast
 #'
 #' @return A character vector with the names of protected columns in the data.
 #' If data is `NULL` (default) then it returns a list of all columns that are
@@ -238,8 +258,8 @@ get_protected_columns <- function(data = NULL) {
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. If `NULL` (the default) the function tries
-#' to infer the unit of a single forecast.
+#' the unit of a single forecast. By default the forecast unit will be
+#' automatically inferred from the data (see [get_forecast_unit()])
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
@@ -248,39 +268,17 @@ get_protected_columns <- function(data = NULL) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 
-get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
+get_duplicate_forecasts <- function(
+  data,
+  forecast_unit = get_forecast_unit(data)
+) {
+  assert_data_frame(data)
+  assert_subset(forecast_unit, colnames(data))
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
-  if (is.null(forecast_unit)) {
-    forecast_unit <- get_forecast_unit(data)
-  }
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
-}
-
-
-#' @title Get a list of all attributes of a scoringutils object
-#'
-#' @param object A object of class `forecast_`
-#'
-#' @return A named list with the attributes of that object.
-#' @keywords internal
-get_scoringutils_attributes <- function(object) {
-  possible_attributes <- c(
-    "scoringutils_by",
-    "forecast_unit",
-    "forecast_type",
-    "score_names",
-    "messages",
-    "warnings"
-  )
-
-  attr_list <- list()
-  for (attr_name in possible_attributes) {
-    attr_list[[attr_name]] <- attr(object, attr_name)
-  }
-  return(attr_list)
 }

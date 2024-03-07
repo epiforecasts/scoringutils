@@ -8,7 +8,7 @@ plot_interval_coverage(coverage, colour = "model")
 }
 \arguments{
 \item{coverage}{A data frame of coverage values as produced by
-\code{get_coverage()}}
+\code{\link[=get_coverage]{get_coverage()}}}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
@@ -23,6 +23,6 @@ Plot interval coverage
 \dontshow{
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
-coverage <- get_coverage(example_quantile, by = c("model"))
+coverage <- get_coverage(as_forecast(example_quantile), by = "model")
 plot_interval_coverage(coverage)
 }

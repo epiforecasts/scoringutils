@@ -8,7 +8,7 @@ plot_quantile_coverage(coverage, colour = "model")
 }
 \arguments{
 \item{coverage}{A data frame of coverage values as produced by
-\code{get_coverage()}}
+\code{\link[=get_coverage]{get_coverage()}}}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
@@ -20,6 +20,6 @@ ggplot object with a plot of interval coverage
 Plot quantile coverage
 }
 \examples{
-coverage <- get_coverage(example_quantile, by = c("model", "interval_range"))
+coverage <- get_coverage(as_forecast(example_quantile), by = "model")
 plot_quantile_coverage(coverage)
 }

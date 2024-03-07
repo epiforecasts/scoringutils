@@ -22,3 +22,5 @@ docs
 .vscode
 *.trackdown
 README.html
+/doc/
+/Meta/
