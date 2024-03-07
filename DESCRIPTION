@@ -51,7 +51,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    checkmate, 
+    checkmate,
     cli,
     data.table,
     ggplot2 (>= 3.4.0),

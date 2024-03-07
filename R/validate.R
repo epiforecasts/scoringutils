@@ -108,8 +108,8 @@ as_forecast.default <- function(data,
     setnames(data, old = sample_id, new = "sample_id")
   }
 
-  # assert that the correct column names are present after renaming
-  assert(check_data_columns(data))
+  # ensure that a model column is present after renaming
+  ensure_model_column(data)
 
   # set forecast unit (error handling is done in `set_forecast_unit()`)
   if (!is.null(forecast_unit)) {
@@ -269,9 +269,17 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' @keywords internal_input_check
 validate_general <- function(data) {
   # check that data is a data.table and that the columns look fine
-  assert_data_table(data)
-  assert(check_data_columns(data))
-  data <- assure_model_column(data)
+  assert_data_table(data, min.rows = 1)
+  assert(check_columns_present(data, c("observed", "predicted", "model")))
+  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
+  if (problem) {
+    cli_abort(
+      c(
+        "!" = "Found columns `quantile_level` and `sample_id`.
+      Only one of these is allowed"
+      )
+    )
+  }
 
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
@@ -322,7 +330,7 @@ validate_general <- function(data) {
 #' @keywords internal
 new_forecast <- function(data, classname) {
   data <- as.data.table(data)
-  data <- assure_model_column(data)
+  data <- ensure_model_column(data)
   class(data) <- c(classname, class(data))
   data <- copy(data)
   return(data[])

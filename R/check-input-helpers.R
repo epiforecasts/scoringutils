@@ -91,10 +91,10 @@ assert_not_null <- function(...) {
 #' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
-assure_model_column <- function(data) {
+ensure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
     #nolint start: keyword_quote_linter
-    cli_inform(
+    cli_warn(
       c(
         "!" = "There is no column called `model` in the data.",
         "i" = "scoringutils assumes that all forecasts come from the
@@ -242,34 +242,6 @@ test_columns_not_present <- function(data, columns) {
   } else {
     return(TRUE)
   }
-}
-
-#' Check whether data is data.frame with correct columns
-#' @description Checks whether data is a data.frame, whether columns
-#' "observed" and "predicted" are present, and checks that only one of
-#' "quantile_level" and "sample_id" is present.
-#' @inherit document_check_functions params return
-#' @importFrom checkmate check_data_frame
-#' @keywords internal_input_check
-check_data_columns <- function(data) {
-  is_data <- check_data_frame(data, min.rows = 1)
-  if (!is.logical(is_data)) {
-    return(is_data)
-  }
-  needed <- test_columns_present(data, c("observed", "predicted"))
-  if (!needed) {
-    return("Both columns `observed` and predicted` are needed")
-  }
-  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
-  if (problem) {
-    return(
-      paste(
-        "Found columns `quantile_level` and `sample_id`.",
-        "Only one of these is allowed."
-      )
-    )
-  }
-  return(TRUE)
 }
 
 

@@ -175,7 +175,7 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  df <- data.frame(observed = 1:10, predicted = factor(1:10))
+  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
   expect_error(
     get_forecast_type(df),
     "input doesn't satisfy criteria for any forecast type",

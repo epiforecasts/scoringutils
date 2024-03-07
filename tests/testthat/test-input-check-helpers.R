@@ -20,15 +20,15 @@ test_that("assert_not_null works", {
   expect_error(test_function())
 })
 
-test_that("assure_model_column works", {
+test_that("ensure_model_column works", {
   test <- data.table::copy(example_binary)
-  expect_message(
-    assure_model_column(test[, model := NULL]),
+  expect_warning(
+    ensure_model_column(test[, model := NULL]),
     "There is no column called `model` in the data."
   )
   expect_true(
     setequal(
-      assure_model_column(example_binary),
+      ensure_model_column(example_binary),
       example_binary
     )
   )
@@ -133,19 +133,5 @@ test_that("test_columns_not_present works", {
   )
   expect_false(
     test_columns_not_present(example_binary, "location")
-  )
-})
-
-test_that("check_data_columns works", {
-  # Add quantile_level column to test for error
-  test_data <- data.table::copy(example_continuous)[, quantile_level := 0]
-  expect_identical(
-    capture.output(
-      check_data_columns(test_data)
-    ),
-    paste(
-      "[1] \"Found columns `quantile_level` and `sample_id`.",
-      "Only one of these is allowed.\""
-    )
   )
 })
