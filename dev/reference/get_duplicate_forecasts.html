@@ -67,7 +67,7 @@ target.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span><span class="va">data</span>, forecast_unit <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span><span class="va">data</span>, forecast_unit <span class="op">=</span> <span class="fu"><a href="get_forecast_unit.html">get_forecast_unit</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,8 +78,8 @@ target.</p>
 
 <dt>forecast_unit</dt>
 <dd><p>A character vector with the column names that define
-the unit of a single forecast. If <code>NULL</code> (the default) the function tries
-to infer the unit of a single forecast.</p></dd>
+the unit of a single forecast. By default the forecast unit will be
+automatically inferred from the data (see <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
