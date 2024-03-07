@@ -26,7 +26,7 @@ no ground truth data.}
 value that is not a column in observations will be removed.}
 }
 \value{
-a data.frame with forecasts and observations
+a data.table with forecasts and observations
 }
 \description{
 The function more or less provides a wrapper around \code{merge} that
