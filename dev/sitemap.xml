@@ -97,9 +97,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/check_has_attribute.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_binary.html</loc>
   </url>
   <url>
@@ -113,9 +110,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_sample.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/check_no_NA_present.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/check_number_per_forecast.html</loc>
@@ -140,9 +134,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/document_check_functions.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/document_score_data.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/document_test_functions.html</loc>
@@ -206,9 +197,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_score_names.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/get_scoringutils_attributes.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_type.html</loc>
