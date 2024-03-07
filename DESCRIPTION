@@ -25,8 +25,7 @@ Authors@R: c(
            role = c("ctb"),
            email = "toshiaki.asa9ra@gmail.com",
            comment = c(ORCID = "0000-0001-8838-785X")),
-    person(given = "James",
-           middle = "Mba",
+    person(given = "James Mba",
            family = "Azam",
            role = c("ctb"),
            email = "james.azam@lshtm.ac.uk",
@@ -35,24 +34,15 @@ Authors@R: c(
             email = "sebastian.funk@lshtm.ac.uk", 
             role = c("aut")))
 Description: 
-    Provides a collection of metrics and proper scoring rules 
-    (Tilmann Gneiting & Adrian E Raftery (2007) 
-    <doi:10.1198/016214506000001437>, Jordan, A., Krüger, F., & Lerch, S. (2019)
-    <doi:10.18637/jss.v090.i12>) within a consistent framework for 
-    evaluation, comparison and visualisation of forecasts. 
-    In addition to proper scoring rules, functions are provided to assess 
-    bias, sharpness and calibration 
-    (Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind
-    M. Eggo, W. John Edmunds (2019) <doi:10.1371/journal.pcbi.1006785>) of 
-    forecasts. 
-    Several types of predictions (e.g. binary, discrete, continuous) which may 
-    come in different formats (e.g. forecasts represented by predictive samples 
-    or by quantiles of the predictive distribution) can be evaluated. 
-    Scoring metrics can be used either through a convenient data.frame format, 
-    or can be applied as individual functions in a vector / matrix format. 
-    All functionality has been implemented with a focus on performance and is 
-    robustly tested. Find more information about the package in the 
-    accompanying paper (<doi:10.48550/arXiv.2205.07090>).
+    `scoringutils` facilitates the evaluation of forecasts in a convenient 
+    framework based on `data.table`. It allows user to to check their forecasts 
+    and diagnose issues, to visualise forecasts and missing data, to transform 
+    data before scoring, to handle missing forecasts, to aggregate scores, and 
+    to visualise the results of the evaluation. The package mostly focuses on 
+    the evaluation of probabilistic forecasts and allows evaluating several 
+    different forecast types and input formats. Find more information about the 
+    package in the Vignettes as well as in the accompanying paper 
+    (<doi:10.48550/arXiv.2205.07090>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
