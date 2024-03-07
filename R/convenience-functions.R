@@ -207,6 +207,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 
   assert_numeric(x, min.len = 1)
   assert_number(offset)
+  assert_number(base)
 
   if (any(x < 0, na.rm = TRUE)) {
     #nolint start: keyword_quote_linter
