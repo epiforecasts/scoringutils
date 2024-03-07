@@ -10,21 +10,15 @@
 #' do, you also have to manually update the attribute by calling
 #' `attr(scores, "score_names") <- new_names`.
 #'
-#' @inheritParams pairwise_comparison
-#' @inheritParams score
+#' @param scores An object of class `scores` (a data.table with
+#' scores and an additional attribute `score_names` as produced by [score()])
 #' @param by character vector with column names to summarise scores by. Default
 #' is `model`, meaning that there will be one score per model in the output.
-#' The *unit of a single forecast* is determined by the columns present in the
-#' input data that do not correspond to a metric produced by [score()], which
-#' indicate indicate a grouping of forecasts (for example there may be one
-#' forecast per day, location and model). Adding additional, unrelated, columns
-#' may alter results in an unpredictable way.
-#' @param across character vector with column names from the vector of variables
-#' that define the *unit of a single forecast* (see above) to summarise scores
+#' @param across character vector with column names to summarise scores
 #' across (meaning that the specified columns will be dropped). This is an
 #' alternative to specifying `by` directly. If `across` is set, `by` will be
 #' ignored. If `across` is `NULL` (default), then `by` will be used.
-#' @param fun a function used for summarising scores. Default is `mean`.
+#' @param fun a function used for summarising scores. Default is [mean()].
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
 #' respective function.
@@ -115,24 +109,11 @@ summarize_scores <- summarise_scores
 #' @title Add pairwise comparisons
 #' @description Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
-#'
-#' a column called
-#' 'model' must be present in the input data. For more information on
+#' For more information on
 #' the computation of relative skill, see [pairwise_comparison()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
-#' WRITE MORE INFO HERE.
-#'
-#'
-#' @param scores MORE INFO HERE.
-#' @param by character vector with column names to summarise scores by. Default
-#' is "model", meaning that there will be one relative skill score per model.
-#' @param metric character with the name of the metric for which
-#' a relative skill shall be computed.
-#' @param baseline character string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
+#' @inheritParams pairwise_comparison
 #' @export
 #' @keywords keyword scoring
 add_pairwise_comparison <- function(

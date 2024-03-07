@@ -7,7 +7,8 @@
 infer_rel_skill_metric(scores)
 }
 \arguments{
-\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{score_names} as produced by \code{\link[=score]{score()}})}
 }
 \description{
 Helper function to infer the metric for which pairwise comparisons shall
