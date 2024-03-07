@@ -114,17 +114,17 @@ Bias can assume values between -1 and 1 and is 0 ideally.</p>
 <span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] -0.660  0.845 -0.645 -0.680  0.025 -0.050  0.570 -0.315 -0.900  0.215</span></span>
-<span><span class="co">#&gt; [11] -0.085 -0.065 -0.920  0.180  0.235 -0.505 -0.735  0.040  0.500 -0.350</span></span>
-<span><span class="co">#&gt; [21] -0.865  0.595 -0.175  0.310  0.430 -0.780  0.255 -0.245  0.800  0.960</span></span>
+<span><span class="co">#&gt;  [1]  0.605 -0.440 -0.115 -0.050 -0.395  0.215 -0.330 -0.505 -0.075  0.295</span></span>
+<span><span class="co">#&gt; [11]  0.635  0.435 -0.730 -0.595 -0.265 -0.765  0.745  0.520 -0.060  0.330</span></span>
+<span><span class="co">#&gt; [21] -0.190  0.675 -0.780 -0.195 -0.485 -0.980  0.785 -0.280  0.375 -0.730</span></span>
 <span></span>
 <span><span class="co">## continuous forecasts</span></span>
 <span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/bias_sample.html">bias_sample</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1]  0.55  0.14 -1.00  0.87 -0.35  0.82 -0.91  0.10  0.44 -0.13  0.14  0.53</span></span>
-<span><span class="co">#&gt; [13]  0.01  0.85 -0.16 -0.59 -0.02  0.06  0.54 -0.91  0.95 -0.86  0.47 -0.11</span></span>
-<span><span class="co">#&gt; [25] -0.46 -0.10 -0.51 -0.66 -0.58  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] -0.70  0.84  0.40  0.41 -0.63  0.42  0.46  0.14 -0.24 -0.85 -0.34  0.91</span></span>
+<span><span class="co">#&gt; [13] -0.64  0.40  0.95 -0.91 -0.75 -0.96  0.11  0.74  0.31 -0.60 -0.06 -0.82</span></span>
+<span><span class="co">#&gt; [25] -0.37 -0.29 -0.27 -0.33 -0.95 -0.75</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sharpness">Sharpness<a class="anchor" aria-label="anchor" href="#sharpness"></a>
@@ -139,9 +139,9 @@ details, see <code><a href="https://rdrr.io/r/stats/mad.html" class="external-li
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/mad_sample.html">mad_sample</a></span><span class="op">(</span>predicted <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 2.9652 2.9652 2.9652 2.9652 2.9652 2.9652</span></span>
-<span><span class="co">#&gt; [11] 2.2239 2.9652 2.9652 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478</span></span>
-<span><span class="co">#&gt; [21] 4.4478 4.4478 4.4478 4.4478 4.4478 4.4478 5.9304 5.9304 4.4478 5.9304</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 1.4826 1.4826 1.4826 1.4826 1.4826 2.2239 2.9652 2.9652 2.9652 2.9652</span></span>
+<span><span class="co">#&gt; [11] 2.9652 2.9652 2.9652 4.4478 2.9652 4.4478 4.4478 4.4478 4.4478 3.7065</span></span>
+<span><span class="co">#&gt; [21] 4.4478 4.4478 5.9304 4.4478 4.4478 5.9304 5.9304 4.4478 5.9304 4.4478</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
@@ -198,10 +198,10 @@ are better.</p>
 <code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/crps_sample.html">crps_sample</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.225650 0.401500 0.387725 0.535000 0.472225 0.635125 0.853400 1.048650</span></span>
-<span><span class="co">#&gt;  [9] 2.232000 0.917775 1.552175 1.739825 0.881000 4.059925 1.001650 1.241700</span></span>
-<span><span class="co">#&gt; [17] 1.120525 3.022075 4.313375 2.090050 1.159775 2.356125 1.534500 1.114475</span></span>
-<span><span class="co">#&gt; [25] 1.176850 1.313550 1.125375 3.148925 4.097950 1.650150</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.251700 0.668450 1.341775 0.457975 0.681750 0.571800 1.079075 1.335875</span></span>
+<span><span class="co">#&gt;  [9] 0.746775 0.748325 1.137425 0.978300 3.347550 9.211550 1.138275 1.794525</span></span>
+<span><span class="co">#&gt; [17] 0.996125 0.910425 1.753775 1.022775 1.306150 6.599375 5.034500 3.273150</span></span>
+<span><span class="co">#&gt; [25] 1.624825 3.004550 1.543825 1.543650 1.885675 2.610200</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="dawid-sebastiani-score-dss">Dawid-Sebastiani Score (DSS)<a class="anchor" aria-label="anchor" href="#dawid-sebastiani-score-dss"></a>
@@ -215,11 +215,11 @@ are better.</p>
 <code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dss_sample.html">dss_sample</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.8845696 1.1999667 2.2928799 1.6373546 1.8021247 6.0025332 2.6224311</span></span>
-<span><span class="co">#&gt;  [8] 2.5611774 2.5580416 2.3060970 2.6535968 3.7208365 3.0345893 2.6831290</span></span>
-<span><span class="co">#&gt; [15] 3.0549703 3.9320006 3.0117994 4.8568574 4.5592841 4.8533308 3.5297247</span></span>
-<span><span class="co">#&gt; [22] 4.4643951 6.6391429 3.3214034 3.2085748 5.4612927 3.4891819 3.3717686</span></span>
-<span><span class="co">#&gt; [29] 5.0030627 3.8180433</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.8877577 2.4922996 1.5283656 2.5526297 1.7652640 2.4893576 2.1727891</span></span>
+<span><span class="co">#&gt;  [8] 1.8172706 2.2628043 3.2404726 4.5166431 2.5987552 2.8633087 2.5753453</span></span>
+<span><span class="co">#&gt; [15] 3.7362634 3.1720532 3.1418768 4.1190599 3.6154186 3.1146260 5.0621382</span></span>
+<span><span class="co">#&gt; [22] 3.5532534 3.7156871 3.2853110 3.9749355 4.6779652 3.6926618 3.3619010</span></span>
+<span><span class="co">#&gt; [29] 3.9573752 7.0146938</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="log-score">Log Score<a class="anchor" aria-label="anchor" href="#log-score"></a>
@@ -235,11 +235,11 @@ values are better.</p>
 <code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, mean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/logs_sample.html">logs_sample</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 1.5619983 1.1837392 1.3387089 1.0313566 2.4325051 1.3353160 1.7509465</span></span>
-<span><span class="co">#&gt;  [8] 1.2071963 0.8856848 1.0643647 1.0227122 0.9636904 0.8931098 1.6126931</span></span>
-<span><span class="co">#&gt; [15] 1.1740298 1.1672577 1.4325158 1.8380371 0.9734818 2.1390054 1.0193022</span></span>
-<span><span class="co">#&gt; [22] 0.9017446 1.9006856 1.0660199 1.8737732 1.6913996 2.9133441 1.4043660</span></span>
-<span><span class="co">#&gt; [29] 0.9642453 1.1002641</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 2.0757875 1.6846266 0.9694294 1.5841697 1.2608832 1.0043333 1.0895268</span></span>
+<span><span class="co">#&gt;  [8] 1.1356739 4.2052910 1.2727363 1.1896753 1.0497307 1.1144002 2.2115636</span></span>
+<span><span class="co">#&gt; [15] 1.8218363 1.4825334 1.3374865 1.0114292 1.4485299 1.1883659 1.5124124</span></span>
+<span><span class="co">#&gt; [22] 1.1141038 1.0181600 1.8075392 1.0435700 1.3035940 1.5214713 1.4946606</span></span>
+<span><span class="co">#&gt; [29] 4.9782645 1.0171138</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="brier-score">Brier Score<a class="anchor" aria-label="anchor" href="#brier-score"></a>
@@ -257,12 +257,12 @@ the probabilistic prediction and the observed outcome.</p>
 <span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.1292735276 0.6590714121 0.2827096412 0.4860082009 0.9885275183</span></span>
-<span><span class="co">#&gt;  [6] 0.6045345231 0.1810415596 0.0413470055 0.5128151123 0.0001649929</span></span>
-<span><span class="co">#&gt; [11] 0.2659532211 0.3491409098 0.1187884559 0.5234898886 0.0071739657</span></span>
-<span><span class="co">#&gt; [16] 0.8021629098 0.0655644208 0.0157784790 0.2650594981 0.3139007247</span></span>
-<span><span class="co">#&gt; [21] 0.5710851122 0.0157850829 0.5080210584 0.1104971068 0.7207408057</span></span>
-<span><span class="co">#&gt; [26] 0.4396016543 0.0743882265 0.7476635664 0.3044163175 0.5231859713</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.2766201771 0.5613552546 0.0613008344 0.8668482413 0.3736261473</span></span>
+<span><span class="co">#&gt;  [6] 0.0315020533 0.6105802964 0.0192306308 0.2332026987 0.8274476104</span></span>
+<span><span class="co">#&gt; [11] 0.0787230859 0.9669167304 0.4246783232 0.2982867134 0.7207237386</span></span>
+<span><span class="co">#&gt; [16] 0.0034050554 0.0068225395 0.1595353909 0.9015719654 0.3563167880</span></span>
+<span><span class="co">#&gt; [21] 0.0120014850 0.2403483529 0.3002008233 0.1380245550 0.9897972361</span></span>
+<span><span class="co">#&gt; [26] 0.0687775642 0.3212266736 0.0003922854 0.9772250982 0.0924538928</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="interval-score">Interval Score<a class="anchor" aria-label="anchor" href="#interval-score"></a>
 </h3>
