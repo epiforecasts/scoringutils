@@ -243,20 +243,3 @@ test_columns_not_present <- function(data, columns) {
     return(TRUE)
   }
 }
-
-
-#' Check whether an attribute is present
-#' @description Checks whether an object has an attribute
-#' @param object An object to be checked
-#' @param attribute name of an attribute to be checked
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_has_attribute <- function(object, attribute) {
-  if (is.null(attr(object, attribute))) {
-    return(
-      paste0("Found no attribute `", attribute, "`")
-    )
-  } else {
-    return(TRUE)
-  }
-}
