@@ -44,11 +44,11 @@
 #' @param ... Additional parameters to pass to the function you supplied. For
 #' the default option of [log_shift()] this could be the `offset` argument.
 #'
-#' @return A `data.table` with either a transformed version of the data, or one
-#' with both the untransformed and the transformed data. includes the original
-#' data as well as a transformation of the original data. There will be one
-#' additional column, `scale', present which will be set to "natural" for the
-#' untransformed forecasts.
+#' @return A forecast object with either a transformed version of the data, or
+#' one with both the untransformed and the transformed data. includes the
+#' original data as well as a transformation of the original data. There will
+#' be one additional column, `scale', present which will be set to "natural"
+#' for the untransformed forecasts.
 #'
 #' @importFrom data.table ':=' is.data.table copy
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -179,6 +179,7 @@ transform_forecasts <- function(data,
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords check-forecasts
+#' @importFrom checkmate assert_numeric assert_number
 #' @examples
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
@@ -190,6 +191,10 @@ transform_forecasts <- function(data,
 #'  )
 
 log_shift <- function(x, offset = 0, base = exp(1)) {
+
+  assert_numeric(x, min.len = 1)
+  assert_number(offset)
+  assert_number(base)
 
   if (any(x < 0, na.rm = TRUE)) {
     w <- paste("Detected input values < 0.")
