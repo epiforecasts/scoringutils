@@ -4,7 +4,7 @@
 \alias{check_duplicates}
 \title{Check that there are no duplicate forecasts}
 \usage{
-check_duplicates(data, forecast_unit = NULL)
+check_duplicates(data, forecast_unit = get_forecast_unit(data))
 }
 \arguments{
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}

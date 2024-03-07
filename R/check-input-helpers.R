@@ -136,31 +136,6 @@ check_number_per_forecast <- function(data, forecast_unit) {
 }
 
 
-#' Check columns in data.frame don't have NA values
-#' @description Function checks whether any of the columns in a data.frame,
-#' as specified in `columns`, have NA values. If so, it returns a string with
-#' an error message, otherwise it returns TRUE.
-#' @inherit document_check_functions params return
-#'
-#' @keywords internal_input_check
-check_no_NA_present <- function(data, columns) {
-  for (x in columns) {
-    if (anyNA(data[[x]])) {
-      msg <- paste0(
-        "Checking `data`: ",
-        sum(is.na(data[[x]])),
-        " values in column `",
-        x,
-        "`` are NA and corresponding rows will be removed. ",
-        "This is fine if not unexpected."
-      )
-      return(msg)
-    }
-  }
-  return(TRUE)
-}
-
-
 #' Check that there are no duplicate forecasts
 #'
 #' @description
@@ -168,7 +143,7 @@ check_no_NA_present <- function(data, columns) {
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_duplicates <- function(data, forecast_unit = NULL) {
+check_duplicates <- function(data, forecast_unit = get_forecast_unit(data)) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {
@@ -239,23 +214,6 @@ test_columns_present <- function(data, columns) {
 test_columns_not_present <- function(data, columns) {
   if (any(columns %in% colnames(data))) {
     return(FALSE)
-  } else {
-    return(TRUE)
-  }
-}
-
-
-#' Check whether an attribute is present
-#' @description Checks whether an object has an attribute
-#' @param object An object to be checked
-#' @param attribute name of an attribute to be checked
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_has_attribute <- function(object, attribute) {
-  if (is.null(attr(object, attribute))) {
-    return(
-      paste0("Found no attribute `", attribute, "`")
-    )
   } else {
     return(TRUE)
   }

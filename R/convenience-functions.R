@@ -179,7 +179,7 @@ transform_forecasts <- function(data,
 #' @param x vector of input values to be transformed
 #' @param offset number to add to the input value before taking the natural
 #' logarithm
-#' @param base a positive or complex number: the base with respect to which
+#' @param base a positive number: the base with respect to which
 #' logarithms are computed. Defaults to e = exp(1).
 #' @importFrom cli cli_abort cli_warn
 #' @return A numeric vector with transformed values
@@ -207,7 +207,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 
   assert_numeric(x, min.len = 1)
   assert_number(offset)
-  assert_number(base)
+  assert_number(base, lower = 0)
 
   if (any(x < 0, na.rm = TRUE)) {
     #nolint start: keyword_quote_linter
