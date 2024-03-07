@@ -270,8 +270,8 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(
-    data,
-    forecast_unit = get_forecast_unit(data)
+  data,
+  forecast_unit = get_forecast_unit(data)
 ) {
   assert_data_frame(data)
   assert_subset(forecast_unit, colnames(data))
