@@ -276,9 +276,6 @@ get_duplicate_forecasts <- function(
   assert_subset(forecast_unit, colnames(data))
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
-  if (is.null(forecast_unit)) {
-    forecast_unit <- get_forecast_unit(data)
-  }
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
