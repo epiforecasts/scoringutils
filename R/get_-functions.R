@@ -258,8 +258,8 @@ get_protected_columns <- function(data = NULL) {
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. If `NULL` (the default) the function tries
-#' to infer the unit of a single forecast.
+#' the unit of a single forecast. By default the forecast unit will be
+#' automatically inferred from the data (see [get_forecast_unit()])
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
@@ -268,39 +268,17 @@ get_protected_columns <- function(data = NULL) {
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 
-get_duplicate_forecasts <- function(data, forecast_unit = NULL) {
+get_duplicate_forecasts <- function(
+  data,
+  forecast_unit = get_forecast_unit(data)
+) {
+  assert_data_frame(data)
+  assert_subset(forecast_unit, colnames(data))
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
-  if (is.null(forecast_unit)) {
-    forecast_unit <- get_forecast_unit(data)
-  }
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
-}
-
-
-#' @title Get a list of all attributes of a scoringutils object
-#'
-#' @param object A object of class `forecast_`
-#'
-#' @return A named list with the attributes of that object.
-#' @keywords internal
-get_scoringutils_attributes <- function(object) {
-  possible_attributes <- c(
-    "scoringutils_by",
-    "forecast_unit",
-    "forecast_type",
-    "score_names",
-    "messages",
-    "warnings"
-  )
-
-  attr_list <- list()
-  for (attr_name in possible_attributes) {
-    attr_list[[attr_name]] <- attr(object, attr_name)
-  }
-  return(attr_list)
 }
