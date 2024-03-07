@@ -192,6 +192,7 @@ transform_forecasts <- function(data,
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords check-forecasts
+#' @importFrom checkmate assert_numeric assert_number
 #' @examples
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
@@ -203,6 +204,10 @@ transform_forecasts <- function(data,
 #'  )
 
 log_shift <- function(x, offset = 0, base = exp(1)) {
+
+  assert_numeric(x, min.len = 1)
+  assert_number(offset)
+  assert_number(base)
 
   if (any(x < 0, na.rm = TRUE)) {
     #nolint start: keyword_quote_linter
