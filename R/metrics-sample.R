@@ -1,4 +1,4 @@
-#' @title Determines bias of forecasts
+#' @title Determines Bias Of Forecasts
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples. The function
@@ -76,7 +76,7 @@ bias_sample <- function(observed, predicted) {
 }
 
 
-#' @title Absolute Error of the Median (Sample-based Version)
+#' @title Absolute Error Of The Median (Sample-Based Version)
 #'
 #' @description
 #' Absolute error of the median calculated as
@@ -111,7 +111,7 @@ ae_median_sample <- function(observed, predicted) {
 }
 
 
-#' @title Squared Error of the Mean (Sample-based Version)
+#' @title Squared Error Of The Mean (Sample-Based Version)
 #'
 #' @description
 #' Squared error of the mean calculated as
@@ -143,7 +143,7 @@ se_mean_sample <- function(observed, predicted) {
 }
 
 
-#' @title Logarithmic score
+#' @title Logarithmic Score
 #'
 #' @description
 #' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
@@ -243,7 +243,7 @@ crps_sample <- function(observed, predicted, ...) {
 }
 
 
-#' @title Determine dispersion of a probabilistic forecast
+#' @title Determine Dispersion Of A Probabilistic Forecast
 #' @details
 #' Sharpness is the ability of the model to generate predictions within a
 #' narrow range and dispersion is the lack thereof.
