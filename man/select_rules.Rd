@@ -4,7 +4,7 @@
 \alias{select_metrics}
 \title{Select Scoring Rules From A List of Possible Scoring Rules}
 \usage{
-select_metrics(rules, select = NULL, exclude = NULL)
+select_metrics(metrics, select = NULL, exclude = NULL)
 }
 \arguments{
 \item{rules}{A list of scoring rules.}

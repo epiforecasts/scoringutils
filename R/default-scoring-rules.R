@@ -1,7 +1,7 @@
 #' @title Select Scoring Rules From A List of Possible Scoring Rules
 #' @description Helper function to return only the scoring rules selected by
 #' the user from a list of possible scoring rules.
-#' @param rules A list of scoring rules.
+#' @param metrics A list of scoring rules.
 #' @param select A character vector of scoring rules to select from the list.
 #' If `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
@@ -19,20 +19,20 @@
 #'   metrics = metrics_binary(),
 #'   exclude = "log_score"
 #' )
-select_metrics <- function(rules, select = NULL, exclude = NULL) {
+select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
-  assert_list(rules, names = "named")
-  allowed <- names(rules)
+  assert_list(metrics, names = "named")
+  allowed <- names(metrics)
 
   if (is.null(select) && is.null(exclude)) {
-    return(rules)
+    return(metrics)
   } else if (is.null(select)) {
     assert_subset(exclude, allowed)
     select <- allowed[!allowed %in% exclude]
-    return(rules[select])
+    return(metrics[select])
   } else {
     assert_subset(select, allowed)
-    return(rules[select])
+    return(metrics[select])
   }
 }
 
