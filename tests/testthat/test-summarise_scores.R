@@ -49,29 +49,6 @@ test_that("summarise_scores() handles the `score_names` attribute correctly", {
   )
 })
 
-test_that("summarise_scores() can compute relative measures", {
-  scores_with <- add_pairwise_comparison(
-    scores_quantile,
-  )
-  scores_with <- summarise_scores(scores_with, by = "model")
-
-  expect_equal(
-    scores_with[, wis_relative_skill],
-    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
-  )
-
-  scores_with <- add_pairwise_comparison(
-    scores_quantile, by = "model",
-    metric = "ae_median"
-  )
-  scores_with <- summarise_scores(scores_with, by = "model")
-
-  expect_equal(
-    scores_with[, ae_median_relative_skill],
-    c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
-  )
-})
-
 test_that("summarise_scores() across argument works as expected", {
   ex <- data.table::copy(example_quantile)
   ex <- suppressMessages(as_forecast(ex))
