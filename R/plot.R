@@ -665,7 +665,7 @@ plot_pit <- function(pit,
 #' are shown on the x-axis.
 #' @param show_counts logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
-#' @return ggplot object with a plot of forecast counts
+#' @return A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N

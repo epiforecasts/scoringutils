@@ -1,4 +1,4 @@
-#' @title Determines Bias Of Forecasts
+#' @title Determine Bias Of Forecasts
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples. The function
