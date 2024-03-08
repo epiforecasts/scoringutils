@@ -99,7 +99,8 @@ different forecast targets.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scores</dt>
-<dd><p>A data.table of scores as produced by <code><a href="score.html">score()</a></code>.</p></dd>
+<dd><p>An object of class <code>scores</code> (a data.table with
+scores and an additional attribute <code>score_names</code> as produced by <code><a href="score.html">score()</a></code>)</p></dd>
 
 
 <dt>name_model1</dt>
@@ -111,8 +112,9 @@ different forecast targets.</p>
 
 
 <dt>metric</dt>
-<dd><p>A character vector of length one with the metric to do the
-comparison on.</p></dd>
+<dd><p>A string with the name of the metric for which
+a relative skill shall be computed. By default this is either "crps",
+"wis" or "brier_score" if any of these are available.</p></dd>
 
 
 <dt>one_sided</dt>
@@ -132,6 +134,13 @@ determine p-values.</p></dd>
 permutation test. Default is 999.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A list with mean score ratios and p-values for the comparison
+between two models</p>
+    </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Johannes Bracher, <a href="mailto:johannes.bracher@kit.edu">johannes.bracher@kit.edu</a></p>

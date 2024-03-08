@@ -90,29 +90,24 @@ do, you also have to manually update the attribute by calling
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scores</dt>
-<dd><p>A data.table of scores as produced by <code><a href="score.html">score()</a></code>.</p></dd>
+<dd><p>An object of class <code>scores</code> (a data.table with
+scores and an additional attribute <code>score_names</code> as produced by <code><a href="score.html">score()</a></code>)</p></dd>
 
 
 <dt>by</dt>
 <dd><p>character vector with column names to summarise scores by. Default
-is <code>model</code>, meaning that there will be one score per model in the output.
-The <em>unit of a single forecast</em> is determined by the columns present in the
-input data that do not correspond to a metric produced by <code><a href="score.html">score()</a></code>, which
-indicate indicate a grouping of forecasts (for example there may be one
-forecast per day, location and model). Adding additional, unrelated, columns
-may alter results in an unpredictable way.</p></dd>
+is <code>model</code>, meaning that there will be one score per model in the output.</p></dd>
 
 
 <dt>across</dt>
-<dd><p>character vector with column names from the vector of variables
-that define the <em>unit of a single forecast</em> (see above) to summarise scores
+<dd><p>character vector with column names to summarise scores
 across (meaning that the specified columns will be dropped). This is an
 alternative to specifying <code>by</code> directly. If <code>across</code> is set, <code>by</code> will be
 ignored. If <code>across</code> is <code>NULL</code> (default), then <code>by</code> will be used.</p></dd>
 
 
 <dt>fun</dt>
-<dd><p>a function used for summarising scores. Default is <code>mean</code>.</p></dd>
+<dd><p>a function used for summarising scores. Default is <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p></dd>
 
 
 <dt>...</dt>
