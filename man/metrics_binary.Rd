@@ -2,7 +2,7 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_binary}
 \alias{metrics_binary}
-\title{Scoring Rules for Binary Forecasts}
+\title{Default Metrics And Scoring Rules for Binary Forecasts}
 \usage{
 metrics_binary(select = NULL, exclude = NULL)
 }

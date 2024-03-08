@@ -2,7 +2,7 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_point}
 \alias{metrics_point}
-\title{Scoring Rules for Point Forecasts}
+\title{Default Metrics And Scoring Rules for Point Forecasts}
 \usage{
 metrics_point(select = NULL, exclude = NULL)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_quantile}
 \alias{metrics_quantile}
-\title{Scoring Rules for Quantile-Based Forecasts}
+\title{Default Metrics And Scoring Rules for Quantile-Based Forecasts}
 \usage{
 metrics_quantile(select = NULL, exclude = NULL)
 }
@@ -18,7 +18,7 @@ A list of scoring rules.
 }
 \description{
 Helper function that returns a named list of default
-scoring rules suitable for forecasts in a quantile-based format
+scoring rules suitable for forecasts in a quantile-based format.
 
 The default scoring rules are:
 \itemize{

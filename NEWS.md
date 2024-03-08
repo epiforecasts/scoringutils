@@ -8,21 +8,21 @@ The update introduces breaking changes. If you want to keep using the older vers
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted" and "model" (which now is a required column). Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
 - The overall scoring workflow was updated. Most functions now operate on forecast objects, which can be created using the function `as_forecast()`. This function replaces the previous `check_forecast()` function and validates the inputs. `as_forecast()` also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. `score()` is now a generic function that dispatches the correct method based on the forecast type. Forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile".
 - `set_forecast_unit()` now errors if any of the values in `forecast_unit` are not columns of the data. 
-- Scoring rules (functions used for scoring) received a consistent interface and input checks:
-  - Scoring rules for binary forecasts:
+- All scoring functions exported by the package received a consistent interface and input checks:
+  - Metrics and scoring rules for binary forecasts:
     - `observed`: factor with exactly 2 levels
     - `predicted`: numeric, vector with probabilities
-  - Scoring rules for point forecasts:
+  - Metrics and scoring rules for point forecasts:
     - `observed`: numeric vector
     - `predicted`: numeric vector
-  - Scoring rules for sample-based forecasts:
+  - Metrics and scoring rules for sample-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
-  - Scoring rules for quantile-based forecasts:
+  - Metrics and scoring rules for quantile-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile_level`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
-- Users can now supply their own scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()` and `metrics_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules). 
+- Users can now supply their own metrics and scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()` and `metrics_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules). 
 - `score()` now returns objects of class `scores` with a stored attribute `score_names` that holds the names of the scoring rules that were used. Users can call `get_score_names()` to access the names of those scoring rules. 
 - `check_forecasts()` was replaced by a different workflow. There now is a function, `as_forecast()`, that determines forecast type of the data, constructs a forecasting object and validates it using the function `validate_forecast()` (a generic that dispatches the correct method based on the forecast type). Objects of class `forecast_binary`, `forecast_point`, `forecast_sample` and `forecast_quantile` have print methods that fulfill the functionality of `check_forecasts()`.
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_sample}
 \alias{metrics_sample}
-\title{Scoring Rules for Sample-Based Forecasts}
+\title{Default Metrics And Scoring Rules for Sample-Based Forecasts}
 \usage{
 metrics_sample(select = NULL, exclude = NULL)
 }
@@ -18,7 +18,7 @@ A list of scoring rules.
 }
 \description{
 Helper function that returns a named list of default
-scoring rules suitable for forecasts in a sample-based format
+scoring rules suitable for forecasts in a sample-based format.
 
 The default scoring rules are:
 \itemize{

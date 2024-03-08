@@ -2,12 +2,12 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{select_metrics}
 \alias{select_metrics}
-\title{Select Scoring Rules From A List of Possible Scoring Rules}
+\title{Select Metrics From A List of Functions}
 \usage{
 select_metrics(metrics, select = NULL, exclude = NULL)
 }
 \arguments{
-\item{rules}{A list of scoring rules.}
+\item{metrics}{A list of scoring functions.}
 
 \item{select}{A character vector of scoring rules to select from the list.
 If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
@@ -20,7 +20,7 @@ A list of scoring rules.
 }
 \description{
 Helper function to return only the scoring rules selected by
-the user from a list of possible scoring rules.
+the user from a list of possible functions.
 }
 \examples{
 select_metrics(

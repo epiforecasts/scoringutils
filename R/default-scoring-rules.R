@@ -1,7 +1,7 @@
-#' @title Select Scoring Rules From A List of Possible Scoring Rules
+#' @title Select Metrics From A List of Functions
 #' @description Helper function to return only the scoring rules selected by
-#' the user from a list of possible scoring rules.
-#' @param metrics A list of scoring rules.
+#' the user from a list of possible functions.
+#' @param metrics A list of scoring functions.
 #' @param select A character vector of scoring rules to select from the list.
 #' If `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
@@ -37,7 +37,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 }
 
 
-#' @title Scoring Rules for Binary Forecasts
+#' @title Default Metrics And Scoring Rules for Binary Forecasts
 #' @description Helper function that returns a named list of default
 #' scoring rules suitable for binary forecasts.
 #'
@@ -61,7 +61,7 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Scoring Rules for Point Forecasts
+#' @title Default Metrics And Scoring Rules for Point Forecasts
 #' @description Helper function that returns a named list of default
 #' scoring rules suitable for point forecasts.
 #'
@@ -86,9 +86,9 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Scoring Rules for Sample-Based Forecasts
+#' @title Default Metrics And Scoring Rules for Sample-Based Forecasts
 #' @description Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a sample-based format
+#' scoring rules suitable for forecasts in a sample-based format.
 #'
 #' The default scoring rules are:
 #' - "mad" = [mad_sample()]
@@ -120,9 +120,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Scoring Rules for Quantile-Based Forecasts
+#' @title Default Metrics And Scoring Rules for Quantile-Based Forecasts
 #' @description Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a quantile-based format
+#' scoring rules suitable for forecasts in a quantile-based format.
 #'
 #' The default scoring rules are:
 #' - "wis" = [wis]
