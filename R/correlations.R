@@ -22,7 +22,7 @@
 correlation <- function(scores,
                         metrics = NULL,
                         digits = NULL) {
-  metrics <- get_score_names(scores)
+  metrics <- get_metrics(scores)
 
   # remove all non metrics and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(

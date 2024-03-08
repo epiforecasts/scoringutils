@@ -14,6 +14,6 @@ Returns \code{NULL} invisibly
 }
 \description{
 This function validates an object of class \code{scores}, checking
-that it has the correct class and that it has a \code{score_names} attribute.
+that it has the correct class and that it has a \code{metrics} attribute.
 }
 \keyword{internal}

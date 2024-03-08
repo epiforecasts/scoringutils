@@ -50,31 +50,31 @@ test_that("run_safely() works as expected", {
 
 
 # ==============================================================================
-# get score_names
+# get metrics
 # ==============================================================================
 
-test_that("get_score_names() works as expected", {
+test_that("get_metrics() works as expected", {
   expect_true(
-    "brier_score" %in% get_score_names(scores_binary)
+    "brier_score" %in% get_metrics(scores_binary)
   )
 
-  expect_equal(get_score_names(scores_continuous),
-               attr(scores_continuous, "score_names"))
+  expect_equal(get_metrics(scores_continuous),
+               attr(scores_continuous, "metrics"))
 
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
-    get_score_names(example_quantile, error = TRUE),
+    get_metrics(example_quantile, error = TRUE),
     "Object needs an attribute"
   )
   expect_no_condition(
-    get_score_names(scores_continuous)
+    get_metrics(scores_continuous)
   )
 
   # expect warning if some column changed
   ex <- data.table::copy(scores_continuous)
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
-    get_score_names(ex),
+    get_metrics(ex),
     "scores have been previously computed, but are no longer column names"
   )
 })
