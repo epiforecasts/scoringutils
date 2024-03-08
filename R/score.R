@@ -233,7 +233,9 @@ apply_metrics <- function(data, metrics, ...) {
 #' @param scores A data.table or similar with scores as produced by [score()]
 #' @param score_names A character vector with the names of the scores
 #' (i.e. the names of the scoring rules used for scoring)
+#' @param ... Additional arguments to [as.data.table()]
 #' @keywords internal
+#' @importFrom data.table as.data.table setattr
 #' @return An object of class `scores`
 #' @examples
 #' \dontrun{
@@ -243,8 +245,8 @@ apply_metrics <- function(data, metrics, ...) {
 #' )
 #' new_scores(df, "wis")
 #' }
-new_scores <- function(scores, score_names) {
-  scores <- as.data.table(scores)
+new_scores <- function(scores, score_names, ...) {
+  scores <- as.data.table(scores, ...)
   class(scores) <- c("scores", class(scores))
   setattr(scores, "score_names", score_names)
   return(scores[])
