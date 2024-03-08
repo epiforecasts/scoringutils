@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_forecast_unit}
 \alias{get_forecast_unit}
-\title{Get unit of a single forecast}
+\title{Get Unit Of A Single Forecast}
 \usage{
 get_forecast_unit(data)
 }

@@ -190,7 +190,7 @@ get_score_names <- function(scores, error = FALSE) {
 }
 
 
-#' @title Get unit of a single forecast
+#' @title Get Unit Of A Single Forecast
 #' @description Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
@@ -210,7 +210,7 @@ get_forecast_unit <- function(data) {
 }
 
 
-#' @title Get protected columns from a data frame
+#' @title Get Protected Columns From Data
 #'
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
@@ -249,7 +249,7 @@ get_protected_columns <- function(data = NULL) {
 }
 
 
-#' @title Find duplicate forecasts
+#' @title Find Duplicate Forecasts
 #'
 #' @description Helper function to identify duplicate forecasts, i.e.
 #' instances where there is more than one forecast for the same prediction
@@ -263,6 +263,7 @@ get_protected_columns <- function(data = NULL) {
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
+#' @importFrom checkmate assert_data_frame assert_subset
 #' @keywords check-forecasts
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])

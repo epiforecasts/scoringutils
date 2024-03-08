@@ -32,7 +32,9 @@ default metrics used.}
 \value{
 An object of class \code{scores}. This object is a data.table with
 unsummarised scores (one score per forecast) and has an additional attribute
-\code{score_names} with the names of the metrics used for scoring.
+\code{score_names} with the names of the metrics used for scoring. See
+\code{\link[=summarise_scores]{summarise_scores()}}) for information on how to summarise
+scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a forecast

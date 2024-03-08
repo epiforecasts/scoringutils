@@ -25,7 +25,7 @@ quantile-based data. Default is \code{NULL} and breaks will be determined by
 \code{num_bins}.}
 }
 \value{
-vector with the scoring values
+A ggplot object with a histogram of PIT values
 }
 \description{
 Make a simple histogram of the probability integral transformed values to

@@ -16,7 +16,7 @@
 #' no ground truth data.
 #' @param by character vector that denotes the columns by which to merge. Any
 #' value that is not a column in observations will be removed.
-#' @return a data.frame with forecasts and observations
+#' @return a data.table with forecasts and observations
 #' @examples
 #' forecasts <- example_quantile_forecasts_only
 #' observations <- example_truth_only
@@ -87,13 +87,12 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' Transform data from a format that is based on predictive samples to a format
 #' based on plain quantiles.
 #'
-#'
 #' @param data a data.frame with samples
 #' @param quantile_level a numeric vector of quantile levels for which
 #' quantiles will be computed
 #' @param type type argument passed down to the quantile function. For more
 #' information, see [quantile()]
-#' @return a data.frame in a long interval range format
+#' @return a data.table in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @importFrom methods hasArg
@@ -135,7 +134,7 @@ sample_to_quantile <- function(data,
 #' [score()]) for quantile forecasts.
 #' @param keep_range_col keep the interval_range and boundary columns after
 #' transformation (default is FALSE)
-#' @return a data.frame in a plain quantile format
+#' @return a data.table in a plain quantile format
 #' @importFrom data.table copy
 #' @keywords internal
 
@@ -158,7 +157,6 @@ interval_long_to_quantile <- function(data,
   if (!keep_range_col) {
     data[, c("interval_range", "boundary") := NULL]
   }
-
 
   return(unique(data)[])
 }
@@ -183,6 +181,7 @@ interval_long_to_quantile <- function(data,
 #' and upper bounds of the 50% and 90% prediction intervals (corresponding to
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 #' @param ... method arguments
+#' @return A data.table with forecasts in an interval format
 #' @keywords data-handling
 #' @export
 quantile_to_interval <- function(...) {
@@ -201,7 +200,6 @@ quantile_to_interval <- function(...) {
 #' output after transformation (default is FALSE). This only works if
 #' `format = "long"`. If `format = "wide"`, the `quantile_level` column will
 #' always be dropped.
-#' @return
 #' *quantile_to_interval.data.frame*:
 #' a data.frame in an interval format (either "long" or "wide"), with or
 #' without a `quantile_level` column. Rows will not be reordered.
@@ -243,7 +241,6 @@ quantile_to_interval.data.frame <- function(dt,
 #' @param predicted a numeric vector of predicted values of size n x N. If
 #' `observed` is a single number, then `predicted` can be a vector of length N
 #' @param quantile_level a numeric vector of quantile levels of size N
-#' @return
 #' *quantile_to_interval.numeric*:
 #' a data.frame in a wide interval format with columns `forecast_id`,
 #' `observed`, `lower`, `upper`, and `interval_range`. The `forecast_id` column
@@ -287,7 +284,7 @@ quantile_to_interval.numeric <- function(observed,
 #' @param type type argument passed down to the quantile function. For more
 #' information, see [quantile()]
 #' @param keep_quantile_col keep quantile_level column, default is TRUE
-#' @return a data.frame in a long interval interval range format
+#' @return a data.table in a long interval interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @keywords internal

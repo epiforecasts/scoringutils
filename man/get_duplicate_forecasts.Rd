@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_duplicate_forecasts}
 \alias{get_duplicate_forecasts}
-\title{Find duplicate forecasts}
+\title{Find Duplicate Forecasts}
 \usage{
 get_duplicate_forecasts(data, forecast_unit = get_forecast_unit(data))
 }

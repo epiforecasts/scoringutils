@@ -26,22 +26,25 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param scores A data.table of scores as produced by [score()].
-#' @param metric A character vector of length one with the metric to do the
-#' comparison on.
-#' @param by character vector with names of columns present in the input
-#' data.frame. `by` determines how pairwise comparisons will be computed.
-#' You will get a relative skill score for every grouping level determined in
-#' `by`. If, for example, `by = c("model", "location")`. Then you will get a
+#' @param by character vector with column names that define the grouping level
+#' for the pairwise comparisons. By default (`model`), there will be one
+#' relative skill score per model. If, for example,
+#' `by = c("model", "location")`. Then you will get a
 #' separate relative skill score for every model in every location. Internally,
-#' the data.frame will be split according `by` (but removing "model" before
-#' splitting) and the pairwise comparisons will be computed separately for the
-#' split data.frames.
-#' @param baseline character vector of length one that denotes the baseline
-#' model against which to compare other models.
+#' the data.table with scores will be split according `by` (removing "model"
+#' before splitting) and the pairwise comparisons will be computed separately
+#' for the split data.tables.
+#' @param metric A string with the name of the metric for which
+#' a relative skill shall be computed. By default this is either "crps",
+#' "wis" or "brier_score" if any of these are available.
+#' @param baseline A string with the name of a model. If a baseline is
+#' given, then a scaled relative skill with respect to the baseline will be
+#' returned. By default (`NULL`), relative skill will not be scaled with
+#' respect to a baseline model.
 #' @param ... additional arguments for the comparison between two models. See
 #' [compare_two_models()] for more information.
-#' @return A ggplot2 object with a coloured table of summarised scores
+#' @inheritParams summarise_scores
+#' @return A data.table with pairwise comparisons
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -209,7 +212,7 @@ pairwise_comparison <- function(
 #' subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
-#' @inheritParams pairwise_comparison
+#' @inherit pairwise_comparison params return
 #' @importFrom cli cli_abort
 #' @keywords internal
 
@@ -357,6 +360,8 @@ pairwise_comparison_one_group <- function(scores,
 #' determine p-values.
 #' @param n_permutations numeric, the number of permutations for a
 #' permutation test. Default is 999.
+#' @return A list with mean score ratios and p-values for the comparison
+#' between two models
 #' @importFrom cli cli_abort
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
