@@ -20,34 +20,6 @@ check_numeric_vector <- function(x, ...) {
 }
 
 
-#' Check that quantiles are valid
-#'
-#' @description
-#' Helper function to check that input quantiles are valid.
-#' Quantiles must be in the range specified, increase monotonically,
-#' and contain no duplicates.
-#'
-#' This is used in [bias_interval()]() and [bias_quantile()]() to
-#' provide informative errors to users.
-#'
-#' @param quantiles Numeric vector of quantiles to check
-#' @param name Character name to use in error messages
-#' @param range Numeric vector giving allowed range
-#'
-#' @return None. Function errors if quantiles are invalid.
-#'
-#' @keywords internal_input_check
-check_quantiles <- function(quantiles, name = "quantiles", range = c(0, 1)) {
-  if (any(quantiles < range[1]) || any(quantiles > range[2])) {
-    stop(name, " must be between ", range[1], " and ", range[2])
-  }
-
-  if (!all(diff(quantiles) > 0)) {
-    stop(name, " must be increasing")
-  }
-}
-
-
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description Tries to execute an expression. Internally, this is used to
@@ -76,6 +48,7 @@ check_try <- function(expr) {
 #' is a helper function that should only be called within other functions
 #' @param ... The variables to check
 #' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
 #' @return The function returns `NULL`, but throws an error if the variable is
 #' missing.
 #'
@@ -85,101 +58,27 @@ assert_not_null <- function(...) {
   varnames <- names(vars)
 
   calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
+  # Get the function name
+  calling_function <- as.list(
+    strsplit(
+      calling_function, "\\(", fixed = TRUE
+    )
+  )[[1]][1]
 
   for (i in seq_along(vars)) {
+    #nolint start: object_usage_linter
     varname <- varnames[i]
     if (is.null(vars[[i]])) {
-      stop(
-        "variable '", varname,
-        "' is `NULL` in the following function call: '",
-        calling_function, "'"
+      cli_abort(
+        c(
+          "!" = "variable {varname} is {.val {NULL}} in the following
+          function call: {.fn {calling_function}}."
+        )
       )
     }
+    #nolint end
   }
   return(invisible(NULL))
-}
-
-
-#' @title Check Length of Two Vectors is Equal
-#'
-#' @description
-#' Check whether variables all have the same length
-#' @param ... The variables to check
-#' @param one_allowed logical, allow arguments of length one that can be
-#' recycled
-#' @param call_levels_up How many levels to go up when including the function
-#' call in the error message. This is useful when calling `assert_equal_length()`
-#' within another checking function.
-#' @inherit document_assert_functions return
-#'
-#' @keywords internal_input_check
-assert_equal_length <- function(...,
-                                one_allowed = TRUE,
-                                call_levels_up = 2) {
-  vars <- list(...)
-  lengths <- lengths(vars)
-
-  lengths <- unique(lengths)
-
-  if (one_allowed) {
-    # check passes if all have length 1
-    if (all(lengths == 1)) {
-      return(invisible(NULL))
-    }
-    # ignore those where length is one for later checks, as we allow length 1
-    lengths <- lengths[lengths != 1]
-  }
-
-  if (length(unique(lengths)) != 1) {
-    calling_function <- deparse(sys.calls()[[sys.nframe() - call_levels_up]])
-
-    lengths_message <- ifelse(
-      one_allowed,
-      "' should have the same length (or length one). Actual lengths: ",
-      "' should have the same length. Actual lengths: "
-    )
-
-    stop(
-      "Arguments to the following function call: '",
-      calling_function,
-      lengths_message,
-      toString(lengths)
-    )
-  }
-  return(invisible(NULL))
-}
-
-
-#' @title Check Whether There Is a Conflict Between Data and Attributes
-#' @description
-#' Check whether there is a conflict between a stored attribute and the
-#' same value as inferred from the data. For example, this could be if
-#' an attribute `forecast_unit` is stored, but is different from the
-#' `forecast_unit` inferred from the data. The check is successful if
-#' the stored and the inferred value are the same.
-#' @param object The object to check
-#' @param attribute The name of the attribute to check
-#' @param expected The expected value of the attribute
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_attribute_conflict <- function(object, attribute, expected) {
-  existing <- attr(object, attribute)
-  if (is.vector(existing) && is.vector(expected)) {
-    existing <- sort(existing)
-    expected <- sort(expected)
-  }
-
-  if (!is.null(existing) && !identical(existing, expected)) {
-    msg <- paste0(
-      "Object has an attribute `", attribute, "`, but it looks different ",
-      "from what's expected based on the data.\n",
-      "Existing: ", toString(existing), "\n",
-      "Expected: ", toString(expected), "\n",
-      "Running `as_forecast()` again might solve the problem"
-    )
-    return(msg)
-  }
-  return(TRUE)
 }
 
 
@@ -188,15 +87,21 @@ check_attribute_conflict <- function(object, attribute, expected) {
 #' @description
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
-#' @inheritParams score
+#' @inheritParams as_forecast
+#' @importFrom cli cli_inform
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
-assure_model_column <- function(data) {
+ensure_model_column <- function(data) {
   if (!("model" %in% colnames(data))) {
-    message(
-      "There is no column called `model` in the data.",
-      "scoringutils assumes that all forecasts come from the same model" # nolint
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "!" = "There is no column called `model` in the data.",
+        "i" = "scoringutils assumes that all forecasts come from the
+        same model"
+      )
     )
+    #nolint end
     data[, model := "Unspecified model"]
   }
   return(data[])
@@ -231,30 +136,6 @@ check_number_per_forecast <- function(data, forecast_unit) {
 }
 
 
-#' Check columns in data.frame don't have NA values
-#' @description Function checks whether any of the columns in a data.frame,
-#' as specified in `columns`, have NA values. If so, it returns a string with
-#' an error message, otherwise it returns TRUE.
-#' @inherit document_check_functions params return
-#'
-#' @keywords internal_input_check
-check_no_NA_present <- function(data, columns) {
-  for (x in columns){
-    if (anyNA(data[[x]])) {
-      msg <- paste0(
-        "Checking `data`: ",
-        sum(is.na(data[[x]])),
-        " values in column `",
-        x,
-        "`` are NA and corresponding rows will be removed. This is fine if not unexpected." # nolint
-      )
-      return(msg)
-    }
-  }
-  return(TRUE)
-}
-
-
 #' Check that there are no duplicate forecasts
 #'
 #' @description
@@ -262,7 +143,7 @@ check_no_NA_present <- function(data, columns) {
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_duplicates <- function(data, forecast_unit = NULL) {
+check_duplicates <- function(data, forecast_unit = get_forecast_unit(data)) {
   check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
 
   if (nrow(check_duplicates) > 0) {
@@ -293,7 +174,7 @@ check_columns_present <- function(data, columns) {
   assert_character(columns, min.len = 1)
   colnames <- colnames(data)
   missing <- list()
-  for (x in columns){
+  for (x in columns) {
     if (!(x %in% colnames)) {
       missing[[x]] <- x
     }
@@ -333,48 +214,6 @@ test_columns_present <- function(data, columns) {
 test_columns_not_present <- function(data, columns) {
   if (any(columns %in% colnames(data))) {
     return(FALSE)
-  } else {
-    return(TRUE)
-  }
-}
-
-#' Check whether data is data.frame with correct columns
-#' @description Checks whether data is a data.frame, whether columns
-#' "observed" and "predicted" are present, and checks that only one of
-#' "quantile_level" and "sample_id" is present.
-#' @inherit document_check_functions params return
-#' @importFrom checkmate check_data_frame
-#' @keywords internal_input_check
-check_data_columns <- function(data) {
-  is_data <- check_data_frame(data, min.rows = 1)
-  if (!is.logical(is_data)) {
-    return(is_data)
-  }
-  needed <- test_columns_present(data, c("observed", "predicted"))
-  if (!needed) {
-    return("Both columns `observed` and predicted` are needed")
-  }
-  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
-  if (problem) {
-    return(
-      "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
-    )
-  }
-  return(TRUE)
-}
-
-
-#' Check whether an attribute is present
-#' @description Checks whether an object has an attribute
-#' @param object An object to be checked
-#' @param attribute name of an attribute to be checked
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_has_attribute <- function(object, attribute) {
-  if (is.null(attr(object, attribute))) {
-    return(
-      paste0("Found no attribute `", attribute, "`")
-    )
   } else {
     return(TRUE)
   }

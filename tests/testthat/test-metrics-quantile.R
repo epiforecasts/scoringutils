@@ -99,7 +99,9 @@ test_that("`wis()` works within score for median forecast", {
     quantile_level = rep(c(0.5), each = 3),
     model = "model1",
     date = 1:3
-  )
+  ) %>%
+    as_forecast()
+
   eval <- score(
     test_data,
     count_median_twice = TRUE, metrics = metrics_no_cov
@@ -141,7 +143,8 @@ test_that("wis() works within score for one interval", {
     predicted = c(c(0, 1, 0), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 2)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -166,7 +169,8 @@ test_that("`wis()` works 1 interval and median", {
     predicted = c(c(0, 1, 0), c(1, 2, 3), c(2, 2, 3)),
     model = c("model1"),
     date = rep(1:3, times = 3)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -206,7 +210,8 @@ test_that("wis works, 2 intervals and median", {
     ),
     model = c("model1"),
     date = rep(1:3, times = 5)
-  )
+  ) %>%
+    as_forecast()
 
   eval <- score(
     test_data,
@@ -284,7 +289,6 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
     value = forecast_quantiles,
     stringsAsFactors = FALSE
   )
-
   # make a version that conforms to scoringutils format
   truth_formatted <- data.table::as.data.table(test_truth)
   truth_formatted[, `:=`(model = NULL)]
@@ -296,7 +300,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
   eval <- score(
-    data_formatted,
+    as_forecast(data_formatted),
     count_median_twice = FALSE, metrics = metrics_no_cov
   )
 
@@ -364,7 +368,8 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   forecasts_formated <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
-  data_formatted <- merge(forecasts_formated, truth_formatted)
+  data_formatted <- merge(forecasts_formated, truth_formatted) %>%
+    as_forecast()
 
   eval <- suppressMessages(score(data_formatted,
                                  count_median_twice = FALSE, metrics = metrics_no_cov_no_ae
@@ -440,7 +445,8 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   forecasts_formated <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
-  data_formatted <- merge(forecasts_formated, truth_formatted)
+  data_formatted <- merge(forecasts_formated, truth_formatted) %>%
+    as_forecast()
 
   eval <- score(data_formatted,
                 count_median_twice = FALSE, metrics = metrics_no_cov
@@ -608,13 +614,16 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
     interval_coverage(
       observed, dropped_quantile_pred, dropped_quantiles, interval_range = 50
     ),
-    "To compute the interval coverage for an interval range of 50%, the `0.25, 0.75` quantiles are required. Returning `NA`"
+    paste(
+      "To compute the interval coverage for an interval range of \"50%\",",
+      "the 0.25 and 0.75 quantiles are required"
+    )
   )
 })
 
 
 # ============================================================================ #
-# `interval_coverage_deviation` ===================================== #
+# `interval_coverage_deviation` ============================================== #
 # ============================================================================ #
 test_that("interval_coverage_deviation works", {
   existing_ranges <- unique(get_range_from_quantile(quantile_level))
@@ -632,13 +641,13 @@ test_that("interval_coverage_deviation works", {
     interval_coverage_deviation(
       observed, predicted, c(quantile_level[-4], 0.76)
     ),
-    "To compute inteval coverage deviation, all quantiles must form central symmetric prediction intervals. Missing quantiles: 0.24, 0.75. Returning `NA`."
+    "all quantiles must form central symmetric prediction intervals"
   )
 })
 
 
 # ============================================================================ #
-# `bias_quantile` ==============================================================
+# `bias_quantile` ============================================================ #
 # ============================================================================ #
 test_that("bias_quantile() works as expected", {
   predicted <- c(1, 2, 3)
@@ -821,4 +830,46 @@ test_that("bias_quantile() works with point forecasts", {
   observed <- 1
   quantile_level <- 0.5
   expect_equal(bias_quantile(observed, predicted, quantile_level), 0)
+})
+
+
+# ============================================================================ #
+# `ae_median_quantile` ======================================================= #
+# ============================================================================ #
+
+test_that("ae_median_quantile() works as_expected", {
+  observed <- 1:30
+  predicted_values <- matrix(2:31)
+  expect_equal(
+    ae_median_quantile(observed, predicted_values, quantile_level = 0.5),
+    as.numeric(predicted_values - observed)
+  )
+
+  # using a vector as input for predicted does not work if there are several
+  # observed values
+  expect_error(
+    ae_median_quantile(observed, as.numeric(predicted_values), quantile_level = 0.5),
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
+  )
+
+  # it does work if there is only a single observed value - in this case
+  # the vector gets treated as one forecast - which means that we need to
+  # supply multiple quantile levels now, because it assumes that single forecast
+  # is represented by several quantiles
+  expect_equal(
+    ae_median_quantile(observed[1], as.numeric(predicted_values)[1:3], quantile_level = c(0.1, 0.5, 0.7)),
+    2
+  )
+
+  # test that we get a warning if there are inputs without a 0.5 quantile
+  expect_warning(
+    expect_equal(
+      ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
+      NA_real_
+    ),
+    'In order to compute the absolute error of the median, "0.5" must be among the quantiles given.'
+  )
+
+
+  dim(1:10)
 })

@@ -1,8 +1,8 @@
 test_that("function transform_forecasts works", {
-
   predictions_original <- example_quantile$predicted
-  predictions <- transform_forecasts(
-    example_quantile,
+  predictions <- example_quantile %>%
+    as_forecast() %>%
+    transform_forecasts(
     fun = function(x) pmax(0, x),
     append = FALSE
   )
@@ -10,22 +10,38 @@ test_that("function transform_forecasts works", {
   expect_equal(predictions$predicted, pmax(0, predictions_original))
 
   one <- transform_forecasts(predictions, offset = 1)
-  expect_equal(one$predicted,
-               c(predictions$predicted, log(predictions$predicted + 1)))
+  expect_equal(
+    one$predicted,
+    c(predictions$predicted, log(predictions$predicted + 1))
+  )
 
   two <- transform_forecasts(predictions, fun = sqrt, label = "sqrt")
-  expect_equal(two$predicted,
-               c(predictions$predicted, sqrt(predictions$predicted)))
-
-
-  # expect a warning if existing transformation is overwritten
-  expect_warning(
-    transform_forecasts(one, fun = sqrt)
+  expect_equal(
+    two$predicted,
+    c(predictions$predicted, sqrt(predictions$predicted))
   )
+
+
+  # expect a warning + error if you add a second transformation with the same label
+  expect_error(
+    expect_warning(
+      transform_forecasts(one, fun = sqrt),
+      "Appending new transformations with label 'log' even though that entry is already present in column 'scale'"
+    ),
+    "There are instances with more than one forecast for the same target. "
+  )
+
 
   # multiple transformations
   three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
   expect_equal(unique(three$scale), c("natural", "log", "sqrt"))
+
+  # expect_error if there is a scale column, but no value "natural"
+  no_natural <- three[three$scale != "natural", ]
+  expect_error(
+    transform_forecasts(no_natural, fun = identity),
+    "If a column 'scale' is present, entries with scale =='natural' are required for the transformation."
+  )
 
   # multiple transformations without append
   four <- transform_forecasts(two, fun = log_shift, offset = 1, append = FALSE)
@@ -43,6 +59,25 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
   expect_s3_class(transformed, "forecast_binary")
 })
 
+test_that("log_shift() works as expected", {
+  expect_equal(log_shift(1:10, 1), log(1:10 + 1))
+
+  # expect errors if there are values < 0
+  expect_error(
+    log_shift(c(1, 0, -1), 1),
+    "Detected input values < 0."
+  )
+
+  # expect errors if there are zeros
+  expect_warning(
+    log_shift(c(1, 0, 1), offset = 0),
+    "Detected zeros in input values."
+  )
+
+  # test that it does not accept a complex number
+  expect_error(log_shift(1:10, offset = 1, base = 1i))
+})
+
 
 # ============================================================================ #
 # `set_forecast_unit()`
@@ -56,7 +91,8 @@ test_that("function set_forecast_unit() works", {
   ex2 <- set_forecast_unit(
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
-  )
+  ) %>%
+    as_forecast()
   scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 
@@ -92,12 +128,13 @@ test_that("set_forecast_unit() revalidates a forecast object", {
 })
 
 
-test_that("function set_forecast_unit() gives warning when column is not there", {
-  expect_warning(
+test_that("function set_forecast_unit() errors when column is not there", {
+  expect_error(
     set_forecast_unit(
       example_quantile,
       c("location", "target_end_date", "target_type", "horizon", "model", "test1", "test2")
-    )
+    ),
+    "Assertion on 'forecast_unit' failed: Must be a subset of "
   )
 })
 

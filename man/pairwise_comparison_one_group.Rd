@@ -10,8 +10,7 @@ pairwise_comparison_one_group(scores, metric, baseline, by, ...)
 \item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
 
 \item{metric}{A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "wis",
-"crps", or "brier_score" will be selected where available.}
+comparison on.}
 
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}

@@ -15,7 +15,8 @@ metrics_no_cov_no_ae <- rules_quantile(
 
 
 # compute scores
-scores_quantile <- suppressMessages(score(example_quantile))
-scores_continuous <- suppressMessages(score(data = example_continuous))
-scores_point <- suppressMessages(score(example_point))
-scores_binary <- suppressMessages(score(example_binary))
+scores_quantile <- suppressMessages(score(as_forecast(example_quantile)))
+scores_continuous <- suppressMessages(score(as_forecast(example_continuous)))
+scores_point <- suppressMessages(score(as_forecast(example_point)))
+scores_binary <- suppressMessages(score(as_forecast(example_binary)))
+

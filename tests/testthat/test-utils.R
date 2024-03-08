@@ -75,41 +75,68 @@ test_that("get_score_names() works as expected", {
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
     get_score_names(ex),
-    "but are no longer column names of the data: `crps`"
+    "scores have been previously computed, but are no longer column names"
   )
 })
 
+
+# ==============================================================================
+# print
+# ==============================================================================
+
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
-  test_dat <- list(example_binary, example_quantile,
-    example_point, example_continuous, example_integer)
+  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
+    na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
   for (dat in test_dat){
-    dat <- suppressMessages(as_forecast(dat))
+    dat <- as_forecast(dat)
     forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
 
     # Check Forecast type
-    expect_output(print(dat), "Forecast type")
-    expect_output(print(dat), forecast_type)
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
     # Check Forecast unit
-    expect_output(print(dat), "Forecast unit")
-    expect_output(print(dat), pattern = paste(forecast_unit, collapse = " "))
+    expect_snapshot(print(dat))
+    expect_snapshot(print(dat))
 
     # Check print.data.table works.
     output_original <- capture.output(print(dat))
     output_test <- capture.output(print(data.table(dat)))
     expect_contains(output_original, output_test)
   }
+})
 
-  # Check Score columns are printed
-  dat <- example_quantile %>%
-    set_forecast_unit(c("location", "target_end_date",
-      "target_type", "horizon", "model")) %>%
-    as_forecast() %>%
-    add_coverage() %>%
-    suppressMessages
+test_that("print methods fail gracefully", {
+  test <- as_forecast(na.omit(example_quantile))
+  test$observed <- NULL
 
-  expect_output(print(dat), "Score columns")
-  score_cols <- get_score_names(dat)
-  expect_output(print(dat), pattern = paste(score_cols, collapse = " "))
+  # message if forecast type can't be computed
+  expect_warning(
+    expect_message(
+      expect_output(
+        print(test),
+        pattern = "Forecast unit:"
+      ),
+      "Could not determine forecast type due to error in validation."
+    ),
+    "Error in validating forecast object:"
+  )
+
+  # message if forecast unit can't be computed
+  test <- 1:10
+  class(test) <- "forecast_point"
+  expect_warning(
+    expect_message(
+      expect_message(
+        expect_output(
+          print(test),
+          pattern = "Forecast unit:"
+        ),
+        "Could not determine forecast unit."
+      ),
+      "Could not determine forecast type"
+    ),
+    "Error in validating forecast object:"
+  )
 })

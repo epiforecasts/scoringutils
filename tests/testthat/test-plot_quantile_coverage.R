@@ -1,6 +1,8 @@
 test_that("plot_quantile_coverage() works as expected", {
-  coverage <- add_coverage(na.omit(example_quantile)) %>%
-    summarise_scores(by = c("model", "quantile_level"))
+  coverage <- example_quantile %>%
+    na.omit() %>%
+    as_forecast() %>%
+    get_coverage(by = c("model", "quantile_level"))
 
   p <- plot_quantile_coverage(coverage)
   expect_s3_class(p, "ggplot")

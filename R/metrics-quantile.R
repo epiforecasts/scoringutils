@@ -229,6 +229,7 @@ underprediction <- function(observed, predicted, quantile_level, ...) {
 #' interval in percent (e.g. 50 for a 50% prediction interval) for which you
 #' want to compute interval coverage.
 #' @importFrom checkmate assert_number
+#' @importFrom cli cli_warn
 #' @return A vector of length n with elements either TRUE,
 #' if the observed value is within the corresponding prediction interval, and
 #' FALSE otherwise.
@@ -253,11 +254,16 @@ interval_coverage <- function(observed, predicted,
     100 - (100 - interval_range) / 2
   ) / 100
   if (!all(necessary_quantiles %in% quantile_level)) {
-    warning(
-      "To compute the interval coverage for an interval range of ",
-      interval_range, "%, the `", toString(necessary_quantiles),
-      "` quantiles are required. Returning `NA`."
+    #nolint start: keyword_quote_linter object_usage_linter
+    cli_warn(
+      c(
+        "!" = "To compute the interval coverage for an interval range of
+        {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
+        are required.",
+        "i" = "Returning {.val {NA}}."
+      )
     )
+    #nolint end
     return(NA)
   }
   r <- interval_range
@@ -310,6 +316,7 @@ interval_coverage <- function(observed, predicted,
 #' The interval coverage deviation is then averaged across all prediction
 #' intervals. The median is ignored when computing coverage deviation.
 #' @inheritParams wis
+#' @importFrom cli cli_warn
 #' @return A numeric vector of length n with the interval coverage deviation
 #' for each forecast (comprising one or multiple prediction intervals).
 #' @export
@@ -334,12 +341,16 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
     c((100 - available_ranges) / 2, 100 - (100 - available_ranges) / 2) / 100
   )
   if (!all(necessary_quantiles %in% quantile_level)) {
+    #nolint start: keyword_quote_linter object_usage_linter
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile_level]
-    warning(
-      "To compute inteval coverage deviation, all quantiles must form central ",
-      "symmetric prediction intervals. Missing quantiles: ",
-      toString(missing), ". Returning `NA`."
+    cli_warn(
+      c(
+        "x" = "To compute interval coverage deviation, all quantiles must form
+        central symmetric prediction intervals.",
+        "i" = "Missing quantiles: {.val {missing}}. Returning {.val {NA}}."
+      )
     )
+    #nolint end
     return(NA)
   }
 
@@ -352,7 +363,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
   out <- reformatted[, .(
     interval_coverage_deviation = mean(interval_coverage_deviation)
   ), by = "forecast_id"]
-  return(out$interval_coverage_dev)
+  return(out$interval_coverage_deviation)
 }
 
 
@@ -399,6 +410,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 #' which predictions were made. If this does not contain the median (0.5) then
 #' the median is imputed as being the mean of the two innermost quantiles.
 #' @param na.rm logical. Should missing values be removed?
+#' @importFrom cli cli_inform
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
@@ -423,10 +435,14 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   if (!(0.5 %in% quantile_level)) {
-    message(
-      "Median not available, computing bias as mean of the two innermost ",
-      "quantiles in order to compute bias."
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "i" = "Median not available, computing bias as mean of the two
+        innermost quantiles in order to compute bias."
+      )
     )
+    #nolint end
   }
   bias <- sapply(1:n, function(i) {
     bias_quantile_single_vector(
@@ -447,6 +463,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
 #' for which predictions were made. If this does not contain the median (0.5)
 #' then the median is imputed as being the mean of the two innermost quantiles.
 #' @inheritParams bias_quantile
+#' @importFrom cli cli_abort
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted,
@@ -472,7 +489,14 @@ bias_quantile_single_vector <- function(observed, predicted,
   order <- order(quantile_level)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
-    stop("Predictions must not be decreasing with increasing quantile level")
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Predictions must not be decreasing with increasing
+        quantile level."
+      )
+    )
+    #nolint end
   }
 
   if (0.5 %in% quantile_level) {
@@ -523,6 +547,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' @return numeric vector of length N with the absolute error of the median
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
+#' @importFrom cli cli_warn
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
@@ -532,10 +557,15 @@ bias_quantile_single_vector <- function(observed, predicted,
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {
-    warning(
-      "in order to compute the absolute error of the median, `0.5` must be ",
-      "among the quantile levels given. Returning `NA`."
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "x" = "In order to compute the absolute error of the median,
+        {.val 0.5} must be among the quantiles given.",
+        "i" = "Returning {.val NA}."
+      )
     )
+    #nolint end
     return(NA_real_)
   }
   if (is.null(dim(predicted))) {

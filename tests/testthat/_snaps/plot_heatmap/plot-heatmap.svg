@@ -57,20 +57,20 @@
 <text transform='translate(573.26,477.48) rotate(-90)' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='27.89px' lengthAdjust='spacingAndGlyphs'>Deaths</text>
 <text x='419.89' y='515.68' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='55.04px' lengthAdjust='spacingAndGlyphs'>target_type</text>
 <text transform='translate(13.05,247.66) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='29.96px' lengthAdjust='spacingAndGlyphs'>model</text>
+<text x='363.85' y='553.50' style='font-size: 11.00px; font-family: sans;' textLength='20.18px' lengthAdjust='spacingAndGlyphs'>bias</text>
 <image width='86.40' height='17.28' x='389.52' y='534.40' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAABCAYAAABkOJMpAAAAgklEQVQ4jbVRSRKAIAxL//8/z37AN8RDcArIJuCppNnqaMd5EWYwAGaAQQ/HWgqnb2mlca/jN+e5iPamhXCpM7olQPUXc/22uAekyGQSIMLs8SVdhx/Onunu6Fa8s7ph746urxktfcW3M+uPzJVvzzgO9QOs/ud0snnjo8luLnVlnhv1hRP8wmytawAAAABJRU5ErkJggg=='/>
+<polyline points='406.06,548.22 406.06,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='426.57,548.22 426.57,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='447.07,548.22 447.07,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='467.57,548.22 467.57,551.68 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='406.06,537.85 406.06,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='426.57,537.85 426.57,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='447.07,537.85 447.07,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='467.57,537.85 467.57,534.40 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <text x='406.06' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.0</text>
 <text x='426.57' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.1</text>
 <text x='447.07' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.2</text>
 <text x='467.57' y='563.21' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.3</text>
-<text x='363.85' y='553.50' style='font-size: 11.00px; font-family: sans;' textLength='20.18px' lengthAdjust='spacingAndGlyphs'>bias</text>
-<line x1='406.06' y1='551.68' x2='406.06' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='426.57' y1='551.68' x2='426.57' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='447.07' y1='551.68' x2='447.07' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='467.57' y1='551.68' x2='467.57' y2='548.22' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='406.06' y1='537.85' x2='406.06' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='426.57' y1='537.85' x2='426.57' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='447.07' y1='537.85' x2='447.07' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<line x1='467.57' y1='537.85' x2='467.57' y2='534.40' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
 <text x='125.25' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='80.00px' lengthAdjust='spacingAndGlyphs'>plot_heatmap</text>
 </g>
 </svg>

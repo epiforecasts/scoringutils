@@ -1,14 +1,19 @@
 #' @title Summarise scores as produced by [score()]
 #'
-#' @description Summarise scores as produced by [score()]
+#' @description Summarise scores as produced by [score()].
+#'
+#' `summarise_scores` relies on a way to identify the names of the scores and
+#' distinguish them from columns that denote the unit of a single forecast.
+#' Internally, this is done via a stored attribute, `score_names` that stores
+#' the names of the scores. This means, however, that you need to be careful
+#' with renaming scores after they have been produced by [score()]. If you
+#' do, you also have to manually update the attribute by calling
+#' `attr(scores, "score_names") <- new_names`.
 #'
 #' @inheritParams pairwise_comparison
 #' @inheritParams score
 #' @param by character vector with column names to summarise scores by. Default
-#' is `NULL`, meaning that the only summary that takes is place is summarising
-#' over samples or quantiles (in case of quantile-based forecasts), such that
-#' there is one score per forecast as defined by the *unit of a single forecast*
-#' (rather than one score for every sample or quantile).
+#' is `model`, meaning that there will be one score per model in the output.
 #' The *unit of a single forecast* is determined by the columns present in the
 #' input data that do not correspond to a metric produced by [score()], which
 #' indicate indicate a grouping of forecasts (for example there may be one
@@ -17,9 +22,8 @@
 #' @param across character vector with column names from the vector of variables
 #' that define the *unit of a single forecast* (see above) to summarise scores
 #' across (meaning that the specified columns will be dropped). This is an
-#' alternative to specifying `by` directly. If `NULL` (default), then `by` will
-#' be used or inferred internally if also not specified. Only  one of `across`
-#' and `by`  may be used at a time.
+#' alternative to specifying `by` directly. If `across` is set, `by` will be
+#' ignored. If `across` is `NULL` (default), then `by` will be used.
 #' @param fun a function used for summarising scores. Default is `mean`.
 #' @param ... additional parameters that can be passed to the summary function
 #' provided to `fun`. For more information see the documentation of the
@@ -32,14 +36,7 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #' library(magrittr) # pipe operator
-#' \dontrun{
-#' scores <- score(example_continuous)
-#' summarise_scores(scores)
-#' }
-#'
-#' # summarise over samples or quantiles to get one score per forecast
-#' scores <- score(example_quantile)
-#' summarise_scores(scores)
+#' scores <- score(as_forecast(example_continuous))
 #'
 #' # get scores by model
 #' summarise_scores(scores,by = "model")
@@ -58,75 +55,45 @@
 #' # round digits
 #' summarise_scores(scores,by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
-#'
-#' # get quantiles of scores
-#' # make sure to aggregate over interval ranges first
-#' summarise_scores(scores,
-#'   by = "model", fun = quantile,
-#'   probs = c(0.25, 0.5, 0.75)
-#' )
-#'
-#' # get ranges
-#' # summarise_scores(scores, by = "range")
 #' @export
+#' @importFrom checkmate assert_subset assert_function test_subset
 #' @keywords scoring
 
 summarise_scores <- function(scores,
-                             by = NULL,
+                             by = "model",
                              across = NULL,
                              fun = mean,
                              ...) {
-  if (!is.null(across) && !is.null(by)) {
-    stop("You cannot specify both 'across' and 'by'. Please choose one.")
-  }
-
+  # input checking ------------------------------------------------------------
+  # Check the score names attribute exists
   score_names <- attr(scores, "score_names")
   if (is.null(score_names)) {
-    stop("`scores` needs to have an attribute `score_names` with the names of
-         the metrics that were used for scoring.")
+    stop("`scores` needs to have an attribute `score_names` with ",
+         "the names of the metrics that were used for scoring.")
   }
 
-  # preparations ---------------------------------------------------------------
-  # get unit of a single forecast
+  if (!test_subset(score_names, names(scores))) {
+    warning(
+      "The names of the scores previously computed do not match the names ",
+      "of the columns in `scores`. This may lead to unexpected results."
+    )
+  }
+
+  # get the forecast unit (which relies on the presence of a scores attribute)
   forecast_unit <- get_forecast_unit(scores)
 
-  # if by is not provided, set to the unit of a single forecast
-  if (is.null(by)) {
-    by <- forecast_unit
-  }
+  assert_subset(by, names(scores), empty.ok = TRUE)
+  assert_subset(across, names(scores), empty.ok = TRUE)
+  assert_function(fun)
 
-  # if across is provided, remove from by
+  # if across is provided, calculate new `by`
   if (!is.null(across)) {
-    if (!all(across %in% forecast_unit)) {
-      stop(
-        "The columns specified in 'across' must be a subset of the columns ",
-        "that define the forecast unit (possible options are ",
-        toString(forecast_unit),
-        "). Please check your input and try again."
-      )
+    if (!setequal(by, "model")) {
+      warning("You specified `across` and `by` at the same time.",
+              "`by` will be ignored.")
     }
     by <- setdiff(forecast_unit, across)
   }
-
-  # check input arguments and check whether relative skill can be computed
-  assert(check_columns_present(scores, by))
-
-  # store attributes as they may be dropped in data.table operations
-  stored_attributes <- c(
-    get_scoringutils_attributes(scores),
-    list(
-      scoringutils_by = by,
-      unsummarised_scores =  scores
-    )
-  )
-
-  # takes the mean over ranges and quantiles first, if neither range nor
-  # quantile are in `by`. Reason to do this is that summaries may be
-  # inaccurate if we treat individual quantiles as independent forecasts
-  scores <- scores[, lapply(.SD, base::mean, ...),
-    by = c(unique(c(forecast_unit, by))),
-    .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
-  ]
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
@@ -134,17 +101,7 @@ summarise_scores <- function(scores,
     .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
   ]
 
-  # remove unnecessary columns -------------------------------------------------
-  # if neither quantile nor range are in by, remove coverage and
-  # quantile_coverage because averaging does not make sense
-  if (!("interval_range" %in% by) && ("coverage" %in% colnames(scores))) {
-    scores[, "coverage" := NULL]
-  }
-  if (!("quantile_level" %in% by) && "quantile_coverage" %in% names(scores)) {
-    scores[, "quantile_coverage" := NULL]
-  }
-
-  scores <- assign_attributes(scores, stored_attributes)
+  attr(scores, "score_names") <- score_names
   return(scores[])
 }
 
@@ -170,26 +127,26 @@ summarize_scores <- summarise_scores
 #' @param scores MORE INFO HERE.
 #' @param by character vector with column names to summarise scores by. Default
 #' is "model", meaning that there will be one relative skill score per model.
-#' @param relative_skill_metric character with the name of the metric for which
-#' a relative skill shall be computed. If equal to 'auto' (the default), then
-#' this will be either interval score, CRPS or Brier score (depending on which
-#' of these is available in the input data)
+#' @param metric character with the name of the metric for which
+#' a relative skill shall be computed.
 #' @param baseline character string with the name of a model. If a baseline is
 #' given, then a scaled relative skill with respect to the baseline will be
 #' returned. By default (`NULL`), relative skill will not be scaled with
 #' respect to a baseline model.
 #' @export
 #' @keywords keyword scoring
-add_pairwise_comparison <- function(scores,
-                                    by = "model",
-                                    relative_skill_metric = "auto",
-                                    baseline = NULL) {
+add_pairwise_comparison <- function(
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL
+) {
 
   # input checks are done in `pairwise_comparison()`
   # do pairwise comparisons ----------------------------------------------------
   pairwise <- pairwise_comparison(
     scores = scores,
-    metric = relative_skill_metric,
+    metric = metric,
     baseline = baseline,
     by = by
   )
@@ -213,7 +170,7 @@ add_pairwise_comparison <- function(scores,
 
   # Update score names
   new_score_names <- paste(
-    relative_skill_metric, c("relative_skill", "scaled_relative_skill"),
+    metric, c("relative_skill", "scaled_relative_skill"),
     sep = "_"
   )
   new_score_names <- new_score_names[new_score_names %in% names(scores)]

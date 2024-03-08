@@ -115,6 +115,7 @@ test_that("sample_to_quantiles issue 557 fix", {
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
+    as_forecast() %>%
     score()
 
   expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
@@ -169,7 +170,7 @@ test_that("quantile_to_range works - scalar and vector case", {
 
   # check error if observed is a vector and predicted is a vector as well
   expect_error(quantile_to_interval(
-    observed = c(1, 2), predicted = c(1, 2), quantile = c(0.1, 0.9)),
+    observed = c(1, 2), predicted = c(1, 2), quantile_level = c(0.1, 0.9)),
     "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
   )
 

@@ -7,7 +7,7 @@
 pairwise_comparison(
   scores,
   by = "model",
-  metric = "auto",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
   ...
 )
@@ -25,8 +25,7 @@ splitting) and the pairwise comparisons will be computed separately for the
 split data.frames.}
 
 \item{metric}{A character vector of length one with the metric to do the
-comparison on. The default is "auto", meaning that either "wis",
-"crps", or "brier_score" will be selected where available.}
+comparison on.}
 
 \item{baseline}{character vector of length one that denotes the baseline
 model against which to compare other models.}
@@ -67,7 +66,7 @@ Andrea Riebler and Michaela Paul.
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 pairwise <- pairwise_comparison(scores, by = "target_type")
 
 library(ggplot2)

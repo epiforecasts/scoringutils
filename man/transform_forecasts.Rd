@@ -7,7 +7,8 @@
 transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{fun}{A function used to transform both observed values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
@@ -68,6 +69,7 @@ library(magrittr) # pipe operator
 # negative values need to be handled (here by replacing them with 0)
 example_quantile \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
+  as_forecast() \%>\%
 # Here we use the default function log_shift() which is essentially the same
 # as log(), but has an additional arguments (offset) that allows you add an
 # offset before applying the logarithm.
@@ -76,6 +78,7 @@ example_quantile \%>\%
 
 # alternatively, integrating the truncation in the transformation function:
 example_quantile \%>\%
+  as_forecast() \%>\%
  transform_forecasts(
    fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
  ) \%>\%
@@ -84,6 +87,7 @@ example_quantile \%>\%
 # specifying an offset for the log transformation removes the
 # warning caused by zeros in the data
 example_quantile \%>\%
+  as_forecast() \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
   transform_forecasts(offset = 1, append = FALSE) \%>\%
   head()
@@ -91,12 +95,14 @@ example_quantile \%>\%
 # adding square root transformed forecasts to the original ones
 example_quantile \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
+  as_forecast() \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
   summarise_scores(by = c("model", "scale"))
 
 # adding multiple transformations
 example_quantile \%>\%
+  as_forecast() \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
   transform_forecasts(fun = log_shift, offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%

@@ -97,36 +97,16 @@ remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 
 In this quick start guide we explore some of the functionality of the `scoringutils` package using quantile forecasts from the [ECDC forecasting hub](https://covid19forecasthub.eu/) as an example. For more detailed documentation please see the package vignettes, and individual function documentation.
 
-### Plotting forecasts
-
-As a first step to evaluating the forecasts we visualise them. For the purposes of this example here we make use of `plot_predictions()` to filter the available forecasts for a single model, and forecast date.
-
-```{r, fig.width = 9, fig.height = 6}
-example_quantile %>%
-  make_NA(what = "truth", 
-          target_end_date >= "2021-07-15", 
-          target_end_date < "2021-05-22"
-  ) %>%
-  make_NA(what = "forecast",
-          model != "EuroCOVIDhub-ensemble", 
-          forecast_date != "2021-06-28"
-  ) %>%
-  plot_predictions(
-    x = "target_end_date",
-    by = c("target_type", "location")
-  ) +
-  facet_wrap(target_type ~ location, ncol = 4, scales = "free") 
-```
-
 ### Scoring forecasts
 
-Forecasts can be easily and quickly scored using the `score()` function. `score()` automatically tries to determine the `forecast_unit`, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually using `set_forecast_unit()` as this may help to avoid errors, especially when scoringutils is used in automated pipelines. The function `set_forecast_unit()` will simply drop unneeded columns. To verify everything is in order, the function `validate_forecast()` should be used. The result of that check can then passed directly into `score()`. `score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of additional functions from `scoringutils` to add empirical coverage-levels (`add_coverage()`), and scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
+Forecasts can be easily and quickly scored using the `score()` function. `score()` automatically tries to determine the `forecast_unit`, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the "forecast_unit" argument in `as_forecast()` as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by `scoringutils`. The function `as_forecast()` processes and validates the inputs. 
+`score()` returns unsummarised scores, which in most cases is not what the user wants. Here we make use of an additional function from `scoringutils` to add scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.
 
 ```{r score-example}
 example_quantile %>%
-  set_forecast_unit(c("location", "target_end_date", "target_type", "horizon", "model")) %>%
-  as_forecast() %>%
-  add_coverage() %>%
+  as_forecast(forecast_unit = c(
+    "location", "target_end_date", "target_type", "horizon", "model"
+  )) %>%
   score() %>%
   add_pairwise_comparison(
     by = c("model", "target_type"), 
@@ -149,9 +129,11 @@ You may want to score forecasts based on transformations of the original data in
 ```{r}
 example_quantile %>%
  .[, observed := ifelse(observed < 0, 0, observed)] %>%
+  as_forecast() %>%
   transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
   score %>%
   summarise_scores(by = c("model", "target_type", "scale")) %>%
+  summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
   head()
 ```
 
