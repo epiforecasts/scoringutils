@@ -1,10 +1,10 @@
-test_that("assert_input_interval() works as expected", {
-  observed <- rnorm(30, mean = 1:30)
-  interval_range <- rep(90, 30)
-  alpha <- (100 - interval_range) / 100
-  lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
-  upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
+observed <- rnorm(30, mean = 1:30)
+interval_range <- rep(90, 30)
+alpha <- (100 - interval_range) / 100
+lower <- qnorm(alpha / 2, rnorm(30, mean = 1:30))
+upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
 
+test_that("assert_input_interval() works as expected", {
   expect_no_condition(
     assert_input_interval(observed, lower, upper, interval_range)
   )
@@ -29,7 +29,7 @@ test_that("check_input_interval() works as expected", {
   )
   # expect message return if upper < lower
   expect_match(
-    scoringutils:::check_input_interval(observed, upper, lower, interval_range),
+    check_input_interval(observed, upper, lower, interval_range),
     regexp = "All values in `upper` need to be greater than or equal"
   )
 })
