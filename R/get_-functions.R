@@ -229,7 +229,6 @@ get_protected_columns <- function(data = NULL) {
     "pit_value", "interval_range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
-    available_metrics(),
     grep("_relative_skill$", names(data), value = TRUE),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
