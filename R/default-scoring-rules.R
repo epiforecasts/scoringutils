@@ -11,15 +11,15 @@
 #' @importFrom checkmate assert_subset assert_list
 #' @export
 #' @examples
-#' select_rules(
+#' select_metrics(
 #'   metrics = metrics_binary(),
 #'   select = "brier_score"
 #' )
-#' select_rules(
+#' select_metrics(
 #'   metrics = metrics_binary(),
 #'   exclude = "log_score"
 #' )
-select_rules <- function(rules, select = NULL, exclude = NULL) {
+select_metrics <- function(rules, select = NULL, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
   assert_list(rules, names = "named")
   allowed <- names(rules)
@@ -44,7 +44,7 @@ select_rules <- function(rules, select = NULL, exclude = NULL) {
 #' The default scoring rules are:
 #' - "brier_score" = [brier_score()]
 #' - "log_score" = [logs_binary()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
@@ -56,7 +56,7 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
     brier_score = brier_score,
     log_score = logs_binary
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
@@ -69,7 +69,7 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
@@ -81,7 +81,7 @@ metrics_point <- function(select = NULL, exclude = NULL) {
     se_point = Metrics::se,
     ape = Metrics::ape
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
@@ -99,7 +99,7 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #' - "mad" = [mad_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
@@ -115,7 +115,7 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
     ae_median = ae_median_sample,
     se_mean = se_mean_sample
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
@@ -144,7 +144,7 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' accept get passed on to it. `interval_range = 90` is set in the function definition,
 #' as passing an argument `interval_range = 90` to [score()] would mean it would also
 #' get passed to `interval_coverage_50`.
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
@@ -164,6 +164,6 @@ metrics_quantile <- function(select = NULL, exclude = NULL) {
     interval_coverage_deviation = interval_coverage_deviation,
     ae_median = ae_median_quantile
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }

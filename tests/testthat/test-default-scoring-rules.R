@@ -1,34 +1,34 @@
-test_that("`select_rules` works as expected", {
+test_that("`select_metrics` works as expected", {
 
   expect_equal(
-    scoringutils:::select_rules(metrics_point(), select = NULL),
+    scoringutils:::select_metrics(metrics_point(), select = NULL),
     metrics_point()
   )
 
   expect_equal(
-    scoringutils:::select_rules(metrics_point(), select = NULL),
-    scoringutils:::select_rules(metrics_point())
+    scoringutils:::select_metrics(metrics_point(), select = NULL),
+    scoringutils:::select_metrics(metrics_point())
   )
 
   expect_equal(
-    names(scoringutils:::select_rules(metrics_point(), select = "ape")),
+    names(scoringutils:::select_metrics(metrics_point(), select = "ape")),
     "ape"
   )
 
   expect_equal(
-    length(scoringutils:::select_rules(metrics_point(), select = NULL, exclude = "ape")),
+    length(scoringutils:::select_metrics(metrics_point(), select = NULL, exclude = "ape")),
     length(metrics_point()) - 1
   )
 
   # if both select and exclude are specified, exclude is ignored
   expect_equal(
-    names(scoringutils:::select_rules(metrics_point(), select = "ape", exclude = "ape")),
+    names(scoringutils:::select_metrics(metrics_point(), select = "ape", exclude = "ape")),
     "ape"
   )
 
   # expect error if possibilities is not a list
   expect_error(
-    scoringutils:::select_rules(metrics_point, select = NULL),
+    scoringutils:::select_metrics(metrics_point, select = NULL),
     "Assertion on 'rules' failed: Must be of type 'list', not 'closure'."
   )
 })
@@ -57,7 +57,7 @@ test_that("default rules work as expected", {
 
   # if both select and exclude are specified, exclude is ignored
   expect_equal(
-    names(scoringutils:::select_rules(metrics_quantile(), select = "wis", exclude = "wis")),
+    names(scoringutils:::select_metrics(metrics_quantile(), select = "wis", exclude = "wis")),
     "wis"
   )
 

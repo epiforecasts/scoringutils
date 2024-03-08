@@ -87,7 +87,7 @@ score.forecast_binary <- function(data, metrics = metrics_binary(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  scores <- apply_rules(
+  scores <- apply_metrics(
     data, metrics,
     data$observed, data$predicted, ...
   )
@@ -108,7 +108,7 @@ score.forecast_point <- function(data, metrics = metrics_point(), ...) {
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  scores <- apply_rules(
+  scores <- apply_metrics(
     data, metrics,
     data$observed, data$predicted, ...
   )
@@ -144,7 +144,7 @@ score.forecast_sample <- function(data, metrics = metrics_sample(), ...) {
     predicted <- do.call(rbind, data$predicted)
     data[, c("observed", "predicted", "scoringutils_N") := NULL]
 
-    data <- apply_rules(
+    data <- apply_metrics(
       data, metrics,
       observed, predicted, ...
     )
@@ -190,7 +190,7 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
       "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
     ) := NULL]
 
-    data <- apply_rules(
+    data <- apply_metrics(
       data, metrics,
       observed, predicted, quantile_level, ...
     )
@@ -206,7 +206,7 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
 
 #' @title Apply A List Of Functions To A Data Table Of Forecasts
 #' @description This helper function applies scoring rules (stored as a list of
-#' functions) to a data table of forecasts. `apply_rules` is used within
+#' functions) to a data table of forecasts. `apply_metrics` is used within
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
@@ -214,7 +214,7 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics
 #' @keywords internal
-apply_rules <- function(data, metrics, ...) {
+apply_metrics <- function(data, metrics, ...) {
   expr <- expression(
     data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
   )
