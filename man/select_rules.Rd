@@ -24,11 +24,11 @@ the user from a list of possible scoring rules.
 }
 \examples{
 select_rules(
-  rules = rules_binary(),
+  metrics = metrics_binary(),
   select = "brier_score"
 )
 select_rules(
-  rules = rules_binary(),
+  metrics = metrics_binary(),
   exclude = "log_score"
 )
 }

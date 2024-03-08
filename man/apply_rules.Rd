@@ -11,8 +11,8 @@ apply_rules(data, metrics, ...)
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
-column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
-\code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
+column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
+\code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
 default metrics used.}
 
 \item{...}{additional arguments}
