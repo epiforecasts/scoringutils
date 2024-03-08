@@ -46,7 +46,8 @@ correlation <- function(scores,
     as.data.frame((cor_mat)),
     score_names = metrics,
     keep.rownames = TRUE
-  )[, metric := rn][, rn := NULL]
+  )
+  correlations <- copy(correlations)[, metric := rn][, rn := NULL]
 
   return(correlations[])
 }
