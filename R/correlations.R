@@ -10,7 +10,9 @@
 #' @param digits A number indicating how many decimal places the result should
 #' be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams pairwise_comparison
-#' @return A data.table with correlations for the different metrics
+#' @return An object of class `scores` (a data.table with an additional
+#' attribute `score_names` holding the names of the scores) with correlations
+#' between different metrics
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @importFrom cli cli_warn
@@ -22,7 +24,7 @@
 correlation <- function(scores,
                         metrics = NULL,
                         digits = NULL) {
-  metrics <- get_score_names(scores)
+  metrics <- get_score_names(scores, error = TRUE)
 
   # remove all non metrics and non-numeric columns
   df <- scores[, .SD, .SDcols = sapply(
@@ -40,7 +42,9 @@ correlation <- function(scores,
     cor_mat <- round(cor_mat, digits)
   }
 
-  correlations <- setDT(as.data.frame((cor_mat)),
+  correlations <- new_scores(
+    as.data.frame((cor_mat)),
+    score_names = metrics,
     keep.rownames = TRUE
   )[, metric := rn][, rn := NULL]
 

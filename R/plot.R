@@ -751,7 +751,7 @@ plot_forecast_counts <- function(forecast_counts,
 
 plot_correlation <- function(correlations) {
 
-  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+  metrics <- get_score_names(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
   rownames(lower_triangle) <- colnames(lower_triangle)
