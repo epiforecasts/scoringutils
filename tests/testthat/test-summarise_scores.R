@@ -50,13 +50,13 @@ test_that("summarise_scores() works with point forecasts", {
   )
 })
 
-test_that("summarise_scores() handles the `score_names` attribute correctly", {
+test_that("summarise_scores() handles the `metrics` attribute correctly", {
   test <- data.table::copy(scores_quantile)
-  attr(test, "score_names") <- NULL
+  attr(test, "metrics") <- NULL
 
   expect_error(
     summarise_scores(test, by = "model"),
-    "`scores` needs to have an attribute `score_names` with the names"
+    "`scores` needs to have an attribute `metrics` with the names"
   )
 
   # expect warning if a score name changed
