@@ -1,15 +1,3 @@
-#' @title Available metrics in scoringutils
-#'
-#' @return A vector with the name of all available metrics
-#' @export
-#' @keywords info
-available_metrics <- function() {
-  return(unique(c(scoringutils::metrics$Name,
-                  "wis", "interval_coverage_50", "interval_coverage_90",
-                  "interval_coverage_deviation")))
-}
-
-
 #' @title Run a function safely
 #' @description This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the
