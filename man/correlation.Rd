@@ -18,7 +18,9 @@ be shown}
 be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
-A data.table with correlations for the different metrics
+An object of class \code{scores} (a data.table with an additional
+attribute \code{score_names} holding the names of the scores) with correlations
+between different metrics
 }
 \description{
 Calculate the correlation between different metrics for a data.frame of
