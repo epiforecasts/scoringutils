@@ -31,25 +31,6 @@ test_that("summarise_scores() handles wrong by argument well", {
   )
 })
 
-test_that("summarise_scores() works with point forecasts", {
-  expect_no_condition(
-    pw_point <- add_pairwise_comparison(
-      scores_point,
-      metric = "se_point"
-    )
-  )
-  pw_point <- summarise_scores(pw_point, by = "model")
-
-  pw_manual <- pairwise_comparison(
-    scores_point, by = "model", metric = "se_point"
-  )
-
-  expect_equal(
-    pw_point$relative_skill,
-    unique(pw_manual$relative_skill)
-  )
-})
-
 test_that("summarise_scores() handles the `score_names` attribute correctly", {
   test <- data.table::copy(scores_quantile)
   attr(test, "score_names") <- NULL

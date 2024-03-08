@@ -448,3 +448,45 @@ test_that("compare_two_models() throws error with wrong inputs", {
   )
 })
 
+test_that("add_pairwise_comparison() works with point forecasts", {
+  expect_no_condition(
+    pw_point <- add_pairwise_comparison(
+      scores_point,
+      metric = "se_point"
+    )
+  )
+  pw_point <- summarise_scores(pw_point, by = "model")
+
+  pw_manual <- pairwise_comparison(
+    scores_point, by = "model", metric = "se_point"
+  )
+
+  expect_equal(
+    pw_point$relative_skill,
+    unique(pw_manual$relative_skill)
+  )
+})
+
+test_that("add_pairwise_comparison() can compute relative measures", {
+  scores_with <- add_pairwise_comparison(
+    scores_quantile,
+  )
+  scores_with <- summarise_scores(scores_with, by = "model")
+
+  expect_equal(
+    scores_with[, wis_relative_skill],
+    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
+  )
+
+  scores_with <- add_pairwise_comparison(
+    scores_quantile, by = "model",
+    metric = "ae_median"
+  )
+  scores_with <- summarise_scores(scores_with, by = "model")
+
+  expect_equal(
+    scores_with[, ae_median_relative_skill],
+    c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
+  )
+})
+

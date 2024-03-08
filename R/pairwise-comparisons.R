@@ -506,3 +506,58 @@ permutation_test <- function(scores1,
   # plus ones to make sure p-val is never 0?
   return(pVal)
 }
+
+
+#' @title Add pairwise comparisons
+#' @description Adds a columns with relative skills computed by running
+#' pairwise comparisons on the scores.
+#' For more information on
+#' the computation of relative skill, see [pairwise_comparison()].
+#' Relative skill will be calculated for the aggregation level specified in
+#' `by`.
+#' @inheritParams pairwise_comparison
+#' @export
+#' @keywords keyword scoring
+add_pairwise_comparison <- function(
+    scores,
+    by = "model",
+    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+    baseline = NULL
+) {
+
+  # input checks are done in `pairwise_comparison()`
+  # do pairwise comparisons ----------------------------------------------------
+  pairwise <- pairwise_comparison(
+    scores = scores,
+    metric = metric,
+    baseline = baseline,
+    by = by
+  )
+
+  # store original score_names
+  score_names <- get_score_names(scores)
+
+  if (!is.null(pairwise)) {
+    # delete unnecessary columns
+    pairwise[, c(
+      "compare_against", "mean_scores_ratio",
+      "pval", "adj_pval"
+    ) := NULL]
+    pairwise <- unique(pairwise)
+
+    # merge back
+    scores <- merge(
+      scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+    )
+  }
+
+  # Update score names
+  new_score_names <- paste(
+    metric, c("relative_skill", "scaled_relative_skill"),
+    sep = "_"
+  )
+  new_score_names <- new_score_names[new_score_names %in% names(scores)]
+  scores <- new_scores(scores, score_names = c(score_names, new_score_names))
+
+  return(scores)
+}
