@@ -21,6 +21,9 @@
 
 \item{...}{additional arguments for \code{\link[=print]{print()}}}
 }
+\value{
+returns x invisibly
+}
 \description{
 This function prints information about a forecast object,
 including "Forecast type", "Score columns",

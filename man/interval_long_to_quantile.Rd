@@ -14,7 +14,7 @@ interval_long_to_quantile(data, keep_range_col = FALSE)
 transformation (default is FALSE)}
 }
 \value{
-a data.frame in a plain quantile format
+a data.table in a plain quantile format
 }
 \description{
 Transform data from a format that uses interval ranges to denote quantiles

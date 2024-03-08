@@ -14,7 +14,7 @@
 #' @param metrics A character vector with the metrics to show. If set to
 #' `NULL` (default), all metrics present in `scores` will be shown.
 #'
-#' @return A ggplot2 object with a coloured table of summarised scores
+#' @return A ggplot object with a coloured table of summarised scores
 #' @inheritParams pairwise_comparison
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
@@ -140,11 +140,12 @@ plot_score_table <- function(scores,
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
 #' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
-#' @return A ggplot2 object showing a contributions from the three components of
+#' @return A ggplot object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
 #' scale_fill_discrete
 #' theme theme_light unit guides guide_legend .data
+#' @return A ggplot object with a visualisation of the WIS decomposition
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -226,7 +227,7 @@ plot_wis <- function(scores,
 #' could be something like "horizon", or "location"
 #' @param metric the metric that determines the value and colour shown in the
 #' tiles of the heatmap
-#' @return A ggplot2 object showing a heatmap of the desired metric
+#' @return A ggplot object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
@@ -410,6 +411,8 @@ plot_quantile_coverage <- function(coverage,
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
 #' element_text element_blank
+#' @return A ggplot object with a heatmap of mean score ratios from pairwise
+#' comparisons
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -541,7 +544,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
-#' @return vector with the scoring values
+#' @return A ggplot object with a histogram of PIT values
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -662,7 +665,7 @@ plot_pit <- function(pit,
 #' are shown on the x-axis.
 #' @param show_counts logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
-#' @return ggplot object with a plot of interval coverage
+#' @return A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
@@ -731,12 +734,13 @@ plot_forecast_counts <- function(forecast_counts,
 #'
 #' @param correlations A data.table of correlations between scores as produced
 #' by [correlation()].
-#' @return A ggplot2 object showing a coloured matrix of correlations
+#' @return A ggplot object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
 #' @export
+#' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' correlations <- correlation(

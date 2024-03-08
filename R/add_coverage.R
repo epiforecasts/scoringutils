@@ -1,9 +1,14 @@
 #' @title Get Quantile And Interval Coverage Values For Quantile-Based Forecasts
 #'
-#' @description Compute interval coverage of central prediction intervals,
-#' quantile coverage for predictive quantiles, as well as the deviation between
-#' desired and actual coverage to a data.table. Forecasts should be in a
-#' quantile format (following the input requirements of `score()`).
+#' @description For a validated forecast object in a quantile-based format
+#' (see [as_forecast()] for more information), this function computes
+#' - interval coverage of central prediction intervals
+#' - quantile coverage for predictive quantiles
+#' - the deviation between desired and actual coverage (both for interval and
+#' quantile coverage)
+#'
+#' Coverage values are computed for a specific level of grouping, as specified
+#' in the `by` argument. By default, coverage values are computed per model.
 #'
 #' **Interval coverage**
 #'
@@ -13,15 +18,6 @@
 #' by two quantiles that denote the lower and upper bound. For example, the 50%
 #' central prediction interval is the interval between the 0.25 and 0.75
 #' quantiles of the predictive distribution.
-#'
-#' The function `get_coverage()` computes the coverage per central prediction
-#' interval. This means that if you set `by` to the unit of a single forecast,
-#' interval coverage will always be either `TRUE`
-#' (observed value falls within the interval) or `FALSE` (observed value falls
-#' outside the interval) and analogously for quantile coverage.
-#' Coverage values become meaningful by summarising them across different
-#' dimensions, as specified in the `by` argument (thereby returning the
-#' proportion of values covered by all prediction intervals/quantiles).
 #'
 #' **Quantile coverage**
 #'
@@ -38,7 +34,8 @@
 #' (can be either interval or quantile coverage) and the
 #' actual coverage. For example, if the desired coverage is 90% and the actual
 #' coverage is 80%, the coverage deviation is -0.1.
-#'
+#' @return A data.table with columns as specified in `by` and additional
+#' columns for the coverage values described above
 #' @inheritParams score
 #' @param by character vector that denotes the level of grouping for which the
 #' coverage values should be computed. By default (`"model"`), one coverage

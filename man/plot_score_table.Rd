@@ -7,7 +7,8 @@
 plot_score_table(scores, y = "model", by = NULL, metrics = NULL)
 }
 \arguments{
-\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{score_names} as produced by \code{\link[=score]{score()}})}
 
 \item{y}{the variable to be shown on the y-axis. Instead of a single character string,
 you can also specify a vector with column names, e.g.
@@ -22,7 +23,7 @@ metric, but you can provide additional column names (see examples).}
 \code{NULL} (default), all metrics present in \code{scores} will be shown.}
 }
 \value{
-A ggplot2 object with a coloured table of summarised scores
+A ggplot object with a coloured table of summarised scores
 }
 \description{
 Plots a coloured table of summarised scores obtained using

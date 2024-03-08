@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{mad_sample}
 \alias{mad_sample}
-\title{Determine dispersion of a probabilistic forecast}
+\title{Determine Dispersion Of A Probabilistic Forecast}
 \usage{
 mad_sample(observed = NULL, predicted, ...)
 }
@@ -21,7 +21,7 @@ Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 vector with dispersion values
 }
 \description{
-Determine dispersion of a probabilistic forecast
+Determine Dispersion Of A Probabilistic Forecast
 }
 \details{
 Sharpness is the ability of the model to generate predictions within a

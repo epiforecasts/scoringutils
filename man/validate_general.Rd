@@ -2,17 +2,16 @@
 % Please edit documentation in R/validate.R
 \name{validate_general}
 \alias{validate_general}
-\title{Apply scoringutls input checks that are the same across forecast types}
+\title{Validation Common To All Forecast Types}
 \usage{
 validate_general(data)
 }
 \arguments{
-\item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+\item{data}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 }
 \value{
-returns the input, with a few new attributes that hold additional
-information, messages and warnings
+returns the input
 }
 \description{
 The function runs input checks that apply to all input data, regardless of

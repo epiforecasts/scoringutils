@@ -34,9 +34,10 @@ A data.table with columns as specified in \code{by} and an additional
 column "count" with the number of forecasts.
 }
 \description{
-Given a data set with forecasts, count the number of available forecasts
-for arbitrary grouping (e.g. the number of forecasts per model, or the
-number of forecasts per model and location).
+Given a data set with forecasts, count the number of available forecasts.
+The level of grouping can be specified using the \code{by} argument (e.g. to
+count the number of forecasts per model, or the number of forecasts per
+model and location).
 This is useful to determine whether there are any missing forecasts.
 }
 \examples{

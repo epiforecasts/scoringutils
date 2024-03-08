@@ -248,7 +248,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 }
 
 
-#' @title Apply scoringutls input checks that are the same across forecast types
+#' @title Validation Common To All Forecast Types
 #'
 #' @description
 #' The function runs input checks that apply to all input data, regardless of
@@ -259,9 +259,8 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
-#' @inheritParams as_forecast
-#' @return returns the input, with a few new attributes that hold additional
-#' information, messages and warnings
+#' @inheritParams get_forecast_counts
+#' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @importFrom cli cli_abort cli_inform

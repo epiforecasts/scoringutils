@@ -44,11 +44,11 @@
 #' @param ... Additional parameters to pass to the function you supplied. For
 #' the default option of [log_shift()] this could be the `offset` argument.
 #'
-#' @return A `data.table` with either a transformed version of the data, or one
-#' with both the untransformed and the transformed data. includes the original
-#' data as well as a transformation of the original data. There will be one
-#' additional column, `scale', present which will be set to "natural" for the
-#' untransformed forecasts.
+#' @return A forecast object with either a transformed version of the data, or
+#' one with both the untransformed and the transformed data. includes the
+#' original data as well as a transformation of the original data. There will
+#' be one additional column, `scale', present which will be set to "natural"
+#' for the untransformed forecasts.
 #'
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom cli cli_abort cli_warn

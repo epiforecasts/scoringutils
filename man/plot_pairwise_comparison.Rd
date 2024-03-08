@@ -18,6 +18,10 @@ plot_pairwise_comparison(
 visualise the ratio or the p-value of the pairwise comparison.
 Default is "mean_scores_ratio".}
 }
+\value{
+A ggplot object with a heatmap of mean score ratios from pairwise
+comparisons
+}
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
 between models

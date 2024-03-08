@@ -13,7 +13,7 @@ as_scores(scores, score_names)
 (i.e. the names of the scoring rules used for scoring)}
 }
 \value{
-Returns an object of class 1scores`
+An object of class \code{scores}
 }
 \description{
 This convenience function wraps \code{\link[=new_scores]{new_scores()}} and validates

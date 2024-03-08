@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{logs_sample}
 \alias{logs_sample}
-\title{Logarithmic score}
+\title{Logarithmic Score}
 \usage{
 logs_sample(observed, predicted, ...)
 }

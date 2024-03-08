@@ -12,15 +12,23 @@ add_pairwise_comparison(
 )
 }
 \arguments{
-\item{scores}{MORE INFO HERE.}
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{score_names} as produced by \code{\link[=score]{score()}})}
 
-\item{by}{character vector with column names to summarise scores by. Default
-is "model", meaning that there will be one relative skill score per model.}
+\item{by}{character vector with column names that define the grouping level
+for the pairwise comparisons. By default (\code{model}), there will be one
+relative skill score per model. If, for example,
+\code{by = c("model", "location")}. Then you will get a
+separate relative skill score for every model in every location. Internally,
+the data.table with scores will be split according \code{by} (removing "model"
+before splitting) and the pairwise comparisons will be computed separately
+for the split data.tables.}
 
-\item{metric}{character with the name of the metric for which
-a relative skill shall be computed.}
+\item{metric}{A string with the name of the metric for which
+a relative skill shall be computed. By default this is either "crps",
+"wis" or "brier_score" if any of these are available.}
 
-\item{baseline}{character string with the name of a model. If a baseline is
+\item{baseline}{A string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
@@ -28,13 +36,10 @@ respect to a baseline model.}
 \description{
 Adds a columns with relative skills computed by running
 pairwise comparisons on the scores.
-
-a column called
-'model' must be present in the input data. For more information on
+For more information on
 the computation of relative skill, see \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
 Relative skill will be calculated for the aggregation level specified in
 \code{by}.
-WRITE MORE INFO HERE.
 }
 \keyword{keyword}
 \keyword{scoring}

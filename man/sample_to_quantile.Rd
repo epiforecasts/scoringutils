@@ -20,7 +20,7 @@ quantiles will be computed}
 information, see \code{\link[=quantile]{quantile()}}}
 }
 \value{
-a data.frame in a long interval range format
+a data.table in a long interval range format
 }
 \description{
 Transform data from a format that is based on predictive samples to a format

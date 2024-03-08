@@ -22,7 +22,9 @@
 #' @param ... additional arguments
 #' @return An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
-#' `score_names` with the names of the metrics used for scoring.
+#' `score_names` with the names of the metrics used for scoring. See
+#' [summarise_scores()]) for information on how to summarise
+#' scores.
 #' @importFrom data.table ':=' as.data.table
 #' @importFrom stats na.omit
 #' @examples
@@ -232,6 +234,7 @@ apply_rules <- function(data, metrics, ...) {
 #' @param score_names A character vector with the names of the scores
 #' (i.e. the names of the scoring rules used for scoring)
 #' @keywords internal
+#' @return An object of class `scores`
 #' @examples
 #' \dontrun{
 #' df <- data.frame(
@@ -251,8 +254,7 @@ new_scores <- function(scores, score_names) {
 #' Create An Object Of Class `scores` From Data
 #' @description This convenience function wraps [new_scores()] and validates
 #' the `scores` object.
-#' @inheritParams new_scores
-#' @returns Returns an object of class 1scores`
+#' @inherit new_scores params return
 #' @importFrom checkmate assert_data_frame
 #' @keywords internal
 as_scores <- function(scores, score_names) {
