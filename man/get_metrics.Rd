@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_metrics}
 \alias{get_metrics}
-\title{Get Names Of The Scoring Rules That Were Used For Scoring}
+\title{Get Names Of The Metrics That Were Used For Scoring}
 \usage{
 get_metrics(scores, error = FALSE)
 }

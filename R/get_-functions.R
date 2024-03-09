@@ -130,7 +130,7 @@ get_type <- function(x) {
 }
 
 
-#' @title Get Names Of The Scoring Rules That Were Used For Scoring
+#' @title Get Names Of The Metrics That Were Used For Scoring
 #' @description
 #' When applying a scoring rule via [score()], the names of the scoring rules
 #' become column names of the

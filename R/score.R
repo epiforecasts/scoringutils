@@ -16,8 +16,8 @@
 #' @param data A forecast object (a validated data.table with predicted and
 #' observed values, see [as_forecast()])
 #' @param metrics A named list of scoring functions. Names will be used as
-#' column names in the output. See [rules_point()], [rules_binary()],
-#' [rules_quantile()], and [rules_sample()] for more information on the
+#' column names in the output. See [metrics_point()], [metrics_binary()],
+#' [metrics_quantile()], and [metrics_sample()] for more information on the
 #' default metrics used.
 #' @param ... additional arguments
 #' @return An object of class `scores`. This object is a data.table with
@@ -81,13 +81,13 @@ score.default <- function(data, metrics, ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
+score.forecast_binary <- function(data, metrics = metrics_binary(), ...) {
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  scores <- apply_rules(
+  scores <- apply_metrics(
     data, metrics,
     data$observed, data$predicted, ...
   )
@@ -102,13 +102,13 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(data, metrics = rules_point(), ...) {
+score.forecast_point <- function(data, metrics = metrics_point(), ...) {
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
   metrics <- validate_metrics(metrics)
 
-  scores <- apply_rules(
+  scores <- apply_metrics(
     data, metrics,
     data$observed, data$predicted, ...
   )
@@ -121,7 +121,7 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
+score.forecast_sample <- function(data, metrics = metrics_sample(), ...) {
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
@@ -144,7 +144,7 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     predicted <- do.call(rbind, data$predicted)
     data[, c("observed", "predicted", "scoringutils_N") := NULL]
 
-    data <- apply_rules(
+    data <- apply_metrics(
       data, metrics,
       observed, predicted, ...
     )
@@ -160,7 +160,7 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
+score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   data <- na.omit(data)
@@ -190,7 +190,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
       "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
     ) := NULL]
 
-    data <- apply_rules(
+    data <- apply_metrics(
       data, metrics,
       observed, predicted, quantile_level, ...
     )
@@ -206,7 +206,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
 
 #' @title Apply A List Of Functions To A Data Table Of Forecasts
 #' @description This helper function applies scoring rules (stored as a list of
-#' functions) to a data table of forecasts. `apply_rules` is used within
+#' functions) to a data table of forecasts. `apply_metrics` is used within
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
@@ -214,7 +214,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics
 #' @keywords internal
-apply_rules <- function(data, metrics, ...) {
+apply_metrics <- function(data, metrics, ...) {
   expr <- expression(
     data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
   )
