@@ -79,10 +79,10 @@ pairwise_comparison <- function(
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
-  score_names <- get_score_names(scores, error = TRUE)
+  metrics <- get_metrics(scores, error = TRUE)
 
   # check that metric is a subset of the scores and is of length 1
-  assert_subset(metric, score_names, empty.ok = FALSE)
+  assert_subset(metric, metrics, empty.ok = FALSE)
   assert_character(metric, len = 1)
 
   # check that model column + columns in 'by' are present

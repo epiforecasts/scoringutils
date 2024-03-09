@@ -22,7 +22,7 @@
 #' @param ... additional arguments
 #' @return An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
-#' `score_names` with the names of the metrics used for scoring. See
+#' `metrics` with the names of the metrics used for scoring. See
 #' [summarise_scores()]) for information on how to summarise
 #' scores.
 #' @importFrom data.table ':=' as.data.table
@@ -92,7 +92,7 @@ score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
     data$observed, data$predicted, ...
   )
 
-  scores <- as_scores(scores, score_names = names(metrics))
+  scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }
 
@@ -113,7 +113,7 @@ score.forecast_point <- function(data, metrics = rules_point(), ...) {
     data$observed, data$predicted, ...
   )
 
-  scores <- as_scores(scores, score_names = names(metrics))
+  scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }
 
@@ -151,7 +151,7 @@ score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
     return(data)
   })
   scores <- rbindlist(split_result)
-  scores <- as_scores(scores, score_names = names(metrics))
+  scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }
 
@@ -198,7 +198,7 @@ score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
   })
   scores <- rbindlist(split_result)
 
-  scores <- as_scores(scores, score_names = names(metrics))
+  scores <- as_scores(scores, metrics = names(metrics))
 
   return(scores[])
 }
@@ -231,7 +231,7 @@ apply_rules <- function(data, metrics, ...) {
 #' @description This function creates an object of class `scores` based on a
 #' data.table or similar.
 #' @param scores A data.table or similar with scores as produced by [score()]
-#' @param score_names A character vector with the names of the scores
+#' @param metrics A character vector with the names of the scores
 #' (i.e. the names of the scoring rules used for scoring)
 #' @param ... Additional arguments to [as.data.table()]
 #' @keywords internal
@@ -245,10 +245,10 @@ apply_rules <- function(data, metrics, ...) {
 #' )
 #' new_scores(df, "wis")
 #' }
-new_scores <- function(scores, score_names, ...) {
+new_scores <- function(scores, metrics, ...) {
   scores <- as.data.table(scores, ...)
   class(scores) <- c("scores", class(scores))
-  setattr(scores, "score_names", score_names)
+  setattr(scores, "metrics", metrics)
   return(scores[])
 }
 
@@ -259,9 +259,9 @@ new_scores <- function(scores, score_names, ...) {
 #' @inherit new_scores params return
 #' @importFrom checkmate assert_data_frame
 #' @keywords internal
-as_scores <- function(scores, score_names) {
+as_scores <- function(scores, metrics) {
   assert_data_frame(scores)
-  scores <- new_scores(scores, score_names)
+  scores <- new_scores(scores, metrics)
   validate_scores(scores)
   return(scores[])
 }
@@ -269,7 +269,7 @@ as_scores <- function(scores, score_names) {
 
 #' Validate An Object Of Class `scores`
 #' @description This function validates an object of class `scores`, checking
-#' that it has the correct class and that it has a `score_names` attribute.
+#' that it has the correct class and that it has a `metrics` attribute.
 #' @inheritParams new_scores
 #' @returns Returns `NULL` invisibly
 #' @importFrom checkmate assert_class assert_data_frame
@@ -277,9 +277,9 @@ as_scores <- function(scores, score_names) {
 validate_scores <- function(scores) {
   assert_data_frame(scores)
   assert_class(scores, "scores")
-  # error if no score_names exists +
-  # throw warning if any of the score_names is not in the data
-  get_score_names(scores, error = TRUE)
+  # error if no metrics exists +
+  # throw warning if any of the metrics is not in the data
+  get_metrics(scores, error = TRUE)
   return(invisible(NULL))
 }
 
@@ -288,7 +288,7 @@ validate_scores <- function(scores) {
 `[.scores` <- function(x, ...) {
   ret <- NextMethod()
   if (is.data.frame(ret)) {
-    attr(ret, "score_names") <- attr(x, "score_names")
+    attr(ret, "metrics") <- attr(x, "metrics")
   }
   return(ret)
 }
