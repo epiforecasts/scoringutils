@@ -4,7 +4,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_quantile))
@@ -16,7 +16,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_binary))
@@ -27,7 +27,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_continuous))
