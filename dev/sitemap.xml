@@ -46,7 +46,7 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/ae_median_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/apply_rules.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/apply_metrics.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast.html</loc>
@@ -232,6 +232,18 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_binary.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_point.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_quantile.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_sample.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/new_forecast.html</loc>
   </url>
   <url>
@@ -289,18 +301,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/rules_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/rules_point.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/rules_quantile.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/rules_sample.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/run_safely.html</loc>
   </url>
   <url>
@@ -322,7 +322,7 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/se_mean_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/select_rules.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/select_metrics.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/set_forecast_unit.html</loc>

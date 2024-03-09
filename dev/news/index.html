@@ -64,26 +64,26 @@
 <li>The overall scoring workflow was updated. Most functions now operate on forecast objects, which can be created using the function <code><a href="../reference/as_forecast.html">as_forecast()</a></code>. This function replaces the previous <code>check_forecast()</code> function and validates the inputs. <code><a href="../reference/as_forecast.html">as_forecast()</a></code> also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> in most cases. <code><a href="../reference/score.html">score()</a></code> is now a generic function that dispatches the correct method based on the forecast type. Forecast types currently supported are “binary”, “point”, “sample” and “quantile” with corresponding classes “forecast_binary”, “forecast_point”, “forecast_sample” and “forecast_quantile”.</li>
 <li>
 <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> now errors if any of the values in <code>forecast_unit</code> are not columns of the data.</li>
-<li>Scoring rules (functions used for scoring) received a consistent interface and input checks:
-<ul><li>Scoring rules for binary forecasts:
+<li>All scoring functions exported by the package received a consistent interface and input checks:
+<ul><li>Metrics and scoring rules for binary forecasts:
 <ul><li>
 <code>observed</code>: factor with exactly 2 levels</li>
 <li>
 <code>predicted</code>: numeric, vector with probabilities</li>
 </ul></li>
-<li>Scoring rules for point forecasts:
+<li>Metrics and scoring rules for point forecasts:
 <ul><li>
 <code>observed</code>: numeric vector</li>
 <li>
 <code>predicted</code>: numeric vector</li>
 </ul></li>
-<li>Scoring rules for sample-based forecasts:
+<li>Metrics and scoring rules for sample-based forecasts:
 <ul><li>
 <code>observed</code>: numeric, either a scalar or a vector</li>
 <li>
 <code>predicted</code>: numeric, a vector (if <code>observed</code> is a scalar) or a matrix (if <code>observed</code> is a vector)</li>
 </ul></li>
-<li>Scoring rules for quantile-based forecasts:
+<li>Metrics and scoring rules for quantile-based forecasts:
 <ul><li>
 <code>observed</code>: numeric, either a scalar or a vector</li>
 <li>
@@ -92,7 +92,7 @@
 <code>quantile_level</code>: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as <code>predicted</code>.</li>
 </ul></li>
 </ul></li>
-<li>Users can now supply their own scoring rules to <code><a href="../reference/score.html">score()</a></code> as a list of functions. Default scoring rules can be accessed using the functions <code><a href="../reference/rules_point.html">rules_point()</a></code>, <code><a href="../reference/rules_sample.html">rules_sample()</a></code>, <code><a href="../reference/rules_quantile.html">rules_quantile()</a></code> and <code><a href="../reference/rules_binary.html">rules_binary()</a></code>, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of <code><a href="../reference/score.html">score()</a></code> correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules).</li>
+<li>Users can now supply their own metrics and scoring rules to <code><a href="../reference/score.html">score()</a></code> as a list of functions. Default scoring rules can be accessed using the functions <code><a href="../reference/metrics_point.html">metrics_point()</a></code>, <code><a href="../reference/metrics_sample.html">metrics_sample()</a></code>, <code><a href="../reference/metrics_quantile.html">metrics_quantile()</a></code> and <code><a href="../reference/metrics_binary.html">metrics_binary()</a></code>, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of <code><a href="../reference/score.html">score()</a></code> correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).</li>
 <li>
 <code><a href="../reference/score.html">score()</a></code> now returns objects of class <code>scores</code> with a stored attribute <code>metrics</code> that holds the names of the scoring rules that were used. Users can call <code><a href="../reference/get_metrics.html">get_metrics()</a></code> to access the names of those scoring rules.</li>
 <li>
