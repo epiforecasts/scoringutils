@@ -24,26 +24,38 @@ The example data used is the data shipped with the `scoringutils` package. It co
 
 ```{r setup, message=FALSE}
 library(scoringutils)
+library(data.table)
 library(ggplot2)
-library(tidyr)
-library(dplyr)
+library(magrittr)
 ```
 
 # Visualising forecasts
 
 ## Timeseries plot with only one horizon (visualisation of all 2 week ahead forecasts and observed values)
 
-This plot shows a visualisation of all available two week ahead forecasts and observed data for Germany. 
+The following plot shows a visualisation of all available two week ahead forecasts and observed data for Germany. First, we need to filter the data and cast it into a wide format. 
 
 ```{r}
+two_week_forecasts <- example_quantile %>%
+  .[model %in% c(NA,"EuroCOVIDhub-ensemble") &
+      target_type == "Cases" &
+      location == "DE" &
+      horizon == 2] %>%
+  dcast(formula = ... ~ quantile_level, value.var = "predicted")
+```
+
+The above code used `data.table`. Here is the same with `dplyr` and `tidyr` syntax: 
+```{r eval=FALSE}
 two_week_forecasts <- example_quantile %>%
   filter(model %in% c(NA,"EuroCOVIDhub-ensemble"), 
          target_type == "Cases", 
          location == "DE", 
-         horizon == 2)
+         horizon == 2) %>%
+  pivot_wider(names_from = quantile_level, values_from = c("predicted"))
+```
 
+```{r eval=FALSE}
 two_week_forecasts %>%
-  pivot_wider(names_from = quantile_level, values_from = c("predicted")) %>%
   ggplot(aes(x = target_end_date)) + 
   geom_ribbon(aes(ymin = `0.025`, ymax = `0.975`), fill = "skyblue2", alpha = 0.3) + 
   geom_ribbon(aes(ymin = `0.25`, ymax = `0.75`), fill = "skyblue2", alpha = 0.3) + 
@@ -58,13 +70,13 @@ two_week_forecasts %>%
 
 ```{r}
 forecasts_one_date <- example_quantile %>%
-  filter(model %in% c(NA,"EuroCOVIDhub-ensemble"), 
-         target_type == "Cases", 
-         forecast_date == "2021-06-14",
-         location == "DE")
+  .[model %in% c(NA,"EuroCOVIDhub-ensemble") &
+      target_type == "Cases" &
+      forecast_date == "2021-06-14" &
+      location == "DE"] %>%
+  dcast(formula = ... ~ quantile_level, value.var = "predicted")
 
 forecasts_one_date %>%
-  pivot_wider(names_from = quantile_level, values_from = c("predicted")) %>%
   ggplot(aes(x = target_end_date)) + 
   geom_ribbon(aes(ymin = `0.025`, ymax = `0.975`), fill = "skyblue2", alpha = 0.3) +
   geom_ribbon(aes(ymin = `0.25`, ymax = `0.75`), fill = "skyblue2", alpha = 0.3) +
