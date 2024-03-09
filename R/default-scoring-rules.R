@@ -1,7 +1,7 @@
-#' @title Select Scoring Rules From A List of Possible Scoring Rules
+#' @title Select Metrics From A List of Functions
 #' @description Helper function to return only the scoring rules selected by
-#' the user from a list of possible scoring rules.
-#' @param rules A list of scoring rules.
+#' the user from a list of possible functions.
+#' @param metrics A list of scoring functions.
 #' @param select A character vector of scoring rules to select from the list.
 #' If `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
@@ -11,57 +11,57 @@
 #' @importFrom checkmate assert_subset assert_list
 #' @export
 #' @examples
-#' select_rules(
-#'   rules = rules_binary(),
+#' select_metrics(
+#'   metrics = metrics_binary(),
 #'   select = "brier_score"
 #' )
-#' select_rules(
-#'   rules = rules_binary(),
+#' select_metrics(
+#'   metrics = metrics_binary(),
 #'   exclude = "log_score"
 #' )
-select_rules <- function(rules, select = NULL, exclude = NULL) {
+select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
-  assert_list(rules, names = "named")
-  allowed <- names(rules)
+  assert_list(metrics, names = "named")
+  allowed <- names(metrics)
 
   if (is.null(select) && is.null(exclude)) {
-    return(rules)
+    return(metrics)
   } else if (is.null(select)) {
     assert_subset(exclude, allowed)
     select <- allowed[!allowed %in% exclude]
-    return(rules[select])
+    return(metrics[select])
   } else {
     assert_subset(select, allowed)
-    return(rules[select])
+    return(metrics[select])
   }
 }
 
 
-#' @title Scoring Rules for Binary Forecasts
+#' @title Default Metrics And Scoring Rules for Binary Forecasts
 #' @description Helper function that returns a named list of default
 #' scoring rules suitable for binary forecasts.
 #'
 #' The default scoring rules are:
 #' - "brier_score" = [brier_score()]
 #' - "log_score" = [logs_binary()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
-#' rules_binary()
-#' rules_binary(select = "brier_score")
-#' rules_binary(exclude = "log_score")
-rules_binary <- function(select = NULL, exclude = NULL) {
+#' metrics_binary()
+#' metrics_binary(select = "brier_score")
+#' metrics_binary(exclude = "log_score")
+metrics_binary <- function(select = NULL, exclude = NULL) {
   all <- list(
     brier_score = brier_score,
     log_score = logs_binary
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
 
-#' @title Scoring Rules for Point Forecasts
+#' @title Default Metrics And Scoring Rules for Point Forecasts
 #' @description Helper function that returns a named list of default
 #' scoring rules suitable for point forecasts.
 #'
@@ -69,26 +69,26 @@ rules_binary <- function(select = NULL, exclude = NULL) {
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
-#' rules_point()
-#' rules_point(select = "ape")
-rules_point <- function(select = NULL, exclude = NULL) {
+#' metrics_point()
+#' metrics_point(select = "ape")
+metrics_point <- function(select = NULL, exclude = NULL) {
   all <- list(
     ae_point = Metrics::ae,
     se_point = Metrics::se,
     ape = Metrics::ape
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
 
-#' @title Scoring Rules for Sample-Based Forecasts
+#' @title Default Metrics And Scoring Rules for Sample-Based Forecasts
 #' @description Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a sample-based format
+#' scoring rules suitable for forecasts in a sample-based format.
 #'
 #' The default scoring rules are:
 #' - "mad" = [mad_sample()]
@@ -99,13 +99,13 @@ rules_point <- function(select = NULL, exclude = NULL) {
 #' - "mad" = [mad_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
-#' rules_sample()
-#' rules_sample(select = "mad")
-rules_sample <- function(select = NULL, exclude = NULL) {
+#' metrics_sample()
+#' metrics_sample(select = "mad")
+metrics_sample <- function(select = NULL, exclude = NULL) {
   all <- list(
     bias = bias_sample,
     dss = dss_sample,
@@ -115,14 +115,14 @@ rules_sample <- function(select = NULL, exclude = NULL) {
     ae_median = ae_median_sample,
     se_mean = se_mean_sample
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }
 
 
-#' @title Scoring Rules for Quantile-Based Forecasts
+#' @title Default Metrics And Scoring Rules for Quantile-Based Forecasts
 #' @description Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a quantile-based format
+#' scoring rules suitable for forecasts in a quantile-based format.
 #'
 #' The default scoring rules are:
 #' - "wis" = [wis]
@@ -144,13 +144,13 @@ rules_sample <- function(select = NULL, exclude = NULL) {
 #' accept get passed on to it. `interval_range = 90` is set in the function definition,
 #' as passing an argument `interval_range = 90` to [score()] would mean it would also
 #' get passed to `interval_coverage_50`.
-#' @inherit select_rules params return
+#' @inherit select_metrics params return
 #' @export
 #' @keywords metric
 #' @examples
-#' rules_quantile()
-#' rules_quantile(select = "wis")
-rules_quantile <- function(select = NULL, exclude = NULL) {
+#' metrics_quantile()
+#' metrics_quantile(select = "wis")
+metrics_quantile <- function(select = NULL, exclude = NULL) {
   all <- list(
     wis = wis,
     overprediction = overprediction,
@@ -164,6 +164,6 @@ rules_quantile <- function(select = NULL, exclude = NULL) {
     interval_coverage_deviation = interval_coverage_deviation,
     ae_median = ae_median_quantile
   )
-  selected <- select_rules(all, select, exclude)
+  selected <- select_metrics(all, select, exclude)
   return(selected)
 }

@@ -130,63 +130,63 @@ get_type <- function(x) {
 }
 
 
-#' @title Get Names Of The Scoring Rules That Were Used For Scoring
+#' @title Get Names Of The Metrics That Were Used For Scoring
 #' @description
 #' When applying a scoring rule via [score()], the names of the scoring rules
 #' become column names of the
-#' resulting data.table. In addition, an attribute `score_names` will be
+#' resulting data.table. In addition, an attribute `metrics` will be
 #' added to the output, holding the names of the scores as a vector.
 #' This is done so that a function like [get_forecast_unit()] can still
 #' identify which columns are part of the forecast unit and which hold a score.
 #'
-#' `get_score_names()` access and returns this attribute. If there is no
+#' `get_metrics()` access and returns this attribute. If there is no
 #' attribute, the function will return NULL. Users can control whether the
 #' function should error instead via the `error` argument.
 #'
-#' `get_score_names()` also checks whether the names of the scores stored in
+#' `get_metrics()` also checks whether the names of the scores stored in
 #' the attribute are column names of the data and will throw a warning if not.
 #' This can happen if you rename columns after scoring. You can either run
 #' [score()] again, specifying names for the scoring rules manually, or you
 #' can update the attribute manually using
-#' `attr(scores, "score_names") <- c("names", "of", "your", "scores")` (the
+#' `attr(scores, "metrics") <- c("names", "of", "your", "scores")` (the
 #' order does not matter).
 #'
-#' @param scores A data.table with an attribute `score_names`
-#' @param error Throw an error if there is no attribute called `score_names`?
+#' @param scores A data.table with an attribute `metrics`
+#' @param error Throw an error if there is no attribute called `metrics`?
 #' Default is FALSE.
 #' @importFrom cli cli_abort cli_warn
 #' @return Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
 #' @export
-get_score_names <- function(scores, error = FALSE) {
-  score_names <- attr(scores, "score_names")
-  if (error && is.null(score_names)) {
+get_metrics <- function(scores, error = FALSE) {
+  metrics <- attr(scores, "metrics")
+  if (error && is.null(metrics)) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Object needs an attribute `score_names` with the names of the
+        "!" = "Object needs an attribute `metrics` with the names of the
          scoring rules that were used for scoring.",
-        "i" = "See `?get_score_names` for further information."
+        "i" = "See `?get_metrics` for further information."
       )
     )
     #nolint end
   }
 
-  if (!all(score_names %in% names(scores))) {
+  if (!all(metrics %in% names(scores))) {
     #nolint start: keyword_quote_linter object_usage_linter
-    missing <- setdiff(score_names, names(scores))
+    missing <- setdiff(metrics, names(scores))
     cli_warn(
       c(
         "!" = "The following scores have been previously computed, but are no
             longer column names of the data: {.val {missing}}",
-        "i" = "See {.code ?get_score_names} for further information."
+        "i" = "See {.code ?get_metrics} for further information."
       )
     )
     #nolint end
   }
 
-  return(score_names)
+  return(metrics)
 }
 
 
@@ -204,7 +204,7 @@ get_score_names <- function(scores, error = FALSE) {
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
   protected_columns <- get_protected_columns(data)
-  protected_columns <- c(protected_columns, attr(data, "score_names"))
+  protected_columns <- c(protected_columns, attr(data, "metrics"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
@@ -229,7 +229,6 @@ get_protected_columns <- function(data = NULL) {
     "pit_value", "interval_range", "boundary",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
-    available_metrics(),
     grep("_relative_skill$", names(data), value = TRUE),
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )

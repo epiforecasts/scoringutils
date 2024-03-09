@@ -8,7 +8,7 @@ correlation(scores, metrics = NULL, digits = NULL)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{score_names} as produced by \code{\link[=score]{score()}})}
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
 
 \item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will
@@ -18,7 +18,9 @@ be shown}
 be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
-A data.table with correlations for the different metrics
+An object of class \code{scores} (a data.table with an additional
+attribute \code{metrics} holding the names of the scores) with correlations
+between different metrics
 }
 \description{
 Calculate the correlation between different metrics for a data.frame of
