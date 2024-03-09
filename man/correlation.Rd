@@ -19,7 +19,7 @@ be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
 An object of class \code{scores} (a data.table with an additional
-attribute \code{score_names} holding the names of the scores) with correlations
+attribute \code{metrics} holding the names of the scores) with correlations
 between different metrics
 }
 \description{
