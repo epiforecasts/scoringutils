@@ -4,7 +4,7 @@
 
 test_that("new_scores() works", {
   expect_equal(
-    class(new_scores(data.frame(), score_names = "")),
+    class(new_scores(data.frame(), metrics = "")),
     c("scores", "data.table", "data.frame")
   )
 
@@ -16,11 +16,11 @@ test_that("new_scores() works", {
 
 test_that("as_scores() works", {
   expect_equal(
-    class(scoringutils:::as_scores(data.frame(wis = 1), score_names = "wis")),
+    class(scoringutils:::as_scores(data.frame(wis = 1), metrics = "wis")),
     c("scores", "data.table", "data.frame")
   )
   expect_warning(
-    scoringutils:::as_scores(data.frame(), score_names = "wis"),
+    scoringutils:::as_scores(data.frame(), metrics = "wis"),
     "The following scores have been previously computed"
   )
 })
@@ -189,19 +189,19 @@ test_that("function produces output for a point case", {
   )
   expect_equal(
     colnames(eval),
-    c("model", "target_type", names(rules_point()))
+    c("model", "target_type", names(metrics_point()))
   )
 })
 
 test_that("Changing metrics names works", {
-  metrics_test <- rules_point()
+  metrics_test <- metrics_point()
   names(metrics_test)[1] = "just_testing"
   eval <- suppressMessages(score(as_forecast(example_point),
                                  metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
-    c("model", "just_testing", names(rules_point())[-1])
+    c("model", "just_testing", names(metrics_point())[-1])
   )
 })
 
@@ -225,7 +225,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
     nrow(eval) > 1,
     TRUE
   )
-  expect_true(all(names(rules_quantile()) %in% colnames(eval)))
+  expect_true(all(names(metrics_quantile()) %in% colnames(eval)))
 })
 
 
@@ -241,12 +241,12 @@ test_that("score() quantile produces desired metrics", {
   data <-suppressWarnings(suppressMessages(as_forecast(data)))
 
   out <- score(data = data, metrics = metrics_no_cov)
-  score_names <- c(
+  metrics <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
   )
 
-  expect_true(all(score_names %in% colnames(out)))
+  expect_true(all(metrics %in% colnames(out)))
 })
 
 
@@ -329,13 +329,13 @@ test_that("function throws an error if data is missing", {
 })
 
 # =============================================================================
-# `apply_rules()`
+# `apply_metrics()`
 # =============================================================================
 
-test_that("apply_rules() works", {
+test_that("apply_metrics() works", {
 
   dt <- data.table::data.table(x = 1:10)
-  scoringutils:::apply_rules(
+  scoringutils:::apply_metrics(
     data = dt, metrics = list("test" = function(x) x + 1),
     dt$x
   )
@@ -343,7 +343,7 @@ test_that("apply_rules() works", {
 
   # additional named argument works
   expect_no_condition(
-    scoringutils:::apply_rules(
+    scoringutils:::apply_metrics(
       data = dt, metrics = list("test" = function(x) x + 1),
       dt$x, y = dt$test)
   )
@@ -351,7 +351,7 @@ test_that("apply_rules() works", {
   # additional unnamed argument does not work
 
   expect_warning(
-    scoringutils:::apply_rules(
+    scoringutils:::apply_metrics(
       data = dt, metrics = list("test" = function(x) x + 1),
       dt$x, dt$test)
   )
@@ -361,6 +361,6 @@ test_that("apply_rules() works", {
 test_that("`[` preserves attributes", {
   test <- data.table::copy(scores_binary)
   class(test) <- c("scores", "data.frame")
-  expect_true("score_names" %in% names(attributes(test)))
-  expect_true("score_names" %in% names(attributes(test[1:10])))
+  expect_true("metrics" %in% names(attributes(test)))
+  expect_true("metrics" %in% names(attributes(test[1:10])))
 })

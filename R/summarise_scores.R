@@ -4,14 +4,14 @@
 #'
 #' `summarise_scores` relies on a way to identify the names of the scores and
 #' distinguish them from columns that denote the unit of a single forecast.
-#' Internally, this is done via a stored attribute, `score_names` that stores
+#' Internally, this is done via a stored attribute, `metrics` that stores
 #' the names of the scores. This means, however, that you need to be careful
 #' with renaming scores after they have been produced by [score()]. If you
 #' do, you also have to manually update the attribute by calling
-#' `attr(scores, "score_names") <- new_names`.
+#' `attr(scores, "metrics") <- new_names`.
 #'
 #' @param scores An object of class `scores` (a data.table with
-#' scores and an additional attribute `score_names` as produced by [score()])
+#' scores and an additional attribute `metrics` as produced by [score()])
 #' @param by character vector with column names to summarise scores by. Default
 #' is `model`, meaning that there will be one score per model in the output.
 #' @param across character vector with column names to summarise scores
@@ -60,13 +60,13 @@ summarise_scores <- function(scores,
                              ...) {
   # input checking ------------------------------------------------------------
   # Check the score names attribute exists
-  score_names <- attr(scores, "score_names")
-  if (is.null(score_names)) {
-    stop("`scores` needs to have an attribute `score_names` with ",
+  metrics <- attr(scores, "metrics")
+  if (is.null(metrics)) {
+    stop("`scores` needs to have an attribute `metrics` with ",
          "the names of the metrics that were used for scoring.")
   }
 
-  if (!test_subset(score_names, names(scores))) {
+  if (!test_subset(metrics, names(scores))) {
     warning(
       "The names of the scores previously computed do not match the names ",
       "of the columns in `scores`. This may lead to unexpected results."
@@ -92,10 +92,10 @@ summarise_scores <- function(scores,
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
-    .SDcols = colnames(scores) %like% paste(score_names, collapse = "|")
+    .SDcols = colnames(scores) %like% paste(metrics, collapse = "|")
   ]
 
-  attr(scores, "score_names") <- score_names
+  attr(scores, "metrics") <- metrics
   return(scores[])
 }
 

@@ -79,10 +79,10 @@ pairwise_comparison <- function(
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
-  score_names <- get_score_names(scores, error = TRUE)
+  metrics <- get_metrics(scores, error = TRUE)
 
   # check that metric is a subset of the scores and is of length 1
-  assert_subset(metric, score_names, empty.ok = FALSE)
+  assert_subset(metric, metrics, empty.ok = FALSE)
   assert_character(metric, len = 1)
 
   # check that model column + columns in 'by' are present
@@ -534,8 +534,8 @@ add_pairwise_comparison <- function(
     by = by
   )
 
-  # store original score_names
-  score_names <- get_score_names(scores)
+  # store original metrics
+  metrics <- get_metrics(scores)
 
   if (!is.null(pairwise)) {
     # delete unnecessary columns
@@ -552,12 +552,12 @@ add_pairwise_comparison <- function(
   }
 
   # Update score names
-  new_score_names <- paste(
+  new_metrics <- paste(
     metric, c("relative_skill", "scaled_relative_skill"),
     sep = "_"
   )
-  new_score_names <- new_score_names[new_score_names %in% names(scores)]
-  scores <- new_scores(scores, score_names = c(score_names, new_score_names))
+  new_metrics <- new_metrics[new_metrics %in% names(scores)]
+  scores <- new_scores(scores, metrics = c(metrics, new_metrics))
 
   return(scores)
 }

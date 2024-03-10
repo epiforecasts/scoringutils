@@ -243,7 +243,7 @@ test_that("pairwise_comparison() works", {
     wis = (abs(rnorm(30))),
     ae_median = (abs(rnorm(30)))
   )
-  attr(df, "score_names") <- c("wis", "ae_median")
+  attr(df, "metrics") <- c("wis", "ae_median")
 
   res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
 
@@ -337,14 +337,14 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
     "Assertion on 'scores' failed: Column 'model' not found in data."
   )
 
-  # error if there isn't a score_names attribute
+  # error if there isn't a metrics attribute
   eval_noattribute <- data.table::copy(eval)
-  attr(eval_noattribute, "score_names") <- NULL
+  attr(eval_noattribute, "metrics") <- NULL
   expect_error(
     add_pairwise_comparison(
       eval_noattribute, by = "model", metric = "crps"
     ),
-    "needs an attribute `score_names`"
+    "needs an attribute `metrics`"
   )
 
   # warning if there are NAs in the column for which a relative metric is computed
