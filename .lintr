@@ -12,6 +12,6 @@ exclusions: c(
     list.files("tests", recursive = TRUE, full.names = TRUE),
     list.files("inst", recursive = TRUE, full.names = TRUE),
     list.files("vignettes", pattern = ".R$", full.names = TRUE),
-    "vignettes/Visualisations.Rmd"
+    "vignettes/Deprecated-visualisations.Rmd"
   )
 exclude: "# nolint"
