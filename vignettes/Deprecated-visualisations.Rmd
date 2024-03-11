@@ -1,5 +1,5 @@
 ---
-title: "Visualisations"
+title: "Deprecated Visualisations"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This Vignette provides a preliminary overview of visualisations for forecasts and scores. Section [Visualising forecasts] gives an overview of how to visualise forecasts. Section [Visualising scores] provides an overview of how to visualise scores. Section [Old visualisations] provides the code for visualisations that were previously part of `scoringutils` but have now been removed.
+This Vignette provides the code for visualisations that were previously part of `scoringutils` but have been removed with `scoringutils` version `2.0`.
 
 The example data used is the data shipped with the `scoringutils` package. It consists of short-term forecasts of COVID-19 cases and deaths for several European countries, submitted to the European COVID-19 Forecast Hub. Every week, forecasters submitted 1 to 4 week ahead forecasts (the "forecast horizon", here restricted to 1 to 3 week ahead). The dates for which a forecast was made are called `target_end_date`. See e.g. `?example_quantile` for more information.
 
@@ -31,73 +31,7 @@ library(magrittr)
 library(magrittr) #pipe operator
 ```
 
-# Visualising forecasts
-
-## Timeseries plot with only one horizon (visualisation of all 2 week ahead forecasts and observed values)
-
-The following plot shows a visualisation of all available two week ahead forecasts and observed data for Germany. First, we need to filter the data and cast it into a wide format. 
-
-```{r}
-two_week_forecasts <- example_quantile %>%
-  .[model %in% c(NA, "EuroCOVIDhub-ensemble") &
-      target_type == "Cases" &
-      location == "DE" &
-      horizon == 2] %>%
-  dcast(formula = ... ~ quantile_level, value.var = "predicted")
-```
-
-The above code used `data.table`. Here is the same with `dplyr` and `tidyr` syntax: 
-```{r eval=FALSE}
-two_week_forecasts <- example_quantile %>%
-  filter(model %in% c(NA, "EuroCOVIDhub-ensemble"),
-         target_type == "Cases",
-         location == "DE",
-         horizon == 2) %>%
-  pivot_wider(names_from = quantile_level, values_from = "predicted")
-```
-
-```{r eval=FALSE}
-two_week_forecasts %>%
-  ggplot(aes(x = target_end_date)) +
-  geom_ribbon(aes(ymin = `0.025`, ymax = `0.975`), fill = "skyblue2", alpha = 0.3) +
-  geom_ribbon(aes(ymin = `0.25`, ymax = `0.75`), fill = "skyblue2", alpha = 0.3) +
-  geom_line(aes(y = `0.5`), linewidth = 1, colour = "skyblue2") +
-  geom_line(aes(y = observed), linewidth = 0.5) +
-  geom_point(aes(y = observed)) +
-  theme_scoringutils()
-```
-
-
-## Timeseries plot with only one forecast date, but several forecast horizons
-
-```{r}
-forecasts_one_date <- example_quantile %>%
-  .[model %in% c(NA, "EuroCOVIDhub-ensemble") &
-      target_type == "Cases" &
-      forecast_date == "2021-06-14" &
-      location == "DE"] %>%
-  dcast(formula = ... ~ quantile_level, value.var = "predicted")
-
-forecasts_one_date %>%
-  ggplot(aes(x = target_end_date)) +
-  geom_ribbon(aes(ymin = `0.025`, ymax = `0.975`), fill = "skyblue2", alpha = 0.3) +
-  geom_ribbon(aes(ymin = `0.25`, ymax = `0.75`), fill = "skyblue2", alpha = 0.3) +
-  geom_line(aes(y = `0.5`), linewidth = 1, colour = "skyblue2") +
-  geom_line(aes(y = observed), linewidth = 0.5) +
-  geom_point(aes(y = observed)) +
-  geom_vline(aes(xintercept = as.numeric(as.Date("2021-06-14"))), linewidth = 4, colour = "black") +
-  theme_scoringutils()
-```
-
-
-
-# Visualising scores
-
-To be expanded later. 
-
-# Old visualisations
-
-## Functions `plot_predictions()` and `make_na()`
+# Functions `plot_predictions()` and `make_na()`
 
 In previous versions of `scoringutils`, forecasts and observed values could be visualised using the function `plot_predictions()` and its `make_na()` helper function. The following shows the function code first and then an example. 
 
@@ -413,7 +347,7 @@ example_quantile %>%
 
 
 
-## Function `plot_interval_ranges()` (formerly `plot_ranges()`)
+# Function `plot_interval_ranges()` (formerly `plot_ranges()`)
 
 ```{r}
 #" @title Plot Metrics by Range of the Prediction Interval
