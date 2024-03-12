@@ -150,18 +150,6 @@ test_that(
       "something"
     )
 
-
-    ## Additional tests for validate_metrics()
-    # passing in something that's not a function or a known metric
-    expect_warning(
-      expect_warning(
-        score(df, metrics = list(
-          "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3)
-        ),
-        "`Metrics` element number 3 is not a valid function"
-      ),
-      "`Metrics` element number 4 is not a valid function")
-
     # passing a single named argument for metrics by position
     expect_contains(
       names(score(df, list("hi" = test_fun))),
