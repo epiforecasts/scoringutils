@@ -282,3 +282,185 @@ get_duplicate_forecasts <- function(
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
 }
+
+
+#' @title Get Quantile And Interval Coverage Values For Quantile-Based Forecasts
+#'
+#' @description For a validated forecast object in a quantile-based format
+#' (see [as_forecast()] for more information), this function computes
+#' - interval coverage of central prediction intervals
+#' - quantile coverage for predictive quantiles
+#' - the deviation between desired and actual coverage (both for interval and
+#' quantile coverage)
+#'
+#' Coverage values are computed for a specific level of grouping, as specified
+#' in the `by` argument. By default, coverage values are computed per model.
+#'
+#' **Interval coverage**
+#'
+#' Interval coverage for a given interval range is defined as the proportion of
+#' observations that fall within the corresponding central prediction intervals.
+#' Central prediction intervals are symmetric around the median and formed
+#' by two quantiles that denote the lower and upper bound. For example, the 50%
+#' central prediction interval is the interval between the 0.25 and 0.75
+#' quantiles of the predictive distribution.
+#'
+#' **Quantile coverage**
+#'
+#' Quantile coverage for a given quantile is defined as the proportion of
+#' observed values that are smaller than the corresponding predictive quantile.
+#' For example, the 0.5 quantile coverage is the proportion of observed values
+#' that are smaller than the 0.5 quantile of the predictive distribution.
+#' Just as above, for a single observation and the quantile of a single
+#' predictive distribution, the value will either be `TRUE` or `FALSE`.
+#'
+#' **Coverage deviation**
+#'
+#' The coverage deviation is the difference between the desired coverage
+#' (can be either interval or quantile coverage) and the
+#' actual coverage. For example, if the desired coverage is 90% and the actual
+#' coverage is 80%, the coverage deviation is -0.1.
+#' @return A data.table with columns as specified in `by` and additional
+#' columns for the coverage values described above
+#' @inheritParams score
+#' @param by character vector that denotes the level of grouping for which the
+#' coverage values should be computed. By default (`"model"`), one coverage
+#' value per model will be returned.
+#' @return a data.table with columns "interval_coverage",
+#' "interval_coverage_deviation", "quantile_coverage",
+#' "quantile_coverage_deviation" and the columns specified in `by`.
+#' @importFrom data.table setcolorder
+#' @importFrom checkmate assert_subset
+#' @examples
+#' library(magrittr) # pipe operator
+#' example_quantile %>%
+#'   as_forecast() %>%
+#'   get_coverage(by = "model")
+#' @export
+#' @keywords scoring
+#' @export
+get_coverage <- function(data, by = "model") {
+  # input checks ---------------------------------------------------------------
+  data <- copy(data)
+  data <- na.omit(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+  assert_subset(get_forecast_type(data), "quantile")
+
+  # remove "quantile_level" and "interval_range" from `by` if present, as these
+  # are included anyway
+  by <- setdiff(by, c("quantile_level", "interval_range"))
+  assert_subset(by, names(data))
+
+  # convert to wide interval format and compute interval coverage --------------
+  interval_data <- quantile_to_interval(data, format = "wide")
+  interval_data[,
+    interval_coverage := (observed <= upper) & (observed >= lower)
+  ][, c("lower", "upper", "observed") := NULL]
+  interval_data[, interval_coverage_deviation :=
+                  interval_coverage - interval_range / 100]
+
+  # merge interval range data with original data -------------------------------
+  # preparations
+  data[, interval_range := get_range_from_quantile(quantile_level)]
+  data_cols <- colnames(data) # store so we can reset column order later
+  forecast_unit <- get_forecast_unit(data)
+
+  data <- merge(data, interval_data,
+                by = unique(c(forecast_unit, "interval_range")))
+
+  # compute quantile coverage and deviation ------------------------------------
+  data[, quantile_coverage := observed <= predicted]
+  data[, quantile_coverage_deviation := quantile_coverage - quantile_level]
+
+  # summarise coverage values according to `by` and cleanup --------------------
+  # reset column order
+  new_metrics <- c("interval_coverage", "interval_coverage_deviation",
+                   "quantile_coverage", "quantile_coverage_deviation")
+  setcolorder(data, unique(c(data_cols, "interval_range", new_metrics)))
+  # remove forecast class and convert to regular data.table
+  data <- as.data.table(data)
+  by <- unique(c(by, "quantile_level", "interval_range"))
+  # summarise
+  data <- data[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
+  return(data[])
+}
+
+
+#' @title Count Number of Available Forecasts
+#'
+#' @description
+#' Given a data set with forecasts, this function counts the number of available forecasts.
+#' The level of grouping can be specified using the `by` argument (e.g. to
+#' count the number of forecasts per model, or the number of forecasts per
+#' model and location).
+#' This is useful to determine whether there are any missing forecasts.
+#'
+#' @param by character vector or `NULL` (the default) that denotes the
+#' categories over which the number of forecasts should be counted.
+#' By default (`by = NULL`) this will be the unit of a single forecast (i.e.
+#' all available columns (apart from a few "protected" columns such as
+#' 'predicted' and 'observed') plus "quantile_level" or "sample_id" where
+#' present).
+#'
+#' @param collapse character vector (default: `c("quantile_level", "sample_id"`)
+#' with names of categories for which the number of rows should be collapsed to
+#' one when counting. For example, a single forecast is usually represented by a
+#' set of several quantiles or samples and collapsing these to one makes sure
+#' that a single forecast only gets counted once. Setting `collapse = c()`
+#' would mean that all quantiles / samples would be counted as individual
+#' forecasts.
+#'
+#' @return A data.table with columns as specified in `by` and an additional
+#' column "count" with the number of forecasts.
+#'
+#' @inheritParams score
+#' @importFrom data.table .I .N nafill
+#' @export
+#' @keywords check-forecasts
+#' @examples
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
+#'
+#' get_forecast_counts(
+#'   as_forecast(example_quantile),
+#'   by = c("model", "target_type")
+#' )
+get_forecast_counts <- function(data,
+                                by = NULL,
+                                collapse = c("quantile_level", "sample_id")) {
+  data <- copy(data)
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+  forecast_unit <- get_forecast_unit(data)
+  data <- na.omit(data)
+
+  if (is.null(by)) {
+    by <- forecast_unit
+  }
+
+  # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
+  # because they all belong to one single forecast that should be counted once
+  collapse_by <- setdiff(
+    c(forecast_unit, "quantile_level", "sample_id"),
+    collapse
+  )
+  # filter out "quantile_level" or "sample" if present in collapse_by, but not data
+  collapse_by <- intersect(collapse_by, names(data))
+
+  data <- data[data[, .I[1], by = collapse_by]$V1]
+
+  # count number of rows = number of forecasts
+  out <- as.data.table(data)[, .(count = .N), by = by]
+
+  # make sure that all combinations in "by" are included in the output (with
+  # count = 0). To achieve that, take the unique values in data and expand grid
+  col_vecs <- unclass(out)
+  col_vecs$count <- NULL
+  col_vecs <- lapply(col_vecs, unique)
+  out_empty <- expand.grid(col_vecs, stringsAsFactors = FALSE)
+
+  out <- merge(out, out_empty, by = by, all.y = TRUE)
+  out[, count := nafill(count, fill = 0)]
+
+  return(out[])
+}
