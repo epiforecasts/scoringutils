@@ -427,7 +427,7 @@ plot_pairwise_comparison <- function(comparison_result,
 
   relative_skill_metric <- grep(
     "_relative_skill$", colnames(comparison_result), value = TRUE
-  )
+  )[1]
   comparison_result[, model := reorder(model, -get(relative_skill_metric))]
   levels <- levels(comparison_result$model)
 
