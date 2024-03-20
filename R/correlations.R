@@ -21,9 +21,9 @@
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' correlation(scores, digits = 2)
-correlation <- function(scores,
-                        metrics = NULL,
-                        digits = NULL) {
+get_correlations <- function(scores,
+                             metrics = NULL,
+                             digits = NULL) {
   metrics <- get_metrics(scores, error = TRUE)
 
   # remove all non metrics and non-numeric columns

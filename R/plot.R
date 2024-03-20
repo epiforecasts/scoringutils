@@ -734,7 +734,7 @@ plot_forecast_counts <- function(forecast_counts,
 #' Plots a heatmap of correlations between different metrics
 #'
 #' @param correlations A data.table of correlations between scores as produced
-#' by [correlation()].
+#' by [get_correlations()].
 #' @return A ggplot object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
@@ -744,13 +744,13 @@ plot_forecast_counts <- function(forecast_counts,
 #' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
-#' correlations <- correlation(
+#' correlations <- correlations(
 #'  summarise_scores(scores),
 #'  digits = 2
 #' )
-#' plot_correlation(correlations)
+#' plot_correlations(correlations)
 
-plot_correlation <- function(correlations) {
+plot_correlations <- function(correlations) {
 
   metrics <- get_metrics(correlations, error = TRUE)
 
