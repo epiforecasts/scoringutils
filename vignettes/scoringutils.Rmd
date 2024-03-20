@@ -181,7 +181,7 @@ In order to better compare models against each other we can use relative scores 
 
 ```{r}
 score(as_forecast(example_quantile)) %>%
-  add_pairwise_comparison(
+  add_relative_skill(
     by = c("model", "target_type"),
     baseline = "EuroCOVIDhub-ensemble"
   ) %>%
@@ -295,7 +295,7 @@ forecast_quantile %>%
 forecast_quantile %>%
   score() %>%
   summarise_scores(by = "model") %>%
-  add_pairwise_comparison(baseline = "EuroCOVIDhub-baseline")
+  add_relative_skill(baseline = "EuroCOVIDhub-baseline")
 ```
 
 If using the `pairwise_comparison()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 

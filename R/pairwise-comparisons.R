@@ -515,7 +515,7 @@ permutation_test <- function(scores1,
 #' @inheritParams pairwise_comparison
 #' @export
 #' @keywords keyword scoring
-add_pairwise_comparison <- function(
+add_relative_skill <- function(
   scores,
   by = "model",
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),

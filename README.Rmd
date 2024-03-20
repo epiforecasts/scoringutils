@@ -108,7 +108,7 @@ example_quantile %>%
     "location", "target_end_date", "target_type", "horizon", "model"
   )) %>%
   score() %>%
-  add_pairwise_comparison(
+  add_relative_skill(
     by = c("model", "target_type"), 
     baseline = "EuroCOVIDhub-ensemble"
   ) %>%
