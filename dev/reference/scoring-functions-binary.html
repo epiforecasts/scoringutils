@@ -158,18 +158,17 @@ then you could of course make <code>observed</code> a factor with levels swapped
 <span class="r-in"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">30</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">brier_score</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7898461339 0.0052301098 0.0105629106 0.1615838428 0.4122892039</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 0.2082583814 0.1201039785 0.0078180483 0.0179886957 0.0054153143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 0.0004518519 0.1208756491 0.6416455412 0.1061715096 0.5836301564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] 0.0264934666 0.0045728710 0.0051110952 0.3101967491 0.0007827255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 0.0156483626 0.2926344609 0.4902747186 0.0002763594 0.3021050603</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] 0.1251692555 0.7046723131 0.0029808643 0.0390356023 0.0153320154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.15764434 0.23310966 0.40112890 0.19694906 0.30516825 0.28917498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.62040853 0.12923288 0.09056041 0.46745236 0.01658184 0.59161584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.09295121 0.18343751 0.07674393 0.52457148 0.02742467 0.73206578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.41473454 0.25453628 0.04734439 0.13350166 0.94332751 0.11202301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.04674103 0.00936064 0.64151039 0.52277547 0.49249583 0.47039165</span>
 <span class="r-in"><span><span class="fu">logs_binary</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.19582149 0.07506789 0.10844975 0.51412260 1.02749469 0.60945579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.42550488 0.09257562 0.14401119 0.07643710 0.02148599 0.42720740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 1.61459018 0.39428736 1.44374090 0.17765423 0.07001805 0.07417620</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.81407963 0.02837605 0.13363816 0.77861136 1.20462702 0.01676379</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.79770990 0.43663489 1.82913506 0.05614430 0.22011601 0.13218660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5059119 0.6593533 1.0033404 0.5866083 0.8039008 0.7716492 1.5495673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4454902 0.3580081 1.1510796 0.1378498 1.4660550 0.3636694 0.5591340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.3243833 1.2883443 0.1810471 1.9352264 1.0328214 0.7022200 0.2453734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.4547270 3.5491345 0.4075148 0.2435972 0.1017564 1.6141662 1.2838538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 1.2099254 1.1578880</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
