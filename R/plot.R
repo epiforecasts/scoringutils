@@ -744,7 +744,7 @@ plot_forecast_counts <- function(forecast_counts,
 #' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
-#' correlations <- correlations(
+#' correlations <- get_correlations(
 #'  summarise_scores(scores),
 #'  digits = 2
 #' )
