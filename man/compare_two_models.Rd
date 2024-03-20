@@ -15,9 +15,16 @@ compare_two_models(
 )
 }
 \arguments{
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
+
 \item{name_model1}{character, name of the first model}
 
 \item{name_model2}{character, name of the model to compare against}
+
+\item{metric}{A string with the name of the metric for which
+a relative skill shall be computed. By default this is either "crps",
+"wis" or "brier_score" if any of these are available.}
 
 \item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
 instead of a two-sided test to determine significance in a pairwise

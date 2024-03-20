@@ -11,6 +11,28 @@ add_relative_skill(
   baseline = NULL
 )
 }
+\arguments{
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
+
+\item{by}{character vector with column names that define the grouping level
+for the pairwise comparisons. By default (\code{model}), there will be one
+relative skill score per model. If, for example,
+\code{by = c("model", "location")}. Then you will get a
+separate relative skill score for every model in every location. Internally,
+the data.table with scores will be split according \code{by} (removing "model"
+before splitting) and the pairwise comparisons will be computed separately
+for the split data.tables.}
+
+\item{metric}{A string with the name of the metric for which
+a relative skill shall be computed. By default this is either "crps",
+"wis" or "brier_score" if any of these are available.}
+
+\item{baseline}{A string with the name of a model. If a baseline is
+given, then a scaled relative skill with respect to the baseline will be
+returned. By default (\code{NULL}), relative skill will not be scaled with
+respect to a baseline model.}
+}
 \description{
 Adds a columns with relative skills computed by running
 pairwise comparisons on the scores.
