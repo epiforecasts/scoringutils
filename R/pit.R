@@ -70,13 +70,13 @@
 #' ## continuous predictions
 #' observed <- rnorm(20, mean = 1:20)
 #' predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
-#' pit <- get_pit_sample(observed, predicted)
+#' pit <- pit_sample(observed, predicted)
 #' plot_pit(pit)
 #'
 #' ## integer predictions
 #' observed <- rpois(20, lambda = 1:20)
 #' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
-#' pit <- get_pit_sample(observed, predicted, n_replicates = 30)
+#' pit <- pit_sample(observed, predicted, n_replicates = 30)
 #' plot_pit(pit)
 #' @export
 #' @references
@@ -86,7 +86,7 @@
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
 
-get_pit_sample <- function(observed,
+pit_sample <- function(observed,
                            predicted,
                            n_replicates = 100) {
 
@@ -170,7 +170,7 @@ get_pit_sample <- function(observed,
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
-#' @inheritParams get_pit_sample
+#' @inheritParams pit_sample
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
@@ -217,7 +217,7 @@ get_pit <- function(data,
     value.var = "predicted"
   )
 
-  pit <- data_wide[, .(pit_value = get_pit_sample(
+  pit <- data_wide[, .(pit_value = pit_sample(
     observed = observed,
     predicted = as.matrix(.SD)
   )),

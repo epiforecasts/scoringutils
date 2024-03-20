@@ -23,7 +23,7 @@ test_that("plot_pit() works as expected with integer forecasts", {
 test_that("plot_pit() works as expected with sample forecasts", {
   observed <- rnorm(30, mean = 1:30)
   predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
-  pit <- get_pit_sample(observed, predicted)
+  pit <- pit_sample(observed, predicted)
   p <- plot_pit(pit)
   expect_s3_class(p, "ggplot")
   skip_on_cran()

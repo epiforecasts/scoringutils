@@ -554,7 +554,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' # PIT histogram in vector based format
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
-#' pit <- get_pit_sample(observed, predicted)
+#' pit <- pit_sample(observed, predicted)
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
