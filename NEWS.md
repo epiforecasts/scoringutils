@@ -53,6 +53,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462) or in the visualisation Vignette.
 - Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659).
 - Added a first versino of a dedicated Vignette that displays some possible ways of visualising forecasts. 
+- Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
 
 # scoringutils 1.2.2
 
