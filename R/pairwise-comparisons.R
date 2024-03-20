@@ -119,13 +119,12 @@ pairwise_comparison <- function(
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
       #nolint start: keyword_quote_linter object_usage_linter
-      cli_warn(
+      cli_abort(
         c(
           "!" = "After removing {.val NA} values for {.var {metric}},
          no values were left."
         )
       )
-      return(NULL)
     }
     cli_warn(
       c(
@@ -227,16 +226,14 @@ pairwise_comparison_one_group <- function(scores,
     )
   }
 
-  if (nrow(scores) == 0) {
-    return(NULL)
-  }
-
   # get list of models
   models <- unique(scores$model)
 
-  # if there aren't enough models to do any comparison, return NULL
+  # if there aren't enough models to do any comparison, abort
   if (length(models) < 2) {
-    return(NULL)
+    cli_abort(
+      c("!" = "There are not enough models to do any comparison")
+    )
   }
 
   # create a data.frame with results
@@ -537,19 +534,17 @@ add_pairwise_comparison <- function(
   # store original metrics
   metrics <- get_metrics(scores)
 
-  if (!is.null(pairwise)) {
-    # delete unnecessary columns
-    pairwise[, c(
-      "compare_against", "mean_scores_ratio",
-      "pval", "adj_pval"
-    ) := NULL]
-    pairwise <- unique(pairwise)
+  # delete unnecessary columns
+  pairwise[, c(
+    "compare_against", "mean_scores_ratio",
+    "pval", "adj_pval"
+  ) := NULL]
+  pairwise <- unique(pairwise)
 
-    # merge back
-    scores <- merge(
-      scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
-    )
-  }
+  # merge back
+  scores <- merge(
+    scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+  )
 
   # Update score names
   new_metrics <- paste(
