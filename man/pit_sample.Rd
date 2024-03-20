@@ -4,7 +4,7 @@
 \alias{pit_sample}
 \title{Probability Integral Transformation (sample-based version)}
 \usage{
-get_pit_sample(observed, predicted, n_replicates = 100)
+pit_sample(observed, predicted, n_replicates = 100)
 }
 \arguments{
 \item{observed}{A vector with observed values of size n}
@@ -99,6 +99,6 @@ real-time epidemic forecasts: A case study of Ebola in the Western Area
 region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 }
 \seealso{
-\code{\link[=pit]{pit()}}
+\code{\link[=get_pit]{get_pit()}}
 }
 \keyword{metric}

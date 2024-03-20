@@ -99,7 +99,7 @@ df[, model := factor(`model`,
 
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
-  pit <- pit(df, by = "model")
+  pit <- get_pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
@@ -623,7 +623,7 @@ p1 + p2 +
 # Figure 12
 # =============================================================================#
 example_continuous |>
-  pit(by = c("model", "target_type")) |>
+  get_pit(by = c("model", "target_type")) |>
   plot_pit() +
   facet_grid(target_type ~ model)
 
