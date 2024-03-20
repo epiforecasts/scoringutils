@@ -232,7 +232,7 @@ pairwise_comparison_one_group <- function(scores,
   # if there aren't enough models to do any comparison, abort
   if (length(models) < 2) {
     cli_abort(
-      "!" = "There are not enough models to do any comparison"
+      c("!" = "There are not enough models to do any comparison")
     )
   }
 
