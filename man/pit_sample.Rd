@@ -4,7 +4,7 @@
 \alias{pit_sample}
 \title{Probability Integral Transformation (sample-based version)}
 \usage{
-pit_sample(observed, predicted, n_replicates = 100)
+get_pit_sample(observed, predicted, n_replicates = 100)
 }
 \arguments{
 \item{observed}{A vector with observed values of size n}
@@ -83,13 +83,13 @@ PIT is a necessary but not sufficient condition of calibration.
 ## continuous predictions
 observed <- rnorm(20, mean = 1:20)
 predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
-pit <- pit_sample(observed, predicted)
+pit <- get_pit_sample(observed, predicted)
 plot_pit(pit)
 
 ## integer predictions
 observed <- rpois(20, lambda = 1:20)
 predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
-pit <- pit_sample(observed, predicted, n_replicates = 30)
+pit <- get_pit_sample(observed, predicted, n_replicates = 30)
 plot_pit(pit)
 }
 \references{

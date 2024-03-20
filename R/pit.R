@@ -70,13 +70,13 @@
 #' ## continuous predictions
 #' observed <- rnorm(20, mean = 1:20)
 #' predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
-#' pit <- pit_sample(observed, predicted)
+#' pit <- get_pit_sample(observed, predicted)
 #' plot_pit(pit)
 #'
 #' ## integer predictions
 #' observed <- rpois(20, lambda = 1:20)
 #' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
-#' pit <- pit_sample(observed, predicted, n_replicates = 30)
+#' pit <- get_pit_sample(observed, predicted, n_replicates = 30)
 #' plot_pit(pit)
 #' @export
 #' @references
@@ -218,7 +218,7 @@ pit <- function(data,
     value.var = "predicted"
   )
 
-  pit <- data_wide[, .(pit_value = pit_sample(
+  pit <- data_wide[, .(pit_value = get_pit_sample(
     observed = observed,
     predicted = as.matrix(.SD)
   )),
