@@ -60,18 +60,18 @@
 #' }
 #'
 #' scores <- score(as_forecast(example_quantile))
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #'
 #' library(ggplot2)
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-pairwise_comparison <- function(
-  scores,
-  by = "model",
-  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-  baseline = NULL,
-  ...
+get_pairwise_comparisons <- function(
+    scores,
+    by = "model",
+    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+    baseline = NULL,
+    ...
 ) {
 
   # input checks ---------------------------------------------------------------
@@ -204,14 +204,14 @@ pairwise_comparison <- function(
 #' @description
 #'
 #' This function does the pairwise comparison for one set of forecasts, but
-#' multiple models involved. It gets called from [pairwise_comparison()].
-#' [pairwise_comparison()] splits the data into arbitrary subgroups specified
-#' by the user (e.g. if pairwise comparison should be done separately for
-#' different forecast targets) and then the actual pairwise comparison for that
-#' subgroup is managed from [pairwise_comparison_one_group()]. In order to
+#' multiple models involved. It gets called from [get_pairwise_comparisons()].
+#' [get_pairwise_comparisons()] splits the data into arbitrary subgroups
+#' specified by the user (e.g. if pairwise comparison should be done separately
+#' for different forecast targets) and then the actual pairwise comparison for
+#' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
-#' @inherit pairwise_comparison params return
+#' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @keywords internal
 
@@ -342,7 +342,7 @@ pairwise_comparison_one_group <- function(scores,
 #' from [pairwise_comparison_one_group()], which handles the
 #' comparison of multiple models on a single set of forecasts (there are no
 #' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
-#' in turn gets called from from [pairwise_comparison()] which can handle
+#' in turn gets called from from [get_pairwise_comparisons()] which can handle
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
@@ -430,7 +430,7 @@ compare_two_models <- function(scores,
 #' @title Calculate Geometric Mean
 #'
 #' @details
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
 #' @return the geometric mean of the values in `x`. `NA` values are ignored.
@@ -452,7 +452,7 @@ geometric_mean <- function(x) {
 #' the two. This observed difference or ratio is compared against the same
 #' test statistic based on permutations of the original data.
 #'
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
 #' @param scores1 vector of scores to compare against another vector of scores
 #' @param scores2 A second vector of scores to compare against the first
@@ -509,7 +509,7 @@ permutation_test <- function(scores1,
 #' @description Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
 #' For more information on
-#' the computation of relative skill, see [pairwise_comparison()].
+#' the computation of relative skill, see [get_pairwise_comparisons()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
 #' @inheritParams pairwise_comparison
@@ -522,9 +522,9 @@ add_relative_skill <- function(
   baseline = NULL
 ) {
 
-  # input checks are done in `pairwise_comparison()`
+  # input checks are done in `get_pairwise_comparisons()`
   # do pairwise comparisons ----------------------------------------------------
-  pairwise <- pairwise_comparison(
+  pairwise <- get_pairwise_comparisons(
     scores = scores,
     metric = metric,
     baseline = baseline,

@@ -1,4 +1,4 @@
-test_that("pairwise_comparison() works", {
+test_that("get_pairwise_comparisons() works", {
   # define some toy data using a format suitable for github.com/reichlab/covidHubUtils
   test_truth <- data.frame(
     model = rep("truth_source", 30),
@@ -217,7 +217,7 @@ test_that("pairwise_comparison() works", {
   expect_equal(relative_skills_with$relative_skill, ratios_scaled)
 })
 
-test_that("pairwise_comparison() work in score() with integer data", {
+test_that("get_pairwise_comparisons() work in score() with integer data", {
   eval <- suppressMessages(score(data = as_forecast(example_integer)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
@@ -225,7 +225,7 @@ test_that("pairwise_comparison() work in score() with integer data", {
 })
 
 
-test_that("pairwise_comparison() work in score() with binary data", {
+test_that("get_pairwise_comparisons() work in score() with binary data", {
   eval <- suppressMessages(score(data = as_forecast(example_binary)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
@@ -235,7 +235,7 @@ test_that("pairwise_comparison() work in score() with binary data", {
 
 # tests for pairwise comparison function ---------------------------------------
 
-test_that("pairwise_comparison() works", {
+test_that("get_pairwise_comparisons() works", {
   df <- data.frame(
     model = rep(c("model1", "model2", "model3"), each = 10),
     date = as.Date("2020-01-01") + rep(1:5, each = 2),
@@ -245,7 +245,7 @@ test_that("pairwise_comparison() works", {
   )
   attr(df, "metrics") <- c("wis", "ae_median")
 
-  res <- suppressMessages(pairwise_comparison(df, baseline = "model1"))
+  res <- suppressMessages(get_pairwise_comparisons(df, baseline = "model1"))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
@@ -256,10 +256,10 @@ test_that("pairwise_comparison() works", {
 })
 
 
-test_that("pairwise_comparison() and `add_relative_skill()` give same result", {
+test_that("get_pairwise_comparisons() and `add_relative_skill()` give same result", {
   eval <- scores_continuous
 
-  pairwise <- pairwise_comparison(eval,
+  pairwise <- get_pairwise_comparisons(eval,
     by = "model",
     metric = "crps"
   )
@@ -272,9 +272,9 @@ test_that("pairwise_comparison() and `add_relative_skill()` give same result", {
   )
 })
 
-test_that("pairwise_comparison() realises when there is no baseline model", {
+test_that("get_pairwise_comparisons() realises when there is no baseline model", {
   expect_error(
-    pairwise_comparison(scores_quantile, baseline = "missing_model"),
+    get_pairwise_comparisons(scores_quantile, baseline = "missing_model"),
     "Assertion on 'baseline' failed: Must be a subset of"
   )
 })
@@ -394,13 +394,13 @@ test_that("Basic input checks for `add_relative_skill() work", {
   )
 })
 
-test_that("pairwise_comparison() throws errors with wrong inputs", {
+test_that("get_pairwise_comparisons() throws errors with wrong inputs", {
   test <- data.table::copy(scores_continuous)
   test <- test[, "model" := NULL]
 
   # expect error if no model column is found
   expect_error(
-    pairwise_comparison(test, by = "location", metric = "crps"),
+    get_pairwise_comparisons(test, by = "location", metric = "crps"),
     "Assertion on 'scores' failed: Column 'model' not found in data."
   )
 })
@@ -457,7 +457,7 @@ test_that("add_relative_skill() works with point forecasts", {
   )
   pw_point <- summarise_scores(pw_point, by = "model")
 
-  pw_manual <- pairwise_comparison(
+  pw_manual <- get_pairwise_comparisons(
     scores_point, by = "model", metric = "se_point"
   )
 

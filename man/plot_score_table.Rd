@@ -7,9 +7,6 @@
 plot_score_table(scores, y = "model", by = NULL, metrics = NULL)
 }
 \arguments{
-\item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
-
 \item{y}{the variable to be shown on the y-axis. Instead of a single character string,
 you can also specify a vector with column names, e.g.
 \code{y = c("model", "location")}. These column names will be concatenated

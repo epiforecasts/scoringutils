@@ -36,11 +36,11 @@ A data.table with pairwise comparisons
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but
-multiple models involved. It gets called from \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
-\code{\link[=pairwise_comparison]{pairwise_comparison()}} splits the data into arbitrary subgroups specified
-by the user (e.g. if pairwise comparison should be done separately for
-different forecast targets) and then the actual pairwise comparison for that
-subgroup is managed from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}. In order to
+multiple models involved. It gets called from \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}.
+\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} splits the data into arbitrary subgroups
+specified by the user (e.g. if pairwise comparison should be done separately
+for different forecast targets) and then the actual pairwise comparison for
+that subgroup is managed from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}. In order to
 actually do the comparison between two models over a subset of common
 forecasts it calls \code{\link[=compare_two_models]{compare_two_models()}}.
 }
