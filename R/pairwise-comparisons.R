@@ -346,7 +346,7 @@ pairwise_comparison_one_group <- function(scores,
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
@@ -512,7 +512,7 @@ permutation_test <- function(scores1,
 #' the computation of relative skill, see [get_pairwise_comparisons()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @export
 #' @keywords keyword scoring
 add_relative_skill <- function(

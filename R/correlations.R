@@ -9,7 +9,7 @@
 #' be shown
 #' @param digits A number indicating how many decimal places the result should
 #' be rounded to. By default (`digits = NULL`) no rounding takes place.
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @return An object of class `scores` (a data.table with an additional
 #' attribute `metrics` holding the names of the scores) with correlations
 #' between different metrics

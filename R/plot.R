@@ -15,7 +15,7 @@
 #' `NULL` (default), all metrics present in `scores` will be shown.
 #'
 #' @return A ggplot object with a coloured table of summarised scores
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
 #' @importFrom stats sd
