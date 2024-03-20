@@ -87,8 +87,8 @@
 #' @keywords metric
 
 pit_sample <- function(observed,
-                           predicted,
-                           n_replicates = 100) {
+                       predicted,
+                       n_replicates = 100) {
 
   # error handling--------------------------------------------------------------
   # check al arguments are provided
