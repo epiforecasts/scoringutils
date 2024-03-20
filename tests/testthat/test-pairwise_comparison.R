@@ -359,7 +359,7 @@ test_that("Basic input checks for `add_pairwise_comparison() work", {
 
   # warning if there are no values left after removing NAs
   eval_nas[, "crps" := NA]
-  expect_warning(
+  expect_error(
     add_pairwise_comparison(
       eval_nas, by = "model", metric = "crps"
     ),
@@ -415,18 +415,18 @@ test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
     "pairwise comparisons require a column called 'model'"
   )
 
-  # expect `NULL` as a result if scores has zero rows
+  # expect error as a result if scores has zero rows
   test <- data.table::copy(scores_continuous)[model == "impossible"]
-  expect_equal(
+  expect_error(
     pairwise_comparison_one_group(test, by = "model", metric = "crps"),
-    NULL
+    "not enough models"
   )
 
-  # expect NULL if there aren't enough models
+  # expect error if there aren't enough models
   test <- data.table::copy(scores_continuous)[model == "EuroCOVIDhub-ensemble"]
-  expect_equal(
+  expect_error(
     pairwise_comparison_one_group(test, by = "model", metric = "crps"),
-    NULL
+    "not enough models"
   )
 
   # expect error if baseline model is missing
