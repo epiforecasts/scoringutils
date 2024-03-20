@@ -87,8 +87,8 @@ pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 ## integer predictions
-observed <- rpois(50, lambda = 1:50)
-predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+observed <- rpois(20, lambda = 1:20)
+predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
 pit <- pit_sample(observed, predicted, n_replicates = 30)
 plot_pit(pit)
 }
