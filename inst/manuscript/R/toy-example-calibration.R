@@ -28,7 +28,7 @@ df[, model := factor(`model`,
 
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
-  pit <- pit(df, by = "model")
+  pit <- get_pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)

@@ -527,8 +527,8 @@ plot_pairwise_comparison <- function(comparison_result,
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param pit either a vector with the PIT values of size n, or a data.frame as
-#' produced by [pit()]
+#' @param pit either a vector with the PIT values of size n, or a data.table as
+#' produced by [get_pit()]
 #' @param num_bins the number of bins in the PIT histogram, default is "auto".
 #' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
 #' will display a bin for each available quantile in case you passed in data in
@@ -557,11 +557,11 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit(as_forecast(example_quantile), by = "model")
+#' pit <- get_pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit(as_forecast(example_integer), by = "model")
+#' pit <- get_pit(as_forecast(example_integer), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export

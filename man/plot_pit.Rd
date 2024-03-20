@@ -7,8 +7,8 @@
 plot_pit(pit, num_bins = "auto", breaks = NULL)
 }
 \arguments{
-\item{pit}{either a vector with the PIT values of size n, or a data.frame as
-produced by \code{\link[=pit]{pit()}}}
+\item{pit}{either a vector with the PIT values of size n, or a data.table as
+produced by \code{\link[=get_pit]{get_pit()}}}
 
 \item{num_bins}{the number of bins in the PIT histogram, default is "auto".
 When \code{num_bins == "auto"}, \code{\link[=plot_pit]{plot_pit()}} will either display 10 bins, or it
@@ -43,10 +43,10 @@ pit <- get_pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit
-pit <- pit(as_forecast(example_quantile), by = "model")
+pit <- get_pit(as_forecast(example_quantile), by = "model")
 plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- pit(as_forecast(example_integer), by = "model")
+pit <- get_pit(as_forecast(example_integer), by = "model")
 plot_pit(pit)
 }
