@@ -67,11 +67,11 @@
 #'   facet_wrap(~target_type)
 
 get_pairwise_comparisons <- function(
-    scores,
-    by = "model",
-    metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-    baseline = NULL,
-    ...
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL,
+  ...
 ) {
 
   # input checks ---------------------------------------------------------------

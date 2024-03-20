@@ -422,7 +422,7 @@ plot_quantile_coverage <- function(coverage,
 #'   facet_wrap(~target_type)
 
 plot_pairwise_comparisons <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval")) {
+                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
   relative_skill_metric <- grep(
