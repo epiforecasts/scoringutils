@@ -1,28 +1,28 @@
-test_that("get_pit_sample() function throws an error when missing observed", {
+test_that("pit_sample() function throws an error when missing observed", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    get_pit_sample(predicted = predicted),
+    pit_sample(predicted = predicted),
     "missing in function"
   )
 })
 
-test_that("get_pit_sample() function throws an error when missing 'predicted'", {
+test_that("pit_sample() function throws an error when missing 'predicted'", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    get_pit_sample(predicted = predicted),
+    pit_sample(predicted = predicted),
     "missing in function"
   )
 })
 
 
-test_that("get_pit_sample() function works for integer observed and predicted", {
+test_that("pit_sample() function works for integer observed and predicted", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(10, rpois(10, lambda = 1:10))
-  output <- get_pit_sample(
+  output <- pit_sample(
     observed = observed,
     predicted = predicted,
     n_replicates = 56
@@ -33,10 +33,10 @@ test_that("get_pit_sample() function works for integer observed and predicted", 
   )
 })
 
-test_that("get_pit_sample() function works for continuous observed and predicted", {
+test_that("pit_sample() function works for continuous observed and predicted", {
   observed <- rnorm(10)
   predicted <- replicate(10, rnorm(10))
-  output <- get_pit_sample(
+  output <- pit_sample(
     observed = observed,
     predicted = predicted,
     n_replicates = 56
@@ -70,14 +70,14 @@ test_that("pit function works for continuous integer and quantile data", {
   expect_s3_class(pit_integer, c("data.table", "data.frame"), exact = TRUE)
 })
 
-test_that("get_pit_sample() throws an error if inputs are wrong", {
+test_that("pit_sample() throws an error if inputs are wrong", {
   observed <- 1.5:20.5
   predicted <- replicate(100, 1.5:20.5)
 
   # message if there is only one observation
   expect_message(
     expect_equal(
-      get_pit_sample(observed[1], predicted[1, ]),
+      pit_sample(observed[1], predicted[1, ]),
       NA
     ),
     "You need more than one observation to assess uniformity of the PIT."
@@ -85,18 +85,18 @@ test_that("get_pit_sample() throws an error if inputs are wrong", {
 
   # predicted as a data.frame should work
   expect_no_condition(
-    get_pit_sample(observed, as.data.frame(predicted))
+    pit_sample(observed, as.data.frame(predicted))
   )
 
   # expect an error if predicted cannot be coerced to a matrix
   expect_error(
-    get_pit_sample(observed, function(x) {}),
+    pit_sample(observed, function(x) {}),
     "`predicted` should be a <matrix>"
   )
 
   # expect an error if the number of rows in predicted does not match the length of observed
   expect_error(
-    get_pit_sample(observed, predicted[1:10, ]),
+    pit_sample(observed, predicted[1:10, ]),
     "Mismatch: 'observed' has length `20`, but `predicted` has `10` rows."
   )
 })
