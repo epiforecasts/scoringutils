@@ -28,6 +28,6 @@ scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{
 scores <- score(as_forecast(example_quantile))
-correlation(scores, digits = 2)
+get_correlations(scores, digits = 2)
 }
 \keyword{scoring}
