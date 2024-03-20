@@ -86,9 +86,9 @@
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
 
-pit_sample <- function(observed,
-                       predicted,
-                       n_replicates = 100) {
+get_pit_sample <- function(observed,
+                           predicted,
+                           n_replicates = 100) {
 
   # error handling--------------------------------------------------------------
   # check al arguments are provided
@@ -163,14 +163,14 @@ pit_sample <- function(observed,
 #' @description Compute the Probability Integral Transformation (PIT) for
 #' validated forecast objects.
 #'
-#' @inherit params score
+#' @inherit score params
 #' @param data a data.frame with the following columns: `observed`,
 #' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
-#' @inheritParams pit_sample
+#' @inheritParams get_pit_sample
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
