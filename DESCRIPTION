@@ -51,7 +51,6 @@ Imports:
     cli,
     data.table,
     ggplot2 (>= 3.4.0),
-    lifecycle,
     methods,
     Metrics,
     scoringRules,
@@ -62,7 +61,7 @@ Suggests:
     knitr,
     magrittr,
     rmarkdown,
-    testthat,
+    testthat (>= 3.1.9),
     vdiffr
 Config/Needs/website: 
     r-lib/pkgdown,
