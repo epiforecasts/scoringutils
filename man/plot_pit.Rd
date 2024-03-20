@@ -39,7 +39,7 @@ visually check whether a uniform distribution seems likely.
 # PIT histogram in vector based format
 observed <- rnorm(30, mean = 1:30)
 predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
-pit <- pit_sample(observed, predicted)
+pit <- get_pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit
