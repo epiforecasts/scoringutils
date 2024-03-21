@@ -55,6 +55,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Added a first versino of a dedicated Vignette that displays some possible ways of visualising forecasts. 
 - Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
+- `pit()` was renamed to `get_pit()`
 
 # scoringutils 1.2.2
 
