@@ -193,6 +193,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/get_pit.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_protected_columns.html</loc>
   </url>
   <url>
@@ -260,9 +263,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/permutation_test.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/pit.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/pit_sample.html</loc>

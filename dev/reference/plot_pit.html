@@ -71,8 +71,8 @@ visually check whether a uniform distribution seems likely.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>pit</dt>
-<dd><p>either a vector with the PIT values of size n, or a data.frame as
-produced by <code><a href="pit.html">pit()</a></code></p></dd>
+<dd><p>either a vector with the PIT values of size n, or a data.table as
+produced by <code><a href="get_pit.html">get_pit()</a></code></p></dd>
 
 
 <dt>num_bins</dt>
@@ -114,14 +114,14 @@ quantile-based data. Default is <code>NULL</code> and breaks will be determined 
 <span class="r-plt img"><img src="plot_pit-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># quantile-based pit</span></span></span>
-<span class="r-in"><span><span class="va">pit</span> <span class="op">&lt;-</span> <span class="fu"><a href="pit.html">pit</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pit</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pit.html">get_pit</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="fu">plot_pit</span><span class="op">(</span><span class="va">pit</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_pit-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sample-based pit</span></span></span>
-<span class="r-in"><span><span class="va">pit</span> <span class="op">&lt;-</span> <span class="fu"><a href="pit.html">pit</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pit</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pit.html">get_pit</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_integer</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="fu">plot_pit</span><span class="op">(</span><span class="va">pit</span><span class="op">)</span></span></span>

@@ -135,6 +135,9 @@
 <li>Added a first versino of a dedicated Vignette that displays some possible ways of visualising forecasts.</li>
 <li>Replaced warnings with errors in <code>pairwise_comparison</code> to avoid returning <code>NULL</code>
 </li>
+<li>
+<code>pit()</code> was renamed to <code><a href="../reference/get_pit.html">get_pit()</a></code>
+</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -307,8 +310,8 @@
 <li>New function <code>avail_forecasts()</code> allows to visualise the number of available forecasts.</li>
 <li>New function <code>find_duplicates()</code> to find duplicate forecasts which cause an error.</li>
 <li>All plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified.</li>
-<li>The function <code><a href="../reference/pit.html">pit()</a></code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
-<li>The function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code><a href="../reference/pit.html">pit()</a></code>
+<li>The function <code>pit()</code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
+<li>The function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code>pit()</code>
 </li>
 <li>Many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
 <li>The function <code><a href="../reference/scoring-functions-binary.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
