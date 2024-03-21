@@ -177,7 +177,7 @@ under_overprediction <- list(
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
   `Name` = r"(crps)",
-  `Functions` = r"(score(), pit())",
+  `Functions` = r"(score(), get_pit())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",

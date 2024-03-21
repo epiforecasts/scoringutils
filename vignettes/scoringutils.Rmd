@@ -234,7 +234,7 @@ We can compute pit values as such:
 ```{r}
 example_continuous %>%
   as_forecast() %>%
-  pit(by = "model")
+  get_pit(by = "model")
 ```
 
 And visualise the results as such: 
@@ -242,7 +242,7 @@ And visualise the results as such:
 ```{r}
 example_continuous %>%
   as_forecast() %>%
-  pit(by = c("model", "target_type")) %>%
+  get_pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
 ```
@@ -252,7 +252,7 @@ Similarly for quantile-based forecasts:
 ```{r}
 example_quantile[quantile_level %in% seq(0.1, 0.9, 0.1), ] %>%
   as_forecast() %>%
-  pit(by = c("model", "target_type")) %>%
+  get_pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
 ```

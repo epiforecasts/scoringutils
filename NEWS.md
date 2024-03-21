@@ -55,6 +55,7 @@ The update introduces breaking changes. If you want to keep using the older vers
 - Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659).
 - Added a first versino of a dedicated Vignette that displays some possible ways of visualising forecasts. 
 - Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
+- `pit()` was renamed to `get_pit()`
 
 # scoringutils 1.2.2
 
