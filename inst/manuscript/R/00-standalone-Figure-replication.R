@@ -654,10 +654,10 @@ p1 / p2 +
 correlations <- example_quantile |>
   score() |>
   summarise_scores() |>
-  correlation(digits = 2)
+  correlations(digits = 2)
 
 correlations |>
   glimpse()
 
 correlations |>
-  plot_correlation()
+  plot_correlations()
