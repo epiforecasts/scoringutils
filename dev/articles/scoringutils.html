@@ -849,15 +849,15 @@ of overlapping forecasts is empty.</p>
 </h3>
 <p>It may sometimes be interesting to see how different scores correlate
 with each other. We can examine this using the function
-<code><a href="../reference/correlation.html">correlation()</a></code>. When dealing with quantile-based forecasts,
+<code>correlation()</code>. When dealing with quantile-based forecasts,
 it is important to call <code>summarise_scorees()</code> before
-<code><a href="../reference/correlation.html">correlation()</a></code> to summarise over quantiles before computing
-correlations.</p>
+<code><a href="../reference/get_correlations.html">get_correlations()</a></code> to summarise over quantiles before
+computing correlations.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/get_correlations.html">get_correlations</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          wis overprediction underprediction  dispersion       bias</span></span>
 <span><span class="co">#&gt;        &lt;num&gt;          &lt;num&gt;           &lt;num&gt;       &lt;num&gt;      &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: 1.0000000      0.9917884       0.8821058  0.86564717 0.61587946</span></span>
@@ -896,8 +896,8 @@ correlations.</p>
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/correlation.html">correlation</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/plot_correlation.html">plot_correlation</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/get_correlations.html">get_correlations</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/plot_correlations.html">plot_correlations</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 </div>
 </div>

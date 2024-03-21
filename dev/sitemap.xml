@@ -124,9 +124,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/compare_two_models.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/correlation.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/crps_sample.html</loc>
   </url>
   <url>
@@ -173,6 +170,9 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/geometric_mean.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/get_correlations.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_coverage.html</loc>
@@ -268,7 +268,7 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/pit_sample.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_correlation.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_correlations.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_forecast_counts.html</loc>
