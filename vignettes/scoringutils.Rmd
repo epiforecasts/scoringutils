@@ -313,13 +313,13 @@ forecast_quantile %>%
 
 ### Correlation between scores
 
-It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `correlation()` to summarise over quantiles before computing correlations.
+It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `get_correlations()` to summarise over quantiles before computing correlations.
 
 ```{r}
 forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation()
+  get_correlations()
 ```
 
 Visualising correlations: 
@@ -328,8 +328,8 @@ Visualising correlations:
 forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation(digits = 2) %>%
-  plot_correlation()
+  get_correlations(digits = 2) %>%
+  plot_correlations()
 ```
 
 
