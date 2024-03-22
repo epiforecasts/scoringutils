@@ -15,7 +15,7 @@
 #' `NULL` (default), all metrics present in `scores` will be shown.
 #'
 #' @return A ggplot object with a coloured table of summarised scores
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
 #' @importFrom data.table setDT melt
 #' @importFrom stats sd
@@ -400,7 +400,7 @@ plot_quantile_coverage <- function(coverage,
 #' between models
 #'
 #' @param comparison_result A data.frame as produced by
-#' [pairwise_comparison()]
+#' [get_pairwise_comparisons()]
 #' @param type character vector of length one that is either
 #'  "mean_scores_ratio" or "pval". This denotes whether to
 #' visualise the ratio or the p-value of the pairwise comparison.
@@ -417,12 +417,12 @@ plot_quantile_coverage <- function(coverage,
 #' @examples
 #' library(ggplot2)
 #' scores <- score(as_forecast(example_quantile))
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval")) {
+plot_pairwise_comparisons <- function(comparison_result,
+                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
   relative_skill_metric <- grep(

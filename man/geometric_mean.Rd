@@ -16,6 +16,6 @@ the geometric mean of the values in \code{x}. \code{NA} values are ignored.
 Calculate Geometric Mean
 }
 \details{
-Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
+Used in \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}.
 }
 \keyword{internal}

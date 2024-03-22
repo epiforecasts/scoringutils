@@ -47,7 +47,7 @@ both models have made a prediction. It gets called
 from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}, which handles the
 comparison of multiple models on a single set of forecasts (there are no
 subsets of forecasts to be distinguished). \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}
-in turn gets called from from \code{\link[=pairwise_comparison]{pairwise_comparison()}} which can handle
+in turn gets called from from \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} which can handle
 pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 pairwise comparisons for one set of forecasts, but done separately for two
 different forecast targets.
