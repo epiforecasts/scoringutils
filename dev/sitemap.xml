@@ -40,7 +40,7 @@
     <loc>https://epiforecasts.io/scoringutils/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/add_pairwise_comparison.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/add_relative_skill.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/ae_median_quantile.html</loc>
@@ -193,6 +193,9 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/get_pit.html</loc>
   </url>
   <url>
@@ -256,9 +259,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/new_scores.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison_one_group.html</loc>
   </url>
   <url>
@@ -280,7 +280,7 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_interval_coverage.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pairwise_comparison.html</loc>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pairwise_comparisons.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pit.html</loc>

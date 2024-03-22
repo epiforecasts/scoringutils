@@ -99,7 +99,8 @@
 <li>
 <code>check_forecasts()</code> was replaced by a different workflow. There now is a function, <code><a href="../reference/as_forecast.html">as_forecast()</a></code>, that determines forecast type of the data, constructs a forecasting object and validates it using the function <code><a href="../reference/validate_forecast.html">validate_forecast()</a></code> (a generic that dispatches the correct method based on the forecast type). Objects of class <code>forecast_binary</code>, <code>forecast_point</code>, <code>forecast_sample</code> and <code>forecast_quantile</code> have print methods that fulfill the functionality of <code>check_forecasts()</code>.</li>
 <li>Users can test whether an object is of class <code>forecast_*()</code> using the function <code><a href="../reference/is_forecast.html">is_forecast()</a></code>. Users can also test for a specific <code>forecast_*</code> class using the appropriate <code>is_forecast.forecast_*</code> method. For example, to check whether an object is of class <code>forecast_quantile</code>, you would use you would use <code>scoringutils:::is_forecast.forecast_quantile()</code>.</li>
-<li>The functionality for computing pairwise comparisons was now split from <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. Instead of doing pairwise comparisons as part of summarising scores, a new function, <code><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison()</a></code>, was introduced that takes summarised scores as an input and adds columns with relative skil scores and scaled relative skill scores.</li>
+<li>The functionality for computing pairwise comparisons was now split from <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. Instead of doing pairwise comparisons as part of summarising scores, a new function, <code><a href="../reference/add_relative_skill.html">add_relative_skill()</a></code>, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.</li>
+<li>The function <code>pairwise_comparison()</code> was renamed to <code><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code>, in line with other <code>get_</code>-functions. Analogously, <code>plot_pairwise_comparison()</code> was renamed to <code><a href="../reference/plot_pairwise_comparisons.html">plot_pairwise_comparisons()</a></code>.</li>
 <li>
 <code>add_coverage()</code> was replaced by a new function, <code><a href="../reference/get_coverage.html">get_coverage()</a></code>. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using <code><a href="../reference/plot_interval_coverage.html">plot_interval_coverage()</a></code> or <code><a href="../reference/plot_quantile_coverage.html">plot_quantile_coverage()</a></code>. An example worfklow would be <code>example_quantile |&gt; as_forecast() |&gt; get_coverage(by = "model") |&gt; plot_interval_coverage()</code>.</li>
 <li>Support for the interval format was mostly dropped (see PR <a href="https://github.com/epiforecasts/scoringutils/issues/525" class="external-link">#525</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a>)
@@ -284,12 +285,12 @@
 <ul><li>Removed the on attach message which warned of breaking changes in <code>1.0.0</code>.</li>
 <li>Renamed the <code>metric</code> argument of <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> to <code>relative_skill_metric</code>. This argument is now deprecated and will be removed in a future version of the package. Please use the new argument instead.</li>
 <li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code> and related functions to make the soft requirement for a <code>model</code> column in the input data more explicit.</li>
-<li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code>, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> and <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> to make it clearer what the unit of a single forecast is that is required for computations</li>
-<li>Simplified the function <code><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison()</a></code> which now only supports plotting mean score ratios or p-values and removed the hybrid option to print both at the same time.</li>
+<li>Updated the documentation for <code><a href="../reference/score.html">score()</a></code>, <code>pairwise_comparison()</code> and <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> to make it clearer what the unit of a single forecast is that is required for computations</li>
+<li>Simplified the function <code>plot_pairwise_comparison()</code> which now only supports plotting mean score ratios or p-values and removed the hybrid option to print both at the same time.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
-<ul><li>Missing baseline forecasts in <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> now trigger an explicit and informative error message.</li>
+<ul><li>Missing baseline forecasts in <code>pairwise_comparison()</code> now trigger an explicit and informative error message.</li>
 <li>The requirements table in the getting started vignette is now correct.</li>
 <li>Added support for an optional <code>sample</code> column when using a quantile forecast format. Previously this resulted in an error.</li>
 </ul></div>
@@ -357,7 +358,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.7" id="scoringutils-017">scoringutils 0.1.7<a class="anchor" aria-label="anchor" href="#scoringutils-017"></a></h2><p class="text-muted">CRAN release: 2021-07-14</p>
 <div class="section level3">
 <h3 id="feature-updates-0-1-7">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-7"></a></h3>
-<ul><li>Added a function, <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> that runs pairwise comparisons between models on the output of <code>eval_forecasts()</code>
+<ul><li>Added a function, <code>pairwise_comparison()</code> that runs pairwise comparisons between models on the output of <code>eval_forecasts()</code>
 </li>
 <li>Added functionality to compute relative skill within <code>eval_forecasts()</code>.</li>
 <li>Added a function to visualise pairwise comparisons.</li>

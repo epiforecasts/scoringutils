@@ -587,7 +587,7 @@ example, to obtain relative scores separately for different forecast
 targets, we can run</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/add_relative_skill.html">add_relative_skill</a></span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
 <span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -747,13 +747,14 @@ slightly from relative scores without a baseline) and all relative
 scores are scaled by (i.e. divided by) the relative score of the
 baseline model.</p>
 <p>In <code>scoringutils</code>, pairwise comparisons can be made in two
-ways: Through the standalone function <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code>
-or from within <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> which simply adds
-relative scores to an existing set of scores.</p>
+ways: Through the standalone function
+<code><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code> or from within
+<code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> which simply adds relative scores to an
+existing set of scores.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span>, baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     model       compare_against mean_scores_ratio         pval</span></span>
 <span><span class="co">#&gt;                    &lt;char&gt;                &lt;char&gt;             &lt;num&gt;        &lt;num&gt;</span></span>
 <span><span class="co">#&gt;  1: EuroCOVIDhub-baseline  epiforecasts-EpiNow2         1.3703452 9.164893e-18</span></span>
@@ -794,7 +795,7 @@ relative scores to an existing set of scores.</p>
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/add_relative_skill.html">add_relative_skill</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: <span style="color: #BBBB00;">!</span> `by` is set to 'model', which is also the unit of a single forecast. This</span></span>
 <span><span class="co">#&gt;   doesn't look right.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> All relative skill scores will be equal to 1.</span></span>
@@ -823,21 +824,21 @@ relative scores to an existing set of scores.</p>
 <span><span class="co">#&gt; 2:                         1</span></span>
 <span><span class="co">#&gt; 3:                         1</span></span>
 <span><span class="co">#&gt; 4:                         1</span></span></code></pre></div>
-<p>If using the <code><a href="../reference/pairwise_comparison.html">pairwise_comparison()</a></code> function, we can also
-visualise pairwise comparisons by showing the mean score ratios between
-models. By default, smaller values are better and the model we care
-about is showing on the y axis on the left, while the model against it
-is compared is shown on the x-axis on the bottom. In the example above,
-the EuroCOVIDhub-ensemble performs best (it only has values smaller 1),
-while the EuroCOVIDhub-baseline performs worst (and only has values
-larger than 1). For cases, the UMass-MechBayes model is of course
+<p>If using the <code><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code> function, we can
+also visualise pairwise comparisons by showing the mean score ratios
+between models. By default, smaller values are better and the model we
+care about is showing on the y axis on the left, while the model against
+it is compared is shown on the x-axis on the bottom. In the example
+above, the EuroCOVIDhub-ensemble performs best (it only has values
+smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has
+values larger than 1). For cases, the UMass-MechBayes model is of course
 excluded as there are no case forecasts available and therefore the set
 of overlapping forecasts is empty.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/pairwise_comparison.html">pairwise_comparison</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/plot_pairwise_comparison.html">plot_pairwise_comparison</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/plot_pairwise_comparisons.html">plot_pairwise_comparisons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scoringutils_files/figure-html/unnamed-chunk-24-1.png" width="864"></p>
 </div>
