@@ -65,7 +65,7 @@ scores as produced by <code><a href="score.html">score()</a></code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,6 +85,10 @@ be shown</p></dd>
 <dd><p>A number indicating how many decimal places the result should
 be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.</p></dd>
 
+
+<dt>...</dt>
+<dd><p>Additional arguments to pass down to <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -101,24 +105,39 @@ between different metrics</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      wis overprediction underprediction dispersion  bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.00           0.94            0.28       0.46  0.11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.94           1.00           -0.03       0.32  0.22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.28          -0.03            1.00       0.15 -0.35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.46           0.32            0.15       1.00  0.11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.11           0.22           -0.35       0.11  1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.34          -0.25           -0.33      -0.12  0.06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  0.99           0.90            0.34       0.54  0.10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_deviation ae_median                      metric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;     &lt;num&gt;                      &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                       -0.34      0.99                         wis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                       -0.25      0.90              overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                       -0.33      0.34             underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                       -0.12      0.54                  dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                        0.06      0.10                        bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:                        1.00     -0.38 interval_coverage_deviation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:                       -0.38      1.00                   ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      wis overprediction underprediction dispersion  bias interval_coverage_50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt; &lt;num&gt;                &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.00           0.94            0.28       0.46  0.11                -0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.94           1.00           -0.03       0.32  0.22                -0.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.28          -0.03            1.00       0.15 -0.35                -0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.46           0.32            0.15       1.00  0.11                -0.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.11           0.22           -0.35       0.11  1.00                 0.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.21          -0.15           -0.21      -0.09  0.01                 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: -0.41          -0.32           -0.36      -0.09  0.10                 0.37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: -0.34          -0.25           -0.33      -0.12  0.06                 0.85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:  0.99           0.90            0.34       0.54  0.10                -0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_90 interval_coverage_deviation ae_median</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;num&gt;                       &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                -0.41                       -0.34      0.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                -0.32                       -0.25      0.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                -0.36                       -0.33      0.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                -0.09                       -0.12      0.54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                 0.10                        0.06      0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:                 0.37                        0.85     -0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:                 1.00                        0.64     -0.41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:                 0.64                        1.00     -0.38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:                -0.41                       -0.38      1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         metric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                         wis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:              overprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             underprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                  dispersion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                        bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:        interval_coverage_50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:        interval_coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: interval_coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:                   ae_median</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
