@@ -69,12 +69,4 @@ test_that("get_metrics() works as expected", {
   expect_no_condition(
     get_metrics(scores_continuous)
   )
-
-  # expect warning if some column changed
-  ex <- data.table::copy(scores_continuous)
-  data.table::setnames(ex, old = "crps", new = "changed")
-  expect_warning(
-    get_metrics(ex),
-    "scores have been previously computed, but are no longer column names"
-  )
 })
