@@ -10,6 +10,7 @@
 #' @param digits A number indicating how many decimal places the result should
 #' be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams get_pairwise_comparisons
+#' @param ... Additional arguments to pass down to [cor()].
 #' @return An object of class `scores` (a data.table with an additional
 #' attribute `metrics` holding the names of the scores) with correlations
 #' between different metrics
@@ -23,20 +24,14 @@
 #' get_correlations(scores, digits = 2)
 get_correlations <- function(scores,
                              metrics = NULL,
-                             digits = NULL) {
+                             digits = NULL,
+                             ...) {
+  scores <- ensure_data.table(scores)
   metrics <- get_metrics(scores, error = TRUE)
-
-  # remove all non metrics and non-numeric columns
-  df <- scores[, .SD, .SDcols = sapply(
-    scores,
-    function(x) {
-      (all(is.numeric(x))) && all(is.finite(x))
-    }
-  )]
-  df <- df[, .SD, .SDcols = names(df) %in% metrics]
+  df <- scores[, .SD, .SDcols = names(scores) %in% metrics]
 
   # define correlation matrix
-  cor_mat <- cor(as.matrix(df))
+  cor_mat <- cor(as.matrix(df), ...)
 
   if (!is.null(digits)) {
     cor_mat <- round(cor_mat, digits)
