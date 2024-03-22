@@ -65,6 +65,7 @@ as_forecast <- function(data,
 #' sample id. This column will be renamed to "sample_id". Only applicable to
 #' sample-based forecasts.
 #' @export
+#' @importFrom cli cli_warn
 as_forecast.default <- function(data,
                                 forecast_unit = NULL,
                                 forecast_type = NULL,
@@ -130,6 +131,41 @@ as_forecast.default <- function(data,
       )
     )
     #nolint end
+  }
+
+  # produce warning if old format is suspected
+  # old quantile format
+  if (forecast_type == "point" && "quantile" %in% colnames(data)) {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "Found column 'quantile' in the input data",
+        "i" = "This column name was used before scoringutils version 2.0.0.
+        Should the column be called 'quantile_level' instead?"
+      ),
+      .frequency = "once",
+      .frequency_id = "quantile_col_present"
+    )
+    #nolint end
+  }
+  #old binary format
+  if (forecast_type == "point") {
+    looks_binary <- check_input_binary(factor(data$observed), data$predicted)
+    if (is.logical(looks_binary)) {
+      #nolint start: keyword_quote_linter duplicate_argument_linter
+      cli_warn(
+        c(
+          "All observations are either 1 or 0.",
+          "i" = "The forecast type was classified as 'point', but it looks like
+          it could be a binary forecast as well.",
+          "i" = "In case you want it to be a binary forecast, convert `observed`
+          to a factor. See `?as_forecast()` for more information."
+        ),
+        .frequency = "once",
+        .frequency_id = "looks_binary"
+      )
+      #nolint end
+    }
   }
 
   # construct class
