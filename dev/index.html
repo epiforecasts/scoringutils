@@ -78,235 +78,123 @@
 <!-- badges: start -->
 
 <p><strong>Note</strong>: <a href="https://epiforecasts.io/scoringutils/dev">This documentation</a> refers to the development version of <code>scoringutils</code>. You can also view the <a href="https://epiforecasts.io/scoringutils">documentation of the stable version</a>.</p>
-<p>The <code>scoringutils</code> package provides a collection of metrics and proper scoring rules and aims to make it simple to score probabilistic forecasts against observed values.</p>
-<p>A good starting point for those wishing to use <code>scoringutils</code> are the vignettes on <a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>.</p>
-<p>For a detailed description of the package, its rationale and design, usage examples and how it relates to other packages in the R ecosystem, please see the corresponding paper:</p>
-<blockquote>
-<p>Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). <em><code>Evaluating Forecasts with scoringutils in R</code></em>. arXiv:2205.07090 <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link uri">https://doi.org/10.48550/arXiv.2205.07090</a></p>
-</blockquote>
+<p>The <code>scoringutils</code> package facilitates the process of evaluating forecasts in R, using a convenient and flexible <code>data.table</code>-based framework. It provides broad functionality to check the input data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts.</p>
+<p>The package underwent a major re-write. The most comprehensive documentation for the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">updated version</a> is the revised version of our <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">original</a> <code>scoringutils</code> paper.</p>
+<p>Another good starting point are the vignettes on <a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>.</p>
+<!-- > Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090> -->
 <p>For further details on the specific issue of transforming forecasts for scoring see:</p>
 <blockquote>
 <p>Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher* and Sebastian Funk* (*: equal contribution) (2023). <em><code>Scoring epidemiological forecasts on transformed scales</code></em>, PLoS Comput Biol 19(8): e1011393 <a href="https://doi.org/10.1371/journal.pcbi.1011393" class="external-link uri">https://doi.org/10.1371/journal.pcbi.1011393</a></p>
 </blockquote>
 <div class="section level2">
-<h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
-</h2>
-<p>The <code>scoringutils</code> package offers convenient automated forecast evaluation through the function <code><a href="reference/score.html">score()</a></code>. The function operates on data.frames (it uses <code>data.table</code> internally for speed and efficiency) and can easily be integrated in a workflow based on <code>dplyr</code> or <code>data.table</code>. It also provides experienced users with a set of reliable lower-level scoring metrics operating on vectors/matrices they can build upon in other applications. In addition it implements a wide range of flexible plots designed to cover many use cases.</p>
-<p>Where available <code>scoringutils</code> depends on functionality from <code>scoringRules</code> which provides a comprehensive collection of proper scoring rules for predictive probability distributions represented as sample or parametric distributions. For some forecast types, such as quantile forecasts, <code>scoringutils</code> also implements additional metrics for evaluating forecasts. On top of providing an interface to the proper scoring rules implemented in <code>scoringRules</code> and natively, <code>scoringutils</code> also offers utilities for summarising and visualising forecasts and scores, and to obtain relative scores between models which may be useful for non-overlapping forecasts and forecasts across scales.</p>
-<p>Predictions can be handled in various formats: <code>scoringutils</code> can handle probabilistic forecasts in either a sample based or a quantile based format. For more detail on the expected input formats please see below. True values can be integer, continuous or binary, and appropriate scores for each of these value types are selected automatically.</p>
-</div>
-<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install the CRAN version of this package using:</p>
+<p>Install the CRAN version of this package using</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scoringutils"</span><span class="op">)</span></span></code></pre></div>
-<p>Install the stable development version of the package with:</p>
+<p>Install the unstable development version from GitHub using</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scoringutils"</span>, repos <span class="op">=</span> <span class="st">"https://epiforecasts.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
-<p>Install the unstable development from GitHub using the following,</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
-<p>In this quick start guide we explore some of the functionality of the <code>scoringutils</code> package using quantile forecasts from the <a href="https://covid19forecasthub.eu/" class="external-link">ECDC forecasting hub</a> as an example. For more detailed documentation please see the package vignettes, and individual function documentation.</p>
+<div class="section level3">
+<h3 id="forecast-types">Forecast types<a class="anchor" aria-label="anchor" href="#forecast-types"></a>
+</h3>
+<p><code>scoringutils</code> currently supports scoring the following forecast types: - <code>binary</code>: a probability for a binary (yes/no) outcome variable. - <code>point</code>: a forecast for a continuous or discrete outcome variable that is represented by a single number. - <code>quantile</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. - <code>sample</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution.</p>
+</div>
+<div class="section level3">
+<h3 id="input-formats-and-input-validation">Input formats and input validation<a class="anchor" aria-label="anchor" href="#input-formats-and-input-validation"></a>
+</h3>
+<p>The expected input format is generally a <code>data.frame</code> (or similar) with required columns <code>observed</code>, <code>predicted</code>, and <code>model</code> that holds the forecasts and observed values. Exact requirements depend on the forecast type. For more information, have a look at the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">paper</a>, call <code>?as_forecast()</code>, or have a look at the example data provided in the package (<code>example_binary</code>, <code>example_point</code>, <code>example_quantile</code>, <code>example_continuous</code>, <code>example_integer</code>).</p>
+<p>Before scoring, input data needs to be validated and transformed into a forecast object using the function <code><a href="reference/as_forecast.html">as_forecast()</a></code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span></span>
+<span>    forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    forecast_type <span class="op">=</span> <span class="st">"quantile"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">forecast_quantile</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: ! Error in validating forecast object: Error in validate_general(data) : !</span></span>
+<span><span class="co">#&gt;   After removing rows with NA values in the data, no forecasts are left. .</span></span>
+<span><span class="co">#&gt; Forecast type:</span></span>
+<span><span class="co">#&gt; quantile</span></span>
+<span><span class="co">#&gt; Forecast unit:</span></span>
+<span><span class="co">#&gt; location, forecast_date, target_end_date, target_type, model, and horizon</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Key: &lt;location, target_end_date, target_type&gt;</span></span>
+<span><span class="co">#&gt;    observed quantile_level predicted location forecast_date target_end_date</span></span>
+<span><span class="co">#&gt;       &lt;num&gt;          &lt;num&gt;     &lt;int&gt;   &lt;char&gt;        &lt;Date&gt;          &lt;Date&gt;</span></span>
+<span><span class="co">#&gt; 1:   127300             NA        NA       DE          &lt;NA&gt;      2021-01-02</span></span>
+<span><span class="co">#&gt; 2:     4534             NA        NA       DE          &lt;NA&gt;      2021-01-02</span></span>
+<span><span class="co">#&gt;    target_type  model horizon</span></span>
+<span><span class="co">#&gt;         &lt;char&gt; &lt;char&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:       Cases   &lt;NA&gt;      NA</span></span>
+<span><span class="co">#&gt; 2:      Deaths   &lt;NA&gt;      NA</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="the-forecast-unit">The forecast unit<a class="anchor" aria-label="anchor" href="#the-forecast-unit"></a>
+</h3>
+<p>For quantile-based and sample-based forecasts, a single prediction is represented by a set of several quantiles (or samples) from the predictive distribution, i.e. several rows in the input data. <code>scoringutils</code> therefore needs to group rows together that form a single forecast. <code>scoringutils</code> uses all other existing columns in the input data to achieve this - the values in all other columns should uniquely identify a single forecast. Additional columns unrelated to the forecast unit can mess this up. The <code>forecast_unit</code> argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> makes sure that only those columns are retained which are relevant for defining the unit of a single forecast.</p>
+</div>
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<p>Forecasts can be easily and quickly scored using the <code><a href="reference/score.html">score()</a></code> function. <code><a href="reference/score.html">score()</a></code> automatically tries to determine the <code>forecast_unit</code>, i.e. the set of columns that uniquely defines a single forecast, by taking all column names of the data into account. However, it is recommended to set the forecast unit manually by specifying the “forecast_unit” argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> as this may help to avoid errors. This will drop all columns that are neither part of the forecast unit nor part of the columns internally used by <code>scoringutils</code>. The function <code><a href="reference/as_forecast.html">as_forecast()</a></code> processes and validates the inputs. <code><a href="reference/score.html">score()</a></code> returns unsummarised scores, which in most cases is not what the user wants. Here we make use of an additional function from <code>scoringutils</code> to add scores relative to a baseline model (here chosen to be the EuroCOVIDhub-ensemble model). See the getting started vignette for more details. Finally we summarise these scores by model and target type.</p>
+<p>Forecasts can be scored by calling <code><a href="reference/score.html">score()</a></code> on a validated forecast object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span>forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"location"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"horizon"</span>, <span class="st">"model"</span></span>
-<span>  <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/add_pairwise_comparison.html">add_pairwise_comparison</a></span><span class="op">(</span></span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, </span>
-<span>    baseline <span class="op">=</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span></span>
-<span>    fun <span class="op">=</span> <span class="va">signif</span>, </span>
-<span>    digits <span class="op">=</span> <span class="fl">2</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
-<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="10%">
-<col width="3%">
-<col width="7%">
-<col width="7%">
-<col width="5%">
-<col width="4%">
-<col width="10%">
-<col width="10%">
-<col width="13%">
-<col width="5%">
-<col width="9%">
-<col width="12%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">model</th>
-<th align="right">wis</th>
-<th align="right">overprediction</th>
-<th align="right">underprediction</th>
-<th align="right">dispersion</th>
-<th align="right">bias</th>
-<th align="right">interval_coverage_50</th>
-<th align="right">interval_coverage_90</th>
-<th align="right">interval_coverage_deviation</th>
-<th align="right">ae_median</th>
-<th align="right">wis_relative_skill</th>
-<th align="right">wis_scaled_relative_skill</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">EuroCOVIDhub-baseline</td>
-<td align="right">28000</td>
-<td align="right">14000.0</td>
-<td align="right">10000.0</td>
-<td align="right">4100</td>
-<td align="right">0.0980</td>
-<td align="right">0.33</td>
-<td align="right">0.82</td>
-<td align="right">-0.120</td>
-<td align="right">38000</td>
-<td align="right">1.30</td>
-<td align="right">1.6</td>
-</tr>
-<tr class="even">
-<td align="left">EuroCOVIDhub-baseline</td>
-<td align="right">160</td>
-<td align="right">66.0</td>
-<td align="right">2.1</td>
-<td align="right">91</td>
-<td align="right">0.3400</td>
-<td align="right">0.66</td>
-<td align="right">1.00</td>
-<td align="right">0.120</td>
-<td align="right">230</td>
-<td align="right">2.30</td>
-<td align="right">3.8</td>
-</tr>
-<tr class="odd">
-<td align="left">EuroCOVIDhub-ensemble</td>
-<td align="right">18000</td>
-<td align="right">10000.0</td>
-<td align="right">4200.0</td>
-<td align="right">3700</td>
-<td align="right">-0.0560</td>
-<td align="right">0.39</td>
-<td align="right">0.80</td>
-<td align="right">-0.100</td>
-<td align="right">24000</td>
-<td align="right">0.82</td>
-<td align="right">1.0</td>
-</tr>
-<tr class="even">
-<td align="left">EuroCOVIDhub-ensemble</td>
-<td align="right">41</td>
-<td align="right">7.1</td>
-<td align="right">4.1</td>
-<td align="right">30</td>
-<td align="right">0.0730</td>
-<td align="right">0.88</td>
-<td align="right">1.00</td>
-<td align="right">0.200</td>
-<td align="right">53</td>
-<td align="right">0.60</td>
-<td align="right">1.0</td>
-</tr>
-<tr class="odd">
-<td align="left">UMass-MechBayes</td>
-<td align="right">53</td>
-<td align="right">9.0</td>
-<td align="right">17.0</td>
-<td align="right">27</td>
-<td align="right">-0.0220</td>
-<td align="right">0.46</td>
-<td align="right">0.88</td>
-<td align="right">-0.025</td>
-<td align="right">78</td>
-<td align="right">0.75</td>
-<td align="right">1.3</td>
-</tr>
-<tr class="even">
-<td align="left">epiforecasts-EpiNow2</td>
-<td align="right">21000</td>
-<td align="right">12000.0</td>
-<td align="right">3300.0</td>
-<td align="right">5700</td>
-<td align="right">-0.0790</td>
-<td align="right">0.47</td>
-<td align="right">0.79</td>
-<td align="right">-0.070</td>
-<td align="right">28000</td>
-<td align="right">0.95</td>
-<td align="right">1.2</td>
-</tr>
-<tr class="odd">
-<td align="left">epiforecasts-EpiNow2</td>
-<td align="right">67</td>
-<td align="right">19.0</td>
-<td align="right">16.0</td>
-<td align="right">32</td>
-<td align="right">-0.0051</td>
-<td align="right">0.42</td>
-<td align="right">0.91</td>
-<td align="right">-0.045</td>
-<td align="right">100</td>
-<td align="right">0.98</td>
-<td align="right">1.6</td>
-</tr>
-</tbody>
-</table>
-<p><code>scoringutils</code> contains additional functionality to transform forecasts, to summarise scores at different levels, to visualise them, and to explore the forecasts themselves. See the package vignettes and function documentation for more information.</p>
-<p>You may want to score forecasts based on transformations of the original data in order to obtain a more complete evaluation (see <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">this paper</a> for more information). This can be done using the function <code><a href="reference/transform_forecasts.html">transform_forecasts()</a></code>. In the following example, we truncate values at 0 and use the function <code><a href="reference/log_shift.html">log_shift()</a></code> to add 1 to all values before applying the natural logarithm.</p>
+<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">forecast_quantile</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="reference/score.html">score()</a></code> takes an additional argument, <code>metrics</code>, with a list of scoring rules. Every forecast type has a default list of metrics. You can easily add your own scoring functions, as long as they conform with the format for that forecast type. See the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">paper</a> for more information.</p>
+<p>You can summarise scores using the function <code><a href="reference/summarise_scores.html">summarise_scores()</a></code>. The <code>by</code> argument is used to specify the desired level of summary. <code>fun</code> let’s you specify any summary function, although it is recommended to stick to the mean as a primary summary function, as other functions can lead to improper scores.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">%&gt;%</span></span>
-<span> <span class="va">.</span><span class="op">[</span>, <span class="va">observed</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">observed</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>append <span class="op">=</span> <span class="cn">TRUE</span>, fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="va">score</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"scale"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                    model target_type   scale     wis overprediction</span></span>
-<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;  &lt;char&gt;   &lt;num&gt;          &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases natural 11600.0        3650.00</span></span>
-<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases natural 22100.0        7700.00</span></span>
-<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases natural 14400.0        5510.00</span></span>
-<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths natural    41.4           7.14</span></span>
-<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths natural   159.0          65.90</span></span>
-<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths natural    52.7           8.98</span></span>
-<span><span class="co">#&gt;    underprediction dispersion    bias interval_coverage_50 interval_coverage_90</span></span>
-<span><span class="co">#&gt;              &lt;num&gt;      &lt;num&gt;   &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:          4240.0     3660.0 -0.0564                0.391                0.805</span></span>
-<span><span class="co">#&gt; 2:         10300.0     4100.0  0.0973                0.328                0.820</span></span>
-<span><span class="co">#&gt; 3:          3260.0     5660.0 -0.0789                0.469                0.789</span></span>
-<span><span class="co">#&gt; 4:             4.1       30.2  0.0727                0.875                1.000</span></span>
-<span><span class="co">#&gt; 5:             2.1       91.4  0.3390                0.664                1.000</span></span>
-<span><span class="co">#&gt; 6:            16.8       26.9 -0.0223                0.461                0.875</span></span>
+<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                    model target_type     wis overprediction underprediction</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;      &lt;char&gt;   &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble       Cases 17900.0       10000.00          4240.0</span></span>
+<span><span class="co">#&gt; 2: EuroCOVIDhub-baseline       Cases 28500.0       14100.00         10300.0</span></span>
+<span><span class="co">#&gt; 3:  epiforecasts-EpiNow2       Cases 20800.0       11900.00          3260.0</span></span>
+<span><span class="co">#&gt; 4: EuroCOVIDhub-ensemble      Deaths    41.4           7.14             4.1</span></span>
+<span><span class="co">#&gt; 5: EuroCOVIDhub-baseline      Deaths   159.0          65.90             2.1</span></span>
+<span><span class="co">#&gt; 6:       UMass-MechBayes      Deaths    52.7           8.98            16.8</span></span>
+<span><span class="co">#&gt; 7:  epiforecasts-EpiNow2      Deaths    66.6          18.90            15.9</span></span>
+<span><span class="co">#&gt;    dispersion     bias interval_coverage_50 interval_coverage_90</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;    &lt;num&gt;                &lt;num&gt;                &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     3660.0 -0.05640                0.391                0.805</span></span>
+<span><span class="co">#&gt; 2:     4100.0  0.09800                0.328                0.820</span></span>
+<span><span class="co">#&gt; 3:     5660.0 -0.07890                0.469                0.789</span></span>
+<span><span class="co">#&gt; 4:       30.2  0.07270                0.875                1.000</span></span>
+<span><span class="co">#&gt; 5:       91.4  0.33900                0.664                1.000</span></span>
+<span><span class="co">#&gt; 6:       26.9 -0.02230                0.461                0.875</span></span>
+<span><span class="co">#&gt; 7:       31.9 -0.00513                0.420                0.908</span></span>
 <span><span class="co">#&gt;    interval_coverage_deviation ae_median</span></span>
 <span><span class="co">#&gt;                          &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:                     -0.1020   17700.0</span></span>
-<span><span class="co">#&gt; 2:                     -0.1140   32100.0</span></span>
-<span><span class="co">#&gt; 3:                     -0.0696   21500.0</span></span>
+<span><span class="co">#&gt; 1:                     -0.1020   24100.0</span></span>
+<span><span class="co">#&gt; 2:                     -0.1170   38500.0</span></span>
+<span><span class="co">#&gt; 3:                     -0.0696   27900.0</span></span>
 <span><span class="co">#&gt; 4:                      0.2040      53.1</span></span>
 <span><span class="co">#&gt; 5:                      0.1210     233.0</span></span>
-<span><span class="co">#&gt; 6:                     -0.0249      78.5</span></span></code></pre></div>
+<span><span class="co">#&gt; 6:                     -0.0249      78.5</span></span>
+<span><span class="co">#&gt; 7:                     -0.0452     105.0</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="package-workflow">Package workflow<a class="anchor" aria-label="anchor" href="#package-workflow"></a>
+</h2>
+<p>The following depicts the suggested workflow for evaluating forecasts with <code>scoringutils</code> (sections refer to the paper). Please find more information in the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">paper</a>, the function documentation and the vignettes.</p>
+<p><img src="./reference/figures/workflow.png"></p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>If using <code>scoringutils</code> in your work please consider citing it using the output of <code>citation("scoringutils")</code>:</p>
+<p>If you are using <code>scoringutils</code> in your work please consider citing it using the output of <code>citation("scoringutils")</code> (or <code>print(citation("scoringutils"), bibtex = TRUE)</code>):</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
