@@ -17,26 +17,30 @@ refers to the development version of `scoringutils`. You can also view
 the [documentation of the stable
 version](https://epiforecasts.io/scoringutils).
 
-The `scoringutils` package provides a collection of metrics and proper
-scoring rules and aims to make it simple to score probabilistic
-forecasts against observed values.
+The `scoringutils` package facilitates the process of evaluating
+forecasts in R, using a convenient and flexible `data.table`-based
+framework. It provides broad functionality to check the input data and
+diagnose issues, to visualise forecasts and missing data, to transform
+data before scoring, to handle missing forecasts, to aggregate scores,
+and to visualise the results of the evaluation. The package is easily
+extendable, meaning that users can supply their own scoring rules or
+extend existing classes to handle new types of forecasts.
 
-A good starting point for those wishing to use `scoringutils` are the
-vignettes on [Getting
+The package underwent a major re-write. The most comprehensive
+documentation for the [updated
+version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
+is the revised version of our
+[original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils`
+paper.
+
+Another good starting point are the vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
 directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
 
-For a detailed description of the package, its rationale and design,
-usage examples and how it relates to other packages in the R ecosystem,
-please see the corresponding paper:
-
-> Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian
-> Funk and Sam Abbott (2022).
-> *`Evaluating Forecasts with scoringutils in R`*. arXiv:2205.07090
-> <https://doi.org/10.48550/arXiv.2205.07090>
+<!-- > Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090> -->
 
 For further details on the specific issue of transforming forecasts for
 scoring see:
@@ -47,49 +51,15 @@ scoring see:
 > Comput Biol 19(8): e1011393
 > <https://doi.org/10.1371/journal.pcbi.1011393>
 
-## Package overview
-
-The `scoringutils` package offers convenient automated forecast
-evaluation through the function `score()`. The function operates on
-data.frames (it uses `data.table` internally for speed and efficiency)
-and can easily be integrated in a workflow based on `dplyr` or
-`data.table`. It also provides experienced users with a set of reliable
-lower-level scoring metrics operating on vectors/matrices they can build
-upon in other applications. In addition it implements a wide range of
-flexible plots designed to cover many use cases.
-
-Where available `scoringutils` depends on functionality from
-`scoringRules` which provides a comprehensive collection of proper
-scoring rules for predictive probability distributions represented as
-sample or parametric distributions. For some forecast types, such as
-quantile forecasts, `scoringutils` also implements additional metrics
-for evaluating forecasts. On top of providing an interface to the proper
-scoring rules implemented in `scoringRules` and natively, `scoringutils`
-also offers utilities for summarising and visualising forecasts and
-scores, and to obtain relative scores between models which may be useful
-for non-overlapping forecasts and forecasts across scales.
-
-Predictions can be handled in various formats: `scoringutils` can handle
-probabilistic forecasts in either a sample based or a quantile based
-format. For more detail on the expected input formats please see below.
-True values can be integer, continuous or binary, and appropriate scores
-for each of these value types are selected automatically.
-
 ## Installation
 
-Install the CRAN version of this package using:
+Install the CRAN version of this package using
 
 ``` r
 install.packages("scoringutils")
 ```
 
-Install the stable development version of the package with:
-
-``` r
-install.packages("scoringutils", repos = "https://epiforecasts.r-universe.dev")
-```
-
-Install the unstable development from GitHub using the following,
+Install the unstable development version from GitHub using
 
 ``` r
 remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
@@ -97,113 +67,146 @@ remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 
 ## Quick start
 
-In this quick start guide we explore some of the functionality of the
-`scoringutils` package using quantile forecasts from the [ECDC
-forecasting hub](https://covid19forecasthub.eu/) as an example. For more
-detailed documentation please see the package vignettes, and individual
-function documentation.
+### Forecast types
+
+`scoringutils` currently supports scoring the following forecast
+types: - `binary`: a probability for a binary (yes/no) outcome
+variable. - `point`: a forecast for a continuous or discrete outcome
+variable that is represented by a single number. - `quantile`: a
+probabilistic forecast for a continuous or discrete outcome variable,
+with the forecast distribution represented by a set of predictive
+quantiles. - `sample`: a probabilistic forecast for a continuous or
+discrete outcome variable, with the forecast represented by a finite set
+of samples drawn from the predictive distribution.
+
+### Input formats and input validation
+
+The expected input format is generally a `data.frame` (or similar) with
+required columns `observed`, `predicted`, and `model` that holds the
+forecasts and observed values. Exact requirements depend on the forecast
+type. For more information, have a look at the
+[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
+call `?as_forecast()`, or have a look at the example data provided in
+the package (`example_binary`, `example_point`, `example_quantile`,
+`example_continuous`, `example_integer`).
+
+Before scoring, input data needs to be validated and transformed into a
+forecast object using the function `as_forecast()`.
+
+``` r
+forecast_quantile <- example_quantile |>
+  as_forecast(
+    forecast_unit = c(
+      "location", "forecast_date", "target_end_date", "target_type", "model", "horizon"
+    ),
+    forecast_type = "quantile"
+  )
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+
+head(forecast_quantile, 2)
+#> Warning: ! Error in validating forecast object: Error in validate_general(data) : !
+#>   After removing rows with NA values in the data, no forecasts are left. .
+#> Forecast type:
+#> quantile
+#> Forecast unit:
+#> location, forecast_date, target_end_date, target_type, model, and horizon
+#> 
+#> Key: <location, target_end_date, target_type>
+#>    observed quantile_level predicted location forecast_date target_end_date
+#>       <num>          <num>     <int>   <char>        <Date>          <Date>
+#> 1:   127300             NA        NA       DE          <NA>      2021-01-02
+#> 2:     4534             NA        NA       DE          <NA>      2021-01-02
+#>    target_type  model horizon
+#>         <char> <char>   <num>
+#> 1:       Cases   <NA>      NA
+#> 2:      Deaths   <NA>      NA
+```
+
+### The forecast unit
+
+For quantile-based and sample-based forecasts, a single prediction is
+represented by a set of several quantiles (or samples) from the
+predictive distribution, i.e. several rows in the input data.
+`scoringutils` therefore needs to group rows together that form a single
+forecast. `scoringutils` uses all other existing columns in the input
+data to achieve this - the values in all other columns should uniquely
+identify a single forecast. Additional columns unrelated to the forecast
+unit can mess this up. The `forecast_unit` argument in `as_forecast()`
+makes sure that only those columns are retained which are relevant for
+defining the unit of a single forecast.
 
 ### Scoring forecasts
 
-Forecasts can be easily and quickly scored using the `score()` function.
-`score()` automatically tries to determine the `forecast_unit`, i.e. the
-set of columns that uniquely defines a single forecast, by taking all
-column names of the data into account. However, it is recommended to set
-the forecast unit manually by specifying the “forecast_unit” argument in
-`as_forecast()` as this may help to avoid errors. This will drop all
-columns that are neither part of the forecast unit nor part of the
-columns internally used by `scoringutils`. The function `as_forecast()`
-processes and validates the inputs. `score()` returns unsummarised
-scores, which in most cases is not what the user wants. Here we make use
-of an additional function from `scoringutils` to add scores relative to
-a baseline model (here chosen to be the EuroCOVIDhub-ensemble model).
-See the getting started vignette for more details. Finally we summarise
-these scores by model and target type.
+Forecasts can be scored by calling `score()` on a validated forecast
+object.
 
 ``` r
-example_quantile %>%
-  as_forecast(forecast_unit = c(
-    "location", "target_end_date", "target_type", "horizon", "model"
-  )) %>%
-  score() %>%
-  add_relative_skill(
-    by = c("model", "target_type"), 
-    baseline = "EuroCOVIDhub-ensemble"
-  ) %>%
-  summarise_scores(
-    by = c("model", "target_type")
-  ) %>%
-  summarise_scores(
-    fun = signif, 
-    digits = 2
-  ) %>%
-  kable()
-#> ℹ Some rows containing NA values may be removed. This is fine if not
-#>   unexpected.
+scores <- forecast_quantile |> 
+  score()
 ```
 
-| model                 |   wis | overprediction | underprediction | dispersion |    bias | interval_coverage_50 | interval_coverage_90 | interval_coverage_deviation | ae_median | wis_relative_skill | wis_scaled_relative_skill |
-|:----------------------|------:|---------------:|----------------:|-----------:|--------:|---------------------:|---------------------:|----------------------------:|----------:|-------------------:|--------------------------:|
-| EuroCOVIDhub-baseline | 28000 |        14000.0 |         10000.0 |       4100 |  0.0980 |                 0.33 |                 0.82 |                      -0.120 |     38000 |               1.30 |                       1.6 |
-| EuroCOVIDhub-baseline |   160 |           66.0 |             2.1 |         91 |  0.3400 |                 0.66 |                 1.00 |                       0.120 |       230 |               2.30 |                       3.8 |
-| EuroCOVIDhub-ensemble | 18000 |        10000.0 |          4200.0 |       3700 | -0.0560 |                 0.39 |                 0.80 |                      -0.100 |     24000 |               0.82 |                       1.0 |
-| EuroCOVIDhub-ensemble |    41 |            7.1 |             4.1 |         30 |  0.0730 |                 0.88 |                 1.00 |                       0.200 |        53 |               0.60 |                       1.0 |
-| UMass-MechBayes       |    53 |            9.0 |            17.0 |         27 | -0.0220 |                 0.46 |                 0.88 |                      -0.025 |        78 |               0.75 |                       1.3 |
-| epiforecasts-EpiNow2  | 21000 |        12000.0 |          3300.0 |       5700 | -0.0790 |                 0.47 |                 0.79 |                      -0.070 |     28000 |               0.95 |                       1.2 |
-| epiforecasts-EpiNow2  |    67 |           19.0 |            16.0 |         32 | -0.0051 |                 0.42 |                 0.91 |                      -0.045 |       100 |               0.98 |                       1.6 |
+`score()` takes an additional argument, `metrics`, with a list of
+scoring rules. Every forecast type has a default list of metrics. You
+can easily add your own scoring functions, as long as they conform with
+the format for that forecast type. See the
+[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
+for more information.
 
-`scoringutils` contains additional functionality to transform forecasts,
-to summarise scores at different levels, to visualise them, and to
-explore the forecasts themselves. See the package vignettes and function
-documentation for more information.
-
-You may want to score forecasts based on transformations of the original
-data in order to obtain a more complete evaluation (see [this
-paper](https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1)
-for more information). This can be done using the function
-`transform_forecasts()`. In the following example, we truncate values at
-0 and use the function `log_shift()` to add 1 to all values before
-applying the natural logarithm.
+You can summarise scores using the function `summarise_scores()`. The
+`by` argument is used to specify the desired level of summary. `fun`
+let’s you specify any summary function, although it is recommended to
+stick to the mean as a primary summary function, as other functions can
+lead to improper scores.
 
 ``` r
-example_quantile %>%
- .[, observed := ifelse(observed < 0, 0, observed)] %>%
-  as_forecast() %>%
-  transform_forecasts(append = TRUE, fun = log_shift, offset = 1) %>%
-  score %>%
-  summarise_scores(by = c("model", "target_type", "scale")) %>%
-  summarise_scores(by = c("model", "target_type", "scale"), fun = signif, digits = 3) %>%
-  head()
-#>                    model target_type   scale     wis overprediction
-#>                   <char>      <char>  <char>   <num>          <num>
-#> 1: EuroCOVIDhub-ensemble       Cases natural 11600.0        3650.00
-#> 2: EuroCOVIDhub-baseline       Cases natural 22100.0        7700.00
-#> 3:  epiforecasts-EpiNow2       Cases natural 14400.0        5510.00
-#> 4: EuroCOVIDhub-ensemble      Deaths natural    41.4           7.14
-#> 5: EuroCOVIDhub-baseline      Deaths natural   159.0          65.90
-#> 6:       UMass-MechBayes      Deaths natural    52.7           8.98
-#>    underprediction dispersion    bias interval_coverage_50 interval_coverage_90
-#>              <num>      <num>   <num>                <num>                <num>
-#> 1:          4240.0     3660.0 -0.0564                0.391                0.805
-#> 2:         10300.0     4100.0  0.0973                0.328                0.820
-#> 3:          3260.0     5660.0 -0.0789                0.469                0.789
-#> 4:             4.1       30.2  0.0727                0.875                1.000
-#> 5:             2.1       91.4  0.3390                0.664                1.000
-#> 6:            16.8       26.9 -0.0223                0.461                0.875
+scores |> 
+  summarise_scores(by = c("model", "target_type")) |>
+  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 3)
+#>                    model target_type     wis overprediction underprediction
+#>                   <char>      <char>   <num>          <num>           <num>
+#> 1: EuroCOVIDhub-ensemble       Cases 17900.0       10000.00          4240.0
+#> 2: EuroCOVIDhub-baseline       Cases 28500.0       14100.00         10300.0
+#> 3:  epiforecasts-EpiNow2       Cases 20800.0       11900.00          3260.0
+#> 4: EuroCOVIDhub-ensemble      Deaths    41.4           7.14             4.1
+#> 5: EuroCOVIDhub-baseline      Deaths   159.0          65.90             2.1
+#> 6:       UMass-MechBayes      Deaths    52.7           8.98            16.8
+#> 7:  epiforecasts-EpiNow2      Deaths    66.6          18.90            15.9
+#>    dispersion     bias interval_coverage_50 interval_coverage_90
+#>         <num>    <num>                <num>                <num>
+#> 1:     3660.0 -0.05640                0.391                0.805
+#> 2:     4100.0  0.09800                0.328                0.820
+#> 3:     5660.0 -0.07890                0.469                0.789
+#> 4:       30.2  0.07270                0.875                1.000
+#> 5:       91.4  0.33900                0.664                1.000
+#> 6:       26.9 -0.02230                0.461                0.875
+#> 7:       31.9 -0.00513                0.420                0.908
 #>    interval_coverage_deviation ae_median
 #>                          <num>     <num>
-#> 1:                     -0.1020   17700.0
-#> 2:                     -0.1140   32100.0
-#> 3:                     -0.0696   21500.0
+#> 1:                     -0.1020   24100.0
+#> 2:                     -0.1170   38500.0
+#> 3:                     -0.0696   27900.0
 #> 4:                      0.2040      53.1
 #> 5:                      0.1210     233.0
 #> 6:                     -0.0249      78.5
+#> 7:                     -0.0452     105.0
 ```
+
+## Package workflow
+
+The following depicts the suggested workflow for evaluating forecasts
+with `scoringutils` (sections refer to the paper). Please find more
+information in the
+[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
+the function documentation and the vignettes.
+
+![](./man/figures/workflow.png)
 
 ## Citation
 
-If using `scoringutils` in your work please consider citing it using the
-output of `citation("scoringutils")`:
+If you are using `scoringutils` in your work please consider citing it
+using the output of `citation("scoringutils")` (or
+`print(citation("scoringutils"), bibtex = TRUE)`):
 
     #> To cite scoringutils in publications use the following. If you use the
     #> CRPS, DSS, or Log Score, please also cite scoringRules.
