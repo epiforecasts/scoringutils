@@ -261,8 +261,7 @@ new_scores <- function(scores, metrics, ...) {
 #' @keywords internal
 as_scores <- function(scores, metrics) {
   assert_data_frame(scores)
-  present_metrics <- names(metrics)[names(metrics) %in% names(scores)]
-  scores <- new_scores(scores, present_metrics)
+  scores <- new_scores(scores, metrics)
   validate_scores(scores)
   return(scores[])
 }
