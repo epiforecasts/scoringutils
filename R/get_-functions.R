@@ -143,6 +143,14 @@ get_type <- function(x) {
 #' attribute, the function will return NULL. Users can control whether the
 #' function should error instead via the `error` argument.
 #'
+#' `get_metrics()` also checks whether the names of the scores stored in
+#' the attribute are column names of the data and will throw a warning if not.
+#' This can happen if you rename columns after scoring. You can either run
+#' [score()] again, specifying names for the scoring rules manually, or you
+#' can update the attribute manually using
+#' `attr(scores, "metrics") <- c("names", "of", "your", "scores")` (the
+#' order does not matter).
+#'
 #' @param scores A data.table with an attribute `metrics`
 #' @param error Throw an error if there is no attribute called `metrics`?
 #' Default is FALSE.
@@ -164,6 +172,20 @@ get_metrics <- function(scores, error = FALSE) {
     )
     #nolint end
   }
+
+  if (!all(metrics %in% names(scores))) {
+    #nolint start: keyword_quote_linter object_usage_linter
+    missing <- setdiff(metrics, names(scores))
+    cli_warn(
+      c(
+        "!" = "The following scores have been previously computed, but are no
+            longer column names of the data: {.val {missing}}",
+        "i" = "See {.code ?get_metrics} for further information."
+      )
+    )
+    #nolint end
+  }
+
   return(metrics)
 }
 
