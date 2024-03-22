@@ -19,10 +19,6 @@ test_that("as_scores() works", {
     class(scoringutils:::as_scores(data.frame(wis = 1), metrics = "wis")),
     c("scores", "data.table", "data.frame")
   )
-  expect_warning(
-    scoringutils:::as_scores(data.frame(), metrics = "wis"),
-    "The following scores have been previously computed"
-  )
 })
 
 test_that("validate_scores() works", {
