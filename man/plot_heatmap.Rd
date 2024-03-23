@@ -30,6 +30,10 @@ different locations.
 \examples{
 scores <- score(as_forecast(example_quantile))
 scores <- summarise_scores(scores, by = c("model", "target_type"))
+scores <- summarise_scores(
+  scores, by = c("model", "target_type"),
+  fun = signif, digits = 2
+)
 
 plot_heatmap(scores, x = "target_type", metric = "bias")
 }
