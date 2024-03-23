@@ -191,18 +191,6 @@ score(as_forecast(example_quantile)) %>%
 
 ## Visualising scores
 
-### Coloured table
-
-A simple coloured table can be produced based on the scores: 
-
-```{r}
-score(as_forecast(example_integer)) %>%
-  summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
-  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2) %>%
-  plot_score_table(by = "target_type") +
-  facet_wrap(~ target_type, nrow = 1)
-```
-
 ### Score heatmap
 
 We can also summarise one particular metric across different categories using a simple heatmap: 
