@@ -740,6 +740,7 @@ plot_forecast_counts <- function(forecast_counts,
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
+#' @importFrom checkmate assert_data_frame
 #' @export
 #' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
@@ -752,9 +753,24 @@ plot_forecast_counts <- function(forecast_counts,
 
 plot_correlations <- function(correlations) {
 
+  assert_data_frame(correlations)
   metrics <- get_metrics(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+
+  # check correlations is actually a matrix of correlations
+  col_present <- check_columns_present(correlations, "metric")
+  if (any(lower_triangle > 1, na.rm = TRUE) || !is.logical(col_present)) {
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "Found correlations > 1 or missing `metric` column.",
+        "i" = "Did you forget to call {.fn scoringutils::get_correlations}?"
+      )
+    )
+    #nolint end
+  }
+
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
