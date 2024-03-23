@@ -415,7 +415,7 @@ plot_interval_ranges <- function(scores,
 }
 ```
 
-The functioniality currently relies on a hack. In previous versions of `scoringutils`, scores were computed per interval range/per quantile. Now, `scoringutils` returns one score per forecast, not per interval range/quantile. We therefore need to add a `range` column, using an internal function `get_range_from_quantile()`. This column will be interpreted as one that defines the unit of a single forecast by `scoringutils`. It also means that we will get a warning about different number of quantile levels for different forecasts (because the 0% prediction interval only has one median forecast, while all other prediction intervals have two (a lower and an upper bound)).
+The functionality currently relies on a hack. In previous versions of `scoringutils`, scores were computed per interval range/per quantile. Now, `scoringutils` returns one score per forecast, not per interval range/quantile. We therefore need to add a `range` column, using an internal function `get_range_from_quantile()`. This column will be interpreted as one that defines the unit of a single forecast by `scoringutils`. It also means that we will get a warning about different number of quantile levels for different forecasts (because the 0% prediction interval only has one median forecast, while all other prediction intervals have two (a lower and an upper bound)).
 
 ```{r}
 range_example <- copy(example_quantile) %>%
@@ -439,3 +439,158 @@ plot_interval_ranges(sum_scores, y = "dispersion", x = "model") +
   facet_wrap(~target_type, scales = "free_y")
 ```
 
+
+# Function `plot_score_table()`
+
+This function allowed users to turn a table of (summarised) scores into a coloured table. The function had hard-coded information about what colour scale to pick for each metric. With scoringutils 2.0.0, we allowed users to assign their own names to metrics or use custom scoring functions. If you only stick to the default names provided by scoringutils, the function should still work. However, the functionality is not easily generalisable, so we decided to deprecate the function. 
+
+```{r}
+#' @title Plot Coloured Score Table
+#'
+#' @description
+#' Plots a coloured table of summarised scores obtained using
+#' [score()].
+#'
+#' @param y the variable to be shown on the y-axis. Instead of a single character string,
+#' you can also specify a vector with column names, e.g.
+#' `y = c("model", "location")`. These column names will be concatenated
+#' to create a unique row identifier (e.g. "model1_location1").
+#' @param by A character vector that determines how the colour shading for the
+#' plot gets computed. By default (`NULL`), shading will be determined per
+#' metric, but you can provide additional column names (see examples).
+#' @param metrics A character vector with the metrics to show. If set to
+#' `NULL` (default), all metrics present in `scores` will be shown.
+#'
+#' @return A ggplot object with a coloured table of summarised scores
+#' @inheritParams get_pairwise_comparisons
+#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
+#' @importFrom data.table setDT melt
+#' @importFrom stats sd
+#' @export
+#'
+#' @examples
+#' library(ggplot2)
+#' library(magrittr) # pipe operator
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
+#'
+#' scores <- score(as_forecast(example_quantile)) %>%
+#'   summarise_scores(by = c("model", "target_type")) %>%
+#'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
+#'
+#' plot_score_table(scores, y = "model", by = "target_type") +
+#'   facet_wrap(~target_type, ncol = 1)
+#'
+#' # can also put target description on the y-axis
+#' plot_score_table(scores,
+#'                  y = c("model", "target_type"),
+#'                  by = "target_type")
+
+plot_score_table <- function(scores,
+                             y = "model",
+                             by = NULL,
+                             metrics = NULL) {
+
+  # identify metrics -----------------------------------------------------------
+  id_vars <- get_forecast_unit(scores)
+  metrics <- get_metrics(scores)
+
+  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
+
+  # compute scaled values ------------------------------------------------------
+  # scaling is done in order to colour the different scores
+  # for most metrics larger is worse, but others like bias are better if they
+  # are close to zero and deviations in both directions are bad
+
+  # define which metrics are scaled using min (larger is worse) and
+  # which not (metrics like bias where deviations in both directions are bad)
+  metrics_zero_good <- c("bias", "interval_coverage_deviation")
+  metrics_no_color <- "coverage"
+
+  metrics_min_good <- setdiff(metrics, c(
+    metrics_zero_good, metrics_no_color
+  ))
+
+  # write scale functions that can be used in data.table
+  scale <- function(x) {
+    scaled <- x / sd(x, na.rm = TRUE)
+    return(scaled)
+  }
+  scale_min_good <- function(x) {
+    scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
+    return(scaled)
+  }
+
+  # pivot longer and add scaled values
+  df <- data.table::melt(scores,
+    value.vars = metrics,
+    id.vars = id_vars,
+    variable.name = "metric"
+  )
+
+  df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
+    by = c("metric", by)
+  ]
+  df[metric %in% metrics_zero_good, value_scaled := scale(value),
+    by = c("metric", by)
+  ]
+  df[metric %in% metrics_no_color, value_scaled := 0,
+    by = c("metric", by)
+  ]
+
+  # create identifier column for plot ------------------------------------------
+  # if there is only one column, leave column as is. Reason to do that is that
+  # users can then pass in a factor and keep the ordering of that column intact
+  if (length(y) > 1) {
+    df[, identifCol := do.call(paste, c(.SD, sep = "_")),
+       .SDcols = y[y %in% names(df)]]
+  } else {
+    setnames(df, old = eval(y), new = "identifCol")
+  }
+
+  # plot -----------------------------------------------------------------------
+  # make plot with all metrics that are not NA
+  plot <- ggplot(
+    df[!is.na(value), ],
+    aes(y = identifCol, x = metric)
+  ) +
+    geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
+    geom_text(aes(y = identifCol, label = value)) +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
+    theme_scoringutils() +
+    theme(
+      legend.title = element_blank(),
+      legend.position = "none",
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    labs(x = "", y = "") +
+    coord_cartesian(expand = FALSE)
+
+  return(plot)
+}
+```
+
+The main functionality the old function provided, was scaling the scores in order to obtain reasonable colour shades. It would do this per metric, but one could also pass in additional grouping variables through the `by` argument. This allowed users to achieve a faceting of the table (note that of course scores also needed to be summarised according to the same grouping). 
+
+```{r}
+scores <- score(as_forecast(example_quantile)) %>%
+  summarise_scores(by = c("model", "target_type")) %>%
+  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
+
+plot_score_table(scores, y = "model", by = "target_type") +
+  facet_wrap(~target_type, ncol = 1)
+```
+
+The function also allowed users to combine different facets into one, by creating a combined y-variable. This was done by passing a vector of column names to the `y` argument. 
+```{r}
+# can also put target description on the y-axis
+plot_score_table(scores,
+                 y = c("model", "target_type"),
+                 by = "target_type")
+
+```
