@@ -231,10 +231,15 @@ plot_wis <- function(scores,
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
+#' @importFrom checkmate assert_subset
 #' @export
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
+#' scores <- summarise_scores(
+#'   scores, by = c("model", "target_type"),
+#'   fun = signif, digits = 2
+#' )
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
 
@@ -242,9 +247,10 @@ plot_heatmap <- function(scores,
                          y = "model",
                          x,
                          metric) {
-  data.table::setDT(scores)
-
-  scores[, eval(metric) := round(get(metric), 2)]
+  scores <- ensure_data.table(scores)
+  assert_subset(y, names(scores))
+  assert_subset(x, names(scores))
+  assert_subset(metric, names(scores))
 
   plot <- ggplot(
     scores,
