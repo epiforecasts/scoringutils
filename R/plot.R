@@ -676,7 +676,7 @@ plot_pit <- function(pit,
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
-#' @importFrom checkmate assert_string assert_logical assert
+#' @importFrom checkmate assert_subset assert_logical
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -696,11 +696,10 @@ plot_forecast_counts <- function(forecast_counts,
                                  show_counts = TRUE) {
 
   forecast_counts <- ensure_data.table(forecast_counts)
-  assert_string(y)
-  assert_string(x)
-  assert(check_columns_present(forecast_counts, c(y, x)))
-  assert_logical(x_as_factor)
-  assert_logical(show_counts)
+  assert_subset(y, colnames(forecast_counts))
+  assert_subset(x, colnames(forecast_counts))
+  assert_logical(x_as_factor, len = 1)
+  assert_logical(show_counts, len = 1)
 
   if (x_as_factor) {
     forecast_counts[, eval(x) := as.factor(get(x))]
