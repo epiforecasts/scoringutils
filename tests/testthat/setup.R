@@ -1,6 +1,4 @@
 # load common required test packages
-library(ggplot2, quietly = TRUE)
-library(data.table)
 suppressMessages(library(magrittr))
 data.table::setDTthreads(2) # restricts number of cores used on CRAN
 
