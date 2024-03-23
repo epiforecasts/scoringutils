@@ -492,10 +492,10 @@ for plotting.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The functioniality currently relies on a hack. In previous versions
-of <code>scoringutils</code>, scores were computed per interval
-range/per quantile. Now, <code>scoringutils</code> returns one score per
-forecast, not per interval range/quantile. We therefore need to add a
+<p>The functionality currently relies on a hack. In previous versions of
+<code>scoringutils</code>, scores were computed per interval range/per
+quantile. Now, <code>scoringutils</code> returns one score per forecast,
+not per interval range/quantile. We therefore need to add a
 <code>range</code> column, using an internal function
 <code><a href="../reference/get_range_from_quantile.html">get_range_from_quantile()</a></code>. This column will be interpreted
 as one that defines the unit of a single forecast by
@@ -523,6 +523,172 @@ bound)).</p>
 <code class="sourceCode R"><span><span class="fu">plot_interval_ranges</span><span class="op">(</span><span class="va">sum_scores</span>, y <span class="op">=</span> <span class="st">"dispersion"</span>, x <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="function-plot_score_table">Function <code>plot_score_table()</code><a class="anchor" aria-label="anchor" href="#function-plot_score_table"></a>
+</h2>
+<p>This function allowed users to turn a table of (summarised) scores
+into a coloured table. The function had hard-coded information about
+what colour scale to pick for each metric. With scoringutils 2.0.0, we
+allowed users to assign their own names to metrics or use custom scoring
+functions. If you only stick to the default names provided by
+scoringutils, the function should still work. However, the functionality
+is not easily generalisable, so we decided to deprecate the
+function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Plot Coloured Score Table</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @description</span></span>
+<span><span class="co">#' Plots a coloured table of summarised scores obtained using</span></span>
+<span><span class="co">#' [score()].</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param y the variable to be shown on the y-axis. Instead of a single character string,</span></span>
+<span><span class="co">#' you can also specify a vector with column names, e.g.</span></span>
+<span><span class="co">#' `y = c("model", "location")`. These column names will be concatenated</span></span>
+<span><span class="co">#' to create a unique row identifier (e.g. "model1_location1").</span></span>
+<span><span class="co">#' @param by A character vector that determines how the colour shading for the</span></span>
+<span><span class="co">#' plot gets computed. By default (`NULL`), shading will be determined per</span></span>
+<span><span class="co">#' metric, but you can provide additional column names (see examples).</span></span>
+<span><span class="co">#' @param metrics A character vector with the metrics to show. If set to</span></span>
+<span><span class="co">#' `NULL` (default), all metrics present in `scores` will be shown.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @return A ggplot object with a coloured table of summarised scores</span></span>
+<span><span class="co">#' @inheritParams get_pairwise_comparisons</span></span>
+<span><span class="co">#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip</span></span>
+<span><span class="co">#' @importFrom data.table setDT melt</span></span>
+<span><span class="co">#' @importFrom stats sd</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @examples</span></span>
+<span><span class="co">#' library(ggplot2)</span></span>
+<span><span class="co">#' library(magrittr) # pipe operator</span></span>
+<span><span class="co">#' \dontshow{</span></span>
+<span><span class="co">#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN</span></span>
+<span><span class="co">#' }</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' scores &lt;- score(as_forecast(example_quantile)) %&gt;%</span></span>
+<span><span class="co">#'   summarise_scores(by = c("model", "target_type")) %&gt;%</span></span>
+<span><span class="co">#'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' plot_score_table(scores, y = "model", by = "target_type") +</span></span>
+<span><span class="co">#'   facet_wrap(~target_type, ncol = 1)</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' # can also put target description on the y-axis</span></span>
+<span><span class="co">#' plot_score_table(scores,</span></span>
+<span><span class="co">#'                  y = c("model", "target_type"),</span></span>
+<span><span class="co">#'                  by = "target_type")</span></span>
+<span></span>
+<span><span class="va">plot_score_table</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>,</span>
+<span>                             <span class="va">y</span> <span class="op">=</span> <span class="st">"model"</span>,</span>
+<span>                             <span class="va">by</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                             <span class="va">metrics</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>  <span class="co"># identify metrics -----------------------------------------------------------</span></span>
+<span>  <span class="va">id_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_forecast_unit.html">get_forecast_unit</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
+<span>  <span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">cols_to_delete</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">metrics</span>, <span class="va">id_vars</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="va">scores</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">cols_to_delete</span><span class="op">)</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># compute scaled values ------------------------------------------------------</span></span>
+<span>  <span class="co"># scaling is done in order to colour the different scores</span></span>
+<span>  <span class="co"># for most metrics larger is worse, but others like bias are better if they</span></span>
+<span>  <span class="co"># are close to zero and deviations in both directions are bad</span></span>
+<span></span>
+<span>  <span class="co"># define which metrics are scaled using min (larger is worse) and</span></span>
+<span>  <span class="co"># which not (metrics like bias where deviations in both directions are bad)</span></span>
+<span>  <span class="va">metrics_zero_good</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bias"</span>, <span class="st">"interval_coverage_deviation"</span><span class="op">)</span></span>
+<span>  <span class="va">metrics_no_color</span> <span class="op">&lt;-</span> <span class="st">"coverage"</span></span>
+<span></span>
+<span>  <span class="va">metrics_min_good</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">metrics</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">metrics_zero_good</span>, <span class="va">metrics_no_color</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># write scale functions that can be used in data.table</span></span>
+<span>  <span class="va">scale</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">scaled</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">scaled</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">scale_min_good</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">scaled</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">scaled</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># pivot longer and add scaled values</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">scores</span>,</span>
+<span>    value.vars <span class="op">=</span> <span class="va">metrics</span>,</span>
+<span>    id.vars <span class="op">=</span> <span class="va">id_vars</span>,</span>
+<span>    variable.name <span class="op">=</span> <span class="st">"metric"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">df</span><span class="op">[</span><span class="va">metric</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">metrics_min_good</span>, <span class="va">value_scaled</span> <span class="op">:=</span> <span class="fu">scale_min_good</span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"metric"</span>, <span class="va">by</span><span class="op">)</span></span>
+<span>  <span class="op">]</span></span>
+<span>  <span class="va">df</span><span class="op">[</span><span class="va">metric</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">metrics_zero_good</span>, <span class="va">value_scaled</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"metric"</span>, <span class="va">by</span><span class="op">)</span></span>
+<span>  <span class="op">]</span></span>
+<span>  <span class="va">df</span><span class="op">[</span><span class="va">metric</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">metrics_no_color</span>, <span class="va">value_scaled</span> <span class="op">:=</span> <span class="fl">0</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"metric"</span>, <span class="va">by</span><span class="op">)</span></span>
+<span>  <span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># create identifier column for plot ------------------------------------------</span></span>
+<span>  <span class="co"># if there is only one column, leave column as is. Reason to do that is that</span></span>
+<span>  <span class="co"># users can then pass in a factor and keep the ordering of that column intact</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">df</span><span class="op">[</span>, <span class="va">identifCol</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">paste</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">.SD</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>       .SDcols <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">df</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, new <span class="op">=</span> <span class="st">"identifCol"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># plot -----------------------------------------------------------------------</span></span>
+<span>  <span class="co"># make plot with all metrics that are not NA</span></span>
+<span>  <span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span>    <span class="va">df</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, <span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">identifCol</span>, x <span class="op">=</span> <span class="va">metric</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">value_scaled</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"white"</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">identifCol</span>, label <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient2</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"steelblue"</span>, high <span class="op">=</span> <span class="st">"salmon"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="../reference/theme_scoringutils.html">theme_scoringutils</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>      legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>      axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span></span>
+<span>        angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>        hjust <span class="op">=</span> <span class="fl">1</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>The main functionality the old function provided, was scaling the
+scores in order to obtain reasonable colour shades. It would do this per
+metric, but one could also pass in additional grouping variables through
+the <code>by</code> argument. This allowed users to achieve a faceting
+of the table (note that of course scores also needed to be summarised
+according to the same grouping).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
+<span><span class="co">#&gt;   unexpected.</span></span>
+<span></span>
+<span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p>The function also allowed users to combine different facets into one,
+by creating a combined y-variable. This was done by passing a vector of
+column names to the <code>y</code> argument.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># can also put target description on the y-axis</span></span>
+<span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>,</span>
+<span>                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
+<span>                 by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
