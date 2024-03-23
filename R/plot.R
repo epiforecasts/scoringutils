@@ -145,6 +145,8 @@ plot_score_table <- function(scores,
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
 #' scale_fill_discrete
 #' theme theme_light unit guides guide_legend .data
+#' @imporFrom data.table melt
+#' @importFrom checkmate assert_subset assert_logical
 #' @return A ggplot object with a visualisation of the WIS decomposition
 #' @export
 #' @examples
@@ -170,14 +172,16 @@ plot_wis <- function(scores,
                      x = "model",
                      relative_contributions = FALSE,
                      flip = FALSE) {
-  scores <- data.table::as.data.table(scores)
+  # input checks
+  scores <- ensure_data.table(scores)
+  wis_components <- c("overprediction", "underprediction", "dispersion")
+  assert(check_columns_present(scores, wis_components))
+  assert_subset(x, names(scores))
+  assert_logical(relative_contributions, len = 1)
+  assert_logical(flip, len = 1)
 
-  scores <- data.table::melt(scores,
-    measure.vars = c(
-      "overprediction",
-      "underprediction",
-      "dispersion"
-    ),
+  scores <- melt(scores,
+    measure.vars = wis_components,
     variable.name = "wis_component_name",
     value.name = "component_value"
   )

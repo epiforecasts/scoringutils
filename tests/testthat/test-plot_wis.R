@@ -2,6 +2,18 @@ sum_scores <- suppressMessages(
   summarise_scores(scores_quantile, by = c("model", "target_type"))
 )
 
+test_that("plot_wis() throws an error if WIS components are missing", {
+  ex_score <- na.omit(example_quantile) %>%
+    as_forecast() %>%
+    score(metrics = metrics_quantile(select = "wis"))
+
+  expect_error(
+    plot_wis(ex_score),
+    "Columns 'overprediction', 'underprediction', 'dispersion' not found in data."
+  )
+})
+
+
 test_that("plot_wis() works as expected with relative contributions", {
   p <- plot_wis(sum_scores,
     x = "model",
