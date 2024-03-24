@@ -11,17 +11,17 @@ transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{fun}{A function used to transform both observed values and predictions.
-The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
-the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
+The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is
+essentially the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
 that allows you add an offset before applying the logarithm. This is often
-helpful as the natural log transformation is not defined at zero. A common,
-and pragmatic solution, is to add a small offset to the data before applying
-the log transformation. In our work we have often used an offset of 1 but
-the precise value will depend on your application.}
+helpful as the natural log transformation is not defined at zero. A
+common, and pragmatic solution, is to add a small offset to the data
+before applying the log transformation. In our work we have often used an
+offset of 1 but the precise value will depend on your application.}
 
 \item{append}{Logical, defaults to \code{TRUE}. Whether or not to append a
 transformed version of the data to the currently existing data (\code{TRUE}). If
-selected, the data gets transformed and appended to the existing data frame,
+selected, the data gets transformed and appended to the existing data,
 making it possible to use the outcome directly in \code{\link[=score]{score()}}. An additional
 column, 'scale', gets created that denotes which rows or untransformed
 ('scale' has the value "natural") and which have been transformed ('scale'
@@ -41,8 +41,7 @@ be one additional column, `scale', present which will be set to "natural"
 for the untransformed forecasts.
 }
 \description{
-Function to transform forecasts and observed values before
-scoring.
+Function to transform forecasts and observed values before scoring.
 }
 \details{
 There are a few reasons, depending on the circumstances, for
@@ -62,7 +61,6 @@ transformation after the score risks losing propriety of the proper scoring
 rule.
 }
 \examples{
-
 library(magrittr) # pipe operator
 
 # transform forecasts using the natural logarithm

@@ -1,4 +1,4 @@
-#' Quantile Example Data
+#' Quantile example data
 #'
 #' A data set with predictions for COVID-19 cases and deaths submitted to the
 #' European Forecast Hub.
@@ -6,7 +6,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -25,7 +25,7 @@
 "example_quantile"
 
 
-#' Point Forecast Example Data
+#' Point forecast example data
 #'
 #' A data set with predictions for COVID-19 cases and deaths submitted to the
 #' European Forecast Hub. This data set is like the quantile example data, only
@@ -34,7 +34,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -52,7 +52,7 @@
 "example_point"
 
 
-#' Continuous Forecast Example Data
+#' Continuous forecast example data
 #'
 #' A data set with continuous predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
@@ -60,7 +60,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 13,429 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -79,7 +79,7 @@
 "example_continuous"
 
 
-#' Integer Forecast Example Data
+#' Discrete forecast example data
 #'
 #' A data set with integer predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
@@ -87,7 +87,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 13,429 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -106,7 +106,7 @@
 "example_integer"
 
 
-#' Binary Forecast Example Data
+#' Binary forecast example data
 #'
 #' A data set with binary predictions for COVID-19 cases and deaths constructed
 #' from data submitted to the European Forecast Hub.
@@ -121,7 +121,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 346 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{location_name}{name of the country for which a prediction was made}

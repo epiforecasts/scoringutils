@@ -3,9 +3,9 @@
 \docType{data}
 \name{example_integer}
 \alias{example_integer}
-\title{Integer Forecast Example Data}
+\title{Discrete forecast example data}
 \format{
-A data frame with 13,429 rows and 10 columns:
+A data frame with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}

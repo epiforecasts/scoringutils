@@ -8,7 +8,8 @@ get_forecast_type(data)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 }
 \value{
 Character vector of length one with either "binary", "quantile",

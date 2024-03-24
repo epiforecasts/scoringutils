@@ -1,6 +1,6 @@
 #' @title Check whether an input is an atomic vector of mode 'numeric'
 #'
-#' @description Helper function
+#' @description Helper function to check whether an input is a numeric vector.
 #' @param x input to check
 #' @inheritDotParams checkmate::check_numeric
 #' @importFrom checkmate check_atomic_vector check_numeric
@@ -22,7 +22,8 @@ check_numeric_vector <- function(x, ...) {
 
 #' @title Helper function to convert assert statements into checks
 #'
-#' @description Tries to execute an expression. Internally, this is used to
+#' @description
+#' Tries to execute an expression. Internally, this is used to
 #' see whether assertions fail when checking inputs (i.e. to convert an
 #' `assert_*()` statement into a check). If the expression fails, the error
 #' message is returned. If the expression succeeds, `TRUE` is returned.
@@ -82,7 +83,7 @@ assert_not_null <- function(...) {
 }
 
 
-#' @title Assure that Data Has a `model` Column
+#' @title Assure that data has a `model` column
 #'
 #' @description
 #' Check whether the data.table has a column called `model`.
@@ -109,7 +110,8 @@ ensure_model_column <- function(data) {
 
 
 #' Check that all forecasts have the same number of quantiles or samples
-#' @description Function checks the number of quantiles or samples per forecast.
+#' @description
+#' Function checks the number of quantiles or samples per forecast.
 #' If the number of quantiles or samples is the same for all forecasts, it
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
@@ -139,7 +141,8 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' Check that there are no duplicate forecasts
 #'
 #' @description
-#' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
+#' Runs [get_duplicate_forecasts()] and returns a message if an issue is
+#' encountered
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check

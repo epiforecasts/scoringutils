@@ -14,7 +14,8 @@ validate_forecast(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 
 \item{...}{additional arguments}
 }
@@ -28,9 +29,9 @@ Methods for the different classes run \code{\link[=validate_general]{validate_ge
 checks that are the same for all forecast types and then perform specific
 checks for the specific forecast type.
 }
-\section{Forecast types and input format}{
+\section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the
-moment, those are
+moment, those are:
 \itemize{
 \item point forecasts
 \item binary forecasts ("soft binary classification")
@@ -41,6 +42,18 @@ as a set of predictive samples)
 }
 
 Forecast types are determined based on the columns present in the input data.
+Here is an overview of the required format for each forecast type:
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{required-inputs.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{required-inputs.png}
+}
+
+\emph{All forecast types} require a data.frame or similar with columns \code{observed}
+\code{predicted}, and \code{model}.
 
 \emph{Point forecasts} require a column \code{observed} of type numeric and a column
 \code{predicted} of type numeric.

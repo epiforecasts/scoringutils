@@ -6,12 +6,12 @@
 #'
 #' The expected input is a forecast object, meaning that users have to call
 #' [as_forecast()] prior to calling `score()`.
-#' See below for more information on forecast types and input formats.
-#' For additional help and examples, check out the [Getting Started
+#' See the details section for more information on forecast types and input
+#' formats. For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
-#' @inheritSection forecast_types Forecast types and input format
+#' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
 #' @param data A forecast object (a validated data.table with predicted and
 #' observed values, see [as_forecast()])

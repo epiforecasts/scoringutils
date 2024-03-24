@@ -8,7 +8,7 @@ check_input_quantile(observed, predicted, quantile_level)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
@@ -22,7 +22,7 @@ matrix.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Function assesses whether the inputs correspond to the
