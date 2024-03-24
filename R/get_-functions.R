@@ -1,22 +1,14 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer Forecast Type
+#' @title Infer forecast type from data
 #' @description Helper function to infer the forecast type based on a
-#' data.frame or similar with predictions. Please check the vignettes to
-#' learn more about forecast types.
-#'
-#' Possible forecast types are
-#' - "sample-based"
-#' - "quantile-based"
-#' - "binary"
-#' - "point" forecast.
-#'
-#' The function runs additional checks to make sure the data satisfies the
-#' requirements of the respective forecast type and throws an
-#' informative error if any issues are found.
+#' data.frame or similar with forecasts and observed values. See the details
+#' section below for information on the different forecast types.
 #' @inheritParams as_forecast
+#' @inheritSection forecast_types Forecast types and input formats
 #' @importFrom cli cli_abort
-#' @return Character vector of length one with either "binary", "quantile",
+#' @return
+#' Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
 #' @keywords check-forecasts

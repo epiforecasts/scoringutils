@@ -35,8 +35,8 @@ that are not part of the forecast unit (or required columns) will be removed.}
 
 \item{forecast_type}{(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by \code{scoringutils} based on the
-input does not match this, an error will be thrown. If \code{NULL} (the default),
-the forecast type will be inferred from the data.}
+input does not match this, an error will be thrown. If \code{NULL} (the
+default), the forecast type will be inferred from the data.}
 
 \item{observed}{(optional) Name of the column in \code{data} that contains the
 observed values. This column will be renamed to "observed".}

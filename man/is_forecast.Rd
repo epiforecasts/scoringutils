@@ -7,7 +7,7 @@
 \alias{is_forecast.forecast_binary}
 \alias{is_forecast.forecast_point}
 \alias{is_forecast.forecast_quantile}
-\title{Test Whether An Object Is Of Class \verb{forecast_*}}
+\title{Test whether an object is a forecast object}
 \usage{
 is_forecast(x, ...)
 

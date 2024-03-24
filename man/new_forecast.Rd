@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{new_forecast}
 \alias{new_forecast}
-\title{Class constructor for scoringutils objects}
+\title{Class constructor for \code{forecast} objects}
 \usage{
 new_forecast(data, classname)
 }

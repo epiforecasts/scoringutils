@@ -43,28 +43,28 @@ as_forecast <- function(data,
 
 #' @rdname as_forecast
 #' @param forecast_unit (optional) Name of the columns in `data` (after
-#' any renaming of columns done by `as_forecast()`) that denote the unit of a
-#' single forecast. See [get_forecast_unit()] for details.
-#' If `NULL` (the default), all columns that are not required columns are
-#' assumed to form the unit of a single forecast. If specified, all columns
-#' that are not part of the forecast unit (or required columns) will be removed.
+#'   any renaming of columns done by `as_forecast()`) that denote the unit of a
+#'   single forecast. See [get_forecast_unit()] for details.
+#'   If `NULL` (the default), all columns that are not required columns are
+#'   assumed to form the unit of a single forecast. If specified, all columns
+#'   that are not part of the forecast unit (or required columns) will be removed.
 #' @param forecast_type (optional) The forecast type you expect the forecasts
-#' to have. If the forecast type as determined by `scoringutils` based on the
-#' input does not match this, an error will be thrown. If `NULL` (the default),
-#' the forecast type will be inferred from the data.
+#'   to have. If the forecast type as determined by `scoringutils` based on the
+#'   input does not match this, an error will be thrown. If `NULL` (the
+#'   default), the forecast type will be inferred from the data.
 #' @param observed (optional) Name of the column in `data` that contains the
-#' observed values. This column will be renamed to "observed".
+#'   observed values. This column will be renamed to "observed".
 #' @param predicted (optional) Name of the column in `data` that contains the
-#' predicted values. This column will be renamed to "predicted".
+#'   predicted values. This column will be renamed to "predicted".
 #' @param model (optional) Name of the column in `data` that contains the names
-#' of the models/forecasters that generated the predicted values.
-#' This column will be renamed to "model".
+#'   of the models/forecasters that generated the predicted values.
+#'   This column will be renamed to "model".
 #' @param quantile_level (optional) Name of the column in `data` that contains
-#' the quantile level of the predicted values. This column will be renamed to
-#' "quantile_level". Only applicable to quantile-based forecasts.
+#'   the quantile level of the predicted values. This column will be renamed to
+#'   "quantile_level". Only applicable to quantile-based forecasts.
 #' @param sample_id (optional) Name of the column in `data` that contains the
-#' sample id. This column will be renamed to "sample_id". Only applicable to
-#' sample-based forecasts.
+#'   sample id. This column will be renamed to "sample_id". Only applicable to
+#'   sample-based forecasts.
 #' @export
 #' @importFrom cli cli_warn
 as_forecast.default <- function(data,
@@ -285,7 +285,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 }
 
 
-#' @title Validation Common To All Forecast Types
+#' @title Validation common to all forecast types
 #'
 #' @description
 #' The function runs input checks that apply to all input data, regardless of
@@ -295,7 +295,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' - checks the forecast type and forecast unit
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
-#' for all forecasts
+#' for all forecasts.
 #' @inheritParams get_forecast_counts
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
@@ -351,7 +351,7 @@ validate_general <- function(data) {
 }
 
 
-#' @title Class constructor for scoringutils objects
+#' @title Class constructor for `forecast` objects
 #'
 #' @description
 #' Construct a class based on a data.frame or similar. The constructor
@@ -373,7 +373,7 @@ new_forecast <- function(data, classname) {
 }
 
 
-#' @title Test Whether An Object Is Of Class `forecast_*`
+#' @title Test whether an object is a forecast object
 #'
 #' @description
 #' Generic function to test whether an object is of class `forecast_*`. You
