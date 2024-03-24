@@ -16,7 +16,7 @@
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
 #' scale_fill_discrete coord_flip
 #' theme theme_light unit guides guide_legend .data
-#' @imporFrom data.table melt
+#' @importFrom data.table melt
 #' @importFrom checkmate assert_subset assert_logical
 #' @return A ggplot object with a visualisation of the WIS decomposition
 #' @export
