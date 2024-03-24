@@ -26,22 +26,25 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param scores A data.table of scores as produced by [score()].
-#' @param metric A character vector of length one with the metric to do the
-#' comparison on.
-#' @param by character vector with names of columns present in the input
-#' data.frame. `by` determines how pairwise comparisons will be computed.
-#' You will get a relative skill score for every grouping level determined in
-#' `by`. If, for example, `by = c("model", "location")`. Then you will get a
+#' @param by character vector with column names that define the grouping level
+#' for the pairwise comparisons. By default (`model`), there will be one
+#' relative skill score per model. If, for example,
+#' `by = c("model", "location")`. Then you will get a
 #' separate relative skill score for every model in every location. Internally,
-#' the data.frame will be split according `by` (but removing "model" before
-#' splitting) and the pairwise comparisons will be computed separately for the
-#' split data.frames.
-#' @param baseline character vector of length one that denotes the baseline
-#' model against which to compare other models.
+#' the data.table with scores will be split according `by` (removing "model"
+#' before splitting) and the pairwise comparisons will be computed separately
+#' for the split data.tables.
+#' @param metric A string with the name of the metric for which
+#' a relative skill shall be computed. By default this is either "crps",
+#' "wis" or "brier_score" if any of these are available.
+#' @param baseline A string with the name of a model. If a baseline is
+#' given, then a scaled relative skill with respect to the baseline will be
+#' returned. By default (`NULL`), relative skill will not be scaled with
+#' respect to a baseline model.
 #' @param ... additional arguments for the comparison between two models. See
 #' [compare_two_models()] for more information.
-#' @return A ggplot2 object with a coloured table of summarised scores
+#' @inheritParams summarise_scores
+#' @return A data.table with pairwise comparisons
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -57,13 +60,13 @@
 #' }
 #'
 #' scores <- score(as_forecast(example_quantile))
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #'
 #' library(ggplot2)
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-pairwise_comparison <- function(
+get_pairwise_comparisons <- function(
   scores,
   by = "model",
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
@@ -76,10 +79,10 @@ pairwise_comparison <- function(
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
-  score_names <- get_score_names(scores, error = TRUE)
+  metrics <- get_metrics(scores, error = TRUE)
 
   # check that metric is a subset of the scores and is of length 1
-  assert_subset(metric, score_names, empty.ok = FALSE)
+  assert_subset(metric, metrics, empty.ok = FALSE)
   assert_character(metric, len = 1)
 
   # check that model column + columns in 'by' are present
@@ -116,13 +119,12 @@ pairwise_comparison <- function(
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
       #nolint start: keyword_quote_linter object_usage_linter
-      cli_warn(
+      cli_abort(
         c(
           "!" = "After removing {.val NA} values for {.var {metric}},
          no values were left."
         )
       )
-      return(NULL)
     }
     cli_warn(
       c(
@@ -202,14 +204,14 @@ pairwise_comparison <- function(
 #' @description
 #'
 #' This function does the pairwise comparison for one set of forecasts, but
-#' multiple models involved. It gets called from [pairwise_comparison()].
-#' [pairwise_comparison()] splits the data into arbitrary subgroups specified
-#' by the user (e.g. if pairwise comparison should be done separately for
-#' different forecast targets) and then the actual pairwise comparison for that
-#' subgroup is managed from [pairwise_comparison_one_group()]. In order to
+#' multiple models involved. It gets called from [get_pairwise_comparisons()].
+#' [get_pairwise_comparisons()] splits the data into arbitrary subgroups
+#' specified by the user (e.g. if pairwise comparison should be done separately
+#' for different forecast targets) and then the actual pairwise comparison for
+#' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
-#' @inheritParams pairwise_comparison
+#' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @keywords internal
 
@@ -224,16 +226,14 @@ pairwise_comparison_one_group <- function(scores,
     )
   }
 
-  if (nrow(scores) == 0) {
-    return(NULL)
-  }
-
   # get list of models
   models <- unique(scores$model)
 
-  # if there aren't enough models to do any comparison, return NULL
+  # if there aren't enough models to do any comparison, abort
   if (length(models) < 2) {
-    return(NULL)
+    cli_abort(
+      c("!" = "There are not enough models to do any comparison")
+    )
   }
 
   # create a data.frame with results
@@ -342,11 +342,11 @@ pairwise_comparison_one_group <- function(scores,
 #' from [pairwise_comparison_one_group()], which handles the
 #' comparison of multiple models on a single set of forecasts (there are no
 #' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
-#' in turn gets called from from [pairwise_comparison()] which can handle
+#' in turn gets called from from [get_pairwise_comparisons()] which can handle
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
-#' @inheritParams pairwise_comparison
+#' @inheritParams get_pairwise_comparisons
 #' @param name_model1 character, name of the first model
 #' @param name_model2 character, name of the model to compare against
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
@@ -357,6 +357,8 @@ pairwise_comparison_one_group <- function(scores,
 #' determine p-values.
 #' @param n_permutations numeric, the number of permutations for a
 #' permutation test. Default is 999.
+#' @return A list with mean score ratios and p-values for the comparison
+#' between two models
 #' @importFrom cli cli_abort
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -428,7 +430,7 @@ compare_two_models <- function(scores,
 #' @title Calculate Geometric Mean
 #'
 #' @details
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
 #' @param x numeric vector of values for which to calculate the geometric mean
 #' @return the geometric mean of the values in `x`. `NA` values are ignored.
@@ -450,7 +452,7 @@ geometric_mean <- function(x) {
 #' the two. This observed difference or ratio is compared against the same
 #' test statistic based on permutations of the original data.
 #'
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
 #' @param scores1 vector of scores to compare against another vector of scores
 #' @param scores2 A second vector of scores to compare against the first
@@ -500,4 +502,57 @@ permutation_test <- function(scores1,
   pVal <- (1 + sum(test_stat_permuted >= test_stat_observed)) / (n_permutation + 1)
   # plus ones to make sure p-val is never 0?
   return(pVal)
+}
+
+
+#' @title Add pairwise comparisons
+#' @description Adds a columns with relative skills computed by running
+#' pairwise comparisons on the scores.
+#' For more information on
+#' the computation of relative skill, see [get_pairwise_comparisons()].
+#' Relative skill will be calculated for the aggregation level specified in
+#' `by`.
+#' @inheritParams get_pairwise_comparisons
+#' @export
+#' @keywords keyword scoring
+add_relative_skill <- function(
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL
+) {
+
+  # input checks are done in `get_pairwise_comparisons()`
+  # do pairwise comparisons ----------------------------------------------------
+  pairwise <- get_pairwise_comparisons(
+    scores = scores,
+    metric = metric,
+    baseline = baseline,
+    by = by
+  )
+
+  # store original metrics
+  metrics <- get_metrics(scores)
+
+  # delete unnecessary columns
+  pairwise[, c(
+    "compare_against", "mean_scores_ratio",
+    "pval", "adj_pval"
+  ) := NULL]
+  pairwise <- unique(pairwise)
+
+  # merge back
+  scores <- merge(
+    scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+  )
+
+  # Update score names
+  new_metrics <- paste(
+    metric, c("relative_skill", "scaled_relative_skill"),
+    sep = "_"
+  )
+  new_metrics <- new_metrics[new_metrics %in% names(scores)]
+  scores <- new_scores(scores, metrics = c(metrics, new_metrics))
+
+  return(scores)
 }

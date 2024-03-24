@@ -4,7 +4,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_quantile))
@@ -16,7 +16,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_binary))
@@ -27,7 +27,7 @@ test_that("get_protected_columns() returns the correct result", {
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
-    "range", "boundary", available_metrics(),
+    "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
   manual <- intersect(manual, colnames(example_continuous))
@@ -50,93 +50,31 @@ test_that("run_safely() works as expected", {
 
 
 # ==============================================================================
-# get score_names
+# get metrics
 # ==============================================================================
 
-test_that("get_score_names() works as expected", {
+test_that("get_metrics() works as expected", {
   expect_true(
-    "brier_score" %in% get_score_names(scores_binary)
+    "brier_score" %in% get_metrics(scores_binary)
   )
 
-  expect_equal(get_score_names(scores_continuous),
-               attr(scores_continuous, "score_names"))
+  expect_equal(get_metrics(scores_continuous),
+               attr(scores_continuous, "metrics"))
 
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
-    get_score_names(example_quantile, error = TRUE),
+    get_metrics(example_quantile, error = TRUE),
     "Object needs an attribute"
   )
   expect_no_condition(
-    get_score_names(scores_continuous)
+    get_metrics(scores_continuous)
   )
 
   # expect warning if some column changed
   ex <- data.table::copy(scores_continuous)
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
-    get_score_names(ex),
+    get_metrics(ex),
     "scores have been previously computed, but are no longer column names"
-  )
-})
-
-
-# ==============================================================================
-# print
-# ==============================================================================
-
-test_that("print() works on forecast_* objects", {
-  # Check print works on each forecast object
-  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
-    na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
-  for (dat in test_dat){
-    dat <- as_forecast(dat)
-    forecast_type <- get_forecast_type(dat)
-    forecast_unit <- get_forecast_unit(dat)
-
-    # Check Forecast type
-    expect_snapshot(print(dat))
-    expect_snapshot(print(dat))
-    # Check Forecast unit
-    expect_snapshot(print(dat))
-    expect_snapshot(print(dat))
-
-    # Check print.data.table works.
-    output_original <- capture.output(print(dat))
-    output_test <- capture.output(print(data.table(dat)))
-    expect_contains(output_original, output_test)
-  }
-})
-
-test_that("print methods fail gracefully", {
-  test <- as_forecast(na.omit(example_quantile))
-  test$observed <- NULL
-
-  # message if forecast type can't be computed
-  expect_warning(
-    expect_message(
-      expect_output(
-        print(test),
-        pattern = "Forecast unit:"
-      ),
-      "Could not determine forecast type due to error in validation."
-    ),
-    "Error in validating forecast object:"
-  )
-
-  # message if forecast unit can't be computed
-  test <- 1:10
-  class(test) <- "forecast_point"
-  expect_warning(
-    expect_message(
-      expect_message(
-        expect_output(
-          print(test),
-          pattern = "Forecast unit:"
-        ),
-        "Could not determine forecast unit."
-      ),
-      "Could not determine forecast type"
-    ),
-    "Error in validating forecast object:"
   )
 })

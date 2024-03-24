@@ -65,6 +65,7 @@ as_forecast <- function(data,
 #' sample id. This column will be renamed to "sample_id". Only applicable to
 #' sample-based forecasts.
 #' @export
+#' @importFrom cli cli_warn
 as_forecast.default <- function(data,
                                 forecast_unit = NULL,
                                 forecast_type = NULL,
@@ -130,6 +131,41 @@ as_forecast.default <- function(data,
       )
     )
     #nolint end
+  }
+
+  # produce warning if old format is suspected
+  # old quantile format
+  if (forecast_type == "point" && "quantile" %in% colnames(data)) {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "Found column 'quantile' in the input data",
+        "i" = "This column name was used before scoringutils version 2.0.0.
+        Should the column be called 'quantile_level' instead?"
+      ),
+      .frequency = "once",
+      .frequency_id = "quantile_col_present"
+    )
+    #nolint end
+  }
+  #old binary format
+  if (forecast_type == "point") {
+    looks_binary <- check_input_binary(factor(data$observed), data$predicted)
+    if (is.logical(looks_binary)) {
+      #nolint start: keyword_quote_linter duplicate_argument_linter
+      cli_warn(
+        c(
+          "All observations are either 1 or 0.",
+          "i" = "The forecast type was classified as 'point', but it looks like
+          it could be a binary forecast as well.",
+          "i" = "In case you want it to be a binary forecast, convert `observed`
+          to a factor. See `?as_forecast()` for more information."
+        ),
+        .frequency = "once",
+        .frequency_id = "looks_binary"
+      )
+      #nolint end
+    }
   }
 
   # construct class
@@ -248,7 +284,7 @@ validate_forecast.forecast_sample <- function(data, ...) {
 }
 
 
-#' @title Apply scoringutls input checks that are the same across forecast types
+#' @title Validation Common To All Forecast Types
 #'
 #' @description
 #' The function runs input checks that apply to all input data, regardless of
@@ -259,9 +295,8 @@ validate_forecast.forecast_sample <- function(data, ...) {
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts
-#' @inheritParams as_forecast
-#' @return returns the input, with a few new attributes that hold additional
-#' information, messages and warnings
+#' @inheritParams get_forecast_counts
+#' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @importFrom cli cli_abort cli_inform
@@ -391,45 +426,4 @@ is_forecast.forecast_point <- function(x, ...) {
 #' @keywords check-forecasts
 is_forecast.forecast_quantile <- function(x, ...) {
   inherits(x, "forecast_quantile")
-}
-
-
-#' @title Validate metrics
-#'
-#' @description This function validates whether the list of metrics is a list
-#' of valid functions.
-#'
-#' The function is used in [score()] to make sure that all metrics are valid
-#' functions
-#'
-#' @param metrics A named list with metrics. Every element should be a scoring
-#' function to be applied to the data.
-#' @importFrom cli cli_warn
-#'
-#' @return A named list of metrics, with those filtered out that are not
-#' valid functions
-#' @importFrom checkmate assert_list test_list check_function
-#' @keywords internal_input_check
-validate_metrics <- function(metrics) {
-
-  assert_list(metrics, min.len = 1, names = "named")
-
-  for (i in seq_along(metrics)) {
-    check_fun <- check_function(metrics[[i]])
-    if (!is.logical(check_fun)) {
-      #nolint start: keyword_quote_linter
-      cli_warn(
-        c(
-          "!" = "`Metrics` element number {i} is not a valid function."
-        )
-      )
-      #nolint end
-      names(metrics)[i] <- "scoringutils_delete"
-    }
-  }
-  metrics[names(metrics) == "scoringutils_delete"] <- NULL
-
-  assert_list(metrics, min.len = 1, .var.name = "valid metrics")
-
-  return(metrics)
 }

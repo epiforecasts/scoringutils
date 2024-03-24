@@ -15,14 +15,16 @@ compare_two_models(
 )
 }
 \arguments{
-\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
 
 \item{name_model1}{character, name of the first model}
 
 \item{name_model2}{character, name of the model to compare against}
 
-\item{metric}{A character vector of length one with the metric to do the
-comparison on.}
+\item{metric}{A string with the name of the metric for which
+a relative skill shall be computed. By default this is either "crps",
+"wis" or "brier_score" if any of these are available.}
 
 \item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
 instead of a two-sided test to determine significance in a pairwise
@@ -35,13 +37,17 @@ determine p-values.}
 \item{n_permutations}{numeric, the number of permutations for a
 permutation test. Default is 999.}
 }
+\value{
+A list with mean score ratios and p-values for the comparison
+between two models
+}
 \description{
 This function compares two models based on the subset of forecasts for which
 both models have made a prediction. It gets called
 from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}, which handles the
 comparison of multiple models on a single set of forecasts (there are no
 subsets of forecasts to be distinguished). \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}
-in turn gets called from from \code{\link[=pairwise_comparison]{pairwise_comparison()}} which can handle
+in turn gets called from from \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} which can handle
 pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 pairwise comparisons for one set of forecasts, but done separately for two
 different forecast targets.

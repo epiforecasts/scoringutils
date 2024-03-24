@@ -27,25 +27,25 @@ prediction interval, respectively.}
 \item{keep_quantile_col}{keep the \code{quantile_level} column in the final
 output after transformation (default is FALSE). This only works if
 \code{format = "long"}. If \code{format = "wide"}, the \code{quantile_level} column will
-always be dropped.}
+always be dropped.
+\emph{quantile_to_interval.data.frame}:
+a data.frame in an interval format (either "long" or "wide"), with or
+without a \code{quantile_level} column. Rows will not be reordered.}
 
 \item{observed}{a numeric vector of observed values of size n}
 
 \item{predicted}{a numeric vector of predicted values of size n x N. If
 \code{observed} is a single number, then \code{predicted} can be a vector of length N}
 
-\item{quantile_level}{a numeric vector of quantile levels of size N}
-}
-\value{
-\emph{quantile_to_interval.data.frame}:
-a data.frame in an interval format (either "long" or "wide"), with or
-without a \code{quantile_level} column. Rows will not be reordered.
-
+\item{quantile_level}{a numeric vector of quantile levels of size N
 \emph{quantile_to_interval.numeric}:
 a data.frame in a wide interval format with columns \code{forecast_id},
 \code{observed}, \code{lower}, \code{upper}, and \code{interval_range}. The \code{forecast_id} column
 is a unique identifier for each forecast. Rows will be reordered according to
-\code{forecast_id} and \code{interval_range}.
+\code{forecast_id} and \code{interval_range}.}
+}
+\value{
+A data.table with forecasts in an interval format
 }
 \description{
 \strong{Quantile format}

@@ -10,7 +10,7 @@ ensure_data.table(data)
 \item{data}{An object to ensure is a data table}
 }
 \value{
-A data table
+A data.table/a copy of an exising data.table
 }
 \description{
 This function ensures that an object is a data table.

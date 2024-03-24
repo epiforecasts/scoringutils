@@ -40,6 +40,6 @@ vector independently and then takes either the difference or the ratio of
 the two. This observed difference or ratio is compared against the same
 test statistic based on permutations of the original data.
 
-Used in \code{\link[=pairwise_comparison]{pairwise_comparison()}}.
+Used in \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}.
 }
 \keyword{internal}

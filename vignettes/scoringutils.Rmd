@@ -181,7 +181,7 @@ In order to better compare models against each other we can use relative scores 
 
 ```{r}
 score(as_forecast(example_quantile)) %>%
-  add_pairwise_comparison(
+  add_relative_skill(
     by = c("model", "target_type"),
     baseline = "EuroCOVIDhub-ensemble"
   ) %>%
@@ -190,18 +190,6 @@ score(as_forecast(example_quantile)) %>%
 
 
 ## Visualising scores
-
-### Coloured table
-
-A simple coloured table can be produced based on the scores: 
-
-```{r}
-score(as_forecast(example_integer)) %>%
-  summarise_scores(by = c("model", "target_type"), na.rm = TRUE) %>%
-  summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2) %>%
-  plot_score_table(by = "target_type") +
-  facet_wrap(~ target_type, nrow = 1)
-```
 
 ### Score heatmap
 
@@ -234,7 +222,7 @@ We can compute pit values as such:
 ```{r}
 example_continuous %>%
   as_forecast() %>%
-  pit(by = "model")
+  get_pit(by = "model")
 ```
 
 And visualise the results as such: 
@@ -242,7 +230,7 @@ And visualise the results as such:
 ```{r}
 example_continuous %>%
   as_forecast() %>%
-  pit(by = c("model", "target_type")) %>%
+  get_pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
 ```
@@ -252,7 +240,7 @@ Similarly for quantile-based forecasts:
 ```{r}
 example_quantile[quantile_level %in% seq(0.1, 0.9, 0.1), ] %>%
   as_forecast() %>%
-  pit(by = c("model", "target_type")) %>%
+  get_pit(by = c("model", "target_type")) %>%
   plot_pit() +
   facet_grid(model ~ target_type)
 ```
@@ -283,28 +271,28 @@ example_quantile %>%
 
 Relative scores for different models can be computed using pairwise comparisons, a sort of pairwise tournament where all combinations of two models are compared against each other based on the overlapping set of available forecasts common to both models. Internally, a ratio of the mean scores of both models is computed. The relative score of a model is then the geometric mean of all mean score ratios which involve that model. When a baseline is provided, then that baseline is excluded from the relative scores for individual models (which therefore differ slightly from relative scores without a baseline) and all relative scores are scaled by (i.e. divided by) the relative score of the baseline model. 
 
-In `scoringutils`, pairwise comparisons can be made in two ways: Through the standalone function `pairwise_comparison()` or from within `summarise_scores()` which simply adds relative scores to an existing set of scores. 
+In `scoringutils`, pairwise comparisons can be made in two ways: Through the standalone function `get_pairwise_comparisons()` or from within `summarise_scores()` which simply adds relative scores to an existing set of scores. 
 
 ```{r}
 forecast_quantile %>%
   score() %>%
-  pairwise_comparison(by = "model", baseline = "EuroCOVIDhub-baseline")
+  get_pairwise_comparisons(by = "model", baseline = "EuroCOVIDhub-baseline")
 ```
 
 ```{r}
 forecast_quantile %>%
   score() %>%
   summarise_scores(by = "model") %>%
-  add_pairwise_comparison(baseline = "EuroCOVIDhub-baseline")
+  add_relative_skill(baseline = "EuroCOVIDhub-baseline")
 ```
 
-If using the `pairwise_comparison()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 
+If using the `get_pairwise_comparisons()` function, we can also visualise pairwise comparisons by showing the mean score ratios between models. By default, smaller values are better and the model we care about is showing on the y axis on the left, while the model against it is compared is shown on the x-axis on the bottom. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller 1), while the EuroCOVIDhub-baseline performs worst (and only has values larger than 1). For cases, the UMass-MechBayes model is of course excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty. 
 
 ```{r, fig.width=9, fig.height=7}
 forecast_quantile %>%
   score() %>%
-  pairwise_comparison(by = c("model", "target_type")) %>%
-  plot_pairwise_comparison() +
+  get_pairwise_comparisons(by = c("model", "target_type")) %>%
+  plot_pairwise_comparisons() +
   facet_wrap(~ target_type)
 ```
 
@@ -313,13 +301,13 @@ forecast_quantile %>%
 
 ### Correlation between scores
 
-It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `correlation()` to summarise over quantiles before computing correlations.
+It may sometimes be interesting to see how different scores correlate with each other. We can examine this using the function `correlation()`. When dealing with quantile-based forecasts, it is important to call `summarise_scorees()` before `get_correlations()` to summarise over quantiles before computing correlations.
 
 ```{r}
 forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation()
+  get_correlations()
 ```
 
 Visualising correlations: 
@@ -328,8 +316,8 @@ Visualising correlations:
 forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
-  correlation(digits = 2) %>%
-  plot_correlation()
+  get_correlations(digits = 2) %>%
+  plot_correlations()
 ```
 
 

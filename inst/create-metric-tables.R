@@ -177,7 +177,7 @@ under_overprediction <- list(
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
   `Name` = r"(crps)",
-  `Functions` = r"(score(), pit())",
+  `Functions` = r"(score(), get_pit())",
   `D` = r"($\checkmark$)",
   `C` = r"($\checkmark$)",
   `B` = r"($-$)",
@@ -189,7 +189,7 @@ pit <- list(
 mean_score_ratio <- list(
   `Metric` = "Mean score ratio",
   `Name` = r"(mean_scores_ratio)",
-  `Functions` = r"(pairwise_comparison())",
+  `Functions` = r"(get_pairwise_comparisons())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
@@ -201,7 +201,7 @@ mean_score_ratio <- list(
 relative_skill <- list(
   `Metric` = "Relative skill",
   `Name` = list("relative_skill"),
-  `Functions` = r"(score(), pairwise_comparison())",
+  `Functions` = r"(score(), get_pairwise_comparisons())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",
@@ -213,7 +213,7 @@ relative_skill <- list(
 scaled_relative_skill <- list(
   `Metric` = "Scaled relative skill",
   `Name` = "scaled_rel_skill",
-  `Functions` = r"(score(), pairwise_comparison())",
+  `Functions` = r"(score(), get_pairwise_comparisons())",
   `D` = r"($\sim$)",
   `C` = r"($\sim$)",
   `B` = r"($\sim$)",

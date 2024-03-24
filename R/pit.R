@@ -59,7 +59,7 @@
 #' correspond to the length of `observed`. For integer forecasts, a
 #' randomised PIT will be returned of length
 #' `length(observed) * n_replicates`
-#' @seealso [pit()]
+#' @seealso [get_pit()]
 #' @importFrom stats runif
 #' @importFrom cli cli_abort cli_inform
 #' @examples
@@ -74,8 +74,8 @@
 #' plot_pit(pit)
 #'
 #' ## integer predictions
-#' observed <- rpois(50, lambda = 1:50)
-#' predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+#' observed <- rpois(20, lambda = 1:20)
+#' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
 #' pit <- pit_sample(observed, predicted, n_replicates = 30)
 #' plot_pit(pit)
 #' @export
@@ -160,11 +160,10 @@ pit_sample <- function(observed,
 
 #' @title Probability Integral Transformation (data.frame Format)
 #'
-#' @description Wrapper around `pit()` for use in data.frames
+#' @description Compute the Probability Integral Transformation (PIT) for
+#' validated forecast objects.
 #'
-#' @details
-#' see [pit()]
-#'
+#' @inherit score params
 #' @param data a data.frame with the following columns: `observed`,
 #' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
@@ -175,11 +174,11 @@ pit_sample <- function(observed,
 #' @return a data.table with PIT values according to the grouping specified in
 #' `by`
 #' @examples
-#' result <- pit(as_forecast(example_continuous), by = "model")
+#' result <- get_pit(as_forecast(example_continuous), by = "model")
 #' plot_pit(result)
 #'
 #' # example with quantile data
-#' result <- pit(as_forecast(example_quantile), by = "model")
+#' result <- get_pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(result)
 #' @export
 #' @references
@@ -189,9 +188,9 @@ pit_sample <- function(observed,
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords scoring
 
-pit <- function(data,
-                by,
-                n_replicates = 100) {
+get_pit <- function(data,
+                    by,
+                    n_replicates = 100) {
 
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))

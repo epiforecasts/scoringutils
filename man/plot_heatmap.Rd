@@ -20,7 +20,7 @@ could be something like "horizon", or "location"}
 tiles of the heatmap}
 }
 \value{
-A ggplot2 object showing a heatmap of the desired metric
+A ggplot object showing a heatmap of the desired metric
 }
 \description{
 This function can be used to create a heatmap of one metric across different
@@ -30,6 +30,10 @@ different locations.
 \examples{
 scores <- score(as_forecast(example_quantile))
 scores <- summarise_scores(scores, by = c("model", "target_type"))
+scores <- summarise_scores(
+  scores, by = c("model", "target_type"),
+  fun = signif, digits = 2
+)
 
 plot_heatmap(scores, x = "target_type", metric = "bias")
 }

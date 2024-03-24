@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{bias_sample}
 \alias{bias_sample}
-\title{Determines bias of forecasts}
+\title{Determine Bias Of Forecasts}
 \usage{
 bias_sample(observed, predicted)
 }

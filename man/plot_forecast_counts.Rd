@@ -30,7 +30,7 @@ are shown on the x-axis.}
 or not to show the actual count numbers on the plot}
 }
 \value{
-ggplot object with a plot of interval coverage
+A ggplot object with a plot of forecast counts
 }
 \description{
 Visualise Where Forecasts Are Available

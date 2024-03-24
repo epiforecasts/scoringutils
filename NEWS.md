@@ -8,25 +8,26 @@ The update introduces breaking changes. If you want to keep using the older vers
 - In `score()`, required columns "true_value" and "prediction" were renamed and replaced by required columns "observed" and "predicted" and "model" (which now is a required column). Scoring functions now also use the function arguments "observed" and "predicted" everywhere consistently. 
 - The overall scoring workflow was updated. Most functions now operate on forecast objects, which can be created using the function `as_forecast()`. This function replaces the previous `check_forecast()` function and validates the inputs. `as_forecast()` also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. `score()` is now a generic function that dispatches the correct method based on the forecast type. Forecast types currently supported are "binary", "point", "sample" and "quantile" with corresponding classes "forecast_binary", "forecast_point", "forecast_sample" and "forecast_quantile".
 - `set_forecast_unit()` now errors if any of the values in `forecast_unit` are not columns of the data. 
-- Scoring rules (functions used for scoring) received a consistent interface and input checks:
-  - Scoring rules for binary forecasts:
+- All scoring functions exported by the package received a consistent interface and input checks:
+  - Metrics and scoring rules for binary forecasts:
     - `observed`: factor with exactly 2 levels
     - `predicted`: numeric, vector with probabilities
-  - Scoring rules for point forecasts:
+  - Metrics and scoring rules for point forecasts:
     - `observed`: numeric vector
     - `predicted`: numeric vector
-  - Scoring rules for sample-based forecasts:
+  - Metrics and scoring rules for sample-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
-  - Scoring rules for quantile-based forecasts:
+  - Metrics and scoring rules for quantile-based forecasts:
     - `observed`: numeric, either a scalar or a vector
     - `predicted`: numeric, a vector (if `observed` is a scalar) or a matrix (if `observed` is a vector)
     - `quantile_level`: numeric, a vector with quantile-levels. Can alternatively be a matrix of the same shape as `predicted`.
-- Users can now supply their own scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `rules_point()`, `rules_sample()`, `rules_quantile()` and `rules_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of scoring rules). 
-- `score()` now returns objects of class `scores` with a stored attribute `score_names` that holds the names of the scoring rules that were used. Users can call `get_score_names()` to access the names of those scoring rules. 
+- Users can now supply their own metrics and scoring rules to `score()` as a list of functions. Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()` and `metrics_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics). 
+- `score()` now returns objects of class `scores` with a stored attribute `metrics` that holds the names of the scoring rules that were used. Users can call `get_metrics()` to access the names of those scoring rules. 
 - `check_forecasts()` was replaced by a different workflow. There now is a function, `as_forecast()`, that determines forecast type of the data, constructs a forecasting object and validates it using the function `validate_forecast()` (a generic that dispatches the correct method based on the forecast type). Objects of class `forecast_binary`, `forecast_point`, `forecast_sample` and `forecast_quantile` have print methods that fulfill the functionality of `check_forecasts()`.
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
-- The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_pairwise_comparison()`, was introduced that takes summarised scores as an input and adds columns with relative skil scores and scaled relative skill scores.
+- The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_relative_skill()`, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.
+- The function `pairwise_comparison()` was renamed to `get_pairwise_comparisons()`, in line with other `get_`-functions. Analogously, `plot_pairwise_comparison()` was renamed to `plot_pairwise_comparisons()`.
 - `add_coverage()` was replaced by a new function, `get_coverage()`. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using `plot_interval_coverage()` or `plot_quantile_coverage()`. An example worfklow would be `example_quantile |> as_forecast() |> get_coverage(by = "model") |> plot_interval_coverage()`.
 - Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
     - The function `bias_range()` was removed (users should now use `bias_quantile()` instead)
@@ -50,8 +51,12 @@ The update introduces breaking changes. If you want to keep using the older vers
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Added a method for `print()` that prints out additional information for `forecast` objects. 
 - Added a subsetting `[` operator for scores, so that the score name attribute gets preserved when subsetting.
-- Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462).
-- Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659).
+- Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462) or in the Deprecated-visualisations Vignette.
+- Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659) or in the Deprecated-visualisations Vignette.
+- Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
+- Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
+- Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
+- `pit()` was renamed to `get_pit()`
 
 # scoringutils 1.2.2
 

@@ -10,23 +10,18 @@ summarise_scores(scores, by = "model", across = NULL, fun = mean, ...)
 summarize_scores(scores, by = "model", across = NULL, fun = mean, ...)
 }
 \arguments{
-\item{scores}{A data.table of scores as produced by \code{\link[=score]{score()}}.}
+\item{scores}{An object of class \code{scores} (a data.table with
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
 
 \item{by}{character vector with column names to summarise scores by. Default
-is \code{model}, meaning that there will be one score per model in the output.
-The \emph{unit of a single forecast} is determined by the columns present in the
-input data that do not correspond to a metric produced by \code{\link[=score]{score()}}, which
-indicate indicate a grouping of forecasts (for example there may be one
-forecast per day, location and model). Adding additional, unrelated, columns
-may alter results in an unpredictable way.}
+is \code{model}, meaning that there will be one score per model in the output.}
 
-\item{across}{character vector with column names from the vector of variables
-that define the \emph{unit of a single forecast} (see above) to summarise scores
+\item{across}{character vector with column names to summarise scores
 across (meaning that the specified columns will be dropped). This is an
 alternative to specifying \code{by} directly. If \code{across} is set, \code{by} will be
 ignored. If \code{across} is \code{NULL} (default), then \code{by} will be used.}
 
-\item{fun}{a function used for summarising scores. Default is \code{mean}.}
+\item{fun}{a function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 
 \item{...}{additional parameters that can be passed to the summary function
 provided to \code{fun}. For more information see the documentation of the
@@ -42,11 +37,11 @@ Summarise scores as produced by \code{\link[=score]{score()}}.
 
 \code{summarise_scores} relies on a way to identify the names of the scores and
 distinguish them from columns that denote the unit of a single forecast.
-Internally, this is done via a stored attribute, \code{score_names} that stores
+Internally, this is done via a stored attribute, \code{metrics} that stores
 the names of the scores. This means, however, that you need to be careful
 with renaming scores after they have been produced by \code{\link[=score]{score()}}. If you
 do, you also have to manually update the attribute by calling
-\code{attr(scores, "score_names") <- new_names}.
+\code{attr(scores, "metrics") <- new_names}.
 }
 \examples{
 \dontshow{

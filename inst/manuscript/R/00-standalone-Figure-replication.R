@@ -99,7 +99,7 @@ df[, model := factor(`model`,
 
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
-  pit <- pit(df, by = "model")
+  pit <- get_pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
@@ -575,9 +575,9 @@ score(example_quantile) |>
 # Figure 9
 # =============================================================================#
 score(example_quantile) |>
-  pairwise_comparison(by = c("model", "target_type"),
-                      baseline = "EuroCOVIDhub-baseline") |>
-  plot_pairwise_comparison() +
+  get_pairwise_comparisons(by = c("model", "target_type"),
+                           baseline = "EuroCOVIDhub-baseline") |>
+  plot_pairwise_comparisons() +
   facet_wrap(~ target_type)
 
 
@@ -623,7 +623,7 @@ p1 + p2 +
 # Figure 12
 # =============================================================================#
 example_continuous |>
-  pit(by = c("model", "target_type")) |>
+  get_pit(by = c("model", "target_type")) |>
   plot_pit() +
   facet_grid(target_type ~ model)
 
@@ -654,10 +654,10 @@ p1 / p2 +
 correlations <- example_quantile |>
   score() |>
   summarise_scores() |>
-  correlation(digits = 2)
+  correlations(digits = 2)
 
 correlations |>
   glimpse()
 
 correlations |>
-  plot_correlation()
+  plot_correlations()

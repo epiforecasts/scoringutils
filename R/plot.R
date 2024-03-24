@@ -1,132 +1,3 @@
-#' @title Plot Coloured Score Table
-#'
-#' @description
-#' Plots a coloured table of summarised scores obtained using
-#' [score()].
-#'
-#' @param y the variable to be shown on the y-axis. Instead of a single character string,
-#' you can also specify a vector with column names, e.g.
-#' `y = c("model", "location")`. These column names will be concatenated
-#' to create a unique row identifier (e.g. "model1_location1").
-#' @param by A character vector that determines how the colour shading for the
-#' plot gets computed. By default (`NULL`), shading will be determined per
-#' metric, but you can provide additional column names (see examples).
-#' @param metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will be shown.
-#'
-#' @return A ggplot2 object with a coloured table of summarised scores
-#' @inheritParams pairwise_comparison
-#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
-#' @importFrom data.table setDT melt
-#' @importFrom stats sd
-#' @export
-#'
-#' @examples
-#' library(ggplot2)
-#' library(magrittr) # pipe operator
-#' \dontshow{
-#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
-#' }
-#'
-#' scores <- score(as_forecast(example_quantile)) %>%
-#'   summarise_scores(by = c("model", "target_type")) %>%
-#'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
-#'
-#' plot_score_table(scores, y = "model", by = "target_type") +
-#'   facet_wrap(~target_type, ncol = 1)
-#'
-#' # can also put target description on the y-axis
-#' plot_score_table(scores,
-#'                  y = c("model", "target_type"),
-#'                  by = "target_type")
-
-plot_score_table <- function(scores,
-                             y = "model",
-                             by = NULL,
-                             metrics = NULL) {
-
-  # identify metrics -----------------------------------------------------------
-  id_vars <- get_forecast_unit(scores)
-  metrics <- get_score_names(scores)
-
-  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
-  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
-
-  # compute scaled values ------------------------------------------------------
-  # scaling is done in order to colour the different scores
-  # for most metrics larger is worse, but others like bias are better if they
-  # are close to zero and deviations in both directions are bad
-
-  # define which metrics are scaled using min (larger is worse) and
-  # which not (metrics like bias where deviations in both directions are bad)
-  metrics_zero_good <- c("bias", "interval_coverage_deviation")
-  metrics_no_color <- "coverage"
-
-  metrics_min_good <- setdiff(metrics, c(
-    metrics_zero_good, metrics_no_color
-  ))
-
-  # write scale functions that can be used in data.table
-  scale <- function(x) {
-    scaled <- x / sd(x, na.rm = TRUE)
-    return(scaled)
-  }
-  scale_min_good <- function(x) {
-    scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
-    return(scaled)
-  }
-
-  # pivot longer and add scaled values
-  df <- data.table::melt(scores,
-    value.vars = metrics,
-    id.vars = id_vars,
-    variable.name = "metric"
-  )
-
-  df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-    by = c("metric", by)
-  ]
-  df[metric %in% metrics_zero_good, value_scaled := scale(value),
-    by = c("metric", by)
-  ]
-  df[metric %in% metrics_no_color, value_scaled := 0,
-    by = c("metric", by)
-  ]
-
-  # create identifier column for plot ------------------------------------------
-  # if there is only one column, leave column as is. Reason to do that is that
-  # users can then pass in a factor and keep the ordering of that column intact
-  if (length(y) > 1) {
-    df[, identifCol := do.call(paste, c(.SD, sep = "_")),
-       .SDcols = y[y %in% names(df)]]
-  } else {
-    setnames(df, old = eval(y), new = "identifCol")
-  }
-
-  # plot -----------------------------------------------------------------------
-  # make plot with all metrics that are not NA
-  plot <- ggplot(
-    df[!is.na(value), ],
-    aes(y = identifCol, x = metric)
-  ) +
-    geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
-    geom_text(aes(y = identifCol, label = value)) +
-    scale_fill_gradient2(low = "steelblue", high = "salmon") +
-    theme_scoringutils() +
-    theme(
-      legend.title = element_blank(),
-      legend.position = "none",
-      axis.text.x = element_text(
-        angle = 90, vjust = 1,
-        hjust = 1
-      )
-    ) +
-    labs(x = "", y = "") +
-    coord_cartesian(expand = FALSE)
-
-  return(plot)
-}
-
 #' @title Plot Contributions to the Weighted Interval Score
 #'
 #' @description
@@ -140,11 +11,14 @@ plot_score_table <- function(scores,
 #' @param relative_contributions show relative contributions instead of absolute
 #' contributions. Default is FALSE and this functionality is not available yet.
 #' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
-#' @return A ggplot2 object showing a contributions from the three components of
+#' @return A ggplot object showing a contributions from the three components of
 #' the weighted interval score
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
-#' scale_fill_discrete
+#' scale_fill_discrete coord_flip
 #' theme theme_light unit guides guide_legend .data
+#' @imporFrom data.table melt
+#' @importFrom checkmate assert_subset assert_logical
+#' @return A ggplot object with a visualisation of the WIS decomposition
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -169,14 +43,16 @@ plot_wis <- function(scores,
                      x = "model",
                      relative_contributions = FALSE,
                      flip = FALSE) {
-  scores <- data.table::as.data.table(scores)
+  # input checks
+  scores <- ensure_data.table(scores)
+  wis_components <- c("overprediction", "underprediction", "dispersion")
+  assert(check_columns_present(scores, wis_components))
+  assert_subset(x, names(scores))
+  assert_logical(relative_contributions, len = 1)
+  assert_logical(flip, len = 1)
 
-  scores <- data.table::melt(scores,
-    measure.vars = c(
-      "overprediction",
-      "underprediction",
-      "dispersion"
-    ),
+  scores <- melt(scores,
+    measure.vars = wis_components,
     variable.name = "wis_component_name",
     value.name = "component_value"
   )
@@ -226,14 +102,19 @@ plot_wis <- function(scores,
 #' could be something like "horizon", or "location"
 #' @param metric the metric that determines the value and colour shown in the
 #' tiles of the heatmap
-#' @return A ggplot2 object showing a heatmap of the desired metric
+#' @return A ggplot object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
+#' @importFrom checkmate assert_subset
 #' @export
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
+#' scores <- summarise_scores(
+#'   scores, by = c("model", "target_type"),
+#'   fun = signif, digits = 2
+#' )
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
 
@@ -241,9 +122,10 @@ plot_heatmap <- function(scores,
                          y = "model",
                          x,
                          metric) {
-  data.table::setDT(scores)
-
-  scores[, eval(metric) := round(get(metric), 2)]
+  scores <- ensure_data.table(scores)
+  assert_subset(y, names(scores))
+  assert_subset(x, names(scores))
+  assert_subset(metric, names(scores))
 
   plot <- ggplot(
     scores,
@@ -279,6 +161,7 @@ plot_heatmap <- function(scores,
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
 #' facet_wrap facet_grid geom_polygon geom_line
+#' @importFrom checkmate assert_subset
 #' @importFrom data.table dcast
 #' @export
 #' @examples
@@ -289,10 +172,12 @@ plot_heatmap <- function(scores,
 #' plot_interval_coverage(coverage)
 plot_interval_coverage <- function(coverage,
                                    colour = "model") {
+  coverage <- ensure_data.table(coverage)
+  assert_subset(colour, names(coverage))
+
   # in case quantile columns are present, remove them and then take unique
   # values. This doesn't visually affect the plot, but prevents lines from being
   # drawn twice.
-  coverage <- ensure_data.table(coverage)
   del <- c("quantile_level", "quantile_coverage", "quantile_coverage_deviation")
   suppressWarnings(coverage[, eval(del) := NULL])
   coverage <- unique(coverage)
@@ -341,6 +226,7 @@ plot_interval_coverage <- function(coverage,
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
 #' scale_y_continuous geom_line
+#' @importFrom checkmate assert_subset assert_data_frame
 #' @importFrom data.table dcast
 #' @export
 #' @examples
@@ -349,6 +235,9 @@ plot_interval_coverage <- function(coverage,
 
 plot_quantile_coverage <- function(coverage,
                                    colour = "model") {
+  coverage <- assert_data_frame(coverage)
+  assert_subset(colour, names(coverage))
+
   p2 <- ggplot(
     data = coverage,
     aes(x = quantile_level, colour = .data[[colour]])
@@ -399,7 +288,7 @@ plot_quantile_coverage <- function(coverage,
 #' between models
 #'
 #' @param comparison_result A data.frame as produced by
-#' [pairwise_comparison()]
+#' [get_pairwise_comparisons()]
 #' @param type character vector of length one that is either
 #'  "mean_scores_ratio" or "pval". This denotes whether to
 #' visualise the ratio or the p-value of the pairwise comparison.
@@ -410,20 +299,23 @@ plot_quantile_coverage <- function(coverage,
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
 #' element_text element_blank
+#' @return A ggplot object with a heatmap of mean score ratios from pairwise
+#' comparisons
 #' @export
 #' @examples
 #' library(ggplot2)
 #' scores <- score(as_forecast(example_quantile))
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval")) {
+plot_pairwise_comparisons <- function(comparison_result,
+                                      type = c("mean_scores_ratio", "pval")) {
   comparison_result <- data.table::as.data.table(comparison_result)
 
   relative_skill_metric <- grep(
-    "_relative_skill$", colnames(comparison_result), value = TRUE
+    "(?<!scaled)_relative_skill$", colnames(comparison_result),
+    value = TRUE, perl = TRUE
   )
   comparison_result[, model := reorder(model, -get(relative_skill_metric))]
   levels <- levels(comparison_result$model)
@@ -524,8 +416,8 @@ plot_pairwise_comparison <- function(comparison_result,
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param pit either a vector with the PIT values of size n, or a data.frame as
-#' produced by [pit()]
+#' @param pit either a vector with the PIT values of size n, or a data.table as
+#' produced by [get_pit()]
 #' @param num_bins the number of bins in the PIT histogram, default is "auto".
 #' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
 #' will display a bin for each available quantile in case you passed in data in
@@ -541,7 +433,7 @@ plot_pairwise_comparison <- function(comparison_result,
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
-#' @return vector with the scoring values
+#' @return A ggplot object with a histogram of PIT values
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -554,11 +446,11 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit(as_forecast(example_quantile), by = "model")
+#' pit <- get_pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit(as_forecast(example_integer), by = "model")
+#' pit <- get_pit(as_forecast(example_integer), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @export
@@ -662,11 +554,11 @@ plot_pit <- function(pit,
 #' are shown on the x-axis.
 #' @param show_counts logical (default is `TRUE`) that indicates whether
 #' or not to show the actual count numbers on the plot
-#' @return ggplot object with a plot of interval coverage
+#' @return A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #' geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
-#' @importFrom checkmate assert_string assert_logical assert
+#' @importFrom checkmate assert_subset assert_logical
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -686,11 +578,10 @@ plot_forecast_counts <- function(forecast_counts,
                                  show_counts = TRUE) {
 
   forecast_counts <- ensure_data.table(forecast_counts)
-  assert_string(y)
-  assert_string(x)
-  assert(check_columns_present(forecast_counts, c(y, x)))
-  assert_logical(x_as_factor)
-  assert_logical(show_counts)
+  assert_subset(y, colnames(forecast_counts))
+  assert_subset(x, colnames(forecast_counts))
+  assert_logical(x_as_factor, len = 1)
+  assert_logical(show_counts, len = 1)
 
   if (x_as_factor) {
     forecast_counts[, eval(x) := as.factor(get(x))]
@@ -730,26 +621,43 @@ plot_forecast_counts <- function(forecast_counts,
 #' Plots a heatmap of correlations between different metrics
 #'
 #' @param correlations A data.table of correlations between scores as produced
-#' by [correlation()].
-#' @return A ggplot2 object showing a coloured matrix of correlations
+#' by [get_correlations()].
+#' @return A ggplot object showing a coloured matrix of correlations
 #' between metrics
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
+#' @importFrom checkmate assert_data_frame
 #' @export
+#' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
-#' correlations <- correlation(
+#' correlations <- get_correlations(
 #'  summarise_scores(scores),
 #'  digits = 2
 #' )
-#' plot_correlation(correlations)
+#' plot_correlations(correlations)
 
-plot_correlation <- function(correlations) {
+plot_correlations <- function(correlations) {
 
-  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+  assert_data_frame(correlations)
+  metrics <- get_metrics(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+
+  # check correlations is actually a matrix of correlations
+  col_present <- check_columns_present(correlations, "metric")
+  if (any(lower_triangle > 1, na.rm = TRUE) || !is.logical(col_present)) {
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "Found correlations > 1 or missing `metric` column.",
+        "i" = "Did you forget to call {.fn scoringutils::get_correlations}?"
+      )
+    )
+    #nolint end
+  }
+
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame

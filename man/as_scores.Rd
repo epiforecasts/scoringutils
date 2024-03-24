@@ -4,16 +4,16 @@
 \alias{as_scores}
 \title{Create An Object Of Class \code{scores} From Data}
 \usage{
-as_scores(scores, score_names)
+as_scores(scores, metrics)
 }
 \arguments{
 \item{scores}{A data.table or similar with scores as produced by \code{\link[=score]{score()}}}
 
-\item{score_names}{A character vector with the names of the scores
+\item{metrics}{A character vector with the names of the scores
 (i.e. the names of the scoring rules used for scoring)}
 }
 \value{
-Returns an object of class 1scores`
+An object of class \code{scores}
 }
 \description{
 This convenience function wraps \code{\link[=new_scores]{new_scores()}} and validates
