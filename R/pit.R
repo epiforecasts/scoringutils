@@ -95,14 +95,6 @@ pit_sample <- function(observed,
     predicted <- matrix(predicted, nrow = 1)
   }
 
-  # check data type ------------------------------------------------------------
-  # check whether continuous or integer
-  if (isTRUE(all.equal(as.vector(predicted), as.integer(predicted)))) {
-    continuous_predictions <- FALSE
-  } else {
-    continuous_predictions <- TRUE
-  }
-
   # calculate PIT-values -------------------------------------------------------
   n_pred <- ncol(predicted)
 
@@ -110,14 +102,14 @@ pit_sample <- function(observed,
   # Portion of (y_observed <= y_predicted)
   p_x <- rowSums(predicted <= observed) / n_pred
 
-  # calculate PIT for continuous predictions case
-  if (continuous_predictions) {
-    pit_values <- p_x
-  } else {
+  # PIT calculation is different for integer and continuous predictions
+  if (get_type(predicted) == "integer") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     pit_values <- as.vector(
       replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
     )
+  } else {
+    pit_values <- p_x
   }
   return(pit_values)
 }
