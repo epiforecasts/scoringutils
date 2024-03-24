@@ -1,3 +1,7 @@
+# ============================================================================ #
+# Test `pit_sample()` function
+# ============================================================================ #
+
 test_that("pit_sample() function throws an error when missing observed", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
@@ -17,7 +21,6 @@ test_that("pit_sample() function throws an error when missing 'predicted'", {
     "missing in function"
   )
 })
-
 
 test_that("pit_sample() function works for integer observed and predicted", {
   observed <- rpois(10, lambda = 1:10)
@@ -46,6 +49,29 @@ test_that("pit_sample() function works for continuous observed and predicted", {
     10
   )
 })
+
+test_that("pit_sample() works with a single observvation", {
+  observed <- observed[1]
+  predicted <- predicted[1, ]
+
+  expect_no_condition(
+    output <- pit_sample(observed = observed, predicted = predicted)
+  )
+  expect_equal(length(output), 1)
+
+  # test discrete case
+  expect_no_condition(
+    output2 <- pit_sample(
+      observed = 3, predicted = 1:10, n_replicates = 24
+    )
+  )
+  expect_equal(length(output2), 24)
+})
+
+
+# ============================================================================ #
+# Test `get_pit()` function
+# ============================================================================ #
 
 test_that("pit function works for continuous integer and quantile data", {
   pit_quantile <- suppressMessages(as_forecast(example_quantile)) %>%
