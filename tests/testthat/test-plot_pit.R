@@ -10,6 +10,7 @@ test_that("plot_pit() works as expected with quantile forecasts", {
 })
 
 test_that("plot_pit() works as expected with integer forecasts", {
+  set.seed(587)
   pit <- example_integer %>%
     na.omit() %>%
     as_forecast() %>%
