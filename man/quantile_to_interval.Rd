@@ -30,12 +30,17 @@ output after transformation (default is FALSE). This only works if
 \code{format = "long"}. If \code{format = "wide"}, the \code{quantile_level} column will
 always be dropped.}
 
-\item{observed}{A numeric vector of observed values of size n.}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{A numeric vector of predicted values of size n x N. If
-\code{observed} is a single number, then \code{predicted} can be a vector of length N}
+\item{predicted}{Numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
-\item{quantile_level}{A numeric vector of quantile levels of size N.}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made.}
 }
 \value{
 A data.table with forecasts in an interval format.

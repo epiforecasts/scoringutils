@@ -234,10 +234,7 @@ quantile_to_interval.data.frame <- function(dt,
 }
 
 
-#' @param observed A numeric vector of observed values of size n.
-#' @param predicted A numeric vector of predicted values of size n x N. If
-#' `observed` is a single number, then `predicted` can be a vector of length N
-#' @param quantile_level A numeric vector of quantile levels of size N.
+#' @inheritParams wis
 #' @return
 #' *quantile_to_interval.numeric*:
 #' a data.table in a wide interval format with columns `forecast_id`,
