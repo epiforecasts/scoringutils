@@ -2,7 +2,7 @@
 % Please edit documentation in R/score.R
 \name{apply_metrics}
 \alias{apply_metrics}
-\title{Apply A List Of Functions To A Data Table Of Forecasts}
+\title{Apply a list of functions to a data table of forecasts}
 \usage{
 apply_metrics(data, metrics, ...)
 }
@@ -18,7 +18,7 @@ default metrics used.}
 \item{...}{Additional arguments}
 }
 \value{
-A data table with the forecasts and the calculated metrics
+A data table with the forecasts and the calculated metrics.
 }
 \description{
 This helper function applies scoring rules (stored as a list of

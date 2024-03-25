@@ -13,7 +13,7 @@ add_relative_skill(
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
 \item{by}{Character vector with column names that define the grouping level
 for the pairwise comparisons. By default (\code{model}), there will be one

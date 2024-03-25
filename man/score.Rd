@@ -6,7 +6,7 @@
 \alias{score.forecast_point}
 \alias{score.forecast_sample}
 \alias{score.forecast_quantile}
-\title{Evaluate forecasts in a data.frame format}
+\title{Evaluate forecasts}
 \usage{
 score(data, metrics, ...)
 
@@ -38,12 +38,11 @@ scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a forecast
-object (a data.table with forecasts and observations).
+object (a data.table with forecasts and observations) as produced by
+\code{\link[=as_forecast]{as_forecast()}}.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
-The expected input is a forecast object, meaning that users have to call
-\code{\link[=as_forecast]{as_forecast()}} prior to calling \code{score()}.
 See the details section for more information on forecast types and input
 formats. For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
 well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.

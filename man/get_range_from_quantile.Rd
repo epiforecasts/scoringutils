@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{get_range_from_quantile}
 \alias{get_range_from_quantile}
-\title{Get Interval Range Belonging to a Quantile}
+\title{Get interval range belonging to a quantile}
 \usage{
 get_range_from_quantile(quantile_level)
 }
 \arguments{
-\item{quantile_level}{a numeric vector of quantile levels of size N}
+\item{quantile_level}{A numeric vector of quantile levels of size N.}
 }
 \value{
 a numeric vector of interval ranges of size N

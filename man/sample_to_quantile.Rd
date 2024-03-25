@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{sample_to_quantile}
 \alias{sample_to_quantile}
-\title{Change Data from a Sample Based Format to a Quantile Format}
+\title{Change data from a sample based format to a quantile format}
 \usage{
 sample_to_quantile(
   data,
@@ -11,13 +11,13 @@ sample_to_quantile(
 )
 }
 \arguments{
-\item{data}{a data.frame with samples}
+\item{data}{A data.frame with samples}
 
-\item{quantile_level}{a numeric vector of quantile levels for which
-quantiles will be computed}
+\item{quantile_level}{A numeric vector of quantile levels for which
+quantiles will be computed.}
 
-\item{type}{type argument passed down to the quantile function. For more
-information, see \code{\link[=quantile]{quantile()}}}
+\item{type}{Type argument passed down to the quantile function. For more
+information, see \code{\link[=quantile]{quantile()}}.}
 }
 \value{
 a data.table in a long interval range format

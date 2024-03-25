@@ -16,7 +16,7 @@ compare_two_models(
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
 \item{name_model1}{Character, name of the first model}
 
