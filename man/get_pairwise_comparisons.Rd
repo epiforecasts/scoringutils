@@ -2,7 +2,7 @@
 % Please edit documentation in R/pairwise-comparisons.R
 \name{get_pairwise_comparisons}
 \alias{get_pairwise_comparisons}
-\title{Do Pairwise Comparisons of Scores}
+\title{Pairwise comparisons of scores}
 \usage{
 get_pairwise_comparisons(
   scores,
@@ -16,7 +16,7 @@ get_pairwise_comparisons(
 \item{scores}{An object of class \code{scores} (a data.table with
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
 
-\item{by}{character vector with column names that define the grouping level
+\item{by}{Character vector with column names that define the grouping level
 for the pairwise comparisons. By default (\code{model}), there will be one
 relative skill score per model. If, for example,
 \code{by = c("model", "location")}. Then you will get a
@@ -34,11 +34,11 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{...}{additional arguments for the comparison between two models. See
+\item{...}{Additional arguments for the comparison between two models. See
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A data.table with pairwise comparisons
+A data.table with pairwise comparisons.
 }
 \description{
 Compute relative scores between different models making pairwise

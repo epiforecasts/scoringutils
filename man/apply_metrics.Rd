@@ -15,7 +15,7 @@ column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
 default metrics used.}
 
-\item{...}{additional arguments}
+\item{...}{Additional arguments}
 }
 \value{
 A data table with the forecasts and the calculated metrics

@@ -5,7 +5,7 @@
 #'
 #' @param x An object of class 'forecast_*' object as produced by
 #' `as_forecast()`
-#' @param ... additional arguments for [print()]
+#' @param ... Additional arguments for [print()]
 #' @return returns x invisibly
 #' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_heatmap}
 \alias{plot_heatmap}
-\title{Create a Heatmap of a Scoring Metric}
+\title{Create a heatmap of a scoring metric}
 \usage{
 plot_heatmap(scores, y = "model", x, metric)
 }
@@ -16,8 +16,8 @@ default for this is "model"}
 \item{x}{The variable from the scores you want to show on the x-Axis. This
 could be something like "horizon", or "location"}
 
-\item{metric}{the metric that determines the value and colour shown in the
-tiles of the heatmap}
+\item{metric}{String, the metric that determines the value and colour shown
+in the tiles of the heatmap.}
 }
 \value{
 A ggplot object showing a heatmap of the desired metric

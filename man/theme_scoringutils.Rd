@@ -10,6 +10,6 @@ theme_scoringutils()
 A ggplot2 theme
 }
 \description{
-A theme for ggplot2 plots used in scoringutils
+A theme for ggplot2 plots used in \code{scoringutils}.
 }
 \keyword{plotting}

@@ -19,7 +19,7 @@
 \item{x}{An object of class 'forecast_*' object as produced by
 \code{as_forecast()}}
 
-\item{...}{additional arguments for \code{\link[=print]{print()}}}
+\item{...}{Additional arguments for \code{\link[=print]{print()}}}
 }
 \value{
 returns x invisibly

@@ -13,7 +13,7 @@ permutation_test(
 )
 }
 \arguments{
-\item{scores1}{vector of scores to compare against another vector of scores}
+\item{scores1}{Vector of scores to compare against another vector of scores.}
 
 \item{scores2}{A second vector of scores to compare against the first}
 
@@ -22,7 +22,7 @@ test. More replications yield more exact results, but require more
 computation.}
 
 \item{one_sided}{Whether or not to compute a one-sided test. Default is
-\code{FALSE},}
+\code{FALSE}.}
 
 \item{comparison_mode}{How to compute the test statistic for the comparison
 of the two scores. Should be either "difference" or "ratio".}

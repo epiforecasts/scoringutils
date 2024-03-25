@@ -17,7 +17,7 @@
 #' @param data A data.frame (or similar) with predicted and observed values.
 #'   See the details section of [as_forecast()] for additional information
 #'   on required input formats.
-#' @param ... additional arguments
+#' @param ... Additional arguments
 #' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
 #' @return
@@ -383,7 +383,7 @@ new_forecast <- function(data, classname) {
 #' `scoringutils:::is_forecast.forecast_quantile()`.
 #'
 #' @param x An R object.
-#' @param ... additional arguments
+#' @param ... Additional arguments
 #' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts

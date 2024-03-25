@@ -24,7 +24,7 @@ as_forecast(data, ...)
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
 on required input formats.}
 
-\item{...}{additional arguments}
+\item{...}{Additional arguments}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns done by \code{as_forecast()}) that denote the unit of a

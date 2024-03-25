@@ -2,7 +2,7 @@
 % Please edit documentation in R/pairwise-comparisons.R
 \name{pairwise_comparison_one_group}
 \alias{pairwise_comparison_one_group}
-\title{Do Pairwise Comparison for one Set of Forecasts}
+\title{Do pairwise comparison for one set of forecasts}
 \usage{
 pairwise_comparison_one_group(scores, metric, baseline, by, ...)
 }
@@ -19,7 +19,7 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{by}{character vector with column names that define the grouping level
+\item{by}{Character vector with column names that define the grouping level
 for the pairwise comparisons. By default (\code{model}), there will be one
 relative skill score per model. If, for example,
 \code{by = c("model", "location")}. Then you will get a
@@ -28,11 +28,11 @@ the data.table with scores will be split according \code{by} (removing "model"
 before splitting) and the pairwise comparisons will be computed separately
 for the split data.tables.}
 
-\item{...}{additional arguments for the comparison between two models. See
+\item{...}{Additional arguments for the comparison between two models. See
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A data.table with pairwise comparisons
+A data.table with pairwise comparisons.
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but

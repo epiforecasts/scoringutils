@@ -17,7 +17,7 @@ validate_forecast(data, ...)
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
 on required input formats.}
 
-\item{...}{additional arguments}
+\item{...}{Additional arguments}
 }
 \value{
 Depending on the forecast type, an object of class

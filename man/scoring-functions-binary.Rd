@@ -4,7 +4,7 @@
 \alias{scoring-functions-binary}
 \alias{brier_score}
 \alias{logs_binary}
-\title{Metrics for Binary Outcomes}
+\title{Metrics for binary outcomes}
 \usage{
 brier_score(observed, predicted)
 
@@ -49,12 +49,14 @@ assigned to the observed value. It is a proper scoring rule. Small values
 are better (best is zero, worst is infinity).
 }
 \details{
+\strong{Input formats}
+
 The functions require users to provide observed values as a factor in order
 to distinguish its input from the input format required for scoring point
 forecasts. Internally, however, factors will be converted to numeric values.
 A factor \verb{observed = factor(c(0, 1, 1, 0, 1)} with two levels (\code{0} and \code{1})
 would internally be coerced to a numeric vector (in this case this would
-result in the numeric vector c(1, 2, 2, 1, 1)). After subtracting 1, the
+result in the numeric vector \code{c(1, 2, 2, 1, 1)}). After subtracting 1, the
 resulting vector (\code{c(0, 1, 1, 0)} in this case) is used for internal
 calculations. All predictions are assumed represent the probability that the
 outcome is equal of the highest factor level (in this case that the

@@ -19,7 +19,7 @@
 #' column names in the output. See [metrics_point()], [metrics_binary()],
 #' [metrics_quantile()], and [metrics_sample()] for more information on the
 #' default metrics used.
-#' @param ... additional arguments
+#' @param ... Additional arguments
 #' @return An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
 #' `metrics` with the names of the metrics used for scoring. See

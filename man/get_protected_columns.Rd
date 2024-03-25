@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_protected_columns}
 \alias{get_protected_columns}
-\title{Get Protected Columns From Data}
+\title{Get protected columns from data}
 \usage{
 get_protected_columns(data = NULL)
 }
