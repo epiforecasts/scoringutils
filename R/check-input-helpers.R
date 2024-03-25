@@ -47,9 +47,11 @@ check_try <- function(expr) {
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams as_forecast
 #' @importFrom cli cli_inform
+#' @importFrom checkmate assert_data_table
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 ensure_model_column <- function(data) {
+  assert_data_table(data)
   if (!("model" %in% colnames(data))) {
     #nolint start: keyword_quote_linter
     cli_warn(
