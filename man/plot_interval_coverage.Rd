@@ -17,7 +17,7 @@ Default is "model".}
 ggplot object with a plot of interval coverage
 }
 \description{
-Plot interval coverage values (see \code{\link[=get_coveage]{get_coveage()}} for more information).
+Plot interval coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
 \dontshow{

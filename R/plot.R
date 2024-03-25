@@ -154,7 +154,7 @@ plot_heatmap <- function(scores,
 #' @title Plot interval coverage
 #'
 #' @description
-#' Plot interval coverage values (see [get_coveage()] for more information).
+#' Plot interval coverage values (see [get_coverage()] for more information).
 #'
 #' @param coverage A data frame of coverage values as produced by
 #' [get_coverage()].
@@ -220,7 +220,7 @@ plot_interval_coverage <- function(coverage,
 #' @title Plot quantile coverage
 #'
 #' @description
-#' Plot quantile coverage values (see [get_coveage()] for more information).
+#' Plot quantile coverage values (see [get_coverage()] for more information).
 #'
 #' @inheritParams plot_interval_coverage
 #' @param colour String, according to which variable shall the graphs be

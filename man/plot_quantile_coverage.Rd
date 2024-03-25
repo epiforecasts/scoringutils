@@ -17,7 +17,7 @@ coloured? Default is "model".}
 A ggplot object with a plot of interval coverage
 }
 \description{
-Plot quantile coverage values (see \code{\link[=get_coveage]{get_coveage()}} for more information).
+Plot quantile coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
 coverage <- get_coverage(as_forecast(example_quantile), by = "model")
