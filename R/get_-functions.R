@@ -155,11 +155,13 @@ get_type <- function(x) {
 #' @param error Throw an error if there is no attribute called `metrics`?
 #' Default is FALSE.
 #' @importFrom cli cli_abort cli_warn
+#' @importFrom checkmate assert_data_frame
 #' @return Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
 #' @export
 get_metrics <- function(scores, error = FALSE) {
+  assert_data_frame(scores)
   metrics <- attr(scores, "metrics")
   if (error && is.null(metrics)) {
     #nolint start: keyword_quote_linter
@@ -200,9 +202,11 @@ get_metrics <- function(scores, error = FALSE) {
 #' @inheritParams as_forecast
 #' @return A character vector with the column names that define the unit of
 #' a single forecast
+#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
+  assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "metrics"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
