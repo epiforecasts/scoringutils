@@ -115,9 +115,11 @@ ensure_model_column <- function(data) {
 #' If the number of quantiles or samples is the same for all forecasts, it
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
+#' @importFrom checkmate assert_subset
 #' @inherit document_check_functions params return
 #' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
+  data <- ensure_data.table(data)
   data <- na.omit(data)
   # check whether there are the same number of quantiles, samples --------------
   data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]

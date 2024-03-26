@@ -402,7 +402,7 @@ get_coverage <- function(data, by = "model") {
 #'
 #' @param by character vector or `NULL` (the default) that denotes the
 #'   categories over which the number of forecasts should be counted.
-#'   By default (`by = NULL`) this will be the unit of a single forecast (i.e.
+#'   By default this will be the unit of a single forecast (i.e.
 #'   all available columns (apart from a few "protected" columns such as
 #'   'predicted' and 'observed') plus "quantile_level" or "sample_id" where
 #'   present).
@@ -432,16 +432,13 @@ get_coverage <- function(data, by = "model") {
 #'   by = c("model", "target_type")
 #' )
 get_forecast_counts <- function(data,
-                                by = NULL,
+                                by = get_forecast_unit(data),
                                 collapse = c("quantile_level", "sample_id")) {
   data <- copy(data)
   suppressWarnings(suppressMessages(validate_forecast(data)))
   forecast_unit <- get_forecast_unit(data)
   data <- na.omit(data)
-
-  if (is.null(by)) {
-    by <- forecast_unit
-  }
+  assert_subset(by, names(data))
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once

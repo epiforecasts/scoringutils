@@ -6,7 +6,7 @@
 \usage{
 get_forecast_counts(
   data,
-  by = NULL,
+  by = get_forecast_unit(data),
   collapse = c("quantile_level", "sample_id")
 )
 }
@@ -16,7 +16,7 @@ observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{by}{character vector or \code{NULL} (the default) that denotes the
 categories over which the number of forecasts should be counted.
-By default (\code{by = NULL}) this will be the unit of a single forecast (i.e.
+By default this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
 'predicted' and 'observed') plus "quantile_level" or "sample_id" where
 present).}
