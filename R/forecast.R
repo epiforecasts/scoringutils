@@ -118,7 +118,7 @@ as_forecast.default <- function(data,
   }
 
   # assert forecast type is as expected
-  assert_forecast_type(data, forecast_type)
+  assert_forecast_type(data, desired = forecast_type)
   forecast_type <- get_forecast_type(data)
 
   # produce warning if old format is suspected
@@ -205,7 +205,7 @@ validate_forecast.default <- function(data, forecast_type = NULL, ...) {
 #' @keywords check-forecasts
 validate_forecast.forecast_binary <- function(data, forecast_type = NULL, ...) {
   data <- validate_general(data)
-  assert_forecast_type(data, forecast_type)
+  assert_forecast_type(data, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
     data, c("sample_id", "quantile_level")
@@ -239,7 +239,7 @@ validate_forecast.forecast_binary <- function(data, forecast_type = NULL, ...) {
 #' @keywords check-forecasts
 validate_forecast.forecast_point <- function(data, forecast_type = NULL, ...) {
   data <- validate_general(data)
-  assert_forecast_type(data, forecast_type)
+  assert_forecast_type(data, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(data$observed, data$predicted)
   if (!is.logical(input_check)) {
@@ -261,7 +261,7 @@ validate_forecast.forecast_point <- function(data, forecast_type = NULL, ...) {
 validate_forecast.forecast_quantile <- function(data,
                                                 forecast_type = NULL, ...) {
   data <- validate_general(data)
-  assert_forecast_type(data, forecast_type)
+  assert_forecast_type(data, actual = "quantile", desired = forecast_type)
   assert_numeric(data$quantile_level, lower = 0, upper = 1)
   return(data[])
 }
@@ -271,9 +271,8 @@ validate_forecast.forecast_quantile <- function(data,
 #' @rdname validate_forecast
 #' @keywords check-forecasts
 validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
-
   data <- validate_general(data)
-  assert_forecast_type(data, forecast_type)
+  assert_forecast_type(data, actual = "sample", desired = forecast_type)
   return(data[])
 }
 
