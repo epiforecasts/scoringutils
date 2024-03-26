@@ -119,6 +119,7 @@ as_forecast.default <- function(data,
 
   # assert forecast type is as expected
   assert_forecast_type(data, forecast_type)
+  forecast_type <- get_forecast_type(data)
 
   # produce warning if old format is suspected
   # old quantile format
