@@ -100,20 +100,22 @@ test_forecast_type_is_quantile <- function(data) {
 
 #' Assert that forecast type is as expected
 #' @param data A forecast object as produced by [as_forecast()].
-#' @inheritParams as_forecast
+#' @param actual The actual forecast type of the data
+#' @param desired The desired forecast type of the data
 #' @inherit document_assert_functions return
 #' @importFrom cli cli_abort
 #' @importFrom checkmate assert_character
-assert_forecast_type <- function(data, forecast_type = NULL) {
-  assert_character(forecast_type, null.ok = TRUE)
-  desired <- forecast_type
-  forecast_type <- get_forecast_type(data)
-  if (!is.null(desired) && desired != forecast_type) {
+#' @keywords internal_input_check
+assert_forecast_type <- function(data,
+                                 actual = get_forecast_type(data),
+                                 desired = NULL) {
+  assert_character(desired, null.ok = TRUE)
+  if (!is.null(desired) && desired != actual) {
     #nolint start: object_usage_linter keyword_quote_linter
     cli_abort(
       c(
         "!" = "Forecast type determined by scoringutils based on input:
-        {.val {forecast_type}}.",
+        {.val {actual}}.",
         "i" = "Desired forecast type: {.val {desired}}."
       )
     )

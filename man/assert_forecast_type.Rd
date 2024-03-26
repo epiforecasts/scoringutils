@@ -4,15 +4,14 @@
 \alias{assert_forecast_type}
 \title{Assert that forecast type is as expected}
 \usage{
-assert_forecast_type(data, forecast_type = NULL)
+assert_forecast_type(data, actual = get_forecast_type(data), desired = NULL)
 }
 \arguments{
 \item{data}{A forecast object as produced by \code{\link[=as_forecast]{as_forecast()}}.}
 
-\item{forecast_type}{(optional) The forecast type you expect the forecasts
-to have. If the forecast type as determined by \code{scoringutils} based on the
-input does not match this, an error will be thrown. If \code{NULL} (the default),
-the forecast type will be inferred from the data.}
+\item{actual}{The actual forecast type of the data}
+
+\item{desired}{The desired forecast type of the data}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an
