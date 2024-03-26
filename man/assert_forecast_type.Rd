@@ -21,3 +21,4 @@ error otherwise.
 \description{
 Assert that forecast type is as expected
 }
+\keyword{internal_input_check}
