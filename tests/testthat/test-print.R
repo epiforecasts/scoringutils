@@ -40,21 +40,17 @@ test_that("print methods fail gracefully", {
   # message if forecast unit can't be computed
   test <- 1:10
   class(test) <- "forecast_point"
-  expect_error(
-    expect_warning(
+  expect_warning(
+    expect_message(
       expect_message(
-        expect_message(
-          expect_output(
-            print(test),
-            pattern = "Forecast unit:"
-          ),
-          "Could not determine forecast unit."
+        expect_output(
+          print(test),
+          pattern = "Forecast unit:"
         ),
-        "Could not determine forecast type"
+        "Could not determine forecast unit."
       ),
-      "Error in validating forecast object:"
+      "Could not determine forecast type"
     ),
-    "Assertion on 'data' failed: Must be of type 'data.frame'"
+    "Error in validating forecast object:"
   )
-
 })
