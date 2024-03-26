@@ -98,6 +98,31 @@ test_forecast_type_is_quantile <- function(data) {
 }
 
 
+#' Assert that forecast type is as expected
+#' @param data A forecast object as produced by [as_forecast()].
+#' @inheritParams as_forecast
+#' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
+#' @importFrom checkmate assert_character
+assert_forecast_type <- function(data, forecast_type = NULL) {
+  assert_character(forecast_type, null.ok = TRUE)
+  desired <- forecast_type
+  forecast_type <- get_forecast_type(data)
+  if (!is.null(desired) && desired != forecast_type) {
+    #nolint start: object_usage_linter keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Forecast type determined by scoringutils based on input:
+        {.val {forecast_type}}.",
+        "i" = "Desired forecast type: {.val {desired}}."
+      )
+    )
+    #nolint end
+  }
+  return(invisible(NULL))
+}
+
+
 #' @title Get type of a vector or matrix of observed values or predictions
 #'
 #' @description Internal helper function to get the type of a vector (usually
