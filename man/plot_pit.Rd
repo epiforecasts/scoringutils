@@ -22,7 +22,7 @@ argument.}
 \item{breaks}{numeric vector with the break points for the bins in the
 PIT histogram. This is preferred when creating a PIT histogram based on
 quantile-based data. Default is \code{NULL} and breaks will be determined by
-\code{num_bins}.}
+\code{num_bins}. If \code{breaks} is used, \code{num_bins} will be ignored.}
 }
 \value{
 A ggplot object with a histogram of PIT values
