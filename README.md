@@ -27,11 +27,10 @@ extendable, meaning that users can supply their own scoring rules or
 extend existing classes to handle new types of forecasts.
 
 The package underwent a major re-write. The most comprehensive
-documentation for the [updated
+documentation for the updated package is the [revised
 version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
-is the revised version of our
-[original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils`
-paper.
+of our [original](https://doi.org/10.48550/arXiv.2205.07090)
+`scoringutils` paper.
 
 Another good starting point are the vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
