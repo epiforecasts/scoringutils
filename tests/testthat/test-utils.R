@@ -64,7 +64,7 @@ test_that("get_metrics() works as expected", {
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
     get_metrics(example_quantile, error = TRUE),
-    "Object needs an attribute"
+    "Input needs an attribute"
   )
   expect_no_condition(
     get_metrics(scores_continuous)
