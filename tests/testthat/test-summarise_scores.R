@@ -45,7 +45,7 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
   data.table::setnames(test, old = "crps", new = "crp2")
   expect_warning(
     summarise_scores(test, by = "model"),
-    "The names of the scores previously computed do not match the names"
+    "The following scores have been previously computed, but are no longer"
   )
 })
 
