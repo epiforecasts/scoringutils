@@ -37,7 +37,7 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
 
   expect_error(
     summarise_scores(test, by = "model"),
-    "`scores` needs to have an attribute `metrics` with the names"
+    "Input needs an attribute `metrics` with the names"
   )
 
   # expect warning if a score name changed
