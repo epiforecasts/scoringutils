@@ -27,11 +27,10 @@ extendable, meaning that users can supply their own scoring rules or
 extend existing classes to handle new types of forecasts.
 
 The package underwent a major re-write. The most comprehensive
-documentation for the [updated
+documentation for the updated package is the [revised
 version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
-is the revised version of our
-[original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils`
-paper.
+of our [original](https://doi.org/10.48550/arXiv.2205.07090)
+`scoringutils` paper.
 
 Another good starting point are the vignettes on [Getting
 started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
@@ -104,23 +103,32 @@ forecast_quantile <- example_quantile |>
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
 
-head(forecast_quantile, 2)
-#> Warning: ! Error in validating forecast object: Error in validate_general(data) : !
-#>   After removing rows with NA values in the data, no forecasts are left. .
+print(forecast_quantile, 2)
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
 #> Forecast type:
+#> 
 #> quantile
+#> 
 #> Forecast unit:
+#> 
 #> location, forecast_date, target_end_date, target_type, model, and horizon
 #> 
 #> Key: <location, target_end_date, target_type>
-#>    observed quantile_level predicted location forecast_date target_end_date
-#>       <num>          <num>     <int>   <char>        <Date>          <Date>
-#> 1:   127300             NA        NA       DE          <NA>      2021-01-02
-#> 2:     4534             NA        NA       DE          <NA>      2021-01-02
-#>    target_type  model horizon
-#>         <char> <char>   <num>
-#> 1:       Cases   <NA>      NA
-#> 2:      Deaths   <NA>      NA
+#>        observed quantile_level predicted location forecast_date target_end_date
+#>           <num>          <num>     <int>   <char>        <Date>          <Date>
+#>     1:   127300             NA        NA       DE          <NA>      2021-01-02
+#>     2:     4534             NA        NA       DE          <NA>      2021-01-02
+#>    ---                                                                         
+#> 20544:       78          0.975       611       IT    2021-07-12      2021-07-24
+#> 20545:       78          0.990       719       IT    2021-07-12      2021-07-24
+#>        target_type                model horizon
+#>             <char>               <char>   <num>
+#>     1:       Cases                 <NA>      NA
+#>     2:      Deaths                 <NA>      NA
+#>    ---                                         
+#> 20544:      Deaths epiforecasts-EpiNow2       2
+#> 20545:      Deaths epiforecasts-EpiNow2       2
 ```
 
 ### The forecast unit
