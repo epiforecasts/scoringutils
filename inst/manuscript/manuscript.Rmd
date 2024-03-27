@@ -333,10 +333,6 @@ A common way to visualise probabilistic calibration is the probability integral 
 
 Users can obtain PIT histograms based on validated forecast objects using the function \fct{get\_pit} and can visualise results using \fct{plot\_pit}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
 
-```{r echo=FALSE, include=FALSE}
-get_pit <- pit
-```
-
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_continuous |>
   get_pit(by = c("model", "target_type")) |>
@@ -469,15 +465,6 @@ Pairwise comparisons should usually be made based on raw, unsummarised scores (m
 <!-- MISSING: HOW CAN YOU SPECIFY WHAT KIND OF TEST YOU WANT? -->
 
 The mean score ratios resulting from \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
-
-```{r temp, echo = FALSE, show = FALSE}
-# while functions aren't renamed yet, use a hack. 
-get_pairwise_comparisons <- pairwise_comparison
-plot_pairwise_comparisons <- plot_pairwise_comparison
-
-get_correlations <- correlation
-plot_correlations <- plot_correlation
-```
 
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e. that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
 forecast_quantile |>
