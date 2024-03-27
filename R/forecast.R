@@ -350,6 +350,30 @@ validate_general <- function(data) {
 }
 
 
+#' Validate forecast objects for internal use
+#' @description
+#' The function makes it possible to silently validate an object. In addition,
+#' it can return a copy of the data and remove rows with missing values.
+#'
+#' @inheritParams score
+#' @param copy Logical, default is `FALSE`. If `TRUE`, a copy of the input data
+#' is created.
+#' @param na.omit Logical, default is `FALSE`. If `TRUE`, rows with missing
+#' values are removed.
+#' @importFrom data.table copy
+#' @importFrom stats na.omit
+#' @keywords internal
+validate_forecast_internal <- function(data, copy = FALSE, na.omit = FALSE) {
+  if (copy) {
+    data <- copy(data)
+  }
+  if (na.omit) {
+    data <- na.omit(data)
+  }
+  suppressWarnings(suppressMessages(validate_forecast(data)))
+}
+
+
 #' @title Class constructor for scoringutils objects
 #'
 #' @description
