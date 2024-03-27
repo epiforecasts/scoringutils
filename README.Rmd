@@ -104,7 +104,7 @@ forecast_quantile <- example_quantile |>
     forecast_type = "quantile"
   )
 
-head(forecast_quantile, 2)
+print(forecast_quantile, 2)
 ```
 
 ### The forecast unit
