@@ -97,6 +97,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @importFrom methods hasArg
+#' @importFrom checkmate assert_numeric
 #' @keywords data-handling
 #' @export
 #' @examples
@@ -105,6 +106,7 @@ sample_to_quantile <- function(data,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
   data <- ensure_data.table(data)
+  assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
@@ -135,11 +137,10 @@ sample_to_quantile <- function(data,
 #' @param keep_range_col Logical, default is `FALSE`. Keep the
 #'   interval_range and boundary columns after transformation?
 #' @return a data.table in a plain quantile format
-#' @importFrom data.table copy
 #' @keywords internal
 interval_long_to_quantile <- function(data,
                                       keep_range_col = FALSE) {
-  data <- data.table::as.data.table(data)
+  data <- ensure_data.table(data)
 
   # filter out duplicated median
   # note that this also filters out instances where range is NA, i.e.
@@ -290,7 +291,7 @@ sample_to_interval_long <- function(data,
                                     interval_range = c(0, 50, 90),
                                     type = 7,
                                     keep_quantile_col = TRUE) {
-  data <- data.table::as.data.table(data)
+  data <- ensure_data.table(data)
 
   lower_quantiles <- (100 - interval_range) / 200
   upper_quantiles <- 1 - lower_quantiles
