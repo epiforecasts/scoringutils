@@ -367,10 +367,11 @@ validate_forecast_internal <- function(data, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     data <- copy(data)
   }
+  suppressWarnings(suppressMessages(validate_forecast(data)))
   if (na.omit) {
     data <- na.omit(data)
   }
-  suppressWarnings(suppressMessages(validate_forecast(data)))
+  return(data)
 }
 
 
