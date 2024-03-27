@@ -17,6 +17,7 @@
 #' @param by Character vector that denotes the columns by which to merge. Any
 #'   value that is not a column in observations will be removed.
 #' @return a data.table with forecasts and observations
+#' @importFrom checkmate assert_subset
 #' @examples
 #' forecasts <- example_quantile_forecasts_only
 #' observations <- example_truth_only
@@ -27,8 +28,10 @@
 merge_pred_and_obs <- function(forecasts, observations,
                                join = c("left", "full", "right"),
                                by = NULL) {
-  forecasts <- data.table::as.data.table(forecasts)
-  observations <- data.table::as.data.table(observations)
+  forecasts <- ensure_data.table(forecasts)
+  observations <- ensure_data.table(observations)
+  join <- match.arg(join)
+  assert_subset(by, intersect(names(forecasts), names(observations)))
 
   if (is.null(by)) {
     protected_columns <- c(
