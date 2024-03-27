@@ -14,6 +14,7 @@
 #' @param ... Arguments to pass to `fun`.
 #' @param fun A function to execute.
 #' @importFrom cli cli_warn
+#' @importFrom checkmate assert_function
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
 #' @keywords scoring
@@ -24,6 +25,7 @@
 #' run_safely(fun = f)
 #' run_safely(y = 3, fun = f)
 run_safely <- function(..., fun) {
+  assert_function(fun)
   args <- list(...)
   # Check if the function accepts ... as an argument
   if ("..." %in% names(formals(fun))) {
