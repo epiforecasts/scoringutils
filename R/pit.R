@@ -87,54 +87,10 @@
 pit_sample <- function(observed,
                        predicted,
                        n_replicates = 100) {
-
-  # error handling--------------------------------------------------------------
-  # check al arguments are provided
-  # this could be integrated into assert_not_null
-  if (missing("observed") || missing("predicted")) {
-    cli_abort(
-      "`observed` or `predicted` missing in function {.fn pit_sample}."
-    )
-  }
-  assert_not_null(observed = observed, predicted = predicted)
-
-  # check if there is more than one observation
-  n <- length(observed)
-  if (n == 1) {
-    #nolint start: keyword_quote_linter
-    cli_inform(
-      c(
-        "i" = "You need more than one observation to assess uniformity
-        of the PIT."
-      )
-    )
-    #nolint end
-    return(NA)
-  }
-
-  # check and handle format of predictions
-  if (is.data.frame(predicted)) {
-    predicted <- as.matrix(predicted)
-  }
-  if (!is.matrix(predicted)) {
-    cli_abort(
-      "`predicted` should be a {.cls matrix},
-      but it is of class {.cls {class(predicted)[1]}}."
-    )
-  }
-  if (nrow(predicted) != n) {
-    cli_abort(
-      "Mismatch: 'observed' has length {.var {n}},
-      but `predicted` has {.var {nrow(predicted)}} rows."
-    )
-  }
-
-  # check data type ------------------------------------------------------------
-  # check whether continuous or integer
-  if (isTRUE(all.equal(as.vector(predicted), as.integer(predicted)))) {
-    continuous_predictions <- FALSE
-  } else {
-    continuous_predictions <- TRUE
+  assert_input_sample(observed = observed, predicted = predicted)
+  assert_number(n_replicates)
+  if (is.vector(predicted)) {
+    predicted <- matrix(predicted, nrow = 1)
   }
 
   # calculate PIT-values -------------------------------------------------------
@@ -144,14 +100,14 @@ pit_sample <- function(observed,
   # Portion of (y_observed <= y_predicted)
   p_x <- rowSums(predicted <= observed) / n_pred
 
-  # calculate PIT for continuous predictions case
-  if (continuous_predictions) {
-    pit_values <- p_x
-  } else {
+  # PIT calculation is different for integer and continuous predictions
+  if (get_type(predicted) == "integer") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     pit_values <- as.vector(
       replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
     )
+  } else {
+    pit_values <- p_x
   }
   return(pit_values)
 }

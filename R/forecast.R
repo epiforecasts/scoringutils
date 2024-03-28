@@ -118,21 +118,9 @@ as_forecast.default <- function(data,
     data <- set_forecast_unit(data, forecast_unit)
   }
 
-  # find forecast type
-  desired <- forecast_type
+  # assert forecast type is as expected
+  assert_forecast_type(data, desired = forecast_type)
   forecast_type <- get_forecast_type(data)
-
-  if (!is.null(desired) && desired != forecast_type) {
-    #nolint start: object_usage_linter keyword_quote_linter
-    cli_abort(
-      c(
-        "!" = "Forecast type determined by scoringutils based on input:
-        {.val {forecast_type}}.",
-        "i" = "Desired forecast type: {.val {desired}}."
-      )
-    )
-    #nolint end
-  }
 
   # produce warning if old format is suspected
   # old quantile format
@@ -195,7 +183,7 @@ as_forecast.default <- function(data,
 #' @examples
 #' forecast <- as_forecast(example_binary)
 #' validate_forecast(forecast)
-validate_forecast <- function(data, ...) {
+validate_forecast <- function(data, forecast_type = NULL, ...) {
   UseMethod("validate_forecast")
 }
 
@@ -203,7 +191,7 @@ validate_forecast <- function(data, ...) {
 #' @importFrom cli cli_abort
 #' @export
 #' @keywords check-forecasts
-validate_forecast.default <- function(data, ...) {
+validate_forecast.default <- function(data, forecast_type = NULL, ...) {
   cli_abort(
     c(
       "!" = "The input needs to be a forecast object.",
@@ -216,8 +204,9 @@ validate_forecast.default <- function(data, ...) {
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_binary <- function(data, ...) {
+validate_forecast.forecast_binary <- function(data, forecast_type = NULL, ...) {
   data <- validate_general(data)
+  assert_forecast_type(data, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
     data, c("sample_id", "quantile_level")
@@ -249,8 +238,9 @@ validate_forecast.forecast_binary <- function(data, ...) {
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_point <- function(data, ...) {
+validate_forecast.forecast_point <- function(data, forecast_type = NULL, ...) {
   data <- validate_general(data)
+  assert_forecast_type(data, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(data$observed, data$predicted)
   if (!is.logical(input_check)) {
@@ -269,8 +259,10 @@ validate_forecast.forecast_point <- function(data, ...) {
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_quantile <- function(data, ...) {
+validate_forecast.forecast_quantile <- function(data,
+                                                forecast_type = NULL, ...) {
   data <- validate_general(data)
+  assert_forecast_type(data, actual = "quantile", desired = forecast_type)
   assert_numeric(data$quantile_level, lower = 0, upper = 1)
   return(data[])
 }
@@ -279,8 +271,9 @@ validate_forecast.forecast_quantile <- function(data, ...) {
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_sample <- function(data, ...) {
+validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
   data <- validate_general(data)
+  assert_forecast_type(data, actual = "sample", desired = forecast_type)
   return(data[])
 }
 

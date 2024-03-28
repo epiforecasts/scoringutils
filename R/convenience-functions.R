@@ -114,8 +114,13 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
+  # input checks
   suppressWarnings(suppressMessages(validate_forecast(data)))
   original_data <- copy(data)
+  assert_function(fun)
+  assert_logical(append, len = 1)
+  assert_character(label, len = 1)
+
   scale_col_present <- ("scale" %in% colnames(original_data))
 
   # Error handling
@@ -264,8 +269,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' )
 set_forecast_unit <- function(data, forecast_unit) {
   data <- ensure_data.table(data)
-  assert_character(forecast_unit, min.len = 1)
-  assert_subset(forecast_unit, names(data))
+  assert_subset(forecast_unit, names(data), empty.ok = FALSE)
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])
   # validate that output remains a valid forecast object if input was one before

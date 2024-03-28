@@ -17,17 +17,18 @@
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @importFrom cli cli_warn
+#' @importFrom checkmate assert_subset
 #' @export
 #' @keywords scoring
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' get_correlations(scores, digits = 2)
 get_correlations <- function(scores,
-                             metrics = NULL,
+                             metrics = get_metrics(scores),
                              digits = NULL,
                              ...) {
   scores <- ensure_data.table(scores)
-  metrics <- get_metrics(scores, error = TRUE)
+  assert_subset(metrics, colnames(scores), empty.ok = FALSE)
   df <- scores[, .SD, .SDcols = names(scores) %in% metrics]
 
   # define correlation matrix

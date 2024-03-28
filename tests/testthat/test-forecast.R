@@ -264,3 +264,13 @@ test_that("validate_forecast.forecast_point() works as expected", {
     "Input looks like a point forecast, but found the following issue"
   )
 })
+
+test_that("validate_forecast() complains if the forecast type is wrong", {
+  test <- na.omit(data.table::copy(example_point))
+  test <- as_forecast(test)
+  expect_error(
+    validate_forecast(test, forecast_type = "quantile"),
+    "Forecast type determined by scoringutils based on input:"
+  )
+})
+
