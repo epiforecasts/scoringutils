@@ -1,10 +1,8 @@
-#' @title Probability Integral Transformation (sample-based version)
+#' @title Probability integral transformation (sample-based version)
 #'
-#' @description Uses a Probability Integral Transformation (PIT) (or a
+#' @description Uses a Probability integral transformation (PIT) (or a
 #' randomised PIT for integer forecasts) to
-#' assess the calibration of predictive Monte Carlo samples. Returns a
-#' p-values resulting from an Anderson-Darling test for uniformity
-#' of the (randomised) PIT as well as a PIT histogram if specified.
+#' assess the calibration of predictive Monte Carlo samples.
 #'
 #' @details
 #' Calibration or reliability of forecasts is the ability of a model to
@@ -52,13 +50,13 @@
 #' In this context it should be noted, though, that uniformity of the
 #' PIT is a necessary but not sufficient condition of calibration.
 #'
-#' @param n_replicates the number of draws for the randomised PIT for
-#' integer predictions.
+#' @param n_replicates The number of draws for the randomised PIT for
+#'   discrete predictions. Will be ignored if forecasts are continuous.
 #' @inheritParams ae_median_sample
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
-#' correspond to the length of `observed`. For integer forecasts, a
-#' randomised PIT will be returned of length
-#' `length(observed) * n_replicates`
+#'   correspond to the length of `observed`. For integer forecasts, a
+#'   randomised PIT will be returned of length
+#'   `length(observed) * n_replicates`.
 #' @seealso [get_pit()]
 #' @importFrom stats runif
 #' @importFrom cli cli_abort cli_inform
@@ -89,54 +87,10 @@
 pit_sample <- function(observed,
                        predicted,
                        n_replicates = 100) {
-
-  # error handling--------------------------------------------------------------
-  # check al arguments are provided
-  # this could be integrated into assert_not_null
-  if (missing("observed") || missing("predicted")) {
-    cli_abort(
-      "`observed` or `predicted` missing in function {.fn pit_sample}."
-    )
-  }
-  assert_not_null(observed = observed, predicted = predicted)
-
-  # check if there is more than one observation
-  n <- length(observed)
-  if (n == 1) {
-    #nolint start: keyword_quote_linter
-    cli_inform(
-      c(
-        "i" = "You need more than one observation to assess uniformity
-        of the PIT."
-      )
-    )
-    #nolint end
-    return(NA)
-  }
-
-  # check and handle format of predictions
-  if (is.data.frame(predicted)) {
-    predicted <- as.matrix(predicted)
-  }
-  if (!is.matrix(predicted)) {
-    cli_abort(
-      "`predicted` should be a {.cls matrix},
-      but it is of class {.cls {class(predicted)[1]}}."
-    )
-  }
-  if (nrow(predicted) != n) {
-    cli_abort(
-      "Mismatch: 'observed' has length {.var {n}},
-      but `predicted` has {.var {nrow(predicted)}} rows."
-    )
-  }
-
-  # check data type ------------------------------------------------------------
-  # check whether continuous or integer
-  if (isTRUE(all.equal(as.vector(predicted), as.integer(predicted)))) {
-    continuous_predictions <- FALSE
-  } else {
-    continuous_predictions <- TRUE
+  assert_input_sample(observed = observed, predicted = predicted)
+  assert_number(n_replicates)
+  if (is.vector(predicted)) {
+    predicted <- matrix(predicted, nrow = 1)
   }
 
   # calculate PIT-values -------------------------------------------------------
@@ -146,33 +100,32 @@ pit_sample <- function(observed,
   # Portion of (y_observed <= y_predicted)
   p_x <- rowSums(predicted <= observed) / n_pred
 
-  # calculate PIT for continuous predictions case
-  if (continuous_predictions) {
-    pit_values <- p_x
-  } else {
+  # PIT calculation is different for integer and continuous predictions
+  if (get_type(predicted) == "integer") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     pit_values <- as.vector(
       replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
     )
+  } else {
+    pit_values <- p_x
   }
   return(pit_values)
 }
 
-#' @title Probability Integral Transformation (data.frame Format)
+#' @title Probability integral transformation (data.frame version)
 #'
-#' @description Compute the Probability Integral Transformation (PIT) for
+#' @description
+#' Compute the Probability Integral Transformation (PIT) for
 #' validated forecast objects.
 #'
 #' @inherit score params
-#' @param data a data.frame with the following columns: `observed`,
-#' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit_sample
-#' @return a data.table with PIT values according to the grouping specified in
-#' `by`
+#' @return A data.table with PIT values according to the grouping specified in
+#' `by`.
 #' @examples
 #' result <- get_pit(as_forecast(example_continuous), by = "model")
 #' plot_pit(result)

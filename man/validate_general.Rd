@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{validate_general}
 \alias{validate_general}
-\title{Validation Common To All Forecast Types}
+\title{Validation common to all forecast types}
 \usage{
 validate_general(data)
 }
@@ -22,7 +22,7 @@ forecast type. The function
 \item checks the forecast type and forecast unit
 \item checks there are no duplicate forecasts
 \item if appropriate, checks the number of samples / quantiles is the same
-for all forecasts
+for all forecasts.
 }
 }
 \keyword{internal_input_check}

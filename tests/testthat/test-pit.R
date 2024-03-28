@@ -1,23 +1,21 @@
-test_that("pit_sample() function throws an error when missing observed", {
+# ============================================================================ #
+# Test `pit_sample()` function
+# ============================================================================ #
+
+test_that("pit_sample() function throws an error when missing args", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
     pit_sample(predicted = predicted),
-    "missing in function"
+    'argument "observed" is missing, with no default'
   )
-})
-
-test_that("pit_sample() function throws an error when missing 'predicted'", {
-  observed <- rpois(10, lambda = 1:10)
-  predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    pit_sample(predicted = predicted),
-    "missing in function"
+    pit_sample(observed = observed),
+    'argument "predicted" is missing, with no default'
   )
 })
-
 
 test_that("pit_sample() function works for integer observed and predicted", {
   observed <- rpois(10, lambda = 1:10)
@@ -47,6 +45,26 @@ test_that("pit_sample() function works for continuous observed and predicted", {
   )
 })
 
+test_that("pit_sample() works with a single observvation", {
+  expect_no_condition(
+    output <- pit_sample(observed = 2.5, predicted = 1.5:10.5)
+  )
+  expect_equal(length(output), 1)
+
+  # test discrete case
+  expect_no_condition(
+    output2 <- pit_sample(
+      observed = 3, predicted = 1:10, n_replicates = 24
+    )
+  )
+  expect_equal(length(output2), 24)
+})
+
+
+# ============================================================================ #
+# Test `get_pit()` function
+# ============================================================================ #
+
 test_that("pit function works for continuous integer and quantile data", {
   pit_quantile <- suppressMessages(as_forecast(example_quantile)) %>%
     get_pit(by = "model")
@@ -74,30 +92,16 @@ test_that("pit_sample() throws an error if inputs are wrong", {
   observed <- 1.5:20.5
   predicted <- replicate(100, 1.5:20.5)
 
-  # message if there is only one observation
-  expect_message(
-    expect_equal(
-      pit_sample(observed[1], predicted[1, ]),
-      NA
-    ),
-    "You need more than one observation to assess uniformity of the PIT."
-  )
-
-  # predicted as a data.frame should work
-  expect_no_condition(
-    pit_sample(observed, as.data.frame(predicted))
-  )
-
   # expect an error if predicted cannot be coerced to a matrix
   expect_error(
     pit_sample(observed, function(x) {}),
-    "`predicted` should be a <matrix>"
+    "Assertion on 'predicted' failed: Must be of type 'matrix'"
   )
 
   # expect an error if the number of rows in predicted does not match the length of observed
   expect_error(
     pit_sample(observed, predicted[1:10, ]),
-    "Mismatch: 'observed' has length `20`, but `predicted` has `10` rows."
+    "Assertion on 'predicted' failed: Must have exactly 20 rows, but has 10 rows."
   )
 })
 

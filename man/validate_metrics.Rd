@@ -19,6 +19,6 @@ This function validates whether the list of metrics is a list
 of valid functions.
 
 The function is used in \code{\link[=score]{score()}} to make sure that all metrics are valid
-functions
+functions.
 }
 \keyword{internal_input_check}

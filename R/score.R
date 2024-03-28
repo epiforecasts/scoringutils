@@ -1,26 +1,26 @@
-#' @title Evaluate forecasts in a data.frame format
+#' @title Evaluate forecasts
 #' @description `score()` applies a selection of scoring metrics to a forecast
-#' object (a data.table with forecasts and observations).
+#' object (a data.table with forecasts and observations) as produced by
+#' [as_forecast()].
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
-#' The expected input is a forecast object, meaning that users have to call
-#' [as_forecast()] prior to calling `score()`.
-#' See below for more information on forecast types and input formats.
-#' For additional help and examples, check out the [Getting Started
+#' See the details section for more information on forecast types and input
+#' formats. For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
-#' @inheritSection forecast_types Forecast types and input format
+#' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
 #' @param data A forecast object (a validated data.table with predicted and
-#' observed values, see [as_forecast()])
+#'   observed values, see [as_forecast()])
 #' @param metrics A named list of scoring functions. Names will be used as
-#' column names in the output. See [metrics_point()], [metrics_binary()],
-#' [metrics_quantile()], and [metrics_sample()] for more information on the
-#' default metrics used.
-#' @param ... additional arguments
-#' @return An object of class `scores`. This object is a data.table with
+#'   column names in the output. See [metrics_point()], [metrics_binary()],
+#'   [metrics_quantile()], and [metrics_sample()] for more information on the
+#'   default metrics used.
+#' @param ... Additional arguments
+#' @return
+#' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
 #' `metrics` with the names of the metrics used for scoring. See
 #' [summarise_scores()]) for information on how to summarise
@@ -204,15 +204,16 @@ score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
 }
 
 
-#' @title Apply A List Of Functions To A Data Table Of Forecasts
-#' @description This helper function applies scoring rules (stored as a list of
+#' @title Apply a list of functions to a data table of forecasts
+#' @description
+#' This helper function applies scoring rules (stored as a list of
 #' functions) to a data table of forecasts. `apply_metrics` is used within
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
 #' accepted by it.
 #' @inheritParams score
-#' @return A data table with the forecasts and the calculated metrics
+#' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal
 apply_metrics <- function(data, metrics, ...) {
   expr <- expression(
@@ -227,12 +228,13 @@ apply_metrics <- function(data, metrics, ...) {
 }
 
 
-#' Construct An Object Of Class `scores`
-#' @description This function creates an object of class `scores` based on a
+#' Construct an object of class `scores`
+#' @description
+#' This function creates an object of class `scores` based on a
 #' data.table or similar.
-#' @param scores A data.table or similar with scores as produced by [score()]
+#' @param scores A data.table or similar with scores as produced by [score()].
 #' @param metrics A character vector with the names of the scores
-#' (i.e. the names of the scoring rules used for scoring)
+#'   (i.e. the names of the scoring rules used for scoring).
 #' @param ... Additional arguments to [as.data.table()]
 #' @keywords internal
 #' @importFrom data.table as.data.table setattr
@@ -253,9 +255,9 @@ new_scores <- function(scores, metrics, ...) {
 }
 
 
-#' Create An Object Of Class `scores` From Data
+#' Create an object of class `scores` from data
 #' @description This convenience function wraps [new_scores()] and validates
-#' the `scores` object.
+#'   the `scores` object.
 #' @inherit new_scores params return
 #' @importFrom checkmate assert_data_frame
 #' @keywords internal
@@ -268,8 +270,9 @@ as_scores <- function(scores, metrics) {
 }
 
 
-#' Validate An Object Of Class `scores`
-#' @description This function validates an object of class `scores`, checking
+#' Validate an object of class `scores`
+#' @description
+#' This function validates an object of class `scores`, checking
 #' that it has the correct class and that it has a `metrics` attribute.
 #' @inheritParams new_scores
 #' @returns Returns `NULL` invisibly

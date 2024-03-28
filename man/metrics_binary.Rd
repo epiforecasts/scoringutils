@@ -2,13 +2,13 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_binary}
 \alias{metrics_binary}
-\title{Default Metrics And Scoring Rules for Binary Forecasts}
+\title{Default metrics and scoring rules for binary forecasts}
 \usage{
 metrics_binary(select = NULL, exclude = NULL)
 }
 \arguments{
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}

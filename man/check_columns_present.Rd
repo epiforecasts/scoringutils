@@ -13,7 +13,7 @@ check_columns_present(data, columns)
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 The functions loops over the column names and checks whether they are

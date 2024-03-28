@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_coverage}
 \alias{get_coverage}
-\title{Get Quantile And Interval Coverage Values For Quantile-Based Forecasts}
+\title{Get quantile and interval coverage values for quantile-based forecasts}
 \usage{
 get_coverage(data, by = "model")
 }
@@ -24,7 +24,7 @@ a data.table with columns "interval_coverage",
 }
 \description{
 For a validated forecast object in a quantile-based format
-(see \code{\link[=as_forecast]{as_forecast()}} for more information), this function computes
+(see \code{\link[=as_forecast]{as_forecast()}} for more information), this function computes:
 \itemize{
 \item interval coverage of central prediction intervals
 \item quantile coverage for predictive quantiles

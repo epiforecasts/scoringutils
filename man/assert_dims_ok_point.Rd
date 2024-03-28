@@ -10,8 +10,8 @@ assert_dims_ok_point(observed, predicted)
 \item{observed}{Input to be checked. Should be a factor of length n with
 exactly two levels, holding the observed values.
 The highest factor level is assumed to be the reference level. This means
-that \code{predicted} represents the probability that the observed value is equal
-to the highest factor level.}
+that \code{predicted} represents the probability that the observed value is
+equal to the highest factor level.}
 
 \item{predicted}{Input to be checked. \code{predicted} should be a vector of
 length n, holding probabilities. Alternatively, \code{predicted} can be a matrix
@@ -27,10 +27,10 @@ error otherwise.
 Function assesses whether input dimensions match. In the
 following, n is the number of observations / forecasts. Scalar values may
 be repeated to match the length of the other input.
-Allowed options are therefore
+Allowed options are therefore:
 \itemize{
 \item \code{observed} is vector of length 1 or length n
-\item \code{predicted} is
+\item \code{predicted} is:
 \itemize{
 \item a vector of of length 1 or length n
 \item a matrix with n rows and 1 column

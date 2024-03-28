@@ -2,13 +2,13 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_quantile}
 \alias{metrics_quantile}
-\title{Default Metrics And Scoring Rules for Quantile-Based Forecasts}
+\title{Default metrics and scoring rules for quantile-based forecasts}
 \usage{
 metrics_quantile(select = NULL, exclude = NULL)
 }
 \arguments{
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}
@@ -39,9 +39,9 @@ Note: The \code{interval_coverage_90} scoring rule is created as a wrapper aroun
 \code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=run_safely]{run_safely()}}.
 This construct allows the function to deal with arbitrary arguments in \code{...},
 while making sure that only those that \code{\link[=interval_coverage]{interval_coverage()}} can
-accept get passed on to it. \code{interval_range = 90} is set in the function definition,
-as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would mean it would also
-get passed to \code{interval_coverage_50}.
+accept get passed on to it. \code{interval_range = 90} is set in the function
+definition, as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would
+mean it would also get passed to \code{interval_coverage_50}.
 }
 \examples{
 metrics_quantile()
