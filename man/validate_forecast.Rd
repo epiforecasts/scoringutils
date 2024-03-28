@@ -19,8 +19,8 @@ on required input formats.}
 
 \item{forecast_type}{(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by \code{scoringutils} based on the
-input does not match this, an error will be thrown. If \code{NULL} (the default),
-the forecast type will be inferred from the data.}
+input does not match this, an error will be thrown. If \code{NULL} (the
+default), the forecast type will be inferred from the data.}
 
 \item{...}{Additional arguments}
 }
