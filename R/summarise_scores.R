@@ -53,6 +53,7 @@
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
 #' @importFrom checkmate assert_subset assert_function test_subset
+#'   assert_data_frame
 #' @keywords scoring
 
 summarise_scores <- function(scores,
@@ -61,26 +62,13 @@ summarise_scores <- function(scores,
                              fun = mean,
                              ...) {
   # input checking ------------------------------------------------------------
-  # Check the score names attribute exists
-  metrics <- attr(scores, "metrics")
-  if (is.null(metrics)) {
-    stop("`scores` needs to have an attribute `metrics` with ",
-         "the names of the metrics that were used for scoring.")
-  }
-
-  if (!test_subset(metrics, names(scores))) {
-    warning(
-      "The names of the scores previously computed do not match the names ",
-      "of the columns in `scores`. This may lead to unexpected results."
-    )
-  }
-
-  # get the forecast unit (which relies on the presence of a scores attribute)
-  forecast_unit <- get_forecast_unit(scores)
-
+  assert_data_frame(scores)
   assert_subset(by, names(scores), empty.ok = TRUE)
   assert_subset(across, names(scores), empty.ok = TRUE)
   assert_function(fun)
+  metrics <- get_metrics(scores, error = TRUE)
+
+  forecast_unit <- get_forecast_unit(scores)
 
   # if across is provided, calculate new `by`
   if (!is.null(across)) {

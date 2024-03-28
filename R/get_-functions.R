@@ -190,7 +190,7 @@ get_metrics <- function(scores, error = FALSE) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Object needs an attribute `metrics` with the names of the
+        "!" = "Input needs an attribute `metrics` with the names of the
          scoring rules that were used for scoring.",
         "i" = "See `?get_metrics` for further information."
       )
