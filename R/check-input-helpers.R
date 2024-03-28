@@ -40,48 +40,6 @@ check_try <- function(expr) {
 }
 
 
-#' @title Check Variable is not NULL
-#'
-#' @description
-#' Check whether a certain variable is not `NULL` and return the name of that
-#' variable and the function call where the variable is missing. This function
-#' is a helper function that should only be called within other functions
-#' @param ... The variables to check
-#' @inherit document_assert_functions return
-#' @importFrom cli cli_abort
-#' @return The function returns `NULL`, but throws an error if the variable is
-#' missing.
-#'
-#' @keywords internal_input_check
-assert_not_null <- function(...) {
-  vars <- list(...)
-  varnames <- names(vars)
-
-  calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
-  # Get the function name
-  calling_function <- as.list(
-    strsplit(
-      calling_function, "\\(", fixed = TRUE
-    )
-  )[[1]][1]
-
-  for (i in seq_along(vars)) {
-    #nolint start: object_usage_linter
-    varname <- varnames[i]
-    if (is.null(vars[[i]])) {
-      cli_abort(
-        c(
-          "!" = "variable {varname} is {.val {NULL}} in the following
-          function call: {.fn {calling_function}}."
-        )
-      )
-    }
-    #nolint end
-  }
-  return(invisible(NULL))
-}
-
-
 #' @title Assure that Data Has a `model` Column
 #'
 #' @description
