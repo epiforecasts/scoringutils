@@ -82,9 +82,7 @@ score.default <- function(data, metrics, ...) {
 #' @rdname score
 #' @export
 score.forecast_binary <- function(data, metrics = metrics_binary(), ...) {
-  data <- copy(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  data <- na.omit(data)
+  data <- validate_forecast_internal(data, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
   scores <- apply_metrics(
@@ -103,9 +101,7 @@ score.forecast_binary <- function(data, metrics = metrics_binary(), ...) {
 #' @rdname score
 #' @export
 score.forecast_point <- function(data, metrics = metrics_point(), ...) {
-  data <- copy(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  data <- na.omit(data)
+  data <- validate_forecast_internal(data, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
   scores <- apply_metrics(
@@ -122,9 +118,7 @@ score.forecast_point <- function(data, metrics = metrics_point(), ...) {
 #' @rdname score
 #' @export
 score.forecast_sample <- function(data, metrics = metrics_sample(), ...) {
-  data <- copy(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  data <- na.omit(data)
+  data <- validate_forecast_internal(data, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)
 
@@ -161,9 +155,7 @@ score.forecast_sample <- function(data, metrics = metrics_sample(), ...) {
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(data, metrics = metrics_quantile(), ...) {
-  data <- copy(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  data <- na.omit(data)
+  data <- validate_forecast_internal(data, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(data)
   metrics <- validate_metrics(metrics)
 
