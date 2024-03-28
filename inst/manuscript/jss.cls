@@ -34,7 +34,7 @@
 \@softwarereviewfalse
 \@reviewfalse
 \@shortnamesfalse
-\@nojssfalse
+\@nojsstrue % \@nojssfalse % this is a line I changed XXX - original was false
 \@notitlefalse
 \@noheadingsfalse
 \@nofooterfalse
