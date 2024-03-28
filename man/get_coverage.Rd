@@ -46,7 +46,7 @@ quantiles of the predictive distribution.
 
 \strong{Quantile coverage}
 
-Quantile coverage for a given quantile is defined as the proportion of
+Quantile coverage for a given quantile level is defined as the proportion of
 observed values that are smaller than the corresponding predictive quantile.
 For example, the 0.5 quantile coverage is the proportion of observed values
 that are smaller than the 0.5 quantile of the predictive distribution.
