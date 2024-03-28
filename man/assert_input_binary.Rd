@@ -10,8 +10,8 @@ assert_input_binary(observed, predicted)
 \item{observed}{Input to be checked. Should be a factor of length n with
 exactly two levels, holding the observed values.
 The highest factor level is assumed to be the reference level. This means
-that \code{predicted} represents the probability that the observed value is equal
-to the highest factor level.}
+that \code{predicted} represents the probability that the observed value is
+equal to the highest factor level.}
 
 \item{predicted}{Input to be checked. \code{predicted} should be a vector of
 length n, holding probabilities. Alternatively, \code{predicted} can be a matrix

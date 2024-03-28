@@ -2,13 +2,13 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_point}
 \alias{metrics_point}
-\title{Default Metrics And Scoring Rules for Point Forecasts}
+\title{Default metrics and scoring rules for point forecasts}
 \usage{
 metrics_point(select = NULL, exclude = NULL)
 }
 \arguments{
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}

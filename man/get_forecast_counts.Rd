@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_forecast_counts}
 \alias{get_forecast_counts}
-\title{Count Number of Available Forecasts}
+\title{Count number of available forecasts}
 \usage{
 get_forecast_counts(
   data,
@@ -22,19 +22,20 @@ all available columns (apart from a few "protected" columns such as
 present).}
 
 \item{collapse}{character vector (default: \verb{c("quantile_level", "sample_id"})
-with names of categories for which the number of rows should be collapsed to
-one when counting. For example, a single forecast is usually represented by a
-set of several quantiles or samples and collapsing these to one makes sure
-that a single forecast only gets counted once. Setting \code{collapse = c()}
-would mean that all quantiles / samples would be counted as individual
-forecasts.}
+with names of categories for which the number of rows should be collapsed
+to one when counting. For example, a single forecast is usually represented
+by a set of several quantiles or samples and collapsing these to one makes
+sure that a single forecast only gets counted once. Setting
+\code{collapse = c()} would mean that all quantiles / samples would be counted
+as individual forecasts.}
 }
 \value{
 A data.table with columns as specified in \code{by} and an additional
 column "count" with the number of forecasts.
 }
 \description{
-Given a data set with forecasts, this function counts the number of available forecasts.
+Given a data set with forecasts, this function counts the number of
+available forecasts.
 The level of grouping can be specified using the \code{by} argument (e.g. to
 count the number of forecasts per model, or the number of forecasts per
 model and location).

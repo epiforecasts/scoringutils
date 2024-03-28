@@ -1,5 +1,6 @@
 #' @title Run a function safely
-#' @description This is a wrapper function designed to run a function safely
+#' @description
+#' This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the
 #' function.
 #'
@@ -10,8 +11,8 @@
 #' `run_safely` can be useful when constructing functions to be used as
 #' metrics in [score()].
 #'
-#' @param ... Arguments to pass to `fun`
-#' @param fun A function to execute
+#' @param ... Arguments to pass to `fun`.
+#' @param fun A function to execute.
 #' @importFrom cli cli_warn
 #' @return The result of `fun` or `NULL` if `fun` errors
 #' @export
@@ -55,12 +56,13 @@ run_safely <- function(..., fun) {
 }
 
 
-#' Ensure That an Object is a Data Table
-#' @description This function ensures that an object is a data table.
+#' Ensure that an object is a `data.table`
+#' @description
+#' This function ensures that an object is a `data table`.
 #' If the object is not a data table, it is converted to one. If the object
 #' is a data table, a copy of the object is returned.
-#' @param data An object to ensure is a data table
-#' @return A data.table/a copy of an exising data.table
+#' @param data An object to ensure is a data table.
+#' @return A data.table/a copy of an existing data.table.
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {

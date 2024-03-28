@@ -1,12 +1,13 @@
-#' @title Print Information About A Forecast Object
-#' @description This function prints information about a forecast object,
+#' @title Print information about a forecast object
+#' @description
+#' This function prints information about a forecast object,
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
 #'
-#' @param x An object of class 'forecast_*' object as produced by
-#' `as_forecast()`
-#' @param ... additional arguments for [print()]
-#' @return returns x invisibly
+#' @param x A forecast object (a validated data.table with predicted and
+#'   observed values, see [as_forecast()]).
+#' @param ... Additional arguments for [print()].
+#' @return Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export
 #' @keywords check-forecasts
@@ -30,12 +31,17 @@ print.forecast_binary <- function(x, ...) {
     do.call(get_forecast_type, list(data = x)),
     silent = TRUE
   )
-  forecast_unit <- get_forecast_unit(x)
+  forecast_unit <- try(
+    do.call(get_forecast_unit, list(data = x)),
+    silent = TRUE
+  )
 
   # Print forecast object information
   if (inherits(forecast_type, "try-error")) {
     cli_inform(
-      "Could not determine forecast type due to error in validation."
+      c(
+        "!" = "Could not determine forecast type due to error in validation." #nolint
+      )
     )
   } else {
     cli_text(
@@ -48,10 +54,10 @@ print.forecast_binary <- function(x, ...) {
     )
   }
 
-  if (length(forecast_unit) == 0) {
+  if (inherits(forecast_unit, "try-error")) {
     cli_inform(
       c(
-        "!" = "Could not determine forecast unit."
+        "!" = "Could not determine forecast unit." #nolint
       )
     )
   } else {

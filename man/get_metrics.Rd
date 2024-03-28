@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_metrics}
 \alias{get_metrics}
-\title{Get Names Of The Metrics That Were Used For Scoring}
+\title{Get names of the metrics that were used for scoring}
 \usage{
 get_metrics(scores, error = FALSE)
 }
 \arguments{
-\item{scores}{A data.table with an attribute \code{metrics}}
+\item{scores}{A data.table with an attribute \code{metrics}.}
 
 \item{error}{Throw an error if there is no attribute called \code{metrics}?
 Default is FALSE.}

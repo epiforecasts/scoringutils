@@ -1,4 +1,4 @@
-#' @title Do Pairwise Comparisons of Scores
+#' @title Pairwise comparisons of scores
 #'
 #' @description
 #'
@@ -26,25 +26,25 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param by character vector with column names that define the grouping level
-#' for the pairwise comparisons. By default (`model`), there will be one
-#' relative skill score per model. If, for example,
-#' `by = c("model", "location")`. Then you will get a
-#' separate relative skill score for every model in every location. Internally,
-#' the data.table with scores will be split according `by` (removing "model"
-#' before splitting) and the pairwise comparisons will be computed separately
-#' for the split data.tables.
+#' @param by Character vector with column names that define the grouping level
+#'   for the pairwise comparisons. By default (`model`), there will be one
+#'   relative skill score per model. If, for example,
+#'   `by = c("model", "location")`. Then you will get a
+#'   separate relative skill score for every model in every location. Internally,
+#'   the data.table with scores will be split according `by` (removing "model"
+#'   before splitting) and the pairwise comparisons will be computed separately
+#'   for the split data.tables.
 #' @param metric A string with the name of the metric for which
-#' a relative skill shall be computed. By default this is either "crps",
-#' "wis" or "brier_score" if any of these are available.
+#'   a relative skill shall be computed. By default this is either "crps",
+#'   "wis" or "brier_score" if any of these are available.
 #' @param baseline A string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
-#' @param ... additional arguments for the comparison between two models. See
-#' [compare_two_models()] for more information.
+#'   given, then a scaled relative skill with respect to the baseline will be
+#'   returned. By default (`NULL`), relative skill will not be scaled with
+#'   respect to a baseline model.
+#' @param ... Additional arguments for the comparison between two models. See
+#'   [compare_two_models()] for more information.
 #' @inheritParams summarise_scores
-#' @return A data.table with pairwise comparisons
+#' @return A data.table with pairwise comparisons.
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -199,10 +199,9 @@ get_pairwise_comparisons <- function(
   return(out[])
 }
 
-#' @title Do Pairwise Comparison for one Set of Forecasts
+#' @title Do pairwise comparison for one set of forecasts
 #'
 #' @description
-#'
 #' This function does the pairwise comparison for one set of forecasts, but
 #' multiple models involved. It gets called from [get_pairwise_comparisons()].
 #' [get_pairwise_comparisons()] splits the data into arbitrary subgroups
@@ -333,10 +332,9 @@ pairwise_comparison_one_group <- function(scores,
   return(out[])
 }
 
-#' @title Compare Two Models Based on Subset of Common Forecasts
+#' @title Compare two models based on subset of common forecasts
 #'
 #' @description
-#'
 #' This function compares two models based on the subset of forecasts for which
 #' both models have made a prediction. It gets called
 #' from [pairwise_comparison_one_group()], which handles the
@@ -347,16 +345,16 @@ pairwise_comparison_one_group <- function(scores,
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
 #' @inheritParams get_pairwise_comparisons
-#' @param name_model1 character, name of the first model
-#' @param name_model2 character, name of the model to compare against
+#' @param name_model1 Character, name of the first model
+#' @param name_model2 Character, name of the model to compare against
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
-#' instead of a two-sided test to determine significance in a pairwise
-#' comparison.
-#' @param test_type character, either "non_parametric" (the default) or
-#' "permutation". This determines which kind of test shall be conducted to
-#' determine p-values.
-#' @param n_permutations numeric, the number of permutations for a
-#' permutation test. Default is 999.
+#'   instead of a two-sided test to determine significance in a pairwise
+#'   comparison.
+#' @param test_type Character, either "non_parametric" (the default) or
+#'   "permutation". This determines which kind of test shall be conducted to
+#'   determine p-values.
+#' @param n_permutations Numeric, the number of permutations for a
+#'   permutation test. Default is 999.
 #' @return A list with mean score ratios and p-values for the comparison
 #' between two models
 #' @importFrom cli cli_abort
@@ -427,13 +425,13 @@ compare_two_models <- function(scores,
 }
 
 
-#' @title Calculate Geometric Mean
+#' @title Calculate geometric mean
 #'
 #' @details
 #' Used in [get_pairwise_comparisons()].
 #'
-#' @param x numeric vector of values for which to calculate the geometric mean
-#' @return the geometric mean of the values in `x`. `NA` values are ignored.
+#' @param x Numeric vector of values for which to calculate the geometric mean.
+#' @return The geometric mean of the values in `x`. `NA` values are ignored.
 #'
 #' @keywords internal
 geometric_mean <- function(x) {
@@ -443,7 +441,8 @@ geometric_mean <- function(x) {
 
 #' @title Simple permutation test
 #'
-#' @description The implementation of the permutation test follows the
+#' @description
+#' The implementation of the permutation test follows the
 #' function
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
@@ -454,15 +453,15 @@ geometric_mean <- function(x) {
 #'
 #' Used in [get_pairwise_comparisons()].
 #'
-#' @param scores1 vector of scores to compare against another vector of scores
+#' @param scores1 Vector of scores to compare against another vector of scores.
 #' @param scores2 A second vector of scores to compare against the first
 #' @param n_permutation The number of replications to use for a permutation
 #' test. More replications yield more exact results, but require more
 #' computation.
 #' @param one_sided Whether or not to compute a one-sided test. Default is
-#' `FALSE`,
+#'   `FALSE`.
 #' @param comparison_mode How to compute the test statistic for the comparison
-#' of the two scores. Should be either "difference" or "ratio".
+#'   of the two scores. Should be either "difference" or "ratio".
 #'
 #' @return p-value of the permutation test
 #' @keywords internal
@@ -505,8 +504,9 @@ permutation_test <- function(scores1,
 }
 
 
-#' @title Add pairwise comparisons
-#' @description Adds a columns with relative skills computed by running
+#' @title Add relative skill scores based on pairwise comparisons
+#' @description
+#' Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
 #' For more information on
 #' the computation of relative skill, see [get_pairwise_comparisons()].

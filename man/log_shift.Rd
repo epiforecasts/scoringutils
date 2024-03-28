@@ -9,10 +9,10 @@ log_shift(x, offset = 0, base = exp(1))
 \arguments{
 \item{x}{vector of input values to be transformed}
 
-\item{offset}{number to add to the input value before taking the natural
-logarithm}
+\item{offset}{Number to add to the input value before taking the natural
+logarithm.}
 
-\item{base}{a positive number: the base with respect to which
+\item{base}{A positive number: the base with respect to which
 logarithms are computed. Defaults to e = exp(1).}
 }
 \value{

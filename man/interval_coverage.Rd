@@ -2,21 +2,22 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{interval_coverage}
 \alias{interval_coverage}
-\title{Interval Coverage (For Quantile-Based Forecasts)}
+\title{Interval coverage (for quantile-based forecasts)}
 \usage{
 interval_coverage(observed, predicted, quantile_level, interval_range = 50)
 }
 \arguments{
-\item{observed}{numeric vector of size n with the observed values}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{numeric nxN matrix of predictive
+\item{predicted}{Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
 (number of columns) the number of quantiles per forecast.
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile_level}{vector with quantile levels of size N}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made.}
 
 \item{interval_range}{A single number with the range of the prediction
 interval in percent (e.g. 50 for a 50\% prediction interval) for which you

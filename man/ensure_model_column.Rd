@@ -2,13 +2,14 @@
 % Please edit documentation in R/check-input-helpers.R
 \name{ensure_model_column}
 \alias{ensure_model_column}
-\title{Assure that Data Has a \code{model} Column}
+\title{Assure that data has a \code{model} column}
 \usage{
 ensure_model_column(data)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 }
 \value{
 The data.table with a column called \code{model}

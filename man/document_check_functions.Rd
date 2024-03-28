@@ -6,11 +6,14 @@
 \arguments{
 \item{data}{A data.frame or similar to be checked}
 
+\item{observed}{Input to be checked. Should be a numeric vector with the
+observed values of size n.}
+
 \item{columns}{A character vector of column names to check}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Documentation template for check functions

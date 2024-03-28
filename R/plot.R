@@ -1,18 +1,20 @@
-#' @title Plot Contributions to the Weighted Interval Score
+#' @title Plot contributions to the weighted interval score
 #'
 #' @description
 #' Visualise the components of the weighted interval score: penalties for
-#' over-prediction, under-prediction and for high dispersion (lack of sharpness)
+#' over-prediction, under-prediction and for high dispersion (lack of
+#' sharpness).
 #'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] and summarised using [summarise_scores()]
+#' @param scores A data.table of scores based on quantile forecasts as
+#'   produced by [score()] and summarised using [summarise_scores()].
 #' @param x The variable from the scores you want to show on the x-Axis.
-#' Usually this will be "model".
-#' @param relative_contributions show relative contributions instead of absolute
-#' contributions. Default is FALSE and this functionality is not available yet.
-#' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
+#'   Usually this will be "model".
+#' @param relative_contributions Logical. Show relative contributions instead
+#'   of absolute contributions? Default is `FALSE` and this functionality is not
+#'   available yet.
+#' @param flip Boolean (default is `FALSE`), whether or not to flip the axes.
 #' @return A ggplot object showing a contributions from the three components of
-#' the weighted interval score
+#'   the weighted interval score.
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
 #' scale_fill_discrete coord_flip
 #' theme theme_light unit guides guide_legend .data
@@ -87,7 +89,7 @@ plot_wis <- function(scores,
 }
 
 
-#' @title Create a Heatmap of a Scoring Metric
+#' @title Create a heatmap of a scoring metric
 #'
 #' @description
 #' This function can be used to create a heatmap of one metric across different
@@ -97,11 +99,11 @@ plot_wis <- function(scores,
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()].
 #' @param y The variable from the scores you want to show on the y-Axis. The
-#' default for this is "model"
+#'   default for this is "model"
 #' @param x The variable from the scores you want to show on the x-Axis. This
-#' could be something like "horizon", or "location"
-#' @param metric the metric that determines the value and colour shown in the
-#' tiles of the heatmap
+#'   could be something like "horizon", or "location"
+#' @param metric String, the metric that determines the value and colour shown
+#'   in the tiles of the heatmap.
 #' @return A ggplot object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
@@ -149,13 +151,13 @@ plot_heatmap <- function(scores,
 }
 
 
-#' @title Plot Interval Coverage
+#' @title Plot interval coverage
 #'
 #' @description
-#' Plot interval coverage
+#' Plot interval coverage values (see [get_coverage()] for more information).
 #'
 #' @param coverage A data frame of coverage values as produced by
-#' [get_coverage()]
+#' [get_coverage()].
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
@@ -215,17 +217,17 @@ plot_interval_coverage <- function(coverage,
   return(p1)
 }
 
-#' @title Plot Quantile Coverage
+#' @title Plot quantile coverage
 #'
 #' @description
-#' Plot quantile coverage
+#' Plot quantile coverage values (see [get_coverage()] for more information).
 #'
 #' @inheritParams plot_interval_coverage
-#' @param colour According to which variable shall the graphs be coloured?
-#' Default is "model".
-#' @return ggplot object with a plot of interval coverage
+#' @param colour String, according to which variable shall the graphs be
+#' coloured? Default is "model".
+#' @return A ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
-#' scale_y_continuous geom_line
+#'   scale_y_continuous geom_line
 #' @importFrom checkmate assert_subset assert_data_frame
 #' @importFrom data.table dcast
 #' @export
@@ -281,26 +283,27 @@ plot_quantile_coverage <- function(coverage,
   return(p2)
 }
 
-#' @title Plot Heatmap of Pairwise Comparisons
+#' @title Plot heatmap of pairwise comparisons
 #'
 #' @description
 #' Creates a heatmap of the ratios or pvalues from a pairwise comparison
-#' between models
+#' between models.
 #'
 #' @param comparison_result A data.frame as produced by
-#' [get_pairwise_comparisons()]
-#' @param type character vector of length one that is either
-#'  "mean_scores_ratio" or "pval". This denotes whether to
-#' visualise the ratio or the p-value of the pairwise comparison.
-#' Default is "mean_scores_ratio".
+#' [get_pairwise_comparisons()].
+#' @param type Character vector of length one that is either
+#'   "mean_scores_ratio" or "pval". This denotes whether to
+#'   visualise the ratio or the p-value of the pairwise comparison.
+#'   Default is "mean_scores_ratio".
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
-#' scale_fill_gradient2 theme_light element_text
+#'   scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
-#' element_text element_blank
-#' @return A ggplot object with a heatmap of mean score ratios from pairwise
-#' comparisons
+#'   element_text element_blank
+#' @return
+#' A ggplot object with a heatmap of mean score ratios from pairwise
+#' comparisons.
 #' @export
 #' @examples
 #' library(ggplot2)
@@ -411,26 +414,26 @@ plot_pairwise_comparisons <- function(comparison_result,
 }
 
 
-#' @title PIT Histogram
+#' @title PIT histogram
 #'
 #' @description
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param pit either a vector with the PIT values of size n, or a data.table as
-#' produced by [get_pit()]
-#' @param num_bins the number of bins in the PIT histogram, default is "auto".
-#' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
-#' will display a bin for each available quantile in case you passed in data in
-#' a quantile-based format.
-#' You can control the number of bins by supplying a number. This is fine for
-#' sample-based pit histograms, but may fail for quantile-based formats. In this
-#' case it is preferred to supply explicit breaks points using the `breaks`
-#' argument.
-#' @param breaks numeric vector with the break points for the bins in the
-#' PIT histogram. This is preferred when creating a PIT histogram based on
-#' quantile-based data. Default is `NULL` and breaks will be determined by
-#' `num_bins`. If `breaks` is used, `num_bins` will be ignored.
+#' @param pit Either a vector with the PIT values, or a data.table as
+#'   produced by [get_pit()].
+#' @param num_bins The number of bins in the PIT histogram, default is "auto".
+#'   When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
+#'   will display a bin for each available quantile in case you passed in data in
+#'   a quantile-based format.
+#'   You can control the number of bins by supplying a number. This is fine for
+#'   sample-based pit histograms, but may fail for quantile-based formats. In this
+#'   case it is preferred to supply explicit breaks points using the `breaks`
+#'   argument.
+#' @param breaks Numeric vector with the break points for the bins in the
+#'   PIT histogram. This is preferred when creating a PIT histogram based on
+#'   quantile-based data. Default is `NULL` and breaks will be determined by
+#'   `num_bins`. If `breaks` is used, `num_bins` will be ignored.
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
@@ -548,24 +551,24 @@ plot_pit <- function(pit,
   return(hist)
 }
 
-#' @title Visualise Where Forecasts Are Available
+#' @title Visualise the number of available forecasts
 #'
 #' @description
-#' Visualise Where Forecasts Are Available
-#' @param forecast_counts a data.table (or similar) with a column `count`
-#' holding forecast counts, as produced by [get_forecast_counts()]
-#' @param x character vector of length one that denotes the name of the column
-#' to appear on the x-axis of the plot.
-#' @param y character vector of length one that denotes the name of the column
-#' to appear on the y-axis of the plot. Default is "model".
-#' @param x_as_factor logical (default is TRUE). Whether or not to convert
-#' the variable on the x-axis to a factor. This has an effect e.g. if dates
-#' are shown on the x-axis.
-#' @param show_counts logical (default is `TRUE`) that indicates whether
-#' or not to show the actual count numbers on the plot
+#' Visualise Where Forecasts Are Available.
+#' @param forecast_counts A data.table (or similar) with a column `count`
+#'   holding forecast counts, as produced by [get_forecast_counts()].
+#' @param x Character vector of length one that denotes the name of the column
+#'   to appear on the x-axis of the plot.
+#' @param y Character vector of length one that denotes the name of the column
+#'   to appear on the y-axis of the plot. Default is "model".
+#' @param x_as_factor Logical (default is `TRUE`). Whether or not to convert
+#'   the variable on the x-axis to a factor. This has an effect e.g. if dates
+#'   are shown on the x-axis.
+#' @param show_counts Logical (default is `TRUE`) that indicates whether
+#'   or not to show the actual count numbers on the plot.
 #' @return A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' geom_tile scale_fill_gradient .data
+#'   geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
 #' @importFrom checkmate assert_subset assert_logical
 #' @export
@@ -624,15 +627,15 @@ plot_forecast_counts <- function(forecast_counts,
 }
 
 
-#' @title Plot Correlation Between Metrics
+#' @title Plot correlation between metrics
 #'
 #' @description
-#' Plots a heatmap of correlations between different metrics
+#' Plots a heatmap of correlations between different metrics.
 #'
 #' @param correlations A data.table of correlations between scores as produced
-#' by [get_correlations()].
-#' @return A ggplot object showing a coloured matrix of correlations
-#' between metrics
+#'   by [get_correlations()].
+#' @return
+#' A ggplot object showing a coloured matrix of correlations between metrics.
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
@@ -707,7 +710,7 @@ plot_correlations <- function(correlations) {
 #' @title Scoringutils ggplot2 theme
 #'
 #' @description
-#' A theme for ggplot2 plots used in scoringutils
+#' A theme for ggplot2 plots used in `scoringutils`.
 #' @return A ggplot2 theme
 #' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
 #' @keywords plotting

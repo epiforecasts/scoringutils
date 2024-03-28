@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_pairwise_comparisons}
 \alias{plot_pairwise_comparisons}
-\title{Plot Heatmap of Pairwise Comparisons}
+\title{Plot heatmap of pairwise comparisons}
 \usage{
 plot_pairwise_comparisons(
   comparison_result,
@@ -11,20 +11,20 @@ plot_pairwise_comparisons(
 }
 \arguments{
 \item{comparison_result}{A data.frame as produced by
-\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}}
+\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}.}
 
-\item{type}{character vector of length one that is either
+\item{type}{Character vector of length one that is either
 "mean_scores_ratio" or "pval". This denotes whether to
 visualise the ratio or the p-value of the pairwise comparison.
 Default is "mean_scores_ratio".}
 }
 \value{
 A ggplot object with a heatmap of mean score ratios from pairwise
-comparisons
+comparisons.
 }
 \description{
 Creates a heatmap of the ratios or pvalues from a pairwise comparison
-between models
+between models.
 }
 \examples{
 library(ggplot2)

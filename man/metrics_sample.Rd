@@ -2,13 +2,13 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_sample}
 \alias{metrics_sample}
-\title{Default Metrics And Scoring Rules for Sample-Based Forecasts}
+\title{Default metrics and scoring rules sample-based forecasts}
 \usage{
 metrics_sample(select = NULL, exclude = NULL)
 }
 \arguments{
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}

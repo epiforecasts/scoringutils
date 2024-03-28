@@ -2,12 +2,12 @@
 % Please edit documentation in R/metrics-sample.R
 \name{mad_sample}
 \alias{mad_sample}
-\title{Determine Dispersion Of A Probabilistic Forecast}
+\title{Determine dispersion of a probabilistic forecast}
 \usage{
 mad_sample(observed = NULL, predicted, ...)
 }
 \arguments{
-\item{observed}{place holder, argument will be ignored and exists only for
+\item{observed}{Place holder, argument will be ignored and exists only for
 consistency with other scoring functions. The output does not depend on
 any observed values.}
 
@@ -15,15 +15,12 @@ any observed values.}
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{...}{additional arguments passed to \link[stats:mad]{mad()}.}
+\item{...}{Additional arguments passed to \link[stats:mad]{mad()}.}
 }
 \value{
-vector with dispersion values
+Vector with dispersion values.
 }
 \description{
-Determine Dispersion Of A Probabilistic Forecast
-}
-\details{
 Sharpness is the ability of the model to generate predictions within a
 narrow range and dispersion is the lack thereof.
 It is a data-independent measure, and is purely a feature

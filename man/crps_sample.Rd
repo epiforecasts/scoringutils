@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{crps_sample}
 \alias{crps_sample}
-\title{Ranked Probability Score}
+\title{(Continuous) ranked probability score}
 \usage{
 crps_sample(observed, predicted, ...)
 }
@@ -13,11 +13,11 @@ crps_sample(observed, predicted, ...)
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{...}{additional arguments passed to
+\item{...}{Additional arguments passed to
 \link[scoringRules:scores_sample_univ]{crps_sample()} from the scoringRules package.}
 }
 \value{
-vector with the scoring values
+Vector with scores.
 }
 \description{
 Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample()}}
