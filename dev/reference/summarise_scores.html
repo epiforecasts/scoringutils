@@ -92,27 +92,27 @@ do, you also have to manually update the attribute by calling
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scores</dt>
 <dd><p>An object of class <code>scores</code> (a data.table with
-scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>)</p></dd>
+scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 
 
 <dt>by</dt>
-<dd><p>character vector with column names to summarise scores by. Default
+<dd><p>Character vector with column names to summarise scores by. Default
 is <code>model</code>, meaning that there will be one score per model in the output.</p></dd>
 
 
 <dt>across</dt>
-<dd><p>character vector with column names to summarise scores
+<dd><p>Character vector with column names to summarise scores
 across (meaning that the specified columns will be dropped). This is an
 alternative to specifying <code>by</code> directly. If <code>across</code> is set, <code>by</code> will be
 ignored. If <code>across</code> is <code>NULL</code> (default), then <code>by</code> will be used.</p></dd>
 
 
 <dt>fun</dt>
-<dd><p>a function used for summarising scores. Default is <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p></dd>
+<dd><p>A function used for summarising scores. Default is <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>additional parameters that can be passed to the summary function
+<dd><p>Additional parameters that can be passed to the summary function
 provided to <code>fun</code>. For more information see the documentation of the
 respective function.</p></dd>
 
@@ -121,7 +121,7 @@ respective function.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a data.table with summarised scores. Scores are summarised according
+<p>A data.table with summarised scores. Scores are summarised according
 to the names of the columns of the original data specified in <code>by</code> or
 <code>across</code> using the <code>fun</code> passed to <code>summarise_scores()</code>.</p>
     </div>

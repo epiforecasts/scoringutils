@@ -51,14 +51,14 @@ several quantiles / prediction intervals and the median.
 In one view, you would treat the WIS as the average of quantile scores (and
 the median as 0.5-quantile) (this is the default for wis()). In another
 view, you would treat the WIS as the average of several interval scores +
-the difference between observed value and median forecast. The effect of
+the difference between the observed value and median forecast. The effect of
 that is that in contrast to the first view, the median has twice as much
 weight (because it is weighted like a prediction interval, rather than like
 a single quantile). Both are valid ways to conceptualise the WIS and you
 can control the behvaviour with the count_median_twice-argument.
 WIS components:
 WIS components can be computed individually using the functions
-overprediction, underprediction, and dispersion."><title>Weighted Interval Score (WIS) — wis • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Weighted Interval Score (WIS) — wis"><meta property="og:description" content="The WIS is a proper scoring rule used to evaluate forecasts in an interval- /
+overprediction, underprediction, and dispersion."><title>Weighted interval score (WIS) — wis • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Weighted interval score (WIS) — wis"><meta property="og:description" content="The WIS is a proper scoring rule used to evaluate forecasts in an interval- /
 quantile-based format. See Bracher et al. (2021). Smaller values are better.
 As the name suggest the score assumes that a forecast comes in the form of
 one or multiple central prediction intervals. A prediction interval is
@@ -110,7 +110,7 @@ several quantiles / prediction intervals and the median.
 In one view, you would treat the WIS as the average of quantile scores (and
 the median as 0.5-quantile) (this is the default for wis()). In another
 view, you would treat the WIS as the average of several interval scores +
-the difference between observed value and median forecast. The effect of
+the difference between the observed value and median forecast. The effect of
 that is that in contrast to the first view, the median has twice as much
 weight (because it is weighted like a prediction interval, rather than like
 a single quantile). Both are valid ways to conceptualise the WIS and you
@@ -169,7 +169,7 @@ overprediction, underprediction, and dispersion."><meta name="robots" content="n
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Weighted Interval Score (WIS)</h1>
+      <img src="" class="logo" alt=""><h1>Weighted interval score (WIS)</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-quantile.R" class="external-link"><code>R/metrics-quantile.R</code></a></small>
       <div class="d-none name"><code>wis.Rd</code></div>
     </div>
@@ -227,7 +227,7 @@ several quantiles / prediction intervals and the median.</p>
 <p>In one view, you would treat the WIS as the average of quantile scores (and
 the median as 0.5-quantile) (this is the default for <code>wis()</code>). In another
 view, you would treat the WIS as the average of several interval scores +
-the difference between observed value and median forecast. The effect of
+the difference between the observed value and median forecast. The effect of
 that is that in contrast to the first view, the median has twice as much
 weight (because it is weighted like a prediction interval, rather than like
 a single quantile). Both are valid ways to conceptualise the WIS and you
@@ -259,11 +259,11 @@ WIS components can be computed individually using the functions
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>observed</dt>
-<dd><p>numeric vector of size n with the observed values</p></dd>
+<dd><p>Numeric vector of size n with the observed values.</p></dd>
 
 
 <dt>predicted</dt>
-<dd><p>numeric nxN matrix of predictive
+<dd><p>Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
 (number of columns) the number of quantiles per forecast.
@@ -272,35 +272,40 @@ vector of size N.</p></dd>
 
 
 <dt>quantile_level</dt>
-<dd><p>vector with quantile levels of size N</p></dd>
+<dd><p>Vector of of size N with the quantile levels
+for which predictions were made.</p></dd>
 
 
 <dt>separate_results</dt>
-<dd><p>if <code>TRUE</code> (default is <code>FALSE</code>), then the separate
-parts of the interval score (dispersion penalty, penalties for over- and
-under-prediction get returned as separate elements of a list). If you want a
-<code>data.frame</code> instead, simply call <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the output.</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default is <code>FALSE</code>), then the
+separate parts of the interval score (dispersion penalty, penalties for
+over- and under-prediction get returned as separate elements of a list).
+If you want a <code>data.frame</code> instead, simply call <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the
+output.</p></dd>
 
 
 <dt>weigh</dt>
-<dd><p>if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-decimal value that  represents how much is outside a central prediction
-interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
-Default: <code>TRUE</code>.</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (the default), weigh the score by
+\(\alpha / 2\), so it can be averaged into an interval score that, in
+the limit (for an increasing number of equally spaced quantiles/prediction
+intervals), corresponds
+to the CRPS. \(\alpha\) is the value that corresponds to the
+(\(\alpha/2\)) or (\(1 - \alpha/2\)), i.e. it is the decimal
+value that represents how much is outside a central prediction interval
+(E.g. for a 90 percent central prediction interval, alpha is 0.1).</p></dd>
 
 
 <dt>count_median_twice</dt>
-<dd><p>if TRUE, count the median twice in the score</p></dd>
+<dd><p>If TRUE, count the median twice in the score.</p></dd>
 
 
 <dt>na.rm</dt>
-<dd><p>if TRUE, ignore NA values when computing the score</p></dd>
+<dd><p>If TRUE, ignore NA values when computing the score.</p></dd>
 
 
 <dt>...</dt>
 <dd><p>Additional arguments passed on to <code>wis()</code> from functions
-<code>overprediction()</code>, <code>underprediction()</code> and <code>dispersion()</code></p></dd>
+<code>overprediction()</code>, <code>underprediction()</code> and <code>dispersion()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -311,11 +316,12 @@ Default: <code>TRUE</code>.</p></dd>
 or a list with separate entries if <code>separate_results</code> is <code>TRUE</code>.</p>
 
 
-<p><code>dispersion()</code>: a numeric vector with dispersion values (one per observation)</p>
+<p><code>dispersion()</code>: a numeric vector with dispersion values (one per
+observation).</p>
 
 
 <p><code>overprediction()</code>: a numeric vector with overprediction values (one per
-observation)</p>
+observation).</p>
 
 
 <p><code>underprediction()</code>: a numeric vector with underprediction values (one per

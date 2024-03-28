@@ -81,7 +81,8 @@ checks for the specific forecast type.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data.frame (or similar) with predicted and observed values.
-See <code><a href="as_forecast.html">as_forecast()</a></code> for additional information on input formats.</p></dd>
+See the details section of <code><a href="as_forecast.html">as_forecast()</a></code> for additional information
+on required input formats.</p></dd>
 
 
 <dt>forecast_type</dt>
@@ -92,7 +93,7 @@ the forecast type will be inferred from the data.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>additional arguments</p></dd>
+<dd><p>Additional arguments</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -104,15 +105,21 @@ the forecast type will be inferred from the data.</p></dd>
 <code>forecast_quantile</code>.</p>
     </div>
     <div class="section level2">
-    <h2 id="forecast-types-and-input-format">Forecast types and input format<a class="anchor" aria-label="anchor" href="#forecast-types-and-input-format"></a></h2>
+    <h2 id="forecast-types-and-input-formats">Forecast types and input formats<a class="anchor" aria-label="anchor" href="#forecast-types-and-input-formats"></a></h2>
     <p>Various different forecast types / forecast formats are supported. At the
-moment, those are</p><ul><li><p>point forecasts</p></li>
+moment, those are:</p><ul><li><p>point forecasts</p></li>
 <li><p>binary forecasts ("soft binary classification")</p></li>
 <li><p>Probabilistic forecasts in a quantile-based format (a forecast is
 represented as a set of predictive quantiles)</p></li>
 <li><p>Probabilistic forecasts in a sample-based format (a forecast is represented
 as a set of predictive samples)</p></li>
-</ul><p>Forecast types are determined based on the columns present in the input data.</p>
+</ul><p>Forecast types are determined based on the columns present in the input data.
+Here is an overview of the required format for each forecast type:
+
+  </p><div style="text-align: left">
+  <img src="figures/required-inputs.png" style="width:750px;max-width:100%;"></div>
+<p><em>All forecast types</em> require a data.frame or similar with columns <code>observed</code>
+<code>predicted</code>, and <code>model</code>.</p>
 <p><em>Point forecasts</em> require a column <code>observed</code> of type numeric and a column
 <code>predicted</code> of type numeric.</p>
 <p><em>Binary forecasts</em> require a column <code>observed</code> of type factor with exactly

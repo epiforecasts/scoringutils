@@ -20,7 +20,7 @@ prediction interval. Correspondingly, the user would have to provide the
 No specific distribution is assumed, but the interval has to be symmetric
 around the median (i.e you can't use the 0.1 quantile
 as the lower bound and the 0.7 quantile as the upper bound).
-Non-symmetric quantiles can be scored using the function quantile_score()."><title>Interval Score — interval_score • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interval Score — interval_score"><meta property="og:description" content="Proper Scoring Rule to score quantile predictions, following Gneiting
+Non-symmetric quantiles can be scored using the function quantile_score()."><title>Interval score — interval_score • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interval score — interval_score"><meta property="og:description" content="Proper Scoring Rule to score quantile predictions, following Gneiting
 and Raftery (2007). Smaller values are better.
 The score is computed as
 $$
@@ -93,7 +93,7 @@ Non-symmetric quantiles can be scored using the function quantile_score()."><met
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Interval Score</h1>
+      <img src="" class="logo" alt=""><h1>Interval score</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-range.R" class="external-link"><code>R/metrics-range.R</code></a></small>
       <div class="d-none name"><code>interval_score.Rd</code></div>
     </div>
@@ -142,44 +142,48 @@ Non-symmetric quantiles can be scored using the function <code><a href="quantile
 
 
 <dt>lower</dt>
-<dd><p>vector of size n with the prediction for the lower quantile
-of the given interval range</p></dd>
+<dd><p>Vector of size n with the prediction for the lower quantile
+of the given interval range.</p></dd>
 
 
 <dt>upper</dt>
-<dd><p>vector of size n with the prediction for the upper quantile
-of the given interval range</p></dd>
+<dd><p>Vector of size n with the prediction for the upper quantile
+of the given interval range.</p></dd>
 
 
 <dt>interval_range</dt>
-<dd><p>the range of the prediction intervals. i.e. if you're
-forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
-Can be either a single number or a vector of size n, if the interval range
-changes for different forecasts to be scored. This corresponds to
-(100-alpha)/100 in Gneiting and Raftery (2007). Internally, the interval
-range will be transformed to alpha.</p></dd>
+<dd><p>Numeric vector (either a single number or a vector of
+size n) with the range of the prediction intervals. For example, if you're
+forecasting the 0.05 and 0.95 quantile, the interval range would be 90.
+The interval range corresponds to \((100-\alpha)/100\), where
+\(\alpha\) is the decimal value that indicates how much is outside
+the prediction interval (see e.g. Gneiting and Raftery (2007)).</p></dd>
 
 
 <dt>weigh</dt>
-<dd><p>if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-decimal value that  represents how much is outside a central prediction
-interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
-Default: <code>TRUE</code>.</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (the default), weigh the score by
+\(\alpha / 2\), so it can be averaged into an interval score that, in
+the limit (for an increasing number of equally spaced quantiles/prediction
+intervals), corresponds
+to the CRPS. \(\alpha\) is the value that corresponds to the
+(\(\alpha/2\)) or (\(1 - \alpha/2\)), i.e. it is the decimal
+value that represents how much is outside a central prediction interval
+(E.g. for a 90 percent central prediction interval, alpha is 0.1).</p></dd>
 
 
 <dt>separate_results</dt>
-<dd><p>if <code>TRUE</code> (default is <code>FALSE</code>), then the separate
-parts of the interval score (dispersion penalty, penalties for over- and
-under-prediction get returned as separate elements of a list). If you want a
-<code>data.frame</code> instead, simply call <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the output.</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default is <code>FALSE</code>), then the
+separate parts of the interval score (dispersion penalty, penalties for
+over- and under-prediction get returned as separate elements of a list).
+If you want a <code>data.frame</code> instead, simply call <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the
+output.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>vector with the scoring values, or a list with separate entries if
+<p>Vector with the scoring values, or a list with separate entries if
 <code>separate_results</code> is <code>TRUE</code>.</p>
     </div>
     <div class="section level2">
@@ -206,11 +210,11 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  upper <span class="op">=</span> <span class="va">upper</span>,</span></span>
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="va">interval_range</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6960286 0.5965772 2.1173303 1.7781117 0.6389212 0.6583173 0.6795999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.6945575 0.7706515 0.7165163 0.6426718 0.6795017 0.6377061 0.6813362</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.5996523 0.7192252 0.6729367 0.6483266 0.6158110 0.6954876 0.7619618</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.5409369 0.6449776 0.7226016 0.6426571 0.7048962 0.8188916 0.7087444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6949123 0.6489636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6186832 0.6857411 0.6851103 0.6735228 0.7207120 0.6350107 0.6326772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7765693 0.9162766 0.7696477 0.5718187 0.5947846 0.6873026 0.6733580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.6672086 0.7094583 0.5695223 0.6244414 0.7408444 1.4548649 0.6493377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.9306896 0.6973638 0.7058552 0.8090509 0.7450232 0.5687430 0.7296127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.7483414 0.6927440</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># gives a warning, as the interval_range should likely be 50 instead of 0.5</span></span></span>
 <span class="r-in"><span><span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu">interval_score</span><span class="op">(</span></span></span>
@@ -232,28 +236,29 @@ Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
 <span class="r-in"><span>  interval_range <span class="op">=</span> <span class="fl">90</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5129436 2.0653800 1.7090811 0.6660888 0.5571730 0.6352722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.6313949 0.6993052 0.6848684 0.6284849 0.6029027 0.6288638 0.5487338</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.5969988 0.5918260 0.6816380 0.6309756 0.5619949 0.6772473 0.6229116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.6195682 0.5369128 0.7050352 0.5788902 0.5501844 0.7358952 0.7075187</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6746259 0.6901630        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5428048 0.7656798 0.5305954 0.6509690 0.6780044 0.5082637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7404846 0.8621966 0.7375557 0.5326411 0.5665304 0.6259204 0.5696571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.6555712 0.5798147 0.6144623 0.5308622 0.6850722 1.4237942 0.6161064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.8500130 0.6461361 0.6502278 0.7400150 0.6942545 0.5921649 0.5858396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6975714 0.7079685        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5129436 0.6072971 0.5786427 0.6660888 0.5571730 0.6352722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.6313949 0.6993052 0.6848684 0.6284849 0.6029027 0.6288638 0.5487338</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.5969988 0.5918260 0.6816380 0.6309756 0.5619949 0.6772473 0.6229116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.6195682 0.5369128 0.7050352 0.5788902 0.5501844 0.7358952 0.7075187</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6746259 0.6901630        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]        NA 0.5428048 0.7656798 0.5305954 0.6509690 0.6780044 0.5082637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7404846 0.5823934 0.7375557 0.5326411 0.5665304 0.6259204 0.5696571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.6555712 0.5798147 0.6144623 0.5308622 0.6850722 0.5303743 0.6161064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.5536698 0.6461361 0.6502278 0.7400150 0.6942545 0.5921649 0.5858396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.6975714 0.7079685        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0  0  0  0  0 NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.000000 0.000000 1.458083 1.130438 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.2798032 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.8934199 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.2963432 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

@@ -13,7 +13,7 @@ A 90% prediction interval, for example, covers 90% of the probability mass
 and is defined by the 5% and 95% quantiles. A forecast could therefore
 be characterised by one or multiple prediction intervals, e.g. the lower
 and upper bounds of the 50% and 90% prediction intervals (corresponding to
-the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles)."><title>Transform From a Quantile Format to an Interval Format — quantile_to_interval • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Transform From a Quantile Format to an Interval Format — quantile_to_interval"><meta property="og:description" content="Quantile format
+the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles)."><title>Transform from a quantile format to an interval format — quantile_to_interval • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Transform from a quantile format to an interval format — quantile_to_interval"><meta property="og:description" content="Quantile format
 In a quantile format, a prediction is characterised by one or multiple
 predicted values and the corresponding quantile levels. For example, a
 prediction in a quantile format could be represented by the 0.05, 0.25, 0.5,
@@ -79,7 +79,7 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles)."><meta name="robots"
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Transform From a Quantile Format to an Interval Format</h1>
+      <img src="" class="logo" alt=""><h1>Transform from a quantile format to an interval format</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/utils_data_handling.R" class="external-link"><code>R/utils_data_handling.R</code></a></small>
       <div class="d-none name"><code>quantile_to_interval.Rd</code></div>
     </div>
@@ -116,19 +116,20 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>method arguments</p></dd>
+<dd><p>Arguments</p></dd>
 
 
 <dt>dt</dt>
-<dd><p>a data.table with columns <code>quantile_level</code> and <code>predicted</code></p></dd>
+<dd><p>A data.table with forecasts in a quantile-based format (see
+<code><a href="as_forecast.html">as_forecast()</a></code>).</p></dd>
 
 
 <dt>format</dt>
-<dd><p>the format of the output. Either "long" or "wide". If "long"
-(the default), there will be a column <code>boundary</code> (with values either "upper"
-or "lower" and a column <code>interval_range</code> that contains the range of the
-interval. If "wide", there will be a column <code>interval_range</code> and two columns
-<code>lower</code> and <code>upper</code> that contain the lower and upper bounds of the
+<dd><p>The format of the output. Either "long" or "wide". If "long"
+(the default), there will be a column <code>boundary</code> (with values either
+"upper" or "lower" and a column <code>interval_range</code> that contains the range of
+the interval. If "wide", there will be a column <code>interval_range</code> and two
+columns <code>lower</code> and <code>upper</code> that contain the lower and upper bounds of the
 prediction interval, respectively.</p></dd>
 
 
@@ -136,35 +137,44 @@ prediction interval, respectively.</p></dd>
 <dd><p>keep the <code>quantile_level</code> column in the final
 output after transformation (default is FALSE). This only works if
 <code>format = "long"</code>. If <code>format = "wide"</code>, the <code>quantile_level</code> column will
-always be dropped.
-<em>quantile_to_interval.data.frame</em>:
-a data.frame in an interval format (either "long" or "wide"), with or
-without a <code>quantile_level</code> column. Rows will not be reordered.</p></dd>
+always be dropped.</p></dd>
 
 
 <dt>observed</dt>
-<dd><p>a numeric vector of observed values of size n</p></dd>
+<dd><p>Numeric vector of size n with the observed values.</p></dd>
 
 
 <dt>predicted</dt>
-<dd><p>a numeric vector of predicted values of size n x N. If
-<code>observed</code> is a single number, then <code>predicted</code> can be a vector of length N</p></dd>
+<dd><p>Numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If <code>observed</code> is just a single number, then predicted can just be a
+vector of size N.</p></dd>
 
 
 <dt>quantile_level</dt>
-<dd><p>a numeric vector of quantile levels of size N
-<em>quantile_to_interval.numeric</em>:
-a data.frame in a wide interval format with columns <code>forecast_id</code>,
-<code>observed</code>, <code>lower</code>, <code>upper</code>, and <code>interval_range</code>. The <code>forecast_id</code> column
-is a unique identifier for each forecast. Rows will be reordered according to
-<code>forecast_id</code> and <code>interval_range</code>.</p></dd>
+<dd><p>Vector of of size N with the quantile levels
+for which predictions were made.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data.table with forecasts in an interval format</p>
+<p>A data.table with forecasts in an interval format.</p>
+
+
+<p><em>quantile_to_interval.data.frame</em>:
+a data.table in an interval format (either "long" or "wide"), with or
+without a <code>quantile_level</code> column. Rows will not be reordered.</p>
+
+
+<p><em>quantile_to_interval.numeric</em>:
+a data.table in a wide interval format with columns <code>forecast_id</code>,
+<code>observed</code>, <code>lower</code>, <code>upper</code>, and <code>interval_range</code>. The <code>forecast_id</code> column
+is a unique identifier for each forecast. Rows will be reordered according to
+<code>forecast_id</code> and <code>interval_range</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
