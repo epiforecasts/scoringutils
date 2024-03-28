@@ -17,6 +17,7 @@
 #' @param by Character vector that denotes the columns by which to merge. Any
 #'   value that is not a column in observations will be removed.
 #' @return a data.table with forecasts and observations
+#' @importFrom checkmate assert_subset
 #' @examples
 #' forecasts <- example_quantile_forecasts_only
 #' observations <- example_truth_only
@@ -27,8 +28,10 @@
 merge_pred_and_obs <- function(forecasts, observations,
                                join = c("left", "full", "right"),
                                by = NULL) {
-  forecasts <- data.table::as.data.table(forecasts)
-  observations <- data.table::as.data.table(observations)
+  forecasts <- ensure_data.table(forecasts)
+  observations <- ensure_data.table(observations)
+  join <- match.arg(join)
+  assert_subset(by, intersect(names(forecasts), names(observations)))
 
   if (is.null(by)) {
     protected_columns <- c(
@@ -94,6 +97,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @importFrom methods hasArg
+#' @importFrom checkmate assert_numeric
 #' @keywords data-handling
 #' @export
 #' @examples
@@ -102,6 +106,7 @@ sample_to_quantile <- function(data,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
   data <- ensure_data.table(data)
+  assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
 
@@ -132,11 +137,10 @@ sample_to_quantile <- function(data,
 #' @param keep_range_col Logical, default is `FALSE`. Keep the
 #'   interval_range and boundary columns after transformation?
 #' @return a data.table in a plain quantile format
-#' @importFrom data.table copy
 #' @keywords internal
 interval_long_to_quantile <- function(data,
                                       keep_range_col = FALSE) {
-  data <- data.table::as.data.table(data)
+  data <- ensure_data.table(data)
 
   # filter out duplicated median
   # note that this also filters out instances where range is NA, i.e.
@@ -287,7 +291,7 @@ sample_to_interval_long <- function(data,
                                     interval_range = c(0, 50, 90),
                                     type = 7,
                                     keep_quantile_col = TRUE) {
-  data <- data.table::as.data.table(data)
+  data <- ensure_data.table(data)
 
   lower_quantiles <- (100 - interval_range) / 200
   upper_quantiles <- 1 - lower_quantiles
