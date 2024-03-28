@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{sample_to_interval_long}
 \alias{sample_to_interval_long}
-\title{Change Data from a Sample Based Format to a Long Interval Range Format}
+\title{Change data from a sample-based format to a long interval range format}
 \usage{
 sample_to_interval_long(
   data,
@@ -12,7 +12,7 @@ sample_to_interval_long(
 )
 }
 \arguments{
-\item{data}{a data.frame with samples}
+\item{data}{A data.frame with samples}
 
 \item{interval_range}{a numeric vector of interval ranges to extract
 (e.g. \code{c(0, 50, 90)})}
@@ -23,10 +23,10 @@ information, see \code{\link[=quantile]{quantile()}}}
 \item{keep_quantile_col}{keep quantile_level column, default is TRUE}
 }
 \value{
-a data.table in a long interval interval range format
+A data.table in a long interval interval range format
 }
 \description{
 Transform data from a format that is based on predictive samples to a format
-based on interval ranges
+based on interval ranges.
 }
 \keyword{internal}

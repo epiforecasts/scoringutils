@@ -1,12 +1,13 @@
-#' @title Print Information About A Forecast Object
-#' @description This function prints information about a forecast object,
+#' @title Print information about a forecast object
+#' @description
+#' This function prints information about a forecast object,
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
 #'
-#' @param x An object of class 'forecast_*' object as produced by
-#' `as_forecast()`
-#' @param ... additional arguments for [print()]
-#' @return returns x invisibly
+#' @param x A forecast object (a validated data.table with predicted and
+#'   observed values, see [as_forecast()]).
+#' @param ... Additional arguments for [print()].
+#' @return Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export
 #' @keywords check-forecasts

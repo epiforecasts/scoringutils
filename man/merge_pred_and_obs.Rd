@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{merge_pred_and_obs}
 \alias{merge_pred_and_obs}
-\title{Merge Forecast Data And Observations}
+\title{Merge forecast data and observations}
 \usage{
 merge_pred_and_obs(
   forecasts,
@@ -12,17 +12,17 @@ merge_pred_and_obs(
 )
 }
 \arguments{
-\item{forecasts}{data.frame with the forecast data (as can be passed to
+\item{forecasts}{A data.frame with the forecast data (as can be passed to
 \code{\link[=score]{score()}}).}
 
-\item{observations}{data.frame with the observations}
+\item{observations}{A data.frame with the observations.}
 
-\item{join}{character, one of \code{c("left", "full", "right")}. Determines the
+\item{join}{Character, one of \code{c("left", "full", "right")}. Determines the
 type of the join. Usually, a left join is appropriate, but sometimes you
 may want to do a full join to keep dates for which there is a forecast, but
 no ground truth data.}
 
-\item{by}{character vector that denotes the columns by which to merge. Any
+\item{by}{Character vector that denotes the columns by which to merge. Any
 value that is not a column in observations will be removed.}
 }
 \value{

@@ -1,31 +1,32 @@
-#' @title Create a `forecast` Object
-#' @description Convert a data.frame or similar of forecasts into an object of
-#' class `forecast_*` and validate it.
+#' @title Create a `forecast` object
 #'
-#' `as_forecast()`
-#' - allows users to specify the current names of the columns that correspond
-#' to the columns required by `scoringutils` (`observed`, `predicted`,
-#' `model`, as well `quantile_level` for quantile-based forecasts and
-#' `sample_id` for sample-based forecasts). `as_forecast()` renames the
-#' existing columns.
-#' - allows users to specify the unit of a single forecast. It removes all
-#' columns that are neither part of the forecast unit nor a required column
-#' (see [set_forecast_unit()] for details)
-#' - Determines the forecast type (binary, point, sample-based or
-#' quantile-based) from the input data (using the function
-#' [get_forecast_type()].
-#' - Constructs a forecast object of the appropriate class
-#' (`forecast_binary`, `forecast_point`, `forecast_sample`, or
-#' `forecast_quantile`, using the function [new_forecast()]).
-#' - Calls [validate_forecast()] on the newly created forecast object to
-#' validate it
+#' @description
+#' Process and validate a data.frame (or similar) or similar with forecasts
+#' and observations. If the input passes all input checks, it will be converted
+#' to a `forecast` object. The class of that object depends on the forecast
+#' type of the input. See the details section below for more information
+#' on the expected input formats.
+#'
+#' `as_forecast()` gives users some control over how their data is parsed.
+#' Using the arguments `observed`, `predicted`, and `model`, users can rename
+#' existing columns of their input data to match the required columns for a
+#' forecast object. Using the argument `forecast_unit`, users can specify the
+#' the columns that uniquely identify a single forecast (and remove the others,
+#' see [set_forecast_unit()] for details).
+#'
 #' @param data A data.frame (or similar) with predicted and observed values.
-#' See [as_forecast()] for additional information on input formats.
-#' @param ... additional arguments
-#' @inheritSection forecast_types Forecast types and input format
-#' @return Depending on the forecast type, an object of class
-#' `forecast_binary`, `forecast_point`, `forecast_sample` or
-#' `forecast_quantile`.
+#'   See the details section of [as_forecast()] for additional information
+#'   on required input formats.
+#' @param ... Additional arguments
+#' @inheritSection forecast_types Forecast types and input formats
+#' @inheritSection forecast_types Forecast unit
+#' @return
+#' Depending on the forecast type, an object of the following class will be
+#' returned:
+#' - `forecast_binary` for binary forecasts
+#' - `forecast_point` for point forecasts
+#' - `forecast_sample` for sample-based forecasts
+#' - `forecast_quantile` for quantile-based forecasts
 #' @export
 #' @keywords check-forecasts
 #' @examples
@@ -42,28 +43,28 @@ as_forecast <- function(data,
 
 #' @rdname as_forecast
 #' @param forecast_unit (optional) Name of the columns in `data` (after
-#' any renaming of columns done by `as_forecast()`) that denote the unit of a
-#' single forecast. See [get_forecast_unit()] for details.
-#' If `NULL` (the default), all columns that are not required columns are
-#' assumed to form the unit of a single forecast. If specified, all columns
-#' that are not part of the forecast unit (or required columns) will be removed.
+#'   any renaming of columns done by `as_forecast()`) that denote the unit of a
+#'   single forecast. See [get_forecast_unit()] for details.
+#'   If `NULL` (the default), all columns that are not required columns are
+#'   assumed to form the unit of a single forecast. If specified, all columns
+#'   that are not part of the forecast unit (or required columns) will be removed.
 #' @param forecast_type (optional) The forecast type you expect the forecasts
-#' to have. If the forecast type as determined by `scoringutils` based on the
-#' input does not match this, an error will be thrown. If `NULL` (the default),
-#' the forecast type will be inferred from the data.
+#'   to have. If the forecast type as determined by `scoringutils` based on the
+#'   input does not match this, an error will be thrown. If `NULL` (the
+#'   default), the forecast type will be inferred from the data.
 #' @param observed (optional) Name of the column in `data` that contains the
-#' observed values. This column will be renamed to "observed".
+#'   observed values. This column will be renamed to "observed".
 #' @param predicted (optional) Name of the column in `data` that contains the
-#' predicted values. This column will be renamed to "predicted".
+#'   predicted values. This column will be renamed to "predicted".
 #' @param model (optional) Name of the column in `data` that contains the names
-#' of the models/forecasters that generated the predicted values.
-#' This column will be renamed to "model".
+#'   of the models/forecasters that generated the predicted values.
+#'   This column will be renamed to "model".
 #' @param quantile_level (optional) Name of the column in `data` that contains
-#' the quantile level of the predicted values. This column will be renamed to
-#' "quantile_level". Only applicable to quantile-based forecasts.
+#'   the quantile level of the predicted values. This column will be renamed to
+#'   "quantile_level". Only applicable to quantile-based forecasts.
 #' @param sample_id (optional) Name of the column in `data` that contains the
-#' sample id. This column will be renamed to "sample_id". Only applicable to
-#' sample-based forecasts.
+#'   sample id. This column will be renamed to "sample_id". Only applicable to
+#'   sample-based forecasts.
 #' @export
 #' @importFrom cli cli_warn
 as_forecast.default <- function(data,
@@ -171,7 +172,7 @@ as_forecast.default <- function(data,
 #' checks that are the same for all forecast types and then perform specific
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
-#' @inheritSection forecast_types Forecast types and input format
+#' @inheritSection forecast_types Forecast types and input formats
 #' @return Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
 #' `forecast_quantile`.
@@ -277,7 +278,7 @@ validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
 }
 
 
-#' @title Validation Common To All Forecast Types
+#' @title Validation common to all forecast types
 #'
 #' @description
 #' The function runs input checks that apply to all input data, regardless of
@@ -287,7 +288,7 @@ validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
 #' - checks the forecast type and forecast unit
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
-#' for all forecasts
+#' for all forecasts.
 #' @inheritParams get_forecast_counts
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
@@ -343,7 +344,7 @@ validate_general <- function(data) {
 }
 
 
-#' @title Class constructor for scoringutils objects
+#' @title Class constructor for `forecast` objects
 #'
 #' @description
 #' Construct a class based on a data.frame or similar. The constructor
@@ -365,7 +366,7 @@ new_forecast <- function(data, classname) {
 }
 
 
-#' @title Test Whether An Object Is Of Class `forecast_*`
+#' @title Test whether an object is a forecast object
 #'
 #' @description
 #' Generic function to test whether an object is of class `forecast_*`. You
@@ -375,7 +376,7 @@ new_forecast <- function(data, classname) {
 #' `scoringutils:::is_forecast.forecast_quantile()`.
 #'
 #' @param x An R object.
-#' @param ... additional arguments
+#' @param ... Additional arguments
 #' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts

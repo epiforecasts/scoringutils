@@ -1,10 +1,8 @@
-#' @title Probability Integral Transformation (sample-based version)
+#' @title Probability integral transformation (sample-based version)
 #'
-#' @description Uses a Probability Integral Transformation (PIT) (or a
+#' @description Uses a Probability integral transformation (PIT) (or a
 #' randomised PIT for integer forecasts) to
-#' assess the calibration of predictive Monte Carlo samples. Returns a
-#' p-values resulting from an Anderson-Darling test for uniformity
-#' of the (randomised) PIT as well as a PIT histogram if specified.
+#' assess the calibration of predictive Monte Carlo samples.
 #'
 #' @details
 #' Calibration or reliability of forecasts is the ability of a model to
@@ -52,13 +50,13 @@
 #' In this context it should be noted, though, that uniformity of the
 #' PIT is a necessary but not sufficient condition of calibration.
 #'
-#' @param n_replicates the number of draws for the randomised PIT for
-#' integer predictions.
+#' @param n_replicates The number of draws for the randomised PIT for
+#'   discrete predictions. Will be ignored if forecasts are continuous.
 #' @inheritParams ae_median_sample
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
-#' correspond to the length of `observed`. For integer forecasts, a
-#' randomised PIT will be returned of length
-#' `length(observed) * n_replicates`
+#'   correspond to the length of `observed`. For integer forecasts, a
+#'   randomised PIT will be returned of length
+#'   `length(observed) * n_replicates`.
 #' @seealso [get_pit()]
 #' @importFrom stats runif
 #' @importFrom cli cli_abort cli_inform
@@ -114,21 +112,20 @@ pit_sample <- function(observed,
   return(pit_values)
 }
 
-#' @title Probability Integral Transformation (data.frame Format)
+#' @title Probability integral transformation (data.frame version)
 #'
-#' @description Compute the Probability Integral Transformation (PIT) for
+#' @description
+#' Compute the Probability Integral Transformation (PIT) for
 #' validated forecast objects.
 #'
 #' @inherit score params
-#' @param data a data.frame with the following columns: `observed`,
-#' `predicted`, `sample_id`.
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
 #' 'location' in the data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit_sample
-#' @return a data.table with PIT values according to the grouping specified in
-#' `by`
+#' @return A data.table with PIT values according to the grouping specified in
+#' `by`.
 #' @examples
 #' result <- get_pit(as_forecast(example_continuous), by = "model")
 #' plot_pit(result)

@@ -1,17 +1,17 @@
-#' @title Correlation Between Metrics
+#' @title Calculate correlation between metrics
 #'
 #' @description
 #' Calculate the correlation between different metrics for a data.frame of
 #' scores as produced by [score()].
 #'
 #' @param metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will
-#' be shown
+#'   `NULL` (default), all metrics present in `scores` will be shown.
 #' @param digits A number indicating how many decimal places the result should
-#' be rounded to. By default (`digits = NULL`) no rounding takes place.
+#'   be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams get_pairwise_comparisons
 #' @param ... Additional arguments to pass down to [cor()].
-#' @return An object of class `scores` (a data.table with an additional
+#' @return
+#' An object of class `scores` (a data.table with an additional
 #' attribute `metrics` holding the names of the scores) with correlations
 #' between different metrics
 #' @importFrom data.table setDT

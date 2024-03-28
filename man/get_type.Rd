@@ -7,11 +7,11 @@
 get_type(x)
 }
 \arguments{
-\item{x}{Input used to get the type.}
+\item{x}{Input the type should be determined for.}
 }
 \value{
 Character vector of length one with either "classification",
-"integer", or "continuous"
+"integer", or "continuous".
 }
 \description{
 Internal helper function to get the type of a vector (usually

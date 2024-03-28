@@ -2,17 +2,16 @@
 % Please edit documentation in R/correlations.R
 \name{get_correlations}
 \alias{get_correlations}
-\title{Correlation Between Metrics}
+\title{Calculate correlation between metrics}
 \usage{
 get_correlations(scores, metrics = get_metrics(scores), digits = NULL, ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}})}
+scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
 \item{metrics}{A character vector with the metrics to show. If set to
-\code{NULL} (default), all metrics present in \code{scores} will
-be shown}
+\code{NULL} (default), all metrics present in \code{scores} will be shown.}
 
 \item{digits}{A number indicating how many decimal places the result should
 be rounded to. By default (\code{digits = NULL}) no rounding takes place.}

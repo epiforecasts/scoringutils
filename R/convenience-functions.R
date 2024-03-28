@@ -1,9 +1,10 @@
 #' @title Transform forecasts and observed values
 #'
-#' @description Function to transform forecasts and observed values before
-#' scoring.
+#' @description
+#' Function to transform forecasts and observed values before scoring.
 #'
-#' @details There are a few reasons, depending on the circumstances, for
+#' @details
+#' There are a few reasons, depending on the circumstances, for
 #' why this might be desirable (check out the linked reference for more info).
 #' In epidemiology, for example, it may be useful to log-transform incidence
 #' counts before evaluating forecasts using scores such as the weighted interval
@@ -22,33 +23,33 @@
 #' @inheritParams score
 #'
 #' @param fun A function used to transform both observed values and predictions.
-#' The default function is [log_shift()], a custom function that is essentially
-#' the same as [log()], but has an additional arguments (`offset`)
-#' that allows you add an offset before applying the logarithm. This is often
-#'  helpful as the natural log transformation is not defined at zero. A common,
-#'  and pragmatic solution, is to add a small offset to the data before applying
-#'  the log transformation. In our work we have often used an offset of 1 but
-#' the precise value will depend on your application.
+#'   The default function is [log_shift()], a custom function that is
+#'   essentially the same as [log()], but has an additional arguments (`offset`)
+#'   that allows you add an offset before applying the logarithm. This is often
+#'   helpful as the natural log transformation is not defined at zero. A
+#'   common, and pragmatic solution, is to add a small offset to the data
+#'   before applying the log transformation. In our work we have often used an
+#'   offset of 1 but the precise value will depend on your application.
 #'
 #' @param append Logical, defaults to `TRUE`. Whether or not to append a
-#' transformed version of the data to the currently existing data (`TRUE`). If
-#' selected, the data gets transformed and appended to the existing data frame,
-#' making it possible to use the outcome directly in [score()]. An additional
-#' column, 'scale', gets created that denotes which rows or untransformed
-#' ('scale' has the value "natural") and which have been transformed ('scale'
-#' has the value passed to the argument `label`).
+#'   transformed version of the data to the currently existing data (`TRUE`). If
+#'   selected, the data gets transformed and appended to the existing data,
+#'   making it possible to use the outcome directly in [score()]. An additional
+#'   column, 'scale', gets created that denotes which rows or untransformed
+#'   ('scale' has the value "natural") and which have been transformed ('scale'
+#'   has the value passed to the argument `label`).
 #'
 #' @param label A string for the newly created 'scale' column to denote the
-#' newly transformed values. Only relevant if `append = TRUE`.
+#'   newly transformed values. Only relevant if `append = TRUE`.
 #'
 #' @param ... Additional parameters to pass to the function you supplied. For
-#' the default option of [log_shift()] this could be the `offset` argument.
+#'   the default option of [log_shift()] this could be the `offset` argument.
 #'
 #' @return A forecast object with either a transformed version of the data, or
-#' one with both the untransformed and the transformed data. includes the
-#' original data as well as a transformation of the original data. There will
-#' be one additional column, `scale', present which will be set to "natural"
-#' for the untransformed forecasts.
+#'   one with both the untransformed and the transformed data. includes the
+#'   original data as well as a transformation of the original data. There will
+#'   be one additional column, `scale', present which will be set to "natural"
+#'   for the untransformed forecasts.
 #'
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom cli cli_abort cli_warn
@@ -63,7 +64,6 @@
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1>
 #' @keywords check-forecasts
 #' @examples
-#'
 #' library(magrittr) # pipe operator
 #'
 #' # transform forecasts using the natural logarithm
@@ -176,26 +176,27 @@ transform_forecasts <- function(data,
 
 #' @title Log transformation with an additive shift
 #'
-#' @description Function that shifts a value by some offset and then applies the
+#' @description
+#' Function that shifts a value by some offset and then applies the
 #' natural logarithm to it.
 #'
 #' @details The output is computed as log(x + offset)
 #'
 #' @param x vector of input values to be transformed
-#' @param offset number to add to the input value before taking the natural
-#' logarithm
-#' @param base a positive number: the base with respect to which
-#' logarithms are computed. Defaults to e = exp(1).
+#' @param offset Number to add to the input value before taking the natural
+#'   logarithm.
+#' @param base A positive number: the base with respect to which
+#'   logarithms are computed. Defaults to e = exp(1).
 #' @importFrom cli cli_abort cli_warn
 #' @return A numeric vector with transformed values
 #' @export
 #' @references Transformation of forecasts for evaluating predictive
-#' performance in an epidemiological context
-#' Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
-#' Sebastian Funk
-#' medRxiv 2023.01.23.23284722
-#' \doi{https://doi.org/10.1101/2023.01.23.23284722}
-#' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
+#'   performance in an epidemiological context
+#'   Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher,
+#'   Sebastian Funk
+#'   medRxiv 2023.01.23.23284722
+#'   \doi{https://doi.org/10.1101/2023.01.23.23284722}
+#'   <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
 #' @keywords check-forecasts
 #' @importFrom checkmate assert_numeric assert_number
 #' @examples
@@ -237,25 +238,26 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 
 #' @title Set unit of a single forecast manually
 #'
-#' @description Helper function to set the unit of a single forecast (i.e. the
+#' @description
+#' Helper function to set the unit of a single forecast (i.e. the
 #' combination of columns that uniquely define a single forecast) manually.
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for observed values, predictions or
-#' quantile levels) and removes duplicate rows.
-#' If not done manually, `scoringutils` attempts to determine the unit
+#' quantile levels) and removes duplicate rows. `set_forecast_unit()` will
+#' mainly be called from [as_forecast()] through the `forecast_unit` argument.
+#'
+#' If not done explicitly, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names
 #' are relevant to determine the forecast unit. This may lead to unexpected
 #' behaviour, so setting the forecast unit explicitly can help make the code
-#' easier to debug and easier to read. When used as part of a workflow,
-#' `set_forecast_unit()` can be directly piped into `as_forecast()` to
-#' check everything is in order.
+#' easier to debug and easier to read.
 #'
 #' @inheritParams as_forecast
 #' @param forecast_unit Character vector with the names of the columns that
-#' uniquely identify a single forecast.
+#'   uniquely identify a single forecast.
 #' @importFrom cli cli_warn
 #' @return A data.table with only those columns kept that are relevant to
-#' scoring or denote the unit of a single forecast as specified by the user.
+#'   scoring or denote the unit of a single forecast as specified by the user.
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
 #' @export

@@ -1,11 +1,14 @@
-#' @title Select Metrics From A List of Functions
-#' @description Helper function to return only the scoring rules selected by
+#' @title Select metrics from a list of functions
+#'
+#' @description
+#' Helper function to return only the scoring rules selected by
 #' the user from a list of possible functions.
+#'
 #' @param metrics A list of scoring functions.
-#' @param select A character vector of scoring rules to select from the list.
-#' If `select` is `NULL` (the default), all possible scoring rules are returned.
+#' @param select A character vector of scoring rules to select from the list. If
+#'   `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
-#' If `select` is not `NULL`, this argument is ignored.
+#'   If `select` is not `NULL`, this argument is ignored.
 #' @return A list of scoring rules.
 #' @keywords metric
 #' @importFrom checkmate assert_subset assert_list
@@ -37,8 +40,9 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default Metrics And Scoring Rules for Binary Forecasts
-#' @description Helper function that returns a named list of default
+#' @title Default metrics and scoring rules for binary forecasts
+#' @description
+#' Helper function that returns a named list of default
 #' scoring rules suitable for binary forecasts.
 #'
 #' The default scoring rules are:
@@ -61,8 +65,9 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default Metrics And Scoring Rules for Point Forecasts
-#' @description Helper function that returns a named list of default
+#' @title Default metrics and scoring rules for point forecasts
+#' @description
+#' Helper function that returns a named list of default
 #' scoring rules suitable for point forecasts.
 #'
 #' The default scoring rules are:
@@ -86,8 +91,9 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default Metrics And Scoring Rules for Sample-Based Forecasts
-#' @description Helper function that returns a named list of default
+#' @title Default metrics and scoring rules sample-based forecasts
+#' @description
+#' Helper function that returns a named list of default
 #' scoring rules suitable for forecasts in a sample-based format.
 #'
 #' The default scoring rules are:
@@ -120,8 +126,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default Metrics And Scoring Rules for Quantile-Based Forecasts
-#' @description Helper function that returns a named list of default
+#' @title Default metrics and scoring rules for quantile-based forecasts
+#' @description
+#' Helper function that returns a named list of default
 #' scoring rules suitable for forecasts in a quantile-based format.
 #'
 #' The default scoring rules are:
@@ -141,9 +148,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' [interval_coverage()], making use of the function [run_safely()].
 #' This construct allows the function to deal with arbitrary arguments in `...`,
 #' while making sure that only those that [interval_coverage()] can
-#' accept get passed on to it. `interval_range = 90` is set in the function definition,
-#' as passing an argument `interval_range = 90` to [score()] would mean it would also
-#' get passed to `interval_coverage_50`.
+#' accept get passed on to it. `interval_range = 90` is set in the function
+#' definition, as passing an argument `interval_range = 90` to [score()] would
+#' mean it would also get passed to `interval_coverage_50`.
 #' @inherit select_metrics params return
 #' @export
 #' @keywords metric

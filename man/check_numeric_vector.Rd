@@ -49,9 +49,9 @@ In this case only a type check of \code{x} is performed, all additional checks a
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
-Helper function
+Helper function to check whether an input is a numeric vector.
 }
 \keyword{internal_input_check}

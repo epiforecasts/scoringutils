@@ -1,6 +1,7 @@
 #' @title Summarise scores as produced by [score()]
 #'
-#' @description Summarise scores as produced by [score()].
+#' @description
+#' Summarise scores as produced by [score()].
 #'
 #' `summarise_scores` relies on a way to identify the names of the scores and
 #' distinguish them from columns that denote the unit of a single forecast.
@@ -11,18 +12,19 @@
 #' `attr(scores, "metrics") <- new_names`.
 #'
 #' @param scores An object of class `scores` (a data.table with
-#' scores and an additional attribute `metrics` as produced by [score()])
-#' @param by character vector with column names to summarise scores by. Default
-#' is `model`, meaning that there will be one score per model in the output.
-#' @param across character vector with column names to summarise scores
-#' across (meaning that the specified columns will be dropped). This is an
-#' alternative to specifying `by` directly. If `across` is set, `by` will be
-#' ignored. If `across` is `NULL` (default), then `by` will be used.
-#' @param fun a function used for summarising scores. Default is [mean()].
-#' @param ... additional parameters that can be passed to the summary function
-#' provided to `fun`. For more information see the documentation of the
-#' respective function.
-#' @return a data.table with summarised scores. Scores are summarised according
+#'   scores and an additional attribute `metrics` as produced by [score()]).
+#' @param by Character vector with column names to summarise scores by. Default
+#'   is `model`, meaning that there will be one score per model in the output.
+#' @param across Character vector with column names to summarise scores
+#'   across (meaning that the specified columns will be dropped). This is an
+#'   alternative to specifying `by` directly. If `across` is set, `by` will be
+#'   ignored. If `across` is `NULL` (default), then `by` will be used.
+#' @param fun A function used for summarising scores. Default is [mean()].
+#' @param ... Additional parameters that can be passed to the summary function
+#'   provided to `fun`. For more information see the documentation of the
+#'   respective function.
+#' @return
+#' A data.table with summarised scores. Scores are summarised according
 #' to the names of the columns of the original data specified in `by` or
 #' `across` using the `fun` passed to `summarise_scores()`.
 #' @examples
