@@ -13,7 +13,8 @@ vignette: >
 knitr::opts_chunk$set(
   fig.width = 7,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache=FALSE
 )
 library(scoringutils)
 library(data.table)
@@ -36,7 +37,7 @@ See a list of the default metrics for point forecasts by calling `?metrics_point
 This is an overview of the input and output formats for point forecasts: 
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="A nice image."}
-knitr::include_graphics("default-scoring-rules/input-point.png")
+knitr::include_graphics("scoring-rules/input-point.png")
 ```
 
 
@@ -79,7 +80,7 @@ See a list of the default metrics for point forecasts by calling `?metrics_binar
 This is an overview of the input and output formats for point forecasts: 
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="A nice image."}
-knitr::include_graphics("default-scoring-rules/input-binary.png")
+knitr::include_graphics("scoring-rules/input-binary.png")
 ```
 
 
@@ -127,10 +128,19 @@ See a list of the default metrics for sample-based forecasts by calling `?metric
 This is an overview of the input and output formats for quantile forecasts: 
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="A nice image."}
-knitr::include_graphics("default-scoring-rules/input-sample.png")
+knitr::include_graphics("scoring-rules/input-sample.png")
 ```
 
 
+```{r}
+?metrics_sample
+```
+
+## CRPS
+
+## MAD
+
+## Bias
 
 
 # Quantile-based forecasts
@@ -140,7 +150,7 @@ See a list of the default metrics for quantile-based forecasts by calling `?metr
 This is an overview of the input and output formats for quantile forecasts: 
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="A nice image."}
-knitr::include_graphics("default-scoring-rules/input-quantile.png")
+knitr::include_graphics("scoring-rules/input-quantile.png")
 ```
 
 ## Weighted interval score (WIS)
@@ -170,41 +180,71 @@ These are the individual components of the WIS. See `?overprediction()`, `?under
 
 **Observation**: $y$, a real number
 
-**Forecast**: $F$. The CDF of the predictive distribution is represented by a set of quantiles.
+**Forecast**: $F$. The CDF of the predictive distribution is represented by a set of quantiles, $Q$. 
 
+Bias can be measured as
 
+\begin{equation}
+    \text{B}(F, y) = 
+    \begin{cases}
+        (1 - 2 \cdot \max \{\alpha | q_\alpha \in Q \land q_\alpha \leq y\}),       & \text{if } y < q_{0.5} \quad \text{(overprediction)}\\
+        (1 - 2 \cdot \min \{\alpha | q_\alpha \in Q_t \land q_\alpha \geq y\},   & \text{if } y > q_{0.5} \quad \text{(underprediction)}\\
+        0,   & \text{if } y = q_{0.5}, \\
+    \end{cases}
+\end{equation}
 
+where $q_\alpha$ is the $\alpha$-quantile of the predictive distribution. For consistency, we define $Q$ (the set of quantiles that form the predictive distribution $F$) such that it always includes the element $q_0 = -\infty$ and $q_1 = \infty$. In clearer terms, bias is:
 
+- $1 - (2 \times$ the maximum percentile rank for which the corresponding quantile is still below the observed value), *if the observed value is smaller than the median of the predictive distribution.*
+- $1 - (2 \times$ the minimum percentile rank for which the corresponding quantile is still larger than the observed value) *if the observed value is larger than the median of the predictive distribution.*.
+- $0$ *if the observed value is exactly the median*.
+
+Bias can assume values between -1 (underprediction) and 1 (overpredictin) and is 0 ideally (i.e. unbiased).
+
+For an increasing number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and the bias metric coincides with the one for continuous forecasts (see above).
+
+See `?bias_quantile()` for more information. 
 
 ## Interval coverage
 
+**Observation**: $y$, a real number
+
+**Forecast**: $F$. The CDF of the predictive distribution is represented by a set of quantiles. These quantiles form central prediction intervals. 
+
+Interval coverage for a given interval range is defined as the proportion of observations that fall within the corresponding central prediction intervals. Central prediction intervals are symmetric around the median and formed by two quantiles that denote the lower and upper bound. For example, the 50% central prediction interval is the interval between the 0.25 and 0.75 quantiles of the predictive distribution.
+
 ### Interval coverage deviation
+
+The interval coverage deviation is the difference between the observed interval coverage and the nominal interval coverage. For example, if the observed interval coverage for the 50% central prediction interval is 0.6, then the interval coverage deviation is $0.6 = - 0.5 = 0.1.$
+
+$$\text{interval coverage deviation} = \text{observed interval coverage} - \text{nominal interval coverage}$$
 
 ## Absolute error of the median
 
+**Observation**: $y$, a real number
 
+**Forecast**: $F$. The CDF of the predictive distribution is represented by a set of quantiles.
+
+The absolute error of the median is the absolute difference between the median of the predictive distribution and the observed value.
+
+$$\text{ae}_\text{median} = |\text{median}(F) - y|$$
 ## Quantile score
+
+The quantile score is also called pinball loss. See [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618) for more details. 
 
 
 # Additional metrics
 
 ## Quantile coverage
 
+Quantile coverage for a given quantile level is defined as the proportion of observed values that are smaller than the corresponding predictive quantiles. For example, the 0.5 quantile coverage is the proportion of observed values that are smaller than the 0.5-quantiles of the predictive distribution. 
 
 ## Probability integral transform (PIT)
 
 
+XXX. 
 
 
-
-
-
-
-
-A variety of metrics and scoring rules can also be accessed directly through 
-the `scoringutils` package. 
-
-The following gives an overview of (most of) the implemented metrics. 
 
 # Bias
 
@@ -338,42 +378,4 @@ for discrete values. Smaller values are better.
 observed <- rnorm(30, mean = 1:30)
 predicted <- replicate(200, rnorm(n = 30, mean = 1:30))
 logs_sample(observed, predicted)
-```
-
-
-## Interval Score
-The Interval Score is a Proper Scoring Rule to score quantile predictions,
-following Gneiting and Raftery (2007). Smaller values are better.
-
-The score is computed as
-
-$$ \text{score} = (\text{upper} - \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{lower} - \text{observed}) \cdot 1(\text{observed} < \text{lower}) + \\
-\frac{2}{\alpha} \cdot (\text{observed} - \text{upper}) \cdot
-1(\text{observed} > \text{upper})$$
-
-
-where $1()$ is the indicator function and $\alpha$ is the decimal value that
-indicates how much is outside the prediction interval.
-To improve usability, the user is asked to provide an interval range in
-percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
-prediction interval. Correspondingly, the user would have to provide the
-5\% and 95\% quantiles (the corresponding alpha would then be 0.1).
-No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper). 
-Setting `weigh = TRUE` will weigh the score by $\frac{\alpha}{2}$ such that 
-the Interval Score converges to the CRPS for increasing number of quantiles. 
-
-
-```{r}
-observed <- c(1, -15, 22)
-predicted <- rbind(
-  c(-1, 0, 1, 2, 3),
-  c(-2, 1, 2, 2, 4),
-  c(-2, 0, 3, 3, 4)
-)
-quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-
-wis(observed, predicted, quantile)
 ```

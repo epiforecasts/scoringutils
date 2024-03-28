@@ -22,12 +22,11 @@ scoring rules suitable for forecasts in a sample-based format.
 
 The default scoring rules are:
 \itemize{
-\item "mad" = \code{\link[=mad_sample]{mad_sample()}}
-\item "bias" = \code{\link[=bias_sample]{bias_sample()}}
-\item "dss" = \code{\link[=dss_sample]{dss_sample()}}
 \item "crps" = \code{\link[=crps_sample]{crps_sample()}}
 \item "log_score" = \code{\link[=logs_sample]{logs_sample()}}
+\item "dss" = \code{\link[=dss_sample]{dss_sample()}}
 \item "mad" = \code{\link[=mad_sample]{mad_sample()}}
+\item "bias" = \code{\link[=bias_sample]{bias_sample()}}
 \item "ae_median" = \code{\link[=ae_median_sample]{ae_median_sample()}}
 \item "se_mean" = \code{\link[=se_mean_sample]{se_mean_sample()}}
 }
