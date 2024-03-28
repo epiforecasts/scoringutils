@@ -111,7 +111,7 @@ ae_median_sample <- function(observed, predicted) {
 }
 
 
-#' @title Squared error of the meean (sample-based version)
+#' @title Squared error of the mean (sample-based version)
 #'
 #' @description
 #' Squared error of the mean calculated as
