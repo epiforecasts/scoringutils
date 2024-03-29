@@ -61,7 +61,8 @@
 <p>The update introduces breaking changes. If you want to keep using the older version, you can download it using <code>remotes::install_github("epiforecasts/scoringutils@v1.2")</code>.</p>
 <div class="section level3">
 <h3 id="package-updates-1-2-2-9000">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-2-9000"></a></h3>
-<ul><li>In <code><a href="../reference/score.html">score()</a></code>, required columns “true_value” and “prediction” were renamed and replaced by required columns “observed” and “predicted” and “model” (which now is a required column). Scoring functions now also use the function arguments “observed” and “predicted” everywhere consistently.</li>
+<ul><li>The most comprehensive documentation for the new pacakge after the rewrite is the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised version</a> of our <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">original</a> <code>scoringutils</code> paper.</li>
+<li>In <code><a href="../reference/score.html">score()</a></code>, required columns “true_value” and “prediction” were renamed and replaced by required columns “observed” and “predicted” and “model” (which now is a required column). Scoring functions now also use the function arguments “observed” and “predicted” everywhere consistently.</li>
 <li>The overall scoring workflow was updated. Most functions now operate on forecast objects, which can be created using the function <code><a href="../reference/as_forecast.html">as_forecast()</a></code>. This function replaces the previous <code>check_forecast()</code> function and validates the inputs. <code><a href="../reference/as_forecast.html">as_forecast()</a></code> also allows users to rename required columns and specify the forecast unit in a single step, taking over the functionality of <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> in most cases. <code><a href="../reference/score.html">score()</a></code> is now a generic function that dispatches the correct method based on the forecast type. Forecast types currently supported are “binary”, “point”, “sample” and “quantile” with corresponding classes “forecast_binary”, “forecast_point”, “forecast_sample” and “forecast_quantile”.</li>
 <li>
 <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> now errors if any of the values in <code>forecast_unit</code> are not columns of the data.</li>
@@ -139,8 +140,7 @@
 <li>Renamed <code>correlation()</code> to <code><a href="../reference/get_correlations.html">get_correlations()</a></code> and <code>plot_correlation()</code> to <code><a href="../reference/plot_correlations.html">plot_correlations()</a></code>
 </li>
 <li>
-<code>pit()</code> was renamed to <code><a href="../reference/get_pit.html">get_pit()</a></code>
-</li>
+<code>pit()</code> was renamed to <code><a href="../reference/get_pit.html">get_pit()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
