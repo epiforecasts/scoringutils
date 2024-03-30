@@ -336,14 +336,6 @@ example_integer %>%
   score()
 ```
 
-## Available metrics
-
-An overview of available metrics can be found in the `metrics` data set that is included in the package. 
-
-```{r}
-metrics
-```
-
 ## Lower level functions
 
 Most of these metrics are available as lower level functions and extensively documented. Have a look at the help files to understand these better. 
