@@ -184,14 +184,3 @@
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_truth_only"
-
-#' Summary information for selected metrics
-#'
-#' A data set with summary information on selected metrics implemented in
-#' \pkg{scoringutils}
-#'
-#' The data was created using the script create-metric-tables.R in the inst/
-#' folder (or the top level folder in a compiled package).
-#'
-#' @keywords info
-"metrics"
