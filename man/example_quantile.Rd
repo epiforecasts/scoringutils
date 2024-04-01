@@ -3,9 +3,9 @@
 \docType{data}
 \name{example_quantile}
 \alias{example_quantile}
-\title{Quantile Example Data}
+\title{Quantile example data}
 \format{
-A data frame with
+A data frame with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}

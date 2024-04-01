@@ -1,15 +1,14 @@
 #' @title Assert that inputs are correct for sample-based forecast
-#' @description Function assesses whether the inputs correspond to the
-#' requirements for scoring sample-based forecasts.
-#' @param observed Input to be checked. Should be a numeric vector with the
-#' observed values of size n
+#' @description
+#' Function assesses whether the inputs correspond to the requirements for
+#' scoring sample-based forecasts.
 #' @param predicted Input to be checked. Should be a numeric nxN matrix of
-#' predictive samples, n (number of rows) being the number of data points and N
-#' (number of columns) the number of samples per forecast.
-#' If `observed` is just a single number, then predicted values can just be a
-#' vector of size N.
+#'   predictive samples, n (number of rows) being the number of data points and
+#'   N (number of columns) the number of samples per forecast.
+#'   If `observed` is just a single number, then predicted values can just be a
+#'   vector of size N.
 #' @importFrom checkmate assert assert_numeric check_matrix
-#' @inherit document_assert_functions return
+#' @inherit document_assert_functions params return
 #' @keywords internal_input_check
 assert_input_sample <- function(observed, predicted) {
   assert_numeric(observed, min.len = 1)
@@ -38,22 +37,21 @@ check_input_sample <- function(observed, predicted) {
 
 
 #' @title Assert that inputs are correct for quantile-based forecast
-#' @description Function assesses whether the inputs correspond to the
+#' @description
+#' Function assesses whether the inputs correspond to the
 #' requirements for scoring quantile-based forecasts.
-#' @param observed Input to be checked. Should be a numeric vector with the
-#' observed values of size n
 #' @param predicted Input to be checked. Should be nxN matrix of predictive
-#' quantiles, n (number of rows) being the number of data points and N
-#' (number of columns) the number of quantiles per forecast.
-#' If `observed` is just a single number, then predicted can just be a
-#' vector of size N.
+#'   quantiles, n (number of rows) being the number of data points and N
+#'   (number of columns) the number of quantiles per forecast.
+#'   If `observed` is just a single number, then predicted can just be a
+#'   vector of size N.
 #' @param quantile_level Input to be checked. Should be a vector of size N that
-#' denotes the quantile levels corresponding to the columns of the prediction
-#' matrix.
+#'   denotes the quantile levels corresponding to the columns of the prediction
+#'   matrix.
 #' @param unique_quantile_levels Whether the quantile levels are required to be
-#' unique (`TRUE`, the default) or not (`FALSE`).
+#'   unique (`TRUE`, the default) or not (`FALSE`).
 #' @importFrom checkmate assert assert_numeric check_matrix check_vector
-#' @inherit document_assert_functions return
+#' @inherit document_assert_functions params return
 #' @keywords internal_input_check
 assert_input_quantile <- function(observed, predicted, quantile_level,
                                   unique_quantile_levels = TRUE) {
@@ -95,19 +93,18 @@ check_input_quantile <- function(observed, predicted, quantile_level) {
 
 
 #' @title Assert that inputs are correct for interval-based forecast
-#' @description Function assesses whether the inputs correspond to the
+#' @description
+#' Function assesses whether the inputs correspond to the
 #' requirements for scoring interval-based forecasts.
-#' @param observed Input to be checked. Should be a numeric vector with the
-#' observed values of size n
 #' @param lower Input to be checked. Should be a numeric vector of size n that
-#' holds the predicted value for the lower bounds of the prediction intervals.
+#'   holds the predicted value for the lower bounds of the prediction intervals.
 #' @param upper Input to be checked. Should be a numeric vector of size n that
-#' holds the predicted value for the upper bounds of the prediction intervals.
+#'   holds the predicted value for the upper bounds of the prediction intervals.
 #' @param interval_range Input to be checked. Should be a vector of size n that
-#' denotes the interval range in percent. E.g. a value of 50 denotes a
-#' (25%, 75%) prediction interval.
+#'   denotes the interval range in percent. E.g. a value of 50 denotes a
+#'   (25%, 75%) prediction interval.
 #' @importFrom cli cli_warn cli_abort
-#' @inherit document_assert_functions return
+#' @inherit document_assert_functions params return
 #' @keywords internal_input_check
 assert_input_interval <- function(observed, lower, upper, interval_range) {
 
@@ -162,18 +159,19 @@ check_input_interval <- function(observed, lower, upper, interval_range) {
 
 
 #' @title Assert that inputs are correct for binary forecast
-#' @description Function assesses whether the inputs correspond to the
+#' @description
+#' Function assesses whether the inputs correspond to the
 #' requirements for scoring binary forecasts.
 #' @param observed Input to be checked. Should be a factor of length n with
-#' exactly two levels, holding the observed values.
-#' The highest factor level is assumed to be the reference level. This means
-#' that `predicted` represents the probability that the observed value is equal
-#' to the highest factor level.
+#'   exactly two levels, holding the observed values.
+#'   The highest factor level is assumed to be the reference level. This means
+#'   that `predicted` represents the probability that the observed value is
+#'   equal to the highest factor level.
 #' @param predicted Input to be checked. `predicted` should be a vector of
-#' length n, holding probabilities. Alternatively, `predicted` can be a matrix
-#' of size n x 1. Values represent the probability that
-#' the corresponding value in `observed` will be equal to the highest
-#' available factor level.
+#'   length n, holding probabilities. Alternatively, `predicted` can be a matrix
+#'   of size n x 1. Values represent the probability that
+#'   the corresponding value in `observed` will be equal to the highest
+#'   available factor level.
 #' @importFrom checkmate assert assert_factor
 #' @inherit document_assert_functions return
 #' @keywords internal_input_check
@@ -196,13 +194,12 @@ check_input_binary <- function(observed, predicted) {
 
 
 #' @title Assert that inputs are correct for point forecast
-#' @description Function assesses whether the inputs correspond to the
+#' @description
+#' Function assesses whether the inputs correspond to the
 #' requirements for scoring point forecasts.
-#' @param observed Input to be checked. Should be a numeric vector with the
-#' observed values of size n
 #' @param predicted Input to be checked. Should be a numeric vector with the
-#' predicted values of size n
-#' @inherit document_assert_functions return
+#'   predicted values of size n.
+#' @inherit document_assert_functions params return
 #' @keywords internal_input_check
 assert_input_point <- function(observed, predicted) {
   assert(check_numeric(observed))
@@ -222,12 +219,13 @@ check_input_point <- function(observed, predicted) {
 
 
 #' @title Assert Inputs Have Matching Dimensions
-#' @description Function assesses whether input dimensions match. In the
+#' @description
+#' Function assesses whether input dimensions match. In the
 #' following, n is the number of observations / forecasts. Scalar values may
 #' be repeated to match the length of the other input.
-#' Allowed options are therefore
+#' Allowed options are therefore:
 #' - `observed` is vector of length 1 or length n
-#' - `predicted` is
+#' - `predicted` is:
 #'     - a vector of of length 1 or length n
 #'     - a matrix with n rows and 1 column
 #' @inherit assert_input_binary

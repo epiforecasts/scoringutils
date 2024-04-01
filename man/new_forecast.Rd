@@ -2,13 +2,14 @@
 % Please edit documentation in R/forecast.R
 \name{new_forecast}
 \alias{new_forecast}
-\title{Class constructor for scoringutils objects}
+\title{Class constructor for \code{forecast} objects}
 \usage{
 new_forecast(data, classname)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 
 \item{classname}{name of the class to be created}
 }

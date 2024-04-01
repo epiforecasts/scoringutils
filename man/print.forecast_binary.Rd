@@ -5,7 +5,7 @@
 \alias{print.forecast_quantile}
 \alias{print.forecast_point}
 \alias{print.forecast_sample}
-\title{Print Information About A Forecast Object}
+\title{Print information about a forecast object}
 \usage{
 \method{print}{forecast_binary}(x, ...)
 
@@ -16,13 +16,13 @@
 \method{print}{forecast_sample}(x, ...)
 }
 \arguments{
-\item{x}{An object of class 'forecast_*' object as produced by
-\code{as_forecast()}}
+\item{x}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
-\item{...}{additional arguments for \code{\link[=print]{print()}}}
+\item{...}{Additional arguments for \code{\link[=print]{print()}}.}
 }
 \value{
-returns x invisibly
+Returns \code{x} invisibly.
 }
 \description{
 This function prints information about a forecast object,

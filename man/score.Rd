@@ -6,7 +6,7 @@
 \alias{score.forecast_point}
 \alias{score.forecast_sample}
 \alias{score.forecast_quantile}
-\title{Evaluate forecasts in a data.frame format}
+\title{Evaluate forecasts}
 \usage{
 score(data, metrics, ...)
 
@@ -27,7 +27,7 @@ column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
 default metrics used.}
 
-\item{...}{additional arguments}
+\item{...}{Additional arguments}
 }
 \value{
 An object of class \code{scores}. This object is a data.table with
@@ -38,19 +38,18 @@ scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a forecast
-object (a data.table with forecasts and observations).
+object (a data.table with forecasts and observations) as produced by
+\code{\link[=as_forecast]{as_forecast()}}.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
-The expected input is a forecast object, meaning that users have to call
-\code{\link[=as_forecast]{as_forecast()}} prior to calling \code{score()}.
-See below for more information on forecast types and input formats.
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+See the details section for more information on forecast types and input
+formats. For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
 well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
-\section{Forecast types and input format}{
+\section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the
-moment, those are
+moment, those are:
 \itemize{
 \item point forecasts
 \item binary forecasts ("soft binary classification")
@@ -61,6 +60,18 @@ as a set of predictive samples)
 }
 
 Forecast types are determined based on the columns present in the input data.
+Here is an overview of the required format for each forecast type:
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{required-inputs.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{required-inputs.png}
+}
+
+\emph{All forecast types} require a data.frame or similar with columns \code{observed}
+\code{predicted}, and \code{model}.
 
 \emph{Point forecasts} require a column \code{observed} of type numeric and a column
 \code{predicted} of type numeric.
@@ -103,9 +114,9 @@ example, if you had an additional row, "even", that is one if the row number
 is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
 then thinks that this column was relevant in defining the forecast unit.
 
-In order to avoid issues, we recommend using the function
-\code{\link[=set_forecast_unit]{set_forecast_unit()}} to determine the forecast unit manually.
-The function simply drops unneeded columns, while making sure that all
+In order to avoid issues, we recommend setting the forecast unit explicitly,
+usually through the \code{forecast_unit} argument in \code{\link[=as_forecast]{as_forecast()}}. This will
+drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 

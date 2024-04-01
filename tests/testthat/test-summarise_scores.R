@@ -37,7 +37,7 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
 
   expect_error(
     summarise_scores(test, by = "model"),
-    "`scores` needs to have an attribute `metrics` with the names"
+    "Input needs an attribute `metrics` with the names"
   )
 
   # expect warning if a score name changed
@@ -45,7 +45,7 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
   data.table::setnames(test, old = "crps", new = "crp2")
   expect_warning(
     summarise_scores(test, by = "model"),
-    "The names of the scores previously computed do not match the names"
+    "The following scores have been previously computed, but are no longer"
   )
 })
 

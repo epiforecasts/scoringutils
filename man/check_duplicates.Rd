@@ -15,9 +15,10 @@ automatically inferred from the data (see \code{\link[=get_forecast_unit]{get_fo
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
-Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is encountered
+Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is
+encountered
 }
 \keyword{internal_input_check}

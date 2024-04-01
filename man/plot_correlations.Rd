@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_correlations}
 \alias{plot_correlations}
-\title{Plot Correlation Between Metrics}
+\title{Plot correlation between metrics}
 \usage{
 plot_correlations(correlations)
 }
@@ -11,13 +11,12 @@ plot_correlations(correlations)
 by \code{\link[=get_correlations]{get_correlations()}}.}
 }
 \value{
-A ggplot object showing a coloured matrix of correlations
-between metrics
+A ggplot object showing a coloured matrix of correlations between metrics.
 
 A ggplot object with a visualisation of correlations between metrics
 }
 \description{
-Plots a heatmap of correlations between different metrics
+Plots a heatmap of correlations between different metrics.
 }
 \examples{
 scores <- score(as_forecast(example_quantile))

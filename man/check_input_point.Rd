@@ -8,14 +8,14 @@ check_input_point(observed, predicted)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be a numeric vector with the
-predicted values of size n}
+predicted values of size n.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Function assesses whether the inputs correspond to the

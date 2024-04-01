@@ -2,35 +2,36 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{quantile_score}
 \alias{quantile_score}
-\title{Quantile Score}
+\title{Quantile score}
 \usage{
 quantile_score(observed, predicted, quantile_level, weigh = TRUE)
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
+\item{predicted}{Numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
-\item{quantile_level}{vector of size n with the quantile levels of the
-corresponding predictions.}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made.}
 
-\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
-and will be computed from the quantile. Alpha is the decimal value that
-represents how much is outside a central prediction interval (E.g. for a
-90 percent central prediction interval, alpha is 0.1). Default: \code{TRUE}.}
-}
-\value{
-vector with the scoring values
+\item{weigh}{Logical. If \code{TRUE} (the default), weigh the score by
+\eqn{\alpha / 2}, so it can be averaged into an interval score that, in
+the limit (for an increasing number of equally spaced quantiles/prediction
+intervals), corresponds
+to the CRPS. \eqn{\alpha} is the value that corresponds to the
+(\eqn{\alpha/2}) or (\eqn{1 - \alpha/2}), i.e. it is the decimal
+value that represents how much is outside a central prediction interval
+(E.g. for a 90 percent central prediction interval, alpha is 0.1).}
 }
 \description{
 Proper Scoring Rule to score quantile predictions. Smaller values are better.
-The quantile score is
-closely related to the Interval score (see \code{\link[=wis]{wis()}}) and is
-the quantile equivalent that works with single quantiles instead of
+The quantile score is closely related to the interval score (see \code{\link[=wis]{wis()}}) and
+is the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
 }
 \examples{

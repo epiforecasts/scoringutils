@@ -2,18 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{ensure_data.table}
 \alias{ensure_data.table}
-\title{Ensure That an Object is a Data Table}
+\title{Ensure that an object is a \code{data.table}}
 \usage{
 ensure_data.table(data)
 }
 \arguments{
-\item{data}{An object to ensure is a data table}
+\item{data}{An object to ensure is a data table.}
 }
 \value{
-A data.table/a copy of an exising data.table
+A data.table/a copy of an existing data.table.
 }
 \description{
-This function ensures that an object is a data table.
+This function ensures that an object is a \verb{data table}.
 If the object is not a data table, it is converted to one. If the object
 is a data table, a copy of the object is returned.
 }

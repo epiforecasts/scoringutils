@@ -3,9 +3,9 @@
 \docType{data}
 \name{example_binary}
 \alias{example_binary}
-\title{Binary Forecast Example Data}
+\title{Binary forecast example data}
 \format{
-A data frame with 346 rows and 10 columns:
+A data frame with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{location_name}{name of the country for which a prediction was made}

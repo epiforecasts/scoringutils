@@ -7,9 +7,9 @@
 run_safely(..., fun)
 }
 \arguments{
-\item{...}{Arguments to pass to \code{fun}}
+\item{...}{Arguments to pass to \code{fun}.}
 
-\item{fun}{A function to execute}
+\item{fun}{A function to execute.}
 }
 \value{
 The result of \code{fun} or \code{NULL} if \code{fun} errors

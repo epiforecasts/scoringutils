@@ -1,22 +1,15 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer Forecast Type
-#' @description Helper function to infer the forecast type based on a
-#' data.frame or similar with predictions. Please check the vignettes to
-#' learn more about forecast types.
-#'
-#' Possible forecast types are
-#' - "sample-based"
-#' - "quantile-based"
-#' - "binary"
-#' - "point" forecast.
-#'
-#' The function runs additional checks to make sure the data satisfies the
-#' requirements of the respective forecast type and throws an
-#' informative error if any issues are found.
+#' @title Infer forecast type from data
+#' @description
+#' Helper function to infer the forecast type based on a
+#' data.frame or similar with forecasts and observed values. See the details
+#' section below for information on the different forecast types.
 #' @inheritParams as_forecast
+#' @inheritSection forecast_types Forecast types and input formats
 #' @importFrom cli cli_abort
-#' @return Character vector of length one with either "binary", "quantile",
+#' @return
+#' Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
 #' @keywords check-forecasts
@@ -98,16 +91,45 @@ test_forecast_type_is_quantile <- function(data) {
 }
 
 
+#' Assert that forecast type is as expected
+#' @param data A forecast object as produced by [as_forecast()].
+#' @param actual The actual forecast type of the data
+#' @param desired The desired forecast type of the data
+#' @inherit document_assert_functions return
+#' @importFrom cli cli_abort
+#' @importFrom checkmate assert_character
+#' @keywords internal_input_check
+assert_forecast_type <- function(data,
+                                 actual = get_forecast_type(data),
+                                 desired = NULL) {
+  assert_character(desired, null.ok = TRUE)
+  if (!is.null(desired) && desired != actual) {
+    #nolint start: object_usage_linter keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Forecast type determined by scoringutils based on input:
+        {.val {actual}}.",
+        "i" = "Desired forecast type: {.val {desired}}."
+      )
+    )
+    #nolint end
+  }
+  return(invisible(NULL))
+}
+
+
 #' @title Get type of a vector or matrix of observed values or predictions
 #'
-#' @description Internal helper function to get the type of a vector (usually
+#' @description
+#' Internal helper function to get the type of a vector (usually
 #' of observed or predicted values). The function checks whether the input is
 #' a factor, or else whether it is integer (or can be coerced to integer) or
 #' whether it's continuous.
-#' @param x Input used to get the type.
+#' @param x Input the type should be determined for.
 #' @importFrom cli cli_abort
-#' @return Character vector of length one with either "classification",
-#' "integer", or "continuous"
+#' @return
+#' Character vector of length one with either "classification",
+#' "integer", or "continuous".
 #' @keywords internal_input_check
 get_type <- function(x) {
   if (is.factor(x)) {
@@ -130,7 +152,7 @@ get_type <- function(x) {
 }
 
 
-#' @title Get Names Of The Metrics That Were Used For Scoring
+#' @title Get names of the metrics that were used for scoring
 #' @description
 #' When applying a scoring rule via [score()], the names of the scoring rules
 #' become column names of the
@@ -151,21 +173,24 @@ get_type <- function(x) {
 #' `attr(scores, "metrics") <- c("names", "of", "your", "scores")` (the
 #' order does not matter).
 #'
-#' @param scores A data.table with an attribute `metrics`
+#' @param scores A data.table with an attribute `metrics`.
 #' @param error Throw an error if there is no attribute called `metrics`?
 #' Default is FALSE.
 #' @importFrom cli cli_abort cli_warn
-#' @return Character vector with the names of the scoring rules that were used
+#' @importFrom checkmate assert_data_frame
+#' @return
+#' Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords check-forecasts
 #' @export
 get_metrics <- function(scores, error = FALSE) {
+  assert_data_frame(scores)
   metrics <- attr(scores, "metrics")
   if (error && is.null(metrics)) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Object needs an attribute `metrics` with the names of the
+        "!" = "Input needs an attribute `metrics` with the names of the
          scoring rules that were used for scoring.",
         "i" = "See `?get_metrics` for further information."
       )
@@ -190,19 +215,24 @@ get_metrics <- function(scores, error = FALSE) {
 }
 
 
-#' @title Get Unit Of A Single Forecast
-#' @description Helper function to get the unit of a single forecast, i.e.
+#' @title Get unit of a single forecast
+#' @description
+#' Helper function to get the unit of a single forecast, i.e.
 #' the column names that define where a single forecast was made for.
 #' This just takes all columns that are available in the data and subtracts
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
 #' @inheritParams as_forecast
-#' @return A character vector with the column names that define the unit of
+#' @inheritSection forecast_types Forecast unit
+#' @return
+#' A character vector with the column names that define the unit of
 #' a single forecast
+#' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords check-forecasts
 get_forecast_unit <- function(data) {
+  assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
   protected_columns <- c(protected_columns, attr(data, "metrics"))
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
@@ -210,14 +240,15 @@ get_forecast_unit <- function(data) {
 }
 
 
-#' @title Get Protected Columns From Data
+#' @title Get protected columns from data
 #'
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
 #' @inheritParams as_forecast
 #'
-#' @return A character vector with the names of protected columns in the data.
+#' @return
+#' A character vector with the names of protected columns in the data.
 #' If data is `NULL` (default) then it returns a list of all columns that are
 #' protected in scoringutils.
 #'
@@ -248,17 +279,18 @@ get_protected_columns <- function(data = NULL) {
 }
 
 
-#' @title Find Duplicate Forecasts
+#' @title Find duplicate forecasts
 #'
-#' @description Helper function to identify duplicate forecasts, i.e.
+#' @description
+#' Helper function to identify duplicate forecasts, i.e.
 #' instances where there is more than one forecast for the same prediction
 #' target.
 #'
 #' @param data A data.frame as used for [score()]
 #'
 #' @param forecast_unit A character vector with the column names that define
-#' the unit of a single forecast. By default the forecast unit will be
-#' automatically inferred from the data (see [get_forecast_unit()])
+#'   the unit of a single forecast. By default the forecast unit will be
+#'   automatically inferred from the data (see [get_forecast_unit()])
 #'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
@@ -284,10 +316,11 @@ get_duplicate_forecasts <- function(
 }
 
 
-#' @title Get Quantile And Interval Coverage Values For Quantile-Based Forecasts
+#' @title Get quantile and interval coverage values for quantile-based forecasts
 #'
-#' @description For a validated forecast object in a quantile-based format
-#' (see [as_forecast()] for more information), this function computes
+#' @description
+#' For a validated forecast object in a quantile-based format
+#' (see [as_forecast()] for more information), this function computes:
 #' - interval coverage of central prediction intervals
 #' - quantile coverage for predictive quantiles
 #' - the deviation between desired and actual coverage (both for interval and
@@ -320,13 +353,15 @@ get_duplicate_forecasts <- function(
 #' (can be either interval or quantile coverage) and the
 #' actual coverage. For example, if the desired coverage is 90% and the actual
 #' coverage is 80%, the coverage deviation is -0.1.
-#' @return A data.table with columns as specified in `by` and additional
+#' @return
+#' A data.table with columns as specified in `by` and additional
 #' columns for the coverage values described above
 #' @inheritParams score
 #' @param by character vector that denotes the level of grouping for which the
-#' coverage values should be computed. By default (`"model"`), one coverage
-#' value per model will be returned.
-#' @return a data.table with columns "interval_coverage",
+#'   coverage values should be computed. By default (`"model"`), one coverage
+#'   value per model will be returned.
+#' @return
+#' a data.table with columns "interval_coverage",
 #' "interval_coverage_deviation", "quantile_coverage",
 #' "quantile_coverage_deviation" and the columns specified in `by`.
 #' @importFrom data.table setcolorder
@@ -386,29 +421,30 @@ get_coverage <- function(data, by = "model") {
 }
 
 
-#' @title Count Number of Available Forecasts
+#' @title Count number of available forecasts
 #'
 #' @description
-#' Given a data set with forecasts, this function counts the number of available forecasts.
+#' Given a data set with forecasts, this function counts the number of
+#' available forecasts.
 #' The level of grouping can be specified using the `by` argument (e.g. to
 #' count the number of forecasts per model, or the number of forecasts per
 #' model and location).
 #' This is useful to determine whether there are any missing forecasts.
 #'
 #' @param by character vector or `NULL` (the default) that denotes the
-#' categories over which the number of forecasts should be counted.
-#' By default this will be the unit of a single forecast (i.e.
-#' all available columns (apart from a few "protected" columns such as
-#' 'predicted' and 'observed') plus "quantile_level" or "sample_id" where
-#' present).
+#'   categories over which the number of forecasts should be counted.
+#'   By default this will be the unit of a single forecast (i.e.
+#'   all available columns (apart from a few "protected" columns such as
+#'   'predicted' and 'observed') plus "quantile_level" or "sample_id" where
+#'   present).
 #'
 #' @param collapse character vector (default: `c("quantile_level", "sample_id"`)
-#' with names of categories for which the number of rows should be collapsed to
-#' one when counting. For example, a single forecast is usually represented by a
-#' set of several quantiles or samples and collapsing these to one makes sure
-#' that a single forecast only gets counted once. Setting `collapse = c()`
-#' would mean that all quantiles / samples would be counted as individual
-#' forecasts.
+#'   with names of categories for which the number of rows should be collapsed
+#'   to one when counting. For example, a single forecast is usually represented
+#'   by a set of several quantiles or samples and collapsing these to one makes
+#'   sure that a single forecast only gets counted once. Setting
+#'   `collapse = c()` would mean that all quantiles / samples would be counted
+#'   as individual forecasts.
 #'
 #' @return A data.table with columns as specified in `by` and an additional
 #' column "count" with the number of forecasts.

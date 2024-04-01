@@ -8,7 +8,8 @@ set_forecast_unit(data, forecast_unit)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See \code{\link[=as_forecast]{as_forecast()}} for additional information on input formats.}
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 
 \item{forecast_unit}{Character vector with the names of the columns that
 uniquely identify a single forecast.}
@@ -22,14 +23,14 @@ Helper function to set the unit of a single forecast (i.e. the
 combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in \code{forecast_unit} (plus
 additional protected columns, e.g. for observed values, predictions or
-quantile levels) and removes duplicate rows.
-If not done manually, \code{scoringutils} attempts to determine the unit
+quantile levels) and removes duplicate rows. \code{set_forecast_unit()} will
+mainly be called from \code{\link[=as_forecast]{as_forecast()}} through the \code{forecast_unit} argument.
+
+If not done explicitly, \code{scoringutils} attempts to determine the unit
 of a single forecast automatically by simply assuming that all column names
 are relevant to determine the forecast unit. This may lead to unexpected
 behaviour, so setting the forecast unit explicitly can help make the code
-easier to debug and easier to read. When used as part of a workflow,
-\code{set_forecast_unit()} can be directly piped into \code{as_forecast()} to
-check everything is in order.
+easier to debug and easier to read.
 }
 \examples{
 set_forecast_unit(

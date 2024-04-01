@@ -3,9 +3,9 @@
 \docType{data}
 \name{example_continuous}
 \alias{example_continuous}
-\title{Continuous Forecast Example Data}
+\title{Continuous forecast example data}
 \format{
-A data frame with 13,429 rows and 10 columns:
+A data frame with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
