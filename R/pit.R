@@ -145,7 +145,7 @@ get_pit <- function(data,
                     by,
                     n_replicates = 100) {
 
-  data <- validate_forecast_internal(data, copy = TRUE, na.omit = TRUE)
+  data <- clean_forecast(data, copy = TRUE, na.omit = TRUE)
   forecast_type <- get_forecast_type(data)
 
   if (forecast_type == "quantile") {

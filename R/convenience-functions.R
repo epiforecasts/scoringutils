@@ -114,7 +114,7 @@ transform_forecasts <- function(data,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  original_data <- validate_forecast_internal(data, copy = TRUE)
+  original_data <- clean_forecast(data, copy = TRUE)
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)

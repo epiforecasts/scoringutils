@@ -357,7 +357,7 @@ validate_general <- function(data) {
 #' @importFrom data.table copy
 #' @importFrom stats na.omit
 #' @keywords internal
-validate_forecast_internal <- function(data, copy = FALSE, na.omit = FALSE) {
+clean_forecast <- function(data, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     data <- copy(data)
   }
