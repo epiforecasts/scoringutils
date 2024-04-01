@@ -7,7 +7,10 @@
 #' overlapping set of available forecasts common to both models.
 #'
 #' The input should be a `scores` object as produced by [score()]. Note that
-#' adding additional unrelated columns can unpredictably change results.
+#' adding additional unrelated columns can unpredictably change results, as
+#' all present columns are taken into account when determining the set of
+#' overlapping forecasts between two models.
+#'
 #' The output of the pairwise comparisons is a set of mean score ratios,
 #' relative skill scores and p-values.
 #'
@@ -45,7 +48,7 @@
 #' computed in two ways: based on a nonparametric Wilcoxon signed-rank test
 #' (internally using [wilcox.test()] with `paired = TRUE`) or based on a
 #' permutation test. The permutation test is based on the difference in mean
-#' scores between two models. The null hypothesis is that the mean score
+#' scores between two models. The default null hypothesis is that the mean score
 #' difference is zero (see [permutation_test()]).
 #' Adjusted p-values are computed by calling [p.adjust()] on the raw p-values.
 #'
@@ -73,7 +76,12 @@
 #' @param ... additional arguments for the comparison between two models. See
 #' [compare_two_models()] for more information.
 #' @inheritParams summarise_scores
-#' @return A data.table with pairwise comparisons
+#' @return A data.table with the results of pairwise comparisons
+#' containing the mean score ratios (`mean_scores_ratio`),
+#' unadjusted (`pval`) and adjusted (`adj_pval`) p-values, and relative skill
+#' values of each model (`..._relative_skill`). If a baseline model is given
+#' then the scaled relative skill is reported as well
+#' (`..._scaled_relative_skill`).
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn

@@ -32,7 +32,12 @@ for the split data.tables.}
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A data.table with pairwise comparisons
+A data.table with the results of pairwise comparisons
+containing the mean score ratios (\code{mean_scores_ratio}),
+unadjusted (\code{pval}) and adjusted (\code{adj_pval}) p-values, and relative skill
+values of each model (\code{..._relative_skill}). If a baseline model is given
+then the scaled relative skill is reported as well
+(\code{..._scaled_relative_skill}).
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but

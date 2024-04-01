@@ -38,7 +38,12 @@ respect to a baseline model.}
 \code{\link[=compare_two_models]{compare_two_models()}} for more information.}
 }
 \value{
-A data.table with pairwise comparisons
+A data.table with the results of pairwise comparisons
+containing the mean score ratios (\code{mean_scores_ratio}),
+unadjusted (\code{pval}) and adjusted (\code{adj_pval}) p-values, and relative skill
+values of each model (\code{..._relative_skill}). If a baseline model is given
+then the scaled relative skill is reported as well
+(\code{..._scaled_relative_skill}).
 }
 \description{
 Compare scores obtained by different models in a pairwise tournament. All
@@ -46,7 +51,10 @@ combinations of two models are compared against each other based on the
 overlapping set of available forecasts common to both models.
 
 The input should be a \code{scores} object as produced by \code{\link[=score]{score()}}. Note that
-adding additional unrelated columns can unpredictably change results.
+adding additional unrelated columns can unpredictably change results, as
+all present columns are taken into account when determining the set of
+overlapping forecasts between two models.
+
 The output of the pairwise comparisons is a set of mean score ratios,
 relative skill scores and p-values.
 
@@ -84,7 +92,7 @@ models (again based on the set of overlapping forecasts). P-values can be
 computed in two ways: based on a nonparametric Wilcoxon signed-rank test
 (internally using \code{\link[=wilcox.test]{wilcox.test()}} with \code{paired = TRUE}) or based on a
 permutation test. The permutation test is based on the difference in mean
-scores between two models. The null hypothesis is that the mean score
+scores between two models. The default null hypothesis is that the mean score
 difference is zero (see \code{\link[=permutation_test]{permutation_test()}}).
 Adjusted p-values are computed by calling \code{\link[=p.adjust]{p.adjust()}} on the raw p-values.
 
