@@ -90,7 +90,15 @@ test_that("sample_to_quantiles works", {
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  quantile2 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
+  expect_error(
+    sample_to_quantile(samples, quantile_level = c(0.25, 0.75)),
+    "The input needs to be a forecast object."
+  )
+
+  quantile2 <- sample_to_quantile(
+    as_forecast(samples),
+    quantile_level = c(0.25, 0.75)
+  )
 
   expect_equal(quantile, as.data.frame(quantile2))
 
@@ -99,14 +107,16 @@ test_that("sample_to_quantiles works", {
   # If it's not scoped well, the call to `sample_to_quantile()` will fail.
   samples$type <- "test"
 
-  quantile3 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
+  quantile3 <- sample_to_quantile(
+    as_forecast(samples),
+    quantile_level = c(0.25, 0.75)
+  )
   quantile3$type <- NULL
 
   expect_identical(
     quantile2,
     quantile3
   )
-
 })
 
 test_that("sample_to_quantiles issue 557 fix", {
