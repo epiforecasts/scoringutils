@@ -387,7 +387,23 @@ See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a disc
 
 **Forecast**: $F$. The CDF of the predictive distribution is represented by a set of quantiles.
 
-The quantile score is also called pinball loss. See [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618) for more details. 
+The quantile score, also called pinball loss, for a single quantile level $\tau$ is defined as
+
+\begin{equation}
+    \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) = 
+    \begin{cases}
+        2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
+        2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau, 
+    \end{cases}
+\end{equation}
+
+with $q_\tau$ being the $\tau$-quantile of the predictive distribution $F$, and $\mathbf{1}(\cdot)$ the indicator function.
+
+The interval score (see above) for a $1 - \alpha$ prediction interval can be computed from the quantile scores at levels $\alpha/2$ and $1 - \alpha/2$ as
+
+$$\text{IS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y) + \text{QS}_{1 - \alpha/2}(F, y)}{\alpha}$$. 
+
+See `?quantile_score` and @bracherEvaluatingEpidemicForecasts2021 for more details. 
 
 
 ---
@@ -399,9 +415,7 @@ The quantile score is also called pinball loss. See [here](https://journals.plos
 
 Quantile coverage for a given quantile level is defined as the proportion of observed values that are smaller than the corresponding predictive quantiles. For example, the 0.5 quantile coverage is the proportion of observed values that are smaller than the 0.5-quantiles of the predictive distribution. 
 
-## Probability integral transform (PIT)
-
-XXX. 
+<!-- ## Probability integral transform (PIT) -->
 
 
 
