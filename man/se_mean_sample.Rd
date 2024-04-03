@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{se_mean_sample}
 \alias{se_mean_sample}
-\title{Squared error of the meean (sample-based version)}
+\title{Squared error of the mean (sample-based version)}
 \usage{
 se_mean_sample(observed, predicted)
 }
