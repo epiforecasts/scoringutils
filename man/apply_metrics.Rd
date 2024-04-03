@@ -4,10 +4,10 @@
 \alias{apply_metrics}
 \title{Apply a list of functions to a data table of forecasts}
 \usage{
-apply_metrics(data, metrics, ...)
+apply_metrics(forecast, metrics, ...)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
