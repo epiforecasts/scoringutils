@@ -5,12 +5,15 @@
 \title{Count number of available forecasts}
 \usage{
 get_forecast_counts(
-  data,
-  by = get_forecast_unit(data),
+  forecast,
+  by = get_forecast_unit(forecast),
   collapse = c("quantile_level", "sample_id")
 )
 }
 \arguments{
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+
 \item{by}{character vector or \code{NULL} (the default) that denotes the
 categories over which the number of forecasts should be counted.
 By default this will be the unit of a single forecast (i.e.
