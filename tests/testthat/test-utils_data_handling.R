@@ -95,6 +95,14 @@ test_that("sample_to_quantiles works", {
     "The input needs to be a forecast object."
   )
 
+  wrongclass <- as_forecast(samples)
+  class(wrongclass) <- c("forecast_point", "data.table", "data.frame")
+  expect_error(
+    sample_to_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
+    'Desired forecast type: "sample"'
+  )
+
+
   quantile2 <- sample_to_quantile(
     as_forecast(samples),
     quantile_level = c(0.25, 0.75)
