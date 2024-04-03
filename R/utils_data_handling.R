@@ -124,7 +124,7 @@ sample_to_quantile <- function(data,
                                         type = ..type, na.rm = TRUE)),
                by = by]
 
-  return(data[])
+  return(as_forecast(data))
 }
 
 
