@@ -42,14 +42,26 @@ lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
 upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 
 qs_lower <- quantile_score(observed,
-  predicted = lower,
+  predicted = matrix(lower),
   quantile_level = alpha / 2
 )
 qs_upper <- quantile_score(observed,
-  predicted = upper,
+  predicted = matrix(upper),
   quantile_level = 1 - alpha / 2
 )
 interval_score <- (qs_lower + qs_upper) / 2
+interval_score2 <- quantile_score(
+  observed,
+  predicted = cbind(lower, upper),
+  quantile_level = c(alpha / 2, 1 - alpha / 2)
+)
+
+# this is the same as the following
+wis(
+  observed,
+  predicted = cbind(lower, upper),
+  quantile_level = c(alpha / 2, 1 - alpha / 2)
+)
 }
 \references{
 Strictly Proper Scoring Rules, Prediction,and Estimation,

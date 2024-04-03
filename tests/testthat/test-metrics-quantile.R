@@ -503,12 +503,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
@@ -547,12 +547,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
