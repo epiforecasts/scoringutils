@@ -628,8 +628,8 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' observed <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5
 #'
-#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+#' lower <- qnorm(alpha / 2, observed)
+#' upper <- qnorm((1 - alpha / 2), observed)
 #'
 #' qs_lower <- quantile_score(observed,
 #'   predicted = matrix(lower),
