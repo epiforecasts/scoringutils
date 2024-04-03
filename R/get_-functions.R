@@ -374,50 +374,50 @@ get_duplicate_forecasts <- function(
 #' @export
 #' @keywords scoring
 #' @export
-get_coverage <- function(data, by = "model") {
+get_coverage <- function(forecast, by = "model") {
   # input checks ---------------------------------------------------------------
-  data <- copy(data)
-  data <- na.omit(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  assert_subset(get_forecast_type(data), "quantile")
+  forecast <- copy(forecast)
+  forecast <- na.omit(forecast)
+  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  assert_subset(get_forecast_type(forecast), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway
   by <- setdiff(by, c("quantile_level", "interval_range"))
-  assert_subset(by, names(data))
+  assert_subset(by, names(forecast))
 
   # convert to wide interval format and compute interval coverage --------------
-  interval_data <- quantile_to_interval(data, format = "wide")
-  interval_data[,
-    interval_coverage := (observed <= upper) & (observed >= lower)
+  interval_forecast <- quantile_to_interval(forecast, format = "wide")
+  interval_forecast[,
+                    interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
-  interval_data[, interval_coverage_deviation :=
-                  interval_coverage - interval_range / 100]
+  interval_forecast[, interval_coverage_deviation :=
+                      interval_coverage - interval_range / 100]
 
   # merge interval range data with original data -------------------------------
   # preparations
-  data[, interval_range := get_range_from_quantile(quantile_level)]
-  data_cols <- colnames(data) # store so we can reset column order later
-  forecast_unit <- get_forecast_unit(data)
+  forecast[, interval_range := get_range_from_quantile(quantile_level)]
+  forecast_cols <- colnames(forecast) # store so we can reset column order later
+  forecast_unit <- get_forecast_unit(forecast)
 
-  data <- merge(data, interval_data,
-                by = unique(c(forecast_unit, "interval_range")))
+  forecast <- merge(forecast, interval_forecast,
+                    by = unique(c(forecast_unit, "interval_range")))
 
   # compute quantile coverage and deviation ------------------------------------
-  data[, quantile_coverage := observed <= predicted]
-  data[, quantile_coverage_deviation := quantile_coverage - quantile_level]
+  forecast[, quantile_coverage := observed <= predicted]
+  forecast[, quantile_coverage_deviation := quantile_coverage - quantile_level]
 
   # summarise coverage values according to `by` and cleanup --------------------
   # reset column order
   new_metrics <- c("interval_coverage", "interval_coverage_deviation",
                    "quantile_coverage", "quantile_coverage_deviation")
-  setcolorder(data, unique(c(data_cols, "interval_range", new_metrics)))
+  setcolorder(forecast, unique(c(forecast_cols, "interval_range", new_metrics)))
   # remove forecast class and convert to regular data.table
-  data <- as.data.table(data)
+  forecast <- as.data.table(forecast)
   by <- unique(c(by, "quantile_level", "interval_range"))
   # summarise
-  data <- data[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
-  return(data[])
+  forecast <- forecast[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
+  return(forecast[])
 }
 
 
