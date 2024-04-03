@@ -290,7 +290,8 @@ validate_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ..
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts.
-#' @inheritParams get_forecast_counts
+#' @param data A data.table with forecasts and observed values that should
+#' be validated.
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table

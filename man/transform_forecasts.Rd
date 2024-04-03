@@ -4,9 +4,18 @@
 \alias{transform_forecasts}
 \title{Transform forecasts and observed values}
 \usage{
-transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
 }
 \arguments{
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+
 \item{fun}{A function used to transform both observed values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is
 essentially the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
