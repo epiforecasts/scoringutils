@@ -603,14 +603,19 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
 #'
 #' qs_lower <- quantile_score(observed,
-#'   predicted = lower,
+#'   predicted = matrix(lower),
 #'   quantile_level = alpha / 2
 #' )
 #' qs_upper <- quantile_score(observed,
-#'   predicted = upper,
+#'   predicted = matrix(upper),
 #'   quantile_level = 1 - alpha / 2
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
+#' interval_score2 <- quantile_score(
+#'   observed,
+#'   predicted = cbind(lower, upper),
+#'   quantile_level = c(alpha / 2, 1 - alpha / 2)
+#' )
 #'
 #' # this is the same as the following
 #' wis(
@@ -631,26 +636,30 @@ quantile_score <- function(observed,
                            predicted,
                            quantile_level,
                            weigh = TRUE) {
+  assert_input_quantile(observed, predicted, quantile_level)
 
   # compute score - this is the version explained in the SI of Bracher et. al.
-  error <- abs(predicted - observed)
-  score <- 2 * ifelse(
-    observed <= predicted, 1 - quantile_level, quantile_level
-  ) * error
+  obs_smaller_pred <- observed <= predicted
+  # subtract tau from indicator function (1(y <= q_tau)) by row
+  tau_diff <- sweep(obs_smaller_pred, 2, quantile_level)
+  error <- predicted - observed
 
-  # adapt score such that mean of unweighted quantile scores corresponds to
-  # unweighted interval score of the corresponding prediction interval
-  # --> needs central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantile_level) * 2
-  alpha <- 1 - central_interval
-  score <- 2 * score / alpha
+  score <- 2 * tau_diff * error
 
-  # if weigh, then reverse last operation
+  # By default, the quantile score already corresponds to the WIS such that
+  # simply averaging the quantile scores gives the WIS
   if (weigh) {
-    score <- score * alpha / 2
-  }
+    return(rowMeans(score))
+  } else {
+    # adapt score such that mean of adapted quantile scores corresponds to
+    # unweighted interval score of the corresponding prediction interval
+    central_interval <- abs(0.5 - quantile_level) * 2
+    alpha <- 1 - central_interval
 
-  return(score)
+    # unweighted score' = 2 * score / alpha
+    score <- 2 * sweep(score, 2, alpha, FUN = "/")
+    return(rowMeans(score))
+  }
 }
 
 
