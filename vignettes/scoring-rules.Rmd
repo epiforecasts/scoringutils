@@ -399,9 +399,13 @@ The quantile score, also called pinball loss, for a single quantile level $\tau$
 
 with $q_\tau$ being the $\tau$-quantile of the predictive distribution $F$, and $\mathbf{1}(\cdot)$ the indicator function.
 
-The interval score (see above) for a $1 - \alpha$ prediction interval can be computed from the quantile scores at levels $\alpha/2$ and $1 - \alpha/2$ as
+The (unweighted) interval score (see above) for a $1 - \alpha$ prediction interval can be computed from the quantile scores at levels $\alpha/2$ and $1 - \alpha/2$ as
 
 $$\text{IS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y) + \text{QS}_{1 - \alpha/2}(F, y)}{\alpha}$$. 
+
+The weighted interval score can be obtained as a simple average of the quantile scores: 
+
+$$\text{WIS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y) + \text{QS}_{1 - \alpha/2}(F, y)}{2}$$. 
 
 See `?quantile_score` and @bracherEvaluatingEpidemicForecasts2021 for more details. 
 
