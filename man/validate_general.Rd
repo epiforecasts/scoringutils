@@ -6,6 +6,10 @@
 \usage{
 validate_general(data)
 }
+\arguments{
+\item{data}{A data.table with forecasts and observed values that should
+be validated.}
+}
 \value{
 returns the input
 }

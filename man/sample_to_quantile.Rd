@@ -11,14 +11,14 @@ sample_to_quantile(
 )
 }
 \arguments{
+\item{forecast}{A \code{forecast} object of class \code{forecast_sample} (a validated
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+
 \item{quantile_level}{A numeric vector of quantile levels for which
 quantiles will be computed.}
 
 \item{type}{Type argument passed down to the quantile function. For more
 information, see \code{\link[=quantile]{quantile()}}.}
-
-\item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
-data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 }
 \value{
 a data.table in a long interval range format
