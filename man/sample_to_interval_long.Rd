@@ -12,13 +12,11 @@ sample_to_interval_long(
 )
 }
 \arguments{
-\item{data}{A data.frame with samples}
+\item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
-\item{interval_range}{a numeric vector of interval ranges to extract
-(e.g. \code{c(0, 50, 90)})}
-
-\item{type}{type argument passed down to the quantile function. For more
-information, see \code{\link[=quantile]{quantile()}}}
+\item{type}{Type argument passed down to the quantile function. For more
+information, see \code{\link[=quantile]{quantile()}}.}
 
 \item{keep_quantile_col}{keep quantile_level column, default is TRUE}
 }
