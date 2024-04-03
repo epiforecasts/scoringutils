@@ -108,8 +108,10 @@ sample_to_quantile <- function(data,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
   data <- copy(data)
-  suppressWarnings(suppressMessages(
-    validate_forecast(data, forecast_type = "sample"))
+  suppressWarnings(
+    suppressMessages(
+      validate_forecast(data, forecast_type = "sample")
+    )
   )
   assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
