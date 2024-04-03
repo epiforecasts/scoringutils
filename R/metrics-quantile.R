@@ -611,6 +611,13 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #'   quantile_level = 1 - alpha / 2
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
+#'
+#' # this is the same as the following
+#' wis(
+#'   observed,
+#'   predicted = cbind(lower, upper),
+#'   quantile_level = c(alpha / 2, 1 - alpha / 2)
+#' )
 #' @export
 #' @keywords metric
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
