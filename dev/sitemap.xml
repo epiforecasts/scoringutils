@@ -22,12 +22,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/articles/metric-details.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/articles/scoring-forecasts-directly.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/articles/scoringutils.html</loc>
   </url>
   <url>
@@ -236,9 +230,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/merge_pred_and_obs.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_binary.html</loc>

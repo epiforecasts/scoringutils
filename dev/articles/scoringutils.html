@@ -46,8 +46,6 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a>
-    <a class="dropdown-item" href="../articles/metric-details.html">Details on the metrics implemented in `scoringutils`</a>
-    <a class="dropdown-item" href="../articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>
   </div>
 </li>
 <li class="nav-item">
@@ -81,7 +79,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-03-29</h4>
+            <h4 data-toc-skip class="date">2024-04-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/vignettes/scoringutils.Rmd" class="external-link"><code>vignettes/scoringutils.Rmd</code></a></small>
       <div class="d-none name"><code>scoringutils.Rmd</code></div>
@@ -963,89 +961,6 @@ available samples is small.</p>
 <span><span class="co">#&gt; 885:                 -0.31181818      42.5</span></span>
 <span><span class="co">#&gt; 886:                  0.41545455       8.0</span></span>
 <span><span class="co">#&gt; 887:                 -0.13000000      73.5</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="available-metrics">Available metrics<a class="anchor" aria-label="anchor" href="#available-metrics"></a>
-</h2>
-<p>An overview of available metrics can be found in the
-<code>metrics</code> data set that is included in the package.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">metrics</span></span>
-<span><span class="co">#&gt;                                           Metric               Name</span></span>
-<span><span class="co">#&gt;                                           &lt;char&gt;             &lt;char&gt;</span></span>
-<span><span class="co">#&gt;  1:                               Absolute error           ae_point</span></span>
-<span><span class="co">#&gt;  2:                               Absolute error          ae_median</span></span>
-<span><span class="co">#&gt;  3:                                Squared error           se_point</span></span>
-<span><span class="co">#&gt;  4:                                Squared error            se_mean</span></span>
-<span><span class="co">#&gt;  5: (Continuous) ranked probability score (CRPS)               crps</span></span>
-<span><span class="co">#&gt;  6:                                    Log score          log_score</span></span>
-<span><span class="co">#&gt;  7:              (Weighted) interval score (WIS)     interval_score</span></span>
-<span><span class="co">#&gt;  8:                 Dawid-Sebastiani score (DSS)                dss</span></span>
-<span><span class="co">#&gt;  9:                             Brier score (BS)        brier_score</span></span>
-<span><span class="co">#&gt; 10:                            Interval coverage           coverage</span></span>
-<span><span class="co">#&gt; 11:                           Coverage deviation coverage_deviation</span></span>
-<span><span class="co">#&gt; 12:                            Quantile coverage  quantile_coverage</span></span>
-<span><span class="co">#&gt; 13:                                   Dispersion         dispersion</span></span>
-<span><span class="co">#&gt; 14:       Median Absolute Deviation (Dispersion)                mad</span></span>
-<span><span class="co">#&gt; 15:                      Under-, Over-prediction    underprediction</span></span>
-<span><span class="co">#&gt; 16:                      Under-, Over-prediction     overprediction</span></span>
-<span><span class="co">#&gt; 17:         Probability integral transform (PIT)               crps</span></span>
-<span><span class="co">#&gt; 18:                                   Dispersion         dispersion</span></span>
-<span><span class="co">#&gt; 19:                                         Bias               bias</span></span>
-<span><span class="co">#&gt; 20:                             Mean score ratio  mean_scores_ratio</span></span>
-<span><span class="co">#&gt; 21:                               Relative skill     relative_skill</span></span>
-<span><span class="co">#&gt; 22:                        Scaled relative skill   scaled_rel_skill</span></span>
-<span><span class="co">#&gt;                                           Metric               Name</span></span>
-<span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
-<span><span class="co">#&gt;                                      &lt;char&gt;   &lt;char&gt;     &lt;char&gt; &lt;char&gt;   &lt;char&gt;</span></span>
-<span><span class="co">#&gt;  1: score(), ae_point()), ae_median_sample(        +          +      -        +</span></span>
-<span><span class="co">#&gt;  2: score(), ae_point()), ae_median_sample(        +          +      -        +</span></span>
-<span><span class="co">#&gt;  3:   score(), se_point(), se_mean_sample()        +          +      -        +</span></span>
-<span><span class="co">#&gt;  4:   score(), se_point(), se_mean_sample()        +          +      -        +</span></span>
-<span><span class="co">#&gt;  5:                       score(), ae_point        +          +      -        -</span></span>
-<span><span class="co">#&gt;  6:   score(), logs_sample(), logs_binary()        -          +      +        -</span></span>
-<span><span class="co">#&gt;  7:               score(), interval_score()        +          +      -        +</span></span>
-<span><span class="co">#&gt;  8:                   score(), dss_sample()        +          +      -        -</span></span>
-<span><span class="co">#&gt;  9:                  score(), brier_score()        -          -      +        -</span></span>
-<span><span class="co">#&gt; 10:                                 score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 11:                                 score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 12:                                 score()        +          +      -        -</span></span>
-<span><span class="co">#&gt; 13:               score(), interval_score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 14:                   score(), mad_sample()        +          +      -        -</span></span>
-<span><span class="co">#&gt; 15:               score(), interval_score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 16:               score(), interval_score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 17:                          score(), pit()        +          +      -        +</span></span>
-<span><span class="co">#&gt; 18:               score(), interval_score()        -          -      -        +</span></span>
-<span><span class="co">#&gt; 19: score(), bias_sample(), bias_quantile()        +          +      -        +</span></span>
-<span><span class="co">#&gt; 20:                   pairwise_comparison()        ~          ~      ~        ~</span></span>
-<span><span class="co">#&gt; 21:          score(), pairwise_comparison()        ~          ~      ~        ~</span></span>
-<span><span class="co">#&gt; 22:          score(), pairwise_comparison()        ~          ~      ~        ~</span></span>
-<span><span class="co">#&gt;                                   Functions Discrete Continuous Binary Quantile</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                           Info</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                         &lt;char&gt;</span></span>
-<span><span class="co">#&gt;  1:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
-<span><span class="co">#&gt;  2:                                                                                                                                               Suitable for scoring the median of a predictive distribution</span></span>
-<span><span class="co">#&gt;  3:                                                                                                                                                Suitable for scoring the mean of a predictive distribution.</span></span>
-<span><span class="co">#&gt;  4:                                                                                                                                                Suitable for scoring the mean of a predictive distribution.</span></span>
-<span><span class="co">#&gt;  5:                           Proper scoring rule (smaller is better), takes entire predictive distribution into account (global), penalises over- and under-confidence similarly, stable handling of outliers</span></span>
-<span><span class="co">#&gt;  6:                               Proper scoring rule, smaller is better, equals negative log of the predictive density at observed value (local), penalises over-confidence severely, susceptible to outliers</span></span>
-<span><span class="co">#&gt;  7:                                                              Proper scoring rule, smaller is better, similar properties to CRPS and converges to CRPS for an increasing number of equally spaced intervals</span></span>
-<span><span class="co">#&gt;  8:                           Proper scoring rule, smaller is better, evaluates forecast based on mean and sd of predictive distribution (global), susceptible to outliers, penalises over-confidence severely</span></span>
-<span><span class="co">#&gt;  9:                                                                                    Proper scoring rule, smaller is better, equals CRPS for binary outcomes, penalises over- and under-confidence similarly</span></span>
-<span><span class="co">#&gt; 10:                                                 Proportion of observations falling inside a given central prediction interval (= 'empirical interval coverage'). Used to assess probabilistic calibration.</span></span>
-<span><span class="co">#&gt; 11:                                                                                               Average difference between empirical and nominal interval coverage (coverage that should have been realised)</span></span>
-<span><span class="co">#&gt; 12:                                                                                         Proportion of observations below a given quantile of the predictive CDF. Used to assess probabilistic calibration.</span></span>
-<span><span class="co">#&gt; 13:                                                                                                                                       Dispersion component of WIS, measures width of predictive intervals.</span></span>
-<span><span class="co">#&gt; 14:                                                                                                                    Measure for dispersion of a forecast: median of the absolute deviations from the median</span></span>
-<span><span class="co">#&gt; 15:                                                                                                                                            Absolute amount of over-or under-prediction (components of WIS)</span></span>
-<span><span class="co">#&gt; 16:                                                                                                                                            Absolute amount of over-or under-prediction (components of WIS)</span></span>
-<span><span class="co">#&gt; 17:                                                                                   PIT transform is the CDF of the predictive distribution evaluated at the observed values. PIT values should be uniform. </span></span>
-<span><span class="co">#&gt; 18:                                                                                                                                       Dispersion component of WIS, measures width of predictive intervals.</span></span>
-<span><span class="co">#&gt; 19:                                                                                       Measure of relative tendency to over- or under-predict (aspect of calibration), bounded between -1 and 1 (ideally 0)</span></span>
-<span><span class="co">#&gt; 20:                                                                                                             Compares performance of two models. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt; 21:                                                         Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt; 22: Ranks models based on pairwise comparisons, useful in the context of missing forecasts. Scaled (i.e. divided) by the score of a baseline model. Properties depend on the metric chosen for the comparison.</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                           Info</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="lower-level-functions">Lower level functions<a class="anchor" aria-label="anchor" href="#lower-level-functions"></a>
