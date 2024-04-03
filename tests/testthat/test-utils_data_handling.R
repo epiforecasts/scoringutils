@@ -130,10 +130,10 @@ test_that("sample_to_quantiles works", {
 test_that("sample_to_quantiles issue 557 fix", {
 
   out <- example_integer %>%
+    as_forecast() %>%
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
-    as_forecast() %>%
     score()
 
   expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
@@ -158,7 +158,7 @@ test_that("sample_to_range_long works", {
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- scoringutils:::sample_to_interval_long(samples,
+  long2 <- scoringutils:::sample_to_interval_long(as_forecast(samples),
                                                   interval_range = 50,
                                                   keep_quantile_col = FALSE)
   long2 <- long2[order(model, boundary, date)]
