@@ -13,7 +13,7 @@ sample_to_interval_long(
 }
 \arguments{
 \item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
-data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{type}{Type argument passed down to the quantile function. For more
 information, see \code{\link[=quantile]{quantile()}}.}

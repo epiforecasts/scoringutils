@@ -12,7 +12,7 @@ sample_to_quantile(
 }
 \arguments{
 \item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
-data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{quantile_level}{A numeric vector of quantile levels for which
 quantiles will be computed.}
