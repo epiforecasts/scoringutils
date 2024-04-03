@@ -594,6 +594,35 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' The quantile score is closely related to the interval score (see [wis()]) and
 #' is the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
+#'
+#' The quantile score, also called pinball loss, for a single quantile
+#' level \eqn{\tau} is defined as
+#' \deqn{
+#'   \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) =
+#'   \begin{cases}
+#' 2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
+#' 2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau,
+#' \end{cases}
+#' }
+#' with \eqn{q_\tau} being the \eqn{\tau}-quantile of the predictive
+#' distribution \eqn{F}, and \eqn{\mathbf{1}(\cdot)} the indicator function.
+#'
+#' The weighted interval score for a single prediction interval can be obtained
+#' as the average of the quantile scores for the lower and upper quantile of
+#' that prediction interval:
+#' \deqn{
+#'   \text{WIS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y)
+#'   + \text{QS}_{1 - \alpha/2}(F, y)}{2}.
+#' }
+#' See the SI of Bracher et al. (2021) for more details.
+#'
+#' `quantile_score()` returns the average quantile score across the quantile
+#' levels provided. For a set of quantile levels that form pairwise central
+#' prediction intervals, the quantile score is equivalent to the interval score.
+#' @return Numeric vector of length n with the quantile score. The scores are
+#' averaged across quantile levels if multiple quantile levels are provided
+#' (the result of calling `rowMeans()` on the matrix of quantile scores that
+#' is computed based on the observed and predicted values).
 #' @inheritParams wis
 #' @examples
 #' observed <- rnorm(10, mean = 1:10)
@@ -630,7 +659,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' Statistical Association, Volume 102, 2007 - Issue 477
 #'
 #' Evaluating epidemic forecasts in an interval format,
-#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 quantile_score <- function(observed,
                            predicted,
