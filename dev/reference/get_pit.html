@@ -63,12 +63,12 @@ validated forecast objects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pit</span><span class="op">(</span><span class="va">data</span>, <span class="va">by</span>, n_replicates <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pit</span><span class="op">(</span><span class="va">forecast</span>, <span class="va">by</span>, n_replicates <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt>forecast</dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
@@ -76,7 +76,7 @@ observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)<
 <dt>by</dt>
 <dd><p>Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
-'location' in the data and want to have a PIT histogram for
+'location' in the input data and want to have a PIT histogram for
 every model and location, specify <code>by = c("model", "location")</code>.</p></dd>
 
 

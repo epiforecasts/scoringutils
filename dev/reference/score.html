@@ -81,24 +81,24 @@ well as the paper <a href="https://arxiv.org/abs/2205.07090" class="external-lin
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, <span class="va">metrics</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">score</span><span class="op">(</span><span class="va">forecast</span>, <span class="va">metrics</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for forecast_binary</span></span>
-<span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_binary.html">metrics_binary</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">score</span><span class="op">(</span><span class="va">forecast</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_binary.html">metrics_binary</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for forecast_point</span></span>
-<span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_point.html">metrics_point</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">score</span><span class="op">(</span><span class="va">forecast</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_point.html">metrics_point</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for forecast_sample</span></span>
-<span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_sample.html">metrics_sample</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">score</span><span class="op">(</span><span class="va">forecast</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_sample.html">metrics_sample</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for forecast_quantile</span></span>
-<span><span class="fu">score</span><span class="op">(</span><span class="va">data</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_quantile.html">metrics_quantile</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">score</span><span class="op">(</span><span class="va">forecast</span>, metrics <span class="op">=</span> <span class="fu"><a href="metrics_quantile.html">metrics_quantile</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt>forecast</dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
