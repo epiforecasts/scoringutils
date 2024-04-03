@@ -462,14 +462,14 @@ get_coverage <- function(data, by = "model") {
 #'   as_forecast(example_quantile),
 #'   by = c("model", "target_type")
 #' )
-get_forecast_counts <- function(data,
-                                by = get_forecast_unit(data),
+get_forecast_counts <- function(forecast,
+                                by = get_forecast_unit(forecast),
                                 collapse = c("quantile_level", "sample_id")) {
-  data <- copy(data)
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  forecast_unit <- get_forecast_unit(data)
-  data <- na.omit(data)
-  assert_subset(by, names(data))
+  forecast <- copy(forecast)
+  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  forecast_unit <- get_forecast_unit(forecast)
+  forecast <- na.omit(forecast)
+  assert_subset(by, names(forecast))
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
@@ -477,16 +477,16 @@ get_forecast_counts <- function(data,
     c(forecast_unit, "quantile_level", "sample_id"),
     collapse
   )
-  # filter out "quantile_level" or "sample" if present in collapse_by, but not data
-  collapse_by <- intersect(collapse_by, names(data))
+  # filter "quantile_level", "sample" if in `collapse_by`, but not the forecast
+  collapse_by <- intersect(collapse_by, names(forecast))
 
-  data <- data[data[, .I[1], by = collapse_by]$V1]
+  forecast <- forecast[forecast[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- as.data.table(data)[, .(count = .N), by = by]
+  out <- as.data.table(forecast)[, .(count = .N), by = by]
 
   # make sure that all combinations in "by" are included in the output (with
-  # count = 0). To achieve that, take the unique values in data and expand grid
+  # count = 0). To achieve that, take unique values in `forecast` and expand grid
   col_vecs <- unclass(out)
   col_vecs$count <- NULL
   col_vecs <- lapply(col_vecs, unique)
