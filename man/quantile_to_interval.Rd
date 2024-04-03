@@ -8,14 +8,14 @@
 \usage{
 quantile_to_interval(...)
 
-\method{quantile_to_interval}{data.frame}(dt, format = "long", keep_quantile_col = FALSE, ...)
+\method{quantile_to_interval}{data.frame}(forecast, format = "long", keep_quantile_col = FALSE, ...)
 
 \method{quantile_to_interval}{numeric}(observed, predicted, quantile_level, ...)
 }
 \arguments{
 \item{...}{Arguments}
 
-\item{dt}{A data.table with forecasts in a quantile-based format (see
+\item{forecast}{A data.table with forecasts in a quantile-based format (see
 \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{format}{The format of the output. Either "long" or "wide". If "long"
