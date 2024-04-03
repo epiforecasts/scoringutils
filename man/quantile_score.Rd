@@ -28,11 +28,42 @@ to the CRPS. \eqn{\alpha} is the value that corresponds to the
 value that represents how much is outside a central prediction interval
 (E.g. for a 90 percent central prediction interval, alpha is 0.1).}
 }
+\value{
+Numeric vector of length n with the quantile score. The scores are
+averaged across quantile levels if multiple quantile levels are provided
+(the result of calling \code{rowMeans()} on the matrix of quantile scores that
+is computed based on the observed and predicted values).
+}
 \description{
 Proper Scoring Rule to score quantile predictions. Smaller values are better.
 The quantile score is closely related to the interval score (see \code{\link[=wis]{wis()}}) and
 is the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
+
+The quantile score, also called pinball loss, for a single quantile
+level \eqn{\tau} is defined as
+\deqn{
+  \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) =
+  \begin{cases}
+2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
+2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau,
+\end{cases}
+}
+with \eqn{q_\tau} being the \eqn{\tau}-quantile of the predictive
+distribution \eqn{F}, and \eqn{\mathbf{1}(\cdot)} the indicator function.
+
+The weighted interval score for a single prediction interval can be obtained
+as the average of the quantile scores for the lower and upper quantile of
+that prediction interval:
+\deqn{
+  \text{WIS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y)
+  + \text{QS}_{1 - \alpha/2}(F, y)}{2}.
+}
+See the SI of Bracher et al. (2021) for more details.
+
+\code{quantile_score()} returns the average quantile score across the quantile
+levels provided. For a set of quantile levels that form pairwise central
+prediction intervals, the quantile score is equivalent to the interval score.
 }
 \examples{
 observed <- rnorm(10, mean = 1:10)
@@ -69,7 +100,7 @@ Tilmann Gneiting and Adrian E. Raftery, 2007, Journal of the American
 Statistical Association, Volume 102, 2007 - Issue 477
 
 Evaluating epidemic forecasts in an interval format,
-Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
 \url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
 }
 \keyword{metric}
