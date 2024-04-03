@@ -6,10 +6,6 @@
 \usage{
 validate_general(data)
 }
-\arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
-}
 \value{
 returns the input
 }
@@ -17,7 +13,7 @@ returns the input
 The function runs input checks that apply to all input data, regardless of
 forecast type. The function
 \itemize{
-\item asserts that the data is a data.table which has columns \code{observed} and
+\item asserts that the forecast is a data.table which has columns \code{observed} and
 \code{predicted}, as well as a column called \code{model}.
 \item checks the forecast type and forecast unit
 \item checks there are no duplicate forecasts

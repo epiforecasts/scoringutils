@@ -7,9 +7,6 @@
 get_pit(data, by, n_replicates = 100)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
-
 \item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
 'location' in the data and want to have a PIT histogram for
