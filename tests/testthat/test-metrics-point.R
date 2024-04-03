@@ -183,7 +183,7 @@ test_that("abs error is correct, point and median forecasts same", {
 
   data_forecast_point <- data_scoringutils[type == "point"][, quantile := NULL]
 
-  eval <- score(data = data_forecast_point)
+  eval <- score(forecast = data_forecast_point)
   eval <- summarise_scores(eval,
     by = c(
       "location", "target_end_date",
