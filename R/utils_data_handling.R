@@ -89,7 +89,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' based on plain quantiles.
 #'
 #' @param data A `forecast` object of class `forecast_sample` (a validated
-#'   data.table with predicted and observed values, see [as_forecast()])
+#'   data.table with predicted and observed values, see [as_forecast()]).
 #'
 #' @param quantile_level A numeric vector of quantile levels for which
 #'   quantiles will be computed.
