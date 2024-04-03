@@ -121,10 +121,11 @@ sample_to_quantile <- function(forecast,
     round(c(quantile_level, 1 - quantile_level), digits = 10)
   )
 
-  forecast <- forecast[, .(quantile_level = quantile_level,
-                   predicted = quantile(x = predicted, probs = ..quantile_level,
-                                        type = ..type, na.rm = TRUE)),
-               by = by]
+  forecast <-
+    forecast[, .(quantile_level = quantile_level,
+                 predicted = quantile(x = predicted, probs = ..quantile_level,
+                                      type = ..type, na.rm = TRUE)),
+             by = by]
 
   return(as_forecast(forecast))
 }
