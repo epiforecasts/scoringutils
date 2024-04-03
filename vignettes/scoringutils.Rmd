@@ -329,19 +329,12 @@ You can convert your sample-based forecasts into a quantile-based format using t
 
 ```{r}
 example_integer %>%
+  as_forecast() %>%
   sample_to_quantile(
     quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
   as_forecast() %>%
   score()
-```
-
-## Available metrics
-
-An overview of available metrics can be found in the `metrics` data set that is included in the package. 
-
-```{r}
-metrics
 ```
 
 ## Lower level functions

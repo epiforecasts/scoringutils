@@ -88,7 +88,9 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' Transform data from a format that is based on predictive samples to a format
 #' based on plain quantiles.
 #'
-#' @param data A data.frame with samples
+#' @param data A `forecast` object of class `forecast_sample` (a validated
+#'   data.table with predicted and observed values, see [as_forecast()]).
+#'
 #' @param quantile_level A numeric vector of quantile levels for which
 #'   quantiles will be computed.
 #' @param type Type argument passed down to the quantile function. For more
@@ -101,11 +103,16 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @keywords data-handling
 #' @export
 #' @examples
-#' sample_to_quantile(example_integer)
+#' sample_to_quantile(as_forecast(example_integer))
 sample_to_quantile <- function(data,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-  data <- ensure_data.table(data)
+  data <- copy(data)
+  suppressWarnings(
+    suppressMessages(
+      validate_forecast(data, forecast_type = "sample")
+    )
+  )
   assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(data), reserved_columns)
@@ -119,7 +126,7 @@ sample_to_quantile <- function(data,
                                         type = ..type, na.rm = TRUE)),
                by = by]
 
-  return(data[])
+  return(as_forecast(data))
 }
 
 
@@ -276,11 +283,7 @@ quantile_to_interval.numeric <- function(observed,
 #' Transform data from a format that is based on predictive samples to a format
 #' based on interval ranges.
 #'
-#' @param data A data.frame with samples
-#' @param interval_range a numeric vector of interval ranges to extract
-#' (e.g. `c(0, 50, 90)`)
-#' @param type type argument passed down to the quantile function. For more
-#' information, see [quantile()]
+#' @inheritParams sample_to_quantile
 #' @param keep_quantile_col keep quantile_level column, default is TRUE
 #' @return A data.table in a long interval interval range format
 #' @importFrom data.table as.data.table

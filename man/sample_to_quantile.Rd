@@ -11,7 +11,8 @@ sample_to_quantile(
 )
 }
 \arguments{
-\item{data}{A data.frame with samples}
+\item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{quantile_level}{A numeric vector of quantile levels for which
 quantiles will be computed.}
@@ -27,6 +28,6 @@ Transform data from a format that is based on predictive samples to a format
 based on plain quantiles.
 }
 \examples{
-sample_to_quantile(example_integer)
+sample_to_quantile(as_forecast(example_integer))
 }
 \keyword{data-handling}

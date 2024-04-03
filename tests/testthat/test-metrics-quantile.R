@@ -478,6 +478,14 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
+
+  # calling quantile_score and wis should return the same result if all
+  # quantiles form central prediction intervals
+  expect_equal(
+    quantile_score(observed, predicted, quantile_level),
+    wis(observed, predicted, quantile_level)
+  )
+
   observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
@@ -503,12 +511,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
@@ -547,12 +555,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
