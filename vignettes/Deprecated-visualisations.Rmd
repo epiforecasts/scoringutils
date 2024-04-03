@@ -123,7 +123,7 @@ plot_predictions <- function(data,
   } else if (get_forecast_type(data) == "sample") {
     # using a scoringutils internal function
     forecasts <- scoringutils:::sample_to_interval_long(
-      forecasts,
+      as_forecast(forecasts),
       interval_range = interval_range,
       keep_quantile_col = FALSE
     )
