@@ -27,6 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a>
     <a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a>
   </div>
 </li>
@@ -133,6 +134,7 @@
 <li>Deleted the function <code>plot_ranges()</code>. If you want to continue using the functionality, you can find the function code <a href="https://github.com/epiforecasts/scoringutils/issues/462" class="external-link">here</a> or in the Deprecated-visualisations Vignette.</li>
 <li>Removed the function <code>plot_predictions()</code>, as well as its helper function <code>make_NA()</code>, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">here</a> (Issue <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">#659</a>) or in the Deprecated-visualisations Vignette.</li>
 <li>Removed the function <code>plot_score_table()</code>. You can find the code in the Deprecated-visualisations Vignette.</li>
+<li>Removed the function <code>merge_pred_and_obs()</code> that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new “Deprecated functions”-vignette.</li>
 <li>Replaced warnings with errors in <code>pairwise_comparison</code> to avoid returning <code>NULL</code>
 </li>
 <li>Renamed <code>correlation()</code> to <code><a href="../reference/get_correlations.html">get_correlations()</a></code> and <code>plot_correlation()</code> to <code><a href="../reference/plot_correlations.html">plot_correlations()</a></code>
