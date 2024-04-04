@@ -393,7 +393,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     forecast <- copy(forecast)
   }
-  suppressWarnings(suppressMessages(assert_forecast(forecast)))
+  assert_forecast(forecast, silent = TRUE)
   if (na.omit) {
     forecast <- na.omit(forecast)
   }
