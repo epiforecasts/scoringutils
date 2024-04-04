@@ -124,7 +124,12 @@ for the split data.tables.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data.table with pairwise comparisons.</p>
+<p>A data.table with the results of pairwise comparisons
+containing the mean score ratios (<code>mean_scores_ratio</code>),
+unadjusted (<code>pval</code>) and adjusted (<code>adj_pval</code>) p-values, and relative skill
+values of each model (<code>..._relative_skill</code>). If a baseline model is given
+then the scaled relative skill is reported as well
+(<code>..._scaled_relative_skill</code>).</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
