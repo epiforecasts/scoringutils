@@ -320,6 +320,7 @@ validate_forecast <- function(forecast, forecast_type = NULL, silent = FALSE) {
 #' for all forecasts.
 #' @param data A data.table with forecasts and observed values that should
 #' be validated.
+#' @inheritParams assert_forecast
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table

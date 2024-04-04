@@ -9,6 +9,9 @@ assert_forecast_generic(data, silent = FALSE)
 \arguments{
 \item{data}{A data.table with forecasts and observed values that should
 be validated.}
+
+\item{silent}{Logical. If \code{TRUE} (default is \code{FALSE}), no messages and
+warnings will be created.}
 }
 \value{
 returns the input
