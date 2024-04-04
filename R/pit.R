@@ -145,9 +145,7 @@ get_pit <- function(forecast,
                     by,
                     n_replicates = 100) {
 
-  forecast <- copy(forecast)
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
-  forecast <- na.omit(forecast)
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_type <- get_forecast_type(forecast)
 
   if (forecast_type == "quantile") {
