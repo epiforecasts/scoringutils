@@ -42,7 +42,7 @@
 #' numeric with sample indices.
 #'
 #' For more information see the vignettes and the example data
-#' ([example_quantile], [example_sample_continuous], [example_integer],
+#' ([example_quantile], [example_sample_continuous], [example_sample_discrete],
 #' [example_point()], and [example_binary]).
 #'
 #' @details # Forecast unit

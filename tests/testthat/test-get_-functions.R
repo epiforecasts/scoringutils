@@ -29,7 +29,7 @@ test_that("removing NA rows from data works as expected", {
   expect_equal(nrow(na.omit(ex)), 2)
 
   # test that attributes and classes are retained
-  ex <- as_forecast(na.omit(example_integer))
+  ex <- as_forecast(na.omit(example_sample_discrete))
   expect_equal(
     class(na.omit(ex)),
     c("forecast_sample", "data.table", "data.frame")
@@ -165,7 +165,7 @@ test_that("get_duplicate_forecasts() works as expected for point", {
 test_that("get_forecast_type() works as expected", {
   expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
   expect_equal(get_forecast_type(example_sample_continuous), "sample")
-  expect_equal(get_forecast_type(example_integer), "sample")
+  expect_equal(get_forecast_type(example_sample_discrete), "sample")
   expect_equal(get_forecast_type(example_binary), "binary")
   expect_equal(get_forecast_type(example_point), "point")
 
@@ -279,12 +279,12 @@ test_that("get_forecast_counts() works as expected", {
   expect_equal(nrow(af), 50688)
 
   # check whether collapsing also works for model-based forecasts
-  af <- na.omit(example_integer) %>%
+  af <- na.omit(example_sample_discrete) %>%
     as_forecast() %>%
     get_forecast_counts(by = "model")
   expect_equal(nrow(af), 4)
 
-  af <- na.omit(example_integer) %>%
+  af <- na.omit(example_sample_discrete) %>%
     as_forecast() %>%
     get_forecast_counts(by = "model", collapse = c())
   expect_equal(af$count, c(10240, 10240, 5120, 9880))

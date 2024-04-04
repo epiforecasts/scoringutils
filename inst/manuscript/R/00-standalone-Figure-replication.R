@@ -534,7 +534,7 @@ p2 + p1 + p_true +
 # =============================================================================#
 # Figure 6
 # =============================================================================#
-available_forecasts(data = example_integer,
+available_forecasts(data = example_sample_discrete,
                 by = c("model", "target_type", "forecast_date")) |>
   plot_available_forecasts(x = "forecast_date",
                        show_counts = FALSE) +

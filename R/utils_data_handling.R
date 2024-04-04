@@ -103,7 +103,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @keywords data-handling
 #' @export
 #' @examples
-#' sample_to_quantile(as_forecast(example_integer))
+#' sample_to_quantile(as_forecast(example_sample_discrete))
 sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {

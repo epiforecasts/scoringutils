@@ -91,7 +91,7 @@ remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 
 ### Input formats and input validation
 
-The expected input format is generally a `data.frame` (or similar) with required columns `observed`, `predicted`, and `model` that holds the forecasts and observed values. Exact requirements depend on the forecast type. For more information, have a look at the [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link), call `?as_forecast()`, or have a look at the example data provided in the package (`example_binary`, `example_point`, `example_quantile`, `example_sample_continuous`, `example_integer`). 
+The expected input format is generally a `data.frame` (or similar) with required columns `observed`, `predicted`, and `model` that holds the forecasts and observed values. Exact requirements depend on the forecast type. For more information, have a look at the [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link), call `?as_forecast()`, or have a look at the example data provided in the package (`example_binary`, `example_point`, `example_quantile`, `example_sample_continuous`, `example_sample_discrete`). 
 
 Before scoring, input data needs to be validated and transformed into a forecast object using the function `as_forecast()`. 
 
