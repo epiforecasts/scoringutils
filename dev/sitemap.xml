@@ -145,12 +145,6 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_binary.html</loc>
   </url>
   <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/example_continuous.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/example_integer.html</loc>
-  </url>
-  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_point.html</loc>
   </url>
   <url>
@@ -158,6 +152,12 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_quantile_forecasts_only.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/example_sample_continuous.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/example_sample_discrete.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/example_truth_only.html</loc>
