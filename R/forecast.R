@@ -314,7 +314,7 @@ validate_general <- function(data) {
 
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
-  assert(check_duplicates(data, forecast_unit = forecast_unit))
+  assert(check_duplicates(data))
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
