@@ -110,7 +110,7 @@ sample_to_quantile <- function(forecast,
   forecast <- copy(forecast)
   suppressWarnings(
     suppressMessages(
-      validate_forecast(forecast, forecast_type = "sample")
+      assert_forecast(forecast, forecast_type = "sample")
     )
   )
   assert_numeric(quantile_level, min.len = 1)

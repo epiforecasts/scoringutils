@@ -225,12 +225,12 @@ test_that("is_forecast() works as expected", {
 
 
 # ==============================================================================
-# validate_forecast()
+# assert_forecast()
 # ==============================================================================
 
-test_that("validate_forecast() works as expected", {
+test_that("assert_forecast() works as expected", {
   # test that by default, `as_forecast()` errors
-  expect_error(validate_forecast(data.frame(x = 1:10)),
+  expect_error(assert_forecast(data.frame(x = 1:10)),
                "The input needs to be a forecast object.")
 })
 
@@ -260,16 +260,16 @@ test_that("validate_forecast.forecast_point() works as expected", {
   # expect an error if column is changed to character after initial validation.
   test <- test[, "predicted" := as.character(predicted)]
   expect_error(
-    validate_forecast(test),
+    assert_forecast(test),
     "Input looks like a point forecast, but found the following issue"
   )
 })
 
-test_that("validate_forecast() complains if the forecast type is wrong", {
+test_that("assert_forecast() complains if the forecast type is wrong", {
   test <- na.omit(data.table::copy(example_point))
   test <- as_forecast(test)
   expect_error(
-    validate_forecast(test, forecast_type = "quantile"),
+    assert_forecast(test, forecast_type = "quantile"),
     "Forecast type determined by scoringutils based on input:"
   )
 })

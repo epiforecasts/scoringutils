@@ -6,7 +6,7 @@
 \alias{validate_forecast.forecast_sample}
 \title{Validate input data}
 \usage{
-validate_forecast(forecast, forecast_type = NULL, ...)
+assert_forecast(forecast, forecast_type = NULL, ...)
 
 \method{validate_forecast}{forecast_quantile}(forecast, forecast_type = NULL, ...)
 
@@ -82,6 +82,6 @@ For more information see the vignettes and the example data
 
 \examples{
 forecast <- as_forecast(example_binary)
-validate_forecast(forecast)
+assert_forecast(forecast)
 }
 \keyword{check-forecasts}

@@ -161,7 +161,7 @@ as_forecast.default <- function(data,
   data <- new_forecast(data, paste0("forecast_", forecast_type))
 
   # validate class
-  validate_forecast(data)
+  assert_forecast(data)
 }
 
 
@@ -183,16 +183,20 @@ as_forecast.default <- function(data,
 #' @keywords check-forecasts
 #' @examples
 #' forecast <- as_forecast(example_binary)
-#' validate_forecast(forecast)
-validate_forecast <- function(forecast, forecast_type = NULL, ...) {
-  UseMethod("validate_forecast")
+#' assert_forecast(forecast)
+assert_forecast <- function(
+  forecast, forecast_type = NULL, silent = FALSE, ...
+) {
+  UseMethod("assert_forecast")
 }
 
 
 #' @importFrom cli cli_abort
 #' @export
 #' @keywords check-forecasts
-validate_forecast.default <- function(forecast, forecast_type = NULL, ...) {
+assert_forecast.default <- function(
+  forecast, forecast_type = NULL, silent = FALSE, ...
+) {
   cli_abort(
     c(
       "!" = "The input needs to be a forecast object.",
@@ -205,7 +209,9 @@ validate_forecast.default <- function(forecast, forecast_type = NULL, ...) {
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_binary <- function(forecast, forecast_type = NULL, ...) {
+assert_forecast.forecast_binary <- function(
+  forecast, forecast_type = NULL, silent = FALSE, ...
+) {
   forecast <- validate_general(forecast)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
 
@@ -232,14 +238,16 @@ validate_forecast.forecast_binary <- function(forecast, forecast_type = NULL, ..
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_point <- function(forecast, forecast_type = NULL, ...) {
+assert_forecast.forecast_point <- function(
+  forecast, forecast_type = NULL, silent = FALSE, ...
+) {
   forecast <- validate_general(forecast)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
@@ -253,29 +261,30 @@ validate_forecast.forecast_point <- function(forecast, forecast_type = NULL, ...
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_quantile <- function(forecast,
-                                                forecast_type = NULL, ...) {
+assert_forecast.forecast_quantile <- function(
+  forecast, forecast_type = NULL, silent = FALSE, ...
+) {
   forecast <- validate_general(forecast)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
+assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
   forecast <- validate_general(forecast)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
@@ -363,7 +372,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     forecast <- copy(forecast)
   }
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  suppressWarnings(suppressMessages(assert_forecast(forecast)))
   if (na.omit) {
     forecast <- na.omit(forecast)
   }

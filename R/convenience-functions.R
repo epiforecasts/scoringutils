@@ -272,7 +272,7 @@ set_forecast_unit <- function(data, forecast_unit) {
   out <- unique(data[, .SD, .SDcols = keep_cols])
   # validate that output remains a valid forecast object if input was one before
   if (is_forecast(out)) {
-    validate_forecast(out)
+    assert_forecast(out)
   }
   return(out)
 }
