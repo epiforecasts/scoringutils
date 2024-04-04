@@ -47,7 +47,7 @@ test_that("get_pairwise_comparisons() works", {
   forecasts_formatted <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formatted, old = "value", new = "predicted")
 
-  data_formatted <- scoringutils::merge_pred_and_obs(
+  data_formatted <- merge(
     forecasts_formatted,
     truth_formatted
   ) %>%

@@ -58,6 +58,7 @@ paper.
 - Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462) or in the Deprecated-visualisations Vignette.
 - Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659) or in the Deprecated-visualisations Vignette.
 - Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
+- Removed the function `merge_pred_and_obs()` that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new "Deprecated functions"-vignette.
 - Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
 - `pit()` was renamed to `get_pit()`. 
