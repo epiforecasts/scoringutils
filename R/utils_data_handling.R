@@ -88,7 +88,7 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' Transform data from a format that is based on predictive samples to a format
 #' based on plain quantiles.
 #'
-#' @param data A `forecast` object of class `forecast_sample` (a validated
+#' @param forecast A `forecast` object of class `forecast_sample` (a validated
 #'   data.table with predicted and observed values, see [as_forecast()]).
 #'
 #' @param quantile_level A numeric vector of quantile levels for which
@@ -104,67 +104,68 @@ merge_pred_and_obs <- function(forecasts, observations,
 #' @export
 #' @examples
 #' sample_to_quantile(as_forecast(example_integer))
-sample_to_quantile <- function(data,
+sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
-  data <- copy(data)
+  forecast <- copy(forecast)
   suppressWarnings(
     suppressMessages(
-      validate_forecast(data, forecast_type = "sample")
+      validate_forecast(forecast, forecast_type = "sample")
     )
   )
   assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
-  by <- setdiff(colnames(data), reserved_columns)
+  by <- setdiff(colnames(forecast), reserved_columns)
 
   quantile_level <- unique(
     round(c(quantile_level, 1 - quantile_level), digits = 10)
   )
 
-  data <- data[, .(quantile_level = quantile_level,
-                   predicted = quantile(x = predicted, probs = ..quantile_level,
-                                        type = ..type, na.rm = TRUE)),
-               by = by]
+  forecast <-
+    forecast[, .(quantile_level = quantile_level,
+                 predicted = quantile(x = predicted, probs = ..quantile_level,
+                                      type = ..type, na.rm = TRUE)),
+             by = by]
 
-  return(as_forecast(data))
+  return(as_forecast(forecast))
 }
 
 
 # ==================== Functions internally used for scoring ===================
 # These functions would ideally be replaced in the future
 
-#' @title Change data from an interval format to a quantile format
+#' @title Change forecast from an interval format to a quantile format
 #'
 #' @description
-#' Transform data from a format that uses interval ranges to denote quantiles
+#' Transform forecast from a format that uses interval ranges to denote quantiles
 #' to a format that uses quantiles only.
 #'
-#' @param data A data.frame following the specifications from
+#' @param forecast A data.frame following the specifications from
 #'   [score()]) for quantile forecasts.
 #' @param keep_range_col Logical, default is `FALSE`. Keep the
 #'   interval_range and boundary columns after transformation?
 #' @return a data.table in a plain quantile format
 #' @keywords internal
-interval_long_to_quantile <- function(data,
+interval_long_to_quantile <- function(forecast,
                                       keep_range_col = FALSE) {
-  data <- ensure_data.table(data)
+  forecast <- ensure_data.table(forecast)
 
   # filter out duplicated median
   # note that this also filters out instances where range is NA, i.e.
   # a point forecast. This should probably be dealt with in the future
-  data <- data[!(interval_range == 0 & boundary == "upper"), ]
+  forecast <- forecast[!(interval_range == 0 & boundary == "upper"), ]
 
-  data[, quantile_level := ifelse(
+  forecast[, quantile_level := ifelse(
     boundary == "lower",
     round((100 - interval_range) / 200, 10),
     round((1 - (100 - interval_range) / 200), 10)
   )]
 
   if (!keep_range_col) {
-    data[, c("interval_range", "boundary") := NULL]
+    forecast[, c("interval_range", "boundary") := NULL]
   }
 
-  return(unique(data)[])
+  return(unique(forecast)[])
 }
 
 
@@ -195,7 +196,7 @@ quantile_to_interval <- function(...) {
 }
 
 
-#' @param dt A data.table with forecasts in a quantile-based format (see
+#' @param forecast A data.table with forecasts in a quantile-based format (see
 #'   [as_forecast()]).
 #' @param format The format of the output. Either "long" or "wide". If "long"
 #'   (the default), there will be a column `boundary` (with values either
@@ -215,33 +216,33 @@ quantile_to_interval <- function(...) {
 #' @export
 #' @rdname quantile_to_interval
 #' @keywords data-handling
-quantile_to_interval.data.frame <- function(dt,
+quantile_to_interval.data.frame <- function(forecast,
                                             format = "long",
                                             keep_quantile_col = FALSE,
                                             ...) {
-  dt <- ensure_data.table(dt)
+  forecast <- ensure_data.table(forecast)
 
-  dt[, boundary := ifelse(quantile_level <= 0.5, "lower", "upper")]
-  dt[, interval_range := get_range_from_quantile(quantile_level)]
+  forecast[, boundary := ifelse(quantile_level <= 0.5, "lower", "upper")]
+  forecast[, interval_range := get_range_from_quantile(quantile_level)]
 
   # add median quantile
-  median <- dt[quantile_level == 0.5, ]
+  median <- forecast[quantile_level == 0.5, ]
   median[, boundary := "upper"]
 
-  dt <- data.table::rbindlist(list(dt, median))
+  forecast <- data.table::rbindlist(list(forecast, median))
   if (!keep_quantile_col) {
-    dt[, quantile_level := NULL]
+    forecast[, quantile_level := NULL]
   }
 
   if (format == "wide") {
-    suppressWarnings(dt[, "quantile_level" := NULL])
-    dt <- dcast(dt, ... ~ boundary, value.var = "predicted")
+    suppressWarnings(forecast[, "quantile_level" := NULL])
+    forecast <- dcast(forecast, ... ~ boundary, value.var = "predicted")
     # if there are NA values in `predicted`, this introduces a column "NA"
-    if ("NA" %in% colnames(dt) && all(is.na(dt[["NA"]]))) {
-      dt[, "NA" := NULL]
+    if ("NA" %in% colnames(forecast) && all(is.na(forecast[["NA"]]))) {
+      forecast[, "NA" := NULL]
     }
   }
-  return(dt[])
+  return(forecast[])
 }
 
 

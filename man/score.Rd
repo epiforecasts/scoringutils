@@ -8,18 +8,18 @@
 \alias{score.forecast_quantile}
 \title{Evaluate forecasts}
 \usage{
-score(data, metrics, ...)
+score(forecast, metrics, ...)
 
-\method{score}{forecast_binary}(data, metrics = metrics_binary(), ...)
+\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
 
-\method{score}{forecast_point}(data, metrics = metrics_point(), ...)
+\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
 
-\method{score}{forecast_sample}(data, metrics = metrics_sample(), ...)
+\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
 
-\method{score}{forecast_quantile}(data, metrics = metrics_quantile(), ...)
+\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as

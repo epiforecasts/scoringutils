@@ -6,16 +6,15 @@
 \alias{validate_forecast.forecast_sample}
 \title{Validate input data}
 \usage{
-validate_forecast(data, forecast_type = NULL, ...)
+validate_forecast(forecast, forecast_type = NULL, ...)
 
-\method{validate_forecast}{forecast_quantile}(data, forecast_type = NULL, ...)
+\method{validate_forecast}{forecast_quantile}(forecast, forecast_type = NULL, ...)
 
-\method{validate_forecast}{forecast_sample}(data, forecast_type = NULL, ...)
+\method{validate_forecast}{forecast_sample}(forecast, forecast_type = NULL, ...)
 }
 \arguments{
-\item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{forecast_type}{(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by \code{scoringutils} based on the

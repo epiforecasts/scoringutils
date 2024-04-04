@@ -5,13 +5,13 @@
 \title{Change data from a sample based format to a quantile format}
 \usage{
 sample_to_quantile(
-  data,
+  forecast,
   quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
   type = 7
 )
 }
 \arguments{
-\item{data}{A \code{forecast} object of class \code{forecast_sample} (a validated
+\item{forecast}{A \code{forecast} object of class \code{forecast_sample} (a validated
 data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{quantile_level}{A numeric vector of quantile levels for which

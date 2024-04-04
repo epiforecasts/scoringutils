@@ -4,15 +4,15 @@
 \alias{get_pit}
 \title{Probability integral transformation (data.frame version)}
 \usage{
-get_pit(data, by, n_replicates = 100)
+get_pit(forecast, by, n_replicates = 100)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
-'location' in the data and want to have a PIT histogram for
+'location' in the input data and want to have a PIT histogram for
 every model and location, specify \code{by = c("model", "location")}.}
 
 \item{n_replicates}{The number of draws for the randomised PIT for

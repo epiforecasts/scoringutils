@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{interval_long_to_quantile}
 \alias{interval_long_to_quantile}
-\title{Change data from an interval format to a quantile format}
+\title{Change forecast from an interval format to a quantile format}
 \usage{
-interval_long_to_quantile(data, keep_range_col = FALSE)
+interval_long_to_quantile(forecast, keep_range_col = FALSE)
 }
 \arguments{
-\item{data}{A data.frame following the specifications from
+\item{forecast}{A data.frame following the specifications from
 \code{\link[=score]{score()}}) for quantile forecasts.}
 
 \item{keep_range_col}{Logical, default is \code{FALSE}. Keep the
@@ -17,7 +17,7 @@ interval_range and boundary columns after transformation?}
 a data.table in a plain quantile format
 }
 \description{
-Transform data from a format that uses interval ranges to denote quantiles
+Transform forecast from a format that uses interval ranges to denote quantiles
 to a format that uses quantiles only.
 }
 \keyword{internal}

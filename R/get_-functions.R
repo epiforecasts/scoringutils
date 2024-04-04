@@ -288,10 +288,6 @@ get_protected_columns <- function(data = NULL) {
 #'
 #' @param data A data.frame as used for [score()]
 #'
-#' @param forecast_unit A character vector with the column names that define
-#'   the unit of a single forecast. By default the forecast unit will be
-#'   automatically inferred from the data (see [get_forecast_unit()])
-#'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
@@ -301,11 +297,10 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(
-  data,
-  forecast_unit = get_forecast_unit(data)
+  data
 ) {
   assert_data_frame(data)
-  assert_subset(forecast_unit, colnames(data))
+  forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   data <- as.data.table(data)
@@ -374,48 +369,48 @@ get_duplicate_forecasts <- function(
 #' @export
 #' @keywords scoring
 #' @export
-get_coverage <- function(data, by = "model") {
+get_coverage <- function(forecast, by = "model") {
   # input checks ---------------------------------------------------------------
-  data <- clean_forecast(data, copy = TRUE, na.omit = TRUE)
-  assert_subset(get_forecast_type(data), "quantile")
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  assert_subset(get_forecast_type(forecast), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway
   by <- setdiff(by, c("quantile_level", "interval_range"))
-  assert_subset(by, names(data))
+  assert_subset(by, names(forecast))
 
   # convert to wide interval format and compute interval coverage --------------
-  interval_data <- quantile_to_interval(data, format = "wide")
-  interval_data[,
+  interval_forecast <- quantile_to_interval(forecast, format = "wide")
+  interval_forecast[,
     interval_coverage := (observed <= upper) & (observed >= lower)
   ][, c("lower", "upper", "observed") := NULL]
-  interval_data[, interval_coverage_deviation :=
-                  interval_coverage - interval_range / 100]
+  interval_forecast[, interval_coverage_deviation :=
+                      interval_coverage - interval_range / 100]
 
   # merge interval range data with original data -------------------------------
   # preparations
-  data[, interval_range := get_range_from_quantile(quantile_level)]
-  data_cols <- colnames(data) # store so we can reset column order later
-  forecast_unit <- get_forecast_unit(data)
+  forecast[, interval_range := get_range_from_quantile(quantile_level)]
+  forecast_cols <- colnames(forecast) # store so we can reset column order later
+  forecast_unit <- get_forecast_unit(forecast)
 
-  data <- merge(data, interval_data,
-                by = unique(c(forecast_unit, "interval_range")))
+  forecast <- merge(forecast, interval_forecast,
+                    by = unique(c(forecast_unit, "interval_range")))
 
   # compute quantile coverage and deviation ------------------------------------
-  data[, quantile_coverage := observed <= predicted]
-  data[, quantile_coverage_deviation := quantile_coverage - quantile_level]
+  forecast[, quantile_coverage := observed <= predicted]
+  forecast[, quantile_coverage_deviation := quantile_coverage - quantile_level]
 
   # summarise coverage values according to `by` and cleanup --------------------
   # reset column order
   new_metrics <- c("interval_coverage", "interval_coverage_deviation",
                    "quantile_coverage", "quantile_coverage_deviation")
-  setcolorder(data, unique(c(data_cols, "interval_range", new_metrics)))
+  setcolorder(forecast, unique(c(forecast_cols, "interval_range", new_metrics)))
   # remove forecast class and convert to regular data.table
-  data <- as.data.table(data)
+  forecast <- as.data.table(forecast)
   by <- unique(c(by, "quantile_level", "interval_range"))
   # summarise
-  data <- data[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
-  return(data[])
+  forecast <- forecast[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
+  return(forecast[])
 }
 
 
@@ -460,12 +455,12 @@ get_coverage <- function(data, by = "model") {
 #'   as_forecast(example_quantile),
 #'   by = c("model", "target_type")
 #' )
-get_forecast_counts <- function(data,
-                                by = get_forecast_unit(data),
+get_forecast_counts <- function(forecast,
+                                by = get_forecast_unit(forecast),
                                 collapse = c("quantile_level", "sample_id")) {
-  data <- clean_forecast(data, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(data)
-  assert_subset(by, names(data))
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
+  assert_subset(by, names(forecast))
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
@@ -473,16 +468,16 @@ get_forecast_counts <- function(data,
     c(forecast_unit, "quantile_level", "sample_id"),
     collapse
   )
-  # filter out "quantile_level" or "sample" if present in collapse_by, but not data
-  collapse_by <- intersect(collapse_by, names(data))
+  # filter "quantile_level", "sample" if in `collapse_by`, but not the forecast
+  collapse_by <- intersect(collapse_by, names(forecast))
 
-  data <- data[data[, .I[1], by = collapse_by]$V1]
+  forecast <- forecast[forecast[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- as.data.table(data)[, .(count = .N), by = by]
+  out <- as.data.table(forecast)[, .(count = .N), by = by]
 
   # make sure that all combinations in "by" are included in the output (with
-  # count = 0). To achieve that, take the unique values in data and expand grid
+  # count = 0). To achieve that, take unique values in `forecast` and expand grid
   col_vecs <- unclass(out)
   col_vecs$count <- NULL
   col_vecs <- lapply(col_vecs, unique)

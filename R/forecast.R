@@ -172,6 +172,7 @@ as_forecast.default <- function(data,
 #' checks that are the same for all forecast types and then perform specific
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
+#' @inheritParams score
 #' @inheritSection forecast_types Forecast types and input formats
 #' @return Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
@@ -183,7 +184,7 @@ as_forecast.default <- function(data,
 #' @examples
 #' forecast <- as_forecast(example_binary)
 #' validate_forecast(forecast)
-validate_forecast <- function(data, forecast_type = NULL, ...) {
+validate_forecast <- function(forecast, forecast_type = NULL, ...) {
   UseMethod("validate_forecast")
 }
 
@@ -191,7 +192,7 @@ validate_forecast <- function(data, forecast_type = NULL, ...) {
 #' @importFrom cli cli_abort
 #' @export
 #' @keywords check-forecasts
-validate_forecast.default <- function(data, forecast_type = NULL, ...) {
+validate_forecast.default <- function(forecast, forecast_type = NULL, ...) {
   cli_abort(
     c(
       "!" = "The input needs to be a forecast object.",
@@ -204,77 +205,77 @@ validate_forecast.default <- function(data, forecast_type = NULL, ...) {
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_binary <- function(data, forecast_type = NULL, ...) {
-  data <- validate_general(data)
-  assert_forecast_type(data, actual = "binary", desired = forecast_type)
+validate_forecast.forecast_binary <- function(forecast, forecast_type = NULL, ...) {
+  forecast <- validate_general(forecast)
+  assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
-    data, c("sample_id", "quantile_level")
+    forecast, c("sample_id", "quantile_level")
   )
   if (!columns_correct) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Checking `data`: Input looks like a binary forecast, but an
+        "!" = "Checking `forecast`: Input looks like a binary forecast, but an
          additional column called `sample_id` or `quantile` was found.",
         "i" = "Please remove the column."
       )
     )
   }
-  input_check <- check_input_binary(data$observed, data$predicted)
+  input_check <- check_input_binary(forecast$observed, forecast$predicted)
   if (!is.logical(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `data`: Input looks like a binary forecast, but found
-             the following issue: {input_check}"
+        "!" = "Checking `forecast`: Input looks like a binary forecast, but
+             found the following issue: {input_check}"
       )
     )
     #nolint end
   }
-  return(data[])
+  return(forecast[])
 }
 
 
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_point <- function(data, forecast_type = NULL, ...) {
-  data <- validate_general(data)
-  assert_forecast_type(data, actual = "point", desired = forecast_type)
+validate_forecast.forecast_point <- function(forecast, forecast_type = NULL, ...) {
+  forecast <- validate_general(forecast)
+  assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
-  input_check <- check_input_point(data$observed, data$predicted)
+  input_check <- check_input_point(forecast$observed, forecast$predicted)
   if (!is.logical(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `data`: Input looks like a point forecast, but found
+        "!" = "Checking `forecast`: Input looks like a point forecast, but found
         the following issue: {input_check}"
       )
     )
     #nolint end
   }
-  return(data[])
+  return(forecast[])
 }
 
 
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_quantile <- function(data,
+validate_forecast.forecast_quantile <- function(forecast,
                                                 forecast_type = NULL, ...) {
-  data <- validate_general(data)
-  assert_forecast_type(data, actual = "quantile", desired = forecast_type)
-  assert_numeric(data$quantile_level, lower = 0, upper = 1)
-  return(data[])
+  forecast <- validate_general(forecast)
+  assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
+  assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
+  return(forecast[])
 }
 
 
 #' @export
 #' @rdname validate_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
-  data <- validate_general(data)
-  assert_forecast_type(data, actual = "sample", desired = forecast_type)
-  return(data[])
+validate_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
+  forecast <- validate_general(forecast)
+  assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
+  return(forecast[])
 }
 
 
@@ -283,13 +284,14 @@ validate_forecast.forecast_sample <- function(data, forecast_type = NULL, ...) {
 #' @description
 #' The function runs input checks that apply to all input data, regardless of
 #' forecast type. The function
-#' - asserts that the data is a data.table which has columns `observed` and
+#' - asserts that the forecast is a data.table which has columns `observed` and
 #' `predicted`, as well as a column called `model`.
 #' - checks the forecast type and forecast unit
 #' - checks there are no duplicate forecasts
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts.
-#' @inheritParams get_forecast_counts
+#' @param data A data.table with forecasts and observed values that should
+#' be validated.
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
@@ -312,7 +314,7 @@ validate_general <- function(data) {
 
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
-  assert(check_duplicates(data, forecast_unit = forecast_unit))
+  assert(check_duplicates(data))
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)

@@ -8,7 +8,7 @@
 #' Calibration or reliability of forecasts is the ability of a model to
 #' correctly identify its own uncertainty in making predictions. In a model
 #' with perfect calibration, the observed data at each time point look as if
-#' they came from the predictive probability distribution at that time.
+#' they came from the predictive proba bility distribution at that time.
 #'
 #' Equivalently, one can inspect the probability integral transform of the
 #' predictive distribution at time t,
@@ -121,7 +121,7 @@ pit_sample <- function(observed,
 #' @inherit score params
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
-#' 'location' in the data and want to have a PIT histogram for
+#' 'location' in the input data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit_sample
 #' @return A data.table with PIT values according to the grouping specified in
@@ -141,17 +141,18 @@ pit_sample <- function(observed,
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords scoring
 
-get_pit <- function(data,
+get_pit <- function(forecast,
                     by,
                     n_replicates = 100) {
 
-  data <- clean_forecast(data, copy = TRUE, na.omit = TRUE)
-  forecast_type <- get_forecast_type(data)
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_type <- get_forecast_type(forecast)
 
   if (forecast_type == "quantile") {
-    data[, quantile_coverage := (observed <= predicted)]
-    quantile_coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
-                              by = c(unique(c(by, "quantile_level")))]
+    forecast[, quantile_coverage := (observed <= predicted)]
+    quantile_coverage <-
+      forecast[, .(quantile_coverage = mean(quantile_coverage)),
+               by = c(unique(c(by, "quantile_level")))]
     quantile_coverage <- quantile_coverage[order(quantile_level),
       .(
         quantile_level = c(quantile_level, 1),
@@ -163,17 +164,17 @@ get_pit <- function(data,
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
-  data_wide <- data.table::dcast(data,
+  forecast_wide <- data.table::dcast(forecast,
     ... ~ paste0("InternalSampl_", sample_id),
     value.var = "predicted"
   )
 
-  pit <- data_wide[, .(pit_value = pit_sample(
+  pit <- forecast_wide[, .(pit_value = pit_sample(
     observed = observed,
     predicted = as.matrix(.SD)
   )),
   by = by,
-  .SDcols = grepl("InternalSampl_", names(data_wide), fixed = TRUE)
+  .SDcols = grepl("InternalSampl_", names(forecast_wide), fixed = TRUE)
   ]
 
   return(pit[])
