@@ -371,9 +371,7 @@ get_duplicate_forecasts <- function(
 #' @export
 get_coverage <- function(forecast, by = "model") {
   # input checks ---------------------------------------------------------------
-  forecast <- copy(forecast)
-  forecast <- na.omit(forecast)
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   assert_subset(get_forecast_type(forecast), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
@@ -460,10 +458,8 @@ get_coverage <- function(forecast, by = "model") {
 get_forecast_counts <- function(forecast,
                                 by = get_forecast_unit(forecast),
                                 collapse = c("quantile_level", "sample_id")) {
-  forecast <- copy(forecast)
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
-  forecast <- na.omit(forecast)
   assert_subset(by, names(forecast))
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,

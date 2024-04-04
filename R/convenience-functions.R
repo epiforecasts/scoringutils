@@ -114,9 +114,7 @@ transform_forecasts <- function(forecast,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  # input checks
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
-  original_forecast <- copy(forecast)
+  original_forecast <- clean_forecast(forecast, copy = TRUE)
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)

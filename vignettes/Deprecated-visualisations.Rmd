@@ -6,7 +6,7 @@ output:
     toc_depth: 3
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Visualisations}
+  %\VignetteIndexEntry{Deprecated Visualisations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
