@@ -117,7 +117,7 @@ score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(data, metrics = metrics_sample(), ...) {
+score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
