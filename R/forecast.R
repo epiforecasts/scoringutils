@@ -162,6 +162,7 @@ as_forecast.default <- function(data,
 
   # validate class
   assert_forecast(data)
+  return(data)
 }
 
 
@@ -173,8 +174,11 @@ as_forecast.default <- function(data,
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
 #' @inheritParams score
+#' @param silent Logical. If `TRUE` (default is `FALSE`), no messages and
+#'   warnings will be created.
 #' @inheritSection forecast_types Forecast types and input formats
-#' @return Depending on the forecast type, an object of class
+#' @return
+#' Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
 #' `forecast_quantile`.
 #' @importFrom data.table ':=' is.data.table
