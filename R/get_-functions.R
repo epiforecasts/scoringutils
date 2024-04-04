@@ -288,10 +288,6 @@ get_protected_columns <- function(data = NULL) {
 #'
 #' @param data A data.frame as used for [score()]
 #'
-#' @param forecast_unit A character vector with the column names that define
-#'   the unit of a single forecast. By default the forecast unit will be
-#'   automatically inferred from the data (see [get_forecast_unit()])
-#'
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
@@ -301,11 +297,10 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(
-  data,
-  forecast_unit = get_forecast_unit(data)
+  data
 ) {
   assert_data_frame(data)
-  assert_subset(forecast_unit, colnames(data))
+  forecast_unit = get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   data <- as.data.table(data)
