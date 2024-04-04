@@ -300,7 +300,7 @@ get_duplicate_forecasts <- function(
   data
 ) {
   assert_data_frame(data)
-  forecast_unit = get_forecast_unit(data)
+  forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   data <- as.data.table(data)
