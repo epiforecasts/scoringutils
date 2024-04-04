@@ -102,10 +102,3 @@ merge_pred_and_obs <- function(forecasts, observations,
   return(combined[])
 }
 ```
-
-
-
-
-
-
-This function mer

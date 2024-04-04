@@ -150,20 +150,6 @@ test_that("as_forecast() function throws an error when no predictions or observe
   "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.")
 })
 
-# test_that("as_forecast() function throws an error when no predictions or observed values are present", {
-#   expect_error(suppressMessages(suppressWarnings(as_forecast(
-#     data.table::copy(example_quantile)[, predicted := NA]
-#   ))))
-#   expect_error(suppressMessages(suppressWarnings(check_forecasts(
-#     data.table::copy(example_quantile)[, observed := NA]
-#   ))))
-# })
-
-# test_that("as_forecast() function throws an sample/quantile not present", {
-#   expect_error(suppressMessages(suppressWarnings(as_forecast(
-#     data.table::copy(example_quantile)[, quantile := NULL]
-#   ))))
-# })
 
 test_that("output of as_forecasts() is accepted as input to score()", {
   check <- suppressMessages(as_forecast(example_binary))
@@ -273,4 +259,3 @@ test_that("validate_forecast() complains if the forecast type is wrong", {
     "Forecast type determined by scoringutils based on input:"
   )
 })
-

@@ -11,7 +11,7 @@ test_that("get_correlations() works as expected", {
   )
 
   # expect no error even if scores are unsummarised
-  # (meaning that coverage will be a logical vecotr instead of a numeric)
+  # (meaning that coverage will be a logical vector instead of a numeric)
   expect_no_condition(
     correlations2 <- scores_quantile %>%
       get_correlations(digits = 2)
