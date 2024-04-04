@@ -14,10 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(scoringutils)
-```
-
 This Vignette provides a small collection of functions that have been deprecated in `scoringutils`. These functions are no longer, but may still prove useful or illustrative. 
 
 # `merge_pred_and_obs()`
