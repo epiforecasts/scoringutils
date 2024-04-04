@@ -4,7 +4,7 @@
 \alias{assert_forecast}
 \alias{assert_forecast.forecast_quantile}
 \alias{assert_forecast.forecast_sample}
-\title{Validate input data}
+\title{Assert that input is a forecast object and passes validations}
 \usage{
 assert_forecast(forecast, forecast_type = NULL, silent = FALSE, ...)
 

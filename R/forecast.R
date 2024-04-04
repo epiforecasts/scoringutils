@@ -166,7 +166,7 @@ as_forecast.default <- function(data,
 }
 
 
-#' @title Validate input data
+#' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
 #' Methods for the different classes run [validate_general()], which performs
@@ -289,6 +289,21 @@ assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...)
   forecast <- validate_general(forecast)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
   return(invisible(NULL))
+}
+
+
+#' @title Re-validate an existing forecast object
+#'
+#' @description
+#' The function re-validates an existing forecast object. It is similar to
+#' [assert_forecast()], but returns the input data instead of an invisible
+#' `NULL`. See [as_forecast()] for details on the expected input formats.
+#' @inherit assert_forecast params return examples
+#' @export
+#' @keywords check-forecasts
+validate_forecast <- function(forecast, forecast_type = NULL, silent = FALSE) {
+  assert_forecast(forecast, forecast_type, silent)
+  return(forecast)
 }
 
 
