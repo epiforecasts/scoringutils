@@ -4,10 +4,10 @@
 \alias{clean_forecast}
 \title{Validate forecast objects for internal use}
 \usage{
-clean_forecast(data, copy = FALSE, na.omit = FALSE)
+clean_forecast(forecast, copy = FALSE, na.omit = FALSE)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{copy}{Logical, default is \code{FALSE}. If \code{TRUE}, a copy of the input data
