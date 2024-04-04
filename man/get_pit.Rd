@@ -27,7 +27,7 @@ Compute the Probability Integral Transformation (PIT) for
 validated forecast objects.
 }
 \examples{
-result <- get_pit(as_forecast(example_continuous), by = "model")
+result <- get_pit(as_forecast(example_sample_continuous), by = "model")
 plot_pit(result)
 
 # example with quantile data

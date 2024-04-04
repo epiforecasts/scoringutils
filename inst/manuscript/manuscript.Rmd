@@ -206,7 +206,7 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 
 The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object". The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values, and a column `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
 
-The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
+The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_sample_continuous`, `example_integer`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
 ### The unit of a single forecast
 
@@ -334,7 +334,7 @@ A common way to visualise probabilistic calibration is the probability integral 
 Users can obtain PIT histograms based on validated forecast objects using the function \fct{get\_pit} and can visualise results using \fct{plot\_pit}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
-example_continuous |>
+example_sample_continuous |>
   get_pit(by = c("model", "target_type")) |>
   plot_pit() + 
   facet_grid(target_type ~ model)
@@ -532,7 +532,7 @@ The user must exercise additional caution and should usually avoid aggregating s
 To detect systematic patterns it may be useful to visualise a single score across several dimensions. The function \fct{plot\_heatmap} can be used to create a heatmap that achieves this. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}). 
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (underprediction)"}
-example_continuous[horizon == 2] |>
+example_sample_continuous[horizon == 2] |>
   as_forecast() |>
   score() |>
   summarise_scores(by = c("model", "location", "target_type")) |>

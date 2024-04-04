@@ -166,7 +166,7 @@ get_samples <- function(values, quantiles, n_samples = 1000) {
 # calculate samples
 setDT(example_quantile)
 n_samples <- 40
-example_continuous <- example_quantile[, .(
+example_sample_continuous <- example_quantile[, .(
   predicted = get_samples(
     predicted,
     quantile,
@@ -182,13 +182,13 @@ by = c(
 )
 ]
 # remove unnecessary rows where no predictions are available
-example_continuous[is.na(predicted), sample_id := NA]
-example_continuous <- unique(example_continuous)
-usethis::use_data(example_continuous, overwrite = TRUE)
+example_sample_continuous[is.na(predicted), sample_id := NA]
+example_sample_continuous <- unique(example_sample_continuous)
+usethis::use_data(example_sample_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
-example_integer <- data.table::copy(example_continuous)
+example_integer <- data.table::copy(example_sample_continuous)
 example_integer <- example_integer[, predicted := round(predicted)]
 usethis::use_data(example_integer, overwrite = TRUE)
 
@@ -199,7 +199,7 @@ usethis::use_data(example_integer, overwrite = TRUE)
 # observed value was below or above that mean prediction.
 # Take this as a way to create example data, not as sound statistical practice
 
-example_binary <- data.table::copy(example_continuous)
+example_binary <- data.table::copy(example_sample_continuous)
 
 # store grouping variable
 by <- c(

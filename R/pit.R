@@ -127,7 +127,7 @@ pit_sample <- function(observed,
 #' @return A data.table with PIT values according to the grouping specified in
 #' `by`.
 #' @examples
-#' result <- get_pit(as_forecast(example_continuous), by = "model")
+#' result <- get_pit(as_forecast(example_sample_continuous), by = "model")
 #' plot_pit(result)
 #'
 #' # example with quantile data

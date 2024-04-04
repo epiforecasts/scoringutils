@@ -61,7 +61,7 @@ In previous versions of `scoringutils`, forecasts and observed values could be v
 #" library(ggplot2)
 #" library(magrittr)
 #"
-#" example_continuous %>%
+#" example_sample_continuous %>%
 #"   make_NA (
 #"     what = "truth",
 #"     target_end_date >= "2021-07-22",
@@ -80,7 +80,7 @@ In previous versions of `scoringutils`, forecasts and observed values could be v
 #"   facet_wrap(~ location + target_type, scales = "free_y") +
 #"   aes(fill = model, color = model)
 #"
-#" example_continuous %>%
+#" example_sample_continuous %>%
 #"   make_NA (
 #"     what = "truth",
 #"     target_end_date >= "2021-07-22",
@@ -242,7 +242,7 @@ plot_predictions <- function(data,
 #"
 #" @examples
 #" make_NA (
-#"     example_continuous,
+#"     example_sample_continuous,
 #"     what = "truth",
 #"     target_end_date >= "2021-07-22",
 #"     target_end_date < "2021-05-01"
@@ -314,7 +314,7 @@ example_quantile %>%
 And a similar plot, this time based on continuous forecasts. The predictions are automatically converted to a quantile-based forecasts for plotting.
 
 ```{r}
-example_continuous %>%
+example_sample_continuous %>%
   make_NA(what = "truth",
           target_end_date <= "2021-05-01",
           target_end_date > "2021-07-22") %>%

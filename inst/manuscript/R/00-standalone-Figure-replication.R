@@ -394,7 +394,7 @@ ggplot(df, aes(x = factor(outcome), y = prob)) +
 # =============================================================================#
 
 ## Real Data
-ex <- example_continuous |>
+ex <- example_sample_continuous |>
   filter(model == "EuroCOVIDhub-ensemble")
 
 scores <- ex |>
@@ -585,7 +585,7 @@ score(example_quantile) |>
 # =============================================================================#
 # Figure 10
 # =============================================================================#
-score(example_continuous) |>
+score(example_sample_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   plot_heatmap(x = "location", metric = "bias") +
   facet_wrap(~ target_type)
@@ -622,7 +622,7 @@ p1 + p2 +
 # =============================================================================#
 # Figure 12
 # =============================================================================#
-example_continuous |>
+example_sample_continuous |>
   get_pit(by = c("model", "target_type")) |>
   plot_pit() +
   facet_grid(target_type ~ model)
