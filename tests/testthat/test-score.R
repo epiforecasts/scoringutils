@@ -42,7 +42,7 @@ test_that("Output of `score()` has the class `scores()`", {
 # common error handling --------------------------------------------------------
 test_that("function throws an error if data is not a forecast object", {
   expect_error(
-    score(data = NULL),
+    score(forecast = NULL),
     "The input needs to be a forecast object."
   )
 })
@@ -57,7 +57,7 @@ test_that("function throws an error if data is not a forecast object", {
 #     bias = 3
 #   )
 #
-#   expect_warning(suppressMessages(score(data = data)))
+#   expect_warning(suppressMessages(score(forecast = data)))
 # })
 
 
@@ -224,7 +224,7 @@ test_that("score() quantile produces desired metrics", {
 
   data <-suppressWarnings(suppressMessages(as_forecast(data)))
 
-  out <- score(data = data, metrics = metrics_no_cov)
+  out <- score(forecast = data, metrics = metrics_no_cov)
   metrics <- c(
     "dispersion", "underprediction", "overprediction",
     "bias", "ae_median"
@@ -309,7 +309,7 @@ test_that("function produces output for a continuous format case", {
 })
 
 test_that("function throws an error if data is missing", {
-  expect_error(suppressMessages(score(data = NULL)))
+  expect_error(suppressMessages(score(forecast = NULL)))
 })
 
 # =============================================================================
@@ -320,7 +320,7 @@ test_that("apply_metrics() works", {
 
   dt <- data.table::data.table(x = 1:10)
   scoringutils:::apply_metrics(
-    data = dt, metrics = list("test" = function(x) x + 1),
+    forecast = dt, metrics = list("test" = function(x) x + 1),
     dt$x
   )
   expect_equal(dt$test, 2:11)
@@ -328,7 +328,7 @@ test_that("apply_metrics() works", {
   # additional named argument works
   expect_no_condition(
     scoringutils:::apply_metrics(
-      data = dt, metrics = list("test" = function(x) x + 1),
+      forecast = dt, metrics = list("test" = function(x) x + 1),
       dt$x, y = dt$test)
   )
 
@@ -336,7 +336,7 @@ test_that("apply_metrics() works", {
 
   expect_warning(
     scoringutils:::apply_metrics(
-      data = dt, metrics = list("test" = function(x) x + 1),
+      forecast = dt, metrics = list("test" = function(x) x + 1),
       dt$x, dt$test)
   )
 })

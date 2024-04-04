@@ -31,7 +31,7 @@ assess the calibration of predictive Monte Carlo samples.
 Calibration or reliability of forecasts is the ability of a model to
 correctly identify its own uncertainty in making predictions. In a model
 with perfect calibration, the observed data at each time point look as if
-they came from the predictive probability distribution at that time.
+they came from the predictive proba bility distribution at that time.
 
 Equivalently, one can inspect the probability integral transform of the
 predictive distribution at time t,
