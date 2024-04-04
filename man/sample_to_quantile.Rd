@@ -28,6 +28,6 @@ Transform data from a format that is based on predictive samples to a format
 based on plain quantiles.
 }
 \examples{
-sample_to_quantile(as_forecast(example_integer))
+sample_to_quantile(as_forecast(example_sample_discrete))
 }
 \keyword{data-handling}

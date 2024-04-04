@@ -52,8 +52,8 @@
 #' score(as_forecast(example_binary))
 #' score(as_forecast(example_quantile))
 #' score(as_forecast(example_point))
-#' score(as_forecast(example_integer))
-#' score(as_forecast(example_continuous))
+#' score(as_forecast(example_sample_discrete))
+#' score(as_forecast(example_sample_continuous))
 #' }
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references

@@ -454,7 +454,7 @@ plot_pairwise_comparisons <- function(comparison_result,
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- get_pit(as_forecast(example_integer), by = "model")
+#' pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @importFrom checkmate assert check_set_equal check_number

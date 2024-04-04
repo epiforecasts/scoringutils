@@ -1,7 +1,7 @@
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
   test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
-                   na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
+                   na.omit(example_point), na.omit(example_sample_continuous), na.omit(example_sample_discrete))
   for (dat in test_dat){
     dat <- as_forecast(dat)
     forecast_type <- get_forecast_type(dat)
