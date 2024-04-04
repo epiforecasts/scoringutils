@@ -359,15 +359,15 @@ validate_general <- function(data) {
 #' @importFrom data.table copy
 #' @importFrom stats na.omit
 #' @keywords internal
-clean_forecast <- function(data, copy = FALSE, na.omit = FALSE) {
+clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
   if (copy) {
-    data <- copy(data)
+    forecast <- copy(forecast)
   }
-  suppressWarnings(suppressMessages(validate_forecast(data)))
+  suppressWarnings(suppressMessages(validate_forecast(forecast)))
   if (na.omit) {
-    data <- na.omit(data)
+    forecast <- na.omit(forecast)
   }
-  return(data)
+  return(forecast)
 }
 
 
