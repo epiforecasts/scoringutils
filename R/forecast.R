@@ -169,7 +169,7 @@ as_forecast.default <- function(data,
 #' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
-#' Methods for the different classes run [validate_general()], which performs
+#' Methods for the different classes run [assert_forecast_generic()], which performs
 #' checks that are the same for all forecast types and then perform specific
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
@@ -216,7 +216,7 @@ assert_forecast.default <- function(
 assert_forecast.forecast_binary <- function(
   forecast, forecast_type = NULL, silent = FALSE, ...
 ) {
-  forecast <- validate_general(forecast)
+  forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
@@ -252,7 +252,7 @@ assert_forecast.forecast_binary <- function(
 assert_forecast.forecast_point <- function(
   forecast, forecast_type = NULL, silent = FALSE, ...
 ) {
-  forecast <- validate_general(forecast)
+  forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
@@ -275,7 +275,7 @@ assert_forecast.forecast_point <- function(
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, silent = FALSE, ...
 ) {
-  forecast <- validate_general(forecast)
+  forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
   return(invisible(NULL))
@@ -286,7 +286,7 @@ assert_forecast.forecast_quantile <- function(
 #' @rdname assert_forecast
 #' @keywords check-forecasts
 assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
-  forecast <- validate_general(forecast)
+  forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
   return(invisible(NULL))
 }
@@ -326,7 +326,7 @@ validate_forecast <- function(forecast, forecast_type = NULL, silent = FALSE) {
 #' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords internal_input_check
-validate_general <- function(data, silent = FALSE) {
+assert_forecast_generic <- function(data, silent = FALSE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
   assert(check_columns_present(data, c("observed", "predicted", "model")))

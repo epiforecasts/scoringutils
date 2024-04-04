@@ -32,7 +32,7 @@ Depending on the forecast type, an object of class
 \code{forecast_quantile}.
 }
 \description{
-Methods for the different classes run \code{\link[=validate_general]{validate_general()}}, which performs
+Methods for the different classes run \code{\link[=assert_forecast_generic]{assert_forecast_generic()}}, which performs
 checks that are the same for all forecast types and then perform specific
 checks for the specific forecast type.
 }
