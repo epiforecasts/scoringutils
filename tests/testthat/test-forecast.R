@@ -1,5 +1,5 @@
 test_that("Running `as_forecast()` twice returns the same object", {
-  ex <- na.omit(example_continuous)
+  ex <- na.omit(example_sample_continuous)
 
   expect_identical(
     as_forecast(as_forecast(ex)),
@@ -29,7 +29,7 @@ test_that("as_forecast() works as expected", {
   )
 
   # additional test with renaming the model column
-  test <- na.omit(data.table::copy(example_continuous))
+  test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,
     old = c("observed", "predicted", "sample_id", "model"),
     new = c("obs", "pred", "sample", "mod")
@@ -46,7 +46,7 @@ test_that("as_forecast() works as expected", {
   )
 
   # test if desired forecast type does not correspond to inferred one
-  test <- na.omit(data.table::copy(example_continuous))
+  test <- na.omit(data.table::copy(example_sample_continuous))
   expect_error(
     as_forecast(test, forecast_type = "quantile"),
     "Forecast type determined by scoringutils based on input"
@@ -210,7 +210,7 @@ test_that("is_forecast() works as expected", {
   ex_binary <- suppressMessages(as_forecast(example_binary))
   ex_point <- suppressMessages(as_forecast(example_point))
   ex_quantile <- suppressMessages(as_forecast(example_quantile))
-  ex_continuous <- suppressMessages(as_forecast(example_continuous))
+  ex_continuous <- suppressMessages(as_forecast(example_sample_continuous))
 
   expect_true(is_forecast(ex_binary))
   expect_true(is_forecast(ex_point))

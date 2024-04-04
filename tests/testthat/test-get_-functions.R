@@ -131,10 +131,10 @@ test_that("get_duplicate_forecasts() works as expected for quantile", {
 })
 
 test_that("get_duplicate_forecasts() works as expected for sample", {
-  expect_equal(nrow(get_duplicate_forecasts(example_continuous)), 0)
+  expect_equal(nrow(get_duplicate_forecasts(example_sample_continuous)), 0)
   expect_equal(
     nrow(
-      get_duplicate_forecasts(rbind(example_continuous, example_continuous[1040:1050]))),
+      get_duplicate_forecasts(rbind(example_sample_continuous, example_sample_continuous[1040:1050]))),
     22
   )
 })
@@ -164,7 +164,7 @@ test_that("get_duplicate_forecasts() works as expected for point", {
 # ==============================================================================
 test_that("get_forecast_type() works as expected", {
   expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
-  expect_equal(get_forecast_type(example_continuous), "sample")
+  expect_equal(get_forecast_type(example_sample_continuous), "sample")
   expect_equal(get_forecast_type(example_integer), "sample")
   expect_equal(get_forecast_type(example_binary), "binary")
   expect_equal(get_forecast_type(example_point), "point")

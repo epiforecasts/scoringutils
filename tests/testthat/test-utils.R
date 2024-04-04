@@ -23,14 +23,14 @@ test_that("get_protected_columns() returns the correct result", {
   auto <- get_protected_columns(data)
   expect_equal(sort(manual), sort(auto))
 
-  data <- example_continuous
+  data <- example_sample_continuous
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
-  manual <- intersect(manual, colnames(example_continuous))
+  manual <- intersect(manual, colnames(example_sample_continuous))
   auto <- get_protected_columns(data)
   expect_equal(sort(manual), sort(auto))
 })

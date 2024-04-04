@@ -87,7 +87,7 @@ type. For more information, have a look at the
 [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
 call `?as_forecast()`, or have a look at the example data provided in
 the package (`example_binary`, `example_point`, `example_quantile`,
-`example_continuous`, `example_integer`).
+`example_sample_continuous`, `example_integer`).
 
 Before scoring, input data needs to be validated and transformed into a
 forecast object using the function `as_forecast()`.
