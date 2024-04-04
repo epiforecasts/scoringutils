@@ -4,7 +4,7 @@
 \alias{validate_general}
 \title{Validation common to all forecast types}
 \usage{
-validate_general(data)
+validate_general(data, silent = FALSE)
 }
 \arguments{
 \item{data}{A data.table with forecasts and observed values that should
