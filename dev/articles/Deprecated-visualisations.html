@@ -137,7 +137,7 @@ example.</p>
 <span><span class="co">#" library(ggplot2)</span></span>
 <span><span class="co">#" library(magrittr)</span></span>
 <span><span class="co">#"</span></span>
-<span><span class="co">#" example_continuous %&gt;%</span></span>
+<span><span class="co">#" example_sample_continuous %&gt;%</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "truth",</span></span>
 <span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
@@ -156,7 +156,7 @@ example.</p>
 <span><span class="co">#"   facet_wrap(~ location + target_type, scales = "free_y") +</span></span>
 <span><span class="co">#"   aes(fill = model, color = model)</span></span>
 <span><span class="co">#"</span></span>
-<span><span class="co">#" example_continuous %&gt;%</span></span>
+<span><span class="co">#" example_sample_continuous %&gt;%</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "truth",</span></span>
 <span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
@@ -321,7 +321,7 @@ the user to filter observations and forecasts independently.</p>
 <span><span class="co">#"</span></span>
 <span><span class="co">#" @examples</span></span>
 <span><span class="co">#" make_NA (</span></span>
-<span><span class="co">#"     example_continuous,</span></span>
+<span><span class="co">#"     example_sample_continuous,</span></span>
 <span><span class="co">#"     what = "truth",</span></span>
 <span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
 <span><span class="co">#"     target_end_date &lt; "2021-05-01"</span></span>
@@ -393,7 +393,7 @@ shown, instead of just the median.</p>
 predictions are automatically converted to a quantile-based forecasts
 for plotting.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>,</span>
 <span>          <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
 <span>          <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>

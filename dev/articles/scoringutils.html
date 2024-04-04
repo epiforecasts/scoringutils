@@ -125,10 +125,10 @@ do the entire evaluation for you. All you need to do is to pass in a
 required depends on the format the forecasts come in. The forecast
 format can either be based on quantiles (see
 <code>example_quantile</code> for the expected format), based on
-predictive samples (see <code>example_continuous</code> and
-<code>example_integer</code> for the expected format in each case) or in
-a binary format. The following table gives an overview (pairwise
-comparisons will be explained in more detail below):</p>
+predictive samples (see <code>example_sample_continuous</code> and
+<code>example_sample_discrete</code> for the expected format in each
+case) or in a binary format. The following table gives an overview
+(pairwise comparisons will be explained in more detail below):</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Format</th>
@@ -257,9 +257,10 @@ additional information.</p>
 <span><span class="co">#&gt; 20544:      2021-07-24    2021-07-12      Deaths       2</span></span>
 <span><span class="co">#&gt; 20545:      2021-07-24    2021-07-12      Deaths       2</span></span></code></pre></div>
 <p>If you are unsure what your input data should look like, have a look
-at the <code>example_quantile</code>, <code>example_integer</code>,
-<code>example_continuous</code> and <code>example_binary</code> data
-sets provided in the package.</p>
+at the <code>example_quantile</code>,
+<code>example_sample_discrete</code>,
+<code>example_sample_continuous</code> and <code>example_binary</code>
+data sets provided in the package.</p>
 <p>The output of <code><a href="../reference/as_forecast.html">as_forecast()</a></code> can later be directly used
 as input to <code><a href="../reference/score.html">score()</a></code>. This is the recommended workflow
 (however, <code><a href="../reference/score.html">score()</a></code> will run <code><a href="../reference/as_forecast.html">as_forecast()</a></code>
@@ -640,7 +641,7 @@ targets, we can run</p>
 <p>We can also summarise one particular metric across different
 categories using a simple heatmap:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_continuous</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_sample_continuous</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"location"</span>, metric <span class="op">=</span> <span class="st">"bias"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">target_type</span><span class="op">)</span></span>
@@ -676,7 +677,7 @@ value. Ideally, pit values should be uniformly distributed after the
 transformation.</p>
 <p>We can compute pit values as such:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/get_pit.html">get_pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
@@ -696,7 +697,7 @@ transformation.</p>
 <span><span class="co">#&gt; 887:       UMass-MechBayes     0.100</span></span></code></pre></div>
 <p>And visualise the results as such:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/get_pit.html">get_pit</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/plot_pit.html">plot_pit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -901,7 +902,7 @@ however, one caveat: Quantiles will be calculated based on the
 predictive samples, which may introduce a bias if the number of
 available samples is small.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_integer</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_sample_discrete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/sample_to_quantile.html">sample_to_quantile</a></span><span class="op">(</span></span>
 <span>    quantile_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">0.975</span>, <span class="fl">0.99</span><span class="op">)</span></span>
