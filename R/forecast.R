@@ -307,7 +307,7 @@ assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...)
 #' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords internal_input_check
-validate_general <- function(data) {
+validate_general <- function(data, silent = FALSE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
   assert(check_columns_present(data, c("observed", "predicted", "model")))
@@ -327,8 +327,8 @@ validate_general <- function(data) {
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
-  if (!is.logical(number_quantiles_samples)) {
-    warning(number_quantiles_samples)
+  if (!is.logical(number_quantiles_samples) && !silent) {
+    cli_warn(number_quantiles_samples)
   }
 
   # check whether there are any NA values
@@ -342,12 +342,14 @@ validate_general <- function(data) {
         )
       )
     }
-    cli_inform(
-      c(
-        "i" = "Some rows containing NA values may be removed.
+    if (!silent) {
+      cli_inform(
+        c(
+          "i" = "Some rows containing NA values may be removed.
         This is fine if not unexpected."
+        )
       )
-    )
+    }
     #nolint end
   }
 
