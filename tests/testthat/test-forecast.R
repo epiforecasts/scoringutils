@@ -274,3 +274,14 @@ test_that("assert_forecast() complains if the forecast type is wrong", {
   )
 })
 
+# ==============================================================================
+# validate_forecast()
+# ==============================================================================
+
+test_that("validate_forecast() works as expected", {
+  # check that validate forecast returns itself
+  expect_no_condition(
+    out <- validate_forecast(as_forecast(na.omit(example_point)))
+  )
+  expect_true(!is.null(out))
+})
