@@ -218,7 +218,7 @@ test_that("get_pairwise_comparisons() works", {
 })
 
 test_that("get_pairwise_comparisons() work in score() with integer data", {
-  eval <- suppressMessages(score(forecast = as_forecast(example_integer)))
+  eval <- suppressMessages(score(forecast = as_forecast(example_sample_discrete)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))

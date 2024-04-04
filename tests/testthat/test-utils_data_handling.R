@@ -129,7 +129,7 @@ test_that("sample_to_quantiles works", {
 
 test_that("sample_to_quantiles issue 557 fix", {
 
-  out <- example_integer %>%
+  out <- example_sample_discrete %>%
     as_forecast() %>%
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)

@@ -188,9 +188,9 @@ usethis::use_data(example_sample_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
-example_integer <- data.table::copy(example_sample_continuous)
-example_integer <- example_integer[, predicted := round(predicted)]
-usethis::use_data(example_integer, overwrite = TRUE)
+example_sample_discrete <- data.table::copy(example_sample_continuous)
+example_sample_discrete <- example_sample_discrete[, predicted := round(predicted)]
+usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 
 # get binary example data ------------------------------------------------------
