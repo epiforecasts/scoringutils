@@ -270,7 +270,7 @@ assert_forecast.forecast_point <- function(
 
 
 #' @export
-#' @rdname validate_forecast
+#' @rdname assert_forecast
 #' @keywords check-forecasts
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, silent = FALSE, ...
@@ -283,7 +283,7 @@ assert_forecast.forecast_quantile <- function(
 
 
 #' @export
-#' @rdname validate_forecast
+#' @rdname assert_forecast
 #' @keywords check-forecasts
 assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
   forecast <- validate_general(forecast)

@@ -2,9 +2,15 @@
 % Please edit documentation in R/forecast.R
 \name{assert_forecast}
 \alias{assert_forecast}
+\alias{assert_forecast.forecast_quantile}
+\alias{assert_forecast.forecast_sample}
 \title{Validate input data}
 \usage{
 assert_forecast(forecast, forecast_type = NULL, silent = FALSE, ...)
+
+\method{assert_forecast}{forecast_quantile}(forecast, forecast_type = NULL, silent = FALSE, ...)
+
+\method{assert_forecast}{forecast_sample}(forecast, forecast_type = NULL, ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and

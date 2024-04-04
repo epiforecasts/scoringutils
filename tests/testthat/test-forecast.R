@@ -234,7 +234,7 @@ test_that("assert_forecast() works as expected", {
                "The input needs to be a forecast object.")
 })
 
-test_that("validate_forecast.forecast_binary works as expected", {
+test_that("assert_forecast.forecast_binary works as expected", {
   test <- na.omit(data.table::copy(example_binary))
   test[, "sample_id" := 1:nrow(test)]
 
@@ -253,7 +253,7 @@ test_that("validate_forecast.forecast_binary works as expected", {
   )
 })
 
-test_that("validate_forecast.forecast_point() works as expected", {
+test_that("assert_forecast.forecast_point() works as expected", {
   test <- na.omit(data.table::copy(example_point))
   test <- as_forecast(test)
 
