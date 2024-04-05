@@ -104,14 +104,9 @@ forecast_quantile <- example_quantile |>
 #>   unexpected.
 
 print(forecast_quantile, 2)
-#> ℹ Some rows containing NA values may be removed. This is fine if not
-#>   unexpected.
 #> Forecast type:
-#> 
 #> quantile
-#> 
 #> Forecast unit:
-#> 
 #> location, forecast_date, target_end_date, target_type, model, and horizon
 #> 
 #> Key: <location, target_end_date, target_type>
