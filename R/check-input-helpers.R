@@ -108,8 +108,8 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_duplicates <- function(data, forecast_unit = get_forecast_unit(data)) {
-  check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
+check_duplicates <- function(data) {
+  check_duplicates <- get_duplicate_forecasts(data)
 
   if (nrow(check_duplicates) > 0) {
     msg <- paste0(

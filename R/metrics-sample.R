@@ -146,7 +146,7 @@ se_mean_sample <- function(observed, predicted) {
 #' [`logs_sample()`][scoringRules::scores_sample_univ] function from the
 #' \pkg{scoringRules} package.
 #'
-#' The functton should be used to score continuous predictions only.
+#' The function should be used to score continuous predictions only.
 #' While the Log Score is in theory also applicable
 #' to discrete forecasts, the problem lies in the implementation: The Log score
 #' needs a kernel density estimation, which is not well defined with

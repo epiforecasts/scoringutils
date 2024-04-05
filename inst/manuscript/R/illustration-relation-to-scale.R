@@ -6,7 +6,7 @@ library(tidyr)
 library(patchwork)
 
 ## Real Data
-ex <- example_continuous |>
+ex <- example_sample_continuous |>
   filter(model == "EuroCOVIDhub-ensemble")
 
 scores <- ex |>

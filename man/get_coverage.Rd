@@ -4,10 +4,10 @@
 \alias{get_coverage}
 \title{Get quantile and interval coverage values for quantile-based forecasts}
 \usage{
-get_coverage(data, by = "model")
+get_coverage(forecast, by = "model")
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{by}{character vector that denotes the level of grouping for which the

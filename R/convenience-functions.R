@@ -109,23 +109,21 @@
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   head()
 
-transform_forecasts <- function(data,
+transform_forecasts <- function(forecast,
                                 fun = log_shift,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
-  # input checks
-  suppressWarnings(suppressMessages(validate_forecast(data)))
-  original_data <- copy(data)
+  original_forecast <- clean_forecast(forecast, copy = TRUE)
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)
 
-  scale_col_present <- ("scale" %in% colnames(original_data))
+  scale_col_present <- ("scale" %in% colnames(original_forecast))
 
   # Error handling
   if (scale_col_present) {
-    if (!("natural" %in% original_data$scale)) {
+    if (!("natural" %in% original_forecast$scale)) {
       #nolint start: keyword_quote_linter
       cli_abort(
         c(
@@ -134,7 +132,7 @@ transform_forecasts <- function(data,
         )
       )
     }
-    if (append && (label %in% original_data$scale)) {
+    if (append && (label %in% original_forecast$scale)) {
       cli_warn(
         c(
           "i" = "Appending new transformations with label '{label}'
@@ -147,30 +145,30 @@ transform_forecasts <- function(data,
 
   if (append) {
     if (scale_col_present) {
-      transformed_data <- copy(original_data)[scale == "natural"]
+      transformed_forecast <- copy(original_forecast)[scale == "natural"]
     } else {
-      transformed_data <- copy(original_data)
-      original_data[, scale := "natural"]
+      transformed_forecast <- copy(original_forecast)
+      original_forecast[, scale := "natural"]
     }
-    transformed_data[, predicted := fun(predicted, ...)]
-    transformed_data[, observed := fun(observed, ...)]
-    transformed_data[, scale := label]
-    out <- rbind(original_data, transformed_data)
+    transformed_forecast[, predicted := fun(predicted, ...)]
+    transformed_forecast[, observed := fun(observed, ...)]
+    transformed_forecast[, scale := label]
+    out <- rbind(original_forecast, transformed_forecast)
     out <- suppressWarnings(suppressMessages(as_forecast(out)))
     return(out[])
   }
 
   # check if a column called "scale" is already present and if so, only
-  # restrict to transformations of the original data
+  # restrict to transformations of the original forecast
   if (scale_col_present) {
-    original_data[scale == "natural", predicted := fun(predicted, ...)]
-    original_data[scale == "natural", observed := fun(observed, ...)]
-    original_data[scale == "natural", scale := label]
+    original_forecast[scale == "natural", predicted := fun(predicted, ...)]
+    original_forecast[scale == "natural", observed := fun(observed, ...)]
+    original_forecast[scale == "natural", scale := label]
   } else {
-    original_data[, predicted := fun(predicted, ...)]
-    original_data[, observed := fun(observed, ...)]
+    original_forecast[, predicted := fun(predicted, ...)]
+    original_forecast[, observed := fun(observed, ...)]
   }
-  return(original_data[])
+  return(original_forecast[])
 }
 
 
@@ -274,7 +272,7 @@ set_forecast_unit <- function(data, forecast_unit) {
   out <- unique(data[, .SD, .SDcols = keep_cols])
   # validate that output remains a valid forecast object if input was one before
   if (is_forecast(out)) {
-    validate_forecast(out)
+    assert_forecast(out)
   }
   return(out)
 }

@@ -33,7 +33,7 @@ Predictions can be handled in various formats: `scoringutils` can handle probabi
 
 ## Input formats
 
-Most of the time, the `score()` function will be able to do the entire evaluation for you. All you need to do is to pass in a `data.frame` with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see `example_quantile` for the expected format), based on predictive samples (see `example_continuous` and `example_integer` for the expected format in each case) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below): 
+Most of the time, the `score()` function will be able to do the entire evaluation for you. All you need to do is to pass in a `data.frame` with the appropriate columns. Which columns are required depends on the format the forecasts come in. The forecast format can either be based on quantiles (see `example_quantile` for the expected format), based on predictive samples (see `example_sample_continuous` and `example_sample_discrete` for the expected format in each case) or in a binary format. The following table gives an overview (pairwise comparisons will be explained in more detail below): 
 
 ```{r, echo=FALSE}
 requirements <- data.table(
@@ -81,7 +81,7 @@ forecast_quantile <- example_quantile %>%
 forecast_quantile
 ```
 
-If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_integer`, `example_continuous` and `example_binary` data sets provided in the package. 
+If you are unsure what your input data should look like, have a look at the `example_quantile`, `example_sample_discrete`, `example_sample_continuous` and `example_binary` data sets provided in the package. 
 
 The output of `as_forecast()` can later be directly used as input to `score()`. This is the recommended workflow (however, `score()` will run `as_forecast()` internally if this hasn't happened before). 
 
@@ -196,7 +196,7 @@ score(as_forecast(example_quantile)) %>%
 We can also summarise one particular metric across different categories using a simple heatmap: 
 
 ```{r, fig.width=11, fig.height=6}
-score(as_forecast(example_continuous)) %>%
+score(as_forecast(example_sample_continuous)) %>%
   summarise_scores(by = c("model", "location", "target_type")) %>%
   plot_heatmap(x = "location", metric = "bias") +
   facet_wrap(~ target_type)
@@ -220,7 +220,7 @@ Calibration is a measure statistical consistency between the forecasts and obser
 We can compute pit values as such: 
 
 ```{r}
-example_continuous %>%
+example_sample_continuous %>%
   as_forecast() %>%
   get_pit(by = "model")
 ```
@@ -228,7 +228,7 @@ example_continuous %>%
 And visualise the results as such: 
 
 ```{r}
-example_continuous %>%
+example_sample_continuous %>%
   as_forecast() %>%
   get_pit(by = c("model", "target_type")) %>%
   plot_pit() +
@@ -328,20 +328,13 @@ Different metrics are available for different forecasting formats. In some cases
 You can convert your sample-based forecasts into a quantile-based format using the function `sample_to_quantile()`. There is, however, one caveat: Quantiles will be calculated based on the predictive samples, which may introduce a bias if the number of available samples is small.
 
 ```{r}
-example_integer %>%
+example_sample_discrete %>%
+  as_forecast() %>%
   sample_to_quantile(
     quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
   ) %>%
   as_forecast() %>%
   score()
-```
-
-## Available metrics
-
-An overview of available metrics can be found in the `metrics` data set that is included in the package. 
-
-```{r}
-metrics
 ```
 
 ## Lower level functions

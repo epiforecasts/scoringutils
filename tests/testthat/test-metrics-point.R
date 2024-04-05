@@ -56,9 +56,9 @@ test_that("abs error is correct within score, point forecast only", {
   data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
-  data_scoringutils <- merge_pred_and_obs(
-    forecasts = fc_scoringutils,
-    observations = truth_scoringutils
+  data_scoringutils <- merge(
+    fc_scoringutils,
+    truth_scoringutils
   )[, quantile := NULL] %>%
     as_forecast()
 
@@ -115,9 +115,9 @@ test_that("abs error is correct, point and median forecasts different", {
   data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
-  data_scoringutils <- merge_pred_and_obs(
-    forecasts = fc_scoringutils,
-    observations = truth_scoringutils
+  data_scoringutils <- merge(
+    fc_scoringutils,
+    truth_scoringutils
   )[, quantile := NULL] %>%
     as_forecast()
 
@@ -163,7 +163,7 @@ test_that("abs error is correct, point and median forecasts same", {
     target_variable = forecast_target_variables,
     target_end_date = forecast_target_end_dates,
     type = c(rep("point", length(point_forecast)), rep("quantile", length(forecast_quantiles))),
-    quantile = c(rep(NA, length(point_forecast)), forecast_quantile_probs),
+    quantile_level = c(rep(NA, length(point_forecast)), forecast_quantile_probs),
     value = c(point_forecast, forecast_quantiles),
     stringsAsFactors = FALSE
   )
@@ -175,15 +175,16 @@ test_that("abs error is correct, point and median forecasts same", {
   data.table::setnames(fc_scoringutils, old = "value", new = "predicted")
   truth_scoringutils[, model := NULL]
 
-  data_scoringutils <- merge_pred_and_obs(
-    forecasts = fc_scoringutils,
-    observations = truth_scoringutils
-  ) %>%
+  data_scoringutils <- merge(
+    fc_scoringutils,
+    truth_scoringutils
+  )
+
+  data_forecast_point <-
+    data_scoringutils[type == "point"][, quantile_level := NULL] %>%
     as_forecast()
 
-  data_forecast_point <- data_scoringutils[type == "point"][, quantile := NULL]
-
-  eval <- score(data = data_forecast_point)
+  eval <- score(forecast = data_forecast_point)
   eval <- summarise_scores(eval,
     by = c(
       "location", "target_end_date",

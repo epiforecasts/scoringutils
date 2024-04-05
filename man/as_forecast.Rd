@@ -123,7 +123,7 @@ a column \code{predicted} of type numeric, and a column \code{sample_id} of type
 numeric with sample indices.
 
 For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous}, \link{example_integer},
+(\link{example_quantile}, \link{example_sample_continuous}, \link{example_sample_discrete},
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
 }
 

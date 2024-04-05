@@ -22,7 +22,7 @@ argument.}
 \item{breaks}{Numeric vector with the break points for the bins in the
 PIT histogram. This is preferred when creating a PIT histogram based on
 quantile-based data. Default is \code{NULL} and breaks will be determined by
-\code{num_bins}.}
+\code{num_bins}. If \code{breaks} is used, \code{num_bins} will be ignored.}
 }
 \value{
 A ggplot object with a histogram of PIT values
@@ -47,6 +47,6 @@ pit <- get_pit(as_forecast(example_quantile), by = "model")
 plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- get_pit(as_forecast(example_integer), by = "model")
+pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
 plot_pit(pit)
 }

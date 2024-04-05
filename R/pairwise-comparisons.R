@@ -1,24 +1,56 @@
-#' @title Pairwise comparisons of scores
+#' @title Obtain pairwise comparisons between models
 #'
 #' @description
 #'
-#' Compute relative scores between different models making pairwise
-#' comparisons. Pairwise comparisons are a sort of pairwise tournament where all
+#' Compare scores obtained by different models in a pairwise tournament. All
 #' combinations of two models are compared against each other based on the
 #' overlapping set of available forecasts common to both models.
-#' Internally, a ratio of the mean scores of both models is computed.
-#' The relative score of a model is then the geometric mean of all mean score
-#' ratios which involve that model. When a baseline is provided, then that
-#' baseline is excluded from the relative scores for individual models
-#' (which therefore differ slightly from relative scores without a baseline)
-#' and all relative scores are scaled by (i.e. divided by) the relative score of
-#' the baseline model.
-#' Usually, the function input should be unsummarised scores as
-#' produced by [score()].
-#' Note that the function internally infers the *unit of a single forecast* by
-#' determining all columns in the input that do not correspond to metrics
-#' computed by [score()]. Adding unrelated columns will change results in an
-#' unpredictable way.
+#'
+#' The input should be a `scores` object as produced by [score()]. Note that
+#' adding additional unrelated columns can unpredictably change results, as
+#' all present columns are taken into account when determining the set of
+#' overlapping forecasts between two models.
+#'
+#' The output of the pairwise comparisons is a set of mean score ratios,
+#' relative skill scores and p-values.
+#'
+#' The following illustrates the pairwise comparison process:
+#'
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{pairwise-illustration.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{pairwise-illustration.png}
+#' }
+#'
+#' *Mean score ratios*
+#'
+#' For every pair of two models, a mean score ratio is computed. This is simply
+#' the mean score of the first model divided by the mean score of the second.
+#' Mean score ratios are computed based on the set of overlapping forecasts
+#' between the two models. That means that only scores for those targets are
+#' taken into account for which both models have submitted a forecast.
+#'
+#' *(Scaled) Relative skill scores*
+#'
+#' The relative score of a model is the geometric mean of all mean score
+#' ratios which involve that model.
+#' If a baseline is provided, scaled relative skill scores will be calculated
+#' as well. Scaled relative skill scores are simply the relative skill score of
+#' a model divided by the relative skill score of the baseline model.
+#'
+#' *p-values*
+#'
+#' In addition, the function computes p-values for the comparison between two
+#' models (again based on the set of overlapping forecasts). P-values can be
+#' computed in two ways: based on a nonparametric Wilcoxon signed-rank test
+#' (internally using [wilcox.test()] with `paired = TRUE`) or based on a
+#' permutation test. The permutation test is based on the difference in mean
+#' scores between two models. The default null hypothesis is that the mean score
+#' difference is zero (see [permutation_test()]).
+#' Adjusted p-values are computed by calling [p.adjust()] on the raw p-values.
 #'
 #' The code for the pairwise comparisons is inspired by an implementation by
 #' Johannes Bracher.
@@ -44,7 +76,12 @@
 #' @param ... Additional arguments for the comparison between two models. See
 #'   [compare_two_models()] for more information.
 #' @inheritParams summarise_scores
-#' @return A data.table with pairwise comparisons.
+#' @return A data.table with the results of pairwise comparisons
+#' containing the mean score ratios (`mean_scores_ratio`),
+#' unadjusted (`pval`) and adjusted (`adj_pval`) p-values, and relative skill
+#' values of each model (`..._relative_skill`). If a baseline model is given
+#' then the scaled relative skill is reported as well
+#' (`..._scaled_relative_skill`).
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -61,6 +98,9 @@
 #'
 #' scores <- score(as_forecast(example_quantile))
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' pairwise2 <- get_pairwise_comparisons(
+#'   scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
+#' )
 #'
 #' library(ggplot2)
 #' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +

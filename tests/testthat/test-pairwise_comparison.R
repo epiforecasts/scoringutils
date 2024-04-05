@@ -47,7 +47,7 @@ test_that("get_pairwise_comparisons() works", {
   forecasts_formatted <- data.table::as.data.table(test_forecasts)
   data.table::setnames(forecasts_formatted, old = "value", new = "predicted")
 
-  data_formatted <- scoringutils::merge_pred_and_obs(
+  data_formatted <- merge(
     forecasts_formatted,
     truth_formatted
   ) %>%
@@ -218,7 +218,7 @@ test_that("get_pairwise_comparisons() works", {
 })
 
 test_that("get_pairwise_comparisons() work in score() with integer data", {
-  eval <- suppressMessages(score(data = as_forecast(example_integer)))
+  eval <- suppressMessages(score(forecast = as_forecast(example_sample_discrete)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
@@ -226,7 +226,7 @@ test_that("get_pairwise_comparisons() work in score() with integer data", {
 
 
 test_that("get_pairwise_comparisons() work in score() with binary data", {
-  eval <- suppressMessages(score(data = as_forecast(example_binary)))
+  eval <- suppressMessages(score(forecast = as_forecast(example_binary)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
   expect_true("brier_score_relative_skill" %in% colnames(eval))

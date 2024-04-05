@@ -314,7 +314,8 @@ plot_quantile_coverage <- function(coverage,
 
 plot_pairwise_comparisons <- function(comparison_result,
                                       type = c("mean_scores_ratio", "pval")) {
-  comparison_result <- data.table::as.data.table(comparison_result)
+  comparison_result <- ensure_data.table(comparison_result)
+  type <- match.arg(type)
 
   relative_skill_metric <- grep(
     "(?<!scaled)_relative_skill$", colnames(comparison_result),
@@ -432,7 +433,7 @@ plot_pairwise_comparisons <- function(comparison_result,
 #' @param breaks Numeric vector with the break points for the bins in the
 #'   PIT histogram. This is preferred when creating a PIT histogram based on
 #'   quantile-based data. Default is `NULL` and breaks will be determined by
-#'   `num_bins`.
+#'   `num_bins`. If `breaks` is used, `num_bins` will be ignored.
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
@@ -453,14 +454,22 @@ plot_pairwise_comparisons <- function(comparison_result,
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- get_pit(as_forecast(example_integer), by = "model")
+#' pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
+#' @importFrom checkmate assert check_set_equal check_number
 #' @export
 
 plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
+  assert(
+    check_set_equal(num_bins, "auto"),
+    check_number(num_bins, lower = 1)
+  )
+  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
+
+  # vector-format is always sample-based, for data.frames there are two options
   if ("quantile_level" %in% names(pit)) {
     type <- "quantile-based"
   } else {
