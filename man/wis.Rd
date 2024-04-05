@@ -118,7 +118,7 @@ Non-symmetric quantiles can be scored using the function \code{\link[=quantile_s
 Usually the interval score is weighted by a factor that makes sure that the
 average score across an increasing number of equally spaced
 quantiles, converges to the continuous ranked probability score (CRPS). This
-weighted score is called the weihted interval score (WIS).
+weighted score is called the weighted interval score (WIS).
 The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
 
 \strong{Quantile score}
@@ -142,7 +142,7 @@ the difference between the observed value and median forecast. The effect of
 that is that in contrast to the first view, the median has twice as much
 weight (because it is weighted like a prediction interval, rather than like
 a single quantile). Both are valid ways to conceptualise the WIS and you
-can control the behvaviour with the \code{count_median_twice}-argument.
+can control the behaviour with the \code{count_median_twice}-argument.
 
 \strong{WIS components}:
 WIS components can be computed individually using the functions

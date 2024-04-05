@@ -5,7 +5,7 @@ This major update and addresses a variety of comments made by reviewers from the
 The update introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`. 
 
 ## Package updates
-- The most comprehensive documentation for the new pacakge after the rewrite is the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
+- The most comprehensive documentation for the new package after the rewrite is the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
 of our
 [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils`
 paper.
@@ -32,7 +32,7 @@ paper.
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_relative_skill()`, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.
 - The function `pairwise_comparison()` was renamed to `get_pairwise_comparisons()`, in line with other `get_`-functions. Analogously, `plot_pairwise_comparison()` was renamed to `plot_pairwise_comparisons()`.
-- `add_coverage()` was replaced by a new function, `get_coverage()`. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using `plot_interval_coverage()` or `plot_quantile_coverage()`. An example worfklow would be `example_quantile |> as_forecast() |> get_coverage(by = "model") |> plot_interval_coverage()`.
+- `add_coverage()` was replaced by a new function, `get_coverage()`. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using `plot_interval_coverage()` or `plot_quantile_coverage()`. An example workflow would be `example_quantile |> as_forecast() |> get_coverage(by = "model") |> plot_interval_coverage()`.
 - Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
     - The function `bias_range()` was removed (users should now use `bias_quantile()` instead)
     - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
@@ -70,7 +70,7 @@ paper.
 - Added a new PR template with a checklist of things to be included in PRs to facilitate the development and review process
 
 ## Bug fixes
-- Fixes a bug with `set_forecast_unit()` where the function only workded with a data.table, but not a data.frame as an input. 
+- Fixes a bug with `set_forecast_unit()` where the function only worked with a data.table, but not a data.frame as an input. 
 - The metrics table in the vignette [Details on the metrics implemented in `scoringutils`](https://epiforecasts.io/scoringutils/articles/metric-details.html) had duplicated entries. This was fixed by removing the duplicated rows.
 
 # scoringutils 1.2.1
