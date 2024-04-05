@@ -15,7 +15,7 @@ to have. If the forecast type as determined by \code{scoringutils} based on the
 input does not match this, an error will be thrown. If \code{NULL} (the
 default), the forecast type will be inferred from the data.}
 
-\item{silent}{Logical. If \code{TRUE} (default is \code{FALSE}), no messages and
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
 warnings will be created.}
 }
 \value{

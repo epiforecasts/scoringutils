@@ -10,7 +10,7 @@ assert_forecast_generic(data, verbose = TRUE)
 \item{data}{A data.table with forecasts and observed values that should
 be validated.}
 
-\item{silent}{Logical. If \code{TRUE} (default is \code{FALSE}), no messages and
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
 warnings will be created.}
 }
 \value{
