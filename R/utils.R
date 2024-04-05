@@ -40,7 +40,7 @@ run_safely <- function(..., fun) {
     valid_args <- args[names(args) == "" | names(args) %in% possible_args]
   }
 
-  result <- try(do.call(fun, valid_args), verbose = FALSE)
+  result <- try(do.call(fun, valid_args), silent = TRUE)
 
   if (inherits(result, "try-error")) {
     #nolint start: object_usage_linter

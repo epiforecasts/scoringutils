@@ -32,7 +32,7 @@ check_numeric_vector <- function(x, ...) {
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
 check_try <- function(expr) {
-  result <- try(expr, verbose = FALSE)
+  result <- try(expr, silent = TRUE)
   if (is.null(result)) {
     return(TRUE)
   }

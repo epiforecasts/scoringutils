@@ -324,7 +324,7 @@ validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
-#' @importFrom cli cli_abort cli_inform
+#' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @keywords internal_input_check
 assert_forecast_generic <- function(data, verbose = TRUE) {
