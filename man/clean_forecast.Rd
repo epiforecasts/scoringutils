@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{clean_forecast}
 \alias{clean_forecast}
-\title{Validate forecast objects for internal use}
+\title{Clean forecast object}
 \usage{
 clean_forecast(forecast, copy = FALSE, na.omit = FALSE)
 }

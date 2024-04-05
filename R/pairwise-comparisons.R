@@ -98,7 +98,9 @@
 #'
 #' scores <- score(as_forecast(example_quantile))
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
-#' pairwise2 <- get_pairwise_comparisons(scores, by = "target_type", baseline = "EuroCOVIDhub-baseline")
+#' pairwise2 <- get_pairwise_comparisons(
+#'   scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
+#' )
 #'
 #' library(ggplot2)
 #' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +

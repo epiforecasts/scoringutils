@@ -18,7 +18,7 @@ print.forecast_binary <- function(x, ...) {
 
   # check whether object passes validation
   validation <- try(
-    do.call(validate_forecast, list(forecast = x)),
+    do.call(assert_forecast, list(forecast = x, verbose = FALSE)),
     silent = TRUE
   )
   if (inherits(validation, "try-error")) {

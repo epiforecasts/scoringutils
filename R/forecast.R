@@ -161,20 +161,24 @@ as_forecast.default <- function(data,
   data <- new_forecast(data, paste0("forecast_", forecast_type))
 
   # validate class
-  validate_forecast(data)
+  assert_forecast(data)
+  return(data)
 }
 
 
-#' @title Validate input data
+#' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
-#' Methods for the different classes run [validate_general()], which performs
+#' Methods for the different classes run [assert_forecast_generic()], which performs
 #' checks that are the same for all forecast types and then perform specific
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
 #' @inheritParams score
+#' @param verbose Logical. If `FALSE` (default is `TRUE`), no messages and
+#'   warnings will be created.
 #' @inheritSection forecast_types Forecast types and input formats
-#' @return Depending on the forecast type, an object of class
+#' @return
+#' Depending on the forecast type, an object of class
 #' `forecast_binary`, `forecast_point`, `forecast_sample` or
 #' `forecast_quantile`.
 #' @importFrom data.table ':=' is.data.table
@@ -183,16 +187,20 @@ as_forecast.default <- function(data,
 #' @keywords check-forecasts
 #' @examples
 #' forecast <- as_forecast(example_binary)
-#' validate_forecast(forecast)
-validate_forecast <- function(forecast, forecast_type = NULL, ...) {
-  UseMethod("validate_forecast")
+#' assert_forecast(forecast)
+assert_forecast <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  UseMethod("assert_forecast")
 }
 
 
 #' @importFrom cli cli_abort
 #' @export
 #' @keywords check-forecasts
-validate_forecast.default <- function(forecast, forecast_type = NULL, ...) {
+assert_forecast.default <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
   cli_abort(
     c(
       "!" = "The input needs to be a forecast object.",
@@ -205,8 +213,10 @@ validate_forecast.default <- function(forecast, forecast_type = NULL, ...) {
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_binary <- function(forecast, forecast_type = NULL, ...) {
-  forecast <- validate_general(forecast)
+assert_forecast.forecast_binary <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
@@ -232,15 +242,17 @@ validate_forecast.forecast_binary <- function(forecast, forecast_type = NULL, ..
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
-validate_forecast.forecast_point <- function(forecast, forecast_type = NULL, ...) {
-  forecast <- validate_general(forecast)
+assert_forecast.forecast_point <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
@@ -253,29 +265,47 @@ validate_forecast.forecast_point <- function(forecast, forecast_type = NULL, ...
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
-#' @rdname validate_forecast
+#' @rdname assert_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_quantile <- function(forecast,
-                                                forecast_type = NULL, ...) {
-  forecast <- validate_general(forecast)
+assert_forecast.forecast_quantile <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
 #' @export
-#' @rdname validate_forecast
+#' @rdname assert_forecast
 #' @keywords check-forecasts
-validate_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
-  forecast <- validate_general(forecast)
+assert_forecast.forecast_sample <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
-  return(forecast[])
+  return(invisible(NULL))
+}
+
+
+#' @title Re-validate an existing forecast object
+#'
+#' @description
+#' The function re-validates an existing forecast object. It is similar to
+#' [assert_forecast()], but returns the input data instead of an invisible
+#' `NULL`. See [as_forecast()] for details on the expected input formats.
+#' @inherit assert_forecast params return examples
+#' @export
+#' @keywords check-forecasts
+validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
+  assert_forecast(forecast, forecast_type, verbose)
+  return(forecast)
 }
 
 
@@ -292,13 +322,14 @@ validate_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ..
 #' for all forecasts.
 #' @param data A data.table with forecasts and observed values that should
 #' be validated.
+#' @inheritParams assert_forecast
 #' @return returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
-#' @importFrom cli cli_abort cli_inform
+#' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @keywords internal_input_check
-validate_general <- function(data) {
+assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
   assert(check_columns_present(data, c("observed", "predicted", "model")))
@@ -318,8 +349,8 @@ validate_general <- function(data) {
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
-  if (!is.logical(number_quantiles_samples)) {
-    warning(number_quantiles_samples)
+  if (!is.logical(number_quantiles_samples) && verbose) {
+    cli_warn(number_quantiles_samples)
   }
 
   # check whether there are any NA values
@@ -333,12 +364,14 @@ validate_general <- function(data) {
         )
       )
     }
-    cli_inform(
-      c(
-        "i" = "Some rows containing NA values may be removed.
+    if (verbose) {
+      cli_inform(
+        c(
+          "i" = "Some rows containing NA values may be removed.
         This is fine if not unexpected."
+        )
       )
-    )
+    }
     #nolint end
   }
 
@@ -346,7 +379,7 @@ validate_general <- function(data) {
 }
 
 
-#' Validate forecast objects for internal use
+#' Clean forecast object
 #' @description
 #' The function makes it possible to silently validate an object. In addition,
 #' it can return a copy of the data and remove rows with missing values.
@@ -363,7 +396,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     forecast <- copy(forecast)
   }
-  suppressWarnings(suppressMessages(validate_forecast(forecast)))
+  assert_forecast(forecast, verbose = FALSE)
   if (na.omit) {
     forecast <- na.omit(forecast)
   }

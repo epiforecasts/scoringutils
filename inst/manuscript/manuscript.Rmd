@@ -254,7 +254,7 @@ Various helper functions are available to diagnose and fix issues with the input
 print(forecast_quantile, 2)
 ```
 
-Internally, the print method calls the functions \fct{get\_forecast\_type}, \fct{get\_forecast\_unit} and \fct{validate\_forecast}. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{validate\_forecast} re-validates an existing forecast object an can be used programmatically without printing an object (users could in principle also call \fct{as\_forecast} again).
+Internally, the print method calls the functions \fct{get\_forecast\_type}, \fct{get\_forecast\_unit} and \fct{assert\_forecast}. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{assert\_forecast} asserts that an existing forecast object passes all validations and returns `invisble(NULL)` if the forecast object is valid (and otherwise errors). \fct{validate\_forecast} is similar to \fct{assert\_forecast}, but returns the forecast object in case of success instead of `invisble(NULL)`, meaning that it can be used in a pipe. 
 
 One common issue that causes \fct{as\_forecast} to fail are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile level or sample id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we would now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
 
@@ -641,11 +641,11 @@ We thank Community Jameel for Institute and research funding
 
 \section{Constructing and validating forecast objects}
 
-The following section gives an overview of how \pkg{scoringutils} constructs forecast objects. The `forecast` class comes with a constructor, \fct{new\_forecast}, a generic validation function, \fct{validate\_forecast}, and a convenient wrapper function \fct{as\_forecast}. 
+The following section gives an overview of how \pkg{scoringutils} constructs forecast objects. The `forecast` class comes with a constructor, \fct{new\_forecast}, a generic validation function, \fct{assert\_forecast}, and a convenient wrapper function \fct{as\_forecast}. 
 
 \fct{new\_forecast} constructs a `forecast` object based on a `data.frame` or similar. It makes a deep copy of the inptut and converts it into a `data.table`, adds a `model` column with value "Unspecified model" if there isn't one and adds a class `forecast_*`, where `*` depends on the forecast type to the object. 
 
-\fct{validate\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
+\fct{assert\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
 
 \fct{as\_forecast} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, determines the forecast type of the input (and optionally checks for consistency with what the user expects), constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
 

@@ -75,6 +75,18 @@ test_that("as_forecast() errors if there is both a sample_id and a quantile_leve
   )
 })
 
+test_that("as_forecast() warns if there are different numbers of quantiles", {
+  example <- data.table::copy(example_quantile)[-1000, ]
+  expect_warning(
+    w <- as_forecast(na.omit(example)),
+    "Some forecasts have different numbers of rows"
+  )
+  # printing should work without a warning because printing is silent
+  expect_no_condition(w)
+})
+
+
+
 test_that("check_columns_present() works", {
   expect_equal(
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),
@@ -211,16 +223,16 @@ test_that("is_forecast() works as expected", {
 
 
 # ==============================================================================
-# validate_forecast()
+# assert_forecast()
 # ==============================================================================
 
-test_that("validate_forecast() works as expected", {
+test_that("assert_forecast() works as expected", {
   # test that by default, `as_forecast()` errors
-  expect_error(validate_forecast(data.frame(x = 1:10)),
+  expect_error(assert_forecast(data.frame(x = 1:10)),
                "The input needs to be a forecast object.")
 })
 
-test_that("validate_forecast.forecast_binary works as expected", {
+test_that("assert_forecast.forecast_binary works as expected", {
   test <- na.omit(data.table::copy(example_binary))
   test[, "sample_id" := 1:nrow(test)]
 
@@ -239,23 +251,36 @@ test_that("validate_forecast.forecast_binary works as expected", {
   )
 })
 
-test_that("validate_forecast.forecast_point() works as expected", {
+test_that("assert_forecast.forecast_point() works as expected", {
   test <- na.omit(data.table::copy(example_point))
   test <- as_forecast(test)
 
   # expect an error if column is changed to character after initial validation.
   test <- test[, "predicted" := as.character(predicted)]
   expect_error(
-    validate_forecast(test),
+    assert_forecast(test),
     "Input looks like a point forecast, but found the following issue"
   )
 })
 
-test_that("validate_forecast() complains if the forecast type is wrong", {
+test_that("assert_forecast() complains if the forecast type is wrong", {
   test <- na.omit(data.table::copy(example_point))
   test <- as_forecast(test)
   expect_error(
-    validate_forecast(test, forecast_type = "quantile"),
+    assert_forecast(test, forecast_type = "quantile"),
     "Forecast type determined by scoringutils based on input:"
   )
+})
+
+
+# ==============================================================================
+# validate_forecast()
+# ==============================================================================
+
+test_that("validate_forecast() works as expected", {
+  # check that validate forecast returns itself
+  expect_no_condition(
+    out <- validate_forecast(as_forecast(na.omit(example_point)))
+  )
+  expect_true(!is.null(out))
 })
