@@ -6,9 +6,9 @@
 \alias{assert_forecast.forecast_sample}
 \title{Assert that input is a forecast object and passes validations}
 \usage{
-assert_forecast(forecast, forecast_type = NULL, silent = FALSE, ...)
+assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
-\method{assert_forecast}{forecast_quantile}(forecast, forecast_type = NULL, silent = FALSE, ...)
+\method{assert_forecast}{forecast_quantile}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
 \method{assert_forecast}{forecast_sample}(forecast, forecast_type = NULL, ...)
 }

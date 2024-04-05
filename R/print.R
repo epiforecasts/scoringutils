@@ -18,8 +18,8 @@ print.forecast_binary <- function(x, ...) {
 
   # check whether object passes validation
   validation <- try(
-    do.call(assert_forecast, list(forecast = x, silent = TRUE)),
-    silent = TRUE
+    do.call(assert_forecast, list(forecast = x, verbose = FALSE)),
+    verbose = FALSE
   )
   if (inherits(validation, "try-error")) {
     cli_warn(
@@ -32,11 +32,11 @@ print.forecast_binary <- function(x, ...) {
   # get forecast type, forecast unit and score columns
   forecast_type <- try(
     do.call(get_forecast_type, list(data = x)),
-    silent = TRUE
+    verbose = FALSE
   )
   forecast_unit <- try(
     do.call(get_forecast_unit, list(data = x)),
-    silent = TRUE
+    verbose = FALSE
   )
 
   # Print forecast object information

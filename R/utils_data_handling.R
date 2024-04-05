@@ -24,7 +24,7 @@ sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
   forecast <- copy(forecast)
-  assert_forecast(forecast, forecast_type = "sample", silent = TRUE)
+  assert_forecast(forecast, forecast_type = "sample", verbose = FALSE)
   assert_numeric(quantile_level, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)

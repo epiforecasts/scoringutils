@@ -174,7 +174,7 @@ as_forecast.default <- function(data,
 #' checks for the specific forecast type.
 #' @inheritParams as_forecast
 #' @inheritParams score
-#' @param silent Logical. If `TRUE` (default is `FALSE`), no messages and
+#' @param verbose Logical. If `FALSE` (default is `TRUE`), no messages and
 #'   warnings will be created.
 #' @inheritSection forecast_types Forecast types and input formats
 #' @return
@@ -189,7 +189,7 @@ as_forecast.default <- function(data,
 #' forecast <- as_forecast(example_binary)
 #' assert_forecast(forecast)
 assert_forecast <- function(
-  forecast, forecast_type = NULL, silent = FALSE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   UseMethod("assert_forecast")
 }
@@ -199,7 +199,7 @@ assert_forecast <- function(
 #' @export
 #' @keywords check-forecasts
 assert_forecast.default <- function(
-  forecast, forecast_type = NULL, silent = FALSE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   cli_abort(
     c(
@@ -214,7 +214,7 @@ assert_forecast.default <- function(
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_binary <- function(
-  forecast, forecast_type = NULL, silent = FALSE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
@@ -250,7 +250,7 @@ assert_forecast.forecast_binary <- function(
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_point <- function(
-  forecast, forecast_type = NULL, silent = FALSE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
@@ -273,7 +273,7 @@ assert_forecast.forecast_point <- function(
 #' @rdname assert_forecast
 #' @keywords check-forecasts
 assert_forecast.forecast_quantile <- function(
-  forecast, forecast_type = NULL, silent = FALSE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
@@ -301,8 +301,8 @@ assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...)
 #' @inherit assert_forecast params return examples
 #' @export
 #' @keywords check-forecasts
-validate_forecast <- function(forecast, forecast_type = NULL, silent = FALSE) {
-  assert_forecast(forecast, forecast_type, silent)
+validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
+  assert_forecast(forecast, forecast_type, verbose)
   return(forecast)
 }
 
@@ -327,7 +327,7 @@ validate_forecast <- function(forecast, forecast_type = NULL, silent = FALSE) {
 #' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords internal_input_check
-assert_forecast_generic <- function(data, silent = FALSE) {
+assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
   assert(check_columns_present(data, c("observed", "predicted", "model")))
@@ -347,7 +347,7 @@ assert_forecast_generic <- function(data, silent = FALSE) {
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
-  if (!is.logical(number_quantiles_samples) && !silent) {
+  if (!is.logical(number_quantiles_samples) && verbose) {
     cli_warn(number_quantiles_samples)
   }
 
@@ -362,7 +362,7 @@ assert_forecast_generic <- function(data, silent = FALSE) {
         )
       )
     }
-    if (!silent) {
+    if (verbose) {
       cli_inform(
         c(
           "i" = "Some rows containing NA values may be removed.
@@ -377,7 +377,7 @@ assert_forecast_generic <- function(data, silent = FALSE) {
 }
 
 
-#' Validate forecast objects for internal use
+#' Clean forecast object
 #' @description
 #' The function makes it possible to silently validate an object. In addition,
 #' it can return a copy of the data and remove rows with missing values.
@@ -394,7 +394,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
   if (copy) {
     forecast <- copy(forecast)
   }
-  assert_forecast(forecast, silent = TRUE)
+  assert_forecast(forecast, verbose = FALSE)
   if (na.omit) {
     forecast <- na.omit(forecast)
   }

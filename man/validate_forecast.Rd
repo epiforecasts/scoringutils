@@ -4,7 +4,7 @@
 \alias{validate_forecast}
 \title{Re-validate an existing forecast object}
 \usage{
-validate_forecast(forecast, forecast_type = NULL, silent = FALSE)
+validate_forecast(forecast, forecast_type = NULL, verbose = TRUE)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and

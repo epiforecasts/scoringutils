@@ -4,7 +4,7 @@
 \alias{assert_forecast_generic}
 \title{Validation common to all forecast types}
 \usage{
-assert_forecast_generic(data, silent = FALSE)
+assert_forecast_generic(data, verbose = TRUE)
 }
 \arguments{
 \item{data}{A data.table with forecasts and observed values that should
