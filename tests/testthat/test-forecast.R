@@ -75,6 +75,18 @@ test_that("as_forecast() errors if there is both a sample_id and a quantile_leve
   )
 })
 
+test_that("as_forecast() warns if there are different numbers of quantiles", {
+  example <- data.table::copy(example_quantile)[-1000, ]
+  expect_warning(
+    w <- as_forecast(na.omit(example)),
+    "Some forecasts have different numbers of rows"
+  )
+  # printing should work without a warning because printing is silent
+  expect_no_condition(w)
+})
+
+
+
 test_that("check_columns_present() works", {
   expect_equal(
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),

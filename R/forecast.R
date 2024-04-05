@@ -216,7 +216,7 @@ assert_forecast.default <- function(
 assert_forecast.forecast_binary <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast)
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)
 
   columns_correct <- test_columns_not_present(
@@ -252,7 +252,7 @@ assert_forecast.forecast_binary <- function(
 assert_forecast.forecast_point <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast)
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
@@ -275,7 +275,7 @@ assert_forecast.forecast_point <- function(
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast)
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
   return(invisible(NULL))
@@ -285,8 +285,10 @@ assert_forecast.forecast_quantile <- function(
 #' @export
 #' @rdname assert_forecast
 #' @keywords check-forecasts
-assert_forecast.forecast_sample <- function(forecast, forecast_type = NULL, ...) {
-  forecast <- assert_forecast_generic(forecast)
+assert_forecast.forecast_sample <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
   return(invisible(NULL))
 }
