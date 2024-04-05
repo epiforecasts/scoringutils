@@ -58,6 +58,12 @@
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_dims_ok_point.html</loc>
   </url>
   <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_forecast.html</loc>
+  </url>
+  <url>
+    <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_generic.html</loc>
+  </url>
+  <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_type.html</loc>
   </url>
   <url>
@@ -344,9 +350,6 @@
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/validate_forecast.html</loc>
-  </url>
-  <url>
-    <loc>https://epiforecasts.io/scoringutils/dev/reference/validate_general.html</loc>
   </url>
   <url>
     <loc>https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.html</loc>
