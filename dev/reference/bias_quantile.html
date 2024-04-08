@@ -117,10 +117,12 @@ consistency, we define \(Q_t\) such that it always includes the element
 \(1()\) is the indicator function that is \(1\) if the
 condition is satisfied and \(0\) otherwise.</p>
 <p>In clearer terms, bias \(B_t\) is:</p><ul><li><p>\(1 - 2 \cdot\) the maximum percentile rank for which the corresponding
-quantile is still below the observed value, <em>if the observed value is smaller
-than the median of the predictive distribution.</em></p></li>
+quantile is still smaller than or equal to the observed value,
+<em>if the observed value is smaller than the median of the predictive
+distribution.</em></p></li>
 <li><p>\(1 - 2 \cdot\) the minimum percentile rank for which the corresponding
-quantile is still larger than the true value <em>if the observed value is larger
+quantile is still larger than or equal to the observed value <em>if the observed
+value is larger
 than the median of the predictive distribution.</em>.</p></li>
 <li><p>\(0\) <em>if the observed value is exactly the median</em> (both terms cancel
 out)</p></li>
