@@ -48,12 +48,11 @@ NULL
 #' rule. Small values are better (best is 0, the worst is 1).
 #'
 #' \deqn{
-#'   \textrm{Brier\_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\textrm{prediction}_t -
-#'   \textrm{outcome}_t)^2,
+#'   \textrm{Brier\_Score} = (\textrm{prediction} - \textrm{outcome})^2,
 #' }{
-#'   Brier_Score = 1/N sum_{t = 1}^{n} (prediction_t - outcome_t)²,
-#' } where \eqn{\textrm{outcome}_t \in \{0, 1\}}{outcome_t in {0, 1}}, and
-#' \eqn{\textrm{prediction}_t \in [0, 1]}{prediction_t in [0, 1]} represents
+#'   Brier_Score = (prediction - outcome)²,
+#' } where \eqn{\textrm{outcome} \in \{0, 1\}}{outcome in {0, 1}}, and
+#' \eqn{\textrm{prediction} \in [0, 1]}{prediction in [0, 1]} represents
 #' the probability that the outcome is equal to 1.
 #' @return A numeric vector of size n with the Brier scores
 #' @keywords metric
