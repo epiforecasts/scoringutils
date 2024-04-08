@@ -97,12 +97,11 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #' scoring rules suitable for forecasts in a sample-based format.
 #'
 #' The default scoring rules are:
-#' - "mad" = [mad_sample()]
-#' - "bias" = [bias_sample()]
-#' - "dss" = [dss_sample()]
 #' - "crps" = [crps_sample()]
 #' - "log_score" = [logs_sample()]
+#' - "dss" = [dss_sample()]
 #' - "mad" = [mad_sample()]
+#' - "bias" = [bias_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
 #' @inherit select_metrics params return
