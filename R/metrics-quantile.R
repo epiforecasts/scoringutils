@@ -399,10 +399,12 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 #'
 #' In clearer terms, bias \eqn{B_t} is:
 #' - \eqn{1 - 2 \cdot} the maximum percentile rank for which the corresponding
-#' quantile is still below the observed value, *if the observed value is smaller
-#' than the median of the predictive distribution.*
+#' quantile is still smaller than or equal to the observed value,
+#' *if the observed value is smaller than the median of the predictive
+#' distribution.*
 #' - \eqn{1 - 2 \cdot} the minimum percentile rank for which the corresponding
-#' quantile is still larger than the true value *if the observed value is larger
+#' quantile is still larger than or equal to the observed value *if the observed
+#' value is larger
 #' than the median of the predictive distribution.*.
 #' - \eqn{0} *if the observed value is exactly the median* (both terms cancel
 #' out)
