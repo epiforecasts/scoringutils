@@ -37,7 +37,7 @@ scores <- score(forecast_quantile)
   ![package workflows](./man/figures/workflow.png)
   
 ### Input formats
-- We standardised input formats both for `score()` as well as for the scoring rules exported by `scoreingutils. The following plot gives a overview of the expected input formats for the different forecast types in `score()`. 
+- We standardised input formats both for `score()` as well as for the scoring rules exported by `scoreingutils`. The following plot gives a overview of the expected input formats for the different forecast types in `score()`. 
 ![input formats](./man/figures/required-inputs.png)
 
 - Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
