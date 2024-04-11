@@ -2,7 +2,9 @@
 
 This update represents a major rewrite of the package and introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`. 
 
-This update was done to address comments made by reviewers from the Journal of Statistical Software (see preprint of the manuscript [here](https://arxiv.org/abs/2205.07090)). The most comprehensive documentation for the new package after the rewrite is the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
+The update aims to make the package more modular and customisable and overall cleaner and easier to work with. In particular, we aimed to make the suggested workflows for evaluating forecasts more explicit and easier to follow (see visualisation below). To do that, we clarified input formats and made them consistent across all functions. We refactord many functions to S3-methods and introduced `forecast` objects with separate classes for different types of forecasts. A new function, `as_forecast()` was introduced to validate the data and convert inputs into a `forecast` object. Another major update is the possibility for users to pass in their own scoring functions into `score()`. We updated and improved all function documentation and added new vignettes to guide users through the package. Internally, we refactored the code, improved input checks, updated notifications (which now use the `cli` package) and increased test coverage. 
+
+The most comprehensive documentation for the new package after the rewrite is the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
 of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` paper.
 
 ## Package updates
@@ -40,7 +42,7 @@ scores <- score(forecast_quantile)
 - We standardised input formats both for `score()` as well as for the scoring rules exported by `scoreingutils`. The following plot gives a overview of the expected input formats for the different forecast types in `score()`. 
 ![input formats](./man/figures/required-inputs.png)
 
-- Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs)
+- Support for the interval format was mostly dropped (see PR #525 by @nikosbosse and reviewed by @seabbs). The co-existence of the quantile and interval format let to a confusing user experience with many duplicated functions providing the same functionality. We decided to simplify the interface by focusing exclusively on the quantile format. 
     - The function `bias_range()` was removed (users should now use `bias_quantile()` instead)
     - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 
