@@ -62,6 +62,8 @@ paper.
 - Replaced warnings with errors in `pairwise_comparison` to avoid returning `NULL`
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
 - `pit()` was renamed to `get_pit()`. 
+- `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
+
 
 # scoringutils 1.2.2
 
