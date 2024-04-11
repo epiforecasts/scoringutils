@@ -508,11 +508,16 @@ bias_quantile_single_vector <- function(observed, predicted,
     median_prediction <- predicted[quantile_level == 0.5]
   } else {
     # if median is not available, compute as mean of two innermost quantile
-    upper_level <- max(quantile_level[quantile_level < 0.5])
-    lower_level <- min(quantile_level[quantile_level > 0.5])
-    median_prediction <-
-      0.5 * predicted[quantile_level == upper_level] +
-      0.5 * predicted[quantile_level == lower_level]
+    upper_q_level <- max(quantile_level[quantile_level < 0.5])
+    lower_q_level <- min(quantile_level[quantile_level > 0.5])
+    upper_value <- predicted[quantile_level == upper_q_level]
+    lower_value <- predicted[quantile_level == lower_q_level]
+
+    # now instead of taking a simple mean, we need to do a linear interpolation
+    # weight is the proportion of the distance between the lower quantile and
+    # the median relative to the distance between the upper and lower quantile
+    w <- (0.5 - lower_q_level) / (upper_q_level - lower_q_level)
+    median_prediction <- lower_value + w * (upper_value - lower_value)
   }
 
   if (observed == median_prediction) {
