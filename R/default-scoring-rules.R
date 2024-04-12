@@ -39,6 +39,13 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   }
 }
 
+customise_metric <- function(metric, ...) {
+  dots <- list(...)
+  customised_metric <- function(...) {
+    do.call(metric, c(list(...), dots))
+  }
+  return(customised_metric)
+}
 
 #' @title Default metrics and scoring rules for binary forecasts
 #' @description
@@ -164,9 +171,9 @@ metrics_quantile <- function(select = NULL, exclude = NULL) {
     dispersion = dispersion,
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
-    interval_coverage_90 = function(...) {
-      run_safely(..., interval_range = 90, fun = interval_coverage)
-    },
+    interval_coverage_90 = customise_metric(
+      interval_coverage, interval_range = 90
+    ),
     interval_coverage_deviation = interval_coverage_deviation,
     ae_median = ae_median_quantile
   )
