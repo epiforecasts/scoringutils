@@ -156,6 +156,11 @@
 <li>Removed <code>interval_coverage_sample()</code> as users are now expected to convert to a quantile format first before scoring.</li>
 </ul></div>
 <div class="section level4">
+<h4 id="function-changes-1-2-2-9000">Function changes<a class="anchor" aria-label="anchor" href="#function-changes-1-2-2-9000"></a></h4>
+<ul><li>
+<code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.</li>
+</ul></div>
+<div class="section level4">
 <h4 id="internal-package-updates-1-2-2-9000">Internal package updates<a class="anchor" aria-label="anchor" href="#internal-package-updates-1-2-2-9000"></a></h4>
 <ul><li>The deprecated <code>..density..</code> was replaced with <code>after_stat(density)</code> in ggplot calls.</li>
 <li>Files ending in “.Rda” were renamed to “.rds” where appropriate when used together with <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> or <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>.</li>
