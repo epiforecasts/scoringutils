@@ -61,7 +61,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' values <- c(1, 2, NA, 4, 5)
 #' custom_metric(values)
 customise_metric <- function(metric, ...) {
-  assert_function()
+  assert_function(metric)
   dots <- list(...)
   customised_metric <- function(...) {
     do.call(metric, c(list(...), dots))

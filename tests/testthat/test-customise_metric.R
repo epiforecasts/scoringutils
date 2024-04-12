@@ -12,10 +12,14 @@ test_that("customise_metric works correctly", {
 
   # Test with no additional arguments
   custom_metric <- customise_metric(mean)
-  expect_error(custom_metric(values), "argument 'na.rm' is missing, with no default")
+  expect_true(is.na(custom_metric(values)))
 })
 
 test_that("customise_metric handles errors correctly", {
   # Test with a non-function metric
-  expect_error(customise_metric("not_a_function", na.rm = TRUE), "is not a function")
+  expect_error(customise_metric("not_a_function", na.rm = TRUE), "Must be a function, not 'character'")
+})
+
+test_that("customize_metric is exported", {
+  expect_equal(customise_metric, customize_metric)
 })
