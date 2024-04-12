@@ -100,13 +100,13 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary()) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
+score.forecast_point <- function(forecast, metrics = metrics_point()) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
   scores <- apply_metrics(
     forecast, metrics,
-    forecast$observed, forecast$predicted, ...
+    forecast$observed, forecast$predicted
   )
 
   scores <- as_scores(scores, metrics = names(metrics))
