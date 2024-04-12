@@ -39,13 +39,40 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   }
 }
 
+#' Customizes a metric function with additional arguments.
+#'
+#' This function takes a metric function and additional arguments, and returns
+#' a new function that includes the additional arguments when calling the
+#' original metric function.
+#'
+#' @param metric The metric function to be customized.
+#' @param ... Additional arguments to be included when calling the metric
+#' function.
+#'
+#' @return A customized metric function.
+#' @keywords metric
+#'
+#' @export
+#' @examples
+#' # Create a customized metric function
+#' custom_metric <- customise_metric(mean, na.rm = TRUE)
+#'
+#' # Use the customized metric function
+#' values <- c(1, 2, NA, 4, 5)
+#' custom_metric(values)
 customise_metric <- function(metric, ...) {
+  assert_function()
   dots <- list(...)
   customised_metric <- function(...) {
     do.call(metric, c(list(...), dots))
   }
   return(customised_metric)
 }
+
+#' @rdname customise_metric
+customize_metric <- customise_metric
+
+
 
 #' @title Default metrics and scoring rules for binary forecasts
 #' @description
