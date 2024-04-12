@@ -504,16 +504,7 @@ bias_quantile_single_vector <- function(observed, predicted,
     #nolint end
   }
 
-  if (0.5 %in% quantile_level) {
-    median_prediction <- predicted[quantile_level == 0.5]
-  } else {
-    # if median is not available, compute as mean of two innermost quantile
-    upper_level <- max(quantile_level[quantile_level < 0.5])
-    lower_level <- min(quantile_level[quantile_level > 0.5])
-    median_prediction <-
-      0.5 * predicted[quantile_level == upper_level] +
-      0.5 * predicted[quantile_level == lower_level]
-  }
+  median_prediction <- interpolate_median(predicted, quantile_level)
 
   if (observed == median_prediction) {
     bias <- 0
@@ -534,6 +525,33 @@ bias_quantile_single_vector <- function(observed, predicted,
     }
   }
   return(bias)
+}
+
+#' Helper function to interpolate the median prediction if it is not available
+#' @description
+#' Internal function to interpolate the median prediction if it is not
+#' available in the given quantile levels.
+#' This is done using linear interpolation between the two innermost quantiles.
+#' @inheritParams bias_quantile_single_vector
+#' @return scalar with the imputed median prediction
+#' @keywords internal
+interpolate_median <- function(predicted, quantile_level) {
+  if (0.5 %in% quantile_level) {
+    median_prediction <- predicted[quantile_level == 0.5]
+  } else {
+    # determine the two innermost quantiles
+    upper_q_level <- max(quantile_level[quantile_level < 0.5])
+    lower_q_level <- min(quantile_level[quantile_level > 0.5])
+    upper_value <- predicted[quantile_level == upper_q_level]
+    lower_value <- predicted[quantile_level == lower_q_level]
+
+    # do a linear interpolation
+    # weight is the proportion of the distance between the lower quantile and
+    # the median relative to the distance between the upper and lower quantile
+    w <- (0.5 - lower_q_level) / (upper_q_level - lower_q_level)
+    median_prediction <- lower_value + w * (upper_value - lower_value)
+  }
+  return(median_prediction)
 }
 
 

@@ -841,6 +841,29 @@ test_that("bias_quantile() works with point forecasts", {
 })
 
 
+# `interpolate_median` ======================================================= #
+test_that("interpolation in `interpolate_median` works", {
+  predicted <- c(1, 10)
+  observed <- 15
+  quantile_level <- c(0.4, 0.6)
+
+  # median is missing, symmetric quantile levels given
+  expect_equal(interpolate_median(predicted, quantile_level), mean(predicted))
+  quantile_level <- c(0.1, 0.9)
+  expect_equal(interpolate_median(predicted, quantile_level), mean(predicted))
+
+  1 + 0.4/0.8 * (10 - 1)
+
+  # asymmetric quantile levels given
+  quantile_level <- c(0.3, 0.6)
+  expect_equal(interpolate_median(predicted, quantile_level), 1 + 0.2/0.3 * (10 - 1))
+
+  quantile_level <- c(0.2, 0.6)
+  expect_equal(interpolate_median(predicted, quantile_level), 1 + 0.3/0.4 * (10 - 1))
+})
+
+
+
 # ============================================================================ #
 # `ae_median_quantile` ======================================================= #
 # ============================================================================ #

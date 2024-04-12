@@ -79,7 +79,10 @@ scores <- score(forecast_quantile)
 - Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
 - Removed the function `merge_pred_and_obs()` that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new "Deprecated functions"-vignette.
 - Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
-  
+
+### Function changes
+- `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
+
 ### Internal package updates
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
