@@ -18,7 +18,8 @@
 #'   column names in the output. See [metrics_point()], [metrics_binary()],
 #'   [metrics_quantile()], and [metrics_sample()] for more information on the
 #'   default metrics used.
-#' @param ... Additional arguments
+#' @param ... Additional arguments. Currently unused but allows for future
+#'  extensions.
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
@@ -81,7 +82,7 @@ score.default <- function(forecast, metrics, ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_binary <- function(forecast, metrics = metrics_binary()) {
+score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
@@ -100,7 +101,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary()) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(forecast, metrics = metrics_point()) {
+score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
@@ -117,7 +118,7 @@ score.forecast_point <- function(forecast, metrics = metrics_point()) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(forecast, metrics = metrics_sample()) {
+score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -154,7 +155,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample()) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(forecast, metrics = metrics_quantile()) {
+score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -204,6 +205,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile()) {
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
 #' accepted by it.
+#' @param ... Additional arguments to be passed to the scoring rules.
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal

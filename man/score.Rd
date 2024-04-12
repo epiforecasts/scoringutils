@@ -10,13 +10,13 @@
 \usage{
 score(forecast, metrics, ...)
 
-\method{score}{forecast_binary}(forecast, metrics = metrics_binary())
+\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
 
-\method{score}{forecast_point}(forecast, metrics = metrics_point())
+\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
 
-\method{score}{forecast_sample}(forecast, metrics = metrics_sample())
+\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
 
-\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile())
+\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
@@ -27,7 +27,8 @@ column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
 default metrics used.}
 
-\item{...}{Additional arguments}
+\item{...}{Additional arguments. Currently unused but allows for future
+extensions.}
 }
 \value{
 An object of class \code{scores}. This object is a data.table with
