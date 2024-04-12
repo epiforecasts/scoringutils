@@ -154,7 +154,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample()) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...) {
+score.forecast_quantile <- function(forecast, metrics = metrics_quantile()) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -184,7 +184,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 
     forecast <- apply_metrics(
       forecast, metrics,
-      observed, predicted, quantile_level, ...
+      observed, predicted, quantile_level
     )
     return(forecast)
   })
