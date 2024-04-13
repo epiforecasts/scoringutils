@@ -69,11 +69,11 @@ customise_metric <- function(metric, ...) {
   return(customised_metric)
 }
 
+
 #' @rdname customise_metric
 #' @keywords metric
 #' @export
 customize_metric <- customise_metric
-
 
 
 #' @title Default metrics and scoring rules for binary forecasts
