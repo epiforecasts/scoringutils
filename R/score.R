@@ -212,7 +212,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 #' @param ... Additional arguments to be passed to the scoring rules. Note that
 #'   this is currently not used, as all calls to `apply_scores` currently
 #'   avoid passing arguments via `...` and instead expect that the metrics
-#'   directly be modified using [customise_scores()].
+#'   directly be modified using [customise_metric()].
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal

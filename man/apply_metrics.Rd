@@ -21,7 +21,7 @@ the \code{metrics} argument in \code{score()}.}
 \item{...}{Additional arguments to be passed to the scoring rules. Note that
 this is currently not used, as all calls to \code{apply_scores} currently
 avoid passing arguments via \code{...} and instead expect that the metrics
-directly be modified using \code{\link[=customise_scores]{customise_scores()}}.}
+directly be modified using \code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
 A data table with the forecasts and the calculated metrics.
