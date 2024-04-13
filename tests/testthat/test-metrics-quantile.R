@@ -152,7 +152,6 @@ test_that("wis() works within score for one interval", {
   metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
-  eval <- score(test_data, metrics = metrics)
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
