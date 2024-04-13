@@ -2,21 +2,20 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{customise_metric}
 \alias{customise_metric}
-\alias{customize_metric}
-\title{Customizes a metric function with additional arguments.}
+\title{Customises a metric function with additional arguments.}
 \usage{
 customise_metric(metric, ...)
 
-customize_metric(metric, ...)
+customise_metric(metric, ...)
 }
 \arguments{
-\item{metric}{The metric function to be customized.}
+\item{metric}{The metric function to be customised.}
 
 \item{...}{Additional arguments to be included when calling the metric
 function.}
 }
 \value{
-A customized metric function.
+A customised metric function.
 }
 \description{
 This function takes a metric function and additional arguments, and returns
@@ -24,10 +23,10 @@ a new function that includes the additional arguments when calling the
 original metric function.
 }
 \examples{
-# Create a customized metric function
+# Create a customised metric function
 custom_metric <- customise_metric(mean, na.rm = TRUE)
 
-# Use the customized metric function
+# Use the customised metric function
 values <- c(1, 2, NA, 4, 5)
 custom_metric(values)
 }

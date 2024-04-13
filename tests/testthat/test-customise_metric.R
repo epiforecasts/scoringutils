@@ -1,8 +1,8 @@
 test_that("customise_metric works correctly", {
-  # Create a customized metric function
+  # Create a customised metric function
   custom_metric <- customise_metric(mean, na.rm = TRUE)
 
-  # Use the customized metric function
+  # Use the customised metric function
   values <- c(1, 2, NA, 4, 5)
   expect_equal(custom_metric(values), 3)
 
@@ -20,6 +20,6 @@ test_that("customise_metric handles errors correctly", {
   expect_error(customise_metric("not_a_function", na.rm = TRUE), "Must be a function, not 'character'")
 })
 
-test_that("customize_metric is exported", {
-  expect_equal(customise_metric, customize_metric)
+test_that("customise_metric is exported", {
+  expect_equal(customise_metric, customise_metric)
 })
