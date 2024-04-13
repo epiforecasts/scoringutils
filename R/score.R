@@ -17,9 +17,13 @@
 #' @param metrics A named list of scoring functions. Names will be used as
 #'   column names in the output. See [metrics_point()], [metrics_binary()],
 #'   [metrics_quantile()], and [metrics_sample()] for more information on the
-#'   default metrics used.
+#'   default metrics used. Note that if you want to pass arguments to any
+#'   given metric, you should do that through the function [customise_metric()]
+#'   and pass an updated list of functions with your custom metric to
+#'   the `metrics` argument in `score()`.
 #' @param ... Additional arguments. Currently unused but allows for future
-#'  extensions.
+#'  extensions. If you want to pass arguments to individual metrics, use
+#'  [customise_metrics()].
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
