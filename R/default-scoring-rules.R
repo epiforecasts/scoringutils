@@ -70,7 +70,9 @@ customise_metric <- function(metric, ...) {
 }
 
 #' @rdname customise_metric
-customise_metric <- customise_metric
+#' @keywords metric
+#' @export
+customize_metric <- customise_metric
 
 
 

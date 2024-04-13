@@ -2,11 +2,12 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{customise_metric}
 \alias{customise_metric}
+\alias{customize_metric}
 \title{Customises a metric function with additional arguments.}
 \usage{
 customise_metric(metric, ...)
 
-customise_metric(metric, ...)
+customize_metric(metric, ...)
 }
 \arguments{
 \item{metric}{The metric function to be customised.}
