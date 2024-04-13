@@ -41,13 +41,14 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 
 #' Customises a metric function with additional arguments.
 #'
+#' @description
 #' This function takes a metric function and additional arguments, and returns
 #' a new function that includes the additional arguments when calling the
 #' original metric function.
 #'
 #' @param metric The metric function to be customised.
 #' @param ... Additional arguments to be included when calling the metric
-#' function.
+#'   function.
 #'
 #' @return A customised metric function.
 #' @keywords metric
