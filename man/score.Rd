@@ -32,7 +32,7 @@ the \code{metrics} argument in \code{score()}.}
 
 \item{...}{Additional arguments. Currently unused but allows for future
 extensions. If you want to pass arguments to individual metrics, use
-\code{\link[=customise_metrics]{customise_metrics()}}.}
+\code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
 An object of class \code{scores}. This object is a data.table with

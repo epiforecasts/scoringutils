@@ -23,7 +23,7 @@
 #'   the `metrics` argument in `score()`.
 #' @param ... Additional arguments. Currently unused but allows for future
 #'  extensions. If you want to pass arguments to individual metrics, use
-#'  [customise_metrics()].
+#'  [customise_metric()].
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
