@@ -160,7 +160,9 @@ test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"] %>%
     as_forecast()
-  eval <- score(df[!is.na(predicted)])
+  metrics <- metrics_quantile()
+  metrics$wis <- customise_metric(wis, separate_results = FALSE)
+  eval <- score(df[!is.na(predicted)], metrics = metrics)
 
   expect_equal(
     nrow(eval) > 1,
