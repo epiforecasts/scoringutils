@@ -15,7 +15,10 @@ column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
 default metrics used.}
 
-\item{...}{Additional arguments to be passed to the scoring rules.}
+\item{...}{Additional arguments to be passed to the scoring rules. Note that
+this is currently not used, as all calls to \code{apply_scores} currently
+avoid passing arguments via \code{...} and instead expect that the metrics
+directly be modified using \code{\link[=customise_scores]{customise_scores()}}.}
 }
 \value{
 A data table with the forecasts and the calculated metrics.
