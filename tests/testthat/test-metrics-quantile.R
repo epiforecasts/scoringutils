@@ -380,7 +380,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = FALSE)
 
   eval <- suppressMessages(score(data_formatted, metrics = metrics))
 
