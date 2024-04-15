@@ -20,6 +20,8 @@
 #'   alternative to specifying `by` directly. If `across` is set, `by` will be
 #'   ignored. If `across` is `NULL` (default), then `by` will be used.
 #' @param fun A function used for summarising scores. Default is [mean()].
+#' @param metrics The metrics to summarise. If missing then `get_metrics()`
+#' is used internally to infer these.
 #' @param ... Additional parameters that can be passed to the summary function
 #'   provided to `fun`. For more information see the documentation of the
 #'   respective function.
@@ -60,13 +62,17 @@ summarise_scores <- function(scores,
                              by = "model",
                              across = NULL,
                              fun = mean,
+                             metrics,
                              ...) {
   # input checking ------------------------------------------------------------
   assert_data_frame(scores)
   assert_subset(by, names(scores), empty.ok = TRUE)
   assert_subset(across, names(scores), empty.ok = TRUE)
   assert_function(fun)
-  metrics <- get_metrics(scores, error = TRUE)
+  if (missing(metrics)) {
+    metrics <- get_metrics(scores, error = TRUE)
+  }
+
 
   forecast_unit <- get_forecast_unit(scores)
 
