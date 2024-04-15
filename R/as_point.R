@@ -93,7 +93,9 @@ as_point.forecast_sample <- function(forecast, quantile_level = 0.5, fun, ...) {
   assert_forecast(forecast, verbose = FALSE)
   if (missing(fun)) {
     quantile_forecast <- as_quantile(forecast, quantile_levels = quantile_level)
-    point_forecast <- as_point(quantile_forecast)
+    point_forecast <- as_point(
+      quantile_forecast, quantile_level = quantile_level
+    )
   } else {
     sum_forecast <- summarise_scores(
       forecast, fun = fun, by = c(get_forecast_unit(forecast), "observed"),
