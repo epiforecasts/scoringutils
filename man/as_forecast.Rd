@@ -16,6 +16,7 @@ as_forecast(data, ...)
   model = NULL,
   quantile_level = NULL,
   sample_id = NULL,
+  check_forecast_type = TRUE,
   ...
 )
 }
@@ -55,6 +56,9 @@ the quantile level of the predicted values. This column will be renamed to
 \item{sample_id}{(optional) Name of the column in \code{data} that contains the
 sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.}
+
+\item{check_forecast_type}{Logical, defaults to \code{FALSE}. Should the
+\code{forecast_type} be checked and reset if not as implied by the \code{data}?}
 }
 \value{
 Depending on the forecast type, an object of the following class will be

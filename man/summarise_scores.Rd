@@ -5,9 +5,9 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by = "model", across = NULL, fun = mean, ...)
+summarise_scores(scores, by = "model", across = NULL, fun = mean, metrics, ...)
 
-summarize_scores(scores, by = "model", across = NULL, fun = mean, ...)
+summarize_scores(scores, by = "model", across = NULL, fun = mean, metrics, ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
@@ -22,6 +22,9 @@ alternative to specifying \code{by} directly. If \code{across} is set, \code{by}
 ignored. If \code{across} is \code{NULL} (default), then \code{by} will be used.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
+
+\item{metrics}{The metrics to summarise. If missing then \code{get_metrics()}
+is used internally to infer these.}
 
 \item{...}{Additional parameters that can be passed to the summary function
 provided to \code{fun}. For more information see the documentation of the
