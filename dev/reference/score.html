@@ -109,11 +109,16 @@ observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)<
 <dd><p>A named list of scoring functions. Names will be used as
 column names in the output. See <code><a href="metrics_point.html">metrics_point()</a></code>, <code><a href="metrics_binary.html">metrics_binary()</a></code>,
 <code><a href="metrics_quantile.html">metrics_quantile()</a></code>, and <code><a href="metrics_sample.html">metrics_sample()</a></code> for more information on the
-default metrics used.</p></dd>
+default metrics used. Note that if you want to pass arguments to any
+given metric, you should do that through the function <code><a href="customise_metric.html">customise_metric()</a></code>
+and pass an updated list of functions with your custom metric to
+the <code>metrics</code> argument in <code>score()</code>.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional arguments</p></dd>
+<dd><p>Additional arguments. Currently unused but allows for future
+extensions. If you want to pass arguments to individual metrics, use
+<code><a href="customise_metric.html">customise_metric()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
