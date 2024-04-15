@@ -445,6 +445,7 @@ new_forecast <- function(data, classname) {
 #' @param verbose A logical value indicating whether to print verbose output
 #'
 #' @return The modified forecast object
+#' @keywords internal
 remake_forecast <- function(
   forecast, old_classname, new_classname, verbose = TRUE
 ) {

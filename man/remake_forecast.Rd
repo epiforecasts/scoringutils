@@ -24,3 +24,4 @@ This function takes a forecast object and modifies its class name by removing
 the old class name and adding a new class name. It also performs an assertion
 check on the modified forecast object.
 }
+\keyword{internal}
