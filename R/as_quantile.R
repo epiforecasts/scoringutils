@@ -68,7 +68,7 @@ as_quantile.forecast_sample <- function(
   )
 
   sum_forecast[,
-   quantile_level := as.numeric(
+    quantile_level := as.numeric(
       gsub("%", "", quantile_level, fixed = TRUE)
     ) / 100
   ]
