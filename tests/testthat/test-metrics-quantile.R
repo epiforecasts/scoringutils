@@ -495,7 +495,8 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
     count_median_twice = TRUE
   )
 
-  metrics <- metrics_quantile() |> select_metrics("wis")
+  metrics <- metrics_quantile() %>%
+    select_metrics("wis")
   metrics$wis <- customise_metric(wis, count_median_twice = TRUE)
   eval2 <- eval <- score(data_formatted, metrics = metrics)
   eval2 <- summarise_scores(eval2,
