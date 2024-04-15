@@ -13,9 +13,15 @@ observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
-default metrics used.}
+default metrics used. Note that if you want to pass arguments to any
+given metric, you should do that through the function \code{\link[=customise_metric]{customise_metric()}}
+and pass an updated list of functions with your custom metric to
+the \code{metrics} argument in \code{score()}.}
 
-\item{...}{Additional arguments to be passed to the scoring rules.}
+\item{...}{Additional arguments to be passed to the scoring rules. Note that
+this is currently not used, as all calls to \code{apply_scores} currently
+avoid passing arguments via \code{...} and instead expect that the metrics
+directly be modified using \code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
 A data table with the forecasts and the calculated metrics.
