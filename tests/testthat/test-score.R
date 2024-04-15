@@ -117,51 +117,8 @@ test_that(
             metrics = list("identity" = function(x, y) {return(y)}))$identity,
       df$predicted
     )
-
-
-    # passing an additional argument that is not part of the function
-    # definition works
-    expect_equal(
-      score(df,
-            metrics = list("identity" = function(x, y) {return(y)}),
-            additional_arg = "something")$identity,
-      df$predicted
-    )
-
-    # passing an additional function to one that accepts ... works
-    expect_message(
-      score(df,
-            metrics = list("test_function" = test_fun),
-            test = "something"),
-      "test argument found"
-    )
-
-    # passing an argument that's the same as a named argument
-    expect_equal(
-      unique(
-        score(df,
-              metrics = list("test_function" = test_fun),
-              y = "something")$test_function
-      ),
-      "something"
-    )
-
-    # passing a single named argument for metrics by position
-    expect_contains(
-      names(score(df, list("hi" = test_fun))),
-      "hi")
-
-    # providing an additional, unrelated function argument works
-    expect_no_error(
-      score(df, unnecessary_argument = "unnecessary")
-    )
-    expect_no_error(
-      score(df, metrics = list("brier_score" = brier_score),
-            unnecessary_argument = "unnecessary")
-    )
   }
 )
-
 
 # test point case --------------------------------------------------------------
 test_that("function produces output for a point case", {
@@ -203,7 +160,9 @@ test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"] %>%
     as_forecast()
-  eval <- score(df[!is.na(predicted)], separate_results = FALSE)
+  metrics <- metrics_quantile()
+  metrics$wis <- customise_metric(wis, separate_results = FALSE)
+  eval <- score(df[!is.na(predicted)], metrics = metrics)
 
   expect_equal(
     nrow(eval) > 1,

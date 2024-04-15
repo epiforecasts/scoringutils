@@ -17,8 +17,13 @@
 #' @param metrics A named list of scoring functions. Names will be used as
 #'   column names in the output. See [metrics_point()], [metrics_binary()],
 #'   [metrics_quantile()], and [metrics_sample()] for more information on the
-#'   default metrics used.
-#' @param ... Additional arguments
+#'   default metrics used. Note that if you want to pass arguments to any
+#'   given metric, you should do that through the function [customise_metric()]
+#'   and pass an updated list of functions with your custom metric to
+#'   the `metrics` argument in `score()`.
+#' @param ... Additional arguments. Currently unused but allows for future
+#'  extensions. If you want to pass arguments to individual metrics, use
+#'  [customise_metric()].
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
@@ -87,7 +92,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 
   scores <- apply_metrics(
     forecast, metrics,
-    forecast$observed, forecast$predicted, ...
+    forecast$observed, forecast$predicted
   )
 
   scores <- as_scores(scores, metrics = names(metrics))
@@ -106,7 +111,7 @@ score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
 
   scores <- apply_metrics(
     forecast, metrics,
-    forecast$observed, forecast$predicted, ...
+    forecast$observed, forecast$predicted
   )
 
   scores <- as_scores(scores, metrics = names(metrics))
@@ -140,7 +145,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
 
     forecast <- apply_metrics(
       forecast, metrics,
-      observed, predicted, ...
+      observed, predicted
     )
     return(forecast)
   })
@@ -184,7 +189,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 
     forecast <- apply_metrics(
       forecast, metrics,
-      observed, predicted, quantile_level, ...
+      observed, predicted, quantile_level
     )
     return(forecast)
   })
@@ -204,6 +209,10 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
 #' accepted by it.
+#' @param ... Additional arguments to be passed to the scoring rules. Note that
+#'   this is currently not used, as all calls to `apply_scores` currently
+#'   avoid passing arguments via `...` and instead expect that the metrics
+#'   directly be modified using [customise_metric()].
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal
