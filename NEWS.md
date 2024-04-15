@@ -52,7 +52,7 @@ scores <- score(forecast_quantile)
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
 
 ### Updating a forecast object
-- The functions `as_point` and `as_quantile` have been added to allow conversion of various forecast types in point and quantile forecasts respectively.
+- The functions `as_point` and `as_quantile` have been added to allow conversion of various forecast types to point and quantile forecasts respectively.
 
 ### Pairwise comparisons and relative skill
 - The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_relative_skill()`, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.
