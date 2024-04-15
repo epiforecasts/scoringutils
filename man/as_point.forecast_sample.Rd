@@ -35,6 +35,6 @@ sample_forecast <- as_forecast(example_sample_continuous)
 as_point(sample_forecast)
 
 # Function approach
-as_point(sample_forecast, fun = function(...) {mean(..., na.rm = TRUE)})
+as_point(sample_forecast, fun = mean)
 }
 \keyword{check-forecasts}

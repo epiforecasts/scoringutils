@@ -432,6 +432,32 @@ new_forecast <- function(data, classname) {
 }
 
 
+#' Remakes a forecast object with a subclass
+#'
+#' This function takes a forecast object and modifies its class name by removing
+#' the old class name and adding a new class name. It also performs an assertion
+#' check on the modified forecast object.
+#'
+#' @param forecast The forecast object to be modified
+#' @param old_classname The name of the class to be removed from the forecast
+#' object
+#' @param new_classname The name of the class to be added to the forecast object
+#' @param verbose A logical value indicating whether to print verbose output
+#'
+#' @return The modified forecast object
+remake_forecast <- function(
+  forecast, old_classname, new_classname, verbose = TRUE
+) {
+  remade_forecast <- forecast
+  class(remade_forecast ) <- setdiff(class(forecast), old_classname)
+  remade_forecast <- new_forecast(
+    remade_forecast , classname = new_classname
+  )
+  assert_forecast(remade_forecast, verbose = verbose)
+  return(remade_forecast)
+}
+
+
 #' @title Test whether an object is a forecast object
 #'
 #' @description

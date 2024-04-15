@@ -80,5 +80,6 @@ globalVariables(c(
   "wis_component_name",
   "x",
   "y",
-  "g"
+  "g",
+  "target_quantile_level"
 ))
