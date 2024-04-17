@@ -1,6 +1,6 @@
 globalVariables(c(
   "..index",
-  "..quantile_level",
+  "..quantile_levels",
   "..type",
   ".",
   ".SD",

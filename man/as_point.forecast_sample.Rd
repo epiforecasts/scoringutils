@@ -4,37 +4,27 @@
 \alias{as_point.forecast_sample}
 \title{Convert a sample based forecast to a point forecast}
 \usage{
-\method{as_point}{forecast_sample}(forecast, quantile_level = 0.5, fun, ...)
+\method{as_point}{forecast_sample}(forecast, fun = median, ...)
 }
 \arguments{
 \item{forecast}{The \code{forecast_sample} object to be converted to a point
 forecast.}
 
-\item{quantile_level}{The desired quantile level of the current forecast
-that should become the point forecast. Defaults to 0.5 (median).}
+\item{fun}{A custom function to summarize the forecast. Defaults to \code{median}.}
 
-\item{fun}{A custom function to summarize the forecast. If provided, this
-function will be used instead of the quantile method. An example could
-be the \code{mean}.}
-
-\item{...}{Additional arguments passing inherited from the default method but
-unused.}
+\item{...}{Additional arguments passed to \code{fun}..}
 }
 \value{
 A \code{forecast_point} object.
 }
 \description{
-This function converts a forecast object to a point forecast by either
-estimating a specified quantile level of the predictive distribution, or by
+This function converts a forecast object to a point forecast by
 summarising the forecast using a custom function (for example \code{mean}).
 }
 \examples{
 sample_forecast <- as_forecast(example_sample_continuous)
 
-# Quantile approach
 as_point(sample_forecast)
-
-# Function approach
 as_point(sample_forecast, fun = mean)
 }
 \keyword{check-forecasts}

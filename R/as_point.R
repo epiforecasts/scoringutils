@@ -68,43 +68,32 @@ as_point.forecast_quantile <- function(forecast, quantile_level = 0.5, ...) {
 
 #' Convert a sample based forecast to a point forecast
 #'
-#' This function converts a forecast object to a point forecast by either
-#' estimating a specified quantile level of the predictive distribution, or by 
+#' This function converts a forecast object to a point forecast by
 #' summarising the forecast using a custom function (for example `mean`).
 #'
 #' @param forecast The `forecast_sample` object to be converted to a point
 #' forecast.
 #'
-#' @param fun A custom function to summarize the forecast. If provided, this
-#' function will be used instead of the quantile method. An example could
-#' be the `mean`.
-#' @inheritParams as_point.forecast_quantile
+#' @param fun A custom function to summarize the forecast. Defaults to `median`.
+#'
+#' @param ... Additional arguments passed to `fun`..
+#'
 #' @return A `forecast_point` object.
 #' @export
 #' @keywords check-forecasts
 #' @examples
 #' sample_forecast <- as_forecast(example_sample_continuous)
 #'
-#' # Quantile approach
 #' as_point(sample_forecast)
-#'
-#' # Function approach
 #' as_point(sample_forecast, fun = mean)
-as_point.forecast_sample <- function(forecast, quantile_level = 0.5, fun, ...) {
+as_point.forecast_sample <- function(forecast, fun = median, ...) {
   assert_forecast(forecast, verbose = FALSE)
-  if (missing(fun)) {
-    quantile_forecast <- as_quantile(forecast, quantile_levels = quantile_level)
-    point_forecast <- as_point(
-      quantile_forecast, quantile_level = quantile_level
-    )
-  } else {
-    sum_forecast <- summarise_scores(
-      forecast, fun = fun, by = c(get_forecast_unit(forecast), "observed"),
-      metrics = "predicted"
-    )
-    point_forecast <- remake_forecast(
-      sum_forecast, "forecast_sample", "forecast_point"
-    )
-  }
+  sum_forecast <- summarise_scores(
+    forecast, fun = fun, by = c(get_forecast_unit(forecast), "observed"),
+    metrics = "predicted", ...
+  )
+  point_forecast <- remake_forecast(
+    sum_forecast, "forecast_sample", "forecast_point"
+  )
   return(point_forecast)
 }

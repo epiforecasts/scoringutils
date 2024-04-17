@@ -25,13 +25,6 @@ test_that("as_point converts forecast_sample to forecast_point using quantile ap
   
   # Check if the result is of class forecast_point
   expect_s3_class(point_forecast, "forecast_point")
-
-  # Convert to forecast_point using as_point with custom quantile_level
-  point_forecast_0.9 <- as_point(forecast_sample, quantile_level = 0.9)
-
-  # Check if the result is of class forecast_point
-  expect_s3_class(point_forecast_0.9, "forecast_point")
-  expect_true(!all(point_forecast_0.9 == point_forecast))
 })
 
 test_that("as_point converts forecast_sample to forecast_point using custom function", {

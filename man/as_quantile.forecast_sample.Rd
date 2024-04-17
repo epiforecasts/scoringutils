@@ -16,8 +16,7 @@
 \item{quantile_levels}{A vector of quantile levels. Defaults to
 0.01 to 0.99 by 0.01.}
 
-\item{...}{Additional arguments passing inherited from the default method but
-unused.}
+\item{...}{Pass additional arguments to \code{\link[=quantile]{quantile()}}.}
 
 \item{A}{forecast object of class \code{forecast_sample} (a validated \code{data.table}
 with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}) \code{forecast_quantile}.}

@@ -39,13 +39,15 @@ as_quantile.default <- function(forecast, ...) {
 #'
 #' @param quantile_levels A vector of quantile levels. Defaults to
 #' 0.01 to 0.99 by 0.01.
+#'
+#' @param ... Pass additional arguments to [quantile()].
+#'
 #' @inheritParams as_point.forecast_quantile
 #'
 #' @return A `forecast_quantile` object.
 #' @export
 #' @keywords check-forecasts
-#' @importFrom data.table melt
-#'
+#' @importFrom stats quantile
 #' @export
 #' @examples
 #' as_quantile(as_forecast(example_sample_continuous))
@@ -56,21 +58,13 @@ as_quantile.forecast_sample <- function(
   assert_numeric(quantile_levels, lower = 0, upper = 1)
 
   sum_forecast <- forecast[,
-    as.list(quantile(predicted, probs = quantile_levels, na.rm = TRUE)),
+    .(
+      quantile_level = quantile_levels,
+      predicted = quantile(
+        x = predicted, probs = ..quantile_levels, na.rm = TRUE, ...
+      )
+    ),
     by = c(eval(get_forecast_unit(forecast)), "observed")
-  ]
-
-  sum_forecast <- melt(
-    sum_forecast,
-    measure.vars = paste0(quantile_levels * 100, "%"),
-    variable.name = "quantile_level",
-    value.name = "predicted"
-  )
-
-  sum_forecast[,
-    quantile_level := as.numeric(
-      gsub("%", "", quantile_level, fixed = TRUE)
-    ) / 100
   ]
 
   quantile_forecast <- remake_forecast(

@@ -1,3 +1,5 @@
+# ==================== Functions internally used for scoring ===================
+# These functions would ideally be replaced in the future
 #' @title Change data from a sample based format to a quantile format
 #'
 #' @description
@@ -16,10 +18,7 @@
 #' @importFrom stats quantile
 #' @importFrom methods hasArg
 #' @importFrom checkmate assert_numeric
-#' @keywords data-handling
-#' @export
-#' @examples
-#' sample_to_quantile(as_forecast(example_sample_discrete))
+#' @keywords internal
 sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
@@ -41,10 +40,6 @@ sample_to_quantile <- function(forecast,
 
   return(as_forecast(forecast))
 }
-
-
-# ==================== Functions internally used for scoring ===================
-# These functions would ideally be replaced in the future
 
 #' @title Change forecast from an interval format to a quantile format
 #'
