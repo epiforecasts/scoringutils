@@ -32,7 +32,7 @@ as_quantile.default <- function(forecast, ...) {
 #' Convert a sample forecast to a quantile forecast
 #'
 #' This function takes a sample forecast and converts it to a quantile forecast
-#' sample.
+#' using the empirical quantiles across samples.
 #'
 #' @param forecast The `forecast_sample`` object to convert to a
 #' `forecast_quantile`.
