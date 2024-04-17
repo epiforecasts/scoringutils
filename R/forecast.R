@@ -142,7 +142,7 @@ as_forecast.default <- function(data,
       )
       #nolint end
     }
-    #old binary format
+    # old binary format
     if (forecast_type == "point") {
       looks_binary <- check_input_binary(factor(data$observed), data$predicted)
       if (is.logical(looks_binary)) {
