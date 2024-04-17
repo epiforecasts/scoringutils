@@ -5,7 +5,7 @@
 #' forecast. It is a generic function that dispatches the conversion to the
 #' appropriate method based on the class of the input forecast object.
 #'
-#' @param forecast An object of class `forecast_{type}`,
+#' @param A forecast object of class `forecast_{type}` (a validated data.table with predicted and observed values, see as_forecast())
 #' representing a forecast.
 #' @param ... Additional arguments to be passed to the specific method.
 #' @return The function returns a point forecast object, which is a specific
