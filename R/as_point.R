@@ -68,8 +68,8 @@ as_point.forecast_quantile <- function(forecast, quantile_level = 0.5, ...) {
 #' Convert a sample based forecast to a point forecast
 #'
 #' This function converts a forecast object to a point forecast by either
-#' taking the quantile forecast at a specified quantile level or by summarizing
-#' the forecast using a custom function (for example `mean`).
+#' estimating a specified quantile level of the predictive distribution, or by 
+#' summarising the forecast using a custom function (for example `mean`).
 #'
 #' @param forecast The `forecast_sample` object to be converted to a point
 #' forecast.
