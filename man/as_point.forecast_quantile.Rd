@@ -9,8 +9,8 @@
 \arguments{
 \item{forecast}{The \code{forecast_quantile} object.}
 
-\item{quantile_level}{The desired quantile level for the point forecast.
-Defaults to 0.5 (median).}
+\item{quantile_level}{The desired quantile level of the current forecast
+that should become the point forecast. Defaults to 0.5 (median).}
 
 \item{...}{Additional arguments passing inherited from the default method but
 unused.}

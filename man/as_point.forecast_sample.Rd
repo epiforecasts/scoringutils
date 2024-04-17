@@ -10,8 +10,8 @@
 \item{forecast}{The \code{forecast_sample} object to be converted to a point
 forecast.}
 
-\item{quantile_level}{The desired quantile level for the point forecast.
-Defaults to 0.5 (median).}
+\item{quantile_level}{The desired quantile level of the current forecast
+that should become the point forecast. Defaults to 0.5 (median).}
 
 \item{fun}{A custom function to summarize the forecast. If provided, this
 function will be used instead of the quantile method. An example could
@@ -25,8 +25,8 @@ A \code{forecast_point} object.
 }
 \description{
 This function converts a forecast object to a point forecast by either
-taking the quantile forecast at a specified quantile level or by summarizing
-the forecast using a custom function (for example \code{mean}).
+estimating a specified quantile level of the predictive distribution, or by
+summarising the forecast using a custom function (for example \code{mean}).
 }
 \examples{
 sample_forecast <- as_forecast(example_sample_continuous)

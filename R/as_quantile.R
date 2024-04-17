@@ -34,8 +34,8 @@ as_quantile.default <- function(forecast, ...) {
 #' This function takes a sample forecast and converts it to a quantile forecast
 #' using the empirical quantiles across samples.
 #'
-#' @param forecast The `forecast_sample`` object to convert to a
-#' `forecast_quantile`.
+#' @param A forecast object of class `forecast_sample` (a validated `data.table`
+#' with predicted and observed values, see [as_forecast()]) `forecast_quantile`.
 #'
 #' @param quantile_levels A vector of quantile levels. Defaults to
 #' 0.01 to 0.99 by 0.01.

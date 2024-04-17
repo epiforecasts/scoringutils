@@ -5,9 +5,11 @@
 #' forecast. It is a generic function that dispatches the conversion to the
 #' appropriate method based on the class of the input forecast object.
 #'
-#' @param A forecast object of class `forecast_{type}` (a validated data.table with predicted and observed values, see as_forecast())
+#' @param forecast A forecast object of class `forecast_{type}` (a validated
+#' `data.table` with predicted and observed values, see [as_forecast()])
 #' representing a forecast.
 #' @param ... Additional arguments to be passed to the specific method.
+#'
 #' @return The function returns a point forecast object, which is a specific
 #' type of forecast object that represents a single value prediction.
 #'
@@ -36,10 +38,9 @@ as_point.default <- function(forecast, ...) {
 #'
 #' This function takes a quantile forecast and converts it to a point forecast
 #' by selecting the forecast corresponding to the specified quantile level.
-#'
 #' @param forecast The `forecast_quantile` object.
-#' @param quantile_level The desired quantile level for the point forecast.
-#' Defaults to 0.5 (median).
+#' @param quantile_level The desired quantile level of the current forecast
+#' that should become the point forecast. Defaults to 0.5 (median).
 #' @param ... Additional arguments passing inherited from the default method but
 #' unused.
 #'

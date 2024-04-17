@@ -58,7 +58,7 @@ sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.}
 
 \item{check_forecast_type}{Logical, defaults to \code{FALSE}. Should the
-\code{forecast_type} be checked and reset if not as implied by the \code{data}?}
+\code{forecast_type} be checked against the type implied by the \code{data}?}
 }
 \value{
 Depending on the forecast type, an object of the following class will be

@@ -10,7 +10,8 @@ as_quantile(forecast, ...)
 \method{as_quantile}{default}(forecast, ...)
 }
 \arguments{
-\item{forecast}{An object of class \verb{forecast_\{type\}},
+\item{forecast}{A forecast object of class \verb{forecast_\{type\}} (a validated
+\code{data.table} with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}})
 representing a forecast.}
 
 \item{...}{Additional arguments to be passed to the specific method.}

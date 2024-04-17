@@ -11,20 +11,23 @@
 )
 }
 \arguments{
-\item{forecast}{The \verb{forecast_sample`` object to convert to a }forecast_quantile`.}
+\item{forecast}{The \code{forecast_quantile} object.}
 
 \item{quantile_levels}{A vector of quantile levels. Defaults to
 0.01 to 0.99 by 0.01.}
 
 \item{...}{Additional arguments passing inherited from the default method but
 unused.}
+
+\item{A}{forecast object of class \code{forecast_sample} (a validated \code{data.table}
+with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}) \code{forecast_quantile}.}
 }
 \value{
 A \code{forecast_quantile} object.
 }
 \description{
 This function takes a sample forecast and converts it to a quantile forecast
-sample.
+using the empirical quantiles across samples.
 }
 \examples{
 as_quantile(as_forecast(example_sample_continuous))
