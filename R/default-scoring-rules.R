@@ -29,14 +29,15 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 
   if (is.null(select) && is.null(exclude)) {
     return(metrics)
-  } else if (is.null(select)) {
+  }
+  if (is.null(select)) {
     assert_subset(exclude, allowed)
     select <- allowed[!allowed %in% exclude]
     return(metrics[select])
-  } else {
-    assert_subset(select, allowed)
-    return(metrics[select])
   }
+  assert_subset(select, allowed)
+  return(metrics[select])
+
 }
 
 #' Customises a metric function with additional arguments.
