@@ -21,7 +21,7 @@ assert_input_sample <- function(observed, predicted) {
       check_matrix(predicted, mode = "numeric", nrows = n_obs)
     )
   } else {
-    assert(check_matrix(predicted, mode = "numeric", nrows = n_obs))
+    assert_matrix(predicted, mode = "numeric", nrows = n_obs)
   }
   return(invisible(NULL))
 }
