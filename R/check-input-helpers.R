@@ -177,9 +177,5 @@ test_columns_present <- function(data, columns) {
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
 #' @keywords internal_input_check
 test_columns_not_present <- function(data, columns) {
-  if (any(columns %in% colnames(data))) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+  checkmate::test_names(colnames(data), disjunct.from = columns)
 }
