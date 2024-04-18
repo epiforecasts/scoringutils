@@ -15,7 +15,7 @@ Authors@R: c(
     person(given = "Hugo",
            family = "Gruson",
            role = c("aut"),
-           email = "hugo.gruson@lshtm.ac.uk",
+           email = "hugo.gruson+R@normalesup.org",
            comment = c(ORCID = "https://orcid.org/0000-0002-4094-1476")),
     person(given = "Johannes Bracher",
            role = c("ctb"),
