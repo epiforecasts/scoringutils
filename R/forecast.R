@@ -66,7 +66,8 @@ as_forecast <- function(data,
 #'   sample id. This column will be renamed to "sample_id". Only applicable to
 #'   sample-based forecasts.
 #' @param check_forecast_type Logical, defaults to `FALSE`. Should the
-#' `forecast_type` be checked against the type implied by the `data`?
+#' `forecast_type` be checked against the type implied by the `data`? If
+#' `forecast_type` is NULL it will be inferred from the data before checking.
 #'
 #' @export
 #' @importFrom cli cli_warn
