@@ -52,7 +52,7 @@ as_point.default <- function(forecast, ...) {
 #' as_point(as_forecast(example_quantile))
 as_point.forecast_quantile <- function(forecast, quantile_level = 0.5, ...) {
   assert_forecast(forecast, verbose = FALSE)
-  assert_numeric(quantile_level, lower = 0, upper = 1, len = 1)
+  assert_subset(quantile_level, unique(forecast$quantile_level)
 
   forecast <- forecast[
     quantile_level == target_quantile_level, ,
