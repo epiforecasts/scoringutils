@@ -18,7 +18,6 @@ Please find the code/vignette files here:
 
 ```{r, results="asis", echo=FALSE}
 tryCatch({
-  # create temporary directory
   dir <- tempdir()
   filepath <- file.path(dir, "manuscript.pdf")
   suppressWarnings(
