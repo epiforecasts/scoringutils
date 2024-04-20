@@ -335,6 +335,7 @@ Users can obtain PIT histograms based on validated forecast objects using the fu
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_sample_continuous |>
+  as_forecast() |>
   get_pit(by = c("model", "target_type")) |>
   plot_pit() + 
   facet_grid(target_type ~ model)
