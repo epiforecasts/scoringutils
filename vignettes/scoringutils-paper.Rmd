@@ -1,0 +1,39 @@
+---
+title: "Evaluating forecasts with scoringutils in R"
+output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{Evaluating forecasts with scoringutils in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+pkgdown:
+  as_is: true
+  extension: pdf
+header-includes:
+  - \usepackage{pdfpages}
+---
+
+Please find the code/vignette files here:  [https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript](https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript).
+
+```{r, results="asis"}
+tryCatch({
+  # create temporary directory
+  dir <- tempdir()
+  filepath <- file.path(dir, "manuscript.pdf")
+  suppressWarnings(
+    download.file(
+    "https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript/manuscript.pdf", 
+    mode = "wb", 
+    quiet = TRUE, 
+    destfile = filepath
+    )
+  )
+}, finally = {
+  if (file.exists(filepath)) {
+    cat(
+    "\\includepdf[pages={-}]{", 
+    filepath, 
+    "}"
+    )
+  }
+})
+```
