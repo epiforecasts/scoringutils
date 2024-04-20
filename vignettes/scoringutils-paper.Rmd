@@ -23,19 +23,19 @@ tryCatch({
   filepath <- file.path(dir, "manuscript.pdf")
   suppressWarnings(
     download.file(
-      "https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf", 
-      mode = "wb", 
-      quiet = TRUE, 
+      "https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf",
+      mode = "wb",
+      quiet = TRUE,
       destfile = filepath
     )
   )
 }, finally = {
   if (file.exists(filepath)) {
     cat(
-    "\\includepdf[pages={-}]{", 
-    filepath, 
-    "}", 
-    sep = ""
+      "\\includepdf[pages={-}]{",
+      filepath,
+      "}",
+      sep = ""
     )
   }
 })
