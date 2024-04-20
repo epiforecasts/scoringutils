@@ -12,19 +12,21 @@ header-includes:
   - \usepackage{pdfpages}
 ---
 
-Please find the code/vignette files here:  [https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript](https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript).
+Please find the code/vignette files here:
 
-```{r, results="asis"}
+[https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript](https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript).
+
+```{r, results="asis", echo=FALSE}
 tryCatch({
   # create temporary directory
   dir <- tempdir()
   filepath <- file.path(dir, "manuscript.pdf")
   suppressWarnings(
     download.file(
-    "https://github.com/epiforecasts/scoringutils/tree/main/inst/manuscript/manuscript.pdf", 
-    mode = "wb", 
-    quiet = TRUE, 
-    destfile = filepath
+      "https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf", 
+      mode = "wb", 
+      quiet = TRUE, 
+      destfile = filepath
     )
   )
 }, finally = {
@@ -32,7 +34,8 @@ tryCatch({
     cat(
     "\\includepdf[pages={-}]{", 
     filepath, 
-    "}"
+    "}", 
+    sep = ""
     )
   }
 })
