@@ -104,7 +104,7 @@ xtable2kable <- function(x) {
 }
 
 opts_chunk$set(
-  cache = TRUE,
+  cache = FALSE,
   warning = FALSE, 
   message = FALSE, 
   out.width = "100%"
