@@ -22,7 +22,7 @@ test_that("range_long_to_quantile works", {
 
 
 
-test_that("quantile_to_interval.data.frame() works", {
+test_that("quantile_to_interval_dataframe() works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",

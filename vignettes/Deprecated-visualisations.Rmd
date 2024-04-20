@@ -116,7 +116,7 @@ plot_predictions <- function(data,
   # interval range data
 
   if (get_forecast_type(data) == "quantile") {
-    forecasts <- quantile_to_interval(
+    forecasts <- scoringutils:::quantile_to_interval(
       forecasts,
       keep_quantile_col = FALSE
     )
