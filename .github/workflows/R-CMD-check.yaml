@@ -51,4 +51,3 @@ jobs:
         with:
           upload-snapshots: true
           args: 'c("--no-manual", "--as-cran", "--compact-vignettes=both")' # add vignette compression to defaults
-
