@@ -46,41 +46,6 @@ sample_to_quantile <- function(forecast,
 # ==================== Functions internally used for scoring ===================
 # These functions would ideally be replaced in the future
 
-#' @title Change forecast from an interval format to a quantile format
-#'
-#' @description
-#' Transform forecast from a format that uses interval ranges to denote quantiles
-#' to a format that uses quantiles only.
-#'
-#' @param forecast A data.frame following the specifications from
-#'   [score()]) for quantile forecasts.
-#' @param keep_range_col Logical, default is `FALSE`. Keep the
-#'   interval_range and boundary columns after transformation?
-#' @return a data.table in a plain quantile format
-#' @keywords internal
-interval_long_to_quantile <- function(forecast,
-                                      keep_range_col = FALSE) {
-  forecast <- ensure_data.table(forecast)
-
-  # filter out duplicated median
-  # note that this also filters out instances where range is NA, i.e.
-  # a point forecast. This should probably be dealt with in the future
-  forecast <- forecast[!(interval_range == 0 & boundary == "upper"), ]
-
-  forecast[, quantile_level := ifelse(
-    boundary == "lower",
-    round((100 - interval_range) / 200, 10),
-    round((1 - (100 - interval_range) / 200), 10)
-  )]
-
-  if (!keep_range_col) {
-    forecast[, c("interval_range", "boundary") := NULL]
-  }
-
-  return(unique(forecast)[])
-}
-
-
 #' Transform from a quantile format to an interval format
 #' @description
 #' **Quantile format**
