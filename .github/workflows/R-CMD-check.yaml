@@ -50,3 +50,5 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          args: 'c("--no-manual", "--as-cran", "--compact-vignettes=both")' # add vignette compression to defaults
+
