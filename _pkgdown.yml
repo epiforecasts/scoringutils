@@ -16,6 +16,14 @@ authors:
   Sam Abbott:
     href: "https://www.samabbott.co.uk/"
 
+navbar:
+  structure:
+    left: [reference, paper, changelog]
+    right: [search, github]
+  components:
+    paper:
+      text: "scoringutils paper"
+      href: https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf
 
 reference:
         - title: Package documentation
