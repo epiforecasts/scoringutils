@@ -241,8 +241,30 @@ test_that("score.forecast_quantile() errors with only NA values", {
   )
 })
 
+test_that("score.forecast_quantile() works as expected in edge cases", {
+  # only the median
+  onlymedian <- example_quantile[quantile_level == 0.5] %>%
+    as_forecast()
+  expect_no_condition(
+    s <- score(onlymedian, metrics = metrics_quantile(
+      exclude = c("interval_coverage_50", "interval_coverage_90")
+    ))
+  )
+  expect_equal(
+    s$wis, abs(onlymedian$observed - onlymedian$predicted)
+  )
 
-
+  # only one symmetric interval is present
+  oneinterval <- example_quantile[quantile_level %in% c(0.25,0.75)] %>%
+    as_forecast()
+  expect_message(
+    s <- score(
+      oneinterval,
+      metrics = metrics_quantile(exclude = c("interval_coverage_90", "ae_median"))
+    ),
+    "Median not available"
+  )
+})
 
 
 # test integer and continuous case ---------------------------------------------
@@ -269,6 +291,25 @@ test_that("function produces output for a continuous format case", {
 
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(forecast = NULL)))
+})
+
+test_that("score() works with only one sample", {
+
+  # with only one sample, dss returns NaN and log_score fails
+  onesample <- na.omit(example_sample_continuous)[sample_id == 20] %>%
+    as_forecast()
+  expect_warning(
+    expect_warning(
+      scoreonesample <- score(onesample),
+      "Function execution failed, returning NULL. Error: need at least 2 data points." #dss
+    ),
+    "Column 'log_score' does not exist to remove" #log_score
+  )
+
+  # verify that all goes well with two samples
+  twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)] %>%
+    as_forecast()
+  expect_no_condition(score(twosample))
 })
 
 # =============================================================================
