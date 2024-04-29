@@ -217,14 +217,12 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 #' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
-  expr <- expression(
-    forecast[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
-  )
-  lapply(seq_along(metrics), function(i, forecast, ...) {
-    metric_name <- names(metrics[i]) # nolint
-    fun <- metrics[[i]] # nolint
-    eval(expr)
-  }, forecast, ...)
+  lapply(names(metrics), function(metric_name) {
+    result <- do.call(run_safely, list(..., fun = metrics[[metric_name]]))
+    if (!is.null(result)) {
+      forecast[, (metric_name) := result]
+    }
+  })
   return(forecast)
 }
 
