@@ -18,7 +18,6 @@
 #' @importFrom cli cli_warn
 #' @importFrom checkmate assert_function
 #' @return The result of `fun` or `NULL` if `fun` errors
-#' @export
 #' @keywords scoring
 #' @examples
 #' f <- function(x) {x}

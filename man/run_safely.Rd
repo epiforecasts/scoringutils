@@ -10,6 +10,9 @@ run_safely(..., fun, metric_name)
 \item{...}{Arguments to pass to \code{fun}.}
 
 \item{fun}{A function to execute.}
+
+\item{metric_name}{A character string with the name of the metric. Used to
+provide a more informative warning message in case \code{fun} errors.}
 }
 \value{
 The result of \code{fun} or \code{NULL} if \code{fun} errors
