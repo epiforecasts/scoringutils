@@ -4,7 +4,7 @@
 \alias{run_safely}
 \title{Run a function safely}
 \usage{
-run_safely(..., fun)
+run_safely(..., fun, metric_name)
 }
 \arguments{
 \item{...}{Arguments to pass to \code{fun}.}

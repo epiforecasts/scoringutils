@@ -218,7 +218,10 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
   lapply(names(metrics), function(metric_name) {
-    result <- do.call(run_safely, list(..., fun = metrics[[metric_name]]))
+    result <- do.call(
+      run_safely,
+      list(..., fun = metrics[[metric_name]], metric_name = metric_name)
+    )
     if (!is.null(result)) {
       forecast[, (metric_name) := result]
     }
