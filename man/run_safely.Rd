@@ -31,9 +31,9 @@ metrics in \code{\link[=score]{score()}}.
 }
 \examples{
 f <- function(x) {x}
-run_safely(2, fun = f)
-run_safely(2, y = 3, fun = f)
-run_safely(fun = f)
-run_safely(y = 3, fun = f)
+scoringutils:::run_safely(2, fun = f, metric_name = "f")
+scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
+scoringutils:::run_safely(fun = f, metric_name = "f")
+scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
 }
 \keyword{scoring}
