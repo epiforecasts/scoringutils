@@ -202,8 +202,8 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' - "interval_coverage_deviation" = [interval_coverage_deviation()],
 #' - "ae_median" = [ae_median_quantile()]
 #'
-#' Note: The `interval_coverage_90` scoring rule is created as a wrapper around
-#' [interval_coverage()], making use of the function [run_safely()].
+#' Note: The `interval_coverage_90` scoring rule is created by modifying
+#' [interval_coverage()], making use of the function [customise_metric()].
 #' This construct allows the function to deal with arbitrary arguments in `...`,
 #' while making sure that only those that [interval_coverage()] can
 #' accept get passed on to it. `interval_range = 90` is set in the function

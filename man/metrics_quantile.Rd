@@ -35,8 +35,8 @@ interval_coverage, interval_range = 90
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 
-Note: The \code{interval_coverage_90} scoring rule is created as a wrapper around
-\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=run_safely]{run_safely()}}.
+Note: The \code{interval_coverage_90} scoring rule is created by modifying
+\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=customise_metric]{customise_metric()}}.
 This construct allows the function to deal with arbitrary arguments in \code{...},
 while making sure that only those that \code{\link[=interval_coverage]{interval_coverage()}} can
 accept get passed on to it. \code{interval_range = 90} is set in the function
