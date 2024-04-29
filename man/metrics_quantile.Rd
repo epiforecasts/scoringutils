@@ -28,9 +28,9 @@ The default scoring rules are:
 \item "dispersion" = \code{\link[=dispersion]{dispersion()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "interval_coverage_50" = \code{\link[=interval_coverage]{interval_coverage()}}
-\item "interval_coverage_90" = function(...) \{
-run_safely(..., interval_range = 90, fun = \link{interval_coverage})
-\}
+\item "interval_coverage_90" = customise_metric(
+interval_coverage, interval_range = 90
+)
 \item "interval_coverage_deviation" = \code{\link[=interval_coverage_deviation]{interval_coverage_deviation()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
