@@ -253,6 +253,13 @@ test_that("get_pairwise_comparisons() works", {
   )
 
   expect_true(all(colnames %in% colnames(res)))
+
+  # output class is as expected
+  expect_s3_class(res, c("data.table", "data.frame"), exact = TRUE)
+  expect_s3_class(
+    get_pairwise_comparisons(scores_quantile),
+    c("data.table", "data.frame"), exact = TRUE
+  )
 })
 
 
@@ -471,6 +478,12 @@ test_that("add_relative_skill() can compute relative measures", {
   scores_with <- add_relative_skill(
     scores_quantile,
   )
+  expect_s3_class(
+    scores_with,
+    c("scores", "data.table", "data.frame"),
+    exact = TRUE
+  )
+
   scores_with <- summarise_scores(scores_with, by = "model")
 
   expect_equal(

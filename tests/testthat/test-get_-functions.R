@@ -1,4 +1,44 @@
 # ==============================================================================
+# `get_forecast_type`
+# ==============================================================================
+test_that("get_forecast_type() works as expected", {
+  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
+  expect_equal(get_forecast_type(example_sample_continuous), "sample")
+  expect_equal(get_forecast_type(example_sample_discrete), "sample")
+  expect_equal(get_forecast_type(example_binary), "binary")
+  expect_equal(get_forecast_type(example_point), "point")
+
+  expect_error(
+    get_forecast_type(data.frame(x = 1:10)),
+    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
+    fixed = TRUE
+  )
+
+  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
+  expect_error(
+    get_forecast_type(df),
+    "input doesn't satisfy criteria for any forecast type",
+    fixed = TRUE
+  )
+})
+
+
+# ==============================================================================
+# get_metrics()
+# ==============================================================================
+test_that("get_metrics() works as expected", {
+  expect_equal(
+    get_metrics(scores_point),
+    c("ae_point", "se_point", "ape")
+  )
+
+  expect_null(
+    get_metrics(as.data.frame(as.matrix(scores_point)))
+  )
+})
+
+
+# ==============================================================================
 # `get_forecast_unit()`
 # ==============================================================================
 test_that("get_forecast_unit() works as expected", {
@@ -30,9 +70,10 @@ test_that("removing NA rows from data works as expected", {
 
   # test that attributes and classes are retained
   ex <- as_forecast(na.omit(example_sample_discrete))
-  expect_equal(
-    class(na.omit(ex)),
-    c("forecast_sample", "data.table", "data.frame")
+  expect_s3_class(
+    na.omit(ex),
+    c("forecast_sample", "data.table", "data.frame"),
+    exact = TRUE
   )
 
   attributes <- attributes(ex)
@@ -120,7 +161,9 @@ test_that("get_type() handles `NA` values", {
 })
 
 
-# `get_duplicate_forecasts()` ==================================================
+# ==============================================================================
+# get_duplicate_forecasts()
+# ==============================================================================
 test_that("get_duplicate_forecasts() works as expected for quantile", {
   expect_equal(nrow(get_duplicate_forecasts(example_quantile)), 0)
   expect_equal(
@@ -158,28 +201,16 @@ test_that("get_duplicate_forecasts() works as expected for point", {
   )
 })
 
-
-# ==============================================================================
-# `get_forecast_type`
-# ==============================================================================
-test_that("get_forecast_type() works as expected", {
-  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
-  expect_equal(get_forecast_type(example_sample_continuous), "sample")
-  expect_equal(get_forecast_type(example_sample_discrete), "sample")
-  expect_equal(get_forecast_type(example_binary), "binary")
-  expect_equal(get_forecast_type(example_point), "point")
-
-  expect_error(
-    get_forecast_type(data.frame(x = 1:10)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
-    fixed = TRUE
+test_that("get_duplicate_forecasts() returns the expected class", {
+  expect_equal(
+    class(get_duplicate_forecasts(example_point)),
+    class(example_point)
   )
 
-  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
-  expect_error(
-    get_forecast_type(df),
-    "input doesn't satisfy criteria for any forecast type",
-    fixed = TRUE
+  expect_s3_class(
+    get_duplicate_forecasts(as.data.frame(example_point)),
+    c("data.table", "data.frame"),
+    exact = TRUE
   )
 })
 
@@ -204,6 +235,12 @@ test_that("get_coverage() works as expected", {
   )
 
   expect_equal(nrow(cov), nrow(na.omit(example_quantile)))
+
+  expect_s3_class(
+    cov,
+    c("data.table", "data.frame"),
+    exact = TRUE
+  )
 })
 
 test_that("get_coverage() outputs an object of class c('data.table', 'data.frame'", {
