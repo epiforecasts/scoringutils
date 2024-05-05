@@ -72,7 +72,7 @@ summarise_scores <- function(scores,
 
   # if across is provided, calculate new `by`
   if (!is.null(across)) {
-    if (by != "model") {
+    if (!setequal(by, "model")) {
       warning("You specified `across` and `by` at the same time.",
               "`by` will be ignored.")
     }
