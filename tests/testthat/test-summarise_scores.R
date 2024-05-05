@@ -75,8 +75,11 @@ test_that("summarise_scores() across argument works as expected", {
     )
   )
 
-  summarise_scores(
-    scores, across = c("horizon", "model", "forecast_date", "target_end_date"),
-    by = c("model", "target_type")
+  expect_warning(
+    summarise_scores(
+      scores, across = c("horizon", "model", "forecast_date", "target_end_date"),
+      by = c("model", "target_type")
+    ),
+    "You specified `across` and `by` at the same time.`by` will be ignored"
   )
 })
