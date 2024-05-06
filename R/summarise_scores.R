@@ -63,6 +63,7 @@ summarise_scores <- function(scores,
                              ...) {
   # input checking ------------------------------------------------------------
   assert_data_frame(scores)
+  scores <- ensure_data.table(scores)
   assert_subset(by, names(scores), empty.ok = TRUE)
   assert_subset(across, names(scores), empty.ok = TRUE)
   assert_function(fun)
