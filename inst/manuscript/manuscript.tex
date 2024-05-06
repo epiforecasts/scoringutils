@@ -1219,6 +1219,9 @@ R> example_sample_continuous[horizon == 2] |>
 +   as_forecast() |>
 +   score() |>
 +   summarise_scores(by = c("model", "location", "target_type")) |>
++   summarise_scores(
++     by = c("model", "location", "target_type"), 
++     fun = signif, digits = 2) |>
 +   plot_heatmap(x = "location", metric = "bias") + 
 +     facet_wrap(~ target_type) 
 \end{CodeInput}
