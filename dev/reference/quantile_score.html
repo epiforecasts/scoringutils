@@ -141,11 +141,11 @@ prediction intervals, the quantile score is equivalent to the interval score.</p
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
+    <dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Numeric vector of size n with the observed values.</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
@@ -154,12 +154,12 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Vector of of size N with the quantile levels
 for which predictions were made.</p></dd>
 
 
-<dt>weigh</dt>
+<dt id="arg-weigh">weigh<a class="anchor" aria-label="anchor" href="#arg-weigh"></a></dt>
 <dd><p>Logical. If <code>TRUE</code> (the default), weigh the score by
 \(\alpha / 2\), so it can be averaged into an interval score that, in
 the limit (for an increasing number of equally spaced quantiles/prediction

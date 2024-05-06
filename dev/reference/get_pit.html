@@ -69,19 +69,19 @@ validated forecast objects.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>forecast</dt>
+    <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
 
-<dt>by</dt>
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
 'location' in the input data and want to have a PIT histogram for
 every model and location, specify <code>by = c("model", "location")</code>.</p></dd>
 
 
-<dt>n_replicates</dt>
+<dt id="arg-n-replicates">n_replicates<a class="anchor" aria-label="anchor" href="#arg-n-replicates"></a></dt>
 <dd><p>The number of draws for the randomised PIT for
 discrete predictions. Will be ignored if forecasts are continuous.</p></dd>
 

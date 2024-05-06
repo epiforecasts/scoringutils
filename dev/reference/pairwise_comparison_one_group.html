@@ -87,25 +87,25 @@ forecasts it calls <code><a href="compare_two_models.html">compare_two_models()<
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>scores</dt>
+    <dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
 <dd><p>An object of class <code>scores</code> (a data.table with
 scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 
 
-<dt>metric</dt>
+<dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
 <dd><p>A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
 "wis" or "brier_score" if any of these are available.</p></dd>
 
 
-<dt>baseline</dt>
+<dt id="arg-baseline">baseline<a class="anchor" aria-label="anchor" href="#arg-baseline"></a></dt>
 <dd><p>A string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (<code>NULL</code>), relative skill will not be scaled with
 respect to a baseline model.</p></dd>
 
 
-<dt>by</dt>
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector with column names that define the grouping level
 for the pairwise comparisons. By default (<code>model</code>), there will be one
 relative skill score per model. If, for example,
@@ -116,7 +116,7 @@ before splitting) and the pairwise comparisons will be computed separately
 for the split data.tables.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments for the comparison between two models. See
 <code><a href="compare_two_models.html">compare_two_models()</a></code> for more information.</p></dd>
 

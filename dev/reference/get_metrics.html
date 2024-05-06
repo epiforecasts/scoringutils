@@ -3,33 +3,41 @@
 become column names of the
 resulting data.table. In addition, an attribute metrics will be
 added to the output, holding the names of the scores as a vector.
-This is done so that a function like get_forecast_unit() can still
-identify which columns are part of the forecast unit and which hold a score.
-get_metrics() access and returns this attribute. If there is no
-attribute, the function will return NULL. Users can control whether the
-function should error instead via the error argument.
-get_metrics() also checks whether the names of the scores stored in
-the attribute are column names of the data and will throw a warning if not.
-This can happen if you rename columns after scoring. You can either run
-score() again, specifying names for the scoring rules manually, or you
-can update the attribute manually using
+This is done so that functions like get_forecast_unit() or
+summarise_scores() can still identify which columns are part of the
+forecast unit and which hold a score.
+get_metrics() accesses and returns the metrics attribute. If there is no
+attribute, the function will return NULL (or, if error = TRUE will
+produce an error instead). In addition, it checks the column names of the
+input for consistency with the data stored in the metrics attribute.
+Handling a missing or inconsistent metrics attribute:
+If the metrics attribute is missing or is not consistent with the column
+names of the data.table, you can either
+run score() again, specifying names for the scoring rules manually, or
+add/update the attribute manually using
 attr(scores, "metrics") &amp;lt;- c("names", "of", "your", "scores") (the
-order does not matter).'><title>Get names of the metrics that were used for scoring — get_metrics • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get names of the metrics that were used for scoring — get_metrics"><meta property="og:description" content='When applying a scoring rule via score(), the names of the scoring rules
+order does not matter).
+
+'><title>Get names of the metrics that were used for scoring — get_metrics • scoringutils</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get names of the metrics that were used for scoring — get_metrics"><meta property="og:description" content='When applying a scoring rule via score(), the names of the scoring rules
 become column names of the
 resulting data.table. In addition, an attribute metrics will be
 added to the output, holding the names of the scores as a vector.
-This is done so that a function like get_forecast_unit() can still
-identify which columns are part of the forecast unit and which hold a score.
-get_metrics() access and returns this attribute. If there is no
-attribute, the function will return NULL. Users can control whether the
-function should error instead via the error argument.
-get_metrics() also checks whether the names of the scores stored in
-the attribute are column names of the data and will throw a warning if not.
-This can happen if you rename columns after scoring. You can either run
-score() again, specifying names for the scoring rules manually, or you
-can update the attribute manually using
+This is done so that functions like get_forecast_unit() or
+summarise_scores() can still identify which columns are part of the
+forecast unit and which hold a score.
+get_metrics() accesses and returns the metrics attribute. If there is no
+attribute, the function will return NULL (or, if error = TRUE will
+produce an error instead). In addition, it checks the column names of the
+input for consistency with the data stored in the metrics attribute.
+Handling a missing or inconsistent metrics attribute:
+If the metrics attribute is missing or is not consistent with the column
+names of the data.table, you can either
+run score() again, specifying names for the scoring rules manually, or
+add/update the attribute manually using
 attr(scores, "metrics") &amp;lt;- c("names", "of", "your", "scores") (the
-order does not matter).'><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+order does not matter).
+
+'><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
@@ -89,20 +97,21 @@ order does not matter).'><meta name="robots" content="noindex"><!-- mathjax --><
     <p>When applying a scoring rule via <code><a href="score.html">score()</a></code>, the names of the scoring rules
 become column names of the
 resulting data.table. In addition, an attribute <code>metrics</code> will be
-added to the output, holding the names of the scores as a vector.
-This is done so that a function like <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> can still
-identify which columns are part of the forecast unit and which hold a score.</p>
-<p><code>get_metrics()</code> access and returns this attribute. If there is no
-attribute, the function will return NULL. Users can control whether the
-function should error instead via the <code>error</code> argument.</p>
-<p><code>get_metrics()</code> also checks whether the names of the scores stored in
-the attribute are column names of the data and will throw a warning if not.
-This can happen if you rename columns after scoring. You can either run
-<code><a href="score.html">score()</a></code> again, specifying names for the scoring rules manually, or you
-can update the attribute manually using
+added to the output, holding the names of the scores as a vector.</p>
+<p>This is done so that functions like <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> or
+<code><a href="summarise_scores.html">summarise_scores()</a></code> can still identify which columns are part of the
+forecast unit and which hold a score.</p>
+<p><code>get_metrics()</code> accesses and returns the <code>metrics</code> attribute. If there is no
+attribute, the function will return <code>NULL</code> (or, if <code>error = TRUE</code> will
+produce an error instead). In addition, it checks the column names of the
+input for consistency with the data stored in the <code>metrics</code> attribute.</p>
+<p><strong>Handling a missing or inconsistent <code>metrics</code> attribute</strong>:</p>
+<p>If the metrics attribute is missing or is not consistent with the column
+names of the data.table, you can either</p><ul><li><p>run <code><a href="score.html">score()</a></code> again, specifying names for the scoring rules manually, or</p></li>
+<li><p>add/update the attribute manually using
 <code>attr(scores, "metrics") &lt;- c("names", "of", "your", "scores")</code> (the
-order does not matter).</p>
-    </div>
+order does not matter).</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
@@ -111,11 +120,11 @@ order does not matter).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>scores</dt>
+    <dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
 <dd><p>A data.table with an attribute <code>metrics</code>.</p></dd>
 
 
-<dt>error</dt>
+<dt id="arg-error">error<a class="anchor" aria-label="anchor" href="#arg-error"></a></dt>
 <dd><p>Throw an error if there is no attribute called <code>metrics</code>?
 Default is FALSE.</p></dd>
 

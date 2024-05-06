@@ -109,17 +109,17 @@ see <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code> for de
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data.frame (or similar) with predicted and observed values.
 See the details section of <code>as_forecast()</code> for additional information
 on required input formats.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments</p></dd>
 
 
-<dt>forecast_unit</dt>
+<dt id="arg-forecast-unit">forecast_unit<a class="anchor" aria-label="anchor" href="#arg-forecast-unit"></a></dt>
 <dd><p>(optional) Name of the columns in <code>data</code> (after
 any renaming of columns done by <code>as_forecast()</code>) that denote the unit of a
 single forecast. See <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> for details.
@@ -128,36 +128,36 @@ assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.</p></dd>
 
 
-<dt>forecast_type</dt>
+<dt id="arg-forecast-type">forecast_type<a class="anchor" aria-label="anchor" href="#arg-forecast-type"></a></dt>
 <dd><p>(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by <code>scoringutils</code> based on the
 input does not match this, an error will be thrown. If <code>NULL</code> (the
 default), the forecast type will be inferred from the data.</p></dd>
 
 
-<dt>observed</dt>
+<dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 observed values. This column will be renamed to "observed".</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 predicted values. This column will be renamed to "predicted".</p></dd>
 
 
-<dt>model</dt>
+<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the names
 of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains
 the quantile level of the predicted values. This column will be renamed to
 "quantile_level". Only applicable to quantile-based forecasts.</p></dd>
 
 
-<dt>sample_id</dt>
+<dt id="arg-sample-id">sample_id<a class="anchor" aria-label="anchor" href="#arg-sample-id"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.</p></dd>

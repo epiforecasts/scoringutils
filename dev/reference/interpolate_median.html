@@ -72,12 +72,12 @@ This is done using linear interpolation between the two innermost quantiles.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>predicted</dt>
+    <dl><dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Vector of length N (corresponding to the number of
 quantiles) that holds predictions.</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Vector of of size N with the quantile levels
 for which predictions were made. Note that if this does not contain the
 median (0.5) then the median is imputed as being the mean of the two

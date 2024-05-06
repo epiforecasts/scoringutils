@@ -114,16 +114,16 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>...</dt>
+    <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments</p></dd>
 
 
-<dt>forecast</dt>
+<dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A data.table with forecasts in a quantile-based format (see
 <code><a href="as_forecast.html">as_forecast()</a></code>).</p></dd>
 
 
-<dt>format</dt>
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>The format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column <code>boundary</code> (with values either
 "upper" or "lower" and a column <code>interval_range</code> that contains the range of
@@ -132,18 +132,18 @@ columns <code>lower</code> and <code>upper</code> that contain the lower and upp
 prediction interval, respectively.</p></dd>
 
 
-<dt>keep_quantile_col</dt>
+<dt id="arg-keep-quantile-col">keep_quantile_col<a class="anchor" aria-label="anchor" href="#arg-keep-quantile-col"></a></dt>
 <dd><p>keep the <code>quantile_level</code> column in the final
 output after transformation (default is FALSE). This only works if
 <code>format = "long"</code>. If <code>format = "wide"</code>, the <code>quantile_level</code> column will
 always be dropped.</p></dd>
 
 
-<dt>observed</dt>
+<dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Numeric vector of size n with the observed values.</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
@@ -152,7 +152,7 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Vector of of size N with the quantile levels
 for which predictions were made.</p></dd>
 

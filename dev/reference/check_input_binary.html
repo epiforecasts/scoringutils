@@ -69,7 +69,7 @@ requirements for scoring binary forecasts.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
+    <dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Input to be checked. Should be a factor of length n with
 exactly two levels, holding the observed values.
 The highest factor level is assumed to be the reference level. This means
@@ -77,7 +77,7 @@ that <code>predicted</code> represents the probability that the observed value i
 equal to the highest factor level.</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Input to be checked. <code>predicted</code> should be a vector of
 length n, holding probabilities. Alternatively, <code>predicted</code> can be a matrix
 of size n x 1. Values represent the probability that

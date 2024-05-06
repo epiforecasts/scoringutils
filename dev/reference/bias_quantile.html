@@ -72,11 +72,11 @@ for integer and continuous forecasts.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
+    <dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Numeric vector of size n with the observed values.</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
@@ -85,14 +85,14 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Vector of of size N with the quantile levels
 for which predictions were made. Note that if this does not contain the
 median (0.5) then the median is imputed as being the mean of the two
 innermost quantiles.</p></dd>
 
 
-<dt>na.rm</dt>
+<dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
 <dd><p>Logical. Should missing values be removed?</p></dd>
 
 </dl></div>

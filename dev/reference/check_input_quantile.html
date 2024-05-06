@@ -69,12 +69,12 @@ requirements for scoring quantile-based forecasts.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>observed</dt>
+    <dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Input to be checked. Should be a numeric vector with the
 observed values of size n.</p></dd>
 
 
-<dt>predicted</dt>
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
 (number of columns) the number of quantiles per forecast.
@@ -82,7 +82,7 @@ If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
 
 
-<dt>quantile_level</dt>
+<dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Input to be checked. Should be a vector of size N that
 denotes the quantile levels corresponding to the columns of the prediction
 matrix.</p></dd>

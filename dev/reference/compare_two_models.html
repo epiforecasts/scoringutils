@@ -98,38 +98,38 @@ different forecast targets.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>scores</dt>
+    <dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
 <dd><p>An object of class <code>scores</code> (a data.table with
 scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 
 
-<dt>name_model1</dt>
+<dt id="arg-name-model-">name_model1<a class="anchor" aria-label="anchor" href="#arg-name-model-"></a></dt>
 <dd><p>Character, name of the first model</p></dd>
 
 
-<dt>name_model2</dt>
+<dt id="arg-name-model-">name_model2<a class="anchor" aria-label="anchor" href="#arg-name-model-"></a></dt>
 <dd><p>Character, name of the model to compare against</p></dd>
 
 
-<dt>metric</dt>
+<dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
 <dd><p>A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
 "wis" or "brier_score" if any of these are available.</p></dd>
 
 
-<dt>one_sided</dt>
+<dt id="arg-one-sided">one_sided<a class="anchor" aria-label="anchor" href="#arg-one-sided"></a></dt>
 <dd><p>Boolean, default is <code>FALSE</code>, whether two conduct a one-sided
 instead of a two-sided test to determine significance in a pairwise
 comparison.</p></dd>
 
 
-<dt>test_type</dt>
+<dt id="arg-test-type">test_type<a class="anchor" aria-label="anchor" href="#arg-test-type"></a></dt>
 <dd><p>Character, either "non_parametric" (the default) or
 "permutation". This determines which kind of test shall be conducted to
 determine p-values.</p></dd>
 
 
-<dt>n_permutations</dt>
+<dt id="arg-n-permutations">n_permutations<a class="anchor" aria-label="anchor" href="#arg-n-permutations"></a></dt>
 <dd><p>Numeric, the number of permutations for a
 permutation test. Default is 999.</p></dd>
 

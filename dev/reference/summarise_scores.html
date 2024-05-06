@@ -89,28 +89,28 @@ do, you also have to manually update the attribute by calling
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>scores</dt>
+    <dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
 <dd><p>An object of class <code>scores</code> (a data.table with
 scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 
 
-<dt>by</dt>
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector with column names to summarise scores by. Default
 is <code>model</code>, meaning that there will be one score per model in the output.</p></dd>
 
 
-<dt>across</dt>
+<dt id="arg-across">across<a class="anchor" aria-label="anchor" href="#arg-across"></a></dt>
 <dd><p>Character vector with column names to summarise scores
 across (meaning that the specified columns will be dropped). This is an
 alternative to specifying <code>by</code> directly. If <code>across</code> is set, <code>by</code> will be
 ignored. If <code>across</code> is <code>NULL</code> (default), then <code>by</code> will be used.</p></dd>
 
 
-<dt>fun</dt>
+<dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>A function used for summarising scores. Default is <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional parameters that can be passed to the summary function
 provided to <code>fun</code>. For more information see the documentation of the
 respective function.</p></dd>

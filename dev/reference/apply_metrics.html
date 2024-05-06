@@ -81,12 +81,12 @@ accepted by it.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>forecast</dt>
+    <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
 
-<dt>metrics</dt>
+<dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>A named list of scoring functions. Names will be used as
 column names in the output. See <code><a href="metrics_point.html">metrics_point()</a></code>, <code><a href="metrics_binary.html">metrics_binary()</a></code>,
 <code><a href="metrics_quantile.html">metrics_quantile()</a></code>, and <code><a href="metrics_sample.html">metrics_sample()</a></code> for more information on the
@@ -96,7 +96,7 @@ and pass an updated list of functions with your custom metric to
 the <code>metrics</code> argument in <code><a href="score.html">score()</a></code>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to the scoring rules. Note that
 this is currently not used, as all calls to <code>apply_scores</code> currently
 avoid passing arguments via <code>...</code> and instead expect that the metrics

@@ -72,12 +72,12 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>forecast</dt>
+    <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 
 
-<dt>fun</dt>
+<dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>A function used to transform both observed values and predictions.
 The default function is <code><a href="log_shift.html">log_shift()</a></code>, a custom function that is
 essentially the same as <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code>, but has an additional arguments (<code>offset</code>)
@@ -88,7 +88,7 @@ before applying the log transformation. In our work we have often used an
 offset of 1 but the precise value will depend on your application.</p></dd>
 
 
-<dt>append</dt>
+<dt id="arg-append">append<a class="anchor" aria-label="anchor" href="#arg-append"></a></dt>
 <dd><p>Logical, defaults to <code>TRUE</code>. Whether or not to append a
 transformed version of the data to the currently existing data (<code>TRUE</code>). If
 selected, the data gets transformed and appended to the existing data,
@@ -98,12 +98,12 @@ column, 'scale', gets created that denotes which rows or untransformed
 has the value passed to the argument <code>label</code>).</p></dd>
 
 
-<dt>label</dt>
+<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
 <dd><p>A string for the newly created 'scale' column to denote the
 newly transformed values. Only relevant if <code>append = TRUE</code>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional parameters to pass to the function you supplied. For
 the default option of <code><a href="log_shift.html">log_shift()</a></code> this could be the <code>offset</code> argument.</p></dd>
 
