@@ -49,6 +49,13 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
   )
 })
 
+test_that("summarise_scores() handles data.frames correctly", {
+  test <- as.data.frame(scores_quantile)
+  expect_no_condition(
+    summarise_scores(test, by = "model")
+  )
+})
+
 test_that("summarise_scores() across argument works as expected", {
   ex <- data.table::copy(example_quantile)
   ex <- suppressMessages(as_forecast(ex))
