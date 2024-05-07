@@ -8,15 +8,15 @@ The default scoring rules are:
 "dispersion" = dispersion()
 "bias" = bias_quantile()
 "interval_coverage_50" = interval_coverage()
-"interval_coverage_90" = function(...) {
-run_safely(..., interval_range = 90, fun = interval_coverage)
-}
+"interval_coverage_90" = customise_metric(
+interval_coverage, interval_range = 90
+)
 "interval_coverage_deviation" = interval_coverage_deviation(),
 "ae_median" = ae_median_quantile()
 
 
-Note: The interval_coverage_90 scoring rule is created as a wrapper around
-interval_coverage(), making use of the function run_safely().
+Note: The interval_coverage_90 scoring rule is created by modifying
+interval_coverage(), making use of the function customise_metric().
 This construct allows the function to deal with arbitrary arguments in ...,
 while making sure that only those that interval_coverage() can
 accept get passed on to it. interval_range = 90 is set in the function
@@ -30,15 +30,15 @@ The default scoring rules are:
 "dispersion" = dispersion()
 "bias" = bias_quantile()
 "interval_coverage_50" = interval_coverage()
-"interval_coverage_90" = function(...) {
-run_safely(..., interval_range = 90, fun = interval_coverage)
-}
+"interval_coverage_90" = customise_metric(
+interval_coverage, interval_range = 90
+)
 "interval_coverage_deviation" = interval_coverage_deviation(),
 "ae_median" = ae_median_quantile()
 
 
-Note: The interval_coverage_90 scoring rule is created as a wrapper around
-interval_coverage(), making use of the function run_safely().
+Note: The interval_coverage_90 scoring rule is created by modifying
+interval_coverage(), making use of the function customise_metric().
 This construct allows the function to deal with arbitrary arguments in ...,
 while making sure that only those that interval_coverage() can
 accept get passed on to it. interval_range = 90 is set in the function
@@ -108,13 +108,13 @@ scoring rules suitable for forecasts in a quantile-based format.</p>
 <li><p>"dispersion" = <code><a href="wis.html">dispersion()</a></code></p></li>
 <li><p>"bias" = <code><a href="bias_quantile.html">bias_quantile()</a></code></p></li>
 <li><p>"interval_coverage_50" = <code><a href="interval_coverage.html">interval_coverage()</a></code></p></li>
-<li><p>"interval_coverage_90" = function(...) {
-run_safely(..., interval_range = 90, fun = <a href="interval_coverage.html">interval_coverage</a>)
-}</p></li>
+<li><p>"interval_coverage_90" = customise_metric(
+interval_coverage, interval_range = 90
+)</p></li>
 <li><p>"interval_coverage_deviation" = <code><a href="interval_coverage_deviation.html">interval_coverage_deviation()</a></code>,</p></li>
 <li><p>"ae_median" = <code><a href="ae_median_quantile.html">ae_median_quantile()</a></code></p></li>
-</ul><p>Note: The <code>interval_coverage_90</code> scoring rule is created as a wrapper around
-<code><a href="interval_coverage.html">interval_coverage()</a></code>, making use of the function <code><a href="run_safely.html">run_safely()</a></code>.
+</ul><p>Note: The <code>interval_coverage_90</code> scoring rule is created by modifying
+<code><a href="interval_coverage.html">interval_coverage()</a></code>, making use of the function <code><a href="customise_metric.html">customise_metric()</a></code>.
 This construct allows the function to deal with arbitrary arguments in <code>...</code>,
 while making sure that only those that <code><a href="interval_coverage.html">interval_coverage()</a></code> can
 accept get passed on to it. <code>interval_range = 90</code> is set in the function
@@ -187,7 +187,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4fb0e80&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5571992846c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -200,7 +200,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$overprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4f97a70&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5571992719d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -213,7 +213,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$underprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4f93af8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55719926f030&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -226,7 +226,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$dispersion)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4f8f030&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x557199270488&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bias</span>
@@ -247,7 +247,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(bias)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576db5c77c0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55719f8dee48&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_50</span>
@@ -270,7 +270,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         (observed &lt;= upper))]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(reformatted$interval_coverage)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d52f9c18&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5571993349f0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_90</span>
@@ -278,8 +278,8 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     do.call(metric, c(list(...), dots))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d66e1fa0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5576dc625468&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55719a8ada38&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5571a2928b68&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_deviation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted, quantile_level) </span>
@@ -305,7 +305,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         by = "forecast_id"]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$interval_coverage_deviation)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4f8d4a0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x557199267528&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
@@ -324,7 +324,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     abs_error_median &lt;- abs(observed - predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(abs_error_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576de297fc0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5571a25ab578&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">metrics_quantile</span><span class="op">(</span>select <span class="op">=</span> <span class="st">"wis"</span><span class="op">)</span></span></span>
@@ -366,7 +366,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576d4fb0e80&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5571992846c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
