@@ -13,18 +13,19 @@
 #'
 #' @param ... Arguments to pass to `fun`.
 #' @param fun A function to execute.
+#' @param metric_name A character string with the name of the metric. Used to
+#'   provide a more informative warning message in case `fun` errors.
 #' @importFrom cli cli_warn
 #' @importFrom checkmate assert_function
 #' @return The result of `fun` or `NULL` if `fun` errors
-#' @export
 #' @keywords scoring
 #' @examples
 #' f <- function(x) {x}
-#' run_safely(2, fun = f)
-#' run_safely(2, y = 3, fun = f)
-#' run_safely(fun = f)
-#' run_safely(y = 3, fun = f)
-run_safely <- function(..., fun) {
+#' scoringutils:::run_safely(2, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(fun = f, metric_name = "f")
+#' scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
+run_safely <- function(..., fun, metric_name) {
   assert_function(fun)
   args <- list(...)
   # Check if the function accepts ... as an argument
@@ -47,7 +48,7 @@ run_safely <- function(..., fun) {
     msg <- conditionMessage(attr(result, "condition"))
     cli_warn(
       c(
-        "!" = "Function execution failed, returning NULL.
+        "!" = "Computation for {.var {metric_name}} failed.
         Error: {msg}."
       )
     )

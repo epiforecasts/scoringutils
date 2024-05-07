@@ -41,11 +41,11 @@ test_that("run_safely() works as expected", {
   expect_equal(run_safely(2, fun = f), 2)
   expect_equal(run_safely(2, y = 3, fun = f), 2)
   expect_warning(
-    run_safely(fun = f),
-    'Function execution failed, returning NULL. Error: argument "x" is missing, with no default',
+    run_safely(fun = f, metric_name = "f"),
+    'Computation for `f` failed. Error: argument "x" is missing, with no default',
     fixed = TRUE
   )
-  expect_equal(suppressWarnings(run_safely(y = 3, fun = f)), NULL)
+  expect_equal(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")), NULL)
 })
 
 
