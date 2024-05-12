@@ -292,7 +292,6 @@ test_that("apply_metrics() works", {
   )
 
   # additional unnamed argument does not work
-
   expect_warning(
     scoringutils:::apply_metrics(
       forecast = dt, metrics = list("test" = function(x) x + 1),

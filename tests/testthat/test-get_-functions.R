@@ -2,17 +2,16 @@
 # `get_forecast_unit()`
 # ==============================================================================
 test_that("get_forecast_unit() works as expected", {
-  expect_equal(
-    get_forecast_unit(example_quantile),
-    c("location", "target_end_date", "target_type", "location_name",
-      "forecast_date", "model", "horizon")
+  fc <- c(
+    "location", "target_end_date", "target_type", "location_name",
+    "forecast_date", "model", "horizon"
   )
 
-  expect_equal(
-    get_forecast_unit(scores_quantile),
-    c("location", "target_end_date", "target_type", "location_name",
-      "forecast_date", "model", "horizon")
-  )
+  expect_equal(get_forecast_unit(example_quantile), fc)
+  expect_equal(get_forecast_unit(scores_quantile), fc)
+
+  # test with data.frame
+  expect_equal(get_forecast_unit(as.data.frame(example_quantile)), fc)
 })
 
 
@@ -159,15 +158,25 @@ test_that("get_duplicate_forecasts() works as expected for point", {
 })
 
 
+test_that("get_duplicate_forecasts() works as expected with a data.frame", {
+  duplicates <- get_duplicate_forecasts(
+    rbind(example_quantile_df, example_quantile_df[101:110, ])
+  )
+  expect_equal(nrow(duplicates), 20)
+})
+
+
 # ==============================================================================
 # `get_forecast_type`
 # ==============================================================================
 test_that("get_forecast_type() works as expected", {
-  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
   expect_equal(get_forecast_type(example_sample_continuous), "sample")
   expect_equal(get_forecast_type(example_sample_discrete), "sample")
   expect_equal(get_forecast_type(example_binary), "binary")
   expect_equal(get_forecast_type(example_point), "point")
+
+  # works with a data.frame
+  expect_equal(get_forecast_type(example_quantile_df), "quantile")
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
@@ -181,6 +190,10 @@ test_that("get_forecast_type() works as expected", {
     "input doesn't satisfy criteria for any forecast type",
     fixed = TRUE
   )
+})
+
+test_that("get_forecast_type() works as expected with a data.frame", {
+  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
 })
 
 
