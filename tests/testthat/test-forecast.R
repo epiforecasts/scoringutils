@@ -7,6 +7,10 @@ test_that("Running `as_forecast()` twice returns the same object", {
   )
 })
 
+test_that("as_forecast works with a data.frame", {
+  expect_no_condition(as_forecast(example_quantile_df))
+})
+
 test_that("as_forecast() works as expected", {
   test <- na.omit(data.table::copy(example_quantile))
   expect_s3_class(as_forecast(test), "forecast_quantile")
@@ -272,6 +276,13 @@ test_that("assert_forecast() complains if the forecast type is wrong", {
   )
 })
 
+test_that("assert_forecast_generic() works as expected with a data.frame", {
+  expect_error(
+    assert_forecast_generic(example_quantile_df),
+    "Assertion on 'data' failed: Must be a data.table, not data.frame."
+  )
+})
+
 
 # ==============================================================================
 # validate_forecast()
@@ -283,4 +294,16 @@ test_that("validate_forecast() works as expected", {
     out <- validate_forecast(as_forecast(na.omit(example_point)))
   )
   expect_true(!is.null(out))
+})
+
+
+# ==============================================================================
+# new_forecast()
+# ==============================================================================
+
+test_that("new_forecast() works as expected with a data.frame", {
+  expect_s3_class(
+    new_forecast(example_quantile_df, "quantile"),
+    c("forecast_quantile", "data.table", "data.frame")
+  )
 })
