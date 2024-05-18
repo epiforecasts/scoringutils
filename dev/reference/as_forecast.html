@@ -19,59 +19,35 @@ Using the arguments observed, predicted, and model, users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument forecast_unit, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
-see set_forecast_unit() for details)."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+see set_forecast_unit() for details)."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
-
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
-
-    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a>
-</li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a>
-    <a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a>
-    <a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a>
-  </div>
-</li>
-      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/epiforecasts/scoringutils/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
+    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
+  </ul></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/epiforecasts/scoringutils/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
-
-    
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Create a <code>forecast</code> object</h1>
+      <h1>Create a <code>forecast</code> object</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/forecast.R" class="external-link"><code>R/forecast.R</code></a></small>
       <div class="d-none name"><code>as_forecast.Rd</code></div>
     </div>
-
     <div class="ref-description section level2">
     <p>Process and validate a data.frame (or similar) or similar with forecasts
 and observations. If the input passes all input checks, it will be converted
@@ -85,7 +61,6 @@ forecast object. Using the argument <code>forecast_unit</code>, users can specif
 the columns that uniquely identify a single forecast (and remove the others,
 see <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code> for details).</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -103,19 +78,14 @@ see <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code> for de
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data.frame (or similar) with predicted and observed values.
 See the details section of <code>as_forecast()</code> for additional information
 on required input formats.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments</p></dd>
-
-
 <dt id="arg-forecast-unit">forecast_unit<a class="anchor" aria-label="anchor" href="#arg-forecast-unit"></a></dt>
 <dd><p>(optional) Name of the columns in <code>data</code> (after
 any renaming of columns done by <code>as_forecast()</code>) that denote the unit of a
@@ -123,47 +93,32 @@ single forecast. See <code><a href="get_forecast_unit.html">get_forecast_unit()<
 If <code>NULL</code> (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.</p></dd>
-
-
 <dt id="arg-forecast-type">forecast_type<a class="anchor" aria-label="anchor" href="#arg-forecast-type"></a></dt>
 <dd><p>(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by <code>scoringutils</code> based on the
 input does not match this, an error will be thrown. If <code>NULL</code> (the
 default), the forecast type will be inferred from the data.</p></dd>
-
-
 <dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 observed values. This column will be renamed to "observed".</p></dd>
-
-
 <dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 predicted values. This column will be renamed to "predicted".</p></dd>
-
-
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the names
 of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".</p></dd>
-
-
 <dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains
 the quantile level of the predicted values. This column will be renamed to
 "quantile_level". Only applicable to quantile-based forecasts.</p></dd>
-
-
 <dt id="arg-sample-id">sample_id<a class="anchor" aria-label="anchor" href="#arg-sample-id"></a></dt>
 <dd><p>(optional) Name of the column in <code>data</code> that contains the
 sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
 <p>Depending on the forecast type, an object of the following class will be
 returned:</p><ul><li><p><code>forecast_binary</code> for binary forecasts</p></li>
 <li><p><code>forecast_point</code> for point forecasts</p></li>
@@ -181,7 +136,6 @@ represented as a set of predictive quantiles)</p></li>
 as a set of predictive samples)</p></li>
 </ul><p>Forecast types are determined based on the columns present in the input data.
 Here is an overview of the required format for each forecast type:
-
   </p><div style="text-align: left">
   <img src="figures/required-inputs.png" style="width:750px;max-width:100%;"></div>
 <p><em>All forecast types</em> require a data.frame or similar with columns <code>observed</code>
@@ -226,7 +180,6 @@ usually through the <code>forecast_unit</code> argument in <code>as_forecast()</
 drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
@@ -305,23 +258,14 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20545:      2021-07-24       2       IT</span>
 </code></pre></div>
     </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer></div>
-
-  
-
-  
-
   </body></html>
 
