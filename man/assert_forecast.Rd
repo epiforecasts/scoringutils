@@ -2,11 +2,20 @@
 % Please edit documentation in R/forecast.R
 \name{assert_forecast}
 \alias{assert_forecast}
+\alias{assert_forecast.default}
+\alias{assert_forecast.forecast_binary}
+\alias{assert_forecast.forecast_point}
 \alias{assert_forecast.forecast_quantile}
 \alias{assert_forecast.forecast_sample}
 \title{Assert that input is a forecast object and passes validations}
 \usage{
 assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
+
+\method{assert_forecast}{default}(forecast, forecast_type = NULL, verbose = TRUE, ...)
+
+\method{assert_forecast}{forecast_binary}(forecast, forecast_type = NULL, verbose = TRUE, ...)
+
+\method{assert_forecast}{forecast_point}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
 \method{assert_forecast}{forecast_quantile}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
