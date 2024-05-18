@@ -861,7 +861,7 @@ test_that("bias_quantile(): quantile levels must be unique", {
 test_that("bias_quantile only produces one message", {
   expect_message(
     bias_quantile(observed, predicted[, -3], quantile_level[-3]),
-    "Median not available, computing bias as mean of the two innermost quantiles in order to compute bias."
+    "Median not available, interpolating median from the two innermost quantiles in order to compute bias."
   )
 })
 
