@@ -21,19 +21,25 @@ When applying a scoring rule via \code{\link[=score]{score()}}, the names of the
 become column names of the
 resulting data.table. In addition, an attribute \code{metrics} will be
 added to the output, holding the names of the scores as a vector.
-This is done so that a function like \code{\link[=get_forecast_unit]{get_forecast_unit()}} can still
-identify which columns are part of the forecast unit and which hold a score.
 
-\code{get_metrics()} access and returns this attribute. If there is no
-attribute, the function will return NULL. Users can control whether the
-function should error instead via the \code{error} argument.
+This is done so that functions like \code{\link[=get_forecast_unit]{get_forecast_unit()}} or
+\code{\link[=summarise_scores]{summarise_scores()}} can still identify which columns are part of the
+forecast unit and which hold a score.
 
-\code{get_metrics()} also checks whether the names of the scores stored in
-the attribute are column names of the data and will throw a warning if not.
-This can happen if you rename columns after scoring. You can either run
-\code{\link[=score]{score()}} again, specifying names for the scoring rules manually, or you
-can update the attribute manually using
+\code{get_metrics()} accesses and returns the \code{metrics} attribute. If there is no
+attribute, the function will return \code{NULL} (or, if \code{error = TRUE} will
+produce an error instead). In addition, it checks the column names of the
+input for consistency with the data stored in the \code{metrics} attribute.
+
+\strong{Handling a missing or inconsistent \code{metrics} attribute}:
+
+If the metrics attribute is missing or is not consistent with the column
+names of the data.table, you can either
+\itemize{
+\item run \code{\link[=score]{score()}} again, specifying names for the scoring rules manually, or
+\item add/update the attribute manually using
 \code{attr(scores, "metrics") <- c("names", "of", "your", "scores")} (the
 order does not matter).
+}
 }
 \keyword{check-forecasts}

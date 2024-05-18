@@ -46,43 +46,13 @@ sample_to_quantile <- function(forecast,
 # ==================== Functions internally used for scoring ===================
 # These functions would ideally be replaced in the future
 
-#' @title Change forecast from an interval format to a quantile format
-#'
-#' @description
-#' Transform forecast from a format that uses interval ranges to denote quantiles
-#' to a format that uses quantiles only.
-#'
-#' @param forecast A data.frame following the specifications from
-#'   [score()]) for quantile forecasts.
-#' @param keep_range_col Logical, default is `FALSE`. Keep the
-#'   interval_range and boundary columns after transformation?
-#' @return a data.table in a plain quantile format
-#' @keywords internal
-interval_long_to_quantile <- function(forecast,
-                                      keep_range_col = FALSE) {
-  forecast <- ensure_data.table(forecast)
-
-  # filter out duplicated median
-  # note that this also filters out instances where range is NA, i.e.
-  # a point forecast. This should probably be dealt with in the future
-  forecast <- forecast[!(interval_range == 0 & boundary == "upper"), ]
-
-  forecast[, quantile_level := ifelse(
-    boundary == "lower",
-    round((100 - interval_range) / 200, 10),
-    round((1 - (100 - interval_range) / 200), 10)
-  )]
-
-  if (!keep_range_col) {
-    forecast[, c("interval_range", "boundary") := NULL]
-  }
-
-  return(unique(forecast)[])
-}
-
-
 #' Transform from a quantile format to an interval format
 #' @description
+#' Internal helper function to transform from a quantile format to an interval
+#' format (which is no longer a supported forecast format, but still used
+#' internally. The function mimics an S3 generic, but is not actually an S3
+#' generic, as we want the functions to be internal and not exported.)
+#'
 #' **Quantile format**
 #' In a quantile format, a prediction is characterised by one or multiple
 #' predicted values and the corresponding quantile levels. For example, a
@@ -101,10 +71,16 @@ interval_long_to_quantile <- function(forecast,
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 #' @param ... Arguments
 #' @return A data.table with forecasts in an interval format.
-#' @keywords data-handling
-#' @export
+#' @keywords internal
 quantile_to_interval <- function(...) {
-  UseMethod("quantile_to_interval")
+  dots <- list(...)
+  if (is.data.frame(dots[[1]])) {
+    do.call(quantile_to_interval_dataframe, dots)
+  } else if (is.numeric(dots[[1]])) {
+    do.call(quantile_to_interval_numeric, dots)
+  } else {
+    stop("Input must be either a data.frame or a numeric vector.")
+  }
 }
 
 
@@ -121,17 +97,16 @@ quantile_to_interval <- function(...) {
 #'   `format = "long"`. If `format = "wide"`, the `quantile_level` column will
 #'   always be dropped.
 #' @return
-#' *quantile_to_interval.data.frame*:
+#' *quantile_to_interval_dataframe*:
 #'   a data.table in an interval format (either "long" or "wide"), with or
 #'   without a `quantile_level` column. Rows will not be reordered.
 #' @importFrom data.table copy
-#' @export
 #' @rdname quantile_to_interval
-#' @keywords data-handling
-quantile_to_interval.data.frame <- function(forecast,
-                                            format = "long",
-                                            keep_quantile_col = FALSE,
-                                            ...) {
+#' @keywords internal
+quantile_to_interval_dataframe <- function(forecast,
+                                           format = "long",
+                                           keep_quantile_col = FALSE,
+                                           ...) {
   forecast <- ensure_data.table(forecast)
 
   forecast[, boundary := ifelse(quantile_level <= 0.5, "lower", "upper")]
@@ -165,10 +140,9 @@ quantile_to_interval.data.frame <- function(forecast,
 #' `observed`, `lower`, `upper`, and `interval_range`. The `forecast_id` column
 #' is a unique identifier for each forecast. Rows will be reordered according to
 #' `forecast_id` and `interval_range`.
-#' @export
 #' @rdname quantile_to_interval
-#' @keywords data-handling
-quantile_to_interval.numeric <- function(observed,
+#' @keywords internal
+quantile_to_interval_numeric <- function(observed,
                                          predicted,
                                          quantile_level,
                                          ...) {

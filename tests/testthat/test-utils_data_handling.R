@@ -1,28 +1,4 @@
-test_that("range_long_to_quantile works", {
-  long <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
-    model = "model1",
-    observed = 1:10,
-    predicted = c(2:11, 4:13),
-    interval_range = 50,
-    boundary = rep(c("lower", "upper"), each = 10)
-  )
-
-  quantile <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
-    model = "model1",
-    observed = 1:10,
-    predicted = c(2:11, 4:13),
-    quantile_level = rep(c(0.25, 0.75), each = 10)
-  )
-
-  quantile2 <- as.data.frame(scoringutils:::interval_long_to_quantile(long))
-  expect_equal(quantile, quantile2)
-})
-
-
-
-test_that("quantile_to_interval.data.frame() works", {
+test_that("quantile_to_interval_dataframe() works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
