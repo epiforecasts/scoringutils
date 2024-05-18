@@ -36,8 +36,7 @@
 #'   forecast_unit = c("model", "target_type", "target_end_date",
 #'                     "horizon", "location")
 #' )
-as_forecast <- function(data,
-                        ...) {
+as_forecast <- function(data, ...) {
   UseMethod("as_forecast")
 }
 
@@ -203,7 +202,7 @@ assert_forecast.default <- function(
 ) {
   cli_abort(
     c(
-      "!" = "The input needs to be a forecast object.",
+      "!" = "The input needs to be a valid forecast object.",
       "i" = "Please run `as_forecast()` first." # nolint
     )
   )
@@ -420,7 +419,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
 new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   data <- ensure_model_column(data)
-  class(data) <- c(classname, class(data))
+  class(data) <- c("forecast", classname, class(data))
   data <- copy(data)
   return(data[])
 }
@@ -458,26 +457,26 @@ is_forecast.default <- function(x, ...) {
 #' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_sample <- function(x, ...) {
-  inherits(x, "forecast_sample")
+  inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_binary <- function(x, ...) {
-  inherits(x, "forecast_binary")
+  inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_point <- function(x, ...) {
-  inherits(x, "forecast_point")
+  inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
 is_forecast.forecast_quantile <- function(x, ...) {
-  inherits(x, "forecast_quantile")
+  inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }

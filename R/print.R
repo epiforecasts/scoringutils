@@ -14,7 +14,7 @@
 #' @examples
 #' dat <- as_forecast(example_quantile)
 #' print(dat)
-print.forecast_binary <- function(x, ...) {
+print.forecast <- function(x, ...) {
 
   # check whether object passes validation
   validation <- try(
@@ -79,15 +79,3 @@ print.forecast_binary <- function(x, ...) {
 
   return(invisible(x))
 }
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_quantile <- print.forecast_binary
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_point <- print.forecast_binary
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_sample <- print.forecast_binary

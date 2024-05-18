@@ -31,7 +31,7 @@ test_that("removing NA rows from data works as expected", {
   ex <- as_forecast(na.omit(example_sample_discrete))
   expect_equal(
     class(na.omit(ex)),
-    c("forecast_sample", "data.table", "data.frame")
+    c("forecast", "forecast_sample", "data.table", "data.frame")
   )
 
   attributes <- attributes(ex)

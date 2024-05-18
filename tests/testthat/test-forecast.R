@@ -233,7 +233,7 @@ test_that("is_forecast() works as expected", {
 test_that("assert_forecast() works as expected", {
   # test that by default, `as_forecast()` errors
   expect_error(assert_forecast(data.frame(x = 1:10)),
-               "The input needs to be a forecast object.")
+               "The input needs to be a valid forecast object.")
 })
 
 test_that("assert_forecast.forecast_binary works as expected", {

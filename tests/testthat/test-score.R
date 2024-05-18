@@ -43,7 +43,7 @@ test_that("Output of `score()` has the class `scores()`", {
 test_that("function throws an error if data is not a forecast object", {
   expect_error(
     score(forecast = NULL),
-    "The input needs to be a forecast object."
+    "The input needs to be a valid forecast object."
   )
 })
 
