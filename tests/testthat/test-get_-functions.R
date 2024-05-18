@@ -204,6 +204,8 @@ test_that("get_duplicate_forecasts() returns the expected class", {
   expect_equal(
     class(get_duplicate_forecasts(example_point)),
     class(example_point)
+  )
+})
 
 test_that("get_duplicate_forecasts() works as expected with a data.frame", {
   duplicates <- get_duplicate_forecasts(
