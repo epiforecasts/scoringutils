@@ -3,8 +3,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      binary
+      Forecast type: binary
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -42,8 +41,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      binary
+      Forecast type: binary
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -81,8 +79,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      binary
+      Forecast type: binary
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -120,8 +117,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      binary
+      Forecast type: binary
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -159,8 +155,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      quantile
+      Forecast type: quantile
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -199,8 +194,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      quantile
+      Forecast type: quantile
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -239,8 +233,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      quantile
+      Forecast type: quantile
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -279,8 +272,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      quantile
+      Forecast type: quantile
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -319,8 +311,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      point
+      Forecast type: point
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -359,8 +350,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      point
+      Forecast type: point
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -399,8 +389,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      point
+      Forecast type: point
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -439,8 +428,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      point
+      Forecast type: point
       Forecast unit:
       location, target_end_date, target_type, location_name, forecast_date, model,
       and horizon
@@ -479,8 +467,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -518,8 +505,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -557,8 +543,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -596,8 +581,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -635,8 +619,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -674,8 +657,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -713,8 +695,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -752,8 +733,7 @@
     Code
       print(dat)
     Message
-      Forecast type:
-      sample
+      Forecast type: sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon

@@ -24,7 +24,7 @@ Useful links:
 Authors:
 \itemize{
   \item Sam Abbott \email{contact@samabbott.co.uk} (\href{https://orcid.org/0000-0001-8057-8037}{ORCID})
-  \item Hugo Gruson \email{hugo.gruson@lshtm.ac.uk} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
+  \item Hugo Gruson \email{hugo.gruson+R@normalesup.org} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
   \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
 

@@ -175,11 +175,8 @@ test_columns_present <- function(data, columns) {
 #' more columns are present, the function returns FALSE.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
+#' @importFrom checkmate test_names
 #' @keywords internal_input_check
 test_columns_not_present <- function(data, columns) {
-  if (any(columns %in% colnames(data))) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+  test_names(colnames(data), disjunct.from = columns)
 }

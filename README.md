@@ -104,8 +104,7 @@ forecast_quantile <- example_quantile |>
 #>   unexpected.
 
 print(forecast_quantile, 2)
-#> Forecast type:
-#> quantile
+#> Forecast type: quantile
 #> Forecast unit:
 #> location, forecast_date, target_end_date, target_type, model, and horizon
 #> 
