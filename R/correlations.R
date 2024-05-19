@@ -48,7 +48,7 @@ get_correlations <- function(scores,
   return(correlations[])
 }
 
-# helper function to obtain upper triangle of matrix
+# helper function to obtain lower triangle of matrix
 get_lower_tri <- function(cormat) {
   cormat[lower.tri(cormat)] <- NA
   return(cormat)
