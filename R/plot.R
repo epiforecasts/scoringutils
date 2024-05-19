@@ -659,7 +659,7 @@ plot_correlations <- function(correlations) {
 
   # check correlations is actually a matrix of correlations
   col_present <- check_columns_present(correlations, "metric")
-  if (any(lower_triangle > 1, na.rm = TRUE) || !is.logical(col_present)) {
+  if (any(lower_triangle > 1, na.rm = TRUE) || !isTRUE(col_present)) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
