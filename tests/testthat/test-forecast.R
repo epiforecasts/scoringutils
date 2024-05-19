@@ -1,3 +1,7 @@
+# ==============================================================================
+# as_forecast()
+# ==============================================================================
+
 test_that("Running `as_forecast()` twice returns the same object", {
   ex <- na.omit(example_sample_continuous)
 
@@ -7,9 +11,17 @@ test_that("Running `as_forecast()` twice returns the same object", {
   )
 })
 
+test_that("as_forecast works with a data.frame", {
+  expect_no_condition(as_forecast(example_quantile_df))
+})
+
 test_that("as_forecast() works as expected", {
   test <- na.omit(data.table::copy(example_quantile))
-  expect_s3_class(as_forecast(test), "forecast_quantile")
+
+  expect_s3_class(
+    as_forecast(test),
+    c("forecast_quantile", "data.table", "data.frame"),
+    exact = TRUE)
 
   # expect error when arguments are not correct
   expect_error(as_forecast(test, observed = 3), "Must be of type 'character'")
@@ -107,25 +119,6 @@ test_that("check_duplicates() works", {
                "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows"
   )
 })
-
-# test_that("as_forecast() function returns a message with NA in the data", {
-#   expect_message(
-#     { check <- as_forecast(example_quantile) },
-#     "\\d+ values for `predicted` are NA"
-#   )
-#   expect_match(
-#     unlist(check$messages),
-#     "\\d+ values for `predicted` are NA"
-#   )
-# })
-
-# test_that("as_forecast() function returns messages with NA in the data", {
-#   example <- data.table::copy(example_quantile)
-#   example[horizon == 2, observed := NA]
-#   check <- suppressMessages(as_forecast(example))
-#
-#   expect_equal(length(check$messages), 2)
-# })
 
 test_that("as_forecast() function throws an error with duplicate forecasts", {
   example <- rbind(example_quantile,
@@ -272,6 +265,13 @@ test_that("assert_forecast() complains if the forecast type is wrong", {
   )
 })
 
+test_that("assert_forecast_generic() works as expected with a data.frame", {
+  expect_error(
+    assert_forecast_generic(example_quantile_df),
+    "Assertion on 'data' failed: Must be a data.table, not data.frame."
+  )
+})
+
 
 # ==============================================================================
 # validate_forecast()
@@ -283,4 +283,21 @@ test_that("validate_forecast() works as expected", {
     out <- validate_forecast(as_forecast(na.omit(example_point)))
   )
   expect_true(!is.null(out))
+
+  expect_equal(
+    validate_forecast(as_forecast(na.omit(example_point))),
+    as_forecast(na.omit(example_point))
+  )
+})
+
+
+# ==============================================================================
+# new_forecast()
+# ==============================================================================
+
+test_that("new_forecast() works as expected with a data.frame", {
+  expect_s3_class(
+    new_forecast(example_quantile_df, "quantile"),
+    c("forecast_quantile", "data.table", "data.frame")
+  )
 })

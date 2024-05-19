@@ -1,11 +1,12 @@
 # =============================================================================
-# Check creation of objects of class `scores`
+# new_scores()
 # =============================================================================
 
 test_that("new_scores() works", {
-  expect_equal(
-    class(new_scores(data.frame(), metrics = "")),
-    c("scores", "data.table", "data.frame")
+  expect_s3_class(
+    new_scores(data.frame(), metrics = ""),
+    c("scores", "data.table", "data.frame"),
+    exact = TRUE
   )
 
   expect_error(
@@ -36,7 +37,7 @@ test_that("Output of `score()` has the class `scores()`", {
 })
 
 # =============================================================================
-# `score()`
+# score()
 # =============================================================================
 
 # common error handling --------------------------------------------------------
@@ -80,6 +81,8 @@ test_that("function produces output for a binary case", {
   )
 
   expect_true("brier_score" %in% names(eval))
+
+  expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
 
 test_that("score.forecast_binary() errors with only NA values", {
@@ -132,6 +135,8 @@ test_that("function produces output for a point case", {
     colnames(eval),
     c("model", "target_type", names(metrics_point()))
   )
+
+  expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
 
 test_that("Changing metrics names works", {
@@ -169,6 +174,8 @@ test_that("score_quantile correctly handles separate results = FALSE", {
     TRUE
   )
   expect_true(all(names(metrics_quantile()) %in% colnames(eval)))
+
+  expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
 
 
@@ -241,8 +248,30 @@ test_that("score.forecast_quantile() errors with only NA values", {
   )
 })
 
+test_that("score.forecast_quantile() works as expected in edge cases", {
+  # only the median
+  onlymedian <- example_quantile[quantile_level == 0.5] %>%
+    as_forecast()
+  expect_no_condition(
+    s <- score(onlymedian, metrics = metrics_quantile(
+      exclude = c("interval_coverage_50", "interval_coverage_90")
+    ))
+  )
+  expect_equal(
+    s$wis, abs(onlymedian$observed - onlymedian$predicted)
+  )
 
-
+  # only one symmetric interval is present
+  oneinterval <- example_quantile[quantile_level %in% c(0.25,0.75)] %>%
+    as_forecast()
+  expect_message(
+    s <- score(
+      oneinterval,
+      metrics = metrics_quantile(exclude = c("interval_coverage_90", "ae_median"))
+    ),
+    "Median not available"
+  )
+})
 
 
 # test integer and continuous case ---------------------------------------------
@@ -265,14 +294,32 @@ test_that("function produces output for a continuous format case", {
     nrow(eval),
     887
   )
+
+  expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
 
 test_that("function throws an error if data is missing", {
   expect_error(suppressMessages(score(forecast = NULL)))
 })
 
+test_that("score() works with only one sample", {
+
+  # with only one sample, dss returns NaN and log_score fails
+  onesample <- na.omit(example_sample_continuous)[sample_id == 20] %>%
+    as_forecast()
+  expect_warning(
+    scoreonesample <- score(onesample),
+    "Computation for `log_score` failed. Error: need at least 2 data points."
+  )
+
+  # verify that all goes well with two samples
+  twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)] %>%
+    as_forecast()
+  expect_no_condition(score(twosample))
+})
+
 # =============================================================================
-# `apply_metrics()`
+# apply_metrics()
 # =============================================================================
 
 test_that("apply_metrics() works", {
@@ -292,7 +339,6 @@ test_that("apply_metrics() works", {
   )
 
   # additional unnamed argument does not work
-
   expect_warning(
     scoringutils:::apply_metrics(
       forecast = dt, metrics = list("test" = function(x) x + 1),
@@ -306,4 +352,15 @@ test_that("`[` preserves attributes", {
   class(test) <- c("scores", "data.frame")
   expect_true("metrics" %in% names(attributes(test)))
   expect_true("metrics" %in% names(attributes(test[1:10])))
+})
+
+
+# =============================================================================
+# validate_scores()
+# =============================================================================
+test_that("validate_scores() works", {
+  expect_no_condition(validate_scores(scores_binary))
+  expect_null(
+    validate_scores(scores_binary),
+  )
 })

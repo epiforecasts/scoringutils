@@ -2,15 +2,20 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{quantile_to_interval}
 \alias{quantile_to_interval}
-\alias{quantile_to_interval.data.frame}
-\alias{quantile_to_interval.numeric}
+\alias{quantile_to_interval_dataframe}
+\alias{quantile_to_interval_numeric}
 \title{Transform from a quantile format to an interval format}
 \usage{
 quantile_to_interval(...)
 
-\method{quantile_to_interval}{data.frame}(forecast, format = "long", keep_quantile_col = FALSE, ...)
+quantile_to_interval_dataframe(
+  forecast,
+  format = "long",
+  keep_quantile_col = FALSE,
+  ...
+)
 
-\method{quantile_to_interval}{numeric}(observed, predicted, quantile_level, ...)
+quantile_to_interval_numeric(observed, predicted, quantile_level, ...)
 }
 \arguments{
 \item{...}{Arguments}
@@ -45,7 +50,7 @@ for which predictions were made.}
 \value{
 A data.table with forecasts in an interval format.
 
-\emph{quantile_to_interval.data.frame}:
+\emph{quantile_to_interval_dataframe}:
 a data.table in an interval format (either "long" or "wide"), with or
 without a \code{quantile_level} column. Rows will not be reordered.
 
@@ -56,6 +61,11 @@ is a unique identifier for each forecast. Rows will be reordered according to
 \code{forecast_id} and \code{interval_range}.
 }
 \description{
+Internal helper function to transform from a quantile format to an interval
+format (which is no longer a supported forecast format, but still used
+internally. The function mimics an S3 generic, but is not actually an S3
+generic, as we want the functions to be internal and not exported.)
+
 \strong{Quantile format}
 In a quantile format, a prediction is characterised by one or multiple
 predicted values and the corresponding quantile levels. For example, a
@@ -73,4 +83,4 @@ be characterised by one or multiple prediction intervals, e.g. the lower
 and upper bounds of the 50\% and 90\% prediction intervals (corresponding to
 the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 }
-\keyword{data-handling}
+\keyword{internal}
