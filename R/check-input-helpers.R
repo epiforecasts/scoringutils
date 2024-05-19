@@ -166,7 +166,7 @@ check_columns_present <- function(data, columns) {
 #' @keywords internal_input_check
 test_columns_present <- function(data, columns) {
   check <- check_columns_present(data, columns)
-  return(is.logical(check))
+  return(isTRUE(check))
 }
 
 #' Test whether column names are NOT present in a data.frame
