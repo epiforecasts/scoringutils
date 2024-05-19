@@ -102,6 +102,9 @@ forecast_quantile <- example_quantile |>
   )
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
+```
+
+``` r
 
 print(forecast_quantile, 2)
 #> Forecast type: quantile
