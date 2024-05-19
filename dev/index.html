@@ -93,8 +93,9 @@
 <span>    forecast_type <span class="op">=</span> <span class="st">"quantile"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
-<span><span class="co">#&gt;   unexpected.</span></span>
-<span></span>
+<span><span class="co">#&gt;   unexpected.</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">forecast_quantile</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Forecast type: quantile</span></span>
 <span><span class="co">#&gt; Forecast unit:</span></span>
@@ -125,12 +126,12 @@
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
 <p>Forecasts can be scored by calling <code><a href="reference/score.html">score()</a></code> on a validated forecast object.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">forecast_quantile</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="reference/score.html">score()</a></code> takes an additional argument, <code>metrics</code>, with a list of scoring rules. Every forecast type has a default list of metrics. You can easily add your own scoring functions, as long as they conform with the format for that forecast type. See the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">paper</a> for more information.</p>
 <p>You can summarise scores using the function <code><a href="reference/summarise_scores.html">summarise_scores()</a></code>. The <code>by</code> argument is used to specify the desired level of summary. <code>fun</code> let’s you specify any summary function, although it is recommended to stick to the mean as a primary summary function, as other functions can lead to improper scores.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scores</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -173,22 +174,22 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you are using <code>scoringutils</code> in your work please consider citing it using the output of <code>citation("scoringutils")</code> (or <code>print(citation("scoringutils"), bibtex = TRUE)</code>):</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;   Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   scoringutils in R, arXiv. DOI: 10.48550/ARXIV.2205.07090</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;   Probabilistic Forecasts with scoringRules. Journal of Statistical</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&gt; To cite scoringutils in publications use the following. If you use the</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; CRPS, DSS, or Log Score, please also cite scoringRules.</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   scoringutils in R, arXiv. DOI: 10.48550/ARXIV.2205.07090</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; To cite scoringRules in publications use:</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;   Alexander Jordan, Fabian Krueger, Sebastian Lerch (2019). Evaluating</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;   Probabilistic Forecasts with scoringRules. Journal of Statistical</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;   Software, 90(12), 1-37. DOI 10.18637/jss.v090.i12</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="how-to-make-a-bug-report-or-feature-request">How to make a bug report or feature request<a class="anchor" aria-label="anchor" href="#how-to-make-a-bug-report-or-feature-request"></a>
