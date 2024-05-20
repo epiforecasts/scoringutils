@@ -196,6 +196,7 @@ assert_forecast <- function(
 
 
 #' @importFrom cli cli_abort
+#' @rdname assert_forecast
 #' @export
 #' @keywords check-forecasts
 assert_forecast.default <- function(
@@ -211,6 +212,7 @@ assert_forecast.default <- function(
 
 
 #' @export
+#' @rdname assert_forecast
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_binary <- function(
@@ -247,6 +249,7 @@ assert_forecast.forecast_binary <- function(
 
 
 #' @export
+#' @rdname assert_forecast
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_point <- function(
