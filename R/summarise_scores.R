@@ -58,7 +58,6 @@ summarise_scores <- function(scores,
   assert_function(fun)
 
   metrics <- get_metrics(scores, error = TRUE)
-  forecast_unit <- get_forecast_unit(scores)
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
