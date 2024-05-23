@@ -140,7 +140,7 @@ as_forecast.default <- function(data,
   #old binary format
   if (forecast_type == "point") {
     looks_binary <- check_input_binary(factor(data$observed), data$predicted)
-    if (is.logical(looks_binary)) {
+    if (isTRUE(looks_binary)) {
       #nolint start: keyword_quote_linter duplicate_argument_linter
       cli_warn(
         c(
@@ -196,6 +196,7 @@ assert_forecast <- function(
 
 
 #' @importFrom cli cli_abort
+#' @rdname assert_forecast
 #' @export
 #' @keywords check-forecasts
 assert_forecast.default <- function(
@@ -211,6 +212,7 @@ assert_forecast.default <- function(
 
 
 #' @export
+#' @rdname assert_forecast
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_binary <- function(
@@ -233,7 +235,7 @@ assert_forecast.forecast_binary <- function(
     )
   }
   input_check <- check_input_binary(forecast$observed, forecast$predicted)
-  if (!is.logical(input_check)) {
+  if (!isTRUE(input_check)) {
     cli_abort(
       c(
         "!" = "Checking `forecast`: Input looks like a binary forecast, but
@@ -247,6 +249,7 @@ assert_forecast.forecast_binary <- function(
 
 
 #' @export
+#' @rdname assert_forecast
 #' @importFrom cli cli_abort
 #' @keywords check-forecasts
 assert_forecast.forecast_point <- function(
@@ -256,7 +259,7 @@ assert_forecast.forecast_point <- function(
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
-  if (!is.logical(input_check)) {
+  if (!isTRUE(input_check)) {
     cli_abort(
       c(
         "!" = "Checking `forecast`: Input looks like a point forecast, but found
@@ -349,7 +352,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
-  if (!is.logical(number_quantiles_samples) && verbose) {
+  if (!isTRUE(number_quantiles_samples) && verbose) {
     cli_warn(number_quantiles_samples)
   }
 

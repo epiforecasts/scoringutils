@@ -7,7 +7,7 @@
 #'   N (number of columns) the number of samples per forecast.
 #'   If `observed` is just a single number, then predicted values can just be a
 #'   vector of size N.
-#' @importFrom checkmate assert assert_numeric check_matrix
+#' @importFrom checkmate assert assert_numeric check_matrix assert_matrix
 #' @inherit document_assert_functions params return
 #' @keywords internal_input_check
 assert_input_sample <- function(observed, predicted) {
@@ -21,7 +21,7 @@ assert_input_sample <- function(observed, predicted) {
       check_matrix(predicted, mode = "numeric", nrows = n_obs)
     )
   } else {
-    assert(check_matrix(predicted, mode = "numeric", nrows = n_obs))
+    assert_matrix(predicted, mode = "numeric", nrows = n_obs)
   }
   return(invisible(NULL))
 }

@@ -128,7 +128,7 @@ get_pairwise_comparisons <- function(
   # check that model column + columns in 'by' are present
   #nolint start: keyword_quote_linter object_usage_linter
   by_cols <- check_columns_present(scores, by)
-  if (!is.logical(by_cols)) {
+  if (!isTRUE(by_cols)) {
     cli_abort(
       c(
         "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"

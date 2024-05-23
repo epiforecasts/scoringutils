@@ -127,7 +127,7 @@ transform_forecasts <- function(forecast,
       #nolint start: keyword_quote_linter
       cli_abort(
         c(
-          "!" = "If a column 'scale' is present, entries with scale =='natural'
+          `!` = "If a column 'scale' is present, entries with scale =='natural'
           are required for the transformation."
         )
       )

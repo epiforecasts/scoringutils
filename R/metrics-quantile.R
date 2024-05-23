@@ -445,7 +445,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
     #nolint start: keyword_quote_linter
     cli_inform(
       c(
-        "i" = "Median not available, computing bias as mean of the two
+        "i" = "Median not available, interpolating median from the two
         innermost quantiles in order to compute bias."
       )
     )

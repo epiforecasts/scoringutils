@@ -1,9 +1,20 @@
-test_that("summarise_scores() works without any arguments", {
+test_that("summarise_scores() works as expected with by = forecast unit", {
+  expect_no_condition(
+    summarised_scores <- summarise_scores(scores_quantile)
+  )
+  expect_s3_class(summarised_scores, c("scores", "data.table", "data.frame"), exact = TRUE)
+})
+
+test_that("summarise_scores() works as expected with by = forecast unit", {
+  # the only effect of running summarise_scores with by = forecast unit is
+  # that coverage is now a numeric instead of a boolean
   summarised_scores <- summarise_scores(
     scores_quantile,
     by = get_forecast_unit(scores_quantile)
   )
-  expect_false("quantile" %in% names(summarised_scores))
+
+  expect_equal(dim(summarised_scores), dim(scores_quantile))
+  expect_equal(summarised_scores$wis, scores_quantile$wis)
 
   s2 <- summarise_scores(scores_quantile,
     by = c(
@@ -12,8 +23,7 @@ test_that("summarise_scores() works without any arguments", {
       "horizon"
     )
   )
-
-  expect_equal(nrow(summarised_scores), nrow(s2))
+  expect_equal(dim(summarised_scores), dim(s2))
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
@@ -80,5 +90,13 @@ test_that("summarise_scores() across argument works as expected", {
     summarise_scores(
       scores, by = c("location", "target_type")
     )
+  )
+
+  expect_warning(
+    summarise_scores(
+      scores, across = c("horizon", "model", "forecast_date", "target_end_date"),
+      by = c("model", "target_type")
+    ),
+    "You specified `across` and `by` at the same time.`by` will be ignored"
   )
 })

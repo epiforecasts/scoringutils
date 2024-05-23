@@ -22,7 +22,7 @@ validate_metrics <- function(metrics) {
 
   for (i in seq_along(metrics)) {
     check_fun <- check_function(metrics[[i]])
-    if (!is.logical(check_fun)) {
+    if (!isTRUE(check_fun)) {
       #nolint start: keyword_quote_linter
       cli_warn(
         c(

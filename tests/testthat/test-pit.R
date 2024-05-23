@@ -1,5 +1,5 @@
 # ============================================================================ #
-# Test `pit_sample()` function
+# pit_sample()
 # ============================================================================ #
 
 test_that("pit_sample() function throws an error when missing args", {
@@ -29,6 +29,8 @@ test_that("pit_sample() function works for integer observed and predicted", {
     length(output),
     560
   )
+
+  checkmate::expect_class(output, "numeric")
 })
 
 test_that("pit_sample() function works for continuous observed and predicted", {
@@ -62,7 +64,7 @@ test_that("pit_sample() works with a single observvation", {
 
 
 # ============================================================================ #
-# Test `get_pit()` function
+# get_pit()
 # ============================================================================ #
 
 test_that("pit function works for continuous integer and quantile data", {
@@ -76,6 +78,8 @@ test_that("pit function works for continuous integer and quantile data", {
   expect_equal(names(pit_quantile), c("model", "quantile_level", "pit_value"))
   expect_equal(names(pit_continuous), c("model", "target_type", "pit_value"))
   expect_equal(names(pit_integer), c("model", "location", "pit_value"))
+
+  expect_s3_class(pit_quantile, c("data.table", "data.frame"), exact = TRUE)
 
   # check printing works
   testthat::expect_output(print(pit_quantile))
