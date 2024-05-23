@@ -149,7 +149,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
     )
     return(forecast)
   })
-  scores <- rbindlist(split_result)
+  scores <- rbindlist(split_result, fill = TRUE)
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }
@@ -193,7 +193,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
     )
     return(forecast)
   })
-  scores <- rbindlist(split_result)
+  scores <- rbindlist(split_result, fill = TRUE)
 
   scores <- as_scores(scores, metrics = names(metrics))
 
