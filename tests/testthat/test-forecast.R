@@ -20,7 +20,7 @@ test_that("as_forecast() works as expected", {
 
   expect_s3_class(
     as_forecast(test),
-    c("forecast_quantile", "data.table", "data.frame"),
+    c("forecast", "forecast_quantile", "data.table", "data.frame"),
     exact = TRUE)
 
   # expect error when arguments are not correct
