@@ -51,7 +51,7 @@
 #' of the data belong together and jointly form a single forecasts. This is
 #' easy e.g. for point forecast, where there is one row per forecast. For
 #' quantile or sample-based forecasts, however, there are multiple rows that
-#' belong to single forecast.
+#' belong to a single forecast.
 #'
 #' The *forecast unit* or *unit of a single forecast* is then described by the
 #' combination of columns that uniquely identify a single forecast.

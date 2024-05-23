@@ -49,10 +49,8 @@ print.forecast <- function(x, ...) {
   } else {
     cli_text(
       col_blue(
-        "Forecast type:"
-      )
-    )
-    cli_text(
+        "Forecast type: "
+      ),
       "{forecast_type}"
     )
   }
