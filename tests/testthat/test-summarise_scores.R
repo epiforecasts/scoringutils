@@ -65,38 +65,3 @@ test_that("summarise_scores() handles data.frames correctly", {
     summarise_scores(test, by = "model")
   )
 })
-
-test_that("summarise_scores() across argument works as expected", {
-  ex <- data.table::copy(example_quantile)
-  ex <- suppressMessages(as_forecast(ex))
-  scores <- score(ex)[, location_name := NULL]
-
-  expect_warning(
-    summarise_scores(
-      scores, by = c("model", "target_type"), across = "horizon"
-    ),
-    regexp = "You specified `across` and `by` at the same time."
-  )
-  expect_error(
-    summarise_scores(
-      scores, across = "horizons"
-    ),
-    regexp = "Assertion on 'across' failed: Must be a subset of "
-  )
-  expect_equal(
-    summarise_scores(
-      scores, across = c("horizon", "model", "forecast_date", "target_end_date")
-    ),
-    summarise_scores(
-      scores, by = c("location", "target_type")
-    )
-  )
-
-  expect_warning(
-    summarise_scores(
-      scores, across = c("horizon", "model", "forecast_date", "target_end_date"),
-      by = c("model", "target_type")
-    ),
-    "You specified `across` and `by` at the same time.`by` will be ignored"
-  )
-})

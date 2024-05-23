@@ -1140,11 +1140,10 @@ default the mean), returning a \texttt{data.table} with summarised
 scores. Users can set the summary level using the argument \texttt{by}
 and will obtain a summarised score for each combination of the value in
 the specified columns (e.g., \texttt{by\ =\ c("model",\ "target\_type")}
-will return one summarised score per model and target type).
-Equivalently, users can specify the columns that should be aggregated
-over (using the argument \code{across}). To display scores it is often
-useful to round the output, for example to two significant digits, which
-can be achieved with another call to \code{summarise\_scores()}.
+will return one summarised score per model and target type). To display
+scores it is often useful to round the output, for example to two
+significant digits, which can be achieved with another call to
+\code{summarise\_scores()}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
