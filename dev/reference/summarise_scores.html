@@ -54,9 +54,9 @@ do, you also have to manually update the attribute by calling
     </div>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, across <span class="op">=</span> <span class="cn">NULL</span>, fun <span class="op">=</span> <span class="va">mean</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">mean</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">summarize_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, across <span class="op">=</span> <span class="cn">NULL</span>, fun <span class="op">=</span> <span class="va">mean</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">summarize_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">mean</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
@@ -66,11 +66,6 @@ scores and an additional attribute <code>metrics</code> as produced by <code><a 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector with column names to summarise scores by. Default
 is <code>model</code>, meaning that there will be one score per model in the output.</p></dd>
-<dt id="arg-across">across<a class="anchor" aria-label="anchor" href="#arg-across"></a></dt>
-<dd><p>Character vector with column names to summarise scores
-across (meaning that the specified columns will be dropped). This is an
-alternative to specifying <code>by</code> directly. If <code>across</code> is set, <code>by</code> will be
-ignored. If <code>across</code> is <code>NULL</code> (default), then <code>by</code> will be used.</p></dd>
 <dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>A function used for summarising scores. Default is <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p></dd>
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -81,8 +76,8 @@ respective function.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
 <p>A data.table with summarised scores. Scores are summarised according
-to the names of the columns of the original data specified in <code>by</code> or
-<code>across</code> using the <code>fun</code> passed to <code>summarise_scores()</code>.</p>
+to the names of the columns of the original data specified in <code>by</code></p>
+<p>using the <code>fun</code> passed to <code>summarise_scores()</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -129,73 +124,6 @@ to the names of the columns of the original data specified in <code>by</code> or
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:   378.5457   216.98699 1.622417e+05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:   123.6211    79.66001 1.371418e+04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:   167.4829   102.18939 3.243111e+04</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Get scores summarised across horizon, forecast date, and target end date</span></span></span>
-<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span></span></span>
-<span class="r-in"><span> <span class="va">scores</span>, across <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_end_date"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     location  location_name target_type                 model        bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt;         &lt;char&gt;      &lt;char&gt;                &lt;char&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:       DE        Germany       Cases EuroCOVIDhub-ensemble  0.17812500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:       DE        Germany       Cases EuroCOVIDhub-baseline  0.51093750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:       DE        Germany       Cases  epiforecasts-EpiNow2  0.15937500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:       DE        Germany      Deaths EuroCOVIDhub-ensemble -0.04531250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:       DE        Germany      Deaths EuroCOVIDhub-baseline  0.40312500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:       DE        Germany      Deaths       UMass-MechBayes -0.58125000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:       DE        Germany      Deaths  epiforecasts-EpiNow2 -0.34531250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:       FR         France       Cases EuroCOVIDhub-ensemble  0.01250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       FR         France       Cases EuroCOVIDhub-baseline -0.02968750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:       FR         France       Cases  epiforecasts-EpiNow2 -0.02656250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:       FR         France      Deaths EuroCOVIDhub-ensemble  0.04687500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:       FR         France      Deaths EuroCOVIDhub-baseline  0.34218750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:       FR         France      Deaths       UMass-MechBayes  0.05156250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:       FR         France      Deaths  epiforecasts-EpiNow2 -0.05652174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:       GB United Kingdom       Cases EuroCOVIDhub-ensemble -0.47656250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:       GB United Kingdom       Cases EuroCOVIDhub-baseline -0.61875000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:       GB United Kingdom       Cases  epiforecasts-EpiNow2 -0.18750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:       GB United Kingdom      Deaths EuroCOVIDhub-ensemble  0.10937500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:       GB United Kingdom      Deaths EuroCOVIDhub-baseline  0.08281250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:       GB United Kingdom      Deaths       UMass-MechBayes  0.62812500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:       GB United Kingdom      Deaths  epiforecasts-EpiNow2  0.43125000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:       IT          Italy       Cases EuroCOVIDhub-ensemble  0.10000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:       IT          Italy       Cases EuroCOVIDhub-baseline  0.28437500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:       IT          Italy       Cases  epiforecasts-EpiNow2 -0.10000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:       IT          Italy      Deaths EuroCOVIDhub-ensemble  0.15312500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26:       IT          Italy      Deaths EuroCOVIDhub-baseline  0.44687500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27:       IT          Italy      Deaths       UMass-MechBayes -0.20625000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28:       IT          Italy      Deaths  epiforecasts-EpiNow2 -0.08281250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     location  location_name target_type                 model        bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           dss        crps log_score         mad   ae_median      se_mean</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;       &lt;num&gt;     &lt;num&gt;       &lt;num&gt;       &lt;num&gt;        &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 18.913810  7936.62666 10.368232 11207.25397 11618.84123 4.494508e+08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 21.878467 15588.64493 11.938333 13450.95537 20043.14918 9.339773e+08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 29.470535 13453.07861 22.686464 14195.91295 18498.57965 1.286406e+09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 10.257710    56.54768  6.104505   167.78914    67.75772 1.061735e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 12.536674   155.04973  6.997312   391.89252   219.90763 1.141223e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 10.620902    76.81642  6.345002   147.52889   113.14713 1.543732e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 11.020430    98.55426  6.571691   222.78911   140.73457 3.401571e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 31.176915 47132.62230 28.508977 20503.83242 54298.94987 1.427192e+10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       NaN 56093.15772       Inf 25117.85238 65048.92899 1.653529e+10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 34.493853 54117.03193 32.355909 33004.99213 63535.47737 1.981982e+10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 10.729140    67.93297  6.236167   188.67948    85.67433 1.819764e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 13.289991   202.77900  7.204643   501.10175   259.38228 2.316930e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 11.322153    85.42422  6.518248   186.16678    98.33634 2.700122e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 11.196840   119.95348  6.553617   331.22963   160.27973 8.603595e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 21.106923 17824.87005 11.748949 30723.25562 24247.60751 1.940949e+09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 24.877031 40848.86212 13.554332 22622.32113 51882.49530 5.228815e+09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 21.224165 20508.11818 11.483762 47677.95848 25915.83258 3.160764e+09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:  8.839111    25.48464  5.251438    81.18266    26.29047 1.515431e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 13.061990   109.66110  6.625700   212.20871   110.49682 1.048123e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:  9.040336    40.55896  5.310473    67.03450    62.02151 8.933439e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:  8.859818    29.31789  5.233896    73.15706    35.78943 4.412517e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 20.402224  5918.10189 11.907522  7106.70962  8832.18969 1.618505e+08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 20.338858  9283.66908 10.903144 14737.72225 13617.49426 3.817765e+08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 78.320096  3507.83559       Inf  4838.51176  4982.29184 6.446300e+07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:  9.813839    53.48466  5.856701   130.23793    70.93715 1.287888e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26: 13.085745   195.66648  7.081908   408.97976   278.16121 1.983392e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27:  9.359876    37.96112  5.592767    93.75413    45.13505 3.484721e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28: 10.033302    64.03710  5.886091    88.80946    88.29173 2.033662e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           dss        crps log_score         mad   ae_median      se_mean</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get standard deviation</span></span></span>
 <span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span>, fun <span class="op">=</span> <span class="va">sd</span><span class="op">)</span></span></span>
