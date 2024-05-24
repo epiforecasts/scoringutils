@@ -5,9 +5,9 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by = "model", across = NULL, fun = mean, ...)
+summarise_scores(scores, by = "model", fun = mean, ...)
 
-summarize_scores(scores, by = "model", across = NULL, fun = mean, ...)
+summarize_scores(scores, by = "model", fun = mean, ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
@@ -15,11 +15,6 @@ scores and an additional attribute \code{metrics} as produced by \code{\link[=sc
 
 \item{by}{Character vector with column names to summarise scores by. Default
 is \code{model}, meaning that there will be one score per model in the output.}
-
-\item{across}{Character vector with column names to summarise scores
-across (meaning that the specified columns will be dropped). This is an
-alternative to specifying \code{by} directly. If \code{across} is set, \code{by} will be
-ignored. If \code{across} is \code{NULL} (default), then \code{by} will be used.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 
@@ -29,8 +24,8 @@ respective function.}
 }
 \value{
 A data.table with summarised scores. Scores are summarised according
-to the names of the columns of the original data specified in \code{by} or
-\code{across} using the \code{fun} passed to \code{summarise_scores()}.
+to the names of the columns of the original data specified in \code{by}
+using the \code{fun} passed to \code{summarise_scores()}.
 }
 \description{
 Summarise scores as produced by \code{\link[=score]{score()}}.
@@ -55,11 +50,6 @@ summarise_scores(scores,by = "model")
 
 # get scores by model and target type
 summarise_scores(scores, by = c("model", "target_type"))
-
-# Get scores summarised across horizon, forecast date, and target end date
-summarise_scores(
- scores, across = c("horizon", "forecast_date", "target_end_date")
-)
 
 # get standard deviation
 summarise_scores(scores, by = "model", fun = sd)
