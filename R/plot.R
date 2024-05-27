@@ -634,6 +634,8 @@ plot_forecast_counts <- function(forecast_counts,
 #'
 #' @param correlations A data.table of correlations between scores as produced
 #'   by [get_correlations()].
+#' @param digits A number indicating how many decimal places the result should
+#'   be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @return
 #' A ggplot object showing a coloured matrix of correlations between metrics.
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
@@ -645,17 +647,21 @@ plot_forecast_counts <- function(forecast_counts,
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
 #' correlations <- get_correlations(
-#'  summarise_scores(scores),
-#'  digits = 2
+#'  summarise_scores(scores)
 #' )
-#' plot_correlations(correlations)
+#' plot_correlations(correlations, digits = 2)
 
-plot_correlations <- function(correlations) {
+plot_correlations <- function(correlations, digits = NULL) {
 
   assert_data_frame(correlations)
   metrics <- get_metrics(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+
+  if (!is.null(digits)) {
+    lower_triangle <- round(lower_triangle, digits)
+  }
+
 
   # check correlations is actually a matrix of correlations
   col_present <- check_columns_present(correlations, "metric")

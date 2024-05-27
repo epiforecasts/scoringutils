@@ -4,7 +4,7 @@ test_that("get_correlations() works as expected", {
   expect_no_condition(
     correlations <- scores_quantile %>%
       summarise_scores(by = get_forecast_unit(scores_quantile)) %>%
-      get_correlations(digits = 2)
+      get_correlations()
   )
   expect_equal(
     colnames(correlations), c(get_metrics(scores_quantile), "metric")
@@ -14,19 +14,19 @@ test_that("get_correlations() works as expected", {
   # (meaning that coverage will be a logical vector instead of a numeric)
   expect_no_condition(
     correlations2 <- scores_quantile %>%
-      get_correlations(digits = 2)
+      get_correlations()
   )
   expect_equal(correlations, correlations2)
 
   expect_s3_class(
-    get_correlations(scores_quantile, digits = 2),
+    get_correlations(scores_quantile),
     c("scores", "data.table", "data.frame"),
     exact = TRUE
   )
 
   # passing a data.frame works as long as the metrics attribute is still there
   expect_no_condition(
-    get_correlations(as.data.frame(scores_quantile), digits = 2)
+    get_correlations(as.data.frame(scores_quantile))
   )
 
   # check we get an error if metrics attribute is missing.

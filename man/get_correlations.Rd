@@ -4,7 +4,7 @@
 \alias{get_correlations}
 \title{Calculate correlation between metrics}
 \usage{
-get_correlations(scores, metrics = get_metrics(scores), digits = NULL, ...)
+get_correlations(scores, metrics = get_metrics(scores), ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
@@ -12,9 +12,6 @@ scores and an additional attribute \code{metrics} as produced by \code{\link[=sc
 
 \item{metrics}{A character vector with the metrics to show. If set to
 \code{NULL} (default), all metrics present in \code{scores} will be shown.}
-
-\item{digits}{A number indicating how many decimal places the result should
-be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 
 \item{...}{Additional arguments to pass down to \code{\link[=cor]{cor()}}.}
 }
