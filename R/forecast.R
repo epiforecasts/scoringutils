@@ -3,8 +3,9 @@
 #' @description
 #' Process and validate a data.frame (or similar) or similar with forecasts
 #' and observations. If the input passes all input checks, it will be converted
-#' to a `forecast` object. The class of that object depends on the forecast
-#' type of the input. See the details section below for more information
+#' to a `forecast` object. A forecast object is a `data.table` with a
+#' class `forecast` and an additional class that depends on the forecast type.
+#' See the details section below for more information
 #' on the expected input formats.
 #'
 #' `as_forecast()` gives users some control over how their data is parsed.
