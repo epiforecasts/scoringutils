@@ -370,13 +370,15 @@ classification than a formal definition). Currently,
 The starting point for working with \pkg{scoringutils} is usually a
 \code{data.frame} (or similar) containing both the predictions and the
 observed values. In a next step (see Section \ref{sec:validation}) this
-data will be validated and transformed into a ``forecast object''. The
-input data needs to have a column \texttt{observed} for the observed
-values, a column \texttt{predicted} for the predicted values, and a
-column \texttt{model} denoting the name of the model/forecaster that
-generated the forecast. Additional requirements depend on the forecast
-type. Table \ref{tab:input-score} shows the expected input format for
-each forecast type.
+data will be validated and transformed into a ``forecast object'' (a
+\code{data.table} with a class \texttt{forecast} and an additional class
+corresponding to the forecast type). The input data needs to have a
+column \texttt{observed} for the observed values, a column
+\texttt{predicted} for the predicted values, and a column \texttt{model}
+denoting the name of the model/forecaster that generated the forecast.
+Additional requirements depend on the forecast type. Table
+\ref{tab:input-score} shows the expected input format for each forecast
+type.
 
 The package contains example data for each forecast type, which can
 serve as an orientation for the correct formats. The example data sets
@@ -439,10 +441,10 @@ based on the available columns, transforms the input into a ``forecast''
 object and validates it (see Figure \ref{fig:flowchart-validation} for
 details). A forecast object is a \texttt{data.table} that has passed
 some input validations. It behaves like a \texttt{data.table}, but has
-dedicated methods e.g., for input validation, scoring and printing. The
-classes corresponding to the forecast types are
-\texttt{forecast\_point}, \texttt{forecast\_binary},
-\texttt{forecast\_quantile} and \texttt{forecast\_sample}.
+an additional class \texttt{forecast} as well as a class corresponding
+to the forecast type (\texttt{forecast\_point},
+\texttt{forecast\_binary}, \texttt{forecast\_quantile} or
+\texttt{forecast\_sample}).
 
 \code{as\_forecast()} can automatically determine the forecast type and
 forecast unit based on the input data. However, it can also take
