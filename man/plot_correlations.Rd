@@ -10,8 +10,8 @@ plot_correlations(correlations, digits = NULL)
 \item{correlations}{A data.table of correlations between scores as produced
 by \code{\link[=get_correlations]{get_correlations()}}.}
 
-\item{digits}{A number indicating how many decimal places the result should
-be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
+\item{digits}{A number indicating how many decimal places the correlations
+should be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
 A ggplot object showing a coloured matrix of correlations between metrics.

@@ -634,8 +634,8 @@ plot_forecast_counts <- function(forecast_counts,
 #'
 #' @param correlations A data.table of correlations between scores as produced
 #'   by [get_correlations()].
-#' @param digits A number indicating how many decimal places the result should
-#'   be rounded to. By default (`digits = NULL`) no rounding takes place.
+#' @param digits A number indicating how many decimal places the correlations
+#'   should be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @return
 #' A ggplot object showing a coloured matrix of correlations between metrics.
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
