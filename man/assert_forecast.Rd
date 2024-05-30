@@ -36,14 +36,12 @@ warnings will be created.}
 \item{...}{Additional arguments}
 }
 \value{
-Depending on the forecast type, an object of class
-\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample} or
-\code{forecast_quantile}.
+Returns \code{NULL} invisibly.
 }
 \description{
-Methods for the different classes run \code{\link[=assert_forecast_generic]{assert_forecast_generic()}}, which performs
-checks that are the same for all forecast types and then perform specific
-checks for the specific forecast type.
+Assert that an object is a forecast object (i.e. a \code{data.table} with a class
+\code{forecast} and an additional class \verb{forecast_*} corresponding to the forecast
+type).
 }
 \section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the

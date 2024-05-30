@@ -169,18 +169,16 @@ as_forecast.default <- function(data,
 #' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
-#' Methods for the different classes run [assert_forecast_generic()], which performs
-#' checks that are the same for all forecast types and then perform specific
-#' checks for the specific forecast type.
+#' Assert that an object is a forecast object (i.e. a `data.table` with a class
+#' `forecast` and an additional class `forecast_*` corresponding to the forecast
+#' type).
 #' @inheritParams as_forecast
 #' @inheritParams score
 #' @param verbose Logical. If `FALSE` (default is `TRUE`), no messages and
 #'   warnings will be created.
 #' @inheritSection forecast_types Forecast types and input formats
 #' @return
-#' Depending on the forecast type, an object of class
-#' `forecast_binary`, `forecast_point`, `forecast_sample` or
-#' `forecast_quantile`.
+#' Returns `NULL` invisibly.
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_frame
 #' @export
@@ -431,7 +429,9 @@ new_forecast <- function(data, classname) {
 #' @title Test whether an object is a forecast object
 #'
 #' @description
-#' Generic function to test whether an object is of class `forecast_*`. You
+#' Generic function to test whether an object is a forecast object (i.e. a
+#' `data.table` with a class `forecast` and an additional class `forecast_*`
+#' corresponding to the forecast type). You
 #' can also test for a specific `forecast_*` class using the appropriate
 #' `is_forecast.forecast_*` method. For example, to check whether an object is
 #' of class `forecast_quantile`, you would use

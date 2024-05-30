@@ -30,7 +30,9 @@ is_forecast(x, ...)
 \code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
 }
 \description{
-Generic function to test whether an object is of class \verb{forecast_*}. You
+Generic function to test whether an object is a forecast object (i.e. a
+\code{data.table} with a class \code{forecast} and an additional class \verb{forecast_*}
+corresponding to the forecast type). You
 can also test for a specific \verb{forecast_*} class using the appropriate
 \verb{is_forecast.forecast_*} method. For example, to check whether an object is
 of class \code{forecast_quantile}, you would use
