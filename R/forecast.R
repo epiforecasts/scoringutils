@@ -330,7 +330,6 @@ validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @importFrom cli cli_abort cli_inform cli_warn
-#' @export
 #' @keywords internal_input_check
 assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
