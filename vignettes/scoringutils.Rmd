@@ -316,8 +316,8 @@ Visualising correlations:
 forecast_quantile %>%
   score() %>%
   summarise_scores() %>%
-  get_correlations(digits = 2) %>%
-  plot_correlations()
+  get_correlations() %>%
+  plot_correlations(digits = 2)
 ```
 
 
