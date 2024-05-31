@@ -36,7 +36,7 @@ scores as produced by <code><a href="score.html">score()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, metrics <span class="op">=</span> <span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
@@ -46,9 +46,6 @@ scores and an additional attribute <code>metrics</code> as produced by <code><a 
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>A character vector with the metrics to show. If set to
 <code>NULL</code> (default), all metrics present in <code>scores</code> will be shown.</p></dd>
-<dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>A number indicating how many decimal places the result should
-be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.</p></dd>
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to pass down to <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>.</p></dd>
 </dl></div>
@@ -63,40 +60,40 @@ between different metrics</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
-<span class="r-in"><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      wis overprediction underprediction dispersion  bias interval_coverage_50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;          &lt;num&gt;           &lt;num&gt;      &lt;num&gt; &lt;num&gt;                &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.00           0.94            0.28       0.46  0.11                -0.21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.94           1.00           -0.03       0.32  0.22                -0.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.28          -0.03            1.00       0.15 -0.35                -0.21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.46           0.32            0.15       1.00  0.11                -0.09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.11           0.22           -0.35       0.11  1.00                 0.01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.21          -0.15           -0.21      -0.09  0.01                 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: -0.41          -0.32           -0.36      -0.09  0.10                 0.37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: -0.34          -0.25           -0.33      -0.12  0.06                 0.85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:  0.99           0.90            0.34       0.54  0.10                -0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_90 interval_coverage_deviation ae_median</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;num&gt;                       &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                -0.41                       -0.34      0.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                -0.32                       -0.25      0.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                -0.36                       -0.33      0.34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                -0.09                       -0.12      0.54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                 0.10                        0.06      0.10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:                 0.37                        0.85     -0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:                 1.00                        0.64     -0.41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:                 0.64                        1.00     -0.38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:                -0.41                       -0.38      1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         metric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                         wis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:              overprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             underprediction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                  dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                        bias</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:        interval_coverage_50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:        interval_coverage_90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: interval_coverage_deviation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:                   ae_median</span>
+<span class="r-in"><span><span class="fu">get_correlations</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           wis overprediction underprediction  dispersion        bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;          &lt;num&gt;           &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.0000000     0.94297565      0.28377361  0.45566303  0.10545891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.9429757     1.00000000     -0.03310356  0.32493799  0.21532161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.2837736    -0.03310356      1.00000000  0.14580143 -0.35123801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.4556630     0.32493799      0.14580143  1.00000000  0.11118365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.1054589     0.21532161     -0.35123801  0.11118365  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.2076649    -0.14556039     -0.21392764 -0.09400664  0.01338140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: -0.4075613    -0.31824017     -0.35756699 -0.08614678  0.09802725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: -0.3425972    -0.25332123     -0.32605710 -0.11957701  0.06001718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:  0.9886108     0.90326672      0.33589892  0.53809741  0.09578751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    interval_coverage_50 interval_coverage_90 interval_coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;num&gt;                &lt;num&gt;                       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:          -0.20766492          -0.40756133                 -0.34259724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          -0.14556039          -0.31824017                 -0.25332123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:          -0.21392764          -0.35756699                 -0.32605710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:          -0.09400664          -0.08614678                 -0.11957701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:           0.01338140           0.09802725                  0.06001718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:           1.00000000           0.37245118                  0.84683642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:           0.37245118           1.00000000                  0.63647831</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:           0.84683642           0.63647831                  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:          -0.24559356          -0.41079097                 -0.37689441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ae_median                      metric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;                      &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  0.98861080                         wis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.90326672              overprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.33589892             underprediction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.53809741                  dispersion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  0.09578751                        bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: -0.24559356        interval_coverage_50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: -0.41079097        interval_coverage_90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: -0.37689441 interval_coverage_deviation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:  1.00000000                   ae_median</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

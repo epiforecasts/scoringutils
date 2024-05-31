@@ -33,13 +33,16 @@
     </div>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_correlations</span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_correlations</span><span class="op">(</span><span class="va">correlations</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-correlations">correlations<a class="anchor" aria-label="anchor" href="#arg-correlations"></a></dt>
 <dd><p>A data.table of correlations between scores as produced
 by <code><a href="get_correlations.html">get_correlations()</a></code>.</p></dd>
+<dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
+<dd><p>A number indicating how many decimal places the correlations
+should be rounded to. By default (<code>digits = NULL</code>) no rounding takes place.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -52,10 +55,9 @@ by <code><a href="get_correlations.html">get_correlations()</a></code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_correlations.html">get_correlations</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> digits <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="summarise_scores.html">summarise_scores</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">plot_correlations</span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_correlations</span><span class="op">(</span><span class="va">correlations</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_correlations-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

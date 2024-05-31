@@ -132,6 +132,7 @@
 <h4 id="function-changes-1-2-2-9000">Function changes<a class="anchor" aria-label="anchor" href="#function-changes-1-2-2-9000"></a></h4>
 <ul><li>
 <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.</li>
+<li>In contrast to the previous <code>correlation</code> function, <code>get_correlations</code> doesn’t round correlations by default. Instead, <code>plot_correlations</code> now has a <code>digits</code> argument that allows users to round correlations before plotting them. Alternatively, using <code>dplyr</code>, you could call something like <code>mutate(correlations, across(where(is.numeric), \(x) signif(x, digits = 2)))</code> on the output of <code>get_correlations</code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="internal-package-updates-1-2-2-9000">Internal package updates<a class="anchor" aria-label="anchor" href="#internal-package-updates-1-2-2-9000"></a></h4>
