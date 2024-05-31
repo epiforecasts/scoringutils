@@ -6,8 +6,6 @@
 #'
 #' @param metrics A character vector with the metrics to show. If set to
 #'   `NULL` (default), all metrics present in `scores` will be shown.
-#' @param digits A number indicating how many decimal places the result should
-#'   be rounded to. By default (`digits = NULL`) no rounding takes place.
 #' @inheritParams get_pairwise_comparisons
 #' @param ... Additional arguments to pass down to [cor()].
 #' @return
@@ -22,10 +20,9 @@
 #' @keywords scoring
 #' @examples
 #' scores <- score(as_forecast(example_quantile))
-#' get_correlations(scores, digits = 2)
+#' get_correlations(scores)
 get_correlations <- function(scores,
                              metrics = get_metrics(scores),
-                             digits = NULL,
                              ...) {
   scores <- ensure_data.table(scores)
   assert_subset(metrics, colnames(scores), empty.ok = FALSE)
@@ -33,10 +30,6 @@ get_correlations <- function(scores,
 
   # define correlation matrix
   cor_mat <- cor(as.matrix(df), ...)
-
-  if (!is.null(digits)) {
-    cor_mat <- round(cor_mat, digits)
-  }
 
   correlations <- new_scores(
     as.data.frame((cor_mat)),
