@@ -1,4 +1,4 @@
-#' @title Determines bias of forecasts
+#' @title Determine bias of forecasts
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples. The function
@@ -28,10 +28,10 @@
 #' In both cases, Bias can assume values between
 #' -1 and 1 and is 0 ideally.
 #'
-#' @return vector of length n with the biases of the predictive samples with
+#' @return
+#' Numeric vector of length n with the biases of the predictive samples with
 #' respect to the observed values.
 #' @inheritParams ae_median_sample
-#' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @examples
 #'
 #' ## integer valued forecasts
@@ -76,7 +76,7 @@ bias_sample <- function(observed, predicted) {
 }
 
 
-#' @title Absolute Error of the Median (Sample-based Version)
+#' @title Absolute error of the median (sample-based version)
 #'
 #' @description
 #' Absolute error of the median calculated as
@@ -89,8 +89,8 @@ bias_sample <- function(observed, predicted) {
 #'
 #' @param observed A vector with observed values of size n
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the number of Monte
-#' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
+#'   the number of data points and N (number of columns) the number of Monte
+#'   Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @return vector with the scoring values
 #' @seealso [ae_median_quantile()]
 #' @importFrom stats median
@@ -111,7 +111,7 @@ ae_median_sample <- function(observed, predicted) {
 }
 
 
-#' @title Squared Error of the Mean (Sample-based Version)
+#' @title Squared error of the mean (sample-based version)
 #'
 #' @description
 #' Squared error of the mean calculated as
@@ -122,11 +122,7 @@ ae_median_sample <- function(observed, predicted) {
 #'   mean(observed - mean prediction)^2
 #' }
 #' The mean prediction is calculated as the mean of the predictive samples.
-#' @param observed A vector with observed values of size n
-#' @param predicted nxN matrix of predictive samples, n (number of rows) being
-#' the number of data points and N (number of columns) the number of Monte
-#' Carlo samples. Alternatively, `predicted` can just be a vector of size n.
-#' @return vector with the scoring values
+#' @inheritParams ae_median_sample
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
@@ -143,22 +139,24 @@ se_mean_sample <- function(observed, predicted) {
 }
 
 
-#' @title Logarithmic score
+#' @title Logarithmic score (sample-based version)
 #'
 #' @description
-#' Wrapper around the [`logs_sample()`][scoringRules::scores_sample_univ]
-#' function from the
-#' \pkg{scoringRules} package. Used to score continuous predictions.
+#' This function is a wrapper around the
+#' [`logs_sample()`][scoringRules::scores_sample_univ] function from the
+#' \pkg{scoringRules} package.
+#'
+#' The function should be used to score continuous predictions only.
 #' While the Log Score is in theory also applicable
-#' to integer forecasts, the problem lies in the implementation: The Log Score
+#' to discrete forecasts, the problem lies in the implementation: The Log score
 #' needs a kernel density estimation, which is not well defined with
-#' integer-valued Monte Carlo Samples. The Log Score can be used for specific
-#' integer valued probability distributions. See the scoringRules package for
+#' integer-valued Monte Carlo Samples. The Log score can be used for specific
+#' discrete probability distributions. See the scoringRules package for
 #' more details.
 #' @inheritParams ae_median_sample
-#' @param ... additional arguments passed to
+#' @param ... Additional arguments passed to
 #' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
-#' @return vector with the scoring values
+#' @return Vector with scores.
 #' @importFrom scoringRules logs_sample
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
@@ -179,16 +177,16 @@ logs_sample <- function(observed, predicted, ...) {
   )
 }
 
-#' @title Dawid-Sebastiani Score
+#' @title Dawid-Sebastiani score
 #'
 #' @description
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package.
 #' @inheritParams logs_sample
-#' @param ... additional arguments passed to
+#' @param ... Additional arguments passed to
 #' [dss_sample()][scoringRules::dss_sample()] from the scoringRules package.
-#' @return vector with scoring values
+#' @return Vector with scores.
 #' @importFrom scoringRules dss_sample
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
@@ -210,7 +208,7 @@ dss_sample <- function(observed, predicted, ...) {
   )
 }
 
-#' @title Ranked Probability Score
+#' @title (Continuous) ranked probability score
 #'
 #' @description
 #' Wrapper around the [`crps_sample()`][scoringRules::scores_sample_univ]
@@ -218,9 +216,9 @@ dss_sample <- function(observed, predicted, ...) {
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
 #' @inheritParams logs_sample
-#' @param ... additional arguments passed to
+#' @param ... Additional arguments passed to
 #' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
-#' @return vector with the scoring values
+#' @return Vector with scores.
 #' @importFrom scoringRules crps_sample
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
@@ -244,7 +242,7 @@ crps_sample <- function(observed, predicted, ...) {
 
 
 #' @title Determine dispersion of a probabilistic forecast
-#' @details
+#' @description
 #' Sharpness is the ability of the model to generate predictions within a
 #' narrow range and dispersion is the lack thereof.
 #' It is a data-independent measure, and is purely a feature
@@ -256,12 +254,12 @@ crps_sample <- function(observed, predicted, ...) {
 #' and the explanations given in Funk et al. (2019)
 #'
 #' @inheritParams ae_median_sample
-#' @param observed place holder, argument will be ignored and exists only for
+#' @param observed Place holder, argument will be ignored and exists only for
 #' consistency with other scoring functions. The output does not depend on
 #' any observed values.
-#' @param ... additional arguments passed to [mad()][stats::mad()].
+#' @param ... Additional arguments passed to [mad()][stats::mad()].
 #' @importFrom stats mad
-#' @return vector with dispersion values
+#' @return Vector with dispersion values.
 #'
 #' @references
 #' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)

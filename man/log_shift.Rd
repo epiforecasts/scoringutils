@@ -9,10 +9,10 @@ log_shift(x, offset = 0, base = exp(1))
 \arguments{
 \item{x}{vector of input values to be transformed}
 
-\item{offset}{number to add to the input value before taking the natural
-logarithm}
+\item{offset}{Number to add to the input value before taking the natural
+logarithm.}
 
-\item{base}{a positive or complex number: the base with respect to which
+\item{base}{A positive number: the base with respect to which
 logarithms are computed. Defaults to e = exp(1).}
 }
 \value{
@@ -30,7 +30,7 @@ log_shift(1:10)
 log_shift(0:9, offset = 1)
 
 transform_forecasts(
-  example_quantile[observed > 0, ],
+  as_forecast(example_quantile)[observed > 0, ],
   fun = log_shift,
   offset = 1
  )

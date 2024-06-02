@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_forecast_counts}
 \alias{plot_forecast_counts}
-\title{Visualise Where Forecasts Are Available}
+\title{Visualise the number of available forecasts}
 \usage{
 plot_forecast_counts(
   forecast_counts,
@@ -13,32 +13,33 @@ plot_forecast_counts(
 )
 }
 \arguments{
-\item{forecast_counts}{a data.table (or similar) with a column \code{count}
-holding forecast counts, as produced by \code{\link[=get_forecast_counts]{get_forecast_counts()}}}
+\item{forecast_counts}{A data.table (or similar) with a column \code{count}
+holding forecast counts, as produced by \code{\link[=get_forecast_counts]{get_forecast_counts()}}.}
 
-\item{x}{character vector of length one that denotes the name of the column
+\item{x}{Character vector of length one that denotes the name of the column
 to appear on the x-axis of the plot.}
 
-\item{y}{character vector of length one that denotes the name of the column
+\item{y}{Character vector of length one that denotes the name of the column
 to appear on the y-axis of the plot. Default is "model".}
 
-\item{x_as_factor}{logical (default is TRUE). Whether or not to convert
+\item{x_as_factor}{Logical (default is \code{TRUE}). Whether or not to convert
 the variable on the x-axis to a factor. This has an effect e.g. if dates
 are shown on the x-axis.}
 
-\item{show_counts}{logical (default is \code{TRUE}) that indicates whether
-or not to show the actual count numbers on the plot}
+\item{show_counts}{Logical (default is \code{TRUE}) that indicates whether
+or not to show the actual count numbers on the plot.}
 }
 \value{
-ggplot object with a plot of interval coverage
+A ggplot object with a plot of forecast counts
 }
 \description{
-Visualise Where Forecasts Are Available
+Visualise Where Forecasts Are Available.
 }
 \examples{
 library(ggplot2)
 forecast_counts <- get_forecast_counts(
-  example_quantile, by = c("model", "target_type", "target_end_date")
+  as_forecast(example_quantile),
+  by = c("model", "target_type", "target_end_date")
 )
 plot_forecast_counts(
  forecast_counts, x = "target_end_date", show_counts = FALSE

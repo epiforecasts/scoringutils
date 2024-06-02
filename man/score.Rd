@@ -2,61 +2,59 @@
 % Please edit documentation in R/score.R
 \name{score}
 \alias{score}
-\alias{score.default}
 \alias{score.forecast_binary}
 \alias{score.forecast_point}
 \alias{score.forecast_sample}
 \alias{score.forecast_quantile}
-\title{Evaluate forecasts in a data.frame format}
+\title{Evaluate forecasts}
 \usage{
-score(data, ...)
+score(forecast, metrics, ...)
 
-\method{score}{default}(data, ...)
+\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
 
-\method{score}{forecast_binary}(data, metrics = rules_binary(), ...)
+\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
 
-\method{score}{forecast_point}(data, metrics = rules_point(), ...)
+\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
 
-\method{score}{forecast_sample}(data, metrics = rules_sample(), ...)
-
-\method{score}{forecast_quantile}(data, metrics = rules_quantile(), ...)
+\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
-
-\item{...}{additional arguments}
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
-column names in the output. See \code{\link[=rules_point]{rules_point()}}, \code{\link[=rules_binary]{rules_binary()}},
-\code{\link[=rules_quantile]{rules_quantile()}}, and \code{\link[=rules_sample]{rules_sample()}} for more information on the
-default metrics used.}
+column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
+\code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+default metrics used. Note that if you want to pass arguments to any
+given metric, you should do that through the function \code{\link[=customise_metric]{customise_metric()}}
+and pass an updated list of functions with your custom metric to
+the \code{metrics} argument in \code{score()}.}
+
+\item{...}{Additional arguments. Currently unused but allows for future
+extensions. If you want to pass arguments to individual metrics, use
+\code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
-A data.table with unsummarised scores. This will generally be
-one score per forecast (as defined by the unit of a single forecast).
-
-For quantile-based forecasts, one score per quantile will be returned
-instead. This is done as scores can be computed and may be of interest
-for individual quantiles. You can call \code{\link[=summarise_scores]{summarise_scores()}}) on the
-unsummarised scores to obtain one score per forecast unit for quantile-based
-forecasts.
+An object of class \code{scores}. This object is a data.table with
+unsummarised scores (one score per forecast) and has an additional attribute
+\code{metrics} with the names of the metrics used for scoring. See
+\code{\link[=summarise_scores]{summarise_scores()}}) for information on how to summarise
+scores.
 }
 \description{
-\code{score()} applies a selection of scoring metrics to a data.frame
-of forecasts. It is the workhorse of the \code{scoringutils} package.
+\code{score()} applies a selection of scoring metrics to a forecast
+object (a data.table with forecasts and observations) as produced by
+\code{\link[=as_forecast]{as_forecast()}}.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
-We recommend that users call \code{\link[=as_forecast]{as_forecast()}} prior to calling \code{score()} to
-validate the input data and convert it to a forecast object (though
-\code{score.default()} will do this if it hasn't happened before).
-See below for more information on forecast types and input formats.
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+See the details section for more information on forecast types and input
+formats. For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
 well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
-\section{Forecast types and input format}{
+\section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the
-moment, those are
+moment, those are:
 \itemize{
 \item point forecasts
 \item binary forecasts ("soft binary classification")
@@ -67,6 +65,18 @@ as a set of predictive samples)
 }
 
 Forecast types are determined based on the columns present in the input data.
+Here is an overview of the required format for each forecast type:
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{required-inputs.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{required-inputs.png}
+}
+
+\emph{All forecast types} require a data.frame or similar with columns \code{observed}
+\code{predicted}, and \code{model}.
 
 \emph{Point forecasts} require a column \code{observed} of type numeric and a column
 \code{predicted} of type numeric.
@@ -77,15 +87,15 @@ corresponding to the probability that \code{observed} is equal to the second
 factor level. See details \link[=brier_score]{here} for more information.
 
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
-a column \code{predicted} of type numeric, and a column \code{quantile} of type numeric
-with quantile-levels (between 0 and 1).
+a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
+numeric with quantile-levels (between 0 and 1).
 
 \emph{Sample-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{sample_id} of type
 numeric with sample indices.
 
 For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_continuous}, \link{example_integer},
+(\link{example_quantile}, \link{example_sample_continuous}, \link{example_sample_discrete},
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
 }
 
@@ -94,7 +104,7 @@ In order to score forecasts, \code{scoringutils} needs to know which of the rows
 of the data belong together and jointly form a single forecasts. This is
 easy e.g. for point forecast, where there is one row per forecast. For
 quantile or sample-based forecasts, however, there are multiple rows that
-belong to single forecast.
+belong to a single forecast.
 
 The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
 combination of columns that uniquely identify a single forecast.
@@ -109,9 +119,9 @@ example, if you had an additional row, "even", that is one if the row number
 is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
 then thinks that this column was relevant in defining the forecast unit.
 
-In order to avoid issues, we recommend using the function
-\code{\link[=set_forecast_unit]{set_forecast_unit()}} to determine the forecast unit manually.
-The function simply drops unneeded columns, while making sure that all
+In order to avoid issues, we recommend setting the forecast unit explicitly,
+usually through the \code{forecast_unit} argument in \code{\link[=as_forecast]{as_forecast()}}. This will
+drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 
@@ -126,21 +136,22 @@ score(validated) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
 # set forecast unit manually (to avoid issues with scoringutils trying to
-# determine the forecast unit automatically), check forecasts before scoring
+# determine the forecast unit automatically)
 example_quantile \%>\%
-  set_forecast_unit(
-    c("location", "target_end_date", "target_type", "horizon", "model")
+  as_forecast(
+    forecast_unit = c(
+      "location", "target_end_date", "target_type", "horizon", "model"
+    )
   ) \%>\%
-  as_forecast() \%>\%
   score()
 
 # forecast formats with different metrics
 \dontrun{
-score(example_binary)
-score(example_quantile)
-score(example_point)
-score(example_integer)
-score(example_continuous)
+score(as_forecast(example_binary))
+score(as_forecast(example_quantile))
+score(as_forecast(example_point))
+score(as_forecast(example_sample_discrete))
+score(as_forecast(example_sample_continuous))
 }
 }
 \references{

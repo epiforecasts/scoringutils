@@ -2,21 +2,26 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{bias_quantile}
 \alias{bias_quantile}
-\title{Determines Bias of Quantile Forecasts}
+\title{Determines bias of quantile forecasts}
 \usage{
-bias_quantile(observed, predicted, quantile, na.rm = TRUE)
+bias_quantile(observed, predicted, quantile_level, na.rm = TRUE)
 }
 \arguments{
-\item{observed}{a single number representing the observed value}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{vector of length corresponding to the number of quantiles
-that holds predictions}
+\item{predicted}{Numeric nxN matrix of predictive
+quantiles, n (number of rows) being the number of forecasts (corresponding
+to the number of observed values) and N
+(number of columns) the number of quantiles per forecast.
+If \code{observed} is just a single number, then predicted can just be a
+vector of size N.}
 
-\item{quantile}{vector of corresponding size with the quantile levels for
-which predictions were made. If this does not contain the median (0.5) then
-the median is imputed as being the mean of the two innermost quantiles.}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made. Note that if this does not contain the
+median (0.5) then the median is imputed as being the mean of the two
+innermost quantiles.}
 
-\item{na.rm}{logical. Should missing values be removed?}
+\item{na.rm}{Logical. Should missing values be removed?}
 }
 \value{
 scalar with the quantile bias for a single quantile prediction
@@ -36,38 +41,40 @@ B_t = (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t\})
  1( x_t \geq q_{t, 0.5}),}
 
 where \eqn{Q_t} is the set of quantiles that form the predictive
-distribution at time \eqn{t}. They represent our
-belief about what the observed value $x_t$ will be. For consistency, we define
-\eqn{Q_t} such that it always includes the element
+distribution at time \eqn{t} and \eqn{x_t} is the observed value. For
+consistency, we define \eqn{Q_t} such that it always includes the element
 \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 \eqn{1()} is the indicator function that is \eqn{1} if the
-condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
-defined as the maximum percentile rank for which the corresponding quantile
-is still below the observed value, if the observed value is smaller than the
-median of the predictive distribution. If the observed value is above the
-median of the predictive distribution, then $B_t$ is the minimum percentile
-rank for which the corresponding quantile is still larger than the true
-value. If the observed value is exactly the median, both terms cancel out and
-\eqn{B_t} is zero. For a large enough number of quantiles, the
-percentile rank will equal the proportion of predictive samples below the
-observed value, and this metric coincides with the one for
-continuous forecasts.
+condition is satisfied and \eqn{0} otherwise.
 
-Bias can assume values between
--1 and 1 and is 0 ideally (i.e. unbiased).
+In clearer terms, bias \eqn{B_t} is:
+\itemize{
+\item \eqn{1 - 2 \cdot} the maximum percentile rank for which the corresponding
+quantile is still smaller than or equal to the observed value,
+\emph{if the observed value is smaller than the median of the predictive
+distribution.}
+\item \eqn{1 - 2 \cdot} the minimum percentile rank for which the corresponding
+quantile is still larger than or equal to the observed value \emph{if the observed
+value is larger
+than the median of the predictive distribution.}.
+\item \eqn{0} \emph{if the observed value is exactly the median} (both terms cancel
+out)
+}
+
+Bias can assume values between -1 and 1 and is 0 ideally (i.e. unbiased).
+
+Note that if the given quantiles do not contain the median, the median is
+imputed as the mean of the two innermost quantiles.
+
+For a large enough number of quantiles, the
+percentile rank will equal the proportion of predictive samples below the
+observed value, and the bias metric coincides with the one for
+continuous forecasts (see \code{\link[=bias_sample]{bias_sample()}}).
 }
 \examples{
-predicted <- c(
-  705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
-  5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
-  6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
-  7973.000, 8340.500, 8675.750, 11555.000, 11976.500
-)
-
-quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-
-observed <- 8062
-
-bias_quantile(observed, predicted, quantile)
+predicted <- matrix(c(1.5:23.5, 3.3:25.3), nrow = 2, byrow = TRUE)
+quantile_level <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+observed <- c(15, 12.4)
+bias_quantile(observed, predicted, quantile_level)
 }
 \keyword{metric}

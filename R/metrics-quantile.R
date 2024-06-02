@@ -2,7 +2,7 @@
 # Metrics with a many-to-one relationship between input and score
 ################################################################################
 
-#' Weighted Interval Score (WIS)
+#' Weighted interval score (WIS)
 #' @description
 #' The WIS is a proper scoring rule used to evaluate forecasts in an interval- /
 #' quantile-based format. See Bracher et al. (2021). Smaller values are better.
@@ -42,14 +42,15 @@
 #' \eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
 #' the prediction interval. For a 90% prediction interval, for example,
 #' \eqn{\alpha}{alpha} is equal to 0.1. No specific distribution is assumed,
-#' but the range has to be symmetric (i.e you can't use the 0.1 quantile
-#' as the lower bound and the 0.7 quantile as the upper).
+#' but the interval formed by the quantiles has to be symmetric around the
+#' median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
+#' quantile as the upper bound).
 #' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
 #' Usually the interval score is weighted by a factor that makes sure that the
 #' average score across an increasing number of equally spaced
 #' quantiles, converges to the continuous ranked probability score (CRPS). This
-#' weighted score is called the weihted interval score (WIS).
+#' weighted score is called the weighted interval score (WIS).
 #' The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
 #'
 #' **Quantile score**
@@ -69,27 +70,28 @@
 #' In one view, you would treat the WIS as the average of quantile scores (and
 #' the median as 0.5-quantile) (this is the default for `wis()`). In another
 #' view, you would treat the WIS as the average of several interval scores +
-#' the difference between observed value and median forecast. The effect of
+#' the difference between the observed value and median forecast. The effect of
 #' that is that in contrast to the first view, the median has twice as much
 #' weight (because it is weighted like a prediction interval, rather than like
 #' a single quantile). Both are valid ways to conceptualise the WIS and you
-#' can control the behvaviour with the `count_median_twice`-argument.
+#' can control the behaviour with the `count_median_twice`-argument.
 #'
 #' **WIS components**:
 #' WIS components can be computed individually using the functions
 #' `overprediction`, `underprediction`, and `dispersion.`
 #'
 #' @inheritParams interval_score
-#' @param observed numeric vector of size n with the observed values
-#' @param predicted numeric nxN matrix of predictive
-#' quantiles, n (number of rows) being the number of forecasts (corresponding
-#' to the number of observed values) and N
-#' (number of columns) the number of quantiles per forecast.
-#' If `observed` is just a single number, then predicted can just be a
-#' vector of size N.
-#' @param quantile vector with quantile levels of size N
-#' @param count_median_twice if TRUE, count the median twice in the score
-#' @param na.rm if TRUE, ignore NA values when computing the score
+#' @param observed Numeric vector of size n with the observed values.
+#' @param predicted Numeric nxN matrix of predictive
+#'   quantiles, n (number of rows) being the number of forecasts (corresponding
+#'   to the number of observed values) and N
+#'   (number of columns) the number of quantiles per forecast.
+#'   If `observed` is just a single number, then predicted can just be a
+#'   vector of size N.
+#' @param quantile_level Vector of of size N with the quantile levels
+#'   for which predictions were made.
+#' @param count_median_twice If TRUE, count the median twice in the score.
+#' @param na.rm If TRUE, ignore NA values when computing the score.
 #' @importFrom stats weighted.mean
 #' @importFrom checkmate assert_logical
 #' @return
@@ -104,17 +106,17 @@
 #'   c(-2, 1, 2, 2, 4),
 #'   c(-2, 0, 3, 3, 4)
 #' )
-#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' wis(observed, predicted, quantile)
+#' quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' wis(observed, predicted, quantile_level)
 wis <- function(observed,
                 predicted,
-                quantile,
+                quantile_level,
                 separate_results = FALSE,
                 weigh = TRUE,
                 count_median_twice = FALSE,
                 na.rm = TRUE) {
-  assert_input_quantile(observed, predicted, quantile)
-  reformatted <- quantile_to_interval(observed, predicted, quantile)
+  assert_input_quantile(observed, predicted, quantile_level)
+  reformatted <- quantile_to_interval(observed, predicted, quantile_level)
 
   assert_logical(separate_results, len = 1)
   assert_logical(weigh, len = 1)
@@ -133,7 +135,7 @@ wis <- function(observed,
       observed = observed,
       lower = lower,
       upper = upper,
-      interval_range = range,
+      interval_range = interval_range,
       weigh = weigh,
       separate_results = separate_results
     )
@@ -142,7 +144,7 @@ wis <- function(observed,
   if (count_median_twice) {
     reformatted[, weight := 1]
   } else {
-    reformatted[, weight := ifelse(range == 0, 0.5, 1)]
+    reformatted[, weight := ifelse(interval_range == 0, 0.5, 1)]
   }
 
   # summarise results by forecast_id
@@ -166,31 +168,38 @@ wis <- function(observed,
 
 
 #' @return
-#' `dispersion()`: a numeric vector with dispersion values (one per observation)
+#' `dispersion()`: a numeric vector with dispersion values (one per
+#' observation).
 #' @param ... Additional arguments passed on to `wis()` from functions
-#' `overprediction()`, `underprediction()` and `dispersion()`
+#'   `overprediction()`, `underprediction()` and `dispersion()`.
 #' @export
 #' @rdname wis
 #' @keywords metric
-dispersion <- function(observed, predicted, quantile, ...) {
+dispersion <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
-  assert_input_quantile(observed, predicted, quantile)
-  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$dispersion
+  assert_input_quantile(observed, predicted, quantile_level)
+  out <- do.call(
+    wis, c(list(observed), list(predicted), list(quantile_level), args)
+  )
+  return(out$dispersion)
 }
 
 
 #' @return
 #' `overprediction()`: a numeric vector with overprediction values (one per
-#' observation)
+#' observation).
 #' @export
 #' @rdname wis
 #' @keywords metric
-overprediction <- function(observed, predicted, quantile, ...) {
+overprediction <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
-  assert_input_quantile(observed, predicted, quantile)
-  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$overprediction
+  assert_input_quantile(observed, predicted, quantile_level)
+  out <- do.call(
+    wis, c(list(observed), list(predicted), list(quantile_level), args)
+  )
+  return(out$overprediction)
 }
 
 
@@ -200,26 +209,32 @@ overprediction <- function(observed, predicted, quantile, ...) {
 #' @export
 #' @rdname wis
 #' @keywords metric
-underprediction <- function(observed, predicted, quantile, ...) {
+underprediction <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
-  assert_input_quantile(observed, predicted, quantile)
-  do.call(wis, c(list(observed), list(predicted), list(quantile), args))$underprediction
+  assert_input_quantile(observed, predicted, quantile_level)
+  out <- do.call(
+    wis, c(list(observed), list(predicted), list(quantile_level), args)
+  )
+  return(out$underprediction)
 }
 
 
-#' @title Interval Coverage (For Quantile-Based Forecasts)
-#' @description Check whether the observed value is within a given central
+#' @title Interval coverage (for quantile-based forecasts)
+#' @description
+#' Check whether the observed value is within a given central
 #' prediction interval. The prediction interval is defined by a lower and an
 #' upper bound formed by a pair of predictive quantiles. For example, a 50%
 #' prediction interval is formed by the 0.25 and 0.75 quantiles of the
 #' predictive distribution.
 #' @inheritParams wis
-#' @param range A single number with the range of the prediction interval in
-#' percent (e.g. 50 for a 50% prediction interval) for which you want to compute
-#' interval coverage.
+#' @param interval_range A single number with the range of the prediction
+#'   interval in percent (e.g. 50 for a 50% prediction interval) for which you
+#'   want to compute interval coverage.
 #' @importFrom checkmate assert_number
-#' @return A vector of length n with elements either TRUE,
+#' @importFrom cli cli_warn
+#' @return
+#' A vector of length n with elements either TRUE,
 #' if the observed value is within the corresponding prediction interval, and
 #' FALSE otherwise.
 #' @name interval_coverage
@@ -232,30 +247,40 @@ underprediction <- function(observed, predicted, quantile, ...) {
 #'   c(-2, 1, 2, 2, 4),
 #'    c(-2, 0, 3, 3, 4)
 #' )
-#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage(observed, predicted, quantile)
-interval_coverage <- function(observed, predicted, quantile, range = 50) {
-  assert_input_quantile(observed, predicted, quantile)
-  assert_number(range)
-  necessary_quantiles <- c((100 - range) / 2, 100 - (100 - range) / 2) / 100
-  if (!all(necessary_quantiles %in% quantile)) {
-    warning(
-      "To compute the interval coverage for a range of ", range,
-      "%, the quantiles `", toString(necessary_quantiles),
-      "` are required. Returning `NA`."
+#' quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage(observed, predicted, quantile_level)
+interval_coverage <- function(observed, predicted,
+                              quantile_level, interval_range = 50) {
+  assert_input_quantile(observed, predicted, quantile_level)
+  assert_number(interval_range)
+  necessary_quantiles <- c(
+    (100 - interval_range) / 2,
+    100 - (100 - interval_range) / 2
+  ) / 100
+  if (!all(necessary_quantiles %in% quantile_level)) {
+    #nolint start: keyword_quote_linter object_usage_linter
+    cli_warn(
+      c(
+        "!" = "To compute the interval coverage for an interval range of
+        {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
+        are required.",
+        "i" = "Returning {.val {NA}}."
+      )
     )
+    #nolint end
     return(NA)
   }
-  r <- range
-  reformatted <- quantile_to_interval(observed, predicted, quantile)
-  reformatted <- reformatted[range %in% r]
+  r <- interval_range
+  reformatted <- quantile_to_interval(observed, predicted, quantile_level)
+  reformatted <- reformatted[interval_range %in% r]
   reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
   return(reformatted$interval_coverage)
 }
 
 
-#' @title Interval Coverage Deviation (For Quantile-Based Forecasts)
-#' @description Check the agreement between desired and actual interval coverage
+#' @title Interval coverage deviation (for quantile-based forecasts)
+#' @description
+#' Check the agreement between desired and actual interval coverage
 #' of a forecast.
 #'
 #' The function is similar to [interval_coverage()],
@@ -296,8 +321,11 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
 #' The interval coverage deviation is then averaged across all prediction
 #' intervals. The median is ignored when computing coverage deviation.
 #' @inheritParams wis
-#' @return A numeric vector of length n with the interval coverage deviation
-#' for each forecast (comprising one or multiple prediction intervals).
+#' @importFrom cli cli_warn
+#' @return
+#' A numeric vector of length n with the interval coverage deviation
+#' for each forecast (with the forecast itself comprising one or multiple
+#' prediction intervals).
 #' @export
 #' @keywords metric
 #' @examples
@@ -307,39 +335,46 @@ interval_coverage <- function(observed, predicted, quantile, range = 50) {
 #'   c(-2, 1, 2, 2, 4),
 #'   c(-2, 0, 3, 3, 4)
 #' )
-#' quantile <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-#' interval_coverage_deviation(observed, predicted, quantile)
-interval_coverage_deviation <- function(observed, predicted, quantile) {
-  assert_input_quantile(observed, predicted, quantile)
+#' quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+#' interval_coverage_deviation(observed, predicted, quantile_level)
+interval_coverage_deviation <- function(observed, predicted, quantile_level) {
+  assert_input_quantile(observed, predicted, quantile_level)
 
-  # transform available quantiles into central interval ranges
-  available_ranges <- unique(get_range_from_quantile(quantile))
+  # transform available quantile_levels into central interval ranges
+  available_ranges <- unique(get_range_from_quantile(quantile_level))
 
-  # check if all necessary quantiles are available
+  # check if all necessary quantile_levels are available
   necessary_quantiles <- unique(
     c((100 - available_ranges) / 2, 100 - (100 - available_ranges) / 2) / 100
   )
-  if (!all(necessary_quantiles %in% quantile)) {
-    missing <- necessary_quantiles[!necessary_quantiles %in% quantile]
-    warning(
-      "To compute inteval coverage deviation, all quantiles must form central ",
-      "symmetric prediction intervals. Missing quantiles: ",
-      toString(missing), ". Returning `NA`."
+  if (!all(necessary_quantiles %in% quantile_level)) {
+    #nolint start: keyword_quote_linter object_usage_linter
+    missing <- necessary_quantiles[!necessary_quantiles %in% quantile_level]
+    cli_warn(
+      c(
+        "x" = "To compute interval coverage deviation, all quantiles must form
+        central symmetric prediction intervals.",
+        "i" = "Missing quantiles: {.val {missing}}. Returning {.val {NA}}."
+      )
     )
+    #nolint end
     return(NA)
   }
 
-  reformatted <- quantile_to_interval(observed, predicted, quantile)[range != 0]
+  reformatted <- quantile_to_interval(
+    observed, predicted, quantile_level
+  )[interval_range != 0]
   reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
-  reformatted[, interval_coverage_deviation := interval_coverage - range / 100]
+  reformatted[, interval_coverage_deviation :=
+                interval_coverage - interval_range / 100]
   out <- reformatted[, .(
     interval_coverage_deviation = mean(interval_coverage_deviation)
   ), by = "forecast_id"]
-  return(out$interval_coverage_dev)
+  return(out$interval_coverage_deviation)
 }
 
 
-#' @title Determines Bias of Quantile Forecasts
+#' @title Determines bias of quantile forecasts
 #'
 #' @description
 #' Determines bias from quantile forecasts. For an increasing number of
@@ -356,113 +391,120 @@ interval_coverage_deviation <- function(observed, predicted, quantile) {
 #'  1( x_t \geq q_{t, 0.5}),}
 #'
 #' where \eqn{Q_t} is the set of quantiles that form the predictive
-#' distribution at time \eqn{t}. They represent our
-#' belief about what the observed value $x_t$ will be. For consistency, we define
-#' \eqn{Q_t} such that it always includes the element
+#' distribution at time \eqn{t} and \eqn{x_t} is the observed value. For
+#' consistency, we define \eqn{Q_t} such that it always includes the element
 #' \eqn{q_{t, 0} = - \infty} and \eqn{q_{t,1} = \infty}.
 #' \eqn{1()} is the indicator function that is \eqn{1} if the
-#' condition is satisfied and $0$ otherwise. In clearer terms, \eqn{B_t} is
-#' defined as the maximum percentile rank for which the corresponding quantile
-#' is still below the observed value, if the observed value is smaller than the
-#' median of the predictive distribution. If the observed value is above the
-#' median of the predictive distribution, then $B_t$ is the minimum percentile
-#' rank for which the corresponding quantile is still larger than the true
-#' value. If the observed value is exactly the median, both terms cancel out and
-#' \eqn{B_t} is zero. For a large enough number of quantiles, the
-#' percentile rank will equal the proportion of predictive samples below the
-#' observed value, and this metric coincides with the one for
-#' continuous forecasts.
+#' condition is satisfied and \eqn{0} otherwise.
 #'
-#' Bias can assume values between
-#' -1 and 1 and is 0 ideally (i.e. unbiased).
-#' @param observed a single number representing the observed value
-#' @param predicted vector of length corresponding to the number of quantiles
-#' that holds predictions
-#' @param quantile vector of corresponding size with the quantile levels for
-#' which predictions were made. If this does not contain the median (0.5) then
-#' the median is imputed as being the mean of the two innermost quantiles.
-#' @param na.rm logical. Should missing values be removed?
+#' In clearer terms, bias \eqn{B_t} is:
+#' - \eqn{1 - 2 \cdot} the maximum percentile rank for which the corresponding
+#' quantile is still smaller than or equal to the observed value,
+#' *if the observed value is smaller than the median of the predictive
+#' distribution.*
+#' - \eqn{1 - 2 \cdot} the minimum percentile rank for which the corresponding
+#' quantile is still larger than or equal to the observed value *if the observed
+#' value is larger
+#' than the median of the predictive distribution.*.
+#' - \eqn{0} *if the observed value is exactly the median* (both terms cancel
+#' out)
+#'
+#' Bias can assume values between -1 and 1 and is 0 ideally (i.e. unbiased).
+#'
+#' Note that if the given quantiles do not contain the median, the median is
+#' imputed as the mean of the two innermost quantiles.
+#'
+#' For a large enough number of quantiles, the
+#' percentile rank will equal the proportion of predictive samples below the
+#' observed value, and the bias metric coincides with the one for
+#' continuous forecasts (see [bias_sample()]).
+#'
+#' @param quantile_level Vector of of size N with the quantile levels
+#'   for which predictions were made. Note that if this does not contain the
+#'   median (0.5) then the median is imputed as being the mean of the two
+#'   innermost quantiles.
+#' @param na.rm Logical. Should missing values be removed?
+#' @importFrom cli cli_inform
+#' @inheritParams wis
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
 #' @examples
-#' predicted <- c(
-#'   705.500, 1127.000, 4006.250, 4341.500, 4709.000, 4821.996,
-#'   5340.500, 5451.000, 5703.500, 6087.014, 6329.500, 6341.000,
-#'   6352.500, 6594.986, 6978.500, 7231.000, 7341.500, 7860.004,
-#'   7973.000, 8340.500, 8675.750, 11555.000, 11976.500
-#' )
-#'
-#' quantile <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-#'
-#' observed <- 8062
-#'
-#' bias_quantile(observed, predicted, quantile)
-bias_quantile <- function(observed, predicted, quantile, na.rm = TRUE) {
-  assert_input_quantile(observed, predicted, quantile)
+#' predicted <- matrix(c(1.5:23.5, 3.3:25.3), nrow = 2, byrow = TRUE)
+#' quantile_level <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+#' observed <- c(15, 12.4)
+#' bias_quantile(observed, predicted, quantile_level)
+bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
+  assert_input_quantile(observed, predicted, quantile_level)
   n <- length(observed)
-  N <- length(quantile)
+  N <- length(quantile_level)
   if (is.null(dim(predicted))) {
     dim(predicted) <- c(n, N)
   }
-  if (!(0.5 %in% quantile)) {
-    message(
-      "Median not available, computing bias as mean of the two innermost ",
-      "quantiles in order to compute bias."
+  if (!(0.5 %in% quantile_level)) {
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "i" = "Median not available, interpolating median from the two
+        innermost quantiles in order to compute bias."
+      )
     )
+    #nolint end
   }
   bias <- sapply(1:n, function(i) {
-    bias_quantile_single_vector(observed[i], predicted[i, ], quantile, na.rm)
+    bias_quantile_single_vector(
+      observed[i], predicted[i, ], quantile_level, na.rm
+    )
   })
   return(bias)
 }
 
 
-#' Compute Bias for a Single Vector of Quantile Predictions
-#' @description Internal function to compute bias for a single observed value,
+#' Compute bias for a single vector of quantile predictions
+#' @description
+#' Internal function to compute bias for a single observed value,
 #' a vector of predicted values and a vector of quantiles.
-#' @param observed scalar with the observed value
-#' @param predicted vector of length N corresponding to the number of quantiles
-#' that holds predictions
-#' @param quantile vector of corresponding size N with the quantile levels for
-#' which predictions were made. If this does not contain the median (0.5) then
-#' the median is imputed as being the mean of the two innermost quantiles.
+#' @param observed Scalar with the observed value.
+#' @param predicted Vector of length N (corresponding to the number of
+#'   quantiles) that holds predictions.
 #' @inheritParams bias_quantile
+#' @importFrom cli cli_abort
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @keywords internal
-bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
+bias_quantile_single_vector <- function(observed, predicted,
+                                        quantile_level, na.rm) {
 
   assert_number(observed)
   # other checks should have happend before
 
   predicted_has_NAs <- anyNA(predicted)
-  quantile_has_NAs <- anyNA(quantile)
+  quantile_has_NAs <- anyNA(quantile_level)
 
   if (any(predicted_has_NAs, quantile_has_NAs)) {
     if (na.rm) {
-      quantile <- quantile[!is.na(predicted)]
+      quantile_level <- quantile_level[!is.na(predicted)]
       predicted <- predicted[!is.na(predicted)]
-      predicted <- predicted[!is.na(quantile)]
-      quantile <- quantile[!is.na(quantile)]
+      predicted <- predicted[!is.na(quantile_level)]
+      quantile_level <- quantile_level[!is.na(quantile_level)]
     } else {
       return(NA_real_)
     }
   }
 
-  order <- order(quantile)
+  order <- order(quantile_level)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
-    stop("Predictions must not be decreasing with increasing quantile level")
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Predictions must not be decreasing with increasing
+        quantile level."
+      )
+    )
+    #nolint end
   }
 
-  if (0.5 %in% quantile) {
-    median_prediction <- predicted[quantile == 0.5]
-  } else {
-    # if median is not available, compute as mean of two innermost quantile
-    median_prediction <-
-      0.5 * predicted[quantile == max(quantile[quantile < 0.5])] +
-      0.5 * predicted[quantile == min(quantile[quantile > 0.5])]
-  }
+  median_prediction <- interpolate_median(predicted, quantile_level)
 
   if (observed == median_prediction) {
     bias <- 0
@@ -471,22 +513,49 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
     if (observed < min(predicted)) {
       bias <- 1
     } else {
-      q <- max(quantile[predicted <= observed])
+      q <- max(quantile_level[predicted <= observed])
       bias <- 1 - 2 * q
     }
   } else if (observed > median_prediction) {
     if (observed > max(predicted)) {
       bias <- -1
     } else {
-      q <- min(quantile[predicted >= observed])
+      q <- min(quantile_level[predicted >= observed])
       bias <- 1 - 2 * q
     }
   }
   return(bias)
 }
 
+#' Helper function to interpolate the median prediction if it is not available
+#' @description
+#' Internal function to interpolate the median prediction if it is not
+#' available in the given quantile levels.
+#' This is done using linear interpolation between the two innermost quantiles.
+#' @inheritParams bias_quantile_single_vector
+#' @return scalar with the imputed median prediction
+#' @keywords internal
+interpolate_median <- function(predicted, quantile_level) {
+  if (0.5 %in% quantile_level) {
+    median_prediction <- predicted[quantile_level == 0.5]
+  } else {
+    # determine the two innermost quantiles
+    upper_q_level <- max(quantile_level[quantile_level < 0.5])
+    lower_q_level <- min(quantile_level[quantile_level > 0.5])
+    upper_value <- predicted[quantile_level == upper_q_level]
+    lower_value <- predicted[quantile_level == lower_q_level]
 
-#' @title Absolute Error of the Median (Quantile-based Version)
+    # do a linear interpolation
+    # weight is the proportion of the distance between the lower quantile and
+    # the median relative to the distance between the upper and lower quantile
+    w <- (0.5 - lower_q_level) / (upper_q_level - lower_q_level)
+    median_prediction <- lower_value + w * (upper_value - lower_value)
+  }
+  return(median_prediction)
+}
+
+
+#' @title Absolute error of the median (quantile-based version)
 #' @description
 #' Compute the absolute error of the median calculated as
 #' \deqn{
@@ -494,32 +563,40 @@ bias_quantile_single_vector <- function(observed, predicted, quantile, na.rm) {
 #' }{
 #'   abs(observed - median_prediction)
 #' }
-#' The median prediction is the predicted value for which quantile == 0.5,
+#' The median prediction is the predicted value for which quantile_level == 0.5,
 #' the function therefore requires 0.5 to be among the quantile levels in
-#' `quantile`.
+#' `quantile_level`.
 #' @inheritParams wis
-#' @return numeric vector of length N with the absolute error of the median
+#' @return Numeric vector of length N with the absolute error of the median.
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
+#' @importFrom cli cli_warn
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
-#' predicted_values <- matrix(rnorm(30, mean = 1:30))
-#' ae_median_quantile(observed, predicted_values, quantile = 0.5)
+#' predicted_values <- replicate(3, rnorm(30, mean = 1:30))
+#' ae_median_quantile(
+#'   observed, predicted_values, quantile_level = c(0.2, 0.5, 0.8)
+#' )
 #' @export
 #' @keywords metric
-ae_median_quantile <- function(observed, predicted, quantile) {
-  assert_input_quantile(observed, predicted, quantile)
-  if (!any(quantile == 0.5)) {
-    warning(
-      "in order to compute the absolute error of the median, `0.5` must be ",
-      "among the quantiles given. Returning `NA`."
+ae_median_quantile <- function(observed, predicted, quantile_level) {
+  assert_input_quantile(observed, predicted, quantile_level)
+  if (!any(quantile_level == 0.5)) {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "x" = "In order to compute the absolute error of the median,
+        {.val 0.5} must be among the quantiles given.",
+        "i" = "Returning {.val NA}."
+      )
     )
+    #nolint end
     return(NA_real_)
   }
   if (is.null(dim(predicted))) {
     predicted <- matrix(predicted, nrow = 1)
   }
-  predicted <- predicted[, quantile == 0.5]
+  predicted <- predicted[, quantile_level == 0.5]
   abs_error_median <- abs(observed - predicted)
   return(abs_error_median)
 }
@@ -530,42 +607,71 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 ################################################################################
 
 
-#' @title Quantile Score
+#' @title Quantile score
 #'
 #' @description
 #' Proper Scoring Rule to score quantile predictions. Smaller values are better.
-#' The quantile score is
-#' closely related to the Interval score (see [wis()]) and is
-#' the quantile equivalent that works with single quantiles instead of
+#' The quantile score is closely related to the interval score (see [wis()]) and
+#' is the quantile equivalent that works with single quantiles instead of
 #' central prediction intervals.
 #'
-#' @param quantile vector of size n with the quantile levels of the
-#' corresponding predictions.
-#' @param weigh if TRUE, weigh the score by alpha / 2, so it can be averaged
-#' into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-#' value that corresponds to the (alpha/2) or (1 - alpha/2) quantiles provided
-#' and will be computed from the quantile. Alpha is the decimal value that
-#' represents how much is outside a central prediction interval (E.g. for a
-#' 90 percent central prediction interval, alpha is 0.1). Default: `TRUE`.
-#' @return vector with the scoring values
-#' @inheritParams interval_score
-#' @inheritParams ae_median_sample
+#' The quantile score, also called pinball loss, for a single quantile
+#' level \eqn{\tau} is defined as
+#' \deqn{
+#'   \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) =
+#'   \begin{cases}
+#' 2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
+#' 2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau,
+#' \end{cases}
+#' }
+#' with \eqn{q_\tau} being the \eqn{\tau}-quantile of the predictive
+#' distribution \eqn{F}, and \eqn{\mathbf{1}(\cdot)} the indicator function.
+#'
+#' The weighted interval score for a single prediction interval can be obtained
+#' as the average of the quantile scores for the lower and upper quantile of
+#' that prediction interval:
+#' \deqn{
+#'   \text{WIS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y)
+#'   + \text{QS}_{1 - \alpha/2}(F, y)}{2}.
+#' }
+#' See the SI of Bracher et al. (2021) for more details.
+#'
+#' `quantile_score()` returns the average quantile score across the quantile
+#' levels provided. For a set of quantile levels that form pairwise central
+#' prediction intervals, the quantile score is equivalent to the interval score.
+#' @return Numeric vector of length n with the quantile score. The scores are
+#' averaged across quantile levels if multiple quantile levels are provided
+#' (the result of calling `rowMeans()` on the matrix of quantile scores that
+#' is computed based on the observed and predicted values).
+#' @inheritParams wis
 #' @examples
 #' observed <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5
 #'
-#' lower <- qnorm(alpha / 2, rnorm(10, mean = 1:10))
-#' upper <- qnorm((1 - alpha / 2), rnorm(10, mean = 1:10))
+#' lower <- qnorm(alpha / 2, observed)
+#' upper <- qnorm((1 - alpha / 2), observed)
 #'
 #' qs_lower <- quantile_score(observed,
-#'   predicted = lower,
-#'   quantile = alpha / 2
+#'   predicted = matrix(lower),
+#'   quantile_level = alpha / 2
 #' )
 #' qs_upper <- quantile_score(observed,
-#'   predicted = upper,
-#'   quantile = 1 - alpha / 2
+#'   predicted = matrix(upper),
+#'   quantile_level = 1 - alpha / 2
 #' )
 #' interval_score <- (qs_lower + qs_upper) / 2
+#' interval_score2 <- quantile_score(
+#'   observed,
+#'   predicted = cbind(lower, upper),
+#'   quantile_level = c(alpha / 2, 1 - alpha / 2)
+#' )
+#'
+#' # this is the same as the following
+#' wis(
+#'   observed,
+#'   predicted = cbind(lower, upper),
+#'   quantile_level = c(alpha / 2, 1 - alpha / 2)
+#' )
 #' @export
 #' @keywords metric
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
@@ -573,54 +679,58 @@ ae_median_quantile <- function(observed, predicted, quantile) {
 #' Statistical Association, Volume 102, 2007 - Issue 477
 #'
 #' Evaluating epidemic forecasts in an interval format,
-#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
 #' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 quantile_score <- function(observed,
                            predicted,
-                           quantile,
+                           quantile_level,
                            weigh = TRUE) {
+  assert_input_quantile(observed, predicted, quantile_level)
 
   # compute score - this is the version explained in the SI of Bracher et. al.
-  error <- abs(predicted - observed)
-  score <- 2 * ifelse(
-    observed <= predicted, 1 - quantile, quantile
-  ) * error
+  obs_smaller_pred <- observed <= predicted
+  # subtract tau from indicator function (1(y <= q_tau)) by row
+  tau_diff <- sweep(obs_smaller_pred, 2, quantile_level)
+  error <- predicted - observed
 
-  # adapt score such that mean of unweighted quantile scores corresponds to
-  # unweighted interval score of the corresponding prediction interval
-  # --> needs central prediction interval which corresponds to given quantiles
-  central_interval <- abs(0.5 - quantile) * 2
-  alpha <- 1 - central_interval
-  score <- 2 * score / alpha
+  score <- 2 * tau_diff * error
 
-  # if weigh, then reverse last operation
+  # By default, the quantile score already corresponds to the WIS such that
+  # simply averaging the quantile scores gives the WIS
   if (weigh) {
-    score <- score * alpha / 2
-  }
+    return(rowMeans(score))
+  } else {
+    # adapt score such that mean of adapted quantile scores corresponds to
+    # unweighted interval score of the corresponding prediction interval
+    central_interval <- abs(0.5 - quantile_level) * 2
+    alpha <- 1 - central_interval
 
-  return(score)
+    # unweighted score' = 2 * score / alpha
+    score <- 2 * sweep(score, 2, alpha, FUN = "/")
+    return(rowMeans(score))
+  }
 }
 
 
 # Weighted Interval Score, But With One-to-One Relationship
 wis_one_to_one <- function(observed,
                            predicted,
-                           quantile,
+                           quantile_level,
                            separate_results = FALSE,
                            output = c("matrix", "data.frame", "vector"),
                            weigh = TRUE) {
 
   # input checks
-  assert_input_quantile(observed, predicted, quantile)
+  assert_input_quantile(observed, predicted, quantile_level)
 
   # store original data
   n <- length(observed)
-  N <- length(quantile)
+  N <- length(quantile_level)
   original_data <- data.table(
     forecast_id = rep(1:n, each = N),
     observed = rep(observed, each = N),
     predicted = as.vector(t(predicted)),
-    quantile = quantile
+    quantile_level = quantile_level
   )
 
   # define output columns
@@ -631,34 +741,34 @@ wis_one_to_one <- function(observed,
   }
 
   # reformat input to interval format and calculate interval score
-  reformatted <- quantile_to_interval(observed, predicted, quantile)
+  reformatted <- quantile_to_interval(observed, predicted, quantile_level)
   reformatted[, eval(cols) := do.call(
     interval_score,
     list(
       observed = observed,
       lower = lower,
       upper = upper,
-      interval_range = range,
+      interval_range = interval_range,
       weigh = weigh,
       separate_results = separate_results
     )
   )]
 
-  # melt data to long format, calclate quantiles, and merge back to original
+  # melt data to long format, calculate quantile_levels, merge back to original
   long <- melt(reformatted,
                measure.vars = c("lower", "upper"),
                variable.name = "boundary",
                value.name = "predicted",
-               id.vars = c("forecast_id", "observed", "range", cols))
-  # calculate quantiles
-  long[, quantile := (100 - range) / 200] # lower quantiles
-  long[boundary == "upper", quantile :=  1 - quantile] # upper quantiles
-  # remove boundary, range, take unique value to get rid of duplicated median
-  long[, c("boundary", "range") := NULL]
+               id.vars = c("forecast_id", "observed", "interval_range", cols))
+  # calculate quantile levels
+  long[, quantile_level := (100 - interval_range) / 200] # lower quantile_levels
+  long[boundary == "upper", quantile_level :=  1 - quantile_level] # upper quantile_levels
+  # remove boundary, interval_range, take unique value to get rid of duplicated median
+  long[, c("boundary", "interval_range") := NULL]
   long <- unique(long) # should maybe check for count_median_twice?
   out <- merge(
     original_data, long, all.x = TRUE,
-    by = c("forecast_id", "observed", "predicted", "quantile")
+    by = c("forecast_id", "observed", "predicted", "quantile_level")
   )[, forecast_id := NULL]
 
   # handle returns depending on the output format

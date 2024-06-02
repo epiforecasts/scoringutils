@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{bias_sample}
 \alias{bias_sample}
-\title{Determines bias of forecasts}
+\title{Determine bias of forecasts}
 \usage{
 bias_sample(observed, predicted)
 }
@@ -14,7 +14,7 @@ the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
-vector of length n with the biases of the predictive samples with
+Numeric vector of length n with the biases of the predictive samples with
 respect to the observed values.
 }
 \description{
@@ -65,8 +65,5 @@ Kucharski AJ, Lowe R, Eggo RM, et al. (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
 region of Sierra Leone, 2014-15. PLOS Computational Biology 15(2): e1006785.
 \doi{10.1371/journal.pcbi.1006785}
-}
-\author{
-Nikos Bosse \email{nikosbosse@gmail.com}
 }
 \keyword{metric}

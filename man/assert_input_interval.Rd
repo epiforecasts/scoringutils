@@ -4,11 +4,11 @@
 \alias{assert_input_interval}
 \title{Assert that inputs are correct for interval-based forecast}
 \usage{
-assert_input_interval(observed, lower, upper, range)
+assert_input_interval(observed, lower, upper, interval_range)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{lower}{Input to be checked. Should be a numeric vector of size n that
 holds the predicted value for the lower bounds of the prediction intervals.}
@@ -16,7 +16,7 @@ holds the predicted value for the lower bounds of the prediction intervals.}
 \item{upper}{Input to be checked. Should be a numeric vector of size n that
 holds the predicted value for the upper bounds of the prediction intervals.}
 
-\item{range}{Input to be checked. Should be a vector of size n that
+\item{interval_range}{Input to be checked. Should be a vector of size n that
 denotes the interval range in percent. E.g. a value of 50 denotes a
 (25\%, 75\%) prediction interval.}
 }

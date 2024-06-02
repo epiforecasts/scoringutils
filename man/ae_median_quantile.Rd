@@ -2,24 +2,25 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{ae_median_quantile}
 \alias{ae_median_quantile}
-\title{Absolute Error of the Median (Quantile-based Version)}
+\title{Absolute error of the median (quantile-based version)}
 \usage{
-ae_median_quantile(observed, predicted, quantile)
+ae_median_quantile(observed, predicted, quantile_level)
 }
 \arguments{
-\item{observed}{numeric vector of size n with the observed values}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{numeric nxN matrix of predictive
+\item{predicted}{Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
 (number of columns) the number of quantiles per forecast.
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{vector with quantile levels of size N}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made.}
 }
 \value{
-numeric vector of length N with the absolute error of the median
+Numeric vector of length N with the absolute error of the median.
 }
 \description{
 Compute the absolute error of the median calculated as
@@ -28,14 +29,16 @@ Compute the absolute error of the median calculated as
 }{
   abs(observed - median_prediction)
 }
-The median prediction is the predicted value for which quantile == 0.5,
+The median prediction is the predicted value for which quantile_level == 0.5,
 the function therefore requires 0.5 to be among the quantile levels in
-\code{quantile}.
+\code{quantile_level}.
 }
 \examples{
 observed <- rnorm(30, mean = 1:30)
-predicted_values <- matrix(rnorm(30, mean = 1:30))
-ae_median_quantile(observed, predicted_values, quantile = 0.5)
+predicted_values <- replicate(3, rnorm(30, mean = 1:30))
+ae_median_quantile(
+  observed, predicted_values, quantile_level = c(0.2, 0.5, 0.8)
+)
 }
 \seealso{
 \code{\link[=ae_median_sample]{ae_median_sample()}}

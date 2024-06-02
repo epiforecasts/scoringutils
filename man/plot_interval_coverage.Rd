@@ -2,14 +2,13 @@
 % Please edit documentation in R/plot.R
 \name{plot_interval_coverage}
 \alias{plot_interval_coverage}
-\title{Plot Interval Coverage}
+\title{Plot interval coverage}
 \usage{
-plot_interval_coverage(scores, colour = "model")
+plot_interval_coverage(coverage, colour = "model")
 }
 \arguments{
-\item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
-in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
+\item{coverage}{A data frame of coverage values as produced by
+\code{\link[=get_coverage]{get_coverage()}}.}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
@@ -18,13 +17,12 @@ Default is "model".}
 ggplot object with a plot of interval coverage
 }
 \description{
-Plot interval coverage
+Plot interval coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
 \dontshow{
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
-data_coverage <- add_coverage(example_quantile)
-summarised <- summarise_scores(data_coverage, by = c("model", "range"))
-plot_interval_coverage(summarised)
+coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+plot_interval_coverage(coverage)
 }

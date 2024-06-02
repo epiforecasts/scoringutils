@@ -1,4 +1,4 @@
-#' Quantile Example Data
+#' Quantile example data
 #'
 #' A data set with predictions for COVID-19 cases and deaths submitted to the
 #' European Forecast Hub.
@@ -6,7 +6,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -14,7 +14,7 @@
 #'   \item{observed}{Numeric: observed values}
 #'   \item{location_name}{name of the country for which a prediction was made}
 #'   \item{forecast_date}{the date on which a prediction was made}
-#'   \item{quantile}{quantile of the corresponding prediction}
+#'   \item{quantile_level}{quantile level of the corresponding prediction}
 #'   \item{predicted}{predicted value}
 #'   \item{model}{name of the model that generated the forecasts}
 #'   \item{horizon}{forecast horizon in weeks}
@@ -25,7 +25,7 @@
 "example_quantile"
 
 
-#' Point Forecast Example Data
+#' Point forecast example data
 #'
 #' A data set with predictions for COVID-19 cases and deaths submitted to the
 #' European Forecast Hub. This data set is like the quantile example data, only
@@ -34,7 +34,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -52,7 +52,7 @@
 "example_point"
 
 
-#' Continuous Forecast Example Data
+#' Continuous forecast example data
 #'
 #' A data set with continuous predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
@@ -60,7 +60,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 13,429 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -76,10 +76,10 @@
 # nolint start
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
-"example_continuous"
+"example_sample_continuous"
 
 
-#' Integer Forecast Example Data
+#' Discrete forecast example data
 #'
 #' A data set with integer predictions for COVID-19 cases and deaths
 #' constructed from data submitted to the European Forecast Hub.
@@ -87,7 +87,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 13,429 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -103,10 +103,10 @@
 # nolint start
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
-"example_integer"
+"example_sample_discrete"
 
 
-#' Binary Forecast Example Data
+#' Binary forecast example data
 #'
 #' A data set with binary predictions for COVID-19 cases and deaths constructed
 #' from data submitted to the European Forecast Hub.
@@ -121,7 +121,7 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with 346 rows and 10 columns:
+#' @format A data frame with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{location_name}{name of the country for which a prediction was made}
@@ -137,61 +137,3 @@
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_binary"
-
-
-#' Quantile Example Data - Forecasts only
-#'
-#' A data set with quantile predictions for COVID-19 cases and deaths
-#' submitted to the European Forecast Hub.
-#'
-#' The data was created using the script create-example-data.R in the inst/
-#' folder (or the top level folder in a compiled package).
-#'
-#' @format A data frame with 7,581 rows and 9 columns:
-#' \describe{
-#'   \item{location}{the country for which a prediction was made}
-#'   \item{target_end_date}{the date for which a prediction was made}
-#'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{forecast_date}{the date on which a prediction was made}
-#'   \item{quantile}{quantile of the corresponding prediction}
-#'   \item{predicted}{predicted value}
-#'   \item{model}{name of the model that generated the forecasts}
-#'   \item{horizon}{forecast horizon in weeks}
-#' }
-# nolint start
-#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
-# nolint end
-"example_quantile_forecasts_only"
-
-
-#' Truth data only
-#'
-#' A data set with truth values for COVID-19 cases and deaths
-#' submitted to the European Forecast Hub.
-#'
-#' The data was created using the script create-example-data.R in the inst/
-#' folder (or the top level folder in a compiled package).
-#'
-#' @format A data frame with 140 rows and 5 columns:
-#' \describe{
-#'   \item{location}{the country for which a prediction was made}
-#'   \item{target_end_date}{the date for which a prediction was made}
-#'   \item{target_type}{the target to be predicted (cases or deaths)}
-#'   \item{observed}{observed values}
-#'   \item{location_name}{name of the country for which a prediction was made}
-#' }
-# nolint start
-#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
-# nolint end
-"example_truth_only"
-
-#' Summary information for selected metrics
-#'
-#' A data set with summary information on selected metrics implemented in
-#' \pkg{scoringutils}
-#'
-#' The data was created using the script create-metric-tables.R in the inst/
-#' folder (or the top level folder in a compiled package).
-#'
-#' @keywords info
-"metrics"

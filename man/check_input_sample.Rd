@@ -8,20 +8,20 @@ check_input_sample(observed, predicted)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be a numeric nxN matrix of
-predictive samples, n (number of rows) being the number of data points and N
-(number of columns) the number of samples per forecast.
+predictive samples, n (number of rows) being the number of data points and
+N (number of columns) the number of samples per forecast.
 If \code{observed} is just a single number, then predicted values can just be a
 vector of size N.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
-Function assesses whether the inputs correspond to the
-requirements for scoring sample-based forecasts.
+Function assesses whether the inputs correspond to the requirements for
+scoring sample-based forecasts.
 }
 \keyword{internal_input_check}

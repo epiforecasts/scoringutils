@@ -2,26 +2,24 @@
 % Please edit documentation in R/plot.R
 \name{plot_quantile_coverage}
 \alias{plot_quantile_coverage}
-\title{Plot Quantile Coverage}
+\title{Plot quantile coverage}
 \usage{
-plot_quantile_coverage(scores, colour = "model")
+plot_quantile_coverage(coverage, colour = "model")
 }
 \arguments{
-\item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=score]{score()}} or \code{\link[=summarise_scores]{summarise_scores()}}. Note that "range" must be included
-in the \code{by} argument when running \code{\link[=summarise_scores]{summarise_scores()}}}
+\item{coverage}{A data frame of coverage values as produced by
+\code{\link[=get_coverage]{get_coverage()}}.}
 
-\item{colour}{According to which variable shall the graphs be coloured?
-Default is "model".}
+\item{colour}{String, according to which variable shall the graphs be
+coloured? Default is "model".}
 }
 \value{
-ggplot object with a plot of interval coverage
+A ggplot object with a plot of interval coverage
 }
 \description{
-Plot quantile coverage
+Plot quantile coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
-data_coverage <- add_coverage(example_quantile)
-summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
-plot_quantile_coverage(summarised)
+coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+plot_quantile_coverage(coverage)
 }

@@ -2,12 +2,14 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_protected_columns}
 \alias{get_protected_columns}
-\title{Get protected columns from a data frame}
+\title{Get protected columns from data}
 \usage{
 get_protected_columns(data = NULL)
 }
 \arguments{
-\item{data}{A data.frame or data.table with predicted and observed values.}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 }
 \value{
 A character vector with the names of protected columns in the data.

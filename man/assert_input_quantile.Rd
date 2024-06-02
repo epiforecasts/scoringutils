@@ -4,11 +4,16 @@
 \alias{assert_input_quantile}
 \title{Assert that inputs are correct for quantile-based forecast}
 \usage{
-assert_input_quantile(observed, predicted, quantile, unique_quantiles = TRUE)
+assert_input_quantile(
+  observed,
+  predicted,
+  quantile_level,
+  unique_quantile_levels = TRUE
+)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
@@ -16,12 +21,12 @@ quantiles, n (number of rows) being the number of data points and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{Input to be checked. Should be a vector of size N that
+\item{quantile_level}{Input to be checked. Should be a vector of size N that
 denotes the quantile levels corresponding to the columns of the prediction
 matrix.}
 
-\item{unique_quantiles}{Input to be checked. Should be TRUE (default) or
-FALSE. Whether the quantile levels are required to be unique or not.}
+\item{unique_quantile_levels}{Whether the quantile levels are required to be
+unique (\code{TRUE}, the default) or not (\code{FALSE}).}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an

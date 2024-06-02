@@ -2,26 +2,32 @@
 % Please edit documentation in R/utils_data_handling.R
 \name{sample_to_quantile}
 \alias{sample_to_quantile}
-\title{Change Data from a Sample Based Format to a Quantile Format}
+\title{Change data from a sample based format to a quantile format}
 \usage{
-sample_to_quantile(data, quantiles = c(0.05, 0.25, 0.5, 0.75, 0.95), type = 7)
+sample_to_quantile(
+  forecast,
+  quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  type = 7
+)
 }
 \arguments{
-\item{data}{a data.frame with samples}
+\item{forecast}{A \code{forecast} object of class \code{forecast_sample} (a validated
+data.table with predicted and observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
-\item{quantiles}{a numeric vector of quantiles to extract}
+\item{quantile_level}{A numeric vector of quantile levels for which
+quantiles will be computed.}
 
-\item{type}{type argument passed down to the quantile function. For more
-information, see \code{\link[=quantile]{quantile()}}}
+\item{type}{Type argument passed down to the quantile function. For more
+information, see \code{\link[=quantile]{quantile()}}.}
 }
 \value{
-a data.frame in a long interval range format
+a data.table in a long interval range format
 }
 \description{
 Transform data from a format that is based on predictive samples to a format
 based on plain quantiles.
 }
 \examples{
-sample_to_quantile(example_integer)
+sample_to_quantile(as_forecast(example_sample_discrete))
 }
 \keyword{data-handling}

@@ -4,11 +4,11 @@
 \alias{check_input_quantile}
 \title{Check that inputs are correct for quantile-based forecast}
 \usage{
-check_input_quantile(observed, predicted, quantile)
+check_input_quantile(observed, predicted, quantile_level)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predictive
 quantiles, n (number of rows) being the number of data points and N
@@ -16,13 +16,13 @@ quantiles, n (number of rows) being the number of data points and N
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile}{Input to be checked. Should be a vector of size N that
+\item{quantile_level}{Input to be checked. Should be a vector of size N that
 denotes the quantile levels corresponding to the columns of the prediction
 matrix.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Function assesses whether the inputs correspond to the

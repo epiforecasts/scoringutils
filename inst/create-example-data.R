@@ -93,7 +93,8 @@ hub_data <- hub_data |>
     # quantile %in% c(seq(0.05, 0.45, 0.1), 0.5, seq(0.55, 0.95, 0.1)),
     location %in% c("DE", "GB", "FR", "IT")
   ) |>
-  select(-target)
+  select(-target) |>
+  rename(quantile_level = quantile)
 
 truth <- truth |>
   filter(
@@ -105,7 +106,7 @@ truth <- truth |>
 
 # save example data with forecasts only
 example_quantile_forecasts_only <- hub_data
-example_quantile_forecasts_only[, quantile := round(quantile, 3)]
+example_quantile_forecasts_only[, quantile_level := round(quantile_level, 3)]
 
 usethis::use_data(example_quantile_forecasts_only, overwrite = TRUE)
 
@@ -115,13 +116,12 @@ usethis::use_data(example_truth_only, overwrite = TRUE)
 # merge forecast data and truth data and save
 example_quantile <- merge_pred_and_obs(hub_data, truth)
 data.table::setDT(example_quantile)
-# make model a character instead of a factor
 usethis::use_data(example_quantile, overwrite = TRUE)
 
 
 # create data with point forecasts ---------------------------------------------
 example_point <- data.table::copy(example_quantile)
-example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile := NULL]
+example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile_level := NULL]
 usethis::use_data(example_point, overwrite = TRUE)
 
 
@@ -166,7 +166,7 @@ get_samples <- function(values, quantiles, n_samples = 1000) {
 # calculate samples
 setDT(example_quantile)
 n_samples <- 40
-example_continuous <- example_quantile[, .(
+example_sample_continuous <- example_quantile[, .(
   predicted = get_samples(
     predicted,
     quantile,
@@ -182,15 +182,15 @@ by = c(
 )
 ]
 # remove unnecessary rows where no predictions are available
-example_continuous[is.na(predicted), sample_id := NA]
-example_continuous <- unique(example_continuous)
-usethis::use_data(example_continuous, overwrite = TRUE)
+example_sample_continuous[is.na(predicted), sample_id := NA]
+example_sample_continuous <- unique(example_sample_continuous)
+usethis::use_data(example_sample_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
-example_integer <- data.table::copy(example_continuous)
-example_integer <- example_integer[, predicted := round(predicted)]
-usethis::use_data(example_integer, overwrite = TRUE)
+example_sample_discrete <- data.table::copy(example_sample_continuous)
+example_sample_discrete <- example_sample_discrete[, predicted := round(predicted)]
+usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 
 # get binary example data ------------------------------------------------------
@@ -199,7 +199,7 @@ usethis::use_data(example_integer, overwrite = TRUE)
 # observed value was below or above that mean prediction.
 # Take this as a way to create example data, not as sound statistical practice
 
-example_binary <- data.table::copy(example_continuous)
+example_binary <- data.table::copy(example_sample_continuous)
 
 # store grouping variable
 by <- c(

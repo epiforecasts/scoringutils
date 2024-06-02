@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-range.R
 \name{interval_score}
 \alias{interval_score}
-\title{Interval Score}
+\title{Interval score}
 \usage{
 interval_score(
   observed,
@@ -16,32 +16,36 @@ interval_score(
 \arguments{
 \item{observed}{A vector with observed values of size n}
 
-\item{lower}{vector of size n with the prediction for the lower quantile
-of the given range}
+\item{lower}{Vector of size n with the prediction for the lower quantile
+of the given interval range.}
 
-\item{upper}{vector of size n with the prediction for the upper quantile
-of the given range}
+\item{upper}{Vector of size n with the prediction for the upper quantile
+of the given interval range.}
 
-\item{interval_range}{the range of the prediction intervals. i.e. if you're
-forecasting the 0.05 and 0.95 quantile, the interval_range would be 90.
-Can be either a single number or a vector of size n, if the range changes
-for different forecasts to be scored. This corresponds to (100-alpha)/100
-in Gneiting and Raftery (2007). Internally, the range will be transformed
-to alpha.}
+\item{interval_range}{Numeric vector (either a single number or a vector of
+size n) with the range of the prediction intervals. For example, if you're
+forecasting the 0.05 and 0.95 quantile, the interval range would be 90.
+The interval range corresponds to \eqn{(100-\alpha)/100}, where
+\eqn{\alpha}{alpha} is the decimal value that indicates how much is outside
+the prediction interval (see e.g. Gneiting and Raftery (2007)).}
 
-\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-decimal value that  represents how much is outside a central prediction
-interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
-Default: \code{TRUE}.}
+\item{weigh}{Logical. If \code{TRUE} (the default), weigh the score by
+\eqn{\alpha / 2}, so it can be averaged into an interval score that, in
+the limit (for an increasing number of equally spaced quantiles/prediction
+intervals), corresponds
+to the CRPS. \eqn{\alpha} is the value that corresponds to the
+(\eqn{\alpha/2}) or (\eqn{1 - \alpha/2}), i.e. it is the decimal
+value that represents how much is outside a central prediction interval
+(E.g. for a 90 percent central prediction interval, alpha is 0.1).}
 
-\item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
-parts of the interval score (dispersion penalty, penalties for over- and
-under-prediction get returned as separate elements of a list). If you want a
-\code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
+\item{separate_results}{Logical. If \code{TRUE} (default is \code{FALSE}), then the
+separate parts of the interval score (dispersion penalty, penalties for
+over- and under-prediction get returned as separate elements of a list).
+If you want a \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the
+output.}
 }
 \value{
-vector with the scoring values, or a list with separate entries if
+Vector with the scoring values, or a list with separate entries if
 \code{separate_results} is \code{TRUE}.
 }
 \description{
@@ -70,9 +74,9 @@ To improve usability, the user is asked to provide an interval range in
 percentage terms, i.e. interval_range = 90 (percent) for a 90 percent
 prediction interval. Correspondingly, the user would have to provide the
 5\% and 95\% quantiles (the corresponding alpha would then be 0.1).
-No specific distribution is assumed,
-but the range has to be symmetric (i.e you can't use the 0.1 quantile
-as the lower bound and the 0.7 quantile as the upper).
+No specific distribution is assumed, but the interval has to be symmetric
+around the median (i.e you can't use the 0.1 quantile
+as the lower bound and the 0.7 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function \code{\link[=quantile_score]{quantile_score()}}.
 }
 \examples{

@@ -8,10 +8,10 @@ assert_input_point(observed, predicted)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
-observed values of size n}
+observed values of size n.}
 
 \item{predicted}{Input to be checked. Should be a numeric vector with the
-predicted values of size n}
+predicted values of size n.}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an

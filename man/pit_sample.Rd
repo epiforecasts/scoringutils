@@ -2,7 +2,7 @@
 % Please edit documentation in R/pit.R
 \name{pit_sample}
 \alias{pit_sample}
-\title{Probability Integral Transformation (sample-based version)}
+\title{Probability integral transformation (sample-based version)}
 \usage{
 pit_sample(observed, predicted, n_replicates = 100)
 }
@@ -13,21 +13,19 @@ pit_sample(observed, predicted, n_replicates = 100)
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{n_replicates}{the number of draws for the randomised PIT for
-integer predictions.}
+\item{n_replicates}{The number of draws for the randomised PIT for
+discrete predictions. Will be ignored if forecasts are continuous.}
 }
 \value{
 A vector with PIT-values. For continuous forecasts, the vector will
 correspond to the length of \code{observed}. For integer forecasts, a
 randomised PIT will be returned of length
-\code{length(observed) * n_replicates}
+\code{length(observed) * n_replicates}.
 }
 \description{
-Uses a Probability Integral Transformation (PIT) (or a
+Uses a Probability integral transformation (PIT) (or a
 randomised PIT for integer forecasts) to
-assess the calibration of predictive Monte Carlo samples. Returns a
-p-values resulting from an Anderson-Darling test for uniformity
-of the (randomised) PIT as well as a PIT histogram if specified.
+assess the calibration of predictive Monte Carlo samples.
 }
 \details{
 Calibration or reliability of forecasts is the ability of a model to
@@ -87,8 +85,8 @@ pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 ## integer predictions
-observed <- rpois(50, lambda = 1:50)
-predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+observed <- rpois(20, lambda = 1:20)
+predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
 pit <- pit_sample(observed, predicted, n_replicates = 30)
 plot_pit(pit)
 }
@@ -99,6 +97,6 @@ real-time epidemic forecasts: A case study of Ebola in the Western Area
 region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 }
 \seealso{
-\code{\link[=pit]{pit()}}
+\code{\link[=get_pit]{get_pit()}}
 }
 \keyword{metric}

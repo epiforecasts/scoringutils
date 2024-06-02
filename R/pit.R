@@ -1,10 +1,8 @@
-#' @title Probability Integral Transformation (sample-based version)
+#' @title Probability integral transformation (sample-based version)
 #'
-#' @description Uses a Probability Integral Transformation (PIT) (or a
+#' @description Uses a Probability integral transformation (PIT) (or a
 #' randomised PIT for integer forecasts) to
-#' assess the calibration of predictive Monte Carlo samples. Returns a
-#' p-values resulting from an Anderson-Darling test for uniformity
-#' of the (randomised) PIT as well as a PIT histogram if specified.
+#' assess the calibration of predictive Monte Carlo samples.
 #'
 #' @details
 #' Calibration or reliability of forecasts is the ability of a model to
@@ -52,15 +50,16 @@
 #' In this context it should be noted, though, that uniformity of the
 #' PIT is a necessary but not sufficient condition of calibration.
 #'
-#' @param n_replicates the number of draws for the randomised PIT for
-#' integer predictions.
+#' @param n_replicates The number of draws for the randomised PIT for
+#'   discrete predictions. Will be ignored if forecasts are continuous.
 #' @inheritParams ae_median_sample
 #' @return A vector with PIT-values. For continuous forecasts, the vector will
-#' correspond to the length of `observed`. For integer forecasts, a
-#' randomised PIT will be returned of length
-#' `length(observed) * n_replicates`
-#' @seealso [pit()]
+#'   correspond to the length of `observed`. For integer forecasts, a
+#'   randomised PIT will be returned of length
+#'   `length(observed) * n_replicates`.
+#' @seealso [get_pit()]
 #' @importFrom stats runif
+#' @importFrom cli cli_abort cli_inform
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -73,8 +72,8 @@
 #' plot_pit(pit)
 #'
 #' ## integer predictions
-#' observed <- rpois(50, lambda = 1:50)
-#' predicted <- replicate(2000, rpois(n = 50, lambda = 1:50))
+#' observed <- rpois(20, lambda = 1:20)
+#' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
 #' pit <- pit_sample(observed, predicted, n_replicates = 30)
 #' plot_pit(pit)
 #' @export
@@ -88,49 +87,10 @@
 pit_sample <- function(observed,
                        predicted,
                        n_replicates = 100) {
-
-  # error handling--------------------------------------------------------------
-  # check al arguments are provided
-  # this could be integrated into assert_not_null
-  if (missing("observed") || missing("predicted")) {
-    stop("`observed` or `predicted` missing in function 'pit_sample()'")
-  }
-  assert_not_null(observed = observed, predicted = predicted)
-
-  # check if there is more than one observation
-  n <- length(observed)
-  if (n == 1) {
-    message(
-      "you need more than one observation to assess uniformity of the PIT"
-    )
-    return(NA)
-  }
-
-  # check and handle format of predictions
-  if (is.data.frame(predicted)) {
-    predicted <- as.matrix(predicted)
-  }
-  if (!is.matrix(predicted)) {
-    msg <- sprintf(
-      "'predicted' should be a matrix. Instead `%s` was found",
-      class(predicted)[1]
-    )
-    stop(msg)
-  }
-  if (nrow(predicted) != n) {
-    msg <- sprintf(
-      "Mismatch: 'observed' has length `%s`, but 'predicted' has `%s` rows.",
-      n, nrow(predicted)
-    )
-    stop(msg)
-  }
-
-  # check data type ------------------------------------------------------------
-  # check whether continuous or integer
-  if (isTRUE(all.equal(as.vector(predicted), as.integer(predicted)))) {
-    continuous_predictions <- FALSE
-  } else {
-    continuous_predictions <- TRUE
+  assert_input_sample(observed = observed, predicted = predicted)
+  assert_number(n_replicates)
+  if (is.vector(predicted)) {
+    predicted <- matrix(predicted, nrow = 1)
   }
 
   # calculate PIT-values -------------------------------------------------------
@@ -140,40 +100,38 @@ pit_sample <- function(observed,
   # Portion of (y_observed <= y_predicted)
   p_x <- rowSums(predicted <= observed) / n_pred
 
-  # calculate PIT for continuous predictions case
-  if (continuous_predictions) {
-    pit_values <- p_x
-  } else {
+  # PIT calculation is different for integer and continuous predictions
+  if (get_type(predicted) == "integer") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     pit_values <- as.vector(
       replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
     )
+  } else {
+    pit_values <- p_x
   }
   return(pit_values)
 }
 
-#' @title Probability Integral Transformation (data.frame Format)
+#' @title Probability integral transformation (data.frame version)
 #'
-#' @description Wrapper around `pit()` for use in data.frames
+#' @description
+#' Compute the Probability Integral Transformation (PIT) for
+#' validated forecast objects.
 #'
-#' @details
-#' see [pit()]
-#'
-#' @param data a data.frame with the following columns: `observed`,
-#' `predicted`, `sample_id`.
+#' @inherit score params
 #' @param by Character vector with the columns according to which the
 #' PIT values shall be grouped. If you e.g. have the columns 'model' and
-#' 'location' in the data and want to have a PIT histogram for
+#' 'location' in the input data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit_sample
-#' @return a data.table with PIT values according to the grouping specified in
-#' `by`
+#' @return A data.table with PIT values according to the grouping specified in
+#' `by`.
 #' @examples
-#' result <- pit(example_continuous, by = "model")
+#' result <- get_pit(as_forecast(example_sample_continuous), by = "model")
 #' plot_pit(result)
 #'
 #' # example with quantile data
-#' result <- pit(example_quantile, by = "model")
+#' result <- get_pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(result)
 #' @export
 #' @references
@@ -183,40 +141,40 @@ pit_sample <- function(observed,
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords scoring
 
-pit <- function(data,
-                by,
-                n_replicates = 100) {
+get_pit <- function(forecast,
+                    by,
+                    n_replicates = 100) {
 
-  data <- as_forecast(data)
-  data <- na.omit(data)
-  forecast_type <- get_forecast_type(data)
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_type <- get_forecast_type(forecast)
 
   if (forecast_type == "quantile") {
-    data[, quantile_coverage := (observed <= predicted)]
-    quantile_coverage <- data[, .(quantile_coverage = mean(quantile_coverage)),
-                              by = c(unique(c(by, "quantile")))]
-    quantile_coverage <- quantile_coverage[order(quantile),
+    forecast[, quantile_coverage := (observed <= predicted)]
+    quantile_coverage <-
+      forecast[, .(quantile_coverage = mean(quantile_coverage)),
+               by = c(unique(c(by, "quantile_level")))]
+    quantile_coverage <- quantile_coverage[order(quantile_level),
       .(
-        quantile = c(quantile, 1),
+        quantile_level = c(quantile_level, 1),
         pit_value = diff(c(0, quantile_coverage, 1))
       ),
       by = c(get_forecast_unit(quantile_coverage))
     ]
-    return(quantile_coverage[])
+    return(as.data.table(quantile_coverage)[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples
-  data_wide <- data.table::dcast(data,
+  forecast_wide <- data.table::dcast(forecast,
     ... ~ paste0("InternalSampl_", sample_id),
     value.var = "predicted"
   )
 
-  pit <- data_wide[, .(pit_value = pit_sample(
+  pit <- forecast_wide[, .(pit_value = pit_sample(
     observed = observed,
     predicted = as.matrix(.SD)
   )),
   by = by,
-  .SDcols = grepl("InternalSampl_", names(data_wide), fixed = TRUE)
+  .SDcols = grepl("InternalSampl_", names(forecast_wide), fixed = TRUE)
   ]
 
   return(pit[])

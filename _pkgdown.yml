@@ -16,11 +16,19 @@ authors:
   Sam Abbott:
     href: "https://www.samabbott.co.uk/"
 
+navbar:
+  structure:
+    left: [reference, paper, articles, changelog]
+    right: [search, github]
+  components:
+    paper:
+      text: "scoringutils paper"
+      href: https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf
 
 reference:
         - title: Package documentation
           contents:
-                - scoringutils
+                - scoringutils-package
         - title: Functions to analyse inputs and obtain useful information
           contents:
                 - has_keyword("check-forecasts")

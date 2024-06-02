@@ -4,20 +4,17 @@
 \alias{check_duplicates}
 \title{Check that there are no duplicate forecasts}
 \usage{
-check_duplicates(data, forecast_unit = NULL)
+check_duplicates(data)
 }
 \arguments{
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
-
-\item{forecast_unit}{A character vector with the column names that define
-the unit of a single forecast. If \code{NULL} (the default) the function tries
-to infer the unit of a single forecast.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
-Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is encountered
+Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is
+encountered
 }
 \keyword{internal_input_check}

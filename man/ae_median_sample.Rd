@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{ae_median_sample}
 \alias{ae_median_sample}
-\title{Absolute Error of the Median (Sample-based Version)}
+\title{Absolute error of the median (sample-based version)}
 \usage{
 ae_median_sample(observed, predicted)
 }

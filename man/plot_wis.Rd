@@ -2,33 +2,37 @@
 % Please edit documentation in R/plot.R
 \name{plot_wis}
 \alias{plot_wis}
-\title{Plot Contributions to the Weighted Interval Score}
+\title{Plot contributions to the weighted interval score}
 \usage{
 plot_wis(scores, x = "model", relative_contributions = FALSE, flip = FALSE)
 }
 \arguments{
-\item{scores}{A data.frame of scores based on quantile forecasts as
-produced by \code{\link[=score]{score()}} and summarised using \code{\link[=summarise_scores]{summarise_scores()}}}
+\item{scores}{A data.table of scores based on quantile forecasts as
+produced by \code{\link[=score]{score()}} and summarised using \code{\link[=summarise_scores]{summarise_scores()}}.}
 
 \item{x}{The variable from the scores you want to show on the x-Axis.
 Usually this will be "model".}
 
-\item{relative_contributions}{show relative contributions instead of absolute
-contributions. Default is FALSE and this functionality is not available yet.}
+\item{relative_contributions}{Logical. Show relative contributions instead
+of absolute contributions? Default is \code{FALSE} and this functionality is not
+available yet.}
 
-\item{flip}{boolean (default is \code{FALSE}), whether or not to flip the axes.}
+\item{flip}{Boolean (default is \code{FALSE}), whether or not to flip the axes.}
 }
 \value{
-A ggplot2 object showing a contributions from the three components of
-the weighted interval score
+A ggplot object showing a contributions from the three components of
+the weighted interval score.
+
+A ggplot object with a visualisation of the WIS decomposition
 }
 \description{
 Visualise the components of the weighted interval score: penalties for
-over-prediction, under-prediction and for high dispersion (lack of sharpness)
+over-prediction, under-prediction and for high dispersion (lack of
+sharpness).
 }
 \examples{
 library(ggplot2)
-scores <- score(example_quantile)
+scores <- score(as_forecast(example_quantile))
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 plot_wis(scores,

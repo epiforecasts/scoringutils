@@ -99,7 +99,7 @@ df[, model := factor(`model`,
 
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
-  pit <- pit(df, by = "model")
+  pit <- get_pit(df, by = "model")
 
   stored <- list(res = res,
                  pit = pit)
@@ -148,7 +148,7 @@ df_quantile <- sample_to_quantile(df,
 
 res_quantile <- score(df_quantile)
 res_quantile <- summarise_scores(res_quantile,
-                                 by = c("model", "range", "quantile"))
+                                 by = c("model", "interval_range", "quantile"))
 
 res_quantile[, model := factor(model,
                                levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
@@ -394,7 +394,7 @@ ggplot(df, aes(x = factor(outcome), y = prob)) +
 # =============================================================================#
 
 ## Real Data
-ex <- example_continuous |>
+ex <- example_sample_continuous |>
   filter(model == "EuroCOVIDhub-ensemble")
 
 scores <- ex |>
@@ -534,7 +534,7 @@ p2 + p1 + p_true +
 # =============================================================================#
 # Figure 6
 # =============================================================================#
-available_forecasts(data = example_integer,
+available_forecasts(data = example_sample_discrete,
                 by = c("model", "target_type", "forecast_date")) |>
   plot_available_forecasts(x = "forecast_date",
                        show_counts = FALSE) +
@@ -575,9 +575,9 @@ score(example_quantile) |>
 # Figure 9
 # =============================================================================#
 score(example_quantile) |>
-  pairwise_comparison(by = c("model", "target_type"),
-                      baseline = "EuroCOVIDhub-baseline") |>
-  plot_pairwise_comparison() +
+  get_pairwise_comparisons(by = c("model", "target_type"),
+                           baseline = "EuroCOVIDhub-baseline") |>
+  plot_pairwise_comparisons() +
   facet_wrap(~ target_type)
 
 
@@ -585,7 +585,7 @@ score(example_quantile) |>
 # =============================================================================#
 # Figure 10
 # =============================================================================#
-score(example_continuous) |>
+score(example_sample_continuous) |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   plot_heatmap(x = "location", metric = "bias") +
   facet_wrap(~ target_type)
@@ -622,8 +622,8 @@ p1 + p2 +
 # =============================================================================#
 # Figure 12
 # =============================================================================#
-example_continuous |>
-  pit(by = c("model", "target_type")) |>
+example_sample_continuous |>
+  get_pit(by = c("model", "target_type")) |>
   plot_pit() +
   facet_grid(target_type ~ model)
 
@@ -633,7 +633,7 @@ example_continuous |>
 # Figure 13
 # =============================================================================#
 cov_scores <- score(example_quantile) |>
-  summarise_scores(by = c("model", "target_type", "range", "quantile"))
+  summarise_scores(by = c("model", "target_type", "interval_range", "quantile"))
 
 p1 <- plot_interval_coverage(cov_scores) +
   facet_wrap(~ target_type) +
@@ -654,10 +654,10 @@ p1 / p2 +
 correlations <- example_quantile |>
   score() |>
   summarise_scores() |>
-  correlation(digits = 2)
+  correlations(digits = 2)
 
 correlations |>
   glimpse()
 
 correlations |>
-  plot_correlation()
+  plot_correlations()

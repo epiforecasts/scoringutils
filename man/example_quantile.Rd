@@ -3,9 +3,9 @@
 \docType{data}
 \name{example_quantile}
 \alias{example_quantile}
-\title{Quantile Example Data}
+\title{Quantile example data}
 \format{
-A data frame with
+A data frame with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
@@ -13,7 +13,7 @@ A data frame with
 \item{observed}{Numeric: observed values}
 \item{location_name}{name of the country for which a prediction was made}
 \item{forecast_date}{the date on which a prediction was made}
-\item{quantile}{quantile of the corresponding prediction}
+\item{quantile_level}{quantile level of the corresponding prediction}
 \item{predicted}{predicted value}
 \item{model}{name of the model that generated the forecasts}
 \item{horizon}{forecast horizon in weeks}

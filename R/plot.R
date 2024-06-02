@@ -1,154 +1,30 @@
-#' @title Plot Coloured Score Table
-#'
-#' @description
-#' Plots a coloured table of summarised scores obtained using
-#' [score()].
-#'
-#' @param y the variable to be shown on the y-axis. Instead of a single character string,
-#' you can also specify a vector with column names, e.g.
-#' `y = c("model", "location")`. These column names will be concatenated
-#' to create a unique row identifier (e.g. "model1_location1").
-#' @param by A character vector that determines how the colour shading for the
-#' plot gets computed. By default (`NULL`), shading will be determined per
-#' metric, but you can provide additional column names (see examples).
-#' @param metrics A character vector with the metrics to show. If set to
-#' `NULL` (default), all metrics present in `scores` will be shown.
-#'
-#' @return A ggplot2 object with a coloured table of summarised scores
-#' @inheritParams pairwise_comparison
-#' @importFrom ggplot2 ggplot aes element_blank element_text labs coord_cartesian coord_flip
-#' @importFrom data.table setDT melt
-#' @importFrom stats sd
-#' @export
-#'
-#' @examples
-#' library(ggplot2)
-#' library(magrittr) # pipe operator
-#' \dontshow{
-#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
-#' }
-#'
-#' scores <- score(example_quantile) %>%
-#'   summarise_scores(by = c("model", "target_type")) %>%
-#'   summarise_scores(fun = signif, digits = 2)
-#'
-#' plot_score_table(scores, y = "model", by = "target_type") +
-#'   facet_wrap(~target_type, ncol = 1)
-#'
-#' # can also put target description on the y-axis
-#' plot_score_table(scores,
-#'                  y = c("model", "target_type"),
-#'                  by = "target_type")
-
-plot_score_table <- function(scores,
-                             y = "model",
-                             by = NULL,
-                             metrics = NULL) {
-
-  # identify metrics -----------------------------------------------------------
-  id_vars <- get_forecast_unit(scores)
-  metrics <- get_score_names(scores)
-
-  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
-  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
-
-  # compute scaled values ------------------------------------------------------
-  # scaling is done in order to colour the different scores
-  # for most metrics larger is worse, but others like bias are better if they
-  # are close to zero and deviations in both directions are bad
-
-  # define which metrics are scaled using min (larger is worse) and
-  # which not (metrics like bias where deviations in both directions are bad)
-  metrics_zero_good <- c("bias", "interval_coverage_deviation")
-  metrics_no_color <- "coverage"
-
-  metrics_min_good <- setdiff(metrics, c(
-    metrics_zero_good, metrics_no_color
-  ))
-
-  # write scale functions that can be used in data.table
-  scale <- function(x) {
-    scaled <- x / sd(x, na.rm = TRUE)
-    return(scaled)
-  }
-  scale_min_good <- function(x) {
-    scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
-    return(scaled)
-  }
-
-  # pivot longer and add scaled values
-  df <- data.table::melt(scores,
-    value.vars = metrics,
-    id.vars = id_vars,
-    variable.name = "metric"
-  )
-
-  df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-    by = c("metric", by)
-  ]
-  df[metric %in% metrics_zero_good, value_scaled := scale(value),
-    by = c("metric", by)
-  ]
-  df[metric %in% metrics_no_color, value_scaled := 0,
-    by = c("metric", by)
-  ]
-
-  # create identifier column for plot ------------------------------------------
-  # if there is only one column, leave column as is. Reason to do that is that
-  # users can then pass in a factor and keep the ordering of that column intact
-  if (length(y) > 1) {
-    df[, identifCol := do.call(paste, c(.SD, sep = "_")),
-       .SDcols = y[y %in% names(df)]]
-  } else {
-    setnames(df, old = eval(y), new = "identifCol")
-  }
-
-  # plot -----------------------------------------------------------------------
-  # make plot with all metrics that are not NA
-  plot <- ggplot(
-    df[!is.na(value), ],
-    aes(y = identifCol, x = metric)
-  ) +
-    geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
-    geom_text(aes(y = identifCol, label = value)) +
-    scale_fill_gradient2(low = "steelblue", high = "salmon") +
-    theme_scoringutils() +
-    theme(
-      legend.title = element_blank(),
-      legend.position = "none",
-      axis.text.x = element_text(
-        angle = 90, vjust = 1,
-        hjust = 1
-      )
-    ) +
-    labs(x = "", y = "") +
-    coord_cartesian(expand = FALSE)
-
-  return(plot)
-}
-
-#' @title Plot Contributions to the Weighted Interval Score
+#' @title Plot contributions to the weighted interval score
 #'
 #' @description
 #' Visualise the components of the weighted interval score: penalties for
-#' over-prediction, under-prediction and for high dispersion (lack of sharpness)
+#' over-prediction, under-prediction and for high dispersion (lack of
+#' sharpness).
 #'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] and summarised using [summarise_scores()]
+#' @param scores A data.table of scores based on quantile forecasts as
+#'   produced by [score()] and summarised using [summarise_scores()].
 #' @param x The variable from the scores you want to show on the x-Axis.
-#' Usually this will be "model".
-#' @param relative_contributions show relative contributions instead of absolute
-#' contributions. Default is FALSE and this functionality is not available yet.
-#' @param flip boolean (default is `FALSE`), whether or not to flip the axes.
-#' @return A ggplot2 object showing a contributions from the three components of
-#' the weighted interval score
+#'   Usually this will be "model".
+#' @param relative_contributions Logical. Show relative contributions instead
+#'   of absolute contributions? Default is `FALSE` and this functionality is not
+#'   available yet.
+#' @param flip Boolean (default is `FALSE`), whether or not to flip the axes.
+#' @return A ggplot object showing a contributions from the three components of
+#'   the weighted interval score.
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
-#' scale_fill_discrete
+#' scale_fill_discrete coord_flip
 #' theme theme_light unit guides guide_legend .data
+#' @importFrom data.table melt
+#' @importFrom checkmate assert_subset assert_logical
+#' @return A ggplot object with a visualisation of the WIS decomposition
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_wis(scores,
@@ -169,14 +45,16 @@ plot_wis <- function(scores,
                      x = "model",
                      relative_contributions = FALSE,
                      flip = FALSE) {
-  scores <- data.table::as.data.table(scores)
+  # input checks
+  scores <- ensure_data.table(scores)
+  wis_components <- c("overprediction", "underprediction", "dispersion")
+  assert(check_columns_present(scores, wis_components))
+  assert_subset(x, names(scores))
+  assert_logical(relative_contributions, len = 1)
+  assert_logical(flip, len = 1)
 
-  scores <- data.table::melt(scores,
-    measure.vars = c(
-      "overprediction",
-      "underprediction",
-      "dispersion"
-    ),
+  scores <- melt(scores,
+    measure.vars = wis_components,
     variable.name = "wis_component_name",
     value.name = "component_value"
   )
@@ -210,72 +88,8 @@ plot_wis <- function(scores,
   return(plot)
 }
 
-#' @title Plot Metrics by Range of the Prediction Interval
-#'
-#' @description
-#' Visualise the metrics by range, e.g. if you are interested how different
-#' interval ranges contribute to the overall interval score, or how
-#' sharpness / dispersion changes by range.
-#'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
-#' @param y The variable from the scores you want to show on the y-Axis.
-#' This could be something like "wis" (the default) or "dispersion"
-#' @param x The variable from the scores you want to show on the x-Axis.
-#' Usually this will be "model"
-#' @param colour Character vector of length one used to determine a variable
-#' for colouring dots. The Default is "range".
-#' @return A ggplot2 object showing a contributions from the three components of
-#' the weighted interval score
-#' @importFrom ggplot2 ggplot aes aes geom_point geom_line
-#' expand_limits theme theme_light element_text scale_color_continuous labs
-#' @export
-#' @examples
-#' library(ggplot2)
-#' ex <- example_quantile
-#' ex$interval_range <- scoringutils:::get_range_from_quantile(ex$quantile)
-#' scores <- score(ex, metrics = list("wis" = wis))
-#' scores$range <- scores$interval_range
-#' summarised <- summarise_scores(
-#'   scores,
-#'   by = c("model", "target_type", "range")
-#' )
-#' plot_ranges(summarised, x = "model") +
-#'   facet_wrap(~target_type, scales = "free")
 
-plot_ranges <- function(scores,
-                        y = "wis",
-                        x = "model",
-                        colour = "range") {
-  plot <- ggplot(
-    scores,
-    aes(
-      x = .data[[x]],
-      y = .data[[y]],
-      colour = .data[[colour]]
-    )
-  ) +
-    geom_point(size = 2) +
-    geom_line(aes(group = range),
-      colour = "black",
-      linewidth = 0.01
-    ) +
-    scale_color_continuous(low = "steelblue", high = "salmon") +
-    theme_scoringutils() +
-    expand_limits(y = 0) +
-    theme(
-      legend.position = "right",
-      axis.text.x = element_text(
-        angle = 90, vjust = 1,
-        hjust = 1
-      )
-    )
-
-  return(plot)
-}
-
-#' @title Create a Heatmap of a Scoring Metric
+#' @title Create a heatmap of a scoring metric
 #'
 #' @description
 #' This function can be used to create a heatmap of one metric across different
@@ -285,19 +99,24 @@ plot_ranges <- function(scores,
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()].
 #' @param y The variable from the scores you want to show on the y-Axis. The
-#' default for this is "model"
+#'   default for this is "model"
 #' @param x The variable from the scores you want to show on the x-Axis. This
-#' could be something like "horizon", or "location"
-#' @param metric the metric that determines the value and colour shown in the
-#' tiles of the heatmap
-#' @return A ggplot2 object showing a heatmap of the desired metric
+#'   could be something like "horizon", or "location"
+#' @param metric String, the metric that determines the value and colour shown
+#'   in the tiles of the heatmap.
+#' @return A ggplot object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
+#' @importFrom checkmate assert_subset
 #' @export
 #' @examples
-#' scores <- score(example_quantile)
+#' scores <- score(as_forecast(example_quantile))
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
+#' scores <- summarise_scores(
+#'   scores, by = c("model", "target_type"),
+#'   fun = signif, digits = 2
+#' )
 #'
 #' plot_heatmap(scores, x = "target_type", metric = "bias")
 
@@ -305,9 +124,10 @@ plot_heatmap <- function(scores,
                          y = "model",
                          x,
                          metric) {
-  data.table::setDT(scores)
-
-  scores[, eval(metric) := round(get(metric), 2)]
+  scores <- ensure_data.table(scores)
+  assert_subset(y, names(scores))
+  assert_subset(x, names(scores))
+  assert_subset(metric, names(scores))
 
   plot <- ggplot(
     scores,
@@ -330,266 +150,43 @@ plot_heatmap <- function(scores,
   return(plot)
 }
 
-#' @title Plot Predictions vs True Values
+
+#' @title Plot interval coverage
 #'
 #' @description
-#' Make a plot of observed and predicted values
+#' Plot interval coverage values (see [get_coverage()] for more information).
 #'
-#' @param data a data.frame that follows the same specifications outlined in
-#' [score()]. To customise your plotting, you can filter your data using the
-#' function [make_NA()].
-#' @param by character vector with column names that denote categories by which
-#' the plot should be stratified. If for example you want to have a facetted
-#' plot, this should be a character vector with the columns used in facetting
-#' (note that the facetting still needs to be done outside of the function call)
-#' @param x character vector of length one that denotes the name of the variable
-#' @param range numeric vector indicating the interval ranges to plot. If 0 is
-#' included in range, the median prediction will be shown.
-#' @return ggplot object with a plot of true vs predicted values
-#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-#' @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data
-#' @importFrom data.table dcast
-#' @importFrom ggdist geom_lineribbon
-#' @export
-#' @examples
-#' library(ggplot2)
-#' library(magrittr)
-#'
-#' example_continuous %>%
-#'   make_NA (
-#'     what = "truth",
-#'     target_end_date >= "2021-07-22",
-#'     target_end_date < "2021-05-01"
-#'   ) %>%
-#'   make_NA (
-#'     what = "forecast",
-#'     model != "EuroCOVIDhub-ensemble",
-#'     forecast_date != "2021-06-07"
-#'   ) %>%
-#'   plot_predictions (
-#'     x = "target_end_date",
-#'     by = c("target_type", "location"),
-#'     range = c(0, 50, 90, 95)
-#'   ) +
-#'   facet_wrap(~ location + target_type, scales = "free_y") +
-#'   aes(fill = model, color = model)
-#'
-#' example_continuous %>%
-#'   make_NA (
-#'     what = "truth",
-#'     target_end_date >= "2021-07-22",
-#'     target_end_date < "2021-05-01"
-#'   ) %>%
-#'   make_NA (
-#'     what = "forecast",
-#'     forecast_date != "2021-06-07"
-#'   ) %>%
-#'   plot_predictions (
-#'     x = "target_end_date",
-#'     by = c("target_type", "location"),
-#'     range = c(0)
-#'   ) +
-#'   facet_wrap(~ location + target_type, scales = "free_y") +
-#'   aes(fill = model, color = model)
-
-plot_predictions <- function(data,
-                             by = NULL,
-                             x = "date",
-                             range = c(0, 50, 90)) {
-
-  # split truth data and forecasts in order to apply different filtering
-  truth_data <- data.table::as.data.table(data)[!is.na(observed)]
-  forecasts <- data.table::as.data.table(data)[!is.na(predicted)]
-
-  del_cols <-
-    colnames(truth_data)[!(colnames(truth_data) %in% c(by, "observed", x))]
-
-  truth_data <- unique(suppressWarnings(truth_data[, eval(del_cols) := NULL]))
-
-  # find out what type of predictions we have. convert sample based to
-  # range data
-
-  if (test_forecast_type_is_quantile(data)) {
-    forecasts <- quantile_to_interval(
-      forecasts,
-      keep_quantile_col = FALSE
-    )
-  } else if (test_forecast_type_is_sample(data)) {
-    forecasts <- sample_to_range_long(
-      forecasts,
-      range = range,
-      keep_quantile_col = FALSE
-    )
-  }
-
-  # select appropriate boundaries and pivot wider
-  select <- forecasts$range %in% setdiff(range, 0)
-  intervals <- forecasts[select, ]
-
-  # delete quantile column in intervals if present. This is important for
-  # pivoting
-  if ("quantile" %in% names(intervals)) {
-    intervals[, quantile := NULL]
-  }
-
-  plot <- ggplot(data = data, aes(x = .data[[x]])) +
-    theme_scoringutils() +
-    ylab("True and predicted values")
-
-  if (nrow(intervals) != 0) {
-    # pivot wider and convert range to a factor
-    intervals <- data.table::dcast(intervals, ... ~ boundary,
-                                   value.var = "predicted")
-
-    # only plot ranges if there are ranges to plot
-    plot <- plot +
-      ggdist::geom_lineribbon(
-        data = intervals,
-        aes(
-          ymin = lower, ymax = upper,
-          # We use the fill_ramp aesthetic for this instead of the default fill
-          # because we want to keep fill to be able to use it for other
-          # variables
-          fill_ramp = factor(range, levels = sort(unique(range), decreasing = TRUE))
-        ),
-        lwd = 0.4
-      ) +
-      ggdist::scale_fill_ramp_discrete(
-        name = "range",
-        # range arguemnt was added to make sure that the line for the median
-        # and the ribbon don't have the same opacity, making the line
-        # invisible
-        range = c(0.15, 0.75)
-      )
-  }
-
-  # We could treat this step as part of ggdist::geom_lineribbon() but we treat
-  # it separately here to deal with the case when only the median is provided
-  # (in which case ggdist::geom_lineribbon() will fail)
-  if (0 %in% range) {
-    select_median <- (forecasts$range == 0 & forecasts$boundary == "lower")
-    median <- forecasts[select_median]
-
-    if (nrow(median) > 0) {
-      plot <- plot +
-        geom_line(
-          data = median,
-          mapping = aes(y = predicted),
-          lwd = 0.4
-        )
-    }
-  }
-
-  # add observed values
-  if (nrow(truth_data) > 0) {
-    plot <- plot +
-      geom_point(
-        data = truth_data,
-        show.legend = FALSE,
-        inherit.aes = FALSE,
-        aes(x = .data[[x]], y = observed),
-        color = "black",
-        size = 0.5
-      ) +
-      geom_line(
-        data = truth_data,
-        inherit.aes = FALSE,
-        show.legend = FALSE,
-        aes(x = .data[[x]], y = observed),
-        linetype = 1,
-        color = "grey40",
-        lwd = 0.2
-      )
-  }
-
-  return(plot)
-}
-
-#' @title Make Rows NA in Data for Plotting
-#'
-#' @description
-#' Filters the data and turns values into `NA` before the data gets passed to
-#' [plot_predictions()]. The reason to do this is to this is that it allows to
-#' 'filter' prediction and truth data separately. Any value that is NA will then
-#' be removed in the subsequent call to [plot_predictions()].
-#'
-#' @inheritParams score
-#' @param what character vector that determines which values should be turned
-#' into `NA`. If `what = "truth"`, values in the column 'observed' will be
-#' turned into `NA`. If `what = "forecast"`, values in the column 'prediction'
-#' will be turned into `NA`. If `what = "both"`, values in both column will be
-#' turned into `NA`.
-#' @param ... logical statements used to filter the data
-#' @return A data.table
-#' @importFrom rlang enexprs
-#' @keywords plotting
-#' @export
-#'
-#' @examples
-#' make_NA (
-#'     example_continuous,
-#'     what = "truth",
-#'     target_end_date >= "2021-07-22",
-#'     target_end_date < "2021-05-01"
-#'   )
-
-make_NA <- function(data = NULL,
-                    what = c("truth", "forecast", "both"),
-                    ...) {
-
-  assert_not_null(data = data)
-
-  data <- data.table::copy(data)
-  what <- match.arg(what)
-
-  # turn ... arguments into expressions
-  args <- enexprs(...)
-
-  vars <- NULL
-  if (what %in% c("forecast", "both")) {
-    vars <- c(vars, "predicted")
-  }
-  if (what %in% c("truth", "both")) {
-    vars <- c(vars, "observed")
-  }
-  for (expr in args) {
-    data <- data[eval(expr), eval(vars) := NA_real_]
-  }
-  return(data[])
-}
-
-#' @rdname make_NA
-#' @keywords plotting
-#' @export
-make_na <- make_NA
-
-#' @title Plot Interval Coverage
-#'
-#' @description
-#' Plot interval coverage
-#'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
+#' @param coverage A data frame of coverage values as produced by
+#' [get_coverage()].
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
-#' facet_wrap facet_grid geom_polygon
+#' facet_wrap facet_grid geom_polygon geom_line
+#' @importFrom checkmate assert_subset
 #' @importFrom data.table dcast
 #' @export
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
-#' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "range"))
-#' plot_interval_coverage(summarised)
-plot_interval_coverage <- function(scores,
+#' coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+#' plot_interval_coverage(coverage)
+plot_interval_coverage <- function(coverage,
                                    colour = "model") {
+  coverage <- ensure_data.table(coverage)
+  assert_subset(colour, names(coverage))
+
+  # in case quantile columns are present, remove them and then take unique
+  # values. This doesn't visually affect the plot, but prevents lines from being
+  # drawn twice.
+  del <- c("quantile_level", "quantile_coverage", "quantile_coverage_deviation")
+  suppressWarnings(coverage[, eval(del) := NULL])
+  coverage <- unique(coverage)
+
   ## overall model calibration - empirical interval coverage
-  p1 <- ggplot(scores, aes(
-    x = range,
+  p1 <- ggplot(coverage, aes(
+    x = interval_range,
     colour = .data[[colour]]
   )) +
     geom_polygon(
@@ -607,7 +204,7 @@ plot_interval_coverage <- function(scores,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = range),
+    geom_line(aes(y = interval_range),
       colour = "grey",
       linetype = "dashed"
     ) +
@@ -620,31 +217,32 @@ plot_interval_coverage <- function(scores,
   return(p1)
 }
 
-#' @title Plot Quantile Coverage
+#' @title Plot quantile coverage
 #'
 #' @description
-#' Plot quantile coverage
+#' Plot quantile coverage values (see [get_coverage()] for more information).
 #'
-#' @param scores A data.frame of scores based on quantile forecasts as
-#' produced by [score()] or [summarise_scores()]. Note that "range" must be included
-#' in the `by` argument when running [summarise_scores()]
-#' @param colour According to which variable shall the graphs be coloured?
-#' Default is "model".
-#' @return ggplot object with a plot of interval coverage
+#' @inheritParams plot_interval_coverage
+#' @param colour String, according to which variable shall the graphs be
+#' coloured? Default is "model".
+#' @return A ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
-#' scale_y_continuous
+#'   scale_y_continuous geom_line
+#' @importFrom checkmate assert_subset assert_data_frame
 #' @importFrom data.table dcast
 #' @export
 #' @examples
-#' data_coverage <- add_coverage(example_quantile)
-#' summarised <- summarise_scores(data_coverage, by = c("model", "quantile"))
-#' plot_quantile_coverage(summarised)
+#' coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+#' plot_quantile_coverage(coverage)
 
-plot_quantile_coverage <- function(scores,
+plot_quantile_coverage <- function(coverage,
                                    colour = "model") {
+  coverage <- assert_data_frame(coverage)
+  assert_subset(colour, names(coverage))
+
   p2 <- ggplot(
-    data = scores,
-    aes(x = quantile, colour = .data[[colour]])
+    data = coverage,
+    aes(x = quantile_level, colour = .data[[colour]])
   ) +
     geom_polygon(
       data = data.frame(
@@ -667,14 +265,14 @@ plot_quantile_coverage <- function(scores,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = quantile),
+    geom_line(aes(y = quantile_level),
       colour = "grey",
       linetype = "dashed"
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +
-    xlab("Quantile") +
-    ylab("% Obs below quantile") +
+    xlab("Quantile level") +
+    ylab("% Obs below quantile level") +
     scale_y_continuous(
       labels = function(x) {
         paste(100 * x)
@@ -685,38 +283,43 @@ plot_quantile_coverage <- function(scores,
   return(p2)
 }
 
-#' @title Plot Heatmap of Pairwise Comparisons
+#' @title Plot heatmap of pairwise comparisons
 #'
 #' @description
 #' Creates a heatmap of the ratios or pvalues from a pairwise comparison
-#' between models
+#' between models.
 #'
 #' @param comparison_result A data.frame as produced by
-#' [pairwise_comparison()]
-#' @param type character vector of length one that is either
-#'  "mean_scores_ratio" or "pval". This denotes whether to
-#' visualise the ratio or the p-value of the pairwise comparison.
-#' Default is "mean_scores_ratio".
+#' [get_pairwise_comparisons()].
+#' @param type Character vector of length one that is either
+#'   "mean_scores_ratio" or "pval". This denotes whether to
+#'   visualise the ratio or the p-value of the pairwise comparison.
+#'   Default is "mean_scores_ratio".
 #' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
-#' scale_fill_gradient2 theme_light element_text
+#'   scale_fill_gradient2 theme_light element_text
 #' @importFrom data.table as.data.table setnames rbindlist
 #' @importFrom stats reorder
 #' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
-#' element_text element_blank
+#'   element_text element_blank
+#' @return
+#' A ggplot object with a heatmap of mean score ratios from pairwise
+#' comparisons.
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(example_quantile)
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' scores <- score(as_forecast(example_quantile))
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-plot_pairwise_comparison <- function(comparison_result,
-                                     type = c("mean_scores_ratio", "pval")) {
-  comparison_result <- data.table::as.data.table(comparison_result)
+plot_pairwise_comparisons <- function(comparison_result,
+                                      type = c("mean_scores_ratio", "pval")) {
+  comparison_result <- ensure_data.table(comparison_result)
+  type <- match.arg(type)
 
   relative_skill_metric <- grep(
-    "_relative_skill$", colnames(comparison_result), value = TRUE
+    "(?<!scaled)_relative_skill$", colnames(comparison_result),
+    value = TRUE, perl = TRUE
   )
   comparison_result[, model := reorder(model, -get(relative_skill_metric))]
   levels <- levels(comparison_result$model)
@@ -811,30 +414,30 @@ plot_pairwise_comparison <- function(comparison_result,
 }
 
 
-#' @title PIT Histogram
+#' @title PIT histogram
 #'
 #' @description
 #' Make a simple histogram of the probability integral transformed values to
 #' visually check whether a uniform distribution seems likely.
 #'
-#' @param pit either a vector with the PIT values of size n, or a data.frame as
-#' produced by [pit()]
-#' @param num_bins the number of bins in the PIT histogram, default is "auto".
-#' When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
-#' will display a bin for each available quantile in case you passed in data in
-#' a quantile-based format.
-#' You can control the number of bins by supplying a number. This is fine for
-#' sample-based pit histograms, but may fail for quantile-based formats. In this
-#' case it is preferred to supply explicit breaks points using the `breaks`
-#' argument.
-#' @param breaks numeric vector with the break points for the bins in the
-#' PIT histogram. This is preferred when creating a PIT histogram based on
-#' quantile-based data. Default is `NULL` and breaks will be determined by
-#' `num_bins`.
+#' @param pit Either a vector with the PIT values, or a data.table as
+#'   produced by [get_pit()].
+#' @param num_bins The number of bins in the PIT histogram, default is "auto".
+#'   When `num_bins == "auto"`, [plot_pit()] will either display 10 bins, or it
+#'   will display a bin for each available quantile in case you passed in data in
+#'   a quantile-based format.
+#'   You can control the number of bins by supplying a number. This is fine for
+#'   sample-based pit histograms, but may fail for quantile-based formats. In this
+#'   case it is preferred to supply explicit breaks points using the `breaks`
+#'   argument.
+#' @param breaks Numeric vector with the break points for the bins in the
+#'   PIT histogram. This is preferred when creating a PIT histogram based on
+#'   quantile-based data. Default is `NULL` and breaks will be determined by
+#'   `num_bins`. If `breaks` is used, `num_bins` will be ignored.
 #' @importFrom stats as.formula
 #' @importFrom ggplot2 geom_col
 #' @importFrom stats density
-#' @return vector with the scoring values
+#' @return A ggplot object with a histogram of PIT values
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -847,19 +450,27 @@ plot_pairwise_comparison <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- pit(example_quantile,by = "model")
+#' pit <- get_pit(as_forecast(example_quantile), by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- pit(example_integer,by = "model")
+#' pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
+#' @importFrom checkmate assert check_set_equal check_number
 #' @export
 
 plot_pit <- function(pit,
                      num_bins = "auto",
                      breaks = NULL) {
-  if ("quantile" %in% names(pit)) {
+  assert(
+    check_set_equal(num_bins, "auto"),
+    check_number(num_bins, lower = 1)
+  )
+  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
+
+  # vector-format is always sample-based, for data.frames there are two options
+  if ("quantile_level" %in% names(pit)) {
     type <- "quantile-based"
   } else {
     type <- "sample-based"
@@ -876,7 +487,7 @@ plot_pit <- function(pit,
       plot_quantiles <- seq(width, 1, width)
     }
     if (type == "quantile-based") {
-      plot_quantiles <- unique(pit$quantile)
+      plot_quantiles <- unique(pit$quantile_level)
     }
   } else {
     # if num_bins is explicitly given
@@ -902,8 +513,8 @@ plot_pit <- function(pit,
       }
 
       hist <- ggplot(
-        data = pit[quantile %in% plot_quantiles],
-        aes(x = quantile, y = pit_value)
+        data = pit[quantile_level %in% plot_quantiles],
+        aes(x = quantile_level, y = pit_value)
       ) +
         geom_col(position = "dodge") +
         facet_wrap(formula)
@@ -940,31 +551,32 @@ plot_pit <- function(pit,
   return(hist)
 }
 
-#' @title Visualise Where Forecasts Are Available
+#' @title Visualise the number of available forecasts
 #'
 #' @description
-#' Visualise Where Forecasts Are Available
-#' @param forecast_counts a data.table (or similar) with a column `count`
-#' holding forecast counts, as produced by [get_forecast_counts()]
-#' @param x character vector of length one that denotes the name of the column
-#' to appear on the x-axis of the plot.
-#' @param y character vector of length one that denotes the name of the column
-#' to appear on the y-axis of the plot. Default is "model".
-#' @param x_as_factor logical (default is TRUE). Whether or not to convert
-#' the variable on the x-axis to a factor. This has an effect e.g. if dates
-#' are shown on the x-axis.
-#' @param show_counts logical (default is `TRUE`) that indicates whether
-#' or not to show the actual count numbers on the plot
-#' @return ggplot object with a plot of interval coverage
+#' Visualise Where Forecasts Are Available.
+#' @param forecast_counts A data.table (or similar) with a column `count`
+#'   holding forecast counts, as produced by [get_forecast_counts()].
+#' @param x Character vector of length one that denotes the name of the column
+#'   to appear on the x-axis of the plot.
+#' @param y Character vector of length one that denotes the name of the column
+#'   to appear on the y-axis of the plot. Default is "model".
+#' @param x_as_factor Logical (default is `TRUE`). Whether or not to convert
+#'   the variable on the x-axis to a factor. This has an effect e.g. if dates
+#'   are shown on the x-axis.
+#' @param show_counts Logical (default is `TRUE`) that indicates whether
+#'   or not to show the actual count numbers on the plot.
+#' @return A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
-#' geom_tile scale_fill_gradient .data
+#'   geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N
-#' @importFrom checkmate assert_string assert_logical assert
+#' @importFrom checkmate assert_subset assert_logical
 #' @export
 #' @examples
 #' library(ggplot2)
 #' forecast_counts <- get_forecast_counts(
-#'   example_quantile, by = c("model", "target_type", "target_end_date")
+#'   as_forecast(example_quantile),
+#'   by = c("model", "target_type", "target_end_date")
 #' )
 #' plot_forecast_counts(
 #'  forecast_counts, x = "target_end_date", show_counts = FALSE
@@ -978,11 +590,10 @@ plot_forecast_counts <- function(forecast_counts,
                                  show_counts = TRUE) {
 
   forecast_counts <- ensure_data.table(forecast_counts)
-  assert_string(y)
-  assert_string(x)
-  assert(check_columns_present(forecast_counts, c(y, x)))
-  assert_logical(x_as_factor)
-  assert_logical(show_counts)
+  assert_subset(y, colnames(forecast_counts))
+  assert_subset(x, colnames(forecast_counts))
+  assert_logical(x_as_factor, len = 1)
+  assert_logical(show_counts, len = 1)
 
   if (x_as_factor) {
     forecast_counts[, eval(x) := as.factor(get(x))]
@@ -1016,32 +627,55 @@ plot_forecast_counts <- function(forecast_counts,
 }
 
 
-#' @title Plot Correlation Between Metrics
+#' @title Plot correlation between metrics
 #'
 #' @description
-#' Plots a heatmap of correlations between different metrics
+#' Plots a heatmap of correlations between different metrics.
 #'
 #' @param correlations A data.table of correlations between scores as produced
-#' by [correlation()].
-#' @return A ggplot2 object showing a coloured matrix of correlations
-#' between metrics
+#'   by [get_correlations()].
+#' @param digits A number indicating how many decimal places the correlations
+#'   should be rounded to. By default (`digits = NULL`) no rounding takes place.
+#' @return
+#' A ggplot object showing a coloured matrix of correlations between metrics.
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
+#' @importFrom checkmate assert_data_frame
 #' @export
+#' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
-#' scores <- score(example_quantile)
-#' correlations <- correlation(
-#'  summarise_scores(scores),
-#'  digits = 2
+#' scores <- score(as_forecast(example_quantile))
+#' correlations <- get_correlations(
+#'  summarise_scores(scores)
 #' )
-#' plot_correlation(correlations)
+#' plot_correlations(correlations, digits = 2)
 
-plot_correlation <- function(correlations) {
+plot_correlations <- function(correlations, digits = NULL) {
 
-  metrics <- names(correlations)[names(correlations) %in% available_metrics()]
+  assert_data_frame(correlations)
+  metrics <- get_metrics(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
+
+  if (!is.null(digits)) {
+    lower_triangle <- round(lower_triangle, digits)
+  }
+
+
+  # check correlations is actually a matrix of correlations
+  col_present <- check_columns_present(correlations, "metric")
+  if (any(lower_triangle > 1, na.rm = TRUE) || !isTRUE(col_present)) {
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "Found correlations > 1 or missing `metric` column.",
+        "i" = "Did you forget to call {.fn scoringutils::get_correlations}?"
+      )
+    )
+    #nolint end
+  }
+
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
@@ -1082,7 +716,7 @@ plot_correlation <- function(correlations) {
 #' @title Scoringutils ggplot2 theme
 #'
 #' @description
-#' A theme for ggplot2 plots used in scoringutils
+#' A theme for ggplot2 plots used in `scoringutils`.
 #' @return A ggplot2 theme
 #' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
 #' @keywords plotting

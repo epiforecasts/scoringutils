@@ -1,33 +1,35 @@
-#' @title Evaluate forecasts in a data.frame format
-#' @description `score()` applies a selection of scoring metrics to a data.frame
-#' of forecasts. It is the workhorse of the `scoringutils` package.
+#' @title Evaluate forecasts
+#' @description `score()` applies a selection of scoring metrics to a forecast
+#' object (a data.table with forecasts and observations) as produced by
+#' [as_forecast()].
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
-#' We recommend that users call [as_forecast()] prior to calling `score()` to
-#' validate the input data and convert it to a forecast object (though
-#' `score.default()` will do this if it hasn't happened before).
-#' See below for more information on forecast types and input formats.
-#' For additional help and examples, check out the [Getting Started
+#' See the details section for more information on forecast types and input
+#' formats. For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
-#' @inheritSection forecast_types Forecast types and input format
+#' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
-#' @param data A data.frame or data.table with predicted and observed values.
+#' @param forecast A forecast object (a validated data.table with predicted and
+#'   observed values, see [as_forecast()])
 #' @param metrics A named list of scoring functions. Names will be used as
-#' column names in the output. See [rules_point()], [rules_binary()],
-#' [rules_quantile()], and [rules_sample()] for more information on the
-#' default metrics used.
-#' @param ... additional arguments
-#' @return A data.table with unsummarised scores. This will generally be
-#' one score per forecast (as defined by the unit of a single forecast).
-#'
-#' For quantile-based forecasts, one score per quantile will be returned
-#' instead. This is done as scores can be computed and may be of interest
-#' for individual quantiles. You can call [summarise_scores()]) on the
-#' unsummarised scores to obtain one score per forecast unit for quantile-based
-#' forecasts.
+#'   column names in the output. See [metrics_point()], [metrics_binary()],
+#'   [metrics_quantile()], and [metrics_sample()] for more information on the
+#'   default metrics used. Note that if you want to pass arguments to any
+#'   given metric, you should do that through the function [customise_metric()]
+#'   and pass an updated list of functions with your custom metric to
+#'   the `metrics` argument in `score()`.
+#' @param ... Additional arguments. Currently unused but allows for future
+#'  extensions. If you want to pass arguments to individual metrics, use
+#'  [customise_metric()].
+#' @return
+#' An object of class `scores`. This object is a data.table with
+#' unsummarised scores (one score per forecast) and has an additional attribute
+#' `metrics` with the names of the metrics used for scoring. See
+#' [summarise_scores()]) for information on how to summarise
+#' scores.
 #' @importFrom data.table ':=' as.data.table
 #' @importFrom stats na.omit
 #' @examples
@@ -41,21 +43,22 @@
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
-#' # determine the forecast unit automatically), check forecasts before scoring
+#' # determine the forecast unit automatically)
 #' example_quantile %>%
-#'   set_forecast_unit(
-#'     c("location", "target_end_date", "target_type", "horizon", "model")
+#'   as_forecast(
+#'     forecast_unit = c(
+#'       "location", "target_end_date", "target_type", "horizon", "model"
+#'     )
 #'   ) %>%
-#'   as_forecast() %>%
 #'   score()
 #'
 #' # forecast formats with different metrics
 #' \dontrun{
-#' score(example_binary)
-#' score(example_quantile)
-#' score(example_point)
-#' score(example_integer)
-#' score(example_continuous)
+#' score(as_forecast(example_binary))
+#' score(as_forecast(example_quantile))
+#' score(as_forecast(example_point))
+#' score(as_forecast(example_sample_discrete))
+#' score(as_forecast(example_sample_continuous))
 #' }
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
@@ -64,37 +67,36 @@
 #' \doi{10.48550/arXiv.2205.07090}
 #' @export
 
-score <- function(data, ...) {
+score <- function(forecast, metrics, ...) {
   UseMethod("score")
 }
 
-#' @rdname score
+#' @importFrom cli cli_abort
 #' @export
-score.default <- function(data, ...) {
-  assert(check_data_columns(data))
-  forecast_type <- get_forecast_type(data)
-  data <- new_forecast(data, paste0("forecast_", forecast_type))
-  score(data, ...)
+score.default <- function(forecast, metrics, ...) {
+  cli_abort(
+    c(
+      "!" = "The input needs to be a forecast object.",
+      "i" = "Please run `as_forecast()` first." # nolint
+    )
+  )
 }
 
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_binary <- function(data, metrics = rules_binary(), ...) {
-  data <- validate_forecast(data)
-  data <- na.omit(data)
+score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
-    data, metrics,
-    data$observed, data$predicted, ...
+  scores <- apply_metrics(
+    forecast, metrics,
+    forecast$observed, forecast$predicted
   )
 
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
-
+  scores <- as_scores(scores, metrics = names(metrics))
+  return(scores[])
 }
 
 
@@ -122,128 +124,199 @@ score.forecast_categorical <- function(data, metrics = rules_categorical(), ...)
 
 #' @importFrom Metrics se ae ape
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(data, metrics = rules_point(), ...) {
-  data <- validate_forecast(data)
-  data <- na.omit(data)
+score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
-  data <- apply_rules(
-    data, metrics,
-    data$observed, data$predicted, ...
+  scores <- apply_metrics(
+    forecast, metrics,
+    forecast$observed, forecast$predicted
   )
 
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
+  scores <- as_scores(scores, metrics = names(metrics))
+  return(scores[])
 }
 
 #' @importFrom stats na.omit
-#' @importFrom data.table setattr
+#' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(data, metrics = rules_sample(), ...) {
-  data <- validate_forecast(data)
-  data <- na.omit(data)
-  forecast_unit <- get_forecast_unit(data)
+score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
 
   # transpose the forecasts that belong to the same forecast unit
-  d_transposed <- data[, .(predicted = list(predicted),
-                           observed = unique(observed),
-                           scoringutils_N = length(list(sample_id))),
-                       by = forecast_unit]
+  f_transposed <- forecast[, .(predicted = list(predicted),
+                               observed = unique(observed),
+                               scoringutils_N = length(list(sample_id))),
+                           by = forecast_unit]
 
   # split according to number of samples and do calculations for different
   # sample lengths separately
-  d_split <- split(d_transposed, d_transposed$scoringutils_N)
+  f_split <- split(f_transposed, f_transposed$scoringutils_N)
 
-  split_result <- lapply(d_split, function(data) {
+  split_result <- lapply(f_split, function(forecast) {
     # create a matrix
-    observed <- data$observed
-    predicted <- do.call(rbind, data$predicted)
-    data[, c("observed", "predicted", "scoringutils_N") := NULL]
+    observed <- forecast$observed
+    predicted <- do.call(rbind, forecast$predicted)
+    forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
 
-    data <- apply_rules(
-      data, metrics,
-      observed, predicted, ...
+    forecast <- apply_metrics(
+      forecast, metrics,
+      observed, predicted
     )
-    return(data)
+    return(forecast)
   })
-  data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
-
-  return(data[])
+  scores <- rbindlist(split_result, fill = TRUE)
+  scores <- as_scores(scores, metrics = names(metrics))
+  return(scores[])
 }
 
 
 #' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr
+#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(data, metrics = rules_quantile(), ...) {
-  data <- validate_forecast(data)
-  data <- na.omit(data)
-  forecast_unit <- get_forecast_unit(data)
+score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the quantiles and predictions are ordered in the same way
-  d_transposed <- data[, .(
-    predicted = list(predicted[order(quantile)]),
+  f_transposed <- forecast[, .(
+    predicted = list(predicted[order(quantile_level)]),
     observed = unique(observed),
-    quantile = list(sort(quantile, na.last = TRUE)),
-    scoringutils_quantile = toString(sort(quantile, na.last = TRUE))
+    quantile_level = list(sort(quantile_level, na.last = TRUE)),
+    scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
   ), by = forecast_unit]
 
-  # split according to quantile lengths and do calculations for different
-  # quantile lengths separately. The function `wis()` assumes that all
-  # forecasts have the same quantiles
-  d_split <- split(d_transposed, d_transposed$scoringutils_quantile)
+  # split according to quantile_level lengths and do calculations for different
+  # quantile_level lengths separately. The function `wis()` assumes that all
+  # forecasts have the same quantile_levels
+  f_split <- split(f_transposed, f_transposed$scoringutils_quantile_level)
 
-  split_result <- lapply(d_split, function(data) {
-    # create a matrix out of the list of predicted values and quantiles
-    observed <- data$observed
-    predicted <- do.call(rbind, data$predicted)
-    quantile <- unlist(unique(data$quantile))
-    data[, c(
-      "observed", "predicted", "quantile", "scoringutils_quantile"
+  split_result <- lapply(f_split, function(forecast) {
+    # create a matrix out of the list of predicted values and quantile_levels
+    observed <- forecast$observed
+    predicted <- do.call(rbind, forecast$predicted)
+    quantile_level <- unlist(unique(forecast$quantile_level))
+    forecast[, c(
+      "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
     ) := NULL]
 
-    data <- apply_rules(
-      data, metrics,
-      observed, predicted, quantile, ...
+    forecast <- apply_metrics(
+      forecast, metrics,
+      observed, predicted, quantile_level
     )
-    return(data)
+    return(forecast)
   })
+  scores <- rbindlist(split_result, fill = TRUE)
 
-  data <- rbindlist(split_result)
-  setattr(data, "score_names", names(metrics))
+  scores <- as_scores(scores, metrics = names(metrics))
 
-  return(data[])
+  return(scores[])
 }
 
 
-#' @title Apply A List Of Functions To A Data Table Of Forecasts
-#' @description This helper function applies scoring rules (stored as a list of
-#' functions) to a data table of forecasts. `apply_rules` is used within
+#' @title Apply a list of functions to a data table of forecasts
+#' @description
+#' This helper function applies scoring rules (stored as a list of
+#' functions) to a data table of forecasts. `apply_metrics` is used within
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
 #' accepted by it.
+#' @param ... Additional arguments to be passed to the scoring rules. Note that
+#'   this is currently not used, as all calls to `apply_scores` currently
+#'   avoid passing arguments via `...` and instead expect that the metrics
+#'   directly be modified using [customise_metric()].
 #' @inheritParams score
-#' @return A data table with the forecasts and the calculated metrics
+#' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal
-apply_rules <- function(data, metrics, ...) {
-  expr <- expression(
-    data[, (metric_name) := do.call(run_safely, list(..., fun = fun))]
-  )
-  lapply(seq_along(metrics), function(i, data, ...) {
-    metric_name <- names(metrics[i]) # nolint
-    fun <- metrics[[i]] # nolint
-    eval(expr)
-  }, data, ...)
-  return(data)
+apply_metrics <- function(forecast, metrics, ...) {
+  lapply(names(metrics), function(metric_name) {
+    result <- do.call(
+      run_safely,
+      list(..., fun = metrics[[metric_name]], metric_name = metric_name)
+    )
+    if (!is.null(result)) {
+      forecast[, (metric_name) := result]
+    }
+  })
+  return(forecast)
+}
+
+
+#' Construct an object of class `scores`
+#' @description
+#' This function creates an object of class `scores` based on a
+#' data.table or similar.
+#' @param scores A data.table or similar with scores as produced by [score()].
+#' @param metrics A character vector with the names of the scores
+#'   (i.e. the names of the scoring rules used for scoring).
+#' @param ... Additional arguments to [as.data.table()]
+#' @keywords internal
+#' @importFrom data.table as.data.table setattr
+#' @return An object of class `scores`
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   model = "A",
+#'   wis = "0.1"
+#' )
+#' new_scores(df, "wis")
+#' }
+new_scores <- function(scores, metrics, ...) {
+  scores <- as.data.table(scores, ...)
+  class(scores) <- c("scores", class(scores))
+  setattr(scores, "metrics", metrics)
+  return(scores[])
+}
+
+
+#' Create an object of class `scores` from data
+#' @description This convenience function wraps [new_scores()] and validates
+#'   the `scores` object.
+#' @inherit new_scores params return
+#' @importFrom checkmate assert_data_frame
+#' @keywords internal
+as_scores <- function(scores, metrics) {
+  assert_data_frame(scores)
+  present_metrics <- metrics[metrics %in% colnames(scores)]
+  scores <- new_scores(scores, present_metrics)
+  validate_scores(scores)
+  return(scores[])
+}
+
+
+#' Validate an object of class `scores`
+#' @description
+#' This function validates an object of class `scores`, checking
+#' that it has the correct class and that it has a `metrics` attribute.
+#' @inheritParams new_scores
+#' @returns Returns `NULL` invisibly
+#' @importFrom checkmate assert_class assert_data_frame
+#' @keywords internal
+validate_scores <- function(scores) {
+  assert_data_frame(scores)
+  assert_class(scores, "scores")
+  # error if no metrics exists +
+  # throw warning if any of the metrics is not in the data
+  get_metrics(scores, error = TRUE)
+  return(invisible(NULL))
+}
+
+##' @method `[` scores
+##' @export
+`[.scores` <- function(x, ...) {
+  ret <- NextMethod()
+  if (is.data.frame(ret)) {
+    attr(ret, "metrics") <- attr(x, "metrics")
+  }
+  return(ret)
 }

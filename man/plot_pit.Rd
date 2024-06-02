@@ -2,15 +2,15 @@
 % Please edit documentation in R/plot.R
 \name{plot_pit}
 \alias{plot_pit}
-\title{PIT Histogram}
+\title{PIT histogram}
 \usage{
 plot_pit(pit, num_bins = "auto", breaks = NULL)
 }
 \arguments{
-\item{pit}{either a vector with the PIT values of size n, or a data.frame as
-produced by \code{\link[=pit]{pit()}}}
+\item{pit}{Either a vector with the PIT values, or a data.table as
+produced by \code{\link[=get_pit]{get_pit()}}.}
 
-\item{num_bins}{the number of bins in the PIT histogram, default is "auto".
+\item{num_bins}{The number of bins in the PIT histogram, default is "auto".
 When \code{num_bins == "auto"}, \code{\link[=plot_pit]{plot_pit()}} will either display 10 bins, or it
 will display a bin for each available quantile in case you passed in data in
 a quantile-based format.
@@ -19,13 +19,13 @@ sample-based pit histograms, but may fail for quantile-based formats. In this
 case it is preferred to supply explicit breaks points using the \code{breaks}
 argument.}
 
-\item{breaks}{numeric vector with the break points for the bins in the
+\item{breaks}{Numeric vector with the break points for the bins in the
 PIT histogram. This is preferred when creating a PIT histogram based on
 quantile-based data. Default is \code{NULL} and breaks will be determined by
-\code{num_bins}.}
+\code{num_bins}. If \code{breaks} is used, \code{num_bins} will be ignored.}
 }
 \value{
-vector with the scoring values
+A ggplot object with a histogram of PIT values
 }
 \description{
 Make a simple histogram of the probability integral transformed values to
@@ -43,10 +43,10 @@ pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit
-pit <- pit(example_quantile,by = "model")
+pit <- get_pit(as_forecast(example_quantile), by = "model")
 plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- pit(example_integer,by = "model")
+pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
 plot_pit(pit)
 }
