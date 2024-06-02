@@ -4,11 +4,14 @@
 \alias{plot_correlations}
 \title{Plot correlation between metrics}
 \usage{
-plot_correlations(correlations)
+plot_correlations(correlations, digits = NULL)
 }
 \arguments{
 \item{correlations}{A data.table of correlations between scores as produced
 by \code{\link[=get_correlations]{get_correlations()}}.}
+
+\item{digits}{A number indicating how many decimal places the correlations
+should be rounded to. By default (\code{digits = NULL}) no rounding takes place.}
 }
 \value{
 A ggplot object showing a coloured matrix of correlations between metrics.
@@ -21,8 +24,7 @@ Plots a heatmap of correlations between different metrics.
 \examples{
 scores <- score(as_forecast(example_quantile))
 correlations <- get_correlations(
- summarise_scores(scores),
- digits = 2
+ summarise_scores(scores)
 )
-plot_correlations(correlations)
+plot_correlations(correlations, digits = 2)
 }

@@ -1114,10 +1114,10 @@ is shown in Figure \ref{fig:correlation-plot}.
 R> correlations <- forecast_quantile |>
 +   score() |>
 +   summarise_scores() |>
-+   get_correlations(digits = 2)
++   get_correlations()
 R> 
 R> correlations |>
-+   plot_correlations()
++   plot_correlations(digits = 2)
 \end{CodeInput}
 \begin{figure}[!h]
 

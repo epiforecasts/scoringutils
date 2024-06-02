@@ -485,10 +485,10 @@ Users can examine correlations between scores using the function \fct{correlatio
 correlations <- forecast_quantile |>
   score() |>
   summarise_scores() |>
-  get_correlations(digits = 2)
+  get_correlations()
 
 correlations |>
-  plot_correlations()
+  plot_correlations(digits = 2)
 ```
 
 
