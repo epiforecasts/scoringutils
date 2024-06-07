@@ -296,6 +296,7 @@ get_protected_columns <- function(data = NULL) {
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
+#' @importFrom data.table setorderv
 #' @keywords check-forecasts
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
@@ -311,6 +312,12 @@ get_duplicate_forecasts <- function(
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
+
+  col <- colnames(data)[
+    colnames(data) %in% c("sample_id", "quantile_level", "predicted_label")
+  ]
+  setorderv(out, cols = c(forecast_unit, col, "predicted"))
+
   out[, scoringutils_InternalDuplicateCheck := NULL]
   return(out[])
 }
