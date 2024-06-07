@@ -16,6 +16,7 @@ as_forecast(data, ...)
   model = NULL,
   quantile_level = NULL,
   sample_id = NULL,
+  predicted_label = NULL,
   ...
 )
 }

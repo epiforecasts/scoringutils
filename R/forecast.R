@@ -75,6 +75,7 @@ as_forecast.default <- function(data,
                                 model = NULL,
                                 quantile_level = NULL,
                                 sample_id = NULL,
+                                predicted_label = NULL,
                                 ...) {
   # check inputs
   data <- ensure_data.table(data)
@@ -108,6 +109,9 @@ as_forecast.default <- function(data,
   }
   if (!is.null(sample_id)) {
     setnames(data, old = sample_id, new = "sample_id")
+  }
+  if (!is.null(predicted_label)) {
+    setnames(data, old = predicted_label, new = "predicted_label")
   }
 
   # ensure that a model column is present after renaming
@@ -306,11 +310,7 @@ assert_forecast.forecast_nominal <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))
   assert_names(colnames(forecast), disjunct.from = c("sample_id", "quantile_level"))
-
   assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
-
-
-  assert_input_nominal(forecast)
   return(forecast[])
 }
 

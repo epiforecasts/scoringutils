@@ -106,13 +106,25 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 #' @export
 score.forecast_nominal <- function(forecast, metrics = metrics_nominal(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
 
-  scores <- apply_metrics(
-    forecast, metrics,
-    forecast$observed, forecast$predicted, forecast$predicted_label, ...
-  )
+  # transpose the forecasts that belong to the same forecast unit
+  # make sure the labels and predictions are ordered in the same way
+  f_transposed <- forecast[, .(
+    predicted = list(predicted[order(predicted_label)]),
+    observed = unique(observed)
+  ), by = forecast_unit]
 
+  observed <- f_transposed$observed
+  predicted <- do.call(rbind, f_transposed$predicted)
+  predicted_label <- sort(unique(forecast$predicted_label, na.last = TRUE))
+  f_transposed[, c("observed", "predicted") := NULL]
+
+  scores <- apply_metrics(
+    f_transposed, metrics,
+    observed, predicted, predicted_label, ...
+  )
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }

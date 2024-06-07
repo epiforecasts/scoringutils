@@ -16,7 +16,9 @@
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))
-  if (test_forecast_type_is_binary(data)) {
+  if (test_forecast_type_is_nominal(data)) {
+    forecast_type <- "nominal"
+  } else if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
     forecast_type <- "quantile"
@@ -275,7 +277,7 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
-    "pit_value", "interval_range", "boundary",
+    "pit_value", "interval_range", "boundary", "predicted_label",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
     grep("_relative_skill$", names(data), value = TRUE),
@@ -319,8 +321,8 @@ get_duplicate_forecasts <- function(
 ) {
   assert_data_frame(data)
   forecast_unit <- get_forecast_unit(data)
-  available_type <- c("sample_id", "quantile_level") %in% colnames(data)
-  type <- c("sample_id", "quantile_level")[available_type]
+  available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
+  type <- c("sample_id", "quantile_level", "predicted_label")[available_type]
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]

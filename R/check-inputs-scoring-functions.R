@@ -224,7 +224,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
     summed_predictions <- .rowSums(predicted, m = 1, n = N)
   } else {
     assert_matrix(predicted, nrows = n)
-    summed_predictions <- rowSums(predicted)
+    summed_predictions <- round(rowSums(predicted), 10) # avoid numeric errors
   }
   if (!all(summed_predictions == 1)) {
     cli_abort(
