@@ -307,13 +307,16 @@ assert_forecast.forecast_sample <- function(
 
 #' @export
 #' @keywords check-forecasts
-#' @importFrom checkmate assert_names, assert_set_equal
+#' @importFrom checkmate assert_names assert_set_equal test_set_equal
 assert_forecast.forecast_nominal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))
-  assert_names(colnames(forecast), disjunct.from = c("sample_id", "quantile_level"))
+  assert_names(
+    colnames(forecast),
+    disjunct.from = c("sample_id", "quantile_level")
+  )
   assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
 
   # levels need to be the same
