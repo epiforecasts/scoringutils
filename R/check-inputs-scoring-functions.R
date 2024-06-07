@@ -206,6 +206,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
   # observed
   assert_factor(observed, min.len = 1, min.levels = 2)
   levels <- levels(observed)
+  n <- length(observed)
   N <- length(levels)
 
   # predicted label
@@ -213,8 +214,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
   assert_set_equal(levels(observed), levels(predicted_label))
 
   # predicted
-  assert_numeric(observed, min.len = 1, lower = 0, upper = 1)
-  n <- length(observed)
+  assert_numeric(predicted, min.len = 1, lower = 0, upper = 1)
   if (n == 1) {
     assert(
       # allow one of two options
@@ -223,7 +223,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
     )
     summed_predictions <- .rowSums(predicted, m = 1, n = N)
   } else {
-    assert_matrix(predicted, nrows = n_obs)
+    assert_matrix(predicted, nrows = n)
     summed_predictions <- rowSums(predicted)
   }
   if (!all(summed_predictions == 1)) {
@@ -242,7 +242,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
 check_input_nominal <- function(observed, predicted, predicted_label) {
-  result <- check_try(assert_input_binary(observed, predicted, predicted_label))
+  result <- check_try(assert_input_nominal(observed, predicted, predicted_label))
   return(result)
 }
 

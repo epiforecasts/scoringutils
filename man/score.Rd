@@ -13,7 +13,7 @@ score(forecast, metrics, ...)
 
 \method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
 
-\method{score}{forecast_nominal}(data, metrics = metrics_nominal(), ...)
+\method{score}{forecast_nominal}(forecast, metrics = metrics_nominal(), ...)
 
 \method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
 

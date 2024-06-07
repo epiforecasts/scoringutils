@@ -299,6 +299,7 @@ assert_forecast.forecast_sample <- function(
 
 #' @export
 #' @keywords check-forecasts
+#' @importFrom checkmate assert_names
 assert_forecast.forecast_nominal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {

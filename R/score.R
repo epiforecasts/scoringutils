@@ -104,7 +104,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 #' @importFrom data.table setattr
 #' @rdname score
 #' @export
-score.forecast_nominal <- function(data, metrics = metrics_nominal(), ...) {
+score.forecast_nominal <- function(forecast, metrics = metrics_nominal(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 

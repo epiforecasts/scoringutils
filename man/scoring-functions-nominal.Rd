@@ -6,6 +6,17 @@
 \usage{
 logs_nominal(observed, predicted, predicted_label)
 }
+\arguments{
+\item{observed}{A factor of length n with N levels holding the observed
+values.}
+
+\item{predicted}{nxN matrix of predictive probabilities, n (number of rows)
+being the number of observations and N (number of columns) the number of
+possible outcomes.}
+
+\item{predicted_label}{A factor of length N, denoting the outcome that the
+probabilities in \code{predicted} correspond to.}
+}
 \value{
 A numeric vector of size n with log scores
 }
@@ -20,9 +31,9 @@ are better (best is zero, worst is infinity).
 factor_levels <- c("one", "two", "three")
 predicted_label <- factor(c("one", "two", "three"), levels = factor_levels)
 observed <- factor(c("one", "three", "two"), levels = factor_levels)
-predicted <- matrix(c(0.8, 0.1, 0.1,
-                      0.1, 0.2, 0.7,
-                      0.4, 0.4, 0.2),
+predicted <- matrix(c(0.8, 0.1, 0.4,
+                      0.1, 0.2, 0.4,
+                      0.1, 0.7, 0.2),
                     nrow = 3)
 logs_nominal(observed, predicted, predicted_label)
 }
