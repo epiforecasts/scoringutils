@@ -193,24 +193,57 @@ check_input_binary <- function(observed, predicted) {
 }
 
 
-#' @title Assert That Inputs Are Correct For Categorical Forecasts
+#' @title Assert that inputs are correct for nominal forecasts
 #' @description Function assesses whether the inputs correspond to the
-#' requirements for scoring categorical forecasts.
-#' @param observed XX
-#' @param predicted XX
-#' @importFrom checkmate assert assert_factor
+#' requirements for scoring nominal forecasts.
+#' @param observed XXX
+#' @param predicted XXX
+#' @param predicted_label XXX
+#' @importFrom checkmate assert_factor assert_numeric assert_set_equal
 #' @inherit document_assert_functions return
 #' @keywords internal_input_check
-assert_input_categorical <- function(observed, predicted) {
+assert_input_nominal <- function(observed, predicted, predicted_label) {
+  # observed
+  assert_factor(observed, min.len = 1, min.levels = 2)
+  levels <- levels(observed)
+  N <- length(levels)
+
+  # predicted label
+  assert_factor(predicted_label, len = N)
+  assert_set_equal(levels(observed), levels(predicted_label))
+
+  # predicted
+  assert_numeric(observed, min.len = 1, lower = 0, upper = 1)
+  n <- length(observed)
+  if (n == 1) {
+    assert(
+      # allow one of two options
+      check_vector(predicted, len = N),
+      check_matrix(predicted, nrows = n, ncols = N)
+    )
+    summed_predictions <- .rowSums(predicted, m = 1, n = N)
+  } else {
+    assert_matrix(predicted, nrows = n_obs)
+    summed_predictions <- rowSums(predicted)
+  }
+  if (!all(summed_predictions == 1)) {
+    cli_abort(
+      c(
+        `!` = "Probabilities belonging to a single forecast must sum to one"
+      )
+    )
+  }
   return(invisible(NULL))
 }
 
 
 #' @title Check That Inputs Are Correct For Categorical Forecasts
-#' @inherit assert_input_categorical params description
+#' @inherit assert_input_nominal params description
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_input_categorical <- function(observed, predicted) {
+check_input_nominal <- function(observed, predicted, predicted_label) {
+  result <- check_try(assert_input_binary(observed, predicted, predicted_label))
+  return(result)
 }
 
 

@@ -90,6 +90,19 @@ test_forecast_type_is_quantile <- function(data) {
   return(observed_correct && predicted_correct && columns_correct)
 }
 
+#' Test whether data could be a nominal forecast.
+#' @description Checks type of the necessary columns.
+#' @inheritParams document_check_functions
+#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
+#' @keywords internal_input_check
+test_forecast_type_is_nominal <- function(data) {
+  observed_correct <- test_factor(x = data$observed)
+  predicted_correct <- test_numeric(x = data$predicted)
+  columns_correct <- test_columns_present(data, "predicted_label")
+  predicted_label_correct <- test_factor(x = data$predicted_label)
+  return(observed_correct && predicted_correct &&
+           columns_correct && predicted_label_correct)
+}
 
 #' Assert that forecast type is as expected
 #' @param data A forecast object as produced by [as_forecast()].

@@ -3,6 +3,7 @@
 \name{score}
 \alias{score}
 \alias{score.forecast_binary}
+\alias{score.forecast_nominal}
 \alias{score.forecast_point}
 \alias{score.forecast_sample}
 \alias{score.forecast_quantile}
@@ -11,6 +12,8 @@
 score(forecast, metrics, ...)
 
 \method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
+
+\method{score}{forecast_nominal}(data, metrics = metrics_nominal(), ...)
 
 \method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
 

@@ -297,6 +297,23 @@ assert_forecast.forecast_sample <- function(
 }
 
 
+#' @export
+#' @keywords check-forecasts
+assert_forecast.forecast_nominal <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
+  assert(check_columns_present(forecast, "predicted_label"))
+  assert_names(colnames(forecast), disjunct.from = c("sample_id", "quantile_level"))
+
+  assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
+
+
+  assert_input_nominal(forecast)
+  return(forecast[])
+}
+
+
 #' @title Re-validate an existing forecast object
 #'
 #' @description
