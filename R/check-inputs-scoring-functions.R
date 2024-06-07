@@ -230,6 +230,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
     summed_predictions <- round(rowSums(predicted, na.rm = TRUE), 10) # avoid numeric errors
   }
   if (!all(summed_predictions == 1)) {
+    #nolint start: keyword_quote_linter object_usage_linter
     row_indices <- as.character(which(summed_predictions != 1))
     cli_abort(
       c(
@@ -237,6 +238,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
         `i` = "Found issues in row{?s} {row_indices} of {.var predicted}"
       )
     )
+    #nolint end
   }
   return(invisible(NULL))
 }
