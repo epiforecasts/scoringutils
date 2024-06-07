@@ -238,7 +238,8 @@ example_nominal <- data.table::copy(example_sample_continuous)
 
 # store grouping variable
 by_vars <- c(
-  "location", "target_end_date", "target_type", "forecast_date", "horizon"
+  "location", "location_name", "target_end_date",
+  "target_type", "forecast_date", "horizon"
 )
 
 # generate low, medium, and high bounds and predicted label

@@ -56,6 +56,11 @@ the quantile level of the predicted values. This column will be renamed to
 \item{sample_id}{(optional) Name of the column in \code{data} that contains the
 sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.}
+
+\item{predicted_label}{(optional) Name of the column in \code{data} that denotes
+the outcome to which a preidcted probability corresponds to.
+This column will be renamed to "predicted_label". Only applicable to
+nominal forecasts.}
 }
 \value{
 Depending on the forecast type, an object of the following class will be
