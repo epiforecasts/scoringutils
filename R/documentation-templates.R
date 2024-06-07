@@ -6,6 +6,7 @@
 #' moment, those are:
 #' - point forecasts
 #' - binary forecasts ("soft binary classification")
+#' - nominal forecasts ("soft classification with multiple unordered classes")
 #' - Probabilistic forecasts in a quantile-based format (a forecast is
 #' represented as a set of predictive quantiles)
 #' - Probabilistic forecasts in a sample-based format (a forecast is represented
@@ -33,6 +34,13 @@
 #' corresponding to the probability that `observed` is equal to the second
 #' factor level. See details [here][brier_score()] for more information.
 #'
+#' *Nominal forecasts* require a column `observed` of type factor with N levels,
+#' (where N is the number of possible outcomes), a column `predicted` of type
+#' numeric with probabilities (which sum to one across all possible outcomes),
+#' and a column `predicted_label` of type factor with N levels, denoting the
+#' outcome for which a probability is given. Forecasts must be complete, i.e.
+#' there must be a probability assigned to every possible outcome.
+#'
 #' *Quantile-based forecasts* require a column `observed` of type numeric,
 #' a column `predicted` of type numeric, and a column `quantile_level` of type
 #' numeric with quantile-levels (between 0 and 1).
@@ -43,7 +51,7 @@
 #'
 #' For more information see the vignettes and the example data
 #' ([example_quantile], [example_sample_continuous], [example_sample_discrete],
-#' [example_point()], and [example_binary]).
+#' [example_point()], [example_binary], and [example_nominal]).
 #'
 #' @details # Forecast unit
 #'

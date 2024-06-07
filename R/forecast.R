@@ -307,7 +307,7 @@ assert_forecast.forecast_sample <- function(
 
 #' @export
 #' @keywords check-forecasts
-#' @importFrom checkmate assert_names
+#' @importFrom checkmate assert_names, assert_set_equal
 assert_forecast.forecast_nominal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -315,6 +315,30 @@ assert_forecast.forecast_nominal <- function(
   assert(check_columns_present(forecast, "predicted_label"))
   assert_names(colnames(forecast), disjunct.from = c("sample_id", "quantile_level"))
   assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
+
+  # levels need to be the same
+  outcomes <- levels(forecast$observed)
+  assert_set_equal(levels(forecast$predicted_label), outcomes)
+
+  # forecasts need to be complete
+  forecast_unit <- get_forecast_unit(forecast)
+  complete <- forecast[, .(correct = test_set_equal(
+    as.character(predicted_label), outcomes)
+  ), by = forecast_unit]
+
+  if (any(!complete$correct)) {
+    issue <- head(complete[(correct), ..forecast_unit], 1)
+    issue <- lapply(issue, FUN = as.character)
+    issue_location <- paste(names(issue), "==", issue)
+
+    cli_abort(
+      c(`!` = "Found incomplete forecasts",
+        `i` = "For a nominal forecast, all possible outcomes must be assigned
+        a probability explicitly.",
+        `i` = "Found first missing probabilities in the forecast specified by
+        {.emph {issue_location}}")
+    )
+  }
   return(forecast[])
 }
 

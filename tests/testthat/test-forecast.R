@@ -193,13 +193,24 @@ test_that("as_forecast() produces a warning if outdated formats are used", {
 })
 
 # as_forecast.forecast_nominal() -----------------------------------------------
-test_that("as_forecast() works with a forecast_nominal object", {
+test_that("as_forecast.forecast_nominal() works as expected", {
   expect_s3_class(
     as_forecast(example_nominal),
     c("forecast_nominal", "data.table", "data.frame"),
     exact = TRUE
   )
+
+  ex_faulty <- data.table::copy(example_nominal)
+  ex_faulty <- ex_faulty[predicted != 0]
+  expect_warning(
+    expect_error(
+      as_forecast(ex_faulty),
+      "Found incomplete forecasts"
+    ),
+    "Some forecasts have different numbers of rows"
+  )
 })
+
 
 
 # ==============================================================================
