@@ -192,6 +192,15 @@ test_that("as_forecast() produces a warning if outdated formats are used", {
   )
 })
 
+# as_forecast.forecast_nominal() -----------------------------------------------
+test_that("as_forecast() works with a forecast_nominal object", {
+  expect_s3_class(
+    as_forecast(example_nominal),
+    c("forecast_nominal", "data.table", "data.frame"),
+    exact = TRUE
+  )
+})
+
 
 # ==============================================================================
 # is_forecast()

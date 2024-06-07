@@ -210,7 +210,10 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
   N <- length(levels)
 
   # predicted label
-  assert_factor(predicted_label, len = N)
+  assert_factor(
+    predicted_label, len = N,
+    any.missing = FALSE, empty.levels.ok = FALSE
+  )
   assert_set_equal(levels(observed), levels(predicted_label))
 
   # predicted
@@ -221,15 +224,17 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
       check_vector(predicted, len = N),
       check_matrix(predicted, nrows = n, ncols = N)
     )
-    summed_predictions <- .rowSums(predicted, m = 1, n = N)
+    summed_predictions <- .rowSums(predicted, m = 1, n = N, na.rm = TRUE)
   } else {
     assert_matrix(predicted, nrows = n)
-    summed_predictions <- round(rowSums(predicted), 10) # avoid numeric errors
+    summed_predictions <- round(rowSums(predicted, na.rm = TRUE), 10) # avoid numeric errors
   }
   if (!all(summed_predictions == 1)) {
+    row_indices <- as.character(which(summed_predictions != 1))
     cli_abort(
       c(
-        `!` = "Probabilities belonging to a single forecast must sum to one"
+        `!` = "Probabilities belonging to a single forecast must sum to one",
+        `i` = "Found issues in row{?s} {row_indices} of {.var predicted}"
       )
     )
   }
