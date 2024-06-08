@@ -330,15 +330,15 @@ assert_forecast.forecast_nominal <- function(
   ), by = forecast_unit]
 
   if (!all(complete$correct)) {
-    issue <- head(complete[(correct), ..forecast_unit], 1)
-    issue <- lapply(issue, FUN = as.character)
+    first_issue <- complete[(correct), ..forecast_unit][1]
+    first_issue <- lapply(first_issue, FUN = as.character)
     #nolint start: keyword_quote_linter object_usage_linter duplicate_argument_linter
-    issue_location <- paste(names(issue), "==", issue)
+    issue_location <- paste(names(first_issue), "==", first_issue)
     cli_abort(
       c(`!` = "Found incomplete forecasts",
         `i` = "For a nominal forecast, all possible outcomes must be assigned
         a probability explicitly.",
-        `i` = "Found first missing probabilities in the forecast specified by
+        `i` = "Found first missing probabilities in the forecast identified by
         {.emph {issue_location}}")
     )
     #nolint end

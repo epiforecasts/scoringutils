@@ -108,7 +108,7 @@ test_that("logs_nominal() works as expected", {
   )
 
   # NA values in observed values lead to NAs in result
-  observed2 <- c(observed["nothing"], observed[-1])
+  observed2 <- as.factor(c(observed["nothing"], observed[-1]))
   expect_equal(
     logs_nominal(observed2, predicted, predicted_label),
     c(NA, res_manual[-1])

@@ -58,6 +58,7 @@ globalVariables(c(
   "pit_value",
   "point",
   "predicted",
+  "predicted_label",
   "pval",
   "quantile_level",
   "ratio",
