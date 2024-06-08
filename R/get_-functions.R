@@ -323,7 +323,7 @@ get_duplicate_forecasts <- function(
   out[, scoringutils_InternalDuplicateCheck := NULL]
 
   if (counts) {
-    out <- out[, .(n_duplicates = .N), by = get_forecast_unit(out)]
+    out <- out[, .(n_duplicates = .N), by = c(get_forecast_unit(out))]
   }
 
   return(out[])
