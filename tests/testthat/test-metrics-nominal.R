@@ -64,7 +64,7 @@ test_that("Input checking for nominal forecasts works", {
   )
 
   # NA values in observed are permitted
-  observed2 <- c(observed[1:2], observed["missing"])
+  observed2 <- factor(c("one", "two", "missing"), levels = c("one", "two", "three"))
   expect_no_condition(
     assert_input_nominal(observed2, predicted, predicted_label)
   )
