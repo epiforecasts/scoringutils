@@ -30,8 +30,12 @@ test_that("Input checking for nominal forecasts works", {
   )
 
   # 6 observations, but only 3 forecasts
+  observed_wrong <- factor(
+    c("one", "two", "one", "one", "two", "three"),
+    levels = c("one", "two", "three")
+  )
   expect_error(
-    assert_input_nominal(c(observed, observed), predicted, predicted_label),
+    assert_input_nominal(observed_wrong, predicted, predicted_label),
     "Assertion on 'predicted' failed: Must have exactly 6 rows, but has 3 rows."
   )
 
