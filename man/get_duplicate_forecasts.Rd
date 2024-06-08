@@ -4,10 +4,14 @@
 \alias{get_duplicate_forecasts}
 \title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data)
+get_duplicate_forecasts(data, summarised = FALSE)
 }
 \arguments{
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
+
+\item{summarised}{Should the output be summarised, i.e. show the number of
+duplicates per forecast unit instead of the individual duplicated rows?
+Default is \code{FALSE}.}
 }
 \value{
 A data.frame with all rows for which a duplicate forecast was found

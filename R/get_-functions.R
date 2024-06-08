@@ -292,7 +292,9 @@ get_protected_columns <- function(data = NULL) {
 #' target.
 #'
 #' @param data A data.frame as used for [score()]
-#'
+#' @param summarised Should the output be summarised, i.e. show the number of
+#'   duplicates per forecast unit instead of the individual duplicated rows?
+#'   Default is `FALSE`.
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
@@ -303,9 +305,11 @@ get_protected_columns <- function(data = NULL) {
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(
-  data
+  data,
+  summarised = FALSE
 ) {
   assert_data_frame(data)
+  data <- ensure_data.table(data)
   forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
@@ -317,8 +321,12 @@ get_duplicate_forecasts <- function(
     colnames(data) %in% c("sample_id", "quantile_level", "predicted_label")
   ]
   setorderv(out, cols = c(forecast_unit, col, "predicted"))
-
   out[, scoringutils_InternalDuplicateCheck := NULL]
+
+  if (summarised) {
+    out <- out[, .(n_duplicates = .N), by = get_forecast_unit(out)]
+  }
+
   return(out[])
 }
 
