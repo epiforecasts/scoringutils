@@ -292,26 +292,40 @@ get_protected_columns <- function(data = NULL) {
 #' target.
 #'
 #' @param data A data.frame as used for [score()]
-#'
+#' @param counts Should the output show the number of duplicates per forecast
+#'   unit instead of the individual duplicated rows? Default is `FALSE`.
 #' @return A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
+#' @importFrom data.table setorderv
 #' @keywords check-forecasts
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 
 get_duplicate_forecasts <- function(
-  data
+  data,
+  counts = FALSE
 ) {
   assert_data_frame(data)
+  data <- ensure_data.table(data)
   forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level") %in% colnames(data)
   type <- c("sample_id", "quantile_level")[available_type]
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
+
+  col <- colnames(data)[
+    colnames(data) %in% c("sample_id", "quantile_level", "predicted_label")
+  ]
+  setorderv(out, cols = c(forecast_unit, col, "predicted"))
   out[, scoringutils_InternalDuplicateCheck := NULL]
+
+  if (counts) {
+    out <- out[, .(n_duplicates = .N), by = c(get_forecast_unit(out))]
+  }
+
   return(out[])
 }
 
