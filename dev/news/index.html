@@ -25,7 +25,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.2.9000" id="scoringutils-1229000">scoringutils 1.2.2.9000<a class="anchor" aria-label="anchor" href="#scoringutils-1229000"></a></h2>
@@ -110,8 +110,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="renamed-functions-1-2-2-9000">Renamed functions<a class="anchor" aria-label="anchor" href="#renamed-functions-1-2-2-9000"></a></h4>
-<ul><li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
-</li>
+<ul><li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>.</li>
 <li>Renamed <code>interval_coverage_quantile()</code> and <code>interval_coverage_dev_quantile()</code> to <code><a href="../reference/interval_coverage.html">interval_coverage()</a></code> and <code><a href="../reference/interval_coverage_deviation.html">interval_coverage_deviation()</a></code>, respectively.</li>
 <li>“range” was consistently renamed to “interval_range” in the code. The “range”-format (which was mostly used internally) was renamed to “interval”-format</li>
 <li>Renamed <code>correlation()</code> to <code><a href="../reference/get_correlations.html">get_correlations()</a></code> and <code>plot_correlation()</code> to <code><a href="../reference/plot_correlations.html">plot_correlations()</a></code>
@@ -121,7 +120,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="deleted-functions-1-2-2-9000">Deleted functions<a class="anchor" aria-label="anchor" href="#deleted-functions-1-2-2-9000"></a></h4>
-<ul><li>Removed abs_error and squared_error from the package in favour of <code><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">Metrics::ae</a></code> and <code><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">Metrics::se</a></code>.</li>
+<ul><li>Removed abs_error and squared_error from the package in favour of <code><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">Metrics::ae</a></code> and <code><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">Metrics::se</a></code>.<code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code> now sorts outputs according to the forecast unit, making it easier to spot duplicates. In addition, there is a <code>counts</code> option that allows the user to display the number of duplicates for each forecast unit, rather than the raw duplicated rows.</li>
 <li>Deleted the function <code>plot_ranges()</code>. If you want to continue using the functionality, you can find the function code <a href="https://github.com/epiforecasts/scoringutils/issues/462" class="external-link">here</a> or in the Deprecated-visualisations Vignette.</li>
 <li>Removed the function <code>plot_predictions()</code>, as well as its helper function <code>make_NA()</code>, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">here</a> (Issue <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">#659</a>) or in the Deprecated-visualisations Vignette.</li>
 <li>Removed the function <code>plot_score_table()</code>. You can find the code in the Deprecated-visualisations Vignette.</li>
@@ -193,15 +192,13 @@
 <h3 id="package-updates-1-2-0">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-0"></a></h3>
 <ul><li>The documentation was updated to reflect the recent changes since <code>scoringutils 1.1.0</code>. In particular, usage of the functions <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code>, <code>check_forecasts()</code> and <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> are now documented in the Vignettes. The introduction of these functions enhances the overall workflow and help to make the code more readable. All functions are designed to be used together with the pipe operator. For example, one can now use something like the following:</li>
 </ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">example_quantile</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/set_forecast_unit.html">set_forecast_unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"horizon"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">check_forecasts</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Documentation for the <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> has also been extended. This functions allows the user to easily add transformations of forecasts, as suggested in the paper <a href="https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1" class="external-link">“Scoring epidemiological forecasts on transformed scales”</a>. In an epidemiological context, for example, it may make sense to apply the natural logarithm first before scoring forecasts, in order to obtain scores that reflect how well models are able to predict exponential growth rates, rather than absolute values. Users can now do something like the following to score a transformed version of the data in addition to the original one:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span><span class="op">[</span><span class="va">true_value</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span><span class="op">[</span><span class="va">true_value</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
 <span><span class="va">data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/transform_forecasts.html">transform_forecasts</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">log_shift</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>

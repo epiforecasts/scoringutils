@@ -25,7 +25,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <h1>Plot interval coverage</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/plot.R" class="external-link"><code>R/plot.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/plot.R" class="external-link"><code>R/plot.R</code></a></small>
       <div class="d-none name"><code>plot_interval_coverage.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -37,7 +37,7 @@
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-coverage">coverage<a class="anchor" aria-label="anchor" href="#arg-coverage"></a></dt>
+<dl><dt id="arg-coverage">coverage<a class="anchor" aria-label="anchor" href="#arg-coverage"></a></dt>
 <dd><p>A data frame of coverage values as produced by
 <code><a href="get_coverage.html">get_coverage()</a></code>.</p></dd>
 <dt id="arg-colour">colour<a class="anchor" aria-label="anchor" href="#arg-colour"></a></dt>
@@ -46,14 +46,11 @@ Default is "model".</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>ggplot object with a plot of interval coverage</p>
+    <p>ggplot object with a plot of interval coverage</p>
     </div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
-<span class="r-in"><span>  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="co"># restricts number of cores used on CRAN</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span><span class="va">coverage</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_coverage.html">get_coverage</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">coverage</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_coverage.html">get_coverage</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-in"><span><span class="fu">plot_interval_coverage</span><span class="op">(</span><span class="va">coverage</span><span class="op">)</span></span></span>

@@ -75,7 +75,7 @@ prediction intervals, the quantile score is equivalent to the interval score."><
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <h1>Quantile score</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/metrics-quantile.R" class="external-link"><code>R/metrics-quantile.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/metrics-quantile.R" class="external-link"><code>R/metrics-quantile.R</code></a></small>
       <div class="d-none name"><code>quantile_score.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -112,7 +112,7 @@ prediction intervals, the quantile score is equivalent to the interval score.</p
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
+<dl><dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Numeric vector of size n with the observed values.</p></dd>
 <dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Numeric nxN matrix of predictive
@@ -136,7 +136,7 @@ value that represents how much is outside a central prediction interval
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>Numeric vector of length n with the quantile score. The scores are
+    <p>Numeric vector of length n with the quantile score. The scores are
 averaged across quantile levels if multiple quantile levels are provided
 (the result of calling <code><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans()</a></code> on the matrix of quantile scores that
 is computed based on the observed and predicted values).</p>

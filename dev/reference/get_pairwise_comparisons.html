@@ -95,7 +95,7 @@ Andrea Riebler and Michaela Paul."><meta name="robots" content="noindex"></head>
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <h1>Obtain pairwise comparisons between models</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
       <div class="d-none name"><code>get_pairwise_comparisons.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -150,7 +150,7 @@ Andrea Riebler and Michaela Paul.</p>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
+<dl><dt id="arg-scores">scores<a class="anchor" aria-label="anchor" href="#arg-scores"></a></dt>
 <dd><p>An object of class <code>scores</code> (a data.table with
 scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
@@ -177,7 +177,7 @@ respect to a baseline model.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>A data.table with the results of pairwise comparisons
+    <p>A data.table with the results of pairwise comparisons
 containing the mean score ratios (<code>mean_scores_ratio</code>),
 unadjusted (<code>pval</code>) and adjusted (<code>adj_pval</code>) p-values, and relative skill
 values of each model (<code>..._relative_skill</code>). If a baseline model is given
@@ -191,10 +191,7 @@ then the scaled relative skill is reported as well
     </div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
-<span class="r-in"><span>  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="co"># restricts number of cores used on CRAN</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="score.html">score</a></span><span class="op">(</span><span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>

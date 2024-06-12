@@ -25,7 +25,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <h1>Transform forecasts and observed values</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/HEAD/R/convenience-functions.R" class="external-link"><code>R/convenience-functions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/convenience-functions.R" class="external-link"><code>R/convenience-functions.R</code></a></small>
       <div class="d-none name"><code>transform_forecasts.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -43,7 +43,7 @@
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
+<dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
 <dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
@@ -72,7 +72,7 @@ the default option of <code><a href="log_shift.html">log_shift()</a></code> this
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>A forecast object with either a transformed version of the data, or
+    <p>A forecast object with either a transformed version of the data, or
 one with both the untransformed and the transformed data. includes the
 original data as well as a transformation of the original data. There will
 be one additional column, `scale', present which will be set to "natural"
