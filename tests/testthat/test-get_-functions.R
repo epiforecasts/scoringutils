@@ -214,6 +214,15 @@ test_that("get_duplicate_forecasts() works as expected with a data.frame", {
   expect_equal(nrow(duplicates), 20)
 })
 
+test_that("get_duplicate_forecasts() shows counts correctly", {
+  duplicates <- get_duplicate_forecasts(
+    rbind(example_quantile, example_quantile[101:110, ]),
+    counts = TRUE
+  )
+  expect_equal(nrow(duplicates), 2)
+  expect_equal(unique(duplicates$n_duplicates), 10)
+})
+
 
 # ==============================================================================
 # `get_forecast_type`
