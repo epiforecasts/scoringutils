@@ -67,14 +67,14 @@ scores <- score(forecast_quantile)
   - `plot_avail_forecasts()` was renamed `plot_forecast_counts()` in line with the change in the function name. The `x` argument no longer has a default value, as the value will depend on the data provided by the user.
   
 ### Renamed functions
-- The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`
+- The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`. 
 - Renamed `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` to `interval_coverage()` and `interval_coverage_deviation()`, respectively. 
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
 - `pit()` was renamed to `get_pit()`. 
 
 ### Deleted functions
-- Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`.
+- Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`.`get_duplicate_forecasts()` now sorts outputs according to the forecast unit, making it easier to spot duplicates. In addition, there is a `counts` option that allows the user to display the number of duplicates for each forecast unit, rather than the raw duplicated rows.
 - Deleted the function `plot_ranges()`. If you want to continue using the functionality, you can find the function code [here](https://github.com/epiforecasts/scoringutils/issues/462) or in the Deprecated-visualisations Vignette.
 - Removed the function `plot_predictions()`, as well as its helper function `make_NA()`, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found [here](https://github.com/epiforecasts/scoringutils/issues/659) (Issue #659) or in the Deprecated-visualisations Vignette.
 - Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
