@@ -17,7 +17,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   - `score()` and many other functions now require a validated `forecast` object. `forecast` objects can be created using the function `as_forecast()` (which replaces the previous `check_forecast()`).
   `score()` now returns objects of class `scores` with a stored attribute `metrics` that holds the names of the scoring rules that were used. Users can call `get_metrics()` to access the names of those scoring rules.
   - `score()` now returns one score per forecast, instead of one score per sample or quantile.
-  - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()`, `metrics_binary()`, and `metrisc_nominal()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
+  - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()`, `metrics_binary()`, and `metrics_nominal()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
   - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `customise_metric()` and `select_metric()`.
 
 ### Creating a forecast object  
@@ -34,8 +34,8 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
     quantile_level = "quantile_level",
     forecast_unit = c("model", "location", "target_end_date", "forecast_date", "target_type")
   )
-scores <- score(forecast_quantile)
-```
+  scores <- score(forecast_quantile)
+  ```
 - Overall, we updated the suggested workflows for how users should work with the package. The following gives an overview (see the  [updated paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) for more details). 
   ![package workflows](./man/figures/workflow.png)
   
