@@ -435,7 +435,7 @@ new_forecast <- function(data, classname) {
 #' information).
 #'
 #' You can also test for a specific `forecast_*` class using the appropriate
-#' `is_forecast_forecast_*` function.
+#' `is_forecast_*` function.
 #'
 #' @param x An R object.
 #' @param ... Additional arguments
@@ -466,27 +466,27 @@ is_forecast.forecast <- function(x, ...) {
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_forecast_sample <- function(x, ...) {
+is_forecast_sample <- function(x, ...) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_forecast_binary <- function(x, ...) {
+is_forecast_binary <- function(x, ...) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_forecast_point <- function(x, ...) {
+is_forecast_point <- function(x, ...) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_forecast_quantile <- function(x, ...) {
+is_forecast_quantile <- function(x, ...) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }

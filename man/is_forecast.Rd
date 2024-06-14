@@ -4,10 +4,10 @@
 \alias{is_forecast}
 \alias{is_forecast.default}
 \alias{is_forecast.forecast}
-\alias{is_forecast_forecast_sample}
-\alias{is_forecast_forecast_binary}
-\alias{is_forecast_forecast_point}
-\alias{is_forecast_forecast_quantile}
+\alias{is_forecast_sample}
+\alias{is_forecast_binary}
+\alias{is_forecast_point}
+\alias{is_forecast_quantile}
 \title{Test whether an object is a forecast object}
 \usage{
 is_forecast(x, ...)
@@ -16,13 +16,13 @@ is_forecast(x, ...)
 
 \method{is_forecast}{forecast}(x, ...)
 
-is_forecast_forecast_sample(x, ...)
+is_forecast_sample(x, ...)
 
-is_forecast_forecast_binary(x, ...)
+is_forecast_binary(x, ...)
 
-is_forecast_forecast_point(x, ...)
+is_forecast_point(x, ...)
 
-is_forecast_forecast_quantile(x, ...)
+is_forecast_quantile(x, ...)
 }
 \arguments{
 \item{x}{An R object.}
@@ -39,7 +39,7 @@ corresponding to the forecast type, see \code{\link[=as_forecast]{as_forecast()}
 information).
 
 You can also test for a specific \verb{forecast_*} class using the appropriate
-\verb{is_forecast_forecast_*} function.
+\verb{is_forecast_*} function.
 }
 \examples{
 forecast_binary <- as_forecast(example_binary)
