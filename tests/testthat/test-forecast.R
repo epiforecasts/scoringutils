@@ -204,14 +204,14 @@ test_that("is_forecast() works as expected", {
   ex_continuous <- suppressMessages(as_forecast(example_sample_continuous))
 
   expect_true(is_forecast(ex_binary))
-  expect_true(is_forecast_forecast_point(ex_point))
-  expect_true(is_forecast_forecast_quantile(ex_quantile))
+  expect_true(is_forecast_point(ex_point))
+  expect_true(is_forecast_quantile(ex_quantile))
   expect_true(is_forecast(ex_continuous))
 
   expect_false(is_forecast(1:10))
   expect_false(is_forecast(data.table::as.data.table(example_point)))
-  expect_false(is_forecast_forecast_sample(ex_quantile))
-  expect_false(is_forecast_forecast_quantile(ex_binary))
+  expect_false(is_forecast_sample(ex_quantile))
+  expect_false(is_forecast_quantile(ex_binary))
 })
 
 
