@@ -429,13 +429,13 @@ new_forecast <- function(data, classname) {
 #' @title Test whether an object is a forecast object
 #'
 #' @description
-#' Generic function to test whether an object is a forecast object (i.e. a
+#' Test whether an object is a forecast object (i.e. a
 #' `data.table` with a class `forecast` and an additional class `forecast_*`
-#' corresponding to the forecast type). You
-#' can also test for a specific `forecast_*` class using the appropriate
-#' `is_forecast.forecast_*` method. For example, to check whether an object is
-#' of class `forecast_quantile`, you would use
-#' `scoringutils:::is_forecast.forecast_quantile()`.
+#' corresponding to the forecast type, see [as_forecast()] for more
+#' information).
+#'
+#' You can also test for a specific `forecast_*` class using the appropriate
+#' `is_forecast_forecast_*` function.
 #'
 #' @param x An R object.
 #' @param ... Additional arguments
@@ -459,27 +459,34 @@ is_forecast.default <- function(x, ...) {
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_sample <- function(x, ...) {
+is_forecast.forecast <- function(x, ...) {
+  inherits(x, "forecast")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast_forecast_sample <- function(x, ...) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_binary <- function(x, ...) {
+is_forecast_forecast_binary <- function(x, ...) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_point <- function(x, ...) {
+is_forecast_forecast_point <- function(x, ...) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_quantile <- function(x, ...) {
+is_forecast_forecast_quantile <- function(x, ...) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }

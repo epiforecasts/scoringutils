@@ -3,23 +3,26 @@
 \name{is_forecast}
 \alias{is_forecast}
 \alias{is_forecast.default}
-\alias{is_forecast.forecast_sample}
-\alias{is_forecast.forecast_binary}
-\alias{is_forecast.forecast_point}
-\alias{is_forecast.forecast_quantile}
+\alias{is_forecast.forecast}
+\alias{is_forecast_forecast_sample}
+\alias{is_forecast_forecast_binary}
+\alias{is_forecast_forecast_point}
+\alias{is_forecast_forecast_quantile}
 \title{Test whether an object is a forecast object}
 \usage{
 is_forecast(x, ...)
 
 \method{is_forecast}{default}(x, ...)
 
-\method{is_forecast}{forecast_sample}(x, ...)
+\method{is_forecast}{forecast}(x, ...)
 
-\method{is_forecast}{forecast_binary}(x, ...)
+is_forecast_forecast_sample(x, ...)
 
-\method{is_forecast}{forecast_point}(x, ...)
+is_forecast_forecast_binary(x, ...)
 
-\method{is_forecast}{forecast_quantile}(x, ...)
+is_forecast_forecast_point(x, ...)
+
+is_forecast_forecast_quantile(x, ...)
 }
 \arguments{
 \item{x}{An R object.}
@@ -30,13 +33,13 @@ is_forecast(x, ...)
 \code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
 }
 \description{
-Generic function to test whether an object is a forecast object (i.e. a
+Test whether an object is a forecast object (i.e. a
 \code{data.table} with a class \code{forecast} and an additional class \verb{forecast_*}
-corresponding to the forecast type). You
-can also test for a specific \verb{forecast_*} class using the appropriate
-\verb{is_forecast.forecast_*} method. For example, to check whether an object is
-of class \code{forecast_quantile}, you would use
-\code{scoringutils:::is_forecast.forecast_quantile()}.
+corresponding to the forecast type, see \code{\link[=as_forecast]{as_forecast()}} for more
+information).
+
+You can also test for a specific \verb{forecast_*} class using the appropriate
+\verb{is_forecast_forecast_*} function.
 }
 \examples{
 forecast_binary <- as_forecast(example_binary)
