@@ -11,12 +11,19 @@ Scoring rules are wrapped in run_safely() to catch errors and to make
 sure that only arguments are passed to the scoring rule that are actually
 accepted by it."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
+
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
@@ -30,14 +37,18 @@ accepted by it."><meta name="robots" content="noindex"></head><body>
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/epiforecasts/scoringutils/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
+
       <h1>Apply a list of functions to a data table of forecasts</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/score.R" class="external-link"><code>R/score.R</code></a></small>
       <div class="d-none name"><code>apply_metrics.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This helper function applies scoring rules (stored as a list of
 functions) to a data table of forecasts. <code>apply_metrics</code> is used within
@@ -46,15 +57,21 @@ Scoring rules are wrapped in <code><a href="run_safely.html">run_safely()</a></c
 sure that only arguments are passed to the scoring rule that are actually
 accepted by it.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">apply_metrics</span><span class="op">(</span><span class="va">forecast</span>, <span class="va">metrics</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
+
+
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>A named list of scoring functions. Names will be used as
 column names in the output. See <code><a href="metrics_point.html">metrics_point()</a></code>, <code><a href="metrics_binary.html">metrics_binary()</a></code>,
@@ -63,24 +80,37 @@ default metrics used. Note that if you want to pass arguments to any
 given metric, you should do that through the function <code><a href="customise_metric.html">customise_metric()</a></code>
 and pass an updated list of functions with your custom metric to
 the <code>metrics</code> argument in <code><a href="score.html">score()</a></code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to the scoring rules. Note that
 this is currently not used, as all calls to <code>apply_scores</code> currently
 avoid passing arguments via <code>...</code> and instead expect that the metrics
 directly be modified using <code><a href="customise_metric.html">customise_metric()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data table with the forecasts and the calculated metrics.</p>
     </div>
+
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

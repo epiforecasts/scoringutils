@@ -37,12 +37,19 @@ be characterised by one or multiple prediction intervals, e.g. the lower
 and upper bounds of the 50% and 90% prediction intervals (corresponding to
 the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles)."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
+
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
@@ -56,14 +63,18 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles)."><meta name="robots"
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/epiforecasts/scoringutils/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
+
       <h1>Transform from a quantile format to an interval format</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/utils_data_handling.R" class="external-link"><code>R/utils_data_handling.R</code></a></small>
       <div class="d-none name"><code>quantile_to_interval.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Internal helper function to transform from a quantile format to an interval
 format (which is no longer a supported forecast format, but still used
@@ -85,6 +96,7 @@ be characterised by one or multiple prediction intervals, e.g. the lower
 and upper bounds of the 50% and 90% prediction intervals (corresponding to
 the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">quantile_to_interval</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
@@ -98,13 +110,20 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 <span></span>
 <span><span class="fu">quantile_to_interval_numeric</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments</p></dd>
+
+
 <dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A data.table with forecasts in a quantile-based format (see
 <code><a href="as_forecast.html">as_forecast()</a></code>).</p></dd>
+
+
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>The format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column <code>boundary</code> (with values either
@@ -112,13 +131,19 @@ the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).</p>
 the interval. If "wide", there will be a column <code>interval_range</code> and two
 columns <code>lower</code> and <code>upper</code> that contain the lower and upper bounds of the
 prediction interval, respectively.</p></dd>
+
+
 <dt id="arg-keep-quantile-col">keep_quantile_col<a class="anchor" aria-label="anchor" href="#arg-keep-quantile-col"></a></dt>
 <dd><p>keep the <code>quantile_level</code> column in the final
 output after transformation (default is FALSE). This only works if
 <code>format = "long"</code>. If <code>format = "wide"</code>, the <code>quantile_level</code> column will
 always be dropped.</p></dd>
+
+
 <dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
 <dd><p>Numeric vector of size n with the observed values.</p></dd>
+
+
 <dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
 <dd><p>Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
@@ -126,9 +151,12 @@ to the number of observed values) and N
 (number of columns) the number of quantiles per forecast.
 If <code>observed</code> is just a single number, then predicted can just be a
 vector of size N.</p></dd>
+
+
 <dt id="arg-quantile-level">quantile_level<a class="anchor" aria-label="anchor" href="#arg-quantile-level"></a></dt>
 <dd><p>Vector of of size N with the quantile levels
 for which predictions were made.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -142,14 +170,24 @@ a data.table in a wide interval format with columns <code>forecast_id</code>,
 is a unique identifier for each forecast. Rows will be reordered according to
 <code>forecast_id</code> and <code>interval_range</code>.</p>
     </div>
+
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

@@ -5,12 +5,19 @@ checks for the specific forecast type."><meta property="og:description" content=
 checks that are the same for all forecast types and then perform specific
 checks for the specific forecast type."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
+
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
@@ -24,19 +31,24 @@ checks for the specific forecast type."><meta name="robots" content="noindex"></
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/epiforecasts/scoringutils/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
+
       <h1>Assert that input is a forecast object and passes validations</h1>
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/forecast.R" class="external-link"><code>R/forecast.R</code></a></small>
       <div class="d-none name"><code>assert_forecast.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Methods for the different classes run <code><a href="assert_forecast_generic.html">assert_forecast_generic()</a></code>, which performs
 checks that are the same for all forecast types and then perform specific
 checks for the specific forecast type.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">assert_forecast</span><span class="op">(</span><span class="va">forecast</span>, forecast_type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -56,21 +68,31 @@ checks for the specific forecast type.</p>
 <span><span class="co"># S3 method for class 'forecast_sample'</span></span>
 <span><span class="fu">assert_forecast</span><span class="op">(</span><span class="va">forecast</span>, forecast_type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
 <dd><p>A forecast object (a validated data.table with predicted and
 observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)</p></dd>
+
+
 <dt id="arg-forecast-type">forecast_type<a class="anchor" aria-label="anchor" href="#arg-forecast-type"></a></dt>
 <dd><p>(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by <code>scoringutils</code> based on the
 input does not match this, an error will be thrown. If <code>NULL</code> (the
 default), the forecast type will be inferred from the data.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical. If <code>FALSE</code> (default is <code>TRUE</code>), no messages and
 warnings will be created.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -89,6 +111,7 @@ represented as a set of predictive quantiles)</p></li>
 as a set of predictive samples)</p></li>
 </ul><p>Forecast types are determined based on the columns present in the input data.
 Here is an overview of the required format for each forecast type:
+
   </p><div style="text-align: left">
   <img src="figures/required-inputs.png" style="width:750px;max-width:100%;"></div>
 <p><em>All forecast types</em> require a data.frame or similar with columns <code>observed</code>
@@ -109,6 +132,7 @@ numeric with sample indices.</p>
 (<a href="example_quantile.html">example_quantile</a>, <a href="example_sample_continuous.html">example_sample_continuous</a>, <a href="example_sample_discrete.html">example_sample_discrete</a>,
 <code><a href="example_point.html">example_point()</a></code>, and <a href="example_binary.html">example_binary</a>).</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_forecast.html">as_forecast</a></span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
@@ -121,12 +145,21 @@ numeric with sample indices.</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://followtheargument.org/" class="external-link">Nikos Bosse</a>, <a href="https://www.samabbott.co.uk/" class="external-link">Sam Abbott</a>, Hugo Gruson, Sebastian Funk.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 
