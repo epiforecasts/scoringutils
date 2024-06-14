@@ -90,6 +90,7 @@ scores <- score(forecast_quantile)
 - Files ending in ".Rda" were renamed to ".rds" where appropriate when used together with `saveRDS()` or `readRDS()`.
 - Added a subsetting `[` operator for scores, so that the score name attribute gets preserved when subsetting.
 - Switched to using `cli` for condition handling and signalling, and added tests for all the `check_*()` and `test_*()` functions. See #583 by @jamesmbaazam and reviewed by @nikosbosse and @seabbs.
+- `scoringutils` now requires R >= 4.0
 
 
 ### Documentation and testing
