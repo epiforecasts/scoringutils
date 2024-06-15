@@ -22,12 +22,14 @@ is_forecast_quantile(x)
 \item{x}{An R object.}
 }
 \value{
-\code{TRUE} if the object is of class \verb{forecast_*}, \code{FALSE} otherwise.
+\emph{\code{is_forecast}}: \code{TRUE} if the object is of class \code{forecast},
+\code{FALSE} otherwise.
+
+\emph{\verb{is_forecast_*}}: \code{TRUE} if the object is of class \verb{forecast_*} in addition
+to class \code{forecast}, \code{FALSE} otherwise.
 }
 \description{
-Test whether an object is a forecast object (i.e. a
-\code{data.table} with a class \code{forecast} and an additional class \verb{forecast_*}
-corresponding to the forecast type, see \code{\link[=as_forecast]{as_forecast()}} for more
+Test whether an object is a forecast object (see \code{\link[=as_forecast]{as_forecast()}} for more
 information).
 
 You can test for a specific \verb{forecast_*} class using the appropriate

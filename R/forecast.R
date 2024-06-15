@@ -429,16 +429,19 @@ new_forecast <- function(data, classname) {
 #' @title Test whether an object is a forecast object
 #'
 #' @description
-#' Test whether an object is a forecast object (i.e. a
-#' `data.table` with a class `forecast` and an additional class `forecast_*`
-#' corresponding to the forecast type, see [as_forecast()] for more
+#' Test whether an object is a forecast object (see [as_forecast()] for more
 #' information).
 #'
 #' You can test for a specific `forecast_*` class using the appropriate
 #' `is_forecast_*` function.
 #'
 #' @param x An R object.
-#' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
+#' @return
+#' *`is_forecast`*: `TRUE` if the object is of class `forecast`,
+#' `FALSE` otherwise.
+#'
+#' *`is_forecast_*`*: `TRUE` if the object is of class `forecast_*` in addition
+#' to class `forecast`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts
 #' @examples
