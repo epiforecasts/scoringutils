@@ -434,59 +434,44 @@ new_forecast <- function(data, classname) {
 #' corresponding to the forecast type, see [as_forecast()] for more
 #' information).
 #'
-#' You can also test for a specific `forecast_*` class using the appropriate
+#' You can test for a specific `forecast_*` class using the appropriate
 #' `is_forecast_*` function.
 #'
 #' @param x An R object.
-#' @param ... Additional arguments
 #' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts
 #' @examples
 #' forecast_binary <- as_forecast(example_binary)
 #' is_forecast(forecast_binary)
-is_forecast <- function(x, ...) {
-  UseMethod("is_forecast")
-}
-
-#' @export
-#' @rdname is_forecast
-#' @keywords check-forecasts
-is_forecast.default <- function(x, ...) {
-  return(FALSE)
-}
-
-#' @export
-#' @rdname is_forecast
-#' @keywords check-forecasts
-is_forecast.forecast <- function(x, ...) {
+is_forecast <- function(x) {
   inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_sample <- function(x, ...) {
+is_forecast_sample <- function(x) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_binary <- function(x, ...) {
+is_forecast_binary <- function(x) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_point <- function(x, ...) {
+is_forecast_point <- function(x) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast_quantile <- function(x, ...) {
+is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }
