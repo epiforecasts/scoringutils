@@ -528,3 +528,10 @@ is_forecast_point <- function(x) {
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast_nominal <- function(x) {
+  inherits(x, "forecast_nominal") && inherits(x, "forecast")
+}
