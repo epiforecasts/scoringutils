@@ -68,7 +68,7 @@ test_that("sample_to_quantiles works", {
 
   expect_error(
     sample_to_quantile(samples, quantile_level = c(0.25, 0.75)),
-    "The input needs to be a forecast object."
+    "The input needs to be a valid forecast object."
   )
 
   wrongclass <- as_forecast(samples)

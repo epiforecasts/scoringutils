@@ -39,7 +39,7 @@ test_that("print methods fail gracefully", {
 
   # message if forecast unit can't be computed
   test <- 1:10
-  class(test) <- "forecast_point"
+  class(test) <- c("forecast", "forecast_point")
   expect_warning(
     expect_message(
       expect_message(

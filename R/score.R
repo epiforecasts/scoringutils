@@ -76,7 +76,7 @@ score <- function(forecast, metrics, ...) {
 score.default <- function(forecast, metrics, ...) {
   cli_abort(
     c(
-      "!" = "The input needs to be a forecast object.",
+      "!" = "The input needs to be a valid forecast object.",
       "i" = "Please run `as_forecast()` first." # nolint
     )
   )

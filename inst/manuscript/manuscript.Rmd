@@ -204,7 +204,7 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \label{tab:input-score}
 \end{table}
 
-The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object". The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values, and a column `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
+The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object" (a \code{data.table} with a class `forecast` and an additional class corresponding to the forecast type). The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values, and a column `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
 
 The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_sample_continuous`, `example_sample_discrete`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
@@ -224,7 +224,7 @@ forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast() 
 ```
 
-The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has dedicated methods e.g., for input validation, scoring and printing. The classes corresponding to the forecast types are `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`. 
+The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_quantile` or `forecast_sample`). 
 
 \fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
