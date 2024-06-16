@@ -3,8 +3,9 @@
 #' @description
 #' Process and validate a data.frame (or similar) or similar with forecasts
 #' and observations. If the input passes all input checks, it will be converted
-#' to a `forecast` object. The class of that object depends on the forecast
-#' type of the input. See the details section below for more information
+#' to a `forecast` object. A forecast object is a `data.table` with a
+#' class `forecast` and an additional class that depends on the forecast type.
+#' See the details section below for more information
 #' on the expected input formats.
 #'
 #' `as_forecast()` gives users some control over how their data is parsed.
@@ -36,8 +37,7 @@
 #'   forecast_unit = c("model", "target_type", "target_end_date",
 #'                     "horizon", "location")
 #' )
-as_forecast <- function(data,
-                        ...) {
+as_forecast <- function(data, ...) {
   UseMethod("as_forecast")
 }
 
@@ -169,18 +169,16 @@ as_forecast.default <- function(data,
 #' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
-#' Methods for the different classes run [assert_forecast_generic()], which performs
-#' checks that are the same for all forecast types and then perform specific
-#' checks for the specific forecast type.
+#' Assert that an object is a forecast object (i.e. a `data.table` with a class
+#' `forecast` and an additional class `forecast_*` corresponding to the forecast
+#' type).
 #' @inheritParams as_forecast
 #' @inheritParams score
 #' @param verbose Logical. If `FALSE` (default is `TRUE`), no messages and
 #'   warnings will be created.
 #' @inheritSection forecast_types Forecast types and input formats
 #' @return
-#' Depending on the forecast type, an object of class
-#' `forecast_binary`, `forecast_point`, `forecast_sample` or
-#' `forecast_quantile`.
+#' Returns `NULL` invisibly.
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_frame
 #' @export
@@ -204,7 +202,7 @@ assert_forecast.default <- function(
 ) {
   cli_abort(
     c(
-      "!" = "The input needs to be a forecast object.",
+      "!" = "The input needs to be a valid forecast object.",
       "i" = "Please run `as_forecast()` first." # nolint
     )
   )
@@ -422,7 +420,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
 new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   data <- ensure_model_column(data)
-  class(data) <- c(classname, class(data))
+  class(data) <- c("forecast", classname, class(data))
   data <- copy(data)
   return(data[])
 }
@@ -431,55 +429,52 @@ new_forecast <- function(data, classname) {
 #' @title Test whether an object is a forecast object
 #'
 #' @description
-#' Generic function to test whether an object is of class `forecast_*`. You
-#' can also test for a specific `forecast_*` class using the appropriate
-#' `is_forecast.forecast_*` method. For example, to check whether an object is
-#' of class `forecast_quantile`, you would use
-#' `scoringutils:::is_forecast.forecast_quantile()`.
+#' Test whether an object is a forecast object (see [as_forecast()] for more
+#' information).
+#'
+#' You can test for a specific `forecast_*` class using the appropriate
+#' `is_forecast_*` function.
 #'
 #' @param x An R object.
-#' @param ... Additional arguments
-#' @return `TRUE` if the object is of class `forecast_*`, `FALSE` otherwise.
+#' @return
+#' *`is_forecast`*: `TRUE` if the object is of class `forecast`,
+#' `FALSE` otherwise.
+#'
+#' *`is_forecast_*`*: `TRUE` if the object is of class `forecast_*` in addition
+#' to class `forecast`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts
 #' @examples
 #' forecast_binary <- as_forecast(example_binary)
 #' is_forecast(forecast_binary)
-is_forecast <- function(x, ...) {
-  UseMethod("is_forecast")
+is_forecast <- function(x) {
+  inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.default <- function(x, ...) {
-  return(FALSE)
+is_forecast_sample <- function(x) {
+  inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_sample <- function(x, ...) {
-  inherits(x, "forecast_sample")
+is_forecast_binary <- function(x) {
+  inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_binary <- function(x, ...) {
-  inherits(x, "forecast_binary")
+is_forecast_point <- function(x) {
+  inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
 #' @keywords check-forecasts
-is_forecast.forecast_point <- function(x, ...) {
-  inherits(x, "forecast_point")
-}
-
-#' @export
-#' @rdname is_forecast
-#' @keywords check-forecasts
-is_forecast.forecast_quantile <- function(x, ...) {
-  inherits(x, "forecast_quantile")
+is_forecast_quantile <- function(x) {
+  inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }

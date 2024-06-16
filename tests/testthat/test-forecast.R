@@ -20,7 +20,7 @@ test_that("as_forecast() works as expected", {
 
   expect_s3_class(
     as_forecast(test),
-    c("forecast_quantile", "data.table", "data.frame"),
+    c("forecast", "forecast_quantile", "data.table", "data.frame"),
     exact = TRUE)
 
   # expect error when arguments are not correct
@@ -204,14 +204,14 @@ test_that("is_forecast() works as expected", {
   ex_continuous <- suppressMessages(as_forecast(example_sample_continuous))
 
   expect_true(is_forecast(ex_binary))
-  expect_true(is_forecast(ex_point))
-  expect_true(is_forecast(ex_quantile))
+  expect_true(is_forecast_point(ex_point))
+  expect_true(is_forecast_quantile(ex_quantile))
   expect_true(is_forecast(ex_continuous))
 
   expect_false(is_forecast(1:10))
   expect_false(is_forecast(data.table::as.data.table(example_point)))
-  expect_false(is_forecast.forecast_sample(ex_quantile))
-  expect_false(is_forecast.forecast_quantile(ex_binary))
+  expect_false(is_forecast_sample(ex_quantile))
+  expect_false(is_forecast_quantile(ex_binary))
 })
 
 
@@ -222,7 +222,7 @@ test_that("is_forecast() works as expected", {
 test_that("assert_forecast() works as expected", {
   # test that by default, `as_forecast()` errors
   expect_error(assert_forecast(data.frame(x = 1:10)),
-               "The input needs to be a forecast object.")
+               "The input needs to be a valid forecast object.")
 })
 
 test_that("assert_forecast.forecast_binary works as expected", {

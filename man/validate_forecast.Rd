@@ -19,9 +19,7 @@ default), the forecast type will be inferred from the data.}
 warnings will be created.}
 }
 \value{
-Depending on the forecast type, an object of class
-\code{forecast_binary}, \code{forecast_point}, \code{forecast_sample} or
-\code{forecast_quantile}.
+Returns \code{NULL} invisibly.
 }
 \description{
 The function re-validates an existing forecast object. It is similar to
