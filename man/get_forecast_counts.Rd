@@ -47,7 +47,7 @@ This is useful to determine whether there are any missing forecasts.
 }
 
 get_forecast_counts(
-  as_forecast(example_quantile),
+  as_forecast_quantile(example_quantile),
   by = c("model", "target_type")
 )
 }

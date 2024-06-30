@@ -131,14 +131,14 @@ library(magrittr) # pipe operator
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 
-validated <- as_forecast(example_quantile)
+validated <- as_forecast_quantile(example_quantile)
 score(validated) \%>\%
   summarise_scores(by = c("model", "target_type"))
 
 # set forecast unit manually (to avoid issues with scoringutils trying to
 # determine the forecast unit automatically)
 example_quantile \%>\%
-  as_forecast(
+  as_forecast_quantile(
     forecast_unit = c(
       "location", "target_end_date", "target_type", "horizon", "model"
     )
@@ -147,11 +147,11 @@ example_quantile \%>\%
 
 # forecast formats with different metrics
 \dontrun{
-score(as_forecast(example_binary))
-score(as_forecast(example_quantile))
-score(as_forecast(example_point))
-score(as_forecast(example_sample_discrete))
-score(as_forecast(example_sample_continuous))
+score(as_forecast_binary(example_binary))
+score(as_forecast_quantile(example_quantile))
+score(as_forecast_point(example_point))
+score(as_forecast_sample(example_sample_discrete))
+score(as_forecast_sample(example_sample_continuous))
 }
 }
 \references{

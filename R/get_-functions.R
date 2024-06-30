@@ -383,7 +383,7 @@ get_duplicate_forecasts <- function(
 #' @examples
 #' library(magrittr) # pipe operator
 #' example_quantile %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #'   get_coverage(by = "model")
 #' @export
 #' @keywords scoring
@@ -471,7 +471,7 @@ get_coverage <- function(forecast, by = "model") {
 #' }
 #'
 #' get_forecast_counts(
-#'   as_forecast(example_quantile),
+#'   as_forecast_quantile(example_quantile),
 #'   by = c("model", "target_type")
 #' )
 get_forecast_counts <- function(forecast,

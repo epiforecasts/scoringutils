@@ -2,21 +2,44 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\alias{as_forecast.default}
+\alias{as_forecast_point}
+\alias{as_forecast_binary}
+\alias{as_forecast_quantile}
+\alias{as_forecast_sample}
 \title{Create a \code{forecast} object}
 \usage{
-as_forecast(data, ...)
-
-\method{as_forecast}{default}(
+as_forecast_point(
   data,
   forecast_unit = NULL,
-  forecast_type = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL
+)
+
+as_forecast_binary(
+  data,
+  forecast_unit = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL
+)
+
+as_forecast_quantile(
+  data,
+  forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
   model = NULL,
-  quantile_level = NULL,
-  sample_id = NULL,
-  ...
+  quantile_level = NULL
+)
+
+as_forecast_sample(
+  data,
+  forecast_unit = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL,
+  sample_id = NULL
 )
 }
 \arguments{
@@ -24,19 +47,12 @@ as_forecast(data, ...)
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
 on required input formats.}
 
-\item{...}{Additional arguments}
-
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns done by \code{as_forecast()}) that denote the unit of a
 single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.}
-
-\item{forecast_type}{(optional) The forecast type you expect the forecasts
-to have. If the forecast type as determined by \code{scoringutils} based on the
-input does not match this, an error will be thrown. If \code{NULL} (the
-default), the forecast type will be inferred from the data.}
 
 \item{observed}{(optional) Name of the column in \code{data} that contains the
 observed values. This column will be renamed to "observed".}
@@ -71,11 +87,13 @@ Process and validate a data.frame (or similar) or similar with forecasts
 and observations. If the input passes all input checks, it will be converted
 to a \code{forecast} object. A forecast object is a \code{data.table} with a
 class \code{forecast} and an additional class that depends on the forecast type.
+Every forecast type has its own \code{as_forecast_()} function.
 See the details section below for more information
 on the expected input formats.
 
-\code{as_forecast()} gives users some control over how their data is parsed.
-Using the arguments \code{observed}, \code{predicted}, and \code{model}, users can rename
+The \code{as_forecast_()} functions give users some control over how their data
+is parsed.
+Using the arguments \code{observed}, \code{predicted}, \code{model}, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
@@ -155,8 +173,8 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 
 \examples{
-as_forecast(example_binary)
-as_forecast(
+as_forecast_binary(example_binary)
+as_forecast_quantile(
   example_quantile,
   forecast_unit = c("model", "target_type", "target_end_date",
                     "horizon", "location")

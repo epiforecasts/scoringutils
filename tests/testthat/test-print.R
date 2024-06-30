@@ -3,9 +3,12 @@ test_that("print() works on forecast_* objects", {
   test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
                    na.omit(example_point), na.omit(example_sample_continuous), na.omit(example_sample_discrete))
   for (dat in test_dat){
-    dat <- as_forecast(dat)
     forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
+
+    fn_name <- paste0("as_forecast_", forecast_type)
+    fn <- get(fn_name)
+    dat <- suppressWarnings(suppressMessages(do.call(fn, list(dat))))
 
     # Check Forecast type
     expect_snapshot(print(dat))
@@ -22,7 +25,7 @@ test_that("print() works on forecast_* objects", {
 })
 
 test_that("print methods fail gracefully", {
-  test <- as_forecast(na.omit(example_quantile))
+  test <- as_forecast_quantile(na.omit(example_quantile))
   test$observed <- NULL
 
   # message if forecast type can't be computed

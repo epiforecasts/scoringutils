@@ -63,7 +63,7 @@ coverage is 80\%, the coverage deviation is -0.1.
 \examples{
 library(magrittr) # pipe operator
 example_quantile \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
   get_coverage(by = "model")
 }
 \keyword{scoring}

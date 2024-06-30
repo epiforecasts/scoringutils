@@ -221,7 +221,7 @@ The raw input data needs to be processed and validated using the function `as_fo
 ```{r, eval=TRUE, echo=TRUE, cache=FALSE}
 library("scoringutils")
 forecast_quantile <- example_quantile[horizon == 2] |>
-  as_forecast() 
+  as_forecast_quantile() 
 ```
 
 The function \fct{as\_forecast} recognises the type of the forecast based on the available columns, transforms the input into a "forecast" object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_quantile` or `forecast_sample`). 
@@ -229,7 +229,7 @@ The function \fct{as\_forecast} recognises the type of the forecast based on the
 \fct{as\_forecast} can automatically determine the forecast type and forecast unit based on the input data. However, it can also take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
 forecast_quantile <- example_quantile[horizon == 2] |>
-  as_forecast(
+  as_forecast_quantile(
     forecast_unit = c(
       "model", "location", "target_end_date", 
       "forecast_date", "horizon", "location"
@@ -335,7 +335,7 @@ Users can obtain PIT histograms based on validated forecast objects using the fu
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_sample_continuous |>
-  as_forecast() |>
+  as_forecast_sample() |>
   get_pit(by = c("model", "target_type")) |>
   plot_pit() + 
   facet_grid(target_type ~ model)
@@ -396,7 +396,7 @@ The function \fct{score} is the workhorse of the package and applies a set of me
 
 ```{r}
 example_point[horizon == 2] |>
-  as_forecast() |>
+  as_forecast_point() |>
   score() |>
   print(2)
 ```
@@ -534,7 +534,7 @@ To detect systematic patterns it may be useful to visualise a single score acros
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (underprediction)"}
 example_sample_continuous[horizon == 2] |>
-  as_forecast() |>
+  as_forecast_sample() |>
   score() |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   summarise_scores(
