@@ -250,7 +250,8 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for observed values, predictions or
 #' quantile levels) and removes duplicate rows. `set_forecast_unit()` will
-#' mainly be called from [as_forecast()] through the `forecast_unit` argument.
+#' mainly be called when constructing a `forecast` object (see [as_forecast()])
+#' via the `forecast_unit` argument there.
 #'
 #' If not done explicitly, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names

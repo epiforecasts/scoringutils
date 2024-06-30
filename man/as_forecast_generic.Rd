@@ -18,7 +18,7 @@ See the details section of \code{\link[=as_forecast]{as_forecast()}} for additio
 on required input formats.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
-any renaming of columns done by \code{as_forecast()}) that denote the unit of a
+any renaming of columns) that denote the unit of a
 single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns

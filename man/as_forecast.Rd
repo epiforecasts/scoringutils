@@ -48,7 +48,7 @@ See the details section of \code{\link[=as_forecast]{as_forecast()}} for additio
 on required input formats.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
-any renaming of columns done by \code{as_forecast()}) that denote the unit of a
+any renaming of columns) that denote the unit of a
 single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
@@ -167,8 +167,8 @@ is even and zero otherwise, then this would mess up scoring as \code{scoringutil
 then thinks that this column was relevant in defining the forecast unit.
 
 In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the \code{forecast_unit} argument in \code{\link[=as_forecast]{as_forecast()}}. This will
-drop unneeded columns, while making sure that all
+usually through the \code{forecast_unit} argument in the \code{\link[=as_forecast]{as_forecast()}}
+functions. This will drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 

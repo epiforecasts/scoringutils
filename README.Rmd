@@ -97,18 +97,17 @@ Before scoring, input data needs to be validated and transformed into a forecast
 
 ```{r}
 forecast_quantile <- example_quantile |>
-  as_forecast(
+  as_forecast_quantile(
     forecast_unit = c(
       "location", "forecast_date", "target_end_date", "target_type", "model", "horizon"
-    ),
-    forecast_type = "quantile"
+    )
   )
 
 print(forecast_quantile, 2)
 ```
 
 ### The forecast unit
-For quantile-based and sample-based forecasts, a single prediction is represented by a set of several quantiles (or samples) from the predictive distribution, i.e. several rows in the input data. `scoringutils` therefore needs to group rows together that form a single forecast. `scoringutils` uses all other existing columns in the input data to achieve this - the values in all other columns should uniquely identify a single forecast. Additional columns unrelated to the forecast unit can mess this up. The `forecast_unit` argument in `as_forecast()` makes sure that only those columns are retained which are relevant for defining the unit of a single forecast. 
+For quantile-based and sample-based forecasts, a single prediction is represented by a set of several quantiles (or samples) from the predictive distribution, i.e. several rows in the input data. `scoringutils` therefore needs to group rows together that form a single forecast. `scoringutils` uses all other existing columns in the input data to achieve this - the values in all other columns should uniquely identify a single forecast. Additional columns unrelated to the forecast unit can mess this up. The `forecast_unit` argument in `as_forecast_...()` makes sure that only those columns are retained which are relevant for defining the unit of a single forecast. 
 
 
 ### Scoring forecasts

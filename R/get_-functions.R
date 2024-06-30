@@ -92,7 +92,7 @@ test_forecast_type_is_quantile <- function(data) {
 
 
 #' Assert that forecast type is as expected
-#' @param data A forecast object as produced by [as_forecast()].
+#' @param data A forecast object (see [as_forecast()]).
 #' @param actual The actual forecast type of the data
 #' @param desired The desired forecast type of the data
 #' @inherit document_assert_functions return

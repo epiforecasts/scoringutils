@@ -43,8 +43,7 @@ scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a forecast
-object (a data.table with forecasts and observations) as produced by
-\code{\link[=as_forecast]{as_forecast()}}.
+object (a data.table with forecasts and observations) (see \code{\link[=as_forecast]{as_forecast()}}).
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
@@ -120,8 +119,8 @@ is even and zero otherwise, then this would mess up scoring as \code{scoringutil
 then thinks that this column was relevant in defining the forecast unit.
 
 In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the \code{forecast_unit} argument in \code{\link[=as_forecast]{as_forecast()}}. This will
-drop unneeded columns, while making sure that all
+usually through the \code{forecast_unit} argument in the \code{\link[=as_forecast]{as_forecast()}}
+functions. This will drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 

@@ -21,7 +21,7 @@
 #'   See the details section of [as_forecast()] for additional information
 #'   on required input formats.
 #' @param forecast_unit (optional) Name of the columns in `data` (after
-#'   any renaming of columns done by `as_forecast()`) that denote the unit of a
+#'   any renaming of columns) that denote the unit of a
 #'   single forecast. See [get_forecast_unit()] for details.
 #'   If `NULL` (the default), all columns that are not required columns are
 #'   assumed to form the unit of a single forecast. If specified, all columns

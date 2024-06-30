@@ -1,7 +1,6 @@
 #' @title Evaluate forecasts
 #' @description `score()` applies a selection of scoring metrics to a forecast
-#' object (a data.table with forecasts and observations) as produced by
-#' [as_forecast()].
+#' object (a data.table with forecasts and observations) (see [as_forecast()]).
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
