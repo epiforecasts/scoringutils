@@ -43,3 +43,4 @@ This function splits out part of the functionality of
 It renames the required columns, where appropriate, and sets the forecast
 unit.
 }
+\keyword{check-forecasts}
