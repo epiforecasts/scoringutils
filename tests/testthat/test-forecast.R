@@ -192,6 +192,25 @@ test_that("as_forecast() produces a warning if outdated formats are used", {
   )
 })
 
+# as_forecast.forecast_nominal() -----------------------------------------------
+test_that("as_forecast.forecast_nominal() works as expected", {
+  expect_s3_class(
+    suppressMessages(as_forecast(example_nominal)),
+    c("forecast", "forecast_nominal", "data.table", "data.frame"),
+    exact = TRUE
+  )
+
+  ex_faulty <- data.table::copy(example_nominal)
+  ex_faulty <- ex_faulty[predicted != 0]
+  expect_warning(
+    expect_error(
+      as_forecast(ex_faulty),
+      "Found incomplete forecasts"
+    ),
+    "Some forecasts have different numbers of rows"
+  )
+})
+
 
 # ==============================================================================
 # is_forecast()
@@ -202,11 +221,13 @@ test_that("is_forecast() works as expected", {
   ex_point <- suppressMessages(as_forecast(example_point))
   ex_quantile <- suppressMessages(as_forecast(example_quantile))
   ex_continuous <- suppressMessages(as_forecast(example_sample_continuous))
+  ex_nominal <- suppressMessages(as_forecast(example_nominal))
 
   expect_true(is_forecast(ex_binary))
   expect_true(is_forecast_point(ex_point))
   expect_true(is_forecast_quantile(ex_quantile))
   expect_true(is_forecast(ex_continuous))
+  expect_true(is_forecast_nominal(ex_nominal))
 
   expect_false(is_forecast(1:10))
   expect_false(is_forecast(data.table::as.data.table(example_point)))

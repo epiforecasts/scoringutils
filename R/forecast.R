@@ -65,6 +65,10 @@ as_forecast <- function(data, ...) {
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id". Only applicable to
 #'   sample-based forecasts.
+#' @param predicted_label (optional) Name of the column in `data` that denotes
+#'   the outcome to which a preidcted probability corresponds to.
+#'   This column will be renamed to "predicted_label". Only applicable to
+#'   nominal forecasts.
 #' @export
 #' @importFrom cli cli_warn
 as_forecast.default <- function(data,
@@ -75,6 +79,7 @@ as_forecast.default <- function(data,
                                 model = NULL,
                                 quantile_level = NULL,
                                 sample_id = NULL,
+                                predicted_label = NULL,
                                 ...) {
   # check inputs
   data <- ensure_data.table(data)
@@ -108,6 +113,9 @@ as_forecast.default <- function(data,
   }
   if (!is.null(sample_id)) {
     setnames(data, old = sample_id, new = "sample_id")
+  }
+  if (!is.null(predicted_label)) {
+    setnames(data, old = predicted_label, new = "predicted_label")
   }
 
   # ensure that a model column is present after renaming
@@ -295,6 +303,48 @@ assert_forecast.forecast_sample <- function(
 }
 
 
+#' @export
+#' @keywords check-forecasts
+#' @importFrom checkmate assert_names assert_set_equal test_set_equal
+assert_forecast.forecast_nominal <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
+  assert(check_columns_present(forecast, "predicted_label"))
+  assert_names(
+    colnames(forecast),
+    disjunct.from = c("sample_id", "quantile_level")
+  )
+  assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
+
+  # levels need to be the same
+  outcomes <- levels(forecast$observed)
+  assert_set_equal(levels(forecast$predicted_label), outcomes)
+
+  # forecasts need to be complete
+  forecast_unit <- get_forecast_unit(forecast)
+  complete <- forecast[, .(
+    correct = test_set_equal(as.character(predicted_label), outcomes)
+  ), by = forecast_unit]
+
+  if (!all(complete$correct)) {
+    first_issue <- complete[(correct), ..forecast_unit][1]
+    first_issue <- lapply(first_issue, FUN = as.character)
+    #nolint start: keyword_quote_linter object_usage_linter duplicate_argument_linter
+    issue_location <- paste(names(first_issue), "==", first_issue)
+    cli_abort(
+      c(`!` = "Found incomplete forecasts",
+        `i` = "For a nominal forecast, all possible outcomes must be assigned
+        a probability explicitly.",
+        `i` = "Found first missing probabilities in the forecast identified by
+        {.emph {issue_location}}")
+    )
+    #nolint end
+  }
+  return(forecast[])
+}
+
+
 #' @title Re-validate an existing forecast object
 #'
 #' @description
@@ -477,4 +527,11 @@ is_forecast_point <- function(x) {
 #' @keywords check-forecasts
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
+}
+
+#' @export
+#' @rdname is_forecast
+#' @keywords check-forecasts
+is_forecast_nominal <- function(x) {
+  inherits(x, "forecast_nominal") && inherits(x, "forecast")
 }
