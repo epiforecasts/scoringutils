@@ -2,7 +2,7 @@
 
 This update represents a major rewrite of the package and introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`.
 
-The update aims to make the package more modular and customisable and overall cleaner and easier to work with. In particular, we aimed to make the suggested workflows for evaluating forecasts more explicit and easier to follow (see visualisation below). To do that, we clarified input formats and made them consistent across all functions. We refactord many functions to S3-methods and introduced `forecast` objects with separate classes for different types of forecasts. A new function, `as_forecast()` was introduced to validate the data and convert inputs into a `forecast` object (a `data.table` with a `forecast` class and an additional class corresponding to the forecast type (see below)). Another major update is the possibility for users to pass in their own scoring functions into `score()`. We updated and improved all function documentation and added new vignettes to guide users through the package. Internally, we refactored the code, improved input checks, updated notifications (which now use the `cli` package) and increased test coverage. 
+The update aims to make the package more modular and customisable and overall cleaner and easier to work with. In particular, we aimed to make the suggested workflows for evaluating forecasts more explicit and easier to follow (see visualisation below). To do that, we clarified input formats and made them consistent across all functions. We refactord many functions to S3-methods and introduced `forecast` objects with separate classes for different types of forecasts. A new set of `as_forecast_...()` functions was introduced to validate the data and convert inputs into a `forecast` object (a `data.table` with a `forecast` class and an additional class corresponding to the forecast type (see below)). Another major update is the possibility for users to pass in their own scoring functions into `score()`. We updated and improved all function documentation and added new vignettes to guide users through the package. Internally, we refactored the code, improved input checks, updated notifications (which now use the `cli` package) and increased test coverage. 
 
 The most comprehensive documentation for the new package after the rewrite is the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
 of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` paper.
@@ -14,19 +14,19 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   - The previous columns "true_value" and "prediction" were renamed. `score()` now requires columns called "observed" and "predicted" and "model". The column `quantile` was renamed to `quantile_level` and `sample` was renamed to `sample_id`
   - `score()` is now a generic. It has S3 methods for the classes `forecast_point`, `forecast_binary`, `forecast_quantile` and `forecast_sample`, which correspond to the different forecast types that can be scored with `scoringutils`. 
   - `score()` now calls `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast.
-  - `score()` and many other functions now require a validated `forecast` object. `forecast` objects can be created using the function `as_forecast()` (which replaces the previous `check_forecast()`). A forecast object is a data.table with class `forecast` and an additional class coresponding to the forecast type (e.g. `forecast_quantile`).
+  - `score()` and many other functions now require a validated `forecast` object. `forecast` objects can be created using the functions `as_forecast_point()`, `as_forecast_binary()`, `as_forecast_quantile()`, and `as_forecast_sample()` (which replace the previous `check_forecast()`). A forecast object is a data.table with class `forecast` and an additional class corresponding to the forecast type (e.g. `forecast_quantile`).
   `score()` now returns objects of class `scores` with a stored attribute `metrics` that holds the names of the scoring rules that were used. Users can call `get_metrics()` to access the names of those scoring rules.
   - `score()` now returns one score per forecast, instead of one score per sample or quantile.
   - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()` and `metrics_binary()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
   - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `customise_metric()` and `select_metric()`.
 
 ### Creating a forecast object  
-- The function `as_forecast()` creates a forecast object and validates it. `as_forecast()` also allows users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. 
+- The `as_forecast_...()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. 
 
 ### Updated workflows
 - An example workflow for scoring a forecast now looks like this: 
   ```
-  forecast_quantile <- as_forecast(
+  forecast_quantile <- as_forecast_quantile(
     example_quantile, 
     observed = "observed", 
     predicted = "predicted", 
@@ -48,7 +48,7 @@ scores <- score(forecast_quantile)
     - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 
 ### (Re-)Validating forecast objects
-- To create and validate a new `forecast` object, users can use `as_forecast()`. To revalidate an existing `forecast` object users can call `assert_forecast()` (which validates the input and returns `invisible(NULL)`. `assert_forecast()` is a generic with methods for the different forecast types. Alternatively, `validate_forecast()` can be used (which calls `assert_forecast()`), which returns the input and is useful in a pipe. Lastly, users can simply print the object to obtain additional information. 
+- To create and validate a new `forecast` object, users can use `as_forecast_...()`. To revalidate an existing `forecast` object users can call `assert_forecast()` (which validates the input and returns `invisible(NULL)`. `assert_forecast()` is a generic with methods for the different forecast types. Alternatively, `validate_forecast()` can be used (which calls `assert_forecast()`), which returns the input and is useful in a pipe. Lastly, users can simply print the object to obtain additional information. 
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
 
 ### Pairwise comparisons and relative skill
@@ -58,7 +58,7 @@ scores <- score(forecast_quantile)
 - Replaced warnings with errors in `get_pairwise_comparison` to avoid returning `NULL`
 
 ### Computing coverage values
-- `add_coverage()` was replaced by a new function, `get_coverage()`. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using `plot_interval_coverage()` or `plot_quantile_coverage()`. An example workflow would be `example_quantile |> as_forecast() |> get_coverage(by = "model") |> plot_interval_coverage()`.
+- `add_coverage()` was replaced by a new function, `get_coverage()`. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using `plot_interval_coverage()` or `plot_quantile_coverage()`. An example workflow would be `example_quantile |> as_forecast_quantile() |> get_coverage(by = "model") |> plot_interval_coverage()`.
 
 ### Obtaining and plotting forecast counts
 - The function `avail_forecasts()` was renamed to `get_forecast_counts()`. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix "get_". Sees Issue #403 and #521 and PR #511 by @nikosbosse and reviewed by @seabbs for details. 

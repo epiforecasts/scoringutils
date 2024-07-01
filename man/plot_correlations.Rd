@@ -22,7 +22,7 @@ A ggplot object with a visualisation of correlations between metrics
 Plots a heatmap of correlations between different metrics.
 }
 \examples{
-scores <- score(as_forecast(example_quantile))
+scores <- score(as_forecast_quantile(example_quantile))
 correlations <- get_correlations(
  summarise_scores(scores)
 )

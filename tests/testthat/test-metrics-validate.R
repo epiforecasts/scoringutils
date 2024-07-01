@@ -9,7 +9,7 @@ test_that("validate_metrics() works as expected", {
   # passing in something that's not a function or a known metric
   expect_warning(
     expect_warning(
-      score(as_forecast(na.omit(example_binary)), metrics = list(
+      score(as_forecast_binary(na.omit(example_binary)), metrics = list(
         "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3)
       ),
       "`Metrics` element number 3 is not a valid function"

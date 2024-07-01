@@ -21,7 +21,7 @@ including "Forecast type", "Score columns",
 "Forecast unit".
 }
 \examples{
-dat <- as_forecast(example_quantile)
+dat <- as_forecast_quantile(example_quantile)
 print(dat)
 }
 \keyword{check-forecasts}

@@ -96,7 +96,7 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(as_forecast(example_quantile))
+#' scores <- score(as_forecast_quantile(example_quantile))
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #' pairwise2 <- get_pairwise_comparisons(
 #'   scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"

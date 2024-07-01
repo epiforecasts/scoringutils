@@ -100,7 +100,7 @@ test_that("`wis()` works within score for median forecast", {
     model = "model1",
     date = 1:3
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("ae_median", "wis"))
@@ -145,7 +145,7 @@ test_that("wis() works within score for one interval", {
     model = c("model1"),
     date = rep(1:3, times = 2)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
@@ -172,7 +172,7 @@ test_that("`wis()` works 1 interval and median", {
     model = c("model1"),
     date = rep(1:3, times = 3)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   metrics <- metrics_quantile() %>%
       select_metrics(select = c("wis"))
@@ -214,7 +214,7 @@ test_that("wis works, 2 intervals and median", {
     model = c("model1"),
     date = rep(1:3, times = 5)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
@@ -308,7 +308,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
   metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(
-    as_forecast(data_formatted), metrics = metrics
+    as_forecast_quantile(data_formatted), metrics = metrics
   )
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
@@ -376,7 +376,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
@@ -453,7 +453,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted) %>%
-    as_forecast()
+    as_forecast_quantile()
 
   eval <- score(data_formatted, metrics = metrics_no_cov)
 

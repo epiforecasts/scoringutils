@@ -36,7 +36,7 @@ You can test for a specific \verb{forecast_*} class using the appropriate
 \verb{is_forecast_*} function.
 }
 \examples{
-forecast_binary <- as_forecast(example_binary)
+forecast_binary <- as_forecast_binary(example_binary)
 is_forecast(forecast_binary)
 }
 \keyword{check-forecasts}

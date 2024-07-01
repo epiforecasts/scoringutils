@@ -1,7 +1,7 @@
 test_that("plot_pit() works as expected with quantile forecasts", {
   pit <- example_quantile %>%
     na.omit() %>%
-    as_forecast() %>%
+    as_forecast_quantile() %>%
     get_pit(by = "model")
   p <- plot_pit(pit, breaks = seq(0.1, 1, 0.1))
   expect_s3_class(p, "ggplot")
@@ -13,7 +13,7 @@ test_that("plot_pit() works as expected with integer forecasts", {
   set.seed(587)
   pit <- example_sample_discrete %>%
     na.omit() %>%
-    as_forecast() %>%
+    as_forecast_sample() %>%
     get_pit(by = "model")
   p <- plot_pit(pit)
   expect_s3_class(p, "ggplot")

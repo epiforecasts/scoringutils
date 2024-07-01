@@ -1,7 +1,7 @@
 test_that("plot_quantile_coverage() works as expected", {
   coverage <- example_quantile %>%
     na.omit() %>%
-    as_forecast() %>%
+    as_forecast_quantile() %>%
     get_coverage(by = c("model", "quantile_level"))
 
   p <- plot_quantile_coverage(coverage)

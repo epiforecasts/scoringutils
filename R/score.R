@@ -1,7 +1,6 @@
 #' @title Evaluate forecasts
 #' @description `score()` applies a selection of scoring metrics to a forecast
-#' object (a data.table with forecasts and observations) as produced by
-#' [as_forecast()].
+#' object (a data.table with forecasts and observations) (see [as_forecast()]).
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
@@ -38,14 +37,14 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' validated <- as_forecast(example_quantile)
+#' validated <- as_forecast_quantile(example_quantile)
 #' score(validated) %>%
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
 #' # determine the forecast unit automatically)
 #' example_quantile %>%
-#'   as_forecast(
+#'   as_forecast_quantile(
 #'     forecast_unit = c(
 #'       "location", "target_end_date", "target_type", "horizon", "model"
 #'     )
@@ -54,11 +53,11 @@
 #'
 #' # forecast formats with different metrics
 #' \dontrun{
-#' score(as_forecast(example_binary))
-#' score(as_forecast(example_quantile))
-#' score(as_forecast(example_point))
-#' score(as_forecast(example_sample_discrete))
-#' score(as_forecast(example_sample_continuous))
+#' score(as_forecast_binary(example_binary))
+#' score(as_forecast_quantile(example_quantile))
+#' score(as_forecast_point(example_point))
+#' score(as_forecast_sample(example_sample_discrete))
+#' score(as_forecast_sample(example_sample_continuous))
 #' }
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
@@ -77,7 +76,7 @@ score.default <- function(forecast, metrics, ...) {
   cli_abort(
     c(
       "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please run `as_forecast()` first." # nolint
+      "i" = "Please convert to `forecast` object first (see {.fn as_forecast})." # nolint
     )
   )
 }

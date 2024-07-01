@@ -19,7 +19,7 @@
 #' @keywords data-handling
 #' @export
 #' @examples
-#' sample_to_quantile(as_forecast(example_sample_discrete))
+#' sample_to_quantile(as_forecast_sample(example_sample_discrete))
 sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
@@ -39,7 +39,7 @@ sample_to_quantile <- function(forecast,
                                       type = ..type, na.rm = TRUE)),
              by = by]
 
-  return(as_forecast(forecast))
+  return(as_forecast_quantile(forecast))
 }
 
 

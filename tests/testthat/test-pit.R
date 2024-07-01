@@ -68,11 +68,11 @@ test_that("pit_sample() works with a single observvation", {
 # ============================================================================ #
 
 test_that("pit function works for continuous integer and quantile data", {
-  pit_quantile <- suppressMessages(as_forecast(example_quantile)) %>%
+  pit_quantile <- suppressMessages(as_forecast_quantile(example_quantile)) %>%
     get_pit(by = "model")
-  pit_continuous <- suppressMessages(as_forecast(example_sample_continuous)) %>%
+  pit_continuous <- suppressMessages(as_forecast_sample(example_sample_continuous)) %>%
     get_pit(by = c("model", "target_type"))
-  pit_integer <- suppressMessages(as_forecast(example_sample_discrete)) %>%
+  pit_integer <- suppressMessages(as_forecast_sample(example_sample_discrete)) %>%
     get_pit(by = c("model", "location"))
 
   expect_equal(names(pit_quantile), c("model", "quantile_level", "pit_value"))

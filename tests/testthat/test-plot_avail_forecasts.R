@@ -1,6 +1,6 @@
 test_that("plot.forecast_counts() works as expected", {
   available_forecasts <- na.omit(example_quantile) %>%
-    as_forecast() %>%
+    as_forecast_quantile() %>%
     get_forecast_counts(
     by = c("model", "target_type", "target_end_date")
   )

@@ -19,7 +19,7 @@
 #' @export
 #' @keywords scoring
 #' @examples
-#' scores <- score(as_forecast(example_quantile))
+#' scores <- score(as_forecast_quantile(example_quantile))
 #' get_correlations(scores)
 get_correlations <- function(scores,
                              metrics = get_metrics(scores),

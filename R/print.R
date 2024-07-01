@@ -12,7 +12,7 @@
 #' @export
 #' @keywords check-forecasts
 #' @examples
-#' dat <- as_forecast(example_quantile)
+#' dat <- as_forecast_quantile(example_quantile)
 #' print(dat)
 print.forecast <- function(x, ...) {
 

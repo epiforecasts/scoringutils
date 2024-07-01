@@ -94,11 +94,10 @@ forecast object using the function `as_forecast()`.
 
 ``` r
 forecast_quantile <- example_quantile |>
-  as_forecast(
+  as_forecast_quantile(
     forecast_unit = c(
       "location", "forecast_date", "target_end_date", "target_type", "model", "horizon"
-    ),
-    forecast_type = "quantile"
+    )
   )
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
@@ -137,9 +136,9 @@ predictive distribution, i.e. several rows in the input data.
 forecast. `scoringutils` uses all other existing columns in the input
 data to achieve this - the values in all other columns should uniquely
 identify a single forecast. Additional columns unrelated to the forecast
-unit can mess this up. The `forecast_unit` argument in `as_forecast()`
-makes sure that only those columns are retained which are relevant for
-defining the unit of a single forecast.
+unit can mess this up. The `forecast_unit` argument in
+`as_forecast_...()` makes sure that only those columns are retained
+which are relevant for defining the unit of a single forecast.
 
 ### Scoring forecasts
 

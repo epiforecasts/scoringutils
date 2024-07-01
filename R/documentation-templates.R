@@ -67,8 +67,8 @@
 #' then thinks that this column was relevant in defining the forecast unit.
 #'
 #' In order to avoid issues, we recommend setting the forecast unit explicitly,
-#' usually through the `forecast_unit` argument in [as_forecast()]. This will
-#' drop unneeded columns, while making sure that all
+#' usually through the `forecast_unit` argument in the [as_forecast()]
+#' functions. This will drop unneeded columns, while making sure that all
 #' necessary, 'protected columns' like "predicted" or "observed" are retained.
 #'
 #' @name forecast_types
