@@ -66,7 +66,7 @@ assert_input_quantile <- function(observed, predicted, quantile_level,
   if (n_obs == 1) {
     assert(
       # allow one of two options
-      check_numeric_vector(predicted, min.len = 1),
+      check_numeric_vector(predicted, min.len = n_quantiles),
       check_matrix(predicted, mode = "numeric",
                    nrows = n_obs, ncols = n_quantiles)
     )
