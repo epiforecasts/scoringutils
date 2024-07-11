@@ -158,6 +158,9 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #'
 #' The default scoring rules are:
 #' - "crps" = [crps_sample()]
+#' - "overprediction" = [overprediction_sample()]
+#' - "underprediction" = [underprediction_sample()]
+#' - "dispersion" = [dispersion_sample()]
 #' - "log_score" = [logs_sample()]
 #' - "dss" = [dss_sample()]
 #' - "mad" = [mad_sample()]
@@ -175,6 +178,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
     bias = bias_sample,
     dss = dss_sample,
     crps = crps_sample,
+    overprediction = overprediction_sample,
+    underprediction = underprediction_sample,
+    dispersion = dispersion_sample,
     log_score = logs_sample,
     mad = mad_sample,
     ae_median = ae_median_sample,

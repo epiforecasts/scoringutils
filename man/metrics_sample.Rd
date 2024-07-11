@@ -23,6 +23,9 @@ scoring rules suitable for forecasts in a sample-based format.
 The default scoring rules are:
 \itemize{
 \item "crps" = \code{\link[=crps_sample]{crps_sample()}}
+\item "overprediction" = \code{\link[=overprediction_sample]{overprediction_sample()}}
+\item "underprediction" = \code{\link[=underprediction_sample]{underprediction_sample()}}
+\item "dispersion" = \code{\link[=dispersion_sample]{dispersion_sample()}}
 \item "log_score" = \code{\link[=logs_sample]{logs_sample()}}
 \item "dss" = \code{\link[=dss_sample]{dss_sample()}}
 \item "mad" = \code{\link[=mad_sample]{mad_sample()}}
