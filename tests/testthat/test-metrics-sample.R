@@ -26,6 +26,34 @@ test_that("Input handling", {
   )
 })
 
+test_that("crps works with separate results", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted,
+    separate_results = TRUE
+  )
+  expect_equal(
+    crps$crps, crps$dispersion + crps$overprediction + crps$underprediction
+  )
+})
+
+test_that("crps is the sum of overprediction, underprediction, dispersion", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  d <- dispersion_sample(observed, predicted)
+  o <- overprediction_sample(observed, predicted)
+  u <- underprediction_sample(observed, predicted)
+
+  expect_equal(crps, d + o + u)
+})
+
 
 
 test_that("bias_sample() throws an error when missing observed", {
