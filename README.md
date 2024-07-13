@@ -137,7 +137,7 @@ forecast. `scoringutils` uses all other existing columns in the input
 data to achieve this - the values in all other columns should uniquely
 identify a single forecast. Additional columns unrelated to the forecast
 unit can mess this up. The `forecast_unit` argument in
-`as_forecast_...()` makes sure that only those columns are retained
+`as_forecast_<type>()` makes sure that only those columns are retained
 which are relevant for defining the unit of a single forecast.
 
 ### Scoring forecasts

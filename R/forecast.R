@@ -54,9 +54,9 @@
 NULL
 
 
-#' Common functionality for `as_forecast_...` functions
+#' Common functionality for `as_forecast_<type>` functions
 #' @details This function splits out part of the functionality of
-#' `as_forecast_...` that is the same for all `as_forecast_...` functions.
+#' `as_forecast_<type>` that is the same for all `as_forecast_<type>` functions.
 #' It renames the required columns, where appropriate, and sets the forecast
 #' unit.
 #' @inheritParams as_forecast

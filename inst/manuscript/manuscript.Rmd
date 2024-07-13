@@ -224,9 +224,9 @@ forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile() 
 ```
 
-Every forecast type has a corresponding `as_forecast_...()` function that transforms the input into a `forecast` object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_quantile` or `forecast_sample`). 
+Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_quantile` or `forecast_sample`). 
 
-All `as_forecast_...()` functions can take additional arguments that help facilitate the process of creating a forecast object: 
+All `as_forecast_<type>()` functions can take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
 forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile(

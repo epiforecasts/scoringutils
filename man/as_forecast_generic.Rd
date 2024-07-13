@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast_generic}
 \alias{as_forecast_generic}
-\title{Common functionality for \code{as_forecast_...} functions}
+\title{Common functionality for \verb{as_forecast_<type>} functions}
 \usage{
 as_forecast_generic(
   data,
@@ -35,11 +35,11 @@ of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".}
 }
 \description{
-Common functionality for \code{as_forecast_...} functions
+Common functionality for \verb{as_forecast_<type>} functions
 }
 \details{
 This function splits out part of the functionality of
-\code{as_forecast_...} that is the same for all \code{as_forecast_...} functions.
+\verb{as_forecast_<type>} that is the same for all \verb{as_forecast_<type>} functions.
 It renames the required columns, where appropriate, and sets the forecast
 unit.
 }
