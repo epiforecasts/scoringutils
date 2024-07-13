@@ -456,7 +456,7 @@ new_forecast <- function(data, classname) {
 #' *`is_forecast`*: `TRUE` if the object is of class `forecast`,
 #' `FALSE` otherwise.
 #'
-#' *`is_forecast_*`*: `TRUE` if the object is of class `forecast_*` in addition
+#' *`is_forecast_<type>*`*: `TRUE` if the object is of class `forecast_*` in addition
 #' to class `forecast`, `FALSE` otherwise.
 #' @export
 #' @keywords check-forecasts

@@ -25,7 +25,7 @@ is_forecast_quantile(x)
 \emph{\code{is_forecast}}: \code{TRUE} if the object is of class \code{forecast},
 \code{FALSE} otherwise.
 
-\emph{\verb{is_forecast_*}}: \code{TRUE} if the object is of class \verb{forecast_*} in addition
+\emph{\verb{is_forecast_<type>*}}: \code{TRUE} if the object is of class \verb{forecast_*} in addition
 to class \code{forecast}, \code{FALSE} otherwise.
 }
 \description{
