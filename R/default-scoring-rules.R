@@ -45,7 +45,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' @description
 #' This function takes a metric function and additional arguments, and returns
 #' a new function that includes the additional arguments when calling the
-#' original metric function.
+#' original metric function. The function is equivalent to `purrr::partial()`.
 #'
 #' This is the expected way to pass additional
 #' arguments to a metric when evaluating a forecast using [score()]:
