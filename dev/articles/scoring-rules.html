@@ -63,7 +63,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-07-04</h4>
+            <h4 data-toc-skip class="date">2024-07-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/vignettes/scoring-rules.Rmd" class="external-link"><code>vignettes/scoring-rules.Rmd</code></a></small>
       <div class="d-none name"><code>scoring-rules.Rmd</code></div>
@@ -167,16 +167,13 @@ following example:</p>
 <span><span class="va">predicted_not_mu</span> <span class="op">&lt;-</span> <span class="va">predicted_mu</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">ae</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_mu</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 34.45981</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">ae</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_not_mu</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 32.54821</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] 34.45981</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">ae</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_not_mu</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 32.54821</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">se</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_mu</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2171.089</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">se</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_not_mu</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2171.089</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">Metrics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">se</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted_not_mu</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 2290.155</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -281,7 +278,7 @@ observed outcome.</p>
 they penalise over- and underconfidence (see <span class="citation">Machete (2012)</span>). The Brier score penalises
 overconfidence and underconfidence in probability space the same.
 Consider the following example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
 <span><span class="va">p_true</span> <span class="op">&lt;-</span> <span class="fl">0.7</span></span>
 <span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">p_true</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -290,9 +287,8 @@ Consider the following example:</p>
 <span><span class="va">p_under</span> <span class="op">&lt;-</span> <span class="va">p_true</span> <span class="op">-</span> <span class="fl">0.15</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_over</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.0223866</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_under</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.0223866</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">brier_score</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_under</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.0226134</span></span></code></pre></div>
 <p>See <code>?brier_score()</code> for more information.</p>
 </div>
@@ -318,11 +314,10 @@ assigned to the observed outcome.</p>
 <p>The log score penalises overconfidence more strongly than
 underconfidence (in probability space). Consider the following
 example:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_over</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.07169954</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_under</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.07169954</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_true</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/scoring-functions-binary.html">logs_binary</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">p_under</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.04741833</span></span></code></pre></div>
 <p>See <code>?logs_binary()</code> for more information.</p>
 <hr>
@@ -855,7 +850,7 @@ Society A: Mathematical, Physical and Engineering Sciences</em> 379
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
 </div>
 
     </footer>
