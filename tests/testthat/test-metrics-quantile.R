@@ -558,6 +558,20 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
 })
 
 
+test_that("wis errors when there are no valid forecast intervals", {
+  # test that wis throws an error when there are no valid forecast intervals
+  # (i.e. the quantiles do not form central prediction intervals)
+  observed <- 0.1
+  predicted <- c(0.1032978, 0.1078166, 0.1906849, 0.1969254, 0.2017249, 0.2078487, 0.2810377, 0.3062168, 0.4006721, 0.8219655)
+  quantile_level <- c(0.600, 0.650, 0.700, 0.750, 0.800, 0.850, 0.900, 0.950, 0.975, 0.990)
+
+  expect_error(
+    wis(observed, predicted, quantile_level),
+    "No valid forecast intervals found."
+  )
+})
+
+
 # ============================================================================ #
 # Quantile score ============================================================= #
 # ============================================================================ #
