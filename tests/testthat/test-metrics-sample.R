@@ -52,6 +52,19 @@ test_that("crps is the sum of overprediction, underprediction, dispersion", {
   u <- underprediction_sample(observed, predicted)
 
   expect_equal(crps, d + o + u)
+
+  observed <- rnorm(30, mean = 1:30)
+  predicted <- replicate(20, rnorm(n = 30, mean = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  d <- dispersion_sample(observed, predicted)
+  o <- overprediction_sample(observed, predicted)
+  u <- underprediction_sample(observed, predicted)
+
+  expect_equal(crps, d + o + u)
 })
 
 
