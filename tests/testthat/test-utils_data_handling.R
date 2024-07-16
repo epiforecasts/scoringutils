@@ -29,13 +29,14 @@ test_that("quantile_to_interval_dataframe() works", {
   quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile_level") := NA]
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
+  
   expect_message(
     quantile_to_interval(
       quantile,
       keep_quantile_col = FALSE,
       format = "wide"
     ),
-    "Aggregate function missing, defaulting to 'length'"
+    "[Aa]ggregate.*default.*length" # the exact message differs for data.table before/after v1.16.0
   )
   quantile <- quantile[-c(1, 3), ]
   wide2 <- scoringutils:::quantile_to_interval(
