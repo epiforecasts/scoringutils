@@ -30,7 +30,7 @@ test_that("quantile_to_interval_dataframe() works", {
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
   
-  expect_message(
+  expect_warning(
     quantile_to_interval(
       quantile,
       keep_quantile_col = FALSE,
