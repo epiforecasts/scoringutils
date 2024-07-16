@@ -390,7 +390,7 @@ See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a disc
 The quantile score, also called pinball loss, for a single quantile level $\tau$ is defined as
 
 \begin{equation}
-    \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) = 
+    \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau - y) = 
     \begin{cases}
         2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
         2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau, 
