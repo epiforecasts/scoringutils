@@ -156,3 +156,4 @@ We welcome contributions and new contributors! We particularly appreciate help o
 Please note that the `scoringutils` project is released with a [Contributor Code of Conduct](https://epiforecasts.io/scoringutils/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
 ## Contributors
+
