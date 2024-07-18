@@ -70,7 +70,7 @@
 #' # negative values need to be handled (here by replacing them with 0)
 #' example_quantile %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #' # Here we use the default function log_shift() which is essentially the same
 #' # as log(), but has an additional arguments (offset) that allows you add an
 #' # offset before applying the logarithm.
@@ -79,7 +79,7 @@
 #'
 #' # alternatively, integrating the truncation in the transformation function:
 #' example_quantile %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #'  transform_forecasts(
 #'    fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
 #'  ) %>%
@@ -88,7 +88,7 @@
 #' # specifying an offset for the log transformation removes the
 #' # warning caused by zeros in the data
 #' example_quantile %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(offset = 1, append = FALSE) %>%
 #'   head()
@@ -96,14 +96,14 @@
 #' # adding square root transformed forecasts to the original ones
 #' example_quantile %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
 #'   score() %>%
 #'   summarise_scores(by = c("model", "scale"))
 #'
 #' # adding multiple transformations
 #' example_quantile %>%
-#'   as_forecast() %>%
+#'   as_forecast_quantile() %>%
 #'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
 #'   transform_forecasts(fun = log_shift, offset = 1) %>%
 #'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
@@ -118,6 +118,9 @@ transform_forecasts <- function(forecast,
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)
+
+  # store forecast type to construct a valid forecast object later
+  forecast_type <- get_forecast_type(original_forecast)
 
   scale_col_present <- ("scale" %in% colnames(original_forecast))
 
@@ -154,7 +157,12 @@ transform_forecasts <- function(forecast,
     transformed_forecast[, observed := fun(observed, ...)]
     transformed_forecast[, scale := label]
     out <- rbind(original_forecast, transformed_forecast)
-    out <- suppressWarnings(suppressMessages(as_forecast(out)))
+
+    # construct a new valid forecast object after binding rows together
+    fn_name <- paste0("as_forecast_", forecast_type)
+    fn <- get(fn_name)
+    out <- suppressWarnings(suppressMessages(do.call(fn, list(out))))
+
     return(out[])
   }
 
@@ -202,7 +210,7 @@ transform_forecasts <- function(forecast,
 #' log_shift(0:9, offset = 1)
 #'
 #' transform_forecasts(
-#'   as_forecast(example_quantile)[observed > 0, ],
+#'   as_forecast_quantile(example_quantile)[observed > 0, ],
 #'   fun = log_shift,
 #'   offset = 1
 #'  )
@@ -242,7 +250,8 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for observed values, predictions or
 #' quantile levels) and removes duplicate rows. `set_forecast_unit()` will
-#' mainly be called from [as_forecast()] through the `forecast_unit` argument.
+#' mainly be called when constructing a `forecast` object (see [as_forecast()])
+#' via the `forecast_unit` argument there.
 #'
 #' If not done explicitly, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names
