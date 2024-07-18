@@ -101,9 +101,6 @@ forecast_quantile <- example_quantile |>
   )
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
-```
-
-``` r
 
 print(forecast_quantile, 2)
 #> Forecast type: quantile
@@ -251,3 +248,13 @@ Please note that the `scoringutils` project is released with a
 [Contributor Code of
 Conduct](https://epiforecasts.io/scoringutils/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
+
+## Funding
+
+The development of `scoringutils` was funded via the Health Protection
+Research Unit (grant code NIHR200908) and the Wellcome Trust (grant:
+210758/Z/18/Z). This work has also been supported by the US National
+Institutes of General Medical Sciences (R35GM119582). The content is
+solely the responsibility of the authors and does not necessarily
+represent the official views of NIGMS, or the National Institutes of
+Health.

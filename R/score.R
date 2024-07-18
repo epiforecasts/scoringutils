@@ -236,7 +236,7 @@ apply_metrics <- function(forecast, metrics, ...) {
 #' @param scores A data.table or similar with scores as produced by [score()].
 #' @param metrics A character vector with the names of the scores
 #'   (i.e. the names of the scoring rules used for scoring).
-#' @param ... Additional arguments to [as.data.table()]
+#' @param ... Additional arguments to [data.table::as.data.table()]
 #' @keywords internal
 #' @importFrom data.table as.data.table setattr
 #' @return An object of class `scores`
