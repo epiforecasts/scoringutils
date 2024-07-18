@@ -98,8 +98,8 @@ example, if you had an additional row, "even", that is one if the row number
 is even and zero otherwise, then this would mess up scoring as <code>scoringutils</code>
 then thinks that this column was relevant in defining the forecast unit.</p>
 <p>In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the <code>forecast_unit</code> argument in <code><a href="as_forecast.html">as_forecast()</a></code>. This will
-drop unneeded columns, while making sure that all
+usually through the <code>forecast_unit</code> argument in the <code><a href="as_forecast.html">as_forecast()</a></code>
+functions. This will drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
     </div>
 

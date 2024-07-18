@@ -94,11 +94,10 @@
 <p>Before scoring, input data needs to be validated and transformed into a forecast object using the function <code><a href="reference/as_forecast.html">as_forecast()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast_quantile</a></span><span class="op">(</span></span>
 <span>    forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    forecast_type <span class="op">=</span> <span class="st">"quantile"</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Some rows containing NA values may be removed. This is fine if not</span></span>
 <span><span class="co">#&gt;   unexpected.</span></span>
@@ -127,7 +126,7 @@
 <div class="section level3">
 <h3 id="the-forecast-unit">The forecast unit<a class="anchor" aria-label="anchor" href="#the-forecast-unit"></a>
 </h3>
-<p>For quantile-based and sample-based forecasts, a single prediction is represented by a set of several quantiles (or samples) from the predictive distribution, i.e. several rows in the input data. <code>scoringutils</code> therefore needs to group rows together that form a single forecast. <code>scoringutils</code> uses all other existing columns in the input data to achieve this - the values in all other columns should uniquely identify a single forecast. Additional columns unrelated to the forecast unit can mess this up. The <code>forecast_unit</code> argument in <code><a href="reference/as_forecast.html">as_forecast()</a></code> makes sure that only those columns are retained which are relevant for defining the unit of a single forecast.</p>
+<p>For quantile-based and sample-based forecasts, a single prediction is represented by a set of several quantiles (or samples) from the predictive distribution, i.e. several rows in the input data. <code>scoringutils</code> therefore needs to group rows together that form a single forecast. <code>scoringutils</code> uses all other existing columns in the input data to achieve this - the values in all other columns should uniquely identify a single forecast. Additional columns unrelated to the forecast unit can mess this up. The <code>forecast_unit</code> argument in <code>as_forecast_&lt;type&gt;()</code> makes sure that only those columns are retained which are relevant for defining the unit of a single forecast.</p>
 </div>
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>

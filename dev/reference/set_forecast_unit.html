@@ -4,7 +4,8 @@ combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in forecast_unit (plus
 additional protected columns, e.g. for observed values, predictions or
 quantile levels) and removes duplicate rows. set_forecast_unit() will
-mainly be called from as_forecast() through the forecast_unit argument.
+mainly be called when constructing a forecast object (see as_forecast())
+via the forecast_unit argument there.
 If not done explicitly, scoringutils attempts to determine the unit
 of a single forecast automatically by simply assuming that all column names
 are relevant to determine the forecast unit. This may lead to unexpected
@@ -14,7 +15,8 @@ combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in forecast_unit (plus
 additional protected columns, e.g. for observed values, predictions or
 quantile levels) and removes duplicate rows. set_forecast_unit() will
-mainly be called from as_forecast() through the forecast_unit argument.
+mainly be called when constructing a forecast object (see as_forecast())
+via the forecast_unit argument there.
 If not done explicitly, scoringutils attempts to determine the unit
 of a single forecast automatically by simply assuming that all column names
 are relevant to determine the forecast unit. This may lead to unexpected
@@ -65,7 +67,8 @@ combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in <code>forecast_unit</code> (plus
 additional protected columns, e.g. for observed values, predictions or
 quantile levels) and removes duplicate rows. <code>set_forecast_unit()</code> will
-mainly be called from <code><a href="as_forecast.html">as_forecast()</a></code> through the <code>forecast_unit</code> argument.</p>
+mainly be called when constructing a <code>forecast</code> object (see <code><a href="as_forecast.html">as_forecast()</a></code>)
+via the <code>forecast_unit</code> argument there.</p>
 <p>If not done explicitly, <code>scoringutils</code> attempts to determine the unit
 of a single forecast automatically by simply assuming that all column names
 are relevant to determine the forecast unit. This may lead to unexpected

@@ -3,10 +3,12 @@
 and observations. If the input passes all input checks, it will be converted
 to a forecast object. A forecast object is a data.table with a
 class forecast and an additional class that depends on the forecast type.
+Every forecast type has its own as_forecast_() function.
 See the details section below for more information
 on the expected input formats.
-as_forecast() gives users some control over how their data is parsed.
-Using the arguments observed, predicted, and model, users can rename
+The as_forecast_() functions give users some control over how their data
+is parsed.
+Using the arguments observed, predicted, model, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument forecast_unit, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
@@ -14,10 +16,12 @@ see set_forecast_unit() for details)."><meta property="og:description" content="
 and observations. If the input passes all input checks, it will be converted
 to a forecast object. A forecast object is a data.table with a
 class forecast and an additional class that depends on the forecast type.
+Every forecast type has its own as_forecast_() function.
 See the details section below for more information
 on the expected input formats.
-as_forecast() gives users some control over how their data is parsed.
-Using the arguments observed, predicted, and model, users can rename
+The as_forecast_() functions give users some control over how their data
+is parsed.
+Using the arguments observed, predicted, model, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument forecast_unit, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
@@ -66,10 +70,12 @@ see set_forecast_unit() for details)."><meta name="robots" content="noindex"></h
 and observations. If the input passes all input checks, it will be converted
 to a <code>forecast</code> object. A forecast object is a <code>data.table</code> with a
 class <code>forecast</code> and an additional class that depends on the forecast type.
+Every forecast type has its own <code>as_forecast_()</code> function.
 See the details section below for more information
 on the expected input formats.</p>
-<p><code>as_forecast()</code> gives users some control over how their data is parsed.
-Using the arguments <code>observed</code>, <code>predicted</code>, and <code>model</code>, users can rename
+<p>The <code>as_forecast_()</code> functions give users some control over how their data
+is parsed.
+Using the arguments <code>observed</code>, <code>predicted</code>, <code>model</code>, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument <code>forecast_unit</code>, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
@@ -78,19 +84,38 @@ see <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code> for de
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">as_forecast</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast_point</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  forecast_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">as_forecast_binary</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">as_forecast_quantile</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  quantile_level <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  quantile_level <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">as_forecast_sample</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sample_id <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,24 +129,13 @@ See the details section of <code>as_forecast()</code> for additional information
 on required input formats.</p></dd>
 
 
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments</p></dd>
-
-
 <dt id="arg-forecast-unit">forecast_unit<a class="anchor" aria-label="anchor" href="#arg-forecast-unit"></a></dt>
 <dd><p>(optional) Name of the columns in <code>data</code> (after
-any renaming of columns done by <code>as_forecast()</code>) that denote the unit of a
+any renaming of columns) that denote the unit of a
 single forecast. See <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> for details.
 If <code>NULL</code> (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.</p></dd>
-
-
-<dt id="arg-forecast-type">forecast_type<a class="anchor" aria-label="anchor" href="#arg-forecast-type"></a></dt>
-<dd><p>(optional) The forecast type you expect the forecasts
-to have. If the forecast type as determined by <code>scoringutils</code> based on the
-input does not match this, an error will be thrown. If <code>NULL</code> (the
-default), the forecast type will be inferred from the data.</p></dd>
 
 
 <dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
@@ -212,14 +226,14 @@ example, if you had an additional row, "even", that is one if the row number
 is even and zero otherwise, then this would mess up scoring as <code>scoringutils</code>
 then thinks that this column was relevant in defining the forecast unit.</p>
 <p>In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the <code>forecast_unit</code> argument in <code>as_forecast()</code>. This will
-drop unneeded columns, while making sure that all
+usually through the <code>forecast_unit</code> argument in the <code>as_forecast()</code>
+functions. This will drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">as_forecast</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">as_forecast_binary</span><span class="op">(</span><span class="va">example_binary</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Forecast type: </span>binary</span>
@@ -253,7 +267,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1029:       UMass-MechBayes       2     0.450        0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1030:  epiforecasts-EpiNow2       3     0.375        0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1031:  epiforecasts-EpiNow2       2     0.300        0</span>
-<span class="r-in"><span><span class="fu">as_forecast</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">as_forecast_quantile</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_quantile</span>,</span></span>
 <span class="r-in"><span>  forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"target_end_date"</span>,</span></span>
 <span class="r-in"><span>                    <span class="st">"horizon"</span>, <span class="st">"location"</span><span class="op">)</span></span></span>
