@@ -86,7 +86,7 @@ test_that("function produces output for a binary case", {
 })
 
 test_that("score.forecast_binary() errors with only NA values", {
-  only_nas <- copy(as_forecast(example_binary))[, predicted := NA_real_]
+  only_nas <- copy(as_forecast_binary(example_binary))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -112,7 +112,7 @@ test_that(
 
     df <- example_binary[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"] %>%
-      as_forecast()
+      as_forecast_binary()
 
     # passing a simple function works
     expect_equal(
@@ -142,7 +142,7 @@ test_that("function produces output for a point case", {
 test_that("Changing metrics names works", {
   metrics_test <- metrics_point()
   names(metrics_test)[1] = "just_testing"
-  eval <- suppressMessages(score(as_forecast(example_point),
+  eval <- suppressMessages(score(as_forecast_point(example_point),
                                  metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
@@ -153,7 +153,7 @@ test_that("Changing metrics names works", {
 
 
 test_that("score.forecast_point() errors with only NA values", {
-  only_nas <- copy(as_forecast(example_point))[, predicted := NA_real_]
+  only_nas <- copy(as_forecast_point(example_point))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -164,7 +164,7 @@ test_that("score.forecast_point() errors with only NA values", {
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"] %>%
-    as_forecast()
+    as_forecast_quantile()
   metrics <- metrics_quantile()
   metrics$wis <- customise_metric(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
@@ -188,7 +188,7 @@ test_that("score() quantile produces desired metrics", {
     quantile_level = rep(c(0.1, 0.5, 0.9), times = 10)
   )
 
-  data <-suppressWarnings(suppressMessages(as_forecast(data)))
+  data <-suppressWarnings(suppressMessages(as_forecast_quantile(data)))
 
   out <- score(forecast = data, metrics = metrics_no_cov)
   metrics <- c(
@@ -227,7 +227,7 @@ test_that("all quantile and range formats yield the same result", {
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
-  eval <- suppressMessages(score(as_forecast(example_quantile),
+  eval <- suppressMessages(score(as_forecast_quantile(example_quantile),
     metrics = list("wis" = wis)
   ))
 
@@ -241,7 +241,7 @@ test_that("WIS is the same with other metrics omitted or included", {
 
 
 test_that("score.forecast_quantile() errors with only NA values", {
-  only_nas <- copy(as_forecast(example_quantile))[, predicted := NA_real_]
+  only_nas <- copy(as_forecast_quantile(example_quantile))[, predicted := NA_real_]
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -251,7 +251,7 @@ test_that("score.forecast_quantile() errors with only NA values", {
 test_that("score.forecast_quantile() works as expected in edge cases", {
   # only the median
   onlymedian <- example_quantile[quantile_level == 0.5] %>%
-    as_forecast()
+    as_forecast_quantile()
   expect_no_condition(
     s <- score(onlymedian, metrics = metrics_quantile(
       exclude = c("interval_coverage_50", "interval_coverage_90")
@@ -263,7 +263,7 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
 
   # only one symmetric interval is present
   oneinterval <- example_quantile[quantile_level %in% c(0.25,0.75)] %>%
-    as_forecast()
+    as_forecast_quantile()
   expect_message(
     s <- score(
       oneinterval,
@@ -279,9 +279,9 @@ test_that("function produces output for a continuous format case", {
 
   eval <- scores_continuous
 
-  only_nas <- copy(as_forecast(example_sample_continuous))[, predicted := NA_real_]
+  only_nas <- copy(as_forecast_sample(example_sample_continuous))[, predicted := NA_real_]
   expect_error(
-    score(as_forecast(only_nas)),
+    score(as_forecast_sample(only_nas)),
     "After removing rows with NA values in the data, no forecasts are left."
   )
 
@@ -306,7 +306,7 @@ test_that("score() works with only one sample", {
 
   # with only one sample, dss returns NaN and log_score fails
   onesample <- na.omit(example_sample_continuous)[sample_id == 20] %>%
-    as_forecast()
+    as_forecast_sample()
   expect_warning(
     scoreonesample <- score(onesample),
     "Computation for `log_score` failed. Error: need at least 2 data points."
@@ -314,7 +314,7 @@ test_that("score() works with only one sample", {
 
   # verify that all goes well with two samples
   twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)] %>%
-    as_forecast()
+    as_forecast_sample()
   expect_no_condition(score(twosample))
 })
 

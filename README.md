@@ -94,11 +94,10 @@ forecast object using the function `as_forecast()`.
 
 ``` r
 forecast_quantile <- example_quantile |>
-  as_forecast(
+  as_forecast_quantile(
     forecast_unit = c(
       "location", "forecast_date", "target_end_date", "target_type", "model", "horizon"
-    ),
-    forecast_type = "quantile"
+    )
   )
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
@@ -134,9 +133,9 @@ predictive distribution, i.e. several rows in the input data.
 forecast. `scoringutils` uses all other existing columns in the input
 data to achieve this - the values in all other columns should uniquely
 identify a single forecast. Additional columns unrelated to the forecast
-unit can mess this up. The `forecast_unit` argument in `as_forecast()`
-makes sure that only those columns are retained which are relevant for
-defining the unit of a single forecast.
+unit can mess this up. The `forecast_unit` argument in
+`as_forecast_<type>()` makes sure that only those columns are retained
+which are relevant for defining the unit of a single forecast.
 
 ### Scoring forecasts
 
@@ -249,6 +248,16 @@ Please note that the `scoringutils` project is released with a
 [Contributor Code of
 Conduct](https://epiforecasts.io/scoringutils/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
+
+## Funding
+
+The development of `scoringutils` was funded via the Health Protection
+Research Unit (grant code NIHR200908) and the Wellcome Trust (grant:
+210758/Z/18/Z). This work has also been supported by the US National
+Institutes of General Medical Sciences (R35GM119582). The content is
+solely the responsibility of the authors and does not necessarily
+represent the official views of NIGMS, or the National Institutes of
+Health.
 
 ## Contributors
 

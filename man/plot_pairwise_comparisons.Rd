@@ -28,7 +28,7 @@ between models.
 }
 \examples{
 library(ggplot2)
-scores <- score(as_forecast(example_quantile))
+scores <- score(as_forecast_quantile(example_quantile))
 pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
   facet_wrap(~target_type)

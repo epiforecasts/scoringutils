@@ -27,7 +27,7 @@ The function re-validates an existing forecast object. It is similar to
 \code{NULL}. See \code{\link[=as_forecast]{as_forecast()}} for details on the expected input formats.
 }
 \examples{
-forecast <- as_forecast(example_binary)
+forecast <- as_forecast_binary(example_binary)
 assert_forecast(forecast)
 }
 \keyword{check-forecasts}
