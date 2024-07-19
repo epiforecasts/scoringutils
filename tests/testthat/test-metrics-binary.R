@@ -153,7 +153,7 @@ test_that("Brier score works with different inputs", {
 
 
 test_that("Binary metrics work within and outside of `score()`", {
-  result <- score(as_forecast(df))
+  result <- score(as_forecast_binary(df))
   expect_equal(
     brier_score(observed, predicted),
     result$brier_score

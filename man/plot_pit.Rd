@@ -43,10 +43,10 @@ pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit
-pit <- get_pit(as_forecast(example_quantile), by = "model")
+pit <- get_pit(as_forecast_quantile(example_quantile), by = "model")
 plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- get_pit(as_forecast(example_sample_discrete), by = "model")
+pit <- get_pit(as_forecast_sample(example_sample_discrete), by = "model")
 plot_pit(pit)
 }

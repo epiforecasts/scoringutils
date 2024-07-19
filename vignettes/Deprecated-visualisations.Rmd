@@ -123,7 +123,7 @@ plot_predictions <- function(data,
   } else if (get_forecast_type(data) == "sample") {
     # using a scoringutils internal function
     forecasts <- scoringutils:::sample_to_interval_long(
-      as_forecast(forecasts),
+      as_forecast_sample(forecasts),
       interval_range = interval_range,
       keep_quantile_col = FALSE
     )
@@ -375,7 +375,7 @@ example_quantile %>%
 #" library(ggplot2)
 #" ex <- data.table::copy(example_quantile)
 #" ex$range <- scoringutils:::get_range_from_quantile(ex$quantile)
-#" scores <- suppressWarnings(score(as_forecast(ex), metrics = list("wis" = wis)))
+#" scores <- suppressWarnings(score(as_forecast_quantile(ex), metrics = list("wis" = wis)))
 #" summarised <- summarise_scores(
 #"   scores,
 #"   by = c("model", "target_type", "range")
@@ -423,7 +423,7 @@ range_example <- copy(example_quantile) %>%
   .[, range := scoringutils:::get_range_from_quantile(quantile_level)]
 
 sum_scores <- range_example %>%
-  as_forecast() %>%
+  as_forecast_quantile() %>%
   score(metrics = list(wis = wis, dispersion = dispersion)) %>%
   summarise_scores(by = c("model", "target_type", "range")) %>%
   suppressWarnings()
@@ -475,7 +475,7 @@ This function allowed users to turn a table of (summarised) scores into a colour
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(as_forecast(example_quantile)) %>%
+#' scores <- score(as_forecast_quantile(example_quantile)) %>%
 #'   summarise_scores(by = c("model", "target_type")) %>%
 #'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 #'
@@ -578,7 +578,7 @@ plot_score_table <- function(scores,
 The main functionality the old function provided, was scaling the scores in order to obtain reasonable colour shades. It would do this per metric, but one could also pass in additional grouping variables through the `by` argument. This allowed users to achieve a faceting of the table (note that of course scores also needed to be summarised according to the same grouping). 
 
 ```{r}
-scores <- score(as_forecast(example_quantile)) %>%
+scores <- score(as_forecast_quantile(example_quantile)) %>%
   summarise_scores(by = c("model", "target_type")) %>%
   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 

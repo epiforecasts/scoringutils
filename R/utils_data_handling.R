@@ -19,7 +19,7 @@
 #' @keywords data-handling
 #' @export
 #' @examples
-#' sample_to_quantile(as_forecast(example_sample_discrete))
+#' sample_to_quantile(as_forecast_sample(example_sample_discrete))
 sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {
@@ -39,7 +39,7 @@ sample_to_quantile <- function(forecast,
                                       type = ..type, na.rm = TRUE)),
              by = by]
 
-  return(as_forecast(forecast))
+  return(as_forecast_quantile(forecast))
 }
 
 
@@ -119,6 +119,19 @@ quantile_to_interval_dataframe <- function(forecast,
   forecast <- data.table::rbindlist(list(forecast, median))
   if (!keep_quantile_col) {
     forecast[, quantile_level := NULL]
+  }
+
+  if (length(unique(forecast$boundary)) < 2) {
+    cli_abort(
+      c(
+        #nolint start: keyword_quote_linter
+        `!` = "No valid forecast intervals found.",
+        `i` = "A forecast interval comprises two
+      quantiles with quantile levels symmetric around the median
+      (e.g. 0.25 and 0.75)"
+        #nolint end
+      )
+    )
   }
 
   if (format == "wide") {
