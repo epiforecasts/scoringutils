@@ -29,13 +29,23 @@ test_that("quantile_to_interval_dataframe() works", {
   quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile_level") := NA]
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
-  expect_message(
+
+  # the data.table behavior differs before/after v1.16.0
+  #  - before, it's a 'message'
+  #  - after, it's a 'warning'
+  #  - the conditionMessage() also differs
+  expected_condition <- tryCatch(
+    dcast(data.table(a = c(1, 1), b = 2, c = 3), a ~ b, value.var="c"),
+    condition = identity
+  )
+  expect_condition(
     quantile_to_interval(
       quantile,
       keep_quantile_col = FALSE,
       format = "wide"
     ),
-    "Aggregate function missing, defaulting to 'length'"
+    class = class(expected_condition)[1L], # testthat 3e requires exactly one class
+    regexp = "[Aa]ggregate.*default.*length"
   )
   quantile <- quantile[-c(1, 3), ]
   wide2 <- scoringutils:::quantile_to_interval(
@@ -71,7 +81,7 @@ test_that("sample_to_quantiles works", {
     "The input needs to be a valid forecast object."
   )
 
-  wrongclass <- as_forecast(samples)
+  wrongclass <- as_forecast_sample(samples)
   class(wrongclass) <- c("forecast_point", "data.table", "data.frame")
   expect_error(
     sample_to_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
@@ -80,7 +90,7 @@ test_that("sample_to_quantiles works", {
 
 
   quantile2 <- sample_to_quantile(
-    as_forecast(samples),
+    as_forecast_sample(samples),
     quantile_level = c(0.25, 0.75)
   )
 
@@ -92,7 +102,7 @@ test_that("sample_to_quantiles works", {
   samples$type <- "test"
 
   quantile3 <- sample_to_quantile(
-    as_forecast(samples),
+    as_forecast_sample(samples),
     quantile_level = c(0.25, 0.75)
   )
   quantile3$type <- NULL
@@ -106,7 +116,7 @@ test_that("sample_to_quantiles works", {
 test_that("sample_to_quantiles issue 557 fix", {
 
   out <- example_sample_discrete %>%
-    as_forecast() %>%
+    as_forecast_sample() %>%
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
@@ -134,7 +144,7 @@ test_that("sample_to_range_long works", {
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- scoringutils:::sample_to_interval_long(as_forecast(samples),
+  long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples),
                                                   interval_range = 50,
                                                   keep_quantile_col = FALSE)
   long2 <- long2[order(model, boundary, date)]

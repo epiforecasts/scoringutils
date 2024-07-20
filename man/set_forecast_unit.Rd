@@ -24,7 +24,8 @@ combination of columns that uniquely define a single forecast) manually.
 This simple function keeps the columns specified in \code{forecast_unit} (plus
 additional protected columns, e.g. for observed values, predictions or
 quantile levels) and removes duplicate rows. \code{set_forecast_unit()} will
-mainly be called from \code{\link[=as_forecast]{as_forecast()}} through the \code{forecast_unit} argument.
+mainly be called when constructing a \code{forecast} object (see \code{\link[=as_forecast]{as_forecast()}})
+via the \code{forecast_unit} argument there.
 
 If not done explicitly, \code{scoringutils} attempts to determine the unit
 of a single forecast automatically by simply assuming that all column names

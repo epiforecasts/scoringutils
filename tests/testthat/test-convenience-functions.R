@@ -5,7 +5,7 @@
 test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
   predictions <- example_quantile %>%
-    as_forecast() %>%
+    as_forecast_quantile() %>%
     transform_forecasts(
     fun = function(x) pmax(0, x),
     append = FALSE
@@ -58,7 +58,7 @@ test_that("function transform_forecasts works", {
 })
 
 test_that("transform_forecasts() outputs an object of class forecast_*", {
-  ex <- as_forecast(na.omit(example_binary))
+  ex <- as_forecast_binary(na.omit(example_binary))
   transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
   expect_s3_class(transformed, "forecast_binary")
 })
@@ -110,7 +110,7 @@ test_that("function set_forecast_unit() works", {
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
   scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 
@@ -141,7 +141,7 @@ test_that("set_forecast_unit() works on input that's not a data.table", {
 })
 
 test_that("set_forecast_unit() revalidates a forecast object", {
-  obj <- as_forecast(na.omit(example_quantile))
+  obj <- as_forecast_quantile(na.omit(example_quantile))
   expect_no_condition(
     set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
   )
@@ -170,7 +170,7 @@ test_that("function get_forecast_unit() and set_forecast_unit() work together", 
 })
 
 test_that("output class of set_forecast_unit() is as expected", {
-  ex <- as_forecast(na.omit(example_binary))
+  ex <- as_forecast_binary(na.omit(example_binary))
   expect_equal(
     class(ex),
     class(set_forecast_unit(ex, c("location", "target_end_date", "target_type", "horizon", "model")))

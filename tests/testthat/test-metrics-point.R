@@ -60,7 +60,7 @@ test_that("abs error is correct within score, point forecast only", {
     fc_scoringutils,
     truth_scoringutils
   )[, quantile := NULL] %>%
-    as_forecast()
+    as_forecast_point()
 
   eval <- scoringutils::score(data_scoringutils)
 
@@ -119,7 +119,7 @@ test_that("abs error is correct, point and median forecasts different", {
     fc_scoringutils,
     truth_scoringutils
   )[, quantile := NULL] %>%
-    as_forecast()
+    as_forecast_point()
 
   eval <- scoringutils::score(data_scoringutils)
 
@@ -182,7 +182,7 @@ test_that("abs error is correct, point and median forecasts same", {
 
   data_forecast_point <-
     data_scoringutils[type == "point"][, quantile_level := NULL] %>%
-    as_forecast()
+    as_forecast_point()
 
   eval <- score(forecast = data_forecast_point)
   eval <- summarise_scores(eval,
