@@ -29,13 +29,23 @@ test_that("quantile_to_interval_dataframe() works", {
   quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile_level") := NA]
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
-  expect_message(
+
+  # the data.table behavior differs before/after v1.16.0
+  #  - before, it's a 'message'
+  #  - after, it's a 'warning'
+  #  - the conditionMessage() also differs
+  expected_condition <- tryCatch(
+    dcast(data.table(a = c(1, 1), b = 2, c = 3), a ~ b, value.var="c"),
+    condition = identity
+  )
+  expect_condition(
     quantile_to_interval(
       quantile,
       keep_quantile_col = FALSE,
       format = "wide"
     ),
-    "Aggregate function missing, defaulting to 'length'"
+    class = class(expected_condition)[1L], # testthat 3e requires exactly one class
+    regexp = "[Aa]ggregate.*default.*length"
   )
   quantile <- quantile[-c(1, 3), ]
   wide2 <- scoringutils:::quantile_to_interval(
