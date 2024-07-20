@@ -23,9 +23,9 @@ scoring rules suitable for forecasts in a quantile-based format.
 The default scoring rules are:
 \itemize{
 \item "wis" = \link{wis}
-\item "overprediction" = \code{\link[=overprediction]{overprediction()}}
-\item "underprediction" = \code{\link[=underprediction]{underprediction()}}
-\item "dispersion" = \code{\link[=dispersion]{dispersion()}}
+\item "overprediction" = \code{\link[=overprediction_quantile]{overprediction_quantile()}}
+\item "underprediction" = \code{\link[=underprediction_quantile]{underprediction_quantile()}}
+\item "dispersion" = \code{\link[=dispersion_quantile]{dispersion_quantile()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "interval_coverage_50" = \code{\link[=interval_coverage]{interval_coverage()}}
 \item "interval_coverage_90" = customise_metric(

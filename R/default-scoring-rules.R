@@ -198,9 +198,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #'
 #' The default scoring rules are:
 #' - "wis" = [wis]
-#' - "overprediction" = [overprediction()]
-#' - "underprediction" = [underprediction()]
-#' - "dispersion" = [dispersion()]
+#' - "overprediction" = [overprediction_quantile()]
+#' - "underprediction" = [underprediction_quantile()]
+#' - "dispersion" = [dispersion_quantile()]
 #' - "bias" = [bias_quantile()]
 #' - "interval_coverage_50" = [interval_coverage()]
 #' - "interval_coverage_90" = customise_metric(
@@ -225,9 +225,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 metrics_quantile <- function(select = NULL, exclude = NULL) {
   all <- list(
     wis = wis,
-    overprediction = overprediction,
-    underprediction = underprediction,
-    dispersion = dispersion,
+    overprediction = overprediction_quantile,
+    underprediction = underprediction_quantile,
+    dispersion = dispersion_quantile,
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
     interval_coverage_90 = customise_metric(
