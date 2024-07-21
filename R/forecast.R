@@ -198,7 +198,7 @@ as_forecast_nominal <- function(data,
   if (!is.null(predicted_label)) {
     setnames(data, old = predicted_label, new = "predicted_label")
   }
-  
+
   data <- as_forecast_generic(data, forecast_unit, observed, predicted, model)
   data <- new_forecast(data, "forecast_nominal")
   assert_forecast(data)
