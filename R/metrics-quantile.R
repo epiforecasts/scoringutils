@@ -618,7 +618,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' The quantile score, also called pinball loss, for a single quantile
 #' level \eqn{\tau} is defined as
 #' \deqn{
-#'   \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau − y) =
+#'   \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau - y) =
 #'   \begin{cases}
 #' 2 \cdot (1 - \tau) * q_\tau - y,       & \text{if } y \leq q_\tau\\
 #' 2 \cdot \tau * |q_\tau - y|,           & \text{if } y > q_\tau,

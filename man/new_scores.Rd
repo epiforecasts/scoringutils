@@ -12,7 +12,7 @@ new_scores(scores, metrics, ...)
 \item{metrics}{A character vector with the names of the scores
 (i.e. the names of the scoring rules used for scoring).}
 
-\item{...}{Additional arguments to \code{\link[=as.data.table]{as.data.table()}}}
+\item{...}{Additional arguments to \code{\link[data.table:as.data.table]{data.table::as.data.table()}}}
 }
 \value{
 An object of class \code{scores}

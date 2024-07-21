@@ -33,7 +33,9 @@ default), the forecast type will be inferred from the data.}
 \item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
 warnings will be created.}
 
-\item{...}{Additional arguments}
+\item{...}{Additional arguments. Currently unused but allows for future
+extensions. If you want to pass arguments to individual metrics, use
+\code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
 Returns \code{NULL} invisibly.
@@ -99,7 +101,7 @@ For more information see the vignettes and the example data
 }
 
 \examples{
-forecast <- as_forecast(example_binary)
+forecast <- as_forecast_binary(example_binary)
 assert_forecast(forecast)
 }
 \keyword{check-forecasts}

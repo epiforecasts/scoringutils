@@ -28,7 +28,7 @@ is_forecast_nominal(x)
 \emph{\code{is_forecast}}: \code{TRUE} if the object is of class \code{forecast},
 \code{FALSE} otherwise.
 
-\emph{\verb{is_forecast_*}}: \code{TRUE} if the object is of class \verb{forecast_*} in addition
+\emph{\verb{is_forecast_<type>*}}: \code{TRUE} if the object is of class \verb{forecast_*} in addition
 to class \code{forecast}, \code{FALSE} otherwise.
 }
 \description{
@@ -39,7 +39,7 @@ You can test for a specific \verb{forecast_*} class using the appropriate
 \verb{is_forecast_*} function.
 }
 \examples{
-forecast_binary <- as_forecast(example_binary)
+forecast_binary <- as_forecast_binary(example_binary)
 is_forecast(forecast_binary)
 }
 \keyword{check-forecasts}
