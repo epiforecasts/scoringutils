@@ -158,37 +158,10 @@ test_that("output of as_forecasts() is accepted as input to score()", {
 })
 
 
-test_that("as_forecast() produces a warning if outdated formats are used", {
-  test_data <- data.frame(
-    observed = rep(c(1, -15, 22), times = 2),
-    quantile = rep(c(0.25, 0.75), each = 3),
-    predicted = c(c(0, 1, 0), c(2, 2, 3)),
-    model = c("model1"),
-    date = rep(1:3, times = 2)
-  )
-
-  expect_warning(
-    as_forecast(test_data),
-    "Found column 'quantile' in the input data",
-  )
-
-  test_data2 <- data.frame(
-    observed = c(1, 0, 0, 1, 0, 1),
-    predicted = c(0.2, 0.4, 0.1, 0.8, 0.1, 0.3),
-    model = c("model1", "model2"),
-    date = rep(1:3, times = 2)
-  )
-
-  expect_warning(
-    as_forecast(test_data2),
-    "The forecast type was classified as 'point', but it looks like"
-  )
-})
-
 # as_forecast.forecast_nominal() -----------------------------------------------
 test_that("as_forecast.forecast_nominal() works as expected", {
   expect_s3_class(
-    suppressMessages(as_forecast(example_nominal)),
+    suppressMessages(as_forecast_nominal(example_nominal)),
     c("forecast", "forecast_nominal", "data.table", "data.frame"),
     exact = TRUE
   )
@@ -197,7 +170,7 @@ test_that("as_forecast.forecast_nominal() works as expected", {
   ex_faulty <- ex_faulty[predicted != 0]
   expect_warning(
     expect_error(
-      as_forecast(ex_faulty),
+      as_forecast_nominal(ex_faulty),
       "Found incomplete forecasts"
     ),
     "Some forecasts have different numbers of rows"
