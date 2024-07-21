@@ -166,7 +166,7 @@ test_that("as_forecast.forecast_nominal() works as expected", {
     exact = TRUE
   )
 
-  ex <- data.table::copy(example_nominal) |>
+  ex <- data.table::copy(example_nominal) %>%
     na.omit()
   setnames(ex, old = "predicted_label", new = "label")
 
