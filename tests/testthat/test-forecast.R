@@ -198,6 +198,7 @@ test_that("is_forecast() works as expected", {
   ex_nominal <- suppressMessages(as_forecast_nominal(example_nominal))
 
   expect_true(is_forecast(ex_binary))
+  expect_true(is_forecast_binary(ex_binary))
   expect_true(is_forecast_point(ex_point))
   expect_true(is_forecast_quantile(ex_quantile))
   expect_true(is_forecast(ex_continuous))

@@ -321,7 +321,10 @@ test_that("score() works with only one sample", {
 
 # test nominal case ------------------------------------------------------------
 test_that("function produces output for a nominal format case", {
+  expect_no_condition(score(as_forecast_nominal(na.omit(example_nominal))))
 })
+
+
 # =============================================================================
 # apply_metrics()
 # =============================================================================

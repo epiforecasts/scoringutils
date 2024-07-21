@@ -244,16 +244,6 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
 }
 
 
-#' @title Check That Inputs Are Correct For Categorical Forecasts
-#' @inherit assert_input_nominal params description
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_input_nominal <- function(observed, predicted, predicted_label) {
-  result <- check_try(assert_input_nominal(observed, predicted, predicted_label))
-  return(result)
-}
-
-
 #' @title Assert that inputs are correct for point forecast
 #' @description
 #' Function assesses whether the inputs correspond to the
