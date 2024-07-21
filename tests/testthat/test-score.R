@@ -318,6 +318,10 @@ test_that("score() works with only one sample", {
   expect_no_condition(score(twosample))
 })
 
+
+# test nominal case ------------------------------------------------------------
+test_that("function produces output for a nominal format case", {
+})
 # =============================================================================
 # apply_metrics()
 # =============================================================================
