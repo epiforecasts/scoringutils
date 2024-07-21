@@ -6,6 +6,7 @@
 \alias{as_forecast_binary}
 \alias{as_forecast_quantile}
 \alias{as_forecast_sample}
+\alias{as_forecast_nominal}
 \title{Create a \code{forecast} object}
 \usage{
 as_forecast_point(
@@ -39,11 +40,16 @@ as_forecast_sample(
   observed = NULL,
   predicted = NULL,
   model = NULL,
-  quantile_level = NULL,
-  sample_id = NULL,
-  predicted_label = NULL,
-  ...
   sample_id = NULL
+)
+
+as_forecast_nominal(
+  data,
+  forecast_unit = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL,
+  predicted_label = NULL
 )
 }
 \arguments{
