@@ -281,7 +281,7 @@ the mean before returning an output.
 ### Bug fixes
 
 - Testing was expanded
-- Minor bugs were fixed, for example a bug in the `sample_to_quantile()` function
+- Minor bugs were fixed, for example a bug in the `as_forecast_quantile()` function
 (https://github.com/epiforecasts/scoringutils/pull/223)
 
 ### Package data updated

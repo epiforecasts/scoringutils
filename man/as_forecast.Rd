@@ -2,20 +2,16 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\alias{as_forecast_point}
 \alias{as_forecast_binary}
+\alias{as_forecast_point}
+\alias{as_forecast_point.default}
+\alias{as_forecast_point.forecast_quantile}
 \alias{as_forecast_quantile}
+\alias{as_forecast_quantile.default}
+\alias{as_forecast_quantile.forecast_sample}
 \alias{as_forecast_sample}
 \title{Create a \code{forecast} object}
 \usage{
-as_forecast_point(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL
-)
-
 as_forecast_binary(
   data,
   forecast_unit = NULL,
@@ -24,13 +20,35 @@ as_forecast_binary(
   model = NULL
 )
 
-as_forecast_quantile(
+as_forecast_point(data, ...)
+
+\method{as_forecast_point}{default}(
+  data,
+  forecast_unit = NULL,
+  observed = NULL,
+  predicted = NULL,
+  model = NULL,
+  ...
+)
+
+\method{as_forecast_point}{forecast_quantile}(data, ...)
+
+as_forecast_quantile(data, ...)
+
+\method{as_forecast_quantile}{default}(
   data,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
   model = NULL,
   quantile_level = NULL
+)
+
+\method{as_forecast_quantile}{forecast_sample}(
+  data,
+  quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  type = 7,
+  ...
 )
 
 as_forecast_sample(
@@ -64,9 +82,11 @@ predicted values. This column will be renamed to "predicted".}
 of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".}
 
-\item{quantile_level}{(optional) Name of the column in \code{data} that contains
-the quantile level of the predicted values. This column will be renamed to
-"quantile_level". Only applicable to quantile-based forecasts.}
+\item{quantile_level}{A numeric vector of quantile levels for which
+quantiles will be computed.}
+
+\item{type}{Type argument passed down to the quantile function. For more
+information, see \code{\link[=quantile]{quantile()}}.}
 
 \item{sample_id}{(optional) Name of the column in \code{data} that contains the
 sample id. This column will be renamed to "sample_id". Only applicable to

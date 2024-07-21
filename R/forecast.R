@@ -102,21 +102,6 @@ as_forecast_generic <- function(data,
 #' @rdname as_forecast
 #' @export
 #' @importFrom cli cli_warn
-as_forecast_point <- function(data,
-                              forecast_unit = NULL,
-                              observed = NULL,
-                              predicted = NULL,
-                              model = NULL) {
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted, model)
-  data <- new_forecast(data, "forecast_point")
-  assert_forecast(data)
-  return(data)
-}
-
-
-#' @rdname as_forecast
-#' @export
-#' @importFrom cli cli_warn
 as_forecast_binary <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
@@ -130,17 +115,61 @@ as_forecast_binary <- function(data,
 
 
 #' @rdname as_forecast
+#' @export
+as_forecast_point <- function(data, ...) {
+  UseMethod("as_forecast_point")
+}
+
+#' @rdname as_forecast
+#' @export
+#' @importFrom cli cli_warn
+as_forecast_point.default <- function(data,
+                                      forecast_unit = NULL,
+                                      observed = NULL,
+                                      predicted = NULL,
+                                      model = NULL,
+                                      ...) {
+  data <- as_forecast_generic(data, forecast_unit, observed, predicted, model)
+  data <- new_forecast(data, "forecast_point")
+  assert_forecast(data)
+  return(data)
+}
+
+
+#' @rdname as_forecast
+#' @export
+#' @keywords check-forecasts
+as_forecast_point.forecast_quantile <- function(data, ...) {
+  assert_forecast(data, verbose = FALSE)
+  assert_subset(0.5, unique(data$quantile_level))
+
+  forecast <- data[quantile_level == 0.5]
+  forecast[, "quantile_level" := NULL]
+
+  point_forecast <- new_forecast(forecast, "forecast_point")
+  return(point_forecast)
+}
+
+
+#' @rdname as_forecast
+#' @export
+as_forecast_quantile <- function(data, ...) {
+  UseMethod("as_forecast_quantile")
+}
+
+
+#' @rdname as_forecast
 #' @param quantile_level (optional) Name of the column in `data` that contains
 #'   the quantile level of the predicted values. This column will be renamed to
 #'   "quantile_level". Only applicable to quantile-based forecasts.
 #' @export
 #' @importFrom cli cli_warn
-as_forecast_quantile <- function(data,
-                                 forecast_unit = NULL,
-                                 observed = NULL,
-                                 predicted = NULL,
-                                 model = NULL,
-                                 quantile_level = NULL) {
+as_forecast_quantile.default <- function(data,
+                                         forecast_unit = NULL,
+                                         observed = NULL,
+                                         predicted = NULL,
+                                         model = NULL,
+                                         quantile_level = NULL) {
   assert_character(quantile_level, len = 1, null.ok = TRUE)
   assert_subset(quantile_level, names(data), empty.ok = TRUE)
   if (!is.null(quantile_level)) {
@@ -151,6 +180,44 @@ as_forecast_quantile <- function(data,
   data <- new_forecast(data, "forecast_quantile")
   assert_forecast(data)
   return(data)
+}
+
+
+#' @rdname as_forecast
+#' @param quantile_level A numeric vector of quantile levels for which
+#'   quantiles will be computed.
+#' @param type Type argument passed down to the quantile function. For more
+#'   information, see [quantile()].
+#' @importFrom stats quantile
+#' @importFrom methods hasArg
+#' @importFrom checkmate assert_numeric
+#' @export
+as_forecast_quantile.forecast_sample <- function(
+  data,
+  quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  type = 7,
+  ...
+) {
+  forecast <- copy(data)
+  assert_forecast(forecast, verbose = FALSE)
+  assert_numeric(quantile_level, min.len = 1)
+  reserved_columns <- c("predicted", "sample_id")
+  by <- setdiff(colnames(forecast), reserved_columns)
+
+  quantile_level <- unique(
+    round(c(quantile_level, 1 - quantile_level), digits = 10)
+  )
+
+  forecast <-
+    forecast[, .(quantile_level = quantile_level,
+                 predicted = quantile(x = predicted, probs = ..quantile_level,
+                                      type = ..type, na.rm = TRUE)),
+             by = by]
+
+  quantile_forecast <- new_forecast(forecast, "forecast_quantile")
+  assert_forecast(quantile_forecast)
+
+  return(quantile_forecast)
 }
 
 
