@@ -3,9 +3,9 @@
 scoring rules suitable for forecasts in a quantile-based format.
 The default scoring rules are:
 "wis" = wis
-"overprediction" = overprediction()
-"underprediction" = underprediction()
-"dispersion" = dispersion()
+"overprediction" = overprediction_quantile()
+"underprediction" = underprediction_quantile()
+"dispersion" = dispersion_quantile()
 "bias" = bias_quantile()
 "interval_coverage_50" = interval_coverage()
 "interval_coverage_90" = customise_metric(
@@ -25,9 +25,9 @@ mean it would also get passed to interval_coverage_50.'><meta property="og:descr
 scoring rules suitable for forecasts in a quantile-based format.
 The default scoring rules are:
 "wis" = wis
-"overprediction" = overprediction()
-"underprediction" = underprediction()
-"dispersion" = dispersion()
+"overprediction" = overprediction_quantile()
+"underprediction" = underprediction_quantile()
+"dispersion" = dispersion_quantile()
 "bias" = bias_quantile()
 "interval_coverage_50" = interval_coverage()
 "interval_coverage_90" = customise_metric(
@@ -87,9 +87,9 @@ mean it would also get passed to interval_coverage_50.'><meta name="robots" cont
     <p>Helper function that returns a named list of default
 scoring rules suitable for forecasts in a quantile-based format.</p>
 <p>The default scoring rules are:</p><ul><li><p>"wis" = <a href="wis.html">wis</a></p></li>
-<li><p>"overprediction" = <code><a href="wis.html">overprediction()</a></code></p></li>
-<li><p>"underprediction" = <code><a href="wis.html">underprediction()</a></code></p></li>
-<li><p>"dispersion" = <code><a href="wis.html">dispersion()</a></code></p></li>
+<li><p>"overprediction" = <code><a href="wis.html">overprediction_quantile()</a></code></p></li>
+<li><p>"underprediction" = <code><a href="wis.html">underprediction_quantile()</a></code></p></li>
+<li><p>"dispersion" = <code><a href="wis.html">dispersion_quantile()</a></code></p></li>
 <li><p>"bias" = <code><a href="bias_quantile.html">bias_quantile()</a></code></p></li>
 <li><p>"interval_coverage_50" = <code><a href="interval_coverage.html">interval_coverage()</a></code></p></li>
 <li><p>"interval_coverage_90" = customise_metric(
@@ -171,7 +171,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b1d7e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda5316c20&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -184,7 +184,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$overprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b21f58&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda531d808&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -197,7 +197,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$underprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b20b00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda53201a8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -210,7 +210,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         args))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$dispersion)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b234d8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda5322b80&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bias</span>
@@ -231,7 +231,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(bias)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e90e5cd28&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda33c39d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_50</span>
@@ -254,7 +254,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         (observed &lt;= upper))]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(reformatted$interval_coverage)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92aba6f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda52bdb38&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_90</span>
@@ -262,8 +262,8 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     do.call(metric, c(list(...), dots))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92916370&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563e95e68c68&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda51493b0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55cda57bfc10&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $interval_coverage_deviation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted, quantile_level) </span>
@@ -289,7 +289,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         by = "forecast_id"]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(out$interval_coverage_deviation)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b24828&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda5323878&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
@@ -308,7 +308,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     abs_error_median &lt;- abs(observed - predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(abs_error_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e9310a878&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda56d7580&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">metrics_quantile</span><span class="op">(</span>select <span class="op">=</span> <span class="st">"wis"</span><span class="op">)</span></span></span>
@@ -350,7 +350,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e92b1d7e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda5316c20&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

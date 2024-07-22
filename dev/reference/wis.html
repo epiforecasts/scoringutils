@@ -232,11 +232,11 @@ WIS components can be computed individually using the functions
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dispersion</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">dispersion_quantile</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">overprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">overprediction_quantile</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">underprediction</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">underprediction_quantile</span><span class="op">(</span><span class="va">observed</span>, <span class="va">predicted</span>, <span class="va">quantile_level</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -290,19 +290,20 @@ value that represents how much is outside a central prediction interval
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed on to <code>wis()</code> from functions
-<code>overprediction()</code>, <code>underprediction()</code> and <code>dispersion()</code>.</p></dd>
+<code>overprediction_quantile()</code>, <code>underprediction_quantile()</code> and
+<code>dispersion_quantile()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>wis()</code>: a numeric vector with WIS values of size n (one per observation),
 or a list with separate entries if <code>separate_results</code> is <code>TRUE</code>.</p>
-<p><code>dispersion()</code>: a numeric vector with dispersion values (one per
+<p><code>dispersion_quantile()</code>: a numeric vector with dispersion values (one per
 observation).</p>
-<p><code>overprediction()</code>: a numeric vector with overprediction values (one per
-observation).</p>
-<p><code>underprediction()</code>: a numeric vector with underprediction values (one per
-observation)</p>
+<p><code>overprediction_quantile()</code>: a numeric vector with overprediction values
+(one per observation).</p>
+<p><code>underprediction_quantile()</code>: a numeric vector with underprediction values
+(one per observation)</p>
     </div>
 
     <div class="section level2">

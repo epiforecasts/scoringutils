@@ -63,7 +63,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-07-20</h4>
+            <h4 data-toc-skip class="date">2024-07-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/vignettes/scoring-rules.Rmd" class="external-link"><code>vignettes/scoring-rules.Rmd</code></a></small>
       <div class="d-none name"><code>scoring-rules.Rmd</code></div>
@@ -375,6 +375,31 @@ into account when determining the quality of the forecast.</p>
 function from the <code>scoringRules</code> package, which assumes that
 the forecast is represented by a set of samples from the predictive
 distribution. See <code>?crps_sample()</code> for more information.</p>
+<div class="section level4">
+<h4 id="overprediction-underprediction-and-dispersion">Overprediction, underprediction and dispersion<a class="anchor" aria-label="anchor" href="#overprediction-underprediction-and-dispersion"></a>
+</h4>
+<p>The CRPS can be interpreted as a sum of a dispersion, an
+overprediction and an underprediction component. If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+is the median forecast then the dispersion component is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">CRPS</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\text{CRPS}(F, m),</annotation></semantics></math>
+the overprediction component is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>m</mi><mo>&gt;</mo><mi>y</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>C</mi><mi>R</mi><mi>P</mi><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>C</mi><mi>R</mi><mi>P</mi><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>m</mi><mo>≤</mo><mi>y</mi></mtd><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">
+\begin{cases}
+m &gt; y &amp; CRPS(F, y) - CRPS(F, m)\\
+m \leq y &amp; 0\\
+\end{cases}
+</annotation></semantics></math> and the underprediction component is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>m</mi><mo>&lt;</mo><mi>y</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>C</mi><mi>R</mi><mi>P</mi><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>C</mi><mi>R</mi><mi>P</mi><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>m</mi><mo>≥</mo><mi>y</mi></mtd><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">
+\begin{cases}
+m &lt; y &amp; CRPS(F, y) - CRPS(F, m)\\
+m \geq y &amp; 0\\
+\end{cases}
+</annotation></semantics></math></p>
+<p>These can be accessed via the <code><a href="../reference/crps_sample.html">dispersion_sample()</a></code>,
+<code><a href="../reference/crps_sample.html">overprediction_sample()</a></code> and
+<code><a href="../reference/crps_sample.html">underprediction_sample()</a></code> functions, respectively.</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="log-score">Log score<a class="anchor" aria-label="anchor" href="#log-score"></a>
@@ -601,11 +626,12 @@ then the WIS converges to the CRPS for an increasing number of equally
 spaced quantiles.</p>
 <p>See <code>?wis()</code> for more information.</p>
 <div class="section level4">
-<h4 id="overprediction-underprediction-and-dispersion">Overprediction, underprediction and dispersion<a class="anchor" aria-label="anchor" href="#overprediction-underprediction-and-dispersion"></a>
+<h4 id="overprediction-underprediction-and-dispersion-1">Overprediction, underprediction and dispersion<a class="anchor" aria-label="anchor" href="#overprediction-underprediction-and-dispersion-1"></a>
 </h4>
 <p>These are the individual components of the WIS. See
-<code>?overprediction()</code>, <code>?underprediction()</code> and
-<code>?dispersion()</code> for more information.</p>
+<code>?overprediction_quantile()</code>,
+<code>?underprediction_quantile()</code> and
+<code>?dispersion_quantile()</code> for more information.</p>
 </div>
 </div>
 <div class="section level3">
