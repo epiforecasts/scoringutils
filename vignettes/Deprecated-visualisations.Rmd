@@ -424,7 +424,7 @@ range_example <- copy(example_quantile) %>%
 
 sum_scores <- range_example %>%
   as_forecast_quantile() %>%
-  score(metrics = list(wis = wis, dispersion = dispersion)) %>%
+  score(metrics = list(wis = wis, dispersion = dispersion_quantile)) %>%
   summarise_scores(by = c("model", "target_type", "range")) %>%
   suppressWarnings()
 

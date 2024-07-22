@@ -346,7 +346,7 @@ See `?wis()` for more information.
 
 ### Overprediction, underprediction and dispersion
 
-These are the individual components of the WIS. See `?overprediction()`, `?underprediction()` and `?dispersion()` for more information.
+These are the individual components of the WIS. See `?overprediction_quantile()`, `?underprediction_quantile()` and `?dispersion_quantile()` for more information.
 
 ## Bias
 

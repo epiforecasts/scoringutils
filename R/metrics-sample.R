@@ -225,6 +225,9 @@ dss_sample <- function(observed, predicted, ...) {
 #' is defined as the CRPS of the forecast for $y$ minus the dispersion
 #' component, and overprediction is zero.
 #'
+#' The overprediction, underprediction and dispersion components correspond to
+#' those of the [wis()].
+#'
 #' @inheritParams logs_sample
 #' @param separate_results Logical. If `TRUE` (default is `FALSE`), then the
 #'   separate parts of the CRPS (dispersion penalty, penalties for
@@ -306,8 +309,8 @@ dispersion_sample <- function(observed, predicted, ...) {
 }
 
 #' @return
-#' `overprediction()`: a numeric vector with overprediction values (one per
-#' observation).
+#' `overprediction_quantile()`: a numeric vector with overprediction values
+#' (one per observation).
 #' @export
 #' @rdname crps_sample
 #' @keywords metric
@@ -317,7 +320,7 @@ overprediction_sample <- function(observed, predicted, ...) {
 }
 
 #' @return
-#' `underprediction()`: a numeric vector with underprediction values (one per
+#' `underprediction_quantile()`: a numeric vector with underprediction values (one per
 #' observation).
 #' @export
 #' @rdname crps_sample

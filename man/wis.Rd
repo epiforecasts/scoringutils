@@ -2,9 +2,9 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{wis}
 \alias{wis}
-\alias{dispersion}
-\alias{overprediction}
-\alias{underprediction}
+\alias{dispersion_quantile}
+\alias{overprediction_quantile}
+\alias{underprediction_quantile}
 \title{Weighted interval score (WIS)}
 \usage{
 wis(
@@ -17,11 +17,11 @@ wis(
   na.rm = TRUE
 )
 
-dispersion(observed, predicted, quantile_level, ...)
+dispersion_quantile(observed, predicted, quantile_level, ...)
 
-overprediction(observed, predicted, quantile_level, ...)
+overprediction_quantile(observed, predicted, quantile_level, ...)
 
-underprediction(observed, predicted, quantile_level, ...)
+underprediction_quantile(observed, predicted, quantile_level, ...)
 }
 \arguments{
 \item{observed}{Numeric vector of size n with the observed values.}
@@ -56,20 +56,21 @@ value that represents how much is outside a central prediction interval
 \item{na.rm}{If TRUE, ignore NA values when computing the score.}
 
 \item{...}{Additional arguments passed on to \code{wis()} from functions
-\code{overprediction()}, \code{underprediction()} and \code{dispersion()}.}
+\code{overprediction_quantile()}, \code{underprediction_quantile()} and
+\code{dispersion_quantile()}.}
 }
 \value{
 \code{wis()}: a numeric vector with WIS values of size n (one per observation),
 or a list with separate entries if \code{separate_results} is \code{TRUE}.
 
-\code{dispersion()}: a numeric vector with dispersion values (one per
+\code{dispersion_quantile()}: a numeric vector with dispersion values (one per
 observation).
 
-\code{overprediction()}: a numeric vector with overprediction values (one per
-observation).
+\code{overprediction_quantile()}: a numeric vector with overprediction values
+(one per observation).
 
-\code{underprediction()}: a numeric vector with underprediction values (one per
-observation)
+\code{underprediction_quantile()}: a numeric vector with underprediction values
+(one per observation)
 }
 \description{
 The WIS is a proper scoring rule used to evaluate forecasts in an interval- /

@@ -38,10 +38,10 @@ Vector with scores.
 \code{dispersion_sample()}: a numeric vector with dispersion values (one per
 observation).
 
-\code{overprediction()}: a numeric vector with overprediction values (one per
-observation).
+\code{overprediction_quantile()}: a numeric vector with overprediction values
+(one per observation).
 
-\code{underprediction()}: a numeric vector with underprediction values (one per
+\code{underprediction_quantile()}: a numeric vector with underprediction values (one per
 observation).
 }
 \description{
@@ -58,6 +58,9 @@ CRPS of the forecast for $y$ minus the dispersion component, and
 underprediction is zero. If, on the other hand, $y<m$ then underprediction
 is defined as the CRPS of the forecast for $y$ minus the dispersion
 component, and overprediction is zero.
+
+The overprediction, underprediction and dispersion components correspond to
+those of the \code{\link[=wis]{wis()}}.
 }
 \examples{
 observed <- rpois(30, lambda = 1:30)

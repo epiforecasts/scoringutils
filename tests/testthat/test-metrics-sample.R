@@ -68,6 +68,34 @@ test_that("crps is the sum of overprediction, underprediction, dispersion", {
 })
 
 
+test_that("crps_sample() components correspond to WIS components", {
+  nreplicates <- 15
+  nsamples <- 2000
+
+  observed <- rnorm(nreplicates, mean = seq_len(nreplicates))
+  predicted <- replicate(
+    nsamples, rnorm(n = nreplicates, mean = seq_len(nreplicates))
+  )
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  dcrps <- dispersion_sample(observed, predicted)
+  ocrps <- overprediction_sample(observed, predicted)
+  ucrps <- underprediction_sample(observed, predicted)
+
+  levels <- seq(0.01, 0.99, by = 0.01)
+  quantiles <- t(apply(predicted, 1, quantile, probs = levels))
+
+  dwis <- dispersion_quantile(observed, quantiles, levels)
+  owis <- overprediction_quantile(observed, quantiles, levels)
+  uwis <- underprediction_quantile(observed, quantiles, levels)
+
+  expect_true(all(abs(c(dcrps - dwis, ocrps - owis, ucrps - uwis)) < 0.01))
+})
+
+
 
 test_that("bias_sample() throws an error when missing observed", {
   observed <- rpois(10, lambda = 1:10)
