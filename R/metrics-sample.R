@@ -215,7 +215,25 @@ dss_sample <- function(observed, predicted, ...) {
 #' function from the
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
 #' valued forecasts
+#'
+#' The Continuous ranked probability score (CRPS) can be interpreted as the sum
+#' of three components: overprediction,  underprediction and dispersion.
+#' "Dispersion" is defined as the CRPS of the median forecast $m$. If an
+#' observation $y$ is greater than $m$ then overpredictoin is defined as the
+#' CRPS of the forecast for $y$ minus the dispersion component, and
+#' underprediction is zero. If, on the other hand, $y<m$ then underprediction
+#' is defined as the CRPS of the forecast for $y$ minus the dispersion
+#' component, and overprediction is zero.
+#'
+#' The overprediction, underprediction and dispersion components correspond to
+#' those of the [wis()].
+#'
 #' @inheritParams logs_sample
+#' @param separate_results Logical. If `TRUE` (default is `FALSE`), then the
+#'   separate parts of the CRPS (dispersion penalty, penalties for
+#'   over- and under-prediction) get returned as separate elements of a list.
+#'   If you want a `data.frame` instead, simply call [as.data.frame()] on the
+#'   output.
 #' @param ... Additional arguments passed to
 #' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
 #' @return Vector with scores.
@@ -230,16 +248,87 @@ dss_sample <- function(observed, predicted, ...) {
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
 #' @keywords metric
 
-crps_sample <- function(observed, predicted, ...) {
+crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   assert_input_sample(observed, predicted)
 
-  scoringRules::crps_sample(
+  crps <- scoringRules::crps_sample(
     y = observed,
     dat = predicted,
     ...
   )
+
+  if (separate_results) {
+    medians <- apply(predicted, 1, median)
+    dispersion <- scoringRules::crps_sample(
+      y = medians,
+      dat = predicted,
+      ...
+    )
+    overprediction <- rep(0, length(observed))
+    underprediction <- rep(0, length(observed))
+
+    overprediction[observed < medians] <- scoringRules::crps_sample(
+      y = observed[observed < medians],
+      dat = predicted[observed < medians, , drop = FALSE],
+      ...
+    )
+    underprediction[observed > medians] <- scoringRules::crps_sample(
+      y = observed[observed > medians],
+      dat = predicted[observed > medians, , drop = FALSE],
+      ...
+    )
+
+    overprediction[overprediction > 0] <-
+      overprediction[overprediction > 0] - dispersion[overprediction > 0]
+    underprediction[underprediction > 0] <-
+      underprediction[underprediction > 0] - dispersion[underprediction > 0]
+
+    return(list(
+      crps = crps,
+      dispersion = dispersion,
+      underprediction = underprediction,
+      overprediction = overprediction
+    ))
+  } else {
+    return(crps)
+  }
 }
 
+#' @return
+#' `dispersion_sample()`: a numeric vector with dispersion values (one per
+#' observation).
+#' @param ... Additional arguments passed on to `crps_sample()` from functions
+#'   `overprediction_sample()`, `underprediction_sample()` and
+#' `dispersion_sample()`.
+#' @export
+#' @rdname crps_sample
+#' @keywords metric
+dispersion_sample <- function(observed, predicted, ...) {
+  crps <- crps_sample(observed, predicted, separate_results = TRUE, ...)
+  return(crps$dispersion)
+}
+
+#' @return
+#' `overprediction_quantile()`: a numeric vector with overprediction values
+#' (one per observation).
+#' @export
+#' @rdname crps_sample
+#' @keywords metric
+overprediction_sample <- function(observed, predicted, ...) {
+  crps <- crps_sample(observed, predicted, separate_results = TRUE, ...)
+  return(crps$overprediction)
+}
+
+#' @return
+#' `underprediction_quantile()`: a numeric vector with underprediction values (one per
+#' observation).
+#' @export
+#' @rdname crps_sample
+#' @keywords metric
+underprediction_sample <- function(observed, predicted, ...) {
+  crps <- crps_sample(observed, predicted, separate_results = TRUE, ...)
+  return(crps$underprediction)
+}
 
 #' @title Determine dispersion of a probabilistic forecast
 #' @description

@@ -636,9 +636,9 @@ test_that("wis is the sum of overprediction, underprediction, dispersion", {
     quantile_level = forecast_quantile_probs
   )
 
-  d <- dispersion(y, forecast_quantiles_matrix, forecast_quantile_probs)
-  o <- overprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
-  u <- underprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  d <- dispersion_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  o <- overprediction_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  u <- underprediction_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
 
   expect_equal(wis, d + o + u)
 })

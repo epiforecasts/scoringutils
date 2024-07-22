@@ -168,14 +168,15 @@ wis <- function(observed,
 
 
 #' @return
-#' `dispersion()`: a numeric vector with dispersion values (one per
+#' `dispersion_quantile()`: a numeric vector with dispersion values (one per
 #' observation).
 #' @param ... Additional arguments passed on to `wis()` from functions
-#'   `overprediction()`, `underprediction()` and `dispersion()`.
+#'   `overprediction_quantile()`, `underprediction_quantile()` and
+#'   `dispersion_quantile()`.
 #' @export
 #' @rdname wis
 #' @keywords metric
-dispersion <- function(observed, predicted, quantile_level, ...) {
+dispersion_quantile <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile_level)
@@ -187,12 +188,12 @@ dispersion <- function(observed, predicted, quantile_level, ...) {
 
 
 #' @return
-#' `overprediction()`: a numeric vector with overprediction values (one per
-#' observation).
+#' `overprediction_quantile()`: a numeric vector with overprediction values
+#' (one per observation).
 #' @export
 #' @rdname wis
 #' @keywords metric
-overprediction <- function(observed, predicted, quantile_level, ...) {
+overprediction_quantile <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile_level)
@@ -204,12 +205,12 @@ overprediction <- function(observed, predicted, quantile_level, ...) {
 
 
 #' @return
-#' `underprediction()`: a numeric vector with underprediction values (one per
-#' observation)
+#' `underprediction_quantile()`: a numeric vector with underprediction values
+#' (one per observation)
 #' @export
 #' @rdname wis
 #' @keywords metric
-underprediction <- function(observed, predicted, quantile_level, ...) {
+underprediction_quantile <- function(observed, predicted, quantile_level, ...) {
   args <- list(...)
   args$separate_results <- TRUE
   assert_input_quantile(observed, predicted, quantile_level)

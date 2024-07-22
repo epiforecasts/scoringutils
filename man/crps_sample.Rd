@@ -2,9 +2,18 @@
 % Please edit documentation in R/metrics-sample.R
 \name{crps_sample}
 \alias{crps_sample}
+\alias{dispersion_sample}
+\alias{overprediction_sample}
+\alias{underprediction_sample}
 \title{(Continuous) ranked probability score}
 \usage{
-crps_sample(observed, predicted, ...)
+crps_sample(observed, predicted, separate_results = FALSE, ...)
+
+dispersion_sample(observed, predicted, ...)
+
+overprediction_sample(observed, predicted, ...)
+
+underprediction_sample(observed, predicted, ...)
 }
 \arguments{
 \item{observed}{A vector with observed values of size n}
@@ -13,17 +22,45 @@ crps_sample(observed, predicted, ...)
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{...}{Additional arguments passed to
-\link[scoringRules:scores_sample_univ]{crps_sample()} from the scoringRules package.}
+\item{separate_results}{Logical. If \code{TRUE} (default is \code{FALSE}), then the
+separate parts of the CRPS (dispersion penalty, penalties for
+over- and under-prediction) get returned as separate elements of a list.
+If you want a \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the
+output.}
+
+\item{...}{Additional arguments passed on to \code{crps_sample()} from functions
+\code{overprediction_sample()}, \code{underprediction_sample()} and
+\code{dispersion_sample()}.}
 }
 \value{
 Vector with scores.
+
+\code{dispersion_sample()}: a numeric vector with dispersion values (one per
+observation).
+
+\code{overprediction_quantile()}: a numeric vector with overprediction values
+(one per observation).
+
+\code{underprediction_quantile()}: a numeric vector with underprediction values (one per
+observation).
 }
 \description{
 Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample()}}
 function from the
 \pkg{scoringRules} package. Can be used for continuous as well as integer
 valued forecasts
+
+The Continuous ranked probability score (CRPS) can be interpreted as the sum
+of three components: overprediction,  underprediction and dispersion.
+"Dispersion" is defined as the CRPS of the median forecast $m$. If an
+observation $y$ is greater than $m$ then overpredictoin is defined as the
+CRPS of the forecast for $y$ minus the dispersion component, and
+underprediction is zero. If, on the other hand, $y<m$ then underprediction
+is defined as the CRPS of the forecast for $y$ minus the dispersion
+component, and overprediction is zero.
+
+The overprediction, underprediction and dispersion components correspond to
+those of the \code{\link[=wis]{wis()}}.
 }
 \examples{
 observed <- rpois(30, lambda = 1:30)
