@@ -69,6 +69,7 @@ test_that("crps is the sum of overprediction, underprediction, dispersion", {
 
 
 test_that("crps_sample() components correspond to WIS components", {
+  set.seed(123)
   nreplicates <- 15
   nsamples <- 2000
 
