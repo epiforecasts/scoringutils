@@ -179,6 +179,9 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #'
 #' The default scoring rules are:
 #' - "crps" = [crps_sample()]
+#' - "overprediction" = [overprediction_sample()]
+#' - "underprediction" = [underprediction_sample()]
+#' - "dispersion" = [dispersion_sample()]
 #' - "log_score" = [logs_sample()]
 #' - "dss" = [dss_sample()]
 #' - "mad" = [mad_sample()]
@@ -196,6 +199,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
     bias = bias_sample,
     dss = dss_sample,
     crps = crps_sample,
+    overprediction = overprediction_sample,
+    underprediction = underprediction_sample,
+    dispersion = dispersion_sample,
     log_score = logs_sample,
     mad = mad_sample,
     ae_median = ae_median_sample,
@@ -213,9 +219,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #'
 #' The default scoring rules are:
 #' - "wis" = [wis]
-#' - "overprediction" = [overprediction()]
-#' - "underprediction" = [underprediction()]
-#' - "dispersion" = [dispersion()]
+#' - "overprediction" = [overprediction_quantile()]
+#' - "underprediction" = [underprediction_quantile()]
+#' - "dispersion" = [dispersion_quantile()]
 #' - "bias" = [bias_quantile()]
 #' - "interval_coverage_50" = [interval_coverage()]
 #' - "interval_coverage_90" = customise_metric(
@@ -240,9 +246,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 metrics_quantile <- function(select = NULL, exclude = NULL) {
   all <- list(
     wis = wis,
-    overprediction = overprediction,
-    underprediction = underprediction,
-    dispersion = dispersion,
+    overprediction = overprediction_quantile,
+    underprediction = underprediction_quantile,
+    dispersion = dispersion_quantile,
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
     interval_coverage_90 = customise_metric(

@@ -26,6 +26,76 @@ test_that("Input handling", {
   )
 })
 
+test_that("crps works with separate results", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted,
+    separate_results = TRUE
+  )
+  expect_equal(
+    crps$crps, crps$dispersion + crps$overprediction + crps$underprediction
+  )
+})
+
+test_that("crps is the sum of overprediction, underprediction, dispersion", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  d <- dispersion_sample(observed, predicted)
+  o <- overprediction_sample(observed, predicted)
+  u <- underprediction_sample(observed, predicted)
+
+  expect_equal(crps, d + o + u)
+
+  observed <- rnorm(30, mean = 1:30)
+  predicted <- replicate(20, rnorm(n = 30, mean = 1:30))
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  d <- dispersion_sample(observed, predicted)
+  o <- overprediction_sample(observed, predicted)
+  u <- underprediction_sample(observed, predicted)
+
+  expect_equal(crps, d + o + u)
+})
+
+
+test_that("crps_sample() components correspond to WIS components", {
+  set.seed(123)
+  nreplicates <- 15
+  nsamples <- 2000
+
+  observed <- rnorm(nreplicates, mean = seq_len(nreplicates))
+  predicted <- replicate(
+    nsamples, rnorm(n = nreplicates, mean = seq_len(nreplicates))
+  )
+  crps <- crps_sample(
+    observed = observed,
+    predicted = predicted
+  )
+
+  dcrps <- dispersion_sample(observed, predicted)
+  ocrps <- overprediction_sample(observed, predicted)
+  ucrps <- underprediction_sample(observed, predicted)
+
+  levels <- seq(0.01, 0.99, by = 0.01)
+  quantiles <- t(apply(predicted, 1, quantile, probs = levels))
+
+  dwis <- dispersion_quantile(observed, quantiles, levels)
+  owis <- overprediction_quantile(observed, quantiles, levels)
+  uwis <- underprediction_quantile(observed, quantiles, levels)
+
+  expect_true(all(abs(c(dcrps - dwis, ocrps - owis, ucrps - uwis)) < 0.01))
+})
+
 
 
 test_that("bias_sample() throws an error when missing observed", {

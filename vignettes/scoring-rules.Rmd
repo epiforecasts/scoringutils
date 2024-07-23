@@ -207,6 +207,28 @@ The CRPS can be understood as a generalisation of the absolute error to predicti
 `scoringutils` re-exports the `crps_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. See `?crps_sample()` for more information.
 
 
+### Overprediction, underprediction and dispersion
+
+The CRPS can be interpreted as a sum of a dispersion, an overprediction and an underprediction component.
+If $m$ is the median forecast then the dispersion component is
+$$\text{CRPS}(F, m),$$
+the overprediction component is
+$$
+\begin{cases}
+m > y & CRPS(F, y) - CRPS(F, m)\\
+m \leq y & 0\\
+\end{cases}
+$$
+and the underprediction component is
+$$
+\begin{cases}
+m < y & CRPS(F, y) - CRPS(F, m)\\
+m \geq y & 0\\
+\end{cases}
+$$
+
+These can be accessed via the `dispersion_sample()`, `overprediction_sample()` and `underprediction_sample()` functions, respectively.
+
 ## Log score
 
 **Observation**: $y$, a real number (or a discrete number).
@@ -324,7 +346,7 @@ See `?wis()` for more information.
 
 ### Overprediction, underprediction and dispersion
 
-These are the individual components of the WIS. See `?overprediction()`, `?underprediction()` and `?dispersion()` for more information.
+These are the individual components of the WIS. See `?overprediction_quantile()`, `?underprediction_quantile()` and `?dispersion_quantile()` for more information.
 
 ## Bias
 
