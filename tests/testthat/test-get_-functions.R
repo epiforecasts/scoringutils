@@ -71,7 +71,7 @@ test_that("removing NA rows from data works as expected", {
   ex <- as_forecast_sample(na.omit(example_sample_discrete))
   expect_s3_class(
     na.omit(ex),
-    c("forecast", "forecast_sample", "data.table", "data.frame"),
+    c("forecast_sample", "forecast", "data.table", "data.frame"),
     exact = TRUE
   )
 
