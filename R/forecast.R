@@ -506,7 +506,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
 new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   data <- ensure_model_column(data)
-  class(data) <- c("forecast", classname, class(data))
+  class(data) <- c(classname, "forecast", class(data))
   data <- copy(data)
   return(data[])
 }
