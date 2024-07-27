@@ -28,7 +28,7 @@ The default scoring rules are:
 \item "dispersion" = \code{\link[=dispersion_quantile]{dispersion_quantile()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "interval_coverage_50" = \code{\link[=interval_coverage]{interval_coverage()}}
-\item "interval_coverage_90" = customise_metric(
+\item "interval_coverage_90" = purrr::partial(
 interval_coverage, interval_range = 90
 )
 \item "interval_coverage_deviation" = \code{\link[=interval_coverage_deviation]{interval_coverage_deviation()}},
@@ -36,7 +36,7 @@ interval_coverage, interval_range = 90
 }
 
 Note: The \code{interval_coverage_90} scoring rule is created by modifying
-\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=customise_metric]{customise_metric()}}.
+\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[purrr:partial]{purrr::partial()}}.
 This construct allows the function to deal with arbitrary arguments in \code{...},
 while making sure that only those that \code{\link[=interval_coverage]{interval_coverage()}} can
 accept get passed on to it. \code{interval_range = 90} is set in the function

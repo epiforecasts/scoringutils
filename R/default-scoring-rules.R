@@ -40,65 +40,6 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 
 }
 
-#' Customises a metric function with additional arguments.
-#'
-#' @description
-#' This function takes a metric function and additional arguments, and returns
-#' a new function that includes the additional arguments when calling the
-#' original metric function.
-#'
-#' This is the expected way to pass additional
-#' arguments to a metric when evaluating a forecast using [score()]:
-#' To evaluate a forecast using a metric with an additional argument, you need
-#' to create a custom version of the scoring function with the argument
-#' included. You then need to create an updated version of the list of scoring
-#' functions that includes your customised metric and pass this to [score()].
-#'
-#' @param metric The metric function to be customised.
-#' @param ... Additional arguments to be included when calling the metric
-#'   function.
-#'
-#' @return A customised metric function.
-#' @keywords metric
-#'
-#' @export
-#' @examples
-#' # Create a customised metric function
-#' custom_metric <- customise_metric(mean, na.rm = TRUE)
-#'
-#' # Use the customised metric function
-#' values <- c(1, 2, NA, 4, 5)
-#' custom_metric(values)
-#'
-#' # Updating metrics list to calculate 70% coverage in `score()`
-#' interval_coverage_70 <- customise_metric(
-#'   interval_coverage, interval_range = 70
-#' )
-#' updated_metrics <- c(
-#'   metrics_quantile(),
-#'   "interval_coverage_70" = interval_coverage_70
-#' )
-#' score(
-#'   as_forecast_quantile(example_quantile),
-#'   metrics = updated_metrics
-#' )
-#'
-#'
-customise_metric <- function(metric, ...) {
-  assert_function(metric)
-  dots <- list(...)
-  customised_metric <- function(...) {
-    do.call(metric, c(list(...), dots))
-  }
-  return(customised_metric)
-}
-
-
-#' @rdname customise_metric
-#' @keywords metric
-#' @export
-customize_metric <- customise_metric
-
 
 #' @title Default metrics and scoring rules for binary forecasts
 #' @description
@@ -203,14 +144,14 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' - "dispersion" = [dispersion_quantile()]
 #' - "bias" = [bias_quantile()]
 #' - "interval_coverage_50" = [interval_coverage()]
-#' - "interval_coverage_90" = customise_metric(
+#' - "interval_coverage_90" = purrr::partial(
 #'      interval_coverage, interval_range = 90
 #'    )
 #' - "interval_coverage_deviation" = [interval_coverage_deviation()],
 #' - "ae_median" = [ae_median_quantile()]
 #'
 #' Note: The `interval_coverage_90` scoring rule is created by modifying
-#' [interval_coverage()], making use of the function [customise_metric()].
+#' [interval_coverage()], making use of the function [purrr::partial()].
 #' This construct allows the function to deal with arbitrary arguments in `...`,
 #' while making sure that only those that [interval_coverage()] can
 #' accept get passed on to it. `interval_range = 90` is set in the function
@@ -230,7 +171,7 @@ metrics_quantile <- function(select = NULL, exclude = NULL) {
     dispersion = dispersion_quantile,
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
-    interval_coverage_90 = customise_metric(
+    interval_coverage_90 = purrr::partial(
       interval_coverage, interval_range = 90
     ),
     interval_coverage_deviation = interval_coverage_deviation,
