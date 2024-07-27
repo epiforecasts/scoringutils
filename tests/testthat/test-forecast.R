@@ -162,7 +162,7 @@ test_that("output of as_forecasts() is accepted as input to score()", {
 test_that("as_forecast.forecast_nominal() works as expected", {
   expect_s3_class(
     suppressMessages(as_forecast_nominal(example_nominal)),
-    c("forecast", "forecast_nominal", "data.table", "data.frame"),
+    c("forecast_nominal", "forecast", "data.table", "data.frame"),
     exact = TRUE
   )
 
