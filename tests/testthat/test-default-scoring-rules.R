@@ -5,39 +5,39 @@
 test_that("`select_metrics` works as expected", {
 
   expect_equal(
-    scoringutils:::select_metrics(metrics_point(), select = NULL),
+    select_metrics(metrics(as_forecast_point(example_point)), select = NULL),
     metrics_point()
   )
 
   expect_equal(
-    scoringutils:::select_metrics(metrics_point(), select = NULL),
-    scoringutils:::select_metrics(metrics_point())
+    select_metrics(metrics(as_forecast_point(example_point)), select = NULL),
+    select_metrics(metrics(as_foreast_point(example_point)))
   )
 
   expect_equal(
-    names(scoringutils:::select_metrics(metrics_point(), select = "ape")),
+    names(select_metrics(metrics(as_foreast_point(example_point)), select = "ape")),
     "ape"
   )
 
   expect_equal(
-    length(scoringutils:::select_metrics(metrics_point(), select = NULL, exclude = "ape")),
+    length(select_metrics(metrics(as_foreast_point(example_point)), select = NULL, exclude = "ape")),
     length(metrics_point()) - 1
   )
 
   # if both select and exclude are specified, exclude is ignored
   expect_equal(
-    names(scoringutils:::select_metrics(metrics_point(), select = "ape", exclude = "ape")),
+    names(select_metrics(metrics(as_foreast_point(example_point)), select = "ape", exclude = "ape")),
     "ape"
   )
 
   # expect error if possibilities is not a list
   expect_error(
-    scoringutils:::select_metrics(metrics_point, select = NULL),
+    select_metrics(metrics, select = NULL),
     "Assertion on 'metrics' failed: Must be of type 'list', not 'closure'."
   )
 
   expect_type(
-    scoringutils:::select_metrics(metrics_point(), select = NULL),
+    select_metrics(metrics(as_foreast_point(example_point)), select = NULL),
     "list"
   )
 })

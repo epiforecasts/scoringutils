@@ -14,8 +14,7 @@
 #' @param forecast A forecast object (a validated data.table with predicted and
 #'   observed values, see [as_forecast()])
 #' @param metrics A named list of scoring functions. Names will be used as
-#'   column names in the output. See [metrics_point()], [metrics_binary()],
-#'   [metrics_quantile()], and [metrics_sample()] for more information on the
+#'   column names in the output. See [metrics()] for more information on the
 #'   default metrics used. Note that if you want to pass arguments to any
 #'   given metric, you should do that through the function [customise_metric()]
 #'   and pass an updated list of functions with your custom metric to
@@ -66,13 +65,13 @@
 #' \doi{10.48550/arXiv.2205.07090}
 #' @export
 
-score <- function(forecast, metrics, ...) {
+score <- function(forecast, metrics = metrics(forecast), ...) {
   UseMethod("score")
 }
 
 #' @importFrom cli cli_abort
 #' @export
-score.default <- function(forecast, metrics, ...) {
+score.default <- function(forecast, metrics = metrics(forecast), ...) {
   cli_abort(
     c(
       "!" = "The input needs to be a valid forecast object.",
@@ -85,7 +84,7 @@ score.default <- function(forecast, metrics, ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
+score.forecast_binary <- function(forecast, metrics = metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
@@ -104,7 +103,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
+score.forecast_point <- function(forecast, metrics = metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
 
@@ -121,7 +120,7 @@ score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
+score.forecast_sample <- function(forecast, metrics = metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -158,7 +157,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...) {
+score.forecast_quantile <- function(forecast, metrics = metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)

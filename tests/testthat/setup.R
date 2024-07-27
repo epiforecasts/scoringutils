@@ -1,10 +1,10 @@
 data.table::setDTthreads(2) # restricts number of cores used on CRAN
 
-metrics_no_cov <- metrics_quantile(
+metrics_no_cov <- metrics(as_forecast_quantile(example_quantile),
   exclude = c("interval_coverage_50", "interval_coverage_90",
               "interval_coverage_deviation")
 )
-metrics_no_cov_no_ae <- metrics_quantile(
+metrics_no_cov_no_ae <- metrics(as_forecast_quantile(example_quantile),
   exclude = c("interval_coverage_50", "interval_coverage_90",
               "interval_coverage_deviation", "ae_median")
 )

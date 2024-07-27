@@ -8,23 +8,22 @@
 \alias{score.forecast_quantile}
 \title{Evaluate forecasts}
 \usage{
-score(forecast, metrics, ...)
+score(forecast, metrics = metrics(forecast), ...)
 
-\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
+\method{score}{forecast_binary}(forecast, metrics = metrics(forecast), ...)
 
-\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
+\method{score}{forecast_point}(forecast, metrics = metrics(forecast), ...)
 
-\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
+\method{score}{forecast_sample}(forecast, metrics = metrics(forecast), ...)
 
-\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
+\method{score}{forecast_quantile}(forecast, metrics = metrics(forecast), ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
-column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
-\code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+column names in the output. See \code{\link[=metrics]{metrics()}} for more information on the
 default metrics used. Note that if you want to pass arguments to any
 given metric, you should do that through the function \code{\link[=customise_metric]{customise_metric()}}
 and pass an updated list of functions with your custom metric to

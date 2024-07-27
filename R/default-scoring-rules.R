@@ -15,11 +15,11 @@
 #' @export
 #' @examples
 #' select_metrics(
-#'   metrics = metrics_binary(),
+#'   metrics = metrics(as_forecast_binary(example_binary)),
 #'   select = "brier_score"
 #' )
 #' select_metrics(
-#'   metrics = metrics_binary(),
+#'   metrics = metrics(as_forecast_binary(example_binary)),
 #'   exclude = "log_score"
 #' )
 select_metrics <- function(metrics, select = NULL, exclude = NULL) {
@@ -75,7 +75,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #'   interval_coverage, interval_range = 70
 #' )
 #' updated_metrics <- c(
-#'   metrics_quantile(),
+#'   metrics(as_forecast_quantile(example_quantile)),
 #'   "interval_coverage_70" = interval_coverage_70
 #' )
 #' score(
@@ -100,22 +100,39 @@ customise_metric <- function(metric, ...) {
 customize_metric <- customise_metric
 
 
-#' @title Default metrics and scoring rules for binary forecasts
+
+#' @title Default metrics and scoring rules
 #' @description
 #' Helper function that returns a named list of default
-#' scoring rules suitable for binary forecasts.
+#' scoring rules.
 #'
-#' The default scoring rules are:
+#' The default for the different forecast types are:
+#'
+#' @inherit select_metrics params return
+#' @keywords metric
+#' @export
+metrics <- function(forecast, select = NULL, exclude = NULL, ...) {
+  UseMethod("metrics")
+}
+
+#' @rdname metrics
+#' @export
+metrics.default <- function(forecast, select = NULL, exclude = NULL, ...) {
+  cli_abort(
+    "{.fn metrics} needs to be called on a `forecast` object."
+  )
+}
+
+#' @rdname metrics
+#' @description
+#' **binary**
+#'
 #' - "brier_score" = [brier_score()]
 #' - "log_score" = [logs_binary()]
-#' @inherit select_metrics params return
 #' @export
-#' @keywords metric
 #' @examples
-#' metrics_binary()
-#' metrics_binary(select = "brier_score")
-#' metrics_binary(exclude = "log_score")
-metrics_binary <- function(select = NULL, exclude = NULL) {
+#' metrics(as_forecast_binary(example_binary))
+metrics.forecast_binary <- function(forecast, select = NULL, exclude = NULL, ...) {
   all <- list(
     brier_score = brier_score,
     log_score = logs_binary
@@ -125,22 +142,16 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default metrics and scoring rules for point forecasts
+#' @rdname metrics
 #' @description
-#' Helper function that returns a named list of default
-#' scoring rules suitable for point forecasts.
-#'
-#' The default scoring rules are:
+#' **point**
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
-#' @inherit select_metrics params return
 #' @export
-#' @keywords metric
 #' @examples
-#' metrics_point()
-#' metrics_point(select = "ape")
-metrics_point <- function(select = NULL, exclude = NULL) {
+#' metrics(as_forecast_point(example_point), select = "ape")
+metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL, ...) {
   all <- list(
     ae_point = Metrics::ae,
     se_point = Metrics::se,
@@ -151,12 +162,10 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default metrics and scoring rules sample-based forecasts
+#' @rdname metrics
 #' @description
-#' Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a sample-based format.
+#' **sample**
 #'
-#' The default scoring rules are:
 #' - "crps" = [crps_sample()]
 #' - "log_score" = [logs_sample()]
 #' - "dss" = [dss_sample()]
@@ -164,13 +173,10 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #' - "bias" = [bias_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
-#' @inherit select_metrics params return
 #' @export
-#' @keywords metric
 #' @examples
-#' metrics_sample()
-#' metrics_sample(select = "mad")
-metrics_sample <- function(select = NULL, exclude = NULL) {
+#' metrics(as_forecast_sample(example_sample_continuous), exclude = "mad")
+metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL, ...) {
   all <- list(
     bias = bias_sample,
     dss = dss_sample,
@@ -185,10 +191,9 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 }
 
 
-#' @title Default metrics and scoring rules for quantile-based forecasts
+#' @rdname metrics
 #' @description
-#' Helper function that returns a named list of default
-#' scoring rules suitable for forecasts in a quantile-based format.
+#' **quantile**
 #'
 #' The default scoring rules are:
 #' - "wis" = [wis]
@@ -210,13 +215,8 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' accept get passed on to it. `interval_range = 90` is set in the function
 #' definition, as passing an argument `interval_range = 90` to [score()] would
 #' mean it would also get passed to `interval_coverage_50`.
-#' @inherit select_metrics params return
 #' @export
-#' @keywords metric
-#' @examples
-#' metrics_quantile()
-#' metrics_quantile(select = "wis")
-metrics_quantile <- function(select = NULL, exclude = NULL) {
+metrics.forecast_quantile <- function(forecast, select = NULL, exclude = NULL, ...) {
   all <- list(
     wis = wis,
     overprediction = overprediction,

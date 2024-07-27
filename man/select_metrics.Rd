@@ -24,11 +24,11 @@ the user from a list of possible functions.
 }
 \examples{
 select_metrics(
-  metrics = metrics_binary(),
+  metrics = metrics(as_forecast_binary(example_binary)),
   select = "brier_score"
 )
 select_metrics(
-  metrics = metrics_binary(),
+  metrics = metrics(as_forecast_binary(example_binary)),
   exclude = "log_score"
 )
 }

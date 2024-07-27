@@ -43,7 +43,7 @@ interval_coverage_70 <- customise_metric(
   interval_coverage, interval_range = 70
 )
 updated_metrics <- c(
-  metrics_quantile(),
+  metrics(as_forecast_quantile(example_quantile)),
   "interval_coverage_70" = interval_coverage_70
 )
 score(
