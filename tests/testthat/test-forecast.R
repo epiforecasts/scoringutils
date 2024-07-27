@@ -173,7 +173,9 @@ test_that("as_forecast.forecast_nominal() works as expected", {
   expect_no_condition(
     as_forecast_nominal(ex, predicted_label = "label")
   )
+})
 
+test_that("as_forecast.forecast_nominal() breaks when rows with zero probability are missing", {
   ex_faulty <- data.table::copy(example_nominal)
   ex_faulty <- ex_faulty[predicted != 0]
   expect_warning(

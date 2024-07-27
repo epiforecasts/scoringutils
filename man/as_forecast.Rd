@@ -83,7 +83,7 @@ sample id. This column will be renamed to "sample_id". Only applicable to
 sample-based forecasts.}
 
 \item{predicted_label}{(optional) Name of the column in \code{data} that denotes
-the outcome to which a preidcted probability corresponds to.
+the outcome to which a predicted probability corresponds to.
 This column will be renamed to "predicted_label". Only applicable to
 nominal forecasts.}
 }
