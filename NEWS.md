@@ -22,7 +22,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   - the CRPS is now reported as decomposition into dispersion, overprediction and underprediction.
 
 ### Creating a forecast object  
-- The `as_forecast_<type>()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. 
+- The `as_forecast_<type>()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. See `?as_forecast()` for more information.
 - Some `as_forecast_<type>()` functions like e.g. `as_forecast_point()` and `as_forecast_quantile()` have S3 methods for converting from another forecast type to the respective forecast type. For example, `as_forecast_quantile()` has a method for converting from a `forecast_sample` object to a `forecast_quantile` object by estimating quantiles from the samples.
 
 ### Updated workflows
