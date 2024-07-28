@@ -78,7 +78,7 @@ test_that("as_forecast_quantiles works", {
   )
 
   expect_no_condition(
-    as_forecast_quantile(samples, quantile_level = c(0.25, 0.75))
+    as_forecast_quantile(samples, probs = c(0.25, 0.75))
   )
 
   wrongclass <- as_forecast_sample(samples)
@@ -91,7 +91,7 @@ test_that("as_forecast_quantiles works", {
 
   quantile2 <- as_forecast_quantile(
     as_forecast_sample(samples),
-    quantile_level = c(0.25, 0.75)
+    probs = c(0.25, 0.75)
   )
 
   expect_equal(quantile, as.data.frame(quantile2))
@@ -103,7 +103,7 @@ test_that("as_forecast_quantiles works", {
 
   quantile3 <- as_forecast_quantile(
     as_forecast_sample(samples),
-    quantile_level = c(0.25, 0.75)
+    probs = c(0.25, 0.75)
   )
   quantile3$type <- NULL
 
@@ -118,7 +118,7 @@ test_that("as_forecast_quantiles issue 557 fix", {
   out <- example_sample_discrete %>%
     as_forecast_sample() %>%
     as_forecast_quantile(
-      quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+      probs = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
     score()
 

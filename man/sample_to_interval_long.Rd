@@ -12,10 +12,6 @@ sample_to_interval_long(
 )
 }
 \arguments{
-\item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
-
 \item{type}{Type argument passed down to the quantile function. For more
 information, see \code{\link[=quantile]{quantile()}}.}
 

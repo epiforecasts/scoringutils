@@ -2,64 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\alias{as_forecast_binary}
-\alias{as_forecast_point}
-\alias{as_forecast_point.default}
-\alias{as_forecast_point.forecast_quantile}
-\alias{as_forecast_quantile}
-\alias{as_forecast_quantile.default}
-\alias{as_forecast_quantile.forecast_sample}
-\alias{as_forecast_sample}
 \title{Create a \code{forecast} object}
-\usage{
-as_forecast_binary(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL
-)
-
-as_forecast_point(data, ...)
-
-\method{as_forecast_point}{default}(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  ...
-)
-
-\method{as_forecast_point}{forecast_quantile}(data, ...)
-
-as_forecast_quantile(data, ...)
-
-\method{as_forecast_quantile}{default}(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  quantile_level = NULL
-)
-
-\method{as_forecast_quantile}{forecast_sample}(
-  data,
-  quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
-  type = 7,
-  ...
-)
-
-as_forecast_sample(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  sample_id = NULL
-)
-}
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
@@ -81,16 +24,6 @@ predicted values. This column will be renamed to "predicted".}
 \item{model}{(optional) Name of the column in \code{data} that contains the names
 of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".}
-
-\item{quantile_level}{A numeric vector of quantile levels for which
-quantiles will be computed.}
-
-\item{type}{Type argument passed down to the quantile function. For more
-information, see \code{\link[=quantile]{quantile()}}.}
-
-\item{sample_id}{(optional) Name of the column in \code{data} that contains the
-sample id. This column will be renamed to "sample_id". Only applicable to
-sample-based forecasts.}
 }
 \value{
 Depending on the forecast type, an object of the following class will be
@@ -107,17 +40,25 @@ Process and validate a data.frame (or similar) or similar with forecasts
 and observations. If the input passes all input checks, it will be converted
 to a \code{forecast} object. A forecast object is a \code{data.table} with a
 class \code{forecast} and an additional class that depends on the forecast type.
-Every forecast type has its own \code{as_forecast_()} function.
+Every forecast type has its own \verb{as_forecast_<type>()} function.
 See the details section below for more information
 on the expected input formats.
 
-The \code{as_forecast_()} functions give users some control over how their data
-is parsed.
+The \verb{as_forecast_<type>()} functions give users some control over how their
+data is parsed.
 Using the arguments \code{observed}, \code{predicted}, \code{model}, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
 see \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
+
+The following functions are available:
+\itemize{
+\item \code{\link[=as_forecast_point]{as_forecast_point()}}
+\item \code{\link[=as_forecast_binary]{as_forecast_binary()}}
+\item \code{\link[=as_forecast_sample]{as_forecast_sample()}}
+\item \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+}
 }
 \section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the
@@ -199,5 +140,9 @@ as_forecast_quantile(
   forecast_unit = c("model", "target_type", "target_end_date",
                     "horizon", "location")
 )
+}
+\seealso{
+\code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
+\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
 }
 \keyword{check-forecasts}

@@ -5,17 +5,23 @@
 #' and observations. If the input passes all input checks, it will be converted
 #' to a `forecast` object. A forecast object is a `data.table` with a
 #' class `forecast` and an additional class that depends on the forecast type.
-#' Every forecast type has its own `as_forecast_()` function.
+#' Every forecast type has its own `as_forecast_<type>()` function.
 #' See the details section below for more information
 #' on the expected input formats.
 #'
-#' The `as_forecast_()` functions give users some control over how their data
-#' is parsed.
+#' The `as_forecast_<type>()` functions give users some control over how their
+#' data is parsed.
 #' Using the arguments `observed`, `predicted`, `model`, etc. users can rename
 #' existing columns of their input data to match the required columns for a
 #' forecast object. Using the argument `forecast_unit`, users can specify the
 #' the columns that uniquely identify a single forecast (and remove the others,
 #' see [set_forecast_unit()] for details).
+#'
+#' The following functions are available:
+#' - [as_forecast_point()]
+#' - [as_forecast_binary()]
+#' - [as_forecast_sample()]
+#' - [as_forecast_quantile()]
 #'
 #' @param data A data.frame (or similar) with predicted and observed values.
 #'   See the details section of [as_forecast()] for additional information
@@ -43,6 +49,8 @@
 #' - `forecast_sample` for sample-based forecasts
 #' - `forecast_quantile` for quantile-based forecasts
 #' @keywords check-forecasts
+#' @seealso [as_forecast_point()], [as_forecast_binary()],
+#'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @examples
 #' as_forecast_binary(example_binary)
 #' as_forecast_quantile(
@@ -99,7 +107,7 @@ as_forecast_generic <- function(data,
 }
 
 
-#' @rdname as_forecast
+#' @title Create a `forecast` object for binary forecasts
 #' @export
 #' @importFrom cli cli_warn
 as_forecast_binary <- function(data,
@@ -114,13 +122,20 @@ as_forecast_binary <- function(data,
 }
 
 
-#' @rdname as_forecast
+#' @title Create a `forecast` object for point forecasts
+#' @description
+#' Create a `forecast` object for point forecasts. See more information on
+#' forecast types and expected input formats by calling `?`[as_forecast()].
+#' @inherit as_forecast params
+#' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
+#'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @export
 as_forecast_point <- function(data, ...) {
   UseMethod("as_forecast_point")
 }
 
-#' @rdname as_forecast
+
+#' @rdname as_forecast_point
 #' @export
 #' @importFrom cli cli_warn
 as_forecast_point.default <- function(data,
@@ -136,7 +151,7 @@ as_forecast_point.default <- function(data,
 }
 
 
-#' @rdname as_forecast
+#' @rdname as_forecast_point
 #' @export
 #' @keywords check-forecasts
 as_forecast_point.forecast_quantile <- function(data, ...) {
@@ -151,14 +166,19 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
 }
 
 
-#' @rdname as_forecast
+#' @title Create a `forecast` object for quantile-based forecasts
+#' @description
+#' Create a `forecast` object for quantile-based forecasts. See more information
+#' on forecast types and expected input formats by calling `?`[as_forecast()].
+#' @seealso [as_forecast_point()], [as_forecast_binary()],
+#'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @export
 as_forecast_quantile <- function(data, ...) {
   UseMethod("as_forecast_quantile")
 }
 
 
-#' @rdname as_forecast
+#' @rdname as_forecast_quantile
 #' @param quantile_level (optional) Name of the column in `data` that contains
 #'   the quantile level of the predicted values. This column will be renamed to
 #'   "quantile_level". Only applicable to quantile-based forecasts.
@@ -183,9 +203,10 @@ as_forecast_quantile.default <- function(data,
 }
 
 
-#' @rdname as_forecast
-#' @param quantile_level A numeric vector of quantile levels for which
-#'   quantiles will be computed.
+#' @rdname as_forecast_quantile
+#' @param probs A numeric vector of quantile levels for which
+#'   quantiles will be computed. Corresponds to the `probs` argument in
+#'   [quantile()].
 #' @param type Type argument passed down to the quantile function. For more
 #'   information, see [quantile()].
 #' @importFrom stats quantile
@@ -194,23 +215,23 @@ as_forecast_quantile.default <- function(data,
 #' @export
 as_forecast_quantile.forecast_sample <- function(
   data,
-  quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  probs = c(0.05, 0.25, 0.5, 0.75, 0.95),
   type = 7,
   ...
 ) {
   forecast <- copy(data)
   assert_forecast(forecast, verbose = FALSE)
-  assert_numeric(quantile_level, min.len = 1)
+  assert_numeric(probs, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)
 
   quantile_level <- unique(
-    round(c(quantile_level, 1 - quantile_level), digits = 10)
+    round(c(probs, 1 - probs), digits = 10)
   )
 
   forecast <-
     forecast[, .(quantile_level = quantile_level,
-                 predicted = quantile(x = predicted, probs = ..quantile_level,
+                 predicted = quantile(x = predicted, probs = ..probs,
                                       type = ..type, na.rm = TRUE)),
              by = by]
 
@@ -221,11 +242,13 @@ as_forecast_quantile.forecast_sample <- function(
 }
 
 
-#' @rdname as_forecast
+#' @title Create a `forecast` object for sample-based forecasts
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id". Only applicable to
 #'   sample-based forecasts.
 #' @export
+#' @seealso [as_forecast_point()], [as_forecast_binary()],
+#'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @importFrom cli cli_warn
 as_forecast_sample <- function(data,
                                forecast_unit = NULL,

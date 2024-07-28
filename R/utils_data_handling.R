@@ -157,7 +157,7 @@ sample_to_interval_long <- function(data,
 
   data <- as_forecast_quantile(
     data,
-    quantile_level = quantile_levels,
+    probs = quantile_levels,
     type = type
   )
 
