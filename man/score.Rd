@@ -55,12 +55,25 @@ well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts w
 \strong{Customising metrics}
 
 If you want to pass arguments to a scoring function, you need change the
-scoring fucntion itself via e.g. \code{\link[purrr:partial]{purrr::partial()}} and pass an updated list
+scoring function itself via e.g. \code{\link[purrr:partial]{purrr::partial()}} and pass an updated list
 of functions with your custom metric to the \code{metrics} argument in \code{score()}.
 For example, to use \code{\link[=interval_coverage]{interval_coverage()}} with \code{interval_range = 90}, you
 would define a new function, e.g.
 \code{interval_coverage_90 <- purrr::partial(interval_coverage, interval_range = 90)}
 and pass this new function to \code{metrics} in \code{score()}.
+
+Note that if you want to pass a variable as an argument, you can
+unquote it with \verb{!!} to make sure the value is evaluated only once when the
+function is created. Consider the following example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{custom_arg <- "foo"
+print1 <- purrr::partial(print, x = custom_arg)
+print2 <- purrr::partial(print, x = !!custom_arg)
+
+custom_arg <- "bar"
+print1() # prints 'bar'
+print2() # prints 'foo'
+}\if{html}{\out{</div>}}
 }
 \section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the

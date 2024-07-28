@@ -159,6 +159,7 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' mean it would also get passed to `interval_coverage_50`.
 #' @inherit select_metrics params return
 #' @export
+#' @importFrom purrr partial
 #' @keywords metric
 #' @examples
 #' metrics_quantile()

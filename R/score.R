@@ -34,6 +34,19 @@
 #' `interval_coverage_90 <- purrr::partial(interval_coverage, interval_range = 90)`
 #' and pass this new function to `metrics` in `score()`.
 #'
+#' Note that if you want to pass a variable as an argument, you can
+#' unquote it with `!!` to make sure the value is evaluated only once when the
+#' function is created. Consider the following example:
+#' ```
+#' custom_arg <- "foo"
+#' print1 <- purrr::partial(print, x = custom_arg)
+#' print2 <- purrr::partial(print, x = !!custom_arg)
+#'
+#' custom_arg <- "bar"
+#' print1() # prints 'bar'
+#' print2() # prints 'foo'
+#' ```
+#'
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute

@@ -46,12 +46,6 @@ test_that("`select_metrics` works as expected", {
 # ==============================================================================
 # Customising metrics using purrr::partial()
 # ==============================================================================
-
-test_that("customize_metric is exported", {
-  expect_equal(customise_metric, customize_metric)
-})
-
-
 test_that("customising metrics via purr::partial works correctly", {
   # Create a customised metric function
   custom_metric <- purrr::partial(mean, na.rm = TRUE)
@@ -68,17 +62,10 @@ test_that("customising metrics via purr::partial works correctly", {
   custom_metric <- purrr::partial(mean)
   expect_true(is.na(custom_metric(values)))
 
-  # make sure that customise_metric fails immediately (instead of at runtime)
-  # when object doesn't exist
-  expect_error(
-    custom_metric <- purrr::partial(print, x = doesnotexist),
-    "object 'doesnotexist' not found"
-  )
-
-  # make sure that customise_metric still works even if original object is
+  # make sure that unquoting argument works even if original object is
   # deleted, meaning that the object is stored as part of the function
   argument <- c("hi", "hello", "I'm here")
-  custom_metric <- purrr::partial(print, x = argument)
+  custom_metric <- purrr::partial(print, x = !!argument)
   expect_output(custom_metric(), "I'm here")
 
   argument <- NULL
