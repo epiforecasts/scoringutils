@@ -66,7 +66,7 @@ test_that("as_forecast_quantiles works", {
     observed = 1:10,
     predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
     sample_id = rep(1:5, each = 10)
-  ) |>
+  ) %>%
     as_forecast_sample()
 
   quantile <- data.frame(

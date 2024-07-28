@@ -42,3 +42,4 @@ forecast types and expected input formats by calling \verb{?}\code{\link[=as_for
 \code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
 \code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
 }
+\keyword{check-forecasts}

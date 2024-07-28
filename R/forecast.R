@@ -116,6 +116,7 @@ as_forecast_generic <- function(data,
 #' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
 #'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @importFrom cli cli_warn
+#' @keywords check-forecasts
 as_forecast_binary <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
@@ -137,6 +138,7 @@ as_forecast_binary <- function(data,
 #' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
 #'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @export
+#' @keywords check-forecasts
 as_forecast_point <- function(data, ...) {
   UseMethod("as_forecast_point")
 }
@@ -185,6 +187,7 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
 #'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @inheritParams as_forecast
 #' @export
+#' @keywords check-forecasts
 as_forecast_quantile <- function(data, ...) {
   UseMethod("as_forecast_quantile")
 }
@@ -270,6 +273,7 @@ as_forecast_quantile.forecast_sample <- function(
 #' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
 #'   [as_forecast_sample()], [as_forecast_quantile()]
 #' @importFrom cli cli_warn
+#' @keywords check-forecasts
 as_forecast_sample <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
