@@ -206,14 +206,13 @@ transform_forecasts <- function(forecast,
 #' @keywords check-forecasts
 #' @importFrom checkmate assert_numeric assert_number
 #' @examples
+#' library(magrittr) # pipe operator
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
 #'
-#' transform_forecasts(
-#'   as_forecast_quantile(example_quantile)[observed > 0, ],
-#'   fun = log_shift,
-#'   offset = 1
-#'  )
+#' example_quantile[observed > 0, ] %>%
+#'   as_forecast_quantile() %>%
+#'   transform_forecasts(fun = log_shift, offset = 1)
 
 log_shift <- function(x, offset = 0, base = exp(1)) {
 
@@ -270,10 +269,11 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' @export
 #' @keywords data-handling
 #' @examples
-#' set_forecast_unit(
-#'   example_quantile,
-#'   c("location", "target_end_date", "target_type", "horizon", "model")
-#' )
+#' library(magrittr) # pipe operator
+#' example_quantile %>%
+#'   set_forecast_unit(
+#'     c("location", "target_end_date", "target_type", "horizon", "model")
+#'   )
 set_forecast_unit <- function(data, forecast_unit) {
   data <- ensure_data.table(data)
   assert_subset(forecast_unit, names(data), empty.ok = FALSE)

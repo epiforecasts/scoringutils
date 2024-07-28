@@ -32,7 +32,10 @@ sharpness).
 }
 \examples{
 library(ggplot2)
-scores <- score(as_forecast_quantile(example_quantile))
+library(magrittr) # pipe operator
+scores <- example_quantile \%>\%
+  as_forecast_quantile \%>\%
+  score()
 scores <- summarise_scores(scores, by = c("model", "target_type"))
 
 plot_wis(scores,

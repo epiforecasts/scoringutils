@@ -19,7 +19,10 @@
 #' @keywords data-handling
 #' @export
 #' @examples
-#' sample_to_quantile(as_forecast_sample(example_sample_discrete))
+#' library(magrittr) # pipe operator
+#' example_sample_discrete %>%
+#'   as_forecast_sample() %>%
+#'   sample_to_quantile()
 sample_to_quantile <- function(forecast,
                                quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
                                type = 7) {

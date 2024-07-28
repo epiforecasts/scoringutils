@@ -35,6 +35,7 @@ visually check whether a uniform distribution seems likely.
 \dontshow{
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
+library(magrittr) # pipe operator
 
 # PIT histogram in vector based format
 observed <- rnorm(30, mean = 1:30)
@@ -43,10 +44,14 @@ pit <- pit_sample(observed, predicted)
 plot_pit(pit)
 
 # quantile-based pit
-pit <- get_pit(as_forecast_quantile(example_quantile), by = "model")
+pit <- example_quantile \%>\%
+  as_forecast_quantile() \%>\%
+  get_pit(by = "model")
 plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 
 # sample-based pit
-pit <- get_pit(as_forecast_sample(example_sample_discrete), by = "model")
+pit <- example_sample_discrete \%>\%
+  as_forecast_sample \%>\%
+  get_pit(by = "model")
 plot_pit(pit)
 }
