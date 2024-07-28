@@ -2,21 +2,22 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{bias_quantile_single_vector}
 \alias{bias_quantile_single_vector}
-\title{Compute Bias for a Single Vector of Quantile Predictions}
+\title{Compute bias for a single vector of quantile predictions}
 \usage{
 bias_quantile_single_vector(observed, predicted, quantile_level, na.rm)
 }
 \arguments{
-\item{observed}{scalar with the observed value}
+\item{observed}{Scalar with the observed value.}
 
-\item{predicted}{vector of length N corresponding to the number of quantiles
-that holds predictions}
+\item{predicted}{Vector of length N (corresponding to the number of
+quantiles) that holds predictions.}
 
-\item{quantile_level}{vector of corresponding size N with the quantile levels
-for which predictions were made. If this does not contain the median (0.5)
-then the median is imputed as being the mean of the two innermost quantiles.}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made. Note that if this does not contain the
+median (0.5) then the median is imputed as being the mean of the two
+innermost quantiles.}
 
-\item{na.rm}{logical. Should missing values be removed?}
+\item{na.rm}{Logical. Should missing values be removed?}
 }
 \value{
 scalar with the quantile bias for a single quantile prediction

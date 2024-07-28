@@ -2,13 +2,13 @@
 % Please edit documentation in R/plot.R
 \name{plot_interval_coverage}
 \alias{plot_interval_coverage}
-\title{Plot Interval Coverage}
+\title{Plot interval coverage}
 \usage{
 plot_interval_coverage(coverage, colour = "model")
 }
 \arguments{
 \item{coverage}{A data frame of coverage values as produced by
-\code{\link[=get_coverage]{get_coverage()}}}
+\code{\link[=get_coverage]{get_coverage()}}.}
 
 \item{colour}{According to which variable shall the graphs be coloured?
 Default is "model".}
@@ -17,12 +17,13 @@ Default is "model".}
 ggplot object with a plot of interval coverage
 }
 \description{
-Plot interval coverage
+Plot interval coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
 \dontshow{
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
-coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+example <- as_forecast_quantile(example_quantile)
+coverage <- get_coverage(example, by = "model")
 plot_interval_coverage(coverage)
 }

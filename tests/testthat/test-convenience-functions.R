@@ -1,7 +1,11 @@
+# ============================================================================ #
+# `transform_forecasts()`
+# ============================================================================ #
+
 test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
   predictions <- example_quantile %>%
-    as_forecast() %>%
+    as_forecast_quantile() %>%
     transform_forecasts(
     fun = function(x) pmax(0, x),
     append = FALSE
@@ -54,10 +58,15 @@ test_that("function transform_forecasts works", {
 })
 
 test_that("transform_forecasts() outputs an object of class forecast_*", {
-  ex <- as_forecast(na.omit(example_binary))
+  ex <- as_forecast_binary(na.omit(example_binary))
   transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
   expect_s3_class(transformed, "forecast_binary")
 })
+
+
+# ============================================================================ #
+# `log_shift()`
+# ============================================================================ #
 
 test_that("log_shift() works as expected", {
   expect_equal(log_shift(1:10, 1), log(1:10 + 1))
@@ -76,6 +85,15 @@ test_that("log_shift() works as expected", {
 
   # test that it does not accept a complex number
   expect_error(log_shift(1:10, offset = 1, base = 1i))
+
+  # test that it does not accept a negative base
+  expect_error(
+    log_shift(1:10, offset = 1, base = -1),
+    "Assertion on 'base' failed: Element 1 is not >= 0."
+  )
+
+  # test output class is numeric as expected
+  checkmate::expect_class(log_shift(1:10, 1), "numeric")
 })
 
 
@@ -92,7 +110,7 @@ test_that("function set_forecast_unit() works", {
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
   scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 
@@ -109,15 +127,21 @@ test_that("set_forecast_unit() works on input that's not a data.table", {
     colnames(set_forecast_unit(df, c("a", "b"))),
     c("a", "b")
   )
-  # apparently it also works on a matrix... good to know :)
+
   expect_equal(
     names(set_forecast_unit(as.matrix(df), "a")),
     "a"
   )
+
+  expect_s3_class(
+    set_forecast_unit(df, c("a", "b")),
+    c("data.table", "data.frame"),
+    exact = TRUE
+  )
 })
 
 test_that("set_forecast_unit() revalidates a forecast object", {
-  obj <- as_forecast(na.omit(example_quantile))
+  obj <- as_forecast_quantile(na.omit(example_quantile))
   expect_no_condition(
     set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
   )
@@ -145,20 +169,11 @@ test_that("function get_forecast_unit() and set_forecast_unit() work together", 
   expect_equal(fu_set, fu_get)
 })
 
-
-test_that("set_forecast_unit() works on input that's not a data.table", {
-  df <- data.frame(
-    a = 1:2,
-    b = 2:3,
-    c = 3:4
-  )
+test_that("output class of set_forecast_unit() is as expected", {
+  ex <- as_forecast_binary(na.omit(example_binary))
   expect_equal(
-    colnames(set_forecast_unit(df, c("a", "b"))),
-    c("a", "b")
-  )
-  # apparently it also works on a matrix... good to know :)
-  expect_equal(
-    names(set_forecast_unit(as.matrix(df), "a")),
-    "a"
+    class(ex),
+    class(set_forecast_unit(ex, c("location", "target_end_date", "target_type", "horizon", "model")))
   )
 })
+

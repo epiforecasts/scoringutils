@@ -7,7 +7,7 @@ Authors@R: c(
            family = "Bosse",
            role = c("aut", "cre"),
            email = "nikosbosse@gmail.com",
-           comment = c(ORCID = "https://orcid.org/0000-0002-7750-5280")),
+           comment = c(ORCID = "0000-0002-7750-5280")),
     person(given = "Sam Abbott",
            role = c("aut"),
            email = "contact@samabbott.co.uk",
@@ -15,8 +15,8 @@ Authors@R: c(
     person(given = "Hugo",
            family = "Gruson",
            role = c("aut"),
-           email = "hugo.gruson@lshtm.ac.uk",
-           comment = c(ORCID = "https://orcid.org/0000-0002-4094-1476")),
+           email = "hugo.gruson+R@normalesup.org",
+           comment = c(ORCID = "0000-0002-4094-1476")),
     person(given = "Johannes Bracher",
            role = c("ctb"),
            email = "johannes.bracher@kit.edu",
@@ -32,7 +32,12 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-5782-7330")),
     person("Sebastian", "Funk", 
             email = "sebastian.funk@lshtm.ac.uk", 
-            role = c("aut")))
+            role = c("aut")),
+    person(given = "Michael",
+           family = "Chirico",
+           role = c("ctb"),
+           email = "michaelchirico4@gmail.com",
+           comment = c(ORCID = "0000-0003-0787-087X")))
 Description: 
     `scoringutils` facilitates the evaluation of forecasts in a convenient 
     framework based on `data.table`. It allows user to to check their forecasts 
@@ -51,7 +56,6 @@ Imports:
     cli,
     data.table,
     ggplot2 (>= 3.4.0),
-    lifecycle,
     methods,
     Metrics,
     scoringRules,
@@ -62,16 +66,16 @@ Suggests:
     knitr,
     magrittr,
     rmarkdown,
-    testthat,
+    testthat (>= 3.1.9),
     vdiffr
 Config/Needs/website: 
     r-lib/pkgdown,
     amirmasoudabdol/preferably
 Config/testthat/edition: 3
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 URL: https://doi.org/10.48550/arXiv.2205.07090, https://epiforecasts.io/scoringutils/, https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.6)
+    R (>= 4.0)
 Roxygen: list(markdown = TRUE)

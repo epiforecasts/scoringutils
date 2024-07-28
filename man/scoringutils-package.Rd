@@ -24,7 +24,7 @@ Useful links:
 Authors:
 \itemize{
   \item Sam Abbott \email{contact@samabbott.co.uk} (\href{https://orcid.org/0000-0001-8057-8037}{ORCID})
-  \item Hugo Gruson \email{hugo.gruson@lshtm.ac.uk} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
+  \item Hugo Gruson \email{hugo.gruson+R@normalesup.org} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
   \item Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
 
@@ -33,6 +33,7 @@ Other contributors:
   \item Johannes Bracher \email{johannes.bracher@kit.edu} (\href{https://orcid.org/0000-0002-3777-1410}{ORCID}) [contributor]
   \item Toshiaki Asakura \email{toshiaki.asa9ra@gmail.com} (\href{https://orcid.org/0000-0001-8838-785X}{ORCID}) [contributor]
   \item James Mba Azam \email{james.azam@lshtm.ac.uk} (\href{https://orcid.org/0000-0001-5782-7330}{ORCID}) [contributor]
+  \item Michael Chirico \email{michaelchirico4@gmail.com} (\href{https://orcid.org/0000-0003-0787-087X}{ORCID}) [contributor]
 }
 
 }

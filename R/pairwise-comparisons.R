@@ -1,24 +1,56 @@
-#' @title Do Pairwise Comparisons of Scores
+#' @title Obtain pairwise comparisons between models
 #'
 #' @description
 #'
-#' Compute relative scores between different models making pairwise
-#' comparisons. Pairwise comparisons are a sort of pairwise tournament where all
+#' Compare scores obtained by different models in a pairwise tournament. All
 #' combinations of two models are compared against each other based on the
 #' overlapping set of available forecasts common to both models.
-#' Internally, a ratio of the mean scores of both models is computed.
-#' The relative score of a model is then the geometric mean of all mean score
-#' ratios which involve that model. When a baseline is provided, then that
-#' baseline is excluded from the relative scores for individual models
-#' (which therefore differ slightly from relative scores without a baseline)
-#' and all relative scores are scaled by (i.e. divided by) the relative score of
-#' the baseline model.
-#' Usually, the function input should be unsummarised scores as
-#' produced by [score()].
-#' Note that the function internally infers the *unit of a single forecast* by
-#' determining all columns in the input that do not correspond to metrics
-#' computed by [score()]. Adding unrelated columns will change results in an
-#' unpredictable way.
+#'
+#' The input should be a `scores` object as produced by [score()]. Note that
+#' adding additional unrelated columns can unpredictably change results, as
+#' all present columns are taken into account when determining the set of
+#' overlapping forecasts between two models.
+#'
+#' The output of the pairwise comparisons is a set of mean score ratios,
+#' relative skill scores and p-values.
+#'
+#' The following illustrates the pairwise comparison process:
+#'
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{pairwise-illustration.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{pairwise-illustration.png}
+#' }
+#'
+#' *Mean score ratios*
+#'
+#' For every pair of two models, a mean score ratio is computed. This is simply
+#' the mean score of the first model divided by the mean score of the second.
+#' Mean score ratios are computed based on the set of overlapping forecasts
+#' between the two models. That means that only scores for those targets are
+#' taken into account for which both models have submitted a forecast.
+#'
+#' *(Scaled) Relative skill scores*
+#'
+#' The relative score of a model is the geometric mean of all mean score
+#' ratios which involve that model.
+#' If a baseline is provided, scaled relative skill scores will be calculated
+#' as well. Scaled relative skill scores are simply the relative skill score of
+#' a model divided by the relative skill score of the baseline model.
+#'
+#' *p-values*
+#'
+#' In addition, the function computes p-values for the comparison between two
+#' models (again based on the set of overlapping forecasts). P-values can be
+#' computed in two ways: based on a nonparametric Wilcoxon signed-rank test
+#' (internally using [wilcox.test()] with `paired = TRUE`) or based on a
+#' permutation test. The permutation test is based on the difference in mean
+#' scores between two models. The default null hypothesis is that the mean score
+#' difference is zero (see [permutation_test()]).
+#' Adjusted p-values are computed by calling [p.adjust()] on the raw p-values.
 #'
 #' The code for the pairwise comparisons is inspired by an implementation by
 #' Johannes Bracher.
@@ -26,25 +58,30 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param by character vector with column names that define the grouping level
-#' for the pairwise comparisons. By default (`model`), there will be one
-#' relative skill score per model. If, for example,
-#' `by = c("model", "location")`. Then you will get a
-#' separate relative skill score for every model in every location. Internally,
-#' the data.table with scores will be split according `by` (removing "model"
-#' before splitting) and the pairwise comparisons will be computed separately
-#' for the split data.tables.
+#' @param by Character vector with column names that define the grouping level
+#'   for the pairwise comparisons. By default (`model`), there will be one
+#'   relative skill score per model. If, for example,
+#'   `by = c("model", "location")`. Then you will get a
+#'   separate relative skill score for every model in every location. Internally,
+#'   the data.table with scores will be split according `by` (removing "model"
+#'   before splitting) and the pairwise comparisons will be computed separately
+#'   for the split data.tables.
 #' @param metric A string with the name of the metric for which
-#' a relative skill shall be computed. By default this is either "crps",
-#' "wis" or "brier_score" if any of these are available.
+#'   a relative skill shall be computed. By default this is either "crps",
+#'   "wis" or "brier_score" if any of these are available.
 #' @param baseline A string with the name of a model. If a baseline is
-#' given, then a scaled relative skill with respect to the baseline will be
-#' returned. By default (`NULL`), relative skill will not be scaled with
-#' respect to a baseline model.
-#' @param ... additional arguments for the comparison between two models. See
-#' [compare_two_models()] for more information.
+#'   given, then a scaled relative skill with respect to the baseline will be
+#'   returned. By default (`NULL`), relative skill will not be scaled with
+#'   respect to a baseline model.
+#' @param ... Additional arguments for the comparison between two models. See
+#'   [compare_two_models()] for more information.
 #' @inheritParams summarise_scores
-#' @return A data.table with pairwise comparisons
+#' @return A data.table with the results of pairwise comparisons
+#' containing the mean score ratios (`mean_scores_ratio`),
+#' unadjusted (`pval`) and adjusted (`adj_pval`) p-values, and relative skill
+#' values of each model (`..._relative_skill`). If a baseline model is given
+#' then the scaled relative skill is reported as well
+#' (`..._scaled_relative_skill`).
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
@@ -59,14 +96,17 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(as_forecast(example_quantile))
-#' pairwise <- pairwise_comparison(scores, by = "target_type")
+#' scores <- score(as_forecast_quantile(example_quantile))
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' pairwise2 <- get_pairwise_comparisons(
+#'   scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
+#' )
 #'
 #' library(ggplot2)
-#' plot_pairwise_comparison(pairwise, type = "mean_scores_ratio") +
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
 
-pairwise_comparison <- function(
+get_pairwise_comparisons <- function(
   scores,
   by = "model",
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
@@ -88,7 +128,7 @@ pairwise_comparison <- function(
   # check that model column + columns in 'by' are present
   #nolint start: keyword_quote_linter object_usage_linter
   by_cols <- check_columns_present(scores, by)
-  if (!is.logical(by_cols)) {
+  if (!isTRUE(by_cols)) {
     cli_abort(
       c(
         "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"
@@ -119,13 +159,12 @@ pairwise_comparison <- function(
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
       #nolint start: keyword_quote_linter object_usage_linter
-      cli_warn(
+      cli_abort(
         c(
           "!" = "After removing {.val NA} values for {.var {metric}},
          no values were left."
         )
       )
-      return(NULL)
     }
     cli_warn(
       c(
@@ -200,19 +239,18 @@ pairwise_comparison <- function(
   return(out[])
 }
 
-#' @title Do Pairwise Comparison for one Set of Forecasts
+#' @title Do pairwise comparison for one set of forecasts
 #'
 #' @description
-#'
 #' This function does the pairwise comparison for one set of forecasts, but
-#' multiple models involved. It gets called from [pairwise_comparison()].
-#' [pairwise_comparison()] splits the data into arbitrary subgroups specified
-#' by the user (e.g. if pairwise comparison should be done separately for
-#' different forecast targets) and then the actual pairwise comparison for that
-#' subgroup is managed from [pairwise_comparison_one_group()]. In order to
+#' multiple models involved. It gets called from [get_pairwise_comparisons()].
+#' [get_pairwise_comparisons()] splits the data into arbitrary subgroups
+#' specified by the user (e.g. if pairwise comparison should be done separately
+#' for different forecast targets) and then the actual pairwise comparison for
+#' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_two_models()].
-#' @inherit pairwise_comparison params return
+#' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @keywords internal
 
@@ -227,16 +265,14 @@ pairwise_comparison_one_group <- function(scores,
     )
   }
 
-  if (nrow(scores) == 0) {
-    return(NULL)
-  }
-
   # get list of models
   models <- unique(scores$model)
 
-  # if there aren't enough models to do any comparison, return NULL
+  # if there aren't enough models to do any comparison, abort
   if (length(models) < 2) {
-    return(NULL)
+    cli_abort(
+      c("!" = "There are not enough models to do any comparison")
+    )
   }
 
   # create a data.frame with results
@@ -336,30 +372,29 @@ pairwise_comparison_one_group <- function(scores,
   return(out[])
 }
 
-#' @title Compare Two Models Based on Subset of Common Forecasts
+#' @title Compare two models based on subset of common forecasts
 #'
 #' @description
-#'
 #' This function compares two models based on the subset of forecasts for which
 #' both models have made a prediction. It gets called
 #' from [pairwise_comparison_one_group()], which handles the
 #' comparison of multiple models on a single set of forecasts (there are no
 #' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
-#' in turn gets called from from [pairwise_comparison()] which can handle
+#' in turn gets called from from [get_pairwise_comparisons()] which can handle
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
-#' @inheritParams pairwise_comparison
-#' @param name_model1 character, name of the first model
-#' @param name_model2 character, name of the model to compare against
+#' @inheritParams get_pairwise_comparisons
+#' @param name_model1 Character, name of the first model
+#' @param name_model2 Character, name of the model to compare against
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
-#' instead of a two-sided test to determine significance in a pairwise
-#' comparison.
-#' @param test_type character, either "non_parametric" (the default) or
-#' "permutation". This determines which kind of test shall be conducted to
-#' determine p-values.
-#' @param n_permutations numeric, the number of permutations for a
-#' permutation test. Default is 999.
+#'   instead of a two-sided test to determine significance in a pairwise
+#'   comparison.
+#' @param test_type Character, either "non_parametric" (the default) or
+#'   "permutation". This determines which kind of test shall be conducted to
+#'   determine p-values.
+#' @param n_permutations Numeric, the number of permutations for a
+#'   permutation test. Default is 999.
 #' @return A list with mean score ratios and p-values for the comparison
 #' between two models
 #' @importFrom cli cli_abort
@@ -430,13 +465,13 @@ compare_two_models <- function(scores,
 }
 
 
-#' @title Calculate Geometric Mean
+#' @title Calculate geometric mean
 #'
 #' @details
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
-#' @param x numeric vector of values for which to calculate the geometric mean
-#' @return the geometric mean of the values in `x`. `NA` values are ignored.
+#' @param x Numeric vector of values for which to calculate the geometric mean.
+#' @return The geometric mean of the values in `x`. `NA` values are ignored.
 #'
 #' @keywords internal
 geometric_mean <- function(x) {
@@ -446,7 +481,8 @@ geometric_mean <- function(x) {
 
 #' @title Simple permutation test
 #'
-#' @description The implementation of the permutation test follows the
+#' @description
+#' The implementation of the permutation test follows the
 #' function
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
@@ -455,17 +491,17 @@ geometric_mean <- function(x) {
 #' the two. This observed difference or ratio is compared against the same
 #' test statistic based on permutations of the original data.
 #'
-#' Used in [pairwise_comparison()].
+#' Used in [get_pairwise_comparisons()].
 #'
-#' @param scores1 vector of scores to compare against another vector of scores
+#' @param scores1 Vector of scores to compare against another vector of scores.
 #' @param scores2 A second vector of scores to compare against the first
 #' @param n_permutation The number of replications to use for a permutation
 #' test. More replications yield more exact results, but require more
 #' computation.
 #' @param one_sided Whether or not to compute a one-sided test. Default is
-#' `FALSE`,
+#'   `FALSE`.
 #' @param comparison_mode How to compute the test statistic for the comparison
-#' of the two scores. Should be either "difference" or "ratio".
+#'   of the two scores. Should be either "difference" or "ratio".
 #'
 #' @return p-value of the permutation test
 #' @keywords internal
@@ -505,4 +541,58 @@ permutation_test <- function(scores1,
   pVal <- (1 + sum(test_stat_permuted >= test_stat_observed)) / (n_permutation + 1)
   # plus ones to make sure p-val is never 0?
   return(pVal)
+}
+
+
+#' @title Add relative skill scores based on pairwise comparisons
+#' @description
+#' Adds a columns with relative skills computed by running
+#' pairwise comparisons on the scores.
+#' For more information on
+#' the computation of relative skill, see [get_pairwise_comparisons()].
+#' Relative skill will be calculated for the aggregation level specified in
+#' `by`.
+#' @inheritParams get_pairwise_comparisons
+#' @export
+#' @keywords keyword scoring
+add_relative_skill <- function(
+  scores,
+  by = "model",
+  metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
+  baseline = NULL
+) {
+
+  # input checks are done in `get_pairwise_comparisons()`
+  # do pairwise comparisons ----------------------------------------------------
+  pairwise <- get_pairwise_comparisons(
+    scores = scores,
+    metric = metric,
+    baseline = baseline,
+    by = by
+  )
+
+  # store original metrics
+  metrics <- get_metrics(scores)
+
+  # delete unnecessary columns
+  pairwise[, c(
+    "compare_against", "mean_scores_ratio",
+    "pval", "adj_pval"
+  ) := NULL]
+  pairwise <- unique(pairwise)
+
+  # merge back
+  scores <- merge(
+    scores, pairwise, all.x = TRUE, by = get_forecast_unit(pairwise)
+  )
+
+  # Update score names
+  new_metrics <- paste(
+    metric, c("relative_skill", "scaled_relative_skill"),
+    sep = "_"
+  )
+  new_metrics <- new_metrics[new_metrics %in% names(scores)]
+  scores <- new_scores(scores, metrics = c(metrics, new_metrics))
+
+  return(scores)
 }

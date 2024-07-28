@@ -2,13 +2,13 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{metrics_quantile}
 \alias{metrics_quantile}
-\title{Default Metrics And Scoring Rules for Quantile-Based Forecasts}
+\title{Default metrics and scoring rules for quantile-based forecasts}
 \usage{
 metrics_quantile(select = NULL, exclude = NULL)
 }
 \arguments{
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}
@@ -23,25 +23,25 @@ scoring rules suitable for forecasts in a quantile-based format.
 The default scoring rules are:
 \itemize{
 \item "wis" = \link{wis}
-\item "overprediction" = \code{\link[=overprediction]{overprediction()}}
-\item "underprediction" = \code{\link[=underprediction]{underprediction()}}
-\item "dispersion" = \code{\link[=dispersion]{dispersion()}}
+\item "overprediction" = \code{\link[=overprediction_quantile]{overprediction_quantile()}}
+\item "underprediction" = \code{\link[=underprediction_quantile]{underprediction_quantile()}}
+\item "dispersion" = \code{\link[=dispersion_quantile]{dispersion_quantile()}}
 \item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
 \item "interval_coverage_50" = \code{\link[=interval_coverage]{interval_coverage()}}
-\item "interval_coverage_90" = function(...) \{
-run_safely(..., interval_range = 90, fun = \link{interval_coverage})
-\}
+\item "interval_coverage_90" = customise_metric(
+interval_coverage, interval_range = 90
+)
 \item "interval_coverage_deviation" = \code{\link[=interval_coverage_deviation]{interval_coverage_deviation()}},
 \item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
 }
 
-Note: The \code{interval_coverage_90} scoring rule is created as a wrapper around
-\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=run_safely]{run_safely()}}.
+Note: The \code{interval_coverage_90} scoring rule is created by modifying
+\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[=customise_metric]{customise_metric()}}.
 This construct allows the function to deal with arbitrary arguments in \code{...},
 while making sure that only those that \code{\link[=interval_coverage]{interval_coverage()}} can
-accept get passed on to it. \code{interval_range = 90} is set in the function definition,
-as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would mean it would also
-get passed to \code{interval_coverage_50}.
+accept get passed on to it. \code{interval_range = 90} is set in the function
+definition, as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would
+mean it would also get passed to \code{interval_coverage_50}.
 }
 \examples{
 metrics_quantile()

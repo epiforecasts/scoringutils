@@ -2,12 +2,12 @@
 % Please edit documentation in R/score.R
 \name{validate_scores}
 \alias{validate_scores}
-\title{Validate An Object Of Class \code{scores}}
+\title{Validate an object of class \code{scores}}
 \usage{
 validate_scores(scores)
 }
 \arguments{
-\item{scores}{A data.table or similar with scores as produced by \code{\link[=score]{score()}}}
+\item{scores}{A data.table or similar with scores as produced by \code{\link[=score]{score()}}.}
 }
 \value{
 Returns \code{NULL} invisibly

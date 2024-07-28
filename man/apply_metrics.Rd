@@ -2,23 +2,29 @@
 % Please edit documentation in R/score.R
 \name{apply_metrics}
 \alias{apply_metrics}
-\title{Apply A List Of Functions To A Data Table Of Forecasts}
+\title{Apply a list of functions to a data table of forecasts}
 \usage{
-apply_metrics(data, metrics, ...)
+apply_metrics(forecast, metrics, ...)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
-default metrics used.}
+default metrics used. Note that if you want to pass arguments to any
+given metric, you should do that through the function \code{\link[=customise_metric]{customise_metric()}}
+and pass an updated list of functions with your custom metric to
+the \code{metrics} argument in \code{score()}.}
 
-\item{...}{additional arguments}
+\item{...}{Additional arguments to be passed to the scoring rules. Note that
+this is currently not used, as all calls to \code{apply_scores} currently
+avoid passing arguments via \code{...} and instead expect that the metrics
+directly be modified using \code{\link[=customise_metric]{customise_metric()}}.}
 }
 \value{
-A data table with the forecasts and the calculated metrics
+A data table with the forecasts and the calculated metrics.
 }
 \description{
 This helper function applies scoring rules (stored as a list of

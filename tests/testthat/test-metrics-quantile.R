@@ -100,12 +100,13 @@ test_that("`wis()` works within score for median forecast", {
     model = "model1",
     date = 1:3
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- score(
-    test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
-  )
+  metrics <- metrics_quantile() %>%
+    select_metrics(select = c("ae_median", "wis"))
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+
+  eval <- score(test_data, metrics = metrics)
   expect_equal(eval$ae_median, eval$wis)
 })
 
@@ -144,12 +145,13 @@ test_that("wis() works within score for one interval", {
     model = c("model1"),
     date = rep(1:3, times = 2)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- score(
-    test_data,
-    count_median_twice = TRUE, metrics = list(wis = wis)
-  )
+  metrics <- metrics_quantile() %>%
+    select_metrics(select = c("wis"))
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+
+  eval <- score(test_data, metrics = metrics)
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
@@ -170,12 +172,13 @@ test_that("`wis()` works 1 interval and median", {
     model = c("model1"),
     date = rep(1:3, times = 3)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- score(
-    test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
-  )
+  metrics <- metrics_quantile() %>%
+      select_metrics(select = c("wis"))
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+
+  eval <- score(test_data, metrics = metrics)
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
@@ -211,12 +214,13 @@ test_that("wis works, 2 intervals and median", {
     model = c("model1"),
     date = rep(1:3, times = 5)
   ) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- score(
-    test_data,
-    count_median_twice = TRUE, metrics = metrics_no_cov
-  )
+  metrics <- metrics_quantile() %>%
+    select_metrics(select = c("wis"))
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+
+  eval <- score(test_data, metrics = metrics)
 
   eval <- summarise_scores(eval, by = c("model", "date"))
 
@@ -299,9 +303,12 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
+  metrics <- metrics_quantile() %>%
+    select_metrics(select = c("wis"))
+  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+
   eval <- score(
-    as_forecast(data_formatted),
-    count_median_twice = FALSE, metrics = metrics_no_cov
+    as_forecast_quantile(data_formatted), metrics = metrics
   )
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
@@ -369,11 +376,12 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- suppressMessages(score(data_formatted,
-                                 count_median_twice = FALSE, metrics = metrics_no_cov_no_ae
-  ))
+  metrics <- metrics_quantile() %>%
+    select_metrics(select = c("wis"))
+
+  eval <- suppressMessages(score(data_formatted, metrics = metrics))
 
   eval <- summarise_scores(eval,
                            by = c(
@@ -389,8 +397,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   actual_wis <- wis(
     observed = y,
     predicted = forecast_quantiles_matrix,
-    quantile_level = c(0.1, 0.9),
-    count_median_twice = FALSE
+    quantile_level = c(0.1, 0.9)
   )
 
   expect_equal(eval$wis, expected)
@@ -446,11 +453,9 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
   data.table::setnames(forecasts_formated, old = "value", new = "predicted")
 
   data_formatted <- merge(forecasts_formated, truth_formatted) %>%
-    as_forecast()
+    as_forecast_quantile()
 
-  eval <- score(data_formatted,
-                count_median_twice = FALSE, metrics = metrics_no_cov
-  )
+  eval <- score(data_formatted, metrics = metrics_no_cov)
 
   eval <- summarise_scores(eval,
                            by = c(
@@ -473,11 +478,46 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
     quantile_level = c(0.1, 0.25, 0.5, 0.75, 0.9),
     count_median_twice = FALSE
   )
-
   expect_equal(eval$wis, expected)
+  expect_equal(actual_wis, expected)
+
+  # check whether `count_median_twice = TRUE` also works
+  expected2 <- (1 / 3) * (
+    abs(y - forecast_quantiles_matrix[, 3]) +
+      (forecast_quantiles_matrix[, 5] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) + c(0, (-2) - (-15), 22 - 4) +
+      (forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2]) * (alpha2 / 2) + c(0, 1 - (-15), 22 - 3)
+  )
+
+  actual_wis2 <- wis(
+    observed = y,
+    predicted = forecast_quantiles_matrix,
+    quantile_level = c(0.1, 0.25, 0.5, 0.75, 0.9),
+    count_median_twice = TRUE
+  )
+
+  metrics <- metrics_quantile() %>%
+    select_metrics("wis")
+  metrics$wis <- customise_metric(wis, count_median_twice = TRUE)
+  eval2 <- eval <- score(data_formatted, metrics = metrics)
+  eval2 <- summarise_scores(eval2,
+                           by = c(
+                             "model", "location", "target_variable",
+                             "target_end_date", "forecast_date", "horizon"
+                           )
+  )
+  expect_equal(eval2$wis, expected2)
+  expect_equal(actual_wis2, expected2)
 })
 
 test_that("Quantlie score and interval score yield the same result, weigh = FALSE", {
+
+  # calling quantile_score and wis should return the same result if all
+  # quantiles form central prediction intervals
+  expect_equal(
+    quantile_score(observed, predicted, quantile_level),
+    wis(observed, predicted, quantile_level)
+  )
+
   observed <- rnorm(10, mean = 1:10)
   alphas <- c(0.1, 0.5, 0.9)
 
@@ -503,18 +543,32 @@ test_that("Quantlie score and interval score yield the same result, weigh = FALS
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
     expect_equal((qs_lower + qs_upper) / 2, is)
     expect_equal(wis, is)
   }
+})
+
+
+test_that("wis errors when there are no valid forecast intervals", {
+  # test that wis throws an error when there are no valid forecast intervals
+  # (i.e. the quantiles do not form central prediction intervals)
+  observed <- 0.1
+  predicted <- c(0.1032978, 0.1078166, 0.1906849, 0.1969254, 0.2017249, 0.2078487, 0.2810377, 0.3062168, 0.4006721, 0.8219655)
+  quantile_level <- c(0.600, 0.650, 0.700, 0.750, 0.800, 0.850, 0.900, 0.950, 0.975, 0.990)
+
+  expect_error(
+    wis(observed, predicted, quantile_level),
+    "No valid forecast intervals found."
+  )
 })
 
 
@@ -547,12 +601,12 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
     )
 
     qs_lower <- quantile_score(observed,
-                               predicted = lower,
+                               predicted = matrix(lower),
                                quantile_level = alpha / 2,
                                weigh = w
     )
     qs_upper <- quantile_score(observed,
-                               predicted = upper,
+                               predicted = matrix(upper),
                                quantile_level = 1 - alpha / 2,
                                weigh = w
     )
@@ -582,9 +636,9 @@ test_that("wis is the sum of overprediction, underprediction, dispersion", {
     quantile_level = forecast_quantile_probs
   )
 
-  d <- dispersion(y, forecast_quantiles_matrix, forecast_quantile_probs)
-  o <- overprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
-  u <- underprediction(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  d <- dispersion_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  o <- overprediction_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
+  u <- underprediction_quantile(y, forecast_quantiles_matrix, forecast_quantile_probs)
 
   expect_equal(wis, d + o + u)
 })
@@ -821,7 +875,7 @@ test_that("bias_quantile(): quantile levels must be unique", {
 test_that("bias_quantile only produces one message", {
   expect_message(
     bias_quantile(observed, predicted[, -3], quantile_level[-3]),
-    "Median not available, computing bias as mean of the two innermost quantiles in order to compute bias."
+    "Median not available, interpolating median from the two innermost quantiles in order to compute bias."
   )
 })
 
@@ -831,6 +885,29 @@ test_that("bias_quantile() works with point forecasts", {
   quantile_level <- 0.5
   expect_equal(bias_quantile(observed, predicted, quantile_level), 0)
 })
+
+
+# `interpolate_median` ======================================================= #
+test_that("interpolation in `interpolate_median` works", {
+  predicted <- c(1, 10)
+  observed <- 15
+  quantile_level <- c(0.4, 0.6)
+
+  # median is missing, symmetric quantile levels given
+  expect_equal(interpolate_median(predicted, quantile_level), mean(predicted))
+  quantile_level <- c(0.1, 0.9)
+  expect_equal(interpolate_median(predicted, quantile_level), mean(predicted))
+
+  1 + 0.4/0.8 * (10 - 1)
+
+  # asymmetric quantile levels given
+  quantile_level <- c(0.3, 0.6)
+  expect_equal(interpolate_median(predicted, quantile_level), 1 + 0.2/0.3 * (10 - 1))
+
+  quantile_level <- c(0.2, 0.6)
+  expect_equal(interpolate_median(predicted, quantile_level), 1 + 0.3/0.4 * (10 - 1))
+})
+
 
 
 # ============================================================================ #

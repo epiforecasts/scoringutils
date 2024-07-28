@@ -13,7 +13,7 @@ check_number_per_forecast(data, forecast_unit)
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Function checks the number of quantiles or samples per forecast.

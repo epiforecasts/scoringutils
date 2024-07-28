@@ -2,16 +2,15 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_duplicate_forecasts}
 \alias{get_duplicate_forecasts}
-\title{Find Duplicate Forecasts}
+\title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data, forecast_unit = get_forecast_unit(data))
+get_duplicate_forecasts(data, counts = FALSE)
 }
 \arguments{
 \item{data}{A data.frame as used for \code{\link[=score]{score()}}}
 
-\item{forecast_unit}{A character vector with the column names that define
-the unit of a single forecast. By default the forecast unit will be
-automatically inferred from the data (see \code{\link[=get_forecast_unit]{get_forecast_unit()}})}
+\item{counts}{Should the output show the number of duplicates per forecast
+unit instead of the individual duplicated rows? Default is \code{FALSE}.}
 }
 \value{
 A data.frame with all rows for which a duplicate forecast was found

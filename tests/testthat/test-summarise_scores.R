@@ -1,9 +1,20 @@
-test_that("summarise_scores() works without any arguments", {
+test_that("summarise_scores() works as expected with by = forecast unit", {
+  expect_no_condition(
+    summarised_scores <- summarise_scores(scores_quantile)
+  )
+  expect_s3_class(summarised_scores, c("scores", "data.table", "data.frame"), exact = TRUE)
+})
+
+test_that("summarise_scores() works as expected with by = forecast unit", {
+  # the only effect of running summarise_scores with by = forecast unit is
+  # that coverage is now a numeric instead of a boolean
   summarised_scores <- summarise_scores(
     scores_quantile,
     by = get_forecast_unit(scores_quantile)
   )
-  expect_false("quantile" %in% names(summarised_scores))
+
+  expect_equal(dim(summarised_scores), dim(scores_quantile))
+  expect_equal(summarised_scores$wis, scores_quantile$wis)
 
   s2 <- summarise_scores(scores_quantile,
     by = c(
@@ -12,8 +23,7 @@ test_that("summarise_scores() works without any arguments", {
       "horizon"
     )
   )
-
-  expect_equal(nrow(summarised_scores), nrow(s2))
+  expect_equal(dim(summarised_scores), dim(s2))
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
@@ -31,32 +41,13 @@ test_that("summarise_scores() handles wrong by argument well", {
   )
 })
 
-test_that("summarise_scores() works with point forecasts", {
-  expect_no_condition(
-    pw_point <- add_pairwise_comparison(
-      scores_point,
-      metric = "se_point"
-    )
-  )
-  pw_point <- summarise_scores(pw_point, by = "model")
-
-  pw_manual <- pairwise_comparison(
-    scores_point, by = "model", metric = "se_point"
-  )
-
-  expect_equal(
-    pw_point$relative_skill,
-    unique(pw_manual$relative_skill)
-  )
-})
-
 test_that("summarise_scores() handles the `metrics` attribute correctly", {
   test <- data.table::copy(scores_quantile)
   attr(test, "metrics") <- NULL
 
   expect_error(
     summarise_scores(test, by = "model"),
-    "`scores` needs to have an attribute `metrics` with the names"
+    "Input needs an attribute `metrics` with the names"
   )
 
   # expect warning if a score name changed
@@ -64,56 +55,13 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
   data.table::setnames(test, old = "crps", new = "crp2")
   expect_warning(
     summarise_scores(test, by = "model"),
-    "The names of the scores previously computed do not match the names"
+    "The following scores have been previously computed, but are no longer"
   )
 })
 
-test_that("summarise_scores() can compute relative measures", {
-  scores_with <- add_pairwise_comparison(
-    scores_quantile,
-  )
-  scores_with <- summarise_scores(scores_with, by = "model")
-
-  expect_equal(
-    scores_with[, wis_relative_skill],
-    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
-  )
-
-  scores_with <- add_pairwise_comparison(
-    scores_quantile, by = "model",
-    metric = "ae_median"
-  )
-  scores_with <- summarise_scores(scores_with, by = "model")
-
-  expect_equal(
-    scores_with[, ae_median_relative_skill],
-    c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
-  )
-})
-
-test_that("summarise_scores() across argument works as expected", {
-  ex <- data.table::copy(example_quantile)
-  ex <- suppressMessages(as_forecast(ex))
-  scores <- score(ex)[, location_name := NULL]
-
-  expect_warning(
-    summarise_scores(
-      scores, by = c("model", "target_type"), across = "horizon"
-    ),
-    regexp = "You specified `across` and `by` at the same time."
-  )
-  expect_error(
-    summarise_scores(
-      scores, across = "horizons"
-    ),
-    regexp = "Assertion on 'across' failed: Must be a subset of "
-  )
-  expect_equal(
-    summarise_scores(
-      scores, across = c("horizon", "model", "forecast_date", "target_end_date")
-    ),
-    summarise_scores(
-      scores, by = c("location", "target_type")
-    )
+test_that("summarise_scores() handles data.frames correctly", {
+  test <- as.data.frame(scores_quantile)
+  expect_no_condition(
+    summarise_scores(test, by = "model")
   )
 })

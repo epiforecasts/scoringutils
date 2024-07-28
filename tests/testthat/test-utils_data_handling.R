@@ -1,28 +1,4 @@
-test_that("range_long_to_quantile works", {
-  long <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
-    model = "model1",
-    observed = 1:10,
-    predicted = c(2:11, 4:13),
-    interval_range = 50,
-    boundary = rep(c("lower", "upper"), each = 10)
-  )
-
-  quantile <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
-    model = "model1",
-    observed = 1:10,
-    predicted = c(2:11, 4:13),
-    quantile_level = rep(c(0.25, 0.75), each = 10)
-  )
-
-  quantile2 <- as.data.frame(scoringutils:::interval_long_to_quantile(long))
-  expect_equal(quantile, quantile2)
-})
-
-
-
-test_that("quantile_to_interval.data.frame() works", {
+test_that("quantile_to_interval_dataframe() works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
@@ -53,13 +29,23 @@ test_that("quantile_to_interval.data.frame() works", {
   quantile[c(1, 3, 11, 13), c("observed", "predicted", "quantile_level") := NA]
   # in this instance, a problem appears because there is an NA value both
   # for the upper and lower bound.
-  expect_message(
+
+  # the data.table behavior differs before/after v1.16.0
+  #  - before, it's a 'message'
+  #  - after, it's a 'warning'
+  #  - the conditionMessage() also differs
+  expected_condition <- tryCatch(
+    dcast(data.table(a = c(1, 1), b = 2, c = 3), a ~ b, value.var="c"),
+    condition = identity
+  )
+  expect_condition(
     quantile_to_interval(
       quantile,
       keep_quantile_col = FALSE,
       format = "wide"
     ),
-    "Aggregate function missing, defaulting to 'length'"
+    class = class(expected_condition)[1L], # testthat 3e requires exactly one class
+    regexp = "[Aa]ggregate.*default.*length"
   )
   quantile <- quantile[-c(1, 3), ]
   wide2 <- scoringutils:::quantile_to_interval(
@@ -90,7 +76,23 @@ test_that("sample_to_quantiles works", {
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  quantile2 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
+  expect_error(
+    sample_to_quantile(samples, quantile_level = c(0.25, 0.75)),
+    "The input needs to be a valid forecast object."
+  )
+
+  wrongclass <- as_forecast_sample(samples)
+  class(wrongclass) <- c("forecast_point", "data.table", "data.frame")
+  expect_error(
+    sample_to_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
+    'Desired forecast type: "sample"'
+  )
+
+
+  quantile2 <- sample_to_quantile(
+    as_forecast_sample(samples),
+    quantile_level = c(0.25, 0.75)
+  )
 
   expect_equal(quantile, as.data.frame(quantile2))
 
@@ -99,23 +101,25 @@ test_that("sample_to_quantiles works", {
   # If it's not scoped well, the call to `sample_to_quantile()` will fail.
   samples$type <- "test"
 
-  quantile3 <- sample_to_quantile(samples, quantile_level = c(0.25, 0.75))
+  quantile3 <- sample_to_quantile(
+    as_forecast_sample(samples),
+    quantile_level = c(0.25, 0.75)
+  )
   quantile3$type <- NULL
 
   expect_identical(
     quantile2,
     quantile3
   )
-
 })
 
 test_that("sample_to_quantiles issue 557 fix", {
 
-  out <- example_integer %>%
+  out <- example_sample_discrete %>%
+    as_forecast_sample() %>%
     sample_to_quantile(
       quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
-    as_forecast() %>%
     score()
 
   expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
@@ -140,7 +144,7 @@ test_that("sample_to_range_long works", {
     boundary = rep(c("lower", "upper"), each = 10)
   )
 
-  long2 <- scoringutils:::sample_to_interval_long(samples,
+  long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples),
                                                   interval_range = 50,
                                                   keep_quantile_col = FALSE)
   long2 <- long2[order(model, boundary, date)]

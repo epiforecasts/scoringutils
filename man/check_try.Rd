@@ -11,7 +11,7 @@ check_try(expr)
 }
 \value{
 Returns TRUE if the check was successful and a string with an
-error message otherwise
+error message otherwise.
 }
 \description{
 Tries to execute an expression. Internally, this is used to

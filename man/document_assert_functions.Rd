@@ -2,12 +2,16 @@
 % Please edit documentation in R/documentation-templates.R
 \name{document_assert_functions}
 \alias{document_assert_functions}
-\title{Documentation template for check functions}
+\title{Documentation template for assert functions}
+\arguments{
+\item{observed}{Input to be checked. Should be a numeric vector with the
+observed values of size n.}
+}
 \value{
 Returns NULL invisibly if the assertion was successful and throws an
 error otherwise.
 }
 \description{
-Documentation template for check functions
+Documentation template for assert functions
 }
 \keyword{internal}

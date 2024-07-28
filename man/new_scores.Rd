@@ -2,17 +2,17 @@
 % Please edit documentation in R/score.R
 \name{new_scores}
 \alias{new_scores}
-\title{Construct An Object Of Class \code{scores}}
+\title{Construct an object of class \code{scores}}
 \usage{
 new_scores(scores, metrics, ...)
 }
 \arguments{
-\item{scores}{A data.table or similar with scores as produced by \code{\link[=score]{score()}}}
+\item{scores}{A data.table or similar with scores as produced by \code{\link[=score]{score()}}.}
 
 \item{metrics}{A character vector with the names of the scores
-(i.e. the names of the scoring rules used for scoring)}
+(i.e. the names of the scoring rules used for scoring).}
 
-\item{...}{Additional arguments to \code{\link[=as.data.table]{as.data.table()}}}
+\item{...}{Additional arguments to \code{\link[data.table:as.data.table]{data.table::as.data.table()}}}
 }
 \value{
 An object of class \code{scores}

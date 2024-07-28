@@ -23,14 +23,14 @@ test_that("get_protected_columns() returns the correct result", {
   auto <- get_protected_columns(data)
   expect_equal(sort(manual), sort(auto))
 
-  data <- example_continuous
+  data <- example_sample_continuous
   manual <- protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary",
     grep("coverage_", names(data), fixed = TRUE, value = TRUE)
   )
-  manual <- intersect(manual, colnames(example_continuous))
+  manual <- intersect(manual, colnames(example_sample_continuous))
   auto <- get_protected_columns(data)
   expect_equal(sort(manual), sort(auto))
 })
@@ -41,11 +41,11 @@ test_that("run_safely() works as expected", {
   expect_equal(run_safely(2, fun = f), 2)
   expect_equal(run_safely(2, y = 3, fun = f), 2)
   expect_warning(
-    run_safely(fun = f),
-    'Function execution failed, returning NULL. Error: argument "x" is missing, with no default',
+    run_safely(fun = f, metric_name = "f"),
+    'Computation for `f` failed. Error: argument "x" is missing, with no default',
     fixed = TRUE
   )
-  expect_equal(suppressWarnings(run_safely(y = 3, fun = f)), NULL)
+  expect_equal(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")), NULL)
 })
 
 
@@ -64,7 +64,7 @@ test_that("get_metrics() works as expected", {
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
     get_metrics(example_quantile, error = TRUE),
-    "Object needs an attribute"
+    "Input needs an attribute"
   )
   expect_no_condition(
     get_metrics(scores_continuous)
@@ -76,67 +76,5 @@ test_that("get_metrics() works as expected", {
   expect_warning(
     get_metrics(ex),
     "scores have been previously computed, but are no longer column names"
-  )
-})
-
-
-# ==============================================================================
-# print
-# ==============================================================================
-
-test_that("print() works on forecast_* objects", {
-  # Check print works on each forecast object
-  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
-    na.omit(example_point), na.omit(example_continuous), na.omit(example_integer))
-  for (dat in test_dat){
-    dat <- as_forecast(dat)
-    forecast_type <- get_forecast_type(dat)
-    forecast_unit <- get_forecast_unit(dat)
-
-    # Check Forecast type
-    expect_snapshot(print(dat))
-    expect_snapshot(print(dat))
-    # Check Forecast unit
-    expect_snapshot(print(dat))
-    expect_snapshot(print(dat))
-
-    # Check print.data.table works.
-    output_original <- capture.output(print(dat))
-    output_test <- capture.output(print(data.table(dat)))
-    expect_contains(output_original, output_test)
-  }
-})
-
-test_that("print methods fail gracefully", {
-  test <- as_forecast(na.omit(example_quantile))
-  test$observed <- NULL
-
-  # message if forecast type can't be computed
-  expect_warning(
-    expect_message(
-      expect_output(
-        print(test),
-        pattern = "Forecast unit:"
-      ),
-      "Could not determine forecast type due to error in validation."
-    ),
-    "Error in validating forecast object:"
-  )
-
-  # message if forecast unit can't be computed
-  test <- 1:10
-  class(test) <- "forecast_point"
-  expect_warning(
-    expect_message(
-      expect_message(
-        expect_output(
-          print(test),
-          pattern = "Forecast unit:"
-        ),
-        "Could not determine forecast unit."
-      ),
-      "Could not determine forecast type"
-    ),
-    "Error in validating forecast object:"
   )
 })

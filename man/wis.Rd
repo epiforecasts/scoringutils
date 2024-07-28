@@ -2,10 +2,10 @@
 % Please edit documentation in R/metrics-quantile.R
 \name{wis}
 \alias{wis}
-\alias{dispersion}
-\alias{overprediction}
-\alias{underprediction}
-\title{Weighted Interval Score (WIS)}
+\alias{dispersion_quantile}
+\alias{overprediction_quantile}
+\alias{underprediction_quantile}
+\title{Weighted interval score (WIS)}
 \usage{
 wis(
   observed,
@@ -17,53 +17,60 @@ wis(
   na.rm = TRUE
 )
 
-dispersion(observed, predicted, quantile_level, ...)
+dispersion_quantile(observed, predicted, quantile_level, ...)
 
-overprediction(observed, predicted, quantile_level, ...)
+overprediction_quantile(observed, predicted, quantile_level, ...)
 
-underprediction(observed, predicted, quantile_level, ...)
+underprediction_quantile(observed, predicted, quantile_level, ...)
 }
 \arguments{
-\item{observed}{numeric vector of size n with the observed values}
+\item{observed}{Numeric vector of size n with the observed values.}
 
-\item{predicted}{numeric nxN matrix of predictive
+\item{predicted}{Numeric nxN matrix of predictive
 quantiles, n (number of rows) being the number of forecasts (corresponding
 to the number of observed values) and N
 (number of columns) the number of quantiles per forecast.
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.}
 
-\item{quantile_level}{vector with quantile levels of size N}
+\item{quantile_level}{Vector of of size N with the quantile levels
+for which predictions were made.}
 
-\item{separate_results}{if \code{TRUE} (default is \code{FALSE}), then the separate
-parts of the interval score (dispersion penalty, penalties for over- and
-under-prediction get returned as separate elements of a list). If you want a
-\code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the output.}
+\item{separate_results}{Logical. If \code{TRUE} (default is \code{FALSE}), then the
+separate parts of the interval score (dispersion penalty, penalties for
+over- and under-prediction get returned as separate elements of a list).
+If you want a \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the
+output.}
 
-\item{weigh}{if TRUE, weigh the score by alpha / 2, so it can be averaged
-into an interval score that, in the limit, corresponds to CRPS. Alpha is the
-decimal value that  represents how much is outside a central prediction
-interval (e.g. for a 90 percent central prediction interval, alpha is 0.1)
-Default: \code{TRUE}.}
+\item{weigh}{Logical. If \code{TRUE} (the default), weigh the score by
+\eqn{\alpha / 2}, so it can be averaged into an interval score that, in
+the limit (for an increasing number of equally spaced quantiles/prediction
+intervals), corresponds
+to the CRPS. \eqn{\alpha} is the value that corresponds to the
+(\eqn{\alpha/2}) or (\eqn{1 - \alpha/2}), i.e. it is the decimal
+value that represents how much is outside a central prediction interval
+(E.g. for a 90 percent central prediction interval, alpha is 0.1).}
 
-\item{count_median_twice}{if TRUE, count the median twice in the score}
+\item{count_median_twice}{If TRUE, count the median twice in the score.}
 
-\item{na.rm}{if TRUE, ignore NA values when computing the score}
+\item{na.rm}{If TRUE, ignore NA values when computing the score.}
 
 \item{...}{Additional arguments passed on to \code{wis()} from functions
-\code{overprediction()}, \code{underprediction()} and \code{dispersion()}}
+\code{overprediction_quantile()}, \code{underprediction_quantile()} and
+\code{dispersion_quantile()}.}
 }
 \value{
 \code{wis()}: a numeric vector with WIS values of size n (one per observation),
 or a list with separate entries if \code{separate_results} is \code{TRUE}.
 
-\code{dispersion()}: a numeric vector with dispersion values (one per observation)
+\code{dispersion_quantile()}: a numeric vector with dispersion values (one per
+observation).
 
-\code{overprediction()}: a numeric vector with overprediction values (one per
-observation)
+\code{overprediction_quantile()}: a numeric vector with overprediction values
+(one per observation).
 
-\code{underprediction()}: a numeric vector with underprediction values (one per
-observation)
+\code{underprediction_quantile()}: a numeric vector with underprediction values
+(one per observation)
 }
 \description{
 The WIS is a proper scoring rule used to evaluate forecasts in an interval- /
@@ -112,7 +119,7 @@ Non-symmetric quantiles can be scored using the function \code{\link[=quantile_s
 Usually the interval score is weighted by a factor that makes sure that the
 average score across an increasing number of equally spaced
 quantiles, converges to the continuous ranked probability score (CRPS). This
-weighted score is called the weihted interval score (WIS).
+weighted score is called the weighted interval score (WIS).
 The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
 
 \strong{Quantile score}
@@ -132,11 +139,11 @@ several quantiles / prediction intervals and the median.
 In one view, you would treat the WIS as the average of quantile scores (and
 the median as 0.5-quantile) (this is the default for \code{wis()}). In another
 view, you would treat the WIS as the average of several interval scores +
-the difference between observed value and median forecast. The effect of
+the difference between the observed value and median forecast. The effect of
 that is that in contrast to the first view, the median has twice as much
 weight (because it is weighted like a prediction interval, rather than like
 a single quantile). Both are valid ways to conceptualise the WIS and you
-can control the behvaviour with the \code{count_median_twice}-argument.
+can control the behaviour with the \code{count_median_twice}-argument.
 
 \strong{WIS components}:
 WIS components can be computed individually using the functions

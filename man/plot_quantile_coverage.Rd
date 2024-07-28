@@ -2,24 +2,25 @@
 % Please edit documentation in R/plot.R
 \name{plot_quantile_coverage}
 \alias{plot_quantile_coverage}
-\title{Plot Quantile Coverage}
+\title{Plot quantile coverage}
 \usage{
 plot_quantile_coverage(coverage, colour = "model")
 }
 \arguments{
 \item{coverage}{A data frame of coverage values as produced by
-\code{\link[=get_coverage]{get_coverage()}}}
+\code{\link[=get_coverage]{get_coverage()}}.}
 
-\item{colour}{According to which variable shall the graphs be coloured?
-Default is "model".}
+\item{colour}{String, according to which variable shall the graphs be
+coloured? Default is "model".}
 }
 \value{
-ggplot object with a plot of interval coverage
+A ggplot object with a plot of interval coverage
 }
 \description{
-Plot quantile coverage
+Plot quantile coverage values (see \code{\link[=get_coverage]{get_coverage()}} for more information).
 }
 \examples{
-coverage <- get_coverage(as_forecast(example_quantile), by = "model")
+example <- as_forecast_quantile(example_quantile)
+coverage <- get_coverage(example, by = "model")
 plot_quantile_coverage(coverage)
 }

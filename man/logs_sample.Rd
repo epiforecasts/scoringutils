@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{logs_sample}
 \alias{logs_sample}
-\title{Logarithmic Score}
+\title{Logarithmic score (sample-based version)}
 \usage{
 logs_sample(observed, predicted, ...)
 }
@@ -13,21 +13,23 @@ logs_sample(observed, predicted, ...)
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
-\item{...}{additional arguments passed to
+\item{...}{Additional arguments passed to
 \link[scoringRules:scores_sample_univ]{logs_sample()} from the scoringRules package.}
 }
 \value{
-vector with the scoring values
+Vector with scores.
 }
 \description{
-Wrapper around the \code{\link[scoringRules:scores_sample_univ]{logs_sample()}}
-function from the
-\pkg{scoringRules} package. Used to score continuous predictions.
+This function is a wrapper around the
+\code{\link[scoringRules:scores_sample_univ]{logs_sample()}} function from the
+\pkg{scoringRules} package.
+
+The function should be used to score continuous predictions only.
 While the Log Score is in theory also applicable
-to integer forecasts, the problem lies in the implementation: The Log Score
+to discrete forecasts, the problem lies in the implementation: The Log score
 needs a kernel density estimation, which is not well defined with
-integer-valued Monte Carlo Samples. The Log Score can be used for specific
-integer valued probability distributions. See the scoringRules package for
+integer-valued Monte Carlo Samples. The Log score can be used for specific
+discrete probability distributions. See the scoringRules package for
 more details.
 }
 \examples{

@@ -1,5 +1,6 @@
 #' @title Run a function safely
-#' @description This is a wrapper function designed to run a function safely
+#' @description
+#' This is a wrapper function designed to run a function safely
 #' when it is not completely clear what arguments could be passed to the
 #' function.
 #'
@@ -10,19 +11,22 @@
 #' `run_safely` can be useful when constructing functions to be used as
 #' metrics in [score()].
 #'
-#' @param ... Arguments to pass to `fun`
-#' @param fun A function to execute
+#' @param ... Arguments to pass to `fun`.
+#' @param fun A function to execute.
+#' @param metric_name A character string with the name of the metric. Used to
+#'   provide a more informative warning message in case `fun` errors.
 #' @importFrom cli cli_warn
+#' @importFrom checkmate assert_function
 #' @return The result of `fun` or `NULL` if `fun` errors
-#' @export
 #' @keywords scoring
 #' @examples
 #' f <- function(x) {x}
-#' run_safely(2, fun = f)
-#' run_safely(2, y = 3, fun = f)
-#' run_safely(fun = f)
-#' run_safely(y = 3, fun = f)
-run_safely <- function(..., fun) {
+#' scoringutils:::run_safely(2, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(fun = f, metric_name = "f")
+#' scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
+run_safely <- function(..., fun, metric_name) {
+  assert_function(fun)
   args <- list(...)
   # Check if the function accepts ... as an argument
   if ("..." %in% names(formals(fun))) {
@@ -44,7 +48,7 @@ run_safely <- function(..., fun) {
     msg <- conditionMessage(attr(result, "condition"))
     cli_warn(
       c(
-        "!" = "Function execution failed, returning NULL.
+        "!" = "Computation for {.var {metric_name}} failed.
         Error: {msg}."
       )
     )
@@ -55,12 +59,13 @@ run_safely <- function(..., fun) {
 }
 
 
-#' Ensure That an Object is a Data Table
-#' @description This function ensures that an object is a data table.
+#' Ensure that an object is a `data.table`
+#' @description
+#' This function ensures that an object is a `data table`.
 #' If the object is not a data table, it is converted to one. If the object
 #' is a data table, a copy of the object is returned.
-#' @param data An object to ensure is a data table
-#' @return A data.table/a copy of an exising data.table
+#' @param data An object to ensure is a data table.
+#' @return A data.table/a copy of an existing data.table.
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {
@@ -71,88 +76,3 @@ ensure_data.table <- function(data) {
   }
   return(data)
 }
-
-#' @title Print Information About A Forecast Object
-#' @description This function prints information about a forecast object,
-#' including "Forecast type", "Score columns",
-#' "Forecast unit".
-#'
-#' @param x An object of class 'forecast_*' object as produced by
-#' `as_forecast()`
-#' @param ... additional arguments for [print()]
-#' @return returns x invisibly
-#' @importFrom cli cli_inform cli_warn col_blue cli_text
-#' @export
-#' @keywords check-forecasts
-#' @examples
-#' dat <- as_forecast(example_quantile)
-#' print(dat)
-print.forecast_binary <- function(x, ...) {
-
-  # check whether object passes validation
-  validation <- try(do.call(validate_forecast, list(data = x)), silent = TRUE)
-  if (inherits(validation, "try-error")) {
-    cli_warn(
-      c(
-        "!" = "Error in validating forecast object: {validation}."
-      )
-    )
-  }
-
-  # get forecast type, forecast unit and score columns
-  forecast_type <- try(
-    do.call(get_forecast_type, list(data = x)),
-    silent = TRUE
-  )
-  forecast_unit <- get_forecast_unit(x)
-
-  # Print forecast object information
-  if (inherits(forecast_type, "try-error")) {
-    cli_inform(
-      "Could not determine forecast type due to error in validation."
-    )
-  } else {
-    cli_text(
-      col_blue(
-        "Forecast type:"
-      )
-    )
-    cli_text(
-      "{forecast_type}"
-    )
-  }
-
-  if (length(forecast_unit) == 0) {
-    cli_inform(
-      c(
-        "!" = "Could not determine forecast unit."
-      )
-    )
-  } else {
-    cli_text(
-      col_blue(
-        "Forecast unit:"
-      )
-    )
-    cli_text(
-      "{forecast_unit}"
-    )
-  }
-
-  cat("\n")
-  NextMethod(x, ...)
-
-  return(invisible(x))
-}
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_quantile <- print.forecast_binary
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_point <- print.forecast_binary
-
-#' @rdname print.forecast_binary
-#' @export
-print.forecast_sample <- print.forecast_binary

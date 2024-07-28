@@ -1,6 +1,6 @@
 #' @title Check whether an input is an atomic vector of mode 'numeric'
 #'
-#' @description Helper function
+#' @description Helper function to check whether an input is a numeric vector.
 #' @param x input to check
 #' @inheritDotParams checkmate::check_numeric
 #' @importFrom checkmate check_atomic_vector check_numeric
@@ -22,7 +22,8 @@ check_numeric_vector <- function(x, ...) {
 
 #' @title Helper function to convert assert statements into checks
 #'
-#' @description Tries to execute an expression. Internally, this is used to
+#' @description
+#' Tries to execute an expression. Internally, this is used to
 #' see whether assertions fail when checking inputs (i.e. to convert an
 #' `assert_*()` statement into a check). If the expression fails, the error
 #' message is returned. If the expression succeeds, `TRUE` is returned.
@@ -40,58 +41,18 @@ check_try <- function(expr) {
 }
 
 
-#' @title Check Variable is not NULL
-#'
-#' @description
-#' Check whether a certain variable is not `NULL` and return the name of that
-#' variable and the function call where the variable is missing. This function
-#' is a helper function that should only be called within other functions
-#' @param ... The variables to check
-#' @inherit document_assert_functions return
-#' @importFrom cli cli_abort
-#' @return The function returns `NULL`, but throws an error if the variable is
-#' missing.
-#'
-#' @keywords internal_input_check
-assert_not_null <- function(...) {
-  vars <- list(...)
-  varnames <- names(vars)
-
-  calling_function <- deparse(sys.calls()[[sys.nframe() - 1]])
-  # Get the function name
-  calling_function <- as.list(
-    strsplit(
-      calling_function, "\\(", fixed = TRUE
-    )
-  )[[1]][1]
-
-  for (i in seq_along(vars)) {
-    #nolint start: object_usage_linter
-    varname <- varnames[i]
-    if (is.null(vars[[i]])) {
-      cli_abort(
-        c(
-          "!" = "variable {varname} is {.val {NULL}} in the following
-          function call: {.fn {calling_function}}."
-        )
-      )
-    }
-    #nolint end
-  }
-  return(invisible(NULL))
-}
-
-
-#' @title Assure that Data Has a `model` Column
+#' @title Assure that data has a `model` column
 #'
 #' @description
 #' Check whether the data.table has a column called `model`.
 #' If not, a column called `model` is added with the value `Unspecified model`.
 #' @inheritParams as_forecast
 #' @importFrom cli cli_inform
+#' @importFrom checkmate assert_data_table
 #' @return The data.table with a column called `model`
 #' @keywords internal_input_check
 ensure_model_column <- function(data) {
+  assert_data_table(data)
   if (!("model" %in% colnames(data))) {
     #nolint start: keyword_quote_linter
     cli_warn(
@@ -109,13 +70,16 @@ ensure_model_column <- function(data) {
 
 
 #' Check that all forecasts have the same number of quantiles or samples
-#' @description Function checks the number of quantiles or samples per forecast.
+#' @description
+#' Function checks the number of quantiles or samples per forecast.
 #' If the number of quantiles or samples is the same for all forecasts, it
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.
+#' @importFrom checkmate assert_subset
 #' @inherit document_check_functions params return
 #' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
+  data <- ensure_data.table(data)
   data <- na.omit(data)
   # check whether there are the same number of quantiles, samples --------------
   data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
@@ -139,12 +103,13 @@ check_number_per_forecast <- function(data, forecast_unit) {
 #' Check that there are no duplicate forecasts
 #'
 #' @description
-#' Runs [get_duplicate_forecasts()] and returns a message if an issue is encountered
+#' Runs [get_duplicate_forecasts()] and returns a message if an issue is
+#' encountered
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_duplicates <- function(data, forecast_unit = get_forecast_unit(data)) {
-  check_duplicates <- get_duplicate_forecasts(data, forecast_unit = forecast_unit)
+check_duplicates <- function(data) {
+  check_duplicates <- get_duplicate_forecasts(data)
 
   if (nrow(check_duplicates) > 0) {
     msg <- paste0(
@@ -201,7 +166,7 @@ check_columns_present <- function(data, columns) {
 #' @keywords internal_input_check
 test_columns_present <- function(data, columns) {
   check <- check_columns_present(data, columns)
-  return(is.logical(check))
+  return(isTRUE(check))
 }
 
 #' Test whether column names are NOT present in a data.frame
@@ -210,11 +175,8 @@ test_columns_present <- function(data, columns) {
 #' more columns are present, the function returns FALSE.
 #' @inheritParams document_check_functions
 #' @return Returns TRUE if none of the columns are present and FALSE otherwise
+#' @importFrom checkmate test_names
 #' @keywords internal_input_check
 test_columns_not_present <- function(data, columns) {
-  if (any(columns %in% colnames(data))) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+  test_names(colnames(data), disjunct.from = columns)
 }

@@ -4,7 +4,7 @@
 \alias{scoring-functions-binary}
 \alias{brier_score}
 \alias{logs_binary}
-\title{Metrics for Binary Outcomes}
+\title{Metrics for binary outcomes}
 \usage{
 brier_score(observed, predicted)
 
@@ -34,12 +34,11 @@ prediction and the observed outcome. The Brier score is a proper scoring
 rule. Small values are better (best is 0, the worst is 1).
 
 \deqn{
-  \textrm{Brier\_Score} = \frac{1}{N} \sum_{t = 1}^{n} (\textrm{prediction}_t -
-  \textrm{outcome}_t)^2,
+  \textrm{Brier\_Score} = (\textrm{prediction} - \textrm{outcome})^2,
 }{
-  Brier_Score = 1/N sum_{t = 1}^{n} (prediction_t - outcome_t)²,
-} where \eqn{\textrm{outcome}_t \in \{0, 1\}}{outcome_t in {0, 1}}, and
-\eqn{\textrm{prediction}_t \in [0, 1]}{prediction_t in [0, 1]} represents
+  Brier_Score = (prediction - outcome)²,
+} where \eqn{\textrm{outcome} \in \{0, 1\}}{outcome in {0, 1}}, and
+\eqn{\textrm{prediction} \in [0, 1]}{prediction in [0, 1]} represents
 the probability that the outcome is equal to 1.
 
 \strong{Log score for binary outcomes}
@@ -49,12 +48,14 @@ assigned to the observed value. It is a proper scoring rule. Small values
 are better (best is zero, worst is infinity).
 }
 \details{
+\strong{Input formats}
+
 The functions require users to provide observed values as a factor in order
 to distinguish its input from the input format required for scoring point
 forecasts. Internally, however, factors will be converted to numeric values.
 A factor \verb{observed = factor(c(0, 1, 1, 0, 1)} with two levels (\code{0} and \code{1})
 would internally be coerced to a numeric vector (in this case this would
-result in the numeric vector c(1, 2, 2, 1, 1)). After subtracting 1, the
+result in the numeric vector \code{c(1, 2, 2, 1, 1)}). After subtracting 1, the
 resulting vector (\code{c(0, 1, 1, 0)} in this case) is used for internal
 calculations. All predictions are assumed represent the probability that the
 outcome is equal of the highest factor level (in this case that the

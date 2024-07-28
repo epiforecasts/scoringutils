@@ -4,24 +4,30 @@
 \alias{transform_forecasts}
 \title{Transform forecasts and observed values}
 \usage{
-transform_forecasts(data, fun = log_shift, append = TRUE, label = "log", ...)
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
 }
 \arguments{
-\item{data}{A forecast object (a validated data.table with predicted and
+\item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 
 \item{fun}{A function used to transform both observed values and predictions.
-The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is essentially
-the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
+The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is
+essentially the same as \code{\link[=log]{log()}}, but has an additional arguments (\code{offset})
 that allows you add an offset before applying the logarithm. This is often
-helpful as the natural log transformation is not defined at zero. A common,
-and pragmatic solution, is to add a small offset to the data before applying
-the log transformation. In our work we have often used an offset of 1 but
-the precise value will depend on your application.}
+helpful as the natural log transformation is not defined at zero. A
+common, and pragmatic solution, is to add a small offset to the data
+before applying the log transformation. In our work we have often used an
+offset of 1 but the precise value will depend on your application.}
 
 \item{append}{Logical, defaults to \code{TRUE}. Whether or not to append a
 transformed version of the data to the currently existing data (\code{TRUE}). If
-selected, the data gets transformed and appended to the existing data frame,
+selected, the data gets transformed and appended to the existing data,
 making it possible to use the outcome directly in \code{\link[=score]{score()}}. An additional
 column, 'scale', gets created that denotes which rows or untransformed
 ('scale' has the value "natural") and which have been transformed ('scale'
@@ -41,8 +47,7 @@ be one additional column, `scale', present which will be set to "natural"
 for the untransformed forecasts.
 }
 \description{
-Function to transform forecasts and observed values before
-scoring.
+Function to transform forecasts and observed values before scoring.
 }
 \details{
 There are a few reasons, depending on the circumstances, for
@@ -62,14 +67,13 @@ transformation after the score risks losing propriety of the proper scoring
 rule.
 }
 \examples{
-
 library(magrittr) # pipe operator
 
 # transform forecasts using the natural logarithm
 # negative values need to be handled (here by replacing them with 0)
 example_quantile \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
 # Here we use the default function log_shift() which is essentially the same
 # as log(), but has an additional arguments (offset) that allows you add an
 # offset before applying the logarithm.
@@ -78,7 +82,7 @@ example_quantile \%>\%
 
 # alternatively, integrating the truncation in the transformation function:
 example_quantile \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
  transform_forecasts(
    fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
  ) \%>\%
@@ -87,7 +91,7 @@ example_quantile \%>\%
 # specifying an offset for the log transformation removes the
 # warning caused by zeros in the data
 example_quantile \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
   transform_forecasts(offset = 1, append = FALSE) \%>\%
   head()
@@ -95,14 +99,14 @@ example_quantile \%>\%
 # adding square root transformed forecasts to the original ones
 example_quantile \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%
   score() \%>\%
   summarise_scores(by = c("model", "scale"))
 
 # adding multiple transformations
 example_quantile \%>\%
-  as_forecast() \%>\%
+  as_forecast_quantile() \%>\%
   .[, observed := ifelse(observed < 0, 0, observed)] \%>\%
   transform_forecasts(fun = log_shift, offset = 1) \%>\%
   transform_forecasts(fun = sqrt, label = "sqrt") \%>\%

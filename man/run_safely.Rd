@@ -4,12 +4,15 @@
 \alias{run_safely}
 \title{Run a function safely}
 \usage{
-run_safely(..., fun)
+run_safely(..., fun, metric_name)
 }
 \arguments{
-\item{...}{Arguments to pass to \code{fun}}
+\item{...}{Arguments to pass to \code{fun}.}
 
-\item{fun}{A function to execute}
+\item{fun}{A function to execute.}
+
+\item{metric_name}{A character string with the name of the metric. Used to
+provide a more informative warning message in case \code{fun} errors.}
 }
 \value{
 The result of \code{fun} or \code{NULL} if \code{fun} errors
@@ -28,9 +31,9 @@ metrics in \code{\link[=score]{score()}}.
 }
 \examples{
 f <- function(x) {x}
-run_safely(2, fun = f)
-run_safely(2, y = 3, fun = f)
-run_safely(fun = f)
-run_safely(y = 3, fun = f)
+scoringutils:::run_safely(2, fun = f, metric_name = "f")
+scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
+scoringutils:::run_safely(fun = f, metric_name = "f")
+scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
 }
 \keyword{scoring}

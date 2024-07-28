@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics-sample.R
 \name{se_mean_sample}
 \alias{se_mean_sample}
-\title{Squared Error Of The Mean (Sample-Based Version)}
+\title{Squared error of the mean (sample-based version)}
 \usage{
 se_mean_sample(observed, predicted)
 }
@@ -12,9 +12,6 @@ se_mean_sample(observed, predicted)
 \item{predicted}{nxN matrix of predictive samples, n (number of rows) being
 the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
-}
-\value{
-vector with the scoring values
 }
 \description{
 Squared error of the mean calculated as

@@ -2,15 +2,15 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{select_metrics}
 \alias{select_metrics}
-\title{Select Metrics From A List of Functions}
+\title{Select metrics from a list of functions}
 \usage{
 select_metrics(metrics, select = NULL, exclude = NULL)
 }
 \arguments{
 \item{metrics}{A list of scoring functions.}
 
-\item{select}{A character vector of scoring rules to select from the list.
-If \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
+\item{select}{A character vector of scoring rules to select from the list. If
+\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}
