@@ -24,6 +24,8 @@ as_forecast_point(data, ...)
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
 on required input formats.}
 
+\item{...}{Unused}
+
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
 single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
@@ -44,6 +46,9 @@ This column will be renamed to "model".}
 \description{
 Create a \code{forecast} object for point forecasts. See more information on
 forecast types and expected input formats by calling \verb{?}\code{\link[=as_forecast]{as_forecast()}}.
+
+When converting a \code{forecast_quantile} object into a \code{forecast_point} object,
+the 0.5 quantile is extracted and returned as the point forecast.
 }
 \seealso{
 \code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},

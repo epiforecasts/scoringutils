@@ -12,6 +12,33 @@ as_forecast_binary(
   model = NULL
 )
 }
+\arguments{
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
+
+\item{forecast_unit}{(optional) Name of the columns in \code{data} (after
+any renaming of columns) that denote the unit of a
+single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+If \code{NULL} (the default), all columns that are not required columns are
+assumed to form the unit of a single forecast. If specified, all columns
+that are not part of the forecast unit (or required columns) will be removed.}
+
+\item{observed}{(optional) Name of the column in \code{data} that contains the
+observed values. This column will be renamed to "observed".}
+
+\item{predicted}{(optional) Name of the column in \code{data} that contains the
+predicted values. This column will be renamed to "predicted".}
+
+\item{model}{(optional) Name of the column in \code{data} that contains the names
+of the models/forecasters that generated the predicted values.
+This column will be renamed to "model".}
+}
 \description{
-Create a \code{forecast} object for binary forecasts
+Create a \code{forecast} object for binary forecasts. See more information on
+forecast types and expected input formats by calling \verb{?}\code{\link[=as_forecast]{as_forecast()}}.
+}
+\seealso{
+\code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
+\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
 }
