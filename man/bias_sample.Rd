@@ -19,7 +19,7 @@ respect to the observed values.
 }
 \description{
 Determines bias from predictive Monte-Carlo samples. The function
-automatically recognises, whether forecasts are continuous or
+automatically recognises whether forecasts are continuous or
 integer valued and adapts the Bias function accordingly.
 }
 \details{
@@ -45,6 +45,17 @@ to adjust for the integer nature of the forecasts.
 In both cases, Bias can assume values between
 -1 and 1 and is 0 ideally.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-sample.png}
+}
+}
+
 \examples{
 
 ## integer valued forecasts

@@ -23,6 +23,17 @@ Squared error of the mean calculated as
 }
 The mean prediction is calculated as the mean of the predictive samples.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-sample.png}
+}
+}
+
 \examples{
 observed <- rnorm(30, mean = 1:30)
 predicted_values <- matrix(rnorm(30, mean = 1:30))

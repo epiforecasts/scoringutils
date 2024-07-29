@@ -33,6 +33,17 @@ The median prediction is the predicted value for which quantile_level == 0.5,
 the function therefore requires 0.5 to be among the quantile levels in
 \code{quantile_level}.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 observed <- rnorm(30, mean = 1:30)
 predicted_values <- replicate(3, rnorm(30, mean = 1:30))

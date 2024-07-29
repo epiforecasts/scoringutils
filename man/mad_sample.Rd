@@ -31,6 +31,17 @@ measured as the normalised median of the absolute deviation from
 the median of the predictive samples. For details, see \link[stats:mad]{mad()}
 and the explanations given in Funk et al. (2019)
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-sample.png}
+}
+}
+
 \examples{
 predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
 mad_sample(predicted = predicted)

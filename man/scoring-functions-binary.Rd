@@ -48,8 +48,6 @@ assigned to the observed value. It is a proper scoring rule. Small values
 are better (best is zero, worst is infinity).
 }
 \details{
-\strong{Input formats}
-
 The functions require users to provide observed values as a factor in order
 to distinguish its input from the input format required for scoring point
 forecasts. Internally, however, factors will be converted to numeric values.
@@ -58,7 +56,7 @@ would internally be coerced to a numeric vector (in this case this would
 result in the numeric vector \code{c(1, 2, 2, 1, 1)}). After subtracting 1, the
 resulting vector (\code{c(0, 1, 1, 0)} in this case) is used for internal
 calculations. All predictions are assumed represent the probability that the
-outcome is equal of the highest factor level (in this case that the
+outcome is equal of the last/highest factor level (in this case that the
 outcome is equal to 1).
 
 You could alternatively also provide a vector like
@@ -69,6 +67,17 @@ If you want your predictions to be probabilities that the outcome is "a",
 then you could of course make \code{observed} a factor with levels swapped, i.e.
 \code{observed = factor(c("a", "b", "b", "a"), levels = c("b", "a"))}
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-binary-point.png}
+}
+}
+
 \examples{
 observed <- factor(sample(c(0, 1), size = 30, replace = TRUE))
 predicted <- runif(n = 30, min = 0, max = 1)

@@ -94,6 +94,7 @@
 #' @param na.rm If TRUE, ignore NA values when computing the score.
 #' @importFrom stats weighted.mean
 #' @importFrom checkmate assert_logical
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @return
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
@@ -229,6 +230,7 @@ underprediction_quantile <- function(observed, predicted, quantile_level, ...) {
 #' prediction interval is formed by the 0.25 and 0.75 quantiles of the
 #' predictive distribution.
 #' @inheritParams wis
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @param interval_range A single number with the range of the prediction
 #'   interval in percent (e.g. 50 for a 50% prediction interval) for which you
 #'   want to compute interval coverage.
@@ -327,6 +329,7 @@ interval_coverage <- function(observed, predicted,
 #' A numeric vector of length n with the interval coverage deviation
 #' for each forecast (with the forecast itself comprising one or multiple
 #' prediction intervals).
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @export
 #' @keywords metric
 #' @examples
@@ -427,6 +430,7 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 #' @param na.rm Logical. Should missing values be removed?
 #' @importFrom cli cli_inform
 #' @inheritParams wis
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @return scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
@@ -534,6 +538,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' available in the given quantile levels.
 #' This is done using linear interpolation between the two innermost quantiles.
 #' @inheritParams bias_quantile_single_vector
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @return scalar with the imputed median prediction
 #' @keywords internal
 interpolate_median <- function(predicted, quantile_level) {
@@ -568,6 +573,7 @@ interpolate_median <- function(predicted, quantile_level) {
 #' the function therefore requires 0.5 to be among the quantile levels in
 #' `quantile_level`.
 #' @inheritParams wis
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @return Numeric vector of length N with the absolute error of the median.
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
@@ -645,6 +651,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' (the result of calling `rowMeans()` on the matrix of quantile scores that
 #' is computed based on the observed and predicted values).
 #' @inheritParams wis
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @examples
 #' observed <- rnorm(10, mean = 1:10)
 #' alpha <- 0.5

@@ -66,6 +66,17 @@ interval coverage deviation =
 The interval coverage deviation is then averaged across all prediction
 intervals. The median is ignored when computing coverage deviation.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 observed <- c(1, -15, 22)
 predicted <- rbind(
