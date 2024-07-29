@@ -142,4 +142,3 @@ NULL
 #' @name illustration-input-metric-quantile
 #' @keywords internal
 NULL
-
