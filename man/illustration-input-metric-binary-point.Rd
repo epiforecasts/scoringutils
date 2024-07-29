@@ -17,3 +17,4 @@ Illustration of required inputs for binary and point forecasts
 }
 }
 
+\keyword{internal}

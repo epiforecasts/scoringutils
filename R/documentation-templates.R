@@ -112,6 +112,7 @@ NULL
 #'   \figure{metrics-sample.png}
 #' }
 #' @name illustration-input-metric-sample
+#' @keywords internal
 NULL
 
 #' Illustration of required inputs for binary and point forecasts
@@ -125,6 +126,7 @@ NULL
 #'   \figure{metrics-binary-point.png}
 #' }
 #' @name illustration-input-metric-binary-point
+#' @keywords internal
 NULL
 
 #' Illustration of required inputs for quantile-based forecasts
@@ -138,5 +140,6 @@ NULL
 #'   \figure{metrics-quantile.png}
 #' }
 #' @name illustration-input-metric-quantile
+#' @keywords internal
 NULL
 

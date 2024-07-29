@@ -17,3 +17,4 @@ Illustration of required inputs for sample-based forecasts
 }
 }
 
+\keyword{internal}
