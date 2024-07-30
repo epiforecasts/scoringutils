@@ -35,6 +35,17 @@ upper bound formed by a pair of predictive quantiles. For example, a 50\%
 prediction interval is formed by the 0.25 and 0.75 quantiles of the
 predictive distribution.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 observed <- c(1, -15, 22)
 predicted <- rbind(

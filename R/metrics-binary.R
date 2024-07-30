@@ -1,7 +1,6 @@
 #' Metrics for binary outcomes
 #'
 #' @details
-#' **Input formats**
 #'
 #' The functions require users to provide observed values as a factor in order
 #' to distinguish its input from the input format required for scoring point
@@ -11,7 +10,7 @@
 #' result in the numeric vector `c(1, 2, 2, 1, 1)`). After subtracting 1, the
 #' resulting vector (`c(0, 1, 1, 0)` in this case) is used for internal
 #' calculations. All predictions are assumed represent the probability that the
-#' outcome is equal of the highest factor level (in this case that the
+#' outcome is equal of the last/highest factor level (in this case that the
 #' outcome is equal to 1).
 #'
 #' You could alternatively also provide a vector like
@@ -36,6 +35,7 @@
 #'
 #' brier_score(observed, predicted)
 #' logs_binary(observed, predicted)
+#' @inheritSection illustration-input-metric-binary-point Input format
 #' @name scoring-functions-binary
 NULL
 

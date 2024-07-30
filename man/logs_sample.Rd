@@ -32,6 +32,17 @@ integer-valued Monte Carlo Samples. The Log score can be used for specific
 discrete probability distributions. See the scoringRules package for
 more details.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-sample.png}
+}
+}
+
 \examples{
 observed <- rpois(30, lambda = 1:30)
 predicted <- replicate(200, rpois(n = 30, lambda = 1:30))

@@ -14,7 +14,7 @@ metrics_binary(select = NULL, exclude = NULL)
 If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
-A list of scoring rules.
+A list of scoring functions.
 }
 \description{
 Helper function that returns a named list of default
@@ -26,6 +26,17 @@ The default scoring rules are:
 \item "log_score" = \code{\link[=logs_binary]{logs_binary()}}
 }
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-binary-point.png}
+}
+}
+
 \examples{
 metrics_binary()
 metrics_binary(select = "brier_score")
