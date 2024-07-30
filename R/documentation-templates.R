@@ -108,3 +108,45 @@ NULL
 #' @name document_test_functions
 #' @keywords internal
 NULL
+
+#' Illustration of required inputs for sample-based forecasts
+#' @details # Input format
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{metrics-sample.png}
+#' }
+#' @name illustration-input-metric-sample
+#' @keywords internal
+NULL
+
+#' Illustration of required inputs for binary and point forecasts
+#' @details # Input format
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{metrics-binary-point.png}
+#' }
+#' @name illustration-input-metric-binary-point
+#' @keywords internal
+NULL
+
+#' Illustration of required inputs for quantile-based forecasts
+#' @details # Input format
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{metrics-quantile.png}
+#' }
+#' @name illustration-input-metric-quantile
+#' @keywords internal
+NULL

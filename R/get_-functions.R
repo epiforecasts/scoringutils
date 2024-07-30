@@ -485,10 +485,10 @@ get_coverage <- function(forecast, by = "model") {
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' get_forecast_counts(
-#'   as_forecast_quantile(example_quantile),
-#'   by = c("model", "target_type")
-#' )
+#' library(magrittr) # pipe operator
+#' example_quantile %>%
+#'   as_forecast_quantile() %>%
+#'   get_forecast_counts(by = c("model", "target_type"))
 get_forecast_counts <- function(forecast,
                                 by = get_forecast_unit(forecast),
                                 collapse = c("quantile_level", "sample_id")) {

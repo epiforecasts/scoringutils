@@ -14,7 +14,7 @@ metrics_quantile(select = NULL, exclude = NULL)
 If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
-A list of scoring rules.
+A list of scoring functions.
 }
 \description{
 Helper function that returns a named list of default
@@ -43,6 +43,17 @@ accept get passed on to it. \code{interval_range = 90} is set in the function
 definition, as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would
 mean it would also get passed to \code{interval_coverage_50}.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 metrics_quantile()
 metrics_quantile(select = "wis")

@@ -71,6 +71,17 @@ percentile rank will equal the proportion of predictive samples below the
 observed value, and the bias metric coincides with the one for
 continuous forecasts (see \code{\link[=bias_sample]{bias_sample()}}).
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 predicted <- matrix(c(1.5:23.5, 3.3:25.3), nrow = 2, byrow = TRUE)
 quantile_level <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)

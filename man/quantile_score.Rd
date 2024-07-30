@@ -65,6 +65,17 @@ See the SI of Bracher et al. (2021) for more details.
 levels provided. For a set of quantile levels that form pairwise central
 prediction intervals, the quantile score is equivalent to the interval score.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 observed <- rnorm(10, mean = 1:10)
 alpha <- 0.5

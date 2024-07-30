@@ -25,7 +25,12 @@ Calculate the correlation between different metrics for a data.frame of
 scores as produced by \code{\link[=score]{score()}}.
 }
 \examples{
-scores <- score(as_forecast_quantile(example_quantile))
+library(magrittr) # pipe operator
+
+scores <- example_quantile \%>\%
+ as_forecast_quantile() \%>\%
+ score()
+
 get_correlations(scores)
 }
 \keyword{scoring}

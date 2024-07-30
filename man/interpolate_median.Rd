@@ -23,4 +23,15 @@ Internal function to interpolate the median prediction if it is not
 available in the given quantile levels.
 This is done using linear interpolation between the two innermost quantiles.
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \keyword{internal}

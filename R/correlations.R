@@ -19,7 +19,12 @@
 #' @export
 #' @keywords scoring
 #' @examples
-#' scores <- score(as_forecast_quantile(example_quantile))
+#' library(magrittr) # pipe operator
+#'
+#' scores <- example_quantile %>%
+#'  as_forecast_quantile() %>%
+#'  score()
+#'
 #' get_correlations(scores)
 get_correlations <- function(scores,
                              metrics = get_metrics(scores),
@@ -39,10 +44,4 @@ get_correlations <- function(scores,
   correlations <- copy(correlations)[, metric := rn][, rn := NULL]
 
   return(correlations[])
-}
-
-# helper function to obtain lower triangle of matrix
-get_lower_tri <- function(cormat) {
-  cormat[lower.tri(cormat)] <- NA
-  return(cormat)
 }
