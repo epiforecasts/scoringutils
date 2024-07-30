@@ -59,14 +59,15 @@ test_that("quantile_to_interval_dataframe() works", {
 })
 
 
-test_that("sample_to_quantiles works", {
+test_that("as_forecast_quantiles works", {
   samples <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
     model = "model1",
     observed = 1:10,
     predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
     sample_id = rep(1:5, each = 10)
-  )
+  ) %>%
+    as_forecast_sample()
 
   quantile <- data.frame(
     date = rep(as.Date("2020-01-01") + 1:10, each = 2),
@@ -76,34 +77,33 @@ test_that("sample_to_quantiles works", {
     predicted = rep(2:11, each = 2) + c(0, 2)
   )
 
-  expect_error(
-    sample_to_quantile(samples, quantile_level = c(0.25, 0.75)),
-    "The input needs to be a valid forecast object."
+  expect_no_condition(
+    as_forecast_quantile(samples, probs = c(0.25, 0.75))
   )
 
   wrongclass <- as_forecast_sample(samples)
   class(wrongclass) <- c("forecast_point", "data.table", "data.frame")
   expect_error(
-    sample_to_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
-    'Desired forecast type: "sample"'
+    as_forecast_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
+    "Assertion on 'quantile_level' failed: Must be of type"
   )
 
 
-  quantile2 <- sample_to_quantile(
+  quantile2 <- as_forecast_quantile(
     as_forecast_sample(samples),
-    quantile_level = c(0.25, 0.75)
+    probs = c(0.25, 0.75)
   )
 
   expect_equal(quantile, as.data.frame(quantile2))
 
-  # Verify that `type` is correctly scoped in sample_to_quantile(), as it is
+  # Verify that `type` is correctly scoped in as_forecast_quantile(), as it is
   # also an argument.
-  # If it's not scoped well, the call to `sample_to_quantile()` will fail.
+  # If it's not scoped well, the call to `as_forecast_quantile()` will fail.
   samples$type <- "test"
 
-  quantile3 <- sample_to_quantile(
+  quantile3 <- as_forecast_quantile(
     as_forecast_sample(samples),
-    quantile_level = c(0.25, 0.75)
+    probs = c(0.25, 0.75)
   )
   quantile3$type <- NULL
 
@@ -113,12 +113,12 @@ test_that("sample_to_quantiles works", {
   )
 })
 
-test_that("sample_to_quantiles issue 557 fix", {
+test_that("as_forecast_quantiles issue 557 fix", {
 
   out <- example_sample_discrete %>%
     as_forecast_sample() %>%
-    sample_to_quantile(
-      quantile_level = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+    as_forecast_quantile(
+      probs = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%
     score()
 
@@ -269,7 +269,13 @@ test_that("quantile_to_interval works - data.frame case", {
     colnames(ex_interval),
     c(colnames(ex), "boundary", "interval_range")
   )
+
+  expect_error(
+    quantile_to_interval(x = "not working"),
+    "Input must be either a data.frame or a numeric vector."
+  )
 })
+
 
 
 

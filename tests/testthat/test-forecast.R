@@ -90,7 +90,11 @@ test_that("as_forecast() warns if there are different numbers of quantiles", {
   expect_no_condition(w)
 })
 
-
+test_that("as_forecast_point() works", {
+  expect_no_condition(
+    as_forecast_point(as_forecast_quantile(na.omit(example_quantile)))
+  )
+})
 
 test_that("check_columns_present() works", {
   expect_equal(
