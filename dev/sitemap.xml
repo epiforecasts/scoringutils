@@ -70,6 +70,9 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_protected_columns.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_range_from_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_type.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-binary-point.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-quantile.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/index.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/interpolate_median.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/interval_coverage.html</loc></url>

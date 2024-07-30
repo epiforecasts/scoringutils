@@ -111,8 +111,7 @@ the highest level of the factor <code>observed</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><strong>Input formats</strong></p>
-<p>The functions require users to provide observed values as a factor in order
+    <p>The functions require users to provide observed values as a factor in order
 to distinguish its input from the input format required for scoring point
 forecasts. Internally, however, factors will be converted to numeric values.
 A factor <code>observed = factor(c(0, 1, 1, 0, 1)</code> with two levels (<code>0</code> and <code>1</code>)
@@ -120,7 +119,7 @@ would internally be coerced to a numeric vector (in this case this would
 result in the numeric vector <code>c(1, 2, 2, 1, 1)</code>). After subtracting 1, the
 resulting vector (<code>c(0, 1, 1, 0)</code> in this case) is used for internal
 calculations. All predictions are assumed represent the probability that the
-outcome is equal of the highest factor level (in this case that the
+outcome is equal of the last/highest factor level (in this case that the
 outcome is equal to 1).</p>
 <p>You could alternatively also provide a vector like
 <code>observed = factor(c("a", "b", "b", "a"))</code> (with two levels, <code>a</code> and <code>b</code>),
@@ -129,6 +128,11 @@ then represent the probability that the outcome is equal to "b".
 If you want your predictions to be probabilities that the outcome is "a",
 then you could of course make <code>observed</code> a factor with levels swapped, i.e.
 <code>observed = factor(c("a", "b", "b", "a"), levels = c("b", "a"))</code></p>
+    </div>
+    <div class="section level2">
+    <h2 id="input-format">Input format<a class="anchor" aria-label="anchor" href="#input-format"></a></h2>
+    <p></p><div style="text-align: left">
+  <img src="figures/metrics-binary-point.png" style="width:750px;max-width:100%;"></div>
     </div>
 
     <div class="section level2">

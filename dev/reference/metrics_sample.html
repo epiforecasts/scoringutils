@@ -103,7 +103,12 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of scoring rules.</p>
+    <p>A list of scoring functions.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="input-format">Input format<a class="anchor" aria-label="anchor" href="#input-format"></a></h2>
+    <p></p><div style="text-align: left">
+  <img src="figures/metrics-sample.png" style="width:750px;max-width:100%;"></div>
     </div>
 
     <div class="section level2">
@@ -126,7 +131,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(res)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413fb8e488&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765aa3eaf8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dss</span>
@@ -135,7 +140,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::dss_sample(y = observed, dat = predicted, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413e65b038&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x557659ef36f8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $crps</span>
@@ -167,7 +172,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(crps)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564138c694d0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576563d5650&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -177,7 +182,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$overprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413f2142f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765a576ac8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -187,7 +192,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$underprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413f2175c0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765a575f30&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -197,7 +202,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$dispersion)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413f216a98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765a5753d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -207,7 +212,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::logs_sample(y = observed, dat = predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564140023018&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5576596b4568&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mad</span>
@@ -217,7 +222,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sharpness &lt;- apply(predicted, MARGIN = 1, mad, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(sharpness)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564138c178e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765d3ccab0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
@@ -229,7 +234,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ae_median &lt;- abs(observed - median_predictions)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(ae_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413ee44730&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x557659b9eab0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $se_mean</span>
@@ -240,7 +245,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     se_mean &lt;- (observed - mean_predictions)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(se_mean)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56413f215f00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765a578630&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">metrics_sample</span><span class="op">(</span>select <span class="op">=</span> <span class="st">"mad"</span><span class="op">)</span></span></span>
@@ -251,7 +256,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sharpness &lt;- apply(predicted, MARGIN = 1, mad, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(sharpness)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564138c178e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55765d3ccab0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
