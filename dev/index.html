@@ -94,7 +94,7 @@
 <p>Before scoring, input data needs to be validated and transformed into a forecast object using the function <code><a href="reference/as_forecast.html">as_forecast()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/as_forecast.html">as_forecast_quantile</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span></span>
 <span>    forecast_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"location"</span>, <span class="st">"forecast_date"</span>, <span class="st">"target_end_date"</span>, <span class="st">"target_type"</span>, <span class="st">"model"</span>, <span class="st">"horizon"</span></span>
 <span>    <span class="op">)</span></span>
