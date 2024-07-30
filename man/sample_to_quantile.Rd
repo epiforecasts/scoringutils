@@ -28,6 +28,9 @@ Transform data from a format that is based on predictive samples to a format
 based on plain quantiles.
 }
 \examples{
-sample_to_quantile(as_forecast_sample(example_sample_discrete))
+library(magrittr) # pipe operator
+example_sample_discrete \%>\%
+  as_forecast_sample() \%>\%
+  sample_to_quantile()
 }
 \keyword{data-handling}

@@ -46,11 +46,11 @@ updated_metrics <- c(
   metrics_quantile(),
   "interval_coverage_70" = interval_coverage_70
 )
-score(
-  as_forecast_quantile(example_quantile),
-  metrics = updated_metrics
-)
 
+library(magrittr) # pipe operator
 
+example_quantile \%>\%
+  as_forecast_quantile() \%>\%
+  score(metrics = updated_metrics)
 }
 \keyword{metric}

@@ -24,7 +24,10 @@
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(as_forecast_quantile(example_quantile))
+#' library(magrittr) # pipe operator
+#' scores <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   score()
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #'
 #' plot_wis(scores,
@@ -111,7 +114,10 @@ plot_wis <- function(scores,
 #' @importFrom checkmate assert_subset
 #' @export
 #' @examples
-#' scores <- score(as_forecast_quantile(example_quantile))
+#' library(magrittr) # pipe operator
+#' scores <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   score()
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #' scores <- summarise_scores(
 #'   scores, by = c("model", "target_type"),
@@ -309,7 +315,10 @@ plot_quantile_coverage <- function(coverage,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' scores <- score(as_forecast_quantile(example_quantile))
+#' library(magrittr) # pipe operator
+#' scores <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   score()
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
 #'   facet_wrap(~target_type)
@@ -444,6 +453,7 @@ plot_pairwise_comparisons <- function(comparison_result,
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
+#' library(magrittr) # pipe operator
 #'
 #' # PIT histogram in vector based format
 #' observed <- rnorm(30, mean = 1:30)
@@ -452,11 +462,15 @@ plot_pairwise_comparisons <- function(comparison_result,
 #' plot_pit(pit)
 #'
 #' # quantile-based pit
-#' pit <- get_pit(as_forecast_quantile(example_quantile), by = "model")
+#' pit <- example_quantile %>%
+#'   as_forecast_quantile() %>%
+#'   get_pit(by = "model")
 #' plot_pit(pit, breaks = seq(0.1, 1, 0.1))
 #'
 #' # sample-based pit
-#' pit <- get_pit(as_forecast_sample(example_sample_discrete), by = "model")
+#' pit <- example_sample_discrete %>%
+#'   as_forecast_sample %>%
+#'   get_pit(by = "model")
 #' plot_pit(pit)
 #' @importFrom ggplot2 ggplot aes xlab ylab geom_histogram stat theme_light after_stat
 #' @importFrom checkmate assert check_set_equal check_number
@@ -576,10 +590,10 @@ plot_pit <- function(pit,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' forecast_counts <- get_forecast_counts(
-#'   as_forecast_quantile(example_quantile),
-#'   by = c("model", "target_type", "target_end_date")
-#' )
+#' library(magrittr) # pipe operator
+#' forecast_counts <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   get_forecast_counts(by = c("model", "target_type", "target_end_date"))
 #' plot_forecast_counts(
 #'  forecast_counts, x = "target_end_date", show_counts = FALSE
 #' ) +
@@ -647,10 +661,13 @@ plot_forecast_counts <- function(forecast_counts,
 #' @export
 #' @return A ggplot object with a visualisation of correlations between metrics
 #' @examples
-#' scores <- score(as_forecast_quantile(example_quantile))
-#' correlations <- get_correlations(
-#'  summarise_scores(scores)
-#' )
+#' library(magrittr) # pipe operator
+#' scores <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   score()
+#' correlations <- scores %>%
+#'   summarise_scores() %>%
+#'   get_correlations()
 #' plot_correlations(correlations, digits = 2)
 
 plot_correlations <- function(correlations, digits = NULL) {
@@ -714,6 +731,14 @@ plot_correlations <- function(correlations, digits = NULL) {
     coord_cartesian(expand = FALSE)
   return(plot)
 }
+
+
+# helper function to obtain lower triangle of matrix
+get_lower_tri <- function(cormat) {
+  cormat[lower.tri(cormat)] <- NA
+  return(cormat)
+}
+
 
 #' @title Scoringutils ggplot2 theme
 #'
