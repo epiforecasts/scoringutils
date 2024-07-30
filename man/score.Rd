@@ -25,14 +25,13 @@ observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
 \code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
-default metrics used. Note that if you want to pass arguments to any
-given metric, you should do that through the function \code{\link[=customise_metric]{customise_metric()}}
-and pass an updated list of functions with your custom metric to
-the \code{metrics} argument in \code{score()}.}
+default metrics used. See the \emph{Customising metrics} section below for
+information on how to pass custom arguments to scoring functions.}
 
-\item{...}{Additional arguments. Currently unused but allows for future
-extensions. If you want to pass arguments to individual metrics, use
-\code{\link[=customise_metric]{customise_metric()}}.}
+\item{...}{Currently unused. You \emph{cannot} pass additional arguments to scoring
+functions via \code{...}. See the \emph{Customising metrics} section below for
+details on how to use \code{\link[purrr:partial]{purrr::partial()}} to pass arguments to individual
+metrics.}
 }
 \value{
 An object of class \code{scores}. This object is a data.table with
@@ -47,9 +46,34 @@ object (a data.table with forecasts and observations) (see \code{\link[=as_forec
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
-See the details section for more information on forecast types and input
-formats. For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
+See the \emph{Forecast types and input formats} section for more information on
+forecast types and input formats.
+For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
 well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
+}
+\details{
+\strong{Customising metrics}
+
+If you want to pass arguments to a scoring function, you need change the
+scoring function itself via e.g. \code{\link[purrr:partial]{purrr::partial()}} and pass an updated list
+of functions with your custom metric to the \code{metrics} argument in \code{score()}.
+For example, to use \code{\link[=interval_coverage]{interval_coverage()}} with \code{interval_range = 90}, you
+would define a new function, e.g.
+\code{interval_coverage_90 <- purrr::partial(interval_coverage, interval_range = 90)}
+and pass this new function to \code{metrics} in \code{score()}.
+
+Note that if you want to pass a variable as an argument, you can
+unquote it with \verb{!!} to make sure the value is evaluated only once when the
+function is created. Consider the following example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{custom_arg <- "foo"
+print1 <- purrr::partial(print, x = custom_arg)
+print2 <- purrr::partial(print, x = !!custom_arg)
+
+custom_arg <- "bar"
+print1() # prints 'bar'
+print2() # prints 'foo'
+}\if{html}{\out{</div>}}
 }
 \section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the

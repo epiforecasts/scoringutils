@@ -33,9 +33,10 @@ default), the forecast type will be inferred from the data.}
 \item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
 warnings will be created.}
 
-\item{...}{Additional arguments. Currently unused but allows for future
-extensions. If you want to pass arguments to individual metrics, use
-\code{\link[=customise_metric]{customise_metric()}}.}
+\item{...}{Currently unused. You \emph{cannot} pass additional arguments to scoring
+functions via \code{...}. See the \emph{Customising metrics} section below for
+details on how to use \code{\link[purrr:partial]{purrr::partial()}} to pass arguments to individual
+metrics.}
 }
 \value{
 Returns \code{NULL} invisibly.
