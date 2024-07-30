@@ -193,6 +193,57 @@ check_input_binary <- function(observed, predicted) {
 }
 
 
+#' @title Assert that inputs are correct for nominal forecasts
+#' @description Function assesses whether the inputs correspond to the
+#' requirements for scoring nominal forecasts.
+#' @param observed XXX
+#' @param predicted XXX
+#' @param predicted_label XXX
+#' @importFrom checkmate assert_factor assert_numeric assert_set_equal
+#' @inherit document_assert_functions return
+#' @keywords internal_input_check
+assert_input_nominal <- function(observed, predicted, predicted_label) {
+  # observed
+  assert_factor(observed, min.len = 1, min.levels = 2)
+  levels <- levels(observed)
+  n <- length(observed)
+  N <- length(levels)
+
+  # predicted label
+  assert_factor(
+    predicted_label, len = N,
+    any.missing = FALSE, empty.levels.ok = FALSE
+  )
+  assert_set_equal(levels(observed), levels(predicted_label))
+
+  # predicted
+  assert_numeric(predicted, min.len = 1, lower = 0, upper = 1)
+  if (n == 1) {
+    assert(
+      # allow one of two options
+      check_vector(predicted, len = N),
+      check_matrix(predicted, nrows = n, ncols = N)
+    )
+    summed_predictions <- .rowSums(predicted, m = 1, n = N, na.rm = TRUE)
+  } else {
+    assert_matrix(predicted, nrows = n)
+    summed_predictions <- round(rowSums(predicted, na.rm = TRUE), 10) # avoid numeric errors
+  }
+  if (!all(summed_predictions == 1)) {
+    #nolint start: keyword_quote_linter object_usage_linter
+    row_indices <- as.character(which(summed_predictions != 1))
+    cli_abort(
+      c(
+        `!` = "Probabilities belonging to a single forecast must sum to one",
+        `i` = "Found issues in row{?s} {row_indices} of {.var predicted}"
+      )
+    )
+    #nolint end
+  }
+  return(invisible(NULL))
+}
+
+
 #' @title Assert that inputs are correct for point forecast
 #' @description
 #' Function assesses whether the inputs correspond to the

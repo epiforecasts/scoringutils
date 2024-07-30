@@ -228,3 +228,47 @@ example_binary[, `:=`(
 example_binary <- unique(example_binary)
 
 usethis::use_data(example_binary, overwrite = TRUE)
+
+
+# get nominal example data ------------------------------------------------------
+# construct a nominal prediction by splitting the forecast into "low", "high",
+# and "medium". Again, this is only an illustrative example.
+
+example_nominal <- data.table::copy(example_sample_continuous)
+
+# store grouping variable
+by_vars <- c(
+  "location", "location_name", "target_end_date",
+  "target_type", "forecast_date", "horizon"
+)
+
+# generate low, medium, and high bounds and predicted label
+example_nominal[, low_bound := quantile(predicted, 0.25, na.rm = TRUE), by = by_vars]
+example_nominal[, high_bound := quantile(predicted, 0.75, na.rm = TRUE), by = by_vars]
+
+example_nominal[, low := predicted < low_bound]
+example_nominal[, medium := (predicted >= low_bound & predicted <= high_bound)]
+example_nominal[, high := (predicted > high_bound)]
+
+example_nominal[, observed := ifelse(
+  observed < low_bound, "low",
+  ifelse(observed >= low_bound & observed <= high_bound,
+         "medium", "high"))]
+
+example_nominal <- example_nominal[
+  , .(low = mean(low),
+      medium = mean(medium),
+      high = mean(high)),
+  by = c(by_vars, "model", "observed")
+]
+example_nominal <- melt(
+  example_nominal, measure.vars = c("low", "high", "medium"),
+  value.name = "predicted", variable.name = "predicted_label"
+)
+
+example_nominal[, `:=`(
+  observed = factor(observed, levels = c("low", "medium", "high")),
+  predicted_label = factor(predicted_label, levels = c("low", "medium", "high"))
+)]
+
+usethis::use_data(example_nominal, overwrite = TRUE)

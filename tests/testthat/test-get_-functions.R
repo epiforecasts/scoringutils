@@ -232,6 +232,7 @@ test_that("get_forecast_type() works as expected", {
   expect_equal(get_forecast_type(example_sample_discrete), "sample")
   expect_equal(get_forecast_type(example_binary), "binary")
   expect_equal(get_forecast_type(example_point), "point")
+  expect_equal(get_forecast_type(example_nominal), "nominal")
 
   # works with a data.frame
   expect_equal(get_forecast_type(example_quantile_df), "quantile")
@@ -317,6 +318,20 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
   expect_equal(cov, cov2)
 })
 
+
+# ==============================================================================
+# `get_protected_columns()`
+# ==============================================================================
+test_that("get_protected_columns() works as expected", {
+  expect_equal(
+    scoringutils:::get_protected_columns(),
+    c("predicted", "observed", "sample_id",
+    "quantile_level", "upper", "lower", "pit_value",
+    "interval_range", "boundary", "predicted_label", "interval_coverage",
+    "interval_coverage_deviation", "quantile_coverage",
+    "quantile_coverage_deviation")
+  )
+})
 
 # ==============================================================================
 # `get_forecast_counts()`

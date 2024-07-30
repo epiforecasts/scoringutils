@@ -6,6 +6,7 @@
 \alias{is_forecast_binary}
 \alias{is_forecast_point}
 \alias{is_forecast_quantile}
+\alias{is_forecast_nominal}
 \title{Test whether an object is a forecast object}
 \usage{
 is_forecast(x)
@@ -17,6 +18,8 @@ is_forecast_binary(x)
 is_forecast_point(x)
 
 is_forecast_quantile(x)
+
+is_forecast_nominal(x)
 }
 \arguments{
 \item{x}{An R object.}
