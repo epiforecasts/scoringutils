@@ -76,17 +76,15 @@ observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)<
 <dd><p>A named list of scoring functions. Names will be used as
 column names in the output. See <code><a href="metrics_point.html">metrics_point()</a></code>, <code><a href="metrics_binary.html">metrics_binary()</a></code>,
 <code><a href="metrics_quantile.html">metrics_quantile()</a></code>, and <code><a href="metrics_sample.html">metrics_sample()</a></code> for more information on the
-default metrics used. Note that if you want to pass arguments to any
-given metric, you should do that through the function <code><a href="customise_metric.html">customise_metric()</a></code>
-and pass an updated list of functions with your custom metric to
-the <code>metrics</code> argument in <code><a href="score.html">score()</a></code>.</p></dd>
+default metrics used. See the <em>Customising metrics</em> section below for
+information on how to pass custom arguments to scoring functions.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to the scoring rules. Note that
 this is currently not used, as all calls to <code>apply_scores</code> currently
 avoid passing arguments via <code>...</code> and instead expect that the metrics
-directly be modified using <code><a href="customise_metric.html">customise_metric()</a></code>.</p></dd>
+directly be modified using <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

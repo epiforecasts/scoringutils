@@ -3,14 +3,16 @@
 object (a data.table with forecasts and observations) (see as_forecast()).
 score() is a generic that dispatches to different methods depending on the
 class of the input data.
-See the details section for more information on forecast types and input
-formats. For additional help and examples, check out the Getting Started Vignette as
+See the Forecast types and input formats section for more information on
+forecast types and input formats.
+For additional help and examples, check out the Getting Started Vignette as
 well as the paper Evaluating Forecasts with scoringutils in R."><meta property="og:description" content="score() applies a selection of scoring metrics to a forecast
 object (a data.table with forecasts and observations) (see as_forecast()).
 score() is a generic that dispatches to different methods depending on the
 class of the input data.
-See the details section for more information on forecast types and input
-formats. For additional help and examples, check out the Getting Started Vignette as
+See the Forecast types and input formats section for more information on
+forecast types and input formats.
+For additional help and examples, check out the Getting Started Vignette as
 well as the paper Evaluating Forecasts with scoringutils in R."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -56,8 +58,9 @@ well as the paper Evaluating Forecasts with scoringutils in R."><meta name="robo
 object (a data.table with forecasts and observations) (see <code><a href="as_forecast.html">as_forecast()</a></code>).
 <code>score()</code> is a generic that dispatches to different methods depending on the
 class of the input data.</p>
-<p>See the details section for more information on forecast types and input
-formats. For additional help and examples, check out the <a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting Started Vignette</a> as
+<p>See the <em>Forecast types and input formats</em> section for more information on
+forecast types and input formats.
+For additional help and examples, check out the <a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting Started Vignette</a> as
 well as the paper <a href="https://arxiv.org/abs/2205.07090" class="external-link">Evaluating Forecasts with scoringutils in R</a>.</p>
     </div>
 
@@ -91,16 +94,15 @@ observed values, see <code><a href="as_forecast.html">as_forecast()</a></code>)<
 <dd><p>A named list of scoring functions. Names will be used as
 column names in the output. See <code><a href="metrics_point.html">metrics_point()</a></code>, <code><a href="metrics_binary.html">metrics_binary()</a></code>,
 <code><a href="metrics_quantile.html">metrics_quantile()</a></code>, and <code><a href="metrics_sample.html">metrics_sample()</a></code> for more information on the
-default metrics used. Note that if you want to pass arguments to any
-given metric, you should do that through the function <code><a href="customise_metric.html">customise_metric()</a></code>
-and pass an updated list of functions with your custom metric to
-the <code>metrics</code> argument in <code>score()</code>.</p></dd>
+default metrics used. See the <em>Customising metrics</em> section below for
+information on how to pass custom arguments to scoring functions.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments. Currently unused but allows for future
-extensions. If you want to pass arguments to individual metrics, use
-<code><a href="customise_metric.html">customise_metric()</a></code>.</p></dd>
+<dd><p>Currently unused. You <em>cannot</em> pass additional arguments to scoring
+functions via <code>...</code>. See the <em>Customising metrics</em> section below for
+details on how to use <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> to pass arguments to individual
+metrics.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -110,6 +112,27 @@ unsummarised scores (one score per forecast) and has an additional attribute
 <code>metrics</code> with the names of the metrics used for scoring. See
 <code><a href="summarise_scores.html">summarise_scores()</a></code>) for information on how to summarise
 scores.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><strong>Customising metrics</strong></p>
+<p>If you want to pass arguments to a scoring function, you need change the
+scoring function itself via e.g. <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> and pass an updated list
+of functions with your custom metric to the <code>metrics</code> argument in <code>score()</code>.
+For example, to use <code><a href="interval_coverage.html">interval_coverage()</a></code> with <code>interval_range = 90</code>, you
+would define a new function, e.g.
+<code>interval_coverage_90 &lt;- purrr::partial(interval_coverage, interval_range = 90)</code>
+and pass this new function to <code>metrics</code> in <code>score()</code>.</p>
+<p>Note that if you want to pass a variable as an argument, you can
+unquote it with <code>!!</code> to make sure the value is evaluated only once when the
+function is created. Consider the following example:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>custom_arg <span class="ot">&lt;-</span> <span class="st">"foo"</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>print1 <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">partial</span>(print, <span class="at">x =</span> custom_arg)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>print2 <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">partial</span>(print, <span class="at">x =</span> <span class="sc">!!</span>custom_arg)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>custom_arg <span class="ot">&lt;-</span> <span class="st">"bar"</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">print1</span>() <span class="co"># prints 'bar'</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">print2</span>() <span class="co"># prints 'foo'</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="forecast-types-and-input-formats">Forecast types and input formats<a class="anchor" aria-label="anchor" href="#forecast-types-and-input-formats"></a></h2>
