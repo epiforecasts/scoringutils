@@ -269,7 +269,13 @@ test_that("quantile_to_interval works - data.frame case", {
     colnames(ex_interval),
     c(colnames(ex), "boundary", "interval_range")
   )
+
+  expect_error(
+    quantile_to_interval(x = "not working"),
+    "Input must be either a data.frame or a numeric vector."
+  )
 })
+
 
 
 
