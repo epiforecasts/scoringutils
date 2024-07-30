@@ -149,6 +149,17 @@ can control the behaviour with the \code{count_median_twice}-argument.
 WIS components can be computed individually using the functions
 \code{overprediction}, \code{underprediction}, and \code{dispersion.}
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-quantile.png}
+}
+}
+
 \examples{
 observed <- c(1, -15, 22)
 predicted <- rbind(

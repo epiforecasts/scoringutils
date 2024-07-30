@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Determines bias from predictive Monte-Carlo samples. The function
-#' automatically recognises, whether forecasts are continuous or
+#' automatically recognises whether forecasts are continuous or
 #' integer valued and adapts the Bias function accordingly.
 #'
 #' @details
@@ -32,6 +32,7 @@
 #' Numeric vector of length n with the biases of the predictive samples with
 #' respect to the observed values.
 #' @inheritParams ae_median_sample
+#' @inheritSection illustration-input-metric-sample Input format
 #' @examples
 #'
 #' ## integer valued forecasts
@@ -91,6 +92,7 @@ bias_sample <- function(observed, predicted) {
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #'   the number of data points and N (number of columns) the number of Monte
 #'   Carlo samples. Alternatively, `predicted` can just be a vector of size n.
+#' @inheritSection illustration-input-metric-sample Input format
 #' @return vector with the scoring values
 #' @seealso [ae_median_quantile()]
 #' @importFrom stats median
@@ -123,6 +125,7 @@ ae_median_sample <- function(observed, predicted) {
 #' }
 #' The mean prediction is calculated as the mean of the predictive samples.
 #' @inheritParams ae_median_sample
+#' @inheritSection illustration-input-metric-sample Input format
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
@@ -156,6 +159,7 @@ se_mean_sample <- function(observed, predicted) {
 #' @inheritParams ae_median_sample
 #' @param ... Additional arguments passed to
 #' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
+#' @inheritSection illustration-input-metric-sample Input format
 #' @return Vector with scores.
 #' @importFrom scoringRules logs_sample
 #' @examples
@@ -186,6 +190,7 @@ logs_sample <- function(observed, predicted, ...) {
 #' @inheritParams logs_sample
 #' @param ... Additional arguments passed to
 #' [dss_sample()][scoringRules::dss_sample()] from the scoringRules package.
+#' @inheritSection illustration-input-metric-sample Input format
 #' @return Vector with scores.
 #' @importFrom scoringRules dss_sample
 #' @examples
@@ -236,6 +241,7 @@ dss_sample <- function(observed, predicted, ...) {
 #'   output.
 #' @param ... Additional arguments passed to
 #' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
+#' @inheritSection illustration-input-metric-sample Input format
 #' @return Vector with scores.
 #' @importFrom scoringRules crps_sample
 #' @examples
@@ -348,6 +354,7 @@ underprediction_sample <- function(observed, predicted, ...) {
 #' any observed values.
 #' @param ... Additional arguments passed to [mad()][stats::mad()].
 #' @importFrom stats mad
+#' @inheritSection illustration-input-metric-sample Input format
 #' @return Vector with dispersion values.
 #'
 #' @references

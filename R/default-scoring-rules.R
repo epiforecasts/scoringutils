@@ -9,7 +9,7 @@
 #'   `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #'   If `select` is not `NULL`, this argument is ignored.
-#' @return A list of scoring rules.
+#' @return A list of scoring functions.
 #' @keywords metric
 #' @importFrom checkmate assert_subset assert_list
 #' @export
@@ -49,6 +49,8 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' The default scoring rules are:
 #' - "brier_score" = [brier_score()]
 #' - "log_score" = [logs_binary()]
+#'
+#' @inheritSection illustration-input-metric-binary-point Input format
 #' @inherit select_metrics params return
 #' @export
 #' @keywords metric
@@ -75,6 +77,8 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
+#'
+#' @inheritSection illustration-input-metric-binary-point Input format
 #' @inherit select_metrics params return
 #' @export
 #' @keywords metric
@@ -108,6 +112,8 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #' - "bias" = [bias_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
+#'
+#' @inheritSection illustration-input-metric-sample Input format
 #' @inherit select_metrics params return
 #' @export
 #' @keywords metric
@@ -157,6 +163,8 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' accept get passed on to it. `interval_range = 90` is set in the function
 #' definition, as passing an argument `interval_range = 90` to [score()] would
 #' mean it would also get passed to `interval_coverage_50`.
+#'
+#' @inheritSection illustration-input-metric-quantile Input format
 #' @inherit select_metrics params return
 #' @export
 #' @importFrom purrr partial

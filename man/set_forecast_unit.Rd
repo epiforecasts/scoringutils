@@ -34,9 +34,10 @@ behaviour, so setting the forecast unit explicitly can help make the code
 easier to debug and easier to read.
 }
 \examples{
-set_forecast_unit(
-  example_quantile,
-  c("location", "target_end_date", "target_type", "horizon", "model")
-)
+library(magrittr) # pipe operator
+example_quantile \%>\%
+  set_forecast_unit(
+    c("location", "target_end_date", "target_type", "horizon", "model")
+  )
 }
 \keyword{data-handling}
