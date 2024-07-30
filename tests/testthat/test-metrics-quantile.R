@@ -104,7 +104,7 @@ test_that("`wis()` works within score for median forecast", {
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("ae_median", "wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
   expect_equal(eval$ae_median, eval$wis)
@@ -149,7 +149,7 @@ test_that("wis() works within score for one interval", {
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
 
@@ -176,7 +176,7 @@ test_that("`wis()` works 1 interval and median", {
 
   metrics <- metrics_quantile() %>%
       select_metrics(select = c("wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
 
@@ -218,7 +218,7 @@ test_that("wis works, 2 intervals and median", {
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
 
@@ -305,7 +305,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   metrics <- metrics_quantile() %>%
     select_metrics(select = c("wis"))
-  metrics$wis <- customise_metric(metrics$wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(
     as_forecast_quantile(data_formatted), metrics = metrics
@@ -497,7 +497,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
 
   metrics <- metrics_quantile() %>%
     select_metrics("wis")
-  metrics$wis <- customise_metric(wis, count_median_twice = TRUE)
+  metrics$wis <- purrr::partial(wis, count_median_twice = TRUE)
   eval2 <- eval <- score(data_formatted, metrics = metrics)
   eval2 <- summarise_scores(eval2,
                            by = c(
