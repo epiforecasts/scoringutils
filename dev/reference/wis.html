@@ -33,11 +33,18 @@ but the interval formed by the quantiles has to be symmetric around the
 median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function quantile_score().
-Usually the interval score is weighted by a factor that makes sure that the
-average score across an increasing number of equally spaced
-quantiles, converges to the continuous ranked probability score (CRPS). This
-weighted score is called the weighted interval score (WIS).
-The weight commonly used is \(\alpha / 2\).
+For a set of \(k = 1, \dots, K\) prediction intervals and the median
+\(m\), we can compute a weighted interval score (WIS) as the sum of the
+interval scores for individual intervals:
+$$
+\text{WIS}_{\alpha_{\{0:K\}}}(F, y) = \frac{1}{K + 1/2}
+\times \left(w_0 \times |y - m| + \sum_{k=1}^{K}
+\left\{ w_k \times \text{IS}_{\alpha_k}(F, y) \right\}\right)
+$$
+The individual scores are usually weighted with
+\(w_k = \frac{\alpha_k}{2}\). This weight ensures that
+for an increasing number of equally spaced quantiles, the WIS
+converges to the continuous ranked probability score (CRPS).
 Quantile score
 In addition to the interval score, there also exists a quantile score (QS)
 (see quantile_score()), which is equal to the so-called pinball loss.
@@ -92,11 +99,18 @@ but the interval formed by the quantiles has to be symmetric around the
 median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function quantile_score().
-Usually the interval score is weighted by a factor that makes sure that the
-average score across an increasing number of equally spaced
-quantiles, converges to the continuous ranked probability score (CRPS). This
-weighted score is called the weighted interval score (WIS).
-The weight commonly used is \(\alpha / 2\).
+For a set of \(k = 1, \dots, K\) prediction intervals and the median
+\(m\), we can compute a weighted interval score (WIS) as the sum of the
+interval scores for individual intervals:
+$$
+\text{WIS}_{\alpha_{\{0:K\}}}(F, y) = \frac{1}{K + 1/2}
+\times \left(w_0 \times |y - m| + \sum_{k=1}^{K}
+\left\{ w_k \times \text{IS}_{\alpha_k}(F, y) \right\}\right)
+$$
+The individual scores are usually weighted with
+\(w_k = \frac{\alpha_k}{2}\). This weight ensures that
+for an increasing number of equally spaced quantiles, the WIS
+converges to the continuous ranked probability score (CRPS).
 Quantile score
 In addition to the interval score, there also exists a quantile score (QS)
 (see quantile_score()), which is equal to the so-called pinball loss.
@@ -192,11 +206,18 @@ but the interval formed by the quantiles has to be symmetric around the
 median (i.e you can't use the 0.1 quantile as the lower bound and the 0.7
 quantile as the upper bound).
 Non-symmetric quantiles can be scored using the function <code><a href="quantile_score.html">quantile_score()</a></code>.</p>
-<p>Usually the interval score is weighted by a factor that makes sure that the
-average score across an increasing number of equally spaced
-quantiles, converges to the continuous ranked probability score (CRPS). This
-weighted score is called the weighted interval score (WIS).
-The weight commonly used is \(\alpha / 2\).</p>
+<p>For a set of \(k = 1, \dots, K\) prediction intervals and the median
+\(m\), we can compute a weighted interval score (WIS) as the sum of the
+interval scores for individual intervals:
+$$
+\text{WIS}_{\alpha_{\{0:K\}}}(F, y) = \frac{1}{K + 1/2}
+\times \left(w_0 \times |y - m| + \sum_{k=1}^{K}
+\left\{ w_k \times \text{IS}_{\alpha_k}(F, y) \right\}\right)
+$$</p>
+<p>The individual scores are usually weighted with
+\(w_k = \frac{\alpha_k}{2}\). This weight ensures that
+for an increasing number of equally spaced quantiles, the WIS
+converges to the continuous ranked probability score (CRPS).</p>
 <p><strong>Quantile score</strong></p>
 <p>In addition to the interval score, there also exists a quantile score (QS)
 (see <code><a href="quantile_score.html">quantile_score()</a></code>), which is equal to the so-called pinball loss.
@@ -309,6 +330,12 @@ observation).</p>
     <h2 id="input-format">Input format<a class="anchor" aria-label="anchor" href="#input-format"></a></h2>
     <p></p><div style="text-align: left">
   <img src="figures/metrics-quantile.png" style="width:750px;max-width:100%;"></div>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Evaluating epidemic forecasts in an interval format,
+Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
+<a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618" class="external-link">https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618</a></p>
     </div>
 
     <div class="section level2">
