@@ -608,3 +608,28 @@ is_forecast_point <- function(x) {
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }
+
+#' @export
+`[.forecast` <- function(x, ...) {
+
+  out <- NextMethod()
+
+  # We don't need to revalidate x[]
+  if (...length() > 1) {
+    # check whether subset object passes validation
+    validation <- try(
+      assert_forecast(forecast = out, verbose = FALSE),
+      silent = TRUE
+    )
+    if (inherits(validation, "try-error")) {
+      cli_warn(
+        c(
+          "!" = "Error in validating forecast object: {validation}"
+        )
+      )
+    }
+  }
+
+  return(out)
+
+}
