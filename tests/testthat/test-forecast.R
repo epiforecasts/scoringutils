@@ -217,7 +217,10 @@ test_that("assert_forecast.forecast_point() works as expected", {
   test <- as_forecast_point(test)
 
   # expect an error if column is changed to character after initial validation.
-  test <- test[, "predicted" := as.character(predicted)]
+  expect_warning(
+    test <- test[, "predicted" := as.character(predicted)],
+    "Input looks like a point forecast, but found the following issue"
+  )
   expect_error(
     assert_forecast(test),
     "Input looks like a point forecast, but found the following issue"
