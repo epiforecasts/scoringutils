@@ -950,3 +950,22 @@ test_that("ae_median_quantile() works as_expected", {
 
   dim(1:10)
 })
+
+
+
+# ============================================================================ #
+# quantile_score() =============================================================
+# ============================================================================ #
+test_that("quantile_score() works regardless of whether input is vector or matrix", {
+
+  observed <- rnorm(1, mean = 2)
+  alpha <- seq(0.2, 0.8, 0.2)
+  predicted <- rnorm(4, mean = 1:4)
+
+
+  expect_equal(
+    quantile_score(observed, predicted, quantile_level = alpha),
+    quantile_score(observed, t(matrix(predicted)), quantile_level = alpha)
+  )
+})
+
