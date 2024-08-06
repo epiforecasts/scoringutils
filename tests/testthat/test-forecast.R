@@ -272,3 +272,19 @@ test_that("new_forecast() works as expected with a data.frame", {
     c("forecast_quantile", "data.table", "data.frame")
   )
 })
+
+# ==============================================================================
+# [.forecast()
+# ==============================================================================
+
+test_that("[.forecast() immediately invalidates on change when necessary", {
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  # For cols
+  expect_warning(
+    test[, colnames(test) != "observed"],
+    "Error in validating"
+  )
+
+  # For rows
+})
