@@ -47,11 +47,20 @@
 #' quantile as the upper bound).
 #' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
-#' Usually the interval score is weighted by a factor that makes sure that the
-#' average score across an increasing number of equally spaced
-#' quantiles, converges to the continuous ranked probability score (CRPS). This
-#' weighted score is called the weighted interval score (WIS).
-#' The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
+#' For a set of \eqn{k = 1, \dots, K} prediction intervals and the median
+#' \eqn{m}, we can compute a weighted interval score (WIS) as the sum of the
+#' interval scores for individual intervals:
+#' \deqn{
+#' \text{WIS}_{\alpha_{\{0:K\}}}(F, y) = \frac{1}{K + 1/2}
+#' \times \left(w_0 \times |y - m| + \sum_{k=1}^{K}
+#' \left\{ w_k \times \text{IS}_{\alpha_k}(F, y) \right\}\right)
+#' }{
+#' }
+#'
+#' The individual scores are usually weighted with
+#' \eqn{w_k = \frac{\alpha_k}{2}}{alpha_k / 2}. This weight ensures that
+#' for an increasing number of equally spaced quantiles, the WIS
+#' converges to the continuous ranked probability score (CRPS).
 #'
 #' **Quantile score**
 #'
@@ -99,6 +108,10 @@
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
+#' @references
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 #' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
