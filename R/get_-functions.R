@@ -480,6 +480,7 @@ get_forecast_counts <- function(forecast,
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   assert_subset(by, names(forecast))
+  forecast <- as.data.table(forecast)
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
   # because they all belong to one single forecast that should be counted once
@@ -493,7 +494,7 @@ get_forecast_counts <- function(forecast,
   forecast <- forecast[forecast[, .I[1], by = collapse_by]$V1]
 
   # count number of rows = number of forecasts
-  out <- as.data.table(forecast)[, .(count = .N), by = by]
+  out <- forecast[, .(count = .N), by = by]
 
   # make sure that all combinations in "by" are included in the output (with
   # count = 0). To achieve that, take unique values in `forecast` and expand grid

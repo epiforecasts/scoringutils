@@ -62,7 +62,9 @@ quantile_to_interval_dataframe <- function(forecast,
                                            format = "long",
                                            keep_quantile_col = FALSE,
                                            ...) {
-  forecast <- ensure_data.table(forecast)
+  # After this transformation, the object will no longer be a valid forecast
+  # object so we unclass it
+  forecast <- as.data.table(forecast)
 
   forecast[, boundary := ifelse(quantile_level <= 0.5, "lower", "upper")]
   forecast[, interval_range := get_range_from_quantile(quantile_level)]

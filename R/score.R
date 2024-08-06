@@ -112,6 +112,7 @@ score.default <- function(forecast, metrics, ...) {
 score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
 
   scores <- apply_metrics(
     forecast, metrics,
@@ -131,6 +132,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
 
   scores <- apply_metrics(
     forecast, metrics,
@@ -149,6 +151,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
 
   # transpose the forecasts that belong to the same forecast unit
   f_transposed <- forecast[, .(predicted = list(predicted),
@@ -186,6 +189,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the quantiles and predictions are ordered in the same way

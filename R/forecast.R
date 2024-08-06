@@ -170,6 +170,12 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
   assert_forecast(data, verbose = FALSE)
   assert_subset(0.5, unique(data$quantile_level))
 
+  # At end of this function, the object will have be turned from a
+  # forecast_quantile to a forecast_point and we don't want to validate it as a
+  # forecast_point during the conversion process. The correct class is restored
+  # at the end.
+  data <- as.data.table(data)
+
   forecast <- data[quantile_level == 0.5]
   forecast[, "quantile_level" := NULL]
 
