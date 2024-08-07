@@ -149,6 +149,7 @@ get_pit <- function(forecast,
 
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_type <- get_forecast_type(forecast)
+  forecast <- as.data.table(forecast)
 
   if (forecast_type == "quantile") {
     forecast[, quantile_coverage := (observed <= predicted)]
@@ -162,7 +163,7 @@ get_pit <- function(forecast,
       ),
       by = c(get_forecast_unit(quantile_coverage))
     ]
-    return(as.data.table(quantile_coverage)[])
+    return(quantile_coverage[])
   }
 
   # if prediction type is not quantile, calculate PIT values based on samples

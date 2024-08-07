@@ -146,7 +146,10 @@ test_that("set_forecast_unit() revalidates a forecast object", {
     set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
   )
   expect_error(
-    set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model")),
+    # [.forecast()` will warn even before the error is thrown
+    suppressWarnings(
+      set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model"))
+    ),
     "There are instances with more than one forecast for the same target."
   )
 })
