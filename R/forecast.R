@@ -639,3 +639,19 @@ is_forecast_quantile <- function(x) {
   return(out)
 
 }
+
+#' @export
+#' @importFrom utils head
+head.forecast <- function(x, ...) {
+  # We use this custom method just to unclass before forwarding to avoid
+  # validation when we expect (and don't care) that objects are invalidated
+  head(as.data.table(x), ...)
+}
+
+#' @export
+#' @importFrom utils tail
+tail.forecast <- function(x, ...) {
+  # We use this custom method just to unclass before forwarding to avoid
+  # validation when we expect (and don't care) that objects are invalidated
+  utils::tail(as.data.table(x), ...)
+}

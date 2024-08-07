@@ -61,7 +61,6 @@ print.forecast <- function(x, ...) {
 
   cat("\n")
 
-  x <- as.data.table(x)
   NextMethod()
 
   return(invisible(x))
