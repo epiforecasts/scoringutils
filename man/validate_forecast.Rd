@@ -30,4 +30,4 @@ The function re-validates an existing forecast object. It is similar to
 forecast <- as_forecast_binary(example_binary)
 assert_forecast(forecast)
 }
-\keyword{check-forecasts}
+\keyword{validate-forecast-object}

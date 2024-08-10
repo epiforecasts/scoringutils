@@ -97,4 +97,4 @@ For more information see the vignettes and the example data
 forecast <- as_forecast_binary(example_binary)
 assert_forecast(forecast)
 }
-\keyword{check-forecasts}
+\keyword{validate-forecast-object}

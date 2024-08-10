@@ -24,4 +24,4 @@ including "Forecast type", "Score columns",
 dat <- as_forecast_quantile(example_quantile)
 print(dat)
 }
-\keyword{check-forecasts}
+\keyword{gain-insights}

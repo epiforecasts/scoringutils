@@ -39,4 +39,4 @@ You can test for a specific \verb{forecast_*} class using the appropriate
 forecast_binary <- as_forecast_binary(example_binary)
 is_forecast(forecast_binary)
 }
-\keyword{check-forecasts}
+\keyword{validate-forecast-object}

@@ -67,4 +67,4 @@ For more information see the vignettes and the example data
 \code{\link[=example_point]{example_point()}}, and \link{example_binary}).
 }
 
-\keyword{check-forecasts}
+\keyword{diagnose-inputs}

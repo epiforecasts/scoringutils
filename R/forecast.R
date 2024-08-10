@@ -1,8 +1,9 @@
-#' @title Create a `forecast` object
+#' @title General information on creating a `forecast` object
 #'
 #' @description
-#' Process and validate a data.frame (or similar) or similar with forecasts
-#' and observations. If the input passes all input checks, it will be converted
+#' There are several ``as_forecast_<type>()` functions to process and validate
+#' a data.frame (or similar) or similar with forecasts and observations. If
+#' the input passes all input checks, those functions will be converted
 #' to a `forecast` object. A forecast object is a `data.table` with a
 #' class `forecast` and an additional class that depends on the forecast type.
 #' Every forecast type has its own `as_forecast_<type>()` function.
@@ -48,9 +49,8 @@
 #' - `forecast_point` for point forecasts
 #' - `forecast_sample` for sample-based forecasts
 #' - `forecast_quantile` for quantile-based forecasts
-#' @keywords check-forecasts
-#' @seealso [as_forecast_point()], [as_forecast_binary()],
-#'   [as_forecast_sample()], [as_forecast_quantile()]
+#' @keywords as_forecast
+#' @family functions to create forecast objects
 #' @examples
 #' as_forecast_binary(example_binary)
 #' as_forecast_quantile(
@@ -68,7 +68,7 @@ NULL
 #' It renames the required columns, where appropriate, and sets the forecast
 #' unit.
 #' @inheritParams as_forecast
-#' @keywords check-forecasts
+#' @keywords as_forecast internal
 as_forecast_generic <- function(data,
                                 forecast_unit = NULL,
                                 observed = NULL,
@@ -113,10 +113,9 @@ as_forecast_generic <- function(data,
 #' forecast types and expected input formats by calling `?`[as_forecast()].
 #' @export
 #' @inheritParams as_forecast
-#' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
-#'   [as_forecast_sample()], [as_forecast_quantile()]
+#' @family functions to create forecast objects
 #' @importFrom cli cli_warn
-#' @keywords check-forecasts
+#' @keywords as_forecast
 as_forecast_binary <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
@@ -135,10 +134,9 @@ as_forecast_binary <- function(data,
 #' forecast types and expected input formats by calling `?`[as_forecast()].
 #' @inherit as_forecast params
 #' @param ... Unused
-#' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
-#'   [as_forecast_sample()], [as_forecast_quantile()]
+#' @family functions to create forecast objects
 #' @export
-#' @keywords check-forecasts
+#' @keywords as_forecast transform
 as_forecast_point <- function(data, ...) {
   UseMethod("as_forecast_point")
 }
@@ -165,7 +163,7 @@ as_forecast_point.default <- function(data,
 #' When converting a `forecast_quantile` object into a `forecast_point` object,
 #' the 0.5 quantile is extracted and returned as the point forecast.
 #' @export
-#' @keywords check-forecasts
+#' @keywords as_forecast
 as_forecast_point.forecast_quantile <- function(data, ...) {
   assert_forecast(data, verbose = FALSE)
   assert_subset(0.5, unique(data$quantile_level))
@@ -183,11 +181,10 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
 #' Create a `forecast` object for quantile-based forecasts. See more information
 #' on forecast types and expected input formats by calling `?`[as_forecast()].
 #' @param ... Unused
-#' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
-#'   [as_forecast_sample()], [as_forecast_quantile()]
+#' @family functions to create forecast objects
 #' @inheritParams as_forecast
 #' @export
-#' @keywords check-forecasts
+#' @keywords as_forecast transform
 as_forecast_quantile <- function(data, ...) {
   UseMethod("as_forecast_quantile")
 }
@@ -270,10 +267,9 @@ as_forecast_quantile.forecast_sample <- function(
 #'   sample-based forecasts.
 #' @inheritParams as_forecast
 #' @export
-#' @seealso [as_forecast()], [as_forecast_point()], [as_forecast_binary()],
-#'   [as_forecast_sample()], [as_forecast_quantile()]
+#' @family functions to create forecast objects
 #' @importFrom cli cli_warn
-#' @keywords check-forecasts
+#' @keywords as_forecast
 as_forecast_sample <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
@@ -312,7 +308,7 @@ as_forecast_sample <- function(data,
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_frame
 #' @export
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 #' @examples
 #' forecast <- as_forecast_binary(example_binary)
 #' assert_forecast(forecast)
@@ -326,7 +322,7 @@ assert_forecast <- function(
 #' @importFrom cli cli_abort
 #' @rdname assert_forecast
 #' @export
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 assert_forecast.default <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -342,7 +338,7 @@ assert_forecast.default <- function(
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 assert_forecast.forecast_binary <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -379,7 +375,7 @@ assert_forecast.forecast_binary <- function(
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 assert_forecast.forecast_point <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -402,7 +398,7 @@ assert_forecast.forecast_point <- function(
 
 #' @export
 #' @rdname assert_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -415,7 +411,7 @@ assert_forecast.forecast_quantile <- function(
 
 #' @export
 #' @rdname assert_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 assert_forecast.forecast_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
@@ -433,7 +429,7 @@ assert_forecast.forecast_sample <- function(
 #' `NULL`. See [as_forecast()] for details on the expected input formats.
 #' @inherit assert_forecast params return examples
 #' @export
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
   assert_forecast(forecast, forecast_type, verbose)
   return(forecast)
@@ -573,7 +569,7 @@ new_forecast <- function(data, classname) {
 #' *`is_forecast_<type>*`*: `TRUE` if the object is of class `forecast_*` in addition
 #' to class `forecast`, `FALSE` otherwise.
 #' @export
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 #' @examples
 #' forecast_binary <- as_forecast_binary(example_binary)
 #' is_forecast(forecast_binary)
@@ -583,28 +579,28 @@ is_forecast <- function(x) {
 
 #' @export
 #' @rdname is_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 is_forecast_sample <- function(x) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 is_forecast_binary <- function(x) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 is_forecast_point <- function(x) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords check-forecasts
+#' @keywords validate-forecast-object
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }

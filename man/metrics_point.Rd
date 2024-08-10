@@ -42,4 +42,4 @@ The default scoring rules are:
 metrics_point()
 metrics_point(select = "ape")
 }
-\keyword{metric}
+\keyword{handle-metrics}

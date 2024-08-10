@@ -49,4 +49,4 @@ functions. This will drop unneeded columns, while making sure that all
 necessary, 'protected columns' like "predicted" or "observed" are retained.
 }
 
-\keyword{check-forecasts}
+\keyword{diagnose-inputs}

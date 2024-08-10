@@ -49,4 +49,4 @@ The default scoring rules are:
 metrics_sample()
 metrics_sample(select = "mad")
 }
-\keyword{metric}
+\keyword{handle-metrics}
