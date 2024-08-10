@@ -75,4 +75,4 @@ For more information see the vignettes and the example data
 \code{\link[=example_point]{example_point()}}, \link{example_binary}, and \link{example_nominal}).
 }
 
-\keyword{check-forecasts}
+\keyword{diagnose-inputs}

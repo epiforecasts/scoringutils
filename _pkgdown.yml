@@ -28,32 +28,41 @@ navbar:
 reference:
         - title: Package documentation
           contents:
-                - scoringutils-package
-        - title: Functions to analyse inputs and obtain useful information
+                - scoringutils
+        - title: Example data
           contents:
-                - has_keyword("check-forecasts")
-        - title: Functions for convenient forecast evaluation
+                - has_keyword("datasets")
+                - has_keyword("info")
+        - title: Create forecast objects
           contents:
-                - score
+                - has_keyword("as_forecast")
+        - title: Validate forecast objects
+          contents:
+                - has_keyword("validate-forecast-object")
+        - title: Gain insights about forecasts and inputs
+          contents:
+                - has_keyword("gain-insights")
+                - has_keyword("diagnose-inputs")
+        - title: Transform data
+          contents:
+                - has_keyword("transform")
+        - title: Handling metrics and scoring functions
+          contents:
+                - has_keyword("handle-metrics")
+        - title: Evaluate forecasts
+          contents:
                 - has_keyword("scoring")
-                - starts_with("score")
         - title: Lower-level scoring functions
           contents:
                 - has_keyword("metric")
-        - title: Data wrangling helpers
-          contents:
-                - has_keyword("data-handling")
         - title: Functions for plotting and data visualisation
           contents:
                 - starts_with("plot")
                 - has_keyword("plotting")
-        - title: Internal input check functions
+        - title: Internal functions
+        - subtitle: Internal input check functions
           contents:
                 - has_keyword("internal_input_check")
-        - title: Misc internal functions
+        - subtitle: Misc internal functions
           contents:
                 - has_keyword("internal")
-        - title: Example data and information
-          contents:
-                - has_keyword("datasets")
-                - has_keyword("info")

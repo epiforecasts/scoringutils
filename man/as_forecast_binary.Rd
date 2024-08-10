@@ -39,7 +39,11 @@ Create a \code{forecast} object for binary forecasts. See more information on
 forecast types and expected input formats by calling \verb{?}\code{\link[=as_forecast]{as_forecast()}}.
 }
 \seealso{
-\code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
-\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+Other functions to create forecast objects: 
+\code{\link{as_forecast}},
+\code{\link{as_forecast_point}()},
+\code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_sample}()}
 }
-\keyword{check-forecasts}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}

@@ -10,7 +10,7 @@
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #'   If `select` is not `NULL`, this argument is ignored.
 #' @return A list of scoring functions.
-#' @keywords metric
+#' @keywords handle-metrics
 #' @importFrom checkmate assert_subset assert_list
 #' @export
 #' @examples
@@ -53,7 +53,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @inherit select_metrics params return
 #' @export
-#' @keywords metric
+#' @keywords handle-metrics
 #' @examples
 #' metrics_binary()
 #' metrics_binary(select = "brier_score")
@@ -102,7 +102,7 @@ metrics_nominal <- function(select = NULL, exclude = NULL) {
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @inherit select_metrics params return
 #' @export
-#' @keywords metric
+#' @keywords handle-metrics
 #' @examples
 #' metrics_point()
 #' metrics_point(select = "ape")
@@ -137,7 +137,7 @@ metrics_point <- function(select = NULL, exclude = NULL) {
 #' @inheritSection illustration-input-metric-sample Input format
 #' @inherit select_metrics params return
 #' @export
-#' @keywords metric
+#' @keywords handle-metrics
 #' @examples
 #' metrics_sample()
 #' metrics_sample(select = "mad")
@@ -189,7 +189,7 @@ metrics_sample <- function(select = NULL, exclude = NULL) {
 #' @inherit select_metrics params return
 #' @export
 #' @importFrom purrr partial
-#' @keywords metric
+#' @keywords handle-metrics
 #' @examples
 #' metrics_quantile()
 #' metrics_quantile(select = "wis")

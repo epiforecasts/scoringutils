@@ -55,6 +55,7 @@
 #' scores.
 #' @importFrom data.table ':=' as.data.table
 #' @importFrom stats na.omit
+#' @keywords scoring
 #' @examples
 #' library(magrittr) # pipe operator
 #' \dontshow{

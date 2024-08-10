@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\title{Create a \code{forecast} object}
+\title{General information on creating a \code{forecast} object}
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
@@ -36,11 +36,9 @@ returned:
 }
 }
 \description{
-Process and validate a data.frame (or similar) or similar with forecasts
-and observations. If the input passes all input checks, it will be converted
-to a \code{forecast} object. A forecast object is a \code{data.table} with a
-class \code{forecast} and an additional class that depends on the forecast type.
-Every forecast type has its own \verb{as_forecast_<type>()} function.
+There are several ``as_forecast_\if{html}{\out{<type>}}()\verb{functions to process and validate a data.frame (or similar) or similar with forecasts and observations. If the input passes all input checks, those functions will be converted to a}forecast` object. A forecast object is a `data.table` with a
+class `forecast` and an additional class that depends on the forecast type.
+Every forecast type has its own `as_forecast_\if{html}{\out{<type>}}()` function.
 See the details section below for more information
 on the expected input formats.
 
@@ -150,7 +148,11 @@ as_forecast_quantile(
 )
 }
 \seealso{
-\code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
-\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+Other functions to create forecast objects: 
+\code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_point}()},
+\code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_sample}()}
 }
-\keyword{check-forecasts}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}
