@@ -143,6 +143,7 @@ returned:</p><ul><li><p><code>forecast_binary</code> for binary forecasts</p></l
     <p>Various different forecast types / forecast formats are supported. At the
 moment, those are:</p><ul><li><p>point forecasts</p></li>
 <li><p>binary forecasts ("soft binary classification")</p></li>
+<li><p>nominal forecasts ("soft classification with multiple unordered classes")</p></li>
 <li><p>Probabilistic forecasts in a quantile-based format (a forecast is
 represented as a set of predictive quantiles)</p></li>
 <li><p>Probabilistic forecasts in a sample-based format (a forecast is represented
@@ -160,6 +161,12 @@ Here is an overview of the required format for each forecast type:
 two levels and a column <code>predicted</code> of type numeric with probabilities,
 corresponding to the probability that <code>observed</code> is equal to the second
 factor level. See details <a href="scoring-functions-binary.html">here</a> for more information.</p>
+<p><em>Nominal forecasts</em> require a column <code>observed</code> of type factor with N levels,
+(where N is the number of possible outcomes), a column <code>predicted</code> of type
+numeric with probabilities (which sum to one across all possible outcomes),
+and a column <code>predicted_label</code> of type factor with N levels, denoting the
+outcome for which a probability is given. Forecasts must be complete, i.e.
+there must be a probability assigned to every possible outcome.</p>
 <p><em>Quantile-based forecasts</em> require a column <code>observed</code> of type numeric,
 a column <code>predicted</code> of type numeric, and a column <code>quantile_level</code> of type
 numeric with quantile-levels (between 0 and 1).</p>
@@ -168,7 +175,7 @@ a column <code>predicted</code> of type numeric, and a column <code>sample_id</c
 numeric with sample indices.</p>
 <p>For more information see the vignettes and the example data
 (<a href="example_quantile.html">example_quantile</a>, <a href="example_sample_continuous.html">example_sample_continuous</a>, <a href="example_sample_discrete.html">example_sample_discrete</a>,
-<code><a href="example_point.html">example_point()</a></code>, and <a href="example_binary.html">example_binary</a>).</p>
+<code><a href="example_point.html">example_point()</a></code>, <a href="example_binary.html">example_binary</a>, and <a href="example_nominal.html">example_nominal</a>).</p>
     </div>
     <div class="section level2">
     <h2 id="forecast-unit">Forecast unit<a class="anchor" aria-label="anchor" href="#forecast-unit"></a></h2>
@@ -198,6 +205,7 @@ necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other functions to create forecast objects:
 <code><a href="as_forecast_binary.html">as_forecast_binary</a>()</code>,
+<code><a href="as_forecast_nominal.html">as_forecast_nominal</a>()</code>,
 <code><a href="as_forecast_point.html">as_forecast_point</a>()</code>,
 <code><a href="as_forecast_quantile.html">as_forecast_quantile</a>()</code>,
 <code><a href="as_forecast_sample.html">as_forecast_sample</a>()</code></p></div>
