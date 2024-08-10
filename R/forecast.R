@@ -683,6 +683,12 @@ is_forecast_quantile <- function(x) {
 }
 
 #' @export
+#' @rdname is_forecast
+is_forecast_nominal <- function(x) {
+  inherits(x, "forecast_nominal") && inherits(x, "forecast")
+}
+
+#' @export
 `[.forecast` <- function(x, ...) {
 
   out <- NextMethod()
@@ -721,9 +727,4 @@ tail.forecast <- function(x, ...) {
   # We use this custom method just to unclass before forwarding to avoid
   # validation when we expect (and don't care) that objects are invalidated
   utils::tail(as.data.table(x), ...)
-
-
-#' @rdname is_forecast
-is_forecast_nominal <- function(x) {
-  inherits(x, "forecast_nominal") && inherits(x, "forecast")
 }
