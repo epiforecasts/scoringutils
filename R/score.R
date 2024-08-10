@@ -133,6 +133,7 @@ score.forecast_nominal <- function(forecast, metrics = metrics_nominal(), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the labels and predictions are ordered in the same way
