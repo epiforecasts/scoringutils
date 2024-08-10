@@ -161,6 +161,37 @@ test_that("output of as_forecasts() is accepted as input to score()", {
   expect_equal(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
 })
 
+
+# as_forecast.forecast_nominal() -----------------------------------------------
+test_that("as_forecast.forecast_nominal() works as expected", {
+  expect_s3_class(
+    suppressMessages(as_forecast_nominal(example_nominal)),
+    c("forecast_nominal", "forecast", "data.table", "data.frame"),
+    exact = TRUE
+  )
+
+  ex <- data.table::copy(example_nominal) %>%
+    na.omit()
+  setnames(ex, old = "predicted_label", new = "label")
+
+  expect_no_condition(
+    as_forecast_nominal(ex, predicted_label = "label")
+  )
+})
+
+test_that("as_forecast.forecast_nominal() breaks when rows with zero probability are missing", {
+  ex_faulty <- data.table::copy(example_nominal)
+  ex_faulty <- ex_faulty[predicted != 0]
+  expect_warning(
+    expect_error(
+      as_forecast_nominal(ex_faulty),
+      "Found incomplete forecasts"
+    ),
+    "Some forecasts have different numbers of rows"
+  )
+})
+
+
 # ==============================================================================
 # is_forecast()
 # ==============================================================================
@@ -170,11 +201,14 @@ test_that("is_forecast() works as expected", {
   ex_point <- suppressMessages(as_forecast_point(example_point))
   ex_quantile <- suppressMessages(as_forecast_quantile(example_quantile))
   ex_continuous <- suppressMessages(as_forecast_sample(example_sample_continuous))
+  ex_nominal <- suppressMessages(as_forecast_nominal(example_nominal))
 
   expect_true(is_forecast(ex_binary))
+  expect_true(is_forecast_binary(ex_binary))
   expect_true(is_forecast_point(ex_point))
   expect_true(is_forecast_quantile(ex_quantile))
   expect_true(is_forecast(ex_continuous))
+  expect_true(is_forecast_nominal(ex_nominal))
 
   expect_false(is_forecast(1:10))
   expect_false(is_forecast(data.table::as.data.table(example_point)))

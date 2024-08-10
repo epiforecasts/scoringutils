@@ -12,11 +12,13 @@
 #' Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))
-  if (test_forecast_type_is_binary(data)) {
+  if (test_forecast_type_is_nominal(data)) {
+    forecast_type <- "nominal"
+  } else if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
     forecast_type <- "quantile"
@@ -90,6 +92,19 @@ test_forecast_type_is_quantile <- function(data) {
   return(observed_correct && predicted_correct && columns_correct)
 }
 
+#' Test whether data could be a nominal forecast.
+#' @description Checks type of the necessary columns.
+#' @inheritParams document_check_functions
+#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
+#' @keywords internal_input_check
+test_forecast_type_is_nominal <- function(data) {
+  observed_correct <- test_factor(x = data$observed)
+  predicted_correct <- test_numeric(x = data$predicted)
+  columns_correct <- test_columns_present(data, "predicted_label")
+  predicted_label_correct <- test_factor(x = data$predicted_label)
+  return(observed_correct && predicted_correct &&
+           columns_correct && predicted_label_correct)
+}
 
 #' Assert that forecast type is as expected
 #' @param data A forecast object (see [as_forecast()]).
@@ -186,7 +201,7 @@ get_type <- function(x) {
 #' @return
 #' Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
-#' @keywords check-forecasts
+#' @keywords handle-metrics
 #' @export
 get_metrics <- function(scores, error = FALSE) {
   assert_data_frame(scores)
@@ -235,7 +250,7 @@ get_metrics <- function(scores, error = FALSE) {
 #' a single forecast
 #' @importFrom checkmate assert_data_frame
 #' @export
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 get_forecast_unit <- function(data) {
   assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
@@ -262,7 +277,7 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
-    "pit_value", "interval_range", "boundary",
+    "pit_value", "interval_range", "boundary", "predicted_label",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
     grep("_relative_skill$", names(data), value = TRUE),
@@ -298,7 +313,7 @@ get_protected_columns <- function(data = NULL) {
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
 #' @importFrom data.table setorderv
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
@@ -310,8 +325,8 @@ get_duplicate_forecasts <- function(
   assert_data_frame(data)
   data <- ensure_data.table(data)
   forecast_unit <- get_forecast_unit(data)
-  available_type <- c("sample_id", "quantile_level") %in% colnames(data)
-  type <- c("sample_id", "quantile_level")[available_type]
+  available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
+  type <- c("sample_id", "quantile_level", "predicted_label")[available_type]
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]
@@ -464,7 +479,7 @@ get_coverage <- function(forecast, by = "model") {
 #' @inheritParams score
 #' @importFrom data.table .I .N nafill
 #' @export
-#' @keywords check-forecasts
+#' @keywords gain-insights
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN

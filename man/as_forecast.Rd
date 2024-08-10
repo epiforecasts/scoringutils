@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\title{Create a \code{forecast} object}
+\title{General information on creating a \code{forecast} object}
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
@@ -36,11 +36,9 @@ returned:
 }
 }
 \description{
-Process and validate a data.frame (or similar) or similar with forecasts
-and observations. If the input passes all input checks, it will be converted
-to a \code{forecast} object. A forecast object is a \code{data.table} with a
-class \code{forecast} and an additional class that depends on the forecast type.
-Every forecast type has its own \verb{as_forecast_<type>()} function.
+There are several ``as_forecast_\if{html}{\out{<type>}}()\verb{functions to process and validate a data.frame (or similar) or similar with forecasts and observations. If the input passes all input checks, those functions will be converted to a}forecast` object. A forecast object is a `data.table` with a
+class `forecast` and an additional class that depends on the forecast type.
+Every forecast type has its own `as_forecast_\if{html}{\out{<type>}}()` function.
 See the details section below for more information
 on the expected input formats.
 
@@ -66,6 +64,7 @@ moment, those are:
 \itemize{
 \item point forecasts
 \item binary forecasts ("soft binary classification")
+\item nominal forecasts ("soft classification with multiple unordered classes")
 \item Probabilistic forecasts in a quantile-based format (a forecast is
 represented as a set of predictive quantiles)
 \item Probabilistic forecasts in a sample-based format (a forecast is represented
@@ -94,6 +93,13 @@ two levels and a column \code{predicted} of type numeric with probabilities,
 corresponding to the probability that \code{observed} is equal to the second
 factor level. See details \link[=brier_score]{here} for more information.
 
+\emph{Nominal forecasts} require a column \code{observed} of type factor with N levels,
+(where N is the number of possible outcomes), a column \code{predicted} of type
+numeric with probabilities (which sum to one across all possible outcomes),
+and a column \code{predicted_label} of type factor with N levels, denoting the
+outcome for which a probability is given. Forecasts must be complete, i.e.
+there must be a probability assigned to every possible outcome.
+
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
 numeric with quantile-levels (between 0 and 1).
@@ -104,7 +110,7 @@ numeric with sample indices.
 
 For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_sample_continuous}, \link{example_sample_discrete},
-\code{\link[=example_point]{example_point()}}, and \link{example_binary}).
+\code{\link[=example_point]{example_point()}}, \link{example_binary}, and \link{example_nominal}).
 }
 
 \section{Forecast unit}{
@@ -142,7 +148,12 @@ as_forecast_quantile(
 )
 }
 \seealso{
-\code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
-\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+Other functions to create forecast objects: 
+\code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
+\code{\link{as_forecast_point}()},
+\code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_sample}()}
 }
-\keyword{check-forecasts}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}

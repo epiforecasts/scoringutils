@@ -40,4 +40,4 @@ example_quantile \%>\%
     c("location", "target_end_date", "target_type", "horizon", "model")
   )
 }
-\keyword{data-handling}
+\keyword{as_forecast}

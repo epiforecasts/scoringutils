@@ -71,7 +71,13 @@ the true quantiles in particular in the tails of the distribution and
 when the number of available samples is low.
 }
 \seealso{
-\code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
-\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+Other functions to create forecast objects: 
+\code{\link{as_forecast}},
+\code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
+\code{\link{as_forecast_point}()},
+\code{\link{as_forecast_sample}()}
 }
-\keyword{check-forecasts}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}
+\keyword{transform}

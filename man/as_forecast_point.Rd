@@ -51,7 +51,13 @@ When converting a \code{forecast_quantile} object into a \code{forecast_point} o
 the 0.5 quantile is extracted and returned as the point forecast.
 }
 \seealso{
-\code{\link[=as_forecast]{as_forecast()}}, \code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
-\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+Other functions to create forecast objects: 
+\code{\link{as_forecast}},
+\code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
+\code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_sample}()}
 }
-\keyword{check-forecasts}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}
+\keyword{transform}

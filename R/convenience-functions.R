@@ -62,7 +62,7 @@
 #' medRxiv 2023.01.23.23284722
 #' \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1>
-#' @keywords check-forecasts
+#' @keywords transform
 #' @examples
 #' library(magrittr) # pipe operator
 #'
@@ -203,7 +203,7 @@ transform_forecasts <- function(forecast,
 #'   medRxiv 2023.01.23.23284722
 #'   \doi{https://doi.org/10.1101/2023.01.23.23284722}
 #'   <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1> # nolint
-#' @keywords check-forecasts
+#' @keywords transform
 #' @importFrom checkmate assert_numeric assert_number
 #' @examples
 #' library(magrittr) # pipe operator
@@ -267,7 +267,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
 #' @export
-#' @keywords data-handling
+#' @keywords as_forecast
 #' @examples
 #' library(magrittr) # pipe operator
 #' example_quantile %>%
