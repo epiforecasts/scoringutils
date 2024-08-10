@@ -54,6 +54,7 @@ the 0.5 quantile is extracted and returned as the point forecast.
 Other functions to create forecast objects: 
 \code{\link{as_forecast}},
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_quantile}()},
 \code{\link{as_forecast_sample}()}
 }

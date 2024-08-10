@@ -64,6 +64,7 @@ moment, those are:
 \itemize{
 \item point forecasts
 \item binary forecasts ("soft binary classification")
+\item nominal forecasts ("soft classification with multiple unordered classes")
 \item Probabilistic forecasts in a quantile-based format (a forecast is
 represented as a set of predictive quantiles)
 \item Probabilistic forecasts in a sample-based format (a forecast is represented
@@ -92,6 +93,13 @@ two levels and a column \code{predicted} of type numeric with probabilities,
 corresponding to the probability that \code{observed} is equal to the second
 factor level. See details \link[=brier_score]{here} for more information.
 
+\emph{Nominal forecasts} require a column \code{observed} of type factor with N levels,
+(where N is the number of possible outcomes), a column \code{predicted} of type
+numeric with probabilities (which sum to one across all possible outcomes),
+and a column \code{predicted_label} of type factor with N levels, denoting the
+outcome for which a probability is given. Forecasts must be complete, i.e.
+there must be a probability assigned to every possible outcome.
+
 \emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
 a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
 numeric with quantile-levels (between 0 and 1).
@@ -102,7 +110,7 @@ numeric with sample indices.
 
 For more information see the vignettes and the example data
 (\link{example_quantile}, \link{example_sample_continuous}, \link{example_sample_discrete},
-\code{\link[=example_point]{example_point()}}, and \link{example_binary}).
+\code{\link[=example_point]{example_point()}}, \link{example_binary}, and \link{example_nominal}).
 }
 
 \section{Forecast unit}{
@@ -142,6 +150,7 @@ as_forecast_quantile(
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_point}()},
 \code{\link{as_forecast_quantile}()},
 \code{\link{as_forecast_sample}()}

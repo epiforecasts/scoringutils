@@ -68,6 +68,27 @@ metrics_binary <- function(select = NULL, exclude = NULL) {
 }
 
 
+#' @title Scoring rules for nominal forecasts
+#' @description Helper function that returns a named list of default
+#' scoring rules suitable for nominal forecasts.
+#'
+#' The default scoring rules are:
+#' - "log_score" = [logs_nominal()]
+#' @inherit select_metrics params return
+#' @export
+#' @keywords metric
+#' @examples
+#' metrics_nominal()
+#' metrics_nominal(select = "log_score")
+metrics_nominal <- function(select = NULL, exclude = NULL) {
+  all <- list(
+    log_score = logs_nominal
+  )
+  selected <- select_metrics(all, select, exclude)
+  return(selected)
+}
+
+
 #' @title Default metrics and scoring rules for point forecasts
 #' @description
 #' Helper function that returns a named list of default

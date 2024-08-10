@@ -41,6 +41,7 @@ forecast types and expected input formats by calling \verb{?}\code{\link[=as_for
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast}},
+\code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_point}()},
 \code{\link{as_forecast_quantile}()},
 \code{\link{as_forecast_sample}()}
