@@ -68,7 +68,7 @@ NULL
 #' It renames the required columns, where appropriate, and sets the forecast
 #' unit.
 #' @inheritParams as_forecast
-#' @keywords as_forecast internal
+#' @keywords as_forecast
 as_forecast_generic <- function(data,
                                 forecast_unit = NULL,
                                 observed = NULL,

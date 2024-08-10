@@ -44,4 +44,3 @@ It renames the required columns, where appropriate, and sets the forecast
 unit.
 }
 \keyword{as_forecast}
-\keyword{internal}
