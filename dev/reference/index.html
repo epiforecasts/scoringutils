@@ -55,7 +55,48 @@
         </dt>
         <dd>scoringutils: Utilities for Scoring and Assessing Predictions</dd>
       </dl></div><div class="section level2">
-      <h2 id="functions-to-analyse-inputs-and-obtain-useful-information">Functions to analyse inputs and obtain useful information<a class="anchor" aria-label="anchor" href="#functions-to-analyse-inputs-and-obtain-useful-information"></a></h2>
+      <h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="example_binary.html">example_binary</a></code>
+
+        </dt>
+        <dd>Binary forecast example data</dd>
+      </dl><dl><dt>
+
+          <code><a href="example_point.html">example_point</a></code>
+
+        </dt>
+        <dd>Point forecast example data</dd>
+      </dl><dl><dt>
+
+          <code><a href="example_quantile.html">example_quantile</a></code>
+
+        </dt>
+        <dd>Quantile example data</dd>
+      </dl><dl><dt>
+
+          <code><a href="example_sample_continuous.html">example_sample_continuous</a></code>
+
+        </dt>
+        <dd>Continuous forecast example data</dd>
+      </dl><dl><dt>
+
+          <code><a href="example_sample_discrete.html">example_sample_discrete</a></code>
+
+        </dt>
+        <dd>Discrete forecast example data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="create-forecast-objects">Create forecast objects<a class="anchor" aria-label="anchor" href="#create-forecast-objects"></a></h2>
 
 
 
@@ -70,7 +111,7 @@
           <code><a href="as_forecast.html">as_forecast</a></code>
 
         </dt>
-        <dd>Create a <code>forecast</code> object</dd>
+        <dd>General information on creating a <code>forecast</code> object</dd>
       </dl><dl><dt>
 
           <code><a href="as_forecast_binary.html">as_forecast_binary()</a></code>
@@ -103,22 +144,68 @@
         <dd>Create a <code>forecast</code> object for sample-based forecasts</dd>
       </dl><dl><dt>
 
+          <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code>
+
+        </dt>
+        <dd>Set unit of a single forecast manually</dd>
+      </dl></div><div class="section level2">
+      <h2 id="validate-forecast-objects">Validate forecast objects<a class="anchor" aria-label="anchor" href="#validate-forecast-objects"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
           <code><a href="assert_forecast.html">assert_forecast()</a></code>
 
         </dt>
         <dd>Assert that input is a forecast object and passes validations</dd>
       </dl><dl><dt>
 
-          <code><a href="get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
+          <code><a href="is_forecast.html">is_forecast()</a></code> <code><a href="is_forecast.html">is_forecast_sample()</a></code> <code><a href="is_forecast.html">is_forecast_binary()</a></code> <code><a href="is_forecast.html">is_forecast_point()</a></code> <code><a href="is_forecast.html">is_forecast_quantile()</a></code>
 
         </dt>
-        <dd>Find duplicate forecasts</dd>
+        <dd>Test whether an object is a forecast object</dd>
       </dl><dl><dt>
+
+          <code><a href="validate_forecast.html">validate_forecast()</a></code>
+
+        </dt>
+        <dd>Re-validate an existing forecast object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="gain-insights-about-forecasts-and-inputs">Gain insights about forecasts and inputs<a class="anchor" aria-label="anchor" href="#gain-insights-about-forecasts-and-inputs"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="get_forecast_counts.html">get_forecast_counts()</a></code>
 
         </dt>
         <dd>Count number of available forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.forecast.html">print(<i>&lt;forecast&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print information about a forecast object</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>
+
+        </dt>
+        <dd>Find duplicate forecasts</dd>
       </dl><dl><dt>
 
           <code><a href="get_forecast_type.html">get_forecast_type()</a></code>
@@ -131,44 +218,8 @@
 
         </dt>
         <dd>Get unit of a single forecast</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_metrics.html">get_metrics()</a></code>
-
-        </dt>
-        <dd>Get names of the metrics that were used for scoring</dd>
-      </dl><dl><dt>
-
-          <code><a href="is_forecast.html">is_forecast()</a></code> <code><a href="is_forecast.html">is_forecast_sample()</a></code> <code><a href="is_forecast.html">is_forecast_binary()</a></code> <code><a href="is_forecast.html">is_forecast_point()</a></code> <code><a href="is_forecast.html">is_forecast_quantile()</a></code>
-
-        </dt>
-        <dd>Test whether an object is a forecast object</dd>
-      </dl><dl><dt>
-
-          <code><a href="log_shift.html">log_shift()</a></code>
-
-        </dt>
-        <dd>Log transformation with an additive shift</dd>
-      </dl><dl><dt>
-
-          <code><a href="print.forecast.html">print(<i>&lt;forecast&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Print information about a forecast object</dd>
-      </dl><dl><dt>
-
-          <code><a href="transform_forecasts.html">transform_forecasts()</a></code>
-
-        </dt>
-        <dd>Transform forecasts and observed values</dd>
-      </dl><dl><dt>
-
-          <code><a href="validate_forecast.html">validate_forecast()</a></code>
-
-        </dt>
-        <dd>Re-validate an existing forecast object</dd>
       </dl></div><div class="section level2">
-      <h2 id="functions-for-convenient-forecast-evaluation">Functions for convenient forecast evaluation<a class="anchor" aria-label="anchor" href="#functions-for-convenient-forecast-evaluation"></a></h2>
+      <h2 id="transform-data">Transform data<a class="anchor" aria-label="anchor" href="#transform-data"></a></h2>
 
 
 
@@ -180,11 +231,87 @@
 
       <dl><dt>
 
-          <code><a href="score.html">score()</a></code>
+          <code><a href="as_forecast_point.html">as_forecast_point()</a></code>
 
         </dt>
-        <dd>Evaluate forecasts</dd>
+        <dd>Create a <code>forecast</code> object for point forecasts</dd>
       </dl><dl><dt>
+
+          <code><a href="as_forecast_quantile.html">as_forecast_quantile()</a></code>
+
+        </dt>
+        <dd>Create a <code>forecast</code> object for quantile-based forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="log_shift.html">log_shift()</a></code>
+
+        </dt>
+        <dd>Log transformation with an additive shift</dd>
+      </dl><dl><dt>
+
+          <code><a href="transform_forecasts.html">transform_forecasts()</a></code>
+
+        </dt>
+        <dd>Transform forecasts and observed values</dd>
+      </dl></div><div class="section level2">
+      <h2 id="handling-metrics-and-scoring-functions">Handling metrics and scoring functions<a class="anchor" aria-label="anchor" href="#handling-metrics-and-scoring-functions"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_metrics.html">get_metrics()</a></code>
+
+        </dt>
+        <dd>Get names of the metrics that were used for scoring</dd>
+      </dl><dl><dt>
+
+          <code><a href="metrics_binary.html">metrics_binary()</a></code>
+
+        </dt>
+        <dd>Default metrics and scoring rules for binary forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="metrics_point.html">metrics_point()</a></code>
+
+        </dt>
+        <dd>Default metrics and scoring rules for point forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="metrics_quantile.html">metrics_quantile()</a></code>
+
+        </dt>
+        <dd>Default metrics and scoring rules for quantile-based forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="metrics_sample.html">metrics_sample()</a></code>
+
+        </dt>
+        <dd>Default metrics and scoring rules sample-based forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="select_metrics.html">select_metrics()</a></code>
+
+        </dt>
+        <dd>Select metrics from a list of functions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="evaluate-forecasts">Evaluate forecasts<a class="anchor" aria-label="anchor" href="#evaluate-forecasts"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="add_relative_skill.html">add_relative_skill()</a></code>
 
@@ -216,10 +343,10 @@
         <dd>Probability integral transformation (data.frame version)</dd>
       </dl><dl><dt>
 
-          <code><a href="run_safely.html">run_safely()</a></code>
+          <code><a href="score.html">score()</a></code>
 
         </dt>
-        <dd>Run a function safely</dd>
+        <dd>Evaluate forecasts</dd>
       </dl><dl><dt>
 
           <code><a href="summarise_scores.html">summarise_scores()</a></code> <code><a href="summarise_scores.html">summarize_scores()</a></code>
@@ -305,30 +432,6 @@
         <dd>Determine dispersion of a probabilistic forecast</dd>
       </dl><dl><dt>
 
-          <code><a href="metrics_binary.html">metrics_binary()</a></code>
-
-        </dt>
-        <dd>Default metrics and scoring rules for binary forecasts</dd>
-      </dl><dl><dt>
-
-          <code><a href="metrics_point.html">metrics_point()</a></code>
-
-        </dt>
-        <dd>Default metrics and scoring rules for point forecasts</dd>
-      </dl><dl><dt>
-
-          <code><a href="metrics_quantile.html">metrics_quantile()</a></code>
-
-        </dt>
-        <dd>Default metrics and scoring rules for quantile-based forecasts</dd>
-      </dl><dl><dt>
-
-          <code><a href="metrics_sample.html">metrics_sample()</a></code>
-
-        </dt>
-        <dd>Default metrics and scoring rules sample-based forecasts</dd>
-      </dl><dl><dt>
-
           <code><a href="pit_sample.html">pit_sample()</a></code>
 
         </dt>
@@ -353,33 +456,10 @@
         <dd>Squared error of the mean (sample-based version)</dd>
       </dl><dl><dt>
 
-          <code><a href="select_metrics.html">select_metrics()</a></code>
-
-        </dt>
-        <dd>Select metrics from a list of functions</dd>
-      </dl><dl><dt>
-
           <code><a href="wis.html">wis()</a></code> <code><a href="wis.html">dispersion_quantile()</a></code> <code><a href="wis.html">overprediction_quantile()</a></code> <code><a href="wis.html">underprediction_quantile()</a></code>
 
         </dt>
         <dd>Weighted interval score (WIS)</dd>
-      </dl></div><div class="section level2">
-      <h2 id="data-wrangling-helpers">Data wrangling helpers<a class="anchor" aria-label="anchor" href="#data-wrangling-helpers"></a></h2>
-
-
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code>
-
-        </dt>
-        <dd>Set unit of a single forecast manually</dd>
       </dl></div><div class="section level2">
       <h2 id="functions-for-plotting-and-data-visualisation">Functions for plotting and data visualisation<a class="anchor" aria-label="anchor" href="#functions-for-plotting-and-data-visualisation"></a></h2>
 
@@ -446,8 +526,14 @@
         </dt>
         <dd>Scoringutils ggplot2 theme</dd>
       </dl></div><div class="section level2">
-      <h2 id="internal-input-check-functions">Internal input check functions<a class="anchor" aria-label="anchor" href="#internal-input-check-functions"></a></h2>
+      <h2 id="internal-functions">Internal functions<a class="anchor" aria-label="anchor" href="#internal-functions"></a></h2>
 
+
+
+
+    </div><div class="section level2">
+
+      <h3 id="internal-input-check-functions">Internal input check functions<a class="anchor" aria-label="anchor" href="#internal-input-check-functions"></a></h3>
 
 
 
@@ -625,8 +711,8 @@
         </dt>
         <dd>Validate metrics</dd>
       </dl></div><div class="section level2">
-      <h2 id="misc-internal-functions">Misc internal functions<a class="anchor" aria-label="anchor" href="#misc-internal-functions"></a></h2>
 
+      <h3 id="misc-internal-functions">Misc internal functions<a class="anchor" aria-label="anchor" href="#misc-internal-functions"></a></h3>
 
 
 
@@ -769,6 +855,12 @@
         <dd>Transform from a quantile format to an interval format</dd>
       </dl><dl><dt>
 
+          <code><a href="run_safely.html">run_safely()</a></code>
+
+        </dt>
+        <dd>Run a function safely</dd>
+      </dl><dl><dt>
+
           <code><a href="sample_to_interval_long.html">sample_to_interval_long()</a></code>
 
         </dt>
@@ -785,47 +877,6 @@
 
         </dt>
         <dd>Validate an object of class <code>scores</code></dd>
-      </dl></div><div class="section level2">
-      <h2 id="example-data-and-information">Example data and information<a class="anchor" aria-label="anchor" href="#example-data-and-information"></a></h2>
-
-
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="example_binary.html">example_binary</a></code>
-
-        </dt>
-        <dd>Binary forecast example data</dd>
-      </dl><dl><dt>
-
-          <code><a href="example_point.html">example_point</a></code>
-
-        </dt>
-        <dd>Point forecast example data</dd>
-      </dl><dl><dt>
-
-          <code><a href="example_quantile.html">example_quantile</a></code>
-
-        </dt>
-        <dd>Quantile example data</dd>
-      </dl><dl><dt>
-
-          <code><a href="example_sample_continuous.html">example_sample_continuous</a></code>
-
-        </dt>
-        <dd>Continuous forecast example data</dd>
-      </dl><dl><dt>
-
-          <code><a href="example_sample_discrete.html">example_sample_discrete</a></code>
-
-        </dt>
-        <dd>Discrete forecast example data</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
