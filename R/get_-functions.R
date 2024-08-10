@@ -16,7 +16,9 @@
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))
-  if (test_forecast_type_is_binary(data)) {
+  if (test_forecast_type_is_nominal(data)) {
+    forecast_type <- "nominal"
+  } else if (test_forecast_type_is_binary(data)) {
     forecast_type <- "binary"
   } else if (test_forecast_type_is_quantile(data)) {
     forecast_type <- "quantile"
@@ -90,6 +92,19 @@ test_forecast_type_is_quantile <- function(data) {
   return(observed_correct && predicted_correct && columns_correct)
 }
 
+#' Test whether data could be a nominal forecast.
+#' @description Checks type of the necessary columns.
+#' @inheritParams document_check_functions
+#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
+#' @keywords internal_input_check
+test_forecast_type_is_nominal <- function(data) {
+  observed_correct <- test_factor(x = data$observed)
+  predicted_correct <- test_numeric(x = data$predicted)
+  columns_correct <- test_columns_present(data, "predicted_label")
+  predicted_label_correct <- test_factor(x = data$predicted_label)
+  return(observed_correct && predicted_correct &&
+           columns_correct && predicted_label_correct)
+}
 
 #' Assert that forecast type is as expected
 #' @param data A forecast object (see [as_forecast()]).
@@ -262,7 +277,7 @@ get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
-    "pit_value", "interval_range", "boundary",
+    "pit_value", "interval_range", "boundary", "predicted_label",
     "interval_coverage", "interval_coverage_deviation",
     "quantile_coverage", "quantile_coverage_deviation",
     grep("_relative_skill$", names(data), value = TRUE),
@@ -310,8 +325,8 @@ get_duplicate_forecasts <- function(
   assert_data_frame(data)
   data <- ensure_data.table(data)
   forecast_unit <- get_forecast_unit(data)
-  available_type <- c("sample_id", "quantile_level") %in% colnames(data)
-  type <- c("sample_id", "quantile_level")[available_type]
+  available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
+  type <- c("sample_id", "quantile_level", "predicted_label")[available_type]
   data <- as.data.table(data)
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
   out <- data[scoringutils_InternalDuplicateCheck > 1]

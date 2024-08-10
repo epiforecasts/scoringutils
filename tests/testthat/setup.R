@@ -17,5 +17,6 @@ scores_quantile <- suppressMessages(score(as_forecast_quantile(example_quantile)
 scores_continuous <- suppressMessages(score(as_forecast_sample(example_sample_continuous)))
 scores_point <- suppressMessages(score(as_forecast_point(example_point)))
 scores_binary <- suppressMessages(score(as_forecast_binary(example_binary)))
+scores_nominal <- suppressMessages(score(as_forecast_nominal(example_nominal)))
 
 class(as.data.frame(example_quantile))
