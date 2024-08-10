@@ -1,51 +1,3 @@
-#' @title Change data from a sample based format to a quantile format
-#'
-#' @description
-#' Transform data from a format that is based on predictive samples to a format
-#' based on plain quantiles.
-#'
-#' @param forecast A `forecast` object of class `forecast_sample` (a validated
-#'   data.table with predicted and observed values, see [as_forecast()]).
-#'
-#' @param quantile_level A numeric vector of quantile levels for which
-#'   quantiles will be computed.
-#' @param type Type argument passed down to the quantile function. For more
-#'   information, see [quantile()].
-#' @return a data.table in a long interval range format
-#' @importFrom data.table as.data.table
-#' @importFrom stats quantile
-#' @importFrom methods hasArg
-#' @importFrom checkmate assert_numeric
-#' @keywords data-handling
-#' @export
-#' @examples
-#' library(magrittr) # pipe operator
-#' example_sample_discrete %>%
-#'   as_forecast_sample() %>%
-#'   sample_to_quantile()
-sample_to_quantile <- function(forecast,
-                               quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95),
-                               type = 7) {
-  forecast <- copy(forecast)
-  assert_forecast(forecast, forecast_type = "sample", verbose = FALSE)
-  assert_numeric(quantile_level, min.len = 1)
-  reserved_columns <- c("predicted", "sample_id")
-  by <- setdiff(colnames(forecast), reserved_columns)
-
-  quantile_level <- unique(
-    round(c(quantile_level, 1 - quantile_level), digits = 10)
-  )
-
-  forecast <-
-    forecast[, .(quantile_level = quantile_level,
-                 predicted = quantile(x = predicted, probs = ..quantile_level,
-                                      type = ..type, na.rm = TRUE)),
-             by = by]
-
-  return(as_forecast_quantile(forecast))
-}
-
-
 # ==================== Functions internally used for scoring ===================
 # These functions would ideally be replaced in the future
 
@@ -186,7 +138,7 @@ quantile_to_interval_numeric <- function(observed,
 #' Transform data from a format that is based on predictive samples to a format
 #' based on interval ranges.
 #'
-#' @inheritParams sample_to_quantile
+#' @inheritParams as_forecast_quantile
 #' @param keep_quantile_col keep quantile_level column, default is TRUE
 #' @return A data.table in a long interval interval range format
 #' @importFrom data.table as.data.table
@@ -203,9 +155,9 @@ sample_to_interval_long <- function(data,
   upper_quantiles <- 1 - lower_quantiles
   quantile_levels <- sort(unique(c(lower_quantiles, upper_quantiles)))
 
-  data <- sample_to_quantile(
+  data <- as_forecast_quantile(
     data,
-    quantile_level = quantile_levels,
+    probs = quantile_levels,
     type = type
   )
 

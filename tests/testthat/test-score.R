@@ -166,7 +166,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
                            target_type == "Cases" & location == "DE"] %>%
     as_forecast_quantile()
   metrics <- metrics_quantile()
-  metrics$wis <- customise_metric(wis, separate_results = FALSE)
+  metrics$wis <- purrr::partial(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
 
   expect_equal(

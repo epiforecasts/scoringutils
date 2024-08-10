@@ -102,17 +102,25 @@ Process and validate a data.frame (or similar) or similar with forecasts
 and observations. If the input passes all input checks, it will be converted
 to a \code{forecast} object. A forecast object is a \code{data.table} with a
 class \code{forecast} and an additional class that depends on the forecast type.
-Every forecast type has its own \code{as_forecast_()} function.
+Every forecast type has its own \verb{as_forecast_<type>()} function.
 See the details section below for more information
 on the expected input formats.
 
-The \code{as_forecast_()} functions give users some control over how their data
-is parsed.
+The \verb{as_forecast_<type>()} functions give users some control over how their
+data is parsed.
 Using the arguments \code{observed}, \code{predicted}, \code{model}, etc. users can rename
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
 see \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
+
+The following functions are available:
+\itemize{
+\item \code{\link[=as_forecast_point]{as_forecast_point()}}
+\item \code{\link[=as_forecast_binary]{as_forecast_binary()}}
+\item \code{\link[=as_forecast_sample]{as_forecast_sample()}}
+\item \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
+}
 }
 \section{Forecast types and input formats}{
 Various different forecast types / forecast formats are supported. At the
@@ -202,5 +210,9 @@ as_forecast_quantile(
   forecast_unit = c("model", "target_type", "target_end_date",
                     "horizon", "location")
 )
+}
+\seealso{
+\code{\link[=as_forecast_point]{as_forecast_point()}}, \code{\link[=as_forecast_binary]{as_forecast_binary()}},
+\code{\link[=as_forecast_sample]{as_forecast_sample()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}
 }
 \keyword{check-forecasts}

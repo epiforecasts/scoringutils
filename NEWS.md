@@ -18,11 +18,12 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   `score()` now returns objects of class `scores` with a stored attribute `metrics` that holds the names of the scoring rules that were used. Users can call `get_metrics()` to access the names of those scoring rules.
   - `score()` now returns one score per forecast, instead of one score per sample or quantile.
   - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the functions `metrics_point()`, `metrics_sample()`, `metrics_quantile()`, `metrics_binary()`, and `metrics_nominal()`, which return a named list of scoring rules suitable for the respective forecast type. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
-  - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `customise_metric()` and `select_metric()`.
+  - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `purrr::partial()` and `select_metric()`. See `?score()` for more information.
   - the CRPS is now reported as decomposition into dispersion, overprediction and underprediction.
 
 ### Creating a forecast object  
-- The `as_forecast_<type>()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. 
+- The `as_forecast_<type>()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. See `?as_forecast()` for more information.
+- Some `as_forecast_<type>()` functions like e.g. `as_forecast_point()` and `as_forecast_quantile()` have S3 methods for converting from another forecast type to the respective forecast type. For example, `as_forecast_quantile()` has a method for converting from a `forecast_sample` object to a `forecast_quantile` object by estimating quantiles from the samples.
 
 ### Updated workflows
 - An example workflow for scoring a forecast now looks like this: 
@@ -281,7 +282,7 @@ the mean before returning an output.
 ### Bug fixes
 
 - Testing was expanded
-- Minor bugs were fixed, for example a bug in the `sample_to_quantile()` function
+- Minor bugs were fixed, for example a bug in the `as_forecast_quantile()` function
 (https://github.com/epiforecasts/scoringutils/pull/223)
 
 ### Package data updated

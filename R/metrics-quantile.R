@@ -47,11 +47,20 @@
 #' quantile as the upper bound).
 #' Non-symmetric quantiles can be scored using the function [quantile_score()].
 #'
-#' Usually the interval score is weighted by a factor that makes sure that the
-#' average score across an increasing number of equally spaced
-#' quantiles, converges to the continuous ranked probability score (CRPS). This
-#' weighted score is called the weighted interval score (WIS).
-#' The weight commonly used is \eqn{\alpha / 2}{alpha / 2}.
+#' For a set of \eqn{k = 1, \dots, K} prediction intervals and the median
+#' \eqn{m}, we can compute a weighted interval score (WIS) as the sum of the
+#' interval scores for individual intervals:
+#' \deqn{
+#' \text{WIS}_{\alpha_{\{0:K\}}}(F, y) = \frac{1}{K + 1/2}
+#' \times \left(w_0 \times |y - m| + \sum_{k=1}^{K}
+#' \left\{ w_k \times \text{IS}_{\alpha_k}(F, y) \right\}\right)
+#' }{
+#' }
+#'
+#' The individual scores are usually weighted with
+#' \eqn{w_k = \frac{\alpha_k}{2}}{alpha_k / 2}. This weight ensures that
+#' for an increasing number of equally spaced quantiles, the WIS
+#' converges to the continuous ranked probability score (CRPS).
 #'
 #' **Quantile score**
 #'
@@ -99,6 +108,10 @@
 #' `wis()`: a numeric vector with WIS values of size n (one per observation),
 #' or a list with separate entries if `separate_results` is `TRUE`.
 #' @export
+#' @references
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
 #' @keywords metric
 #' @examples
 #' observed <- c(1, -15, 22)
@@ -609,11 +622,6 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 }
 
 
-################################################################################
-# Metrics with a one-to-one relationship between input and score
-################################################################################
-
-
 #' @title Quantile score
 #'
 #' @description
@@ -680,6 +688,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #'   predicted = cbind(lower, upper),
 #'   quantile_level = c(alpha / 2, 1 - alpha / 2)
 #' )
+#' @importFrom checkmate test_atomic_vector
 #' @export
 #' @keywords metric
 #' @references Strictly Proper Scoring Rules, Prediction,and Estimation,
@@ -697,8 +706,14 @@ quantile_score <- function(observed,
 
   # compute score - this is the version explained in the SI of Bracher et. al.
   obs_smaller_pred <- observed <= predicted
-  # subtract tau from indicator function (1(y <= q_tau)) by row
+
+  if (test_atomic_vector(predicted)) {
+    obs_smaller_pred <- matrix(obs_smaller_pred, nrow = 1)
+  }
+  # subtract quantile level tau from result of indicator function (1(y <= q_tau))
+  # (subtraction is element-wise and by row)
   tau_diff <- sweep(obs_smaller_pred, 2, quantile_level)
+
   error <- predicted - observed
 
   score <- 2 * tau_diff * error
@@ -716,96 +731,5 @@ quantile_score <- function(observed,
     # unweighted score' = 2 * score / alpha
     score <- 2 * sweep(score, 2, alpha, FUN = "/")
     return(rowMeans(score))
-  }
-}
-
-
-# Weighted Interval Score, But With One-to-One Relationship
-wis_one_to_one <- function(observed,
-                           predicted,
-                           quantile_level,
-                           separate_results = FALSE,
-                           output = c("matrix", "data.frame", "vector"),
-                           weigh = TRUE) {
-
-  # input checks
-  assert_input_quantile(observed, predicted, quantile_level)
-
-  # store original data
-  n <- length(observed)
-  N <- length(quantile_level)
-  original_data <- data.table(
-    forecast_id = rep(1:n, each = N),
-    observed = rep(observed, each = N),
-    predicted = as.vector(t(predicted)),
-    quantile_level = quantile_level
-  )
-
-  # define output columns
-  if (separate_results) {
-    cols <- c("wis", "dispersion", "underprediction", "overprediction")
-  } else {
-    cols <- "wis"
-  }
-
-  # reformat input to interval format and calculate interval score
-  reformatted <- quantile_to_interval(observed, predicted, quantile_level)
-  reformatted[, eval(cols) := do.call(
-    interval_score,
-    list(
-      observed = observed,
-      lower = lower,
-      upper = upper,
-      interval_range = interval_range,
-      weigh = weigh,
-      separate_results = separate_results
-    )
-  )]
-
-  # melt data to long format, calculate quantile_levels, merge back to original
-  long <- melt(reformatted,
-               measure.vars = c("lower", "upper"),
-               variable.name = "boundary",
-               value.name = "predicted",
-               id.vars = c("forecast_id", "observed", "interval_range", cols))
-  # calculate quantile levels
-  long[, quantile_level := (100 - interval_range) / 200] # lower quantile_levels
-  long[boundary == "upper", quantile_level :=  1 - quantile_level] # upper quantile_levels
-  # remove boundary, interval_range, take unique value to get rid of duplicated median
-  long[, c("boundary", "interval_range") := NULL]
-  long <- unique(long) # should maybe check for count_median_twice?
-  out <- merge(
-    original_data, long, all.x = TRUE,
-    by = c("forecast_id", "observed", "predicted", "quantile_level")
-  )[, forecast_id := NULL]
-
-  # handle returns depending on the output format
-  if (output == "data.frame") {
-    return(out)
-  }
-
-  wis <- out$wis
-  if (separate_results) {
-    components <- list(
-      underprediction = out$underprediction,
-      overprediction = out$overprediction,
-      dispersion = out$dispersion
-    )
-  }
-
-  if (output == "vector" && separate_results) {
-    return(c(wis = wis, components))
-  } else if (output == "vector") {
-    return(wis)
-  }
-
-  if (output == "matrix") {
-    wis <- matrix(wis, nrow = n, ncol = N)
-    if (separate_results) {
-      components <- lapply(components, matrix, nrow = n, ncol = N)
-      return(c(wis, components))
-    } else {
-      return(wis)
-    }
   }
 }

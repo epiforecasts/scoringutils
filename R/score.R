@@ -4,8 +4,9 @@
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
-#' See the details section for more information on forecast types and input
-#' formats. For additional help and examples, check out the [Getting Started
+#' See the *Forecast types and input formats* section for more information on
+#' forecast types and input formats.
+#' For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
@@ -16,13 +17,36 @@
 #' @param metrics A named list of scoring functions. Names will be used as
 #'   column names in the output. See [metrics_point()], [metrics_binary()],
 #'   [metrics_quantile()], and [metrics_sample()] for more information on the
-#'   default metrics used. Note that if you want to pass arguments to any
-#'   given metric, you should do that through the function [customise_metric()]
-#'   and pass an updated list of functions with your custom metric to
-#'   the `metrics` argument in `score()`.
-#' @param ... Additional arguments. Currently unused but allows for future
-#'  extensions. If you want to pass arguments to individual metrics, use
-#'  [customise_metric()].
+#'   default metrics used. See the *Customising metrics* section below for
+#'   information on how to pass custom arguments to scoring functions.
+#' @param ... Currently unused. You *cannot* pass additional arguments to scoring
+#'   functions via `...`. See the *Customising metrics* section below for
+#'   details on how to use [purrr::partial()] to pass arguments to individual
+#'   metrics.
+#' @details
+#' **Customising metrics**
+#'
+#' If you want to pass arguments to a scoring function, you need change the
+#' scoring function itself via e.g. [purrr::partial()] and pass an updated list
+#' of functions with your custom metric to the `metrics` argument in `score()`.
+#' For example, to use [interval_coverage()] with `interval_range = 90`, you
+#' would define a new function, e.g.
+#' `interval_coverage_90 <- purrr::partial(interval_coverage, interval_range = 90)`
+#' and pass this new function to `metrics` in `score()`.
+#'
+#' Note that if you want to pass a variable as an argument, you can
+#' unquote it with `!!` to make sure the value is evaluated only once when the
+#' function is created. Consider the following example:
+#' ```
+#' custom_arg <- "foo"
+#' print1 <- purrr::partial(print, x = custom_arg)
+#' print2 <- purrr::partial(print, x = !!custom_arg)
+#'
+#' custom_arg <- "bar"
+#' print1() # prints 'bar'
+#' print2() # prints 'foo'
+#' ```
+#'
 #' @return
 #' An object of class `scores`. This object is a data.table with
 #' unsummarised scores (one score per forecast) and has an additional attribute
@@ -241,7 +265,7 @@ score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...)
 #' @param ... Additional arguments to be passed to the scoring rules. Note that
 #'   this is currently not used, as all calls to `apply_scores` currently
 #'   avoid passing arguments via `...` and instead expect that the metrics
-#'   directly be modified using [customise_metric()].
+#'   directly be modified using [purrr::partial()].
 #' @inheritParams score
 #' @return A data table with the forecasts and the calculated metrics.
 #' @keywords internal
