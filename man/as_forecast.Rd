@@ -2,56 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{as_forecast}
 \alias{as_forecast}
-\alias{as_forecast_point}
-\alias{as_forecast_binary}
-\alias{as_forecast_quantile}
-\alias{as_forecast_sample}
-\alias{as_forecast_nominal}
 \title{Create a \code{forecast} object}
-\usage{
-as_forecast_point(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL
-)
-
-as_forecast_binary(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL
-)
-
-as_forecast_quantile(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  quantile_level = NULL
-)
-
-as_forecast_sample(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  sample_id = NULL
-)
-
-as_forecast_nominal(
-  data,
-  forecast_unit = NULL,
-  observed = NULL,
-  predicted = NULL,
-  model = NULL,
-  predicted_label = NULL
-)
-}
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
@@ -73,19 +24,6 @@ predicted values. This column will be renamed to "predicted".}
 \item{model}{(optional) Name of the column in \code{data} that contains the names
 of the models/forecasters that generated the predicted values.
 This column will be renamed to "model".}
-
-\item{quantile_level}{(optional) Name of the column in \code{data} that contains
-the quantile level of the predicted values. This column will be renamed to
-"quantile_level". Only applicable to quantile-based forecasts.}
-
-\item{sample_id}{(optional) Name of the column in \code{data} that contains the
-sample id. This column will be renamed to "sample_id". Only applicable to
-sample-based forecasts.}
-
-\item{predicted_label}{(optional) Name of the column in \code{data} that denotes
-the outcome to which a predicted probability corresponds to.
-This column will be renamed to "predicted_label". Only applicable to
-nominal forecasts.}
 }
 \value{
 Depending on the forecast type, an object of the following class will be

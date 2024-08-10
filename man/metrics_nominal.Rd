@@ -14,7 +14,7 @@ metrics_nominal(select = NULL, exclude = NULL)
 If \code{select} is not \code{NULL}, this argument is ignored.}
 }
 \value{
-A list of scoring rules.
+A list of scoring functions.
 }
 \description{
 Helper function that returns a named list of default

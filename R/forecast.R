@@ -294,13 +294,17 @@ as_forecast_sample <- function(data,
 
 
 
-#' @rdname as_forecast
+#' @title Create a `forecast` object for nominal forecasts
+#' @description
+#' Nominal forecasts are a form of categorical forecasts where the possible
+#' outcomes that the observed values can assume are not ordered. In that sense,
+#' Nominal forecasts represent a generalisation of binary forecasts.
+#' @inheritParams as_forecast
 #' @param predicted_label (optional) Name of the column in `data` that denotes
 #'   the outcome to which a predicted probability corresponds to.
 #'   This column will be renamed to "predicted_label". Only applicable to
 #'   nominal forecasts.
 #' @export
-
 as_forecast_nominal <- function(data,
                                 forecast_unit = NULL,
                                 observed = NULL,

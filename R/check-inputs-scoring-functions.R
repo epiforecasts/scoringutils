@@ -196,9 +196,23 @@ check_input_binary <- function(observed, predicted) {
 #' @title Assert that inputs are correct for nominal forecasts
 #' @description Function assesses whether the inputs correspond to the
 #' requirements for scoring nominal forecasts.
-#' @param observed XXX
-#' @param predicted XXX
-#' @param predicted_label XXX
+#' @param observed Input to be checked. Should be a factor of length n with
+#'   N levels holding the observed values. n is the number of observations and
+#'   N is the number of possible outcomes the observed values can assume.
+#'   output)
+#' @param predicted Input to be checked. Should be nxN matrix of predictive
+#'   quantiles, n (number of rows) being the number of data points and N
+#'   (number of columns) the number of possible outcomes the observed values
+#'   can assume.
+#'   If `observed` is just a single number, then predicted can just be a
+#'   vector of size N.
+#' @param predicted Input to be checked. `predicted` should be a vector of
+#'   length n, holding probabilities. Alternatively, `predicted` can be a matrix
+#'   of size n x 1. Values represent the probability that
+#'   the corresponding value in `observed` will be equal to the highest
+#'   available factor level.
+#' @param predicted_label Factor of length N with N levels, where N is the
+#'   number of possible outcomes the observed values can assume.
 #' @importFrom checkmate assert_factor assert_numeric assert_set_equal
 #' @inherit document_assert_functions return
 #' @keywords internal_input_check
