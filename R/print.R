@@ -31,7 +31,7 @@ print.forecast <- function(x, ...) {
 
   # get forecast type, forecast unit and score columns
   forecast_type <- try(
-    do.call(get_forecast_type, list(data = x)),
+    do.call(get_forecast_type, list(forecast = x)),
     silent = TRUE
   )
   forecast_unit <- try(

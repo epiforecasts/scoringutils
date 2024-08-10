@@ -1,7 +1,8 @@
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
-  test_dat <- list(na.omit(example_binary), na.omit(example_quantile),
-                   na.omit(example_point), na.omit(example_sample_continuous), na.omit(example_sample_discrete))
+  test_dat <- list(forecast_binary, forecast_quantile,
+                   forecast_point, forecast_sample_continuous,
+                   forecast_sample_discrete)
   for (dat in test_dat){
     forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
@@ -26,7 +27,7 @@ test_that("print() works on forecast_* objects", {
 
 test_that("print methods fail gracefully", {
   test <- as_forecast_quantile(na.omit(example_quantile))
-  test$observed <- NULL
+  class(test) <- c("forecast", "data.table", "data.frame")
 
   # message if forecast type can't be computed
   expect_warning(
@@ -45,14 +46,11 @@ test_that("print methods fail gracefully", {
   class(test) <- c("forecast", "forecast_point")
   expect_warning(
     expect_message(
-      expect_message(
-        expect_output(
-          print(test),
-          pattern = "Forecast unit:"
-        ),
-        "Could not determine forecast unit."
+      expect_output(
+        print(test),
+        pattern = "Forecast unit:"
       ),
-      "Could not determine forecast type"
+      "Could not determine forecast unit."
     ),
     "Error in validating forecast object:"
   )

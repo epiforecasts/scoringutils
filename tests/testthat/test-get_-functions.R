@@ -2,23 +2,24 @@
 # `get_forecast_type`
 # ==============================================================================
 test_that("get_forecast_type() works as expected", {
-  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
-  expect_equal(get_forecast_type(example_sample_continuous), "sample")
-  expect_equal(get_forecast_type(example_sample_discrete), "sample")
-  expect_equal(get_forecast_type(example_binary), "binary")
-  expect_equal(get_forecast_type(example_point), "point")
+  expect_equal(get_forecast_type(forecast_quantile), "quantile")
+  expect_equal(get_forecast_type(forecast_sample_continuous), "sample")
+  expect_equal(get_forecast_type(forecast_sample_discrete), "sample")
+  expect_equal(get_forecast_type(forecast_binary), "binary")
+  expect_equal(get_forecast_type(forecast_point), "point")
+  expect_equal(get_forecast_type(forecast_nominal), "nominal")
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
+    "Input is not a forecast object",
     fixed = TRUE
   )
 
-  df <- data.frame(observed = 1:10, predicted = factor(1:10), model = "model")
+  test <- test <- as_forecast_quantile(na.omit(example_quantile))
+  class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
-    get_forecast_type(df),
-    "input doesn't satisfy criteria for any forecast type",
-    fixed = TRUE
+    get_forecast_type(test),
+    "Class of forecast object seems to be malformed."
   )
 })
 
@@ -198,6 +199,12 @@ test_that("get_duplicate_forecasts() works as expected for point", {
       get_duplicate_forecasts(rbind(example_point, example_point[1010:1020]))),
     22
   )
+
+  expect_s3_class(
+    get_duplicate_forecasts(as.data.frame(example_point)),
+    c("data.table", "data.frame"),
+    exact = TRUE
+  )
 })
 
 test_that("get_duplicate_forecasts() returns the expected class", {
@@ -221,37 +228,6 @@ test_that("get_duplicate_forecasts() shows counts correctly", {
   )
   expect_equal(nrow(duplicates), 2)
   expect_equal(unique(duplicates$n_duplicates), 10)
-})
-
-
-# ==============================================================================
-# `get_forecast_type`
-# ==============================================================================
-test_that("get_forecast_type() works as expected", {
-  expect_equal(get_forecast_type(example_sample_continuous), "sample")
-  expect_equal(get_forecast_type(example_sample_discrete), "sample")
-  expect_equal(get_forecast_type(example_binary), "binary")
-  expect_equal(get_forecast_type(example_point), "point")
-  expect_equal(get_forecast_type(example_nominal), "nominal")
-
-  # works with a data.frame
-  expect_equal(get_forecast_type(example_quantile_df), "quantile")
-
-  expect_error(
-    get_forecast_type(data.frame(x = 1:10)),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data.",
-    fixed = TRUE
-  )
-
-  expect_s3_class(
-    get_duplicate_forecasts(as.data.frame(example_point)),
-    c("data.table", "data.frame"),
-    exact = TRUE
-  )
-})
-
-test_that("get_forecast_type() works as expected with a data.frame", {
-  expect_equal(get_forecast_type(as.data.frame(example_quantile)), "quantile")
 })
 
 

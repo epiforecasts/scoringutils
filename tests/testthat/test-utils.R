@@ -58,8 +58,8 @@ test_that("get_metrics() works as expected", {
     "brier_score" %in% get_metrics(scores_binary)
   )
 
-  expect_equal(get_metrics(scores_continuous),
-               attr(scores_continuous, "metrics"))
+  expect_equal(get_metrics(scores_sample_continuous),
+               attr(scores_sample_continuous, "metrics"))
 
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
@@ -67,11 +67,11 @@ test_that("get_metrics() works as expected", {
     "Input needs an attribute"
   )
   expect_no_condition(
-    get_metrics(scores_continuous)
+    get_metrics(scores_sample_continuous)
   )
 
   # expect warning if some column changed
-  ex <- data.table::copy(scores_continuous)
+  ex <- data.table::copy(scores_sample_continuous)
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
     get_metrics(ex),

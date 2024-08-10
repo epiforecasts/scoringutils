@@ -51,7 +51,7 @@ test_that("summarise_scores() handles the `metrics` attribute correctly", {
   )
 
   # expect warning if a score name changed
-  test <- data.table::copy(scores_continuous)
+  test <- data.table::copy(scores_sample_continuous)
   data.table::setnames(test, old = "crps", new = "crp2")
   expect_warning(
     summarise_scores(test, by = "model"),

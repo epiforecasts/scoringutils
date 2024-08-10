@@ -1,42 +1,19 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer forecast type from data
-#' @description
-#' Helper function to infer the forecast type based on a
-#' data.frame or similar with forecasts and observed values. See the details
-#' section below for information on the different forecast types.
-#' @inheritParams as_forecast
-#' @inheritSection forecast_types Forecast types and input formats
+#' @title Get forecast type from forecast object
+#' @inheritParams score
 #' @importFrom cli cli_abort
 #' @return
-#' Character vector of length one with either "binary", "quantile",
-#' "sample" or "point".
-#' @export
-#' @keywords diagnose-inputs
-get_forecast_type <- function(data) {
-  assert_data_frame(data)
-  assert(check_columns_present(data, c("observed", "predicted")))
-  if (test_forecast_type_is_nominal(data)) {
-    forecast_type <- "nominal"
-  } else if (test_forecast_type_is_binary(data)) {
-    forecast_type <- "binary"
-  } else if (test_forecast_type_is_quantile(data)) {
-    forecast_type <- "quantile"
-  } else if (test_forecast_type_is_sample(data)) {
-    forecast_type <- "sample"
-  } else if (test_forecast_type_is_point(data)) {
-    forecast_type <- "point"
-  } else {
-    #nolint start: keyword_quote_linter
-    cli_abort(
-      c(
-        "!" = "Checking `data`: input doesn't satisfy criteria for any
-        forecast type. ",
-        "i" = "Are you missing a column `quantile_level` or `sample_id`?
-        Please check the vignette for additional info."
-      )
-    )
-    #nolint end
+#' Character vector of length one with the forecast type.
+#' @keywords internal_input_check
+get_forecast_type <- function(forecast) {
+  if (!is_forecast(forecast)) {
+    cli_abort("Input is not a forecast object.")
+  }
+  forecast_type <- class(forecast)[grepl("forecast_", class(forecast))]
+  forecast_type <- gsub("forecast_", "", forecast_type)
+  if (length(forecast_type) != 1) {
+    cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
   }
   return(forecast_type)
 }
