@@ -36,4 +36,4 @@ scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
 scoringutils:::run_safely(fun = f, metric_name = "f")
 scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
 }
-\keyword{scoring}
+\keyword{internal}

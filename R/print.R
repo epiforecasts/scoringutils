@@ -10,7 +10,7 @@
 #' @return Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export
-#' @keywords check-forecasts
+#' @keywords gain-insights
 #' @examples
 #' dat <- as_forecast_quantile(example_quantile)
 #' print(dat)

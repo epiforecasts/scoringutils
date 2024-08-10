@@ -12,7 +12,7 @@
 #' Character vector of length one with either "binary", "quantile",
 #' "sample" or "point".
 #' @export
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 get_forecast_type <- function(data) {
   assert_data_frame(data)
   assert(check_columns_present(data, c("observed", "predicted")))
@@ -186,7 +186,7 @@ get_type <- function(x) {
 #' @return
 #' Character vector with the names of the scoring rules that were used
 #' for scoring or `NULL` if no scores were computed previously.
-#' @keywords check-forecasts
+#' @keywords handle-metrics
 #' @export
 get_metrics <- function(scores, error = FALSE) {
   assert_data_frame(scores)
@@ -235,7 +235,7 @@ get_metrics <- function(scores, error = FALSE) {
 #' a single forecast
 #' @importFrom checkmate assert_data_frame
 #' @export
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 get_forecast_unit <- function(data) {
   assert_data_frame(data)
   protected_columns <- get_protected_columns(data)
@@ -298,7 +298,7 @@ get_protected_columns <- function(data = NULL) {
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
 #' @importFrom data.table setorderv
-#' @keywords check-forecasts
+#' @keywords diagnose-inputs
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
@@ -464,7 +464,7 @@ get_coverage <- function(forecast, by = "model") {
 #' @inheritParams score
 #' @importFrom data.table .I .N nafill
 #' @export
-#' @keywords check-forecasts
+#' @keywords gain-insights
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN

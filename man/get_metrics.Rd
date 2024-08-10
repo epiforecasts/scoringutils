@@ -42,4 +42,4 @@ names of the data.table, you can either
 order does not matter).
 }
 }
-\keyword{check-forecasts}
+\keyword{handle-metrics}

@@ -24,4 +24,4 @@ target.
 example <- rbind(example_quantile, example_quantile[1000:1010])
 get_duplicate_forecasts(example)
 }
-\keyword{check-forecasts}
+\keyword{diagnose-inputs}

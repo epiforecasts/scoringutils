@@ -18,7 +18,7 @@
 #' @importFrom cli cli_warn
 #' @importFrom checkmate assert_function
 #' @return The result of `fun` or `NULL` if `fun` errors
-#' @keywords scoring
+#' @keywords internal
 #' @examples
 #' f <- function(x) {x}
 #' scoringutils:::run_safely(2, fun = f, metric_name = "f")

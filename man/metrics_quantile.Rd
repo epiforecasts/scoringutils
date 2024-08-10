@@ -58,4 +58,4 @@ mean it would also get passed to \code{interval_coverage_50}.
 metrics_quantile()
 metrics_quantile(select = "wis")
 }
-\keyword{metric}
+\keyword{handle-metrics}

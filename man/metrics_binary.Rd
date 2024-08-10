@@ -42,4 +42,4 @@ metrics_binary()
 metrics_binary(select = "brier_score")
 metrics_binary(exclude = "log_score")
 }
-\keyword{metric}
+\keyword{handle-metrics}

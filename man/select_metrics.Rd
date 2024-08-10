@@ -32,4 +32,4 @@ select_metrics(
   exclude = "log_score"
 )
 }
-\keyword{metric}
+\keyword{handle-metrics}
