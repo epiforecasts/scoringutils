@@ -46,6 +46,7 @@ Create a \code{forecast} object for sample-based forecasts
 Other functions to create forecast objects: 
 \code{\link{as_forecast}},
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_point}()},
 \code{\link{as_forecast_quantile}()}
 }

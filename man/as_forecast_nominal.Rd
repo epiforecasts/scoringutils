@@ -45,3 +45,13 @@ Nominal forecasts are a form of categorical forecasts where the possible
 outcomes that the observed values can assume are not ordered. In that sense,
 Nominal forecasts represent a generalisation of binary forecasts.
 }
+\seealso{
+Other functions to create forecast objects: 
+\code{\link{as_forecast}},
+\code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_point}()},
+\code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_sample}()}
+}
+\concept{functions to create forecast objects}
+\keyword{as_forecast}

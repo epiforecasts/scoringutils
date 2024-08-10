@@ -289,7 +289,6 @@ as_forecast_sample <- function(data,
 }
 
 
-
 #' @title Create a `forecast` object for nominal forecasts
 #' @description
 #' Nominal forecasts are a form of categorical forecasts where the possible
@@ -300,6 +299,8 @@ as_forecast_sample <- function(data,
 #'   the outcome to which a predicted probability corresponds to.
 #'   This column will be renamed to "predicted_label". Only applicable to
 #'   nominal forecasts.
+#' @family functions to create forecast objects
+#' @keywords as_forecast
 #' @export
 as_forecast_nominal <- function(data,
                                 forecast_unit = NULL,
@@ -653,35 +654,30 @@ is_forecast <- function(x) {
 
 #' @export
 #' @rdname is_forecast
-#' @keywords validate-forecast-object
 is_forecast_sample <- function(x) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords validate-forecast-object
 is_forecast_binary <- function(x) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords validate-forecast-object
 is_forecast_point <- function(x) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords validate-forecast-object
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
 }
 
 #' @export
 #' @rdname is_forecast
-#' @keywords check-forecasts
 is_forecast_nominal <- function(x) {
   inherits(x, "forecast_nominal") && inherits(x, "forecast")
 }
