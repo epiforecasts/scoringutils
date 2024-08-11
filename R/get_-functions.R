@@ -5,32 +5,44 @@
 #' @return
 #' Character vector of length one with the forecast type.
 #' @keywords internal_input_check
-.get_forecast_type <- function(forecast) {
-  UseMethod(".get_forecast_type")
+get_forecast_type <- function(forecast) {
+  UseMethod("get_forecast_type")
 }
 
+#' @rdname get_forecast_type
+#' @export
 #' @importFrom cli cli_abort
-.get_forecast_type.default <- function(forecast) {
+get_forecast_type.default <- function(forecast) {
   cli_abort("Input is not a valid forecast object.")
 }
 
-.get_forecast_type.forecast_binary <- function(forecast) {
+#' @rdname get_forecast_type
+#' @export
+get_forecast_type.forecast_binary <- function(forecast) {
   return("binary")
 }
 
-.get_forecast_type.forecast_sample <- function(forecast) {
+#' @rdname get_forecast_type
+#' @export
+get_forecast_type.forecast_sample <- function(forecast) {
   return("sample")
 }
 
-.get_forecast_type.forecast_point <- function(forecast) {
+#' @rdname get_forecast_type
+#' @export
+get_forecast_type.forecast_point <- function(forecast) {
   return("point")
 }
 
-.get_forecast_type.forecast_quantile <- function(forecast) {
+#' @rdname get_forecast_type
+#' @export
+get_forecast_type.forecast_quantile <- function(forecast) {
   return("quantile")
 }
 
-.get_forecast_type.forecast_nominal <- function(forecast) {
+#' @rdname get_forecast_type
+#' @export
+get_forecast_type.forecast_nominal <- function(forecast) {
   return("nominal")
 }
 
@@ -108,7 +120,7 @@ test_forecast_type_is_nominal <- function(data) {
 #' @importFrom checkmate assert_character
 #' @keywords internal_input_check
 assert_forecast_type <- function(data,
-                                 actual = .get_forecast_type(data),
+                                 actual = get_forecast_type(data),
                                  desired = NULL) {
   assert_character(desired, null.ok = TRUE)
   if (!is.null(desired) && desired != actual) {
@@ -399,7 +411,7 @@ get_duplicate_forecasts <- function(
 get_coverage <- function(forecast, by = "model") {
   # input checks ---------------------------------------------------------------
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  assert_subset(.get_forecast_type(forecast), "quantile")
+  assert_subset(get_forecast_type(forecast), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway

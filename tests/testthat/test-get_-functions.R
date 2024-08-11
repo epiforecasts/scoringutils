@@ -1,16 +1,16 @@
 # ==============================================================================
 # `get_forecast_type`
 # ==============================================================================
-test_that(".get_forecast_type() works as expected", {
-  expect_equal(.get_forecast_type(forecast_quantile), "quantile")
-  expect_equal(.get_forecast_type(forecast_sample_continuous), "sample")
-  expect_equal(.get_forecast_type(forecast_sample_discrete), "sample")
-  expect_equal(.get_forecast_type(forecast_binary), "binary")
-  expect_equal(.get_forecast_type(forecast_point), "point")
-  expect_equal(.get_forecast_type(forecast_nominal), "nominal")
+test_that("get_forecast_type() works as expected", {
+  expect_equal(get_forecast_type(forecast_quantile), "quantile")
+  expect_equal(get_forecast_type(forecast_sample_continuous), "sample")
+  expect_equal(get_forecast_type(forecast_sample_discrete), "sample")
+  expect_equal(get_forecast_type(forecast_binary), "binary")
+  expect_equal(get_forecast_type(forecast_point), "point")
+  expect_equal(get_forecast_type(forecast_nominal), "nominal")
 
   expect_error(
-    .get_forecast_type(data.frame(x = 1:10)),
+    get_forecast_type(data.frame(x = 1:10)),
     "Input is not a valid forecast object",
     fixed = TRUE
   )
@@ -18,7 +18,7 @@ test_that(".get_forecast_type() works as expected", {
   test <- test <- as_forecast_quantile(na.omit(example_quantile))
   class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
-    .get_forecast_type(test),
+    get_forecast_type(test),
     "Input is not a valid forecast object",
   )
 })

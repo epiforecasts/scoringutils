@@ -148,7 +148,7 @@ get_pit <- function(forecast,
                     n_replicates = 100) {
 
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_type <- .get_forecast_type(forecast)
+  forecast_type <- get_forecast_type(forecast)
 
   if (forecast_type == "quantile") {
     forecast[, quantile_coverage := (observed <= predicted)]
