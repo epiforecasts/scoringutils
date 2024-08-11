@@ -10,8 +10,8 @@ get_forecast_type <- function(forecast) {
   if (!is_forecast(forecast)) {
     cli_abort("Input is not a forecast object.")
   }
-  forecast_type <- class(forecast)[grepl("forecast_", class(forecast))]
-  forecast_type <- gsub("forecast_", "", forecast_type)
+  forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
+  forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
   if (length(forecast_type) != 1) {
     cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
   }
