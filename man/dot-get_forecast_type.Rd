@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_-functions.R
 \name{.get_forecast_type}
 \alias{.get_forecast_type}
-\title{Get forecast type from forecast object}
+\title{Get forecast type from forecast object
+Internal function to obtain the forecast type as a string.}
 \usage{
 .get_forecast_type(forecast)
 }
@@ -15,5 +16,6 @@ Character vector of length one with the forecast type.
 }
 \description{
 Get forecast type from forecast object
+Internal function to obtain the forecast type as a string.
 }
 \keyword{internal_input_check}

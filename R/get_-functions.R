@@ -1,8 +1,7 @@
 # Functions that help to obtain information about the data
 
-#' @title Get forecast type from forecast object
+#' Get forecast type from forecast object
 #' @inheritParams score
-#' @importFrom cli cli_abort
 #' @return
 #' Character vector of length one with the forecast type.
 #' @keywords internal_input_check
@@ -10,14 +9,14 @@
   UseMethod(".get_forecast_type")
 }
 
+#' @importFrom cli cli_abort
 .get_forecast_type.default <- function(forecast) {
-  cli_abort("Input is not a forecast object.")
+  cli_abort("Input is not a valid forecast object.")
 }
 
 .get_forecast_type.forecast_binary <- function(forecast) {
   return("binary")
 }
-
 
 .get_forecast_type.forecast_sample <- function(forecast) {
   return("sample")
@@ -34,32 +33,6 @@
 .get_forecast_type.forecast_nominal <- function(forecast) {
   return("nominal")
 }
-
-#
-#
-#
-#   if (!is_forecast(forecast)) {
-#     cli_abort("Input is not a forecast object.")
-#   }
-#   forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
-#   forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
-#   if (length(forecast_type) != 1) {
-#     cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
-#   }
-#   return(forecast_type)
-# }
-
-# get_forecast_type <- function(forecast) {
-#   if (!is_forecast(forecast)) {
-#     cli_abort("Input is not a forecast object.")
-#   }
-#   forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
-#   forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
-#   if (length(forecast_type) != 1) {
-#     cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
-#   }
-#   return(forecast_type)
-# }
 
 
 #' Test whether data could be a binary forecast.
