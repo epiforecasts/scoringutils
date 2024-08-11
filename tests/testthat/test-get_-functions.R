@@ -11,7 +11,7 @@ test_that("get_forecast_type() works as expected", {
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
-    "Input is not a forecast object",
+    "Input is not a valid forecast object",
     fixed = TRUE
   )
 
@@ -19,7 +19,7 @@ test_that("get_forecast_type() works as expected", {
   class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
     get_forecast_type(test),
-    "Class of forecast object seems to be malformed."
+    "Input is not a valid forecast object",
   )
 })
 
