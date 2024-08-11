@@ -120,7 +120,7 @@ transform_forecasts <- function(forecast,
   assert_character(label, len = 1)
 
   # store forecast type to construct a valid forecast object later
-  forecast_type <- get_forecast_type(original_forecast)
+  forecast_type <- .get_forecast_type(original_forecast)
 
   scale_col_present <- ("scale" %in% colnames(original_forecast))
 

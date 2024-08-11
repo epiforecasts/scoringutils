@@ -6,17 +6,60 @@
 #' @return
 #' Character vector of length one with the forecast type.
 #' @keywords internal_input_check
-get_forecast_type <- function(forecast) {
-  if (!is_forecast(forecast)) {
-    cli_abort("Input is not a forecast object.")
-  }
-  forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
-  forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
-  if (length(forecast_type) != 1) {
-    cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
-  }
-  return(forecast_type)
+.get_forecast_type <- function(forecast) {
+  UseMethod(".get_forecast_type")
 }
+
+.get_forecast_type.default <- function(forecast) {
+  cli_abort("Input is not a forecast object.")
+}
+
+.get_forecast_type.forecast_binary <- function(forecast) {
+  return("binary")
+}
+
+
+.get_forecast_type.forecast_sample <- function(forecast) {
+  return("sample")
+}
+
+.get_forecast_type.forecast_point <- function(forecast) {
+  return("point")
+}
+
+.get_forecast_type.forecast_quantile <- function(forecast) {
+  return("quantile")
+}
+
+.get_forecast_type.forecast_nominal <- function(forecast) {
+  return("nominal")
+}
+
+#
+#
+#
+#   if (!is_forecast(forecast)) {
+#     cli_abort("Input is not a forecast object.")
+#   }
+#   forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
+#   forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
+#   if (length(forecast_type) != 1) {
+#     cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
+#   }
+#   return(forecast_type)
+# }
+
+# get_forecast_type <- function(forecast) {
+#   if (!is_forecast(forecast)) {
+#     cli_abort("Input is not a forecast object.")
+#   }
+#   forecast_type <- class(forecast)[grepl("forecast_", class(forecast), fixed = TRUE)]
+#   forecast_type <- gsub("forecast_", "", forecast_type, fixed = TRUE)
+#   if (length(forecast_type) != 1) {
+#     cli_abort("Class of forecast object seems to be malformed. Expecting `forecast_<type>`.")
+#   }
+#   return(forecast_type)
+# }
 
 
 #' Test whether data could be a binary forecast.
@@ -92,7 +135,7 @@ test_forecast_type_is_nominal <- function(data) {
 #' @importFrom checkmate assert_character
 #' @keywords internal_input_check
 assert_forecast_type <- function(data,
-                                 actual = get_forecast_type(data),
+                                 actual = .get_forecast_type(data),
                                  desired = NULL) {
   assert_character(desired, null.ok = TRUE)
   if (!is.null(desired) && desired != actual) {
@@ -383,7 +426,7 @@ get_duplicate_forecasts <- function(
 get_coverage <- function(forecast, by = "model") {
   # input checks ---------------------------------------------------------------
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  assert_subset(get_forecast_type(forecast), "quantile")
+  assert_subset(.get_forecast_type(forecast), "quantile")
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway

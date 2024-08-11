@@ -4,7 +4,7 @@ test_that("print() works on forecast_* objects", {
                    forecast_point, forecast_sample_continuous,
                    forecast_sample_discrete)
   for (dat in test_dat){
-    forecast_type <- get_forecast_type(dat)
+    forecast_type <- .get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
 
     fn_name <- paste0("as_forecast_", forecast_type)
