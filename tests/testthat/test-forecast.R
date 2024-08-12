@@ -314,11 +314,31 @@ test_that("new_forecast() works as expected with a data.frame", {
 test_that("[.forecast() immediately invalidates on change when necessary", {
   test <- as_forecast_quantile(na.omit(example_quantile))
 
-  # For cols
+  # For cols; various ways to drop.
+  # We use local() to avoid actual deletion in this frame and having to recreate
+  # the input multiple times
   expect_warning(
-    test[, colnames(test) != "observed"],
+    local(test[, colnames(test) != "observed"]),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test[, "observed"] <- NULL),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test$observed <- NULL),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test[["observed"]] <- NULL),
     "Error in validating"
   )
 
   # For rows
+  expect_warning(expect_warning(
+    local(test[2, ] <- test[1, ])
+  ))
 })

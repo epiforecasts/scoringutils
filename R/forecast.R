@@ -714,6 +714,72 @@ is_forecast_nominal <- function(x) {
 }
 
 #' @export
+`$<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
+`[[<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
+`[<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
 #' @importFrom utils head
 head.forecast <- function(x, ...) {
   # We use this custom method just to unclass before forwarding to avoid
