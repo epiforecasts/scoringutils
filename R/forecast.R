@@ -480,7 +480,7 @@ assert_forecast.forecast_nominal <- function(
 
   # forecasts need to be complete
   forecast_unit <- get_forecast_unit(forecast)
-  complete <- forecast[, .(
+  complete <- as.data.table(forecast)[, .(
     correct = test_set_equal(as.character(predicted_label), outcomes)
   ), by = forecast_unit]
 
