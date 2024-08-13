@@ -342,3 +342,18 @@ test_that("[.forecast() immediately invalidates on change when necessary", {
     local(test[2, ] <- test[1, ])
   ))
 })
+
+test_that("[.forecast() is compatible with data.table syntax", {
+
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  expect_no_condition(
+    test[location == "DE"]
+  )
+
+  expect_no_condition(
+    test[target_type == "Cases",
+         .(location, target_end_date, observed, location_name, forecast_date, quantile_level, predicted, model)]
+  )
+
+})
