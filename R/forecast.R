@@ -693,8 +693,10 @@ is_forecast_nominal <- function(x) {
 
   out <- NextMethod()
 
-  # We don't need to revalidate x[]
-  if (...length() > 1) {
+  # ...length() > 1: we don't need to revalidate x[]
+  # is.data.table: when [.data.table returns an atomic vector, it's clear it
+  #   cannot be a valid forecast object, and it is likely intended by the user
+  if (...length() > 1 && data.table::is.data.table(out)) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),

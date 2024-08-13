@@ -318,7 +318,7 @@ test_that("[.forecast() immediately invalidates on change when necessary", {
   # We use local() to avoid actual deletion in this frame and having to recreate
   # the input multiple times
   expect_warning(
-    local(test[, colnames(test) != "observed"]),
+    local(test[, colnames(test) != "observed", with = FALSE]),
     "Error in validating"
   )
 
@@ -338,9 +338,15 @@ test_that("[.forecast() immediately invalidates on change when necessary", {
   )
 
   # For rows
-  expect_warning(expect_warning(
+  expect_warning(
     local(test[2, ] <- test[1, ])
-  ))
+  )
+})
+
+test_that("[.forecast() doesn't warn on cases where the user likely didn't intend getting a forecast object", {
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  expect_no_condition(test[, location])
 })
 
 test_that("[.forecast() is compatible with data.table syntax", {
