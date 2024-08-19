@@ -1,11 +1,11 @@
 pandoc: 3.1.11
 pkgdown: 2.1.0.9000
-pkgdown_sha: 1d40a80e6b3564a6d7da0ce467b0a4570aa5665e
+pkgdown_sha: 0f565db6296b85cb6c8f06f2fc55a44b3391df1d
 articles:
   Deprecated-functions: Deprecated-functions.html
   Deprecated-visualisations: Deprecated-visualisations.html
   scoring-rules: scoring-rules.html
-last_built: 2024-08-10T11:53Z
+last_built: 2024-08-19T20:50Z
 urls:
   reference: https://epiforecasts.io/scoringutils/reference
   article: https://epiforecasts.io/scoringutils/articles
