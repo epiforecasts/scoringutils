@@ -251,7 +251,10 @@ test_that("assert_forecast.forecast_point() works as expected", {
   test <- as_forecast_point(test)
 
   # expect an error if column is changed to character after initial validation.
-  test <- test[, "predicted" := as.character(predicted)]
+  expect_warning(
+    test <- test[, "predicted" := as.character(predicted)],
+    "Input looks like a point forecast, but found the following issue"
+  )
   expect_error(
     assert_forecast(test),
     "Input looks like a point forecast, but found the following issue"
@@ -302,4 +305,61 @@ test_that("new_forecast() works as expected with a data.frame", {
     new_forecast(example_quantile_df, "quantile"),
     c("forecast_quantile", "data.table", "data.frame")
   )
+})
+
+# ==============================================================================
+# [.forecast()
+# ==============================================================================
+
+test_that("[.forecast() immediately invalidates on change when necessary", {
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  # For cols; various ways to drop.
+  # We use local() to avoid actual deletion in this frame and having to recreate
+  # the input multiple times
+  expect_warning(
+    local(test[, colnames(test) != "observed", with = FALSE]),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test[, "observed"] <- NULL),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test$observed <- NULL),
+    "Error in validating"
+  )
+
+  expect_warning(
+    local(test[["observed"]] <- NULL),
+    "Error in validating"
+  )
+
+  # For rows
+  expect_warning(
+    local(test[2, ] <- test[1, ])
+  )
+})
+
+test_that("[.forecast() doesn't warn on cases where the user likely didn't intend getting a forecast object", {
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  expect_no_condition(test[, location])
+})
+
+test_that("[.forecast() is compatible with data.table syntax", {
+
+  test <- as_forecast_quantile(na.omit(example_quantile))
+
+  expect_no_condition(
+    test[location == "DE"]
+  )
+
+  expect_no_condition(
+    test[target_type == "Cases",
+         .(location, target_end_date, observed, location_name, forecast_date, quantile_level, predicted, model)]
+  )
+
 })

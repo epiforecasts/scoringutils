@@ -79,7 +79,9 @@ ensure_model_column <- function(data) {
 #' @inherit document_check_functions params return
 #' @keywords internal_input_check
 check_number_per_forecast <- function(data, forecast_unit) {
-  data <- ensure_data.table(data)
+  # This function doesn't return a forecast object so it's fine to unclass it
+  # to avoid validation error while subsetting
+  data <- as.data.table(data)
   data <- na.omit(data)
   # check whether there are the same number of quantiles, samples --------------
   data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
