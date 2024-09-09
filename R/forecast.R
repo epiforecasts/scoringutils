@@ -693,10 +693,17 @@ is_forecast_nominal <- function(x) {
 
   out <- NextMethod()
 
-  # ...length() > 1: we don't need to revalidate x[]
+  # (identical(x, out) && ...length() == 1) is the best way I have found to
+  #   selectively catch x[], which we don't want to revalidate. ...length()
+  #   alone will skip cases with dplyr verbs and identical alone will skip cases
+  #   where we used data.table := operator which will turn x into out before we
+  #   arrive to this function.
+  is_dt_force_print <- identical(x, out) && ...length() == 1
+  #   ...length() as it still returns 1 in x[] and then skips validations in
+  #   undesired situation if we set ...length() > 1
   # is.data.table: when [.data.table returns an atomic vector, it's clear it
   #   cannot be a valid forecast object, and it is likely intended by the user
-  if (...length() > 1 && data.table::is.data.table(out)) {
+  if (data.table::is.data.table(out) && !is_dt_force_print) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),
