@@ -11,7 +11,7 @@ test_that("Check equal length works if all arguments have length 1", {
 })
 
 test_that("ensure_model_column works", {
-  test <- data.table::copy(example_binary)
+  test <- as.data.table(example_binary)
   expect_warning(
     ensure_model_column(test[, model := NULL]),
     "There is no column called `model` in the data."
@@ -48,7 +48,7 @@ test_that("check_number_per_forecast works", {
 
 
 test_that("check_duplicates works", {
-  example_bin <- rbind(example_binary[1:2, ], example_binary[1:2, ])
+  example_bin <- rbind(example_binary[1000:1002, ], example_binary[1000:1002, ])
   expect_identical(
     capture.output(
       check_duplicates(example_bin)

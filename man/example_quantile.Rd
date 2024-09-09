@@ -5,7 +5,8 @@
 \alias{example_quantile}
 \title{Quantile example data}
 \format{
-A data frame with the following columns:
+An object of class \code{forecast_quantile} (see \code{\link[=as_forecast]{as_forecast()}}) with the
+following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}
