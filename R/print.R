@@ -16,19 +16,6 @@
 #' print(dat)
 print.forecast <- function(x, ...) {
 
-  # check whether object passes validation
-  validation <- try(
-    do.call(assert_forecast, list(forecast = x, verbose = FALSE)),
-    silent = TRUE
-  )
-  if (inherits(validation, "try-error")) {
-    cli_warn(
-      c(
-        "!" = "Error in validating forecast object: {validation}."
-      )
-    )
-  }
-
   # get forecast type, forecast unit and score columns
   forecast_type <- try(
     do.call(get_forecast_type, list(forecast = x)),
@@ -73,7 +60,8 @@ print.forecast <- function(x, ...) {
   }
 
   cat("\n")
-  NextMethod(x, ...)
+
+  NextMethod()
 
   return(invisible(x))
 }

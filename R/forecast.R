@@ -168,6 +168,12 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
   assert_forecast(data, verbose = FALSE)
   assert_subset(0.5, unique(data$quantile_level))
 
+  # At end of this function, the object will have be turned from a
+  # forecast_quantile to a forecast_point and we don't want to validate it as a
+  # forecast_point during the conversion process. The correct class is restored
+  # at the end.
+  data <- as.data.table(data)
+
   forecast <- data[quantile_level == 0.5]
   forecast[, "quantile_level" := NULL]
 
@@ -474,7 +480,7 @@ assert_forecast.forecast_nominal <- function(
 
   # forecasts need to be complete
   forecast_unit <- get_forecast_unit(forecast)
-  complete <- forecast[, .(
+  complete <- as.data.table(forecast)[, .(
     correct = test_set_equal(as.character(predicted_label), outcomes)
   ), by = forecast_unit]
 
@@ -680,4 +686,120 @@ is_forecast_quantile <- function(x) {
 #' @rdname is_forecast
 is_forecast_nominal <- function(x) {
   inherits(x, "forecast_nominal") && inherits(x, "forecast")
+}
+
+#' @export
+`[.forecast` <- function(x, ...) {
+
+  out <- NextMethod()
+
+  # (identical(x, out) && ...length() == 1) is the best way I have found to
+  #   selectively catch x[], which we don't want to revalidate. ...length()
+  #   alone will skip cases with dplyr verbs and identical alone will skip cases
+  #   where we used data.table := operator which will turn x into out before we
+  #   arrive to this function.
+  is_dt_force_print <- identical(x, out) && ...length() == 1
+  #   ...length() as it still returns 1 in x[] and then skips validations in
+  #   undesired situation if we set ...length() > 1
+  # is.data.table: when [.data.table returns an atomic vector, it's clear it
+  #   cannot be a valid forecast object, and it is likely intended by the user
+  if (data.table::is.data.table(out) && !is_dt_force_print) {
+    # check whether subset object passes validation
+    validation <- try(
+      assert_forecast(forecast = out, verbose = FALSE),
+      silent = TRUE
+    )
+    if (inherits(validation, "try-error")) {
+      cli_warn(
+        c(
+          "!" = "Error in validating forecast object: {validation}"
+        )
+      )
+    }
+  }
+
+  return(out)
+
+}
+
+#' @export
+`$<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
+`[[<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
+`[<-.forecast` <- function(x, ..., value) {
+
+  out <- NextMethod()
+
+  # check whether subset object passes validation
+  validation <- try(
+    assert_forecast(forecast = out, verbose = FALSE),
+    silent = TRUE
+  )
+  if (inherits(validation, "try-error")) {
+    cli_warn(
+      c(
+        "!" = "Error in validating forecast object: {validation}"
+      )
+    )
+  }
+
+  return(out)
+
+}
+
+#' @export
+#' @importFrom utils head
+head.forecast <- function(x, ...) {
+  # We use this custom method just to unclass before forwarding to avoid
+  # validation when we expect (and don't care) that objects are invalidated
+  head(as.data.table(x), ...)
+}
+
+#' @export
+#' @importFrom utils tail
+tail.forecast <- function(x, ...) {
+  # We use this custom method just to unclass before forwarding to avoid
+  # validation when we expect (and don't care) that objects are invalidated
+  utils::tail(as.data.table(x), ...)
 }

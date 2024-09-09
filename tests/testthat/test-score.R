@@ -86,7 +86,10 @@ test_that("function produces output for a binary case", {
 })
 
 test_that("score.forecast_binary() errors with only NA values", {
-  only_nas <- copy(as_forecast_binary(example_binary))[, predicted := NA_real_]
+  # [.forecast()` will warn even before score()
+  only_nas <- suppressWarnings(
+    copy(as_forecast_binary(example_binary))[, predicted := NA_real_]
+  )
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -153,7 +156,10 @@ test_that("Changing metrics names works", {
 
 
 test_that("score.forecast_point() errors with only NA values", {
-  only_nas <- copy(as_forecast_point(example_point))[, predicted := NA_real_]
+  # [.forecast()` will warn even before score()
+  only_nas <- suppressWarnings(
+    copy(as_forecast_point(example_point))[, predicted := NA_real_]
+  )
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -241,7 +247,10 @@ test_that("WIS is the same with other metrics omitted or included", {
 
 
 test_that("score.forecast_quantile() errors with only NA values", {
-  only_nas <- copy(as_forecast_quantile(example_quantile))[, predicted := NA_real_]
+  # [.forecast()` will warn even before score()
+  only_nas <- suppressWarnings(
+    copy(as_forecast_quantile(example_quantile))[, predicted := NA_real_]
+  )
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
@@ -279,7 +288,10 @@ test_that("function produces output for a continuous format case", {
 
   eval <- scores_sample_continuous
 
-  only_nas <- copy(as_forecast_sample(example_sample_continuous))[, predicted := NA_real_]
+  # [.forecast()` will warn even before score()
+  only_nas <- suppressWarnings(
+    copy(as_forecast_sample(example_sample_continuous))[, predicted := NA_real_]
+  )
   expect_error(
     score(as_forecast_sample(only_nas)),
     "After removing rows with NA values in the data, no forecasts are left."
