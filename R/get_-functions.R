@@ -11,7 +11,8 @@ get_forecast_type <- function(forecast) {
     type <- gsub("forecast_", "", classname)
     return(type)
   } else {
-    cli_abort("Input is not a valid forecast object.")
+    cli_abort("Input is not a valid forecast object
+              (it's first class should begin with `forecast_`).")
   }
 }
 
