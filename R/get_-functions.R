@@ -7,12 +7,14 @@
 #' @keywords internal_input_check
 get_forecast_type <- function(forecast) {
   classname <- class(forecast)[1]
-  if (grepl("forecast_", classname)) {
-    type <- gsub("forecast_", "", classname)
+  if (grepl("forecast_", classname, fixed = TRUE)) {
+    type <- gsub("forecast_", "", classname, fixed = TRUE)
     return(type)
   } else {
-    cli_abort("Input is not a valid forecast object
-              (it's first class should begin with `forecast_`).")
+    cli_abort(
+      "Input is not a valid forecast object
+      (it's first class should begin with `forecast_`)."
+    )
   }
 }
 
