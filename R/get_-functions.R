@@ -1,44 +1,21 @@
 # Functions that help to obtain information about the data
 
-#' @title Infer forecast type from data
-#' @description
-#' Helper function to infer the forecast type based on a
-#' data.frame or similar with forecasts and observed values. See the details
-#' section below for information on the different forecast types.
-#' @inheritParams as_forecast
-#' @inheritSection forecast_types Forecast types and input formats
-#' @importFrom cli cli_abort
+#' Get forecast type from forecast object
+#' @inheritParams score
 #' @return
-#' Character vector of length one with either "binary", "quantile",
-#' "sample" or "point".
-#' @export
-#' @keywords diagnose-inputs
-get_forecast_type <- function(data) {
-  assert_data_frame(data)
-  assert(check_columns_present(data, c("observed", "predicted")))
-  if (test_forecast_type_is_nominal(data)) {
-    forecast_type <- "nominal"
-  } else if (test_forecast_type_is_binary(data)) {
-    forecast_type <- "binary"
-  } else if (test_forecast_type_is_quantile(data)) {
-    forecast_type <- "quantile"
-  } else if (test_forecast_type_is_sample(data)) {
-    forecast_type <- "sample"
-  } else if (test_forecast_type_is_point(data)) {
-    forecast_type <- "point"
+#' Character vector of length one with the forecast type.
+#' @keywords internal_input_check
+get_forecast_type <- function(forecast) {
+  classname <- class(forecast)[1]
+  if (grepl("forecast_", classname, fixed = TRUE)) {
+    type <- gsub("forecast_", "", classname, fixed = TRUE)
+    return(type)
   } else {
-    #nolint start: keyword_quote_linter
     cli_abort(
-      c(
-        "!" = "Checking `data`: input doesn't satisfy criteria for any
-        forecast type. ",
-        "i" = "Are you missing a column `quantile_level` or `sample_id`?
-        Please check the vignette for additional info."
-      )
+      "Input is not a valid forecast object
+      (it's first class should begin with `forecast_`)."
     )
-    #nolint end
   }
-  return(forecast_type)
 }
 
 

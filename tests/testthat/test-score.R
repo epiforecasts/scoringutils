@@ -32,7 +32,7 @@ test_that("validate_scores() works", {
 test_that("Output of `score()` has the class `scores()`", {
   expect_no_condition(validate_scores(scores_point))
   expect_no_condition(validate_scores(scores_binary))
-  expect_no_condition(validate_scores(scores_continuous))
+  expect_no_condition(validate_scores(scores_sample_continuous))
   expect_no_condition(validate_scores(scores_quantile))
 })
 
@@ -286,7 +286,7 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
 
-  eval <- scores_continuous
+  eval <- scores_sample_continuous
 
   # [.forecast()` will warn even before score()
   only_nas <- suppressWarnings(

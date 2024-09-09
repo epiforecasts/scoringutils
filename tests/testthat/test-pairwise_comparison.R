@@ -264,14 +264,14 @@ test_that("get_pairwise_comparisons() works", {
 
 
 test_that("get_pairwise_comparisons() and `add_relative_skill()` give same result", {
-  eval <- scores_continuous
+  eval <- scores_sample_continuous
 
   pairwise <- get_pairwise_comparisons(eval,
     by = "model",
     metric = "crps"
   )
 
-  eval2 <- add_relative_skill(scores_continuous, by = "model")
+  eval2 <- add_relative_skill(scores_sample_continuous, by = "model")
   eval2 <- summarise_scores(eval2, by = "model")
 
   expect_equal(
@@ -287,7 +287,7 @@ test_that("get_pairwise_comparisons() realises when there is no baseline model",
 })
 
 test_that("Basic input checks for `add_relative_skill() work", {
-  eval <- data.table::copy(scores_continuous)
+  eval <- data.table::copy(scores_sample_continuous)
 
   # check that model column + columns in 'by' + baseline model are present
   expect_error(
@@ -402,7 +402,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
 })
 
 test_that("get_pairwise_comparisons() throws errors with wrong inputs", {
-  test <- data.table::copy(scores_continuous)
+  test <- data.table::copy(scores_sample_continuous)
   test <- test[, "model" := NULL]
 
   # expect error if no model column is found
@@ -413,7 +413,7 @@ test_that("get_pairwise_comparisons() throws errors with wrong inputs", {
 })
 
 test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
-  test <- data.table::copy(scores_continuous)
+  test <- data.table::copy(scores_sample_continuous)
   test <- test[, "model" := NULL]
 
   # expect error if no model column is found
@@ -423,21 +423,21 @@ test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
   )
 
   # expect error as a result if scores has zero rows
-  test <- data.table::copy(scores_continuous)[model == "impossible"]
+  test <- data.table::copy(scores_sample_continuous)[model == "impossible"]
   expect_error(
     pairwise_comparison_one_group(test, by = "model", metric = "crps"),
     "not enough models"
   )
 
   # expect error if there aren't enough models
-  test <- data.table::copy(scores_continuous)[model == "EuroCOVIDhub-ensemble"]
+  test <- data.table::copy(scores_sample_continuous)[model == "EuroCOVIDhub-ensemble"]
   expect_error(
     pairwise_comparison_one_group(test, by = "model", metric = "crps"),
     "not enough models"
   )
 
   # expect error if baseline model is missing
-  test <- data.table::copy(scores_continuous)
+  test <- data.table::copy(scores_sample_continuous)
   expect_error(
     pairwise_comparison_one_group(test, by = "model", baseline = "missing", metric = "crps"),
     "Baseline model `missing` missing"
@@ -445,7 +445,7 @@ test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
 })
 
 test_that("compare_two_models() throws error with wrong inputs", {
-  test <- data.table::copy(scores_continuous)
+  test <- data.table::copy(scores_sample_continuous)
   test <- test[, "model" := NULL]
 
   # expect error if no model column is found

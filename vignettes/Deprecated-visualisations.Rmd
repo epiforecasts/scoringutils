@@ -115,12 +115,12 @@ plot_predictions <- function(data,
   # find out what type of predictions we have. convert sample based to
   # interval range data
 
-  if (get_forecast_type(data) == "quantile") {
+  if ("quantile_level" %in% colnames(data)) {
     forecasts <- scoringutils:::quantile_to_interval(
       forecasts,
       keep_quantile_col = FALSE
     )
-  } else if (get_forecast_type(data) == "sample") {
+  } else if ("sample_id" %in% colnames(data)) {
     # using a scoringutils internal function
     forecasts <- scoringutils:::sample_to_interval_long(
       as_forecast_sample(forecasts),
