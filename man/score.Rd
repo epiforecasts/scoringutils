@@ -11,15 +11,15 @@
 \usage{
 score(forecast, metrics, ...)
 
-\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
+\method{score}{forecast_binary}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_nominal}(forecast, metrics = metrics_nominal(), ...)
+\method{score}{forecast_nominal}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
+\method{score}{forecast_point}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
+\method{score}{forecast_sample}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
+\method{score}{forecast_quantile}(forecast, metrics = get_metrics(forecast), ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and

@@ -59,7 +59,7 @@ summarise_scores <- function(scores,
   assert_subset(by, names(scores), empty.ok = TRUE)
   assert_function(fun)
 
-  metrics <- get_metrics(scores, error = TRUE)
+  metrics <- get_scored_metrics(scores, error = TRUE)
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),

@@ -180,7 +180,7 @@ get_type <- function(x) {
 #' for scoring or `NULL` if no scores were computed previously.
 #' @keywords handle-metrics
 #' @export
-get_metrics <- function(scores, error = FALSE) {
+get_scored_metrics <- function(scores, error = FALSE) {
   assert_data_frame(scores)
   metrics <- attr(scores, "metrics")
   if (error && is.null(metrics)) {

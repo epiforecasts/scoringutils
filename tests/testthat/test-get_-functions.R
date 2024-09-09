@@ -29,7 +29,7 @@ test_that("get_forecast_type() works as expected", {
 # ==============================================================================
 test_that("get_metrics() works as expected", {
   expect_equal(
-    get_metrics(scores_point),
+    get_scored_metrics(scores_point),
     c("ae_point", "se_point", "ape")
   )
 

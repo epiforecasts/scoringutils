@@ -55,10 +55,10 @@ test_that("run_safely() works as expected", {
 
 test_that("get_metrics() works as expected", {
   expect_true(
-    "brier_score" %in% get_metrics(scores_binary)
+    "brier_score" %in% get_scored_metrics(scores_binary)
   )
 
-  expect_equal(get_metrics(scores_sample_continuous),
+  expect_equal(get_scored_metrics(scores_sample_continuous),
                attr(scores_sample_continuous, "metrics"))
 
   #check that function errors if `error = TRUE` and not otherwise
@@ -67,7 +67,7 @@ test_that("get_metrics() works as expected", {
     "Input needs an attribute"
   )
   expect_no_condition(
-    get_metrics(scores_sample_continuous)
+    get_scored_metrics(scores_sample_continuous)
   )
 
   # expect warning if some column changed
