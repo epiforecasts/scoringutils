@@ -6,44 +6,13 @@
 #' Character vector of length one with the forecast type.
 #' @keywords internal_input_check
 get_forecast_type <- function(forecast) {
-  UseMethod("get_forecast_type")
-}
-
-#' @rdname get_forecast_type
-#' @export
-#' @importFrom cli cli_abort
-get_forecast_type.default <- function(forecast) {
-  cli_abort("Input is not a valid forecast object.")
-}
-
-#' @rdname get_forecast_type
-#' @export
-get_forecast_type.forecast_binary <- function(forecast) {
-  return("binary")
-}
-
-#' @rdname get_forecast_type
-#' @export
-get_forecast_type.forecast_sample <- function(forecast) {
-  return("sample")
-}
-
-#' @rdname get_forecast_type
-#' @export
-get_forecast_type.forecast_point <- function(forecast) {
-  return("point")
-}
-
-#' @rdname get_forecast_type
-#' @export
-get_forecast_type.forecast_quantile <- function(forecast) {
-  return("quantile")
-}
-
-#' @rdname get_forecast_type
-#' @export
-get_forecast_type.forecast_nominal <- function(forecast) {
-  return("nominal")
+  classname <- class(forecast)[1]
+  if (grepl("forecast_", classname)) {
+    type <- gsub("forecast_", "", classname)
+    return(type)
+  } else {
+    cli_abort("Input is not a valid forecast object.")
+  }
 }
 
 

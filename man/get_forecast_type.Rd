@@ -2,27 +2,9 @@
 % Please edit documentation in R/get_-functions.R
 \name{get_forecast_type}
 \alias{get_forecast_type}
-\alias{get_forecast_type.default}
-\alias{get_forecast_type.forecast_binary}
-\alias{get_forecast_type.forecast_sample}
-\alias{get_forecast_type.forecast_point}
-\alias{get_forecast_type.forecast_quantile}
-\alias{get_forecast_type.forecast_nominal}
 \title{Get forecast type from forecast object}
 \usage{
 get_forecast_type(forecast)
-
-\method{get_forecast_type}{default}(forecast)
-
-\method{get_forecast_type}{forecast_binary}(forecast)
-
-\method{get_forecast_type}{forecast_sample}(forecast)
-
-\method{get_forecast_type}{forecast_point}(forecast)
-
-\method{get_forecast_type}{forecast_quantile}(forecast)
-
-\method{get_forecast_type}{forecast_nominal}(forecast)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
