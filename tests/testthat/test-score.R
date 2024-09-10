@@ -88,7 +88,7 @@ test_that("function produces output for a binary case", {
 test_that("score.forecast_binary() errors with only NA values", {
   # [.forecast()` will warn even before score()
   only_nas <- suppressWarnings(
-    copy(as_forecast_binary(example_binary))[, predicted := NA_real_]
+    copy(example_binary)[, predicted := NA_real_]
   )
   expect_error(
     score(only_nas),
@@ -158,7 +158,7 @@ test_that("Changing metrics names works", {
 test_that("score.forecast_point() errors with only NA values", {
   # [.forecast()` will warn even before score()
   only_nas <- suppressWarnings(
-    copy(as_forecast_point(example_point))[, predicted := NA_real_]
+    copy(example_point)[, predicted := NA_real_]
   )
   expect_error(
     score(only_nas),
@@ -169,8 +169,7 @@ test_that("score.forecast_point() errors with only NA values", {
 # test quantile case -----------------------------------------------------------
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"] %>%
-    as_forecast_quantile()
+                           target_type == "Cases" & location == "DE"]
   metrics <- metrics_quantile()
   metrics$wis <- purrr::partial(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
@@ -209,7 +208,7 @@ test_that("score() quantile produces desired metrics", {
 test_that("calculation of ae_median is correct for a quantile format case", {
   eval <- summarise_scores(scores_quantile,by = "model")
 
-  example <- scoringutils::example_quantile
+  example <- as.data.table(example_quantile)
   ae <- example[quantile_level == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
     by = "model"
   ]$mean
@@ -221,7 +220,7 @@ test_that("calculation of ae_median is correct for a quantile format case", {
 test_that("all quantile and range formats yield the same result", {
   eval1 <- summarise_scores(scores_quantile, by = "model")
 
-  df <- data.table::copy(example_quantile)
+  df <- as.data.table(example_quantile)
 
   ae <- df[
     quantile_level == 0.5, ae := abs(observed - predicted)][
@@ -233,9 +232,9 @@ test_that("all quantile and range formats yield the same result", {
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
-  eval <- suppressMessages(score(as_forecast_quantile(example_quantile),
+  eval <- score(example_quantile,
     metrics = list("wis" = wis)
-  ))
+  )
 
   eval2 <- scores_quantile
 
@@ -249,7 +248,7 @@ test_that("WIS is the same with other metrics omitted or included", {
 test_that("score.forecast_quantile() errors with only NA values", {
   # [.forecast()` will warn even before score()
   only_nas <- suppressWarnings(
-    copy(as_forecast_quantile(example_quantile))[, predicted := NA_real_]
+    copy(example_quantile)[, predicted := NA_real_]
   )
   expect_error(
     score(only_nas),
@@ -259,8 +258,7 @@ test_that("score.forecast_quantile() errors with only NA values", {
 
 test_that("score.forecast_quantile() works as expected in edge cases", {
   # only the median
-  onlymedian <- example_quantile[quantile_level == 0.5] %>%
-    as_forecast_quantile()
+  onlymedian <- example_quantile[quantile_level == 0.5]
   expect_no_condition(
     s <- score(onlymedian, metrics = metrics_quantile(
       exclude = c("interval_coverage_50", "interval_coverage_90")
@@ -290,7 +288,7 @@ test_that("function produces output for a continuous format case", {
 
   # [.forecast()` will warn even before score()
   only_nas <- suppressWarnings(
-    copy(as_forecast_sample(example_sample_continuous))[, predicted := NA_real_]
+    copy(example_sample_continuous)[, predicted := NA_real_]
   )
   expect_error(
     score(as_forecast_sample(only_nas)),
@@ -317,16 +315,14 @@ test_that("function throws an error if data is missing", {
 test_that("score() works with only one sample", {
 
   # with only one sample, dss returns NaN and log_score fails
-  onesample <- na.omit(example_sample_continuous)[sample_id == 20] %>%
-    as_forecast_sample()
+  onesample <- na.omit(example_sample_continuous)[sample_id == 20]
   expect_warning(
     scoreonesample <- score(onesample),
     "Computation for `log_score` failed. Error: need at least 2 data points."
   )
 
   # verify that all goes well with two samples
-  twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)] %>%
-    as_forecast_sample()
+  twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)]
   expect_no_condition(score(twosample))
 })
 

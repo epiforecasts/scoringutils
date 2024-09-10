@@ -6,7 +6,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_quantile` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -34,7 +35,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_point` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -60,7 +62,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -87,7 +90,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -121,7 +125,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_binary` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{location_name}{name of the country for which a prediction was made}
@@ -147,7 +152,8 @@
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format A data frame with the following columns:
+#' @format An object of class `forecast_nominal` (see [as_forecast()]) with the
+#' following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}

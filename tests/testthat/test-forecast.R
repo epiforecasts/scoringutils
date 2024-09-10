@@ -73,7 +73,7 @@ test_that("as_forecast() function has an error for empty data.frame", {
 })
 
 test_that("as_forecast() errors if there is both a sample_id and a quantile_level column", {
-  example <- data.table::copy(example_quantile)[, sample_id := 1]
+  example <- as.data.table(example_quantile)[, sample_id := 1]
   expect_error(
     as_forecast_quantile(example),
     "Found columns `quantile_level` and `sample_id`. Only one of these is allowed"
@@ -81,7 +81,7 @@ test_that("as_forecast() errors if there is both a sample_id and a quantile_leve
 })
 
 test_that("as_forecast() warns if there are different numbers of quantiles", {
-  example <- data.table::copy(example_quantile)[-1000, ]
+  example <- as.data.table(example_quantile)[-1000, ]
   expect_warning(
     w <- as_forecast_quantile(na.omit(example)),
     "Some forecasts have different numbers of rows"
@@ -129,7 +129,7 @@ test_that("as_forecast() function throws an error with duplicate forecasts", {
 })
 
 test_that("as_forecast_quantile() function warns when no model column is present", {
-  no_model <- data.table::copy(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
+  no_model <- as.data.table(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
   expect_warning(
     as_forecast_quantile(no_model),
     "There is no column called `model` in the data.")
@@ -180,7 +180,7 @@ test_that("as_forecast.forecast_nominal() works as expected", {
 })
 
 test_that("as_forecast.forecast_nominal() breaks when rows with zero probability are missing", {
-  ex_faulty <- data.table::copy(example_nominal)
+  ex_faulty <- as.data.table(example_nominal)
   ex_faulty <- ex_faulty[predicted != 0]
   expect_warning(
     expect_error(
@@ -228,7 +228,7 @@ test_that("assert_forecast() works as expected", {
 })
 
 test_that("assert_forecast.forecast_binary works as expected", {
-  test <- na.omit(data.table::copy(example_binary))
+  test <- na.omit(as.data.table(example_binary))
   test[, "sample_id" := 1:nrow(test)]
 
   # error if there is a superfluous sample_id column
@@ -238,7 +238,7 @@ test_that("assert_forecast.forecast_binary works as expected", {
   )
 
   # expect error if probabilties are not in [0, 1]
-  test <- na.omit(data.table::copy(example_binary))
+  test <- na.omit(as.data.table(example_binary))
   test[, "predicted" := predicted + 1]
   expect_error(
     as_forecast_binary(test),
@@ -247,7 +247,7 @@ test_that("assert_forecast.forecast_binary works as expected", {
 })
 
 test_that("assert_forecast.forecast_point() works as expected", {
-  test <- na.omit(data.table::copy(example_point))
+  test <- na.omit(as.data.table(example_point))
   test <- as_forecast_point(test)
 
   # expect an error if column is changed to character after initial validation.

@@ -116,12 +116,14 @@ usethis::use_data(example_truth_only, overwrite = TRUE)
 # merge forecast data and truth data and save
 example_quantile <- merge_pred_and_obs(hub_data, truth)
 data.table::setDT(example_quantile)
+example_quantile <- as_forecast_quantile(example_quantile)
 usethis::use_data(example_quantile, overwrite = TRUE)
 
 
 # create data with point forecasts ---------------------------------------------
 example_point <- data.table::copy(example_quantile)
 example_point <- example_point[quantile %in% c(NA, 0.5)][, quantile_level := NULL]
+example_point <- as_forecast_point(example_point)
 usethis::use_data(example_point, overwrite = TRUE)
 
 
@@ -184,12 +186,14 @@ by = c(
 # remove unnecessary rows where no predictions are available
 example_sample_continuous[is.na(predicted), sample_id := NA]
 example_sample_continuous <- unique(example_sample_continuous)
+example_sample_continuous <- as_forecast_sample(example_sample_continuous)
 usethis::use_data(example_sample_continuous, overwrite = TRUE)
 
 
 # get integer sample data ------------------------------------------------------
 example_sample_discrete <- data.table::copy(example_sample_continuous)
 example_sample_discrete <- example_sample_discrete[, predicted := round(predicted)]
+example_sample_discrete <- as_forecast_sample(example_sample_discrete)
 usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 
@@ -226,7 +230,7 @@ example_binary[, `:=`(
   observed = factor(as.numeric(observed))
 )]
 example_binary <- unique(example_binary)
-
+example_binary <- as_forecast_binary(example_binary)
 usethis::use_data(example_binary, overwrite = TRUE)
 
 
@@ -270,5 +274,5 @@ example_nominal[, `:=`(
   observed = factor(observed, levels = c("low", "medium", "high")),
   predicted_label = factor(predicted_label, levels = c("low", "medium", "high"))
 )]
-
+example_nominal <- as_forecast_nominal(example_nominal)
 usethis::use_data(example_nominal, overwrite = TRUE)

@@ -279,9 +279,5 @@ set_forecast_unit <- function(data, forecast_unit) {
   assert_subset(forecast_unit, names(data), empty.ok = FALSE)
   keep_cols <- c(get_protected_columns(data), forecast_unit)
   out <- unique(data[, .SD, .SDcols = keep_cols])
-  # validate that output remains a valid forecast object if input was one before
-  if (is_forecast(out)) {
-    assert_forecast(out)
-  }
   return(out)
 }
