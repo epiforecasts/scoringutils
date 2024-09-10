@@ -15,11 +15,11 @@
 #' @export
 #' @examples
 #' select_metrics(
-#'   metrics = metrics_binary(),
+#'   metrics = get_metrics(example_binary),
 #'   select = "brier_score"
 #' )
 #' select_metrics(
-#'   metrics = metrics_binary(),
+#'   metrics = get_metrics(example_binary),
 #'   exclude = "log_score"
 #' )
 select_metrics <- function(metrics, select = NULL, exclude = NULL) {
@@ -50,10 +50,10 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' @return A list of scoring functions.
 #' @export
 #' @examples
-#' get_metrics("binary")
-#' get_metrics("binary", select = "brier_score")
-#' get_metrics("quantile", exclude = "wis")
-get_metrics <- function(type, select = NULL, exclude = NULL) {
+#' get_metrics(example_binary)
+#' get_metrics(example_binary, select = "brier_score")
+#' get_metrics(example_quantile, exclude = "wis")
+get_metrics <- function(forecast, select = NULL, exclude = NULL) {
   UseMethod("get_metrics")
 }
 
@@ -127,8 +127,8 @@ get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) 
 #' @inheritSection illustration-input-metric-sample Input format
 #' @export
 #' @examples
-#' get_metrics(example_sample)
-#' get_metrics(example_sample, select = "mad")
+#' get_metrics(example_sample_continuous)
+#' get_metrics(example_sample_continuous, select = "mad")
 get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL) {
   all <- list(
     bias = bias_sample,

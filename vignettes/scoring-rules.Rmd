@@ -35,7 +35,7 @@ Many scoring rules for probabilistic forecasts are so-called (strictly) proper s
 
 # Metrics for point forecasts
 
-See a list of the default metrics for point forecasts by calling `?metrics_point()`. 
+See a list of the default metrics for point forecasts by calling `get_metrics(example_point)`. 
 
 This is an overview of the input and output formats for point forecasts: 
 
@@ -106,7 +106,7 @@ The absolute percentage error is only an appropriate rule if $\hat{y}$ correspon
 
 # Binary forecasts
 
-See a list of the default metrics for point forecasts by calling `?metrics_binary()`. 
+See a list of the default metrics for point forecasts by calling `?get_metrics(example_binary)`. 
 
 This is an overview of the input and output formats for point forecasts: 
 
@@ -178,7 +178,7 @@ See `?logs_binary()` for more information.
 
 # Sample-based forecasts
 
-See a list of the default metrics for sample-based forecasts by calling `?metrics_sample()`. 
+See a list of the default metrics for sample-based forecasts by calling `get_metrics(example_sample_continuous)`. 
 
 This is an overview of the input and output formats for quantile forecasts: 
 
@@ -317,7 +317,7 @@ See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a disc
 
 # Quantile-based forecasts
 
-See a list of the default metrics for quantile-based forecasts by calling `?metrics_quantile()`. 
+See a list of the default metrics for quantile-based forecasts by calling `get_metrics(example_quantile)`. 
 
 This is an overview of the input and output formats for quantile forecasts: 
 

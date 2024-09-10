@@ -34,7 +34,7 @@ test_that("get_metrics() works as expected", {
   )
 
   expect_null(
-    get_metrics(as.data.frame(as.matrix(scores_point)))
+    get_scored_metrics(as.data.frame(as.matrix(scores_point)))
   )
 })
 

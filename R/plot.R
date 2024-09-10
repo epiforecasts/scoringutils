@@ -673,7 +673,7 @@ plot_forecast_counts <- function(forecast_counts,
 plot_correlations <- function(correlations, digits = NULL) {
 
   assert_data_frame(correlations)
-  metrics <- get_metrics(correlations, error = TRUE)
+  metrics <- get_scored_metrics(correlations, error = TRUE)
 
   lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
 

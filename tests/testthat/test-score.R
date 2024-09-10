@@ -136,21 +136,21 @@ test_that("function produces output for a point case", {
   )
   expect_equal(
     colnames(eval),
-    c("model", "target_type", names(metrics_point()))
+    c("model", "target_type", names(get_metrics(example_point)))
   )
 
   expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
 
 test_that("Changing metrics names works", {
-  metrics_test <- metrics_point()
+  metrics_test <- get_metrics(example_point)
   names(metrics_test)[1] = "just_testing"
   eval <- suppressMessages(score(as_forecast_point(example_point),
                                  metrics = metrics_test))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),
-    c("model", "just_testing", names(metrics_point())[-1])
+    c("model", "just_testing", names(get_metrics(example_point))[-1])
   )
 })
 
@@ -170,7 +170,7 @@ test_that("score.forecast_point() errors with only NA values", {
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
                            target_type == "Cases" & location == "DE"]
-  metrics <- metrics_quantile()
+  metrics <- get_metrics(example_quantile)
   metrics$wis <- purrr::partial(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
 
@@ -178,7 +178,7 @@ test_that("score_quantile correctly handles separate results = FALSE", {
     nrow(eval) > 1,
     TRUE
   )
-  expect_true(all(names(metrics_quantile()) %in% colnames(eval)))
+  expect_true(all(names(get_metrics(example_quantile)) %in% colnames(eval)))
 
   expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
@@ -260,7 +260,8 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
   # only the median
   onlymedian <- example_quantile[quantile_level == 0.5]
   expect_no_condition(
-    s <- score(onlymedian, metrics = metrics_quantile(
+    s <- score(onlymedian, metrics = get_metrics(
+      example_quantile,
       exclude = c("interval_coverage_50", "interval_coverage_90")
     ))
   )
@@ -274,7 +275,10 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
   expect_message(
     s <- score(
       oneinterval,
-      metrics = metrics_quantile(exclude = c("interval_coverage_90", "ae_median"))
+      metrics = get_metrics(
+        example_quantile,
+        exclude = c("interval_coverage_90", "ae_median")
+      )
     ),
     "Median not available"
   )

@@ -53,7 +53,7 @@ test_that("run_safely() works as expected", {
 # get metrics
 # ==============================================================================
 
-test_that("get_metrics() works as expected", {
+test_that("get_scored_metrics() works as expected", {
   expect_true(
     "brier_score" %in% get_scored_metrics(scores_binary)
   )
@@ -63,7 +63,7 @@ test_that("get_metrics() works as expected", {
 
   #check that function errors if `error = TRUE` and not otherwise
   expect_error(
-    get_metrics(example_quantile, error = TRUE),
+    get_scored_metrics(example_quantile, error = TRUE),
     "Input needs an attribute"
   )
   expect_no_condition(
@@ -74,7 +74,7 @@ test_that("get_metrics() works as expected", {
   ex <- data.table::copy(scores_sample_continuous)
   data.table::setnames(ex, old = "crps", new = "changed")
   expect_warning(
-    get_metrics(ex),
+    get_scored_metrics(ex),
     "scores have been previously computed, but are no longer column names"
   )
 })

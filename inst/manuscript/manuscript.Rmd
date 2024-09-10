@@ -405,10 +405,10 @@ include_graphics("output/input-formats-scoring-rules.png")
 ```
 
 ### Composing a custom list of metrics and scoring rules
-For every forecast type, there exists a default list of scoring rules that are applied to the data when calling \fct{score}. The default lists can be accessed by calling the functions \fct{metrics\_point}, \fct{metrics\_binary}, \fct{metrics\_sample} and \fct{metrics\_quantile}. These functions take additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_metrics} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of metrics and scoring rules. 
+For every forecast type, there exists a default list of scoring rules that are applied to the data when calling \fct{score}. The default lists can be accessed by calling the function \fct{get\_metrics} on a `forecast` object. \fct{get\_metrics} takes additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_metrics} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of metrics and scoring rules. 
 
 ```{r eval=FALSE}
-custom_metrics <- metrics_quantile() |>
+custom_metrics <- get_metrics(example_quantile) |>
   select_metrics(select = c("wis", "overprediction"))
 
 score(metrics = custom_metrics)

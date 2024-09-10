@@ -9,7 +9,7 @@
 \alias{get_metrics.forecast_quantile}
 \title{Get metrics for different forecast types}
 \usage{
-get_metrics(type, select = NULL, exclude = NULL)
+get_metrics(forecast, select = NULL, exclude = NULL)
 
 \method{get_metrics}{forecast_binary}(forecast, select = NULL, exclude = NULL)
 
@@ -22,14 +22,14 @@ get_metrics(type, select = NULL, exclude = NULL)
 \method{get_metrics}{forecast_quantile}(forecast, select = NULL, exclude = NULL)
 }
 \arguments{
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+
 \item{select}{A character vector of scoring rules to select from the list. If
 \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
 
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}
-
-\item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
 }
 \value{
 A list of scoring functions.
@@ -131,9 +131,9 @@ mean it would also get passed to \code{interval_coverage_50}.
 }
 
 \examples{
-get_metrics("binary")
-get_metrics("binary", select = "brier_score")
-get_metrics("quantile", exclude = "wis")
+get_metrics(example_binary)
+get_metrics(example_binary, select = "brier_score")
+get_metrics(example_quantile, exclude = "wis")
 get_metrics(example_binary)
 get_metrics(example_binary, select = "brier_score")
 get_metrics(example_binary, exclude = "log_score")
@@ -141,8 +141,8 @@ get_metrics(example_nominal)
 get_metrics(example_nominal, select = "log_score")
 get_metrics(example_point)
 get_metrics(example_point, select = "ape")
-get_metrics(example_sample)
-get_metrics(example_sample, select = "mad")
+get_metrics(example_sample_continuous)
+get_metrics(example_sample_continuous, select = "mad")
 get_metrics(example_quantile)
 get_metrics(example_quantile, select = "wis")
 }
