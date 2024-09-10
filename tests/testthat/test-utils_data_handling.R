@@ -116,7 +116,7 @@ test_that("as_forecast_quantiles works", {
 test_that("as_forecast_quantiles issue 557 fix", {
 
   out <- example_sample_discrete %>%
-    as_forecast_sample() %>%
+    na.omit %>%
     as_forecast_quantile(
       probs = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
     ) %>%

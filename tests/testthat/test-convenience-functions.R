@@ -5,7 +5,6 @@
 test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
   predictions <- example_quantile %>%
-    as_forecast_quantile() %>%
     transform_forecasts(
     fun = function(x) pmax(0, x),
     append = FALSE
@@ -58,8 +57,7 @@ test_that("function transform_forecasts works", {
 })
 
 test_that("transform_forecasts() outputs an object of class forecast_*", {
-  ex <- as_forecast_binary(na.omit(example_binary))
-  transformed <- transform_forecasts(ex, fun = identity, append = FALSE)
+  transformed <- transform_forecasts(example_binary, fun = identity, append = FALSE)
   expect_s3_class(transformed, "forecast_binary")
 })
 
@@ -106,11 +104,17 @@ test_that("function set_forecast_unit() works", {
   # these and see whether the result stays the same.
   scores1 <- scores_quantile[order(location, target_end_date, target_type, horizon, model), ]
 
+  # test that if setting the forecast unit results in an invalid object,
+  # a warning occurs.
+  expect_warning(
+    set_forecast_unit(example_quantile, "model"),
+    "Assertion on 'data' failed: There are instances with more"
+  )
+
   ex2 <- set_forecast_unit(
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
-  ) %>%
-    as_forecast_quantile()
+  )
   scores2 <- score(na.omit(ex2))
   scores2 <- scores2[order(location, target_end_date, target_type, horizon, model), ]
 
@@ -144,13 +148,6 @@ test_that("set_forecast_unit() revalidates a forecast object", {
   obj <- as_forecast_quantile(na.omit(example_quantile))
   expect_no_condition(
     set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model", "horizon"))
-  )
-  expect_error(
-    # [.forecast()` will warn even before the error is thrown
-    suppressWarnings(
-      set_forecast_unit(obj, c("location", "target_end_date", "target_type", "model"))
-    ),
-    "There are instances with more than one forecast for the same target."
   )
 })
 

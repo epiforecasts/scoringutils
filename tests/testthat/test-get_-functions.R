@@ -2,12 +2,12 @@
 # `get_forecast_type`
 # ==============================================================================
 test_that("get_forecast_type() works as expected", {
-  expect_equal(get_forecast_type(forecast_quantile), "quantile")
-  expect_equal(get_forecast_type(forecast_sample_continuous), "sample")
-  expect_equal(get_forecast_type(forecast_sample_discrete), "sample")
-  expect_equal(get_forecast_type(forecast_binary), "binary")
-  expect_equal(get_forecast_type(forecast_point), "point")
-  expect_equal(get_forecast_type(forecast_nominal), "nominal")
+  expect_equal(get_forecast_type(example_quantile), "quantile")
+  expect_equal(get_forecast_type(example_sample_continuous), "sample")
+  expect_equal(get_forecast_type(example_sample_discrete), "sample")
+  expect_equal(get_forecast_type(example_binary), "binary")
+  expect_equal(get_forecast_type(example_point), "point")
+  expect_equal(get_forecast_type(example_nominal), "nominal")
 
   expect_error(
     get_forecast_type(data.frame(x = 1:10)),
@@ -210,7 +210,7 @@ test_that("get_duplicate_forecasts() works as expected for point", {
 test_that("get_duplicate_forecasts() returns the expected class", {
   expect_equal(
     class(get_duplicate_forecasts(example_point)),
-    class(example_point)
+    c("data.table", "data.frame")
   )
 })
 
