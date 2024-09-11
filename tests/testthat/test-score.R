@@ -65,6 +65,12 @@ test_that("function throws an error if data is not a forecast object", {
 
 # test binary case -------------------------------------------------------------
 test_that("function produces output for a binary case", {
+
+  expect_equal(
+    names(scores_binary),
+    c(get_forecast_unit(example_binary), names(metrics_binary()))
+  )
+
   eval <- summarise_scores(scores_binary, by = c("model", "target_type"))
 
   expect_equal(
@@ -128,6 +134,11 @@ test_that(
 
 # test point case --------------------------------------------------------------
 test_that("function produces output for a point case", {
+  expect_equal(
+    names(scores_binary),
+    c(get_forecast_unit(example_binary), names(metrics_binary()))
+  )
+
   eval <- summarise_scores(scores_point, by = c("model", "target_type"))
 
   expect_equal(
@@ -366,7 +377,7 @@ test_that("`[` preserves attributes", {
   test <- data.table::copy(scores_binary)
   class(test) <- c("scores", "data.frame")
   expect_true("metrics" %in% names(attributes(test)))
-  expect_true("metrics" %in% names(attributes(test[1:10])))
+  expect_true("metrics" %in% names(attributes(test[1:9])))
 })
 
 
