@@ -7,7 +7,10 @@
 \alias{get_metrics.forecast_point}
 \alias{get_metrics.forecast_sample}
 \alias{get_metrics.forecast_quantile}
-\title{Get metrics for different forecast types}
+\title{Get metrics available for scoring a forecast object
+\code{get_metrics()} is a generic function with methods for all forecast types.
+Called on a \code{forecast} object (see \code{\link[=as_forecast]{as_forecast()}}, it returns a list of
+functions that can be used for scoring.}
 \usage{
 get_metrics(forecast, select = NULL, exclude = NULL)
 
@@ -35,8 +38,6 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 A list of scoring functions.
 }
 \description{
-Generic function to get metrics for different forecast types
-
 For binary forecasts, the default scoring rules are:
 \itemize{
 \item "brier_score" = \code{\link[=brier_score]{brier_score()}}
@@ -133,16 +134,9 @@ mean it would also get passed to \code{interval_coverage_50}.
 \examples{
 get_metrics(example_binary)
 get_metrics(example_binary, select = "brier_score")
-get_metrics(example_quantile, exclude = "wis")
-get_metrics(example_binary)
-get_metrics(example_binary, select = "brier_score")
 get_metrics(example_binary, exclude = "log_score")
 get_metrics(example_nominal)
-get_metrics(example_nominal, select = "log_score")
-get_metrics(example_point)
 get_metrics(example_point, select = "ape")
-get_metrics(example_sample_continuous)
-get_metrics(example_sample_continuous, select = "mad")
-get_metrics(example_quantile)
+get_metrics(example_sample_continuous, exclude = "mad")
 get_metrics(example_quantile, select = "wis")
 }

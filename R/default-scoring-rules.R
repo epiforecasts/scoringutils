@@ -37,11 +37,12 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   }
   assert_subset(select, allowed)
   return(metrics[select])
-
 }
 
-#' @title Get metrics for different forecast types
-#' @description Generic function to get metrics for different forecast types
+#' @title Get metrics available for scoring a forecast object
+#' `get_metrics()` is a generic function with methods for all forecast types.
+#' Called on a `forecast` object (see [as_forecast()], it returns a list of
+#' functions that can be used for scoring.
 #' @inheritParams score
 #' @param select A character vector of scoring rules to select from the list. If
 #'   `select` is `NULL` (the default), all possible scoring rules are returned.
@@ -49,10 +50,6 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #'   If `select` is not `NULL`, this argument is ignored.
 #' @return A list of scoring functions.
 #' @export
-#' @examples
-#' get_metrics(example_binary)
-#' get_metrics(example_binary, select = "brier_score")
-#' get_metrics(example_quantile, exclude = "wis")
 get_metrics <- function(forecast, select = NULL, exclude = NULL) {
   UseMethod("get_metrics")
 }
@@ -83,7 +80,6 @@ get_metrics.forecast_binary <- function(forecast, select = NULL, exclude = NULL)
 #' @export
 #' @examples
 #' get_metrics(example_nominal)
-#' get_metrics(example_nominal, select = "log_score")
 get_metrics.forecast_nominal <- function(forecast, select = NULL, exclude = NULL) {
   all <- list(
     log_score = logs_nominal
@@ -100,7 +96,6 @@ get_metrics.forecast_nominal <- function(forecast, select = NULL, exclude = NULL
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @export
 #' @examples
-#' get_metrics(example_point)
 #' get_metrics(example_point, select = "ape")
 get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) {
   all <- list(
@@ -127,8 +122,7 @@ get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) 
 #' @inheritSection illustration-input-metric-sample Input format
 #' @export
 #' @examples
-#' get_metrics(example_sample_continuous)
-#' get_metrics(example_sample_continuous, select = "mad")
+#' get_metrics(example_sample_continuous, exclude = "mad")
 get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL) {
   all <- list(
     bias = bias_sample,
@@ -171,7 +165,6 @@ get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL)
 #' @export
 #' @importFrom purrr partial
 #' @examples
-#' get_metrics(example_quantile)
 #' get_metrics(example_quantile, select = "wis")
 get_metrics.forecast_quantile <- function(forecast, select = NULL, exclude = NULL) {
   all <- list(
