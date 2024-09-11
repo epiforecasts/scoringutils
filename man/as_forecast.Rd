@@ -48,7 +48,7 @@ Using the arguments \code{observed}, \code{predicted}, \code{model}, etc. users 
 existing columns of their input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, users can specify the
 the columns that uniquely identify a single forecast (and remove the others,
-see \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
+see docs for the internal \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
 
 The following functions are available:
 \itemize{

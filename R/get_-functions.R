@@ -215,11 +215,11 @@ get_protected_columns <- function(data = NULL) {
 #' @title Find duplicate forecasts
 #'
 #' @description
-#' Helper function to identify duplicate forecasts, i.e.
+#' Internal helper function to identify duplicate forecasts, i.e.
 #' instances where there is more than one forecast for the same prediction
 #' target.
 #'
-#' @param data A data.frame as used for [score()]
+#' @inheritParams as_forecast
 #' @param counts Should the output show the number of duplicates per forecast
 #'   unit instead of the individual duplicated rows? Default is `FALSE`.
 #' @return A data.frame with all rows for which a duplicate forecast was found
@@ -233,10 +233,15 @@ get_protected_columns <- function(data = NULL) {
 
 get_duplicate_forecasts <- function(
   data,
+  forecast_unit = NULL,
   counts = FALSE
 ) {
   assert_data_frame(data)
   data <- ensure_data.table(data)
+
+  if (!is.null(forecast_unit)) {
+    data <- set_forecast_unit(data, forecast_unit)
+  }
   forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
   type <- c("sample_id", "quantile_level", "predicted_label")[available_type]

@@ -82,6 +82,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
 - Removed the function `merge_pred_and_obs()` that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new "Deprecated functions"-vignette.
 - Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
+- Function `set_forecast_unit()` was deleted. Instead there is now a `forecast_unit` argument in `as_forecast_<type>()` as well as in `get_duplicate_forecasts()`.
 
 ### Function changes
 - `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
