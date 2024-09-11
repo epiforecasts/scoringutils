@@ -503,3 +503,14 @@ test_that("add_relative_skill() can compute relative measures", {
   )
 })
 
+# test more esoteric options to make at least sure they don't produce an error
+test_that("permutation_tests work as expected", {
+  expect_no_condition(
+    get_pairwise_comparisons(
+      scores_quantile,
+      test_type = "permutation",
+      one_sided = TRUE,
+      n_permutations = 50
+    )
+  )
+})
