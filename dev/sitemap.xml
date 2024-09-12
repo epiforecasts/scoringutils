@@ -121,11 +121,6 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_columns_not_present.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_columns_present.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_forecast_type_is_binary.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_forecast_type_is_nominal.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_forecast_type_is_point.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_forecast_type_is_quantile.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_forecast_type_is_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/theme_scoringutils.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/transform_forecasts.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/validate_forecast.html</loc></url>
