@@ -165,6 +165,14 @@ test_that("get_type() handles `NA` values", {
 # get_duplicate_forecasts()
 # ==============================================================================
 test_that("get_duplicate_forecasts() works as expected for quantile", {
+  expect_no_condition(get_duplicate_forecasts(
+    example_quantile,
+    forecast_unit =
+      c("location", "target_end_date", "target_type", "location_name",
+        "forecast_date", "model")
+    )
+  )
+
   expect_equal(nrow(get_duplicate_forecasts(example_quantile)), 0)
   expect_equal(
     nrow(

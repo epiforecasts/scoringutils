@@ -266,12 +266,11 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
 #'   scoring or denote the unit of a single forecast as specified by the user.
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
-#' @export
 #' @keywords as_forecast
 #' @examples
 #' library(magrittr) # pipe operator
 #' example_quantile %>%
-#'   set_forecast_unit(
+#'   scoringutils:::set_forecast_unit(
 #'     c("location", "target_end_date", "target_type", "horizon", "model")
 #'   )
 set_forecast_unit <- function(data, forecast_unit) {
