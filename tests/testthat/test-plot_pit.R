@@ -7,6 +7,11 @@ test_that("plot_pit() works as expected with quantile forecasts", {
   expect_s3_class(p, "ggplot")
   skip_on_cran()
   vdiffr::expect_doppelganger("plot_pit_quantile", p)
+
+  p2 <- plot_pit(pit)
+  expect_s3_class(p2, "ggplot")
+  skip_on_cran()
+  vdiffr::expect_doppelganger("plot_pit_quantile_2", p2)
 })
 
 test_that("plot_pit() works as expected with integer forecasts", {

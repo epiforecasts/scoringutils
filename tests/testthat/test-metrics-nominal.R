@@ -15,6 +15,14 @@ test_that("Input checking for nominal forecasts works", {
     assert_input_nominal(observed, predicted, predicted_label)
   )
 
+  # works with a single observations
+  expect_no_condition(
+    assert_input_nominal(observed[1], predicted[1, ], predicted_label)
+  )
+  expect_no_condition(
+    assert_input_nominal(observed[1], matrix(predicted[1, ], nrow = 1), predicted_label)
+  )
+
   # observed and predicted_label have different level lengths
   observed_wrong <- factor(observed, levels = c("one", "two"))
   expect_error(
@@ -93,6 +101,16 @@ test_that("logs_nominal() works as expected", {
   )
   res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
   expect_equal(res, res_manual)
+
+  # works with a single observations
+  expect_equal(
+    logs_nominal(observed[1], predicted[1, ], predicted_label),
+    res_manual[1]
+  )
+  expect_equal(
+    logs_nominal(observed[1], matrix(predicted[1, ], nrow = 1), predicted_label),
+    res_manual[1]
+  )
 
   # log scores still work if there are NA values in probabilities that have
   # not materialised
