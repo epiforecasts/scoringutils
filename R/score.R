@@ -118,6 +118,7 @@ score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...
     forecast, metrics,
     forecast$observed, forecast$predicted
   )
+  scores[, `:=`(predicted = NULL, observed = NULL)]
 
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
@@ -169,6 +170,7 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
     forecast, metrics,
     forecast$observed, forecast$predicted
   )
+  scores[, `:=`(predicted = NULL, observed = NULL)]
 
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])

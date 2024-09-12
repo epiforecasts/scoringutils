@@ -16,7 +16,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   - `score()` now calls `na.omit()` on the data, instead of only removing rows with missing values in the columns `observed` and `predicted`. This is because `NA` values in other columns can also mess up e.g. grouping of forecasts according to the unit of a single forecast.
   - `score()` and many other functions now require a validated `forecast` object. `forecast` objects can be created using the functions `as_forecast_point()`, `as_forecast_binary()`, `as_forecast_quantile()`, and `as_forecast_sample()` (which replace the previous `check_forecast()`). A forecast object is a data.table with class `forecast` and an additional class corresponding to the forecast type (e.g. `forecast_quantile`).
   `score()` now returns objects of class `scores` with a stored attribute `metrics` that holds the names of the scoring rules that were used. Users can call `get_metrics()` to access the names of those scoring rules.
-  - `score()` now returns one score per forecast, instead of one score per sample or quantile.
+  - `score()` now returns one score per forecast, instead of one score per sample or quantile. For binary and point forecasts, the columns "observed" and "predicted" are now removed for consistency with the other forecast types.
   - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the function `get_metrics()`, which is a a generic with S3 methods for each forecast type. It returns a named list of scoring rules suitable for the respective forecast object. For example, you could call `get_metrics(example_quantile)`. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
   - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `purrr::partial()` and `select_metric()`. See `?score()` for more information.
   - the CRPS is now reported as decomposition into dispersion, overprediction and underprediction.
@@ -82,6 +82,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Removed the function `plot_score_table()`. You can find the code in the Deprecated-visualisations Vignette. 
 - Removed the function `merge_pred_and_obs()` that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new "Deprecated functions"-vignette.
 - Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
+- Function `set_forecast_unit()` was deleted. Instead there is now a `forecast_unit` argument in `as_forecast_<type>()` as well as in `get_duplicate_forecasts()`.
 
 ### Function changes
 - `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.

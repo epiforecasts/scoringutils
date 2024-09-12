@@ -19,70 +19,6 @@ get_forecast_type <- function(forecast) {
 }
 
 
-#' Test whether data could be a binary forecast.
-#' @description Checks type of the necessary columns.
-#' @inheritParams document_check_functions
-#' @importFrom checkmate test_factor test_numeric
-#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal_input_check
-test_forecast_type_is_binary <- function(data) {
-  observed_correct <- test_factor(x = data$observed)
-  predicted_correct <- test_numeric(x = data$predicted)
-  return(observed_correct && predicted_correct)
-}
-
-#' Test whether data could be a sample-based forecast.
-#' @description Checks type of the necessary columns.
-#' @inheritParams document_check_functions
-#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal_input_check
-test_forecast_type_is_sample <- function(data) {
-  observed_correct <- test_numeric(x = data$observed)
-  predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "sample_id")
-  return(observed_correct && predicted_correct && columns_correct)
-}
-
-#' Test whether data could be a point forecast.
-#' @description Checks type of the necessary columns.
-#' @inheritParams document_check_functions
-#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal_input_check
-test_forecast_type_is_point <- function(data) {
-  observed_correct <- test_numeric(x = data$observed)
-  predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_not_present(
-    data, c("sample_id", "quantile_level")
-  )
-  return(observed_correct && predicted_correct && columns_correct)
-}
-
-#' Test whether data could be a quantile forecast.
-#' @description Checks type of the necessary columns.
-#' @inheritParams document_check_functions
-#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal_input_check
-test_forecast_type_is_quantile <- function(data) {
-  observed_correct <- test_numeric(x = data$observed)
-  predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "quantile_level")
-  return(observed_correct && predicted_correct && columns_correct)
-}
-
-#' Test whether data could be a nominal forecast.
-#' @description Checks type of the necessary columns.
-#' @inheritParams document_check_functions
-#' @return Returns TRUE if basic requirements are satisfied and FALSE otherwise
-#' @keywords internal_input_check
-test_forecast_type_is_nominal <- function(data) {
-  observed_correct <- test_factor(x = data$observed)
-  predicted_correct <- test_numeric(x = data$predicted)
-  columns_correct <- test_columns_present(data, "predicted_label")
-  predicted_label_correct <- test_factor(x = data$predicted_label)
-  return(observed_correct && predicted_correct &&
-           columns_correct && predicted_label_correct)
-}
-
 #' Assert that forecast type is as expected
 #' @param data A forecast object (see [as_forecast()]).
 #' @param actual The actual forecast type of the data
@@ -279,11 +215,11 @@ get_protected_columns <- function(data = NULL) {
 #' @title Find duplicate forecasts
 #'
 #' @description
-#' Helper function to identify duplicate forecasts, i.e.
+#' Internal helper function to identify duplicate forecasts, i.e.
 #' instances where there is more than one forecast for the same prediction
 #' target.
 #'
-#' @param data A data.frame as used for [score()]
+#' @inheritParams as_forecast
 #' @param counts Should the output show the number of duplicates per forecast
 #'   unit instead of the individual duplicated rows? Default is `FALSE`.
 #' @return A data.frame with all rows for which a duplicate forecast was found
@@ -297,10 +233,15 @@ get_protected_columns <- function(data = NULL) {
 
 get_duplicate_forecasts <- function(
   data,
+  forecast_unit = NULL,
   counts = FALSE
 ) {
   assert_data_frame(data)
   data <- ensure_data.table(data)
+
+  if (!is.null(forecast_unit)) {
+    data <- set_forecast_unit(data, forecast_unit)
+  }
   forecast_unit <- get_forecast_unit(data)
   available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
   type <- c("sample_id", "quantile_level", "predicted_label")[available_type]

@@ -4,10 +4,19 @@
 \alias{get_duplicate_forecasts}
 \title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data, counts = FALSE)
+get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
 }
 \arguments{
-\item{data}{A data.frame as used for \code{\link[=score]{score()}}}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
+
+\item{forecast_unit}{(optional) Name of the columns in \code{data} (after
+any renaming of columns) that denote the unit of a
+single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+If \code{NULL} (the default), all columns that are not required columns are
+assumed to form the unit of a single forecast. If specified, all columns
+that are not part of the forecast unit (or required columns) will be removed.}
 
 \item{counts}{Should the output show the number of duplicates per forecast
 unit instead of the individual duplicated rows? Default is \code{FALSE}.}
@@ -16,7 +25,7 @@ unit instead of the individual duplicated rows? Default is \code{FALSE}.}
 A data.frame with all rows for which a duplicate forecast was found
 }
 \description{
-Helper function to identify duplicate forecasts, i.e.
+Internal helper function to identify duplicate forecasts, i.e.
 instances where there is more than one forecast for the same prediction
 target.
 }

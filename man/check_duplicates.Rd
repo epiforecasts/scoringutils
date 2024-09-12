@@ -7,7 +7,9 @@
 check_duplicates(data)
 }
 \arguments{
-\item{data}{A data.frame as used for \code{\link[=score]{score()}}}
+\item{data}{A data.frame (or similar) with predicted and observed values.
+See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
+on required input formats.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an

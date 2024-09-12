@@ -25,3 +25,22 @@ test_that("print() works on forecast_* objects", {
     expect_contains(output_original, output_test)
   }
 })
+
+test_that("print() throws the expected messages", {
+  test <- data.table::copy(example_point)
+  class(test) <- c("point", "forecast", "data.table", "data.frame")
+  suppressMessages(
+    expect_message(
+      capture.output(print(test)),
+      "Could not determine forecast type due to error in validation."
+    )
+  )
+
+  class(test) <- c("forecast_point", "forecast")
+  suppressMessages(
+    expect_message(
+      capture.output(print(test)),
+      "Could not determine forecast unit."
+    )
+  )
+})

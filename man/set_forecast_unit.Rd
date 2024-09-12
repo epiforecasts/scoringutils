@@ -36,7 +36,7 @@ easier to debug and easier to read.
 \examples{
 library(magrittr) # pipe operator
 example_quantile \%>\%
-  set_forecast_unit(
+  scoringutils:::set_forecast_unit(
     c("location", "target_end_date", "target_type", "horizon", "model")
   )
 }

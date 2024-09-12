@@ -16,7 +16,7 @@
 #' existing columns of their input data to match the required columns for a
 #' forecast object. Using the argument `forecast_unit`, users can specify the
 #' the columns that uniquely identify a single forecast (and remove the others,
-#' see [set_forecast_unit()] for details).
+#' see docs for the internal [set_forecast_unit()] for details).
 #'
 #' The following functions are available:
 #' - [as_forecast_point()]
