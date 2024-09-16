@@ -7,10 +7,13 @@
 \method{get_metrics}{scores}(x, error = FALSE, ...)
 }
 \arguments{
-\item{x}{unused}
+\item{x}{A \code{scores} object, (a data.table with an attribute \code{metrics} as
+produced by \code{\link[=score]{score()}}).}
 
 \item{error}{Throw an error if there is no attribute called \code{metrics}?
 Default is FALSE.}
+
+\item{...}{unused}
 }
 \value{
 Character vector with the names of the scoring rules that were used
