@@ -45,10 +45,6 @@ observed values. This column will be renamed to "observed".}
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
 
-\item{model}{(optional) Name of the column in \code{data} that contains the names
-of the models/forecasters that generated the predicted values.
-This column will be renamed to "model".}
-
 \item{quantile_level}{(optional) Name of the column in \code{data} that contains
 the quantile level of the predicted values. This column will be renamed to
 "quantile_level". Only applicable to quantile-based forecasts.}

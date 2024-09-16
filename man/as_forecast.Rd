@@ -20,10 +20,6 @@ observed values. This column will be renamed to "observed".}
 
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
-
-\item{model}{(optional) Name of the column in \code{data} that contains the names
-of the models/forecasters that generated the predicted values.
-This column will be renamed to "model".}
 }
 \value{
 Depending on the forecast type, an object of the following class will be
