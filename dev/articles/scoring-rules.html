@@ -63,7 +63,7 @@
                         <h4 data-toc-skip class="author">Nikos
 Bosse</h4>
             
-            <h4 data-toc-skip class="date">2024-09-12</h4>
+            <h4 data-toc-skip class="date">2024-09-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/vignettes/scoring-rules.Rmd" class="external-link"><code>vignettes/scoring-rules.Rmd</code></a></small>
       <div class="d-none name"><code>scoring-rules.Rmd</code></div>
@@ -135,7 +135,7 @@ of
 <h2 id="metrics-for-point-forecasts">Metrics for point forecasts<a class="anchor" aria-label="anchor" href="#metrics-for-point-forecasts"></a>
 </h2>
 <p>See a list of the default metrics for point forecasts by calling
-<code>?metrics_point()</code>.</p>
+<code>get_metrics(example_point)</code>.</p>
 <p>This is an overview of the input and output formats for point
 forecasts:</p>
 <div class="figure">
@@ -247,7 +247,7 @@ Otherwise, results will be misleading (see <span class="citation">Gneiting (2011
 <h2 id="binary-forecasts">Binary forecasts<a class="anchor" aria-label="anchor" href="#binary-forecasts"></a>
 </h2>
 <p>See a list of the default metrics for point forecasts by calling
-<code>?metrics_binary()</code>.</p>
+<code>?get_metrics(example_binary)</code>.</p>
 <p>This is an overview of the input and output formats for point
 forecasts:</p>
 <div class="figure">
@@ -327,7 +327,7 @@ example:</p>
 <h2 id="sample-based-forecasts">Sample-based forecasts<a class="anchor" aria-label="anchor" href="#sample-based-forecasts"></a>
 </h2>
 <p>See a list of the default metrics for sample-based forecasts by
-calling <code>?metrics_sample()</code>.</p>
+calling <code>get_metrics(example_sample_continuous)</code>.</p>
 <p>This is an overview of the input and output formats for quantile
 forecasts:</p>
 <div class="figure">
@@ -560,7 +560,7 @@ correspondence between the squared error and the mean.</p>
 <h2 id="quantile-based-forecasts">Quantile-based forecasts<a class="anchor" aria-label="anchor" href="#quantile-based-forecasts"></a>
 </h2>
 <p>See a list of the default metrics for quantile-based forecasts by
-calling <code>?metrics_quantile()</code>.</p>
+calling <code>get_metrics(example_quantile)</code>.</p>
 <p>This is an overview of the input and output formats for quantile
 forecasts:</p>
 <div class="figure">

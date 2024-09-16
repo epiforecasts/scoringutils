@@ -70,7 +70,13 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_counts.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_pit.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_protected_columns.html</loc></url>
@@ -88,11 +94,6 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/log_shift.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/logs_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/mad_sample.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_binary.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_nominal.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_point.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_quantile.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/metrics_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/new_forecast.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/new_scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison_one_group.html</loc></url>
