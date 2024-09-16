@@ -2,9 +2,18 @@
 % Please edit documentation in R/pit.R
 \name{get_pit}
 \alias{get_pit}
+\alias{get_pit.default}
+\alias{get_pit.forecast_sample}
+\alias{get_pit.forecast_quantile}
 \title{Probability integral transformation (data.frame version)}
 \usage{
-get_pit(forecast, by, n_replicates = 100)
+get_pit(forecast, by, ...)
+
+\method{get_pit}{default}(forecast, by, ...)
+
+\method{get_pit}{forecast_sample}(forecast, by, n_replicates = 100, ...)
+
+\method{get_pit}{forecast_quantile}(forecast, by, ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
@@ -14,6 +23,11 @@ observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 PIT values shall be grouped. If you e.g. have the columns 'model' and
 'location' in the input data and want to have a PIT histogram for
 every model and location, specify \code{by = c("model", "location")}.}
+
+\item{...}{Currently unused. You \emph{cannot} pass additional arguments to scoring
+functions via \code{...}. See the \emph{Customising metrics} section below for
+details on how to use \code{\link[purrr:partial]{purrr::partial()}} to pass arguments to individual
+metrics.}
 
 \item{n_replicates}{The number of draws for the randomised PIT for
 discrete predictions. Will be ignored if forecasts are continuous.}

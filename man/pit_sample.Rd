@@ -2,7 +2,7 @@
 % Please edit documentation in R/pit.R
 \name{pit_sample}
 \alias{pit_sample}
-\title{Probability integral transformation (sample-based version)}
+\title{Probability integral transformation for counts}
 \usage{
 pit_sample(observed, predicted, n_replicates = 100)
 }
