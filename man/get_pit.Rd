@@ -8,7 +8,7 @@ get_pit(forecast, by, n_replicates = 100)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and

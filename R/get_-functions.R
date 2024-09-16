@@ -106,19 +106,22 @@ get_type <- function(x) {
 #' `attr(scores, "metrics") <- c("names", "of", "your", "scores")` (the
 #' order does not matter).
 #'
-#' @param scores A data.table with an attribute `metrics`.
+#' @param x A `scores` object, (a data.table with an attribute `metrics` as
+#'   produced by [score()]).
 #' @param error Throw an error if there is no attribute called `metrics`?
-#' Default is FALSE.
+#'   Default is FALSE.
+#' @param ... unused
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom checkmate assert_data_frame
 #' @return
 #' Character vector with the names of the scoring rules that were used
-#' for scoring or `NULL` if no scores were computed previously.
+#' for scoring.
 #' @keywords handle-metrics
+#' @family `get_metrics` functions
 #' @export
-get_metrics <- function(scores, error = FALSE) {
-  assert_data_frame(scores)
-  metrics <- attr(scores, "metrics")
+get_metrics.scores <- function(x, error = FALSE, ...) {
+  assert_data_frame(x)
+  metrics <- attr(x, "metrics")
   if (error && is.null(metrics)) {
     #nolint start: keyword_quote_linter
     cli_abort(
@@ -131,9 +134,9 @@ get_metrics <- function(scores, error = FALSE) {
     #nolint end
   }
 
-  if (!all(metrics %in% names(scores))) {
+  if (!all(metrics %in% names(x))) {
     #nolint start: keyword_quote_linter object_usage_linter
-    missing <- setdiff(metrics, names(scores))
+    missing <- setdiff(metrics, names(x))
     cli_warn(
       c(
         "!" = "The following scores have been previously computed, but are no

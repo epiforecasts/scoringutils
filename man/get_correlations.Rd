@@ -4,7 +4,7 @@
 \alias{get_correlations}
 \title{Calculate correlation between metrics}
 \usage{
-get_correlations(scores, metrics = get_metrics(scores), ...)
+get_correlations(scores, metrics = get_metrics.scores(scores), ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with

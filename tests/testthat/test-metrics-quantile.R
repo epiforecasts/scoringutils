@@ -102,7 +102,7 @@ test_that("`wis()` works within score for median forecast", {
   ) %>%
     as_forecast_quantile()
 
-  metrics <- metrics_quantile() %>%
+  metrics <- get_metrics(example_quantile) %>%
     select_metrics(select = c("ae_median", "wis"))
   metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
@@ -147,7 +147,7 @@ test_that("wis() works within score for one interval", {
   ) %>%
     as_forecast_quantile()
 
-  metrics <- metrics_quantile() %>%
+  metrics <- get_metrics(example_quantile) %>%
     select_metrics(select = c("wis"))
   metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
@@ -174,8 +174,7 @@ test_that("`wis()` works 1 interval and median", {
   ) %>%
     as_forecast_quantile()
 
-  metrics <- metrics_quantile() %>%
-      select_metrics(select = c("wis"))
+  metrics <- get_metrics(example_quantile, select = c("wis"))
   metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
@@ -216,8 +215,7 @@ test_that("wis works, 2 intervals and median", {
   ) %>%
     as_forecast_quantile()
 
-  metrics <- metrics_quantile() %>%
-    select_metrics(select = c("wis"))
+  metrics <- get_metrics(example_quantile, select = c("wis"))
   metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(test_data, metrics = metrics)
@@ -303,8 +301,7 @@ test_that("wis is correct, median only - test corresponds to covidHubUtils", {
 
   data_formatted <- merge(forecasts_formated, truth_formatted)
 
-  metrics <- metrics_quantile() %>%
-    select_metrics(select = c("wis"))
+  metrics <- get_metrics(example_quantile, select = c("wis"))
   metrics$wis <- purrr::partial(metrics$wis, count_median_twice = TRUE)
 
   eval <- score(
@@ -378,8 +375,7 @@ test_that("wis is correct, 1 interval only - test corresponds to covidHubUtils",
   data_formatted <- merge(forecasts_formated, truth_formatted) %>%
     as_forecast_quantile()
 
-  metrics <- metrics_quantile() %>%
-    select_metrics(select = c("wis"))
+  metrics <- get_metrics(example_quantile, select = c("wis"))
 
   eval <- suppressMessages(score(data_formatted, metrics = metrics))
 
@@ -495,8 +491,7 @@ test_that("wis is correct, 2 intervals and median - test corresponds to covidHub
     count_median_twice = TRUE
   )
 
-  metrics <- metrics_quantile() %>%
-    select_metrics("wis")
+  metrics <- get_metrics(example_quantile, "wis")
   metrics$wis <- purrr::partial(wis, count_median_twice = TRUE)
   eval2 <- eval <- score(data_formatted, metrics = metrics)
   eval2 <- summarise_scores(eval2,

@@ -7,7 +7,7 @@ test_that("get_correlations() works as expected", {
       get_correlations()
   )
   expect_equal(
-    colnames(correlations), c(get_metrics(scores_quantile), "metric")
+    colnames(correlations), c(get_metrics.scores(scores_quantile), "metric")
   )
 
   # expect no error if scores are unsummarised

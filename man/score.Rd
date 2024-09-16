@@ -11,23 +11,22 @@
 \usage{
 score(forecast, metrics, ...)
 
-\method{score}{forecast_binary}(forecast, metrics = metrics_binary(), ...)
+\method{score}{forecast_binary}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_nominal}(forecast, metrics = metrics_nominal(), ...)
+\method{score}{forecast_nominal}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_point}(forecast, metrics = metrics_point(), ...)
+\method{score}{forecast_point}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_sample}(forecast, metrics = metrics_sample(), ...)
+\method{score}{forecast_sample}(forecast, metrics = get_metrics(forecast), ...)
 
-\method{score}{forecast_quantile}(forecast, metrics = metrics_quantile(), ...)
+\method{score}{forecast_quantile}(forecast, metrics = get_metrics(forecast), ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
-column names in the output. See \code{\link[=metrics_point]{metrics_point()}}, \code{\link[=metrics_binary]{metrics_binary()}},
-\code{\link[=metrics_quantile]{metrics_quantile()}}, and \code{\link[=metrics_sample]{metrics_sample()}} for more information on the
+column names in the output. See \code{\link[=get_metrics]{get_metrics()}} for more information on the
 default metrics used. See the \emph{Customising metrics} section below for
 information on how to pass custom arguments to scoring functions.}
 

@@ -27,7 +27,7 @@
 #'
 #' get_correlations(scores)
 get_correlations <- function(scores,
-                             metrics = get_metrics(scores),
+                             metrics = get_metrics.scores(scores),
                              ...) {
   scores <- ensure_data.table(scores)
   assert_subset(metrics, colnames(scores), empty.ok = FALSE)

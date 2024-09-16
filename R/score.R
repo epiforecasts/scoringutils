@@ -13,10 +13,9 @@
 #' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
 #' @param forecast A forecast object (a validated data.table with predicted and
-#'   observed values, see [as_forecast()])
+#'   observed values, see [as_forecast()]).
 #' @param metrics A named list of scoring functions. Names will be used as
-#'   column names in the output. See [metrics_point()], [metrics_binary()],
-#'   [metrics_quantile()], and [metrics_sample()] for more information on the
+#'   column names in the output. See [get_metrics()] for more information on the
 #'   default metrics used. See the *Customising metrics* section below for
 #'   information on how to pass custom arguments to scoring functions.
 #' @param ... Currently unused. You *cannot* pass additional arguments to scoring
@@ -110,7 +109,7 @@ score.default <- function(forecast, metrics, ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
+score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
   forecast <- as.data.table(forecast)
@@ -130,7 +129,7 @@ score.forecast_binary <- function(forecast, metrics = metrics_binary(), ...) {
 #' @importFrom data.table setattr
 #' @rdname score
 #' @export
-score.forecast_nominal <- function(forecast, metrics = metrics_nominal(), ...) {
+score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -162,7 +161,7 @@ score.forecast_nominal <- function(forecast, metrics = metrics_nominal(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
+score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   metrics <- validate_metrics(metrics)
   forecast <- as.data.table(forecast)
@@ -181,7 +180,7 @@ score.forecast_point <- function(forecast, metrics = metrics_point(), ...) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
+score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -219,7 +218,7 @@ score.forecast_sample <- function(forecast, metrics = metrics_sample(), ...) {
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
-score.forecast_quantile <- function(forecast, metrics = metrics_quantile(), ...) {
+score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -346,7 +345,7 @@ validate_scores <- function(scores) {
   assert_class(scores, "scores")
   # error if no metrics exists +
   # throw warning if any of the metrics is not in the data
-  get_metrics(scores, error = TRUE)
+  get_metrics.scores(scores, error = TRUE)
   return(invisible(NULL))
 }
 
