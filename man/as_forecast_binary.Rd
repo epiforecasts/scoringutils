@@ -8,8 +8,7 @@ as_forecast_binary(
   data,
   forecast_unit = NULL,
   observed = NULL,
-  predicted = NULL,
-  model = NULL
+  predicted = NULL
 )
 }
 \arguments{

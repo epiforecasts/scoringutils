@@ -13,8 +13,10 @@
 #'
 #' @param scores An object of class `scores` (a data.table with
 #'   scores and an additional attribute `metrics` as produced by [score()]).
-#' @param by Character vector with column names to summarise scores by. Default
-#'   is `model`, meaning that there will be one score per model in the output.
+#' @param by Character vector with column names to summarise scores by. An
+#'   example here would be something like a `model` column when summarising
+#'   scores by model. Default is an empty character vector, which means that
+#'   scores are summarised without grouping.
 #' @param fun A function used for summarising scores. Default is [mean()].
 #' @param ... Additional parameters that can be passed to the summary function
 #'   provided to `fun`. For more information see the documentation of the
@@ -50,7 +52,7 @@
 #' @keywords scoring
 
 summarise_scores <- function(scores,
-                             by = "model",
+                             by = character(0),
                              fun = mean,
                              ...) {
   # input checking ------------------------------------------------------------

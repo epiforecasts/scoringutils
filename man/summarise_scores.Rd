@@ -5,16 +5,18 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by = "model", fun = mean, ...)
+summarise_scores(scores, by = character(0), fun = mean, ...)
 
-summarize_scores(scores, by = "model", fun = mean, ...)
+summarize_scores(scores, by = character(0), fun = mean, ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
-\item{by}{Character vector with column names to summarise scores by. Default
-is \code{model}, meaning that there will be one score per model in the output.}
+\item{by}{Character vector with column names to summarise scores by. An
+example here would be something like a \code{model} column when summarising
+scores by model. Default is an empty character vector, which means that
+scores are summarised without grouping.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 

@@ -13,7 +13,6 @@ as_forecast_quantile(data, ...)
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  model = NULL,
   quantile_level = NULL,
   ...
 )

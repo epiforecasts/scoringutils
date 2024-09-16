@@ -9,7 +9,6 @@ as_forecast_sample(
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  model = NULL,
   sample_id = NULL
 )
 }

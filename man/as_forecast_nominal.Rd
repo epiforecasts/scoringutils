@@ -9,7 +9,6 @@ as_forecast_nominal(
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  model = NULL,
   predicted_label = NULL
 )
 }

@@ -13,7 +13,6 @@ as_forecast_point(data, ...)
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  model = NULL,
   ...
 )
 
