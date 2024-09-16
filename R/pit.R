@@ -1,4 +1,4 @@
-#' @title Probability integral transformation (sample-based version)
+#' @title Probability integral transformation for counts
 #'
 #' @description Uses a Probability integral transformation (PIT) (or a
 #' randomised PIT for integer forecasts) to
@@ -83,7 +83,6 @@
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
-
 pit_sample <- function(observed,
                        predicted,
                        n_replicates = 100) {
@@ -143,28 +142,29 @@ pit_sample <- function(observed,
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords scoring
 
-get_pit <- function(forecast,
-                    by,
-                    n_replicates = 100) {
+#' @keywords scoring
+#' @export
+get_pit <- function(forecast, by, ...) {
+  UseMethod("get_pit")
+}
 
+#' @rdname get_pit
+#' @importFrom cli cli_abort
+#' @export
+get_pit.default <- function(forecast, by, ...) {
+  cli_abort(c(
+    "!" = "The input needs to be a valid forecast object represented as quantiles or samples." # nolint
+  ))
+}
+
+#' @rdname get_pit
+#' @importFrom stats na.omit
+#' @importFrom data.table `:=` as.data.table dcast
+#' @inheritParams pit_sample n_replicates
+#' @export
+get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_type <- get_forecast_type(forecast)
   forecast <- as.data.table(forecast)
-
-  if (forecast_type == "quantile") {
-    forecast[, quantile_coverage := (observed <= predicted)]
-    quantile_coverage <-
-      forecast[, .(quantile_coverage = mean(quantile_coverage)),
-               by = c(unique(c(by, "quantile_level")))]
-    quantile_coverage <- quantile_coverage[order(quantile_level),
-      .(
-        quantile_level = c(quantile_level, 1),
-        pit_value = diff(c(0, quantile_coverage, 1))
-      ),
-      by = c(get_forecast_unit(quantile_coverage))
-    ]
-    return(quantile_coverage[])
-  }
 
   # if prediction type is not quantile, calculate PIT values based on samples
   forecast_wide <- data.table::dcast(forecast,
@@ -181,4 +181,26 @@ get_pit <- function(forecast,
   ]
 
   return(pit[])
+}
+
+#' @rdname get_pit
+#' @importFrom stats na.omit
+#' @importFrom data.table `:=` as.data.table
+#' @export
+get_pit.forecast_quantile <- function(forecast, by, ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast <- as.data.table(forecast)
+
+  forecast[, quantile_coverage := (observed <= predicted)]
+  quantile_coverage <-
+    forecast[, .(quantile_coverage = mean(quantile_coverage)),
+      by = c(unique(c(by, "quantile_level")))]
+  quantile_coverage <- quantile_coverage[order(quantile_level),
+    .(
+      quantile_level = c(quantile_level, 1),
+      pit_value = diff(c(0, quantile_coverage, 1))
+    ),
+    by = c(get_forecast_unit(quantile_coverage))
+  ]
+  return(quantile_coverage[])
 }
