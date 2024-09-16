@@ -39,33 +39,58 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   return(metrics[select])
 }
 
-#' @title Get metrics available for scoring a forecast object
-#' `get_metrics()` is a generic function with methods for all forecast types.
-#' Called on a `forecast` object (see [as_forecast()], it returns a list of
-#' functions that can be used for scoring.
-#' @inheritParams score
-#' @param select A character vector of scoring rules to select from the list. If
-#'   `select` is `NULL` (the default), all possible scoring rules are returned.
-#' @param exclude A character vector of scoring rules to exclude from the list.
-#'   If `select` is not `NULL`, this argument is ignored.
-#' @return A list of scoring functions.
+#' Get metrics
+#'
+#' @description
+#' Generic function to to obtain default metrics availble for scoring or metrics
+#' that were used for scoring.
+#'
+#' - If called on `forecast` object it returns a list of functions that can be
+#' used for scoring.
+#' - If called on a `scores` object (see [score()]), it returns a character vector
+#' with the names of the metrics that were used for scoring.
+#'
+#' See the documentation for the actual methods in the `See Also` section below
+#' for more details. Alternatively call `?get_metrics.<forecast_type>` or
+#' `?get_metrics.scores`.
+#'
+#' @param x A `forecast` or `scores` object.
+#' @param ... Additional arguments passed to the method.
+#' @details
+#' See [as_forecast()] for more information on `forecast` objects and [score()]
+#' for more information on `scores` objects.
+#'
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @export
-get_metrics <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics <- function(x, ...) {
   UseMethod("get_metrics")
 }
 
-#' @rdname get_metrics
+
+#' Get default metrics for binary forecasts
+#'
 #' @description
 #' For binary forecasts, the default scoring rules are:
 #' - "brier_score" = [brier_score()]
 #' - "log_score" = [logs_binary()]
 #' @inheritSection illustration-input-metric-binary-point Input format
+#' @param x A forecast object (a validated data.table with predicted and
+#'   observed values, see [as_forecast()]).
+#' @param select A character vector of scoring rules to select from the list. If
+#'   `select` is `NULL` (the default), all possible scoring rules are returned.
+#' @param exclude A character vector of scoring rules to exclude from the list.
+#'   If `select` is not `NULL`, this argument is ignored.
+#' @param ... unused
+#' @return A list of scoring functions.
 #' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_binary)
 #' get_metrics(example_binary, select = "brier_score")
 #' get_metrics(example_binary, exclude = "log_score")
-get_metrics.forecast_binary <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     brier_score = brier_score,
     log_score = logs_binary
@@ -73,31 +98,40 @@ get_metrics.forecast_binary <- function(forecast, select = NULL, exclude = NULL)
   select_metrics(all, select, exclude)
 }
 
-#' @rdname get_metrics
+
+#' Get default metrics for nominal forecasts
+#' @inheritParams get_metrics.forecast_binary
 #' @description
 #' For nominal forecasts, the default scoring rule is:
 #' - "log_score" = [logs_nominal()]
 #' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_nominal)
-get_metrics.forecast_nominal <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     log_score = logs_nominal
   )
   select_metrics(all, select, exclude)
 }
 
-#' @rdname get_metrics
+
+#' Get default metrics for point forecasts
+#'
 #' @description
 #' For point forecasts, the default scoring rules are:
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
 #' @inheritSection illustration-input-metric-binary-point Input format
+#' @inheritParams get_metrics.forecast_binary
 #' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_point, select = "ape")
-get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     ae_point = Metrics::ae,
     se_point = Metrics::se,
@@ -106,7 +140,9 @@ get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) 
   select_metrics(all, select, exclude)
 }
 
-#' @rdname get_metrics
+
+#' Get default metrics for sample-based forecasts
+#'
 #' @description
 #' For sample-based forecasts, the default scoring rules are:
 #' - "crps" = [crps_sample()]
@@ -120,10 +156,13 @@ get_metrics.forecast_point <- function(forecast, select = NULL, exclude = NULL) 
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
 #' @inheritSection illustration-input-metric-sample Input format
+#' @inheritParams get_metrics.forecast_binary
 #' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_sample_continuous, exclude = "mad")
-get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     bias = bias_sample,
     dss = dss_sample,
@@ -139,7 +178,9 @@ get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL)
   select_metrics(all, select, exclude)
 }
 
-#' @rdname get_metrics
+
+#' Get default metrics for quantile-based forecasts
+#'
 #' @description
 #' For quantile-based forecasts, the default scoring rules are:
 #' - "wis" = [wis]
@@ -162,11 +203,14 @@ get_metrics.forecast_sample <- function(forecast, select = NULL, exclude = NULL)
 #' definition, as passing an argument `interval_range = 90` to [score()] would
 #' mean it would also get passed to `interval_coverage_50`.
 #' @inheritSection illustration-input-metric-quantile Input format
+#' @inheritParams get_metrics.forecast_binary
 #' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
 #' @importFrom purrr partial
 #' @examples
 #' get_metrics(example_quantile, select = "wis")
-get_metrics.forecast_quantile <- function(forecast, select = NULL, exclude = NULL) {
+get_metrics.forecast_quantile <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     wis = wis,
     overprediction = overprediction_quantile,

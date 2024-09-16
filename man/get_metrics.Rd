@@ -2,141 +2,41 @@
 % Please edit documentation in R/default-scoring-rules.R
 \name{get_metrics}
 \alias{get_metrics}
-\alias{get_metrics.forecast_binary}
-\alias{get_metrics.forecast_nominal}
-\alias{get_metrics.forecast_point}
-\alias{get_metrics.forecast_sample}
-\alias{get_metrics.forecast_quantile}
-\title{Get metrics available for scoring a forecast object
-\code{get_metrics()} is a generic function with methods for all forecast types.
-Called on a \code{forecast} object (see \code{\link[=as_forecast]{as_forecast()}}, it returns a list of
-functions that can be used for scoring.}
+\title{Get metrics}
 \usage{
-get_metrics(forecast, select = NULL, exclude = NULL)
-
-\method{get_metrics}{forecast_binary}(forecast, select = NULL, exclude = NULL)
-
-\method{get_metrics}{forecast_nominal}(forecast, select = NULL, exclude = NULL)
-
-\method{get_metrics}{forecast_point}(forecast, select = NULL, exclude = NULL)
-
-\method{get_metrics}{forecast_sample}(forecast, select = NULL, exclude = NULL)
-
-\method{get_metrics}{forecast_quantile}(forecast, select = NULL, exclude = NULL)
+get_metrics(x, ...)
 }
 \arguments{
-\item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+\item{x}{A \code{forecast} or \code{scores} object.}
 
-\item{select}{A character vector of scoring rules to select from the list. If
-\code{select} is \code{NULL} (the default), all possible scoring rules are returned.}
-
-\item{exclude}{A character vector of scoring rules to exclude from the list.
-If \code{select} is not \code{NULL}, this argument is ignored.}
-}
-\value{
-A list of scoring functions.
+\item{...}{Additional arguments passed to the method.}
 }
 \description{
-For binary forecasts, the default scoring rules are:
+Generic function to to obtain default metrics availble for scoring or metrics
+that were used for scoring.
 \itemize{
-\item "brier_score" = \code{\link[=brier_score]{brier_score()}}
-\item "log_score" = \code{\link[=logs_binary]{logs_binary()}}
+\item If called on \code{forecast} object it returns a list of functions that can be
+used for scoring.
+\item If called on a \code{scores} object (see \code{\link[=score]{score()}}), it returns a character vector
+with the names of the metrics that were used for scoring.
 }
 
-For nominal forecasts, the default scoring rule is:
-\itemize{
-\item "log_score" = \code{\link[=logs_nominal]{logs_nominal()}}
+See the documentation for the actual methods in the \verb{See Also} section below
+for more details. Alternatively call \verb{?get_metrics.<forecast_type>} or
+\code{?get_metrics.scores}.
 }
-
-For point forecasts, the default scoring rules are:
-\itemize{
-\item "ae_point" = \link[Metrics:ae]{ae()}
-\item "se_point" = \link[Metrics:se]{se()}
-\item "ape" = \link[Metrics:ape]{ape()}
+\details{
+See \code{\link[=as_forecast]{as_forecast()}} for more information on \code{forecast} objects and \code{\link[=score]{score()}}
+for more information on \code{scores} objects.
 }
-
-For sample-based forecasts, the default scoring rules are:
-\itemize{
-\item "crps" = \code{\link[=crps_sample]{crps_sample()}}
-\item "overprediction" = \code{\link[=overprediction_sample]{overprediction_sample()}}
-\item "underprediction" = \code{\link[=underprediction_sample]{underprediction_sample()}}
-\item "dispersion" = \code{\link[=dispersion_sample]{dispersion_sample()}}
-\item "log_score" = \code{\link[=logs_sample]{logs_sample()}}
-\item "dss" = \code{\link[=dss_sample]{dss_sample()}}
-\item "mad" = \code{\link[=mad_sample]{mad_sample()}}
-\item "bias" = \code{\link[=bias_sample]{bias_sample()}}
-\item "ae_median" = \code{\link[=ae_median_sample]{ae_median_sample()}}
-\item "se_mean" = \code{\link[=se_mean_sample]{se_mean_sample()}}
+\seealso{
+Other \code{get_metrics} functions: 
+\code{\link{get_metrics.forecast_binary}()},
+\code{\link{get_metrics.forecast_nominal}()},
+\code{\link{get_metrics.forecast_point}()},
+\code{\link{get_metrics.forecast_quantile}()},
+\code{\link{get_metrics.forecast_sample}()},
+\code{\link{get_metrics.scores}()}
 }
-
-For quantile-based forecasts, the default scoring rules are:
-\itemize{
-\item "wis" = \link{wis}
-\item "overprediction" = \code{\link[=overprediction_quantile]{overprediction_quantile()}}
-\item "underprediction" = \code{\link[=underprediction_quantile]{underprediction_quantile()}}
-\item "dispersion" = \code{\link[=dispersion_quantile]{dispersion_quantile()}}
-\item "bias" = \code{\link[=bias_quantile]{bias_quantile()}}
-\item "interval_coverage_50" = \code{\link[=interval_coverage]{interval_coverage()}}
-\item "interval_coverage_90" = purrr::partial(
-interval_coverage, interval_range = 90
-)
-\item "interval_coverage_deviation" = \code{\link[=interval_coverage_deviation]{interval_coverage_deviation()}},
-\item "ae_median" = \code{\link[=ae_median_quantile]{ae_median_quantile()}}
-}
-
-Note: The \code{interval_coverage_90} scoring rule is created by modifying
-\code{\link[=interval_coverage]{interval_coverage()}}, making use of the function \code{\link[purrr:partial]{purrr::partial()}}.
-This construct allows the function to deal with arbitrary arguments in \code{...},
-while making sure that only those that \code{\link[=interval_coverage]{interval_coverage()}} can
-accept get passed on to it. \code{interval_range = 90} is set in the function
-definition, as passing an argument \code{interval_range = 90} to \code{\link[=score]{score()}} would
-mean it would also get passed to \code{interval_coverage_50}.
-}
-\section{Input format}{
-\if{html}{
-  \out{<div style="text-align: left">}
-  \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
-}
-\if{latex}{
-  \figure{metrics-binary-point.png}
-}
-
-\if{html}{
-  \out{<div style="text-align: left">}
-  \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
-}
-\if{latex}{
-  \figure{metrics-binary-point.png}
-}
-
-\if{html}{
-  \out{<div style="text-align: left">}
-  \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
-}
-\if{latex}{
-  \figure{metrics-sample.png}
-}
-
-\if{html}{
-  \out{<div style="text-align: left">}
-  \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
-}
-\if{latex}{
-  \figure{metrics-quantile.png}
-}
-}
-
-\examples{
-get_metrics(example_binary)
-get_metrics(example_binary, select = "brier_score")
-get_metrics(example_binary, exclude = "log_score")
-get_metrics(example_nominal)
-get_metrics(example_point, select = "ape")
-get_metrics(example_sample_continuous, exclude = "mad")
-get_metrics(example_quantile, select = "wis")
-}
+\concept{\code{get_metrics} functions}
+\keyword{handle-metrics}

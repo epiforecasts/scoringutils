@@ -46,7 +46,7 @@ reference:
         - title: Transform data
           contents:
                 - has_keyword("transform")
-        - title: Handling metrics and scoring functions
+        - title: Handling metrics/scoring functions
           contents:
                 - has_keyword("handle-metrics")
         - title: Evaluate forecasts

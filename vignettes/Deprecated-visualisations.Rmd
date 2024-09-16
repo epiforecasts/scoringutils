@@ -494,7 +494,7 @@ plot_score_table <- function(scores,
 
   # identify metrics -----------------------------------------------------------
   id_vars <- get_forecast_unit(scores)
-  metrics <- get_scored_metrics(scores)
+  metrics <- get_metrics(scores)
 
   cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
   suppressWarnings(scores[, eval(cols_to_delete) := NULL])

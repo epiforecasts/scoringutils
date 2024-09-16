@@ -8,7 +8,7 @@ validate_forecast(forecast, forecast_type = NULL, verbose = TRUE)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{forecast_type}{(optional) The forecast type you expect the forecasts
 to have. If the forecast type as determined by \code{scoringutils} based on the

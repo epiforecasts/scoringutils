@@ -13,7 +13,7 @@
 #' @inheritSection forecast_types Forecast types and input formats
 #' @inheritSection forecast_types Forecast unit
 #' @param forecast A forecast object (a validated data.table with predicted and
-#'   observed values, see [as_forecast()])
+#'   observed values, see [as_forecast()]).
 #' @param metrics A named list of scoring functions. Names will be used as
 #'   column names in the output. See [get_metrics()] for more information on the
 #'   default metrics used. See the *Customising metrics* section below for
@@ -345,7 +345,7 @@ validate_scores <- function(scores) {
   assert_class(scores, "scores")
   # error if no metrics exists +
   # throw warning if any of the metrics is not in the data
-  get_scored_metrics(scores, error = TRUE)
+  get_metrics.scores(scores, error = TRUE)
   return(invisible(NULL))
 }
 

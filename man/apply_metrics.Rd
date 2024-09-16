@@ -8,7 +8,7 @@ apply_metrics(forecast, metrics, ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}})}
+observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=get_metrics]{get_metrics()}} for more information on the

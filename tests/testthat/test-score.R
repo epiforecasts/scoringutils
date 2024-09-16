@@ -68,7 +68,7 @@ test_that("function produces output for a binary case", {
 
   expect_equal(
     names(scores_binary),
-    c(get_forecast_unit(example_binary), names(metrics_binary()))
+    c(get_forecast_unit(example_binary), names(get_metrics(example_binary)))
   )
 
   eval <- summarise_scores(scores_binary, by = c("model", "target_type"))
@@ -136,7 +136,7 @@ test_that(
 test_that("function produces output for a point case", {
   expect_equal(
     names(scores_binary),
-    c(get_forecast_unit(example_binary), names(metrics_binary()))
+    c(get_forecast_unit(example_binary), names(get_metrics(example_binary)))
   )
 
   eval <- summarise_scores(scores_point, by = c("model", "target_type"))
