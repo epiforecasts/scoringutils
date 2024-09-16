@@ -7,8 +7,7 @@
 \method{get_metrics}{scores}(x, error = FALSE, ...)
 }
 \arguments{
-\item{x}{A \code{scores} object, (a data.table with an attribute \code{metrics} as
-produced by \code{\link[=score]{score()}}).}
+\item{x}{unused}
 
 \item{error}{Throw an error if there is no attribute called \code{metrics}?
 Default is FALSE.}

@@ -110,6 +110,7 @@ get_type <- function(x) {
 #'   produced by [score()]).
 #' @param error Throw an error if there is no attribute called `metrics`?
 #'   Default is FALSE.
+#' @param x unused
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom checkmate assert_data_frame
 #' @return
