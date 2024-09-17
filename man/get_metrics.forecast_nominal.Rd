@@ -21,7 +21,7 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 \description{
 For nominal forecasts, the default scoring rule is:
 \itemize{
-\item "log_score" = \code{\link[=logs_nominal]{logs_nominal()}}
+\item "neg_log_score" = \code{\link[=logs_nominal]{logs_nominal()}}
 }
 }
 \examples{

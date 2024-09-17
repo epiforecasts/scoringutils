@@ -25,7 +25,7 @@ For sample-based forecasts, the default scoring rules are:
 \item "overprediction" = \code{\link[=overprediction_sample]{overprediction_sample()}}
 \item "underprediction" = \code{\link[=underprediction_sample]{underprediction_sample()}}
 \item "dispersion" = \code{\link[=dispersion_sample]{dispersion_sample()}}
-\item "log_score" = \code{\link[=logs_sample]{logs_sample()}}
+\item "neg_log_score" = \code{\link[=logs_sample]{logs_sample()}}
 \item "dss" = \code{\link[=dss_sample]{dss_sample()}}
 \item "mad" = \code{\link[=mad_sample]{mad_sample()}}
 \item "bias" = \code{\link[=bias_sample]{bias_sample()}}

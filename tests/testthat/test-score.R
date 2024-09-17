@@ -82,7 +82,7 @@ test_that("function produces output for a binary case", {
     c(
       "model", "target_type",
       "brier_score",
-      "log_score"
+      "neg_log_score"
     )
   )
 
@@ -333,7 +333,7 @@ test_that("score() works with only one sample", {
   onesample <- na.omit(example_sample_continuous)[sample_id == 20]
   expect_warning(
     scoreonesample <- score(onesample),
-    "Computation for `log_score` failed. Error: need at least 2 data points."
+    "Computation for `neg_log_score` failed. Error: need at least 2 data points."
   )
 
   # verify that all goes well with two samples

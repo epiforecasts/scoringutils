@@ -20,7 +20,7 @@
 #' )
 #' select_metrics(
 #'   metrics = get_metrics(example_binary),
-#'   exclude = "log_score"
+#'   exclude = "neg_log_score"
 #' )
 select_metrics <- function(metrics, select = NULL, exclude = NULL) {
   assert_character(x = c(select, exclude), null.ok = TRUE)
@@ -73,7 +73,7 @@ get_metrics <- function(x, ...) {
 #' @description
 #' For binary forecasts, the default scoring rules are:
 #' - "brier_score" = [brier_score()]
-#' - "log_score" = [logs_binary()]
+#' - "neg_log_score" = [logs_binary()]
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @param x A forecast object (a validated data.table with predicted and
 #'   observed values, see [as_forecast()]).
@@ -89,11 +89,11 @@ get_metrics <- function(x, ...) {
 #' @examples
 #' get_metrics(example_binary)
 #' get_metrics(example_binary, select = "brier_score")
-#' get_metrics(example_binary, exclude = "log_score")
+#' get_metrics(example_binary, exclude = "neg_log_score")
 get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     brier_score = brier_score,
-    log_score = logs_binary
+    neg_log_score = logs_binary
   )
   select_metrics(all, select, exclude)
 }
@@ -103,7 +103,7 @@ get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
 #' @inheritParams get_metrics.forecast_binary
 #' @description
 #' For nominal forecasts, the default scoring rule is:
-#' - "log_score" = [logs_nominal()]
+#' - "neg_log_score" = [logs_nominal()]
 #' @export
 #' @family `get_metrics` functions
 #' @keywords handle-metrics
@@ -111,7 +111,7 @@ get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
 #' get_metrics(example_nominal)
 get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    log_score = logs_nominal
+    neg_log_score = logs_nominal
   )
   select_metrics(all, select, exclude)
 }
@@ -183,7 +183,7 @@ get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
 #' - "overprediction" = [overprediction_sample()]
 #' - "underprediction" = [underprediction_sample()]
 #' - "dispersion" = [dispersion_sample()]
-#' - "log_score" = [logs_sample()]
+#' - "neg_log_score" = [logs_sample()]
 #' - "dss" = [dss_sample()]
 #' - "mad" = [mad_sample()]
 #' - "bias" = [bias_sample()]
@@ -204,7 +204,7 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
     overprediction = overprediction_sample,
     underprediction = underprediction_sample,
     dispersion = dispersion_sample,
-    log_score = logs_sample,
+    neg_log_score = logs_sample,
     mad = mad_sample,
     ae_median = ae_median_sample,
     se_mean = se_mean_sample

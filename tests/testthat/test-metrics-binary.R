@@ -161,7 +161,7 @@ test_that("Binary metrics work within and outside of `score()`", {
 
   expect_equal(
     logs_binary(observed, predicted),
-    result$log_score
+    result$neg_log_score
   )
 })
 
