@@ -26,6 +26,7 @@ test_that("print() works on forecast_* objects", {
   }
 })
 
+
 test_that("print() throws the expected messages", {
   test <- data.table::copy(example_point)
   class(test) <- c("point", "forecast", "data.table", "data.frame")
