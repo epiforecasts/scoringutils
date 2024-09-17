@@ -21,7 +21,7 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 \description{
 For quantile-based forecasts, the default scoring rules are:
 \itemize{
-\item "wis" = \link{wis}
+\item "wis" = \code{\link[=wis]{wis()}}
 \item "overprediction" = \code{\link[=overprediction_quantile]{overprediction_quantile()}}
 \item "underprediction" = \code{\link[=underprediction_quantile]{underprediction_quantile()}}
 \item "dispersion" = \code{\link[=dispersion_quantile]{dispersion_quantile()}}
