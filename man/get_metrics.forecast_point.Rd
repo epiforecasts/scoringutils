@@ -34,7 +34,7 @@ The mean squared error, for example, is only a meaningful scoring rule if
 the forecaster actually reported the mean of their predictive distribution
 as a point forecast. If the forecaster reported the median, then the mean
 absolute error would be the appropriate scoring rule. If the scoring rule
-and the predictive task do not align, misleading results ensue.
+and the predictive task do not align, the results will be misleading.
 
 Failure to respect this correspondence can lead to grossly misleading
 results! Consider the example in the section below.

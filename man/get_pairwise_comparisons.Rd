@@ -6,7 +6,8 @@
 \usage{
 get_pairwise_comparisons(
   scores,
-  by = "model",
+  compare,
+  by = character(0),
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
   ...
@@ -16,14 +17,16 @@ get_pairwise_comparisons(
 \item{scores}{An object of class \code{scores} (a data.table with
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
-\item{by}{Character vector with column names that define the grouping level
-for the pairwise comparisons. By default (\code{model}), there will be one
-relative skill score per model. If, for example,
-\code{by = c("model", "location")}. Then you will get a
-separate relative skill score for every model in every location. Internally,
-the data.table with scores will be split according \code{by} (removing "model"
-before splitting) and the pairwise comparisons will be computed separately
-for the split data.tables.}
+\item{compare}{Character vector with a single colum name that defines the
+elements for the pairwise comparison. For example, if this is set to
+"model", then elements of the "model" column will be compared.}
+
+\item{by}{Character vector with column names that define further grouping
+levels for the pairwise comparisons. By default this is an empty character
+vector and there will be one relative skill score per distinct entry of the
+column selected in \code{compare}. If further columns are given here, for
+example, \code{by = "location"}, then you a separate relative skill score is
+calculated for every model in every location.}
 
 \item{metric}{A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
@@ -101,26 +104,6 @@ Johannes Bracher.
 The implementation of the permutation test follows the function
 \code{permutationTest} from the \code{surveillance} package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
-}
-\examples{
-\dontshow{
-  data.table::setDTthreads(2) # restricts number of cores used on CRAN
-}
-
-library(magrittr) # pipe operator
-
-scores <- example_quantile \%>\%
- as_forecast_quantile() \%>\%
- score()
-
-pairwise <- get_pairwise_comparisons(scores, by = "target_type")
-pairwise2 <- get_pairwise_comparisons(
-  scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
-)
-
-library(ggplot2)
-plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
-  facet_wrap(~target_type)
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}
