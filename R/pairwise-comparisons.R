@@ -207,8 +207,7 @@ get_pairwise_comparisons <- function(
 
   # if compare is equal to forecast_unit, then pairwise comparisons don't make
   # sense
-  # if compare == forecast_unit then this all relative skill
-  # scores will simply be 1.
+  # if compare == forecast_unit then all relative skill scores will simply be 1.
   if (setequal(compare, forecast_unit)) {
     #nolint start: keyword_quote_linter
     cli_warn(
@@ -218,6 +217,7 @@ get_pairwise_comparisons <- function(
         "i" = "All relative skill scores will be equal to 1."
       )
     )
+    #nolint end
   } else if (setequal(c(compare, by), forecast_unit)) {
     #nolint start: keyword_quote_linter
     cli_inform(
