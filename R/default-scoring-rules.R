@@ -124,6 +124,19 @@ get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) 
 #' - "ae_point" = [ae()][Metrics::ae()]
 #' - "se_point" = [se()][Metrics::se()]
 #' - "ape" = [ape()][Metrics::ape()]
+#'
+#' A note of caution: Every scoring rule for a point forecast
+#' is implicitly minimised by a specific aspect of the predictive distribution
+#' (see Gneiting, 2011).
+#'
+#' The mean squared error, for example, is only a meaningful scoring rule if
+#' the forecaster actually reported the mean of their predictive distribution
+#' as a point forecast. If the forecaster reported the median, then the mean
+#' absolute error would be the appropriate scoring rule. If the scoring rule
+#' and the predictive task do not align, the results will be misleading.
+#'
+#' Failure to respect this correspondence can lead to grossly misleading
+#' results! Consider the example in the section below.
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @inheritParams get_metrics.forecast_binary
 #' @export
@@ -131,6 +144,27 @@ get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) 
 #' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_point, select = "ape")
+#'
+#' library(magrittr)
+#' set.seed(123)
+#' n <- 500
+#' observed <- rnorm(n, 5, 4)^2
+#'
+#' predicted_mu <- mean(observed)
+#' predicted_not_mu <- predicted_mu - rnorm(n, 10, 2)
+#'
+#' df <- data.frame(
+#'   model = rep(c("perfect", "bad"), each = n),
+#'   predicted = c(rep(predicted_mu, n), predicted_not_mu),
+#'   observed = rep(observed, 2),
+#'   id = rep(1:n, 2)
+#' ) %>%
+#'   as_forecast_point()
+#' score(df) %>%
+#'   summarise_scores()
+#' @references
+#' Making and Evaluating Point Forecasts, Gneiting, Tilmann, 2011,
+#' Journal of the American Statistical Association.
 get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     ae_point = Metrics::ae,
@@ -183,7 +217,7 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 #'
 #' @description
 #' For quantile-based forecasts, the default scoring rules are:
-#' - "wis" = [wis]
+#' - "wis" = [wis()]
 #' - "overprediction" = [overprediction_quantile()]
 #' - "underprediction" = [underprediction_quantile()]
 #' - "dispersion" = [dispersion_quantile()]
