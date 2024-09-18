@@ -1,4 +1,5 @@
 globalVariables(c(
+  "..compare",
   "..index",
   "..probs",
   "..type",
