@@ -61,6 +61,19 @@ summarise_scores <- function(scores,
   assert_subset(by, names(scores), empty.ok = TRUE)
   assert_function(fun)
 
+  # allow legacy fixed column name for mdoels
+  if (missing(by) && "model" %in% colnames(scores)) {
+    by <- "model"
+    cli_warn(
+      c(
+        "!" = "Setting `by` to \"model\" to reflect previous behaviour.
+          In the future this behaviour will be deprecated, and users will have
+          to specify which column to use for comparison. To silence this message
+          set `by = \"model\"` explicitly."
+      )
+    )
+  }
+
   metrics <- get_metrics.scores(scores, error = TRUE)
 
   # summarise scores -----------------------------------------------------------

@@ -127,6 +127,19 @@ get_pairwise_comparisons <- function(
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
 
+  # allow legacy fixed column name for mdoels
+  if (missing(compare) && "model" %in% colnames(scores)) {
+    compare <- "model"
+    cli_warn(
+      c(
+        "!" = "Setting `compare` to \"model\" to reflect previous behaviour.
+          In the future this behaviour will be deprecated, and users will have
+          to specify which column to use for comparison. To silence this message
+          set `compare = \"model\"` explicitly."
+      )
+    )
+  }
+
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
   metrics <- get_metrics.scores(scores, error = TRUE)
