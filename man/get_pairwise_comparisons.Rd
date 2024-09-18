@@ -38,7 +38,7 @@ returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
 \item{...}{Additional arguments for the comparison between two models. See
-\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
+\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
 }
 \value{
 A data.table with the results of pairwise comparisons
@@ -104,6 +104,29 @@ Johannes Bracher.
 The implementation of the permutation test follows the function
 \code{permutationTest} from the \code{surveillance} package by Michael Höhle,
 Andrea Riebler and Michaela Paul.
+}
+\examples{
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
+
+library(magrittr) # pipe operator
+
+scores <- example_quantile \%>\%
+ as_forecast_quantile() \%>\%
+ score()
+
+pairwise <- get_pairwise_comparisons(
+  scores, compare = "model", by = "target_type"
+)
+pairwise2 <- get_pairwise_comparisons(
+  scores, compare = "model", by = "target_type",
+  baseline = "EuroCOVIDhub-baseline"
+)
+
+library(ggplot2)
+plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
+  facet_wrap(~target_type)
 }
 \author{
 Nikos Bosse \email{nikosbosse@gmail.com}

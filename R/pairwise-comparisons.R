@@ -75,7 +75,7 @@
 #'   returned. By default (`NULL`), relative skill will not be scaled with
 #'   respect to a baseline model.
 #' @param ... Additional arguments for the comparison between two models. See
-#'   [compare_two_models()] for more information.
+#'   [compare_forecasts()] for more information.
 #' @inheritParams summarise_scores
 #' @return A data.table with the results of pairwise comparisons
 #' containing the mean score ratios (`mean_scores_ratio`),
@@ -107,7 +107,7 @@
 #'   scores, compare = "model", by = "target_type"
 #' )
 #' pairwise2 <- get_pairwise_comparisons(
-#'   scores, compare = "model", by = target_type",
+#'   scores, compare = "model", by = "target_type",
 #'   baseline = "EuroCOVIDhub-baseline"
 #' )
 #'
@@ -263,7 +263,7 @@ get_pairwise_comparisons <- function(
 #' for different forecast targets) and then the actual pairwise comparison for
 #' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
-#' forecasts it calls [compare_two_models()].
+#' forecasts it calls [compare_forecasts()].
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @keywords internal

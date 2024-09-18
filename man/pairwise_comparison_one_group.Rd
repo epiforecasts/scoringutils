@@ -31,7 +31,7 @@ example, \code{by = "location"}, then you a separate relative skill score is
 calculated for every model in every location.}
 
 \item{...}{Additional arguments for the comparison between two models. See
-\code{\link[=compare_two_models]{compare_two_models()}} for more information.}
+\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
 }
 \value{
 A data.table with the results of pairwise comparisons
@@ -49,6 +49,6 @@ specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
 that subgroup is managed from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}. In order to
 actually do the comparison between two models over a subset of common
-forecasts it calls \code{\link[=compare_two_models]{compare_two_models()}}.
+forecasts it calls \code{\link[=compare_forecasts]{compare_forecasts()}}.
 }
 \keyword{internal}
