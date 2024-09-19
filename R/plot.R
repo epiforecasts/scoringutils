@@ -518,16 +518,6 @@ plot_pit <- function(pit,
 
     # quantile version
     if (type == "quantile-based") {
-      if (num_bins == "auto") {
-      } else {
-        width <- 1 / num_bins
-        plot_quantiles <- seq(width, 1, width)
-      }
-
-      if (!is.null(breaks)) {
-        plot_quantiles <- breaks
-      }
-
       hist <- ggplot(
         data = pit[quantile_level %in% plot_quantiles],
         aes(x = quantile_level, y = pit_value)
