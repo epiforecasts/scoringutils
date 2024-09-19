@@ -184,7 +184,7 @@ get_pit.forecast_quantile <- function(forecast, by, ...) {
   forecast[, quantile_coverage := (observed <= predicted)]
   quantile_coverage <-
     forecast[, .(quantile_coverage = mean(quantile_coverage)),
-      by = c(unique(c(by, "quantile_level")))]
+             by = c(unique(c(by, "quantile_level")))]
   quantile_coverage <- quantile_coverage[order(quantile_level),
     .(
       quantile_level = c(quantile_level, 1),
