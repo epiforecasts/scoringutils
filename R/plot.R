@@ -494,21 +494,21 @@ plot_pit <- function(pit,
 
   # use breaks if explicitly given, otherwise assign based on number of bins
   if (!is.null(breaks)) {
-    plot_quantiles <- breaks
+    plot_quantiles <- unique(c(0, breaks, 1))
   } else if (is.null(num_bins) || num_bins == "auto") {
     # automatically set number of bins
     if (type == "sample-based") {
       num_bins <- 10
       width <- 1 / num_bins
-      plot_quantiles <- seq(width, 1, width)
+      plot_quantiles <- seq(0, 1, width)
     }
     if (type == "quantile-based") {
-      plot_quantiles <- unique(pit$quantile_level)
+      plot_quantiles <- unique(c(0, pit$quantile_level, 1))
     }
   } else {
     # if num_bins is explicitly given
     width <- 1 / num_bins
-    plot_quantiles <- seq(width, 1, width)
+    plot_quantiles <- seq(0, 1, width)
   }
 
   # function for data.frames
