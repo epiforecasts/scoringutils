@@ -24,7 +24,7 @@
 #' forecasts \eqn{F_t} are said to be ideal if \eqn{F_t = G_t} at all times t.
 #' In that case, the probabilities \eqn{u_t} are distributed uniformly.
 #'
-#' In the case of discrete outcomes such as incidence counts,
+#' In the case of discrete nonnegative outcomes such as incidence counts,
 #' the PIT is no longer uniform even when forecasts are ideal.
 #' In that case a randomised PIT can be used instead:
 #' \deqn{
