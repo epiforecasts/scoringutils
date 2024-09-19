@@ -522,7 +522,7 @@ plot_pit <- function(pit,
         data = pit[quantile_level %in% plot_quantiles],
         aes(x = quantile_level, y = pit_value)
       ) +
-        geom_col(position = "dodge") +
+        geom_col(position = "dodge", colour = "grey") +
         facet_wrap(formula)
     }
 
