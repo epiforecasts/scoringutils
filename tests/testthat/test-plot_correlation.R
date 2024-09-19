@@ -12,7 +12,7 @@ test_that("plot_correlations() works as expected", {
 
   # expect an error if you forgot to compute correlations
   expect_error(
-    plot_correlations(summarise_scores(scores_quantile)),
+    plot_correlations(summarise_scores(scores_quantile, by = "model")),
     "Did you forget to call `scoringutils::get_correlations()`?"
   )
 })
