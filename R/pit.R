@@ -65,6 +65,9 @@
 #' plot_pit(pit)
 #' @export
 #' @references
+#' Claudia Czado, Tilmann Gneiting Leonhard Held (2009) Predictive model
+#' assessment for count data. Biometrika, 96(4), 633-648.
+#
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 #' Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
