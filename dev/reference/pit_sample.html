@@ -97,7 +97,7 @@ the (continuous) predictive cumulative probability distribution at time t. If
 the true probability distribution of outcomes at time t is \(G_t\) then the
 forecasts \(F_t\) are said to be ideal if \(F_t = G_t\) at all times t.
 In that case, the probabilities \(u_t\) are distributed uniformly.</p>
-<p>In the case of discrete outcomes such as incidence counts,
+<p>In the case of discrete nonnegative outcomes such as incidence counts,
 the PIT is no longer uniform even when forecasts are ideal.
 In that case a randomised PIT can be used instead:
 $$
@@ -108,21 +108,12 @@ cumulative probability of observing incidence k at time t,
 \(P_t (-1) = 0\) by definition and v is standard uniform and independent
 of k. If \(P_t\) is the true cumulative
 probability distribution, then \(u_t\) is standard uniform.</p>
-<p>The function checks whether integer or continuous forecasts were provided.
-It then applies the (randomised) probability integral and tests
-the values \(u_t\) for uniformity using the
-Anderson-Darling test.</p>
-<p>As a rule of thumb, there is no evidence to suggest a forecasting model is
-miscalibrated if the p-value found was greater than a threshold of p &gt;= 0.1,
-some evidence that it was miscalibrated if 0.01 &lt; p &lt; 0.1, and good
-evidence that it was miscalibrated if p &lt;= 0.01. However, the AD-p-values
-may be overly strict and there actual usefulness may be questionable.
-In this context it should be noted, though, that uniformity of the
-PIT is a necessary but not sufficient condition of calibration.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
+    <p>Claudia Czado, Tilmann Gneiting Leonhard Held (2009) Predictive model
+assessment for count data. Biometrika, 96(4), 633-648.
+Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 real-time epidemic forecasts: A case study of Ebola in the Western Area
 region of Sierra Leone, 2014-15, <a href="https://doi.org/10.1371/journal.pcbi.1006785" class="external-link">doi:10.1371/journal.pcbi.1006785</a></p>
@@ -159,7 +150,7 @@ region of Sierra Leone, 2014-15, <a href="https://doi.org/10.1371/journal.pcbi.1
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
 </div>
 
     </footer></div>
