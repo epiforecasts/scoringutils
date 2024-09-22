@@ -24,7 +24,7 @@
 #' forecasts \eqn{F_t} are said to be ideal if \eqn{F_t = G_t} at all times t.
 #' In that case, the probabilities \eqn{u_t} are distributed uniformly.
 #'
-#' In the case of discrete outcomes such as incidence counts,
+#' In the case of discrete nonnegative outcomes such as incidence counts,
 #' the PIT is no longer uniform even when forecasts are ideal.
 #' In that case a randomised PIT can be used instead:
 #' \deqn{
@@ -36,19 +36,6 @@
 #' \eqn{P_t (-1) = 0} by definition and v is standard uniform and independent
 #' of k. If \eqn{P_t} is the true cumulative
 #' probability distribution, then \eqn{u_t} is standard uniform.
-#'
-#' The function checks whether integer or continuous forecasts were provided.
-#' It then applies the (randomised) probability integral and tests
-#' the values \eqn{u_t} for uniformity using the
-#' Anderson-Darling test.
-#'
-#' As a rule of thumb, there is no evidence to suggest a forecasting model is
-#' miscalibrated if the p-value found was greater than a threshold of p >= 0.1,
-#' some evidence that it was miscalibrated if 0.01 < p < 0.1, and good
-#' evidence that it was miscalibrated if p <= 0.01. However, the AD-p-values
-#' may be overly strict and there actual usefulness may be questionable.
-#' In this context it should be noted, though, that uniformity of the
-#' PIT is a necessary but not sufficient condition of calibration.
 #'
 #' @param n_replicates The number of draws for the randomised PIT for
 #'   discrete predictions. Will be ignored if forecasts are continuous.
@@ -78,6 +65,9 @@
 #' plot_pit(pit)
 #' @export
 #' @references
+#' Claudia Czado, Tilmann Gneiting Leonhard Held (2009) Predictive model
+#' assessment for count data. Biometrika, 96(4), 633-648.
+#
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 #' Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
@@ -194,7 +184,7 @@ get_pit.forecast_quantile <- function(forecast, by, ...) {
   forecast[, quantile_coverage := (observed <= predicted)]
   quantile_coverage <-
     forecast[, .(quantile_coverage = mean(quantile_coverage)),
-      by = c(unique(c(by, "quantile_level")))]
+             by = c(unique(c(by, "quantile_level")))]
   quantile_coverage <- quantile_coverage[order(quantile_level),
     .(
       quantile_level = c(quantile_level, 1),
