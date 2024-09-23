@@ -62,6 +62,7 @@ Imports:
     scoringRules,
     stats
 Suggests: 
+    ggdist,
     kableExtra,
     knitr,
     magrittr,
