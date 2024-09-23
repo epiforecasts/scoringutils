@@ -155,10 +155,10 @@ se_mean_sample <- function(observed, predicted) {
 #' The function should be used to score continuous predictions only.
 #' While the Log Score is in theory also applicable
 #' to discrete forecasts, the problem lies in the implementation: The function
-#' needs a kernel density estimation, which is not well defined with
-#' integer-valued Monte Carlo Samples. The Log score can be used for specific
-#' discrete probability distributions. See the scoringRules package for
-#' more details.
+#' uses a kernel density estimation, which is not well defined with
+#' integer-valued Monte Carlo Samples.
+#' See the scoringRules package for more details and alternatives, e.g.
+#' calculating scores for specific discrete probability distributions.
 #' @inheritParams ae_median_sample
 #' @param ... Additional arguments passed to
 #' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
