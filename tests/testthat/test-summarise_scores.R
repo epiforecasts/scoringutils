@@ -65,3 +65,13 @@ test_that("summarise_scores() handles data.frames correctly", {
     summarise_scores(test, by = "model")
   )
 })
+
+
+test_that("summarise_scores() errors if `by = NULL", {
+  expect_error(
+    summarise_scores(scores_quantile, by = NULL),
+    "Assertion on 'by' failed: Must be a subset of"
+  )
+})
+
+
