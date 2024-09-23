@@ -25,7 +25,7 @@ A list of scoring functions.
 For binary forecasts, the default scoring rules are:
 \itemize{
 \item "brier_score" = \code{\link[=brier_score]{brier_score()}}
-\item "neg_log_score" = \code{\link[=logs_binary]{logs_binary()}}
+\item "log_score" = \code{\link[=logs_binary]{logs_binary()}}
 }
 }
 \section{Input format}{
@@ -42,7 +42,7 @@ For binary forecasts, the default scoring rules are:
 \examples{
 get_metrics(example_binary)
 get_metrics(example_binary, select = "brier_score")
-get_metrics(example_binary, exclude = "neg_log_score")
+get_metrics(example_binary, exclude = "log_score")
 }
 \seealso{
 Other \code{get_metrics} functions: 

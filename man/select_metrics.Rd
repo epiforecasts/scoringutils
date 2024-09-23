@@ -29,7 +29,7 @@ select_metrics(
 )
 select_metrics(
   metrics = get_metrics(example_binary),
-  exclude = "neg_log_score"
+  exclude = "log_score"
 )
 }
 \keyword{handle-metrics}

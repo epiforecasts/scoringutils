@@ -149,9 +149,12 @@ se_mean_sample <- function(observed, predicted) {
 #' [`logs_sample()`][scoringRules::scores_sample_univ] function from the
 #' \pkg{scoringRules} package.
 #'
+#' The log score is the negative logarithm of the predictive density evaluated
+#' at the observed value.
+#'
 #' The function should be used to score continuous predictions only.
 #' While the Log Score is in theory also applicable
-#' to discrete forecasts, the problem lies in the implementation: The Log score
+#' to discrete forecasts, the problem lies in the implementation: The function
 #' needs a kernel density estimation, which is not well defined with
 #' integer-valued Monte Carlo Samples. The Log score can be used for specific
 #' discrete probability distributions. See the scoringRules package for
@@ -162,6 +165,7 @@ se_mean_sample <- function(observed, predicted) {
 #' @inheritSection illustration-input-metric-sample Input format
 #' @return Vector with scores.
 #' @importFrom scoringRules logs_sample
+#' @family log score functions
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
 #' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
