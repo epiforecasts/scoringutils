@@ -24,13 +24,16 @@ This function is a wrapper around the
 \code{\link[scoringRules:scores_sample_univ]{logs_sample()}} function from the
 \pkg{scoringRules} package.
 
+The log score is the negative logarithm of the predictive density evaluated
+at the observed value.
+
 The function should be used to score continuous predictions only.
 While the Log Score is in theory also applicable
-to discrete forecasts, the problem lies in the implementation: The Log score
-needs a kernel density estimation, which is not well defined with
-integer-valued Monte Carlo Samples. The Log score can be used for specific
-discrete probability distributions. See the scoringRules package for
-more details.
+to discrete forecasts, the problem lies in the implementation: The function
+uses a kernel density estimation, which is not well defined with
+integer-valued Monte Carlo Samples.
+See the scoringRules package for more details and alternatives, e.g.
+calculating scores for specific discrete probability distributions.
 }
 \section{Input format}{
 \if{html}{
@@ -52,4 +55,10 @@ logs_sample(observed, predicted)
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12}
 }
+\seealso{
+Other log score functions: 
+\code{\link{logs_nominal}()},
+\code{\link{scoring-functions-binary}}
+}
+\concept{log score functions}
 \keyword{metric}

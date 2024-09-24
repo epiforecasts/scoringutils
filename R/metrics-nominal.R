@@ -18,6 +18,7 @@
 #' @export
 #' @keywords metric
 #' @rdname scoring-functions-nominal
+#' @family log score functions
 #' @examples
 #' factor_levels <- c("one", "two", "three")
 #' predicted_label <- factor(c("one", "two", "three"), levels = factor_levels)

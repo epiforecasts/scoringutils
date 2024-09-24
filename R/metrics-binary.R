@@ -80,6 +80,7 @@ brier_score <- function(observed, predicted) {
 #' @importFrom methods hasArg
 #' @export
 #' @keywords metric
+#' @family log score functions
 #' @rdname scoring-functions-binary
 logs_binary <- function(observed, predicted) {
   assert_input_binary(observed, predicted)
