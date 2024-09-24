@@ -37,4 +37,10 @@ predicted <- matrix(c(0.8, 0.1, 0.4,
                     nrow = 3)
 logs_nominal(observed, predicted, predicted_label)
 }
+\seealso{
+Other log score functions: 
+\code{\link{logs_sample}()},
+\code{\link{scoring-functions-binary}}
+}
+\concept{log score functions}
 \keyword{metric}

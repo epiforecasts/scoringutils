@@ -85,4 +85,10 @@ predicted <- runif(n = 30, min = 0, max = 1)
 brier_score(observed, predicted)
 logs_binary(observed, predicted)
 }
+\seealso{
+Other log score functions: 
+\code{\link{logs_nominal}()},
+\code{\link{logs_sample}()}
+}
+\concept{log score functions}
 \keyword{metric}
