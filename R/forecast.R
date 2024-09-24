@@ -484,21 +484,6 @@ assert_forecast.forecast_nominal <- function(
 }
 
 
-#' @title Re-validate an existing forecast object
-#'
-#' @description
-#' The function re-validates an existing forecast object. It is similar to
-#' [assert_forecast()], but returns the input data instead of an invisible
-#' `NULL`. See [as_forecast()] for details on the expected input formats.
-#' @inherit assert_forecast params return examples
-#' @export
-#' @keywords validate-forecast-object
-validate_forecast <- function(forecast, forecast_type = NULL, verbose = TRUE) {
-  assert_forecast(forecast, forecast_type, verbose)
-  return(forecast)
-}
-
-
 #' @title Validation common to all forecast types
 #'
 #' @description
