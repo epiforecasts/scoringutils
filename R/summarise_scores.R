@@ -13,10 +13,8 @@
 #'
 #' @param scores An object of class `scores` (a data.table with
 #'   scores and an additional attribute `metrics` as produced by [score()]).
-#' @param by Character vector with column names to summarise scores by. An
-#'   example here would be something like a `model` column when summarising
-#'   scores by model. Default is an empty character vector, which means that
-#'   scores are summarised without grouping.
+#' @param by Character vector with column names to summarise scores by. Default
+#'   is "model", i.e. scores are summarised by the "model" column.
 #' @param fun A function used for summarising scores. Default is [mean()].
 #' @param ... Additional parameters that can be passed to the summary function
 #'   provided to `fun`. For more information see the documentation of the
@@ -44,7 +42,7 @@
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # round digits
-#' summarise_scores(scores,by = "model") %>%
+#' summarise_scores(scores, by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
 #' @importFrom checkmate assert_subset assert_function test_subset
@@ -52,7 +50,7 @@
 #' @keywords scoring
 
 summarise_scores <- function(scores,
-                             by = character(0),
+                             by = "model",
                              fun = mean,
                              ...) {
   # input checking ------------------------------------------------------------
@@ -60,19 +58,6 @@ summarise_scores <- function(scores,
   scores <- ensure_data.table(scores)
   assert_subset(by, names(scores), empty.ok = FALSE)
   assert_function(fun)
-
-  # allow legacy fixed column name for mdoels
-  if (missing(by) && "model" %in% colnames(scores)) {
-    by <- "model"
-    cli_warn(
-      c(
-        "!" = "Setting `by` to \"model\" to reflect previous behaviour.
-          In the future this behaviour will be deprecated, and users will have
-          to specify which column to use for comparison. To silence this message
-          set `by = \"model\"` explicitly."
-      )
-    )
-  }
 
   metrics <- get_metrics.scores(scores, error = TRUE)
 

@@ -1,4 +1,11 @@
 test_that("summarise_scores() works as expected with by = forecast unit", {
+  expect_no_condition(
+    summarised_scores <- summarise_scores(scores_quantile)
+  )
+  expect_s3_class(summarised_scores, c("scores", "data.table", "data.frame"), exact = TRUE)
+})
+
+test_that("summarise_scores() works as expected with by = forecast unit", {
   # the only effect of running summarise_scores with by = forecast unit is
   # that coverage is now a numeric instead of a boolean
   summarised_scores <- summarise_scores(
@@ -6,7 +13,6 @@ test_that("summarise_scores() works as expected with by = forecast unit", {
     by = get_forecast_unit(scores_quantile)
   )
 
-  expect_s3_class(summarised_scores, c("scores", "data.table", "data.frame"), exact = TRUE)
   expect_equal(dim(summarised_scores), dim(scores_quantile))
   expect_equal(summarised_scores$wis, scores_quantile$wis)
 

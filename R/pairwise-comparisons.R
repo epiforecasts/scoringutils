@@ -60,13 +60,14 @@
 #'
 #' @param compare Character vector with a single colum name that defines the
 #'   elements for the pairwise comparison. For example, if this is set to
-#'   "model", then elements of the "model" column will be compared.
+#'   "model" (the default), then elements of the "model" column will be
+#'   compared.
 #' @param by Character vector with column names that define further grouping
-#'   levels for the pairwise comparisons. By default this is an empty character
-#'   vector and there will be one relative skill score per distinct entry of the
-#'   column selected in `compare`. If further columns are given here, for
-#'   example, `by = "location"` and `compare = "model"`, then one separate relative 
-#'   skill score is calculated for every model in every location.
+#'   levels for the pairwise comparisons. By default this is `NULL` and there
+#'   will be one relative skill score per distinct entry of the column selected
+#'   in `compare`. If further columns are given here, for example, `by =
+#'   "location"` with `compare = "model"`, then one separate relative skill
+#'   score is calculated for every model in every location.
 #' @param metric A string with the name of the metric for which
 #'   a relative skill shall be computed. By default this is either "crps",
 #'   "wis" or "brier_score" if any of these are available.
@@ -86,7 +87,7 @@
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
-#' @importFrom checkmate assert_subset assert_character
+#' @importFrom checkmate assert_subset assert_character assert_disjunct
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -103,12 +104,9 @@
 #'  as_forecast_quantile() %>%
 #'  score()
 #'
-#' pairwise <- get_pairwise_comparisons(
-#'   scores, compare = "model", by = "target_type"
-#' )
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #' pairwise2 <- get_pairwise_comparisons(
-#'   scores, compare = "model", by = "target_type",
-#'   baseline = "EuroCOVIDhub-baseline"
+#'   scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
 #' )
 #'
 #' library(ggplot2)
@@ -117,8 +115,8 @@
 
 get_pairwise_comparisons <- function(
   scores,
-  compare,
-  by = character(0),
+  compare = "model",
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
   ...
@@ -126,19 +124,10 @@ get_pairwise_comparisons <- function(
 
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
-
-  # allow legacy fixed column name for mdoels
-  if (missing(compare) && "model" %in% colnames(scores)) {
-    compare <- "model"
-    cli_warn(
-      c(
-        "!" = "Setting `compare` to \"model\" to reflect previous behaviour.
-          In the future this behaviour will be deprecated, and users will have
-          to specify which column to use for comparison. To silence this message
-          set `compare = \"model\"` explicitly."
-      )
-    )
-  }
+  # check that 'compare' column in is are present
+  assert(check_columns_present(scores, compare))
+  # check that column(s) in `by` ar not in `compare`
+  assert_disjunct(by, compare)
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
@@ -160,10 +149,10 @@ get_pairwise_comparisons <- function(
       )
       #nolint end
     }
+  } else {
+    ## set explicitly to character(0) in case it was given as NULL
+    by <- character(0)
   }
-
-  # check that 'compare' column in is are present
-  assert(check_columns_present(scores, compare))
 
   # check that baseline exists
   comparators <- as.vector(unique(scores[[compare]]))
@@ -279,12 +268,13 @@ get_pairwise_comparisons <- function(
 #' forecasts it calls [compare_forecasts()].
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
+#' @importFrom data.table setnames
 #' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
                                           baseline,
-                                          compare,
+                                          compare = "model",
                                           by,
                                           ...) {
   if (!(compare %in% names(scores))) {
@@ -328,7 +318,7 @@ pairwise_comparison_one_group <- function(scores,
 
   # mirror computations
   combinations_mirrored <- data.table::copy(combinations)
-  data.table::setnames(combinations_mirrored,
+  setnames(combinations_mirrored,
     old = c("..compare", "compare_against"),
     new = c("compare_against", "..compare")
   )
@@ -356,7 +346,7 @@ pairwise_comparison_one_group <- function(scores,
     compare_against = as.character(compare_against)
   )]
 
-  data.table::setnames(result, old = "..compare", new = compare)
+  setnames(result, old = "..compare", new = compare)
 
   # calculate relative skill as geometric mean
   # small theta is again better (assuming that the score is negatively oriented)
@@ -433,7 +423,7 @@ pairwise_comparison_one_group <- function(scores,
 #' @keywords internal
 
 compare_forecasts <- function(scores,
-                              compare,
+                              compare = "model",
                               name_comparator1,
                               name_comparator2,
                               metric,
@@ -588,7 +578,7 @@ permutation_test <- function(scores1,
 #' @keywords keyword scoring
 add_relative_skill <- function(
   scores,
-  compare,
+  compare = "model",
   by = character(0),
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL

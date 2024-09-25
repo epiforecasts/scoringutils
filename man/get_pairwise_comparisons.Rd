@@ -6,8 +6,8 @@
 \usage{
 get_pairwise_comparisons(
   scores,
-  compare,
-  by = character(0),
+  compare = "model",
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
   ...
@@ -19,14 +19,14 @@ scores and an additional attribute \code{metrics} as produced by \code{\link[=sc
 
 \item{compare}{Character vector with a single colum name that defines the
 elements for the pairwise comparison. For example, if this is set to
-"model", then elements of the "model" column will be compared.}
+"model" (the default), then elements of the "model" column will be
+compared.}
 
 \item{by}{Character vector with column names that define further grouping
-levels for the pairwise comparisons. By default this is an empty character
-vector and there will be one relative skill score per distinct entry of the
-column selected in \code{compare}. If further columns are given here, for
-example, \code{by = "location"}, then you a separate relative skill score is
-calculated for every model in every location.}
+levels for the pairwise comparisons. By default this is \code{NULL} and there
+will be one relative skill score per distinct entry of the column selected
+in \code{compare}. If further columns are given here, for example, \code{by = "location"} with \code{compare = "model"}, then one separate relative skill
+score is calculated for every model in every location.}
 
 \item{metric}{A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
@@ -116,12 +116,9 @@ scores <- example_quantile \%>\%
  as_forecast_quantile() \%>\%
  score()
 
-pairwise <- get_pairwise_comparisons(
-  scores, compare = "model", by = "target_type"
-)
+pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 pairwise2 <- get_pairwise_comparisons(
-  scores, compare = "model", by = "target_type",
-  baseline = "EuroCOVIDhub-baseline"
+  scores, by = "target_type", baseline = "EuroCOVIDhub-baseline"
 )
 
 library(ggplot2)

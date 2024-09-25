@@ -5,18 +5,16 @@
 \alias{summarize_scores}
 \title{Summarise scores as produced by \code{\link[=score]{score()}}}
 \usage{
-summarise_scores(scores, by = character(0), fun = mean, ...)
+summarise_scores(scores, by = "model", fun = mean, ...)
 
-summarize_scores(scores, by = character(0), fun = mean, ...)
+summarize_scores(scores, by = "model", fun = mean, ...)
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
-\item{by}{Character vector with column names to summarise scores by. An
-example here would be something like a \code{model} column when summarising
-scores by model. Default is an empty character vector, which means that
-scores are summarised without grouping.}
+\item{by}{Character vector with column names to summarise scores by. Default
+is "model", i.e. scores are summarised by the "model" column.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 
@@ -59,7 +57,7 @@ summarise_scores(scores, by = c("model", "target_type"))
 summarise_scores(scores, by = "model", fun = sd)
 
 # round digits
-summarise_scores(scores,by = "model") \%>\%
+summarise_scores(scores, by = "model") \%>\%
   summarise_scores(fun = signif, digits = 2)
 }
 \keyword{scoring}

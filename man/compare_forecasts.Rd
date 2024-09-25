@@ -6,7 +6,7 @@
 \usage{
 compare_forecasts(
   scores,
-  compare,
+  compare = "model",
   name_comparator1,
   name_comparator2,
   metric,
@@ -21,7 +21,8 @@ scores and an additional attribute \code{metrics} as produced by \code{\link[=sc
 
 \item{compare}{Character vector with a single colum name that defines the
 elements for the pairwise comparison. For example, if this is set to
-"model", then elements of the "model" column will be compared.}
+"model" (the default), then elements of the "model" column will be
+compared.}
 
 \item{name_comparator1}{Character, name of the first comparator}
 

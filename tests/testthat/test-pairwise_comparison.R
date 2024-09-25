@@ -65,13 +65,11 @@ test_that("get_pairwise_comparisons() works", {
     )
   )
   eval_without_baseline <- suppressMessages(
-    add_relative_skill(eval_without_rel_skill, compare = "model")
+    add_relative_skill(eval_without_rel_skill)
   )
 
   eval_with_baseline <- suppressMessages(
-    add_relative_skill(
-      eval_without_rel_skill, compare = "model", baseline = "m1"
-    )
+    add_relative_skill(eval_without_rel_skill, baseline = "m1")
   )
 
 
@@ -205,9 +203,7 @@ test_that("get_pairwise_comparisons() works", {
 
   eval <- score(data_formatted)
   eval_summarised <- summarise_scores(eval, by = c("model", "location"))
-  eval_with_baseline <- add_relative_skill(
-    eval, compare = "model", by = "location", baseline = "m1"
-)
+  eval_with_baseline <- add_relative_skill(eval, by = "location", baseline = "m1")
   eval_with_baseline <- summarise_scores(eval_with_baseline, by = c("model", "location"))
 
   relative_skills_with <- eval_with_baseline[
@@ -224,7 +220,7 @@ test_that("get_pairwise_comparisons() works", {
 test_that("get_pairwise_comparisons() work in score() with integer data", {
   eval <- suppressMessages(score(forecast = as_forecast_sample(example_sample_discrete)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
-  eval <- add_relative_skill(eval_summarised, compare = "model")
+  eval <- add_relative_skill(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
 })
 
@@ -232,7 +228,7 @@ test_that("get_pairwise_comparisons() work in score() with integer data", {
 test_that("get_pairwise_comparisons() work in score() with binary data", {
   eval <- suppressMessages(score(forecast = as_forecast_binary(example_binary)))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
-  eval <- add_relative_skill(eval_summarised, compare = "model")
+  eval <- add_relative_skill(eval_summarised)
   expect_true("brier_score_relative_skill" %in% colnames(eval))
 })
 
@@ -249,9 +245,7 @@ test_that("get_pairwise_comparisons() works", {
   )
   attr(df, "metrics") <- c("wis", "ae_median")
 
-  res <- suppressMessages(get_pairwise_comparisons(
-    df, compare = "model", baseline = "model1")
-    )
+  res <- suppressMessages(get_pairwise_comparisons(df, baseline = "model1"))
 
   colnames <- c(
     "model", "compare_against", "mean_scores_ratio",
@@ -263,7 +257,7 @@ test_that("get_pairwise_comparisons() works", {
   # output class is as expected
   expect_s3_class(res, c("data.table", "data.frame"), exact = TRUE)
   expect_s3_class(
-    get_pairwise_comparisons(scores_quantile, compare = "model"),
+    get_pairwise_comparisons(scores_quantile),
     c("data.table", "data.frame"), exact = TRUE
   )
 })
@@ -287,9 +281,7 @@ test_that("get_pairwise_comparisons() and `add_relative_skill()` give same resul
 
 test_that("get_pairwise_comparisons() realises when there is no baseline model", {
   expect_error(
-    get_pairwise_comparisons(
-      scores_quantile, compare = "model", baseline = "missing_model"
-    ),
+    get_pairwise_comparisons(scores_quantile, baseline = "missing_model"),
     "Assertion on 'baseline' failed: Must be a subset of"
   )
 })
@@ -303,6 +295,14 @@ test_that("Basic input checks for `add_relative_skill() work", {
       eval, compare = "model", by = "missing", metric = "crps"
     ),
     "Not all columns specified in `by` are present:"
+  )
+
+  # check that none of the columns in `by` are in `compare`
+  expect_error(
+    add_relative_skill(
+      eval, by = c("model", "target_type"), metric = "crps"
+    ),
+    "Must be disjunct from \\{'model'\\}"
   )
 
   # error if baseline is not present
@@ -347,7 +347,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_nomodel <- data.table::copy(eval)[, "model" := NULL]
   expect_error(
     add_relative_skill(
-      eval_nomodel, compare = "model", by = "target_type", metric = "crps"
+      eval_nomodel, by = "target_type", metric = "crps"
     ),
     "Assertion on 'scores' failed: Column 'model' not found in data."
   )
@@ -468,7 +468,6 @@ test_that("add_relative_skill() works with point forecasts", {
   expect_no_condition(
     pw_point <- add_relative_skill(
       scores_point,
-      compare = "model",
       metric = "se_point"
     )
   )
@@ -486,8 +485,7 @@ test_that("add_relative_skill() works with point forecasts", {
 
 test_that("add_relative_skill() can compute relative measures", {
   scores_with <- add_relative_skill(
-    scores_quantile,
-    compare = "model"
+    scores_quantile
   )
   expect_s3_class(
     scores_with,
@@ -519,7 +517,6 @@ test_that("permutation_tests work as expected", {
   expect_no_condition(
     get_pairwise_comparisons(
       scores_quantile,
-      compare = "model",
       test_type = "permutation",
       one_sided = TRUE,
       n_permutations = 50
