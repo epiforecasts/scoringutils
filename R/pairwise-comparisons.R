@@ -65,8 +65,8 @@
 #'   levels for the pairwise comparisons. By default this is an empty character
 #'   vector and there will be one relative skill score per distinct entry of the
 #'   column selected in `compare`. If further columns are given here, for
-#'   example, `by = "location"`, then you a separate relative skill score is
-#'   calculated for every model in every location.
+#'   example, `by = "location"` and `compare = "model"`, then one separate relative 
+#'   skill score is calculated for every model in every location.
 #' @param metric A string with the name of the metric for which
 #'   a relative skill shall be computed. By default this is either "crps",
 #'   "wis" or "brier_score" if any of these are available.
