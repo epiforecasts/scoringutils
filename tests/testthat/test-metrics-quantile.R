@@ -659,7 +659,7 @@ test_that("interval_coverage rejects wrong inputs", {
 test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
   dropped_quantile_pred <- predicted[, -4]
   dropped_quantiles <- quantile_level[-4]
-  expect_warning(
+  expect_error(
     interval_coverage(
       observed, dropped_quantile_pred, dropped_quantiles, interval_range = 50
     ),
@@ -686,7 +686,7 @@ test_that("interval_coverage_deviation works", {
     interval_coverage_deviation(observed, predicted, quantile_level),
     manual
   )
-  expect_warning(
+  expect_error(
     interval_coverage_deviation(
       observed, predicted, c(quantile_level[-4], 0.76)
     ),
@@ -945,16 +945,10 @@ test_that("ae_median_quantile() works as_expected", {
   )
 
   # test that we get a warning if there are inputs without a 0.5 quantile
-  expect_warning(
-    expect_equal(
-      ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
-      NA_real_
-    ),
-    'In order to compute the absolute error of the median, "0.5" must be among the quantiles given.'
+  expect_error(
+    ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
+    'In order to compute the absolute error of the median, '
   )
-
-
-  dim(1:10)
 })
 
 
