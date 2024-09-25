@@ -14,7 +14,7 @@ summarize_scores(scores, by = "model", fun = mean, ...)
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
 \item{by}{Character vector with column names to summarise scores by. Default
-is \code{model}, meaning that there will be one score per model in the output.}
+is "model", i.e. scores are summarised by the "model" column.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 
@@ -57,7 +57,7 @@ summarise_scores(scores, by = c("model", "target_type"))
 summarise_scores(scores, by = "model", fun = sd)
 
 # round digits
-summarise_scores(scores,by = "model") \%>\%
+summarise_scores(scores, by = "model") \%>\%
   summarise_scores(fun = signif, digits = 2)
 }
 \keyword{scoring}

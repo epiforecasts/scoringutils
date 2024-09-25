@@ -43,12 +43,12 @@ test_that("as_forecast() works as expected", {
   # additional test with renaming the model column
   test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,
-    old = c("observed", "predicted", "sample_id", "model"),
-    new = c("obs", "pred", "sample", "mod")
+    old = c("observed", "predicted", "sample_id"),
+    new = c("obs", "pred", "sample")
   )
   expect_no_condition(
     as_forecast_sample(test,
-      observed = "obs", predicted = "pred", model = "mod",
+      observed = "obs", predicted = "pred",
       forecast_unit = c(
         "location", "model", "target_type",
         "target_end_date", "horizon"
@@ -126,13 +126,6 @@ test_that("as_forecast() function throws an error with duplicate forecasts", {
     "Assertion on 'data' failed: There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows.", #nolint
     fixed = TRUE
   )
-})
-
-test_that("as_forecast_quantile() function warns when no model column is present", {
-  no_model <- as.data.table(example_quantile[model == "EuroCOVIDhub-ensemble"])[, model := NULL][]
-  expect_warning(
-    as_forecast_quantile(no_model),
-    "There is no column called `model` in the data.")
 })
 
 test_that("as_forecast_quantile() function throws an error when no predictions or observed values are present", {

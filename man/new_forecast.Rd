@@ -20,7 +20,6 @@ An object of the class indicated by \code{classname}
 Construct a class based on a data.frame or similar. The constructor
 \itemize{
 \item coerces the data into a data.table
-\item makes sure that a column called \code{model} exists and if not creates one
 \item assigns a class
 }
 }

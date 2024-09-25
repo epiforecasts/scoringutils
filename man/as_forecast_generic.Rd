@@ -8,8 +8,7 @@ as_forecast_generic(
   data,
   forecast_unit = NULL,
   observed = NULL,
-  predicted = NULL,
-  model = NULL
+  predicted = NULL
 )
 }
 \arguments{
@@ -29,10 +28,6 @@ observed values. This column will be renamed to "observed".}
 
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
-
-\item{model}{(optional) Name of the column in \code{data} that contains the names
-of the models/forecasters that generated the predicted values.
-This column will be renamed to "model".}
 }
 \description{
 Common functionality for \verb{as_forecast_<type>} functions

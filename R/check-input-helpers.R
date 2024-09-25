@@ -40,35 +40,6 @@ check_try <- function(expr) {
   return(msg)
 }
 
-
-#' @title Assure that data has a `model` column
-#'
-#' @description
-#' Check whether the data.table has a column called `model`.
-#' If not, a column called `model` is added with the value `Unspecified model`.
-#' @inheritParams as_forecast
-#' @importFrom cli cli_inform
-#' @importFrom checkmate assert_data_table
-#' @return The data.table with a column called `model`
-#' @keywords internal_input_check
-ensure_model_column <- function(data) {
-  assert_data_table(data)
-  if (!("model" %in% colnames(data))) {
-    #nolint start: keyword_quote_linter
-    cli_warn(
-      c(
-        "!" = "There is no column called `model` in the data.",
-        "i" = "scoringutils assumes that all forecasts come from the
-        same model"
-      )
-    )
-    #nolint end
-    data[, model := "Unspecified model"]
-  }
-  return(data[])
-}
-
-
 #' Check that all forecasts have the same number of quantiles or samples
 #' @description
 #' Function checks the number of quantiles or samples per forecast.
