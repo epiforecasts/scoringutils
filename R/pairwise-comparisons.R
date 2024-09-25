@@ -124,7 +124,7 @@ get_pairwise_comparisons <- function(
 
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
-  # check that 'compare' column in is are present
+  # check that column in 'compare' is present
   assert(check_columns_present(scores, compare))
   # check that column(s) in `by` ar not in `compare`
   assert_disjunct(by, compare)
