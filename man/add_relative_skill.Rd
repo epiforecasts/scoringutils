@@ -7,7 +7,7 @@
 add_relative_skill(
   scores,
   compare = "model",
-  by = character(0),
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL
 )
