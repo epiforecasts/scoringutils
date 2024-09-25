@@ -882,6 +882,17 @@ test_that("bias_quantile() works with point forecasts", {
 })
 
 
+test_that("bias_quantile() handles cases where median is not available", {
+  predicted <- c(1, 10)
+  observed <- 15
+  quantile_level <- c(0.2, 0.4)
+
+  expect_error(
+    bias_quantile(observed, predicted, quantile_level),
+    "Assertion on 'quantile_level\\[quantile_leve\\l >= 0.5]' failed: Must have length >= 1, but has length 0."
+  )
+})
+
 # `interpolate_median` ======================================================= #
 test_that("interpolation in `interpolate_median` works", {
   predicted <- c(1, 10)

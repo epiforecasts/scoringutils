@@ -64,7 +64,10 @@ out)
 Bias can assume values between -1 and 1 and is 0 ideally (i.e. unbiased).
 
 Note that if the given quantiles do not contain the median, the median is
-imputed as the mean of the two innermost quantiles.
+imputed as a linear interpolation of the two innermost quantiles. If the
+median is not available and cannot be imputed, an error will be thrown.
+Note that in order to compute bias, quantiles must be non-decreasing with
+increasing quantile levels.
 
 For a large enough number of quantiles, the
 percentile rank will equal the proportion of predictive samples below the

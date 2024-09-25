@@ -275,16 +275,14 @@ interval_coverage <- function(observed, predicted,
   ) / 100
   if (!all(necessary_quantiles %in% quantile_level)) {
     #nolint start: keyword_quote_linter object_usage_linter
-    cli_warn(
+    cli_abort(
       c(
         "!" = "To compute the interval coverage for an interval range of
         {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
-        are required.",
-        "i" = "Returning {.val {NA}}."
+        are required"
       )
     )
     #nolint end
-    return(NA)
   }
   r <- interval_range
   reformatted <- quantile_to_interval(observed, predicted, quantile_level)
@@ -367,15 +365,13 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
   if (!all(necessary_quantiles %in% quantile_level)) {
     #nolint start: keyword_quote_linter object_usage_linter
     missing <- necessary_quantiles[!necessary_quantiles %in% quantile_level]
-    cli_warn(
+    cli_abort(
       c(
-        "x" = "To compute interval coverage deviation, all quantiles must form
-        central symmetric prediction intervals.",
-        "i" = "Missing quantiles: {.val {missing}}. Returning {.val {NA}}."
+        "!" = "To compute interval coverage deviation, all quantiles must form
+        central symmetric prediction intervals"
       )
     )
     #nolint end
-    return(NA)
   }
 
   reformatted <- quantile_to_interval(
@@ -429,7 +425,10 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 #' Bias can assume values between -1 and 1 and is 0 ideally (i.e. unbiased).
 #'
 #' Note that if the given quantiles do not contain the median, the median is
-#' imputed as the mean of the two innermost quantiles.
+#' imputed as a linear interpolation of the two innermost quantiles. If the
+#' median is not available and cannot be imputed, an error will be thrown.
+#' Note that in order to compute bias, quantiles must be non-decreasing with
+#' increasing quantile levels.
 #'
 #' For a large enough number of quantiles, the
 #' percentile rank will equal the proportion of predictive samples below the
@@ -454,6 +453,11 @@ interval_coverage_deviation <- function(observed, predicted, quantile_level) {
 #' bias_quantile(observed, predicted, quantile_level)
 bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
   assert_input_quantile(observed, predicted, quantile_level)
+  # for bias quantile to work, at least one quantile level has to be <= 0.5
+  # and at least one >= 0.5
+  assert_vector(quantile_level[quantile_level <= 0.5], min.len = 1)
+  assert_vector(quantile_level[quantile_level >= 0.5], min.len = 1)
+
   n <- length(observed)
   N <- length(quantile_level)
   if (is.null(dim(predicted))) {
@@ -603,15 +607,13 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {
     #nolint start: keyword_quote_linter
-    cli_warn(
+    cli_abort(
       c(
-        "x" = "In order to compute the absolute error of the median,
-        {.val 0.5} must be among the quantiles given.",
-        "i" = "Returning {.val NA}."
+        "!" = "In order to compute the absolute error of the median,
+        {.val 0.5} must be among the quantiles given"
       )
     )
     #nolint end
-    return(NA_real_)
   }
   if (is.null(dim(predicted))) {
     predicted <- matrix(predicted, nrow = 1)
