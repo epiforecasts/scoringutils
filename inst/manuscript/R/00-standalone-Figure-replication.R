@@ -575,7 +575,7 @@ score(example_quantile) |>
 # Figure 9
 # =============================================================================#
 score(example_quantile) |>
-  get_pairwise_comparisons(by = c("model", "target_type"),
+  get_pairwise_comparisons(compare = "model", by = "target_type",
                            baseline = "EuroCOVIDhub-baseline") |>
   plot_pairwise_comparisons() +
   facet_wrap(~ target_type)

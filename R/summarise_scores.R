@@ -14,7 +14,7 @@
 #' @param scores An object of class `scores` (a data.table with
 #'   scores and an additional attribute `metrics` as produced by [score()]).
 #' @param by Character vector with column names to summarise scores by. Default
-#'   is `model`, meaning that there will be one score per model in the output.
+#'   is "model", i.e. scores are summarised by the "model" column.
 #' @param fun A function used for summarising scores. Default is [mean()].
 #' @param ... Additional parameters that can be passed to the summary function
 #'   provided to `fun`. For more information see the documentation of the
@@ -42,7 +42,7 @@
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # round digits
-#' summarise_scores(scores,by = "model") %>%
+#' summarise_scores(scores, by = "model") %>%
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
 #' @importFrom checkmate assert_subset assert_function test_subset
@@ -56,7 +56,7 @@ summarise_scores <- function(scores,
   # input checking ------------------------------------------------------------
   assert_data_frame(scores)
   scores <- ensure_data.table(scores)
-  assert_subset(by, names(scores), empty.ok = TRUE)
+  assert_subset(by, names(scores), empty.ok = FALSE)
   assert_function(fun)
 
   metrics <- get_metrics.scores(scores, error = TRUE)

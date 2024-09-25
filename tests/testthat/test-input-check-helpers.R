@@ -10,20 +10,6 @@ test_that("Check equal length works if all arguments have length 1", {
   expect_equal(out, 0.05)
 })
 
-test_that("ensure_model_column works", {
-  test <- as.data.table(example_binary)
-  expect_warning(
-    ensure_model_column(test[, model := NULL]),
-    "There is no column called `model` in the data."
-  )
-  expect_true(
-    setequal(
-      ensure_model_column(example_binary),
-      example_binary
-    )
-  )
-})
-
 test_that("check_number_per_forecast works", {
   expect_identical(
     capture.output(

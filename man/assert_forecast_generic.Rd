@@ -21,7 +21,7 @@ The function runs input checks that apply to all input data, regardless of
 forecast type. The function
 \itemize{
 \item asserts that the forecast is a data.table which has columns \code{observed} and
-\code{predicted}, as well as a column called \code{model}.
+\code{predicted}
 \item checks the forecast type and forecast unit
 \item checks there are no duplicate forecasts
 \item if appropriate, checks the number of samples / quantiles is the same

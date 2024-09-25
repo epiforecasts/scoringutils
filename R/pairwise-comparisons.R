@@ -58,14 +58,16 @@
 #' `permutationTest` from the `surveillance` package by Michael Höhle,
 #' Andrea Riebler and Michaela Paul.
 #'
-#' @param by Character vector with column names that define the grouping level
-#'   for the pairwise comparisons. By default (`model`), there will be one
-#'   relative skill score per model. If, for example,
-#'   `by = c("model", "location")`. Then you will get a
-#'   separate relative skill score for every model in every location. Internally,
-#'   the data.table with scores will be split according `by` (removing "model"
-#'   before splitting) and the pairwise comparisons will be computed separately
-#'   for the split data.tables.
+#' @param compare Character vector with a single colum name that defines the
+#'   elements for the pairwise comparison. For example, if this is set to
+#'   "model" (the default), then elements of the "model" column will be
+#'   compared.
+#' @param by Character vector with column names that define further grouping
+#'   levels for the pairwise comparisons. By default this is `NULL` and there
+#'   will be one relative skill score per distinct entry of the column selected
+#'   in `compare`. If further columns are given here, for example, `by =
+#'   "location"` with `compare = "model"`, then one separate relative skill
+#'   score is calculated for every model in every location.
 #' @param metric A string with the name of the metric for which
 #'   a relative skill shall be computed. By default this is either "crps",
 #'   "wis" or "brier_score" if any of these are available.
@@ -74,7 +76,7 @@
 #'   returned. By default (`NULL`), relative skill will not be scaled with
 #'   respect to a baseline model.
 #' @param ... Additional arguments for the comparison between two models. See
-#'   [compare_two_models()] for more information.
+#'   [compare_forecasts()] for more information.
 #' @inheritParams summarise_scores
 #' @return A data.table with the results of pairwise comparisons
 #' containing the mean score ratios (`mean_scores_ratio`),
@@ -85,7 +87,7 @@
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
-#' @importFrom checkmate assert_subset assert_character
+#' @importFrom checkmate assert_subset assert_character assert_disjunct
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -113,7 +115,8 @@
 
 get_pairwise_comparisons <- function(
   scores,
-  by = "model",
+  compare = "model",
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
   ...
@@ -121,6 +124,10 @@ get_pairwise_comparisons <- function(
 
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
+  # check that column in 'compare' is present
+  assert(check_columns_present(scores, compare))
+  # check that column(s) in `by` ar not in `compare`
+  assert_disjunct(by, compare)
 
   # we need the score names attribute to make sure we can determine the
   # forecast unit correctly, so here we check it exists
@@ -130,25 +137,29 @@ get_pairwise_comparisons <- function(
   assert_subset(metric, metrics, empty.ok = FALSE)
   assert_character(metric, len = 1)
 
-  # check that model column + columns in 'by' are present
+  # check that columns in 'by' are present
   #nolint start: keyword_quote_linter object_usage_linter
-  by_cols <- check_columns_present(scores, by)
-  if (!isTRUE(by_cols)) {
-    cli_abort(
-      c(
-        "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"
+  if (length(by) > 0) {
+    by_cols <- check_columns_present(scores, by)
+    if (!isTRUE(by_cols)) {
+      cli_abort(
+        c(
+          "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"
+        )
       )
-    )
-    #nolint end
+      #nolint end
+    }
+  } else {
+    ## set explicitly to character(0) in case it was given as NULL
+    by <- character(0)
   }
-  assert(check_columns_present(scores, "model"))
 
-  # check that baseline is one of the existing models
-  models <- as.vector(unique(scores$model))
-  assert_subset(baseline, models)
+  # check that baseline exists
+  comparators <- as.vector(unique(scores[[compare]]))
+  assert_subset(baseline, comparators)
 
-  # check there are enough models
-  if (length(setdiff(models, baseline)) < 2) {
+  # check there are enough comparators
+  if (length(setdiff(comparators, baseline)) < 2) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
@@ -196,36 +207,35 @@ get_pairwise_comparisons <- function(
   # identify unit of single observation.
   forecast_unit <- get_forecast_unit(scores)
 
-  # if by is equal to forecast_unit, then pairwise comparisons don't make sense
-  # if by == forecast_unit == "model" then this will pass and all relative skill
-  # scores will simply be 1.
-  if (setequal(by, forecast_unit)) {
-    if (setequal(by, "model")) {
-      #nolint start: keyword_quote_linter
-      cli_warn(
-        c(
-          "!" = "`by` is set to 'model', which is also the unit of a single
-         forecast. This doesn't look right.",
+  # if compare is equal to forecast_unit, then pairwise comparisons don't make
+  # sense
+  # if compare == forecast_unit then all relative skill scores will simply be 1.
+  if (setequal(compare, forecast_unit)) {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "!" = "`compare` is set to the unit of a single forecast. This doesn't
+            look right.",
         "i" = "All relative skill scores will be equal to 1."
-        )
       )
-    } else {
-      by <- "model"
-      cli_inform(
-        c(
-          "!" = "relative skill can only be computed if `by` is different from the
-        unit of a single forecast.",
-        "i" = "`by` was set to 'model'"
-        )
+    )
+    #nolint end
+  } else if (setequal(c(compare, by), forecast_unit)) {
+    #nolint start: keyword_quote_linter
+    cli_inform(
+      c(
+        "!" = "relative skill can only be computed if the combination of
+        `compare` and `by` is different from the unit of a single forecast.",
+        "i" = "`by` was set to an empty character vector"
       )
-      #nolint end
-    }
+    )
+    #nolint end
+    by <- character(0)
   }
 
   # do the pairwise comparison -------------------------------------------------
   # split data set into groups determined by 'by'
-  split_by <- setdiff(by, "model")
-  split_scores <- split(scores, by = split_by)
+  split_scores <- split(scores, by = by)
 
   results <- lapply(split_scores,
     FUN = function(scores) {
@@ -233,6 +243,7 @@ get_pairwise_comparisons <- function(
         scores = scores,
         metric = metric,
         baseline = baseline,
+        compare = compare,
         by = by,
         ...
       )
@@ -254,29 +265,31 @@ get_pairwise_comparisons <- function(
 #' for different forecast targets) and then the actual pairwise comparison for
 #' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
-#' forecasts it calls [compare_two_models()].
+#' forecasts it calls [compare_forecasts()].
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
+#' @importFrom data.table setnames
 #' @keywords internal
 
 pairwise_comparison_one_group <- function(scores,
                                           metric,
                                           baseline,
+                                          compare = "model",
                                           by,
                                           ...) {
-  if (!("model" %in% names(scores))) {
+  if (!(compare %in% names(scores))) {
     cli_abort(
-      "pairwise comparisons require a column called 'model'"
+      "pairwise comparisons require a column as given by `compare`"
     )
   }
 
   # get list of models
-  models <- unique(scores$model)
+  comparators <- unique(scores[[compare]])
 
   # if there aren't enough models to do any comparison, abort
-  if (length(models) < 2) {
+  if (length(comparators) < 2) {
     cli_abort(
-      c("!" = "There are not enough models to do any comparison")
+      c("!" = "There are not enough comparators to do any comparison")
     )
   }
 
@@ -286,13 +299,14 @@ pairwise_comparison_one_group <- function(scores,
   # be the same
 
   # set up initial data.frame with all possible pairwise comparisons
-  combinations <- data.table::as.data.table(t(combn(models, m = 2)))
-  colnames(combinations) <- c("model", "compare_against")
+  combinations <- data.table::as.data.table(t(combn(comparators, m = 2)))
+  colnames(combinations) <- c("..compare", "compare_against")
 
-  combinations[, c("ratio", "pval") := compare_two_models(
+  combinations[, c("ratio", "pval") := compare_forecasts(
+    compare = compare,
     scores = scores,
-    name_model1 = model,
-    name_model2 = compare_against,
+    name_comparator1 = ..compare,
+    name_comparator2 = compare_against,
     metric = metric,
     ...
   ),
@@ -304,21 +318,20 @@ pairwise_comparison_one_group <- function(scores,
 
   # mirror computations
   combinations_mirrored <- data.table::copy(combinations)
-  data.table::setnames(combinations_mirrored,
-    old = c("model", "compare_against"),
-    new = c("compare_against", "model")
+  setnames(combinations_mirrored,
+    old = c("..compare", "compare_against"),
+    new = c("compare_against", "..compare")
   )
   combinations_mirrored[, ratio := 1 / ratio]
 
   # add a one for those that are the same
   combinations_equal <- data.table::data.table(
-    model = models,
-    compare_against = models,
+    ..compare = comparators,
+    compare_against = comparators,
     ratio = 1,
     pval = 1,
     adj_pval = 1
   )
-
   result <- data.table::rbindlist(list(
     combinations,
     combinations_mirrored,
@@ -329,35 +342,37 @@ pairwise_comparison_one_group <- function(scores,
 
   # make result character instead of factor
   result[, `:=`(
-    model = as.character(model),
+    ..compare = as.character(..compare),
     compare_against = as.character(compare_against)
   )]
+
+  setnames(result, old = "..compare", new = compare)
 
   # calculate relative skill as geometric mean
   # small theta is again better (assuming that the score is negatively oriented)
   result[, `:=`(
     theta = geometric_mean(ratio)
   ),
-  by = "model"
+  by = compare,
   ]
 
   if (!is.null(baseline)) {
-    baseline_theta <- unique(result[model == baseline, ]$theta)
+    baseline_theta <- unique(result[get(compare) == baseline, ]$theta)
     if (length(baseline_theta) == 0) {
       cli_abort(
-        "Baseline model {.var {baseline}} missing."
+        "Baseline comparator {.var {baseline}} missing."
       )
     }
     result[, rel_to_baseline := theta / baseline_theta]
   }
 
   # remove all the rows that are not present in by before merging
-  cols_to_keep <- unique(c(by, "model"))
+  cols_to_keep <- unique(c(by, compare))
   cols_to_remove <- colnames(scores)[!(colnames(scores) %in% cols_to_keep)]
   scores[, eval(cols_to_remove) := NULL]
   scores <- unique(scores)
   # allow.cartesian needs to be set as sometimes rows will be duplicated a lot
-  out <- merge(scores, result, by = "model", all = TRUE)
+  out <- merge(scores, result, by = compare, all = TRUE)
 
   # rename ratio to mean_scores_ratio
   data.table::setnames(out,
@@ -377,21 +392,21 @@ pairwise_comparison_one_group <- function(scores,
   return(out[])
 }
 
-#' @title Compare two models based on subset of common forecasts
+#' @title Compare a subset of common forecasts
 #'
 #' @description
-#' This function compares two models based on the subset of forecasts for which
-#' both models have made a prediction. It gets called
+#' This function compares two comparators based on the subset of forecasts for which
+#' both comparators have made a prediction. It gets called
 #' from [pairwise_comparison_one_group()], which handles the
-#' comparison of multiple models on a single set of forecasts (there are no
+#' comparison of multiple comparators on a single set of forecasts (there are no
 #' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
 #' in turn gets called from from [get_pairwise_comparisons()] which can handle
 #' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
 #' pairwise comparisons for one set of forecasts, but done separately for two
 #' different forecast targets.
 #' @inheritParams get_pairwise_comparisons
-#' @param name_model1 Character, name of the first model
-#' @param name_model2 Character, name of the model to compare against
+#' @param name_comparator1 Character, name of the first comparator
+#' @param name_comparator2 Character, name of the comparator to compare against
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
 #'   instead of a two-sided test to determine significance in a pairwise
 #'   comparison.
@@ -401,38 +416,39 @@ pairwise_comparison_one_group <- function(scores,
 #' @param n_permutations Numeric, the number of permutations for a
 #'   permutation test. Default is 999.
 #' @return A list with mean score ratios and p-values for the comparison
-#' between two models
+#' between two comparators
 #' @importFrom cli cli_abort
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @keywords internal
 
-compare_two_models <- function(scores,
-                               name_model1,
-                               name_model2,
-                               metric,
-                               one_sided = FALSE,
-                               test_type = c("non_parametric", "permutation"),
-                               n_permutations = 999) {
+compare_forecasts <- function(scores,
+                              compare = "model",
+                              name_comparator1,
+                              name_comparator2,
+                              metric,
+                              one_sided = FALSE,
+                              test_type = c("non_parametric", "permutation"),
+                              n_permutations = 999) {
   scores <- data.table::as.data.table(scores)
 
   forecast_unit <- get_forecast_unit(scores)
 
-  if (!("model" %in% names(scores))) {
+  if (!(compare %in% names(scores))) {
     cli_abort(
-      "pairwise comparisons require a column called 'model'"
+      "pairwise comparisons require a column as given by `compare`"
     )
   }
 
   # select only columns in c(by, var)
-  a <- scores[model == name_model1]
-  b <- scores[model == name_model2]
+  a <- scores[get(compare) == name_comparator1]
+  b <- scores[get(compare) == name_comparator2]
 
-  # remove "model" from 'by' before merging
-  merge_by <- setdiff(forecast_unit, "model")
+  # remove compare column from 'by' before merging
+  merge_by <- setdiff(forecast_unit, compare)
 
   overlap <- merge(a, b, by = merge_by, allow.cartesian = TRUE)
-  unique(overlap)
+  overlap <- unique(overlap)
 
   if (nrow(overlap) == 0) {
     return(list(ratio = NA_real_, pval = NA_real_))
@@ -441,9 +457,9 @@ compare_two_models <- function(scores,
   values_x <- overlap[[paste0(metric, ".x")]]
   values_y <- overlap[[paste0(metric, ".y")]]
 
-  # calculate ratio to of average scores achieved by both models.
+  # calculate ratio to of average scores achieved by both comparator.
   # this should be equivalent to theta_ij in Johannes Bracher's document.
-  # ratio < 1 --> model1 is better.
+  # ratio < 1 --> comparator 1 is better.
   # note we could also take mean(values_x) / mean(values_y), as it cancels out
   ratio <- sum(values_x) / sum(values_y)
 
@@ -562,7 +578,8 @@ permutation_test <- function(scores1,
 #' @keywords keyword scoring
 add_relative_skill <- function(
   scores,
-  by = "model",
+  compare = "model",
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL
 ) {
@@ -573,6 +590,7 @@ add_relative_skill <- function(
     scores = scores,
     metric = metric,
     baseline = baseline,
+    compare = compare,
     by = by
   )
 

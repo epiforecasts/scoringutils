@@ -467,7 +467,7 @@ The mean score ratios resulting from \fct{pairwise\_comparison} can then be visu
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e., that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
 forecast_quantile |>
   score() |>
-  get_pairwise_comparisons(by = c("model", "target_type")) |>
+  get_pairwise_comparisons(compare = "model", by = "target_type") |>
   plot_pairwise_comparisons() + 
   facet_wrap(~ target_type)
 ```
