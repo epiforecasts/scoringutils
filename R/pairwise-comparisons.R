@@ -579,7 +579,7 @@ permutation_test <- function(scores1,
 add_relative_skill <- function(
   scores,
   compare = "model",
-  by = character(0),
+  by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL
 ) {
