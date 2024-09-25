@@ -48,14 +48,13 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_numeric_vector.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_try.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/clean_forecast.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/compare_two_models.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/crps_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/document_assert_functions.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/document_check_functions.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/document_test_functions.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/dss_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/ensure_data.table.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/ensure_model_column.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_binary.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_nominal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_point.html</loc></url>

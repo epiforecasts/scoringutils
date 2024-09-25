@@ -6,14 +6,14 @@ specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
 that subgroup is managed from pairwise_comparison_one_group(). In order to
 actually do the comparison between two models over a subset of common
-forecasts it calls compare_two_models()."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
+forecasts it calls compare_forecasts()."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
 multiple models involved. It gets called from get_pairwise_comparisons().
 get_pairwise_comparisons() splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
 that subgroup is managed from pairwise_comparison_one_group(). In order to
 actually do the comparison between two models over a subset of common
-forecasts it calls compare_two_models()."><meta name="robots" content="noindex"></head><body>
+forecasts it calls compare_forecasts()."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -61,12 +61,19 @@ specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
 that subgroup is managed from <code>pairwise_comparison_one_group()</code>. In order to
 actually do the comparison between two models over a subset of common
-forecasts it calls <code><a href="compare_two_models.html">compare_two_models()</a></code>.</p>
+forecasts it calls <code><a href="compare_forecasts.html">compare_forecasts()</a></code>.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pairwise_comparison_one_group</span><span class="op">(</span><span class="va">scores</span>, <span class="va">metric</span>, <span class="va">baseline</span>, <span class="va">by</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pairwise_comparison_one_group</span><span class="op">(</span></span>
+<span>  <span class="va">scores</span>,</span>
+<span>  <span class="va">metric</span>,</span>
+<span>  <span class="va">baseline</span>,</span>
+<span>  compare <span class="op">=</span> <span class="st">"model"</span>,</span>
+<span>  <span class="va">by</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -91,20 +98,24 @@ returned. By default (<code>NULL</code>), relative skill will not be scaled with
 respect to a baseline model.</p></dd>
 
 
+<dt id="arg-compare">compare<a class="anchor" aria-label="anchor" href="#arg-compare"></a></dt>
+<dd><p>Character vector with a single colum name that defines the
+elements for the pairwise comparison. For example, if this is set to
+"model" (the default), then elements of the "model" column will be
+compared.</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>Character vector with column names that define the grouping level
-for the pairwise comparisons. By default (<code>model</code>), there will be one
-relative skill score per model. If, for example,
-<code>by = c("model", "location")</code>. Then you will get a
-separate relative skill score for every model in every location. Internally,
-the data.table with scores will be split according <code>by</code> (removing "model"
-before splitting) and the pairwise comparisons will be computed separately
-for the split data.tables.</p></dd>
+<dd><p>Character vector with column names that define further grouping
+levels for the pairwise comparisons. By default this is <code>NULL</code> and there
+will be one relative skill score per distinct entry of the column selected
+in <code>compare</code>. If further columns are given here, for example, <code>by = "location"</code> with <code>compare = "model"</code>, then one separate relative skill
+score is calculated for every model in every location.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments for the comparison between two models. See
-<code><a href="compare_two_models.html">compare_two_models()</a></code> for more information.</p></dd>
+<code><a href="compare_forecasts.html">compare_forecasts()</a></code> for more information.</p></dd>
 
 </dl></div>
     <div class="section level2">

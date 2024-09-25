@@ -160,7 +160,8 @@ Andrea Riebler and Michaela Paul.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pairwise_comparisons</span><span class="op">(</span></span>
 <span>  <span class="va">scores</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"model"</span>,</span>
+<span>  compare <span class="op">=</span> <span class="st">"model"</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wis"</span>, <span class="st">"crps"</span>, <span class="st">"brier_score"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -176,15 +177,19 @@ Andrea Riebler and Michaela Paul.</p>
 scores and an additional attribute <code>metrics</code> as produced by <code><a href="score.html">score()</a></code>).</p></dd>
 
 
+<dt id="arg-compare">compare<a class="anchor" aria-label="anchor" href="#arg-compare"></a></dt>
+<dd><p>Character vector with a single colum name that defines the
+elements for the pairwise comparison. For example, if this is set to
+"model" (the default), then elements of the "model" column will be
+compared.</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>Character vector with column names that define the grouping level
-for the pairwise comparisons. By default (<code>model</code>), there will be one
-relative skill score per model. If, for example,
-<code>by = c("model", "location")</code>. Then you will get a
-separate relative skill score for every model in every location. Internally,
-the data.table with scores will be split according <code>by</code> (removing "model"
-before splitting) and the pairwise comparisons will be computed separately
-for the split data.tables.</p></dd>
+<dd><p>Character vector with column names that define further grouping
+levels for the pairwise comparisons. By default this is <code>NULL</code> and there
+will be one relative skill score per distinct entry of the column selected
+in <code>compare</code>. If further columns are given here, for example, <code>by = "location"</code> with <code>compare = "model"</code>, then one separate relative skill
+score is calculated for every model in every location.</p></dd>
 
 
 <dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
@@ -202,7 +207,7 @@ respect to a baseline model.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments for the comparison between two models. See
-<code><a href="compare_two_models.html">compare_two_models()</a></code> for more information.</p></dd>
+<code><a href="compare_forecasts.html">compare_forecasts()</a></code> for more information.</p></dd>
 
 </dl></div>
     <div class="section level2">

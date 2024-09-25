@@ -82,7 +82,7 @@ scores and an additional attribute <code>metrics</code> as produced by <code><a 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector with column names to summarise scores by. Default
-is <code>model</code>, meaning that there will be one score per model in the output.</p></dd>
+is "model", i.e. scores are summarised by the "model" column.</p></dd>
 
 
 <dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
@@ -172,7 +172,7 @@ using the <code>fun</code> passed to <code>summarise_scores()</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:        36.98584   29.60927  1.126019   123.3465    76.09471 2.994664e+04</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># round digits</span></span></span>
-<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>,by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu">summarise_scores</span><span class="op">(</span><span class="va">scores</span>, by <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">summarise_scores</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    model    bias   dss  crps overprediction underprediction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;          &lt;num&gt;           &lt;num&gt;</span>
