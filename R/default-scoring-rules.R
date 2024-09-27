@@ -226,7 +226,6 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 #' - "interval_coverage_90" = purrr::partial(
 #'      interval_coverage, interval_range = 90
 #'    )
-#' - "interval_coverage_deviation" = [interval_coverage_deviation()],
 #' - "ae_median" = [ae_median_quantile()]
 #'
 #' Note: The `interval_coverage_90` scoring rule is created by modifying

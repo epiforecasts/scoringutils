@@ -70,7 +70,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   
 ### Renamed functions
 - The function `find_duplicates()` was renamed to `get_duplicate_forecasts()`. 
-- Renamed `interval_coverage_quantile()` and `interval_coverage_dev_quantile()` to `interval_coverage()` and `interval_coverage_deviation()`, respectively. 
+- Renamed `interval_coverage_quantile()` to `interval_coverage()`. 
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
 - `pit()` was renamed to `get_pit()` and converted to an S3 method.
@@ -83,6 +83,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Removed the function `merge_pred_and_obs()` that was used to merge two separate data frames with forecasts and observations. We moved its contents to a new "Deprecated functions"-vignette.
 - Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
 - Function `set_forecast_unit()` was deleted. Instead there is now a `forecast_unit` argument in `as_forecast_<type>()` as well as in `get_duplicate_forecasts()`.
+- Removed `interval_coverage_dev_quantile()`. Users can still access the difference between nominal and actual interval coverage using `get_coverage()`.
 
 ### Function changes
 - `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
