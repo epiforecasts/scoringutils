@@ -356,6 +356,8 @@ validate_scores <- function(scores) {
   ret <- NextMethod()
   if (is.data.table(ret)) {
     setattr(ret, "metrics", attr(x, "metrics"))
+  } else if (is.data.frame(ret)) {
+    attr(ret, "metrics") <- attr(x, "metrics")
   }
   return(ret)
 }
