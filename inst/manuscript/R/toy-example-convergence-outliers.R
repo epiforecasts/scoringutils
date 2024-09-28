@@ -27,13 +27,14 @@ if (!file.exists("inst/manuscript/output/sample-convergence.rds")) {
                 rnorm(n = i, mean = mu, sd = sd))
     )
     setnames(samples, as.character(1:n_rep))
-    samples[, sample := 1:i]
-    samples <- melt(samples, id.vars = "sample",
+    samples[, sample_id := 1:i]
+    samples <- melt(samples, id.vars = "sample_id",
                     variable.name = "repetition",
-                    value.name = "prediction")
-    samples[, true_value := true_value]
+                    value.name = "predicted")
+    samples[, observed := true_value]
+    samples <- as_forecast_sample(samples)
     results[[paste(i)]] <- score(
-      samples, metrics = c("crps", "log_score", "dss")
+      samples, get_metrics(samples, select = c("crps", "log_score", "dss"))
     )[, n_samples := i]
   }
   saveRDS(results, "inst/manuscript/output/sample-convergence.rds")

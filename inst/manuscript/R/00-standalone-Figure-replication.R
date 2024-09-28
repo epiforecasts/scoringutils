@@ -84,18 +84,15 @@ predictions2 <- rnorm(n_truth * n_samples, mean = 0.5, sd = 1)
 predictions3 <- rnorm(n_truth * n_samples, mean = 0, sd = 2)
 predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd =  0.5)
 
-df <- data.table(true_value = rep(truth, each = n_samples),
+df <- data.table(observed = rep(truth, each = n_samples),
                  id = rep(1:n_truth, each = n_samples),
-                 prediction = c(predictions1, predictions2,
-                                predictions3, predictions4),
-                 sample = 1:n_samples,
+                 predicted = c(predictions1, predictions2,
+                               predictions3, predictions4),
+                 sample_id = 1:n_samples,
                  `model` = rep(c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
                                  "Pred: N(0, 2)", "Pred: N(0, 0.5)"),
-                               each = n_truth * n_samples))
-
-df[, model := factor(`model`,
-                     levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+                               each = n_truth * n_samples)) %>%
+  as_forecast_sample()
 
 if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) {
   res <- score(df)
@@ -105,11 +102,13 @@ if (!file.exists("inst/manuscript/output/calibration-diagnostic-examples.rds")) 
                  pit = pit)
 
   saveRDS(stored, "inst/manuscript/output/calibration-diagnostic-examples.rds")
-
 } else {
-
   stored <- readRDS("inst/manuscript/output/calibration-diagnostic-examples.rds")
 }
+
+df[, model := factor(`model`,
+                     levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
 
 res_summarised <- summarise_scores(stored$res,by = "model")
 
@@ -124,12 +123,12 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 
 # create histogram true vs. predicted ------------------------------------------
 pred_hist <- df |>
-  ggplot(aes(x = true_value)) +
+  ggplot(aes(x = observed)) +
   facet_wrap(~ model, nrow = 1) +
   geom_histogram(aes(y=after_stat(density)),
                  fill = "grey",
                  colour = "dark grey") +
-  geom_density(aes(y=after_stat(density), x = prediction),
+  geom_density(aes(y=after_stat(density), x = predicted),
                colour = "black") +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")
