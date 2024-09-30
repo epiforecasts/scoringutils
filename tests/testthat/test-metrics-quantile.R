@@ -659,7 +659,7 @@ test_that("interval_coverage rejects wrong inputs", {
 test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
   dropped_quantile_pred <- predicted[, -4]
   dropped_quantiles <- quantile_level[-4]
-  expect_warning(
+  expect_error(
     interval_coverage(
       observed, dropped_quantile_pred, dropped_quantiles, interval_range = 50
     ),
@@ -858,6 +858,17 @@ test_that("bias_quantile() works with point forecasts", {
 })
 
 
+test_that("bias_quantile() handles cases where median is not available", {
+  predicted <- c(1, 10)
+  observed <- 15
+  quantile_level <- c(0.2, 0.4)
+
+  expect_error(
+    bias_quantile(observed, predicted, quantile_level),
+    "Assertion on 'quantile_level\\[quantile_leve\\l >= 0.5]' failed: Must have length >= 1, but has length 0."
+  )
+})
+
 # `interpolate_median` ======================================================= #
 test_that("interpolation in `interpolate_median` works", {
   predicted <- c(1, 10)
@@ -910,16 +921,10 @@ test_that("ae_median_quantile() works as_expected", {
   )
 
   # test that we get a warning if there are inputs without a 0.5 quantile
-  expect_warning(
-    expect_equal(
-      ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
-      NA_real_
-    ),
-    'In order to compute the absolute error of the median, "0.5" must be among the quantiles given.'
+  expect_error(
+    ae_median_quantile(observed, predicted_values, quantile_level = 0.6),
+    'In order to compute the absolute error of the median, '
   )
-
-
-  dim(1:10)
 })
 
 

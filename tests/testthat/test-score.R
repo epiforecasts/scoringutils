@@ -304,6 +304,56 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
 })
 
 
+
+test_that("score() works even if only some quantiles are missing", {
+
+  # only the median is there
+  onlymedian <- example_quantile[quantile_level == 0.5]
+  expect_no_condition(
+    score(onlymedian, metrics = get_metrics(
+      example_quantile,
+      exclude = c("interval_coverage_50", "interval_coverage_90")
+    ))
+  )
+
+
+  # asymmetric intervals
+  asymm <- example_quantile[!quantile_level > 0.6]
+  expect_warning(
+    expect_warning(
+      score_a <- score(asymm) %>% summarise_scores(by = "model"),
+      "Computation for `interval_coverage_50` failed."
+    ),
+    "Computation for `interval_coverage_90` failed."
+  )
+
+  # check that the result is equal to a case where we discard the entire
+  # interval in terms of WIS
+  inner <- example_quantile[quantile_level %in% c(0.4, 0.45, 0.5, 0.55, 0.6)]
+  score_b <- score(inner, get_metrics(
+    inner, exclude = c("interval_coverage_50", "interval_coverage_90")
+  )) %>%
+    summarise_scores(by = "model")
+  expect_equal(
+    score_a$wis,
+    score_b$wis
+  )
+
+  # median is not there, but only in a single model
+  test <- data.table::copy(example_quantile)
+  test_no_median <- test[model == "epiforecasts-EpiNow2" & !(quantile_level %in% c(0.5)), ]
+  test <- rbind(test[model != "epiforecasts-EpiNow2"], test_no_median)
+
+  test <- suppressWarnings(as_forecast_quantile(test))
+  expect_message(
+    expect_warning(
+      score(test),
+      "Computation for `ae_median` failed."
+    ),
+    "interpolating median from the two innermost quantiles"
+  )
+})
+
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
 
