@@ -661,8 +661,183 @@ include_graphics("output/flowchart-create-object.png")
 
 The following Figure gives a more detailed overview of how to interpret different calibration plots (showing the actual forecasts and observations that produced the corresponding visualisations). 
 
-```{r calibration-plots, echo = FALSE,  fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", cache = FALSE}
-include_graphics("output/calibration-diagnostic-examples.png")
+```{r calibration-plots, echo = FALSE, cache = TRUE, fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", fig.height=12, fig.width=10}
+
+
+# helper function to plot scores
+plot_score_table <- function(scores,
+                             y = "model",
+                             by = NULL,
+                             metrics = NULL) {
+  
+  # identify metrics -----------------------------------------------------------
+  id_vars <- get_forecast_unit(scores)
+  metrics <- get_metrics(scores)
+  
+  cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
+  suppressWarnings(scores[, eval(cols_to_delete) := NULL])
+  
+  # compute scaled values ------------------------------------------------------
+  # scaling is done in order to colour the different scores
+  # for most metrics larger is worse, but others like bias are better if they
+  # are close to zero and deviations in both directions are bad
+  
+  # define which metrics are scaled using min (larger is worse) and
+  # which not (metrics like bias where deviations in both directions are bad)
+  metrics_zero_good <- c("bias", "interval_coverage_deviation")
+  metrics_no_color <- "coverage"
+  
+  metrics_min_good <- setdiff(metrics, c(
+    metrics_zero_good, metrics_no_color
+  ))
+  
+  # write scale functions that can be used in data.table
+  scale <- function(x) {
+    scaled <- x / sd(x, na.rm = TRUE)
+    return(scaled)
+  }
+  scale_min_good <- function(x) {
+    scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
+    return(scaled)
+  }
+  
+  # pivot longer and add scaled values
+  df <- data.table::melt(scores,
+                         value.vars = metrics,
+                         id.vars = id_vars,
+                         variable.name = "metric"
+  )
+  
+  df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
+     by = c("metric", by)
+  ]
+  df[metric %in% metrics_zero_good, value_scaled := scale(value),
+     by = c("metric", by)
+  ]
+  df[metric %in% metrics_no_color, value_scaled := 0,
+     by = c("metric", by)
+  ]
+  
+  # create identifier column for plot ------------------------------------------
+  # if there is only one column, leave column as is. Reason to do that is that
+  # users can then pass in a factor and keep the ordering of that column intact
+  if (length(y) > 1) {
+    df[, identifCol := do.call(paste, c(.SD, sep = "_")),
+       .SDcols = y[y %in% names(df)]]
+  } else {
+    setnames(df, old = eval(y), new = "identifCol")
+  }
+  
+  # plot -----------------------------------------------------------------------
+  # make plot with all metrics that are not NA
+  plot <- ggplot(
+    df[!is.na(value), ],
+    aes(y = identifCol, x = metric)
+  ) +
+    geom_tile(aes(fill = value_scaled), colour = "white", show.legend = FALSE) +
+    geom_text(aes(y = identifCol, label = value)) +
+    scale_fill_gradient2(low = "steelblue", high = "salmon") +
+    theme_scoringutils() +
+    theme(
+      legend.title = element_blank(),
+      legend.position = "none",
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    labs(x = "", y = "") +
+    coord_cartesian(expand = FALSE)
+  
+  return(plot)
+}
+
+# generate predictions data.table
+n_truth = 2000
+n_samples = 2000
+truth <- rnorm(n_truth, mean = 0, sd = 1)
+predictions1 <- rnorm(n_truth * n_samples, mean = 0, sd = 1)
+predictions2 <- rnorm(n_truth * n_samples, mean = 0.5, sd = 1)
+predictions3 <- rnorm(n_truth * n_samples, mean = 0, sd = 2)
+predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd =  0.5)
+
+df <- data.table(observed = rep(truth, each = n_samples),
+                 id = rep(1:n_truth, each = n_samples),
+                 predicted = c(predictions1, predictions2,
+                               predictions3, predictions4),
+                 sample_id = 1:n_samples,
+                 `model` = rep(c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"),
+                               each = n_truth * n_samples)) %>%
+  as_forecast_sample()
+
+res <- score(df)
+pit <- get_pit(df, by = "model")
+
+df[, model := factor(`model`,
+                     levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+
+res_summarised <- summarise_scores(res,by = "model")
+
+scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) |>
+  plot_score_table(y = "model") +
+  coord_flip() +
+  theme_scoringutils() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust = 0.5)) +
+  theme(legend.position = "none")
+
+
+# create histogram true vs. predicted ------------------------------------------
+pred_hist <- df |>
+  ggplot(aes(x = observed)) +
+  facet_wrap(~ model, nrow = 1) +
+  geom_histogram(aes(y=after_stat(density)),
+                 fill = "grey",
+                 colour = "dark grey") +
+  geom_density(aes(y=after_stat(density), x = predicted),
+               colour = "black") +
+  theme_scoringutils() +
+  labs(y = "Density", x = "Value")
+
+
+# create pit plots -------------------------------------------------------------
+pit_plots <- plot_pit(pit) +
+  facet_wrap(~ model, nrow = 1) +
+  theme_scoringutils()
+
+# create interval and quantile coverage plots ----------------------------------
+# create coverage plots by transforming to quantile format first
+quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+df_quantile <- as_forecast_quantile(df,
+                                  quantiles = quantiles)
+
+coverage <- get_coverage(df_quantile, by = "model")
+
+coverage[, model := factor(model,
+                           levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
+                                      "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+
+interval_coverage <- plot_interval_coverage(coverage) +
+  facet_wrap(~ model, nrow = 1) +
+  theme_scoringutils()
+
+quantile_coverage <- plot_quantile_coverage(coverage) +
+  facet_wrap(~ model, nrow = 1) +
+  theme_scoringutils()
+
+
+# bring plot together ----------------------------------------------------------
+p <- pred_hist /
+  pit_plots /
+  interval_coverage /
+  quantile_coverage /
+  scores_table_plot +
+  plot_layout(guides = 'collect') &
+  theme(legend.position = "none") &
+  theme(panel.spacing = unit(2, "lines")) &
+  plot_annotation(tag_levels = "A")
+p
 ```
 
 \clearpage
