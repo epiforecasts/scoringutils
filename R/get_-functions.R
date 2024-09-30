@@ -415,7 +415,7 @@ get_forecast_counts <- function(forecast,
                                 collapse = c("quantile_level", "sample_id")) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
-  assert_subset(by, names(forecast))
+  assert_subset(by, names(forecast), empty.ok = FALSE)
   forecast <- as.data.table(forecast)
 
   # collapse several rows to 1, e.g. treat a set of 10 quantiles as one,
