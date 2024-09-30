@@ -349,11 +349,14 @@ validate_scores <- function(scores) {
   return(invisible(NULL))
 }
 
-##' @method `[` scores
-##' @export
+#' @method `[` scores
+#' @importFrom data.table setattr
+#' @export
 `[.scores` <- function(x, ...) {
   ret <- NextMethod()
-  if (is.data.frame(ret)) {
+  if (is.data.table(ret)) {
+    setattr(ret, "metrics", attr(x, "metrics"))
+  } else if (is.data.frame(ret)) {
     attr(ret, "metrics") <- attr(x, "metrics")
   }
   return(ret)

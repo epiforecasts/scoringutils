@@ -61,6 +61,14 @@ test_that("function throws an error if data is not a forecast object", {
 #   expect_warning(suppressMessages(score(forecast = data)))
 # })
 
+test_that("Manipulating scores objects with .[ works as expected", {
+  expect_no_condition(scores_point[1:10])
+
+  expect_no_condition(scores_point[, .(model, ae_point)])
+
+  ex <- score(example_quantile)
+  expect_no_condition(ex[, extra_col := "something"])
+})
 
 
 # test binary case -------------------------------------------------------------
