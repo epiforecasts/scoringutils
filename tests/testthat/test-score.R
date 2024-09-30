@@ -321,10 +321,7 @@ test_that("score() works even if only some quantiles are missing", {
   asymm <- example_quantile[!quantile_level > 0.6]
   expect_warning(
     expect_warning(
-      expect_warning(
-        score_a <- score(asymm) %>% summarise_scores(by = "model"),
-        "Computation for `interval_coverage_deviation` failed."
-      ),
+      score_a <- score(asymm) %>% summarise_scores(by = "model"),
       "Computation for `interval_coverage_50` failed."
     ),
     "Computation for `interval_coverage_90` failed."
