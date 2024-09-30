@@ -15,7 +15,7 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  test <- test <- as_forecast_quantile(na.omit(example_quantile))
+  test <- test <- data.table::copy(example_quantile)
   class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
     get_forecast_type(test),
@@ -246,8 +246,6 @@ ex_coverage <- example_quantile[model == "EuroCOVIDhub-ensemble"]
 
 test_that("get_coverage() works as expected", {
   cov <- example_quantile %>%
-    na.omit() %>%
-    as_forecast_quantile() %>%
     get_coverage(by = get_forecast_unit(example_quantile))
 
   expect_equal(
@@ -268,17 +266,14 @@ test_that("get_coverage() works as expected", {
 })
 
 test_that("get_coverage() outputs an object of class c('data.table', 'data.frame'", {
-  ex <- as_forecast_quantile(na.omit(example_quantile))
-  cov <- get_coverage(ex)
+  cov <- get_coverage(example_quantile)
   expect_s3_class(cov, c("data.table", "data.frame"), exact = TRUE)
 })
 
 test_that("get_coverage() can deal with non-symmetric prediction intervals", {
   # the expected result is that `get_coverage()` just works. However,
   # all interval coverages with missing values should just be `NA`
-  test <- data.table::copy(example_quantile) %>%
-    na.omit() %>%
-    as_forecast_quantile()
+  test <- data.table::copy(example_quantile)
   test <- test[!quantile_level %in% c(0.2, 0.3, 0.5)]
 
   expect_no_condition(cov <- get_coverage(test))
@@ -293,10 +288,7 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
 
   # test for a version where values are not missing, but just `NA`
   # since `get_coverage()` calls `na.omit`, the result should be the same.
-  test <- data.table::copy(example_quantile) %>%
-    na.omit() %>%
-    as_forecast_quantile() %>%
-    suppressMessages()
+  test <- data.table::copy(example_quantile)
   test <- test[quantile_level %in% c(0.2, 0.3, 0.5), predicted := NA]
   cov2 <- get_coverage(test)
   expect_equal(cov, cov2)
@@ -321,7 +313,7 @@ test_that("get_protected_columns() works as expected", {
 # `get_forecast_counts()`
 # ==============================================================================
 test_that("get_forecast_counts() works as expected", {
-  af <- suppressMessages(as_forecast_quantile(example_quantile))
+  af <- data.table::copy(example_quantile)
   af <- get_forecast_counts(
     af,
     by = c("model", "target_type", "target_end_date")
@@ -331,8 +323,7 @@ test_that("get_forecast_counts() works as expected", {
   expect_type(af$target_type, "character")
   expect_type(af$`count`, "integer")
   expect_equal(nrow(af[is.na(`count`)]), 0)
-  af <- na.omit(example_quantile) %>%
-    as_forecast_quantile() %>%
+  af <- example_quantile %>%
     get_forecast_counts(by = "model")
   expect_equal(nrow(af), 4)
   expect_equal(af$`count`, c(256, 256, 128, 247))
@@ -341,26 +332,26 @@ test_that("get_forecast_counts() works as expected", {
   expect_s3_class(af, c("data.table", "data.frame"), exact = TRUE)
 
   # Setting `collapse = c()` means that all quantiles and samples are counted
-  af <- na.omit(example_quantile) %>%
-    as_forecast_quantile() %>%
+  af <- example_quantile %>%
     get_forecast_counts(by = "model", collapse = c())
   expect_equal(nrow(af), 4)
   expect_equal(af$`count`, c(5888, 5888, 2944, 5681))
 
-  # setting by = NULL, the default, results in by equal to forecast unit
-  af <- na.omit(example_quantile) %>%
-    as_forecast_quantile() %>%
+  af <- example_quantile %>%
     get_forecast_counts()
   expect_equal(nrow(af), 50688)
 
+  expect_error(
+    get_forecast_counts(example_quantile, by = NULL),
+    "Assertion on 'by' failed: Must be a subset of"
+  )
+
   # check whether collapsing also works for model-based forecasts
-  af <- na.omit(example_sample_discrete) %>%
-    as_forecast_sample() %>%
+  af <- example_sample_discrete %>%
     get_forecast_counts(by = "model")
   expect_equal(nrow(af), 4)
 
-  af <- na.omit(example_sample_discrete) %>%
-    as_forecast_sample() %>%
+  af <- example_sample_discrete %>%
     get_forecast_counts(by = "model", collapse = c())
   expect_equal(af$count, c(10240, 10240, 5120, 9880))
 })
