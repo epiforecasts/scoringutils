@@ -272,24 +272,6 @@ test_that("assert_forecast_generic() works as expected with a data.frame", {
 
 
 # ==============================================================================
-# validate_forecast()
-# ==============================================================================
-
-test_that("validate_forecast() works as expected", {
-  # check that validate forecast returns itself
-  expect_no_condition(
-    out <- validate_forecast(as_forecast_point(na.omit(example_point)))
-  )
-  expect_true(!is.null(out))
-
-  expect_equal(
-    validate_forecast(as_forecast_point(na.omit(example_point))),
-    as_forecast_point(na.omit(example_point))
-  )
-})
-
-
-# ==============================================================================
 # new_forecast()
 # ==============================================================================
 

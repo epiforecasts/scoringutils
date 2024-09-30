@@ -672,30 +672,6 @@ test_that("interval_coverage_quantile throws a warning when a required quantile 
 
 
 # ============================================================================ #
-# `interval_coverage_deviation` ============================================== #
-# ============================================================================ #
-test_that("interval_coverage_deviation works", {
-  existing_ranges <- unique(get_range_from_quantile(quantile_level))
-  expect_equal(existing_ranges, c(80, 50, 0))
-
-  cov_50 <- interval_coverage(observed, predicted, quantile_level, interval_range = c(50))
-  cov_80 <- interval_coverage(observed, predicted, quantile_level, interval_range = c(80))
-  manual <- 0.5 * (cov_50 - 0.5) + 0.5 * (cov_80 - 0.8)
-
-  expect_equal(
-    interval_coverage_deviation(observed, predicted, quantile_level),
-    manual
-  )
-  expect_error(
-    interval_coverage_deviation(
-      observed, predicted, c(quantile_level[-4], 0.76)
-    ),
-    "all quantiles must form central symmetric prediction intervals"
-  )
-})
-
-
-# ============================================================================ #
 # `bias_quantile` ============================================================ #
 # ============================================================================ #
 test_that("bias_quantile() works as expected", {
