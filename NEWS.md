@@ -50,7 +50,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
     - The function `interval_score()` was made an internal function rather than being exported to users. We recommend using `wis()` instead. 
 
 ### (Re-)Validating forecast objects
-- To create and validate a new `forecast` object, users can use `as_forecast_<type>()`. To revalidate an existing `forecast` object users can call `assert_forecast()` (which validates the input and returns `invisible(NULL)`. `assert_forecast()` is a generic with methods for the different forecast types. Alternatively, `validate_forecast()` can be used (which calls `assert_forecast()`), which returns the input and is useful in a pipe. Lastly, users can simply print the object to obtain additional information. 
+- To create and validate a new `forecast` object, users can use `as_forecast_<type>()`. To revalidate an existing `forecast` object users can call `assert_forecast()` (which validates the input and returns `invisible(NULL)`. `assert_forecast()` is a generic with methods for the different forecast types. Alternatively, users can call ``as_forecast_<type>()` again to re-validate a forecast object. Simply printing the object will also provide some additional information. 
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
 
 ### Pairwise comparisons and relative skill
