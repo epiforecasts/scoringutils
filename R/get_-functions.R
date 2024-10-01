@@ -150,32 +150,6 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
   return(metrics)
 }
 
-
-#' @title Get unit of a single forecast
-#' @description
-#' Helper function to get the unit of a single forecast, i.e.
-#' the column names that define where a single forecast was made for.
-#' This just takes all columns that are available in the data and subtracts
-#' the columns that are protected, i.e. those returned by
-#' [get_protected_columns()] as well as the names of the metrics that were
-#' specified during scoring, if any.
-#' @inheritParams as_forecast
-#' @inheritSection forecast_types Forecast unit
-#' @return
-#' A character vector with the column names that define the unit of
-#' a single forecast
-#' @importFrom checkmate assert_data_frame
-#' @export
-#' @keywords diagnose-inputs
-get_forecast_unit <- function(data) {
-  assert_data_frame(data)
-  protected_columns <- get_protected_columns(data)
-  protected_columns <- c(protected_columns, attr(data, "metrics"))
-  forecast_unit <- setdiff(colnames(data), unique(protected_columns))
-  return(forecast_unit)
-}
-
-
 #' @title Get protected columns from data
 #'
 #' @description Helper function to get the names of all columns in a data frame

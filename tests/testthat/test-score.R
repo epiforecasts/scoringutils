@@ -22,18 +22,18 @@ test_that("as_scores() works", {
   )
 })
 
-test_that("validate_scores() works", {
+test_that("assert_scores() works", {
   expect_error(
-    validate_scores(data.frame()),
+    assert_scores(data.frame()),
     "Must inherit from class 'scores'"
   )
 })
 
 test_that("Output of `score()` has the class `scores()`", {
-  expect_no_condition(validate_scores(scores_point))
-  expect_no_condition(validate_scores(scores_binary))
-  expect_no_condition(validate_scores(scores_sample_continuous))
-  expect_no_condition(validate_scores(scores_quantile))
+  expect_no_condition(assert_scores(scores_point))
+  expect_no_condition(assert_scores(scores_binary))
+  expect_no_condition(assert_scores(scores_sample_continuous))
+  expect_no_condition(assert_scores(scores_quantile))
 })
 
 # =============================================================================
@@ -444,11 +444,11 @@ test_that("`[` preserves attributes", {
 
 
 # =============================================================================
-# validate_scores()
+# assert_scores()
 # =============================================================================
-test_that("validate_scores() works", {
-  expect_no_condition(validate_scores(scores_binary))
+test_that("assert_scores() works", {
+  expect_no_condition(assert_scores(scores_binary))
   expect_null(
-    validate_scores(scores_binary),
+    assert_scores(scores_binary),
   )
 })

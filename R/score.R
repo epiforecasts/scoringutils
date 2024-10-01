@@ -327,7 +327,7 @@ as_scores <- function(scores, metrics) {
   assert_data_frame(scores)
   present_metrics <- metrics[metrics %in% colnames(scores)]
   scores <- new_scores(scores, present_metrics)
-  validate_scores(scores)
+  assert_scores(scores)
   return(scores[])
 }
 
@@ -340,7 +340,7 @@ as_scores <- function(scores, metrics) {
 #' @returns Returns `NULL` invisibly
 #' @importFrom checkmate assert_class assert_data_frame
 #' @keywords internal
-validate_scores <- function(scores) {
+assert_scores <- function(scores) {
   assert_data_frame(scores)
   assert_class(scores, "scores")
   # error if no metrics exists +

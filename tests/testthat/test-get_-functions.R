@@ -40,23 +40,6 @@ test_that("get_metrics() works as expected", {
 
 
 # ==============================================================================
-# `get_forecast_unit()`
-# ==============================================================================
-test_that("get_forecast_unit() works as expected", {
-  fc <- c(
-    "location", "target_end_date", "target_type", "location_name",
-    "forecast_date", "model", "horizon"
-  )
-
-  expect_equal(get_forecast_unit(example_quantile), fc)
-  expect_equal(get_forecast_unit(scores_quantile), fc)
-
-  # test with data.frame
-  expect_equal(get_forecast_unit(as.data.frame(example_quantile)), fc)
-})
-
-
-# ==============================================================================
 # Test removing `NA` values from the data
 # ==============================================================================
 test_that("removing NA rows from data works as expected", {
