@@ -220,40 +220,6 @@ test_that("assert_forecast() works as expected", {
                "The input needs to be a valid forecast object.")
 })
 
-test_that("assert_forecast.forecast_binary works as expected", {
-  test <- na.omit(as.data.table(example_binary))
-  test[, "sample_id" := 1:nrow(test)]
-
-  # error if there is a superfluous sample_id column
-  expect_error(
-    as_forecast_binary(test),
-    "Input looks like a binary forecast, but an additional column called `sample_id` or `quantile` was found."
-  )
-
-  # expect error if probabilties are not in [0, 1]
-  test <- na.omit(as.data.table(example_binary))
-  test[, "predicted" := predicted + 1]
-  expect_error(
-    as_forecast_binary(test),
-    "Input looks like a binary forecast, but found the following issue"
-  )
-})
-
-test_that("assert_forecast.forecast_point() works as expected", {
-  test <- na.omit(as.data.table(example_point))
-  test <- as_forecast_point(test)
-
-  # expect an error if column is changed to character after initial validation.
-  expect_warning(
-    test <- test[, "predicted" := as.character(predicted)],
-    "Input looks like a point forecast, but found the following issue"
-  )
-  expect_error(
-    assert_forecast(test),
-    "Input looks like a point forecast, but found the following issue"
-  )
-})
-
 test_that("assert_forecast() complains if the forecast type is wrong", {
   test <- na.omit(data.table::copy(example_point))
   test <- as_forecast_point(test)

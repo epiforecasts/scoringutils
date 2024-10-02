@@ -105,25 +105,6 @@ score.default <- function(forecast, metrics, ...) {
   )
 }
 
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  scores <- apply_metrics(
-    forecast, metrics,
-    forecast$observed, forecast$predicted
-  )
-  scores[, `:=`(predicted = NULL, observed = NULL)]
-
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
 
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr
@@ -155,26 +136,6 @@ score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ..
   return(scores[])
 }
 
-
-#' @importFrom Metrics se ae ape
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  scores <- apply_metrics(
-    forecast, metrics,
-    forecast$observed, forecast$predicted
-  )
-  scores[, `:=`(predicted = NULL, observed = NULL)]
-
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
 
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
@@ -210,53 +171,6 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
   })
   scores <- rbindlist(split_result, fill = TRUE)
   scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
-#' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
-#' @rdname score
-#' @export
-score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  # make sure the quantiles and predictions are ordered in the same way
-  f_transposed <- forecast[, .(
-    predicted = list(predicted[order(quantile_level)]),
-    observed = unique(observed),
-    quantile_level = list(sort(quantile_level, na.last = TRUE)),
-    scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
-  ), by = forecast_unit]
-
-  # split according to quantile_level lengths and do calculations for different
-  # quantile_level lengths separately. The function `wis()` assumes that all
-  # forecasts have the same quantile_levels
-  f_split <- split(f_transposed, f_transposed$scoringutils_quantile_level)
-
-  split_result <- lapply(f_split, function(forecast) {
-    # create a matrix out of the list of predicted values and quantile_levels
-    observed <- forecast$observed
-    predicted <- do.call(rbind, forecast$predicted)
-    quantile_level <- unlist(unique(forecast$quantile_level))
-    forecast[, c(
-      "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
-    ) := NULL]
-
-    forecast <- apply_metrics(
-      forecast, metrics,
-      observed, predicted, quantile_level
-    )
-    return(forecast)
-  })
-  scores <- rbindlist(split_result, fill = TRUE)
-
-  scores <- as_scores(scores, metrics = names(metrics))
-
   return(scores[])
 }
 

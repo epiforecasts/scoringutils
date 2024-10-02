@@ -172,25 +172,3 @@ get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
 
   return(pit[])
 }
-
-#' @rdname get_pit
-#' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table
-#' @export
-get_pit.forecast_quantile <- function(forecast, by, ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast <- as.data.table(forecast)
-
-  forecast[, quantile_coverage := (observed <= predicted)]
-  quantile_coverage <-
-    forecast[, .(quantile_coverage = mean(quantile_coverage)),
-             by = c(unique(c(by, "quantile_level")))]
-  quantile_coverage <- quantile_coverage[order(quantile_level),
-    .(
-      quantile_level = c(quantile_level, 1),
-      pit_value = diff(c(0, quantile_coverage, 1))
-    ),
-    by = c(get_forecast_unit(quantile_coverage))
-  ]
-  return(quantile_coverage[])
-}
