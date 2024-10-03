@@ -210,6 +210,40 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
 }
 
 
+#' Check that all forecasts have the same number of e.g. quantiles or samples
+#' @description
+#' Helper function that checks the number of quantiles or samples per forecast.
+#' If the number of quantiles or samples is the same for all forecasts, it
+#' returns TRUE and a string with an error message otherwise.
+#' @param forecast_unit Character vector denoting the unit of a single forecast.
+#' @importFrom checkmate assert_subset
+#' @inherit document_check_functions params return
+#' @keywords internal_input_check
+check_number_per_forecast <- function(data, forecast_unit) {
+  # This function doesn't return a forecast object so it's fine to unclass it
+  # to avoid validation error while subsetting
+  data <- as.data.table(data)
+  data <- na.omit(data)
+  # check whether there are the same number of quantiles, samples --------------
+  data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
+  n <- unique(data$scoringutils_InternalNumCheck)
+  data[, scoringutils_InternalNumCheck := NULL]
+  if (length(n) > 1) {
+    msg <- paste0(
+      "Some forecasts have different numbers of rows ",
+      "(e.g. quantiles or samples). ",
+      "scoringutils found: ", toString(n),
+      ". This may be a problem (it can potentially distort scores, ",
+      "making it more difficult to compare them), ",
+      "so make sure this is intended."
+    )
+    return(msg)
+  }
+  return(TRUE)
+}
+
+
+
 #' Clean forecast object
 #' @description
 #' The function makes it possible to silently validate an object. In addition,
