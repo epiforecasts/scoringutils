@@ -106,75 +106,6 @@ score.default <- function(forecast, metrics, ...) {
 }
 
 
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr
-#' @rdname score
-#' @export
-score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  # make sure the labels and predictions are ordered in the same way
-  f_transposed <- forecast[, .(
-    predicted = list(predicted[order(predicted_label)]),
-    observed = unique(observed)
-  ), by = forecast_unit]
-
-  observed <- f_transposed$observed
-  predicted <- do.call(rbind, f_transposed$predicted)
-  predicted_label <- sort(unique(forecast$predicted_label, na.last = TRUE))
-  f_transposed[, c("observed", "predicted") := NULL]
-
-  scores <- apply_metrics(
-    f_transposed, metrics,
-    observed, predicted, predicted_label, ...
-  )
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  f_transposed <- forecast[, .(predicted = list(predicted),
-                               observed = unique(observed),
-                               scoringutils_N = length(list(sample_id))),
-                           by = forecast_unit]
-
-  # split according to number of samples and do calculations for different
-  # sample lengths separately
-  f_split <- split(f_transposed, f_transposed$scoringutils_N)
-
-  split_result <- lapply(f_split, function(forecast) {
-    # create a matrix
-    observed <- forecast$observed
-    predicted <- do.call(rbind, forecast$predicted)
-    forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
-
-    forecast <- apply_metrics(
-      forecast, metrics,
-      observed, predicted
-    )
-    return(forecast)
-  })
-  scores <- rbindlist(split_result, fill = TRUE)
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
 #' @title Apply a list of functions to a data table of forecasts
 #' @description
 #' This helper function applies scoring rules (stored as a list of
@@ -204,74 +135,44 @@ apply_metrics <- function(forecast, metrics, ...) {
 }
 
 
-#' Construct an object of class `scores`
+#' @title Validate metrics
+#'
 #' @description
-#' This function creates an object of class `scores` based on a
-#' data.table or similar.
-#' @param scores A data.table or similar with scores as produced by [score()].
-#' @param metrics A character vector with the names of the scores
-#'   (i.e. the names of the scoring rules used for scoring).
-#' @param ... Additional arguments to [data.table::as.data.table()]
-#' @keywords internal
-#' @importFrom data.table as.data.table setattr
-#' @return An object of class `scores`
-#' @examples
-#' \dontrun{
-#' df <- data.frame(
-#'   model = "A",
-#'   wis = "0.1"
-#' )
-#' new_scores(df, "wis")
-#' }
-new_scores <- function(scores, metrics, ...) {
-  scores <- as.data.table(scores, ...)
-  class(scores) <- c("scores", class(scores))
-  setattr(scores, "metrics", metrics)
-  return(scores[])
-}
+#' This function validates whether the list of metrics is a list
+#' of valid functions.
+#'
+#' The function is used in [score()] to make sure that all metrics are valid
+#' functions.
+#'
+#' @param metrics A named list with metrics. Every element should be a scoring
+#'   function to be applied to the data.
+#' @importFrom cli cli_warn
+#'
+#' @return
+#' A named list of metrics, with those filtered out that are not
+#' valid functions
+#' @importFrom checkmate assert_list test_list check_function
+#' @keywords internal_input_check
+validate_metrics <- function(metrics) {
 
+  assert_list(metrics, min.len = 1, names = "named")
 
-#' Create an object of class `scores` from data
-#' @description This convenience function wraps [new_scores()] and validates
-#'   the `scores` object.
-#' @inherit new_scores params return
-#' @importFrom checkmate assert_data_frame
-#' @keywords internal
-as_scores <- function(scores, metrics) {
-  assert_data_frame(scores)
-  present_metrics <- metrics[metrics %in% colnames(scores)]
-  scores <- new_scores(scores, present_metrics)
-  assert_scores(scores)
-  return(scores[])
-}
-
-
-#' Validate an object of class `scores`
-#' @description
-#' This function validates an object of class `scores`, checking
-#' that it has the correct class and that it has a `metrics` attribute.
-#' @inheritParams new_scores
-#' @returns Returns `NULL` invisibly
-#' @importFrom checkmate assert_class assert_data_frame
-#' @keywords internal
-assert_scores <- function(scores) {
-  assert_data_frame(scores)
-  assert_class(scores, "scores")
-  # error if no metrics exists +
-  # throw warning if any of the metrics is not in the data
-  get_metrics.scores(scores, error = TRUE)
-  return(invisible(NULL))
-}
-
-#' @method `[` scores
-#' @importFrom data.table setattr
-#' @export
-`[.scores` <- function(x, ...) {
-  ret <- NextMethod()
-  if (is.data.table(ret)) {
-    setattr(ret, "metrics", attr(x, "metrics"))
-  } else if (is.data.frame(ret)) {
-    attr(ret, "metrics") <- attr(x, "metrics")
+  for (i in seq_along(metrics)) {
+    check_fun <- check_function(metrics[[i]])
+    if (!isTRUE(check_fun)) {
+      #nolint start: keyword_quote_linter
+      cli_warn(
+        c(
+          "!" = "`Metrics` element number {i} is not a valid function."
+        )
+      )
+      #nolint end
+      names(metrics)[i] <- "scoringutils_delete"
+    }
   }
-  return(ret)
+  metrics[names(metrics) == "scoringutils_delete"] <- NULL
+
+  assert_list(metrics, min.len = 1, .var.name = "valid metrics")
+
+  return(metrics)
 }

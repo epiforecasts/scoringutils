@@ -77,3 +77,79 @@ is_forecast_nominal <- function(x) {
   inherits(x, "forecast_nominal") && inherits(x, "forecast")
 }
 
+
+#' Get default metrics for nominal forecasts
+#' @inheritParams get_metrics.forecast_binary
+#' @description
+#' For nominal forecasts, the default scoring rule is:
+#' - "log_score" = [logs_nominal()]
+#' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
+#' @examples
+#' get_metrics(example_nominal)
+get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
+  all <- list(
+    log_score = logs_nominal
+  )
+  select_metrics(all, select, exclude)
+}
+
+
+#' @importFrom stats na.omit
+#' @importFrom data.table setattr
+#' @rdname score
+#' @export
+score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
+  metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
+
+  # transpose the forecasts that belong to the same forecast unit
+  # make sure the labels and predictions are ordered in the same way
+  f_transposed <- forecast[, .(
+    predicted = list(predicted[order(predicted_label)]),
+    observed = unique(observed)
+  ), by = forecast_unit]
+
+  observed <- f_transposed$observed
+  predicted <- do.call(rbind, f_transposed$predicted)
+  predicted_label <- sort(unique(forecast$predicted_label, na.last = TRUE))
+  f_transposed[, c("observed", "predicted") := NULL]
+
+  scores <- apply_metrics(
+    f_transposed, metrics,
+    observed, predicted, predicted_label, ...
+  )
+  scores <- as_scores(scores, metrics = names(metrics))
+  return(scores[])
+}
+
+
+#' Nominal example data
+#'
+#' A data set with predictions for COVID-19 cases and deaths submitted to the
+#' European Forecast Hub.
+#'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
+#' @format An object of class `forecast_nominal` (see [as_forecast()]) with the
+#' following columns:
+#' \describe{
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
+#'   \item{observed}{Numeric: observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{predicted_label}{outcome that a probabilty corresponds to}
+#'   \item{predicted}{predicted value}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#' }
+# nolint start
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
+"example_nominal"

@@ -87,3 +87,162 @@ as_forecast_quantile.forecast_sample <- function(
 
   return(quantile_forecast)
 }
+
+
+#' Get default metrics for sample-based forecasts
+#'
+#' @description
+#' For sample-based forecasts, the default scoring rules are:
+#' - "crps" = [crps_sample()]
+#' - "overprediction" = [overprediction_sample()]
+#' - "underprediction" = [underprediction_sample()]
+#' - "dispersion" = [dispersion_sample()]
+#' - "log_score" = [logs_sample()]
+#' - "dss" = [dss_sample()]
+#' - "mad" = [mad_sample()]
+#' - "bias" = [bias_sample()]
+#' - "ae_median" = [ae_median_sample()]
+#' - "se_mean" = [se_mean_sample()]
+#' @inheritSection illustration-input-metric-sample Input format
+#' @inheritParams get_metrics.forecast_binary
+#' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
+#' @examples
+#' get_metrics(example_sample_continuous, exclude = "mad")
+get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
+  all <- list(
+    bias = bias_sample,
+    dss = dss_sample,
+    crps = crps_sample,
+    overprediction = overprediction_sample,
+    underprediction = underprediction_sample,
+    dispersion = dispersion_sample,
+    log_score = logs_sample,
+    mad = mad_sample,
+    ae_median = ae_median_sample,
+    se_mean = se_mean_sample
+  )
+  select_metrics(all, select, exclude)
+}
+
+
+#' @importFrom stats na.omit
+#' @importFrom data.table setattr copy
+#' @rdname score
+#' @export
+score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
+  metrics <- validate_metrics(metrics)
+  forecast <- as.data.table(forecast)
+
+  # transpose the forecasts that belong to the same forecast unit
+  f_transposed <- forecast[, .(predicted = list(predicted),
+                               observed = unique(observed),
+                               scoringutils_N = length(list(sample_id))),
+                           by = forecast_unit]
+
+  # split according to number of samples and do calculations for different
+  # sample lengths separately
+  f_split <- split(f_transposed, f_transposed$scoringutils_N)
+
+  split_result <- lapply(f_split, function(forecast) {
+    # create a matrix
+    observed <- forecast$observed
+    predicted <- do.call(rbind, forecast$predicted)
+    forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
+
+    forecast <- apply_metrics(
+      forecast, metrics,
+      observed, predicted
+    )
+    return(forecast)
+  })
+  scores <- rbindlist(split_result, fill = TRUE)
+  scores <- as_scores(scores, metrics = names(metrics))
+  return(scores[])
+}
+
+
+#' @rdname get_pit
+#' @importFrom stats na.omit
+#' @importFrom data.table `:=` as.data.table dcast
+#' @inheritParams pit_sample n_replicates
+#' @export
+get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast <- as.data.table(forecast)
+
+  # if prediction type is not quantile, calculate PIT values based on samples
+  forecast_wide <- data.table::dcast(forecast,
+                                     ... ~ paste0("InternalSampl_", sample_id),
+                                     value.var = "predicted"
+  )
+
+  pit <- forecast_wide[, .(pit_value = pit_sample(
+    observed = observed,
+    predicted = as.matrix(.SD)
+  )),
+  by = by,
+  .SDcols = grepl("InternalSampl_", names(forecast_wide), fixed = TRUE)
+  ]
+
+  return(pit[])
+}
+
+
+#' Continuous forecast example data
+#'
+#' A data set with continuous predictions for COVID-19 cases and deaths
+#' constructed from data submitted to the European Forecast Hub.
+#'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
+#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
+#' following columns:
+#' \describe{
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
+#'   \item{observed}{observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{predicted}{predicted value}
+#'   \item{sample_id}{id for the corresponding sample}
+#' }
+# nolint start
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
+"example_sample_continuous"
+
+
+#' Discrete forecast example data
+#'
+#' A data set with integer predictions for COVID-19 cases and deaths
+#' constructed from data submitted to the European Forecast Hub.
+#'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
+#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
+#' following columns:
+#' \describe{
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
+#'   \item{observed}{observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{predicted}{predicted value}
+#'   \item{sample_id}{id for the corresponding sample}
+#' }
+# nolint start
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
+"example_sample_discrete"
