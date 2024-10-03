@@ -37,6 +37,13 @@ as_forecast_quantile.default <- function(data,
 }
 
 
+#' @export
+#' @rdname is_forecast
+is_forecast_quantile <- function(x) {
+  inherits(x, "forecast_quantile") && inherits(x, "forecast")
+}
+
+
 #' @importFrom stats na.omit
 #' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
 #' @rdname score

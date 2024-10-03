@@ -94,109 +94,6 @@ as_forecast_generic <- function(data,
 }
 
 
-#' @rdname as_forecast_quantile
-#' @description
-#' When creating a `forecast_quantile` object from a `forecast_sample` object,
-#' the quantiles are estimated by computing empircal quantiles from the samples
-#' via [quantile()]. Note that empirical quantiles are a biased estimator for
-#' the true quantiles in particular in the tails of the distribution and
-#' when the number of available samples is low.
-#' @param probs A numeric vector of quantile levels for which
-#'   quantiles will be computed. Corresponds to the `probs` argument in
-#'   [quantile()].
-#' @param type Type argument passed down to the quantile function. For more
-#'   information, see [quantile()].
-#' @importFrom stats quantile
-#' @importFrom methods hasArg
-#' @importFrom checkmate assert_numeric
-#' @export
-as_forecast_quantile.forecast_sample <- function(
-  data,
-  probs = c(0.05, 0.25, 0.5, 0.75, 0.95),
-  type = 7,
-  ...
-) {
-  forecast <- copy(data)
-  assert_forecast(forecast, verbose = FALSE)
-  assert_numeric(probs, min.len = 1)
-  reserved_columns <- c("predicted", "sample_id")
-  by <- setdiff(colnames(forecast), reserved_columns)
-
-  quantile_level <- unique(
-    round(c(probs, 1 - probs), digits = 10)
-  )
-
-  forecast <-
-    forecast[, .(quantile_level = quantile_level,
-                 predicted = quantile(x = predicted, probs = ..probs,
-                                      type = ..type, na.rm = TRUE)),
-             by = by]
-
-  quantile_forecast <- new_forecast(forecast, "forecast_quantile")
-  assert_forecast(quantile_forecast)
-
-  return(quantile_forecast)
-}
-
-
-#' @title Create a `forecast` object for sample-based forecasts
-#' @param sample_id (optional) Name of the column in `data` that contains the
-#'   sample id. This column will be renamed to "sample_id". Only applicable to
-#'   sample-based forecasts.
-#' @inheritParams as_forecast
-#' @export
-#' @family functions to create forecast objects
-#' @importFrom cli cli_warn
-#' @keywords as_forecast
-as_forecast_sample <- function(data,
-                               forecast_unit = NULL,
-                               observed = NULL,
-                               predicted = NULL,
-                               sample_id = NULL) {
-  assert_character(sample_id, len = 1, null.ok = TRUE)
-  assert_subset(sample_id, names(data), empty.ok = TRUE)
-  if (!is.null(sample_id)) {
-    setnames(data, old = sample_id, new = "sample_id")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
-  data <- new_forecast(data, "forecast_sample")
-  assert_forecast(data)
-  return(data)
-}
-
-
-#' @title Create a `forecast` object for nominal forecasts
-#' @description
-#' Nominal forecasts are a form of categorical forecasts where the possible
-#' outcomes that the observed values can assume are not ordered. In that sense,
-#' Nominal forecasts represent a generalisation of binary forecasts.
-#' @inheritParams as_forecast
-#' @param predicted_label (optional) Name of the column in `data` that denotes
-#'   the outcome to which a predicted probability corresponds to.
-#'   This column will be renamed to "predicted_label". Only applicable to
-#'   nominal forecasts.
-#' @family functions to create forecast objects
-#' @keywords as_forecast
-#' @export
-as_forecast_nominal <- function(data,
-                                forecast_unit = NULL,
-                                observed = NULL,
-                                predicted = NULL,
-                                predicted_label = NULL) {
-  assert_character(predicted_label, len = 1, null.ok = TRUE)
-  assert_subset(predicted_label, names(data), empty.ok = TRUE)
-  if (!is.null(predicted_label)) {
-    setnames(data, old = predicted_label, new = "predicted_label")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
-  data <- new_forecast(data, "forecast_nominal")
-  assert_forecast(data)
-  return(data)
-}
-
-
 #' @title Assert that input is a forecast object and passes validations
 #'
 #' @description
@@ -241,60 +138,6 @@ assert_forecast.default <- function(
       "i" = "Please convert to `forecast` object first (see {.fn as_forecast})." # nolint
     )
   )
-}
-
-
-#' @export
-#' @rdname assert_forecast
-#' @keywords validate-forecast-object
-assert_forecast.forecast_sample <- function(
-  forecast, forecast_type = NULL, verbose = TRUE, ...
-) {
-  forecast <- assert_forecast_generic(forecast, verbose)
-  assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
-  return(invisible(NULL))
-}
-
-
-#' @export
-#' @keywords check-forecasts
-#' @importFrom checkmate assert_names assert_set_equal test_set_equal
-assert_forecast.forecast_nominal <- function(
-  forecast, forecast_type = NULL, verbose = TRUE, ...
-) {
-  forecast <- assert_forecast_generic(forecast, verbose)
-  assert(check_columns_present(forecast, "predicted_label"))
-  assert_names(
-    colnames(forecast),
-    disjunct.from = c("sample_id", "quantile_level")
-  )
-  assert_forecast_type(forecast, actual = "nominal", desired = forecast_type)
-
-  # levels need to be the same
-  outcomes <- levels(forecast$observed)
-  assert_set_equal(levels(forecast$predicted_label), outcomes)
-
-  # forecasts need to be complete
-  forecast_unit <- get_forecast_unit(forecast)
-  complete <- as.data.table(forecast)[, .(
-    correct = test_set_equal(as.character(predicted_label), outcomes)
-  ), by = forecast_unit]
-
-  if (!all(complete$correct)) {
-    first_issue <- complete[(correct), ..forecast_unit][1]
-    first_issue <- lapply(first_issue, FUN = as.character)
-    #nolint start: keyword_quote_linter object_usage_linter duplicate_argument_linter
-    issue_location <- paste(names(first_issue), "==", first_issue)
-    cli_abort(
-      c(`!` = "Found incomplete forecasts",
-        `i` = "For a nominal forecast, all possible outcomes must be assigned
-        a probability explicitly.",
-        `i` = "Found first missing probabilities in the forecast identified by
-        {.emph {issue_location}}")
-    )
-    #nolint end
-  }
-  return(forecast[])
 }
 
 
@@ -437,23 +280,6 @@ is_forecast <- function(x) {
   inherits(x, "forecast")
 }
 
-#' @export
-#' @rdname is_forecast
-is_forecast_sample <- function(x) {
-  inherits(x, "forecast_sample") && inherits(x, "forecast")
-}
-
-#' @export
-#' @rdname is_forecast
-is_forecast_quantile <- function(x) {
-  inherits(x, "forecast_quantile") && inherits(x, "forecast")
-}
-
-#' @export
-#' @rdname is_forecast
-is_forecast_nominal <- function(x) {
-  inherits(x, "forecast_nominal") && inherits(x, "forecast")
-}
 
 #' @export
 `[.forecast` <- function(x, ...) {
