@@ -3,7 +3,7 @@
 #' @importFrom cli cli_abort
 #' @keywords validate-forecast-object
 assert_forecast.forecast_point <- function(
-    forecast, forecast_type = NULL, verbose = TRUE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)

@@ -94,7 +94,7 @@ score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), .
 #' @rdname assert_forecast
 #' @keywords validate-forecast-object
 assert_forecast.forecast_quantile <- function(
-    forecast, forecast_type = NULL, verbose = TRUE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
@@ -186,12 +186,13 @@ get_pit.forecast_quantile <- function(forecast, by, ...) {
   quantile_coverage <-
     forecast[, .(quantile_coverage = mean(quantile_coverage)),
              by = c(unique(c(by, "quantile_level")))]
-  quantile_coverage <- quantile_coverage[order(quantile_level),
-                                         .(
-                                           quantile_level = c(quantile_level, 1),
-                                           pit_value = diff(c(0, quantile_coverage, 1))
-                                         ),
-                                         by = c(get_forecast_unit(quantile_coverage))
+  quantile_coverage <- quantile_coverage[
+    order(quantile_level),
+    .(
+      quantile_level = c(quantile_level, 1),
+      pit_value = diff(c(0, quantile_coverage, 1))
+    ),
+    by = c(get_forecast_unit(quantile_coverage))
   ]
   return(quantile_coverage[])
 }

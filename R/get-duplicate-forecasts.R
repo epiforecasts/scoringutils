@@ -17,9 +17,9 @@
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
 get_duplicate_forecasts <- function(
-    data,
-    forecast_unit = NULL,
-    counts = FALSE
+  data,
+  forecast_unit = NULL,
+  counts = FALSE
 ) {
   assert_data_frame(data)
   data <- ensure_data.table(data)

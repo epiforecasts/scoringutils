@@ -2,7 +2,7 @@
 #' @keywords check-forecasts
 #' @importFrom checkmate assert_names assert_set_equal test_set_equal
 assert_forecast.forecast_nominal <- function(
-    forecast, forecast_type = NULL, verbose = TRUE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))

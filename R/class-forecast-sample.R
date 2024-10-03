@@ -2,7 +2,7 @@
 #' @rdname assert_forecast
 #' @keywords validate-forecast-object
 assert_forecast.forecast_sample <- function(
-    forecast, forecast_type = NULL, verbose = TRUE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
@@ -61,10 +61,10 @@ is_forecast_sample <- function(x) {
 #' @importFrom checkmate assert_numeric
 #' @export
 as_forecast_quantile.forecast_sample <- function(
-    data,
-    probs = c(0.05, 0.25, 0.5, 0.75, 0.95),
-    type = 7,
-    ...
+  data,
+  probs = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  type = 7,
+  ...
 ) {
   forecast <- copy(data)
   assert_forecast(forecast, verbose = FALSE)
@@ -175,9 +175,10 @@ get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
   forecast <- as.data.table(forecast)
 
   # if prediction type is not quantile, calculate PIT values based on samples
-  forecast_wide <- data.table::dcast(forecast,
-                                     ... ~ paste0("InternalSampl_", sample_id),
-                                     value.var = "predicted"
+  forecast_wide <- data.table::dcast(
+    forecast,
+    ... ~ paste0("InternalSampl_", sample_id),
+    value.var = "predicted"
   )
 
   pit <- forecast_wide[, .(pit_value = pit_sample(

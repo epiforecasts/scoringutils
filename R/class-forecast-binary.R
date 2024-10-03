@@ -23,7 +23,7 @@ as_forecast_binary <- function(data,
 #' @importFrom cli cli_abort
 #' @keywords validate-forecast-object
 assert_forecast.forecast_binary <- function(
-    forecast, forecast_type = NULL, verbose = TRUE, ...
+  forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "binary", desired = forecast_type)

@@ -217,4 +217,3 @@ get_protected_columns <- function(data = NULL) {
 
   return(protected_columns)
 }
-
