@@ -22,6 +22,7 @@
 #' result <- get_pit(example, by = "model")
 #' plot_pit(result)
 #' @export
+#' @keywords scoring
 #' @references
 #' Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 #' Rosalind M. Eggo, W. John Edmunds (2019) Assessing the performance of
