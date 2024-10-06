@@ -1,4 +1,28 @@
 # ==============================================================================
+# as_forecast_binary()
+# ==============================================================================
+test_that("output of as_forecast_binary() is accepted as input to score()", {
+  check <- suppressMessages(as_forecast_binary(example_binary))
+  expect_no_error(
+    score_check <- score(na.omit(check))
+  )
+  expect_equal(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
+})
+
+
+# ==============================================================================
+# is_forecast_binary()
+# ==============================================================================
+test_that("is_forecast_binary() works as expected", {
+  expect_true(is_forecast_binary(example_binary))
+  expect_false(is_forecast_binary(example_point))
+  expect_false(is_forecast_binary(example_quantile))
+  expect_false(is_forecast_binary(example_sample_continuous))
+  expect_false(is_forecast_binary(example_nominal))
+})
+
+
+# ==============================================================================
 # assert_forecast.forecast_binary()
 # ==============================================================================
 test_that("assert_forecast.forecast_binary works as expected", {
@@ -92,3 +116,13 @@ test_that(
     )
   }
 )
+
+# ==============================================================================
+# get_metrics.forecast_binary()
+# ==============================================================================
+
+test_that("get_metrics.forecast_binary() works as expected", {
+  expect_true(
+    is.list(get_metrics(example_binary))
+  )
+})

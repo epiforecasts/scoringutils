@@ -99,3 +99,139 @@ get_coverage <- function(forecast, by = "model") {
   forecast <- forecast[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
   return(forecast[])
 }
+
+
+#' @title Plot interval coverage
+#'
+#' @description
+#' Plot interval coverage values (see [get_coverage()] for more information).
+#'
+#' @param coverage A data frame of coverage values as produced by
+#' [get_coverage()].
+#' @param colour According to which variable shall the graphs be coloured?
+#' Default is "model".
+#' @return ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
+#' facet_wrap facet_grid geom_polygon geom_line
+#' @importFrom checkmate assert_subset
+#' @importFrom data.table dcast
+#' @export
+#' @examples
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
+#' example <- as_forecast_quantile(example_quantile)
+#' coverage <- get_coverage(example, by = "model")
+#' plot_interval_coverage(coverage)
+plot_interval_coverage <- function(coverage,
+                                   colour = "model") {
+  coverage <- ensure_data.table(coverage)
+  assert_subset(colour, names(coverage))
+
+  # in case quantile columns are present, remove them and then take unique
+  # values. This doesn't visually affect the plot, but prevents lines from being
+  # drawn twice.
+  del <- c("quantile_level", "quantile_coverage", "quantile_coverage_deviation")
+  suppressWarnings(coverage[, eval(del) := NULL])
+  coverage <- unique(coverage)
+
+  ## overall model calibration - empirical interval coverage
+  p1 <- ggplot(coverage, aes(
+    x = interval_range,
+    colour = .data[[colour]]
+  )) +
+    geom_polygon(
+      data = data.frame(
+        x = c(0, 0, 100),
+        y = c(0, 100, 100),
+        g = c("o", "o", "o"),
+        stringsAsFactors = TRUE
+      ),
+      aes(
+        x = x, y = y, group = g,
+        fill = g
+      ),
+      alpha = 0.05,
+      colour = "white",
+      fill = "olivedrab3"
+    ) +
+    geom_line(aes(y = interval_range),
+              colour = "grey",
+              linetype = "dashed"
+    ) +
+    geom_line(aes(y = interval_coverage * 100)) +
+    theme_scoringutils() +
+    ylab("% Obs inside interval") +
+    xlab("Nominal interval coverage") +
+    coord_cartesian(expand = FALSE)
+
+  return(p1)
+}
+
+
+#' @title Plot quantile coverage
+#'
+#' @description
+#' Plot quantile coverage values (see [get_coverage()] for more information).
+#'
+#' @inheritParams plot_interval_coverage
+#' @param colour String, according to which variable shall the graphs be
+#' coloured? Default is "model".
+#' @return A ggplot object with a plot of interval coverage
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
+#'   scale_y_continuous geom_line
+#' @importFrom checkmate assert_subset assert_data_frame
+#' @importFrom data.table dcast
+#' @export
+#' @examples
+#' example <- as_forecast_quantile(example_quantile)
+#' coverage <- get_coverage(example, by = "model")
+#' plot_quantile_coverage(coverage)
+
+plot_quantile_coverage <- function(coverage,
+                                   colour = "model") {
+  coverage <- assert_data_frame(coverage)
+  assert_subset(colour, names(coverage))
+
+  p2 <- ggplot(
+    data = coverage,
+    aes(x = quantile_level, colour = .data[[colour]])
+  ) +
+    geom_polygon(
+      data = data.frame(
+        x = c(
+          0, 0.5, 0.5,
+          0.5, 0.5, 1
+        ),
+        y = c(
+          0, 0, 0.5,
+          0.5, 1, 1
+        ),
+        g = c("o", "o", "o"),
+        stringsAsFactors = TRUE
+      ),
+      aes(
+        x = x, y = y, group = g,
+        fill = g
+      ),
+      alpha = 0.05,
+      colour = "white",
+      fill = "olivedrab3"
+    ) +
+    geom_line(aes(y = quantile_level),
+              colour = "grey",
+              linetype = "dashed"
+    ) +
+    geom_line(aes(y = quantile_coverage)) +
+    theme_scoringutils() +
+    xlab("Quantile level") +
+    ylab("% Obs below quantile level") +
+    scale_y_continuous(
+      labels = function(x) {
+        paste(100 * x)
+      }
+    ) +
+    coord_cartesian(expand = FALSE)
+
+  return(p2)
+}

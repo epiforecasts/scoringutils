@@ -1,7 +1,6 @@
 # ============================================================================ #
 # `transform_forecasts()`
 # ============================================================================ #
-
 test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
   predictions <- example_quantile %>%
@@ -65,7 +64,6 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
 # ============================================================================ #
 # `log_shift()`
 # ============================================================================ #
-
 test_that("log_shift() works as expected", {
   expect_equal(log_shift(1:10, 1), log(1:10 + 1))
 

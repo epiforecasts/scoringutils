@@ -169,3 +169,44 @@ test_that("assert_scores() works", {
     assert_scores(scores_binary),
   )
 })
+
+# ==============================================================================
+# validate_metrics()
+# ==============================================================================
+test_that("validate_metrics() works as expected", {
+  test_fun <- function(x, y, ...) {
+    if (hasArg("test")) {
+      message("test argument found")
+    }
+    return(y)
+  }
+  ## Additional tests for validate_metrics()
+  # passing in something that's not a function or a known metric
+  expect_warning(
+    expect_warning(
+      score(as_forecast_binary(na.omit(example_binary)), metrics = list(
+        "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3
+      )),
+      "`Metrics` element number 3 is not a valid function"
+    ),
+    "`Metrics` element number 4 is not a valid function"
+  )
+})
+
+
+# ==============================================================================
+# run_safely()
+# ==============================================================================
+test_that("run_safely() works as expected", {
+  f <- function(x) {
+    x
+  }
+  expect_equal(run_safely(2, fun = f), 2)
+  expect_equal(run_safely(2, y = 3, fun = f), 2)
+  expect_warning(
+    run_safely(fun = f, metric_name = "f"),
+    'Computation for `f` failed. Error: argument "x" is missing, with no default',
+    fixed = TRUE
+  )
+  expect_equal(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")), NULL)
+})

@@ -38,9 +38,46 @@ as_forecast_quantile.default <- function(data,
 
 
 #' @export
+#' @rdname assert_forecast
+#' @keywords validate-forecast-object
+assert_forecast.forecast_quantile <- function(
+    forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
+  assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
+  assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
+  return(invisible(NULL))
+}
+
+
+#' @export
 #' @rdname is_forecast
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")
+}
+
+
+#' @rdname as_forecast_point
+#' @description
+#' When converting a `forecast_quantile` object into a `forecast_point` object,
+#' the 0.5 quantile is extracted and returned as the point forecast.
+#' @export
+#' @keywords as_forecast
+as_forecast_point.forecast_quantile <- function(data, ...) {
+  assert_forecast(data, verbose = FALSE)
+  assert_subset(0.5, unique(data$quantile_level))
+
+  # At end of this function, the object will have be turned from a
+  # forecast_quantile to a forecast_point and we don't want to validate it as a
+  # forecast_point during the conversion process. The correct class is restored
+  # at the end.
+  data <- as.data.table(data)
+
+  forecast <- data[quantile_level == 0.5]
+  forecast[, "quantile_level" := NULL]
+
+  point_forecast <- new_forecast(forecast, "forecast_point")
+  return(point_forecast)
 }
 
 
@@ -88,42 +125,6 @@ score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), .
   scores <- as_scores(scores, metrics = names(metrics))
 
   return(scores[])
-}
-
-#' @export
-#' @rdname assert_forecast
-#' @keywords validate-forecast-object
-assert_forecast.forecast_quantile <- function(
-  forecast, forecast_type = NULL, verbose = TRUE, ...
-) {
-  forecast <- assert_forecast_generic(forecast, verbose)
-  assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
-  assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
-  return(invisible(NULL))
-}
-
-
-#' @rdname as_forecast_point
-#' @description
-#' When converting a `forecast_quantile` object into a `forecast_point` object,
-#' the 0.5 quantile is extracted and returned as the point forecast.
-#' @export
-#' @keywords as_forecast
-as_forecast_point.forecast_quantile <- function(data, ...) {
-  assert_forecast(data, verbose = FALSE)
-  assert_subset(0.5, unique(data$quantile_level))
-
-  # At end of this function, the object will have be turned from a
-  # forecast_quantile to a forecast_point and we don't want to validate it as a
-  # forecast_point during the conversion process. The correct class is restored
-  # at the end.
-  data <- as.data.table(data)
-
-  forecast <- data[quantile_level == 0.5]
-  forecast[, "quantile_level" := NULL]
-
-  point_forecast <- new_forecast(forecast, "forecast_point")
-  return(point_forecast)
 }
 
 

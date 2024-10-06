@@ -1,15 +1,3 @@
-#' @export
-#' @rdname assert_forecast
-#' @keywords validate-forecast-object
-assert_forecast.forecast_sample <- function(
-  forecast, forecast_type = NULL, verbose = TRUE, ...
-) {
-  forecast <- assert_forecast_generic(forecast, verbose)
-  assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
-  return(invisible(NULL))
-}
-
-
 #' @title Create a `forecast` object for sample-based forecasts
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id". Only applicable to
@@ -34,6 +22,18 @@ as_forecast_sample <- function(data,
   data <- new_forecast(data, "forecast_sample")
   assert_forecast(data)
   return(data)
+}
+
+
+#' @export
+#' @rdname assert_forecast
+#' @keywords validate-forecast-object
+assert_forecast.forecast_sample <- function(
+  forecast, forecast_type = NULL, verbose = TRUE, ...
+) {
+  forecast <- assert_forecast_generic(forecast, verbose)
+  assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
+  return(invisible(NULL))
 }
 
 
@@ -89,44 +89,6 @@ as_forecast_quantile.forecast_sample <- function(
 }
 
 
-#' Get default metrics for sample-based forecasts
-#'
-#' @description
-#' For sample-based forecasts, the default scoring rules are:
-#' - "crps" = [crps_sample()]
-#' - "overprediction" = [overprediction_sample()]
-#' - "underprediction" = [underprediction_sample()]
-#' - "dispersion" = [dispersion_sample()]
-#' - "log_score" = [logs_sample()]
-#' - "dss" = [dss_sample()]
-#' - "mad" = [mad_sample()]
-#' - "bias" = [bias_sample()]
-#' - "ae_median" = [ae_median_sample()]
-#' - "se_mean" = [se_mean_sample()]
-#' @inheritSection illustration-input-metric-sample Input format
-#' @inheritParams get_metrics.forecast_binary
-#' @export
-#' @family `get_metrics` functions
-#' @keywords handle-metrics
-#' @examples
-#' get_metrics(example_sample_continuous, exclude = "mad")
-get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
-  all <- list(
-    bias = bias_sample,
-    dss = dss_sample,
-    crps = crps_sample,
-    overprediction = overprediction_sample,
-    underprediction = underprediction_sample,
-    dispersion = dispersion_sample,
-    log_score = logs_sample,
-    mad = mad_sample,
-    ae_median = ae_median_sample,
-    se_mean = se_mean_sample
-  )
-  select_metrics(all, select, exclude)
-}
-
-
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
 #' @rdname score
@@ -165,10 +127,48 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
 }
 
 
+#' Get default metrics for sample-based forecasts
+#'
+#' @description
+#' For sample-based forecasts, the default scoring rules are:
+#' - "crps" = [crps_sample()]
+#' - "overprediction" = [overprediction_sample()]
+#' - "underprediction" = [underprediction_sample()]
+#' - "dispersion" = [dispersion_sample()]
+#' - "log_score" = [logs_sample()]
+#' - "dss" = [dss_sample()]
+#' - "mad" = [mad_sample()]
+#' - "bias" = [bias_sample()]
+#' - "ae_median" = [ae_median_sample()]
+#' - "se_mean" = [se_mean_sample()]
+#' @inheritSection illustration-input-metric-sample Input format
+#' @inheritParams get_metrics.forecast_binary
+#' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
+#' @examples
+#' get_metrics(example_sample_continuous, exclude = "mad")
+get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
+  all <- list(
+    bias = bias_sample,
+    dss = dss_sample,
+    crps = crps_sample,
+    overprediction = overprediction_sample,
+    underprediction = underprediction_sample,
+    dispersion = dispersion_sample,
+    log_score = logs_sample,
+    mad = mad_sample,
+    ae_median = ae_median_sample,
+    se_mean = se_mean_sample
+  )
+  select_metrics(all, select, exclude)
+}
+
+
 #' @rdname get_pit
 #' @importFrom stats na.omit
 #' @importFrom data.table `:=` as.data.table dcast
-#' @inheritParams pit_sample n_replicates
+#' @inheritParams pit_sample
 #' @export
 get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)

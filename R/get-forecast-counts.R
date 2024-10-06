@@ -73,3 +73,79 @@ get_forecast_counts <- function(forecast,
 
   return(out[])
 }
+
+
+#' @title Visualise the number of available forecasts
+#'
+#' @description
+#' Visualise Where Forecasts Are Available.
+#' @param forecast_counts A data.table (or similar) with a column `count`
+#'   holding forecast counts, as produced by [get_forecast_counts()].
+#' @param x Character vector of length one that denotes the name of the column
+#'   to appear on the x-axis of the plot.
+#' @param y Character vector of length one that denotes the name of the column
+#'   to appear on the y-axis of the plot. Default is "model".
+#' @param x_as_factor Logical (default is `TRUE`). Whether or not to convert
+#'   the variable on the x-axis to a factor. This has an effect e.g. if dates
+#'   are shown on the x-axis.
+#' @param show_counts Logical (default is `TRUE`) that indicates whether
+#'   or not to show the actual count numbers on the plot.
+#' @return A ggplot object with a plot of forecast counts
+#' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
+#'   geom_tile scale_fill_gradient .data
+#' @importFrom data.table dcast .I .N
+#' @importFrom checkmate assert_subset assert_logical
+#' @export
+#' @examples
+#' library(ggplot2)
+#' library(magrittr) # pipe operator
+#' forecast_counts <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   get_forecast_counts(by = c("model", "target_type", "target_end_date"))
+#' plot_forecast_counts(
+#'  forecast_counts, x = "target_end_date", show_counts = FALSE
+#' ) +
+#'  facet_wrap("target_type")
+
+plot_forecast_counts <- function(forecast_counts,
+                                 x,
+                                 y = "model",
+                                 x_as_factor = TRUE,
+                                 show_counts = TRUE) {
+
+  forecast_counts <- ensure_data.table(forecast_counts)
+  assert_subset(y, colnames(forecast_counts))
+  assert_subset(x, colnames(forecast_counts))
+  assert_logical(x_as_factor, len = 1)
+  assert_logical(show_counts, len = 1)
+
+  if (x_as_factor) {
+    forecast_counts[, eval(x) := as.factor(get(x))]
+  }
+
+  setnames(forecast_counts, old = "count", new = "Count")
+
+  plot <- ggplot(
+    forecast_counts,
+    aes(y = .data[[y]], x = .data[[x]])
+  ) +
+    geom_tile(aes(fill = `Count`),
+              width = 0.97, height = 0.97) +
+    scale_fill_gradient(
+      low = "grey95", high = "steelblue",
+      na.value = "lightgrey"
+    ) +
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      )
+    ) +
+    theme(panel.spacing = unit(2, "lines"))
+  if (show_counts) {
+    plot <- plot +
+      geom_text(aes(label = `Count`))
+  }
+  return(plot)
+}

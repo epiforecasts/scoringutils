@@ -66,7 +66,6 @@ test_that("summarise_scores() handles data.frames correctly", {
   )
 })
 
-
 test_that("summarise_scores() errors if `by = NULL", {
   expect_error(
     summarise_scores(scores_quantile, by = NULL),

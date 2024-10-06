@@ -619,3 +619,137 @@ add_relative_skill <- function(
 
   return(scores)
 }
+
+
+#' @title Plot heatmap of pairwise comparisons
+#'
+#' @description
+#' Creates a heatmap of the ratios or pvalues from a pairwise comparison
+#' between models.
+#'
+#' @param comparison_result A data.frame as produced by
+#' [get_pairwise_comparisons()].
+#' @param type Character vector of length one that is either
+#'   "mean_scores_ratio" or "pval". This denotes whether to
+#'   visualise the ratio or the p-value of the pairwise comparison.
+#'   Default is "mean_scores_ratio".
+#' @importFrom ggplot2 ggplot aes geom_tile geom_text labs coord_cartesian
+#'   scale_fill_gradient2 theme_light element_text
+#' @importFrom data.table as.data.table setnames rbindlist
+#' @importFrom stats reorder
+#' @importFrom ggplot2 labs coord_cartesian facet_wrap facet_grid theme
+#'   element_text element_blank
+#' @return
+#' A ggplot object with a heatmap of mean score ratios from pairwise
+#' comparisons.
+#' @export
+#' @examples
+#' library(ggplot2)
+#' library(magrittr) # pipe operator
+#' scores <- example_quantile %>%
+#'   as_forecast_quantile %>%
+#'   score()
+#' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
+#' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +
+#'   facet_wrap(~target_type)
+
+plot_pairwise_comparisons <- function(comparison_result,
+                                      type = c("mean_scores_ratio", "pval")) {
+  comparison_result <- ensure_data.table(comparison_result)
+  type <- match.arg(type)
+
+  relative_skill_metric <- grep(
+    "(?<!scaled)_relative_skill$", colnames(comparison_result),
+    value = TRUE, perl = TRUE
+  )
+  comparison_result[, model := reorder(model, -get(relative_skill_metric))]
+  levels <- levels(comparison_result$model)
+
+  get_fill_scale <- function(values, breaks, plot_scales) {
+    values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
+    scale <- cut(values,
+                 breaks = breaks,
+                 include.lowest = TRUE,
+                 right = FALSE,
+                 labels = plot_scales
+    )
+    return(as.numeric(as.character(scale)))
+  }
+
+  type <- match.arg(type)
+
+  if (type == "mean_scores_ratio") {
+    comparison_result[, var_of_interest := round(mean_scores_ratio, 2)]
+
+    # implement breaks for colour heatmap
+    breaks <- c(0, 0.1, 0.5, 0.75, 1, 1.33, 2, 10, Inf)
+    plot_scales <- c(-1, -0.5, -0.25, 0, 0, 0.25, 0.5, 1)
+    comparison_result[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
+
+    high_col <- "salmon"
+  } else if (type == "pval") {
+    comparison_result[, var_of_interest := round(pval, 3)]
+    # implemnt breaks for colour heatmap
+    breaks <- c(0, 0.01, 0.05, 0.1, 1)
+    plot_scales <- c(1, 0.5, 0.1, 0)
+    comparison_result[, fill_col := get_fill_scale(
+      var_of_interest,
+      breaks, plot_scales
+    )]
+
+    high_col <- "palegreen3"
+    comparison_result[, var_of_interest := as.character(var_of_interest)]
+    comparison_result[, var_of_interest := ifelse(var_of_interest == "0",
+                                                  "< 0.001", var_of_interest)]
+  }
+
+  plot <- ggplot(
+    comparison_result,
+    aes(
+      y = reorder(model, 1 / mean_scores_ratio, FUN = geometric_mean),
+      x = reorder(compare_against, mean_scores_ratio, FUN = geometric_mean),
+      fill = fill_col
+    )
+  ) +
+    geom_tile(
+      color = "white",
+      width = 0.97, height = 0.97
+    ) +
+    geom_text(aes(label = var_of_interest),
+              na.rm = TRUE) +
+    scale_fill_gradient2(
+      low = "steelblue", mid = "grey95",
+      high = high_col,
+      na.value = "lightgrey",
+      midpoint = 0,
+      limits = c(-1, 1),
+      name = NULL
+    ) +
+    theme_scoringutils() +
+    theme(
+      axis.text.x = element_text(
+        angle = 90, vjust = 1,
+        hjust = 1
+      ),
+      legend.position = "none"
+    ) +
+    labs(
+      x = "", y = ""
+    ) +
+    coord_cartesian(expand = FALSE)
+  if (type == "mean_scores_ratio") {
+    plot <- plot +
+      theme(
+        axis.text.x = element_text(
+          angle = 90, vjust = 1,
+          hjust = 1, color = "brown4"
+        ),
+        axis.text.y = element_text(color = "steelblue4")
+      )
+  }
+
+  return(plot)
+}

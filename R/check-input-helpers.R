@@ -1,4 +1,46 @@
-# to be deleted
+#' Ensure that an object is a `data.table`
+#' @description
+#' This function ensures that an object is a `data table`.
+#' If the object is not a data table, it is converted to one. If the object
+#' is a data table, a copy of the object is returned.
+#' @param data An object to ensure is a data table.
+#' @return A data.table/a copy of an existing data.table.
+#' @keywords internal
+#' @importFrom data.table copy is.data.table as.data.table
+ensure_data.table <- function(data) {
+  if (is.data.table(data)) {
+    data <- copy(data)
+  } else {
+    data <- as.data.table(data)
+  }
+  return(data)
+}
+
+
+#' @title Check whether an input is an atomic vector of mode 'numeric'
+#'
+#' @description Helper function to check whether an input is a numeric vector.
+#' @param x input to check
+#' @inheritDotParams checkmate::check_numeric
+#' @importFrom checkmate check_atomic_vector check_numeric
+#' @inherit document_check_functions return
+#' @keywords internal_input_check
+check_numeric_vector <- function(x, ...) {
+  # check functions must return TRUE on success
+  # and a custom error message otherwise
+  numeric <- check_numeric(x, ...)
+  vector <- check_atomic_vector(x)
+  if (!isTRUE(numeric)) {
+    return(numeric)
+  } else if (!isTRUE(vector)) {
+    return(vector)
+  }
+  return(TRUE)
+}
+
+
+# ==============================================================================
+# functinos below will be deleted in the future
 
 #' @title Helper function to convert assert statements into checks
 #'

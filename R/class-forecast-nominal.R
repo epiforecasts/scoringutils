@@ -1,3 +1,34 @@
+#' @title Create a `forecast` object for nominal forecasts
+#' @description
+#' Nominal forecasts are a form of categorical forecasts where the possible
+#' outcomes that the observed values can assume are not ordered. In that sense,
+#' Nominal forecasts represent a generalisation of binary forecasts.
+#' @inheritParams as_forecast
+#' @param predicted_label (optional) Name of the column in `data` that denotes
+#'   the outcome to which a predicted probability corresponds to.
+#'   This column will be renamed to "predicted_label". Only applicable to
+#'   nominal forecasts.
+#' @family functions to create forecast objects
+#' @keywords as_forecast
+#' @export
+as_forecast_nominal <- function(data,
+                                forecast_unit = NULL,
+                                observed = NULL,
+                                predicted = NULL,
+                                predicted_label = NULL) {
+  assert_character(predicted_label, len = 1, null.ok = TRUE)
+  assert_subset(predicted_label, names(data), empty.ok = TRUE)
+  if (!is.null(predicted_label)) {
+    setnames(data, old = predicted_label, new = "predicted_label")
+  }
+
+  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- new_forecast(data, "forecast_nominal")
+  assert_forecast(data)
+  return(data)
+}
+
+
 #' @export
 #' @keywords check-forecasts
 #' @importFrom checkmate assert_names assert_set_equal test_set_equal
@@ -40,59 +71,10 @@ assert_forecast.forecast_nominal <- function(
 }
 
 
-#' @title Create a `forecast` object for nominal forecasts
-#' @description
-#' Nominal forecasts are a form of categorical forecasts where the possible
-#' outcomes that the observed values can assume are not ordered. In that sense,
-#' Nominal forecasts represent a generalisation of binary forecasts.
-#' @inheritParams as_forecast
-#' @param predicted_label (optional) Name of the column in `data` that denotes
-#'   the outcome to which a predicted probability corresponds to.
-#'   This column will be renamed to "predicted_label". Only applicable to
-#'   nominal forecasts.
-#' @family functions to create forecast objects
-#' @keywords as_forecast
-#' @export
-as_forecast_nominal <- function(data,
-                                forecast_unit = NULL,
-                                observed = NULL,
-                                predicted = NULL,
-                                predicted_label = NULL) {
-  assert_character(predicted_label, len = 1, null.ok = TRUE)
-  assert_subset(predicted_label, names(data), empty.ok = TRUE)
-  if (!is.null(predicted_label)) {
-    setnames(data, old = predicted_label, new = "predicted_label")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
-  data <- new_forecast(data, "forecast_nominal")
-  assert_forecast(data)
-  return(data)
-}
-
-
 #' @export
 #' @rdname is_forecast
 is_forecast_nominal <- function(x) {
   inherits(x, "forecast_nominal") && inherits(x, "forecast")
-}
-
-
-#' Get default metrics for nominal forecasts
-#' @inheritParams get_metrics.forecast_binary
-#' @description
-#' For nominal forecasts, the default scoring rule is:
-#' - "log_score" = [logs_nominal()]
-#' @export
-#' @family `get_metrics` functions
-#' @keywords handle-metrics
-#' @examples
-#' get_metrics(example_nominal)
-get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
-  all <- list(
-    log_score = logs_nominal
-  )
-  select_metrics(all, select, exclude)
 }
 
 
@@ -124,6 +106,24 @@ score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ..
   )
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
+}
+
+
+#' Get default metrics for nominal forecasts
+#' @inheritParams get_metrics.forecast_binary
+#' @description
+#' For nominal forecasts, the default scoring rule is:
+#' - "log_score" = [logs_nominal()]
+#' @export
+#' @family `get_metrics` functions
+#' @keywords handle-metrics
+#' @examples
+#' get_metrics(example_nominal)
+get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
+  all <- list(
+    log_score = logs_nominal
+  )
+  select_metrics(all, select, exclude)
 }
 
 

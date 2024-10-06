@@ -3,7 +3,6 @@
 # ==============================================================================
 
 test_that("`select_metrics` works as expected", {
-
   expect_equal(
     scoringutils:::select_metrics(get_metrics(example_point), select = NULL),
     get_metrics(example_point)
@@ -39,6 +38,41 @@ test_that("`select_metrics` works as expected", {
   expect_type(
     scoringutils:::select_metrics(get_metrics(example_point), select = NULL),
     "list"
+  )
+})
+
+
+# ==============================================================================
+# get_metrics()
+# ==============================================================================
+# See additional tests for individual classes.
+test_that("selecting metrics in get_metrics() works as expected", {
+  expect_equal(
+    names(get_metrics(example_point, select = "ape")),
+    "ape"
+  )
+
+  expect_equal(
+    length(get_metrics(example_binary, select = NULL, exclude = "brier_score")),
+    length(get_metrics(example_binary)) - 1
+  )
+
+  # if both select and exclude are specified, exclude is ignored
+  expect_equal(
+    names(scoringutils:::select_metrics(get_metrics(example_quantile), select = "wis", exclude = "wis")),
+    "wis"
+  )
+
+  # expect error if select is not included in the default possibilities
+  expect_error(
+    get_metrics(example_sample_continuous, select = "not-included"),
+    "Must be a subset of"
+  )
+
+  # expect error if exclude is not included in the default possibilities
+  expect_error(
+    get_metrics(example_quantile, exclude = "not-included"),
+    "Must be a subset of"
   )
 })
 
@@ -84,49 +118,4 @@ test_that("customising metrics via purr::partial works correctly", {
 test_that("purrr::partial() has the expected output class", {
   custom_metric <- purrr::partial(mean, na.rm = TRUE)
   checkmate::expect_class(custom_metric, "function")
-})
-
-
-# ==============================================================================
-# default scoring rules
-# ==============================================================================
-
-test_that("default rules work as expected", {
-
-  expect_true(
-    all(c(
-      is.list(get_metrics(example_quantile)),
-      is.list(get_metrics(example_binary)),
-      is.list(get_metrics(example_sample_continuous)),
-      is.list(get_metrics(example_point)))
-    )
-  )
-
-  expect_equal(
-    names(get_metrics(example_point, select = "ape")),
-    "ape"
-  )
-
-  expect_equal(
-    length(get_metrics(example_binary, select = NULL, exclude = "brier_score")),
-    length(get_metrics(example_binary)) - 1
-  )
-
-  # if both select and exclude are specified, exclude is ignored
-  expect_equal(
-    names(scoringutils:::select_metrics(get_metrics(example_quantile), select = "wis", exclude = "wis")),
-    "wis"
-  )
-
-  # expect error if select is not included in the default possibilities
-  expect_error(
-    get_metrics(example_sample_continuous, select = "not-included"),
-    "Must be a subset of"
-  )
-
-  # expect error if exclude is not included in the default possibilities
-  expect_error(
-    get_metrics(example_quantile, exclude = "not-included"),
-    "Must be a subset of"
-  )
 })

@@ -1,7 +1,7 @@
 #' @title General information on creating a `forecast` object
 #'
 #' @description
-#' There are several ``as_forecast_<type>()` functions to process and validate
+#' There are several `as_forecast_<type>()` functions to process and validate
 #' a data.frame (or similar) or similar with forecasts and observations. If
 #' the input passes all input checks, those functions will be converted
 #' to a `forecast` object. A forecast object is a `data.table` with a
@@ -210,9 +210,10 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
 }
 
 
-#' Check that all forecasts have the same number of e.g. quantiles or samples
+#' Check that all forecasts have the same number of rows
 #' @description
-#' Helper function that checks the number of quantiles or samples per forecast.
+#' Helper function that checks the number of rows (corresponding e.g to
+#' quantiles or samples) per forecast.
 #' If the number of quantiles or samples is the same for all forecasts, it
 #' returns TRUE and a string with an error message otherwise.
 #' @param forecast_unit Character vector denoting the unit of a single forecast.

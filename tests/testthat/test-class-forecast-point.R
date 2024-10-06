@@ -1,9 +1,32 @@
 # ==============================================================================
+# as_forecast_point()
+# ==============================================================================
+
+test_that("as_forecast_point() works", {
+  expect_no_condition(
+    as_forecast_point(as_forecast_quantile(na.omit(example_quantile)))
+  )
+})
+
+
+# ==============================================================================
+# is_forecast_point()
+# ==============================================================================
+test_that("is_forecast_point() works as expected", {
+  expect_true(is_forecast_point(example_point))
+  expect_false(is_forecast_point(example_binary))
+  expect_false(is_forecast_point(example_quantile))
+  expect_false(is_forecast_point(example_sample_continuous))
+  expect_false(is_forecast_point(example_nominal))
+})
+
+
+# ==============================================================================
 # assert_forecast.forecast_point()
 # ==============================================================================
 
 test_that("assert_forecast.forecast_point() works as expected", {
-  test <- na.omit(as.data.table(example_point))
+  test <- na.omit(data.table::as.data.table(example_point))
   test <- as_forecast_point(test)
 
   # expect an error if column is changed to character after initial validation.
@@ -14,6 +37,13 @@ test_that("assert_forecast.forecast_point() works as expected", {
   expect_error(
     assert_forecast(test),
     "Input looks like a point forecast, but found the following issue"
+  )
+})
+
+test_that("assert_forecast.forecast_point() complains if the forecast type is wrong", {
+  expect_error(
+    assert_forecast(na.omit(example_point), forecast_type = "quantile"),
+    "Forecast type determined by scoringutils based on input:"
   )
 })
 
@@ -61,5 +91,19 @@ test_that("score.forecast_point() errors with only NA values", {
   expect_error(
     score(only_nas),
     "After removing rows with NA values in the data, no forecasts are left."
+  )
+})
+
+# ==============================================================================
+# get_metrics.forecast_point()
+# ==============================================================================
+test_that("get_metrics.forecast_point() works as expected", {
+  expect_true(
+    is.list(get_metrics(example_point))
+  )
+
+  expect_equal(
+    get_metrics.scores(scores_point),
+    c("ae_point", "se_point", "ape")
   )
 })

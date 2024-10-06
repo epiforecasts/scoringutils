@@ -1,3 +1,7 @@
+# ==============================================================================
+# quantile_to_interval()
+# ==============================================================================
+
 test_that("quantile_to_interval_dataframe() works", {
   quantile <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
@@ -35,7 +39,7 @@ test_that("quantile_to_interval_dataframe() works", {
   #  - after, it's a 'warning'
   #  - the conditionMessage() also differs
   expected_condition <- tryCatch(
-    dcast(data.table(a = c(1, 1), b = 2, c = 3), a ~ b, value.var="c"),
+    dcast(data.table(a = c(1, 1), b = 2, c = 3), a ~ b, value.var = "c"),
     condition = identity
   )
   expect_condition(
@@ -56,73 +60,6 @@ test_that("quantile_to_interval_dataframe() works", {
   expect_equal(nrow(wide2), 10)
   expect_true(!("NA") %in% colnames(wide2))
   expect_equal(sum(wide2$lower, na.rm = TRUE), 59)
-})
-
-
-test_that("as_forecast_quantiles works", {
-  samples <- data.frame(
-    date = as.Date("2020-01-01") + 1:10,
-    model = "model1",
-    observed = 1:10,
-    predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
-    sample_id = rep(1:5, each = 10)
-  ) %>%
-    as_forecast_sample()
-
-  quantile <- data.frame(
-    date = rep(as.Date("2020-01-01") + 1:10, each = 2),
-    model = "model1",
-    observed = rep(1:10, each = 2),
-    quantile_level = c(0.25, 0.75),
-    predicted = rep(2:11, each = 2) + c(0, 2)
-  )
-
-  expect_no_condition(
-    as_forecast_quantile(samples, probs = c(0.25, 0.75))
-  )
-
-  wrongclass <- as_forecast_sample(samples)
-  class(wrongclass) <- c("forecast_point", "data.table", "data.frame")
-  expect_error(
-    as_forecast_quantile(wrongclass, quantile_level = c(0.25, 0.75)),
-    "Assertion on 'quantile_level' failed: Must be of type"
-  )
-
-
-  quantile2 <- as_forecast_quantile(
-    as_forecast_sample(samples),
-    probs = c(0.25, 0.75)
-  )
-
-  expect_equal(quantile, as.data.frame(quantile2))
-
-  # Verify that `type` is correctly scoped in as_forecast_quantile(), as it is
-  # also an argument.
-  # If it's not scoped well, the call to `as_forecast_quantile()` will fail.
-  samples$type <- "test"
-
-  quantile3 <- as_forecast_quantile(
-    as_forecast_sample(samples),
-    probs = c(0.25, 0.75)
-  )
-  quantile3$type <- NULL
-
-  expect_identical(
-    quantile2,
-    quantile3
-  )
-})
-
-test_that("as_forecast_quantiles issue 557 fix", {
-
-  out <- example_sample_discrete %>%
-    na.omit %>%
-    as_forecast_quantile(
-      probs = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-    ) %>%
-    score()
-
-  expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
 })
 
 

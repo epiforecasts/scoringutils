@@ -1,3 +1,32 @@
+#' @title Create a `forecast` object for point forecasts
+#' @description
+#' Create a `forecast` object for point forecasts. See more information on
+#' forecast types and expected input formats by calling `?`[as_forecast()].
+#' @inherit as_forecast params
+#' @param ... Unused
+#' @family functions to create forecast objects
+#' @export
+#' @keywords as_forecast transform
+as_forecast_point <- function(data, ...) {
+  UseMethod("as_forecast_point")
+}
+
+
+#' @rdname as_forecast_point
+#' @export
+#' @importFrom cli cli_warn
+as_forecast_point.default <- function(data,
+                                      forecast_unit = NULL,
+                                      observed = NULL,
+                                      predicted = NULL,
+                                      ...) {
+  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- new_forecast(data, "forecast_point")
+  assert_forecast(data)
+  return(data)
+}
+
+
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort
@@ -26,35 +55,6 @@ assert_forecast.forecast_point <- function(
 #' @rdname is_forecast
 is_forecast_point <- function(x) {
   inherits(x, "forecast_point") && inherits(x, "forecast")
-}
-
-
-#' @title Create a `forecast` object for point forecasts
-#' @description
-#' Create a `forecast` object for point forecasts. See more information on
-#' forecast types and expected input formats by calling `?`[as_forecast()].
-#' @inherit as_forecast params
-#' @param ... Unused
-#' @family functions to create forecast objects
-#' @export
-#' @keywords as_forecast transform
-as_forecast_point <- function(data, ...) {
-  UseMethod("as_forecast_point")
-}
-
-
-#' @rdname as_forecast_point
-#' @export
-#' @importFrom cli cli_warn
-as_forecast_point.default <- function(data,
-                                      forecast_unit = NULL,
-                                      observed = NULL,
-                                      predicted = NULL,
-                                      ...) {
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
-  data <- new_forecast(data, "forecast_point")
-  assert_forecast(data)
-  return(data)
 }
 
 
