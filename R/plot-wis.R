@@ -56,10 +56,11 @@ plot_wis <- function(scores,
   assert_logical(relative_contributions, len = 1)
   assert_logical(flip, len = 1)
 
-  scores <- melt(scores,
-                 measure.vars = wis_components,
-                 variable.name = "wis_component_name",
-                 value.name = "component_value"
+  scores <- melt(
+    scores,
+    measure.vars = wis_components,
+    variable.name = "wis_component_name",
+    value.name = "component_value"
   )
 
   # stack or fill the geom_col position

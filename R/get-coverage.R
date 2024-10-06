@@ -155,9 +155,10 @@ plot_interval_coverage <- function(coverage,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = interval_range),
-              colour = "grey",
-              linetype = "dashed"
+    geom_line(
+      aes(y = interval_range),
+      colour = "grey",
+      linetype = "dashed"
     ) +
     geom_line(aes(y = interval_coverage * 100)) +
     theme_scoringutils() +
@@ -218,9 +219,10 @@ plot_quantile_coverage <- function(coverage,
       colour = "white",
       fill = "olivedrab3"
     ) +
-    geom_line(aes(y = quantile_level),
-              colour = "grey",
-              linetype = "dashed"
+    geom_line(
+      aes(y = quantile_level),
+      colour = "grey",
+      linetype = "dashed"
     ) +
     geom_line(aes(y = quantile_coverage)) +
     theme_scoringutils() +

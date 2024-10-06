@@ -667,11 +667,12 @@ plot_pairwise_comparisons <- function(comparison_result,
 
   get_fill_scale <- function(values, breaks, plot_scales) {
     values[is.na(values)] <- 1 # this would be either ratio = 1 or pval = 1
-    scale <- cut(values,
-                 breaks = breaks,
-                 include.lowest = TRUE,
-                 right = FALSE,
-                 labels = plot_scales
+    scale <- cut(
+      values,
+      breaks = breaks,
+      include.lowest = TRUE,
+      right = FALSE,
+      labels = plot_scales
     )
     return(as.numeric(as.character(scale)))
   }

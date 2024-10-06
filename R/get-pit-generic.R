@@ -147,9 +147,10 @@ plot_pit <- function(pit,
         data = pit,
         aes(x = pit_value)
       ) +
-        geom_histogram(aes(y = after_stat(width * density)),
-                       breaks = plot_quantiles,
-                       colour = "grey"
+        geom_histogram(
+          aes(y = after_stat(width * density)),
+          breaks = plot_quantiles,
+          colour = "grey"
         ) +
         facet_wrap(formula)
     }
@@ -159,9 +160,10 @@ plot_pit <- function(pit,
       data = data.frame(x = pit, stringsAsFactors = TRUE),
       aes(x = x)
     ) +
-      geom_histogram(aes(y = after_stat(width * density)),
-                     breaks = plot_quantiles,
-                     colour = "grey"
+      geom_histogram(
+        aes(y = after_stat(width * density)),
+        breaks = plot_quantiles,
+        colour = "grey"
       )
   }
 
@@ -172,4 +174,3 @@ plot_pit <- function(pit,
 
   return(hist)
 }
-
