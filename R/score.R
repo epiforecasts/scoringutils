@@ -105,161 +105,6 @@ score.default <- function(forecast, metrics, ...) {
   )
 }
 
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  scores <- apply_metrics(
-    forecast, metrics,
-    forecast$observed, forecast$predicted
-  )
-  scores[, `:=`(predicted = NULL, observed = NULL)]
-
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr
-#' @rdname score
-#' @export
-score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  # make sure the labels and predictions are ordered in the same way
-  f_transposed <- forecast[, .(
-    predicted = list(predicted[order(predicted_label)]),
-    observed = unique(observed)
-  ), by = forecast_unit]
-
-  observed <- f_transposed$observed
-  predicted <- do.call(rbind, f_transposed$predicted)
-  predicted_label <- sort(unique(forecast$predicted_label, na.last = TRUE))
-  f_transposed[, c("observed", "predicted") := NULL]
-
-  scores <- apply_metrics(
-    f_transposed, metrics,
-    observed, predicted, predicted_label, ...
-  )
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
-#' @importFrom Metrics se ae ape
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  scores <- apply_metrics(
-    forecast, metrics,
-    forecast$observed, forecast$predicted
-  )
-  scores[, `:=`(predicted = NULL, observed = NULL)]
-
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-#' @importFrom stats na.omit
-#' @importFrom data.table setattr copy
-#' @rdname score
-#' @export
-score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  f_transposed <- forecast[, .(predicted = list(predicted),
-                               observed = unique(observed),
-                               scoringutils_N = length(list(sample_id))),
-                           by = forecast_unit]
-
-  # split according to number of samples and do calculations for different
-  # sample lengths separately
-  f_split <- split(f_transposed, f_transposed$scoringutils_N)
-
-  split_result <- lapply(f_split, function(forecast) {
-    # create a matrix
-    observed <- forecast$observed
-    predicted <- do.call(rbind, forecast$predicted)
-    forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
-
-    forecast <- apply_metrics(
-      forecast, metrics,
-      observed, predicted
-    )
-    return(forecast)
-  })
-  scores <- rbindlist(split_result, fill = TRUE)
-  scores <- as_scores(scores, metrics = names(metrics))
-  return(scores[])
-}
-
-
-#' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
-#' @rdname score
-#' @export
-score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
-
-  # transpose the forecasts that belong to the same forecast unit
-  # make sure the quantiles and predictions are ordered in the same way
-  f_transposed <- forecast[, .(
-    predicted = list(predicted[order(quantile_level)]),
-    observed = unique(observed),
-    quantile_level = list(sort(quantile_level, na.last = TRUE)),
-    scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
-  ), by = forecast_unit]
-
-  # split according to quantile_level lengths and do calculations for different
-  # quantile_level lengths separately. The function `wis()` assumes that all
-  # forecasts have the same quantile_levels
-  f_split <- split(f_transposed, f_transposed$scoringutils_quantile_level)
-
-  split_result <- lapply(f_split, function(forecast) {
-    # create a matrix out of the list of predicted values and quantile_levels
-    observed <- forecast$observed
-    predicted <- do.call(rbind, forecast$predicted)
-    quantile_level <- unlist(unique(forecast$quantile_level))
-    forecast[, c(
-      "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
-    ) := NULL]
-
-    forecast <- apply_metrics(
-      forecast, metrics,
-      observed, predicted, quantile_level
-    )
-    return(forecast)
-  })
-  scores <- rbindlist(split_result, fill = TRUE)
-
-  scores <- as_scores(scores, metrics = names(metrics))
-
-  return(scores[])
-}
-
 
 #' @title Apply a list of functions to a data table of forecasts
 #' @description
@@ -290,74 +135,105 @@ apply_metrics <- function(forecast, metrics, ...) {
 }
 
 
-#' Construct an object of class `scores`
+#' @title Run a function safely
 #' @description
-#' This function creates an object of class `scores` based on a
-#' data.table or similar.
-#' @param scores A data.table or similar with scores as produced by [score()].
-#' @param metrics A character vector with the names of the scores
-#'   (i.e. the names of the scoring rules used for scoring).
-#' @param ... Additional arguments to [data.table::as.data.table()]
+#' This is a wrapper/helper function designed to run a function safely
+#' when it is not completely clear what arguments could be passed to the
+#' function.
+#'
+#' All named arguments in `...` that are not accepted by `fun` are removed.
+#' All unnamed arguments are passed on to the function. In case `fun` errors,
+#' the error will be converted to a warning and `run_safely` returns `NULL`.
+#'
+#' `run_safely` can be useful when constructing functions to be used as
+#' metrics in [score()].
+#'
+#' @param ... Arguments to pass to `fun`.
+#' @param fun A function to execute.
+#' @param metric_name A character string with the name of the metric. Used to
+#'   provide a more informative warning message in case `fun` errors.
+#' @importFrom cli cli_warn
+#' @importFrom checkmate assert_function
+#' @return The result of `fun` or `NULL` if `fun` errors
 #' @keywords internal
-#' @importFrom data.table as.data.table setattr
-#' @return An object of class `scores`
 #' @examples
-#' \dontrun{
-#' df <- data.frame(
-#'   model = "A",
-#'   wis = "0.1"
-#' )
-#' new_scores(df, "wis")
-#' }
-new_scores <- function(scores, metrics, ...) {
-  scores <- as.data.table(scores, ...)
-  class(scores) <- c("scores", class(scores))
-  setattr(scores, "metrics", metrics)
-  return(scores[])
-}
-
-
-#' Create an object of class `scores` from data
-#' @description This convenience function wraps [new_scores()] and validates
-#'   the `scores` object.
-#' @inherit new_scores params return
-#' @importFrom checkmate assert_data_frame
-#' @keywords internal
-as_scores <- function(scores, metrics) {
-  assert_data_frame(scores)
-  present_metrics <- metrics[metrics %in% colnames(scores)]
-  scores <- new_scores(scores, present_metrics)
-  validate_scores(scores)
-  return(scores[])
-}
-
-
-#' Validate an object of class `scores`
-#' @description
-#' This function validates an object of class `scores`, checking
-#' that it has the correct class and that it has a `metrics` attribute.
-#' @inheritParams new_scores
-#' @returns Returns `NULL` invisibly
-#' @importFrom checkmate assert_class assert_data_frame
-#' @keywords internal
-validate_scores <- function(scores) {
-  assert_data_frame(scores)
-  assert_class(scores, "scores")
-  # error if no metrics exists +
-  # throw warning if any of the metrics is not in the data
-  get_metrics.scores(scores, error = TRUE)
-  return(invisible(NULL))
-}
-
-#' @method `[` scores
-#' @importFrom data.table setattr
-#' @export
-`[.scores` <- function(x, ...) {
-  ret <- NextMethod()
-  if (is.data.table(ret)) {
-    setattr(ret, "metrics", attr(x, "metrics"))
-  } else if (is.data.frame(ret)) {
-    attr(ret, "metrics") <- attr(x, "metrics")
+#' f <- function(x) {x}
+#' scoringutils:::run_safely(2, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(2, y = 3, fun = f, metric_name = "f")
+#' scoringutils:::run_safely(fun = f, metric_name = "f")
+#' scoringutils:::run_safely(y = 3, fun = f, metric_name = "f")
+run_safely <- function(..., fun, metric_name) {
+  assert_function(fun)
+  args <- list(...)
+  # Check if the function accepts ... as an argument
+  if ("..." %in% names(formals(fun))) {
+    valid_args <- args
+  } else if (is.null(names(args))) {
+    # if no arguments are named, just pass all arguments on
+    valid_args <- args
+  } else {
+    # Identify the arguments that fun() accepts
+    possible_args <- names(formals(fun))
+    # keep valid arguments as well as unnamed arguments
+    valid_args <- args[names(args) == "" | names(args) %in% possible_args]
   }
-  return(ret)
+
+  result <- try(do.call(fun, valid_args), silent = TRUE)
+
+  if (inherits(result, "try-error")) {
+    #nolint start: object_usage_linter
+    msg <- conditionMessage(attr(result, "condition"))
+    cli_warn(
+      c(
+        "!" = "Computation for {.var {metric_name}} failed.
+        Error: {msg}."
+      )
+    )
+    #nolint end
+    return(NULL)
+  }
+  return(result)
+}
+
+
+#' @title Validate metrics
+#'
+#' @description
+#' This function validates whether the list of metrics is a list
+#' of valid functions.
+#'
+#' The function is used in [score()] to make sure that all metrics are valid
+#' functions.
+#'
+#' @param metrics A named list with metrics. Every element should be a scoring
+#'   function to be applied to the data.
+#' @importFrom cli cli_warn
+#'
+#' @return
+#' A named list of metrics, with those filtered out that are not
+#' valid functions
+#' @importFrom checkmate assert_list test_list check_function
+#' @keywords internal_input_check
+validate_metrics <- function(metrics) {
+
+  assert_list(metrics, min.len = 1, names = "named")
+
+  for (i in seq_along(metrics)) {
+    check_fun <- check_function(metrics[[i]])
+    if (!isTRUE(check_fun)) {
+      #nolint start: keyword_quote_linter
+      cli_warn(
+        c(
+          "!" = "`Metrics` element number {i} is not a valid function."
+        )
+      )
+      #nolint end
+      names(metrics)[i] <- "scoringutils_delete"
+    }
+  }
+  metrics[names(metrics) == "scoringutils_delete"] <- NULL
+
+  assert_list(metrics, min.len = 1, .var.name = "valid metrics")
+
+  return(metrics)
 }

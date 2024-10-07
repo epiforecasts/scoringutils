@@ -1,3 +1,22 @@
+#' Ensure that an object is a `data.table`
+#' @description
+#' This function ensures that an object is a `data table`.
+#' If the object is not a data table, it is converted to one. If the object
+#' is a data table, a copy of the object is returned.
+#' @param data An object to ensure is a data table.
+#' @return A data.table/a copy of an existing data.table.
+#' @keywords internal
+#' @importFrom data.table copy is.data.table as.data.table
+ensure_data.table <- function(data) {
+  if (is.data.table(data)) {
+    data <- copy(data)
+  } else {
+    data <- as.data.table(data)
+  }
+  return(data)
+}
+
+
 #' @title Check whether an input is an atomic vector of mode 'numeric'
 #'
 #' @description Helper function to check whether an input is a numeric vector.
@@ -20,6 +39,9 @@ check_numeric_vector <- function(x, ...) {
 }
 
 
+# ==============================================================================
+# functinos below will be deleted in the future
+
 #' @title Helper function to convert assert statements into checks
 #'
 #' @description
@@ -38,62 +60,6 @@ check_try <- function(expr) {
   }
   msg <- conditionMessage(attr(result, "condition"))
   return(msg)
-}
-
-#' Check that all forecasts have the same number of quantiles or samples
-#' @description
-#' Function checks the number of quantiles or samples per forecast.
-#' If the number of quantiles or samples is the same for all forecasts, it
-#' returns TRUE and a string with an error message otherwise.
-#' @param forecast_unit Character vector denoting the unit of a single forecast.
-#' @importFrom checkmate assert_subset
-#' @inherit document_check_functions params return
-#' @keywords internal_input_check
-check_number_per_forecast <- function(data, forecast_unit) {
-  # This function doesn't return a forecast object so it's fine to unclass it
-  # to avoid validation error while subsetting
-  data <- as.data.table(data)
-  data <- na.omit(data)
-  # check whether there are the same number of quantiles, samples --------------
-  data[, scoringutils_InternalNumCheck := length(predicted), by = forecast_unit]
-  n <- unique(data$scoringutils_InternalNumCheck)
-  data[, scoringutils_InternalNumCheck := NULL]
-  if (length(n) > 1) {
-    msg <- paste0(
-      "Some forecasts have different numbers of rows ",
-      "(e.g. quantiles or samples). ",
-      "scoringutils found: ", toString(n),
-      ". This may be a problem (it can potentially distort scores, ",
-      "making it more difficult to compare them), ",
-      "so make sure this is intended."
-    )
-    return(msg)
-  }
-  return(TRUE)
-}
-
-
-#' Check that there are no duplicate forecasts
-#'
-#' @description
-#' Runs [get_duplicate_forecasts()] and returns a message if an issue is
-#' encountered
-#' @inheritParams get_duplicate_forecasts
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_duplicates <- function(data) {
-  check_duplicates <- get_duplicate_forecasts(data)
-
-  if (nrow(check_duplicates) > 0) {
-    msg <- paste0(
-      "There are instances with more than one forecast for the same target. ",
-      "This can't be right and needs to be resolved. Maybe you need to ",
-      "check the unit of a single forecast and add missing columns? Use ",
-      "the function get_duplicate_forecasts() to identify duplicate rows"
-    )
-    return(msg)
-  }
-  return(TRUE)
 }
 
 

@@ -1,6 +1,58 @@
-################################################################################
-# Metrics with a many-to-one relationship between input and score
-################################################################################
+#' @title Assert that inputs are correct for quantile-based forecast
+#' @description
+#' Function assesses whether the inputs correspond to the
+#' requirements for scoring quantile-based forecasts.
+#' @param predicted Input to be checked. Should be nxN matrix of predictive
+#'   quantiles, n (number of rows) being the number of data points and N
+#'   (number of columns) the number of quantiles per forecast.
+#'   If `observed` is just a single number, then predicted can just be a
+#'   vector of size N.
+#' @param quantile_level Input to be checked. Should be a vector of size N that
+#'   denotes the quantile levels corresponding to the columns of the prediction
+#'   matrix.
+#' @param unique_quantile_levels Whether the quantile levels are required to be
+#'   unique (`TRUE`, the default) or not (`FALSE`).
+#' @importFrom checkmate assert assert_numeric check_matrix check_vector
+#' @inherit document_assert_functions params return
+#' @keywords internal_input_check
+assert_input_quantile <- function(observed, predicted, quantile_level,
+                                  unique_quantile_levels = TRUE) {
+  assert_numeric(observed, min.len = 1)
+  n_obs <- length(observed)
+
+  assert_numeric(
+    quantile_level, min.len = 1, lower = 0, upper = 1,
+    unique = unique_quantile_levels
+  )
+  n_quantiles <- length(quantile_level)
+  if (n_obs == 1) {
+    assert(
+      # allow one of two options
+      check_numeric_vector(predicted, min.len = n_quantiles),
+      check_matrix(predicted, mode = "numeric",
+                   nrows = n_obs, ncols = n_quantiles)
+    )
+    assert(check_vector(quantile_level, len = length(predicted)))
+  } else {
+    assert(
+      check_matrix(predicted, mode = "numeric",
+                   nrows = n_obs, ncols = n_quantiles)
+    )
+  }
+  return(invisible(NULL))
+}
+
+#' @title Check that inputs are correct for quantile-based forecast
+#' @inherit assert_input_quantile params description
+#' @inherit check_input_sample return description
+#' @keywords internal_input_check
+check_input_quantile <- function(observed, predicted, quantile_level) {
+  result <- check_try(
+    assert_input_quantile(observed, predicted, quantile_level)
+  )
+  return(result)
+}
+
 
 #' Weighted interval score (WIS)
 #' @description
