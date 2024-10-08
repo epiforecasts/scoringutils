@@ -190,7 +190,7 @@ wis <- function(observed,
   )
   complete_intervals <-
     duplicated(interval_ranges) | duplicated(interval_ranges, fromLast = TRUE)
-  if (!all(complete_intervals) && !na.rm) {
+  if (!all(complete_intervals) && !isTRUE(na.rm)) {
     #nolint start: keyword_quote_linter object_usage_linter
     incomplete <- quantile_level[quantile_level != 0.5][!complete_intervals]
     cli_abort(
