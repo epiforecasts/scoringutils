@@ -88,6 +88,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 ### Function changes
 - `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
 - In contrast to the previous `correlation` function, `get_correlations` doesn't round correlations by default. Instead, `plot_correlations` now has a `digits` argument that allows users to round correlations before plotting them. Alternatively, using `dplyr`, you could call something like `mutate(correlations, across(where(is.numeric), \(x) signif(x, digits = 2)))` on the output of `get_correlations`. 
+- `wis()` now errors by default if not all quantile levels form valid prediction intervals.
 
 ### Internal package updates
 - The deprecated `..density..` was replaced with `after_stat(density)` in ggplot calls.
