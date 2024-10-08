@@ -14,7 +14,7 @@ wis(
   separate_results = FALSE,
   weigh = TRUE,
   count_median_twice = FALSE,
-  na.rm = TRUE
+  na.rm = FALSE
 )
 
 dispersion_quantile(observed, predicted, quantile_level, ...)

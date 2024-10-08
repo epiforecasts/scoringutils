@@ -300,23 +300,29 @@ test_that("score() works even if only some quantiles are missing", {
     ))
   )
 
-
   # asymmetric intervals
   asymm <- example_quantile[!quantile_level > 0.6]
+  metrics <- get_metrics(example_quantile)
+  metrics$wis <- purrr::partial(wis, na.rm = TRUE)
   expect_warning(
     expect_warning(
-      score_a <- score(asymm) %>% summarise_scores(by = "model"),
+      score_a <- score(asymm, metrics = metrics) %>%
+        summarise_scores(by = "model"),
       "Computation for `interval_coverage_50` failed."
     ),
     "Computation for `interval_coverage_90` failed."
   )
 
+  # expect a failure with the regular wis wihtout ma.rm=TRUE
+  expect_warning(
+    score(asymm, metrics = c(wis = wis)),
+    "Not all quantile levels specified form symmetric prediction intervals."
+  )
+
   # check that the result is equal to a case where we discard the entire
   # interval in terms of WIS
   inner <- example_quantile[quantile_level %in% c(0.4, 0.45, 0.5, 0.55, 0.6)]
-  score_b <- score(inner, get_metrics(
-    inner, exclude = c("interval_coverage_50", "interval_coverage_90")
-  )) %>%
+  score_b <- score(inner, metrics = c(wis = wis)) %>%
     summarise_scores(by = "model")
   expect_equal(
     score_a$wis,
