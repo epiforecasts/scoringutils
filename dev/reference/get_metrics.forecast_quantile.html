@@ -147,11 +147,19 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">example_quantile</span>, select <span class="op">=</span> <span class="st">"wis"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $wis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted, quantile_level, separate_results = FALSE, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     weigh = TRUE, count_median_twice = FALSE, na.rm = TRUE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     weigh = TRUE, count_median_twice = FALSE, na.rm = FALSE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_quantile(observed, predicted, quantile_level)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     reformatted &lt;- quantile_to_interval(observed, predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         quantile_level)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     interval_ranges &lt;- get_range_from_quantile(quantile_level[quantile_level != </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         0.5])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     complete_intervals &lt;- duplicated(interval_ranges) | duplicated(interval_ranges, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         fromLast = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!all(complete_intervals) &amp;&amp; !isTRUE(na.rm)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         incomplete &lt;- quantile_level[quantile_level != 0.5][!complete_intervals]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         cli_abort(c(`!` = "Not all quantile levels specified form symmetric prediction\n        intervals.\n        The following quantile levels miss a corresponding lower/upper bound:\n        {.val {incomplete}}.\n        You can drop incomplete prediction intervals using `na.rm = TRUE`."))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_logical(separate_results, len = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_logical(weigh, len = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_logical(count_median_twice, len = 1)</span>
@@ -183,7 +191,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(reformatted$wis)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55e9af1fd8e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5632bd621240&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
