@@ -190,9 +190,9 @@ wis <- function(observed,
   )
   complete_intervals <-
     duplicated(interval_ranges) | duplicated(interval_ranges, fromLast = TRUE)
-  if (any(!complete_intervals) && !na.rm) {
+  if (!all(complete_intervals) && !na.rm) {
+    #nolint start: keyword_quote_linter object_usage_linter
     incomplete <- quantile_level[quantile_level != 0.5][!complete_intervals]
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
         "!" = "Not all quantile levels specified form symmetric prediction
