@@ -180,9 +180,30 @@ wis <- function(observed,
                 separate_results = FALSE,
                 weigh = TRUE,
                 count_median_twice = FALSE,
-                na.rm = TRUE) {
+                na.rm = FALSE) {
   assert_input_quantile(observed, predicted, quantile_level)
   reformatted <- quantile_to_interval(observed, predicted, quantile_level)
+
+  # check that all quantile levels form valid prediction intervals
+  interval_ranges <- get_range_from_quantile(
+    quantile_level[quantile_level != 0.5]
+  )
+  complete_intervals <-
+    duplicated(interval_ranges) | duplicated(interval_ranges, fromLast = TRUE)
+  if (any(!complete_intervals) && !na.rm) {
+    incomplete <- quantile_level[quantile_level != 0.5][!complete_intervals]
+    #nolint start: keyword_quote_linter
+    cli_abort(
+      c(
+        "!" = "Not all quantile levels specified form symmetric prediction
+        intervals.
+        The following quantile levels miss a corresponding lower/upper bound:
+        {.val {incomplete}}.
+        You can drop incomplete prediction intervals using `na.rm = TRUE`."
+      )
+    )
+    #nolint end
+  }
 
   assert_logical(separate_results, len = 1)
   assert_logical(weigh, len = 1)
