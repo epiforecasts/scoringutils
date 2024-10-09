@@ -1,6 +1,14 @@
+# nocov start
+#' @importFrom cli cli_inform
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(
-    "We'd like to hear your feedback and thoughts! Let us know by ",
-    "creating an issue on {.url https://github.com/epiforecasts/scoringutils/issues}."
+  cli_inform(
+    "scoringutils 2.0.0 introduces major changes. We'd love your feedback!
+    {.url https://github.com/epiforecasts/scoringutils/issues}.
+    To use the old version, run:
+    {.code remotes::install_github('epiforecasts/scoringutils@v1.2.2')}",
+    .frequency = "once",
+    .frequency_id = "enw_startup_message",
+    class = "packageStartupMessage"
   )
 }
+# nocov end
