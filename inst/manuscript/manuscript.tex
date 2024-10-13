@@ -233,7 +233,7 @@ well as sensible defaults for scoring forecasts.
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{output/workflow} 
+{\centering \includegraphics[width=1\linewidth]{../../man/figures/workflow} 
 
 }
 
@@ -298,18 +298,23 @@ Forecasts differ in the exact prediction task and in how the forecaster
 chooses to represent their prediction. To distinguish different kinds of
 forecasts, we use the term ``forecast type'' (which is more a convenient
 classification than a formal definition). Currently,
-\texttt{scoringutils} distinguishes four different forecast types:
-``binary'', ``point'', ``quantile'' and ``sample'' forecasts.
+\texttt{scoringutils} distinguishes five different forecast types:
+``point'', ``binary'', ``nominal'', ``quantile'' and ``sample''
+forecasts.
 
 \begin{itemize}
 \tightlist
+\item
+  ``Point'' denotes a forecast for a continuous or discrete outcome
+  variable that is represented by a single number.
 \item
   ``Binary'' denotes a probability forecast for a binary (yes/no)
   outcome variable. This is sometimes also called ``soft binary
   classification''.
 \item
-  ``Point'' denotes a forecast for a continuous or discrete outcome
-  variable that is represented by a single number.
+  ``Nominal'' denotes a probability forecast for a variable where the
+  outcome can assume one of multiple unordered classes. This represents
+  a generalisation of binary forecasts to multiple possible outcomes.
 \item
   ``Quantile'' or ``quantile-based'' is used to denote a probabilistic
   forecast for a continuous or discrete outcome variable, with the
@@ -335,16 +340,14 @@ classification than a formal definition). Currently,
 \toprule
 \textbf{Forecast type} & & & \textbf{column} & \textbf{type} \\
 \midrule
-
-% All forecast types
-\multirow{3}{*}{\makecell[cl]{All forecast\\types}} & & & \texttt{observed}  & \\
-                                                    & & & \texttt{predicted} & \\
-                                                    & & & \texttt{model}    & \\
-\midrule
-
 % Classification
-\multirow{2}{*}{Classification} & \multirow{2}{*}{Binary} & Soft classification & \texttt{observed} & factor with 2 levels \\ 
-                                &        & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1]       \\
+\multirow{5}{*}{\makecell[cl]{Categorical\\forecast}}    & \multirow{2}{*}{Binary}     & Soft classification & \texttt{observed} & factor with 2 levels \\ 
+                                &                             & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1] \\
+\cmidrule(l){2-5} 
+                                & \multirow{3}{*}{\makecell[cl]{Nominal\\{\footnotesize(multiclass)}}} & \multirow{3}{*}{\makecell[cl]{Soft classification\\{\footnotesize(prediction is probability)}}} 
+                                                                  & \texttt{observed}   & factor with $N$ levels \\ 
+                                &                                 & & \texttt{predicted} & numeric [0,1] \\
+                                &                                 & & \texttt{predicted\_label} & factor with $N$ levels \\
 \midrule
 
 % Point forecasts
@@ -363,7 +366,7 @@ classification than a formal definition). Currently,
 \bottomrule
 \end{tabular}
 }
-\caption{Formatting requirements for data inputs. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed}, \texttt{predicted}, and \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\caption{Formatting requirements for data inputs. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For nominal forecasts, the observed value must be a factor with $N$ levels (where $N$ is the number of possible outcomes) and a column \texttt{predicted\_label} must denote the outcome for which a probability was made. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
 \label{tab:input-score}
 \end{table}
 
@@ -374,22 +377,25 @@ data will be validated and transformed into a ``forecast object'' (a
 \code{data.table} with a class \texttt{forecast} and an additional class
 corresponding to the forecast type). The input data needs to have a
 column \texttt{observed} for the observed values, a column
-\texttt{predicted} for the predicted values, and a column \texttt{model}
-denoting the name of the model/forecaster that generated the forecast.
-Additional requirements depend on the forecast type. Table
-\ref{tab:input-score} shows the expected input format for each forecast
-type.
+\texttt{predicted} for the predicted values. Additional requirements
+depend on the forecast type.
+
+Table \ref{tab:input-score} shows the expected input format for each
+forecast type.
 
 The package contains example data for each forecast type, which can
 serve as an orientation for the correct formats. The example data sets
-are exported as \texttt{example\_quantile},
-\texttt{example\_sample\_continuous},
-\texttt{example\_sample\_discrete}, \texttt{example\_point} and
-\texttt{example\_binary}. For illustrative purposes, the example data
-also contains some rows with only observations and no corresponding
-predictions. Input formats for the scoring rules that can be called
-directly follow the same convention, with inputs expected to be vectors
-or matrices.
+are exported as \texttt{example\_point} and \texttt{example\_binary},
+\texttt{example\_nominal}, \texttt{example\_quantile},
+\texttt{example\_sample\_continuous}, and
+\texttt{example\_sample\_discrete}. For illustrative purposes, the
+example data also contains some rows with only observations and no
+corresponding predictions. All example data in the package use a column
+called \texttt{model} to denote the name of the model/forecaster that
+generated the forecast. This is also the default in some function, but
+does not reflect a hard requirement. Input formats for the scoring rules
+that can be called directly follow the same convention, with inputs
+expected to be vectors or matrices.
 
 \subsubsection{The unit of a single
 forecast}\label{the-unit-of-a-single-forecast}
@@ -444,7 +450,8 @@ object is a \texttt{data.table} that has passed some input validations.
 It behaves like a \texttt{data.table}, but has an additional class
 \texttt{forecast} as well as a class corresponding to the forecast type
 (\texttt{forecast\_point}, \texttt{forecast\_binary},
-\texttt{forecast\_quantile} or \texttt{forecast\_sample}).
+\texttt{forecast\_nominal}, \texttt{forecast\_quantile} or
+\texttt{forecast\_sample}).
 
 All \texttt{as\_forecast\_\textless{}type\textgreater{}()} functions can
 take additional arguments that help facilitate the process of creating a
@@ -854,27 +861,20 @@ R> example_point[horizon == 2] |>
 \end{CodeInput}
 \begin{CodeOutput}
 Key: <location, target_end_date, target_type>
-     location target_end_date target_type observed location_name
-       <char>          <Date>      <char>    <num>        <char>
-  1:       DE      2021-05-15       Cases    64985       Germany
-  2:       DE      2021-05-15       Cases    64985       Germany
+     location target_end_date target_type location_name forecast_date
+       <char>          <Date>      <char>        <char>        <Date>
+  1:       DE      2021-05-15       Cases       Germany    2021-05-03
+  2:       DE      2021-05-15       Cases       Germany    2021-05-03
+ ---                                                                 
+304:       IT      2021-07-24      Deaths         Italy    2021-07-12
+305:       IT      2021-07-24      Deaths         Italy    2021-07-12
+                     model horizon ae_point   se_point       ape
+                    <char>   <num>    <num>      <num>     <num>
+  1: EuroCOVIDhub-ensemble       2    45731 2091324361 0.7037162
+  2: EuroCOVIDhub-baseline       2    67622 4572734884 1.0405786
  ---                                                            
-304:       IT      2021-07-24      Deaths       78         Italy
-305:       IT      2021-07-24      Deaths       78         Italy
-     forecast_date predicted                 model horizon ae_point
-            <Date>     <int>                <char>   <num>    <num>
-  1:    2021-05-03    110716 EuroCOVIDhub-ensemble       2    45731
-  2:    2021-05-03    132607 EuroCOVIDhub-baseline       2    67622
- ---                                                               
-304:    2021-07-12       124       UMass-MechBayes       2       46
-305:    2021-07-12       186  epiforecasts-EpiNow2       2      108
-       se_point       ape
-          <num>     <num>
-  1: 2091324361 0.7037162
-  2: 4572734884 1.0405786
- ---                     
-304:       2116 0.5897436
-305:      11664 1.3846154
+304:       UMass-MechBayes       2       46       2116 0.5897436
+305:  epiforecasts-EpiNow2       2      108      11664 1.3846154
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -913,18 +913,17 @@ rules}\label{composing-a-custom-list-of-metrics-and-scoring-rules}
 
 For every forecast type, there exists a default list of scoring rules
 that are applied to the data when calling \code{score()}. The default
-lists can be accessed by calling the functions \code{metrics\_point()},
-\code{metrics\_binary()}, \code{metrics\_sample()} and
-\code{metrics\_quantile()}. These functions take additional arguments
-\texttt{exclude} and \texttt{select} which can be used to customise
-which scoring rules are included. Alternatively, users can call the
-function \code{select\_metrics()} on a list of scoring rules, which
-achieves the same purposes and allows users to compose custom lists of
-metrics and scoring rules.
+lists can be accessed by calling the function \code{get\_metrics()} on a
+\texttt{forecast} object. \code{get\_metrics()} takes additional
+arguments \texttt{exclude} and \texttt{select} which can be used to
+customise which scoring rules are included. Alternatively, users can
+call the function \code{select\_metrics()} on a list of scoring rules,
+which achieves the same purposes and allows users to compose custom
+lists of metrics and scoring rules.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> custom_metrics <- metrics_quantile() |>
+R> custom_metrics <- get_metrics(example_quantile) |>
 +   select_metrics(select = c("wis", "overprediction"))
 R> 
 R> score(metrics = custom_metrics)
@@ -1082,7 +1081,7 @@ then be visualised using the function
 \begin{CodeInput}
 R> forecast_quantile |>
 +   score() |>
-+   get_pairwise_comparisons(by = c("model", "target_type")) |>
++   get_pairwise_comparisons(compare = "model", by = "target_type") |>
 +   plot_pairwise_comparisons() + 
 +   facet_wrap(~ target_type)
 \end{CodeInput}
@@ -1422,9 +1421,25 @@ different calibration plots (showing the actual forecasts and
 observations that produced the corresponding visualisations).
 
 \begin{CodeChunk}
+\begin{CodeOutput}
+
+           observed    id   predicted sample_id           model
+              <num> <int>       <num>     <int>          <fctr>
+       1: 0.6286418     1  1.16131695         1   Pred: N(0, 1)
+       2: 0.6286418     1 -0.99315186         2   Pred: N(0, 1)
+       3: 0.6286418     1  0.34728150         3   Pred: N(0, 1)
+       4: 0.6286418     1 -0.04181622         4   Pred: N(0, 1)
+       5: 0.6286418     1  0.50687585         5   Pred: N(0, 1)
+      ---                                                      
+15999996: 0.1889872  2000  0.16620035      1996 Pred: N(0, 0.5)
+15999997: 0.1889872  2000 -0.11813551      1997 Pred: N(0, 0.5)
+15999998: 0.1889872  2000  0.07934558      1998 Pred: N(0, 0.5)
+15999999: 0.1889872  2000  1.21359187      1999 Pred: N(0, 0.5)
+16000000: 0.1889872  2000 -0.18941563      2000 Pred: N(0, 0.5)
+\end{CodeOutput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth,]{output/calibration-diagnostic-examples} 
+{\centering \includegraphics[width=1\linewidth,]{manuscript_files/figure-latex/calibration-plots-1} 
 
 }
 
