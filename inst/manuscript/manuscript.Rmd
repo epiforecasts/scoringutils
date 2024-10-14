@@ -134,7 +134,7 @@ The package provides broad functionality to check the data and diagnose issues, 
 \pkg{scoringutils} provides extensive documentation and case studies, as well as sensible defaults for scoring forecasts. 
 
 ```{r workflow-scoringutils, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the suggested workflow for evaluating forecasts with \\pkg{scoringutils}. A: Workflow for working with forecasts in a \\code{data.table}-based format. The left side shows the core workflow of the package: 1) validating and processing inputs, 2) scoring forecasts and 3) summarising scores. The right side shows additional functionality that is available at the different stages of the evaluation process. The part in blue is covered by Section \\ref{sec:inputs} and includes all functions related to processing and validating inputs as well as obtaining additional information about the forecasts. The part in green is covered by Section \\ref{sec:scoring} and includes all functions related to scoring forecasts and obtaining additional information about the scores. The part in red is covered by Section \\ref{sec:summarising} and includes all functions related to summarising scores and additional visualisations based on summarised scores. B: An alternative workflow, allowing users to call scoring rules directly with vectors/matrices as inputs.", fig.show="hold"}
-include_graphics("output/workflow.png")
+include_graphics("../../man/figures/workflow.png")
 ```
 
 ### Paper outline and package workflow
@@ -157,10 +157,11 @@ The code for this package and paper can be found on \url{https:github.com/epifor
 
 ## Input formats and types of forecasts
 
-Forecasts differ in the exact prediction task and in how the forecaster chooses to represent their prediction. To distinguish different kinds of forecasts, we use the term "forecast type" (which is more a convenient classification than a formal definition). Currently, `scoringutils` distinguishes four different forecast types: "binary", "point", "quantile" and "sample" forecasts.
+Forecasts differ in the exact prediction task and in how the forecaster chooses to represent their prediction. To distinguish different kinds of forecasts, we use the term "forecast type" (which is more a convenient classification than a formal definition). Currently, `scoringutils` distinguishes five different forecast types: "point", "binary", "nominal", "quantile" and "sample" forecasts.
 
-- "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification". 
 - "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number.
+- "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification".
+- "Nominal" denotes a probability forecast for a variable where the outcome can assume one of multiple unordered classes. This represents a generalisation of binary forecasts to multiple possible outcomes.
 - "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. 
 - "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
@@ -172,16 +173,14 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \toprule
 \textbf{Forecast type} & & & \textbf{column} & \textbf{type} \\
 \midrule
-
-% All forecast types
-\multirow{3}{*}{\makecell[cl]{All forecast\\types}} & & & \texttt{observed}  & \\
-                                                    & & & \texttt{predicted} & \\
-                                                    & & & \texttt{model}    & \\
-\midrule
-
 % Classification
-\multirow{2}{*}{Classification} & \multirow{2}{*}{Binary} & Soft classification & \texttt{observed} & factor with 2 levels \\ 
-                                &        & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1]       \\
+\multirow{5}{*}{\makecell[cl]{Categorical\\forecast}}    & \multirow{2}{*}{Binary}     & Soft classification & \texttt{observed} & factor with 2 levels \\ 
+                                &                             & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1] \\
+\cmidrule(l){2-5} 
+                                & \multirow{3}{*}{\makecell[cl]{Nominal\\{\footnotesize(multiclass)}}} & \multirow{3}{*}{\makecell[cl]{Soft classification\\{\footnotesize(prediction is probability)}}} 
+                                                                  & \texttt{observed}   & factor with $N$ levels \\ 
+                                &                                 & & \texttt{predicted} & numeric [0,1] \\
+                                &                                 & & \texttt{predicted\_label} & factor with $N$ levels \\
 \midrule
 
 % Point forecasts
@@ -200,13 +199,15 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 \bottomrule
 \end{tabular}
 }
-\caption{Formatting requirements for data inputs. Regardless of the forecast type, the \texttt{data.frame} (or similar) must have columns called \texttt{observed}, \texttt{predicted}, and \texttt{model}. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
+\caption{Formatting requirements for data inputs. For binary forecasts, the column \texttt{observed} must be of type factor with two levels and the column \texttt{predicted} must be a numeric between 0 and 1. For nominal forecasts, the observed value must be a factor with $N$ levels (where $N$ is the number of possible outcomes) and a column \texttt{predicted\_label} must denote the outcome for which a probability was made. For all other forecast types, both \texttt{observed} and \texttt{predicted} must be of type numeric. Forecasts in a sample-based format require an additional numeric column \texttt{sample\_id} and forecasts in a quantile-based format require an additional numeric column \texttt{quantile\_level} with values between 0 and 1.}
 \label{tab:input-score}
 \end{table}
 
-The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object" (a \code{data.table} with a class `forecast` and an additional class corresponding to the forecast type). The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values, and a column `model` denoting the name of the model/forecaster that generated the forecast. Additional requirements depend on the forecast type. Table \ref{tab:input-score} shows the expected input format for each forecast type. 
+The starting point for working with \pkg{scoringutils} is usually a \code{data.frame} (or similar) containing both the predictions and the observed values. In a next step (see Section \ref{sec:validation}) this data will be validated and transformed into a "forecast object" (a \code{data.table} with a class `forecast` and an additional class corresponding to the forecast type). The input data needs to have a column `observed` for the observed values, a column `predicted` for the predicted values. Additional requirements depend on the forecast type. 
 
-The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_quantile`, `example_sample_continuous`, `example_sample_discrete`, `example_point` and `example_binary`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
+Table \ref{tab:input-score} shows the expected input format for each forecast type. 
+
+The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_point` and `example_binary`, `example_nominal`, `example_quantile`, `example_sample_continuous`, and `example_sample_discrete`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. All example data in the package use a column called `model` to denote the name of the model/forecaster that generated the forecast. This is also the default in some function, but does not reflect a hard requirement. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
 ### The unit of a single forecast
 
@@ -224,7 +225,7 @@ forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile() 
 ```
 
-Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_quantile` or `forecast_sample`). 
+Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_nominal`, `forecast_quantile` or `forecast_sample`). 
 
 All `as_forecast_<type>()` functions can take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
@@ -401,7 +402,7 @@ example_point[horizon == 2] |>
 All \fct{score} methods take an argument `metrics` with a named list of functions to apply to the data. These can be metrics exported by \pkg{scoringutils} or any other custom scoring function. All metrics scoring rules passed to \fct{score} need to adhere to the same input format (see Figure \ref{fig:input-scoring-rules}), corresponding to the type of forecast to be scored. Scoring functions must accept a vector of observed values as their first argument, a matrix/vector of predicted values as their second argument and, for quantile-based forecasts, a vector of quantile levels as their third argument). However, functions may have arbitrary argument names. Within \fct{score}, inputs like the observed and predicted values, quantile levels etc. are passed to the individual scoring rules by position, rather than by name. The default scoring rules for point forecasts, for example, comprise functions from the \pkg{Metrics} package, which use the names `actual` and `predicted` for their arguments instead of `observed` and `predicted`. Additional arguments can be passed down to the scoring functions via the `...` arguments in \fct{score}. 
 
 ```{r input-scoring-rules, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Overview of the inputs and outputs of the metrics and scoring rules exported by \\pkg{scoringutils}. Dots indicate scalar values, while bars indicate vectors (comprised of values that belong together). Several bars (vectors) can be grouped into a matrix with rows representing the individual forecasts. All scoring functions used within \\fct{score} must accept the same input formats as the functions here. However, functions used within \\fct{score} do not necessarily have to have the same argument names (see Section \\ref{sec:scoring}). Input formats directly correspond to the required columns for the different forecast types (see Table \\ref{tab:input-score}). The only exception is the forecast type 'sample': Inputs require a column \\code{sample\\_id} in \\fct{score}, but no corresponding argument is necessary when calling scoring rules directly on vectors or matrices.", fig.show="hold"}
-include_graphics("output/input-formats-scoring-rules.png")
+include_graphics("../../man/figures/input-formats-scoring-rules.png")
 ```
 
 ### Composing a custom list of metrics and scoring rules
@@ -438,7 +439,7 @@ Models enter a 'pairwise tournament', where all possible pairs of models are com
 Two models can of course only be fairly compared if they have overlapping forecasts. Furthermore, pairwise comparisons between models for a given score are only possible if all values have the same sign, i.e., all score values need to be either positive or negative. 
 
 ```{r pairwise-comparison, echo=FALSE, fig.pos = "!h", fig.cap = "Illustration of the computation of relative skill scores through pairwise comparisons of three different forecast models, M1-M3. Score ratios are computed based on the overlapping set of forecasts common to all pairs of two models. The relative skill score of a model is then the geometric mean of all mean score ratios which involve that model. The orientation of the relative skill score depends on the score used: if lower values are better for a particular scoring rule, then the same is true for the relative skill score computed based on that score.", fig.show="hold"}
-include_graphics("output/pairwise-comparisons.png")
+include_graphics("../../man/figures/pairwise-illustration.png")
 ```
 
 To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument `metric` and adds them as an additional column to the input data. Optionally, users can specify a baseline model to also compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
