@@ -572,7 +572,7 @@ pit_histogram_sample <- function(observed,
         replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
       )
     } else {
-      f_dash <- function(u) {
+      f_bar <- function(u) {
         f <- fcase(
           u <= p_xm1, 0,
           u >= p_x, 1,
@@ -580,7 +580,7 @@ pit_histogram_sample <- function(observed,
         )
         mean(f)
       }
-      pit_histogram <- diff(vapply(quantiles, f_dash, numeric(1))) /
+      pit_histogram <- diff(vapply(quantiles, f_bar, numeric(1))) /
         diff(quantiles)
     }
   } else {
