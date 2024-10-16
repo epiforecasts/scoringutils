@@ -216,47 +216,68 @@ test_that("function throws an error when missing 'predicted'", {
 
 
 # ============================================================================ #
-# pit_sample()
+# pit_histogram_sample()
 # ============================================================================ #
 
-test_that("pit_sample() function throws an error when missing args", {
+test_that("pit_histogram_sample() function throws an error when missing args", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
-    pit_sample(predicted = predicted),
+    pit_histogram_sample(predicted = predicted),
     'argument "observed" is missing, with no default'
   )
 
   expect_error(
-    pit_sample(observed = observed),
+    pit_histogram_sample(observed = observed),
     'argument "predicted" is missing, with no default'
+  )
+
+  expect_error(
+    pit_histogram_sample(predicted = predicted, observed = observed),
+    'argument "quantiles" is missing, with no default'
+  )
+
+  expect_error(
+    pit_histogram_sample(
+      predicted = predicted, observed = observed,
+      quantiles = seq(0, 1, by = 0.1), integers = "random"
+    ),
+    '`n_replicates` must be specified when `integers` is `random`'
   )
 })
 
-test_that("pit_sample() function works for integer observed and predicted", {
+test_that("pit_histogram_sample() function works for integer observed and predicted", {
   observed <- rpois(10, lambda = 1:10)
   predicted <- replicate(10, rpois(10, lambda = 1:10))
-  output <- pit_sample(
+  output <- pit_histogram_sample(
     observed = observed,
     predicted = predicted,
-    n_replicates = 56
+    quantiles = seq(0, 1, by = 0.1)
   )
   expect_equal(
     length(output),
-    560
+    10
   )
 
   checkmate::expect_class(output, "numeric")
-})
 
-test_that("pit_sample() function works for continuous observed and predicted", {
-  observed <- rnorm(10)
-  predicted <- replicate(10, rnorm(10))
-  output <- pit_sample(
+  output2 <- pit_histogram_sample(
     observed = observed,
     predicted = predicted,
+    quantiles = seq(0, 1, by = 0.1),
+    integers = "random",
     n_replicates = 56
+  )
+})
+
+test_that("pit_histogram_sample() function works for continuous observed and predicted", {
+  observed <- rnorm(10)
+  predicted <- replicate(10, rnorm(10))
+  output <- pit_histogram_sample(
+    observed = observed,
+    predicted = predicted,
+    quantiles = seq(0, 1, by = 0.1)
   )
   expect_equal(
     length(output),
@@ -264,34 +285,43 @@ test_that("pit_sample() function works for continuous observed and predicted", {
   )
 })
 
-test_that("pit_sample() works with a single observvation", {
+test_that("pit_histogram_sample() works with a single observvation", {
   expect_no_condition(
-    output <- pit_sample(observed = 2.5, predicted = 1.5:10.5)
+    output <- pit_histogram_sample(
+      observed = 2.5, predicted = 1.5:10.5, quantiles = seq(0, 1, by = 0.1)
+    )
   )
-  expect_equal(length(output), 1)
+  expect_equal(length(output), 10)
 
   # test discrete case
   expect_no_condition(
-    output2 <- pit_sample(
-      observed = 3, predicted = 1:10, n_replicates = 24
+    output2 <- pit_histogram_sample(
+      observed = 3, predicted = 1:10, quantiles = seq(0, 1, by = 0.1)
     )
   )
-  expect_equal(length(output2), 24)
+  expect_equal(length(output2), 10)
 })
 
-test_that("pit_sample() throws an error if inputs are wrong", {
+test_that("pit_histogram_sample() throws an error if inputs are wrong", {
   observed <- 1.5:20.5
   predicted <- replicate(100, 1.5:20.5)
 
   # expect an error if predicted cannot be coerced to a matrix
   expect_error(
-    pit_sample(observed, function(x) {}),
+    pit_histogram_sample(observed, function(x) {}),
     "Assertion on 'predicted' failed: Must be of type 'matrix'"
   )
 
   # expect an error if the number of rows in predicted does not match the length of observed
   expect_error(
-    pit_sample(observed, predicted[1:10, ]),
+    pit_histogram_sample(observed, predicted[1:10, ]),
     "Assertion on 'predicted' failed: Must have exactly 20 rows, but has 10 rows."
+  )
+
+  expect_warning(
+    pit_histogram_sample(
+      observed, predicted, quantiles = seq(0, 1, by = 0.1), n_replicates = 10
+    ),
+    "`n_replicates` is ignored when `integers` is not `random`"
   )
 })
