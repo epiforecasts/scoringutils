@@ -479,7 +479,7 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #'
 #' Alternatively, a randomised PIT can be used instead. In this case, the PIT is
 #' \deqn{
-#' u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1) )
+#'   u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1))
 #' }
 #'
 #' where \eqn{v} is standard uniform and independent of \eqn{k}. The values of

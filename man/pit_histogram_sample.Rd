@@ -92,7 +92,7 @@ And calculating the value at each bin between quantile \eqn{q_i} and quantile
 
 Alternatively, a randomised PIT can be used instead. In this case, the PIT is
 \deqn{
-u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1) )
+  u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1))
 }
 
 where \eqn{v} is standard uniform and independent of \eqn{k}. The values of
