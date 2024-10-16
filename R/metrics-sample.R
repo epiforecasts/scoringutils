@@ -447,27 +447,61 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #'
 #' In the case of discrete nonnegative outcomes such as incidence counts,
 #' the PIT is no longer uniform even when forecasts are ideal.
-#' In that case a randomised PIT can be used instead:
+#' In that case two methods are available ase described by Czado et al. (2007).
+#'
+#' By default, a nonrandomised PIT is calculated using the conditional
+#' cumulative distribution function
+#' \deqn{
+#'   F(u) =
+#'   \begin{cases}
+#'     0 & \text{if } v < P_t(k_t - 1) \\
+#'     (v - P_t(k_t - 1)) / (P_t(k_t) - P_t(k_t - 1)) & \text{if } P_t(k_t - 1) \leq v < P_t(k_t) \\
+#'     1 & \text{if } v \geq P_t(k_t)
+#'   \end{cases}
+#' }
+#'
+#' where \eqn{k_t} is the observed count, \eqn{P_t(x)} is the predictive
+#' cumulative probability of observing incidence \eqn{k} at time \eqn{t} and
+#' \eqn{P_t (-1) = 0} by definition.
+#' Values of the PIT histogram are then created by averaging over the \eqn{n}
+#' predictions,
+#'
+#' \deqn{
+#    \bar{F}(u) = \frac{i = 1}{n} \sum_{i=1}^{n} F^{(i)}(u)
+#' }
+#'
+#' And calculating the value at each bin between quantile \eqn{q_i} and quantile
+#' \eqn{q_{i + 1}} as
+#'
+#' \deqn{
+#    \bar{F}(q_i) - \bar{F}(q_{i + 1})
+#' }
+#'
+#' Alternatively, a randomised PIT can be used instead. In this case, the PIT is
 #' \deqn{
 #' u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1) )
 #' }
 #'
-#' where \eqn{k_t} is the observed count, \eqn{P_t(x)} is the predictive
-#' cumulative probability of observing incidence k at time t,
-#' \eqn{P_t (-1) = 0} by definition and v is standard uniform and independent
-#' of k. If \eqn{P_t} is the true cumulative
-#' probability distribution, then \eqn{u_t} is standard uniform.
+#' where \eqn{v} is standard uniform and independent of \eqn{k}. The values of
+#' the PIT histogram are then calculated by binning the $u_t$ values as above.
 #'
-#' @param n_replicates The number of draws for the randomised PIT for
-#'   discrete predictions. Will be ignored if forecasts are continuous.
+#' @param quantiles A vector of quantiles between which to calculate the PIT.
+#' @param integers How to handle inteteger forecasts (count data). This is based
+#'   on methods described Czado et al. (2007). If "nonrandom" (default) the
+#'   function will use the non-randomised PIT method. If "random", will use the
+#'   randomised PIT method. If "ignore", will treat integer forecasts as if they
+#'   were continuous.
+#' @param n_replicates The number of draws for the randomised PIT for discrete
+#'   predictions. Will be ignored if forecasts are continuous or `integers` is
+#'   not set to `random`.
 #' @inheritParams ae_median_sample
-#' @return A vector with PIT-values. For continuous forecasts, the vector will
-#'   correspond to the length of `observed`. For integer forecasts, a
-#'   randomised PIT will be returned of length
-#'   `length(observed) * n_replicates`.
-#' @seealso [get_pit()]
+#' @inheritParams get_pit_histogram
+#' @return A vector with PIT histogram densities for the bins corresponding
+#'   to the given quantiles.
+#' @seealso [get_pit_histogram()]
 #' @importFrom stats runif
-#' @importFrom cli cli_abort cli_inform
+#' @importFrom data.table fcase
+#' @importFrom cli cli_warn cli_abort
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
@@ -476,14 +510,20 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' ## continuous predictions
 #' observed <- rnorm(20, mean = 1:20)
 #' predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
-#' pit <- pit_sample(observed, predicted)
-#' plot_pit(pit)
+#' pit <- pit_histogram_sample(observed, predicted, quantiles = seq(0, 1, 0.1))
 #'
 #' ## integer predictions
 #' observed <- rpois(20, lambda = 1:20)
 #' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
-#' pit <- pit_sample(observed, predicted, n_replicates = 30)
-#' plot_pit(pit)
+#' pit <- pit_histogram_sample(observed, predicted, quantiles = seq(0, 1, 0.1))
+#'
+#' ## integer predictions, randomised PIT
+#' observed <- rpois(20, lambda = 1:20)
+#' predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
+#' pit <- pit_histogram_sample(
+#'   observed, predicted, quantiles = seq(0, 1, 0.1),
+#'   integers = "random", n_replicates = 30
+#' )
 #' @export
 #' @references
 #' Claudia Czado, Tilmann Gneiting Leonhard Held (2009) Predictive model
@@ -494,13 +534,26 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' real-time epidemic forecasts: A case study of Ebola in the Western Area
 #' region of Sierra Leone, 2014-15, \doi{10.1371/journal.pcbi.1006785}
 #' @keywords metric
-pit_sample <- function(observed,
-                       predicted,
-                       n_replicates = 100) {
+pit_histogram_sample <- function(observed,
+                                 predicted,
+                                 quantiles,
+                                 integers = c("nonrandom", "random", "ignore"),
+                                 n_replicates = NULL) {
   assert_input_sample(observed = observed, predicted = predicted)
-  assert_number(n_replicates)
+  integers <- match.arg(integers)
+  assert_number(n_replicates, null.ok = TRUE)
   if (is.vector(predicted)) {
     predicted <- matrix(predicted, nrow = 1)
+  }
+
+  if (integers == "random" && is.null(n_replicates)) {
+    cli::cli_abort(
+      "`n_replicates` must be specified when `integers` is `random`"
+    )
+  }
+
+  if (integers != "random" && !is.null(n_replicates)) {
+    cli::cli_warn("`n_replicates` is ignored when `integers` is not `random`")
   }
 
   # calculate PIT-values -------------------------------------------------------
@@ -511,13 +564,32 @@ pit_sample <- function(observed,
   p_x <- rowSums(predicted <= observed) / n_pred
 
   # PIT calculation is different for integer and continuous predictions
-  if (get_type(predicted) == "integer") {
+  predicted <- round(predicted)
+  if (get_type(predicted) == "integer" && integers != "ignore") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
-    pit_values <- as.vector(
-      replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
-    )
+    if (integers == "random") {
+      pit_values <- as.vector(
+        replicate(n_replicates, p_xm1 + runif(1) * (p_x - p_xm1))
+      )
+    } else {
+      f_dash <- function(u) {
+        f <- fcase(
+          u <= p_xm1, 0,
+          u >= p_x, 1,
+          default = (u - p_xm1) / (p_x - p_xm1)
+        )
+        mean(f)
+      }
+      pit_histogram <- diff(vapply(quantiles, f_dash, numeric(1))) /
+        diff(quantiles)
+    }
   } else {
     pit_values <- p_x
   }
-  return(pit_values)
+
+  if (integers != "nonrandom") {
+    pit_histogram <- hist(pit_values, breaks = quantiles, plot = FALSE)$density
+  }
+
+  return(pit_histogram)
 }
