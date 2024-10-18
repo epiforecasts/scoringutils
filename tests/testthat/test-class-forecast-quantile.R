@@ -355,12 +355,12 @@ test_that("get_metrics.forecast_quantile() works as expected", {
 
 
 # ==============================================================================
-# get_pit.forecast_quantile()
+# get_pit_histogram.forecast_quantile()
 # ==============================================================================
-test_that("get_pit.forecast_quantile() works as expected", {
-  pit_quantile <- get_pit(example_quantile, by = "model")
+test_that("get_pit_histogram.forecast_quantile() works as expected", {
+  pit_quantile <- get_pit_histogram(example_quantile, by = "model")
 
-  expect_equal(names(pit_quantile), c("model", "quantile_level", "pit_value"))
+  expect_equal(names(pit_quantile), c("model", "density", "bin", "mid"))
   expect_s3_class(pit_quantile, c("data.table", "data.frame"), exact = TRUE)
 
   # check printing works
