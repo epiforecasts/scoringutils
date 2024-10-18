@@ -112,7 +112,7 @@ get_coverage <- function(forecast, by = "model") {
 #' Default is "model".
 #' @return ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
-#' facet_wrap facet_grid geom_polygon geom_line
+#' facet_wrap facet_grid geom_polygon geom_line xlab ylab
 #' @importFrom checkmate assert_subset
 #' @importFrom data.table dcast
 #' @export
