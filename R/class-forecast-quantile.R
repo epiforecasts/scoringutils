@@ -179,8 +179,10 @@ get_metrics.forecast_quantile <- function(x, select = NULL, exclude = NULL, ...)
 #' @importFrom stats na.omit
 #' @importFrom data.table `:=` as.data.table
 #' @export
-get_pit_histogram.forecast_quantile <- function(forecast, num_bins = "auto",
+get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
                                                 breaks = NULL, by, ...) {
+  assert_number(num_bins, lower = 1, null.ok = TRUE)
+  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
   present_quantiles <- unique(c(0, forecast$quantile_level, 1))

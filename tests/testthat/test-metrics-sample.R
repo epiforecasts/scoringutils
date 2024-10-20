@@ -243,7 +243,7 @@ test_that("pit_histogram_sample() function throws an error when missing args", {
       predicted = predicted, observed = observed,
       quantiles = seq(0, 1, by = 0.1), integers = "random"
     ),
-    '`n_replicates` must be specified when `integers` is `random`'
+    "Assertion on 'n_replicates with `integers` =  random' failed:"
   )
 })
 

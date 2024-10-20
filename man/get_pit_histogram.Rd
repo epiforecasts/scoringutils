@@ -8,19 +8,19 @@
 \alias{get_pit_histogram.default}
 \title{Probability integral transformation histogram}
 \usage{
-\method{get_pit_histogram}{forecast_quantile}(forecast, num_bins = "auto", breaks = NULL, by, ...)
+\method{get_pit_histogram}{forecast_quantile}(forecast, num_bins = NULL, breaks = NULL, by, ...)
 
 \method{get_pit_histogram}{forecast_sample}(
   forecast,
-  num_bins = "auto",
+  num_bins = 10,
   breaks = NULL,
   by,
   integers = c("nonrandom", "random", "ignore"),
-  n_replicates = 100,
+  n_replicates = NULL,
   ...
 )
 
-get_pit_histogram(forecast, num_bins = "auto", breaks = NULL, by, ...)
+get_pit_histogram(forecast, num_bins, breaks = NULL, by, ...)
 
 \method{get_pit_histogram}{default}(forecast, num_bins, breaks, by, ...)
 }
@@ -28,14 +28,13 @@ get_pit_histogram(forecast, num_bins = "auto", breaks = NULL, by, ...)
 \item{forecast}{A forecast object (a validated data.table with predicted and
 observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
 
-\item{num_bins}{The number of bins in the PIT histogram, default is "auto".
-When \code{num_bins == "auto"}, a histogram will be created with either 10 bins,
-or it a bin for each available quantile in case the forecasts are in a
-quantile-based format.
+\item{num_bins}{The number of bins in the PIT histogram. For sample-based
+forecasts, the default is 10 bins. For quantile-based forecasts, the
+default is one bin for each available quantile.
 You can control the number of bins by supplying a number. This is fine for
-sample-based pit histograms, but may fail for quantile-based formats. In this
-case it is preferred to supply explicit breaks points using the \code{breaks}
-argument.}
+sample-based pit histograms, but may fail for quantile-based formats. In
+this case it is preferred to supply explicit breaks points using the
+\code{breaks} argument.}
 
 \item{breaks}{Numeric vector with the break points for the bins in the
 PIT histogram. This is preferred when creating a PIT histogram based on
@@ -52,7 +51,7 @@ functions via \code{...}. See the \emph{Customising metrics} section below for
 details on how to use \code{\link[purrr:partial]{purrr::partial()}} to pass arguments to individual
 metrics.}
 
-\item{integers}{How to handle inteteger forecasts (count data). This is based
+\item{integers}{How to handle integer forecasts (count data). This is based
 on methods described Czado et al. (2007). If "nonrandom" (default) the
 function will use the non-randomised PIT method. If "random", will use the
 randomised PIT method. If "ignore", will treat integer forecasts as if they
