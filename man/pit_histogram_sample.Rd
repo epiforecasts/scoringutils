@@ -21,7 +21,7 @@ Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 
 \item{quantiles}{A vector of quantiles between which to calculate the PIT.}
 
-\item{integers}{How to handle inteteger forecasts (count data). This is based
+\item{integers}{How to handle integer forecasts (count data). This is based
 on methods described Czado et al. (2007). If "nonrandom" (default) the
 function will use the non-randomised PIT method. If "random", will use the
 randomised PIT method. If "ignore", will treat integer forecasts as if they

@@ -486,7 +486,7 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' the PIT histogram are then calculated by binning the $u_t$ values as above.
 #'
 #' @param quantiles A vector of quantiles between which to calculate the PIT.
-#' @param integers How to handle inteteger forecasts (count data). This is based
+#' @param integers How to handle integer forecasts (count data). This is based
 #'   on methods described Czado et al. (2007). If "nonrandom" (default) the
 #'   function will use the non-randomised PIT method. If "random", will use the
 #'   randomised PIT method. If "ignore", will treat integer forecasts as if they
@@ -541,15 +541,12 @@ pit_histogram_sample <- function(observed,
                                  n_replicates = NULL) {
   assert_input_sample(observed = observed, predicted = predicted)
   integers <- match.arg(integers)
-  assert_number(n_replicates, null.ok = TRUE)
+  assert_number(
+    n_replicates, null.ok = (integers != "random"),
+    .var.name = paste("n_replicates with `integers` = ", integers)
+  )
   if (is.vector(predicted)) {
     predicted <- matrix(predicted, nrow = 1)
-  }
-
-  if (integers == "random" && is.null(n_replicates)) {
-    cli::cli_abort(
-      "`n_replicates` must be specified when `integers` is `random`"
-    )
   }
 
   if (integers != "random" && !is.null(n_replicates)) {
@@ -559,7 +556,7 @@ pit_histogram_sample <- function(observed,
   # calculate PIT-values -------------------------------------------------------
   n_pred <- ncol(predicted)
 
-  # calculate emipirical cumulative distribution function as
+  # calculate empirical cumulative distribution function as
   # Portion of (y_observed <= y_predicted)
   p_x <- rowSums(predicted <= observed) / n_pred
 

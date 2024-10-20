@@ -166,35 +166,25 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 
 
 #' @rdname get_pit_histogram
-#' @param integers How to handle inteteger forecasts (count data). This is based
-#'   on methods described Czado et al. (2007). If "nonrandom" (default) the
-#'   function will use the non-randomised PIT method. If "random", will use the
-#'   randomised PIT method. If "ignore", will treat integer forecasts as if they
-#'   were continuous.
 #' @importFrom data.table `:=` as.data.table dcast
 #' @inheritParams pit_histogram_sample
 #' @seealso [pit_histogram_sample()]
 #' @export
-get_pit_histogram.forecast_sample <- function(forecast, num_bins = "auto",
+get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
                                               breaks = NULL, by, integers = c(
                                                 "nonrandom", "random", "ignore"
-                                              ), n_replicates = 100, ...) {
+                                              ), n_replicates = NULL, ...) {
   integers <- match.arg(integers)
-
+  assert_number(num_bins, lower = 1, null.ok = FALSE)
+  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
 
-  assert_number(n_replicates)
-
+  quantiles <- seq(0, 1, 1 / num_bins)
   if (!is.null(breaks)) {
     quantiles <- unique(c(0, breaks, 1))
-  } else if (is.null(num_bins) || num_bins == "auto") {
-    quantiles <- seq(0, 1, 1 / 10)
-  } else {
-    quantiles <- seq(0, 1, 1 / num_bins)
   }
 
-  # if prediction type is not quantile, calculate PIT values based on samples
   forecast_wide <- data.table::dcast(
     forecast,
     ... ~ paste0("InternalSampl_", sample_id),
@@ -203,10 +193,6 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = "auto",
 
   bins <- sprintf("[%s,%s)", quantiles[-length(quantiles)], quantiles[-1])
   mids <- (quantiles[-length(quantiles)] + quantiles[-1]) / 2
-
-  if (missing(n_replicates) && integers != "random") {
-    n_replicates <- NULL
-  }
 
   pit_histogram <- forecast_wide[, .(
     density = pit_histogram_sample(
