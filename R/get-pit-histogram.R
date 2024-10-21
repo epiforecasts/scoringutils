@@ -4,6 +4,8 @@
 #' Generate a Probability Integral Transformation (PIT) histogram for
 #' validated forecast objects.
 #'
+#' See the examples for how to plot the result of this function.
+#'
 #' @inherit score params
 #' @param num_bins The number of bins in the PIT histogram. For sample-based
 #'   forecasts, the default is 10 bins. For quantile-based forecasts, the
@@ -24,12 +26,22 @@
 #' @inheritParams pit_histogram_sample
 #' @return A data.table with density values for each bin in the PIT histogram.
 #' @examples
+#' library("ggplot2")
+#'
 #' example <- as_forecast_sample(example_sample_continuous)
 #' result <- get_pit_histogram(example, by = "model")
+#' ggplot(result,  aes(x = mid, y = density)) +
+#'   geom_col() +
+#'   facet_wrap(. ~ model) +
+#'   labs(x = "Quantile", "Density")
 #'
 #' # example with quantile data
 #' example <- as_forecast_quantile(example_quantile)
 #' result <- get_pit_histogram(example, by = "model")
+#' ggplot(result,  aes(x = mid, y = density)) +
+#'   geom_col() +
+#'   facet_wrap(. ~ model) +
+#'   labs(x = "Quantile", "Density")
 #' @export
 #' @keywords scoring
 #' @references
