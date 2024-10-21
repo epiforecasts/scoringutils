@@ -20,7 +20,7 @@
   ...
 )
 
-get_pit_histogram(forecast, num_bins, breaks = NULL, by, ...)
+get_pit_histogram(forecast, num_bins, breaks, by, ...)
 
 \method{get_pit_histogram}{default}(forecast, num_bins, breaks, by, ...)
 }
@@ -39,7 +39,8 @@ this case it is preferred to supply explicit breaks points using the
 \item{breaks}{Numeric vector with the break points for the bins in the
 PIT histogram. This is preferred when creating a PIT histogram based on
 quantile-based data. Default is \code{NULL} and breaks will be determined by
-\code{num_bins}. If \code{breaks} is used, \code{num_bins} will be ignored.}
+\code{num_bins}. If \code{breaks} is used, \code{num_bins} will be ignored.
+0 and 1 will always be added as left and right bounds, respectively.}
 
 \item{by}{Character vector with the columns according to which the
 PIT values shall be grouped. If you e.g. have the columns 'model' and
