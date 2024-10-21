@@ -167,6 +167,7 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 
 #' @rdname get_pit_histogram
 #' @importFrom data.table `:=` as.data.table dcast
+#' @importFrom checkmate assert_int assert_numeric
 #' @inheritParams pit_histogram_sample
 #' @seealso [pit_histogram_sample()]
 #' @export
@@ -175,15 +176,17 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
                                                 "nonrandom", "random", "ignore"
                                               ), n_replicates = NULL, ...) {
   integers <- match.arg(integers)
-  assert_number(num_bins, lower = 1, null.ok = FALSE)
+  assert_int(num_bins, lower = 1, null.ok = FALSE)
   assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
 
-  quantiles <- seq(0, 1, 1 / num_bins)
-  if (!is.null(breaks)) {
-    quantiles <- unique(c(0, breaks, 1))
-  }
+
+  quantiles <- ifelse(
+    is.null(breaks),
+    unique(c(0, breaks, 1)),
+    seq(0, 1, 1 / num_bins)
+  )
 
   forecast_wide <- data.table::dcast(
     forecast,
