@@ -16,6 +16,7 @@
 #'   PIT histogram. This is preferred when creating a PIT histogram based on
 #'   quantile-based data. Default is `NULL` and breaks will be determined by
 #'   `num_bins`. If `breaks` is used, `num_bins` will be ignored.
+#'   0 and 1 will always be added as left and right bounds, respectively. 
 #' @param by Character vector with the columns according to which the
 #'   PIT values shall be grouped. If you e.g. have the columns 'model' and
 #'   'location' in the input data and want to have a PIT histogram for
