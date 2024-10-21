@@ -16,7 +16,7 @@
 #' @return A ggplot object showing a contributions from the three components of
 #'   the weighted interval score.
 #' @importFrom ggplot2 ggplot aes geom_linerange facet_wrap labs
-#' scale_fill_discrete coord_flip
+#' scale_fill_discrete coord_flip geom_col
 #' theme theme_light unit guides guide_legend .data
 #' @importFrom data.table melt
 #' @importFrom checkmate assert_subset assert_logical
