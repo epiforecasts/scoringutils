@@ -181,12 +181,11 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
 
-
-  quantiles <- ifelse(
-    is.null(breaks),
-    unique(c(0, breaks, 1)),
-    seq(0, 1, 1 / num_bins)
-  )
+  if (is.null(breaks)) {
+    quantiles <- seq(0, 1, 1 / num_bins)
+  } else {
+    quantiles <- unique(c(0, breaks, 1))
+  }
 
   forecast_wide <- data.table::dcast(
     forecast,
