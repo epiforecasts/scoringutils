@@ -61,6 +61,7 @@
 <li>Users can now also use their own scoring rules (making use of the <code>metrics</code> argument, which takes in a named list of functions). Default scoring rules can be accessed using the function <code><a href="../reference/get_metrics.html">get_metrics()</a></code>, which is a a generic with S3 methods for each forecast type. It returns a named list of scoring rules suitable for the respective forecast object. For example, you could call <code>get_metrics(example_quantile)</code>. Column names of scores in the output of <code><a href="../reference/score.html">score()</a></code> correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).</li>
 <li>Instead of supplying arguments to <code><a href="../reference/score.html">score()</a></code> to manipulate individual scoring rules users should now manipulate the metric list being supplied using <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> and <code>select_metric()</code>. See <code>?score()</code> for more information.</li>
 <li>the CRPS is now reported as decomposition into dispersion, overprediction and underprediction.</li>
+<li>functionality to calculate the Probability Integral Transform (PIT) has been deprecated and replaced by functionality to calculate PIT histograms, using the <code><a href="../reference/get_pit_histogram.html">get_pit_histogram()</a></code> function; as part of this change, nonrandomised PITs can now be calculated for count data, and this is is done by default</li>
 </ul></li>
 </ul></div>
 <div class="section level4">
@@ -128,8 +129,6 @@
 <li>“range” was consistently renamed to “interval_range” in the code. The “range”-format (which was mostly used internally) was renamed to “interval”-format</li>
 <li>Renamed <code>correlation()</code> to <code><a href="../reference/get_correlations.html">get_correlations()</a></code> and <code>plot_correlation()</code> to <code><a href="../reference/plot_correlations.html">plot_correlations()</a></code>
 </li>
-<li>
-<code>pit()</code> was renamed to <code><a href="../reference/get_pit.html">get_pit()</a></code> and converted to an S3 method.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="deleted-functions-1-2-2-9000">Deleted functions<a class="anchor" aria-label="anchor" href="#deleted-functions-1-2-2-9000"></a></h4>
@@ -141,6 +140,8 @@
 <li>Removed <code>interval_coverage_sample()</code> as users are now expected to convert to a quantile format first before scoring.</li>
 <li>Function <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> was deleted. Instead there is now a <code>forecast_unit</code> argument in <code>as_forecast_&lt;type&gt;()</code> as well as in <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>.</li>
 <li>Removed <code>interval_coverage_dev_quantile()</code>. Users can still access the difference between nominal and actual interval coverage using <code><a href="../reference/get_coverage.html">get_coverage()</a></code>.</li>
+<li>
+<code>pit()</code>, <code>pit_sample()</code> and <code>plot_pit()</code> have been removed and replaced by functionality to create PIT histograms (<code>pit_histogram_sampel()</code> and <code><a href="../reference/get_pit_histogram.html">get_pit_histogram()</a></code>)</li>
 </ul></div>
 <div class="section level4">
 <h4 id="function-changes-1-2-2-9000">Function changes<a class="anchor" aria-label="anchor" href="#function-changes-1-2-2-9000"></a></h4>
@@ -335,8 +336,8 @@
 <li>New function <code>avail_forecasts()</code> allows to visualise the number of available forecasts.</li>
 <li>New function <code>find_duplicates()</code> to find duplicate forecasts which cause an error.</li>
 <li>All plotting functions were renamed to begin with <code>plot_</code>. Arguments were simplified.</li>
-<li>The function <code>pit()</code> now works based on data.frames. The old <code>pit</code> function was renamed to <code><a href="../reference/pit_sample.html">pit_sample()</a></code>. PIT p-values were removed entirely.</li>
-<li>The function <code><a href="../reference/plot_pit.html">plot_pit()</a></code> now works directly with input as produced by <code>pit()</code>
+<li>The function <code>pit()</code> now works based on data.frames. The old <code>pit</code> function was renamed to <code>pit_sample()</code>. PIT p-values were removed entirely.</li>
+<li>The function <code>plot_pit()</code> now works directly with input as produced by <code>pit()</code>
 </li>
 <li>Many data-handling functions were removed and input types for <code><a href="../reference/score.html">score()</a></code> were restricted to sample-based, quantile-based or binary forecasts.</li>
 <li>The function <code><a href="../reference/scoring-functions-binary.html">brier_score()</a></code> now returns all brier scores, rather than taking the mean before returning an output.</li>
