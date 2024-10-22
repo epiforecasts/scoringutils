@@ -334,9 +334,11 @@ Users can obtain PIT histograms based on validated forecast objects using the fu
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_sample_continuous |>
   as_forecast_sample() |>
-  get_pit(by = c("model", "target_type")) |>
-  plot_pit() + 
-  facet_grid(target_type ~ model)
+  get_pit_histogram(by = c("model", "target_type")) |>
+  ggplot(aes(x = mid, y = density)) +
+  geom_col() +
+  facet_grid(target_type ~ model) +
+  labs(x = "Quantile", "Density")
 ```
 
 It is, in theory, possible to conduct a formal test for probabilistic calibration, for example by employing an Anderson-Darling test on the uniformity of PIT values. In practice, this can be difficult as forecasts, and therefore PIT values as well, are often correlated. Personal experience suggests that the Anderson-Darling test is often too quick to reject the null hypothesis of uniformity.
@@ -773,7 +775,7 @@ df <- data.table(observed = rep(truth, each = n_samples),
   as_forecast_sample()
 
 res <- score(df)
-pit <- get_pit(df, by = "model")
+pit <- get_pit_histogram(df, by = "model")
 
 df[, model := factor(`model`,
                      levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
@@ -803,9 +805,12 @@ pred_hist <- df |>
 
 
 # create pit plots -------------------------------------------------------------
-pit_plots <- plot_pit(pit) +
+pit_plots <- pit |>
+  ggplot(aes(x = mid, y = density)) +
+  geom_col() +
   facet_wrap(~ model, nrow = 1) +
-  theme_scoringutils()
+  theme_scoringutils() +
+  labs(y = "Density", x = "Quantile")
 
 # create interval and quantile coverage plots ----------------------------------
 # create coverage plots by transforming to quantile format first

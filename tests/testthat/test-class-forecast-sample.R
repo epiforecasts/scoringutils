@@ -57,14 +57,14 @@ test_that("get_metrics.forecast_sample() works as expected", {
 
 
 # ==============================================================================
-# get_pit.forecast_sample()
+# get_pit_histogram.forecast_sample()
 # ==============================================================================
-test_that("get_pit.forecast_sample() works as expected", {
-    pit_continuous <- get_pit(example_sample_continuous, by = c("model", "target_type"))
-    pit_integer <- get_pit(example_sample_discrete, by = c("model", "location"))
+test_that("get_pit_histogram.forecast_sample() works as expected", {
+    pit_continuous <- get_pit_histogram(example_sample_continuous, by = c("model", "target_type"))
+    pit_integer <- get_pit_histogram(example_sample_discrete, by = c("model", "location"))
 
-    expect_equal(names(pit_continuous), c("model", "target_type", "pit_value"))
-    expect_equal(names(pit_integer), c("model", "location", "pit_value"))
+    expect_equal(names(pit_continuous), c("model", "target_type", "density", "bin", "mid"))
+    expect_equal(names(pit_integer), c("model", "location", "density", "bin", "mid"))
 
     # check printing works
     expect_output(print(pit_continuous))

@@ -165,31 +165,53 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 }
 
 
-#' @rdname get_pit
-#' @importFrom stats na.omit
+#' @rdname get_pit_histogram
 #' @importFrom data.table `:=` as.data.table dcast
-#' @inheritParams pit_sample
+#' @importFrom checkmate assert_int assert_numeric
+#' @inheritParams pit_histogram_sample
+#' @seealso [pit_histogram_sample()]
 #' @export
-get_pit.forecast_sample <- function(forecast, by, n_replicates = 100, ...) {
+get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
+                                              breaks = NULL, by, integers = c(
+                                                "nonrandom", "random", "ignore"
+                                              ), n_replicates = NULL, ...) {
+  integers <- match.arg(integers)
+  assert_int(num_bins, lower = 1, null.ok = FALSE)
+  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
 
-  # if prediction type is not quantile, calculate PIT values based on samples
+  if (is.null(breaks)) {
+    quantiles <- seq(0, 1, 1 / num_bins)
+  } else {
+    quantiles <- unique(c(0, breaks, 1))
+  }
+
   forecast_wide <- data.table::dcast(
     forecast,
     ... ~ paste0("InternalSampl_", sample_id),
     value.var = "predicted"
   )
 
-  pit <- forecast_wide[, .(pit_value = pit_sample(
-    observed = observed,
-    predicted = as.matrix(.SD)
-  )),
+  bins <- sprintf("[%s,%s)", quantiles[-length(quantiles)], quantiles[-1])
+  mids <- (quantiles[-length(quantiles)] + quantiles[-1]) / 2
+
+  pit_histogram <- forecast_wide[, .(
+    density = pit_histogram_sample(
+      observed = observed,
+      predicted = as.matrix(.SD),
+      quantiles = quantiles,
+      integers = integers,
+      n_replicates = n_replicates
+    ),
+    bin = bins,
+    mid = mids
+  ),
   by = by,
   .SDcols = grepl("InternalSampl_", names(forecast_wide), fixed = TRUE)
   ]
 
-  return(pit[])
+  return(pit_histogram[])
 }
 
 

@@ -20,6 +20,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
   - Users can now also use their own scoring rules (making use of the `metrics` argument, which takes in a named list of functions). Default scoring rules can be accessed using the function `get_metrics()`, which is a a generic with S3 methods for each forecast type. It returns a named list of scoring rules suitable for the respective forecast object. For example, you could call `get_metrics(example_quantile)`. Column names of scores in the output of `score()` correspond to the names of the scoring rules (i.e. the names of the functions in the list of metrics).
   - Instead of supplying arguments to `score()` to manipulate individual scoring rules users should now manipulate the metric list being supplied using `purrr::partial()` and `select_metric()`. See `?score()` for more information.
   - the CRPS is now reported as decomposition into dispersion, overprediction and underprediction.
+  - functionality to calculate the Probability Integral Transform (PIT) has been deprecated and replaced by functionality to calculate PIT histograms, using the `get_pit_histogram()` function; as part of this change, nonrandomised PITs can now be calculated for count data, and this is is done by default
 
 ### Creating a forecast object  
 - The `as_forecast_<type>()` functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of `set_forecast_unit()` in most cases. See `?as_forecast()` for more information.
@@ -73,7 +74,6 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Renamed `interval_coverage_quantile()` to `interval_coverage()`. 
 - "range" was consistently renamed to "interval_range" in the code. The "range"-format (which was mostly used internally) was renamed to "interval"-format
 - Renamed `correlation()` to `get_correlations()` and `plot_correlation()` to `plot_correlations()`
-- `pit()` was renamed to `get_pit()` and converted to an S3 method.
 
 ### Deleted functions
 - Removed abs_error and squared_error from the package in favour of `Metrics::ae` and `Metrics::se`.`get_duplicate_forecasts()` now sorts outputs according to the forecast unit, making it easier to spot duplicates. In addition, there is a `counts` option that allows the user to display the number of duplicates for each forecast unit, rather than the raw duplicated rows.
@@ -84,6 +84,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Removed `interval_coverage_sample()` as users are now expected to convert to a quantile format first before scoring.
 - Function `set_forecast_unit()` was deleted. Instead there is now a `forecast_unit` argument in `as_forecast_<type>()` as well as in `get_duplicate_forecasts()`.
 - Removed `interval_coverage_dev_quantile()`. Users can still access the difference between nominal and actual interval coverage using `get_coverage()`.
+- `pit()`, `pit_sample()` and `plot_pit()` have been removed and replaced by functionality to create PIT histograms (`pit_histogram_sampel()` and `get_pit_histogram()`)
 
 ### Function changes
 - `bias_quantile()` changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.
