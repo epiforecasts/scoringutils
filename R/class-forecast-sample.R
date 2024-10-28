@@ -31,7 +31,7 @@ as_forecast_sample <- function(data,
 assert_forecast.forecast_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast, verbose)
+  assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
   return(invisible(NULL))
 }

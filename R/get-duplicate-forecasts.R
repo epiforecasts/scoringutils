@@ -22,7 +22,7 @@ get_duplicate_forecasts <- function(
   counts = FALSE
 ) {
   assert_data_frame(data)
-  data <- ensure_data.table(data)
+  ensure_data.table(data)
 
   if (!is.null(forecast_unit)) {
     data <- set_forecast_unit(data, forecast_unit)
@@ -31,7 +31,9 @@ get_duplicate_forecasts <- function(
   available_type <- c("sample_id", "quantile_level", "predicted_label") %in% colnames(data)
   type <- c("sample_id", "quantile_level", "predicted_label")[available_type]
   data <- as.data.table(data)
+
   data[, scoringutils_InternalDuplicateCheck := .N, by = c(forecast_unit, type)]
+
   out <- data[scoringutils_InternalDuplicateCheck > 1]
 
   col <- colnames(data)[
@@ -43,8 +45,7 @@ get_duplicate_forecasts <- function(
   if (counts) {
     out <- out[, .(n_duplicates = .N), by = c(get_forecast_unit(out))]
   }
-
-  return(out[])
+  return(out)
 }
 
 

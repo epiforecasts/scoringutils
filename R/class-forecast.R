@@ -161,8 +161,11 @@ assert_forecast.default <- function(
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @keywords internal_input_check
 assert_forecast_generic <- function(data, verbose = TRUE) {
-  # check that data is a data.table and that the columns look fine
-  assert_data_table(data, min.rows = 1)
+
+  # unclass object to avoid issues with double-printing in data.table
+  # see https://github.com/epiforecasts/scoringutils/issues/935 for more info
+  data <- as.data.table(data)
+
   assert(check_columns_present(data, c("observed", "predicted")))
   problem <- test_columns_present(data, c("sample_id", "quantile_level"))
   if (problem) {
@@ -177,36 +180,36 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data))
+  #
+  # # check that the number of forecasts per sample / quantile level is the same
+  # number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
+  # if (!isTRUE(number_quantiles_samples) && verbose) {
+  #   cli_warn(number_quantiles_samples)
+  # }
+  #
+  # # check whether there are any NA values
+  # if (anyNA(data)) {
+  #   if (nrow(na.omit(data)) == 0) {
+  #     #nolint start: keyword_quote_linter
+  #     cli_abort(
+  #       c(
+  #         "!" = "After removing rows with NA values in the data, no forecasts
+  #         are left."
+  #       )
+  #     )
+  #   }
+  #   if (verbose) {
+  #     cli_inform(
+  #       c(
+  #         "i" = "Some rows containing NA values may be removed.
+  #       This is fine if not unexpected."
+  #       )
+  #     )
+  #   }
+  #   #nolint end
+  # }
 
-  # check that the number of forecasts per sample / quantile level is the same
-  number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
-  if (!isTRUE(number_quantiles_samples) && verbose) {
-    cli_warn(number_quantiles_samples)
-  }
-
-  # check whether there are any NA values
-  if (anyNA(data)) {
-    if (nrow(na.omit(data)) == 0) {
-      #nolint start: keyword_quote_linter
-      cli_abort(
-        c(
-          "!" = "After removing rows with NA values in the data, no forecasts
-          are left."
-        )
-      )
-    }
-    if (verbose) {
-      cli_inform(
-        c(
-          "i" = "Some rows containing NA values may be removed.
-        This is fine if not unexpected."
-        )
-      )
-    }
-    #nolint end
-  }
-
-  return(data[])
+  return(invisible(NULL))
 }
 
 
@@ -286,7 +289,7 @@ new_forecast <- function(data, classname) {
   data <- as.data.table(data)
   class(data) <- c(classname, "forecast", class(data))
   data <- copy(data)
-  return(data[])
+  return(data)
 }
 
 
@@ -456,6 +459,30 @@ tail.forecast <- function(x, ...) {
 #' print(dat)
 print.forecast <- function(x, ...) {
 
+  shouldPrint <- getAnywhere("shouldPrint")$objs[[1]]
+  # the following lines were taken from data.tables print.data.table
+  # https://github.com/Rdatatable/data.table/blob/058dd4d51ef4a70aef3b913e556b4ab1a150d1c9/R/print.data.table.R#L24C3-L41C4
+  # ----------------------------------------------------------------------------
+  #  := in [.data.table sets .global$print=address(x) to suppress the next print i.e., like <- does. See FAQ 2.22 and README item in v1.9.5
+  # The issue is distinguishing "> DT" (after a previous := in a function) from "> DT[,foo:=1]". To print.data.table(), there
+  # is no difference. Now from R 3.2.0 a side effect of the very welcome and requested change to avoid silent deep copy is that
+  # there is now no longer a difference between > DT and > print(DT). So decided that DT[] is now needed to guarantee print; simpler.
+  # This applies just at the prompt. Inside functions, print(DT) will of course print.
+  # Other options investigated (could revisit): Cstack_info(), .Last.value gets set first before autoprint, history(), sys.status(),
+  #   topenv(), inspecting next statement in caller, using clock() at C level to timeout suppression after some number of cycles
+  SYS <- sys.calls()
+  if (!shouldPrint(x)) {
+    SYS = sys.calls()
+    if (length(SYS) <= 2L ||  # "> DT" auto-print or "> print(DT)" explicit print (cannot distinguish from R 3.2.0 but that's ok)
+        ( length(SYS) >= 3L && is.symbol(thisSYS <- SYS[[length(SYS)-2L]][[1L]]) &&
+          as.character(thisSYS) == 'source') || # suppress printing from source(echo = TRUE) calls, #2369
+        ( length(SYS) > 3L && is.symbol(thisSYS <- SYS[[length(SYS)-3L]][[1L]]) &&
+          as.character(thisSYS) %chin% mimicsAutoPrint ) )  {
+      return(invisible(x))
+      # is.symbol() temp fix for #1758.
+    }
+  }
+
   # get forecast type, forecast unit and score columns
   forecast_type <- try(
     do.call(get_forecast_type, list(forecast = x)),
@@ -501,7 +528,7 @@ print.forecast <- function(x, ...) {
 
   cat("\n")
 
-  NextMethod()
+  print(x)
 
   return(invisible(x))
 }

@@ -34,7 +34,7 @@ as_forecast_point.default <- function(data,
 assert_forecast.forecast_point <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast, verbose)
+  assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: keyword_quote_linter object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
