@@ -302,7 +302,10 @@ test_that("score() works even if only some quantiles are missing", {
 
   # asymmetric intervals
   asymm <- example_quantile[!quantile_level > 0.6]
-  metrics <- get_metrics(example_quantile)
+  metrics <- get_metrics(
+    example_quantile,
+    exclude = c("overprediction", "underprediction", "dispersion")
+  )
   metrics$wis <- purrr::partial(wis, na.rm = TRUE)
   expect_warning(
     expect_warning(
