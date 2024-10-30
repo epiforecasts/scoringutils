@@ -48,7 +48,7 @@ Using the arguments \code{observed}, \code{predicted}, etc. you can rename
 existing columns of the input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, you can specify
 the columns that uniquely identify a single forecast (and remove the others,
-see docs for the internal \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
+see section "Forecast Unit" below for details).
 }
 \details{
 Nominal forecasts are a form of categorical forecasts and represent a

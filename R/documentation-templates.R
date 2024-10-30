@@ -11,7 +11,7 @@
 #' existing columns of the input data to match the required columns for a
 #' forecast object. Using the argument `forecast_unit`, you can specify
 #' the columns that uniquely identify a single forecast (and remove the others,
-#' see docs for the internal [set_forecast_unit()] for details).
+#' see section "Forecast Unit" below for details).
 #'
 #' @param data A data.frame (or similar) with predicted and observed values.
 #'   See the details section of for additional information
