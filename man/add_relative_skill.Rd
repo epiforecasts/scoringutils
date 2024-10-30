@@ -44,5 +44,4 @@ the computation of relative skill, see \code{\link[=get_pairwise_comparisons]{ge
 Relative skill will be calculated for the aggregation level specified in
 \code{by}.
 }
-\keyword{keyword}
 \keyword{scoring}

@@ -119,28 +119,26 @@ bias_sample <- function(observed, predicted) {
 #'
 #' @description
 #' Absolute error of the median calculated as
-#'
-#' \deqn{%
-#'   \textrm{abs}(\textrm{observevd} - \textrm{median\_prediction})
-#' }{%
-#'   abs(observed - median_prediction)
+#' \deqn{
+#'   |observed - median\_prediction|
 #' }
+#' where the median prediction is calculated as the median of the predictive
+#' samples.
 #'
 #' @param observed A vector with observed values of size n
 #' @param predicted nxN matrix of predictive samples, n (number of rows) being
 #'   the number of data points and N (number of columns) the number of Monte
 #'   Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @inheritSection illustration-input-metric-sample Input format
-#' @returns vector with the scoring values
+#' @returns Numeric vector of length n with the absolute errors of the median.
 #' @seealso [ae_median_quantile()]
 #' @importFrom stats median
+#' @keywords metric
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- matrix(rnorm(30, mean = 1:30))
 #' ae_median_sample(observed, predicted_values)
 #' @export
-#' @keywords metric
-
 ae_median_sample <- function(observed, predicted) {
   assert_input_sample(observed, predicted)
   median_predictions <- apply(

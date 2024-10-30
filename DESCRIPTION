@@ -41,7 +41,7 @@ Authors@R: c(
            email = "michaelchirico4@gmail.com",
            comment = c(ORCID = "0000-0003-0787-087X")))
 Description: 
-    scoringutils facilitates the evaluation of forecasts in a convenient 
+    Facilitate the evaluation of forecasts in a convenient 
     framework based on data.table. It allows user to to check their forecasts 
     and diagnose issues, to visualise forecasts and missing data, to transform 
     data before scoring, to handle missing forecasts, to aggregate scores, and 

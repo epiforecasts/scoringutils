@@ -556,23 +556,22 @@ interpolate_median <- function(predicted, quantile_level) {
 }
 
 
-#' @title Absolute error of the median (quantile-based version)
-#' @description
+#' Absolute error of the median (quantile-based version)
+#'
 #' Compute the absolute error of the median calculated as
 #' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
-#' }{
-#'   abs(observed - median_prediction)
+#'   |observed - median prediction|
 #' }
-#' The median prediction is the predicted value for which quantile_level == 0.5,
-#' the function therefore requires 0.5 to be among the quantile levels in
-#' `quantile_level`.
+#' The median prediction is the predicted value for which quantile_level == 0.5.
+#' The function requires 0.5 to be among the quantile levels in `quantile_level`.
+#'
 #' @inheritParams wis
 #' @inheritSection illustration-input-metric-quantile Input format
 #' @returns Numeric vector of length N with the absolute error of the median.
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
 #' @importFrom cli cli_warn
+#' @keywords metric
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- replicate(3, rnorm(30, mean = 1:30))
@@ -580,7 +579,6 @@ interpolate_median <- function(predicted, quantile_level) {
 #'   observed, predicted_values, quantile_level = c(0.2, 0.5, 0.8)
 #' )
 #' @export
-#' @keywords metric
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {

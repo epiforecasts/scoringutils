@@ -25,13 +25,10 @@ Numeric vector of length N with the absolute error of the median.
 \description{
 Compute the absolute error of the median calculated as
 \deqn{
-  \textrm{abs}(\textrm{observed} - \textrm{median prediction})
-}{
-  abs(observed - median_prediction)
+  |observed - median prediction|
 }
-The median prediction is the predicted value for which quantile_level == 0.5,
-the function therefore requires 0.5 to be among the quantile levels in
-\code{quantile_level}.
+The median prediction is the predicted value for which quantile_level == 0.5.
+The function requires 0.5 to be among the quantile levels in \code{quantile_level}.
 }
 \section{Input format}{
 \if{html}{
