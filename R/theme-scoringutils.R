@@ -2,7 +2,7 @@
 #'
 #' @description
 #' A theme for ggplot2 plots used in `scoringutils`.
-#' @return A ggplot2 theme
+#' @returns A ggplot2 theme
 #' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
 #' @keywords plotting
 #' @export

@@ -89,7 +89,7 @@ NULL
 #' } where \eqn{\textrm{outcome} \in \{0, 1\}}{outcome in {0, 1}}, and
 #' \eqn{\textrm{prediction} \in [0, 1]}{prediction in [0, 1]} represents
 #' the probability that the outcome is equal to 1.
-#' @return A numeric vector of size n with the Brier scores
+#' @returns A numeric vector of size n with the Brier scores
 #' @keywords metric
 #' @export
 #' @rdname scoring-functions-binary
@@ -111,7 +111,7 @@ brier_score <- function(observed, predicted) {
 #' assigned to the observed value. It is a proper scoring rule. Small values
 #' are better (best is zero, worst is infinity).
 #'
-#' @return A numeric vector of size n with log scores
+#' @returns A numeric vector of size n with log scores
 #' @importFrom methods hasArg
 #' @export
 #' @keywords metric

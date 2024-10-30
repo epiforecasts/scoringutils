@@ -88,7 +88,7 @@ NULL
 #' @param observed Input to be checked. Should be a numeric vector with the
 #'   observed values of size n.
 #' @param columns A character vector of column names to check
-#' @return Returns TRUE if the check was successful and a string with an
+#' @returns Returns TRUE if the check was successful and a string with an
 #'   error message otherwise.
 #' @name document_check_functions
 #' @keywords internal

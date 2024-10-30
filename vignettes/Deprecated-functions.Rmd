@@ -39,7 +39,7 @@ This Vignette provides a small collection of functions that have been deprecated
 #'   no ground truth data.
 #' @param by Character vector that denotes the columns by which to merge. Any
 #'   value that is not a column in observations will be removed.
-#' @return a data.table with forecasts and observations
+#' @returns a data.table with forecasts and observations
 #' @importFrom checkmate assert_subset
 #' @importFrom data.table as.data.table
 #' @keywords data-handling

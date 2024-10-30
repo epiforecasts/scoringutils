@@ -4,7 +4,7 @@
 #' If the object is not a data table, it is converted to one. If the object
 #' is a data table, a copy of the object is returned.
 #' @param data An object to ensure is a data table.
-#' @return A data.table/a copy of an existing data.table.
+#' @returns A data.table/a copy of an existing data.table.
 #' @keywords internal
 #' @importFrom data.table copy is.data.table as.data.table
 ensure_data.table <- function(data) {
@@ -101,7 +101,7 @@ check_columns_present <- function(data, columns) {
 #' one or more columns are missing, the function returns FALSE. If all columns
 #' are present, the function returns TRUE.
 #' @inheritParams document_check_functions
-#' @return Returns TRUE if all columns are present and FALSE otherwise
+#' @returns Returns TRUE if all columns are present and FALSE otherwise
 #' @keywords internal_input_check
 test_columns_present <- function(data, columns) {
   check <- check_columns_present(data, columns)
@@ -113,7 +113,7 @@ test_columns_present <- function(data, columns) {
 #' If none of the columns are present, the function returns TRUE. If one or
 #' more columns are present, the function returns FALSE.
 #' @inheritParams document_check_functions
-#' @return Returns TRUE if none of the columns are present and FALSE otherwise
+#' @returns Returns TRUE if none of the columns are present and FALSE otherwise
 #' @importFrom checkmate test_names
 #' @keywords internal_input_check
 test_columns_not_present <- function(data, columns) {

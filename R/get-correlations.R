@@ -63,7 +63,7 @@ get_correlations <- function(scores,
 #' @importFrom data.table setDT melt
 #' @importFrom checkmate assert_data_frame
 #' @export
-#' @return A ggplot object with a visualisation of correlations between metrics
+#' @returns A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' library(magrittr) # pipe operator
 #' scores <- example_quantile %>%
