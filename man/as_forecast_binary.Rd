@@ -38,12 +38,11 @@ and observations. If the input passes all input checks, those functions will
 be converted to a \code{forecast} object. A forecast object is a \code{data.table} with
 a class \code{forecast} and an additional class that depends on the forecast type.
 
-You have some control over how your data is parsed:
-Using the arguments \code{observed}, \code{predicted}, etc. you can rename
+The arguments \code{observed}, \code{predicted}, etc. make it possible to rename
 existing columns of the input data to match the required columns for a
 forecast object. Using the argument \code{forecast_unit}, you can specify
-the columns that uniquely identify a single forecast (and remove the others,
-see section "Forecast Unit" below for details).
+the columns that uniquely identify a single forecast (and thereby removing
+other, unneeded columns. See section "Forecast Unit" below for details).
 }
 \section{Required input}{
 The input needs to be a data.frame or similar with the following columns:
@@ -85,7 +84,7 @@ is even and zero otherwise, then this would mess up scoring as \code{scoringutil
 then thinks that this column was relevant in defining the forecast unit.
 
 In order to avoid issues, we recommend setting the forecast unit explicitly,
-using the \code{forecast_unit} argument. This will drop unneeded columns,
+using the \code{forecast_unit} argument. This will simply drop unneeded columns,
 while making sure that all necessary, 'protected columns' like "predicted"
 or "observed" are retained.
 }

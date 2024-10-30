@@ -6,12 +6,11 @@
 #' be converted to a `forecast` object. A forecast object is a `data.table` with
 #' a class `forecast` and an additional class that depends on the forecast type.
 #'
-#' You have some control over how your data is parsed:
-#' Using the arguments `observed`, `predicted`, etc. you can rename
+#' The arguments `observed`, `predicted`, etc. make it possible to rename
 #' existing columns of the input data to match the required columns for a
 #' forecast object. Using the argument `forecast_unit`, you can specify
-#' the columns that uniquely identify a single forecast (and remove the others,
-#' see section "Forecast Unit" below for details).
+#' the columns that uniquely identify a single forecast (and thereby removing
+#' other, unneeded columns. See section "Forecast Unit" below for details).
 #'
 #' @param data A data.frame (or similar) with predicted and observed values.
 #'   See the details section of for additional information
@@ -56,7 +55,7 @@ NULL
 #' then thinks that this column was relevant in defining the forecast unit.
 #'
 #' In order to avoid issues, we recommend setting the forecast unit explicitly,
-#' using the `forecast_unit` argument. This will drop unneeded columns,
+#' using the `forecast_unit` argument. This will simply drop unneeded columns,
 #' while making sure that all necessary, 'protected columns' like "predicted"
 #' or "observed" are retained.
 #'

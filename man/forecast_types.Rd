@@ -27,7 +27,7 @@ is even and zero otherwise, then this would mess up scoring as \code{scoringutil
 then thinks that this column was relevant in defining the forecast unit.
 
 In order to avoid issues, we recommend setting the forecast unit explicitly,
-using the \code{forecast_unit} argument. This will drop unneeded columns,
+using the \code{forecast_unit} argument. This will simply drop unneeded columns,
 while making sure that all necessary, 'protected columns' like "predicted"
 or "observed" are retained.
 }
