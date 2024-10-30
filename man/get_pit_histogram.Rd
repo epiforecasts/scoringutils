@@ -26,7 +26,7 @@ get_pit_histogram(forecast, num_bins, breaks, by, ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{num_bins}{The number of bins in the PIT histogram. For sample-based
 forecasts, the default is 10 bins. For quantile-based forecasts, the

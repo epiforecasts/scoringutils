@@ -5,8 +5,8 @@
 \alias{example_sample_discrete}
 \title{Discrete forecast example data}
 \format{
-An object of class \code{forecast_sample} (see \code{\link[=as_forecast]{as_forecast()}}) with the
-following columns:
+An object of class \code{forecast_sample} (see \code{\link[=as_forecast_sample]{as_forecast_sample()}})
+with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}

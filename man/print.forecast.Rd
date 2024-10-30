@@ -7,8 +7,7 @@
 \method{print}{forecast}(x, ...)
 }
 \arguments{
-\item{x}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+\item{x}{A forecast object}
 
 \item{...}{Additional arguments for \code{\link[=print]{print()}}.}
 }

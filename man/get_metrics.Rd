@@ -12,10 +12,10 @@ get_metrics(x, ...)
 \item{...}{Additional arguments passed to the method.}
 }
 \description{
-Generic function to to obtain default metrics availble for scoring or metrics
+Generic function to to obtain default metrics available for scoring or metrics
 that were used for scoring.
 \itemize{
-\item If called on \code{forecast} object it returns a list of functions that can be
+\item If called on a \code{forecast} object it returns a list of functions that can be
 used for scoring.
 \item If called on a \code{scores} object (see \code{\link[=score]{score()}}), it returns a character vector
 with the names of the metrics that were used for scoring.
@@ -24,10 +24,6 @@ with the names of the metrics that were used for scoring.
 See the documentation for the actual methods in the \verb{See Also} section below
 for more details. Alternatively call \verb{?get_metrics.<forecast_type>} or
 \code{?get_metrics.scores}.
-}
-\details{
-See \code{\link[=as_forecast]{as_forecast()}} for more information on \code{forecast} objects and \code{\link[=score]{score()}}
-for more information on \code{scores} objects.
 }
 \seealso{
 Other \code{get_metrics} functions: 

@@ -235,11 +235,10 @@ new_forecast <- function(data, classname) {
 #' @title Test whether an object is a forecast object
 #'
 #' @description
-#' Test whether an object is a forecast object (see [as_forecast()] for more
-#' information).
+#' Test whether an object is a forecast object.
 #'
-#' You can test for a specific `forecast_*` class using the appropriate
-#' `is_forecast_*` function.
+#' You can test for a specific `forecast_<type>` class using the appropriate
+#' `is_forecast_<type>` function.
 #'
 #' @param x An R object.
 #' @return
@@ -386,8 +385,7 @@ tail.forecast <- function(x, ...) {
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
 #'
-#' @param x A forecast object (a validated data.table with predicted and
-#'   observed values, see [as_forecast()]).
+#' @param x A forecast object
 #' @param ... Additional arguments for [print()].
 #' @return Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text

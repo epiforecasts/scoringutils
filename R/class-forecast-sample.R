@@ -240,8 +240,8 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast_sample()])
+#' with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -268,8 +268,8 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast_sample()])
+#' with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}

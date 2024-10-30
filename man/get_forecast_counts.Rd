@@ -12,7 +12,7 @@ get_forecast_counts(
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{by}{character vector or \code{NULL} (the default) that denotes the
 categories over which the number of forecasts should be counted.

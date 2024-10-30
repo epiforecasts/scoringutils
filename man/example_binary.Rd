@@ -5,8 +5,8 @@
 \alias{example_binary}
 \title{Binary forecast example data}
 \format{
-An object of class \code{forecast_binary} (see \code{\link[=as_forecast]{as_forecast()}}) with the
-following columns:
+An object of class \code{forecast_binary} (see \code{\link[=as_forecast_binary]{as_forecast_binary()}})
+with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{location_name}{name of the country for which a prediction was made}

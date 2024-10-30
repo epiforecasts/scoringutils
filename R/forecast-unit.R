@@ -6,8 +6,8 @@
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for observed values, predictions or
 #' quantile levels) and removes duplicate rows. `set_forecast_unit()` will
-#' mainly be called when constructing a `forecast` object (see [as_forecast()])
-#' via the `forecast_unit` argument there.
+#' mainly be called when constructing a `forecast` object
+#' via the `forecast_unit` argument in `as_forecast_<type>`.
 #'
 #' If not done explicitly, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names

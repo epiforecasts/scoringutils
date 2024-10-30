@@ -14,7 +14,7 @@ transform_forecasts(
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{fun}{A function used to transform both observed values and predictions.
 The default function is \code{\link[=log_shift]{log_shift()}}, a custom function that is

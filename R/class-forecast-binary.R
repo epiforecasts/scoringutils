@@ -113,7 +113,7 @@ score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...
 #' - "log_score" = [logs_binary()]
 #' @inheritSection illustration-input-metric-binary-point Input format
 #' @param x A forecast object (a validated data.table with predicted and
-#'   observed values, see [as_forecast()]).
+#'   observed values, see [as_forecast_binary()]).
 #' @param select A character vector of scoring rules to select from the list. If
 #'   `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
@@ -151,8 +151,8 @@ get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_binary` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_binary` (see [as_forecast_binary()])
+#' with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{location_name}{name of the country for which a prediction was made}

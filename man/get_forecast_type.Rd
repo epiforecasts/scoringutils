@@ -8,7 +8,7 @@ get_forecast_type(forecast)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 }
 \value{
 Character vector of length one with the forecast type.

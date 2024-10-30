@@ -15,7 +15,7 @@
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
 #' @param forecast A forecast object (a validated data.table with predicted and
-#'   observed values, see [as_forecast()]).
+#'   observed values).
 #' @param metrics A named list of scoring functions. Names will be used as
 #'   column names in the output. See [get_metrics()] for more information on the
 #'   default metrics used. See the *Customising metrics* section below for

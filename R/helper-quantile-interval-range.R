@@ -40,7 +40,7 @@ quantile_to_interval <- function(...) {
 
 
 #' @param forecast A data.table with forecasts in a quantile-based format (see
-#'   [as_forecast()]).
+#'   [as_forecast_quantile()]).
 #' @param format The format of the output. Either "long" or "wide". If "long"
 #'   (the default), there will be a column `boundary` (with values either
 #'   "upper" or "lower" and a column `interval_range` that contains the range of
