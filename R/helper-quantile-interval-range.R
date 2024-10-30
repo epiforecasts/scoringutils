@@ -25,7 +25,7 @@
 #' and upper bounds of the 50% and 90% prediction intervals (corresponding to
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
 #' @param ... Arguments
-#' @return A data.table with forecasts in an interval format.
+#' @returns A data.table with forecasts in an interval format.
 #' @keywords internal
 quantile_to_interval <- function(...) {
   dots <- list(...)
@@ -142,7 +142,7 @@ quantile_to_interval_numeric <- function(observed,
 #'
 #' @inheritParams as_forecast_quantile
 #' @param keep_quantile_col keep quantile_level column, default is TRUE
-#' @return A data.table in a long interval interval range format
+#' @returns A data.table in a long interval interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @keywords internal
@@ -179,7 +179,7 @@ sample_to_interval_long <- function(data,
 #' rounded to 10 decimal places. This is not a problem for the vast majority of
 #' use cases, but it is something to be aware of.
 #' @param quantile_level A numeric vector of quantile levels of size N.
-#' @return a numeric vector of interval ranges of size N
+#' @returns a numeric vector of interval ranges of size N
 #' @keywords internal
 get_range_from_quantile <- function(quantile_level) {
   boundary <- ifelse(quantile_level <= 0.5, "lower", "upper")

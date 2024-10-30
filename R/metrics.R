@@ -9,7 +9,7 @@
 #'   `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #'   If `select` is not `NULL`, this argument is ignored.
-#' @return A list of scoring functions.
+#' @returns A list of scoring functions.
 #' @keywords handle-metrics
 #' @importFrom checkmate assert_subset assert_list
 #' @export
@@ -60,7 +60,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' See [as_forecast()] for more information on `forecast` objects and [score()]
 #' for more information on `scores` objects.
 #'
-#' @family `get_metrics` functions
+#' @family get_metrics functions
 #' @keywords handle-metrics
 #' @export
 get_metrics <- function(x, ...) {

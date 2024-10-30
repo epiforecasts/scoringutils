@@ -45,7 +45,7 @@
 #' @param ... Additional parameters to pass to the function you supplied. For
 #'   the default option of [log_shift()] this could be the `offset` argument.
 #'
-#' @return A forecast object with either a transformed version of the data, or
+#' @returns A forecast object with either a transformed version of the data, or
 #'   one with both the untransformed and the transformed data. includes the
 #'   original data as well as a transformation of the original data. There will
 #'   be one additional column, `scale', present which will be set to "natural"
@@ -194,7 +194,7 @@ transform_forecasts <- function(forecast,
 #' @param base A positive number: the base with respect to which
 #'   logarithms are computed. Defaults to e = exp(1).
 #' @importFrom cli cli_abort cli_warn
-#' @return A numeric vector with transformed values
+#' @returns A numeric vector with transformed values
 #' @export
 #' @references Transformation of forecasts for evaluating predictive
 #'   performance in an epidemiological context

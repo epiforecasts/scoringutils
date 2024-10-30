@@ -421,7 +421,7 @@ interval_coverage <- function(observed, predicted,
 #' @importFrom cli cli_inform
 #' @inheritParams wis
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return scalar with the quantile bias for a single quantile prediction
+#' @returns scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
 #' @examples
@@ -469,7 +469,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
 #'   quantiles) that holds predictions.
 #' @inheritParams bias_quantile
 #' @importFrom cli cli_abort
-#' @return scalar with the quantile bias for a single quantile prediction
+#' @returns scalar with the quantile bias for a single quantile prediction
 #' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted,
                                         quantile_level, na.rm) {
@@ -534,7 +534,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' This is done using linear interpolation between the two innermost quantiles.
 #' @inheritParams bias_quantile_single_vector
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return scalar with the imputed median prediction
+#' @returns scalar with the imputed median prediction
 #' @keywords internal
 interpolate_median <- function(predicted, quantile_level) {
   if (0.5 %in% quantile_level) {
@@ -556,23 +556,22 @@ interpolate_median <- function(predicted, quantile_level) {
 }
 
 
-#' @title Absolute error of the median (quantile-based version)
-#' @description
+#' Absolute error of the median (quantile-based version)
+#'
 #' Compute the absolute error of the median calculated as
 #' \deqn{
-#'   \textrm{abs}(\textrm{observed} - \textrm{median prediction})
-#' }{
-#'   abs(observed - median_prediction)
+#'   |observed - median prediction|
 #' }
-#' The median prediction is the predicted value for which quantile_level == 0.5,
-#' the function therefore requires 0.5 to be among the quantile levels in
-#' `quantile_level`.
+#' The median prediction is the predicted value for which quantile_level == 0.5.
+#' The function requires 0.5 to be among the quantile levels in `quantile_level`.
+#'
 #' @inheritParams wis
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return Numeric vector of length N with the absolute error of the median.
+#' @returns Numeric vector of length N with the absolute error of the median.
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
 #' @importFrom cli cli_warn
+#' @keywords metric
 #' @examples
 #' observed <- rnorm(30, mean = 1:30)
 #' predicted_values <- replicate(3, rnorm(30, mean = 1:30))
@@ -580,7 +579,6 @@ interpolate_median <- function(predicted, quantile_level) {
 #'   observed, predicted_values, quantile_level = c(0.2, 0.5, 0.8)
 #' )
 #' @export
-#' @keywords metric
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {
@@ -634,7 +632,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' `quantile_score()` returns the average quantile score across the quantile
 #' levels provided. For a set of quantile levels that form pairwise central
 #' prediction intervals, the quantile score is equivalent to the interval score.
-#' @return Numeric vector of length n with the quantile score. The scores are
+#' @returns Numeric vector of length n with the quantile score. The scores are
 #' averaged across quantile levels if multiple quantile levels are provided
 #' (the result of calling `rowMeans()` on the matrix of quantile scores that
 #' is computed based on the observed and predicted values).

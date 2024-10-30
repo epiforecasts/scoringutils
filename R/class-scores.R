@@ -8,7 +8,7 @@
 #' @param ... Additional arguments to [data.table::as.data.table()]
 #' @keywords internal
 #' @importFrom data.table as.data.table setattr
-#' @return An object of class `scores`
+#' @returns An object of class `scores`
 #' @examples
 #' \dontrun{
 #' df <- data.frame(
@@ -108,7 +108,7 @@ assert_scores <- function(scores) {
 #' Character vector with the names of the scoring rules that were used
 #' for scoring.
 #' @keywords handle-metrics
-#' @family `get_metrics` functions
+#' @family get_metrics functions
 #' @export
 get_metrics.scores <- function(x, error = FALSE, ...) {
   assert_data_frame(x)

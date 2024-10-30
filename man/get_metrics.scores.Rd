@@ -46,7 +46,7 @@ order does not matter).
 }
 }
 \seealso{
-Other \code{get_metrics} functions: 
+Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_binary}()},
 \code{\link{get_metrics.forecast_nominal}()},
@@ -54,5 +54,5 @@ Other \code{get_metrics} functions:
 \code{\link{get_metrics.forecast_quantile}()},
 \code{\link{get_metrics.forecast_sample}()}
 }
-\concept{\code{get_metrics} functions}
+\concept{get_metrics functions}
 \keyword{handle-metrics}
