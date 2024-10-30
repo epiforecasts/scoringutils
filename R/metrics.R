@@ -60,7 +60,7 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' See [as_forecast()] for more information on `forecast` objects and [score()]
 #' for more information on `scores` objects.
 #'
-#' @family `get_metrics` functions
+#' @family get_metrics functions
 #' @keywords handle-metrics
 #' @export
 get_metrics <- function(x, ...) {

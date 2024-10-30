@@ -6,7 +6,7 @@
 \alias{scoringutils-package}
 \title{scoringutils: Utilities for Scoring and Assessing Predictions}
 \description{
-scoringutils facilitates the evaluation of forecasts in a convenient framework based on data.table. It allows user to to check their forecasts and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package mostly focuses on the evaluation of probabilistic forecasts and allows evaluating several different forecast types and input formats. Find more information about the package in the Vignettes as well as in the accompanying paper, \doi{10.48550/arXiv.2205.07090}.
+Facilitate the evaluation of forecasts in a convenient framework based on data.table. It allows user to to check their forecasts and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package mostly focuses on the evaluation of probabilistic forecasts and allows evaluating several different forecast types and input formats. Find more information about the package in the Vignettes as well as in the accompanying paper, \doi{10.48550/arXiv.2205.07090}.
 }
 \seealso{
 Useful links:

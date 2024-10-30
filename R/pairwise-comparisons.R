@@ -565,17 +565,18 @@ permutation_test <- function(scores1,
 }
 
 
-#' @title Add relative skill scores based on pairwise comparisons
-#' @description
+#' Add relative skill scores based on pairwise comparisons
+#'
 #' Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
 #' For more information on
 #' the computation of relative skill, see [get_pairwise_comparisons()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
+#'
 #' @inheritParams get_pairwise_comparisons
 #' @export
-#' @keywords keyword scoring
+#' @keywords scoring
 add_relative_skill <- function(
   scores,
   compare = "model",

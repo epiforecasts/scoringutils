@@ -45,7 +45,7 @@ get_metrics(example_binary, select = "brier_score")
 get_metrics(example_binary, exclude = "log_score")
 }
 \seealso{
-Other \code{get_metrics} functions: 
+Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_nominal}()},
 \code{\link{get_metrics.forecast_point}()},
@@ -53,5 +53,5 @@ Other \code{get_metrics} functions:
 \code{\link{get_metrics.forecast_sample}()},
 \code{\link{get_metrics.scores}()}
 }
-\concept{\code{get_metrics} functions}
+\concept{get_metrics functions}
 \keyword{handle-metrics}

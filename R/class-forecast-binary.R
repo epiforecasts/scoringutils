@@ -98,7 +98,7 @@ score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...
 #' @param ... unused
 #' @return A list of scoring functions.
 #' @export
-#' @family `get_metrics` functions
+#' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_binary)
@@ -142,6 +142,6 @@ get_metrics.forecast_binary <- function(x, select = NULL, exclude = NULL, ...) {
 #'   \item{predicted}{predicted value}
 #' }
 # nolint start
-#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_binary"

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This Vignette provides the code for visualisations that were previously part of `scoringutils` but have been removed with `scoringutils` version `2.0`. For alternative ways to implemenent data visualisations, we refer to the `hubVis` [package](https://github.com/Infectious-Disease-Modeling-Hubs/hubVis).
+This Vignette provides the code for visualisations that were previously part of `scoringutils` but have been removed with `scoringutils` version `2.0`. For alternative ways to implemenent data visualisations, we refer to the `hubVis` [package](https://github.com/hubverse-org/hubVis).
 
 The example data used is the data shipped with the `scoringutils` package. It consists of short-term forecasts of COVID-19 cases and deaths for several European countries, submitted to the European COVID-19 Forecast Hub. Every week, forecasters submitted 1 to 4 week ahead forecasts (the "forecast horizon", here restricted to 1 to 3 week ahead). The dates for which a forecast was made are called `target_end_date`. See e.g. `?example_quantile` for more information.
 
