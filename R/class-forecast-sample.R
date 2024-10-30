@@ -62,7 +62,7 @@ is_forecast_sample <- function(x) {
 
 
 #' @rdname as_forecast_quantile
-#' @description
+#' @details # Converting from `forecast_sample` to `forecast_quantile`
 #' When creating a `forecast_quantile` object from a `forecast_sample` object,
 #' the quantiles are estimated by computing empircal quantiles from the samples
 #' via [quantile()]. Note that empirical quantiles are a biased estimator for

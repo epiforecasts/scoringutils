@@ -60,11 +60,17 @@ information, see \code{\link[=quantile]{quantile()}}.}
 A \code{forecast} object of class \code{forecast_quantile}
 }
 \description{
-When creating a \code{forecast_quantile} object from a \code{forecast_sample} object,
-the quantiles are estimated by computing empircal quantiles from the samples
-via \code{\link[=quantile]{quantile()}}. Note that empirical quantiles are a biased estimator for
-the true quantiles in particular in the tails of the distribution and
-when the number of available samples is low.
+Process and validate a data.frame (or similar) or similar with forecasts
+and observations. If the input passes all input checks, those functions will
+be converted to a \code{forecast} object. A forecast object is a \code{data.table} with
+a class \code{forecast} and an additional class that depends on the forecast type.
+
+You have some control over how your data is parsed:
+Using the arguments \code{observed}, \code{predicted}, etc. you can rename
+existing columns of the input data to match the required columns for a
+forecast object. Using the argument \code{forecast_unit}, you can specify
+the columns that uniquely identify a single forecast (and remove the others,
+see docs for the internal \code{\link[=set_forecast_unit]{set_forecast_unit()}} for details).
 }
 \section{Required input}{
 The input needs to be a data.frame or similar with the following columns:
@@ -82,6 +88,14 @@ of the forecaster or model that produced a prediction, but this is not
 strictly necessary.
 
 See the \link{example_quantile} data set for an example.
+}
+
+\section{Converting from \code{forecast_sample} to \code{forecast_quantile}}{
+When creating a \code{forecast_quantile} object from a \code{forecast_sample} object,
+the quantiles are estimated by computing empircal quantiles from the samples
+via \code{\link[=quantile]{quantile()}}. Note that empirical quantiles are a biased estimator for
+the true quantiles in particular in the tails of the distribution and
+when the number of available samples is low.
 }
 
 \section{Forecast unit}{
