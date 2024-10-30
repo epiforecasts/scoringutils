@@ -24,7 +24,7 @@
 #'   'location' in the input data and want to have a PIT histogram for
 #' every model and location, specify `by = c("model", "location")`.
 #' @inheritParams pit_histogram_sample
-#' @return A data.table with density values for each bin in the PIT histogram.
+#' @returns A data.table with density values for each bin in the PIT histogram.
 #' @examples
 #' library("ggplot2")
 #'

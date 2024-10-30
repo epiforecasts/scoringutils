@@ -421,7 +421,7 @@ interval_coverage <- function(observed, predicted,
 #' @importFrom cli cli_inform
 #' @inheritParams wis
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return scalar with the quantile bias for a single quantile prediction
+#' @returns scalar with the quantile bias for a single quantile prediction
 #' @export
 #' @keywords metric
 #' @examples
@@ -469,7 +469,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
 #'   quantiles) that holds predictions.
 #' @inheritParams bias_quantile
 #' @importFrom cli cli_abort
-#' @return scalar with the quantile bias for a single quantile prediction
+#' @returns scalar with the quantile bias for a single quantile prediction
 #' @keywords internal
 bias_quantile_single_vector <- function(observed, predicted,
                                         quantile_level, na.rm) {
@@ -534,7 +534,7 @@ bias_quantile_single_vector <- function(observed, predicted,
 #' This is done using linear interpolation between the two innermost quantiles.
 #' @inheritParams bias_quantile_single_vector
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return scalar with the imputed median prediction
+#' @returns scalar with the imputed median prediction
 #' @keywords internal
 interpolate_median <- function(predicted, quantile_level) {
   if (0.5 %in% quantile_level) {
@@ -569,7 +569,7 @@ interpolate_median <- function(predicted, quantile_level) {
 #' `quantile_level`.
 #' @inheritParams wis
 #' @inheritSection illustration-input-metric-quantile Input format
-#' @return Numeric vector of length N with the absolute error of the median.
+#' @returns Numeric vector of length N with the absolute error of the median.
 #' @seealso [ae_median_sample()]
 #' @importFrom stats median
 #' @importFrom cli cli_warn
@@ -634,7 +634,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #' `quantile_score()` returns the average quantile score across the quantile
 #' levels provided. For a set of quantile levels that form pairwise central
 #' prediction intervals, the quantile score is equivalent to the interval score.
-#' @return Numeric vector of length n with the quantile score. The scores are
+#' @returns Numeric vector of length n with the quantile score. The scores are
 #' averaged across quantile levels if multiple quantile levels are provided
 #' (the result of calling `rowMeans()` on the matrix of quantile scores that
 #' is computed based on the observed and predicted values).

@@ -13,7 +13,7 @@
 #'   could be something like "horizon", or "location"
 #' @param metric String, the metric that determines the value and colour shown
 #'   in the tiles of the heatmap.
-#' @return A ggplot object showing a heatmap of the desired metric
+#' @returns A ggplot object showing a heatmap of the desired metric
 #' @importFrom data.table setDT `:=`
 #' @importFrom ggplot2 ggplot  aes geom_tile geom_text .data
 #' scale_fill_gradient2 labs element_text coord_cartesian
