@@ -8,7 +8,7 @@
 #' @param ... Additional arguments to [data.table::as.data.table()]
 #' @keywords internal
 #' @importFrom data.table as.data.table setattr
-#' @return An object of class `scores`
+#' @returns An object of class `scores`
 #' @examples
 #' \dontrun{
 #' df <- data.frame(

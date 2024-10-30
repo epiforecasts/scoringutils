@@ -96,7 +96,7 @@ score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #'   If `select` is not `NULL`, this argument is ignored.
 #' @param ... unused
-#' @return A list of scoring functions.
+#' @returns A list of scoring functions.
 #' @export
 #' @family get_metrics functions
 #' @keywords handle-metrics

@@ -130,7 +130,7 @@ bias_sample <- function(observed, predicted) {
 #'   the number of data points and N (number of columns) the number of Monte
 #'   Carlo samples. Alternatively, `predicted` can just be a vector of size n.
 #' @inheritSection illustration-input-metric-sample Input format
-#' @return Numeric vector of length n with the absolute errors of the median.
+#' @returns Numeric vector of length n with the absolute errors of the median.
 #' @seealso [ae_median_quantile()]
 #' @importFrom stats median
 #' @keywords metric
@@ -199,7 +199,7 @@ se_mean_sample <- function(observed, predicted) {
 #' @param ... Additional arguments passed to
 #' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
 #' @inheritSection illustration-input-metric-sample Input format
-#' @return Vector with scores.
+#' @returns Vector with scores.
 #' @importFrom scoringRules logs_sample
 #' @family log score functions
 #' @examples
@@ -231,7 +231,7 @@ logs_sample <- function(observed, predicted, ...) {
 #' @param ... Additional arguments passed to
 #' [dss_sample()][scoringRules::dss_sample()] from the scoringRules package.
 #' @inheritSection illustration-input-metric-sample Input format
-#' @return Vector with scores.
+#' @returns Vector with scores.
 #' @importFrom scoringRules dss_sample
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
@@ -282,7 +282,7 @@ dss_sample <- function(observed, predicted, ...) {
 #' @param ... Additional arguments passed to
 #' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
 #' @inheritSection illustration-input-metric-sample Input format
-#' @return Vector with scores.
+#' @returns Vector with scores.
 #' @importFrom scoringRules crps_sample
 #' @examples
 #' observed <- rpois(30, lambda = 1:30)
@@ -395,7 +395,7 @@ underprediction_sample <- function(observed, predicted, ...) {
 #' @param ... Additional arguments passed to [mad()][stats::mad()].
 #' @importFrom stats mad
 #' @inheritSection illustration-input-metric-sample Input format
-#' @return Vector with dispersion values.
+#' @returns Vector with dispersion values.
 #'
 #' @references
 #' Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019)
@@ -494,7 +494,7 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #'   not set to `random`.
 #' @inheritParams ae_median_sample
 #' @inheritParams get_pit_histogram
-#' @return A vector with PIT histogram densities for the bins corresponding
+#' @returns A vector with PIT histogram densities for the bins corresponding
 #'   to the given quantiles.
 #' @seealso [get_pit_histogram()]
 #' @importFrom stats runif
