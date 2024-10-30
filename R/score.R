@@ -121,7 +121,7 @@ score.default <- function(forecast, metrics, ...) {
 #'   avoid passing arguments via `...` and instead expect that the metrics
 #'   directly be modified using [purrr::partial()].
 #' @inheritParams score
-#' @return A data table with the forecasts and the calculated metrics.
+#' @returns A data table with the forecasts and the calculated metrics.
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
   lapply(names(metrics), function(metric_name) {
@@ -156,7 +156,7 @@ apply_metrics <- function(forecast, metrics, ...) {
 #'   provide a more informative warning message in case `fun` errors.
 #' @importFrom cli cli_warn
 #' @importFrom checkmate assert_function
-#' @return The result of `fun` or `NULL` if `fun` errors
+#' @returns The result of `fun` or `NULL` if `fun` errors
 #' @keywords internal
 #' @examples
 #' f <- function(x) {x}

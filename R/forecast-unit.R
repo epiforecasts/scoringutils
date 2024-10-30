@@ -19,7 +19,7 @@
 #' @param forecast_unit Character vector with the names of the columns that
 #'   uniquely identify a single forecast.
 #' @importFrom cli cli_warn
-#' @return A data.table with only those columns kept that are relevant to
+#' @returns A data.table with only those columns kept that are relevant to
 #'   scoring or denote the unit of a single forecast as specified by the user.
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset

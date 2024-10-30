@@ -97,7 +97,7 @@ assert_forecast.default <- function(
 #' @param data A data.table with forecasts and observed values that should
 #' be validated.
 #' @inheritParams assert_forecast
-#' @return returns the input
+#' @returns returns the input
 #' @importFrom data.table ':=' is.data.table
 #' @importFrom checkmate assert_data_table
 #' @importFrom cli cli_abort cli_inform cli_warn
@@ -221,7 +221,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
 #'
 #' @inheritParams as_forecast_doc_template
 #' @param classname name of the class to be created
-#' @return An object of the class indicated by `classname`
+#' @returns An object of the class indicated by `classname`
 #' @export
 #' @keywords internal
 new_forecast <- function(data, classname) {
@@ -387,7 +387,7 @@ tail.forecast <- function(x, ...) {
 #'
 #' @param x A forecast object
 #' @param ... Additional arguments for [print()].
-#' @return Returns `x` invisibly.
+#' @returns Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text
 #' @export
 #' @keywords gain-insights

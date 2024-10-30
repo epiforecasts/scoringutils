@@ -14,16 +14,15 @@ the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, \code{predicted} can just be a vector of size n.}
 }
 \value{
-vector with the scoring values
+Numeric vector of length n with the absolute errors of the median.
 }
 \description{
 Absolute error of the median calculated as
-
-\deqn{%
-  \textrm{abs}(\textrm{observevd} - \textrm{median\_prediction})
-}{%
-  abs(observed - median_prediction)
+\deqn{
+  |observed - median\_prediction|
 }
+where the median prediction is calculated as the median of the predictive
+samples.
 }
 \section{Input format}{
 \if{html}{

@@ -161,7 +161,7 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
 #' @inheritSection illustration-input-metric-sample Input format
 #' @inheritParams get_metrics.forecast_binary
 #' @export
-#' @family `get_metrics` functions
+#' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
 #' get_metrics(example_sample_continuous, exclude = "mad")
@@ -255,7 +255,7 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #'   \item{sample_id}{id for the corresponding sample}
 #' }
 # nolint start
-#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_sample_continuous"
 
@@ -283,6 +283,6 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #'   \item{sample_id}{id for the corresponding sample}
 #' }
 # nolint start
-#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_sample_discrete"

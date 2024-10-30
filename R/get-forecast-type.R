@@ -4,14 +4,14 @@
 #' Character vector of length one with the forecast type.
 #' @keywords internal_input_check
 get_forecast_type <- function(forecast) {
-  classname <- class(forecast)[1]
-  if (grepl("forecast_", classname, fixed = TRUE)) {
-    type <- gsub("forecast_", "", classname, fixed = TRUE)
-    return(type)
+  classname <- class(forecast)
+  forecast_class <- classname[grepl("forecast_", classname, fixed = TRUE)]
+  if (length(forecast_class) == 1) {
+    return(gsub("forecast_", "", forecast_class, fixed = TRUE))
   } else {
     cli_abort(
       "Input is not a valid forecast object
-      (it's first class should begin with `forecast_`)."
+      (There should be a single class beginning with `forecast_`)."
     )
   }
 }

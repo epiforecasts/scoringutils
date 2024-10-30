@@ -23,7 +23,7 @@
 #'   `collapse = c()` would mean that all quantiles / samples would be counted
 #'   as individual forecasts.
 #'
-#' @return A data.table with columns as specified in `by` and an additional
+#' @returns A data.table with columns as specified in `by` and an additional
 #' column "count" with the number of forecasts.
 #'
 #' @inheritParams score
@@ -90,7 +90,7 @@ get_forecast_counts <- function(forecast,
 #'   are shown on the x-axis.
 #' @param show_counts Logical (default is `TRUE`) that indicates whether
 #'   or not to show the actual count numbers on the plot.
-#' @return A ggplot object with a plot of forecast counts
+#' @returns A ggplot object with a plot of forecast counts
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual
 #'   geom_tile scale_fill_gradient .data
 #' @importFrom data.table dcast .I .N

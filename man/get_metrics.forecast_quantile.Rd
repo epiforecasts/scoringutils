@@ -56,7 +56,7 @@ mean it would also get passed to \code{interval_coverage_50}.
 get_metrics(example_quantile, select = "wis")
 }
 \seealso{
-Other \code{get_metrics} functions: 
+Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_binary}()},
 \code{\link{get_metrics.forecast_nominal}()},
@@ -64,5 +64,5 @@ Other \code{get_metrics} functions:
 \code{\link{get_metrics.forecast_sample}()},
 \code{\link{get_metrics.scores}()}
 }
-\concept{\code{get_metrics} functions}
+\concept{get_metrics functions}
 \keyword{handle-metrics}

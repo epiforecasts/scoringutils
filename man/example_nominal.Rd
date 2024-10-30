@@ -21,7 +21,7 @@ An object of class \code{forecast_nominal}
 }
 }
 \source{
-\url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+\url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 }
 \usage{
 example_nominal

@@ -35,17 +35,17 @@ devel <- length(unclass(package_version(version))[[1]]) > 3
 if (devel) {
   cat(
     "**Note**: ",
-    "[This documentation](https://epiforecasts.io/scoringutils/dev) refers to the development version of `scoringutils`. ",
+    "[This documentation](https://epiforecasts.io/scoringutils/dev/) refers to the development version of `scoringutils`. ",
     "You can also view the [documentation of the stable version]",
-    "(https://epiforecasts.io/scoringutils).",
+    "(https://epiforecasts.io/scoringutils/).",
     sep = ""
   )
 } else {
   cat(
     "**Note**: ",
-    "[This documentation](https://epiforecasts.io/scoringutils) refers to the stable version of `scoringutils`. ",
+    "[This documentation](https://epiforecasts.io/scoringutils/) refers to the stable version of `scoringutils`. ",
     "You can also view the [documentation of the development version]",
-    "(https://epiforecasts.io/scoringutils/dev).",
+    "(https://epiforecasts.io/scoringutils/dev/).",
     sep = ""
   )
 }
@@ -163,7 +163,7 @@ The development of `scoringutils` was funded via the Health Protection Research 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropensci/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
 ### Code
 

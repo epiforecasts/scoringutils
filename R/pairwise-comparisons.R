@@ -78,7 +78,7 @@
 #' @param ... Additional arguments for the comparison between two models. See
 #'   [compare_forecasts()] for more information.
 #' @inheritParams summarise_scores
-#' @return A data.table with the results of pairwise comparisons
+#' @returns A data.table with the results of pairwise comparisons
 #' containing the mean score ratios (`mean_scores_ratio`),
 #' unadjusted (`pval`) and adjusted (`adj_pval`) p-values, and relative skill
 #' values of each model (`..._relative_skill`). If a baseline model is given
@@ -415,7 +415,7 @@ pairwise_comparison_one_group <- function(scores,
 #'   determine p-values.
 #' @param n_permutations Numeric, the number of permutations for a
 #'   permutation test. Default is 999.
-#' @return A list with mean score ratios and p-values for the comparison
+#' @returns A list with mean score ratios and p-values for the comparison
 #' between two comparators
 #' @importFrom cli cli_abort
 #' @author Johannes Bracher, \email{johannes.bracher@@kit.edu}
@@ -492,7 +492,7 @@ compare_forecasts <- function(scores,
 #' Used in [get_pairwise_comparisons()].
 #'
 #' @param x Numeric vector of values for which to calculate the geometric mean.
-#' @return The geometric mean of the values in `x`. `NA` values are ignored.
+#' @returns The geometric mean of the values in `x`. `NA` values are ignored.
 #'
 #' @keywords internal
 geometric_mean <- function(x) {
@@ -524,7 +524,7 @@ geometric_mean <- function(x) {
 #' @param comparison_mode How to compute the test statistic for the comparison
 #'   of the two scores. Should be either "difference" or "ratio".
 #'
-#' @return p-value of the permutation test
+#' @returns p-value of the permutation test
 #' @keywords internal
 permutation_test <- function(scores1,
                              scores2,
@@ -565,17 +565,18 @@ permutation_test <- function(scores1,
 }
 
 
-#' @title Add relative skill scores based on pairwise comparisons
-#' @description
+#' Add relative skill scores based on pairwise comparisons
+#'
 #' Adds a columns with relative skills computed by running
 #' pairwise comparisons on the scores.
 #' For more information on
 #' the computation of relative skill, see [get_pairwise_comparisons()].
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
+#'
 #' @inheritParams get_pairwise_comparisons
 #' @export
-#' @keywords keyword scoring
+#' @keywords scoring
 add_relative_skill <- function(
   scores,
   compare = "model",

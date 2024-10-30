@@ -12,10 +12,11 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: [This documentation](https://epiforecasts.io/scoringutils/dev)
-refers to the development version of `scoringutils`. You can also view
-the [documentation of the stable
-version](https://epiforecasts.io/scoringutils).
+**Note**: [This
+documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
+development version of `scoringutils`. You can also view the
+[documentation of the stable
+version](https://epiforecasts.io/scoringutils/).
 
 The `scoringutils` package facilitates the process of evaluating
 forecasts in R, using a convenient and flexible `data.table`-based
@@ -257,10 +258,9 @@ Health.
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
-[`allcontributors`
-package](https://github.com/ropenscilabs/allcontributors) following the
-[all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+[`allcontributors` package](https://github.com/ropensci/allcontributors)
+following the [all-contributors](https://allcontributors.org)
+specification. Contributions of any kind are welcome!
 
 ### Code
 

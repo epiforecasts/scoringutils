@@ -110,7 +110,7 @@ get_coverage <- function(forecast, by = "model") {
 #' [get_coverage()].
 #' @param colour According to which variable shall the graphs be coloured?
 #' Default is "model".
-#' @return ggplot object with a plot of interval coverage
+#' @returns ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data
 #' facet_wrap facet_grid geom_polygon geom_line xlab ylab
 #' @importFrom checkmate assert_subset
@@ -178,7 +178,7 @@ plot_interval_coverage <- function(coverage,
 #' @inheritParams plot_interval_coverage
 #' @param colour String, according to which variable shall the graphs be
 #' coloured? Default is "model".
-#' @return A ggplot object with a plot of interval coverage
+#' @returns A ggplot object with a plot of interval coverage
 #' @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual .data aes
 #'   scale_y_continuous geom_line
 #' @importFrom checkmate assert_subset assert_data_frame

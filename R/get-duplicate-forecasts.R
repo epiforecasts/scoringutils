@@ -8,7 +8,7 @@
 #' @inheritParams as_forecast_doc_template
 #' @param counts Should the output show the number of duplicates per forecast
 #'   unit instead of the individual duplicated rows? Default is `FALSE`.
-#' @return A data.frame with all rows for which a duplicate forecast was found
+#' @returns A data.frame with all rows for which a duplicate forecast was found
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset
 #' @importFrom data.table setorderv
