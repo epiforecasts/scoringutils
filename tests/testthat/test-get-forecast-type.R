@@ -21,6 +21,11 @@ test_that("get_forecast_type() works as expected", {
     get_forecast_type(test),
     "Input is not a valid forecast object",
   )
+
+  # get_forecast_type() should still work even if a new class is added
+  testclassobject <- data.table::copy(example_quantile)
+  class(testclassobject) <- c("something", class(testclassobject))
+  expect_equal(get_forecast_type(testclassobject), "quantile")
 })
 
 
