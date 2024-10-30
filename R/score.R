@@ -1,17 +1,19 @@
 #' @title Evaluate forecasts
 #' @description `score()` applies a selection of scoring metrics to a forecast
-#' object (a data.table with forecasts and observations) (see [as_forecast()]).
+#' object.
 #' `score()` is a generic that dispatches to different methods depending on the
 #' class of the input data.
 #'
-#' See the *Forecast types and input formats* section for more information on
-#' forecast types and input formats.
+#' See [as_forecast_binary()], [as_forecast_quantile()] etc. for information on
+#' how to create a forecast object.
+#'
+#' See [get_forecast_unit()] for more information on the concept of a forecast
+#' unit.
+#'
 #' For additional help and examples, check out the [Getting Started
 #' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
 #' well as the paper [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
-#' @inheritSection forecast_types Forecast types and input formats
-#' @inheritSection forecast_types Forecast unit
 #' @param forecast A forecast object (a validated data.table with predicted and
 #'   observed values, see [as_forecast()]).
 #' @param metrics A named list of scoring functions. Names will be used as

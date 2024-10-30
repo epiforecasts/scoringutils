@@ -1,12 +1,35 @@
 #' @title Create a `forecast` object for binary forecasts
-#' @description
-#' Create a `forecast` object for binary forecasts. See more information on
-#' forecast types and expected input formats by calling `?`[as_forecast()].
-#' @export
-#' @inheritParams as_forecast
+#' @inherit as_forecast_doc_template params description
+#' @details
+#' # Required input
+#'
+#' The input needs to be a data.frame or similar with the following columns:
+#' - `observed`: `factor` with exactly two levels representing the observed
+#'   values. The highest factor level is assumed to be the reference level.
+#'   This means that corresponding value in `predicted` represent the
+#'   probability that the observed value is equal to the highest factor level.
+#' - `predicted`: `numeric` with predicted probabilities, representing
+#'   the probability that the corresponding value in `observed` is equal to
+#'   the highest available factor level.
+#'
+#' For convenience, we recommend an additional column `model` holding the name
+#' of the forecaster or model that produced a prediction, but this is not
+#' strictly necessary.
+#'
+#' See the [example_binary] data set for an example.
+#' @inheritSection forecast_types Forecast unit
+#' @returns A `forecast` object of class `forecast_binary`
 #' @family functions to create forecast objects
 #' @importFrom cli cli_warn
 #' @keywords as_forecast
+#' @export
+#' @examples
+#' as_forecast_binary(
+#'   example_binary,
+#'   predicted = "predicted",
+#'   forecast_unit = c("model", "target_type", "target_end_date",
+#'                     "horizon", "location")
+#' )
 as_forecast_binary <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,

@@ -15,7 +15,7 @@
 #' behaviour, so setting the forecast unit explicitly can help make the code
 #' easier to debug and easier to read.
 #'
-#' @inheritParams as_forecast
+#' @inheritParams as_forecast_doc_template
 #' @param forecast_unit Character vector with the names of the columns that
 #'   uniquely identify a single forecast.
 #' @importFrom cli cli_warn
@@ -47,7 +47,7 @@ set_forecast_unit <- function(data, forecast_unit) {
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#' @inheritParams as_forecast
+#' @inheritParams as_forecast_doc_template
 #' @inheritSection forecast_types Forecast unit
 #' @return
 #' A character vector with the column names that define the unit of

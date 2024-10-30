@@ -8,8 +8,8 @@ get_forecast_unit(data)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 }
 \value{
 A character vector with the column names that define the unit of
@@ -44,9 +44,9 @@ is even and zero otherwise, then this would mess up scoring as \code{scoringutil
 then thinks that this column was relevant in defining the forecast unit.
 
 In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the \code{forecast_unit} argument in the \code{\link[=as_forecast]{as_forecast()}}
-functions. This will drop unneeded columns, while making sure that all
-necessary, 'protected columns' like "predicted" or "observed" are retained.
+using the \code{forecast_unit} argument. This will drop unneeded columns,
+while making sure that all necessary, 'protected columns' like "predicted"
+or "observed" are retained.
 }
 
 \keyword{diagnose-inputs}

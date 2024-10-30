@@ -1,9 +1,19 @@
 #' @title Create a `forecast` object for point forecasts
-#' @description
-#' Create a `forecast` object for point forecasts. See more information on
-#' forecast types and expected input formats by calling `?`[as_forecast()].
-#' @inherit as_forecast params
+#' @inherit as_forecast_doc_template params description
+#' @details
+#' # Required input
+#'
+#' The input needs to be a data.frame or similar with the following columns:
+#' - `observed`: Column of type `numeric` with observed values.
+#' - `predicted`: Column of type `numeric` with predicted values.
+#'
+#' For convenience, we recommend an additional column `model` holding the name
+#' of the forecaster or model that produced a prediction, but this is not
+#' strictly necessary.
+#'
+#' See the [example_point] data set for an example.
 #' @param ... Unused
+#' @returns A `forecast` object of class `forecast_point`
 #' @family functions to create forecast objects
 #' @export
 #' @keywords as_forecast transform

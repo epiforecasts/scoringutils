@@ -1,12 +1,34 @@
 #' @title Create a `forecast` object for quantile-based forecasts
-#' @description
-#' Create a `forecast` object for quantile-based forecasts. See more information
-#' on forecast types and expected input formats by calling `?`[as_forecast()].
+#' @inherit as_forecast_doc_template params description
+#' @details
+#' # Required input
+#'
+#' The input needs to be a data.frame or similar with the following columns:
+#' - `observed`: Column of type `numeric` with observed values.
+#' - `predicted`: Column of type `numeric` with predicted values. Predicted
+#'    values represent quantiles of the predictive distribution.
+#' - `quantile_level`: Column of type `numeric`, denoting the quantile level of
+#'    the corresponding predicted value.
+#'    Quantile levels must be between 0 and 1.
+#'
+#' For convenience, we recommend an additional column `model` holding the name
+#' of the forecaster or model that produced a prediction, but this is not
+#' strictly necessary.
+#'
+#' See the [example_quantile] data set for an example.
+#' @inheritSection forecast_types Forecast unit
 #' @param ... Unused
 #' @family functions to create forecast objects
-#' @inheritParams as_forecast
+#' @returns A `forecast` object of class `forecast_quantile`
 #' @export
 #' @keywords as_forecast transform
+#' @examples
+#' as_forecast_quantile(
+#'   example_quantile,
+#'   predicted = "predicted",
+#'   forecast_unit = c("model", "target_type", "target_end_date",
+#'                     "horizon", "location")
+#' )
 as_forecast_quantile <- function(data, ...) {
   UseMethod("as_forecast_quantile")
 }

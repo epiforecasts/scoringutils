@@ -79,6 +79,7 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
 #' @param predicted_label A factor of length N, denoting the outcome that the
 #'   probabilities in `predicted` correspond to.
 #' @return A numeric vector of size n with log scores
+#' @inheritSection illustration-input-metric-nominal Input format
 #' @importFrom methods hasArg
 #' @export
 #' @keywords metric
