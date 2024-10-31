@@ -10,9 +10,8 @@
 #' See [get_forecast_unit()] for more information on the concept of a forecast
 #' unit.
 #'
-#' For additional help and examples, check out the [Getting Started
-#' Vignette](https://epiforecasts.io/scoringutils/articles/scoringutils.html) as
-#' well as the paper [Evaluating Forecasts with scoringutils in
+#' For additional help and examples, check out the paper
+#' [Evaluating Forecasts with scoringutils in
 #' R](https://arxiv.org/abs/2205.07090).
 #' @param forecast A forecast object (a validated data.table with predicted and
 #'   observed values).
@@ -103,7 +102,7 @@ score.default <- function(forecast, metrics, ...) {
     #nolint start: keyword_quote_linter
     c(
       "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to `forecast` object first by calling the
+      "i" = "Please convert to a `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
     #nolint end
