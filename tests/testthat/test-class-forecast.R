@@ -146,14 +146,14 @@ test_that("print() works on forecast_* objects", {
 test_that("print() throws the expected messages", {
   test <- data.table::copy(example_point)
   class(test) <- c("point", "forecast", "data.table", "data.frame")
-  expect_warning(
-    suppressMessages(
-      expect_message(
-        capture.output(print(test)),
-        "Could not determine forecast type due to error in validation."
-      )
-    ),
-    "Error in validating"
+
+  # note that since introducing a length maximum for validation to be triggered,
+  # we don't throw a warning automatically anymore
+  suppressMessages(
+    expect_message(
+      capture.output(print(test)),
+      "Could not determine forecast type due to error in validation."
+    )
   )
 
   class(test) <- c("forecast_point", "forecast")
