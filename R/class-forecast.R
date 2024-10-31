@@ -75,10 +75,13 @@ assert_forecast.default <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   cli_abort(
+    #nolint start: keyword_quote_linter
     c(
       "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to `forecast` object first (see {.fn as_forecast})." # nolint
+      "i" = "Please convert to `forecast` object first by calling the
+      appropriate {.fn as_forecast_<type>} function)."
     )
+    #nolint end
   )
 }
 
