@@ -53,3 +53,18 @@ test_that("get_metrics.forecast_nominal() works as expected", {
     is.list(get_metrics(example_nominal))
   )
 })
+
+
+# ==============================================================================
+# Printing
+# ==============================================================================
+test_that("Printing works as expected", {
+  suppressMessages(
+    expect_message(
+      expect_message(
+        capture.output(print(example_nominal)),
+        "Forecast type: nominal"
+      ),
+      "Forecast unit:")
+  )
+})
