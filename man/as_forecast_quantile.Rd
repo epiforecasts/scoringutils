@@ -27,8 +27,8 @@ as_forecast_quantile(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 
 \item{...}{Unused}
 
@@ -56,19 +56,83 @@ quantiles will be computed. Corresponds to the \code{probs} argument in
 \item{type}{Type argument passed down to the quantile function. For more
 information, see \code{\link[=quantile]{quantile()}}.}
 }
+\value{
+A \code{forecast} object of class \code{forecast_quantile}
+}
 \description{
-Create a \code{forecast} object for quantile-based forecasts. See more information
-on forecast types and expected input formats by calling \verb{?}\code{\link[=as_forecast]{as_forecast()}}.
+Process and validate a data.frame (or similar) or similar with forecasts
+and observations. If the input passes all input checks, those functions will
+be converted to a \code{forecast} object. A forecast object is a \code{data.table} with
+a class \code{forecast} and an additional class that depends on the forecast type.
 
+The arguments \code{observed}, \code{predicted}, etc. make it possible to rename
+existing columns of the input data to match the required columns for a
+forecast object. Using the argument \code{forecast_unit}, you can specify
+the columns that uniquely identify a single forecast (and thereby removing
+other, unneeded columns. See section "Forecast Unit" below for details).
+}
+\section{Required input}{
+The input needs to be a data.frame or similar with the following columns:
+\itemize{
+\item \code{observed}: Column of type \code{numeric} with observed values.
+\item \code{predicted}: Column of type \code{numeric} with predicted values. Predicted
+values represent quantiles of the predictive distribution.
+\item \code{quantile_level}: Column of type \code{numeric}, denoting the quantile level of
+the corresponding predicted value.
+Quantile levels must be between 0 and 1.
+}
+
+For convenience, we recommend an additional column \code{model} holding the name
+of the forecaster or model that produced a prediction, but this is not
+strictly necessary.
+
+See the \link{example_quantile} data set for an example.
+}
+
+\section{Converting from \code{forecast_sample} to \code{forecast_quantile}}{
 When creating a \code{forecast_quantile} object from a \code{forecast_sample} object,
 the quantiles are estimated by computing empircal quantiles from the samples
 via \code{\link[=quantile]{quantile()}}. Note that empirical quantiles are a biased estimator for
 the true quantiles in particular in the tails of the distribution and
 when the number of available samples is low.
 }
+
+\section{Forecast unit}{
+In order to score forecasts, \code{scoringutils} needs to know which of the rows
+of the data belong together and jointly form a single forecasts. This is
+easy e.g. for point forecast, where there is one row per forecast. For
+quantile or sample-based forecasts, however, there are multiple rows that
+belong to a single forecast.
+
+The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
+combination of columns that uniquely identify a single forecast.
+For example, we could have forecasts made by different models in various
+locations at different time points, each for several weeks into the future.
+The forecast unit could then be described as
+\code{forecast_unit = c("model", "location", "forecast_date", "forecast_horizon")}.
+\code{scoringutils} automatically tries to determine the unit of a single
+forecast. It uses all existing columns for this, which means that no columns
+must be present that are unrelated to the forecast unit. As a very simplistic
+example, if you had an additional row, "even", that is one if the row number
+is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
+then thinks that this column was relevant in defining the forecast unit.
+
+In order to avoid issues, we recommend setting the forecast unit explicitly,
+using the \code{forecast_unit} argument. This will simply drop unneeded columns,
+while making sure that all necessary, 'protected columns' like "predicted"
+or "observed" are retained.
+}
+
+\examples{
+as_forecast_quantile(
+  example_quantile,
+  predicted = "predicted",
+  forecast_unit = c("model", "target_type", "target_end_date",
+                    "horizon", "location")
+)
+}
 \seealso{
 Other functions to create forecast objects: 
-\code{\link{as_forecast}},
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_point}()},

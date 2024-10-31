@@ -8,7 +8,7 @@ clean_forecast(forecast, copy = FALSE, na.omit = FALSE)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{copy}{Logical, default is \code{FALSE}. If \code{TRUE}, a copy of the input data
 is created.}

@@ -21,8 +21,8 @@ as_forecast_point(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 
 \item{...}{Unused}
 
@@ -39,16 +39,29 @@ observed values. This column will be renamed to "observed".}
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
 }
+\value{
+A \code{forecast} object of class \code{forecast_point}
+}
 \description{
-Create a \code{forecast} object for point forecasts. See more information on
-forecast types and expected input formats by calling \verb{?}\code{\link[=as_forecast]{as_forecast()}}.
-
 When converting a \code{forecast_quantile} object into a \code{forecast_point} object,
 the 0.5 quantile is extracted and returned as the point forecast.
 }
+\section{Required input}{
+The input needs to be a data.frame or similar with the following columns:
+\itemize{
+\item \code{observed}: Column of type \code{numeric} with observed values.
+\item \code{predicted}: Column of type \code{numeric} with predicted values.
+}
+
+For convenience, we recommend an additional column \code{model} holding the name
+of the forecaster or model that produced a prediction, but this is not
+strictly necessary.
+
+See the \link{example_point} data set for an example.
+}
+
 \seealso{
 Other functions to create forecast objects: 
-\code{\link{as_forecast}},
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_quantile}()},

@@ -8,7 +8,7 @@
 }
 \arguments{
 \item{x}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values, see \code{\link[=as_forecast_binary]{as_forecast_binary()}}).}
 
 \item{select}{A character vector of scoring rules to select from the list. If
 \code{select} is \code{NULL} (the default), all possible scoring rules are returned.}

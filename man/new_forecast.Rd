@@ -8,8 +8,8 @@ new_forecast(data, classname)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 
 \item{classname}{name of the class to be created}
 }

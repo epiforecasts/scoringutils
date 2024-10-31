@@ -34,11 +34,10 @@ is_forecast(x)
 to class \code{forecast}, \code{FALSE} otherwise.
 }
 \description{
-Test whether an object is a forecast object (see \code{\link[=as_forecast]{as_forecast()}} for more
-information).
+Test whether an object is a forecast object.
 
-You can test for a specific \verb{forecast_*} class using the appropriate
-\verb{is_forecast_*} function.
+You can test for a specific \verb{forecast_<type>} class using the appropriate
+\verb{is_forecast_<type>} function.
 }
 \examples{
 forecast_binary <- as_forecast_binary(example_binary)

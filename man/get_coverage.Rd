@@ -8,7 +8,7 @@ get_coverage(forecast, by = "model")
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{by}{character vector that denotes the level of grouping for which the
 coverage values should be computed. By default (\code{"model"}), one coverage
@@ -24,7 +24,7 @@ a data.table with columns "interval_coverage",
 }
 \description{
 For a validated forecast object in a quantile-based format
-(see \code{\link[=as_forecast]{as_forecast()}} for more information), this function computes:
+(see \code{\link[=as_forecast_quantile]{as_forecast_quantile()}} for more information), this function computes:
 \itemize{
 \item interval coverage of central prediction intervals
 \item quantile coverage for predictive quantiles

@@ -2,7 +2,7 @@
 #'
 #' @description
 #' For a validated forecast object in a quantile-based format
-#' (see [as_forecast()] for more information), this function computes:
+#' (see [as_forecast_quantile()] for more information), this function computes:
 #' - interval coverage of central prediction intervals
 #' - quantile coverage for predictive quantiles
 #' - the deviation between desired and actual coverage (both for interval and

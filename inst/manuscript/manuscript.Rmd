@@ -162,7 +162,7 @@ Forecasts differ in the exact prediction task and in how the forecaster chooses 
 - "Point" denotes a forecast for a continuous or discrete outcome variable that is represented by a single number.
 - "Binary" denotes a probability forecast for a binary (yes/no) outcome variable. This is sometimes also called "soft binary classification".
 - "Nominal" denotes a probability forecast for a variable where the outcome can assume one of multiple unordered classes. This represents a generalisation of binary forecasts to multiple possible outcomes.
-- "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will return `NA` if this is not the case. 
+- "Quantile" or "quantile-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. While a single quantile would already satisfy the requirements for a quantile-based forecast, most scoring rules expect a set of quantiles which are symmetric around the median (thus forming the lower and upper bounds of central "prediction intervals") and will error (or return `NA` if `na.rm = TRUE`) if this is not the case. 
 - "Sample" or "sample-based" is used to denote a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. A single sample technically suffices, but would lead to very imprecise results.
 
 \begin{table}[h]
@@ -207,7 +207,7 @@ The starting point for working with \pkg{scoringutils} is usually a \code{data.f
 
 Table \ref{tab:input-score} shows the expected input format for each forecast type. 
 
-The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_point` and `example_binary`, `example_nominal`, `example_quantile`, `example_sample_continuous`, and `example_sample_discrete`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. All example data in the package use a column called `model` to denote the name of the model/forecaster that generated the forecast. This is also the default in some function, but does not reflect a hard requirement. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
+The package contains example data for each forecast type, which can serve as an orientation for the correct formats. The example data sets are exported as `example_point` and `example_binary`, `example_nominal`, `example_quantile`, `example_sample_continuous`, and `example_sample_discrete`. For illustrative purposes, the example data also contains some rows with only observations and no corresponding predictions. All example data in the package use a column called `model` to denote the name of the model/forecaster that generated the forecast. This is also the default in some functions, but does not reflect a hard requirement. Input formats for the scoring rules that can be called directly follow the same convention, with inputs expected to be vectors or matrices.
 
 ### The unit of a single forecast
 
@@ -246,13 +246,13 @@ The argument `forecast_unit` allows the user to manually set the unit of a singl
 
 ## Diagnostic helper functions
 
-Various helper functions are available to diagnose and fix issues with the input data. The most important one is `print()`. Once a forecast object has successfully been created, diagnostic information will automatically be added to the output when printing a forecast object. This information includes the forecast type, the forecast unit, and additional information in case the object fails validations. 
+Various helper functions are available to diagnose and fix issues with the input data. A simple one is the `print()` method for forecast objects. Once a forecast object has successfully been created, the forecast type and the forecast unit will automatically be added to the output when printing. 
 
 ```{r}
 print(forecast_quantile, 2)
 ```
 
-Internally, the print method calls the functions \fct{get\_forecast\_type}, \fct{get\_forecast\_unit} and \fct{assert\_forecast}. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{assert\_forecast} asserts that an existing forecast object passes all validations and returns `invisble(NULL)` if the forecast object is valid (and otherwise errors). \fct{validate\_forecast} is similar to \fct{assert\_forecast}, but returns the forecast object in case of success instead of `invisble(NULL)`, meaning that it can be used in a pipe. 
+Internally, the print method calls the functions \fct{get\_forecast\_type} and \fct{get\_forecast\_unit}. Both functions can also be accesssed independently. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{assert\_forecast} asserts that an existing forecast object passes all validations and returns `invisble(NULL)` if the forecast object is valid (and otherwise errors).
 
 One common issue that causes transformation to a `forecast` object to fail are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile level or sample id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we would now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
 
@@ -653,10 +653,6 @@ The following section gives an overview of how \pkg{scoringutils} constructs for
 \fct{assert\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
 
 \fct{as\_forecast\_...} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
-
-```{r flowchart-validation, echo = FALSE, fig.pos = "!h", out.width="100%", fig.cap= "Illustration of the process of creating a `forecast` object.", fig.show="hold"}
-include_graphics("output/flowchart-create-object.png")
-```
 
 \clearpage
 

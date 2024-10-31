@@ -322,8 +322,9 @@ forecasts.
   While a single quantile would already satisfy the requirements for a
   quantile-based forecast, most scoring rules expect a set of quantiles
   which are symmetric around the median (thus forming the lower and
-  upper bounds of central ``prediction intervals'') and will return
-  \texttt{NA} if this is not the case.
+  upper bounds of central ``prediction intervals'') and will error (or
+  return \texttt{NA} if \texttt{na.rm\ =\ TRUE}) if this is not the
+  case.
 \item
   ``Sample'' or ``sample-based'' is used to denote a probabilistic
   forecast for a continuous or discrete outcome variable, with the
@@ -392,7 +393,7 @@ are exported as \texttt{example\_point} and \texttt{example\_binary},
 example data also contains some rows with only observations and no
 corresponding predictions. All example data in the package use a column
 called \texttt{model} to denote the name of the model/forecaster that
-generated the forecast. This is also the default in some function, but
+generated the forecast. This is also the default in some functions, but
 does not reflect a hard requirement. Input formats for the scoring rules
 that can be called directly follow the same convention, with inputs
 expected to be vectors or matrices.
@@ -486,11 +487,10 @@ specified columns to the corresponding required columns.
 functions}\label{diagnostic-helper-functions}
 
 Various helper functions are available to diagnose and fix issues with
-the input data. The most important one is \texttt{print()}. Once a
-forecast object has successfully been created, diagnostic information
-will automatically be added to the output when printing a forecast
-object. This information includes the forecast type, the forecast unit,
-and additional information in case the object fails validations.
+the input data. A simple one is the \texttt{print()} method for forecast
+objects. Once a forecast object has successfully been created, the
+forecast type and the forecast unit will automatically be added to the
+output when printing.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -524,18 +524,15 @@ Key: <location, target_end_date, target_type>
 \end{CodeChunk}
 
 Internally, the print method calls the functions
-\code{get\_forecast\_type()}, \code{get\_forecast\_unit()} and
-\code{assert\_forecast()}. \code{get\_forecast\_type()} and
-\code{get\_forecast\_unit()} work on either an unvalidated
-\code{data.frame} (or similar) or on an already validated forecast
-object. They return the forecast type and the forecast unit,
-respectively, as inferred from the input data. \code{assert\_forecast()}
-asserts that an existing forecast object passes all validations and
-returns \texttt{invisble(NULL)} if the forecast object is valid (and
-otherwise errors). \code{validate\_forecast()} is similar to
-\code{assert\_forecast()}, but returns the forecast object in case of
-success instead of \texttt{invisble(NULL)}, meaning that it can be used
-in a pipe.
+\code{get\_forecast\_type()} and \code{get\_forecast\_unit()}. Both
+functions can also be accesssed independently.
+\code{get\_forecast\_type()} and \code{get\_forecast\_unit()} work on
+either an unvalidated \code{data.frame} (or similar) or on an already
+validated forecast object. They return the forecast type and the
+forecast unit, respectively, as inferred from the input data.
+\code{assert\_forecast()} asserts that an existing forecast object
+passes all validations and returns \texttt{invisble(NULL)} if the
+forecast object is valid (and otherwise errors).
 
 One common issue that causes transformation to a \texttt{forecast}
 object to fail are ``duplicates'' in the data. \pkg{scoringutils}
@@ -737,9 +734,11 @@ summary level. The output of the following is shown in Figure
 \begin{CodeInput}
 R> example_sample_continuous |>
 +   as_forecast_sample() |>
-+   get_pit(by = c("model", "target_type")) |>
-+   plot_pit() + 
-+   facet_grid(target_type ~ model)
++   get_pit_histogram(by = c("model", "target_type")) |>
++   ggplot(aes(x = mid, y = density)) +
++   geom_col() +
++   facet_grid(target_type ~ model) +
++   labs(x = "Quantile", "Density")
 \end{CodeInput}
 \begin{figure}[!h]
 
@@ -989,7 +988,7 @@ i.e., all score values need to be either positive or negative.
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{output/pairwise-comparisons} 
+{\centering \includegraphics[width=1\linewidth]{../../man/figures/pairwise-illustration} 
 
 }
 
@@ -1401,17 +1400,6 @@ conform with the requirements for forecast objects, (optionally) sets
 the forecast unit, constructs the class and validates the input. The
 process is illustrated in Figure \ref{fig:flowchart-validation}.
 
-\begin{CodeChunk}
-\begin{figure}[!h]
-
-{\centering \includegraphics[width=1\linewidth]{output/flowchart-create-object} 
-
-}
-
-\caption[Illustration of the process of creating a `forecast` object]{Illustration of the process of creating a `forecast` object.}\label{fig:flowchart-validation}
-\end{figure}
-\end{CodeChunk}
-
 \clearpage
 
 \section{Comparing different calibration plots}
@@ -1423,19 +1411,19 @@ observations that produced the corresponding visualisations).
 \begin{CodeChunk}
 \begin{CodeOutput}
 
-           observed    id   predicted sample_id           model
-              <num> <int>       <num>     <int>          <fctr>
-       1: 0.6286418     1  1.16131695         1   Pred: N(0, 1)
-       2: 0.6286418     1 -0.99315186         2   Pred: N(0, 1)
-       3: 0.6286418     1  0.34728150         3   Pred: N(0, 1)
-       4: 0.6286418     1 -0.04181622         4   Pred: N(0, 1)
-       5: 0.6286418     1  0.50687585         5   Pred: N(0, 1)
-      ---                                                      
-15999996: 0.1889872  2000  0.16620035      1996 Pred: N(0, 0.5)
-15999997: 0.1889872  2000 -0.11813551      1997 Pred: N(0, 0.5)
-15999998: 0.1889872  2000  0.07934558      1998 Pred: N(0, 0.5)
-15999999: 0.1889872  2000  1.21359187      1999 Pred: N(0, 0.5)
-16000000: 0.1889872  2000 -0.18941563      2000 Pred: N(0, 0.5)
+            observed    id   predicted sample_id           model
+               <num> <int>       <num>     <int>          <fctr>
+       1: -1.0981862     1  2.16551331         1   Pred: N(0, 1)
+       2: -1.0981862     1 -1.72018902         2   Pred: N(0, 1)
+       3: -1.0981862     1  0.83321201         3   Pred: N(0, 1)
+       4: -1.0981862     1  0.28800142         4   Pred: N(0, 1)
+       5: -1.0981862     1 -0.12326236         5   Pred: N(0, 1)
+      ---                                                       
+15999996: -0.6612465  2000 -0.27061649      1996 Pred: N(0, 0.5)
+15999997: -0.6612465  2000  0.06780212      1997 Pred: N(0, 0.5)
+15999998: -0.6612465  2000  0.05126678      1998 Pred: N(0, 0.5)
+15999999: -0.6612465  2000  0.70752951      1999 Pred: N(0, 0.5)
+16000000: -0.6612465  2000  0.34493113      2000 Pred: N(0, 0.5)
 \end{CodeOutput}
 \begin{figure}[!h]
 

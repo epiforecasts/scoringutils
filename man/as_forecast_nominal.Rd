@@ -14,8 +14,8 @@ as_forecast_nominal(
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
@@ -32,17 +32,87 @@ predicted values. This column will be renamed to "predicted".}
 
 \item{predicted_label}{(optional) Name of the column in \code{data} that denotes
 the outcome to which a predicted probability corresponds to.
-This column will be renamed to "predicted_label". Only applicable to
-nominal forecasts.}
+This column will be renamed to "predicted_label".}
+}
+\value{
+A \code{forecast} object of class \code{forecast_nominal}
 }
 \description{
-Nominal forecasts are a form of categorical forecasts where the possible
-outcomes that the observed values can assume are not ordered. In that sense,
-Nominal forecasts represent a generalisation of binary forecasts.
+Process and validate a data.frame (or similar) or similar with forecasts
+and observations. If the input passes all input checks, those functions will
+be converted to a \code{forecast} object. A forecast object is a \code{data.table} with
+a class \code{forecast} and an additional class that depends on the forecast type.
+
+The arguments \code{observed}, \code{predicted}, etc. make it possible to rename
+existing columns of the input data to match the required columns for a
+forecast object. Using the argument \code{forecast_unit}, you can specify
+the columns that uniquely identify a single forecast (and thereby removing
+other, unneeded columns. See section "Forecast Unit" below for details).
+}
+\details{
+Nominal forecasts are a form of categorical forecasts and represent a
+generalisation of binary forecasts to multiple outcomes. The possible
+outcomes that the observed values can assume are not ordered.
+}
+\section{Required input}{
+The input needs to be a data.frame or similar with the following columns:
+\itemize{
+\item \code{observed}: Column with observed values of type \code{factor} with N levels,
+where N is the number of possible outcomes.
+The levels of the factor represent the possible outcomes that
+the observed values can assume.
+\item \code{predicted}: \code{numeric} column with predicted probabilities. The values
+represent the probability that the observed value is equal to the factor
+level denoted in \code{predicted_label}. Note that forecasts must be complete,
+i.e. there must be a probability assigned to every possible outcome and
+those probabilities must sum to one.
+\item \code{predicted_label}: \code{factor} with N levels, denoting the outcome that the
+probabilities in \code{predicted} correspond to.
+}
+
+For convenience, we recommend an additional column \code{model} holding the name
+of the forecaster or model that produced a prediction, but this is not
+strictly necessary.
+
+See the \link{example_nominal} data set for an example.
+}
+
+\section{Forecast unit}{
+In order to score forecasts, \code{scoringutils} needs to know which of the rows
+of the data belong together and jointly form a single forecasts. This is
+easy e.g. for point forecast, where there is one row per forecast. For
+quantile or sample-based forecasts, however, there are multiple rows that
+belong to a single forecast.
+
+The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
+combination of columns that uniquely identify a single forecast.
+For example, we could have forecasts made by different models in various
+locations at different time points, each for several weeks into the future.
+The forecast unit could then be described as
+\code{forecast_unit = c("model", "location", "forecast_date", "forecast_horizon")}.
+\code{scoringutils} automatically tries to determine the unit of a single
+forecast. It uses all existing columns for this, which means that no columns
+must be present that are unrelated to the forecast unit. As a very simplistic
+example, if you had an additional row, "even", that is one if the row number
+is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
+then thinks that this column was relevant in defining the forecast unit.
+
+In order to avoid issues, we recommend setting the forecast unit explicitly,
+using the \code{forecast_unit} argument. This will simply drop unneeded columns,
+while making sure that all necessary, 'protected columns' like "predicted"
+or "observed" are retained.
+}
+
+\examples{
+as_forecast_nominal(
+  na.omit(example_nominal),
+  predicted = "predicted",
+  forecast_unit = c("model", "target_type", "target_end_date",
+                    "horizon", "location")
+)
 }
 \seealso{
 Other functions to create forecast objects: 
-\code{\link{as_forecast}},
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_point}()},
 \code{\link{as_forecast_quantile}()},

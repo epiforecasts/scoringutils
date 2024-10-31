@@ -8,8 +8,8 @@ get_protected_columns(data = NULL)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of \code{\link[=as_forecast]{as_forecast()}} for additional information
-on required input formats.}
+See the details section of for additional information
+on the required input format.}
 }
 \value{
 A character vector with the names of protected columns in the data.

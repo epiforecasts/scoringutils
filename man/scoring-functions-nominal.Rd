@@ -27,6 +27,17 @@ The Log Score is the negative logarithm of the probability
 assigned to the observed value. It is a proper scoring rule. Small values
 are better (best is zero, worst is infinity).
 }
+\section{Input format}{
+\if{html}{
+  \out{<div style="text-align: left">}
+  \figure{metrics-nominal.png}{options: style="width:750px;max-width:100\%;"}
+  \out{</div>}
+}
+\if{latex}{
+  \figure{metrics-nominal.png}
+}
+}
+
 \examples{
 factor_levels <- c("one", "two", "three")
 predicted_label <- factor(c("one", "two", "three"), levels = factor_levels)

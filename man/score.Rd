@@ -25,7 +25,7 @@ score(forecast, metrics, ...)
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
-observed values, see \code{\link[=as_forecast]{as_forecast()}}).}
+observed values).}
 
 \item{metrics}{A named list of scoring functions. Names will be used as
 column names in the output. See \code{\link[=get_metrics]{get_metrics()}} for more information on the
@@ -46,12 +46,16 @@ scores.
 }
 \description{
 \code{score()} applies a selection of scoring metrics to a forecast
-object (a data.table with forecasts and observations) (see \code{\link[=as_forecast]{as_forecast()}}).
+object.
 \code{score()} is a generic that dispatches to different methods depending on the
 class of the input data.
 
-See the \emph{Forecast types and input formats} section for more information on
-forecast types and input formats.
+See \code{\link[=as_forecast_binary]{as_forecast_binary()}}, \code{\link[=as_forecast_quantile]{as_forecast_quantile()}} etc. for information on
+how to create a forecast object.
+
+See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for more information on the concept of a forecast
+unit.
+
 For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
 well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
@@ -79,87 +83,6 @@ print1() # prints 'bar'
 print2() # prints 'foo'
 }\if{html}{\out{</div>}}
 }
-\section{Forecast types and input formats}{
-Various different forecast types / forecast formats are supported. At the
-moment, those are:
-\itemize{
-\item point forecasts
-\item binary forecasts ("soft binary classification")
-\item nominal forecasts ("soft classification with multiple unordered classes")
-\item Probabilistic forecasts in a quantile-based format (a forecast is
-represented as a set of predictive quantiles)
-\item Probabilistic forecasts in a sample-based format (a forecast is represented
-as a set of predictive samples)
-}
-
-Forecast types are determined based on the columns present in the input data.
-Here is an overview of the required format for each forecast type:
-\if{html}{
-  \out{<div style="text-align: left">}
-  \figure{required-inputs.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
-}
-\if{latex}{
-  \figure{required-inputs.png}
-}
-
-\emph{All forecast types} require a data.frame or similar with columns \code{observed}
-\code{predicted}, and \code{model}.
-
-\emph{Point forecasts} require a column \code{observed} of type numeric and a column
-\code{predicted} of type numeric.
-
-\emph{Binary forecasts} require a column \code{observed} of type factor with exactly
-two levels and a column \code{predicted} of type numeric with probabilities,
-corresponding to the probability that \code{observed} is equal to the second
-factor level. See details \link[=brier_score]{here} for more information.
-
-\emph{Nominal forecasts} require a column \code{observed} of type factor with N levels,
-(where N is the number of possible outcomes), a column \code{predicted} of type
-numeric with probabilities (which sum to one across all possible outcomes),
-and a column \code{predicted_label} of type factor with N levels, denoting the
-outcome for which a probability is given. Forecasts must be complete, i.e.
-there must be a probability assigned to every possible outcome.
-
-\emph{Quantile-based forecasts} require a column \code{observed} of type numeric,
-a column \code{predicted} of type numeric, and a column \code{quantile_level} of type
-numeric with quantile-levels (between 0 and 1).
-
-\emph{Sample-based forecasts} require a column \code{observed} of type numeric,
-a column \code{predicted} of type numeric, and a column \code{sample_id} of type
-numeric with sample indices.
-
-For more information see the vignettes and the example data
-(\link{example_quantile}, \link{example_sample_continuous}, \link{example_sample_discrete},
-\code{\link[=example_point]{example_point()}}, \link{example_binary}, and \link{example_nominal}).
-}
-
-\section{Forecast unit}{
-In order to score forecasts, \code{scoringutils} needs to know which of the rows
-of the data belong together and jointly form a single forecasts. This is
-easy e.g. for point forecast, where there is one row per forecast. For
-quantile or sample-based forecasts, however, there are multiple rows that
-belong to a single forecast.
-
-The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
-combination of columns that uniquely identify a single forecast.
-For example, we could have forecasts made by different models in various
-locations at different time points, each for several weeks into the future.
-The forecast unit could then be described as
-\code{forecast_unit = c("model", "location", "forecast_date", "forecast_horizon")}.
-\code{scoringutils} automatically tries to determine the unit of a single
-forecast. It uses all existing columns for this, which means that no columns
-must be present that are unrelated to the forecast unit. As a very simplistic
-example, if you had an additional row, "even", that is one if the row number
-is even and zero otherwise, then this would mess up scoring as \code{scoringutils}
-then thinks that this column was relevant in defining the forecast unit.
-
-In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the \code{forecast_unit} argument in the \code{\link[=as_forecast]{as_forecast()}}
-functions. This will drop unneeded columns, while making sure that all
-necessary, 'protected columns' like "predicted" or "observed" are retained.
-}
-
 \examples{
 library(magrittr) # pipe operator
 \dontshow{

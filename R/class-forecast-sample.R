@@ -1,9 +1,26 @@
 #' @title Create a `forecast` object for sample-based forecasts
+#' @inherit as_forecast_doc_template params description
+#' @details
+#' # Required input
+#'
+#' The input needs to be a data.frame or similar with the following columns:
+#' - `observed`: Column of type `numeric` with observed values.
+#' - `predicted`: Column of type `numeric` with predicted values. Predicted
+#'    values represent random samples from the predictive distribution.
+#' - `sample_id`: Column of any type with unique identifiers
+#'    (unique within a single forecast) for each sample.
+#'
+#' For convenience, we recommend an additional column `model` holding the name
+#' of the forecaster or model that produced a prediction, but this is not
+#' strictly necessary.
+#'
+#' See the [example_sample_continuous] and [example_sample_discrete] data set
+#' for an example
+#' @inheritSection forecast_types Forecast unit
 #' @param sample_id (optional) Name of the column in `data` that contains the
-#'   sample id. This column will be renamed to "sample_id". Only applicable to
-#'   sample-based forecasts.
-#' @inheritParams as_forecast
+#'   sample id. This column will be renamed to "sample_id".
 #' @export
+#' @returns A `forecast` object of class `forecast_sample`
 #' @family functions to create forecast objects
 #' @importFrom cli cli_warn
 #' @keywords as_forecast
@@ -45,7 +62,7 @@ is_forecast_sample <- function(x) {
 
 
 #' @rdname as_forecast_quantile
-#' @description
+#' @details # Converting from `forecast_sample` to `forecast_quantile`
 #' When creating a `forecast_quantile` object from a `forecast_sample` object,
 #' the quantiles are estimated by computing empircal quantiles from the samples
 #' via [quantile()]. Note that empirical quantiles are a biased estimator for
@@ -223,8 +240,8 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast_sample()])
+#' with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
@@ -251,8 +268,8 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_sample` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_sample` (see [as_forecast_sample()])
+#' with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}

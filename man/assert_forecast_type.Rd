@@ -7,7 +7,7 @@
 assert_forecast_type(data, actual = get_forecast_type(data), desired = NULL)
 }
 \arguments{
-\item{data}{A forecast object (see \code{\link[=as_forecast]{as_forecast()}}).}
+\item{data}{A forecast object.}
 
 \item{actual}{The actual forecast type of the data}
 

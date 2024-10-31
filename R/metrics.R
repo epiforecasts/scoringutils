@@ -42,10 +42,10 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #' Get metrics
 #'
 #' @description
-#' Generic function to to obtain default metrics availble for scoring or metrics
+#' Generic function to to obtain default metrics available for scoring or metrics
 #' that were used for scoring.
 #'
-#' - If called on `forecast` object it returns a list of functions that can be
+#' - If called on a `forecast` object it returns a list of functions that can be
 #' used for scoring.
 #' - If called on a `scores` object (see [score()]), it returns a character vector
 #' with the names of the metrics that were used for scoring.
@@ -56,9 +56,6 @@ select_metrics <- function(metrics, select = NULL, exclude = NULL) {
 #'
 #' @param x A `forecast` or `scores` object.
 #' @param ... Additional arguments passed to the method.
-#' @details
-#' See [as_forecast()] for more information on `forecast` objects and [score()]
-#' for more information on `scores` objects.
 #'
 #' @family get_metrics functions
 #' @keywords handle-metrics

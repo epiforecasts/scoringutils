@@ -3,7 +3,7 @@
 #' @description Helper function to get the names of all columns in a data frame
 #' that are protected columns.
 #'
-#' @inheritParams as_forecast
+#' @inheritParams as_forecast_doc_template
 #'
 #' @return
 #' A character vector with the names of protected columns in the data.

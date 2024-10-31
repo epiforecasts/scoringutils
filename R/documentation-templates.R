@@ -1,57 +1,37 @@
+#' @title General information on creating a `forecast` object
+#'
+#' @description
+#' Process and validate a data.frame (or similar) or similar with forecasts
+#' and observations. If the input passes all input checks, those functions will
+#' be converted to a `forecast` object. A forecast object is a `data.table` with
+#' a class `forecast` and an additional class that depends on the forecast type.
+#'
+#' The arguments `observed`, `predicted`, etc. make it possible to rename
+#' existing columns of the input data to match the required columns for a
+#' forecast object. Using the argument `forecast_unit`, you can specify
+#' the columns that uniquely identify a single forecast (and thereby removing
+#' other, unneeded columns. See section "Forecast Unit" below for details).
+#'
+#' @param data A data.frame (or similar) with predicted and observed values.
+#'   See the details section of for additional information
+#'   on the required input format.
+#' @param forecast_unit (optional) Name of the columns in `data` (after
+#'   any renaming of columns) that denote the unit of a
+#'   single forecast. See [get_forecast_unit()] for details.
+#'   If `NULL` (the default), all columns that are not required columns are
+#'   assumed to form the unit of a single forecast. If specified, all columns
+#'   that are not part of the forecast unit (or required columns) will be removed.
+#' @param observed (optional) Name of the column in `data` that contains the
+#'   observed values. This column will be renamed to "observed".
+#' @param predicted (optional) Name of the column in `data` that contains the
+#'   predicted values. This column will be renamed to "predicted".
+#' @inheritSection forecast_types Forecast unit
+#' @keywords as_forecast
+#' @name as_forecast_doc_template
+NULL
+
+
 #' @title Documentation template for forecast types
-#'
-#' @details # Forecast types and input formats
-#'
-#' Various different forecast types / forecast formats are supported. At the
-#' moment, those are:
-#' - point forecasts
-#' - binary forecasts ("soft binary classification")
-#' - nominal forecasts ("soft classification with multiple unordered classes")
-#' - Probabilistic forecasts in a quantile-based format (a forecast is
-#' represented as a set of predictive quantiles)
-#' - Probabilistic forecasts in a sample-based format (a forecast is represented
-#' as a set of predictive samples)
-#'
-#' Forecast types are determined based on the columns present in the input data.
-#' Here is an overview of the required format for each forecast type:
-#' \if{html}{
-#'   \out{<div style="text-align: left">}
-#'   \figure{required-inputs.png}{options: style="width:750px;max-width:100\%;"}
-#'   \out{</div>}
-#' }
-#' \if{latex}{
-#'   \figure{required-inputs.png}
-#' }
-#'
-#' *All forecast types* require a data.frame or similar with columns `observed`
-#' `predicted`, and `model`.
-#'
-#' *Point forecasts* require a column `observed` of type numeric and a column
-#' `predicted` of type numeric.
-#'
-#' *Binary forecasts* require a column `observed` of type factor with exactly
-#' two levels and a column `predicted` of type numeric with probabilities,
-#' corresponding to the probability that `observed` is equal to the second
-#' factor level. See details [here][brier_score()] for more information.
-#'
-#' *Nominal forecasts* require a column `observed` of type factor with N levels,
-#' (where N is the number of possible outcomes), a column `predicted` of type
-#' numeric with probabilities (which sum to one across all possible outcomes),
-#' and a column `predicted_label` of type factor with N levels, denoting the
-#' outcome for which a probability is given. Forecasts must be complete, i.e.
-#' there must be a probability assigned to every possible outcome.
-#'
-#' *Quantile-based forecasts* require a column `observed` of type numeric,
-#' a column `predicted` of type numeric, and a column `quantile_level` of type
-#' numeric with quantile-levels (between 0 and 1).
-#'
-#' *Sample-based forecasts* require a column `observed` of type numeric,
-#' a column `predicted` of type numeric, and a column `sample_id` of type
-#' numeric with sample indices.
-#'
-#' For more information see the vignettes and the example data
-#' ([example_quantile], [example_sample_continuous], [example_sample_discrete],
-#' [example_point()], [example_binary], and [example_nominal]).
 #'
 #' @details # Forecast unit
 #'
@@ -75,9 +55,9 @@
 #' then thinks that this column was relevant in defining the forecast unit.
 #'
 #' In order to avoid issues, we recommend setting the forecast unit explicitly,
-#' usually through the `forecast_unit` argument in the [as_forecast()]
-#' functions. This will drop unneeded columns, while making sure that all
-#' necessary, 'protected columns' like "predicted" or "observed" are retained.
+#' using the `forecast_unit` argument. This will simply drop unneeded columns,
+#' while making sure that all necessary, 'protected columns' like "predicted"
+#' or "observed" are retained.
 #'
 #' @name forecast_types
 #' @keywords internal
@@ -148,5 +128,19 @@ NULL
 #'   \figure{metrics-quantile.png}
 #' }
 #' @name illustration-input-metric-quantile
+#' @keywords internal
+NULL
+
+#' Illustration of required inputs for nominal forecasts
+#' @details # Input format
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{metrics-nominal.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div>}
+#' }
+#' \if{latex}{
+#'   \figure{metrics-nominal.png}
+#' }
+#' @name illustration-input-metric-nominal
 #' @keywords internal
 NULL

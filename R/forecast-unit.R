@@ -6,8 +6,8 @@
 #' This simple function keeps the columns specified in `forecast_unit` (plus
 #' additional protected columns, e.g. for observed values, predictions or
 #' quantile levels) and removes duplicate rows. `set_forecast_unit()` will
-#' mainly be called when constructing a `forecast` object (see [as_forecast()])
-#' via the `forecast_unit` argument there.
+#' mainly be called when constructing a `forecast` object
+#' via the `forecast_unit` argument in `as_forecast_<type>`.
 #'
 #' If not done explicitly, `scoringutils` attempts to determine the unit
 #' of a single forecast automatically by simply assuming that all column names
@@ -15,7 +15,7 @@
 #' behaviour, so setting the forecast unit explicitly can help make the code
 #' easier to debug and easier to read.
 #'
-#' @inheritParams as_forecast
+#' @inheritParams as_forecast_doc_template
 #' @param forecast_unit Character vector with the names of the columns that
 #'   uniquely identify a single forecast.
 #' @importFrom cli cli_warn
@@ -47,7 +47,7 @@ set_forecast_unit <- function(data, forecast_unit) {
 #' the columns that are protected, i.e. those returned by
 #' [get_protected_columns()] as well as the names of the metrics that were
 #' specified during scoring, if any.
-#' @inheritParams as_forecast
+#' @inheritParams as_forecast_doc_template
 #' @inheritSection forecast_types Forecast unit
 #' @return
 #' A character vector with the column names that define the unit of

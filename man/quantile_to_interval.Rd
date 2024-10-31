@@ -21,7 +21,7 @@ quantile_to_interval_numeric(observed, predicted, quantile_level, ...)
 \item{...}{Arguments}
 
 \item{forecast}{A data.table with forecasts in a quantile-based format (see
-\code{\link[=as_forecast]{as_forecast()}}).}
+\code{\link[=as_forecast_quantile]{as_forecast_quantile()}}).}
 
 \item{format}{The format of the output. Either "long" or "wide". If "long"
 (the default), there will be a column \code{boundary} (with values either

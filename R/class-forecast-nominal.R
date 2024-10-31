@@ -1,16 +1,45 @@
 #' @title Create a `forecast` object for nominal forecasts
-#' @description
-#' Nominal forecasts are a form of categorical forecasts where the possible
-#' outcomes that the observed values can assume are not ordered. In that sense,
-#' Nominal forecasts represent a generalisation of binary forecasts.
-#' @inheritParams as_forecast
+#' @inherit as_forecast_doc_template params description
+#' @details
+#' Nominal forecasts are a form of categorical forecasts and represent a
+#' generalisation of binary forecasts to multiple outcomes. The possible
+#' outcomes that the observed values can assume are not ordered.
+#'
+#' # Required input
+#'
+#' The input needs to be a data.frame or similar with the following columns:
+#' - `observed`: Column with observed values of type `factor` with N levels,
+#'    where N is the number of possible outcomes.
+#'    The levels of the factor represent the possible outcomes that
+#'    the observed values can assume.
+#' - `predicted`: `numeric` column with predicted probabilities. The values
+#'    represent the probability that the observed value is equal to the factor
+#'    level denoted in `predicted_label`. Note that forecasts must be complete,
+#'    i.e. there must be a probability assigned to every possible outcome and
+#'    those probabilities must sum to one.
+#' - `predicted_label`: `factor` with N levels, denoting the outcome that the
+#'    probabilities in `predicted` correspond to.
+#'
+#' For convenience, we recommend an additional column `model` holding the name
+#' of the forecaster or model that produced a prediction, but this is not
+#' strictly necessary.
+#'
+#' See the [example_nominal] data set for an example.
+#' @inheritSection forecast_types Forecast unit
 #' @param predicted_label (optional) Name of the column in `data` that denotes
 #'   the outcome to which a predicted probability corresponds to.
-#'   This column will be renamed to "predicted_label". Only applicable to
-#'   nominal forecasts.
+#'   This column will be renamed to "predicted_label".
+#' @returns A `forecast` object of class `forecast_nominal`
 #' @family functions to create forecast objects
 #' @keywords as_forecast
 #' @export
+#' @examples
+#' as_forecast_nominal(
+#'   na.omit(example_nominal),
+#'   predicted = "predicted",
+#'   forecast_unit = c("model", "target_type", "target_end_date",
+#'                     "horizon", "location")
+#' )
 as_forecast_nominal <- function(data,
                                 forecast_unit = NULL,
                                 observed = NULL,
@@ -135,8 +164,8 @@ get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) 
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_nominal` (see [as_forecast()]) with the
-#' following columns:
+#' @format An object of class `forecast_nominal`
+#' (see [as_forecast_nominal()]) with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}
