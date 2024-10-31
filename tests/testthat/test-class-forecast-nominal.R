@@ -53,3 +53,13 @@ test_that("get_metrics.forecast_nominal() works as expected", {
     is.list(get_metrics(example_nominal))
   )
 })
+
+
+# ==============================================================================
+# Printing
+# ==============================================================================
+test_that("Printing works as expected", {
+  expect_no_condition(
+    print(example_nominal)
+  )
+})

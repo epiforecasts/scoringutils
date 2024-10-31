@@ -272,7 +272,12 @@ is_forecast <- function(x) {
   #   undesired situation if we set ...length() > 1
   # is.data.table: when [.data.table returns an atomic vector, it's clear it
   #   cannot be a valid forecast object, and it is likely intended by the user
-  if (data.table::is.data.table(out) && !is_dt_force_print) {
+
+  # in addition, we also check for a maximum length. The reason is that
+  # print.data.table will internally subset the data.table before printing.
+  # this subsetting triggers the validation, which is not desired in this case.
+  # this is a hack and ideally, we'd do things differently.
+  if (nrow(out) > 30 && data.table::is.data.table(out) && !is_dt_force_print) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),
@@ -281,7 +286,10 @@ is_forecast <- function(x) {
     if (inherits(validation, "try-error")) {
       cli_warn(
         c(
-          "!" = "Error in validating forecast object: {validation}"
+          "!" = "Error in validating forecast object: {validation}.",
+          "i" = "Note this error is sometimes related to `data.table`s `print`.
+          Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
+          to confirm."
         )
       )
     }
