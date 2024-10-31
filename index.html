@@ -62,7 +62,7 @@
 <p><strong>Note</strong>: <a href="https://epiforecasts.io/scoringutils/">This documentation</a> refers to the stable version of <code>scoringutils</code>. You can also view the <a href="https://epiforecasts.io/scoringutils/dev/">documentation of the development version</a>.</p>
 <p>The <code>scoringutils</code> package facilitates the process of evaluating forecasts in R, using a convenient and flexible <code>data.table</code>-based framework. It provides broad functionality to check the input data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts.</p>
 <p>The package underwent a major re-write. The most comprehensive documentation for the updated package is the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised version</a> of our <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">original</a> <code>scoringutils</code> paper.</p>
-<p>Another good starting point are the vignettes on <a href="https://epiforecasts.io/scoringutils/articles/scoringutils.html">Getting started</a>, <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>.</p>
+<p>Another good starting point are the vignettes <!-- vignettes on [Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),  --> <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>.</p>
 <!-- > Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090> -->
 <p>For further details on the specific issue of transforming forecasts for scoring see:</p>
 <blockquote>
@@ -84,7 +84,19 @@
 <div class="section level3">
 <h3 id="forecast-types">Forecast types<a class="anchor" aria-label="anchor" href="#forecast-types"></a>
 </h3>
-<p><code>scoringutils</code> currently supports scoring the following forecast types: - <code>binary</code>: a probability for a binary (yes/no) outcome variable. - <code>point</code>: a forecast for a continuous or discrete outcome variable that is represented by a single number. - <code>quantile</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles. - <code>sample</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution. - <code>nominal</code> categorical forecast with unordered outcome possibilities (generalisation of binary forecasts to multiple outcomes)</p>
+<p><code>scoringutils</code> currently supports scoring the following forecast types:</p>
+<ul>
+<li>
+<code>binary</code>: a probability for a binary (yes/no) outcome variable.</li>
+<li>
+<code>point</code>: a forecast for a continuous or discrete outcome variable that is represented by a single number.</li>
+<li>
+<code>quantile</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast distribution represented by a set of predictive quantiles.</li>
+<li>
+<code>sample</code>: a probabilistic forecast for a continuous or discrete outcome variable, with the forecast represented by a finite set of samples drawn from the predictive distribution.</li>
+<li>
+<code>nominal</code> categorical forecast with unordered outcome possibilities (generalisation of binary forecasts to multiple outcomes)</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="input-formats-and-input-validation">Input formats and input validation<a class="anchor" aria-label="anchor" href="#input-formats-and-input-validation"></a>
