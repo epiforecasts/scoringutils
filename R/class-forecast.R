@@ -285,12 +285,14 @@ is_forecast <- function(x) {
     )
     if (inherits(validation, "try-error")) {
       cli_warn(
+        #nolint start: keyword_quote_linter
         c(
           "!" = "Error in validating forecast object: {validation}.",
           "i" = "Note this error is sometimes related to `data.table`s `print`.
           Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
           to confirm."
         )
+        #nolint end
       )
     }
   }
