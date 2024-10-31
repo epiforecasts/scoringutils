@@ -48,7 +48,7 @@
 <div class="section level4">
 <h4 id="score-1-2-2-9000"><code>score()</code><a class="anchor" aria-label="anchor" href="#score-1-2-2-9000"></a></h4>
 <ul><li>The main function of the package is still the function <code><a href="../reference/score.html">score()</a></code>. However, we reworked the function and updated and clarified its input requirements.
-<ul><li>The previous columns “true_value” and “prediction” were renamed. <code><a href="../reference/score.html">score()</a></code> now requires columns called “observed” and “predicted” and “model”. The column <code>quantile</code> was renamed to <code>quantile_level</code> and <code>sample</code> was renamed to <code>sample_id</code>
+<ul><li>The previous columns “true_value” and “prediction” were renamed. <code><a href="../reference/score.html">score()</a></code> now requires columns called “observed” and “predicted” (some functions still assume the existence of a <code>model</code> column as default but this is not a strict requirement). The column <code>quantile</code> was renamed to <code>quantile_level</code> and <code>sample</code> was renamed to <code>sample_id</code>
 </li>
 <li>
 <code><a href="../reference/score.html">score()</a></code> is now a generic. It has S3 methods for the classes <code>forecast_point</code>, <code>forecast_binary</code>, <code>forecast_quantile</code>, <code>forecast_sample</code>, and <code>forecast_nominal</code>, which correspond to the different forecast types that can be scored with <code>scoringutils</code>.</li>
