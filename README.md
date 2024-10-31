@@ -77,21 +77,24 @@ probabilistic forecast for a continuous or discrete outcome variable,
 with the forecast distribution represented by a set of predictive
 quantiles. - `sample`: a probabilistic forecast for a continuous or
 discrete outcome variable, with the forecast represented by a finite set
-of samples drawn from the predictive distribution.
+of samples drawn from the predictive distribution. - `nominal`
+categorical forecast with unordered outcome possibilities
+(generalisation of binary forecasts to multiple outcomes)
 
 ### Input formats and input validation
 
 The expected input format is generally a `data.frame` (or similar) with
-required columns `observed`, `predicted`, and `model` that holds the
-forecasts and observed values. Exact requirements depend on the forecast
-type. For more information, have a look at the
+required columns `observed`, and `predicted` that holds the forecasts
+and observed values. Exact requirements depend on the forecast type. For
+more information, have a look at the
 [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
-call `?as_forecast()`, or have a look at the example data provided in
-the package (`example_binary`, `example_point`, `example_quantile`,
-`example_sample_continuous`, `example_sample_discrete`).
+call `?as_forecast_binary`, `?as_forecast_quantile` etc., or have a look
+at the example data provided in the package (`example_binary`,
+`example_point`, `example_quantile`, `example_sample_continuous`,
+`example_sample_discrete`, `example_nominal`).
 
 Before scoring, input data needs to be validated and transformed into a
-forecast object using the function `as_forecast()`.
+forecast object using one of the `as_forecast_<type>()` functions.
 
 ``` r
 forecast_quantile <- example_quantile |>
