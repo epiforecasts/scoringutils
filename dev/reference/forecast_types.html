@@ -45,45 +45,6 @@
 
 
     <div class="section level2">
-    <h2 id="forecast-types-and-input-formats">Forecast types and input formats<a class="anchor" aria-label="anchor" href="#forecast-types-and-input-formats"></a></h2>
-    <p>Various different forecast types / forecast formats are supported. At the
-moment, those are:</p><ul><li><p>point forecasts</p></li>
-<li><p>binary forecasts ("soft binary classification")</p></li>
-<li><p>nominal forecasts ("soft classification with multiple unordered classes")</p></li>
-<li><p>Probabilistic forecasts in a quantile-based format (a forecast is
-represented as a set of predictive quantiles)</p></li>
-<li><p>Probabilistic forecasts in a sample-based format (a forecast is represented
-as a set of predictive samples)</p></li>
-</ul><p>Forecast types are determined based on the columns present in the input data.
-Here is an overview of the required format for each forecast type:
-
-  </p><div style="text-align: left">
-  <img src="figures/required-inputs.png" style="width:750px;max-width:100%;"></div>
-<p><em>All forecast types</em> require a data.frame or similar with columns <code>observed</code>
-<code>predicted</code>, and <code>model</code>.</p>
-<p><em>Point forecasts</em> require a column <code>observed</code> of type numeric and a column
-<code>predicted</code> of type numeric.</p>
-<p><em>Binary forecasts</em> require a column <code>observed</code> of type factor with exactly
-two levels and a column <code>predicted</code> of type numeric with probabilities,
-corresponding to the probability that <code>observed</code> is equal to the second
-factor level. See details <a href="scoring-functions-binary.html">here</a> for more information.</p>
-<p><em>Nominal forecasts</em> require a column <code>observed</code> of type factor with N levels,
-(where N is the number of possible outcomes), a column <code>predicted</code> of type
-numeric with probabilities (which sum to one across all possible outcomes),
-and a column <code>predicted_label</code> of type factor with N levels, denoting the
-outcome for which a probability is given. Forecasts must be complete, i.e.
-there must be a probability assigned to every possible outcome.</p>
-<p><em>Quantile-based forecasts</em> require a column <code>observed</code> of type numeric,
-a column <code>predicted</code> of type numeric, and a column <code>quantile_level</code> of type
-numeric with quantile-levels (between 0 and 1).</p>
-<p><em>Sample-based forecasts</em> require a column <code>observed</code> of type numeric,
-a column <code>predicted</code> of type numeric, and a column <code>sample_id</code> of type
-numeric with sample indices.</p>
-<p>For more information see the vignettes and the example data
-(<a href="example_quantile.html">example_quantile</a>, <a href="example_sample_continuous.html">example_sample_continuous</a>, <a href="example_sample_discrete.html">example_sample_discrete</a>,
-<code><a href="example_point.html">example_point()</a></code>, <a href="example_binary.html">example_binary</a>, and <a href="example_nominal.html">example_nominal</a>).</p>
-    </div>
-    <div class="section level2">
     <h2 id="forecast-unit">Forecast unit<a class="anchor" aria-label="anchor" href="#forecast-unit"></a></h2>
     <p>In order to score forecasts, <code>scoringutils</code> needs to know which of the rows
 of the data belong together and jointly form a single forecasts. This is
@@ -103,13 +64,12 @@ example, if you had an additional row, "even", that is one if the row number
 is even and zero otherwise, then this would mess up scoring as <code>scoringutils</code>
 then thinks that this column was relevant in defining the forecast unit.</p>
 <p>In order to avoid issues, we recommend setting the forecast unit explicitly,
-usually through the <code>forecast_unit</code> argument in the <code><a href="as_forecast.html">as_forecast()</a></code>
-functions. This will drop unneeded columns, while making sure that all
-necessary, 'protected columns' like "predicted" or "observed" are retained.</p>
+using the <code>forecast_unit</code> argument. This will simply drop unneeded columns,
+while making sure that all necessary, 'protected columns' like "predicted"
+or "observed" are retained.</p>
     </div>
 
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
-    </nav></aside></div>
+  </main></div>
 
 
     <footer><div class="pkgdown-footer-left">
