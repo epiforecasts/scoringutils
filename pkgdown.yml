@@ -1,12 +1,11 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7.9000
-pkgdown_sha: 548a9493b72ff93d3ed8392d4ad30b77d8b15fa5
+pandoc: 3.1.11
+pkgdown: 2.1.1.9000
+pkgdown_sha: ffe60d5f60934e95285d416dae12c05e24ed1dac
 articles:
-  metric-details: metric-details.html
-  scoring-forecasts-directly: scoring-forecasts-directly.html
-  scoringutils: scoringutils.html
-last_built: 2024-01-05T16:21Z
+  Deprecated-functions: Deprecated-functions.html
+  Deprecated-visualisations: Deprecated-visualisations.html
+  scoring-rules: scoring-rules.html
+last_built: 2024-10-31T14:06Z
 urls:
   reference: https://epiforecasts.io/scoringutils/reference
   article: https://epiforecasts.io/scoringutils/articles
-
