@@ -31,8 +31,8 @@ version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?
 of our [original](https://doi.org/10.48550/arXiv.2205.07090)
 `scoringutils` paper.
 
-Another good starting point are the vignettes on [Getting
-started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),
+Another good starting point are the vignettes
+<!-- vignettes on [Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),  -->
 [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
@@ -67,17 +67,19 @@ remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 
 ### Forecast types
 
-`scoringutils` currently supports scoring the following forecast
-types: - `binary`: a probability for a binary (yes/no) outcome
-variable. - `point`: a forecast for a continuous or discrete outcome
-variable that is represented by a single number. - `quantile`: a
-probabilistic forecast for a continuous or discrete outcome variable,
-with the forecast distribution represented by a set of predictive
-quantiles. - `sample`: a probabilistic forecast for a continuous or
-discrete outcome variable, with the forecast represented by a finite set
-of samples drawn from the predictive distribution. - `nominal`
-categorical forecast with unordered outcome possibilities
-(generalisation of binary forecasts to multiple outcomes)
+`scoringutils` currently supports scoring the following forecast types:
+
+- `binary`: a probability for a binary (yes/no) outcome variable.
+- `point`: a forecast for a continuous or discrete outcome variable that
+  is represented by a single number.
+- `quantile`: a probabilistic forecast for a continuous or discrete
+  outcome variable, with the forecast distribution represented by a set
+  of predictive quantiles.
+- `sample`: a probabilistic forecast for a continuous or discrete
+  outcome variable, with the forecast represented by a finite set of
+  samples drawn from the predictive distribution.
+- `nominal` categorical forecast with unordered outcome possibilities
+  (generalisation of binary forecasts to multiple outcomes)
 
 ### Input formats and input validation
 
