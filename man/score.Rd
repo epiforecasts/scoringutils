@@ -56,8 +56,8 @@ how to create a forecast object.
 See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for more information on the concept of a forecast
 unit.
 
-For additional help and examples, check out the \href{https://epiforecasts.io/scoringutils/articles/scoringutils.html}{Getting Started Vignette} as
-well as the paper \href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
+For additional help and examples, check out the paper
+\href{https://arxiv.org/abs/2205.07090}{Evaluating Forecasts with scoringutils in R}.
 }
 \details{
 \strong{Customising metrics}
