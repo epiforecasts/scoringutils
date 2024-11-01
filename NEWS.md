@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+Minor spelling / mathematical updates to Scoring rule vignette. (#969)
+
 # scoringutils 2.0.0
 
 This update represents a major rewrite of the package and introduces breaking changes. If you want to keep using the older version, you can download it using `remotes::install_github("epiforecasts/scoringutils@v1.2")`.

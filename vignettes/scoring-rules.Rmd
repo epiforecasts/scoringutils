@@ -23,7 +23,7 @@ library(data.table)
 
 # Introduction
 
-This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the pacakge works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper. 
+This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper. 
 
 We can distinguish two types of forecasts: point forecasts and probabilistic forecasts. A point forecast is a single number representing a single outcome. A probabilistic forecast is a full predictive probability distribution over multiple possible outcomes. In contrast to point forecasts, probabilistic forecasts incorporate uncertainty about different possible outcomes. 
 
@@ -371,7 +371,7 @@ where $q_\alpha$ is the $\alpha$-quantile of the predictive distribution. For co
 - $1 - (2 \times$ the minimum percentile rank for which the corresponding quantile is still larger than the observed value) *if the observed value is larger than the median of the predictive distribution.*.
 - $0$ *if the observed value is exactly the median*.
 
-Bias can assume values between -1 (underprediction) and 1 (overpredictin) and is 0 ideally (i.e. unbiased).
+Bias can assume values between -1 (underprediction) and 1 (overprediction) and is 0 ideally (i.e. unbiased).
 
 For an increasing number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and the bias metric coincides with the one for continuous forecasts (see above).
 
@@ -387,7 +387,7 @@ Interval coverage for a given interval range is defined as the proportion of obs
 
 ### Interval coverage deviation
 
-The interval coverage deviation is the difference between the observed interval coverage and the nominal interval coverage. For example, if the observed interval coverage for the 50% central prediction interval is 0.6, then the interval coverage deviation is $0.6 = - 0.5 = 0.1.$
+The interval coverage deviation is the difference between the observed interval coverage and the nominal interval coverage. For example, if the observed interval coverage for the 50% central prediction interval is 0.6, then the interval coverage deviation is $0.6 - 0.5 = 0.1.$
 
 $$\text{interval coverage deviation} = \text{observed interval coverage} - \text{nominal interval coverage}$$
 
