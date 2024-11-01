@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,14 +39,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.2.9000" id="scoringutils-1229000">scoringutils 1.2.2.9000<a class="anchor" aria-label="anchor" href="#scoringutils-1229000"></a></h2>
+<h2 class="pkg-version" data-toc-text="development version" id="scoringutils-development-version">scoringutils (development version)<a class="anchor" aria-label="anchor" href="#scoringutils-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="scoringutils-200">scoringutils 2.0.0<a class="anchor" aria-label="anchor" href="#scoringutils-200"></a></h2><p class="text-muted">CRAN release: 2024-10-31</p>
 <p>This update represents a major rewrite of the package and introduces breaking changes. If you want to keep using the older version, you can download it using <code>remotes::install_github("epiforecasts/scoringutils@v1.2")</code>.</p>
 <p>The update aims to make the package more modular and customisable and overall cleaner and easier to work with. In particular, we aimed to make the suggested workflows for evaluating forecasts more explicit and easier to follow (see visualisation below). To do that, we clarified input formats and made them consistent across all functions. We refactord many functions to S3-methods and introduced <code>forecast</code> objects with separate classes for different types of forecasts. A new set of <code>as_forecast_&lt;type&gt;()</code> functions was introduced to validate the data and convert inputs into a <code>forecast</code> object (a <code>data.table</code> with a <code>forecast</code> class and an additional class corresponding to the forecast type (see below)). Another major update is the possibility for users to pass in their own scoring functions into <code><a href="../reference/score.html">score()</a></code>. We updated and improved all function documentation and added new vignettes to guide users through the package. Internally, we refactored the code, improved input checks, updated notifications (which now use the <code>cli</code> package) and increased test coverage.</p>
 <p>The most comprehensive documentation for the new package after the rewrite is the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised version</a> of our <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">original</a> <code>scoringutils</code> paper.</p>
 <div class="section level3">
-<h3 id="package-updates-1-2-2-9000">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-1-2-2-9000"></a></h3>
+<h3 id="package-updates-2-0-0">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-2-0-0"></a></h3>
 <div class="section level4">
-<h4 id="score-1-2-2-9000"><code>score()</code><a class="anchor" aria-label="anchor" href="#score-1-2-2-9000"></a></h4>
+<h4 id="score-2-0-0"><code>score()</code><a class="anchor" aria-label="anchor" href="#score-2-0-0"></a></h4>
 <ul><li>The main function of the package is still the function <code><a href="../reference/score.html">score()</a></code>. However, we reworked the function and updated and clarified its input requirements.
 <ul><li>The previous columns “true_value” and “prediction” were renamed. <code><a href="../reference/score.html">score()</a></code> now requires columns called “observed” and “predicted” (some functions still assume the existence of a <code>model</code> column as default but this is not a strict requirement). The column <code>quantile</code> was renamed to <code>quantile_level</code> and <code>sample</code> was renamed to <code>sample_id</code>
 </li>
@@ -65,12 +68,12 @@
 </ul></li>
 </ul></div>
 <div class="section level4">
-<h4 id="creating-a-forecast-object-1-2-2-9000">Creating a forecast object<a class="anchor" aria-label="anchor" href="#creating-a-forecast-object-1-2-2-9000"></a></h4>
+<h4 id="creating-a-forecast-object-2-0-0">Creating a forecast object<a class="anchor" aria-label="anchor" href="#creating-a-forecast-object-2-0-0"></a></h4>
 <ul><li>The <code>as_forecast_&lt;type&gt;()</code> functions create a forecast object and validates it. They also allow users to rename/specify required columns and specify the forecast unit in a single step, taking over the functionality of <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> in most cases. See <code>?as_forecast()</code> for more information.</li>
 <li>Some <code>as_forecast_&lt;type&gt;()</code> functions like e.g. <code><a href="../reference/as_forecast_point.html">as_forecast_point()</a></code> and <code><a href="../reference/as_forecast_quantile.html">as_forecast_quantile()</a></code> have S3 methods for converting from another forecast type to the respective forecast type. For example, <code><a href="../reference/as_forecast_quantile.html">as_forecast_quantile()</a></code> has a method for converting from a <code>forecast_sample</code> object to a <code>forecast_quantile</code> object by estimating quantiles from the samples.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="updated-workflows-1-2-2-9000">Updated workflows<a class="anchor" aria-label="anchor" href="#updated-workflows-1-2-2-9000"></a></h4>
+<h4 id="updated-workflows-2-0-0">Updated workflows<a class="anchor" aria-label="anchor" href="#updated-workflows-2-0-0"></a></h4>
 <ul><li>
 <p>An example workflow for scoring a forecast now looks like this:</p>
 <pre><code><span><span class="va">forecast_quantile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span></span>
@@ -86,7 +89,7 @@
 <li><p>Overall, we updated the suggested workflows for how users should work with the package. The following gives an overview (see the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">updated paper</a> for more details). <img src="./reference/figures/workflow.png" alt="package workflows"></p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="input-formats-1-2-2-9000">Input formats<a class="anchor" aria-label="anchor" href="#input-formats-1-2-2-9000"></a></h4>
+<h4 id="input-formats-2-0-0">Input formats<a class="anchor" aria-label="anchor" href="#input-formats-2-0-0"></a></h4>
 <ul><li><p>We standardised input formats both for <code><a href="../reference/score.html">score()</a></code> as well as for the scoring rules exported by <code>scoreingutils</code>. The following plot gives a overview of the expected input formats for the different forecast types in <code><a href="../reference/score.html">score()</a></code>. <img src="./reference/figures/required-inputs.png" alt="input formats"></p></li>
 <li>
 <p>Support for the interval format was mostly dropped (see PR <a href="https://github.com/epiforecasts/scoringutils/issues/525" class="external-link">#525</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a>). The co-existence of the quantile and interval format let to a confusing user experience with many duplicated functions providing the same functionality. We decided to simplify the interface by focusing exclusively on the quantile format.</p>
@@ -95,12 +98,12 @@
 </ul></li>
 </ul></div>
 <div class="section level4">
-<h4 id="re-validating-forecast-objects-1-2-2-9000">(Re-)Validating forecast objects<a class="anchor" aria-label="anchor" href="#re-validating-forecast-objects-1-2-2-9000"></a></h4>
+<h4 id="re-validating-forecast-objects-2-0-0">(Re-)Validating forecast objects<a class="anchor" aria-label="anchor" href="#re-validating-forecast-objects-2-0-0"></a></h4>
 <ul><li>To create and validate a new <code>forecast</code> object, users can use <code>as_forecast_&lt;type&gt;()</code>. To revalidate an existing <code>forecast</code> object users can call <code><a href="../reference/assert_forecast.html">assert_forecast()</a></code> (which validates the input and returns <code>invisible(NULL)</code>. <code><a href="../reference/assert_forecast.html">assert_forecast()</a></code> is a generic with methods for the different forecast types. Alternatively, users can call `<code>as_forecast_&lt;type&gt;()</code> again to re-validate a forecast object. Simply printing the object will also provide some additional information.</li>
 <li>Users can test whether an object is of class <code>forecast_*()</code> using the function <code><a href="../reference/is_forecast.html">is_forecast()</a></code>. Users can also test for a specific <code>forecast_*</code> class using the appropriate <code>is_forecast.forecast_*</code> method. For example, to check whether an object is of class <code>forecast_quantile</code>, you would use you would use <code>scoringutils:::is_forecast.forecast_quantile()</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="pairwise-comparisons-and-relative-skill-1-2-2-9000">Pairwise comparisons and relative skill<a class="anchor" aria-label="anchor" href="#pairwise-comparisons-and-relative-skill-1-2-2-9000"></a></h4>
+<h4 id="pairwise-comparisons-and-relative-skill-2-0-0">Pairwise comparisons and relative skill<a class="anchor" aria-label="anchor" href="#pairwise-comparisons-and-relative-skill-2-0-0"></a></h4>
 <ul><li>The functionality for computing pairwise comparisons was now split from <code><a href="../reference/summarise_scores.html">summarise_scores()</a></code>. Instead of doing pairwise comparisons as part of summarising scores, a new function, <code><a href="../reference/add_relative_skill.html">add_relative_skill()</a></code>, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.</li>
 <li>The function <code>pairwise_comparison()</code> was renamed to <code><a href="../reference/get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code>, in line with other <code>get_</code>-functions. Analogously, <code>plot_pairwise_comparison()</code> was renamed to <code><a href="../reference/plot_pairwise_comparisons.html">plot_pairwise_comparisons()</a></code>.</li>
 <li>Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.</li>
@@ -108,12 +111,12 @@
 </li>
 </ul></div>
 <div class="section level4">
-<h4 id="computing-coverage-values-1-2-2-9000">Computing coverage values<a class="anchor" aria-label="anchor" href="#computing-coverage-values-1-2-2-9000"></a></h4>
+<h4 id="computing-coverage-values-2-0-0">Computing coverage values<a class="anchor" aria-label="anchor" href="#computing-coverage-values-2-0-0"></a></h4>
 <ul><li>
 <code>add_coverage()</code> was replaced by a new function, <code><a href="../reference/get_coverage.html">get_coverage()</a></code>. This function comes with an updated workflow where coverage values are computed directly based on the original data and can then be visualised using <code><a href="../reference/plot_interval_coverage.html">plot_interval_coverage()</a></code> or <code><a href="../reference/plot_quantile_coverage.html">plot_quantile_coverage()</a></code>. An example workflow would be <code>example_quantile |&gt; as_forecast_quantile() |&gt; get_coverage(by = "model") |&gt; plot_interval_coverage()</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="obtaining-and-plotting-forecast-counts-1-2-2-9000">Obtaining and plotting forecast counts<a class="anchor" aria-label="anchor" href="#obtaining-and-plotting-forecast-counts-1-2-2-9000"></a></h4>
+<h4 id="obtaining-and-plotting-forecast-counts-2-0-0">Obtaining and plotting forecast counts<a class="anchor" aria-label="anchor" href="#obtaining-and-plotting-forecast-counts-2-0-0"></a></h4>
 <ul><li>The function <code>avail_forecasts()</code> was renamed to <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code>. This represents a change in the naming convention where we aim to name functions that provide the user with additional useful information about the data with a prefix “get_”. Sees Issue <a href="https://github.com/epiforecasts/scoringutils/issues/403" class="external-link">#403</a> and <a href="https://github.com/epiforecasts/scoringutils/issues/521" class="external-link">#521</a> and PR <a href="https://github.com/epiforecasts/scoringutils/issues/511" class="external-link">#511</a> by <a href="https://github.com/nikosbosse" class="external-link">@nikosbosse</a> and reviewed by <a href="https://github.com/seabbs" class="external-link">@seabbs</a> for details.
 <ul><li>For clarity, the output column in <code><a href="../reference/get_forecast_counts.html">get_forecast_counts()</a></code> was renamed from “Number forecasts” to “count”.</li>
 <li>
@@ -123,7 +126,7 @@
 </ul></li>
 </ul></div>
 <div class="section level4">
-<h4 id="renamed-functions-1-2-2-9000">Renamed functions<a class="anchor" aria-label="anchor" href="#renamed-functions-1-2-2-9000"></a></h4>
+<h4 id="renamed-functions-2-0-0">Renamed functions<a class="anchor" aria-label="anchor" href="#renamed-functions-2-0-0"></a></h4>
 <ul><li>The function <code>find_duplicates()</code> was renamed to <code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code>.</li>
 <li>Renamed <code>interval_coverage_quantile()</code> to <code><a href="../reference/interval_coverage.html">interval_coverage()</a></code>.</li>
 <li>“range” was consistently renamed to “interval_range” in the code. The “range”-format (which was mostly used internally) was renamed to “interval”-format</li>
@@ -131,7 +134,7 @@
 </li>
 </ul></div>
 <div class="section level4">
-<h4 id="deleted-functions-1-2-2-9000">Deleted functions<a class="anchor" aria-label="anchor" href="#deleted-functions-1-2-2-9000"></a></h4>
+<h4 id="deleted-functions-2-0-0">Deleted functions<a class="anchor" aria-label="anchor" href="#deleted-functions-2-0-0"></a></h4>
 <ul><li>Removed abs_error and squared_error from the package in favour of <code><a href="https://rdrr.io/pkg/Metrics/man/ae.html" class="external-link">Metrics::ae</a></code> and <code><a href="https://rdrr.io/pkg/Metrics/man/se.html" class="external-link">Metrics::se</a></code>.<code><a href="../reference/get_duplicate_forecasts.html">get_duplicate_forecasts()</a></code> now sorts outputs according to the forecast unit, making it easier to spot duplicates. In addition, there is a <code>counts</code> option that allows the user to display the number of duplicates for each forecast unit, rather than the raw duplicated rows.</li>
 <li>Deleted the function <code>plot_ranges()</code>. If you want to continue using the functionality, you can find the function code <a href="https://github.com/epiforecasts/scoringutils/issues/462" class="external-link">here</a> or in the Deprecated-visualisations Vignette.</li>
 <li>Removed the function <code>plot_predictions()</code>, as well as its helper function <code>make_NA()</code>, in favour of a dedicated Vignette that shows different ways of visualising predictions. For future reference, the function code can be found <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">here</a> (Issue <a href="https://github.com/epiforecasts/scoringutils/issues/659" class="external-link">#659</a>) or in the Deprecated-visualisations Vignette.</li>
@@ -144,7 +147,7 @@
 <code>pit()</code>, <code>pit_sample()</code> and <code>plot_pit()</code> have been removed and replaced by functionality to create PIT histograms (<code>pit_histogram_sampel()</code> and <code><a href="../reference/get_pit_histogram.html">get_pit_histogram()</a></code>)</li>
 </ul></div>
 <div class="section level4">
-<h4 id="function-changes-1-2-2-9000">Function changes<a class="anchor" aria-label="anchor" href="#function-changes-1-2-2-9000"></a></h4>
+<h4 id="function-changes-2-0-0">Function changes<a class="anchor" aria-label="anchor" href="#function-changes-2-0-0"></a></h4>
 <ul><li>
 <code><a href="../reference/bias_quantile.html">bias_quantile()</a></code> changed the way it handles forecasts where the median is missing: The median is now imputed by linear interpolation between the innermost quantiles. Previously, we imputed the median by simply taking the mean of the innermost quantiles.</li>
 <li>In contrast to the previous <code>correlation</code> function, <code>get_correlations</code> doesn’t round correlations by default. Instead, <code>plot_correlations</code> now has a <code>digits</code> argument that allows users to round correlations before plotting them. Alternatively, using <code>dplyr</code>, you could call something like <code>mutate(correlations, across(where(is.numeric), \(x) signif(x, digits = 2)))</code> on the output of <code>get_correlations</code>.</li>
@@ -152,7 +155,7 @@
 <code><a href="../reference/wis.html">wis()</a></code> now errors by default if not all quantile levels form valid prediction intervals and returns <code>NA</code> if there are missing values. Previously, <code>na.rm</code> was set to <code>TRUE</code> by default, which could lead to unexpected results, if users are not aware of this.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="internal-package-updates-1-2-2-9000">Internal package updates<a class="anchor" aria-label="anchor" href="#internal-package-updates-1-2-2-9000"></a></h4>
+<h4 id="internal-package-updates-2-0-0">Internal package updates<a class="anchor" aria-label="anchor" href="#internal-package-updates-2-0-0"></a></h4>
 <ul><li>The deprecated <code>..density..</code> was replaced with <code>after_stat(density)</code> in ggplot calls.</li>
 <li>Files ending in “.Rda” were renamed to “.rds” where appropriate when used together with <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> or <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>.</li>
 <li>Added a subsetting <code>[</code> operator for scores, so that the score name attribute gets preserved when subsetting.</li>
@@ -161,7 +164,7 @@
 <code>scoringutils</code> now requires R &gt;= 4.0</li>
 </ul></div>
 <div class="section level4">
-<h4 id="documentation-and-testing-1-2-2-9000">Documentation and testing<a class="anchor" aria-label="anchor" href="#documentation-and-testing-1-2-2-9000"></a></h4>
+<h4 id="documentation-and-testing-2-0-0">Documentation and testing<a class="anchor" aria-label="anchor" href="#documentation-and-testing-2-0-0"></a></h4>
 <ul><li>Updates documentation for most functions and made sure all functions have documented return statements</li>
 <li>Documentation pkgdown pages are now created both for the stable and dev versions.</li>
 <li>Added unit tests for many functions</li>

@@ -11,7 +11,7 @@ assess the calibration of predictive Monte Carlo samples."><meta name="robots" c
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,17 +133,19 @@ cumulative probability of observing incidence \(k\) at time \(t\) and
 Values of the PIT histogram are then created by averaging over the \(n\)
 predictions,</p>
 <p>$$
+   \bar{F}(u) = \frac{i = 1}{n} \sum_{i=1}^{n} F^{(i)}(u)
 $$</p>
 <p>And calculating the value at each bin between quantile \(q_i\) and quantile
 \(q_{i + 1}\) as</p>
 <p>$$
+   \bar{F}(q_i) - \bar{F}(q_{i + 1})
 $$</p>
 <p>Alternatively, a randomised PIT can be used instead. In this case, the PIT is
 $$
   u_t = P_t(k_t) + v * (P_t(k_t) - P_t(k_t - 1))
 $$</p>
 <p>where \(v\) is standard uniform and independent of \(k\). The values of
-the PIT histogram are then calculated by binning the $u_t$ values as above.</p>
+the PIT histogram are then calculated by binning the \(u_t\) values as above.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
