@@ -217,7 +217,7 @@ Rows are automatically grouped based on the values in all other columns present 
 
 \subsection{Forecast objects and input validation} \label{sec:validation}
 
-The raw input data needs to be processed and validated by converting it into a `forecast` object: 
+The raw input data needs to be processed and validated by converting it into a `forecast` object (ignore for now that the example data shipped with package is pre-validated by default).  
 
 ```{r, eval=TRUE, echo=TRUE, cache=FALSE}
 library("scoringutils")
@@ -225,7 +225,7 @@ forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile() 
 ```
 
-Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it (see Figure \ref{fig:flowchart-validation} for details). A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_nominal`, `forecast_quantile` or `forecast_sample`). 
+Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it. A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_nominal`, `forecast_quantile` or `forecast_sample`). 
 
 All `as_forecast_<type>()` functions can take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
@@ -248,11 +248,13 @@ The argument `forecast_unit` allows the user to manually set the unit of a singl
 
 Various helper functions are available to diagnose and fix issues with the input data. A simple one is the `print()` method for forecast objects. Once a forecast object has successfully been created, the forecast type and the forecast unit will automatically be added to the output when printing. 
 
-```{r}
+```{r, message=TRUE, warning=TRUE, cache=FALSE}
 print(forecast_quantile, 2)
 ```
 
-Internally, the print method calls the functions \fct{get\_forecast\_type} and \fct{get\_forecast\_unit}. Both functions can also be accesssed independently. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. \fct{assert\_forecast} asserts that an existing forecast object passes all validations and returns `invisble(NULL)` if the forecast object is valid (and otherwise errors).
+Internally, the print method calls \fct{get\_forecast\_type} and \fct{get\_forecast\_unit}. Both functions can also be called independently. \fct{get\_forecast\_type} and \fct{get\_forecast\_unit} work on either an unvalidated \code{data.frame} (or similar) or on an already validated forecast object. They return the forecast type and the forecast unit, respectively, as inferred from the input data. 
+
+\fct{assert\_forecast} asserts that an existing forecast object passes all validations and returns `invisble(NULL)` if the forecast object is valid (and otherwise errors).
 
 One common issue that causes transformation to a `forecast` object to fail are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile level or sample id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we would now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
 
@@ -276,7 +278,7 @@ The function \fct{transform\_forecasts} takes a validated forecast object as inp
 
 The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts} twice to replace them with zeroes first before appending transformed counts. 
 
-```{r}
+```{r, message=TRUE, warning=TRUE, cache=FALSE}
 forecast_quantile |> 
   transform_forecasts(fun = \(x) {pmax(x, 0)}, append = FALSE) |>
   transform_forecasts(fun = log_shift, offset = 1) |>
@@ -329,11 +331,10 @@ One important quality of good forecasts is calibration. The term describes a sta
 
 A common way to visualise probabilistic calibration is the probability integral transform (PIT) histogram \citep{dawidPresentPositionPotential1984}. Observed values, $y$, are transformed using the CDF of the predictive distribution, $F$, to create a new variable $u$ with $u = F(y)$. $u$ is therefore simply the CDF of the predictive distribution evaluated at the observed value. If forecasts are probabilistically calibrated, then the transformed values will be uniformly distributed (for a proof see for example @angusProbabilityIntegralTransform1994). When plotting a histogram of PIT values (see Figure \ref{fig:pit-plots}), a systematic bias usually leads to a triangular shape, a U-shaped histogram corresponds to forecasts that are underdispersed (too sharp) and a hump shape appears when forecasts are overdispersed (too wide). There exist different variations of the PIT to deal with discrete instead of continuous data (see e.g., \cite{czadoPredictiveModelAssessment2009} and \cite{funkAssessingPerformanceRealtime2019}). The PIT version implemented in `scoringutils` for discrete variables follows \cite{funkAssessingPerformanceRealtime2019}. 
 
-Users can obtain PIT histograms based on validated forecast objects using the function \fct{get\_pit} and can visualise results using \fct{plot\_pit}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
+Users can obtain PIT histograms based on validated forecast objects using the function \fct{get\_pit\_histogram}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
 example_sample_continuous |>
-  as_forecast_sample() |>
   get_pit_histogram(by = c("model", "target_type")) |>
   ggplot(aes(x = mid, y = density)) +
   geom_col() +
@@ -351,7 +352,7 @@ For forecasts in a quantile-based format, there exists a second way to assess pr
 
 Interval and quantile coverage can easily be computed by calling \fct{get_coverage} on a validated forecast object (in a quantile-based format). The function computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation and returns a `data.table` with corresponding columns. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 forecast_quantile |>
   get_coverage(by = "model") |>
   print(2)
@@ -394,9 +395,8 @@ Metrics and scoring rules can be applied to data in two different ways: They can
 
 The function \fct{score} is the workhorse of the package and applies a set of metrics and scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The input of \fct{score} is a validated forecast object and its output is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). 
 
-```{r}
+```{r, message=TRUE, warning=TRUE, cache=FALSE}
 example_point[horizon == 2] |>
-  as_forecast_point() |>
   score() |>
   print(2)
 ```
@@ -534,7 +534,6 @@ To detect systematic patterns it may be useful to visualise a single score acros
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (underprediction)"}
 example_sample_continuous[horizon == 2] |>
-  as_forecast_sample() |>
   score() |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   summarise_scores(
@@ -652,7 +651,7 @@ The following section gives an overview of how \pkg{scoringutils} constructs for
 
 \fct{assert\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
 
-\fct{as\_forecast\_...} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
+\fct{as\_forecast\_...} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, constructs the class and validates the input.
 
 \clearpage
 

@@ -433,7 +433,8 @@ relevant to grouping the forecasts.
 \subsection{Forecast objects and input validation} \label{sec:validation}
 
 The raw input data needs to be processed and validated by converting it
-into a \texttt{forecast} object:
+into a \texttt{forecast} object (ignore for now that the example data
+shipped with package is pre-validated by default).
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -445,12 +446,11 @@ R> forecast_quantile <- example_quantile[horizon == 2] |>
 
 Every forecast type has a corresponding
 \texttt{as\_forecast\_\textless{}type\textgreater{}()} function that
-transforms the input into a \texttt{forecast} object and validates it
-(see Figure \ref{fig:flowchart-validation} for details). A forecast
-object is a \texttt{data.table} that has passed some input validations.
-It behaves like a \texttt{data.table}, but has an additional class
-\texttt{forecast} as well as a class corresponding to the forecast type
-(\texttt{forecast\_point}, \texttt{forecast\_binary},
+transforms the input into a \texttt{forecast} object and validates it. A
+forecast object is a \texttt{data.table} that has passed some input
+validations. It behaves like a \texttt{data.table}, but has an
+additional class \texttt{forecast} as well as a class corresponding to
+the forecast type (\texttt{forecast\_point}, \texttt{forecast\_binary},
 \texttt{forecast\_nominal}, \texttt{forecast\_quantile} or
 \texttt{forecast\_sample}).
 
@@ -497,6 +497,16 @@ output when printing.
 R> print(forecast_quantile, 2)
 \end{CodeInput}
 \begin{CodeOutput}
+Forecast type: quantile
+\end{CodeOutput}
+\begin{CodeOutput}
+Forecast unit:
+\end{CodeOutput}
+\begin{CodeOutput}
+location, target_end_date, target_type, location_name, forecast_date,
+model, and horizon
+\end{CodeOutput}
+\begin{CodeOutput}
 
 Key: <location, target_end_date, target_type>
       location target_end_date target_type observed location_name
@@ -523,13 +533,14 @@ Key: <location, target_end_date, target_type>
 \end{CodeOutput}
 \end{CodeChunk}
 
-Internally, the print method calls the functions
-\code{get\_forecast\_type()} and \code{get\_forecast\_unit()}. Both
-functions can also be accesssed independently.
-\code{get\_forecast\_type()} and \code{get\_forecast\_unit()} work on
-either an unvalidated \code{data.frame} (or similar) or on an already
-validated forecast object. They return the forecast type and the
-forecast unit, respectively, as inferred from the input data.
+Internally, the print method calls \code{get\_forecast\_type()} and
+\code{get\_forecast\_unit()}. Both functions can also be called
+independently. \code{get\_forecast\_type()} and
+\code{get\_forecast\_unit()} work on either an unvalidated
+\code{data.frame} (or similar) or on an already validated forecast
+object. They return the forecast type and the forecast unit,
+respectively, as inferred from the input data.
+
 \code{assert\_forecast()} asserts that an existing forecast object
 passes all validations and returns \texttt{invisble(NULL)} if the
 forecast object is valid (and otherwise errors).
@@ -613,6 +624,16 @@ R> forecast_quantile |>
 +   transform_forecasts(fun = log_shift, offset = 1) |>
 +   print(2)
 \end{CodeInput}
+\begin{CodeOutput}
+Forecast type: quantile
+\end{CodeOutput}
+\begin{CodeOutput}
+Forecast unit:
+\end{CodeOutput}
+\begin{CodeOutput}
+location, target_end_date, target_type, location_name, forecast_date,
+model, horizon, and scale
+\end{CodeOutput}
 \begin{CodeOutput}
 
        location target_end_date target_type     observed
@@ -725,15 +746,13 @@ implemented in \texttt{scoringutils} for discrete variables follows
 \cite{funkAssessingPerformanceRealtime2019}.
 
 Users can obtain PIT histograms based on validated forecast objects
-using the function \code{get\_pit()} and can visualise results using
-\code{plot\_pit()}. Once again, the argument \texttt{by} controls the
-summary level. The output of the following is shown in Figure
-\ref{fig:pit-plots}:
+using the function \code{get\_pit\_histogram()}. Once again, the
+argument \texttt{by} controls the summary level. The output of the
+following is shown in Figure \ref{fig:pit-plots}:
 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> example_sample_continuous |>
-+   as_forecast_sample() |>
 +   get_pit_histogram(by = c("model", "target_type")) |>
 +   ggplot(aes(x = mid, y = density)) +
 +   geom_col() +
@@ -792,6 +811,29 @@ R> forecast_quantile |>
 +   get_coverage(by = "model") |>
 +   print(2)
 \end{CodeInput}
+\begin{CodeOutput}
+                    model quantile_level interval_range
+                   <char>          <num>          <num>
+ 1: EuroCOVIDhub-baseline           0.50              0
+ 2: EuroCOVIDhub-baseline           0.45             10
+---                                                    
+91:       UMass-MechBayes           0.01             98
+92:       UMass-MechBayes           0.99             98
+    interval_coverage interval_coverage_deviation quantile_coverage
+                <num>                       <num>             <num>
+ 1:        0.00000000                 0.000000000         0.6818182
+ 2:        0.09090909                -0.009090909         0.6477273
+---                                                                
+91:        1.00000000                 0.020000000         0.0000000
+92:        1.00000000                 0.020000000         1.0000000
+    quantile_coverage_deviation
+                          <num>
+ 1:                   0.1818182
+ 2:                   0.1977273
+---                            
+91:                  -0.0100000
+92:                   0.0100000
+\end{CodeOutput}
 \end{CodeChunk}
 
 Results can then be visualised using the functions
@@ -854,7 +896,6 @@ which is a essentially \texttt{data.table} with an additional attribute
 \begin{CodeChunk}
 \begin{CodeInput}
 R> example_point[horizon == 2] |>
-+   as_forecast_point() |>
 +   score() |>
 +   print(2)
 \end{CodeInput}
@@ -1210,7 +1251,6 @@ heatmap of bias values across different locations and forecast targets
 \begin{CodeChunk}
 \begin{CodeInput}
 R> example_sample_continuous[horizon == 2] |>
-+   as_forecast_sample() |>
 +   score() |>
 +   summarise_scores(by = c("model", "location", "target_type")) |>
 +   summarise_scores(
@@ -1397,8 +1437,7 @@ throws an error with a message that explains what went wrong.
 
 \code{as\_forecast\_...()} (optionally) renames existing columns to
 conform with the requirements for forecast objects, (optionally) sets
-the forecast unit, constructs the class and validates the input. The
-process is illustrated in Figure \ref{fig:flowchart-validation}.
+the forecast unit, constructs the class and validates the input.
 
 \clearpage
 
