@@ -94,7 +94,8 @@ NULL
 #' \if{html}{
 #'   \out{<div style="text-align: left">}
 #'   \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
-#'   \out{</div>}
+#'   \out{</div><p>}
+#'   Overview of required input format for sample-based forecasts
 #' }
 #' \if{latex}{
 #'   \figure{metrics-sample.png}
@@ -108,7 +109,8 @@ NULL
 #' \if{html}{
 #'   \out{<div style="text-align: left">}
 #'   \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
-#'   \out{</div>}
+#'   \out{</div><p>}
+#'   Overview of required input format for binary and point forecasts
 #' }
 #' \if{latex}{
 #'   \figure{metrics-binary-point.png}
@@ -122,7 +124,8 @@ NULL
 #' \if{html}{
 #'   \out{<div style="text-align: left">}
 #'   \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
-#'   \out{</div>}
+#'   \out{</div><p>}
+#'   Overview of required input format for quantile-based forecasts
 #' }
 #' \if{latex}{
 #'   \figure{metrics-quantile.png}
@@ -136,7 +139,8 @@ NULL
 #' \if{html}{
 #'   \out{<div style="text-align: left">}
 #'   \figure{metrics-nominal.png}{options: style="width:750px;max-width:100\%;"}
-#'   \out{</div>}
+#'   \out{</div><p>}
+#'   Overview of required input format for nominal forecasts
 #' }
 #' \if{latex}{
 #'   \figure{metrics-nominal.png}

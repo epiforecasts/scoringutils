@@ -82,12 +82,14 @@ Values of the PIT histogram are then created by averaging over the \eqn{n}
 predictions,
 
 \deqn{
+   \bar{F}(u) = \frac{i = 1}{n} \sum_{i=1}^{n} F^{(i)}(u)
 }
 
 And calculating the value at each bin between quantile \eqn{q_i} and quantile
 \eqn{q_{i + 1}} as
 
 \deqn{
+   \bar{F}(q_i) - \bar{F}(q_{i + 1})
 }
 
 Alternatively, a randomised PIT can be used instead. In this case, the PIT is
@@ -96,7 +98,7 @@ Alternatively, a randomised PIT can be used instead. In this case, the PIT is
 }
 
 where \eqn{v} is standard uniform and independent of \eqn{k}. The values of
-the PIT histogram are then calculated by binning the $u_t$ values as above.
+the PIT histogram are then calculated by binning the \eqn{u_t} values as above.
 }
 \examples{
 \dontshow{

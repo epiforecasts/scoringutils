@@ -19,7 +19,7 @@ Numeric vector of length n with the absolute errors of the median.
 \description{
 Absolute error of the median calculated as
 \deqn{
-  |observed - median\_prediction|
+  |\text{observed} - \text{median prediction}|
 }
 where the median prediction is calculated as the median of the predictive
 samples.
@@ -28,7 +28,8 @@ samples.
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for sample-based forecasts
 }
 \if{latex}{
   \figure{metrics-sample.png}

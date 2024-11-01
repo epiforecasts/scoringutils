@@ -25,7 +25,7 @@ Numeric vector of length N with the absolute error of the median.
 \description{
 Compute the absolute error of the median calculated as
 \deqn{
-  |observed - median prediction|
+  |\text{observed} - \text{median prediction}|
 }
 The median prediction is the predicted value for which quantile_level == 0.5.
 The function requires 0.5 to be among the quantile levels in \code{quantile_level}.
@@ -34,7 +34,8 @@ The function requires 0.5 to be among the quantile levels in \code{quantile_leve
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for quantile-based forecasts
 }
 \if{latex}{
   \figure{metrics-quantile.png}

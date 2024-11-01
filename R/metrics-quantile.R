@@ -560,7 +560,7 @@ interpolate_median <- function(predicted, quantile_level) {
 #'
 #' Compute the absolute error of the median calculated as
 #' \deqn{
-#'   |observed - median prediction|
+#'   |\text{observed} - \text{median prediction}|
 #' }
 #' The median prediction is the predicted value for which quantile_level == 0.5.
 #' The function requires 0.5 to be among the quantile levels in `quantile_level`.

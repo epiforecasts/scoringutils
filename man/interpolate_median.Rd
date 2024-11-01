@@ -27,7 +27,8 @@ This is done using linear interpolation between the two innermost quantiles.
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for quantile-based forecasts
 }
 \if{latex}{
   \figure{metrics-quantile.png}

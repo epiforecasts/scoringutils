@@ -61,12 +61,12 @@ overlapping forecasts between two models.
 The output of the pairwise comparisons is a set of mean score ratios,
 relative skill scores and p-values.
 
-The following illustrates the pairwise comparison process:
-
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{pairwise-illustration.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Illustration of the pairwise comparison process.
+
 }
 \if{latex}{
   \figure{pairwise-illustration.png}
