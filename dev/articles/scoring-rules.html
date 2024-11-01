@@ -78,7 +78,7 @@ Bosse</h4>
 available through the <code>scoringutils</code> package. You can, of
 course, also use your own scoring rules, provided they follow the same
 format. If you want to obtain more detailed information about how the
-pacakge works, have a look at the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised
+package works, have a look at the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised
 version</a> of our <code>scoringutils</code> paper.</p>
 <p>We can distinguish two types of forecasts: point forecasts and
 probabilistic forecasts. A point forecast is a single number
@@ -683,7 +683,7 @@ larger than the median of the predictive distribution.</em>.</li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math><em>if the observed value is exactly the median</em>.</li>
 </ul>
 <p>Bias can assume values between -1 (underprediction) and 1
-(overpredictin) and is 0 ideally (i.e. unbiased).</p>
+(overprediction) and is 0 ideally (i.e. unbiased).</p>
 <p>For an increasing number of quantiles, the percentile rank will equal
 the proportion of predictive samples below the observed value, and the
 bias metric coincides with the one for continuous forecasts (see
@@ -713,7 +713,7 @@ between the 0.25 and 0.75 quantiles of the predictive distribution.</p>
 observed interval coverage and the nominal interval coverage. For
 example, if the observed interval coverage for the 50% central
 prediction interval is 0.6, then the interval coverage deviation is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.6</mn><mo>=</mo><mo>−</mo><mn>0.5</mn><mo>=</mo><mn>0.1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">0.6 = - 0.5 = 0.1.</annotation></semantics></math></p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.6</mn><mo>−</mo><mn>0.5</mn><mo>=</mo><mn>0.1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">0.6 - 0.5 = 0.1.</annotation></semantics></math></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">interval coverage deviation</mtext><mo>=</mo><mtext mathvariant="normal">observed interval coverage</mtext><mo>−</mo><mtext mathvariant="normal">nominal interval coverage</mtext></mrow><annotation encoding="application/x-tex">\text{interval coverage deviation} = \text{observed interval coverage} - \text{nominal interval coverage}</annotation></semantics></math></p>
 </div>
 </div>
