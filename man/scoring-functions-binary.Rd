@@ -71,7 +71,8 @@ then you could of course make \code{observed} a factor with levels swapped, i.e.
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-binary-point.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for binary and point forecasts
 }
 \if{latex}{
   \figure{metrics-binary-point.png}

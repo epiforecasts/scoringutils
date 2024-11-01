@@ -35,7 +35,8 @@ and the explanations given in Funk et al. (2019)
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for sample-based forecasts
 }
 \if{latex}{
   \figure{metrics-sample.png}

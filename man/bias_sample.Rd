@@ -49,7 +49,8 @@ In both cases, Bias can assume values between
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-sample.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for sample-based forecasts
 }
 \if{latex}{
   \figure{metrics-sample.png}

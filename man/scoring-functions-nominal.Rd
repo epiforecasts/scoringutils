@@ -31,7 +31,8 @@ are better (best is zero, worst is infinity).
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-nominal.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for nominal forecasts
 }
 \if{latex}{
   \figure{metrics-nominal.png}

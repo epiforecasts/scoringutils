@@ -120,7 +120,7 @@ bias_sample <- function(observed, predicted) {
 #' @description
 #' Absolute error of the median calculated as
 #' \deqn{
-#'   |observed - median\_prediction|
+#'   |\text{observed} - \text{median prediction}|
 #' }
 #' where the median prediction is calculated as the median of the predictive
 #' samples.
@@ -465,14 +465,14 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' predictions,
 #'
 #' \deqn{
-#    \bar{F}(u) = \frac{i = 1}{n} \sum_{i=1}^{n} F^{(i)}(u)
+#'    \bar{F}(u) = \frac{i = 1}{n} \sum_{i=1}^{n} F^{(i)}(u)
 #' }
 #'
 #' And calculating the value at each bin between quantile \eqn{q_i} and quantile
 #' \eqn{q_{i + 1}} as
 #'
 #' \deqn{
-#    \bar{F}(q_i) - \bar{F}(q_{i + 1})
+#'    \bar{F}(q_i) - \bar{F}(q_{i + 1})
 #' }
 #'
 #' Alternatively, a randomised PIT can be used instead. In this case, the PIT is
@@ -481,7 +481,7 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' }
 #'
 #' where \eqn{v} is standard uniform and independent of \eqn{k}. The values of
-#' the PIT histogram are then calculated by binning the $u_t$ values as above.
+#' the PIT histogram are then calculated by binning the \eqn{u_t} values as above.
 #'
 #' @param quantiles A vector of quantiles between which to calculate the PIT.
 #' @param integers How to handle integer forecasts (count data). This is based

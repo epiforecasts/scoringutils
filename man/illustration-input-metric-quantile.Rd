@@ -10,7 +10,8 @@ Illustration of required inputs for quantile-based forecasts
 \if{html}{
   \out{<div style="text-align: left">}
   \figure{metrics-quantile.png}{options: style="width:750px;max-width:100\%;"}
-  \out{</div>}
+  \out{</div><p>}
+  Overview of required input format for quantile-based forecasts
 }
 \if{latex}{
   \figure{metrics-quantile.png}
