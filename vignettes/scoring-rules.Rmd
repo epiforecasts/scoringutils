@@ -371,7 +371,7 @@ where $q_\alpha$ is the $\alpha$-quantile of the predictive distribution. For co
 - $1 - (2 \times$ the minimum percentile rank for which the corresponding quantile is still larger than the observed value) *if the observed value is larger than the median of the predictive distribution.*.
 - $0$ *if the observed value is exactly the median*.
 
-Bias can assume values between -1 (underprediction) and 1 (overpredictin) and is 0 ideally (i.e. unbiased).
+Bias can assume values between -1 (underprediction) and 1 (overprediction) and is 0 ideally (i.e. unbiased).
 
 For an increasing number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed value, and the bias metric coincides with the one for continuous forecasts (see above).
 
