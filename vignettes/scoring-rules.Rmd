@@ -23,7 +23,7 @@ library(data.table)
 
 # Introduction
 
-This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the pacakge works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper. 
+This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper. 
 
 We can distinguish two types of forecasts: point forecasts and probabilistic forecasts. A point forecast is a single number representing a single outcome. A probabilistic forecast is a full predictive probability distribution over multiple possible outcomes. In contrast to point forecasts, probabilistic forecasts incorporate uncertainty about different possible outcomes. 
 
