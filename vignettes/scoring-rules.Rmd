@@ -387,7 +387,7 @@ Interval coverage for a given interval range is defined as the proportion of obs
 
 ### Interval coverage deviation
 
-The interval coverage deviation is the difference between the observed interval coverage and the nominal interval coverage. For example, if the observed interval coverage for the 50% central prediction interval is 0.6, then the interval coverage deviation is $0.6 = - 0.5 = 0.1.$
+The interval coverage deviation is the difference between the observed interval coverage and the nominal interval coverage. For example, if the observed interval coverage for the 50% central prediction interval is 0.6, then the interval coverage deviation is $0.6 - 0.5 = 0.1.$
 
 $$\text{interval coverage deviation} = \text{observed interval coverage} - \text{nominal interval coverage}$$
 
