@@ -258,9 +258,7 @@ Health.
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-
 <!-- prettier-ignore-start -->
-
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
@@ -272,9 +270,9 @@ specification. Contributions of any kind are welcome!
 
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=nikosbosse">nikosbosse</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=seabbs">seabbs</a>,
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=sbfnk">sbfnk</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=jamesmbaazam">jamesmbaazam</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=Bisaloo">Bisaloo</a>,
-<a href="https://github.com/epiforecasts/scoringutils/commits?author=sbfnk">sbfnk</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=actions-user">actions-user</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura">toshiakiasakura</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico">MichaelChirico</a>,
@@ -287,17 +285,16 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ADavideMagno">DavideMagno</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ambojan">mbojan</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov">dshemetov</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1">elray1</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1">elray1</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor">jonathonmellor</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajcken95">jcken95</a>
 
 ### Issue Contributors
 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Ajbracher">jbracher</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Adylanhmorris">dylanhmorris</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Ajonathonmellor">jonathonmellor</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>
 
 <!-- markdownlint-enable -->
-
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
