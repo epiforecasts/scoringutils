@@ -74,16 +74,14 @@ See the examples for how to plot the result of this function.
 \examples{
 library("ggplot2")
 
-example <- as_forecast_sample(example_sample_continuous)
-result <- get_pit_histogram(example, by = "model")
+result <- get_pit_histogram(example_sample_continuous, by = "model")
 ggplot(result,  aes(x = mid, y = density)) +
   geom_col() +
   facet_wrap(. ~ model) +
   labs(x = "Quantile", "Density")
 
 # example with quantile data
-example <- as_forecast_quantile(example_quantile)
-result <- get_pit_histogram(example, by = "model")
+result <- get_pit_histogram(example_quantile, by = "model")
 ggplot(result,  aes(x = mid, y = density)) +
   geom_col() +
   facet_wrap(. ~ model) +
