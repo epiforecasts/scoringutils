@@ -651,7 +651,7 @@ The following section gives an overview of how \pkg{scoringutils} constructs for
 
 \fct{assert\_forecast} is a generic which dispatches to a specialised validator method depending on the class of the input. It validates the input and returns it if it is valid. If the input is not valid, it throws an error with a message that explains what went wrong.
 
-\fct{as\_forecast\_...} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, constructs the class and validates the input. The process is illustrated in Figure \ref{fig:flowchart-validation}. 
+\fct{as\_forecast\_...} (optionally) renames existing columns to conform with the requirements for forecast objects, (optionally) sets the forecast unit, constructs the class and validates the input.
 
 \clearpage
 
