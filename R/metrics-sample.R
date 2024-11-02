@@ -306,7 +306,7 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   if (separate_results) {
     if (is.null(dim(predicted))) {
       ## if `predicted` is a vector convert to matrix
-      predicted <- matrix(predicted, nrow = 1)
+      dim(predicted) <- c(1, length(predicted))
     }
     medians <- apply(predicted, 1, median)
     dispersion <- scoringRules::crps_sample(
