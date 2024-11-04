@@ -96,7 +96,15 @@ test_that("crps_sample() components correspond to WIS components", {
   expect_true(all(abs(c(dcrps - dwis, ocrps - owis, ucrps - uwis)) < 0.01))
 })
 
-
+test_that("crps_sample() works with a single observation", {
+  expect_no_condition(
+    crps <- crps_sample(
+      observed = 2.5, predicted = 1.5:10.5, separate_results = TRUE
+    )
+  )
+  expect_equal(length(crps), 4)
+  expect_equal(unique(vapply(crps, length, integer(1))), 1)
+})
 
 test_that("bias_sample() throws an error when missing observed", {
   observed <- rpois(10, lambda = 1:10)

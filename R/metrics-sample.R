@@ -304,6 +304,10 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   )
 
   if (separate_results) {
+    if (is.null(dim(predicted))) {
+      ## if `predicted` is a vector convert to matrix
+      dim(predicted) <- c(1, length(predicted))
+    }
     medians <- apply(predicted, 1, median)
     dispersion <- scoringRules::crps_sample(
       y = medians,
@@ -313,21 +317,29 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
     overprediction <- rep(0, length(observed))
     underprediction <- rep(0, length(observed))
 
-    overprediction[observed < medians] <- scoringRules::crps_sample(
-      y = observed[observed < medians],
-      dat = predicted[observed < medians, , drop = FALSE],
-      ...
-    )
-    underprediction[observed > medians] <- scoringRules::crps_sample(
-      y = observed[observed > medians],
-      dat = predicted[observed > medians, , drop = FALSE],
-      ...
-    )
+    if (any(observed < medians)) {
+      overprediction[observed < medians] <- scoringRules::crps_sample(
+        y = observed[observed < medians],
+        dat = predicted[observed < medians, , drop = FALSE],
+        ...
+      )
+    }
+    if (any(observed > medians)) {
+      underprediction[observed > medians] <- scoringRules::crps_sample(
+        y = observed[observed > medians],
+        dat = predicted[observed > medians, , drop = FALSE],
+        ...
+      )
+    }
 
-    overprediction[overprediction > 0] <-
-      overprediction[overprediction > 0] - dispersion[overprediction > 0]
-    underprediction[underprediction > 0] <-
-      underprediction[underprediction > 0] - dispersion[underprediction > 0]
+    if (any(overprediction > 0)) {
+      overprediction[overprediction > 0] <-
+        overprediction[overprediction > 0] - dispersion[overprediction > 0]
+    }
+    if (any(underprediction > 0)) {
+      underprediction[underprediction > 0] <-
+        underprediction[underprediction > 0] - dispersion[underprediction > 0]
+    }
 
     return(list(
       crps = crps,
