@@ -142,7 +142,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(res)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7b950a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c7aa8050&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dss</span>
@@ -151,7 +151,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::dss_sample(y = observed, dat = predicted, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b6a4b910&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c69d7950&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $crps</span>
@@ -161,21 +161,32 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     crps &lt;- scoringRules::crps_sample(y = observed, dat = predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (separate_results) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (is.null(dim(predicted))) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             dim(predicted) &lt;- c(1, length(predicted))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         medians &lt;- apply(predicted, 1, median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         dispersion &lt;- scoringRules::crps_sample(y = medians, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             dat = predicted, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         overprediction &lt;- rep(0, length(observed))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         underprediction &lt;- rep(0, length(observed))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         overprediction[observed &lt; medians] &lt;- scoringRules::crps_sample(y = observed[observed &lt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             medians], dat = predicted[observed &lt; medians, , drop = FALSE], </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ...)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         underprediction[observed &gt; medians] &lt;- scoringRules::crps_sample(y = observed[observed &gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             medians], dat = predicted[observed &gt; medians, , drop = FALSE], </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ...)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         overprediction[overprediction &gt; 0] &lt;- overprediction[overprediction &gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0] - dispersion[overprediction &gt; 0]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         underprediction[underprediction &gt; 0] &lt;- underprediction[underprediction &gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0] - dispersion[underprediction &gt; 0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (any(observed &lt; medians)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             overprediction[observed &lt; medians] &lt;- scoringRules::crps_sample(y = observed[observed &lt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 medians], dat = predicted[observed &lt; medians, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 , drop = FALSE], ...)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (any(observed &gt; medians)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             underprediction[observed &gt; medians] &lt;- scoringRules::crps_sample(y = observed[observed &gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 medians], dat = predicted[observed &gt; medians, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 , drop = FALSE], ...)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (any(overprediction &gt; 0)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             overprediction[overprediction &gt; 0] &lt;- overprediction[overprediction &gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 0] - dispersion[overprediction &gt; 0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (any(underprediction &gt; 0)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             underprediction[underprediction &gt; 0] &lt;- underprediction[underprediction &gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 0] - dispersion[underprediction &gt; 0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(list(crps = crps, dispersion = dispersion, underprediction = underprediction, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             overprediction = overprediction))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
@@ -183,7 +194,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(crps)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b964a3f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c95b89a0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -193,7 +204,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$overprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7f1a0a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c747d9e8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -203,7 +214,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$underprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7f19580&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c747cec0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -213,7 +224,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$dispersion)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7f18a58&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c747c360&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -223,7 +234,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::logs_sample(y = observed, dat = predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7d19e60&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c747f668&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
@@ -235,7 +246,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ae_median &lt;- abs(observed - median_predictions)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(ae_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b8374160&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c827a2c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $se_mean</span>
@@ -246,7 +257,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     se_mean &lt;- (observed - mean_predictions)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(se_mean)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5597b7d1c368&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5556c7481b70&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
