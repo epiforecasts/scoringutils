@@ -49,6 +49,7 @@ get_metrics(example_binary, exclude = "log_score")
 Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_nominal}()},
+\code{\link{get_metrics.forecast_ordinal}()},
 \code{\link{get_metrics.forecast_point}()},
 \code{\link{get_metrics.forecast_quantile}()},
 \code{\link{get_metrics.forecast_sample}()},

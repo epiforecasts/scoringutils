@@ -29,6 +29,7 @@ for more details. Alternatively call \verb{?get_metrics.<forecast_type>} or
 Other get_metrics functions: 
 \code{\link{get_metrics.forecast_binary}()},
 \code{\link{get_metrics.forecast_nominal}()},
+\code{\link{get_metrics.forecast_ordinal}()},
 \code{\link{get_metrics.forecast_point}()},
 \code{\link{get_metrics.forecast_quantile}()},
 \code{\link{get_metrics.forecast_sample}()},

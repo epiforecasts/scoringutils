@@ -1,9 +1,9 @@
-#' @title Assert that inputs are correct for nominal forecasts
+#' @title Assert that inputs are correct for ordinal forecasts
 #' @description Function assesses whether the inputs correspond to the
-#' requirements for scoring nominal forecasts.
-#' @param observed Input to be checked. Should be a factor of length n with
-#'   N levels holding the observed values. n is the number of observations and
-#'   N is the number of possible outcomes the observed values can assume.
+#' requirements for scoring ordinal forecasts.
+#' @param observed Input to be checked. Should be an ordered factor of length n
+#'   with N levels holding the observed values. n is the number of observations
+#'   and N is the number of possible outcomes the observed values can assume.
 #' @param predicted Input to be checked. Should be nxN matrix of predicted
 #'   probabilities, n (number of rows) being the number of data points and N
 #'   (number of columns) the number of possible outcomes the observed values
@@ -12,24 +12,31 @@
 #'   vector of size N.
 #'   Values represent the probability that the corresponding value
 #'   in `observed` will be equal to the highest available factor level.
-#' @param predicted_label Factor of length N with N levels, where N is the
-#'   number of possible outcomes the observed values can assume.
+#' @param predicted_label Ordered factor of length N with N levels, where N is
+#'   the number of possible outcomes the observed values can assume.
 #' @importFrom checkmate assert_factor assert_numeric assert_set_equal
 #' @inherit document_assert_functions return
 #' @keywords internal_input_check
-assert_input_nominal <- function(observed, predicted, predicted_label) {
+assert_input_ordinal <- function(observed, predicted, predicted_label) {
   # observed
-  assert_factor(observed, min.len = 1, min.levels = 2)
+  assert_factor(observed, min.len = 1, min.levels = 2, ordered = TRUE)
   levels <- levels(observed)
   n <- length(observed)
   N <- length(levels)
 
   # predicted label
   assert_factor(
-    predicted_label, len = N,
-    any.missing = FALSE, empty.levels.ok = FALSE
+    predicted_label,
+    len = N,
+    any.missing = FALSE, empty.levels.ok = FALSE, ordered = TRUE
   )
-  assert_set_equal(levels(observed), levels(predicted_label))
+  if (!identical(levels(predicted_label), levels(observed))) {
+    cli_abort(
+      "Levels of `predicted_label` and `observed` must be identical
+      and in the same order. Found levels {.val {levels(predicted_label)}}
+      and {.val {levels(observed)}}."
+    )
+  }
 
   # predicted
   assert_numeric(predicted, min.len = 1, lower = 0, upper = 1)
@@ -59,10 +66,10 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
 }
 
 
-#' Log score for nominal outcomes
+#' Log score for ordinal outcomes
 #'
 #' @description
-#' **Log score for nominal outcomes**
+#' **Log score for ordinal outcomes**
 #'
 #' The Log Score is the negative logarithm of the probability
 #' assigned to the observed value. It is a proper scoring rule. Small values
@@ -90,8 +97,8 @@ assert_input_nominal <- function(observed, predicted, predicted_label) {
 #'                       0.1, 0.7, 0.2),
 #'                     nrow = 3)
 #' logs_nominal(observed, predicted, predicted_label)
-logs_nominal <- function(observed, predicted, predicted_label) {
-  assert_input_nominal(observed, predicted, predicted_label)
+logs_ordinal <- function(observed, predicted, predicted_label) {
+  assert_input_ordinal(observed, predicted, predicted_label)
   n <- length(observed)
   if (n == 1) {
     predicted <- matrix(predicted, nrow = 1)
