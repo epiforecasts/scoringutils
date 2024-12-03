@@ -42,10 +42,12 @@ takes the ordering of categories into account. Small values are better
 factor_levels <- c("one", "two", "three")
 predicted_label <- factor(factor_levels, levels = factor_levels, ordered = TRUE)
 observed <- factor(c("one", "three", "two"), levels = factor_levels, ordered = TRUE)
-predicted <- matrix(c(0.8, 0.1, 0.4,
-                     0.1, 0.2, 0.4,
-                     0.1, 0.7, 0.2),
-                   nrow = 3)
+predicted <- matrix(
+  c(0.8, 0.1, 0.4,
+    0.1, 0.2, 0.4,
+    0.1, 0.7, 0.2),
+  nrow = 3
+)
 rps_ordinal(observed, predicted, predicted_label)
 }
 \concept{scoring functions}

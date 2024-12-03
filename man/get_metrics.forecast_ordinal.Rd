@@ -22,10 +22,11 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 For nominal forecasts, the default scoring rule is:
 \itemize{
 \item "log_score" = \code{\link[=logs_nominal]{logs_nominal()}}
+\item "rps" = \code{\link[=rps_ordinal]{rps_ordinal()}}
 }
 }
 \examples{
-get_metrics(example_nominal)
+get_metrics(example_ordinal)
 }
 \seealso{
 Other get_metrics functions: 
