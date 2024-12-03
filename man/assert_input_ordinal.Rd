@@ -18,7 +18,7 @@ can assume.
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.
 Values represent the probability that the corresponding value
-in \code{observed} will be equal to the highest available factor level.}
+in \code{observed} will be equal to factor level referenced in \code{predicted_label}.}
 
 \item{predicted_label}{Ordered factor of length N with N levels, where N is
 the number of possible outcomes the observed values can assume.}

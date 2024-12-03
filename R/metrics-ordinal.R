@@ -11,7 +11,7 @@
 #'   If `observed` is just a single number, then predicted can just be a
 #'   vector of size N.
 #'   Values represent the probability that the corresponding value
-#'   in `observed` will be equal to the highest available factor level.
+#'   in `observed` will be equal to factor level referenced in `predicted_label`.
 #' @param predicted_label Ordered factor of length N with N levels, where N is
 #'   the number of possible outcomes the observed values can assume.
 #' @importFrom checkmate assert_factor assert_numeric assert_set_equal
@@ -78,15 +78,17 @@ assert_input_ordinal <- function(observed, predicted, predicted_label) {
 #'   values.
 #' @param predicted nxN matrix of predictive probabilities, n (number of rows)
 #'   being the number of observations and N (number of columns) the number of
-#'   possible outcomes.
+#'   possible outcomes. If `observed` is just a single number, then predicted
+#'   can just be a vector of size N.
+#'   Values represent the probability that the corresponding value in `observed`
+#'   will be equal to factor level referenced in `predicted_label`.
 #' @param predicted_label A factor of length N, denoting the outcome that the
 #'   probabilities in `predicted` correspond to.
 #' @returns A numeric vector of size n with log scores
-#' @inheritSection illustration-input-metric-nominal Input format
+#' @inheritSection illustration-input-metric-ordinal Input format
 #' @importFrom methods hasArg
 #' @export
 #' @keywords metric
-#' @rdname scoring-functions-nominal
 #' @family log score functions
 #' @examples
 #' factor_levels <- c("one", "two", "three")
@@ -107,4 +109,59 @@ logs_ordinal <- function(observed, predicted, predicted_label) {
   pred_for_observed <- predicted[cbind(1:n, observed_indices)]
   logs <- -log(pred_for_observed)
   return(logs)
+}
+
+#' Ranked Probability Score for ordinal outcomes
+#'
+#' @description
+#' The Ranked Probability Score (RPS) measures the difference between the predicted
+#' and observed cumulative distribution functions. It is a proper scoring rule that
+#' takes the ordering of categories into account. Small values are better
+#' (best is zero, worst is 1).
+#' @param observed A factor of length n with N levels holding the observed
+#'   values.
+#' @param predicted nxN matrix of predictive probabilities, n (number of rows)
+#'   being the number of observations and N (number of columns) the number of
+#'   possible outcomes.
+#' @param predicted_label A factor of length N, denoting the outcome that the
+#'   probabilities in `predicted` correspond to.
+#' @returns A numeric vector of size n with ranked probability scores
+#' @inheritSection illustration-input-metric-nominal Input format
+#' @importFrom methods hasArg
+#' @export
+#' @keywords metric
+#' @family scoring functions
+#' @examples
+#' factor_levels <- c("one", "two", "three")
+#' predicted_label <- factor(factor_levels, levels = factor_levels, ordered = TRUE)
+#' observed <- factor(c("one", "three", "two"), levels = factor_levels, ordered = TRUE)
+#' predicted <- matrix(
+#'   c(0.8, 0.1, 0.4,
+#'     0.1, 0.2, 0.4,
+#'     0.1, 0.7, 0.2),
+#'   nrow = 3
+#' )
+#' rps_ordinal(observed, predicted, predicted_label)
+rps_ordinal <- function(observed, predicted, predicted_label) {
+  assert_input_ordinal(observed, predicted, predicted_label)
+  n <- length(observed)
+  if (n == 1) {
+    predicted <- matrix(predicted, nrow = 1)
+  }
+
+  # Calculate cumulative probabilities for predictions
+  cum_pred <- t(apply(predicted, 1, cumsum))
+
+  # Create matrix of cumulative probabilities for observations
+  N <- ncol(predicted)
+  observed_indices <- as.numeric(observed)
+  cum_obs <- matrix(0, nrow = n, ncol = N)
+  for (i in 1:n) {
+    cum_obs[i, observed_indices[i]:N] <- 1
+  }
+
+  # Calculate RPS as mean squared difference of cumulative probabilities
+  rps <- rowMeans((cum_pred - cum_obs)^2)
+
+  return(rps)
 }
