@@ -152,14 +152,16 @@ score.forecast_ordinal <- function(forecast, metrics = get_metrics(forecast), ..
 #' @description
 #' For nominal forecasts, the default scoring rule is:
 #' - "log_score" = [logs_nominal()]
+#' - "rps" = [rps_ordinal()]
 #' @export
 #' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
-#' get_metrics(example_nominal)
+#' get_metrics(example_ordinal)
 get_metrics.forecast_ordinal <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    log_score = logs_nominal
+    log_score = logs_nominal,
+    rps = rps_ordinal
   )
   select_metrics(all, select, exclude)
 }
