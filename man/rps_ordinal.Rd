@@ -39,9 +39,9 @@ takes the ordering of categories into account. Small values are better
 }
 
 \examples{
-factor_levels <- c("one", "two", "three")
+factor_levels <- c("one", "three", "two")
 predicted_label <- factor(factor_levels, levels = factor_levels, ordered = TRUE)
-observed <- factor(c("one", "three", "two"), levels = factor_levels, ordered = TRUE)
+observed <- factor(c("three", "three", "two"), levels = factor_levels, ordered = TRUE)
 predicted <- matrix(
   c(0.8, 0.1, 0.4,
     0.1, 0.2, 0.4,

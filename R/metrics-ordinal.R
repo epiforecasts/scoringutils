@@ -128,13 +128,14 @@ logs_ordinal <- function(observed, predicted, predicted_label) {
 #' @returns A numeric vector of size n with ranked probability scores
 #' @inheritSection illustration-input-metric-nominal Input format
 #' @importFrom methods hasArg
+#' @importFrom scoringRules rps_probs
 #' @export
 #' @keywords metric
 #' @family scoring functions
 #' @examples
-#' factor_levels <- c("one", "two", "three")
+#' factor_levels <- c("one", "three", "two")
 #' predicted_label <- factor(factor_levels, levels = factor_levels, ordered = TRUE)
-#' observed <- factor(c("one", "three", "two"), levels = factor_levels, ordered = TRUE)
+#' observed <- factor(c("three", "three", "two"), levels = factor_levels, ordered = TRUE)
 #' predicted <- matrix(
 #'   c(0.8, 0.1, 0.4,
 #'     0.1, 0.2, 0.4,
@@ -149,19 +150,11 @@ rps_ordinal <- function(observed, predicted, predicted_label) {
     predicted <- matrix(predicted, nrow = 1)
   }
 
-  # Calculate cumulative probabilities for predictions
-  cum_pred <- t(apply(predicted, 1, cumsum))
+  # Reorder the predicted matrix columns to match the natural ordering
+  correct_order <- as.numeric(predicted_label)
+  ordered_predicted <- predicted[, correct_order]
 
-  # Create matrix of cumulative probabilities for observations
-  N <- ncol(predicted)
-  observed_indices <- as.numeric(observed)
-  cum_obs <- matrix(0, nrow = n, ncol = N)
-  for (i in 1:n) {
-    cum_obs[i, observed_indices[i]:N] <- 1
-  }
-
-  # Calculate RPS as mean squared difference of cumulative probabilities
-  rps <- rowMeans((cum_pred - cum_obs)^2)
-
+  # Use scoringRules implementation
+  rps <- scoringRules::rps_probs(as.numeric(observed), ordered_predicted)
   return(rps)
 }
