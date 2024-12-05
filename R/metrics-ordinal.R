@@ -154,7 +154,6 @@ rps_ordinal <- function(observed, predicted, predicted_label) {
   correct_order <- as.numeric(predicted_label)
   ordered_predicted <- predicted[, correct_order]
 
-  # Use scoringRules implementation
   rps <- scoringRules::rps_probs(as.numeric(observed), ordered_predicted)
   return(rps)
 }
