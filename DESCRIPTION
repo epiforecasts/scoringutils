@@ -12,7 +12,7 @@ Authors@R: c(
            family = "Abbott",
            role = c("aut"),
            email = "contact@samabbott.co.uk",
-           comment = c(ORCID = "0000-0001-8057-8037")), 
+           comment = c(ORCID = "0000-0001-8057-8037")),
     person(given = "Hugo",
            family = "Gruson",
            role = c("aut"),
@@ -22,7 +22,7 @@ Authors@R: c(
            family = "Bracher",
            role = c("ctb"),
            email = "johannes.bracher@kit.edu",
-           comment = c(ORCID = "0000-0002-3777-1410")), 
+           comment = c(ORCID = "0000-0002-3777-1410")),
     person(given = "Toshiaki Asakura",
            role = c("ctb"),
            email = "toshiaki.asa9ra@gmail.com",
@@ -32,38 +32,39 @@ Authors@R: c(
            role = c("ctb"),
            email = "james.azam@lshtm.ac.uk",
            comment = c(ORCID = "0000-0001-5782-7330")),
-    person("Sebastian", "Funk", 
-            email = "sebastian.funk@lshtm.ac.uk", 
+    person("Sebastian", "Funk",
+            email = "sebastian.funk@lshtm.ac.uk",
             role = c("aut")),
     person(given = "Michael",
            family = "Chirico",
            role = c("ctb"),
            email = "michaelchirico4@gmail.com",
            comment = c(ORCID = "0000-0003-0787-087X")))
-Description: 
-    Facilitate the evaluation of forecasts in a convenient 
-    framework based on data.table. It allows user to to check their forecasts 
-    and diagnose issues, to visualise forecasts and missing data, to transform 
-    data before scoring, to handle missing forecasts, to aggregate scores, and 
-    to visualise the results of the evaluation. The package mostly focuses on 
-    the evaluation of probabilistic forecasts and allows evaluating several 
-    different forecast types and input formats. Find more information about the 
-    package in the Vignettes as well as in the accompanying paper, 
+Description:
+    Facilitate the evaluation of forecasts in a convenient
+    framework based on data.table. It allows user to to check their forecasts
+    and diagnose issues, to visualise forecasts and missing data, to transform
+    data before scoring, to handle missing forecasts, to aggregate scores, and
+    to visualise the results of the evaluation. The package mostly focuses on
+    the evaluation of probabilistic forecasts and allows evaluating several
+    different forecast types and input formats. Find more information about the
+    package in the Vignettes as well as in the accompanying paper,
     <doi:10.48550/arXiv.2205.07090>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: 
+Imports:
     checkmate,
     cli,
     data.table,
     ggplot2 (>= 3.4.0),
+    lifecycle,
     methods,
     Metrics,
     purrr,
     scoringRules,
     stats
-Suggests: 
+Suggests:
     ggdist,
     kableExtra,
     knitr,
@@ -71,7 +72,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.1.9),
     vdiffr
-Config/Needs/website: 
+Config/Needs/website:
     r-lib/pkgdown,
     amirmasoudabdol/preferably
 Config/testthat/edition: 3
@@ -79,6 +80,6 @@ RoxygenNote: 7.3.2
 URL: https://doi.org/10.48550/arXiv.2205.07090, https://epiforecasts.io/scoringutils/, https://github.com/epiforecasts/scoringutils
 BugReports: https://github.com/epiforecasts/scoringutils/issues
 VignetteBuilder: knitr
-Depends: 
+Depends:
     R (>= 4.0)
 Roxygen: list(markdown = TRUE)

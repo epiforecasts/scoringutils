@@ -7,9 +7,10 @@
 assert_input_nominal(observed, predicted, predicted_label)
 }
 \arguments{
-\item{observed}{Input to be checked. Should be a factor of length n with
-N levels holding the observed values. n is the number of observations and
-N is the number of possible outcomes the observed values can assume.}
+\item{observed}{Input to be checked. Should be an unordered factor of length
+n with N levels holding the observed values. n is the number of
+observations and N is the number of possible outcomes the observed values
+can assume.}
 
 \item{predicted}{Input to be checked. Should be nxN matrix of predicted
 probabilities, n (number of rows) being the number of data points and N
@@ -18,10 +19,11 @@ can assume.
 If \code{observed} is just a single number, then predicted can just be a
 vector of size N.
 Values represent the probability that the corresponding value
-in \code{observed} will be equal to the highest available factor level.}
+in \code{observed} will be equal to the factor level referenced in
+\code{predicted_label}.}
 
-\item{predicted_label}{Factor of length N with N levels, where N is the
-number of possible outcomes the observed values can assume.}
+\item{predicted_label}{Unordered factor of length N with N levels, where N
+is the number of possible outcomes the observed values can assume.}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an

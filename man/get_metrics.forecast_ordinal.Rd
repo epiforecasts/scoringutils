@@ -19,9 +19,9 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 \item{...}{unused}
 }
 \description{
-For nominal forecasts, the default scoring rule is:
+For ordinal forecasts, the default scoring rules are:
 \itemize{
-\item "log_score" = \code{\link[=logs_nominal]{logs_nominal()}}
+\item "log_score" = \code{\link[=logs_categorical]{logs_categorical()}}
 \item "rps" = \code{\link[=rps_ordinal]{rps_ordinal()}}
 }
 }

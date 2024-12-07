@@ -145,7 +145,7 @@ score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ..
 #' @inheritParams get_metrics.forecast_binary
 #' @description
 #' For nominal forecasts, the default scoring rule is:
-#' - "log_score" = [logs_nominal()]
+#' - "log_score" = [logs_categorical()]
 #' @export
 #' @family get_metrics functions
 #' @keywords handle-metrics
@@ -153,7 +153,7 @@ score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ..
 #' get_metrics(example_nominal)
 get_metrics.forecast_nominal <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    log_score = logs_nominal
+    log_score = logs_categorical
   )
   select_metrics(all, select, exclude)
 }

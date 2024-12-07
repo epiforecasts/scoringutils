@@ -96,45 +96,12 @@ test_that("Input checking for ordinal forecasts works", {
 # ============================================================================ #
 # logs ordinal =============================================================== #
 # ============================================================================ #
-test_that("logs_ordinal() works as expected", {
+test_that("logs_categorical() works as expected with ordered factors", {
   expect_no_condition(
-    res <- logs_ordinal(observed, predicted, predicted_label)
+    res <- logs_categorical(observed, predicted, predicted_label)
   )
   res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
   expect_equal(res, res_manual)
-
-  # works with a single observations
-  expect_equal(
-    logs_ordinal(observed[1], predicted[1, ], predicted_label),
-    res_manual[1]
-  )
-  expect_equal(
-    logs_ordinal(observed[1], matrix(predicted[1, ], nrow = 1), predicted_label),
-    res_manual[1]
-  )
-
-  # log scores still work if there are NA values in probabilities that have
-  # not materialised
-  predicted2 <- predicted
-  predicted2[2, c(1, 3)] <- c(NA, 0.8)
-  expect_equal(
-    logs_ordinal(observed, predicted2, predicted_label),
-    res_manual
-  )
-
-  # relevant NAs in predictions lead to NA outcomes
-  predicted2[1, 1:2] <- c(NA, 0.9)
-  expect_equal(
-    logs_ordinal(observed, predicted2, predicted_label),
-    c(NA, res_manual[-1])
-  )
-
-  # NA values in observed values lead to NAs in result
-  observed2 <- factor(c(NA, "two", "two"), levels = c("one", "two", "three"), ordered = TRUE)
-  expect_equal(
-    logs_ordinal(observed2, predicted, predicted_label),
-    c(NA, res_manual[-1])
-  )
 })
 
 # ============================================================================ #
