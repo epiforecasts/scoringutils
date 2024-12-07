@@ -117,7 +117,7 @@ logs_ordinal <- function(observed, predicted, predicted_label) {
 #' The Ranked Probability Score (RPS) measures the difference between the predicted
 #' and observed cumulative distribution functions. It is a proper scoring rule that
 #' takes the ordering of categories into account. Small values are better
-#' (best is zero, worst is 1).
+#' (best is zero, worst is N - 1 where N is the number of categories).
 #' @param observed A factor of length n with N levels holding the observed
 #'   values.
 #' @param predicted nxN matrix of predictive probabilities, n (number of rows)
@@ -133,14 +133,15 @@ logs_ordinal <- function(observed, predicted, predicted_label) {
 #' @keywords metric
 #' @family scoring functions
 #' @examples
-#' factor_levels <- c("one", "three", "two")
+#' factor_levels <- c("one", "two", "three")
 #' predicted_label <- factor(factor_levels, levels = factor_levels, ordered = TRUE)
 #' observed <- factor(c("three", "three", "two"), levels = factor_levels, ordered = TRUE)
 #' predicted <- matrix(
-#'   c(0.8, 0.1, 0.4,
-#'     0.1, 0.2, 0.4,
-#'     0.1, 0.7, 0.2),
-#'   nrow = 3
+#'   c(0.8, 0.1, 0.1,
+#'     0.1, 0.2, 0.7,
+#'     0.4, 0.4, 0.2),
+#'   nrow = 3,
+#'   byrow = TRUE
 #' )
 #' rps_ordinal(observed, predicted, predicted_label)
 rps_ordinal <- function(observed, predicted, predicted_label) {

@@ -150,7 +150,7 @@ score.forecast_ordinal <- function(forecast, metrics = get_metrics(forecast), ..
 #' Get default metrics for nominal forecasts
 #' @inheritParams get_metrics.forecast_binary
 #' @description
-#' For nominal forecasts, the default scoring rule is:
+#' For ordinal forecasts, the default scoring rules are:
 #' - "log_score" = [logs_nominal()]
 #' - "rps" = [rps_ordinal()]
 #' @export
