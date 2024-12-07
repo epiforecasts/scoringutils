@@ -58,7 +58,7 @@ Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12
 }
 \seealso{
 Other log score functions: 
-\code{\link{logs_nominal}()},
+\code{\link{logs_categorical}()},
 \code{\link{scoring-functions-binary}}
 }
 \concept{log score functions}

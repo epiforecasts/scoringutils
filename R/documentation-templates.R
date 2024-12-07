@@ -148,3 +148,18 @@ NULL
 #' @name illustration-input-metric-nominal
 #' @keywords internal
 NULL
+
+#' Illustration of required inputs for ordinal forecasts
+#' @details # Input format
+#' \if{html}{
+#'   \out{<div style="text-align: left">}
+#'   \figure{metrics-ordinal.png}{options: style="width:750px;max-width:100\%;"}
+#'   \out{</div><p>}
+#'   Overview of required input format for ordinal forecasts
+#' }
+#' \if{latex}{
+#'   \figure{metrics-ordinal.png}
+#' }
+#' @name illustration-input-metric-ordinal
+#' @keywords internal
+NULL

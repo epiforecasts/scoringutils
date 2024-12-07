@@ -88,7 +88,7 @@ logs_binary(observed, predicted)
 }
 \seealso{
 Other log score functions: 
-\code{\link{logs_nominal}()},
+\code{\link{logs_categorical}()},
 \code{\link{logs_sample}()}
 }
 \concept{log score functions}

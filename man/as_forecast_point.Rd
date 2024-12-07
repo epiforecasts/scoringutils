@@ -64,6 +64,7 @@ See the \link{example_point} data set for an example.
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_nominal}()},
+\code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_quantile}()},
 \code{\link{as_forecast_sample}()}
 }

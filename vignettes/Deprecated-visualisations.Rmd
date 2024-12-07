@@ -34,7 +34,7 @@ library(magrittr) #pipe operator
 
 In previous versions of `scoringutils`, forecasts and observed values could be visualised using the function `plot_predictions()` and its `make_na()` helper function. The following shows the function code first and then an example. 
 
-```{r eval=!require("ggdist", quietly = TRUE)}
+```{r eval=require("ggdist", quietly = TRUE)}
 #" @title Plot Predictions vs True Values
 #"
 #" @description
@@ -278,7 +278,7 @@ In the following are a few examples of using the two functions to create a plot 
 
 Visualising the median forecasts for the example data. The truth data is restricted to a period between 2021-05-01 and 2021-07-22. The forecast data is a forecast from the model "EuroCOVIDhub-ensemble" made on the "2021-06-07". All other data is set to `NA`, effectively removing it from the plot. 
 
-```{r eval=!require("ggdist", quietly = TRUE)}
+```{r eval=require("ggdist", quietly = TRUE)}
 median_forecasts <- example_quantile[quantile_level == 0.5]
 median_forecasts %>%
   make_NA(what = "truth",
@@ -296,7 +296,7 @@ median_forecasts %>%
 
 This is the same plot, but with a variety of prediction intervals shown, instead of just the median. 
 
-```{r eval=!require("ggdist", quiet = TRUE)}
+```{r eval=require("ggdist", quiet = TRUE)}
 example_quantile %>%
   make_NA(what = "truth",
           target_end_date <= "2021-05-01",
@@ -314,7 +314,7 @@ example_quantile %>%
 
 And a similar plot, this time based on continuous forecasts. The predictions are automatically converted to a quantile-based forecasts for plotting.
 
-```{r eval=!require("ggdist", quietly = TRUE)}
+```{r eval=require("ggdist", quietly = TRUE)}
 example_sample_continuous %>%
   make_NA(what = "truth",
           target_end_date <= "2021-05-01",
@@ -332,7 +332,7 @@ example_sample_continuous %>%
 
 Displaying two forecasts at a time with additional colours: 
 
-```{r eval=!require("ggdist", quietly = TRUE)}
+```{r eval=require("ggdist", quietly = TRUE)}
 example_quantile %>%
   make_NA(what = "truth",
           target_end_date > "2021-07-15",
