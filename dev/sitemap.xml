@@ -19,6 +19,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_doc_template.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_generic.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_sample.html</loc></url>
@@ -30,6 +31,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_binary.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_interval.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_sample.html</loc></url>
@@ -58,6 +60,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/ensure_data.table.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_binary.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/example_sample_continuous.html</loc></url>
@@ -72,6 +75,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.html</loc></url>
@@ -84,6 +88,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_type.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-binary-point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-nominal.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/illustration-input-metric-sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/index.html</loc></url>
@@ -109,6 +114,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/print.forecast.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/quantile_score.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/rps_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/run_safely.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/sample_to_interval_long.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/score.html</loc></url>
