@@ -276,3 +276,17 @@ example_nominal[, `:=`(
 )]
 example_nominal <- as_forecast_nominal(example_nominal)
 usethis::use_data(example_nominal, overwrite = TRUE)
+
+
+# get ordinal example data ------------------------------------------------------
+# construct an ordinal prediction by making factors ordered
+
+example_ordinal <- data.table::copy(example_nominal)
+
+example_ordinal[, `:=`(
+  observed = ordered(observed, levels = c("low", "medium", "high")),
+  predicted_label = ordered(predicted_label, levels = c("low", "medium", "high"))
+)]
+
+example_ordinal <- as_forecast_ordinal(example_ordinal)
+usethis::use_data(example_ordinal, overwrite = TRUE)
