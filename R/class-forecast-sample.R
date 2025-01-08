@@ -29,13 +29,13 @@ as_forecast_sample <- function(data,
                                observed = NULL,
                                predicted = NULL,
                                sample_id = NULL) {
-  assert_character(sample_id, len = 1, null.ok = TRUE)
-  assert_subset(sample_id, names(data), empty.ok = TRUE)
-  if (!is.null(sample_id)) {
-    setnames(data, old = sample_id, new = "sample_id")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- as_forecast_generic(
+    data,
+    forecast_unit,
+    observed = observed,
+    predicted = predicted,
+    sample_id = sample_id
+  )
   data <- new_forecast(data, "forecast_sample")
   assert_forecast(data)
   return(data)
