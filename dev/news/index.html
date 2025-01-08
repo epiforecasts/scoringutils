@@ -45,6 +45,7 @@
 <h3 id="package-updates-development-version">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-development-version"></a></h3>
 <ul><li>A bug was fixed where <code><a href="../reference/crps_sample.html">crps_sample()</a></code> could fail in edge cases.</li>
 <li>Implemented a new forecast class, <code>forecast_ordinal</code> with appropriate metrics. Ordinal forecasts are a form of categorical forecasts. The main difference between ordinal and nominal forecasts is that the outcome is ordered, rather than unordered.</li>
+<li>Refactored the way that columns get internally renamed in <code>as_forecast_&lt;type&gt;()</code> functions (<a href="https://github.com/epiforecasts/scoringutils/issues/980" class="external-link">#980</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">

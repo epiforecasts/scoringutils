@@ -29,6 +29,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_generic.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_type.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_binary.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_categorical.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_interval.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_nominal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/assert_input_ordinal.html</loc></url>

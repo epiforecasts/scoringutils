@@ -45,12 +45,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast_generic</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  predicted <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast_generic</span><span class="op">(</span><span class="va">data</span>, forecast_unit <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,14 +67,10 @@ assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.</p></dd>
 
 
-<dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the
-observed values. This column will be renamed to "observed".</p></dd>
-
-
-<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
-<dd><p>(optional) Name of the column in <code>data</code> that contains the
-predicted values. This column will be renamed to "predicted".</p></dd>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Named arguments that are used to rename columns. The names of the
+arguments are the names of the columns that should be renamed. The values
+are the new names.</p></dd>
 
 </dl></div>
     <div class="section level2">
