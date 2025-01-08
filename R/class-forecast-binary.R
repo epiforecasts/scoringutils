@@ -34,7 +34,12 @@ as_forecast_binary <- function(data,
                                forecast_unit = NULL,
                                observed = NULL,
                                predicted = NULL) {
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- as_forecast_generic(
+    data,
+    forecast_unit,
+    observed = observed,
+    predicted = predicted
+  )
   data <- new_forecast(data, "forecast_binary")
   assert_forecast(data)
   return(data)

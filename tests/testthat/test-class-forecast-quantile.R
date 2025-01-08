@@ -157,6 +157,25 @@ test_that("as_forecast_quantiles issue 557 fix", {
   expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
 })
 
+test_that("as_forecast_quantile doesn't modify column names in place", {
+  quantile_data <- data.table(
+    my_quantile = c(0.25, 0.5),
+    forecast_value = c(1, 2),
+    observed_value = c(5, 5)
+  )
+  pre <- names(quantile_data)
+
+  quantile_forecast <- quantile_data %>%
+    as_forecast_quantile(
+      predicted = "forecast_value",
+      observed = "observed_value",
+      quantile_level = "my_quantile"
+    )
+
+  post <- names(quantile_data)
+  expect_equal(pre, post)
+})
+
 
 # ==============================================================================
 # is_forecast_quantile()

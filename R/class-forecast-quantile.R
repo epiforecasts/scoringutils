@@ -46,13 +46,13 @@ as_forecast_quantile.default <- function(data,
                                          predicted = NULL,
                                          quantile_level = NULL,
                                          ...) {
-  assert_character(quantile_level, len = 1, null.ok = TRUE)
-  assert_subset(quantile_level, names(data), empty.ok = TRUE)
-  if (!is.null(quantile_level)) {
-    setnames(data, old = quantile_level, new = "quantile_level")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- as_forecast_generic(
+    data,
+    forecast_unit,
+    observed = observed,
+    predicted = predicted,
+    quantile_level = quantile_level
+  )
   data <- new_forecast(data, "forecast_quantile")
   assert_forecast(data)
   return(data)

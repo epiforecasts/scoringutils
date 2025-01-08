@@ -4,25 +4,29 @@
 #' It renames the required columns, where appropriate, and sets the forecast
 #' unit.
 #' @inheritParams as_forecast_doc_template
+#' @param ... Named arguments that are used to rename columns. The names of the
+#'  arguments are the names of the columns that should be renamed. The values
+#'  are the new names.
 #' @keywords as_forecast
 as_forecast_generic <- function(data,
                                 forecast_unit = NULL,
-                                observed = NULL,
-                                predicted = NULL) {
-  # check inputs - general
+                                ...) {
   data <- ensure_data.table(data)
-  assert_character(observed, len = 1, null.ok = TRUE)
-  assert_subset(observed, names(data), empty.ok = TRUE)
+  oldnames <- list(...)
+  newnames <- names(oldnames)
+  provided <- !sapply(oldnames, is.null)
 
-  assert_character(predicted, len = 1, null.ok = TRUE)
-  assert_subset(predicted, names(data), empty.ok = TRUE)
+  lapply(seq_along(oldnames), function(i) {
+    var <- oldnames[[i]]
+    varname <- names(oldnames)[i]
+    assert_character(var, len = 1, null.ok = TRUE, .var.name = varname)
+    assert_subset(var, names(data), empty.ok = TRUE, .var.name = varname)
+  })
 
-  # rename columns - general
-  if (!is.null(observed)) {
-    setnames(data, old = observed, new = "observed")
-  }
-  if (!is.null(predicted)) {
-    setnames(data, old = predicted, new = "predicted")
+  oldnames <- unlist(oldnames[provided])
+  newnames <- unlist(newnames[provided])
+  if (!is.null(oldnames) && length(oldnames) > 0) {
+    setnames(data, old = oldnames, new = newnames)
   }
 
   # set forecast unit (error handling is done in `set_forecast_unit()`)

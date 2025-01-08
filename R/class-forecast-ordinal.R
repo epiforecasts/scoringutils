@@ -45,13 +45,13 @@ as_forecast_ordinal <- function(data,
                                 observed = NULL,
                                 predicted = NULL,
                                 predicted_label = NULL) {
-  assert_character(predicted_label, len = 1, null.ok = TRUE)
-  assert_subset(predicted_label, names(data), empty.ok = TRUE)
-  if (!is.null(predicted_label)) {
-    setnames(data, old = predicted_label, new = "predicted_label")
-  }
-
-  data <- as_forecast_generic(data, forecast_unit, observed, predicted)
+  data <- as_forecast_generic(
+    data,
+    forecast_unit,
+    observed = observed,
+    predicted = predicted,
+    predicted_label = predicted_label
+  )
   data <- new_forecast(data, "forecast_ordinal")
   assert_forecast(data)
   return(data)
