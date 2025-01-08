@@ -6,6 +6,7 @@ Minor spelling / mathematical updates to Scoring rule vignette. (#969)
 
 - A bug was fixed where `crps_sample()` could fail in edge cases.
 - Implemented a new forecast class, `forecast_ordinal` with appropriate metrics. Ordinal forecasts are a form of categorical forecasts. The main difference between ordinal and nominal forecasts is that the outcome is ordered, rather than unordered.
+- Refactored the way that columns get internally renamed in `as_forecast_<type>()` functions (#980)
 
 # scoringutils 2.0.0
 
