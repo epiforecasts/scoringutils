@@ -69,12 +69,16 @@ other, unneeded columns. See section "Forecast Unit" below for details).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast_sample</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_forecast_sample</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">as_forecast_sample</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  observed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predicted <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_id <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  sample_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -86,6 +90,10 @@ other, unneeded columns. See section "Forecast Unit" below for details).</p>
 <dd><p>A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Unused</p></dd>
 
 
 <dt id="arg-forecast-unit">forecast_unit<a class="anchor" aria-label="anchor" href="#arg-forecast-unit"></a></dt>
@@ -118,7 +126,8 @@ sample id. This column will be renamed to "sample_id".</p></dd>
     </div>
     <div class="section level2">
     <h2 id="required-input">Required input<a class="anchor" aria-label="anchor" href="#required-input"></a></h2>
-    <p>The input needs to be a data.frame or similar with the following columns:</p><ul><li><p><code>observed</code>: Column of type <code>numeric</code> with observed values.</p></li>
+    <p>The input needs to be a data.frame or similar for the default method
+with the following columns:</p><ul><li><p><code>observed</code>: Column of type <code>numeric</code> with observed values.</p></li>
 <li><p><code>predicted</code>: Column of type <code>numeric</code> with predicted values. Predicted
 values represent random samples from the predictive distribution.</p></li>
 <li><p><code>sample_id</code>: Column of any type with unique identifiers
