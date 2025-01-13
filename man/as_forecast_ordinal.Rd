@@ -2,20 +2,26 @@
 % Please edit documentation in R/class-forecast-ordinal.R
 \name{as_forecast_ordinal}
 \alias{as_forecast_ordinal}
+\alias{as_forecast_ordinal.default}
 \title{Create a \code{forecast} object for ordinal forecasts}
 \usage{
-as_forecast_ordinal(
+as_forecast_ordinal(data, ...)
+
+\method{as_forecast_ordinal}{default}(
   data,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  predicted_label = NULL
+  predicted_label = NULL,
+  ...
 )
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.}
+
+\item{...}{Unused}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
@@ -55,7 +61,8 @@ generalisation of binary forecasts to multiple outcomes. The possible
 outcomes that the observed values can assume are ordered.
 }
 \section{Required input}{
-The input needs to be a data.frame or similar with the following columns:
+The input needs to be a data.frame or similar for the default method
+with the following columns:
 \itemize{
 \item \code{observed}: Column with observed values of type \code{factor} with N ordered
 levels, where N is the number of possible outcomes.
@@ -121,3 +128,4 @@ Other functions to create forecast objects:
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}
+\keyword{transform}

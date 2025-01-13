@@ -7,7 +7,8 @@
 #'
 #' # Required input
 #'
-#' The input needs to be a data.frame or similar with the following columns:
+#' The input needs to be a data.frame or similar for the default method
+#' with the following columns:
 #' - `observed`: Column with observed values of type `factor` with N ordered
 #'   levels, where N is the number of possible outcomes.
 #'   The levels of the factor represent the possible outcomes that
@@ -26,13 +27,11 @@
 #'
 #' See the [example_ordinal] data set for an example.
 #' @inheritSection forecast_types Forecast unit
-#' @param predicted_label (optional) Name of the column in `data` that denotes
-#'   the outcome to which a predicted probability corresponds to.
-#'   This column will be renamed to "predicted_label".
-#' @returns A `forecast` object of class `forecast_ordinal`
+#' @param ... Unused
 #' @family functions to create forecast objects
-#' @keywords as_forecast
+#' @returns A `forecast` object of class `forecast_ordinal`
 #' @export
+#' @keywords as_forecast transform
 #' @examples
 #' as_forecast_ordinal(
 #'   na.omit(example_ordinal),
@@ -40,11 +39,23 @@
 #'   forecast_unit = c("model", "target_type", "target_end_date",
 #'                     "horizon", "location")
 #' )
-as_forecast_ordinal <- function(data,
-                                forecast_unit = NULL,
-                                observed = NULL,
-                                predicted = NULL,
-                                predicted_label = NULL) {
+as_forecast_ordinal <- function(data, ...) {
+  UseMethod("as_forecast_ordinal")
+}
+
+#' @rdname as_forecast_ordinal
+#' @param predicted_label (optional) Name of the column in `data` that denotes
+#'   the outcome to which a predicted probability corresponds to.
+#'   This column will be renamed to "predicted_label".
+#' @export
+#' @method as_forecast_ordinal default
+#' @importFrom cli cli_warn
+as_forecast_ordinal.default <- function(data,
+                                        forecast_unit = NULL,
+                                        observed = NULL,
+                                        predicted = NULL,
+                                        predicted_label = NULL,
+                                        ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,

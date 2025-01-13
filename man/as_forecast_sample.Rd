@@ -2,20 +2,26 @@
 % Please edit documentation in R/class-forecast-sample.R
 \name{as_forecast_sample}
 \alias{as_forecast_sample}
+\alias{as_forecast_sample.default}
 \title{Create a \code{forecast} object for sample-based forecasts}
 \usage{
-as_forecast_sample(
+as_forecast_sample(data, ...)
+
+\method{as_forecast_sample}{default}(
   data,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  sample_id = NULL
+  sample_id = NULL,
+  ...
 )
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.}
+
+\item{...}{Unused}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
@@ -49,7 +55,8 @@ the columns that uniquely identify a single forecast (and thereby removing
 other, unneeded columns. See section "Forecast Unit" below for details).
 }
 \section{Required input}{
-The input needs to be a data.frame or similar with the following columns:
+The input needs to be a data.frame or similar for the default method
+with the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
 \item \code{predicted}: Column of type \code{numeric} with predicted values. Predicted
@@ -102,3 +109,4 @@ Other functions to create forecast objects:
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}
+\keyword{transform}

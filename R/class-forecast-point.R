@@ -3,7 +3,8 @@
 #' @details
 #' # Required input
 #'
-#' The input needs to be a data.frame or similar with the following columns:
+#' The input needs to be a data.frame or similar for the default method
+#' with the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values.
 #'
@@ -24,6 +25,7 @@ as_forecast_point <- function(data, ...) {
 
 #' @rdname as_forecast_point
 #' @export
+#' @method as_forecast_point default
 #' @importFrom cli cli_warn
 as_forecast_point.default <- function(data,
                                       forecast_unit = NULL,
