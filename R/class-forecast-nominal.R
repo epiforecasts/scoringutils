@@ -31,7 +31,7 @@
 #' @returns A `forecast` object of class `forecast_nominal`
 #' @family functions to create forecast objects
 #' @keywords as_forecast transform
-#' @export4
+#' @export
 #' @examples
 #' as_forecast_nominal(
 #'   na.omit(example_nominal),
