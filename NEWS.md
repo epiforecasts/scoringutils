@@ -5,6 +5,7 @@ Minor spelling / mathematical updates to Scoring rule vignette. (#969)
 ## Package updates
 
 - A bug was fixed where `crps_sample()` could fail in edge cases.
+- All `as_forecast_<type>()` functions now have S3 methods for converting from another forecast type to the respective forecast type.
 - Implemented a new forecast class, `forecast_ordinal` with appropriate metrics. Ordinal forecasts are a form of categorical forecasts. The main difference between ordinal and nominal forecasts is that the outcome is ordered, rather than unordered.
 - Refactored the way that columns get internally renamed in `as_forecast_<type>()` functions (#980)
 
