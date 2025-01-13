@@ -3,7 +3,8 @@
 #' @details
 #' # Required input
 #'
-#' The input needs to be a data.frame or similar with the following columns:
+#' The input needs to be a data.frame or similar for the default method
+#' with the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values. Predicted
 #'    values represent random samples from the predictive distribution.
@@ -17,18 +18,27 @@
 #' See the [example_sample_continuous] and [example_sample_discrete] data set
 #' for an example
 #' @inheritSection forecast_types Forecast unit
+#' @param ... Unused
+#' @family functions to create forecast objects
+#' @returns A `forecast` object of class `forecast_sample`
+#' @export
+#' @keywords as_forecast transform
+as_forecast_sample <- function(data, ...) {
+  UseMethod("as_forecast_sample")
+}
+
+
+#' @rdname as_forecast_sample
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id".
 #' @export
-#' @returns A `forecast` object of class `forecast_sample`
-#' @family functions to create forecast objects
 #' @importFrom cli cli_warn
-#' @keywords as_forecast
-as_forecast_sample <- function(data,
-                               forecast_unit = NULL,
-                               observed = NULL,
-                               predicted = NULL,
-                               sample_id = NULL) {
+as_forecast_sample.default <- function(data,
+                                       forecast_unit = NULL,
+                                       observed = NULL,
+                                       predicted = NULL,
+                                       sample_id = NULL,
+                                       ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,

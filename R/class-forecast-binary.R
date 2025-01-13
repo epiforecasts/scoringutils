@@ -18,11 +18,11 @@
 #'
 #' See the [example_binary] data set for an example.
 #' @inheritSection forecast_types Forecast unit
+#' @param ... Unused
 #' @returns A `forecast` object of class `forecast_binary`
 #' @family functions to create forecast objects
-#' @importFrom cli cli_warn
-#' @keywords as_forecast
 #' @export
+#' @keywords as_forecast transform
 #' @examples
 #' as_forecast_binary(
 #'   example_binary,
@@ -30,10 +30,19 @@
 #'   forecast_unit = c("model", "target_type", "target_end_date",
 #'                     "horizon", "location")
 #' )
-as_forecast_binary <- function(data,
-                               forecast_unit = NULL,
-                               observed = NULL,
-                               predicted = NULL) {
+as_forecast_binary <- function(data, ...) {
+  UseMethod("as_forecast_binary")
+}
+
+#' @rdname as_forecast_binary
+#' @export
+#' @method as_forecast_binary default
+#' @importFrom cli cli_warn
+as_forecast_binary.default <- function(data,
+                                       forecast_unit = NULL,
+                                       observed = NULL,
+                                       predicted = NULL,
+                                       ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -44,7 +53,6 @@ as_forecast_binary <- function(data,
   assert_forecast(data)
   return(data)
 }
-
 
 #' @export
 #' @rdname assert_forecast

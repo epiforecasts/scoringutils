@@ -47,7 +47,8 @@ When converting a \code{forecast_quantile} object into a \code{forecast_point} o
 the 0.5 quantile is extracted and returned as the point forecast.
 }
 \section{Required input}{
-The input needs to be a data.frame or similar with the following columns:
+The input needs to be a data.frame or similar for the default method
+with the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
 \item \code{predicted}: Column of type \code{numeric} with predicted values.

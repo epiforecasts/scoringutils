@@ -3,7 +3,8 @@
 #' @details
 #' # Required input
 #'
-#' The input needs to be a data.frame or similar with the following columns:
+#' The input needs to be a data.frame or similar for the default method
+#' with the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values. Predicted
 #'    values represent quantiles of the predictive distribution.
@@ -39,6 +40,7 @@ as_forecast_quantile <- function(data, ...) {
 #'   the quantile level of the predicted values. This column will be renamed to
 #'   "quantile_level". Only applicable to quantile-based forecasts.
 #' @export
+#' @method as_forecast_quantile default
 #' @importFrom cli cli_warn
 as_forecast_quantile.default <- function(data,
                                          forecast_unit = NULL,

@@ -2,19 +2,25 @@
 % Please edit documentation in R/class-forecast-binary.R
 \name{as_forecast_binary}
 \alias{as_forecast_binary}
+\alias{as_forecast_binary.default}
 \title{Create a \code{forecast} object for binary forecasts}
 \usage{
-as_forecast_binary(
+as_forecast_binary(data, ...)
+
+\method{as_forecast_binary}{default}(
   data,
   forecast_unit = NULL,
   observed = NULL,
-  predicted = NULL
+  predicted = NULL,
+  ...
 )
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.}
+
+\item{...}{Unused}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
@@ -107,3 +113,4 @@ Other functions to create forecast objects:
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}
+\keyword{transform}
