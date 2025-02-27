@@ -314,32 +314,10 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
       dat = predicted,
       ...
     )
-    overprediction <- rep(0, length(observed))
-    underprediction <- rep(0, length(observed))
+    difference <- crps - dispersion
 
-    if (any(observed < medians)) {
-      overprediction[observed < medians] <- scoringRules::crps_sample(
-        y = observed[observed < medians],
-        dat = predicted[observed < medians, , drop = FALSE],
-        ...
-      )
-    }
-    if (any(observed > medians)) {
-      underprediction[observed > medians] <- scoringRules::crps_sample(
-        y = observed[observed > medians],
-        dat = predicted[observed > medians, , drop = FALSE],
-        ...
-      )
-    }
-
-    if (any(overprediction > 0)) {
-      overprediction[overprediction > 0] <-
-        overprediction[overprediction > 0] - dispersion[overprediction > 0]
-    }
-    if (any(underprediction > 0)) {
-      underprediction[underprediction > 0] <-
-        underprediction[underprediction > 0] - dispersion[underprediction > 0]
-    }
+    overprediction <- fcase(observed < medians, difference, default = 0)
+    underprediction <- fcase(observed > medians, difference, default = 0)
 
     return(list(
       crps = crps,
