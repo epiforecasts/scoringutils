@@ -47,6 +47,7 @@
 <li>All <code>as_forecast_&lt;type&gt;()</code> functions now have S3 methods for converting from another forecast type to the respective forecast type.</li>
 <li>Implemented a new forecast class, <code>forecast_ordinal</code> with appropriate metrics. Ordinal forecasts are a form of categorical forecasts. The main difference between ordinal and nominal forecasts is that the outcome is ordered, rather than unordered.</li>
 <li>Refactored the way that columns get internally renamed in <code>as_forecast_&lt;type&gt;()</code> functions (<a href="https://github.com/epiforecasts/scoringutils/issues/980" class="external-link">#980</a>)</li>
+<li>The package now correctly specifies a dependency on <code>data.table</code> &gt;= 1.16.0.</li>
 </ul></div>
 </div>
     <div class="section level2">
