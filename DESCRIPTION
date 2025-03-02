@@ -56,7 +56,7 @@ LazyData: true
 Imports:
     checkmate,
     cli,
-    data.table,
+    data.table (>= 1.16.0),
     ggplot2 (>= 3.4.0),
     lifecycle,
     methods,
