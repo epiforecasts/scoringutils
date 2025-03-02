@@ -133,11 +133,3 @@ logs_categorical <- function(observed, predicted, predicted_label) {
   logs <- -log(pred_for_observed)
   return(logs)
 }
-
-#' @importFrom lifecycle deprecate_warn
-logs_nominal <- function(observed, predicted, predicted_label) {
-  deprecate_warn(
-    when = "2.1.0", what = "logs_nominal()", with = "logs_categorical()"
-  )
-  logs_categorical(observed, predicted, predicted_label)
-}
