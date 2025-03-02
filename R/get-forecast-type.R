@@ -8,12 +8,11 @@ get_forecast_type <- function(forecast) {
   forecast_class <- classname[grepl("forecast_", classname, fixed = TRUE)]
   if (length(forecast_class) == 1) {
     return(gsub("forecast_", "", forecast_class, fixed = TRUE))
-  } else {
-    cli_abort(
-      "Input is not a valid forecast object
-      (There should be a single class beginning with `forecast_`)."
-    )
   }
+  cli_abort(
+    "Input is not a valid forecast object
+    (There should be a single class beginning with `forecast_`)."
+  )
 }
 
 
