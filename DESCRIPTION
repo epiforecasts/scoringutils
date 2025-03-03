@@ -58,7 +58,6 @@ Imports:
     cli,
     data.table (>= 1.16.0),
     ggplot2 (>= 3.4.0),
-    lifecycle,
     methods,
     Metrics,
     purrr,
