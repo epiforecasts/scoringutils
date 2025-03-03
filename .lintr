@@ -1,12 +1,13 @@
 linters: linters_with_tags(
     tags = NULL, # include all linters
     implicit_integer_linter = NULL,
-    extraction_operator_linter = NULL,
     undesirable_function_linter = NULL,
     function_argument_linter = NULL,
     object_name_linter = NULL,
     line_length_linter(120),
-    cyclocomp_linter(20L)
+    cyclocomp_linter(20L),
+    return_linter = NULL,
+    object_overwrite_linter = NULL
   )
 exclusions: c(
     list.files("tests", recursive = TRUE, full.names = TRUE),

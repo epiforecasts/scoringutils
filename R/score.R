@@ -179,7 +179,7 @@ run_safely <- function(..., fun, metric_name) {
     # Identify the arguments that fun() accepts
     possible_args <- names(formals(fun))
     # keep valid arguments as well as unnamed arguments
-    valid_args <- args[names(args) == "" | names(args) %in% possible_args]
+    valid_args <- args[!nzchar(names(args)) | names(args) %in% possible_args]
   }
 
   result <- try(do.call(fun, valid_args), silent = TRUE)

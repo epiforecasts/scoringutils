@@ -481,14 +481,13 @@ bias_quantile_single_vector <- function(observed, predicted,
   quantile_has_NAs <- anyNA(quantile_level)
 
   if (any(predicted_has_NAs, quantile_has_NAs)) {
-    if (na.rm) {
-      quantile_level <- quantile_level[!is.na(predicted)]
-      predicted <- predicted[!is.na(predicted)]
-      predicted <- predicted[!is.na(quantile_level)]
-      quantile_level <- quantile_level[!is.na(quantile_level)]
-    } else {
+    if (!na.rm) {
       return(NA_real_)
     }
+    quantile_level <- quantile_level[!is.na(predicted)]
+    predicted <- predicted[!is.na(predicted)]
+    predicted <- predicted[!is.na(quantile_level)]
+    quantile_level <- quantile_level[!is.na(quantile_level)]
   }
 
   order <- order(quantile_level)
