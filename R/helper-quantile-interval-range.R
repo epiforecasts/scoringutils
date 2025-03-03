@@ -27,6 +27,7 @@
 #' @param ... Arguments
 #' @returns A data.table with forecasts in an interval format.
 #' @keywords internal
+#' @importFrom cli cli_abort
 quantile_to_interval <- function(...) {
   dots <- list(...)
   if (is.data.frame(dots[[1]])) {
@@ -34,7 +35,7 @@ quantile_to_interval <- function(...) {
   } else if (is.numeric(dots[[1]])) {
     do.call(quantile_to_interval_numeric, dots)
   } else {
-    stop("Input must be either a data.frame or a numeric vector.")
+    cli_abort("Input must be either a data.frame or a numeric vector.")
   }
 }
 
