@@ -1,4 +1,4 @@
-# scoringutils (development version)
+# scoringutils 2.1.0
 
 Minor spelling / mathematical updates to Scoring rule vignette. (#969)
 
