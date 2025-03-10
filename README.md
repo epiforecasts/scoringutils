@@ -11,10 +11,11 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 [![metacrandownloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: [This documentation](https://epiforecasts.io/scoringutils/)
-refers to the stable version of `scoringutils`. You can also view the
-[documentation of the development
-version](https://epiforecasts.io/scoringutils/dev/).
+**Note**: [This
+documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
+development version of `scoringutils`. You can also view the
+[documentation of the stable
+version](https://epiforecasts.io/scoringutils/).
 
 The `scoringutils` package facilitates the process of evaluating
 forecasts in R, using a convenient and flexible `data.table`-based
