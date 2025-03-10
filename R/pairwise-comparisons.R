@@ -588,7 +588,8 @@ add_relative_skill <- function(
   compare = "model",
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-  baseline = NULL
+  baseline = NULL,
+  ...
 ) {
 
   # input checks are done in `get_pairwise_comparisons()`
@@ -598,7 +599,8 @@ add_relative_skill <- function(
     metric = metric,
     baseline = baseline,
     compare = compare,
-    by = by
+    by = by,
+    ...
   )
 
   # store original metrics
