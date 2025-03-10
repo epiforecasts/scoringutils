@@ -1,5 +1,8 @@
 # scoringutils (development version)
 
+- Made computation of p-values optional in pairwise comparisons by allowing `test_type = NULL` in `compare_forecasts()`. When `test_type = NULL`, p-values will be `NA` (#978).
+
+
 # scoringutils 2.1.0
 
 Minor spelling / mathematical updates to Scoring rule vignette. (#969)
