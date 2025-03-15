@@ -9,7 +9,8 @@ add_relative_skill(
   compare = "model",
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-  baseline = NULL
+  baseline = NULL,
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ a relative skill shall be computed. By default this is either "crps",
 given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
+
+\item{...}{Additional arguments for the comparison between two models. See
+\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
 }
 \description{
 Adds a columns with relative skills computed by running
