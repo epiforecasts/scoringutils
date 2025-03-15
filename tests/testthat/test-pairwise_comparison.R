@@ -547,7 +547,7 @@ test_that("plot_pairwise_comparisons() works when showing p values", {
 })
 
 test_that("add_relative_skill() works without warnings when not computing p-values", {
-  forecast_quantile <- example_quantile |>
+  forecast_quantile <- example_quantile %>%
     as_forecast_quantile(
       forecast_unit = c(
         "location", "forecast_date", "target_end_date",
@@ -555,11 +555,11 @@ test_that("add_relative_skill() works without warnings when not computing p-valu
       )
     )
 
-  scores <- forecast_quantile |>
+  scores <- forecast_quantile %>%
     score(metrics = get_metrics(forecast_quantile, "ae_median"))
 
   expect_no_warning(
-    scores_w_rel_skill <- scores |>
+    scores_w_rel_skill <- scores %>%
       add_relative_skill(
         compare = "model",
         by = "location",
