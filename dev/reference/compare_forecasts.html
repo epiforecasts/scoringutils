@@ -76,7 +76,7 @@ different forecast targets.</p>
 <span>  <span class="va">name_comparator2</span>,</span>
 <span>  <span class="va">metric</span>,</span>
 <span>  one_sided <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permutation"</span><span class="op">)</span>,</span>
+<span>  test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permutation"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
 <span>  n_permutations <span class="op">=</span> <span class="fl">999</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -118,9 +118,9 @@ comparison.</p></dd>
 
 
 <dt id="arg-test-type">test_type<a class="anchor" aria-label="anchor" href="#arg-test-type"></a></dt>
-<dd><p>Character, either "non_parametric" (the default) or
-"permutation". This determines which kind of test shall be conducted to
-determine p-values.</p></dd>
+<dd><p>Character, either "non_parametric" (the default), "permutation",
+or NULL. This determines which kind of test shall be conducted to determine
+p-values. If NULL, no test will be conducted and p-values will be NA.</p></dd>
 
 
 <dt id="arg-n-permutations">n_permutations<a class="anchor" aria-label="anchor" href="#arg-n-permutations"></a></dt>
