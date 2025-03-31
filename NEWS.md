@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
+
 # scoringutils 2.1.0
 
 Minor spelling / mathematical updates to Scoring rule vignette. (#969)
