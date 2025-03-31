@@ -11,7 +11,7 @@ compare_forecasts(
   name_comparator2,
   metric,
   one_sided = FALSE,
-  test_type = c("non_parametric", "permutation"),
+  test_type = c("non_parametric", "permutation", NULL),
   n_permutations = 999
 )
 }
@@ -36,9 +36,9 @@ a relative skill shall be computed. By default this is either "crps",
 instead of a two-sided test to determine significance in a pairwise
 comparison.}
 
-\item{test_type}{Character, either "non_parametric" (the default) or
-"permutation". This determines which kind of test shall be conducted to
-determine p-values.}
+\item{test_type}{Character, either "non_parametric" (the default), "permutation",
+or NULL. This determines which kind of test shall be conducted to determine
+p-values. If NULL, no test will be conducted and p-values will be NA.}
 
 \item{n_permutations}{Numeric, the number of permutations for a
 permutation test. Default is 999.}

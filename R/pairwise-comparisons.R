@@ -410,9 +410,9 @@ pairwise_comparison_one_group <- function(scores,
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
 #'   instead of a two-sided test to determine significance in a pairwise
 #'   comparison.
-#' @param test_type Character, either "non_parametric" (the default) or
-#'   "permutation". This determines which kind of test shall be conducted to
-#'   determine p-values.
+#' @param test_type Character, either "non_parametric" (the default), "permutation",
+#'   or NULL. This determines which kind of test shall be conducted to determine
+#'   p-values. If NULL, no test will be conducted and p-values will be NA.
 #' @param n_permutations Numeric, the number of permutations for a
 #'   permutation test. Default is 999.
 #' @returns A list with mean score ratios and p-values for the comparison
@@ -428,7 +428,7 @@ compare_forecasts <- function(scores,
                               name_comparator2,
                               metric,
                               one_sided = FALSE,
-                              test_type = c("non_parametric", "permutation"),
+                              test_type = c("non_parametric", "permutation", NULL),
                               n_permutations = 999) {
   scores <- data.table::as.data.table(scores)
 
@@ -463,22 +463,28 @@ compare_forecasts <- function(scores,
   # note we could also take mean(values_x) / mean(values_y), as it cancels out
   ratio <- sum(values_x) / sum(values_y)
 
-  # test whether the ratio is significantly different from one
-  # equivalently, one can test whether the difference between the two values
-  # is significantly different from zero.
-  test_type <- match.arg(test_type)
-  if (test_type == "permutation") {
-    # adapted from the surveillance package
-    pval <- permutation_test(values_x, values_y,
-      n_permutation = n_permutations,
-      one_sided = one_sided,
-      comparison_mode = "difference"
-    )
+  # If test_type is NULL, return NA for p-value
+  if (is.null(test_type)) {
+    pval <- NA_real_
   } else {
-    # this probably needs some more thought
-    # alternative: do a paired t-test on ranks?
-    pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
+    # test whether the ratio is significantly different from one
+    # equivalently, one can test whether the difference between the two values
+    # is significantly different from zero.
+    test_type <- match.arg(test_type)
+    if (test_type == "permutation") {
+      # adapted from the surveillance package
+      pval <- permutation_test(values_x, values_y,
+        n_permutation = n_permutations,
+        one_sided = one_sided,
+        comparison_mode = "difference"
+      )
+    } else {
+      # this probably needs some more thought
+      # alternative: do a paired t-test on ranks?
+      pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
+    }
   }
+
   return(list(
     mean_scores_ratio = ratio,
     pval = pval
@@ -582,7 +588,8 @@ add_relative_skill <- function(
   compare = "model",
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
-  baseline = NULL
+  baseline = NULL,
+  ...
 ) {
 
   # input checks are done in `get_pairwise_comparisons()`
@@ -592,7 +599,8 @@ add_relative_skill <- function(
     metric = metric,
     baseline = baseline,
     compare = compare,
-    by = by
+    by = by,
+    ...
   )
 
   # store original metrics

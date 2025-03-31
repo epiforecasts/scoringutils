@@ -1,6 +1,7 @@
 # scoringutils (development version)
 
 - Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
+- Made computation of p-values optional in pairwise comparisons by allowing `test_type = NULL` in `compare_forecasts()`. When `test_type = NULL`, p-values will be `NA` (#978).
 
 # scoringutils 2.1.0
 
