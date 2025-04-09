@@ -73,7 +73,7 @@ assert_input_categorical <- function(
     summed_predictions <- round(rowSums(predicted, na.rm = TRUE), 10) # avoid numeric errors
   }
   # Allow for numeric errors
-  tolerance <- 1e-8
+  tolerance <- 1e-4
   invalid_rows <- abs(summed_predictions - 1) > tolerance
   if (any(invalid_rows)) {
     #nolint start: keyword_quote_linter object_usage_linter
