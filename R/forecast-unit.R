@@ -62,3 +62,36 @@ get_forecast_unit <- function(data) {
   forecast_unit <- setdiff(colnames(data), unique(protected_columns))
   return(forecast_unit)
 }
+
+#' @title Set grouping
+#' @description
+#' Helper function to set the grouping of a forecast.
+#' @inheritParams as_forecast_doc_template
+#' @param grouping Character vector with the names of the columns that
+#'   define the grouping.
+#' @importFrom data.table ':=' is.data.table copy
+#' @export
+set_grouping <- function(data, grouping) {
+  out <- assert_data_table(data)
+  out <- out[, .scoringutils_group_id := .GRP, by = grouping]
+
+  # need to add a check that within one group, all individual forecasts (as defined by the forecast unit)
+  # have the same number of samples
+
+  return(out)
+}
+
+get_grouping <- function(data) {
+  assert_data_frame(data)
+  if (!(".scoringutils_group_id" %in% names(data))) {
+    return(get_forecast_unit(data))
+  }
+  data <- as.data.table(data)
+  # this iteratives over every column, and for every column makes sure that there
+  # is always only one unique value per group specified by .scoringutils_group_id
+  # if that is the case, the column is part of the grouping vector.
+  grouping_cols <- names(data)[sapply(names(data), function(col) {
+    data[, all(length(unique(.SD[[col]])) == 1), by = ".scoringutils_group_id"][, all(V1)]
+  })]
+  return(grouping_cols)
+}

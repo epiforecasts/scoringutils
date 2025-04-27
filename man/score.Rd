@@ -115,6 +115,13 @@ score(as_forecast_point(example_point))
 score(as_forecast_sample(example_sample_discrete))
 score(as_forecast_sample(example_sample_continuous))
 }
+
+# multivariate forecasts
+
+example_sample_continuous \%>\%
+  scoringutils:::set_grouping()
+  score()
+
 }
 \references{
 Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S

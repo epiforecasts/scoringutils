@@ -84,6 +84,13 @@
 #' score(as_forecast_sample(example_sample_discrete))
 #' score(as_forecast_sample(example_sample_continuous))
 #' }
+#'
+#' # multivariate forecasts
+#'
+#' example_sample_continuous %>%
+#'   scoringutils:::set_grouping()
+#'   score()
+#'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
 #' Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
@@ -169,18 +176,9 @@ apply_metrics <- function(forecast, metrics, ...) {
 run_safely <- function(..., fun, metric_name) {
   assert_function(fun)
   args <- list(...)
-  # Check if the function accepts ... as an argument
-  if ("..." %in% names(formals(fun))) {
-    valid_args <- args
-  } else if (is.null(names(args))) {
-    # if no arguments are named, just pass all arguments on
-    valid_args <- args
-  } else {
-    # Identify the arguments that fun() accepts
-    possible_args <- names(formals(fun))
-    # keep valid arguments as well as unnamed arguments
-    valid_args <- args[!nzchar(names(args)) | names(args) %in% possible_args]
-  }
+  possible_args <- names(formals(fun))
+  # keep valid arguments as well as unnamed arguments
+  valid_args <- args[!nzchar(names(args)) | names(args) %in% possible_args]
 
   result <- try(do.call(fun, valid_args), silent = TRUE)
 
