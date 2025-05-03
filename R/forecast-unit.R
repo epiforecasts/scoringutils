@@ -72,7 +72,8 @@ get_forecast_unit <- function(data) {
 #' @importFrom data.table ':=' is.data.table copy
 #' @export
 set_grouping <- function(data, grouping) {
-  out <- assert_data_table(data)
+  out <- ensure_data.table(data)
+  # assert that grouping isn't niull
   out <- out[, .scoringutils_group_id := .GRP, by = grouping]
 
   # todo:
@@ -84,6 +85,8 @@ set_grouping <- function(data, grouping) {
   return(out)
 }
 
+#' @title Get grouping
+#' @export
 get_grouping <- function(data) {
   assert_data_frame(data)
   if (!(".scoringutils_group_id" %in% names(data))) {

@@ -2,9 +2,7 @@
 % Please edit documentation in R/metrics-sample-multivariate.R
 \name{energy_score_multivariate}
 \alias{energy_score_multivariate}
-\title{Energy score for multivariate forecasts
-
-Compute the multivariate energy score (see )}
+\title{Energy score for multivariate forecasts}
 \usage{
 energy_score_multivariate(observed, predicted, grouping_id, w = NULL)
 }
@@ -16,11 +14,17 @@ the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
 of size n.}
 
+\item{grouping_id}{Numeric vector of length n with ids indicating the
+grouping of predicted values. Conceptually, each row of the \code{predicted}
+matrix \emph{could} be seen as a separate (univariate) forecast.
+The grouping id then groups several of those forecasts together, treating
+them as a single multivariate forecast.}
+
 \item{w}{numeric vector of weights for forecast draws (length equal to number of columns of \code{dat})}
 }
 \description{
-Energy score for multivariate forecasts
-
-Compute the multivariate energy score (see )
+Compute the multivariate energy score
+(see \link[scoringRules:es_sample]{scoringRules::es_sample})
+for each group defined by \code{grouping_id}.
 }
 \keyword{internal_input_check}

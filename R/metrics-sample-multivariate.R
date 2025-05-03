@@ -26,8 +26,9 @@ assert_input_sample_multivariate <- function(observed, predicted, grouping_id) {
   return(invisible(NULL))
 }
 
+
 #' @title Energy score for multivariate forecasts
-#'
+#' @description
 #' Compute the multivariate energy score
 #' (see \link[scoringRules:es_sample]{scoringRules::es_sample})
 #' for each group defined by `grouping_id`.

@@ -17,7 +17,10 @@ If \code{observed} is just a single number, then predicted values can just be a
 vector of size N.}
 
 \item{grouping_id}{Numeric vector of length n with ids indicating the
-grouping of predicted values.}
+grouping of predicted values. Conceptually, each row of the \code{predicted}
+matrix \emph{could} be seen as a separate (univariate) forecast.
+The grouping id then groups several of those forecasts together, treating
+them as a single multivariate forecast.}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an
