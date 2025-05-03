@@ -116,37 +116,6 @@ as_forecast_quantile.forecast_sample <- function(
 }
 
 
-# #' @importFrom stats na.omit
-# #' @importFrom data.table setattr copy
-# #' @rdname score
-# #' @export
-# score.forecast_sample_justatest <- function(forecast, metrics = get_metrics(forecast), ...) {
-#   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-#   forecast_unit <- get_forecast_unit(forecast)
-#   metrics <- validate_metrics(metrics)
-#   forecast <- as.data.table(forecast)
-
-#   # transpose the forecasts that belong to the same forecast unit
-#   f_transposed <- forecast[, .(predicted = list(predicted),
-#                                observed = unique(observed),
-#                                scoringutils_N = length(list(sample_id))),
-#                            by = forecast_unit]
-
-#   if (".scoringutils_group_id" %in% names(f_transposed)) {
-#     grouping <- get_grouping(forecast)
-#     # metrics are only metrics that take "grouping" as an argument
-#     metrics <- metrics[sapply(metrics, function(m) {
-#       "grouping" %in% formalArgs(m)
-#     })]
-#     return(score_forecast_sample_multiv(f_transposed, metrics, grouping, ...))
-#   } else {
-#     # metrics are only metrics that do not take "grouping" as an argument
-#     metrics <- metrics[!sapply(metrics, function(m) {
-#       "grouping" %in% formalArgs(m)
-#     })]
-#     return(score_forecast_sample_univ(f_transposed, metrics, ...))
-#   }
-# }
 
 
 #' @importFrom stats na.omit

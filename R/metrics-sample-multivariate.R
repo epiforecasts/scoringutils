@@ -1,5 +1,8 @@
 # These metrics are metrics for the `forecast_sample` class, but accept an
 # additional `grouping_id` argument.
+# ==============================================================================
+
+
 #' @title Assert that inputs are correct for sample-based forecast
 #' @description
 #' Function assesses whether the inputs correspond to the requirements for
@@ -10,7 +13,10 @@
 #'   If `observed` is just a single number, then predicted values can just be a
 #'   vector of size N.
 #' @param grouping_id Numeric vector of length n with ids indicating the
-#'   grouping of predicted values.
+#'   grouping of predicted values. Conceptually, each row of the `predicted`
+#'   matrix _could_ be seen as a separate (univariate) forecast.
+#'   The grouping id then groups several of those forecasts together, treating
+#'   them as a single multivariate forecast.
 #' @importFrom scoringRules es_sample
 #' @inherit document_assert_functions params return
 #' @keywords internal_input_check
@@ -22,8 +28,11 @@ assert_input_sample_multivariate <- function(observed, predicted, grouping_id) {
 
 #' @title Energy score for multivariate forecasts
 #'
-#' Compute the multivariate energy score (see )
+#' Compute the multivariate energy score
+#' (see \link[scoringRules:es_sample]{scoringRules::es_sample})
+#' for each group defined by `grouping_id`.
 #' @inheritParams ae_median_sample
+#' @inheritParams assert_input_sample_multivariate
 #' @inherit scoringRules::es_sample params
 #' @keywords internal_input_check
 #' @export

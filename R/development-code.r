@@ -59,12 +59,6 @@
 
 
 
-
-
-
-
-
-
 # # development plan:
 # # X 0. get some example data
 # # X 1. implement a first version of the function in matrix format
