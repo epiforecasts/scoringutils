@@ -2,10 +2,13 @@
 % Please edit documentation in R/forecast-unit.R
 \name{get_grouping}
 \alias{get_grouping}
-\title{Get grouping}
+\title{Get grouping for a multivariate forecast}
 \usage{
-get_grouping(data)
+get_grouping(forecast)
+}
+\value{
+A character vector with the names of the columns that define the grouping.
 }
 \description{
-Get grouping
+Helper function to get the grouping for a multivariate forecast.
 }

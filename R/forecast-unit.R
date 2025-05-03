@@ -70,29 +70,46 @@ get_forecast_unit <- function(data) {
 #' @param grouping Character vector with the names of the columns that
 #'   define the grouping.
 #' @importFrom data.table ':=' is.data.table copy
+#' @importFrom checkmate assert_character assert_subset
 #' @export
 set_grouping <- function(data, grouping) {
-  out <- ensure_data.table(data)
-  # assert that grouping isn't niull
-  out <- out[, .scoringutils_group_id := .GRP, by = grouping]
+  data <- ensure_data.table(data)
+  assert_character(grouping, min.len = 1)
+  assert_subset(grouping, colnames(data))
 
-  # todo:
-  # need to add a check that within one group, all individual forecasts (as defined by the forecast unit)
-  # have the same number of samples
-  # because if not, we split things up according to the number of samples in the score function, and that
-  # will cause problems.
+  data[, .scoringutils_group_id := .GRP, by = grouping]
 
-  return(out)
+  data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data))]
+
+  for (group_id in unique(data$.scoringutils_group_id)) {
+    counts <- data[.scoringutils_group_id == group_id, .scoringutils_count]
+    unique_counts <- unique(counts)
+
+    if (length(unique_counts) > 1) {
+      cli_abort(
+        "All forecasts (as defined by the forecast unit) in a group must have
+        the same number of samples. This is not the case for group
+        {.val {group_id}}. Seeing {.val {unique_counts}} samples."
+      )
+    }
+  }
+  data[, .scoringutils_count := NULL]
+  return(data)
 }
 
-#' @title Get grouping
+#' @title Get grouping for a multivariate forecast
+#' @description
+#' Helper function to get the grouping for a multivariate forecast.
+#' @inheritParams as_forecast_doc_template
+#' @return
+#' A character vector with the names of the columns that define the grouping.
 #' @export
-get_grouping <- function(data) {
-  assert_data_frame(data)
-  if (!(".scoringutils_group_id" %in% names(data))) {
-    return(get_forecast_unit(data))
+get_grouping <- function(forecast) {
+  assert_forecast(forecast)
+  if (!(".scoringutils_group_id" %in% names(forecast))) {
+    return(get_forecast_unit(forecast))
   }
-  data <- as.data.table(data)
+  data <- as.data.table(forecast)
   # this iterates over every column, and for every column checks if there
   # is always only one unique value per group specified by .scoringutils_group_id
   # if that is the case, the column is part of the grouping vector.

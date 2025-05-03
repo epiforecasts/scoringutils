@@ -120,6 +120,7 @@ as_forecast_quantile.forecast_sample <- function(
 
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
+#' @importFrom methods formalArgs
 #' @rdname score
 #' @export
 score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
@@ -159,17 +160,17 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
     grouping_id <- single_forecast$.scoringutils_group_id
 
     univariate_result <- apply_metrics(
-      forecast = single_forecast, metrics = univariate_metrics,
-      observed = observed, predicted = predicted
+      single_forecast, univariate_metrics,
+      observed, predicted
     )
 
     # for multivariate scores, multiple rows collapse to a single score.
     # we therefore create a new data.table, compute scores, and merge back.
     temp_dt <- unique(single_forecast[, .SD, .SDcols = ".scoringutils_group_id"])
     multivariate_result <- apply_metrics(
-      forecast = temp_dt, metrics = multivariate_metrics,
-      observed = observed, predicted = predicted,
-      grouping_id = grouping_id
+      temp_dt, metrics = multivariate_metrics,
+      observed, predicted,
+      grouping_id
     )
 
     result <- merge(univariate_result, multivariate_result, by = ".scoringutils_group_id")
@@ -191,38 +192,6 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
   return(scores[])
 }
 
-
-# #' @importFrom stats na.omit
-# #' @importFrom data.table setattr copy
-# #' @rdname score
-# #' @export
-# score.forecast_sample_justatest <- function(forecast, metrics = get_metrics(forecast), ...) {
-#   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-#   forecast_unit <- get_forecast_unit(forecast)
-#   metrics <- validate_metrics(metrics)
-#   forecast <- as.data.table(forecast)
-
-#   # transpose the forecasts that belong to the same forecast unit
-#   f_transposed <- forecast[, .(predicted = list(predicted),
-#                                observed = unique(observed),
-#                                scoringutils_N = length(list(sample_id))),
-#                            by = forecast_unit]
-
-#   if (".scoringutils_group_id" %in% names(f_transposed)) {
-#     grouping <- get_grouping(forecast)
-#     # metrics are only metrics that take "grouping" as an argument
-#     metrics <- metrics[sapply(metrics, function(m) {
-#       "grouping" %in% formalArgs(m)
-#     })]
-#     return(score_forecast_sample_multiv(f_transposed, metrics, grouping, ...))
-#   } else {
-#     # metrics are only metrics that do not take "grouping" as an argument
-#     metrics <- metrics[!sapply(metrics, function(m) {
-#       "grouping" %in% formalArgs(m)
-#     })]
-#     return(score_forecast_sample_univ(f_transposed, metrics, ...))
-#   }
-# }
 
 
 score_forecast_sample_univ <- function(f_transposed, metrics, ...) {
@@ -460,7 +429,8 @@ apply_multivariate_metrics <- function(forecast, metrics, observed, predicted, g
 
   # Join results back to forecast units and remove grouping ID
   result <- merge(group_mapping, group_results, by = ".scoringutils_group_id")[
-    , .SD, .SDcols = c(forecast_unit, metric_names)]
+    , .SD, .SDcols = c(forecast_unit, metric_names)
+  ]
 
   return(result)
 }

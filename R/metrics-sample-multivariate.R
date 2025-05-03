@@ -20,7 +20,7 @@
 #' @importFrom scoringRules es_sample
 #' @inherit document_assert_functions params return
 #' @keywords internal_input_check
-assert_input_sample_multivariate <- function(observed, predicted, grouping_id) {
+assert_input_sample_multiv <- function(observed, predicted, grouping_id) {
   assert_input_sample(observed, predicted)
   assert_numeric(grouping_id, len = length(observed))
   return(invisible(NULL))
@@ -33,12 +33,12 @@ assert_input_sample_multivariate <- function(observed, predicted, grouping_id) {
 #' (see \link[scoringRules:es_sample]{scoringRules::es_sample})
 #' for each group defined by `grouping_id`.
 #' @inheritParams ae_median_sample
-#' @inheritParams assert_input_sample_multivariate
+#' @inheritParams assert_input_sample_multiv
 #' @inherit scoringRules::es_sample params
 #' @keywords internal_input_check
 #' @export
 energy_score_multivariate <- function(observed, predicted, grouping_id, w = NULL) {
-  assert_input_sample_multivariate(observed, predicted, grouping_id)
+  assert_input_sample_multiv(observed, predicted, grouping_id)
   unique_groups <- unique(grouping_id)
 
   energy_score <- vapply(unique_groups, function(group_id) {

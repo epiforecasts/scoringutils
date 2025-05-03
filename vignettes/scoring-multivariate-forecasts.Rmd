@@ -95,6 +95,21 @@ In the univariate case, Energy Score and CRPS are the same (see output above). N
 
 If, at any point, you want to score the same forecast using different groupings, you'd have to specify those groupings separately and score the forecast multiple times.
 
+<!-- ## Details on the grouping - WIP
+
+As mentioned above, you can set the grouping with the `set_grouping` function. This will return the original data with an additional column `.scoringutils_group_id` that indicates the group each observation belongs to.
+
+Alternatively, you can set the grouping right when creating the forecast.
+
+
+forecast <- as_forecast_sample(
+  example_sample_continuous,
+  grouping = c("target_end_date", "target_type", "forecast_date", "model", "horizon")
+)
+
+forecast -->
+
+
 
 ## Univariate and multivariate scoring for matrices
 
@@ -112,8 +127,8 @@ mu0 <- rep(0, d)
 mu <- rep(1, d)
 
 S0 <- S <- diag(d)
-S0[S0==0] <- 0.2
-S[S==0] <- 0.1
+S0[S0 == 0] <- 0.2
+S[S == 0] <- 0.1
 
 # generate samples from multivariate normal distributions
 obs <- drop(mu0 + rnorm(d) %*% chol(S0))
@@ -146,7 +161,7 @@ You can provide observation weights when computing the Energy Score.
 ```{r}
 # illustration of observation weights for Energy Score
 # example: equal weights for first half of draws; zero weights for other draws
-w <- rep(c(1, 0), each = .5*m)/(.5*m)
+w <- rep(c(1, 0), each = 0.5 * m) / (0.5 * m)
 
 es_sr1 <- scoringRules::es_sample(y = obs, dat = fc_sample, w = w)
 es_sr2 <- scoringRules::es_sample(y = obs2, dat = fc_sample2, w = w)
