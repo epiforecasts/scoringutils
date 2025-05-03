@@ -117,10 +117,11 @@ score(as_forecast_sample(example_sample_continuous))
 }
 
 # multivariate forecasts
-
+\dontrun{
 example_sample_continuous \%>\%
-  scoringutils:::set_grouping()
+  set_grouping(c("target_end_date", "target_type", "forecast_date", "model", "horizon")) \%>\%
   score()
+}
 
 }
 \references{

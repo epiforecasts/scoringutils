@@ -6,6 +6,10 @@
 \usage{
 get_grouping(forecast)
 }
+\arguments{
+\item{forecast}{A forecast object (a validated data.table with predicted and
+observed values).}
+}
 \value{
 A character vector with the names of the columns that define the grouping.
 }

@@ -100,12 +100,11 @@ set_grouping <- function(data, grouping) {
 #' @title Get grouping for a multivariate forecast
 #' @description
 #' Helper function to get the grouping for a multivariate forecast.
-#' @inheritParams as_forecast_doc_template
+#' @inheritParams score
 #' @return
 #' A character vector with the names of the columns that define the grouping.
 #' @export
 get_grouping <- function(forecast) {
-  assert_forecast(forecast)
   if (!(".scoringutils_group_id" %in% names(forecast))) {
     return(get_forecast_unit(forecast))
   }

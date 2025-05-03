@@ -86,10 +86,11 @@
 #' }
 #'
 #' # multivariate forecasts
-#'
+#' \dontrun{
 #' example_sample_continuous %>%
-#'   scoringutils:::set_grouping()
+#'   set_grouping(c("target_end_date", "target_type", "forecast_date", "model", "horizon")) %>%
 #'   score()
+#' }
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
