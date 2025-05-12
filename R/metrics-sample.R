@@ -264,7 +264,7 @@ dss_sample <- function(observed, predicted, ...) {
 #' The Continuous ranked probability score (CRPS) can be interpreted as the sum
 #' of three components: overprediction,  underprediction and dispersion.
 #' "Dispersion" is defined as the CRPS of the median forecast $m$. If an
-#' observation $y$ is greater than $m$ then overpredictoin is defined as the
+#' observation $y$ is greater than $m$ then overprediction is defined as the
 #' CRPS of the forecast for $y$ minus the dispersion component, and
 #' underprediction is zero. If, on the other hand, $y<m$ then underprediction
 #' is defined as the CRPS of the forecast for $y$ minus the dispersion
@@ -345,7 +345,7 @@ dispersion_sample <- function(observed, predicted, ...) {
 }
 
 #' @return
-#' `overprediction_quantile()`: a numeric vector with overprediction values
+#' `overprediction_sample()`: a numeric vector with overprediction values
 #' (one per observation).
 #' @export
 #' @rdname crps_sample
@@ -356,7 +356,7 @@ overprediction_sample <- function(observed, predicted, ...) {
 }
 
 #' @return
-#' `underprediction_quantile()`: a numeric vector with underprediction values (one per
+#' `underprediction_sample()`: a numeric vector with underprediction values (one per
 #' observation).
 #' @export
 #' @rdname crps_sample

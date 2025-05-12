@@ -38,10 +38,10 @@ Vector with scores.
 \code{dispersion_sample()}: a numeric vector with dispersion values (one per
 observation).
 
-\code{overprediction_quantile()}: a numeric vector with overprediction values
+\code{overprediction_sample()}: a numeric vector with overprediction values
 (one per observation).
 
-\code{underprediction_quantile()}: a numeric vector with underprediction values (one per
+\code{underprediction_sample()}: a numeric vector with underprediction values (one per
 observation).
 }
 \description{
@@ -53,7 +53,7 @@ valued forecasts
 The Continuous ranked probability score (CRPS) can be interpreted as the sum
 of three components: overprediction,  underprediction and dispersion.
 "Dispersion" is defined as the CRPS of the median forecast $m$. If an
-observation $y$ is greater than $m$ then overpredictoin is defined as the
+observation $y$ is greater than $m$ then overprediction is defined as the
 CRPS of the forecast for $y$ minus the dispersion component, and
 underprediction is zero. If, on the other hand, $y<m$ then underprediction
 is defined as the CRPS of the forecast for $y$ minus the dispersion
