@@ -83,9 +83,31 @@ define_grouping_cols <- function(data, across) {
 assert_forecast.forecast_sample_multivariate <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
+  assert(check_columns_present(forecast, c("sample_id", ".scoringutils_group_id")))
   forecast <- assert_forecast_generic(forecast, verbose)
+
+  # make sure that for every .scoringutils_group_id, the number of samples per
+  # forecast unit is the same
+  sample_lengths <- as.data.table(forecast)[, .(
+    .scoringutils_N = length(sample_id)
+  ),
+  by = c(get_forecast_unit(forecast), ".scoringutils_group_id")
+  ]
+  group_variations <- sample_lengths[, .(
+    .scoringutils_N = length(unique(.scoringutils_N))
+  ),
+  by = .scoringutils_group_id
+  ]
+  if (any(group_variations$.scoringutils_N > 1)) {
+    problematic_groups <- group_variations[.scoringutils_N > 1, .scoringutils_group_id]
+    cli_abort(
+      "Found groups with inconsistent sample lengths.
+      Groups {.val {problematic_groups}} have different numbers of samples."
+    )
+  }
+
   # Todo: add a few additional checks
-  assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
+  assert_forecast_type(forecast, actual = "forecast_sample_multivariate", desired = forecast_type)
   return(invisible(NULL))
 }
 
@@ -108,25 +130,23 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
   metrics <- validate_metrics(metrics)
   forecast <- as.data.table(forecast)
 
-  # need to assume ".scoringutils_group_id" %in% names(forecast)
-
   # transpose the forecasts that belong to the same forecast unit
   f_transposed <- forecast[, .(
     predicted = list(predicted),
     observed = unique(observed),
-    scoringutils_N = length(list(sample_id))
+    .scoringutils_N = length(sample_id)
   ),
   by = forecast_unit
   ]
 
   # split according to number of samples and do calculations for different
   # sample lengths separately
-  f_split <- split(f_transposed, f_transposed$scoringutils_N)
+  f_split <- split(f_transposed, f_transposed$.scoringutils_N)
 
   split_result <- lapply(f_split, function(forecast_same_length) {
     observed <- forecast_same_length$observed
     predicted <- do.call(rbind, forecast_same_length$predicted)
-    forecast_same_length[, c("observed", "predicted", "scoringutils_N") := NULL]
+    forecast_same_length[, c("observed", "predicted", ".scoringutils_N") := NULL]
 
     grouping_id <- forecast_same_length$.scoringutils_group_id
 
@@ -226,3 +246,32 @@ get_grouping <- function(forecast) {
   })]
   return(grouping_cols)
 }
+
+
+#' Multivariate forecast example data
+#'
+#' A data set with continuous multivariate predictions for COVID-19 cases and
+#' deaths constructed from data submitted to the European Forecast Hub.
+#'
+#' The data was created using the script create-example-data.R in the inst/
+#' folder (or the top level folder in a compiled package).
+#'
+#' @format An object of class `forecast_sample_multivariate`
+#' (see [as_forecast_sample_multivariate()]) with the following columns:
+#' \describe{
+#'   \item{location}{the country for which a prediction was made}
+#'   \item{target_end_date}{the date for which a prediction was made}
+#'   \item{target_type}{the target to be predicted (cases or deaths)}
+#'   \item{observed}{observed values}
+#'   \item{location_name}{name of the country for which a prediction was made}
+#'   \item{forecast_date}{the date on which a prediction was made}
+#'   \item{model}{name of the model that generated the forecasts}
+#'   \item{horizon}{forecast horizon in weeks}
+#'   \item{predicted}{predicted value}
+#'   \item{sample_id}{id for the corresponding sample}
+#'   \item{.scoringutils_group_id}{id for the corresponding group}
+#' }
+# nolint start
+#' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
+# nolint end
+"example_sample_multivariate"

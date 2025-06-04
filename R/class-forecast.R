@@ -297,7 +297,8 @@ is_forecast <- function(x) {
           "!" = "Error in validating forecast object: {validation}.",
           "i" = "Note this error is sometimes related to `data.table`s `print`.
           Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
-          to confirm."
+          to confirm. To get rid of this warning entirely,
+          call `as.data.table()` on the forecast object."
         )
         #nolint end
       )

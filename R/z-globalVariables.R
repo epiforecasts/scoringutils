@@ -71,6 +71,7 @@ globalVariables(c(
   "sample_id",
   "scoringutils_InternalDuplicateCheck",
   "scoringutils_InternalNumCheck",
+  ".scoringutils_N",
   "se_mean",
   "sharpness",
   "theta",

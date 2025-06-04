@@ -67,6 +67,7 @@ as_forecast_quantile.default <- function(data,
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
+  assert(check_columns_present(forecast, c("quantile_level")))
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
