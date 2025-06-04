@@ -116,11 +116,8 @@ as_forecast_quantile.forecast_sample <- function(
 }
 
 
-
-
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
-#' @importFrom methods formalArgs
 #' @rdname score
 #' @export
 score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
@@ -128,73 +125,13 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
   forecast <- as.data.table(forecast)
-  compute_multivariate <- (".scoringutils_group_id" %in% names(forecast))
 
   # transpose the forecasts that belong to the same forecast unit
-  f_transposed <- forecast[, .(
-    predicted = list(predicted),
-    observed = unique(observed),
-    scoringutils_N = length(list(sample_id))
-  ),
-  by = forecast_unit
-  ]
+  f_transposed <- forecast[, .(predicted = list(predicted),
+                               observed = unique(observed),
+                               scoringutils_N = length(list(sample_id))),
+                           by = forecast_unit]
 
-  multivariate_metrics <- metrics[sapply(metrics, function(m) {
-    "grouping_id" %in% formalArgs(m)
-  })]
-  univariate_metrics <- metrics[setdiff(names(metrics), names(multivariate_metrics))]
-
-
-  f_split <- split(f_transposed, f_transposed$scoringutils_N)
-
-  split_result <- lapply(f_split, function(single_forecast) {
-
-    # create a matrix
-    observed <- single_forecast$observed
-    predicted <- do.call(rbind, single_forecast$predicted)
-    single_forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
-
-    if (!(".scoringutils_group_id" %in% names(single_forecast))) {
-      single_forecast <- set_grouping(single_forecast, forecast_unit)
-    }
-    grouping_id <- single_forecast$.scoringutils_group_id
-
-    univariate_result <- apply_metrics(
-      single_forecast, univariate_metrics,
-      observed, predicted
-    )
-
-    # for multivariate scores, multiple rows collapse to a single score.
-    # we therefore create a new data.table, compute scores, and merge back.
-    temp_dt <- unique(single_forecast[, .SD, .SDcols = ".scoringutils_group_id"])
-    multivariate_result <- apply_metrics(
-      temp_dt, metrics = multivariate_metrics,
-      observed, predicted,
-      grouping_id
-    )
-
-    result <- merge(univariate_result, multivariate_result, by = ".scoringutils_group_id")
-    setcolorder(result, c(setdiff(colnames(result), ".scoringutils_group_id"), ".scoringutils_group_id"))
-
-    return(result)
-  })
-  scores <- rbindlist(split_result, fill = TRUE)
-  scores <- as_scores(scores, metrics = names(metrics))
-
-  # if we're computing multivariate scores, then append "_multiv" to the names of the scores
-  if (compute_multivariate && length(multivariate_metrics) > 0) {
-    to_rename <- intersect(names(multivariate_metrics), names(scores))
-    setnames(scores, to_rename, paste0(to_rename, "_multiv"))
-  } else {
-    scores[, .scoringutils_group_id := NULL]
-  }
-
-  return(scores[])
-}
-
-
-
-score_forecast_sample_univ <- function(f_transposed, metrics, ...) {
   # split according to number of samples and do calculations for different
   # sample lengths separately
   f_split <- split(f_transposed, f_transposed$scoringutils_N)
@@ -215,35 +152,6 @@ score_forecast_sample_univ <- function(f_transposed, metrics, ...) {
   scores <- as_scores(scores, metrics = names(metrics))
   return(scores[])
 }
-
-# I think I don't actually need this? Because the grouping is handled in scoring function?
-# And I can just pass any argument to any function and it will be ignored if it is not needed?
-# and then I just have to think about the output and how to name the grouping id there
-score_forecast_sample_multiv <- function(f_transposed, metrics, grouping, ...) {
-  f_split_multiv <- split(f_transposed, f_transposed$scoringutils_N)
-
-  split_result_multiv <- lapply(f_split_multiv, function(data) {
-    observed <- data$observed
-    predicted <- do.call(rbind, data$predicted)
-    grouping_id <- data$.scoringutils_group_id
-    data[, c("observed", "predicted", ".scoringutils_group_id") := NULL]
-
-    result_univ <- apply_metrics(
-      data, metrics,
-      observed, predicted,
-      grouping_id = grouping_id
-    )
-    return(result_univ)
-  })
-
-  scores_multiv <- rbindlist(split_result_multiv, fill = TRUE)
-  scores_multiv <- as_scores(scores_multiv, metrics = names(metrics))
-
-  return(scores_multiv[])
-}
-
-
-
 
 
 #' Get default metrics for sample-based forecasts
@@ -278,9 +186,7 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
     log_score = logs_sample,
     mad = mad_sample,
     ae_median = ae_median_sample,
-    se_mean = se_mean_sample,
-    # multivariate scores
-    energy_score = energy_score_multivariate
+    se_mean = se_mean_sample
   )
   select_metrics(all, select, exclude)
 }
@@ -390,47 +296,3 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
 "example_sample_discrete"
-
-
-# Add this new function above score.forecast_sample
-apply_multivariate_metrics <- function(forecast, metrics, observed, predicted, grouping_id, forecast_unit) {
-  # Early return if no metrics or no grouping
-  if (length(metrics) == 0 || is.null(grouping_id)) {
-    return(NULL)
-  }
-
-  # Create group-to-forecast-unit mapping
-  group_mapping <- unique(forecast[, c(forecast_unit, ".scoringutils_group_id"), with = FALSE])
-
-  # Calculate metrics directly by group
-  metric_names <- names(metrics)
-  group_results <- forecast[, lapply(metric_names, function(metric_name) {
-    do.call(
-      run_safely,
-      list(
-        observed = observed,
-        predicted = predicted,
-        grouping_id = .BY[[1]],
-        fun = metrics[[metric_name]],
-        metric_name = metric_name
-      )
-    )
-  }), by = ".scoringutils_group_id", .SDcols = metric_names]
-
-  # Set column names
-  setnames(group_results,
-           paste0("V", seq_along(metric_names)),
-           metric_names)
-
-  # Skip if no results
-  if (nrow(group_results) == 0) {
-    return(NULL)
-  }
-
-  # Join results back to forecast units and remove grouping ID
-  result <- merge(group_mapping, group_results, by = ".scoringutils_group_id")[
-    , .SD, .SDcols = c(forecast_unit, metric_names)
-  ]
-
-  return(result)
-}
