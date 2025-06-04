@@ -2,13 +2,14 @@
 % Please edit documentation in R/class-forecast-binary.R,
 %   R/class-forecast-nominal.R, R/class-forecast-ordinal.R,
 %   R/class-forecast-point.R, R/class-forecast-quantile.R,
-%   R/class-forecast-sample.R, R/score.R
+%   R/class-forecast-sample-multivariate.R, R/class-forecast-sample.R, R/score.R
 \name{score.forecast_binary}
 \alias{score.forecast_binary}
 \alias{score.forecast_nominal}
 \alias{score.forecast_ordinal}
 \alias{score.forecast_point}
 \alias{score.forecast_quantile}
+\alias{score.forecast_sample_multivariate}
 \alias{score.forecast_sample}
 \alias{score}
 \title{Evaluate forecasts}
@@ -22,6 +23,8 @@
 \method{score}{forecast_point}(forecast, metrics = get_metrics(forecast), ...)
 
 \method{score}{forecast_quantile}(forecast, metrics = get_metrics(forecast), ...)
+
+\method{score}{forecast_sample_multivariate}(forecast, metrics = get_metrics(forecast), ...)
 
 \method{score}{forecast_sample}(forecast, metrics = get_metrics(forecast), ...)
 

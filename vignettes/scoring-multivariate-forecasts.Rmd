@@ -69,14 +69,16 @@ Let's just assume that our samples were draws from a multivariate distribution a
 
 To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the grouping. Analogously to the forecast unit (see `?get_forecast_unit`), the grouping is the set of columns that are constant within a multivariate forecast. The group is determined by a unique combination of the values of the columns specified in the grouping vector.
 
-We can use the function `set_grouping` to specify the grouping. This will return the original data with an additional column `.scoringutils_group_id` that indicates the group each observation belongs to.
+To facilitate specifying the grouping, you can use the helper function `define_grouping_cols` with its `across` argument. This allows you to specify the columns over which to group. The function returns a vector of column names that define the grouping.
 
 ```{r}
-example_multiv <- example_univ_multi
+grouping <- define_grouping_cols(example_univ_multi, across = c("location", "location_name"))
 
-forecast_unit <- get_forecast_unit(example_multiv)
-grouping <- setdiff(forecast_unit, c("location", "location_name"))
-example_multiv <- set_grouping(example_multiv, grouping)
+example_multiv <- as_forecast_sample_multivariate(
+  data = example_univ_multi,
+  grouping = grouping
+)
+example_multiv
 ```
 
 (Note that for the purposes of scoring, it doesn't matter that sample ids are still 1-40, repeated 4 times, instead of 1-160. `scoringutils` handles this appropriately.)

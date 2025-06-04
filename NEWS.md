@@ -146,7 +146,7 @@ This major release contains a range of new features and bug fixes that have been
 
 - Documentation updated to reflect changes since version 1.1.0, including new transform and workflow functions.
 - New `set_forecast_unit()` function allows manual setting of forecast unit.
-- `summarise_scores()` gains new `across` argument for summarizing across variables.
+- `summarise_scores()` gains new `across` argument for summarizing across variables. EDIT: This has since been removed again in [PR #831](https://github.com/epiforecasts/scoringutils/pull/831).
 - New `transform_forecasts()` and `log_shift()` functions allow forecast transformations. See the documentation for `transform_forecasts()` for more details and an example use case.
 - Input checks and test coverage improved for bias functions.
 - Bug fix in `get_prediction_type()` for integer matrix input.
