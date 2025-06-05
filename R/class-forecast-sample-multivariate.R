@@ -106,7 +106,6 @@ assert_forecast.forecast_sample_multivariate <- function(
     )
   }
 
-  # Todo: add a few additional checks
   assert_forecast_type(forecast, actual = "forecast_sample_multivariate", desired = forecast_type)
   return(invisible(NULL))
 }
