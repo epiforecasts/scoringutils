@@ -25,9 +25,11 @@
 #' @returns A `forecast` object of class `forecast_sample`
 #' @export
 #' @keywords as_forecast transform
+# nolint start: object_name_linter
 as_forecast_sample_multivariate <- function(data, ...) {
   UseMethod("as_forecast_sample_multivariate")
 }
+# nolint end
 
 
 #' @rdname as_forecast_sample
@@ -99,11 +101,13 @@ assert_forecast.forecast_sample_multivariate <- function(
   by = .scoringutils_group_id
   ]
   if (any(group_variations$.scoringutils_N > 1)) {
+    # nolint start: object_usage_linter
     problematic_groups <- group_variations[.scoringutils_N > 1, .scoringutils_group_id]
     cli_abort(
       "Found groups with inconsistent sample lengths.
       Groups {.val {problematic_groups}} have different numbers of samples."
     )
+    # nolint end
   }
 
   assert_forecast_type(forecast, actual = "forecast_sample_multivariate", desired = forecast_type)
@@ -113,9 +117,11 @@ assert_forecast.forecast_sample_multivariate <- function(
 
 #' @export
 #' @rdname is_forecast
+# nolint start: object_name_linter
 is_forecast_sample_multivariate <- function(x) {
   inherits(x, "forecast_sample_multivariate") && inherits(x, "forecast")
 }
+# nolint end
 
 
 #' @importFrom stats na.omit
