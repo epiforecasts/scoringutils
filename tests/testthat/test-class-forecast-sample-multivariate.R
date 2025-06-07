@@ -115,6 +115,19 @@ test_that("get_grouping() works as expected", {
   expect_true(all(grouping %in% result))
 })
 
+test_that("get_grouping() falls back to forecast_unit when group_id is missing", {
+  data <- example_sample_multivariate
+
+  # Remove the group_id column
+  data_bad <- as.data.table(data)
+  data_bad[, .scoringutils_group_id := NULL]
+
+  expect_error(
+    get_grouping(data_bad),
+    "No column `.scoringutils_group_id` found in the forecast object."
+  )
+})
+
 # ==============================================================================
 # score.forecast_sample_multivariate()
 # ==============================================================================

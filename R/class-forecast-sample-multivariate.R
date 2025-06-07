@@ -249,7 +249,7 @@ set_grouping <- function(data, grouping) {
 #' @keywords diagnose-inputs
 get_grouping <- function(forecast) {
   if (!(".scoringutils_group_id" %in% names(forecast))) {
-    return(get_forecast_unit(forecast))
+    cli_abort("No column `.scoringutils_group_id` found in the forecast object.")
   }
   data <- as.data.table(forecast)
   # this iterates over every column, and for every column checks if there
