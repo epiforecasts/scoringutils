@@ -158,11 +158,16 @@ test_that("as_forecast_sample_multivariate() handles errors appropriately", {
     "All forecasts \\(as defined by the forecast unit\\) in a group must have the same number of samples"
   )
 
-  # Test with invalid grouping columns
+  # Test with inconsistent sample lengths after forecast object creation
+  expect_warning(
+    example_sample_multivariate[-(1000:1010), ],
+    "Found the following group with an inconsistent sample length"
+  )
+
+   # Test with invalid grouping columns
   expect_error(
     as_forecast_sample_multivariate(data,
       grouping = c("nonexistent_column")),
     "Must be a subset of"
   )
 })
-

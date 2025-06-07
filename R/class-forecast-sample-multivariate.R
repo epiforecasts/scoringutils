@@ -82,6 +82,7 @@ define_grouping_cols <- function(data, across) {
 
 #' @export
 #' @rdname assert_forecast
+#' @importFrom cli cli_abort qty
 #' @keywords validate-forecast-object
 assert_forecast.forecast_sample_multivariate <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
@@ -105,8 +106,9 @@ assert_forecast.forecast_sample_multivariate <- function(
     # nolint start: object_usage_linter
     problematic_groups <- group_variations[.scoringutils_N > 1, .scoringutils_group_id]
     cli_abort(
-      "Found groups with inconsistent sample lengths.
-      Groups {.val {problematic_groups}} have different numbers of samples."
+      "Found the following {qty(length(problematic_groups))} group{?s} with an
+      inconsistent sample length, compared to other groups:
+      {.val {problematic_groups}}"
     )
     # nolint end
   }
