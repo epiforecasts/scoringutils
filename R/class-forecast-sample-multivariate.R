@@ -67,6 +67,7 @@ as_forecast_sample_multivariate.default <- function(data,
 #' @return
 #' A character vector with the names of the columns that define the grouping.
 #' @export
+#' @keywords transform
 define_grouping_cols <- function(data, across) {
   if (missing(across) || is.null(across)) {
     cli_abort("{.arg across} is required to denote the variable across
@@ -205,6 +206,11 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #'   define the grouping.
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
+#' @importFrom cli cli_abort
+#' @return
+#' A data.table with an additional column `.scoringutils_group_id` that
+#' contains the group id for each row.
+#' @keywords internal
 set_grouping <- function(data, grouping) {
   data <- ensure_data.table(data)
   assert_character(grouping, min.len = 1)
@@ -238,6 +244,7 @@ set_grouping <- function(data, grouping) {
 #' @return
 #' A character vector with the names of the columns that define the grouping.
 #' @export
+#' @keywords diagnose-inputs
 get_grouping <- function(forecast) {
   if (!(".scoringutils_group_id" %in% names(forecast))) {
     return(get_forecast_unit(forecast))
