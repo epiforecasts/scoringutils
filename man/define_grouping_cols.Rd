@@ -20,3 +20,4 @@ A character vector with the names of the columns that define the grouping.
 \description{
 Return column names to define the grouping for multivariate forecasts
 }
+\keyword{transform}

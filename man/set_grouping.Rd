@@ -14,6 +14,11 @@ on the required input format.}
 \item{grouping}{Character vector with the names of the columns that
 define the grouping.}
 }
+\value{
+A data.table with an additional column \code{.scoringutils_group_id} that
+contains the group id for each row.
+}
 \description{
 Helper function to set the grouping of a forecast.
 }
+\keyword{internal}
