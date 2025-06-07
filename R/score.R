@@ -84,6 +84,14 @@
 #' score(as_forecast_sample(example_sample_discrete))
 #' score(as_forecast_sample(example_sample_continuous))
 #' }
+#'
+#' # multivariate forecasts
+#' \dontrun{
+#' example_sample_continuous %>%
+#'   set_grouping(c("target_end_date", "target_type", "forecast_date", "model", "horizon")) %>%
+#'   score()
+#' }
+#'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @references
 #' Bosse NI, Gruson H, Cori A, van Leeuwen E, Funk S, Abbott S
@@ -169,6 +177,8 @@ apply_metrics <- function(forecast, metrics, ...) {
 run_safely <- function(..., fun, metric_name) {
   assert_function(fun)
   args <- list(...)
+  possible_args <- names(formals(fun))
+
   # Check if the function accepts ... as an argument
   if ("..." %in% names(formals(fun))) {
     valid_args <- args
