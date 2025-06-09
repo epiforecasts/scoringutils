@@ -2,9 +2,20 @@
 % Please edit documentation in R/class-forecast-sample-multivariate.R
 \name{as_forecast_sample_multivariate}
 \alias{as_forecast_sample_multivariate}
+\alias{as_forecast_sample_multivariate.default}
 \title{Create a \code{forecast} object for sample-based multivariate forecasts}
 \usage{
 as_forecast_sample_multivariate(data, ...)
+
+\method{as_forecast_sample_multivariate}{default}(
+  data,
+  grouping,
+  forecast_unit = NULL,
+  observed = NULL,
+  predicted = NULL,
+  sample_id = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
@@ -12,6 +23,24 @@ See the details section of for additional information
 on the required input format.}
 
 \item{...}{Unused}
+
+\item{grouping}{ADD}
+
+\item{forecast_unit}{(optional) Name of the columns in \code{data} (after
+any renaming of columns) that denote the unit of a
+single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+If \code{NULL} (the default), all columns that are not required columns are
+assumed to form the unit of a single forecast. If specified, all columns
+that are not part of the forecast unit (or required columns) will be removed.}
+
+\item{observed}{(optional) Name of the column in \code{data} that contains the
+observed values. This column will be renamed to "observed".}
+
+\item{predicted}{(optional) Name of the column in \code{data} that contains the
+predicted values. This column will be renamed to "predicted".}
+
+\item{sample_id}{(optional) Name of the column in \code{data} that contains the
+sample id. This column will be renamed to "sample_id".}
 }
 \value{
 A \code{forecast} object of class \code{forecast_sample}
@@ -82,7 +111,7 @@ Other functions to create forecast objects:
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_point}()},
 \code{\link{as_forecast_quantile}()},
-\code{\link{as_forecast_sample_multivariate.default}()}
+\code{\link{as_forecast_sample}()}
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}

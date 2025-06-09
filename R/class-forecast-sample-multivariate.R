@@ -32,7 +32,7 @@ as_forecast_sample_multivariate <- function(data, ...) {
 # nolint end
 
 
-#' @rdname as_forecast_sample
+#' @rdname as_forecast_sample_multivariate
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id".
 #' @param grouping ADD
