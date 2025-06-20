@@ -75,7 +75,6 @@ as_forecast_ordinal.default <- function(data,
 assert_forecast.forecast_ordinal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))
   assert_names(
     colnames(forecast),
@@ -85,6 +84,8 @@ assert_forecast.forecast_ordinal <- function(
 
   assert_factor(forecast$observed, ordered = TRUE)
   assert_factor(forecast$predicted_label, ordered = TRUE)
+
+  forecast <- assert_forecast_generic(forecast, verbose)
 
   observed_levels <- levels(forecast$observed)
   predicted_label_levels <- levels(forecast$predicted_label)

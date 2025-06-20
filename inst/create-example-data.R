@@ -197,6 +197,19 @@ example_sample_discrete <- as_forecast_sample(example_sample_discrete)
 usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 
+# get multivariate sample data -------------------------------------------------
+example_sample_multivariate <- data.table::copy(example_sample_continuous)
+grouping <- define_grouping_cols(
+  across = c("location_name", "location"),
+  data = example_sample_multivariate
+)
+example_sample_multivariate <- as_forecast_sample_multivariate(
+  data = example_sample_multivariate,
+  grouping = grouping,
+)
+usethis::use_data(example_sample_multivariate, overwrite = TRUE)
+
+
 # get binary example data ------------------------------------------------------
 # construct a binary prediction by looking at the number of samples below the
 # mean prediction. Construct the outcome as whether or not the actually
