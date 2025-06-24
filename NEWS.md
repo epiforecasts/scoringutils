@@ -1,6 +1,7 @@
 # scoringutils (development version)
 
 - The package now depends on R version at least 4.1.0 as a result of downstream dependencies.
+- The package now depends on scoringRules at least version 1.1.3
 - Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
 - Made computation of p-values optional in pairwise comparisons by allowing `test_type = NULL` in `compare_forecasts()`. When `test_type = NULL`, p-values will be `NA` (#978).
 - Added a dependency on a scoringRules version >= 1.1.2 which is required for ordinal forecasts (#1006).
