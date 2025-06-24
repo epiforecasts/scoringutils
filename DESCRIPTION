@@ -61,7 +61,7 @@ Imports:
     methods,
     Metrics,
     purrr,
-    scoringRules (>= 1.1.2),
+    scoringRules (>= 1.1.3),
     stats
 Suggests:
     ggdist,
