@@ -4,7 +4,7 @@
 - Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
 - Made computation of p-values optional in pairwise comparisons by allowing `test_type = NULL` in `compare_forecasts()`. When `test_type = NULL`, p-values will be `NA` (#978).
 - Added a dependency on a scoringRules version >= 1.1.2 which is required for ordinal forecasts (#1006).
-- A bug was fixed in PIT histograms from continuous values
+- A bug was fixed in PIT histograms from continuous values (#1010).
 
 # scoringutils 2.1.0
 
