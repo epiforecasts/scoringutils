@@ -17,7 +17,7 @@ by."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ by."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Add relative skill scores based on pairwise comparisons</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.0/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
       <div class="d-none name"><code>add_relative_skill.Rd</code></div>
     </div>
 
@@ -65,7 +65,8 @@ Relative skill will be calculated for the aggregation level specified in
 <span>  compare <span class="op">=</span> <span class="st">"model"</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wis"</span>, <span class="st">"crps"</span>, <span class="st">"brier_score"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  baseline <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  baseline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -105,6 +106,11 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (<code>NULL</code>), relative skill will not be scaled with
 respect to a baseline model.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional arguments for the comparison between two models. See
+<code><a href="compare_forecasts.html">compare_forecasts()</a></code> for more information.</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -116,7 +122,7 @@ respect to a baseline model.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
     </footer></div>

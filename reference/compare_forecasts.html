@@ -23,7 +23,7 @@ different forecast targets."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ different forecast targets."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Compare a subset of common forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.0/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
       <div class="d-none name"><code>compare_forecasts.Rd</code></div>
     </div>
 
@@ -76,7 +76,7 @@ different forecast targets.</p>
 <span>  <span class="va">name_comparator2</span>,</span>
 <span>  <span class="va">metric</span>,</span>
 <span>  one_sided <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permutation"</span><span class="op">)</span>,</span>
+<span>  test_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"non_parametric"</span>, <span class="st">"permutation"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
 <span>  n_permutations <span class="op">=</span> <span class="fl">999</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -118,9 +118,9 @@ comparison.</p></dd>
 
 
 <dt id="arg-test-type">test_type<a class="anchor" aria-label="anchor" href="#arg-test-type"></a></dt>
-<dd><p>Character, either "non_parametric" (the default) or
-"permutation". This determines which kind of test shall be conducted to
-determine p-values.</p></dd>
+<dd><p>Character, either "non_parametric" (the default), "permutation",
+or NULL. This determines which kind of test shall be conducted to determine
+p-values. If NULL, no test will be conducted and p-values will be NA.</p></dd>
 
 
 <dt id="arg-n-permutations">n_permutations<a class="anchor" aria-label="anchor" href="#arg-n-permutations"></a></dt>
@@ -148,7 +148,7 @@ between two comparators</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
     </footer></div>
