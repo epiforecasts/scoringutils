@@ -44,7 +44,7 @@
 <li>Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (<a href="https://github.com/epiforecasts/scoringutils/issues/997" class="external-link">#997</a>)</li>
 <li>Made computation of p-values optional in pairwise comparisons by allowing <code>test_type = NULL</code> in <code><a href="../reference/compare_forecasts.html">compare_forecasts()</a></code>. When <code>test_type = NULL</code>, p-values will be <code>NA</code> (<a href="https://github.com/epiforecasts/scoringutils/issues/978" class="external-link">#978</a>).</li>
 <li>Added a dependency on a scoringRules version &gt;= 1.1.3 which is required for ordinal forecasts and the <code>rps_probs()</code> function (<a href="https://github.com/epiforecasts/scoringutils/issues/1006" class="external-link">#1006</a>,#1011).</li>
-<li>A bug was fixed in PIT histograms from continuous values (<a href="https://github.com/epiforecasts/scoringutils/issues/1010" class="external-link">#1010</a>).</li>
+<li>A bug was fixed in PIT histograms from continuous values (<a href="https://github.com/epiforecasts/scoringutils/issues/1010" class="external-link">#1010</a>). The bug caused all PIT histograms to use the discrete version, even with continuous data. In the calculations, values were also rounded inappropriately.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.0" id="scoringutils-210">scoringutils 2.1.0<a class="anchor" aria-label="anchor" href="#scoringutils-210"></a></h2><p class="text-muted">CRAN release: 2025-03-03</p>
