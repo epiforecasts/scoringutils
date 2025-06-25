@@ -1,4 +1,4 @@
-# scoringutils (development version)
+# scoringutils 2.1.1
 
 - The package now depends on R version at least 4.1.0 as a result of downstream dependencies.
 - Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
