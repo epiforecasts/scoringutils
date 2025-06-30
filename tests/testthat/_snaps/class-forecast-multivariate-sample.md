@@ -5,8 +5,7 @@
     Message
       Forecast type: sample_multivariate
       Forecast unit:
-      location, model, target_type, target_end_date, horizon, and
-      .scoringutils_group_id
+      location, model, target_type, target_end_date, and horizon
     Output
       
       Index: <.scoringutils_group_id>
@@ -50,7 +49,7 @@
     Code
       cat("Forecast unit:", paste(get_forecast_unit(result), collapse = ", "), "\n")
     Output
-      Forecast unit: location, model, target_type, target_end_date, horizon, .scoringutils_group_id 
+      Forecast unit: location, model, target_type, target_end_date, horizon 
     Code
       cat("Number of rows:", nrow(result), "\n")
     Output

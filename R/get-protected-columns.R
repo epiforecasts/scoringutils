@@ -14,7 +14,7 @@
 get_protected_columns <- function(data = NULL) {
 
   protected_columns <- c(
-    ".scoringutils_grouping_id",
+    ".scoringutils_group_id",
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value", "interval_range", "boundary", "predicted_label",
     "interval_coverage", "interval_coverage_deviation",

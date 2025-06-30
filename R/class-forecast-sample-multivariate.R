@@ -131,7 +131,7 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
     observed = unique(observed),
     .scoringutils_N = length(sample_id)
   ),
-  by = forecast_unit
+  by = c(forecast_unit, ".scoringutils_group_id")
   ]
 
   # split according to number of samples and do calculations for different
