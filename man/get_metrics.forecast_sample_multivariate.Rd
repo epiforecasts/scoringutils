@@ -39,7 +39,7 @@ For sample-based multivariate forecasts, the default scoring rules are:
 \examples{
 forecast_unit <- get_forecast_unit(example_sample_multivariate)
 grouping <- setdiff(forecast_unit, c("location", "location_name"))
-example <- as_forecast_multivariate_sample(example_sample_continuous, grouping = grouping)
+example <- as_forecast_multivariate_sample(example_sample_continuous, by = grouping)
 get_metrics(example)
 }
 \seealso{
