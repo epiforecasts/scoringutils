@@ -550,7 +550,6 @@ pit_histogram_sample <- function(observed,
   p_x <- rowSums(predicted <= observed) / n_pred
 
   # PIT calculation is different for integer and continuous predictions
-  predicted <- round(predicted)
   if (get_type(predicted) == "integer" && integers != "ignore") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     if (integers == "random") {
@@ -573,7 +572,7 @@ pit_histogram_sample <- function(observed,
     pit_values <- p_x
   }
 
-  if (integers != "nonrandom") {
+  if (get_type(predicted) != "integer" || integers != "nonrandom") {
     pit_histogram <- hist(pit_values, breaks = quantiles, plot = FALSE)$density
   }
 

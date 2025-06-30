@@ -11,11 +11,10 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 [![metacrandownloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: [This
-documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
-development version of `scoringutils`. You can also view the
-[documentation of the stable
-version](https://epiforecasts.io/scoringutils/).
+**Note**: [This documentation](https://epiforecasts.io/scoringutils/)
+refers to the stable version of `scoringutils`. You can also view the
+[documentation of the development
+version](https://epiforecasts.io/scoringutils/dev/).
 
 The `scoringutils` package facilitates the process of evaluating
 forecasts in R, using a convenient and flexible `data.table`-based
@@ -276,6 +275,7 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=actions-user">actions-user</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura">toshiakiasakura</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico">MichaelChirico</a>,
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95">jcken95</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich">nickreich</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=jhellewell14">jhellewell14</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer">damonbayer</a>
@@ -287,13 +287,16 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov">dshemetov</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1">elray1</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor">jonathonmellor</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajcken95">jcken95</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris">dylanhmorris</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli">annakrystalli</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>
 
 ### Issue Contributors
 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Ajbracher">jbracher</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Adylanhmorris">dylanhmorris</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Aathowes">athowes</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3ATimTaylor">TimTaylor</a>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->

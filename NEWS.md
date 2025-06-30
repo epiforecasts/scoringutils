@@ -1,8 +1,12 @@
 # scoringutils (development version)
 
+# scoringutils 2.1.1
+
 - The package now depends on R version at least 4.1.0 as a result of downstream dependencies.
 - Added tolerance for numeric errors when checking that probabilities sum to one in ordinal forecasts (#997)
 - Made computation of p-values optional in pairwise comparisons by allowing `test_type = NULL` in `compare_forecasts()`. When `test_type = NULL`, p-values will be `NA` (#978).
+- Added a dependency on a scoringRules version >= 1.1.3 which is required for ordinal forecasts and the `rps_probs()` function (#1006,#1011).
+- A bug was fixed in PIT histograms from continuous values (#1010). The bug caused all PIT histograms to use the discrete version, even with continuous data. In the calculations, values were also rounded inappropriately.
 
 # scoringutils 2.1.0
 
