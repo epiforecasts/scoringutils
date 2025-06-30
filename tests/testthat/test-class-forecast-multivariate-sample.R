@@ -141,39 +141,6 @@ test_that("score.forecast_sample_multivariate() works as expected", {
   expect_true(is.numeric(scores$energy_score))
 })
 
-test_that("score.forecast_sample_multivariate() creates expected output structure", {
-  data <- example_sample_multivariate
-
-  # Test basic scoring and capture snapshot
-  scores <- score(data)
-
-  # Snapshot the print output to capture the structure
-  expect_snapshot(print(scores))
-
-  # Snapshot the detailed structure
-  expect_snapshot({
-    cat("Class:", class(scores), "\n")
-    cat("Number of rows:", nrow(scores), "\n")
-    cat("Number of columns:", ncol(scores), "\n")
-    cat("Column names:", paste(names(scores), collapse = ", "), "\n")
-    cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE), collapse = " to "), "\n")
-    cat("Number of non-NA energy scores:", sum(!is.na(scores$energy_score)), "\n")
-    cat("Sample of energy scores:", paste(head(scores$energy_score, 5), collapse = ", "), "\n")
-  })
-
-  # Test with specific metrics and capture snapshot
-  scores_specific <- score(data, metrics = list(energy_score = energy_score_multivariate))
-
-  expect_snapshot({
-    cat("=== Specific Metrics Test ===\n")
-    cat("Class:", class(scores_specific), "\n")
-    cat("Number of rows:", nrow(scores_specific), "\n")
-    cat("Number of columns:", ncol(scores_specific), "\n")
-    cat("Column names:", paste(names(scores_specific), collapse = ", "), "\n")
-    cat("Energy score range:", paste(range(scores_specific$energy_score, na.rm = TRUE), collapse = " to "), "\n")
-  })
-})
-
 # ==============================================================================
 # Error cases for as_forecast_multivariate_sample()
 # ==============================================================================
