@@ -6,7 +6,7 @@
 \title{Multivariate forecast example data}
 \format{
 An object of class \code{forecast_sample_multivariate}
-(see \code{\link[=as_forecast_sample_multivariate]{as_forecast_sample_multivariate()}}) with the following columns:
+(see \code{\link[=as_forecast_multivariate_sample]{as_forecast_multivariate_sample()}}) with the following columns:
 \describe{
 \item{location}{the country for which a prediction was made}
 \item{target_end_date}{the date for which a prediction was made}

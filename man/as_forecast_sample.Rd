@@ -102,11 +102,11 @@ or "observed" are retained.
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_point}()},
-\code{\link{as_forecast_quantile}()},
-\code{\link{as_forecast_sample_multivariate}()}
+\code{\link{as_forecast_quantile}()}
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}

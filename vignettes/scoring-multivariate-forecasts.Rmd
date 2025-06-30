@@ -69,14 +69,15 @@ Let's just assume that our samples were draws from a multivariate distribution a
 
 To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the grouping. Analogously to the forecast unit (see `?get_forecast_unit`), the grouping is the set of columns that are constant within a multivariate forecast. The group is determined by a unique combination of the values of the columns specified in the grouping vector.
 
-To facilitate specifying the grouping, you can use the helper function `define_grouping_cols` with its `across` argument. This allows you to specify the columns over which to group. The function returns a vector of column names that define the grouping.
+The grouping variable is set analogously to the forecast unit: by listing all columns that, together, uniquely define a single group - meaning that a unique combination of values in those columns is associated with a single group. You may, however, find it more intuitive to group "across" certain columns. You can do this using `setdiff()` and `get_forecast_unit()`. For example, if you want to make all forecasts for the same location part of the same group, you could do something like `grouping = setdiff(get_forecast_unit(data, "location"))`.
 
 ```{r}
-grouping <- define_grouping_cols(example_univ_multi, across = c("location", "location_name"))
+forecast_unit <- get_forecast_unit(example_univ_multi)
+grouping <- setdiff(forecast_unit, c("location", "location_name"))
 
-example_multiv <- as_forecast_sample_multivariate(
+example_multiv <- as_forecast_multivariate_sample(
   data = example_univ_multi,
-  grouping = grouping
+  by = grouping
 )
 example_multiv
 ```
@@ -95,7 +96,7 @@ score(example_multiv)
 
 In the univariate case, Energy Score and CRPS are the same (see output above). Now, they are different, because one is treating the data as a multivariate forecast, the other as 4 separate univariate forecasts.
 
-If, at any point, you want to score the same forecast using different groupings, you'd have to specify those groupings separately and score the forecast multiple times.
+If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
 
 <!-- ## Details on the grouping - WIP
 

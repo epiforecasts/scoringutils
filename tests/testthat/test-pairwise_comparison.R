@@ -548,6 +548,7 @@ test_that("plot_pairwise_comparisons() works when showing p values", {
 
 test_that("add_relative_skill() works without warnings when not computing p-values", {
   forecast_quantile <- example_quantile %>%
+    na.omit() %>%
     as_forecast_quantile(
       forecast_unit = c(
         "location", "forecast_date", "target_end_date",

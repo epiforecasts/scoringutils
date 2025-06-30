@@ -1,20 +1,20 @@
 # ==============================================================================
-# as_forecast_sample_multivariate()
+# as_forecast_multivariate_sample()
 # ==============================================================================
-test_that("as_forecast_sample_multivariate() works as expected", {
+test_that("as_forecast_multivariate_sample() works as expected", {
     test <- na.omit(data.table::copy(example_sample_continuous))
     data.table::setnames(test,
         old = c("observed", "predicted", "sample_id"),
         new = c("obs", "pred", "sample")
     )
     expect_no_condition(
-        as_forecast_sample_multivariate(test,
+        as_forecast_multivariate_sample(test,
             observed = "obs", predicted = "pred",
             forecast_unit = c(
                 "location", "model", "target_type",
                 "target_end_date", "horizon"
             ),
-            grouping = c(
+            by = c(
                 "model", "target_type",
                 "target_end_date", "horizon"
             ),
@@ -44,48 +44,6 @@ test_that("get_metrics.forecast_sample_multivariate() works as expected", {
     )
 })
 
-
-# ==============================================================================
-# define_grouping_cols()
-# ==============================================================================
-test_that("define_grouping_cols() works as expected", {
-  data <- example_sample_multivariate
-  forecast_unit <- get_forecast_unit(data)
-
-  # Test basic functionality
-  result <- define_grouping_cols(data, across = "location")
-  expect_type(result, "character")
-  expect_true(all(result %in% forecast_unit))
-  expect_false("location" %in% result)
-
-  # Test with multiple across variables
-  result <- define_grouping_cols(data, across = c("location", "target_type"))
-  expect_type(result, "character")
-  expect_true(all(result %in% forecast_unit))
-  expect_false(any(c("location", "target_type") %in% result))
-})
-
-test_that("define_grouping_cols() handles errors appropriately", {
-  data <- example_sample_multivariate
-
-  # Test missing across argument
-  expect_error(
-    define_grouping_cols(data),
-    "required to denote the variable across which to form groups for multivariate forecasts."
-  )
-
-  # Test invalid column names
-  expect_error(
-    define_grouping_cols(data, across = "nonexistent_column"),
-    "Must be a subset of"
-  )
-
-  # Test empty across vector
-  expect_error(
-    define_grouping_cols(data, across = character()),
-    "Must have length >= 1"
-  )
-})
 
 # ==============================================================================
 # set_grouping() and get_grouping()
@@ -149,16 +107,16 @@ test_that("score.forecast_sample_multivariate() works as expected", {
 })
 
 # ==============================================================================
-# Error cases for as_forecast_sample_multivariate()
+# Error cases for as_forecast_multivariate_sample()
 # ==============================================================================
-test_that("as_forecast_sample_multivariate() handles errors appropriately", {
+test_that("as_forecast_multivariate_sample() handles errors appropriately", {
   data <- as.data.table(example_sample_multivariate)
 
   # Test with missing required columns
   data_bad <- data[, !"sample_id"]
   expect_error(
-    as_forecast_sample_multivariate(data_bad,
-      grouping = c("model", "target_type")),
+    as_forecast_multivariate_sample(data_bad,
+      by = c("model", "target_type")),
     "Assertion on 'forecast' failed: Column 'sample_id' not found in data."
   )
 
@@ -166,8 +124,8 @@ test_that("as_forecast_sample_multivariate() handles errors appropriately", {
   data_bad <- copy(data)
   data_bad <- rbind(data_bad[1000:1010], data_bad)
   expect_error(
-    as_forecast_sample_multivariate(data_bad,
-      grouping = c("model", "target_type")),
+    as_forecast_multivariate_sample(data_bad,
+      by = c("model", "target_type")),
     "All forecasts \\(as defined by the forecast unit\\) in a group must have the same number of samples"
   )
 
@@ -179,8 +137,8 @@ test_that("as_forecast_sample_multivariate() handles errors appropriately", {
 
    # Test with invalid grouping columns
   expect_error(
-    as_forecast_sample_multivariate(data,
-      grouping = c("nonexistent_column")),
+    as_forecast_multivariate_sample(data,
+      by = c("nonexistent_column")),
     "Must be a subset of"
   )
 })

@@ -26,20 +26,28 @@
 #' @export
 #' @keywords as_forecast transform
 # nolint start: object_name_linter
-as_forecast_sample_multivariate <- function(data, ...) {
-  UseMethod("as_forecast_sample_multivariate")
+as_forecast_multivariate_sample <- function(data, ...) {
+  UseMethod("as_forecast_multivariate_sample")
 }
 # nolint end
 
 
-#' @rdname as_forecast_sample_multivariate
+#' @rdname as_forecast_multivariate_sample
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id".
-#' @param grouping ADD
+#' @param by Character vector with the names of the columns that define the
+#' grouping. The grouping variable is set analogously to the forecast unit: by
+#' listing all columns that, together, uniquely define a single group - meaning
+#' that a unique combination of values in those columns is associated with a
+#' single group. You may, however, find it more intuitive to group "across"
+#' certain columns. You can do this using [setdiff()] and [get_forecast_unit()].
+#' For example, if you want to make all forecasts for the same location part of
+#' the same group, you could do something like
+#' `by = setdiff(get_forecast_unit(data, "location"))`.
 #' @export
 #' @importFrom cli cli_warn
-as_forecast_sample_multivariate.default <- function(data,
-                                                    grouping,
+as_forecast_multivariate_sample.default <- function(data,
+                                                    by,
                                                     forecast_unit = NULL,
                                                     observed = NULL,
                                                     predicted = NULL,
@@ -52,33 +60,12 @@ as_forecast_sample_multivariate.default <- function(data,
     predicted = predicted,
     sample_id = sample_id
   )
-  data <- set_grouping(data, grouping)
+  data <- set_grouping(data, by)
   data <- new_forecast(data, "forecast_sample_multivariate")
   assert_forecast(data)
   return(data)
 }
 
-#' @title Return column names to define the grouping for multivariate forecasts
-#' @param across Character vector with the names of the columns over which to
-#'   group.
-#' @inheritParams get_forecast_unit
-#' @importFrom cli cli_abort
-#' @importFrom checkmate assert_character assert_subset
-#' @return
-#' A character vector with the names of the columns that define the grouping.
-#' @export
-#' @keywords transform
-define_grouping_cols <- function(data, across) {
-  if (missing(across) || is.null(across)) {
-    cli_abort("{.arg across} is required to denote the variable across
-    which to form groups for multivariate forecasts.")
-  }
-  assert_character(across, min.len = 1, null.ok = FALSE)
-  assert_subset(across, names(data), empty.ok = FALSE)
-  forecast_unit <- get_forecast_unit(data)
-  grouping_unit <- setdiff(forecast_unit, across)
-  return(grouping_unit)
-}
 
 #' @export
 #' @rdname assert_forecast
@@ -160,7 +147,8 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
 
     # for multivariate scores, multiple rows collapse to a single score.
     # we therefore create a new data.table, compute scores, and merge back.
-    temp_dt <- unique(forecast_same_length[, .SD, .SDcols = ".scoringutils_group_id"])
+    grouping_cols <- get_grouping(forecast_same_length)
+    temp_dt <- unique(forecast_same_length[, .SD, .SDcols = c(grouping_cols, ".scoringutils_group_id")])
     result <- apply_metrics(
       temp_dt,
       metrics = metrics,
@@ -190,8 +178,9 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
 #' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
-#' grouping <- define_grouping_cols(c("location_name", "location"), data = example_sample_continuous)
-#' example <- as_forecast_sample_multivariate(example_sample_continuous, grouping = grouping)
+#' forecast_unit <- get_forecast_unit(example_sample_multivariate)
+#' grouping <- setdiff(forecast_unit, c("location", "location_name"))
+#' example <- as_forecast_multivariate_sample(example_sample_continuous, grouping = grouping)
 #' get_metrics(example)
 get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
@@ -204,8 +193,7 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' @description
 #' Helper function to set the grouping of a forecast.
 #' @inheritParams as_forecast_doc_template
-#' @param grouping Character vector with the names of the columns that
-#'   define the grouping.
+#' @inheritParams as_forecast_multivariate_sample
 #' @importFrom data.table ':=' is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
 #' @importFrom cli cli_abort
@@ -213,12 +201,12 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' A data.table with an additional column `.scoringutils_group_id` that
 #' contains the group id for each row.
 #' @keywords internal
-set_grouping <- function(data, grouping) {
+set_grouping <- function(data, by) {
   data <- ensure_data.table(data)
-  assert_character(grouping, min.len = 1)
-  assert_subset(grouping, colnames(data))
+  assert_character(by, min.len = 1)
+  assert_subset(by, colnames(data))
 
-  data[, .scoringutils_group_id := .GRP, by = grouping]
+  data[, .scoringutils_group_id := .GRP, by = by]
 
   data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data))]
 
@@ -271,7 +259,7 @@ get_grouping <- function(forecast) {
 #' folder (or the top level folder in a compiled package).
 #'
 #' @format An object of class `forecast_sample_multivariate`
-#' (see [as_forecast_sample_multivariate()]) with the following columns:
+#' (see [as_forecast_multivariate_sample()]) with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}
 #'   \item{target_end_date}{the date for which a prediction was made}

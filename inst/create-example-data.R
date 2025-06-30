@@ -199,11 +199,10 @@ usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 # get multivariate sample data -------------------------------------------------
 example_sample_multivariate <- data.table::copy(example_sample_continuous)
-grouping <- define_grouping_cols(
-  across = c("location_name", "location"),
-  data = example_sample_multivariate
-)
-example_sample_multivariate <- as_forecast_sample_multivariate(
+forecast_unit <- get_forecast_unit(example_sample_multivariate)
+grouping <- setdiff(forecast_unit, c("location", "location_name"))
+
+example_sample_multivariate <- as_forecast_multivariate_sample(
   data = example_sample_multivariate,
   grouping = grouping,
 )

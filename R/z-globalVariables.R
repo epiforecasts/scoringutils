@@ -13,7 +13,6 @@ globalVariables(c(
   ".SD",
   ".scoringutils_count",
   ".scoringutils_group_id",
-  # ".V1",
   "adj_pval",
   "ae_point",
   "ae_median",
@@ -21,7 +20,6 @@ globalVariables(c(
   "bias",
   "brier_score",
   "component_value",
-
   "calibration",
   "compare_against",
   "correct",
