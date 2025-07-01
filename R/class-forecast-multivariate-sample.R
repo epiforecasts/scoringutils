@@ -223,11 +223,7 @@ set_grouping <- function(data, by) {
       )
     }
   }
-  if (length(existing_keys) > 0) {
-    setkey(data, existing_keys)
-  } else {
-    setkey(data, NULL)
-  }
+  setkey(data, existing_keys) # is NULL if no keys were present
   data[, .scoringutils_count := NULL]
   return(data)
 }
