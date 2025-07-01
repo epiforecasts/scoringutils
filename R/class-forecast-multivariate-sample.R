@@ -208,7 +208,7 @@ set_grouping <- function(data, by) {
 
   data[, .scoringutils_group_id := .GRP, by = by]
 
-  data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data))]
+  data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data)), keyby = FALSE]
 
   for (group_id in unique(data$.scoringutils_group_id)) {
     counts <- data[.scoringutils_group_id == group_id, .scoringutils_count]
