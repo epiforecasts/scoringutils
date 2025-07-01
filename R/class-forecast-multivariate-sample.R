@@ -194,7 +194,7 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' Helper function to set the grouping of a forecast.
 #' @inheritParams as_forecast_doc_template
 #' @inheritParams as_forecast_multivariate_sample
-#' @importFrom data.table ':=' is.data.table copy
+#' @importFrom data.table ':=' is.data.table copy setkey key
 #' @importFrom checkmate assert_character assert_subset
 #' @importFrom cli cli_abort
 #' @return
@@ -208,7 +208,8 @@ set_grouping <- function(data, by) {
 
   data[, .scoringutils_group_id := .GRP, by = by]
 
-  data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data)), keyby = FALSE]
+  existing_keys <- key(data)
+  data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data))]
 
   for (group_id in unique(data$.scoringutils_group_id)) {
     counts <- data[.scoringutils_group_id == group_id, .scoringutils_count]
@@ -221,6 +222,11 @@ set_grouping <- function(data, by) {
         {.val {group_id}}. Seeing {.val {unique_counts}} samples."
       )
     }
+  }
+  if (length(existing_keys) > 0) {
+    setkey(data, existing_keys)
+  } else {
+    setkey(data, NULL)
   }
   data[, .scoringutils_count := NULL]
   return(data)
