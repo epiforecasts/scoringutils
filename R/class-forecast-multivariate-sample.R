@@ -194,7 +194,7 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' Helper function to set the grouping of a forecast.
 #' @inheritParams as_forecast_doc_template
 #' @inheritParams as_forecast_multivariate_sample
-#' @importFrom data.table ':=' is.data.table copy setkey key
+#' @importFrom data.table ':=' is.data.table copy setkeyv key
 #' @importFrom checkmate assert_character assert_subset
 #' @importFrom cli cli_abort
 #' @return
@@ -223,7 +223,7 @@ set_grouping <- function(data, by) {
       )
     }
   }
-  setkey(data, existing_keys) # is NULL if no keys were present
+  setkeyv(data, existing_keys)
   data[, .scoringutils_count := NULL]
   return(data)
 }
