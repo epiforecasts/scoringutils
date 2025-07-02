@@ -290,7 +290,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor">jonathonmellor</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris">dylanhmorris</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli">annakrystalli</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand">teunbrand</a>
 
 ### Issue Contributors
 
