@@ -235,7 +235,7 @@ get_pairwise_comparisons <- function(
 
   # do the pairwise comparison -------------------------------------------------
   # split data set into groups determined by 'by'
-  split_scores <- split(scores, by = by)
+  split_scores <- split(scores, by = by, drop = TRUE)
 
   results <- lapply(split_scores,
     FUN = function(scores) {
