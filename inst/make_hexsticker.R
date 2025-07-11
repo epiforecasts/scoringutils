@@ -16,17 +16,19 @@ hex_plot <- plot_wis(scores, x = "model", relative_contributions = FALSE) +
   labs(x = "", y = "") +
   theme(
     legend.position = "none",
+    strip.text = element_blank(),
     axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_blank()
   )
 
 # Make and save hexsticker
 sticker(
   hex_plot,
-  s_x = 0,
-  s_y = 0.9,
-  s_width = 3.5,
-  s_height = 1.4,
+  s_x = 0.93,
+  s_y = 0.82,
+  s_width = 1.6,
+  s_height = 1.1,
   package = "scoringutils",
   p_color = "#646770",
   p_size = 76,
