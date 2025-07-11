@@ -276,6 +276,7 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=actions-user">actions-user</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura">toshiakiasakura</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico">MichaelChirico</a>,
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95">jcken95</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich">nickreich</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=jhellewell14">jhellewell14</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer">damonbayer</a>
@@ -287,13 +288,17 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov">dshemetov</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1">elray1</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor">jonathonmellor</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajcken95">jcken95</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris">dylanhmorris</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli">annakrystalli</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand">teunbrand</a>
 
 ### Issue Contributors
 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Ajbracher">jbracher</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Adylanhmorris">dylanhmorris</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Aathowes">athowes</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3ATimTaylor">TimTaylor</a>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
