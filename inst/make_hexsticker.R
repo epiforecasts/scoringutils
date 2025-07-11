@@ -8,18 +8,25 @@ library(scoringutils)
 scores <- example_quantile %>%
   as_forecast_quantile() %>%
   score() %>%
-  summarise_scores(by = c("model", "target_type"))
+  summarise_scores(by = c("model", "target_type")) |>
+  filter(target_type == "Cases")
 
 hex_plot <- plot_wis(scores, x = "model", relative_contributions = FALSE) +
-  facet_wrap(~target_type, scales = "free_x")
+  facet_wrap(~target_type, scales = "free_x") +
+  labs(x = "", y = "") +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
 
 # Make and save hexsticker
 sticker(
   hex_plot,
   s_x = 0,
-  s_y = 0.55,
-  s_width = 3.25,
-  s_height = 2,
+  s_y = 0.9,
+  s_width = 3.5,
+  s_height = 1.4,
   package = "scoringutils",
   p_color = "#646770",
   p_size = 76,
