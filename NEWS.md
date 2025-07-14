@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits. 
+
 # scoringutils 2.1.1
 
 - The package now depends on R version at least 4.1.0 as a result of downstream dependencies.
