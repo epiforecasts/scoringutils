@@ -63,9 +63,9 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
 # is_forecast_sample()
 # ==============================================================================
 test_that("is_forecast_sample() works as expected", {
-  expect_true(is_forecast_sample_multivariate(example_sample_multivariate))
+  expect_true(is_forecast_sample_multivariate(example_multivariate_sample))
   expect_false(is_forecast_sample_multivariate(example_binary))
-  expect_false(is_forecast_sample(example_sample_multivariate))
+  expect_false(is_forecast_sample(example_multivariate_sample))
 })
 
 
@@ -75,7 +75,7 @@ test_that("is_forecast_sample() works as expected", {
 
 test_that("get_metrics.forecast_sample_multivariate() works as expected", {
   expect_true(
-      is.list(get_metrics(example_sample_multivariate))
+      is.list(get_metrics(example_multivariate_sample))
   )
 })
 
@@ -84,7 +84,7 @@ test_that("get_metrics.forecast_sample_multivariate() works as expected", {
 # set_grouping() and get_grouping()
 # ==============================================================================
 test_that("set_grouping() works as expected", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 grouping <- c("model", "target_type", "target_end_date", "horizon")
 
 # Test basic functionality
@@ -98,7 +98,7 @@ expect_true(all(group_counts$N > 0))
 })
 
 test_that("get_grouping() works as expected", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 grouping <- c("model", "target_type", "target_end_date", "horizon")
 data <- set_grouping(data, grouping)
 
@@ -109,7 +109,7 @@ expect_true(all(grouping %in% result))
 })
 
 test_that("get_grouping() falls back to forecast_unit when group_id is missing", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 
 # Remove the group_id column
 data_bad <- as.data.table(data)
@@ -122,7 +122,7 @@ expect_error(
 })
 
 test_that("set_grouping() preserves existing keys correctly", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 grouping <- c("model", "target_type", "target_end_date", "horizon")
 
 # Test case 1: No existing keys
@@ -157,7 +157,7 @@ expect_true(all(group_counts$N > 0))
 # score.forecast_sample_multivariate()
 # ==============================================================================
 test_that("score.forecast_sample_multivariate() works as expected", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 
 # Test basic scoring
 scores <- score(data)
@@ -174,7 +174,7 @@ expect_true(is.numeric(scores$energy_score))
 })
 
 test_that("score.forecast_sample_multivariate() creates expected output structure", {
-data <- example_sample_multivariate
+data <- example_multivariate_sample
 
 # Test basic scoring and capture snapshot
 scores <- score(data)
@@ -210,7 +210,7 @@ expect_snapshot({
 # Error cases for as_forecast_multivariate_sample()
 # ==============================================================================
 test_that("as_forecast_multivariate_sample() handles errors appropriately", {
-data <- as.data.table(example_sample_multivariate)
+data <- as.data.table(example_multivariate_sample)
 
 # Test with missing required columns
 data_bad <- data[, !"sample_id"]
@@ -231,7 +231,7 @@ expect_error(
 
 # Test with inconsistent sample lengths after forecast object creation
 expect_warning(
-  example_sample_multivariate[-(1000:1010), ],
+  example_multivariate_sample[-(1000:1010), ],
   "Found the following group with an inconsistent sample length"
 )
 

@@ -178,7 +178,7 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
 #' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
-#' forecast_unit <- get_forecast_unit(example_sample_multivariate)
+#' forecast_unit <- get_forecast_unit(example_multivariate_sample)
 #' grouping <- setdiff(forecast_unit, c("location", "location_name"))
 #' example <- as_forecast_multivariate_sample(example_sample_continuous, by = grouping)
 #' get_metrics(example)
@@ -278,4 +278,4 @@ get_grouping <- function(forecast) {
 # nolint start
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
 # nolint end
-"example_sample_multivariate"
+"example_multivariate_sample"
