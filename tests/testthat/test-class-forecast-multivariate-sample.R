@@ -54,7 +54,7 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
       cat("Number of rows:", nrow(result), "\n")
       cat("Number of columns:", ncol(result), "\n")
       cat("Column names:", paste(names(result), collapse = ", "), "\n")
-      cat("Number of unique groups:", length(unique(result$.scoringutils_group_id)), "\n")
+      cat("Number of unique groups:", length(unique(result$.group_id)), "\n")
   })
 })
 
@@ -89,11 +89,11 @@ grouping <- c("model", "target_type", "target_end_date", "horizon")
 
 # Test basic functionality
 result <- set_grouping(data, grouping)
-expect_true(".scoringutils_group_id" %in% names(result))
-expect_true(is.numeric(result$.scoringutils_group_id))
+expect_true(".group_id" %in% names(result))
+expect_true(is.numeric(result$.group_id))
 
 # Test that groups are consistent
-group_counts <- as.data.table(result)[, .N, by = .scoringutils_group_id]
+group_counts <- as.data.table(result)[, .N, by = .group_id]
 expect_true(all(group_counts$N > 0))
 })
 
@@ -113,11 +113,11 @@ data <- example_multivariate_sample
 
 # Remove the group_id column
 data_bad <- as.data.table(data)
-data_bad[, .scoringutils_group_id := NULL]
+data_bad[, .group_id := NULL]
 
 expect_error(
   get_grouping(data_bad),
-  "No column `.scoringutils_group_id` found in the forecast object."
+  "No column `.group_id` found in the forecast object."
 )
 })
 
@@ -145,11 +145,11 @@ result_with_keys <- scoringutils:::set_grouping(data_with_keys, grouping)
 expect_equal(key(result_with_keys), original_keys)  # Should preserve original keys
 
 # Test case 3: Verify functionality still works with keys preserved
-expect_true(".scoringutils_group_id" %in% names(result_with_keys))
-expect_true(is.numeric(result_with_keys$.scoringutils_group_id))
+expect_true(".group_id" %in% names(result_with_keys))
+expect_true(is.numeric(result_with_keys$.group_id))
 
 # Test that groups are consistent
-group_counts <- as.data.table(result_with_keys)[, .N, by = .scoringutils_group_id]
+group_counts <- as.data.table(result_with_keys)[, .N, by = .group_id]
 expect_true(all(group_counts$N > 0))
 })
 

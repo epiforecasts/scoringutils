@@ -18,7 +18,7 @@ An object of class \code{forecast_sample_multivariate}
 \item{horizon}{forecast horizon in weeks}
 \item{predicted}{predicted value}
 \item{sample_id}{id for the corresponding sample}
-\item{.scoringutils_group_id}{id for the corresponding group}
+\item{.group_id}{id for the corresponding group}
 }
 }
 \source{

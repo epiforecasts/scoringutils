@@ -74,24 +74,24 @@ as_forecast_multivariate_sample.default <- function(data,
 assert_forecast.forecast_sample_multivariate <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, c("sample_id", ".scoringutils_group_id")))
+  assert(check_columns_present(forecast, c("sample_id", ".group_id")))
   forecast <- assert_forecast_generic(forecast, verbose)
 
-  # make sure that for every .scoringutils_group_id, the number of samples per
+  # make sure that for every .group_id, the number of samples per
   # forecast unit is the same
   sample_lengths <- as.data.table(forecast)[, .(
     .scoringutils_N = length(sample_id)
   ),
-  by = c(get_forecast_unit(forecast), ".scoringutils_group_id")
+  by = c(get_forecast_unit(forecast), ".group_id")
   ]
   group_variations <- sample_lengths[, .(
     .scoringutils_N = length(unique(.scoringutils_N))
   ),
-  by = .scoringutils_group_id
+  by = .group_id
   ]
   if (any(group_variations$.scoringutils_N > 1)) {
     # nolint start: object_usage_linter
-    problematic_groups <- group_variations[.scoringutils_N > 1, .scoringutils_group_id]
+    problematic_groups <- group_variations[.scoringutils_N > 1, .group_id]
     cli_abort(
       "Found the following {qty(length(problematic_groups))} group{?s} with an
       inconsistent sample length, compared to other groups:
@@ -131,7 +131,7 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
     observed = unique(observed),
     .scoringutils_N = length(sample_id)
   ),
-  by = c(forecast_unit, ".scoringutils_group_id")
+  by = c(forecast_unit, ".group_id")
   ]
 
   # split according to number of samples and do calculations for different
@@ -143,12 +143,12 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
     predicted <- do.call(rbind, forecast_same_length$predicted)
     forecast_same_length[, c("observed", "predicted", ".scoringutils_N") := NULL]
 
-    grouping_id <- forecast_same_length$.scoringutils_group_id
+    grouping_id <- forecast_same_length$.group_id
 
     # for multivariate scores, multiple rows collapse to a single score.
     # we therefore create a new data.table, compute scores, and merge back.
     grouping_cols <- get_grouping(forecast_same_length)
-    temp_dt <- unique(forecast_same_length[, .SD, .SDcols = c(grouping_cols, ".scoringutils_group_id")])
+    temp_dt <- unique(forecast_same_length[, .SD, .SDcols = c(grouping_cols, ".group_id")])
     result <- apply_metrics(
       temp_dt,
       metrics = metrics,
@@ -156,7 +156,7 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
       grouping_id
     )
 
-    setcolorder(result, c(setdiff(colnames(result), ".scoringutils_group_id"), ".scoringutils_group_id"))
+    setcolorder(result, c(setdiff(colnames(result), ".group_id"), ".group_id"))
 
     return(result)
   })
@@ -198,7 +198,7 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' @importFrom checkmate assert_character assert_subset
 #' @importFrom cli cli_abort
 #' @return
-#' A data.table with an additional column `.scoringutils_group_id` that
+#' A data.table with an additional column `.group_id` that
 #' contains the group id for each row.
 #' @keywords internal
 set_grouping <- function(data, by) {
@@ -206,13 +206,13 @@ set_grouping <- function(data, by) {
   assert_character(by, min.len = 1)
   assert_subset(by, colnames(data))
 
-  data[, .scoringutils_group_id := .GRP, by = by]
+  data[, .group_id := .GRP, by = by]
 
   existing_keys <- key(data)
   data[, .scoringutils_count := .N, by = eval(get_forecast_unit(data))]
 
-  for (group_id in unique(data$.scoringutils_group_id)) {
-    counts <- data[.scoringutils_group_id == group_id, .scoringutils_count]
+  for (group_id in unique(data$.group_id)) {
+    counts <- data[.group_id == group_id, .scoringutils_count]
     unique_counts <- unique(counts)
 
     if (length(unique_counts) > 1) {
@@ -238,15 +238,15 @@ set_grouping <- function(data, by) {
 #' @export
 #' @keywords diagnose-inputs
 get_grouping <- function(forecast) {
-  if (!(".scoringutils_group_id" %in% names(forecast))) {
-    cli_abort("No column `.scoringutils_group_id` found in the forecast object.")
+  if (!(".group_id" %in% names(forecast))) {
+    cli_abort("No column `.group_id` found in the forecast object.")
   }
   data <- as.data.table(forecast)
   # this iterates over every column, and for every column checks if there
-  # is always only one unique value per group specified by .scoringutils_group_id
+  # is always only one unique value per group specified by .group_id
   # if that is the case, the column is part of the grouping vector.
   grouping_cols <- names(data)[sapply(names(data), function(col) {
-    data[, all(length(unique(.SD[[col]])) == 1), by = ".scoringutils_group_id"][, all(V1)]
+    data[, all(length(unique(.SD[[col]])) == 1), by = ".group_id"][, all(V1)]
   })]
   return(grouping_cols)
 }
@@ -273,7 +273,7 @@ get_grouping <- function(forecast) {
 #'   \item{horizon}{forecast horizon in weeks}
 #'   \item{predicted}{predicted value}
 #'   \item{sample_id}{id for the corresponding sample}
-#'   \item{.scoringutils_group_id}{id for the corresponding group}
+#'   \item{.group_id}{id for the corresponding group}
 #' }
 # nolint start
 #' @source \url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive/commit/a42867b1ea152c57e25b04f9faa26cfd4bfd8fa6/}
