@@ -64,8 +64,9 @@ as_forecast_quantile.default <- function(data,
       (run {.code diff(sort(unique(data$quantile_level)))} to see this.
       As {.code scoringutils} does not support arbitrarily fine quantile level
       increments, we're going to run {.code round(x, digits = 10)} on
-      the {.code quantile_level} column." )
-      data$quantile_level <- round(data$quantile_level, digits = 9)
+      the {.code quantile_level} column."
+    )
+    data$quantile_level <- round(data$quantile_level, digits = 9)
   }
 
   data <- new_forecast(data, "forecast_quantile")
