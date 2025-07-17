@@ -78,14 +78,14 @@ result <- get_pit_histogram(example_sample_continuous, by = "model")
 ggplot(result,  aes(x = mid, y = density)) +
   geom_col() +
   facet_wrap(. ~ model) +
-  labs(x = "Quantile", "Density")
+  labs(x = "Quantile", y = "Density")
 
 # example with quantile data
 result <- get_pit_histogram(example_quantile, by = "model")
 ggplot(result,  aes(x = mid, y = density)) +
   geom_col() +
   facet_wrap(. ~ model) +
-  labs(x = "Quantile", "Density")
+  labs(x = "Quantile", y = "Density")
 }
 \references{
 Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,

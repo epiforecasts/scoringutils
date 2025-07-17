@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- updated a few example plots to comply with an updated ggplot2 requirement to name labels in `labs()` explicitly.
+
 # scoringutils 2.1.1
 
 - The package now depends on R version at least 4.1.0 as a result of downstream dependencies.

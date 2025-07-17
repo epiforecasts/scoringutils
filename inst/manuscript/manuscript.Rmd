@@ -339,7 +339,7 @@ example_sample_continuous |>
   ggplot(aes(x = mid, y = density)) +
   geom_col() +
   facet_grid(target_type ~ model) +
-  labs(x = "Quantile", "Density")
+  labs(x = "Quantile", y = "Density")
 ```
 
 It is, in theory, possible to conduct a formal test for probabilistic calibration, for example by employing an Anderson-Darling test on the uniformity of PIT values. In practice, this can be difficult as forecasts, and therefore PIT values as well, are often correlated. Personal experience suggests that the Anderson-Darling test is often too quick to reject the null hypothesis of uniformity.
