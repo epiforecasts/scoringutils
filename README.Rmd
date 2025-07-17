@@ -167,6 +167,7 @@ The development of `scoringutils` was funded via the Health Protection Research 
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -202,7 +203,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris">dylanhmorris</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli">annakrystalli</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>, 
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand">teunbrand</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand">teunbrand</a>, 
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aathowes">athowes</a>, 
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah">RokGrah</a>
 
 
 
@@ -211,13 +214,13 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Ajbracher">jbracher</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Akathsherratt">kathsherratt</a>, 
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3Aathowes">athowes</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3ATimTaylor">TimTaylor</a>
 
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 
