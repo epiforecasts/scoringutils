@@ -219,7 +219,7 @@ data_bad <- copy(data)
 data_bad <- rbind(data_bad[1000:1010], data_bad)
 expect_error(
   as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
-  "All forecasts \\(as defined by the forecast unit\\) in a group must have the same number of samples"
+  "All univariate forecasts \\(as defined by the univariate forecast unit\\) in a group must have the same number of samples"
 )
 
 # Test with inconsistent sample lengths after forecast object creation

@@ -14,7 +14,7 @@ test_that("function set_forecast_unit() works", {
     "Assertion on 'data' failed: There are instances with more"
   )
 
-  ex2 <- scoringutils:::set_forecast_unit(
+  ex2 <- set_forecast_unit(
     example_quantile,
     c("location", "target_end_date", "target_type", "horizon", "model")
   )

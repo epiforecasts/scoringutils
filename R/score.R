@@ -87,9 +87,7 @@
 #'
 #' # multivariate forecasts
 #' \dontrun{
-#' example_sample_continuous %>%
-#'   set_grouping(c("target_end_date", "target_type", "forecast_date", "model", "horizon")) %>%
-#'   score()
+#' score(example_multivariate_sample)
 #' }
 #'
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -180,14 +178,12 @@ run_safely <- function(..., fun, metric_name) {
   possible_args <- names(formals(fun))
 
   # Check if the function accepts ... as an argument
-  if ("..." %in% names(formals(fun))) {
+  if ("..." %in% possible_args) {
     valid_args <- args
   } else if (is.null(names(args))) {
     # if no arguments are named, just pass all arguments on
     valid_args <- args
   } else {
-    # Identify the arguments that fun() accepts
-    possible_args <- names(formals(fun))
     # keep valid arguments as well as unnamed arguments
     valid_args <- args[!nzchar(names(args)) | names(args) %in% possible_args]
   }

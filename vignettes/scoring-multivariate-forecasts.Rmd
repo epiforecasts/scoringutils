@@ -39,7 +39,7 @@ We can score this forecast and will receive a single score.
 score(example_univ_single)
 ```
 
-Now, of course, we can also score multiple fo these forecasts at the same time. Let's say we're not only interested in Germany, but other countries as well.
+Now, of course, we can also score multiple similar forecasts at the same time. Let's say we're not only interested in Germany, but other countries as well.
 
 ```{r}
 example_univ_multi <- example_sample_continuous[
@@ -67,7 +67,7 @@ The corresponding multivariate forecast would similarly specify a predictive dis
 
 In the following, let's assume that our samples were draws from a multivariate distribution all along (we just treated them as independent for the univariate case).
 
-To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the columns that are pooled together to form a single multivariate forecast. We do this by setting the `joint_across` argument. For example, if we want to pool all forecasts for the same location, we could set `joint_across = c("location", "location_name")` (in our example, the two columns contain essentially the same information - we have to include both in `joint_across` or could alternatively delete one of them).
+To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the columns that are pooled together to form a single multivariate forecast. We do this via the `joint_across` argument. For example, if we want to pool forecasts across locations and treat them as a single multivariate forecast, we could set `joint_across = c("location", "location_name")` (in our example, the two columns contain essentially the same information - we therefore have to include both in `joint_across` (or could alternatively delete one of them)).
 
 ```{r}
 example_multiv <- as_forecast_multivariate_sample(
@@ -128,7 +128,7 @@ obs2 <- drop(mu0 + rnorm(d) %*% chol(S0))
 fc_sample2 <- replicate(m, drop(mu + rnorm(d) %*% chol(S)))
 ```
 
-Now, we can compute the Energy Score. Let's compare the implementation of the `scoringRules` package, on which the `scoringutils` implementation is based. The only difference is that `scoringRules` always expects a single multivariate `forecast`, while the `scoringutils` implementation can handle multiple multivariate forecasts together, identified via a grouping vector (assuming they all have the same dimension).
+Now, we can compute the Energy Score. Let's compare the `scoringutils` implementation with that of the `scoringRules` package, on which the `scoringutils` implementation is based. The only difference is that `scoringRules` always expects a single multivariate `forecast`, while the `scoringutils` implementation can handle multiple multivariate forecasts together, identified via a grouping vector (assuming they all have the same dimension).
 
 ```{r}
 scoringRules::es_sample(y = obs, dat = fc_sample)

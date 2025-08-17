@@ -156,7 +156,8 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
     mv_group_id <- forecast_same_length$.mv_group_id
 
     # for multivariate scores, multiple rows collapse to a single score.
-    # we therefore create a new data.table, compute scores, and merge back.
+    # we therefore have to create a new data.table with the correct dimensions
+    # and groups
     grouping_cols <- get_grouping(forecast_same_length)
     temp_dt <- unique(forecast_same_length[, .SD, .SDcols = c(grouping_cols, ".mv_group_id")])
     result <- apply_metrics(
@@ -229,8 +230,9 @@ set_grouping <- function(data, joint_across) {
 
     if (length(unique_counts) > 1) {
       cli_abort(
-        "All forecasts (as defined by the forecast unit) in a group must have
-        the same number of samples. This is not the case for group
+        "All univariate forecasts (as defined by the univariate forecast unit)
+        in a group must have the same number of samples.
+        This is not the case for group
         {.val {mv_group_id}}. Seeing {.val {unique_counts}} samples."
       )
     }
