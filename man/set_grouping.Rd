@@ -4,22 +4,19 @@
 \alias{set_grouping}
 \title{Set grouping}
 \usage{
-set_grouping(data, by)
+set_grouping(data, joint_across)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.}
 
-\item{by}{Character vector with the names of the columns that define the
-grouping. The grouping variable is set analogously to the forecast unit: by
-listing all columns that, together, uniquely define a single group - meaning
-that a unique combination of values in those columns is associated with a
-single group. You may, however, find it more intuitive to group "across"
-certain columns. You can do this using \code{\link[=setdiff]{setdiff()}} and \code{\link[=get_forecast_unit]{get_forecast_unit()}}.
-For example, if you want to make all forecasts for the same location part of
-the same group, you could do something like
-\code{by = setdiff(get_forecast_unit(data, "location"))}.}
+\item{joint_across}{Character vector with columns names that define the
+variables which are forecasted jointly. Conceptually, several univariate
+forecasts are pooled together to form a single multivariate forecasts.
+For example, if you have a column \code{country} and want to define
+a multivariate forecast for several countries at once, you could set
+\code{joint_across = "country"}.}
 }
 \value{
 A data.table with an additional column \code{.mv_group_id} that

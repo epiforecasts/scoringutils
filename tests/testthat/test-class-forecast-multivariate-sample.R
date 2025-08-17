@@ -14,10 +14,7 @@ test_that("as_forecast_multivariate_sample() works as expected", {
               "location", "model", "target_type",
               "target_end_date", "horizon"
           ),
-          by = c(
-              "model", "target_type",
-              "target_end_date", "horizon"
-          ),
+          joint_across = "location",
           sample_id = "sample"
       )
   )
@@ -36,10 +33,7 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
           "location", "model", "target_type",
           "target_end_date", "horizon"
       ),
-      by = c(
-          "model", "target_type",
-          "target_end_date", "horizon"
-      ),
+      joint_across = "location",
       sample_id = "sample"
   )
 
@@ -100,7 +94,8 @@ expect_true(all(group_counts$N > 0))
 test_that("get_grouping() works as expected", {
 data <- example_multivariate_sample
 grouping <- c("model", "target_type", "target_end_date", "horizon")
-data <- set_grouping(data, grouping)
+joint_across <- setdiff(get_forecast_unit(data), grouping)
+data <- scoringutils:::set_grouping(data, joint_across)
 
 # Test that get_grouping returns the correct columns
 result <- get_grouping(data)
@@ -215,8 +210,7 @@ data <- as.data.table(example_multivariate_sample)
 # Test with missing required columns
 data_bad <- data[, !"sample_id"]
 expect_error(
-  as_forecast_multivariate_sample(data_bad,
-    by = c("model", "target_type")),
+  as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
   "Assertion on 'forecast' failed: Column 'sample_id' not found in data."
 )
 
@@ -224,8 +218,7 @@ expect_error(
 data_bad <- copy(data)
 data_bad <- rbind(data_bad[1000:1010], data_bad)
 expect_error(
-  as_forecast_multivariate_sample(data_bad,
-    by = c("model", "target_type")),
+  as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
   "All forecasts \\(as defined by the forecast unit\\) in a group must have the same number of samples"
 )
 
@@ -238,7 +231,7 @@ expect_warning(
   # Test with invalid grouping columns
 expect_error(
   as_forecast_multivariate_sample(data,
-    by = c("nonexistent_column")),
+    joint_across = c("nonexistent_column")),
   "Must be a subset of"
 )
 })

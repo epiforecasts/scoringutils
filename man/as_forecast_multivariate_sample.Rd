@@ -9,7 +9,7 @@ as_forecast_multivariate_sample(data, ...)
 
 \method{as_forecast_multivariate_sample}{default}(
   data,
-  by,
+  joint_across,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
@@ -24,22 +24,23 @@ on the required input format.}
 
 \item{...}{Unused}
 
-\item{by}{Character vector with the names of the columns that define the
-grouping. The grouping variable is set analogously to the forecast unit: by
-listing all columns that, together, uniquely define a single group - meaning
-that a unique combination of values in those columns is associated with a
-single group. You may, however, find it more intuitive to group "across"
-certain columns. You can do this using \code{\link[=setdiff]{setdiff()}} and \code{\link[=get_forecast_unit]{get_forecast_unit()}}.
-For example, if you want to make all forecasts for the same location part of
-the same group, you could do something like
-\code{by = setdiff(get_forecast_unit(data, "location"))}.}
+\item{joint_across}{Character vector with columns names that define the
+variables which are forecasted jointly. Conceptually, several univariate
+forecasts are pooled together to form a single multivariate forecasts.
+For example, if you have a column \code{country} and want to define
+a multivariate forecast for several countries at once, you could set
+\code{joint_across = "country"}.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
-single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+single univariate (!) forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
-that are not part of the forecast unit (or required columns) will be removed.}
+that are not part of the forecast unit (or required columns) will be removed.
+Multivariate forecasts are defined by a) specifying the univariate forecast
+unit (i.e. the unit of a single forecast if that forecast were univariate)
+and b) specifying which variables are pooled together to form a
+multivariate forecast.}
 
 \item{observed}{(optional) Name of the column in \code{data} that contains the
 observed values. This column will be renamed to "observed".}
@@ -79,8 +80,6 @@ values represent random samples from the predictive distribution.
 is created automatically using the \code{forecast_unit} and the \code{joint_across}
 arguments.
 }
-
-You can rename columns on the fly using the corresponding function arguemnts.
 
 For convenience, we recommend an additional column \code{model} holding the name
 of the forecaster or model that produced a prediction, but this is not

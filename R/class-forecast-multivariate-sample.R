@@ -1,5 +1,15 @@
 #' @title Create a `forecast` object for sample-based multivariate forecasts
 #' @inherit as_forecast_doc_template params description
+#' @param forecast_unit (optional) Name of the columns in `data` (after
+#'   any renaming of columns) that denote the unit of a
+#'   single univariate (!) forecast. See [get_forecast_unit()] for details.
+#'   If `NULL` (the default), all columns that are not required columns are
+#'   assumed to form the unit of a single forecast. If specified, all columns
+#'   that are not part of the forecast unit (or required columns) will be removed.
+#'   Multivariate forecasts are defined by a) specifying the univariate forecast
+#'   unit (i.e. the unit of a single forecast if that forecast were univariate)
+#'   and b) specifying which variables are pooled together to form a
+#'   multivariate forecast.
 #' @details
 #' # Target format
 #'
@@ -14,8 +24,6 @@
 #'    (unique within a single forecast) for each multivariate group. This column
 #'    is created automatically using the `forecast_unit` and the `joint_across`
 #'    arguments.
-#'
-#' You can rename columns on the fly using the corresponding function arguemnts.
 #'
 #' For convenience, we recommend an additional column `model` holding the name
 #' of the forecaster or model that produced a prediction, but this is not
@@ -39,19 +47,16 @@ as_forecast_multivariate_sample <- function(data, ...) {
 #' @rdname as_forecast_multivariate_sample
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id".
-#' @param by Character vector with the names of the columns that define the
-#' grouping. The grouping variable is set analogously to the forecast unit: by
-#' listing all columns that, together, uniquely define a single group - meaning
-#' that a unique combination of values in those columns is associated with a
-#' single group. You may, however, find it more intuitive to group "across"
-#' certain columns. You can do this using [setdiff()] and [get_forecast_unit()].
-#' For example, if you want to make all forecasts for the same location part of
-#' the same group, you could do something like
-#' `by = setdiff(get_forecast_unit(data, "location"))`.
+#' @param joint_across Character vector with columns names that define the
+#'   variables which are forecasted jointly. Conceptually, several univariate
+#'   forecasts are pooled together to form a single multivariate forecasts.
+#'   For example, if you have a column `country` and want to define
+#'   a multivariate forecast for several countries at once, you could set
+#'   `joint_across = "country"`.
 #' @export
 #' @importFrom cli cli_warn
 as_forecast_multivariate_sample.default <- function(data,
-                                                    by,
+                                                    joint_across,
                                                     forecast_unit = NULL,
                                                     observed = NULL,
                                                     predicted = NULL,
@@ -64,8 +69,8 @@ as_forecast_multivariate_sample.default <- function(data,
     predicted = predicted,
     sample_id = sample_id
   )
-  data <- set_grouping(data, by)
-  
+  data <- set_grouping(data, joint_across)
+
   data <- new_forecast(data, "forecast_sample_multivariate")
   assert_forecast(data)
   return(data)
@@ -183,9 +188,9 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
 #' @family get_metrics functions
 #' @keywords handle-metrics
 #' @examples
-#' forecast_unit <- get_forecast_unit(example_multivariate_sample)
-#' grouping <- setdiff(forecast_unit, c("location", "location_name"))
-#' example <- as_forecast_multivariate_sample(example_sample_continuous, by = grouping)
+#' example <- as_forecast_multivariate_sample(
+#'   example_sample_continuous, joint_across = c("location", "location_name")
+#' )
 #' get_metrics(example)
 get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
@@ -206,10 +211,12 @@ get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude =
 #' A data.table with an additional column `.mv_group_id` that
 #' contains the group id for each row.
 #' @keywords internal
-set_grouping <- function(data, by) {
+set_grouping <- function(data, joint_across) {
   data <- ensure_data.table(data)
-  assert_character(by, min.len = 1)
-  assert_subset(by, colnames(data))
+  assert_character(joint_across, min.len = 1)
+  assert_subset(joint_across, colnames(data))
+
+  by <- setdiff(get_forecast_unit(data), joint_across)
 
   data[, .mv_group_id := .GRP, by = by]
 

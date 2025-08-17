@@ -65,36 +65,23 @@ Now, instead of treating the four observations as independent, we could also thi
 
 The corresponding multivariate forecast would similarly specify a predictive distribution for the number of cases across all 4 countries. The samples are then not draws from four independent distributions, but instead samples from a joint multivariate predictive distribution.
 
-Let's just assume that our samples were draws from a multivariate distribution all along (we just treated them as independent for the univariate case).
+In the following, let's assume that our samples were draws from a multivariate distribution all along (we just treated them as independent for the univariate case).
 
-To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the grouping. Analogously to the forecast unit (see `?get_forecast_unit`), the grouping is the set of columns that are constant within a multivariate forecast. The group is determined by a unique combination of the values of the columns specified in the grouping vector.
-
-The grouping variable is set analogously to the forecast unit: by listing all columns that, together, uniquely define a single group - meaning that a unique combination of values in those columns is associated with a single group. You may, however, find it more intuitive to group "across" certain columns. You can do this using `setdiff()` and `get_forecast_unit()`. For example, if you want to make all forecasts for the same location part of the same group, you could do something like `grouping = setdiff(get_forecast_unit(data, "location"))`.
+To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the columns that are pooled together to form a single multivariate forecast. We do this by setting the `joint_across` argument. For example, if we want to pool all forecasts for the same location, we could set `joint_across = c("location", "location_name")` (in our example, the two columns contain essentially the same information - we have to include both in `joint_across` or could alternatively delete one of them).
 
 ```{r}
-forecast_unit <- get_forecast_unit(example_univ_multi)
-grouping <- setdiff(forecast_unit, c("location", "location_name"))
-
 example_multiv <- as_forecast_multivariate_sample(
   data = example_univ_multi,
-  by = grouping
+  c("location", "location_name")
 )
 example_multiv
 ```
 
-(Note that for the purposes of scoring, it doesn't matter that sample ids are still 1-40, repeated 4 times, instead of 1-160. `scoringutils` handles this appropriately.)
-
-The grouping id is 1 everywhere, because we only have a single multivariate forecast. When scoring this forecast using an appropriate multivariate scoring function, we will get a single score, even though we have 4 observations, one for each country.
-
-When scoring this forecast using `score()`, we will still get 4 rows, though. This is because `score()` handles univariate and multivariate scoring at the same time. All scoring functions that can handle multivariate forecasts will treat the forecast as a single forecast. Those scoring functions that only handle univariate forecasts will continue to treat the forecast as 4 separate univariate forecasts.
-
-You can notice, that the name of the energy score has changed to `energy_score_multiv` and there is an additional column `.mv_group_id` in the output.
+The column `.mv_group_id` is created automatically and represents an identifier for each multivariate forecast. `.mv_group_id` is 1 everywhere, because we only have a single multivariate forecast. When scoring this forecast using an appropriate multivariate scoring function, we will get a single score, even though we have 4 observations, one for each country. (Note that for the purposes of scoring, it doesn't matter that sample ids are still 1-40, repeated 4 times, instead of 1-160. `scoringutils` handles this appropriately.)
 
 ```{r}
 score(example_multiv)
 ```
-
-In the univariate case, Energy Score and CRPS are the same (see output above). Now, they are different, because one is treating the data as a multivariate forecast, the other as 4 separate univariate forecasts.
 
 If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
 
