@@ -32,14 +32,14 @@
 #' ggplot(result,  aes(x = mid, y = density)) +
 #'   geom_col() +
 #'   facet_wrap(. ~ model) +
-#'   labs(x = "Quantile", "Density")
+#'   labs(x = "Quantile", y = "Density")
 #'
 #' # example with quantile data
 #' result <- get_pit_histogram(example_quantile, by = "model")
 #' ggplot(result,  aes(x = mid, y = density)) +
 #'   geom_col() +
 #'   facet_wrap(. ~ model) +
-#'   labs(x = "Quantile", "Density")
+#'   labs(x = "Quantile", y = "Density")
 #' @export
 #' @keywords scoring
 #' @references

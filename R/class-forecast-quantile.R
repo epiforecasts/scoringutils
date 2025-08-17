@@ -55,6 +55,20 @@ as_forecast_quantile.default <- function(data,
     predicted = predicted,
     quantile_level = quantile_level
   )
+  unique_q_levels <- sort(unique(data$quantile_level))
+  level_diffs <- diff(unique_q_levels)
+  if (any(level_diffs <= 1e-10)) {
+    cli_warn(
+      "The {.code quantile_level} column in your data
+      seems to have a rounding issue
+      (run {.code diff(sort(unique(data$quantile_level)))} to see this.
+      As {.code scoringutils} does not support arbitrarily fine quantile level
+      increments, we're going to run {.code round(x, digits = 10)} on
+      the {.code quantile_level} column."
+    )
+    data$quantile_level <- round(data$quantile_level, digits = 9)
+  }
+
   data <- new_forecast(data, "forecast_quantile")
   assert_forecast(data)
   return(data)

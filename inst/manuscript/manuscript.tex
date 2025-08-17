@@ -75,7 +75,7 @@ London School of Hygiene \& Tropical Medicine\\
 Keppel Street\\
 London WC1E 7HT\\
   E-mail: \email{hugo.gruson@lshtm.ac.uk}\\
-  
+
       Anne Cori\\
     Imperial College London\\
     MRC Centre for Global Infectious Disease Analysis, School of Public
@@ -84,14 +84,14 @@ Imperial College London\\
 Norfolk Place\\
 London W2 1PG\\
   E-mail: \email{a.cori@imperial.ac.uk}\\
-  
+
       Edwin van Leeuwen\\
     UK Health Security Agency, LSHTM\\
     Statistics, Modelling and Economics Department\\
 UK Health Security Agency\\
 London NW9 5EQ\\
   E-mail: \email{Edwin.VanLeeuwen@phe.gov.uk}\\
-  
+
       Sebastian Funk\\
     LSHTM\\
     Centre for Mathematical Modelling of Infectious Diseases\\
@@ -99,7 +99,7 @@ London School of Hygiene \& Tropical Medicine\\
 Keppel Street\\
 London WC1E 7HT\\
   E-mail: \email{sebastian.funk@lshtm.ac.uk}\\
-  
+
       Sam Abbott\\
     LSHTM\\
     Centre for Mathematical Modelling of Infectious Diseases\\
@@ -107,7 +107,7 @@ London School of Hygiene \& Tropical Medicine\\
 Keppel Street\\
 London WC1E 7HT\\
   E-mail: \email{sam.abbott@lshtm.ac.uk}\\
-  
+
   }
 
 
@@ -233,7 +233,7 @@ well as sensible defaults for scoring forecasts.
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{../../man/figures/workflow} 
+{\centering \includegraphics[width=1\linewidth]{../../man/figures/workflow}
 
 }
 
@@ -342,11 +342,11 @@ forecasts.
 \textbf{Forecast type} & & & \textbf{column} & \textbf{type} \\
 \midrule
 % Classification
-\multirow{5}{*}{\makecell[cl]{Categorical\\forecast}}    & \multirow{2}{*}{Binary}     & Soft classification & \texttt{observed} & factor with 2 levels \\ 
+\multirow{5}{*}{\makecell[cl]{Categorical\\forecast}}    & \multirow{2}{*}{Binary}     & Soft classification & \texttt{observed} & factor with 2 levels \\
                                 &                             & {\footnotesize(prediction is probability)}  & \texttt{predicted} & numeric [0,1] \\
-\cmidrule(l){2-5} 
-                                & \multirow{3}{*}{\makecell[cl]{Nominal\\{\footnotesize(multiclass)}}} & \multirow{3}{*}{\makecell[cl]{Soft classification\\{\footnotesize(prediction is probability)}}} 
-                                                                  & \texttt{observed}   & factor with $N$ levels \\ 
+\cmidrule(l){2-5}
+                                & \multirow{3}{*}{\makecell[cl]{Nominal\\{\footnotesize(multiclass)}}} & \multirow{3}{*}{\makecell[cl]{Soft classification\\{\footnotesize(prediction is probability)}}}
+                                                                  & \texttt{observed}   & factor with $N$ levels \\
                                 &                                 & & \texttt{predicted} & numeric [0,1] \\
                                 &                                 & & \texttt{predicted\_label} & factor with $N$ levels \\
 \midrule
@@ -360,7 +360,7 @@ forecasts.
 \multirow{6}{*}{\makecell[cl]{Probabilistic\\forecast}} & & \multirow{3}{*}{Sample format} & \texttt{observed} & numeric                \\
                                                          &                      &               & \texttt{predicted} & numeric                \\
                                                          &                      &               & \texttt{sample\_id} & numeric              \\
-\cmidrule(l){3-5} 
+\cmidrule(l){3-5}
                                                          &                      & \multirow{3}{*}{Quantile format}  & \texttt{observed} & numeric                \\
                                                          &                      &               & \texttt{predicted} & numeric                \\
                                                          &                      &               & \texttt{quantile\_level} & numeric [0,1]  \\
@@ -440,7 +440,7 @@ shipped with package is pre-validated by default).
 \begin{CodeInput}
 R> library("scoringutils")
 R> forecast_quantile <- example_quantile[horizon == 2] |>
-+   as_forecast_quantile() 
++   as_forecast_quantile()
 \end{CodeInput}
 \end{CodeChunk}
 
@@ -463,14 +463,14 @@ forecast object:
 R> forecast_quantile <- example_quantile[horizon == 2] |>
 +   as_forecast_quantile(
 +     forecast_unit = c(
-+       "model", "location", "target_end_date", 
++       "model", "location", "target_end_date",
 +       "forecast_date", "horizon", "location"
 +     ),
-+     observed = "observed", 
++     observed = "observed",
 +     predicted = "predicted",
 +     model = "model",
 +     quantile_level = "quantile_level",
-+   ) 
++   )
 \end{CodeInput}
 \end{CodeChunk}
 
@@ -513,21 +513,21 @@ Key: <location, target_end_date, target_type>
         <char>          <Date>      <char>    <num>        <char>
    1:       DE      2021-05-15       Cases    64985       Germany
    2:       DE      2021-05-15       Cases    64985       Germany
-  ---                                                            
+  ---
 7014:       IT      2021-07-24      Deaths       78         Italy
 7015:       IT      2021-07-24      Deaths       78         Italy
       forecast_date quantile_level predicted                 model
              <Date>          <num>     <int>                <char>
    1:    2021-05-03          0.010     63106 EuroCOVIDhub-ensemble
    2:    2021-05-03          0.025     67867 EuroCOVIDhub-ensemble
-  ---                                                             
+  ---
 7014:    2021-07-12          0.975       611  epiforecasts-EpiNow2
 7015:    2021-07-12          0.990       719  epiforecasts-EpiNow2
       horizon
         <num>
    1:       2
    2:       2
-  ---        
+  ---
 7014:       2
 7015:       2
 \end{CodeOutput}
@@ -562,7 +562,7 @@ forecast.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> rbind(example_quantile, example_quantile[1001:1002]) |>
-+   get_duplicate_forecasts() 
++   get_duplicate_forecasts()
 \end{CodeInput}
 \begin{CodeOutput}
    location target_end_date target_type observed location_name
@@ -619,7 +619,7 @@ zeroes first before appending transformed counts.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> forecast_quantile |> 
+R> forecast_quantile |>
 +   transform_forecasts(fun = \(x) {pmax(x, 0)}, append = FALSE) |>
 +   transform_forecasts(fun = log_shift, offset = 1) |>
 +   print(2)
@@ -640,21 +640,21 @@ model, horizon, and scale
          <char>          <Date>      <char>        <num>
     1:       DE      2021-05-15       Cases 64985.000000
     2:       DE      2021-05-15       Cases 64985.000000
-   ---                                                  
+   ---
 14029:       IT      2021-07-24      Deaths     4.369448
 14030:       IT      2021-07-24      Deaths     4.369448
        location_name forecast_date quantile_level    predicted
               <char>        <Date>          <num>        <num>
     1:       Germany    2021-05-03          0.010 63106.000000
     2:       Germany    2021-05-03          0.025 67867.000000
-   ---                                                        
+   ---
 14029:         Italy    2021-07-12          0.975     6.416732
 14030:         Italy    2021-07-12          0.990     6.579251
                        model horizon   scale
                       <char>   <num>  <char>
     1: EuroCOVIDhub-ensemble       2 natural
     2: EuroCOVIDhub-ensemble       2 natural
-   ---                                      
+   ---
 14029:  epiforecasts-EpiNow2       2     log
 14030:  epiforecasts-EpiNow2       2     log
 \end{CodeOutput}
@@ -696,13 +696,13 @@ on the output (Figure \ref{fig:plot-forecast-counts}).
 \begin{CodeInput}
 R> library("ggplot2")
 R> forecast_counts |>
-+   plot_forecast_counts(x = "forecast_date") + 
++   plot_forecast_counts(x = "forecast_date") +
 +   facet_wrap(~ target_type) +
 +   labs(y = "Model", x = "Forecast date")
 \end{CodeInput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/plot-forecast-counts-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/plot-forecast-counts-1}
 
 }
 
@@ -761,7 +761,7 @@ R> example_sample_continuous |>
 \end{CodeInput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/pit-plots-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/pit-plots-1}
 
 }
 
@@ -816,21 +816,21 @@ R> forecast_quantile |>
                    <char>          <num>          <num>
  1: EuroCOVIDhub-baseline           0.50              0
  2: EuroCOVIDhub-baseline           0.45             10
----                                                    
+---
 91:       UMass-MechBayes           0.01             98
 92:       UMass-MechBayes           0.99             98
     interval_coverage interval_coverage_deviation quantile_coverage
                 <num>                       <num>             <num>
  1:        0.00000000                 0.000000000         0.6818182
  2:        0.09090909                -0.009090909         0.6477273
----                                                                
+---
 91:        1.00000000                 0.020000000         0.0000000
 92:        1.00000000                 0.020000000         1.0000000
     quantile_coverage_deviation
                           <num>
  1:                   0.1818182
  2:                   0.1977273
----                            
+---
 91:                  -0.0100000
 92:                   0.0100000
 \end{CodeOutput}
@@ -848,12 +848,12 @@ overconfidence/predictive distributions that are too narrow on average
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
-R> 
-R> plot_interval_coverage(coverage) + 
+R> coverage <- get_coverage(forecast_quantile, by = c("model", "target_type"))
+R>
+R> plot_interval_coverage(coverage) +
 +   facet_wrap(~ target_type)
-R> 
-R> plot_quantile_coverage(coverage) + 
+R>
+R> plot_quantile_coverage(coverage) +
 +   facet_wrap(~ target_type)
 \end{CodeInput}
 \end{CodeChunk}
@@ -867,7 +867,7 @@ calibration.
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/coverage-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/coverage-1}
 
 }
 
@@ -905,14 +905,14 @@ Key: <location, target_end_date, target_type>
        <char>          <Date>      <char>        <char>        <Date>
   1:       DE      2021-05-15       Cases       Germany    2021-05-03
   2:       DE      2021-05-15       Cases       Germany    2021-05-03
- ---                                                                 
+ ---
 304:       IT      2021-07-24      Deaths         Italy    2021-07-12
 305:       IT      2021-07-24      Deaths         Italy    2021-07-12
                      model horizon ae_point   se_point       ape
                     <char>   <num>    <num>      <num>     <num>
   1: EuroCOVIDhub-ensemble       2    45731 2091324361 0.7037162
   2: EuroCOVIDhub-baseline       2    67622 4572734884 1.0405786
- ---                                                            
+ ---
 304:       UMass-MechBayes       2       46       2116 0.5897436
 305:  epiforecasts-EpiNow2       2      108      11664 1.3846154
 \end{CodeOutput}
@@ -940,7 +940,7 @@ arguments can be passed down to the scoring functions via the
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{../../man/figures/input-formats-scoring-rules} 
+{\centering \includegraphics[width=1\linewidth]{../../man/figures/input-formats-scoring-rules}
 
 }
 
@@ -965,7 +965,7 @@ lists of metrics and scoring rules.
 \begin{CodeInput}
 R> custom_metrics <- get_metrics(example_quantile) |>
 +   select_metrics(select = c("wis", "overprediction"))
-R> 
+R>
 R> score(metrics = custom_metrics)
 \end{CodeInput}
 \end{CodeChunk}
@@ -1029,7 +1029,7 @@ i.e., all score values need to be either positive or negative.
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{../../man/figures/pairwise-illustration} 
+{\centering \includegraphics[width=1\linewidth]{../../man/figures/pairwise-illustration}
 
 }
 
@@ -1059,7 +1059,7 @@ the different forecasting targets.
 \begin{CodeInput}
 R> forecast_quantile |>
 +   score() |>
-+   add_relative_skill(by = c("model", "target_type"), 
++   add_relative_skill(by = c("model", "target_type"),
 +                      baseline = "EuroCOVIDhub-baseline")
 \end{CodeInput}
 \end{CodeChunk}
@@ -1122,12 +1122,12 @@ then be visualised using the function
 R> forecast_quantile |>
 +   score() |>
 +   get_pairwise_comparisons(compare = "model", by = "target_type") |>
-+   plot_pairwise_comparisons() + 
++   plot_pairwise_comparisons() +
 +   facet_wrap(~ target_type)
 \end{CodeInput}
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/pairwise-plot-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/pairwise-plot-1}
 
 }
 
@@ -1149,13 +1149,13 @@ R> correlations <- forecast_quantile |>
 +   score() |>
 +   summarise_scores() |>
 +   get_correlations()
-R> 
+R>
 R> correlations |>
 +   plot_correlations(digits = 2)
 \end{CodeInput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/correlation-plot-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/correlation-plot-1}
 
 }
 
@@ -1254,14 +1254,14 @@ R> example_sample_continuous[horizon == 2] |>
 +   score() |>
 +   summarise_scores(by = c("model", "location", "target_type")) |>
 +   summarise_scores(
-+     by = c("model", "location", "target_type"), 
++     by = c("model", "location", "target_type"),
 +     fun = signif, digits = 2) |>
-+   plot_heatmap(x = "location", metric = "bias") + 
-+     facet_wrap(~ target_type) 
++   plot_heatmap(x = "location", metric = "bias") +
++     facet_wrap(~ target_type)
 \end{CodeInput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/score-heatmap-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/score-heatmap-1}
 
 }
 
@@ -1285,16 +1285,16 @@ in Figure \ref{fig:wis-components}.
 R> forecast_quantile |>
 +   score() |>
 +   summarise_scores(by = c("model", "target_type")) |>
-+   plot_wis(relative_contributions = FALSE) + 
-+   facet_wrap(~ target_type, 
-+              scales = "free_x") 
++   plot_wis(relative_contributions = FALSE) +
++   facet_wrap(~ target_type,
++              scales = "free_x")
 \end{CodeInput}
 \end{CodeChunk}
 
 \begin{CodeChunk}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/wis-components-1} 
+{\centering \includegraphics[width=1\linewidth]{manuscript_files/figure-latex/wis-components-1}
 
 }
 
@@ -1457,7 +1457,7 @@ observations that produced the corresponding visualisations).
        3: -1.0981862     1  0.83321201         3   Pred: N(0, 1)
        4: -1.0981862     1  0.28800142         4   Pred: N(0, 1)
        5: -1.0981862     1 -0.12326236         5   Pred: N(0, 1)
-      ---                                                       
+      ---
 15999996: -0.6612465  2000 -0.27061649      1996 Pred: N(0, 0.5)
 15999997: -0.6612465  2000  0.06780212      1997 Pred: N(0, 0.5)
 15999998: -0.6612465  2000  0.05126678      1998 Pred: N(0, 0.5)
@@ -1466,7 +1466,7 @@ observations that produced the corresponding visualisations).
 \end{CodeOutput}
 \begin{figure}[!h]
 
-{\centering \includegraphics[width=1\linewidth,]{manuscript_files/figure-latex/calibration-plots-1} 
+{\centering \includegraphics[width=1\linewidth,]{manuscript_files/figure-latex/calibration-plots-1}
 
 }
 
