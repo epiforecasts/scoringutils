@@ -41,8 +41,8 @@ energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL
   assert_input_multivariate_sample(observed, predicted, mv_group_id)
   unique_groups <- unique(mv_group_id)
 
-  energy_score <- vapply(unique_groups, function(mv_group_id) {
-    idx <- which(mv_group_id == mv_group_id)
+  energy_score <- vapply(unique_groups, function(group) {
+    idx <- which(mv_group_id == group)
     es_sample(y = observed[idx], dat = predicted[idx, , drop = FALSE], w = w)
   }, numeric(1))
 

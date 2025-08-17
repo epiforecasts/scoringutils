@@ -113,7 +113,7 @@ or "observed" are retained.
 }
 
 \seealso{
-Other functions to create forecast objects:
+Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},

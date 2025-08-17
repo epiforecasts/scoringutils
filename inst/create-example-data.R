@@ -204,7 +204,7 @@ grouping <- setdiff(forecast_unit, c("location", "location_name"))
 
 example_multivariate_sample <- as_forecast_multivariate_sample(
   data = example_multivariate_sample,
-  grouping = grouping,
+  by = grouping,
 )
 
 usethis::use_data(example_multivariate_sample, overwrite = TRUE)

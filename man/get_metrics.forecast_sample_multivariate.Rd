@@ -43,7 +43,7 @@ example <- as_forecast_multivariate_sample(example_sample_continuous, by = group
 get_metrics(example)
 }
 \seealso{
-Other get_metrics functions:
+Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_binary}()},
 \code{\link{get_metrics.forecast_nominal}()},
