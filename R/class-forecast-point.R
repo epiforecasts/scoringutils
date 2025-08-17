@@ -1,10 +1,10 @@
 #' @title Create a `forecast` object for point forecasts
 #' @inherit as_forecast_doc_template params description
 #' @details
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar for the default method
-#' with the following columns:
+#' The input for all further scoring needs to be a data.frame or similar with
+#' the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values.
 #'

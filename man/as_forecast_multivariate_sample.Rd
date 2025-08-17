@@ -65,8 +65,8 @@ forecast object. Using the argument \code{forecast_unit}, you can specify
 the columns that uniquely identify a single forecast (and thereby removing
 other, unneeded columns. See section "Forecast Unit" below for details).
 }
-\section{Required input}{
-The input needs to be a data.frame or similar for the default method
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar
 with the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
@@ -75,8 +75,12 @@ values represent random samples from the predictive distribution.
 \item \code{sample_id}: Column of any type with unique identifiers
 (unique within a single forecast) for each sample.
 \item \code{mv_group_id}: Column of any type with unique identifiers
-(unique within a single forecast) for each group.
+(unique within a single forecast) for each multivariate group. This column
+is created automatically using the \code{forecast_unit} and the \code{joint_across}
+arguments.
 }
+
+You can rename columns on the fly using the corresponding function arguemnts.
 
 For convenience, we recommend an additional column \code{model} holding the name
 of the forecaster or model that produced a prediction, but this is not

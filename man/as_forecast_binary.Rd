@@ -50,8 +50,9 @@ forecast object. Using the argument \code{forecast_unit}, you can specify
 the columns that uniquely identify a single forecast (and thereby removing
 other, unneeded columns. See section "Forecast Unit" below for details).
 }
-\section{Required input}{
-The input needs to be a data.frame or similar with the following columns:
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar with
+the following columns:
 \itemize{
 \item \code{observed}: \code{factor} with exactly two levels representing the observed
 values. The highest factor level is assumed to be the reference level.

@@ -60,9 +60,9 @@ Nominal forecasts are a form of categorical forecasts and represent a
 generalisation of binary forecasts to multiple outcomes. The possible
 outcomes that the observed values can assume are not ordered.
 }
-\section{Required input}{
-The input needs to be a data.frame or similar for the default method
-with the following columns:
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar with
+the following columns:
 \itemize{
 \item \code{observed}: Column with observed values of type \code{factor} with N levels,
 where N is the number of possible outcomes.

@@ -1,9 +1,9 @@
 #' @title Create a `forecast` object for sample-based multivariate forecasts
 #' @inherit as_forecast_doc_template params description
 #' @details
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar for the default method
+#' The input for all further scoring needs to be a data.frame or similar
 #' with the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values. Predicted
@@ -11,7 +11,11 @@
 #' - `sample_id`: Column of any type with unique identifiers
 #'    (unique within a single forecast) for each sample.
 #' - `mv_group_id`: Column of any type with unique identifiers
-#'    (unique within a single forecast) for each group.
+#'    (unique within a single forecast) for each multivariate group. This column
+#'    is created automatically using the `forecast_unit` and the `joint_across`
+#'    arguments.
+#'
+#' You can rename columns on the fly using the corresponding function arguemnts.
 #'
 #' For convenience, we recommend an additional column `model` holding the name
 #' of the forecaster or model that produced a prediction, but this is not
@@ -61,6 +65,7 @@ as_forecast_multivariate_sample.default <- function(data,
     sample_id = sample_id
   )
   data <- set_grouping(data, by)
+  
   data <- new_forecast(data, "forecast_sample_multivariate")
   assert_forecast(data)
   return(data)
