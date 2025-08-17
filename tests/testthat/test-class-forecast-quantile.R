@@ -176,6 +176,26 @@ test_that("as_forecast_quantile doesn't modify column names in place", {
   expect_equal(pre, post)
 })
 
+test_that("as_forecast_quantile handles rounding issues correctly", {
+  quantile_data <- data.table(
+    quantile_level = c(0.25, 0.75 + 1e-13, 0.25, 0.75),
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, 5),
+    location = c(1, 1, 2, 2)
+  )
+  expect_warning(
+    quantile_forecast <- quantile_data %>%
+      as_forecast_quantile(),
+    "rounding issue"
+  )
+  expect_no_condition(
+    score(quantile_forecast, metrics = c(wis = wis))
+  )
+})
+
+
+
+
 
 # ==============================================================================
 # is_forecast_quantile()
